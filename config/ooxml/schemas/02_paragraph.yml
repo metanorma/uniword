@@ -1,0 +1,282 @@
+# Paragraph Schema
+# ISO/IEC 29500-1:2016 - Section 17.3.1
+# Paragraph elements and properties
+
+schema:
+  namespace: w
+  category: "Paragraph"
+  iso_section: "17.3.1"
+
+elements:
+  # Paragraph element
+  paragraph:
+    tag: 'w:p'
+    description: "Paragraph - block-level text container"
+    iso_reference: "17.3.1.22"
+    children:
+      - element: paragraph_properties
+        tag: 'w:pPr'
+        optional: true
+      - element: run
+        tag: 'w:r'
+        multiple: true
+        optional: true
+      - element: hyperlink
+        tag: 'w:hyperlink'
+        multiple: true
+        optional: true
+      - element: bookmark_start
+        tag: 'w:bookmarkStart'
+        multiple: true
+        optional: true
+      - element: bookmark_end
+        tag: 'w:bookmarkEnd'
+        multiple: true
+        optional: true
+      - element: comment_range_start
+        tag: 'w:commentRangeStart'
+        multiple: true
+        optional: true
+      - element: comment_range_end
+        tag: 'w:commentRangeEnd'
+        multiple: true
+        optional: true
+      - element: field_char
+        tag: 'w:fldChar'
+        multiple: true
+        optional: true
+      - element: instr_text
+        tag: 'w:instrText'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Paragraph properties
+  paragraphproperties:
+    tag: 'w:pPr'
+    description: "Paragraph formatting properties"
+    iso_reference: "17.3.1.26"
+    children:
+      - element: style
+        tag: 'w:pStyle'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: alignment
+        tag: 'w:jc'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [left, right, center, both, distribute]
+            required: true
+      - element: spacing
+        tag: 'w:spacing'
+        optional: true
+        attributes:
+          - name: before
+            type: integer
+          - name: after
+            type: integer
+          - name: line
+            type: integer
+          - name: lineRule
+            type: enum
+            values: [auto, exact, atLeast]
+      - element: indentation
+        tag: 'w:ind'
+        optional: true
+        attributes:
+          - name: left
+            type: integer
+          - name: right
+            type: integer
+          - name: firstLine
+            type: integer
+          - name: hanging
+            type: integer
+      - element: numbering
+        tag: 'w:numPr'
+        optional: true
+        children:
+          - element: ilvl
+            tag: 'w:ilvl'
+            attributes:
+              - name: val
+                type: integer
+                required: true
+          - element: numId
+            tag: 'w:numId'
+            attributes:
+              - name: val
+                type: integer
+                required: true
+      - element: keep_next
+        tag: 'w:keepNext'
+        optional: true
+        presence_only: true
+      - element: keep_lines
+        tag: 'w:keepLines'
+        optional: true
+        presence_only: true
+      - element: page_break_before
+        tag: 'w:pageBreakBefore'
+        optional: true
+        presence_only: true
+      - element: outline_level
+        tag: 'w:outlineLvl'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+      - element: shading
+        tag: 'w:shd'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [clear, solid, horzStripe, vertStripe, reverseDiagStripe, diagStripe, horzCross, diagCross, thinHorzStripe, thinVertStripe, thinReverseDiagStripe, thinDiagStripe, thinHorzCross, thinDiagCross, pct5, pct10, pct12, pct15, pct20, pct25, pct30, pct35, pct37, pct40, pct45, pct50, pct55, pct60, pct62, pct65, pct70, pct75, pct80, pct85, pct87, pct90, pct95]
+          - name: color
+            type: string
+          - name: fill
+            type: string
+      - element: tabs
+        tag: 'w:tabs'
+        optional: true
+        children:
+          - element: tab
+            tag: 'w:tab'
+            multiple: true
+            attributes:
+              - name: val
+                type: enum
+                values: [left, right, center, decimal, bar, num, clear]
+                required: true
+              - name: pos
+                type: integer
+                required: true
+              - name: leader
+                type: enum
+                values: [none, dot, hyphen, underscore, heavy, middleDot]
+      - element: contextual_spacing
+        tag: 'w:contextualSpacing'
+        optional: true
+        presence_only: true
+      - element: widow_control
+        tag: 'w:widowControl'
+        optional: true
+        presence_only: true
+      - element: suppress_auto_hyphens
+        tag: 'w:suppressAutoHyphens'
+        optional: true
+        presence_only: true
+      - element: bidi
+        tag: 'w:bidi'
+        optional: true
+        presence_only: true
+      - element: adjust_right_ind
+        tag: 'w:adjustRightInd'
+        optional: true
+        presence_only: true
+      - element: snap_to_grid
+        tag: 'w:snapToGrid'
+        optional: true
+        presence_only: true
+      - element: text_alignment
+        tag: 'w:textAlignment'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [top, center, baseline, bottom, auto]
+            required: true
+      - element: text_direction
+        tag: 'w:textDirection'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [lrTb, tbRl, btLr, lrTbV, tbRlV, tbLrV]
+            required: true
+      - element: div_id
+        tag: 'w:divId'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: cnf_style
+        tag: 'w:cnfStyle'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+          - name: firstRow
+            type: boolean
+          - name: lastRow
+            type: boolean
+          - name: firstColumn
+            type: boolean
+          - name: lastColumn
+            type: boolean
+          - name: oddVBand
+            type: boolean
+          - name: evenVBand
+            type: boolean
+          - name: oddHBand
+            type: boolean
+          - name: evenHBand
+            type: boolean
+      - element: rpr_change
+        tag: 'w:rPrChange'
+        optional: true
+        attributes:
+          - name: id
+            type: string
+            required: true
+          - name: author
+            type: string
+            required: true
+          - name: date
+            type: string
+      - element: sect_pr_change
+        tag: 'w:sectPrChange'
+        optional: true
+        attributes:
+          - name: id
+            type: string
+            required: true
+          - name: author
+            type: string
+            required: true
+          - name: date
+            type: string
+    attributes: []
+
+  # Hyperlink element
+  hyperlink:
+    tag: 'w:hyperlink'
+    description: "Hyperlink element"
+    iso_reference: "17.16.22"
+    children:
+      - element: run
+        tag: 'w:r'
+        multiple: true
+    attributes:
+      - name: id
+        namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+        prefix: 'r'
+        type: string
+      - name: anchor
+        type: string
+      - name: tooltip
+        type: string
+
+metadata:
+  element_count: 3
+  priority: "HIGH"
+  status: "complete"
+  phase: "1"

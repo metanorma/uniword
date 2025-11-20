@@ -1,0 +1,802 @@
+= Uniword
+
+image:https://img.shields.io/gem/v/uniword.svg[Gem Version,link=https://rubygems.org/gems/uniword]
+image:https://img.shields.io/github/license/metanorma/uniword.svg[License,link=https://github.com/metanorma/uniword/blob/main/LICENSE.txt]
+image:https://github.com/metanorma/uniword/actions/workflows/rake.yml/badge.svg[Build Status,link=https://github.com/metanorma/uniword/actions/workflows/rake.yml]
+
+== Purpose
+
+Uniword is a comprehensive Ruby library for reading and writing Microsoft Word documents in both DOCX (Word 2007+) and MHTML (Word 2003+) formats.
+
+== Features
+
+* Full DOCX read/write support (Word 2007+)
+* Full MHTML read/write support (Word 2003+)
+* Format conversion (DOCX ↔ MHTML)
+* Styles (paragraph, character, table)
+* Lists (numbered, bulleted, multi-level)
+* Tables with borders and cell merging
+* Images with positioning
+* Headers and footers
+* Text boxes
+* Footnotes and endnotes
+* Bookmarks and cross-references
+* Math formulas (MathML/AsciiMath)
+* Fluent API and Builder pattern
+* Command-line interface
+* Comprehensive error handling
+
+== Architecture
+
+.High-level architecture of Uniword
+[source]
+----
+┌─────────────────────────────────────────────────────────────┐
+│                      Uniword Gem                            │
+│                   (Public API Layer)                        │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌────────────────┐           ┌──────────────────┐         │
+│  │  Format Layer  │           │  Document Layer  │         │
+│  │                │           │                  │         │
+│  │ - DOCX Handler │◄──────────┤ - Document Model │         │
+│  │   (Read/Write) │           │   (lutaml-model) │         │
+│  │ - MHTML Handler│           │ - Element Models │         │
+│  │   (Read/Write) │           │ - Style Models   │         │
+│  └────────────────┘           └──────────────────┘         │
+│         │                              │                   │
+│         ▼                              ▼                   │
+│  ┌────────────────┐           ┌──────────────────┐         │
+│  │ Serialization  │           │  Component Layer │         │
+│  │     Layer      │           │                  │         │
+│  │                │           │ - Paragraphs     │         │
+│  │ - XML Parser/  │◄──────────┤ - Tables         │         │
+│  │   Serializer   │           │ - Images         │         │
+│  │   (lutaml)     │           │ - Lists          │         │
+│  │ - MIME Handler │           │ - Styles         │         │
+│  │ - ZIP Handler  │           │ - Runs           │         │
+│  └────────────────┘           └──────────────────┘         │
+└─────────────────────────────────────────────────────────────┘
+----
+
+The architecture follows strict object-oriented principles:
+
+* **SOLID principles** - Single responsibility, open/closed, Liskov substitution, interface segregation, dependency inversion
+* **MECE (Mutually Exclusive, Collectively Exhaustive)** - Clear separation of concerns with no overlap
+* **Separation of Concerns** - Layered architecture with distinct responsibilities
+* **Design Patterns** - Strategy, Factory, Visitor, Builder, Template Method, Registry, Adapter patterns
+
+== Installation
+
+Add this line to your application's Gemfile:
+
+[source,ruby]
+----
+gem 'uniword'
+----
+
+And then execute:
+
+[source,shell]
+----
+bundle install
+----
+
+Or install it yourself as:
+
+[source,shell]
+----
+gem install uniword
+----
+
+== Quick start
+
+=== Creating documents
+
+[source,ruby]
+----
+require 'uniword'
+
+# Simple document
+doc = Uniword::Document.new
+para = Uniword::Paragraph.new
+para.add_text("Hello World", bold: true)
+doc.add_element(para)
+doc.save('output.docx')
+----
+
+=== Reading documents
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file('input.docx')
+puts doc.text
+doc.paragraphs.each { |p| puts p.text }
+----
+
+== Usage guide
+
+=== Text formatting
+
+==== Basic text formatting
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Bold", bold: true)
+para.add_text(" Italic", italic: true)
+para.add_text(" Underline", underline: 'single')
+para.add_text(" Red text", color: 'FF0000')
+para.add_text(" Large text", size: 24)
+para.add_text(" Custom font", font: 'Arial')
+----
+
+==== Combined formatting
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Bold italic red",
+  bold: true,
+  italic: true,
+  color: 'FF0000',
+  size: 18
+)
+----
+
+=== Styles
+
+==== Using built-in styles
+
+[source,ruby]
+----
+# Heading styles
+heading = Uniword::Paragraph.new
+heading.set_style('Heading1')
+heading.add_text("Chapter 1")
+
+# Normal style
+para = Uniword::Paragraph.new
+para.set_style('Normal')
+para.add_text("Body text")
+----
+
+==== Creating custom styles
+
+[source,ruby]
+----
+# Create custom paragraph style
+doc.styles_configuration.create_paragraph_style(
+  'CustomStyle',
+  'My Custom Style',
+  paragraph_properties: Uniword::Properties::ParagraphProperties.new(
+    alignment: 'center',
+    spacing_before: 240,
+    spacing_after: 120
+  ),
+  run_properties: Uniword::Properties::RunProperties.new(
+    bold: true,
+    color: '0000FF',
+    size: 24
+  )
+)
+
+# Use custom style
+para = Uniword::Paragraph.new
+para.set_style('CustomStyle')
+para.add_text("Styled text")
+----
+
+=== StyleSets
+
+==== What are StyleSets
+
+StyleSets are collections of professionally designed style definitions provided by Microsoft Office.
+They work alongside themes to create beautifully formatted documents with consistent styling.
+
+A StyleSet (.dotx file) contains:
+
+* Style definitions for headings, body text, quotes, etc.
+* Paragraph formatting (spacing, indentation, alignment)
+* Character formatting (fonts, colors, sizes)
+* Table styles
+
+==== Loading StyleSets from .dotx files
+
+[source,ruby]
+----
+# Load StyleSet from .dotx file
+styleset = Uniword::StyleSet.from_dotx('path/to/Distinctive.dotx')
+
+puts styleset.name
+# => "Distinctive"
+
+puts styleset.styles.count
+# => 42
+
+# Apply to document
+doc = Uniword::Document.new
+styleset.apply_to(doc)
+
+# Now document has all Distinctive styles
+doc.add_paragraph("Heading", heading: :heading_1)
+doc.save('output.docx')
+----
+
+==== Using bundled StyleSets
+
+Uniword includes all Office StyleSets as bundled YAML files for fast loading:
+
+[source,ruby]
+----
+# Load bundled StyleSet by name
+styleset = Uniword::StyleSet.load('distinctive')
+
+# Apply to document
+doc = Uniword::Document.new
+styleset.apply_to(doc)
+
+# Or use shorthand method
+doc.apply_styleset('distinctive')
+
+# List available bundled StyleSets
+available = Uniword::StyleSet.available_stylesets
+# => ["distinctive", "elegant", "fancy", "formal", ...]
+----
+
+==== Combining themes and StyleSets
+
+Themes define colors and fonts, while StyleSets define style formatting.
+Use them together for professional documents:
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+
+# Apply theme (colors and fonts)
+doc.apply_theme('celestial')
+
+# Apply StyleSet (style definitions)
+doc.apply_styleset('distinctive')
+
+# Use the styled content
+doc.add_paragraph('Document Title', heading: :heading_1)
+doc.add_paragraph('Introduction paragraph with consistent styling.')
+
+doc.save('professional_document.docx')
+----
+
+==== StyleSet conflict resolution strategies
+
+When applying a StyleSet, you can control how conflicts with existing styles are handled:
+
+[source,ruby]
+----
+# Keep existing styles, add only new ones (default)
+styleset.apply_to(doc, strategy: :keep_existing)
+
+# Replace existing styles with StyleSet styles
+styleset.apply_to(doc, strategy: :replace)
+
+# Keep both, rename imported styles
+styleset.apply_to(doc, strategy: :rename)
+----
+
+==== Available Office StyleSets
+
+Uniword bundles the following Office StyleSets:
+
+* **Basic (Word 2010)** - Simple, clean formatting
+* **Distinctive** - Bold headings with color accents
+* **Elegant** - Refined, professional appearance
+* **Fancy** - Decorative, attention-grabbing
+* **Formal** - Traditional business document styling
+* **Manuscript** - Book-style formatting
+* **Modern** - Contemporary, minimalist design
+* **Newsprint** - Newspaper-style columns and headers
+* **Perspective** - Dynamic, angled headings
+* **Simple** - Minimal, unobtrusive formatting
+* **Thatch** - Textured, organic appearance
+* **Traditional** - Classic document styling
+
+=== Tables
+
+==== Basic table creation
+
+[source,ruby]
+----
+table = Uniword::Table.new
+row = Uniword::TableRow.new
+
+cell1 = Uniword::TableCell.new
+cell1.add_paragraph("Cell 1")
+row.add_cell(cell1)
+
+cell2 = Uniword::TableCell.new
+cell2.add_paragraph("Cell 2")
+row.add_cell(cell2)
+
+table.add_row(row)
+doc.add_element(table)
+----
+
+==== Table with borders
+
+[source,ruby]
+----
+table = Uniword::Table.new
+
+# Set table borders
+table.properties = Uniword::Properties::TableProperties.new
+table.properties.borders = {
+  top: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  bottom: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  left: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  right: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  insideH: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  insideV: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000')
+}
+
+# Add rows and cells
+row = Uniword::TableRow.new
+row.add_cell(Uniword::TableCell.new.tap { |c| c.add_paragraph("A1") })
+row.add_cell(Uniword::TableCell.new.tap { |c| c.add_paragraph("B1") })
+table.add_row(row)
+----
+
+==== Using Builder for tables
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_table do
+    row do
+      cell 'Header 1', bold: true
+      cell 'Header 2', bold: true
+    end
+    row do
+      cell 'Data 1'
+      cell 'Data 2'
+    end
+  end
+  .build
+----
+
+=== Lists
+
+==== Numbered lists
+
+[source,ruby]
+----
+# Create numbered list
+3.times do |i|
+  para = Uniword::Paragraph.new
+  para.set_numbering(1, 0)  # numbering_id=1, level=0
+  para.add_text("Item #{i+1}")
+  doc.add_element(para)
+end
+----
+
+==== Bulleted lists
+
+[source,ruby]
+----
+# Create bulleted list
+['Apple', 'Banana', 'Cherry'].each do |item|
+  para = Uniword::Paragraph.new
+  para.set_numbering(2, 0)  # numbering_id=2 for bullets
+  para.add_text(item)
+  doc.add_element(para)
+end
+----
+
+==== Multi-level lists
+
+[source,ruby]
+----
+# Level 0 item
+para1 = Uniword::Paragraph.new
+para1.set_numbering(1, 0)
+para1.add_text("Level 0 item")
+doc.add_element(para1)
+
+# Level 1 item (indented)
+para2 = Uniword::Paragraph.new
+para2.set_numbering(1, 1)
+para2.add_text("Level 1 item")
+doc.add_element(para2)
+
+# Level 2 item (more indented)
+para3 = Uniword::Paragraph.new
+para3.set_numbering(1, 2)
+para3.add_text("Level 2 item")
+doc.add_element(para3)
+----
+
+=== Images
+
+==== Adding images
+
+[source,ruby]
+----
+# Add image from file
+image = Uniword::Image.new(
+  path: 'path/to/image.png',
+  width: 300,
+  height: 200
+)
+doc.add_element(image)
+----
+
+==== Image positioning
+
+[source,ruby]
+----
+# Add positioned image
+image = Uniword::Image.new(
+  path: 'logo.png',
+  width: 100,
+  height: 100,
+  position: {
+    horizontal: 'center',
+    vertical: 'top'
+  }
+)
+----
+
+=== Headers and footers
+
+==== Adding headers
+
+[source,ruby]
+----
+section = doc.current_section
+header = Uniword::Header.new(type: 'default')
+
+para = Uniword::Paragraph.new
+para.add_text("Page Header", bold: true)
+para.align('center')
+header.add_element(para)
+
+section.default_header = header
+----
+
+==== Adding footers
+
+[source,ruby]
+----
+footer = Uniword::Footer.new(type: 'default')
+
+para = Uniword::Paragraph.new
+para.add_text("Page ")
+# Add page number field
+para.add_text("1", field_type: 'page_number')
+para.align('center')
+footer.add_element(para)
+
+section.default_footer = footer
+----
+
+==== Different headers for first page
+
+[source,ruby]
+----
+# First page header
+first_header = Uniword::Header.new(type: 'first')
+para = Uniword::Paragraph.new
+para.add_text("First Page Header")
+first_header.add_element(para)
+section.first_header = first_header
+
+# Default header for other pages
+default_header = Uniword::Header.new(type: 'default')
+para = Uniword::Paragraph.new
+para.add_text("Default Header")
+default_header.add_element(para)
+section.default_header = default_header
+----
+
+=== Text boxes
+
+==== Creating text boxes
+
+[source,ruby]
+----
+text_box = Uniword::TextBox.new(
+  width: 200,
+  height: 100,
+  position: { x: 100, y: 100 }
+)
+
+para = Uniword::Paragraph.new
+para.add_text("Text inside box")
+text_box.add_element(para)
+
+doc.add_element(text_box)
+----
+
+=== Footnotes and endnotes
+
+==== Adding footnotes
+
+[source,ruby]
+----
+# Add text with footnote reference
+para = Uniword::Paragraph.new
+para.add_text("This text has a footnote")
+para.add_text("1", footnote_ref: true)
+
+# Create footnote
+footnote = Uniword::Footnote.new(id: 1)
+footnote_para = Uniword::Paragraph.new
+footnote_para.add_text("This is the footnote text")
+footnote.add_element(footnote_para)
+
+doc.footnotes << footnote
+doc.add_element(para)
+----
+
+==== Adding endnotes
+
+[source,ruby]
+----
+# Add text with endnote reference
+para = Uniword::Paragraph.new
+para.add_text("This text has an endnote")
+para.add_text("i", endnote_ref: true)
+
+# Create endnote
+endnote = Uniword::Endnote.new(id: 1)
+endnote_para = Uniword::Paragraph.new
+endnote_para.add_text("This is the endnote text")
+endnote.add_element(endnote_para)
+
+doc.endnotes << endnote
+doc.add_element(para)
+----
+
+=== Bookmarks and cross-references
+
+==== Creating bookmarks
+
+[source,ruby]
+----
+# Create bookmark
+bookmark = Uniword::Bookmark.new(
+  id: 1,
+  name: 'Section1'
+)
+
+para = Uniword::Paragraph.new
+para.add_text("Bookmarked section")
+para.add_bookmark_start(bookmark)
+para.add_bookmark_end(bookmark.id)
+
+doc.bookmarks << bookmark
+doc.add_element(para)
+----
+
+==== Adding cross-references
+
+[source,ruby]
+----
+# Reference to bookmark
+para = Uniword::Paragraph.new
+para.add_text("See ")
+para.add_text("Section 1", hyperlink: '#Section1')
+doc.add_element(para)
+----
+
+=== Math formulas
+
+==== MathML formulas
+
+[source,ruby]
+----
+# Add MathML formula
+para = Uniword::Paragraph.new
+para.add_math('<math><mrow><mi>x</mi><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow></math>')
+doc.add_element(para)
+----
+
+==== AsciiMath formulas
+
+[source,ruby]
+----
+# Add AsciiMath formula (converted to MathML)
+para = Uniword::Paragraph.new
+para.add_math('x = (-b)/(2a)', format: :asciimath)
+doc.add_element(para)
+----
+
+== Format conversion
+
+=== DOCX to MHTML
+
+[source,ruby]
+----
+# Read DOCX
+doc = Uniword::DocumentFactory.from_file('input.docx')
+
+# Save as MHTML
+doc.save('output.doc')
+----
+
+=== MHTML to DOCX
+
+[source,ruby]
+----
+# Read MHTML
+doc = Uniword::DocumentFactory.from_file('input.doc')
+
+# Save as DOCX
+doc.save('output.docx')
+----
+
+=== Auto-detect format
+
+[source,ruby]
+----
+# Format is auto-detected from file extension
+doc = Uniword::DocumentFactory.from_file('document.docx')
+doc.save('output.mht')  # Auto-converts to MHTML
+----
+
+== Builder pattern
+
+The Builder pattern provides a fluent, declarative way to create documents:
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading('My Document', level: 1)
+  .add_paragraph('Introduction paragraph')
+  .add_blank_line
+  .add_heading('Section 1', level: 2)
+  .add_paragraph('Section content', bold: true)
+  .add_table do
+    row do
+      cell 'Header 1', bold: true
+      cell 'Header 2', bold: true
+    end
+    row do
+      cell 'Data 1'
+      cell 'Data 2'
+    end
+  end
+  .add_paragraph('Conclusion')
+  .build
+
+doc.save('output.docx')
+----
+
+== CLI usage
+
+=== Convert between formats
+
+[source,shell]
+----
+# Convert DOCX to MHTML
+uniword convert input.docx output.doc
+
+# Convert MHTML to DOCX
+uniword convert input.doc output.docx --verbose
+
+# Specify formats explicitly
+uniword convert input.mht output.docx --from mhtml --to docx
+----
+
+=== Document information
+
+[source,shell]
+----
+# Show basic information
+uniword info document.docx
+
+# Show detailed information
+uniword info document.docx --verbose
+----
+
+=== Validate document
+
+[source,shell]
+----
+# Validate document structure
+uniword validate document.docx
+
+# Show detailed validation results
+uniword validate document.docx --verbose
+----
+
+=== Show version
+
+[source,shell]
+----
+uniword version
+----
+
+== API reference
+
+Full API documentation is available at https://www.rubydoc.info/gems/uniword[RubyDoc.info].
+
+Key classes:
+
+* `Uniword::Document` - Main document class
+* `Uniword::DocumentFactory` - Factory for reading documents
+* `Uniword::DocumentWriter` - Writer for saving documents
+* `Uniword::Builder` - Fluent document builder
+* `Uniword::Paragraph` - Paragraph element
+* `Uniword::Run` - Text run with formatting
+* `Uniword::Table` - Table element
+* `Uniword::Image` - Image element
+* `Uniword::CLI` - Command-line interface
+
+== Error handling
+
+Uniword provides comprehensive error handling:
+
+[source,ruby]
+----
+require 'uniword'
+
+begin
+  doc = Uniword::DocumentFactory.from_file('document.docx')
+rescue Uniword::FileNotFoundError => e
+  puts "File not found: #{e.path}"
+rescue Uniword::CorruptedFileError => e
+  puts "Corrupted file: #{e.reason}"
+rescue Uniword::InvalidFormatError => e
+  puts "Invalid format: #{e.message}"
+rescue Uniword::Error => e
+  puts "Error: #{e.message}"
+end
+----
+
+Available exceptions:
+
+* `Uniword::FileNotFoundError` - File does not exist
+* `Uniword::CorruptedFileError` - File is corrupted or invalid
+* `Uniword::InvalidFormatError` - Unsupported format
+* `Uniword::ValidationError` - Document validation failed
+* `Uniword::ConversionError` - Format conversion failed
+
+== Examples
+
+Complete examples are available in the link:examples/[`examples/`] directory:
+
+* link:examples/basic_usage.rb[`basic_usage.rb`] - Basic document creation
+* link:examples/styles_example.rb[`styles_example.rb`] - Text formatting and styles
+* link:examples/advanced_example.rb[`advanced_example.rb`] - Complex document
+* link:examples/conversion_example.rb[`conversion_example.rb`] - Format conversion
+
+Run any example:
+
+[source,shell]
+----
+ruby examples/basic_usage.rb
+----
+
+== Performance
+
+Uniword is optimized for performance with large documents:
+
+* Lazy loading for memory efficiency
+* Streaming parsers for large files
+* Efficient XML serialization with lutaml-model
+* Optimized ZIP handling
+
+See link:PERFORMANCE.md[PERFORMANCE.md] for benchmarks and optimization details.
+
+== Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/metanorma/uniword.
+
+Please see link:CONTRIBUTING.md[CONTRIBUTING.md] for development guidelines.
+
+== License
+
+The gem is available as open source under the terms of the https://opensource.org/licenses/BSD-2-Clause[BSD 2-Clause License].
+
+== Copyright
+
+Copyright (c) 2024 Ribose Inc.

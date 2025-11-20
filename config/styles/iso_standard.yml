@@ -1,0 +1,229 @@
+# ISO Standard Document Style Library
+# External configuration for all document styles
+# Version: 1.0
+
+style_library:
+  name: "ISO Standard Styles"
+  version: "1.0"
+  description: "Standard styles for ISO documents"
+
+  # Paragraph styles
+  paragraph_styles:
+    title:
+      name: "Title"
+      base_style: null
+      next_style: "subtitle"
+      properties:
+        alignment: center
+        spacing_before: 240  # 12pt
+        spacing_after: 120   # 6pt
+        keep_next: true
+      run_properties:
+        font: "Arial"
+        size: 32  # 16pt (half-points)
+        bold: true
+        color: "000000"
+
+    subtitle:
+      name: "Subtitle"
+      base_style: title
+      properties:
+        spacing_before: 120
+        spacing_after: 240
+      run_properties:
+        size: 28  # 14pt
+        bold: false
+        italic: true
+
+    heading_1:
+      name: "Heading 1"
+      properties:
+        outline_level: 0
+        page_break_before: false
+        keep_next: true
+        spacing_before: 240
+        spacing_after: 120
+      run_properties:
+        font: "Arial"
+        size: 28
+        bold: true
+        color: "1F4E78"
+
+    heading_2:
+      name: "Heading 2"
+      base_style: heading_1
+      properties:
+        outline_level: 1
+        spacing_before: 180
+        spacing_after: 60
+      run_properties:
+        size: 24
+
+    heading_3:
+      name: "Heading 3"
+      base_style: heading_2
+      properties:
+        outline_level: 2
+        spacing_before: 120
+        spacing_after: 60
+      run_properties:
+        size: 22
+
+    heading_4:
+      name: "Heading 4"
+      base_style: heading_3
+      properties:
+        outline_level: 3
+        spacing_before: 120
+        spacing_after: 40
+      run_properties:
+        size: 22
+        bold: false
+
+    heading_5:
+      name: "Heading 5"
+      base_style: heading_4
+      properties:
+        outline_level: 4
+        spacing_before: 100
+        spacing_after: 40
+      run_properties:
+        size: 20
+
+    heading_6:
+      name: "Heading 6"
+      base_style: heading_5
+      properties:
+        outline_level: 5
+        spacing_before: 100
+        spacing_after: 40
+      run_properties:
+        size: 20
+        italic: true
+
+    body_text:
+      name: "Body Text"
+      properties:
+        alignment: left
+        spacing_after: 120
+        line_spacing: 1.15
+        line_rule: "auto"
+      run_properties:
+        font: "Calibri"
+        size: 22  # 11pt
+
+    quote:
+      name: "Quote"
+      base_style: body_text
+      properties:
+        indent_left: 720   # 0.5 inch
+        indent_right: 720
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        italic: true
+        color: "595959"
+
+  # Character (run) styles
+  character_styles:
+    emphasis:
+      name: "Emphasis"
+      run_properties:
+        italic: true
+
+    strong:
+      name: "Strong"
+      run_properties:
+        bold: true
+
+    code:
+      name: "Code"
+      run_properties:
+        font: "Consolas"
+        size: 20  # 10pt
+        color: "C7254E"
+
+    hyperlink:
+      name: "Hyperlink"
+      run_properties:
+        color: "0563C1"
+        underline: "single"
+
+  # List styles
+  list_styles:
+    bullet_list:
+      name: "Bullet List"
+      numbering_definition: 1
+      levels:
+        - level: 0
+          format: bullet
+          text: "•"
+          alignment: left
+          properties:
+            indent_left: 360
+        - level: 1
+          format: bullet
+          text: "◦"
+          properties:
+            indent_left: 720
+        - level: 2
+          format: bullet
+          text: "▪"
+          properties:
+            indent_left: 1080
+
+    numbered_list:
+      name: "Numbered List"
+      numbering_definition: 2
+      levels:
+        - level: 0
+          format: decimal
+          text: "%1."
+          alignment: left
+          properties:
+            indent_left: 360
+        - level: 1
+          format: lowerLetter
+          text: "%2."
+          properties:
+            indent_left: 720
+        - level: 2
+          format: lowerRoman
+          text: "%3."
+          properties:
+            indent_left: 1080
+
+  # Table styles
+  table_styles:
+    standard_table:
+      name: "Standard Table"
+      table_properties:
+        width: 5000
+        layout: auto
+      cell_properties:
+        vertical_alignment: top
+      conditional_formatting:
+        first_row:
+          cell_properties:
+            background_color: "D9E2F3"
+
+  # Semantic styles
+  semantic_styles:
+    term:
+      name: "Term"
+      semantic: term
+      run_properties:
+        bold: true
+
+    definition:
+      name: "Definition"
+      semantic: definition
+      properties:
+        indent_left: 360
+
+    example:
+      name: "Example"
+      semantic: example
+      run_properties:
+        font: "Consolas"
+        color: "2E7D32"

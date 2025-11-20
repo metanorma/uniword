@@ -1,0 +1,49 @@
+# Document Quality Rules Configuration
+#
+# This file defines the quality checking rules applied to documents.
+# Each rule can be enabled/disabled and configured with specific parameters.
+#
+# Configuration follows "Configuration over Convention" principle - all rule
+# behavior is defined here, not hardcoded in classes.
+
+quality_rules:
+  # Heading Hierarchy Rule
+  # Ensures headings follow proper hierarchical structure
+  heading_hierarchy:
+    enabled: true
+    max_level: 6              # Maximum heading level allowed (1-9)
+    require_sequential: true  # Headings must be sequential (no skipping levels)
+
+  # Table Header Rule
+  # Validates that tables have proper headers
+  table_headers:
+    enabled: true
+    require_headers: true     # Tables must have header rows
+
+  # Paragraph Length Rule
+  # Checks paragraph word count for readability
+  paragraph_length:
+    enabled: true
+    max_words: 500           # Maximum words per paragraph (error)
+    warning_words: 400       # Warning threshold for long paragraphs
+
+  # Image Alt Text Rule
+  # Ensures images have accessibility text
+  image_alt_text:
+    enabled: true
+    require_alt_text: true   # Images must have alt text
+    min_length: 10           # Minimum alt text length (characters)
+
+  # Link Validation Rule
+  # Checks for broken or invalid links
+  link_validation:
+    enabled: true
+    check_internal: true     # Check internal document links
+    check_external: false    # Check external URLs (requires network)
+
+  # Style Consistency Rule
+  # Detects direct formatting instead of styles
+  style_consistency:
+    enabled: true
+    allow_direct_formatting: false  # Whether direct formatting is allowed
+    require_standard_styles: true   # Require use of standard styles

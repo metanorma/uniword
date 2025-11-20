@@ -1,0 +1,81 @@
+# Fields Schema
+# ISO/IEC 29500-1:2016 - Section 17.16
+# Field elements for dynamic content
+
+schema:
+  namespace: w
+  category: "Fields"
+  iso_section: "17.16"
+
+elements:
+  # Simple field
+  field_simple:
+    tag: 'w:fldSimple'
+    description: "Simple field (self-contained field)"
+    iso_reference: "17.16.19"
+    children:
+      - element: run
+        tag: 'w:r'
+        multiple: true
+        optional: true
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+        optional: true
+    attributes:
+      - name: instr
+        type: string
+        required: true
+        description: "Field instruction text"
+
+  # Complex field character
+  field_char:
+    tag: 'w:fldChar'
+    description: "Complex field character (begin/separate/end markers)"
+    iso_reference: "17.16.18"
+    children:
+      - element: field_data
+        tag: 'w:fldData'
+        optional: true
+    attributes:
+      - name: fldCharType
+        type: enum
+        values: [begin, separate, end]
+        required: true
+      - name: fldLock
+        type: boolean
+      - name: dirty
+        type: boolean
+
+  # Field instruction text
+  instr_text:
+    tag: 'w:instrText'
+    description: "Field instruction text for complex fields"
+    iso_reference: "17.16.23"
+    children: []
+    attributes:
+      - name: space
+        namespace: 'http://www.w3.org/XML/1998/namespace'
+        prefix: 'xml'
+        type: enum
+        values: [preserve, default]
+
+  # Field data
+  field_data:
+    tag: 'w:fldData'
+    description: "Custom field data storage"
+    iso_reference: "17.16.17"
+    children: []
+    attributes:
+      - name: space
+        namespace: 'http://www.w3.org/XML/1998/namespace'
+        prefix: 'xml'
+        type: enum
+        values: [preserve, default]
+
+metadata:
+  element_count: 4
+  priority: "MEDIUM"
+  status: "new"
+  phase: "1"
+  notes: "Fields enable dynamic content like page numbers, dates, etc."

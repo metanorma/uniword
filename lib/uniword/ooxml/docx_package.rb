@@ -1,0 +1,144 @@
+# frozen_string_literal: true
+
+require 'lutaml/model'
+require_relative 'namespaces'
+require_relative 'core_properties'
+require_relative 'app_properties'
+require_relative '../theme'
+
+module Uniword
+  module Ooxml
+    # DOCX Package - Complete OOXML package model
+    #
+    # Represents the entire .docx file structure as a lutaml-model object.
+    # Each XML file within the ZIP is a separate lutaml-model class.
+    #
+    # This is the CORRECT OOP approach:
+    # - ONE model class for the container
+    # - Each XML part is a proper model attribute
+    # - No serializer/deserializer anti-pattern
+    #
+    # @example Load DOCX
+    #   package = DocxPackage.from_file('document.docx')
+    #   package.core_properties.title = 'New Title'
+    #   package.to_file('output.docx')
+    class DocxPackage < Lutaml::Model::Serializable
+      # Core document metadata
+      attribute :core_properties, CoreProperties
+
+      # Extended application properties
+      attribute :app_properties, AppProperties
+
+      # Document theme
+      attribute :theme, Theme
+
+      # Raw XML for parts not yet fully modeled
+      attr_accessor :raw_document_xml
+      attr_accessor :raw_styles_xml
+      attr_accessor :raw_font_table_xml
+      attr_accessor :raw_numbering_xml
+      attr_accessor :raw_settings_xml
+      attr_accessor :raw_web_settings_xml
+      attr_accessor :raw_relationships
+
+      # Load DOCX package from file
+      #
+      # @param path [String] Path to .docx file
+      # @return [DocxPackage] Loaded package
+      def self.from_file(path)
+        require_relative '../infrastructure/zip_extractor'
+
+        extractor = Infrastructure::ZipExtractor.new
+        zip_content = extractor.extract(path)
+
+        from_zip_content(zip_content)
+      end
+
+      # Create package from extracted ZIP content
+      #
+      # @param zip_content [Hash] Extracted ZIP files
+      # @return [DocxPackage] Package object
+      def self.from_zip_content(zip_content)
+        package = new
+
+        # Parse lutaml-model files
+        if zip_content['docProps/core.xml']
+          package.core_properties = CoreProperties.from_xml(zip_content['docProps/core.xml'])
+        end
+
+        if zip_content['docProps/app.xml']
+          package.app_properties = AppProperties.from_xml(zip_content['docProps/app.xml'])
+        end
+
+        if zip_content['word/theme/theme1.xml']
+          package.theme = Theme.from_xml(zip_content['word/theme/theme1.xml'])
+          package.theme.raw_xml = zip_content['word/theme/theme1.xml']
+        end
+
+        # Store raw XML for parts not yet modeled
+        package.raw_document_xml = zip_content['word/document.xml']
+        package.raw_styles_xml = zip_content['word/styles.xml']
+        package.raw_font_table_xml = zip_content['word/fontTable.xml']
+        package.raw_numbering_xml = zip_content['word/numbering.xml']
+        package.raw_settings_xml = zip_content['word/settings.xml']
+        package.raw_web_settings_xml = zip_content['word/webSettings.xml']
+        package.raw_content_types = zip_content['[Content_Types].xml']
+        package.raw_relationships = {
+          'root' => zip_content['_rels/.rels'],
+          'document' => zip_content['word/_rels/document.xml.rels'],
+          'theme' => zip_content['word/theme/_rels/theme1.xml.rels']
+        }
+
+        package
+      end
+
+      # Save package to file
+      #
+      # @param path [String] Output path
+      def to_file(path)
+        require_relative '../infrastructure/zip_packager'
+
+        zip_content = to_zip_content
+
+        packager = Infrastructure::ZipPackager.new
+        packager.package(zip_content, path)
+      end
+
+      # Generate ZIP content hash
+      #
+      # @return [Hash] File paths => content
+      def to_zip_content
+        content = {}
+
+        # Serialize lutaml-model files with prefix: false
+        content['docProps/core.xml'] = core_properties.to_xml(encoding: 'UTF-8', prefix: false) if core_properties
+        content['docProps/app.xml'] = app_properties.to_xml(encoding: 'UTF-8', prefix: false) if app_properties
+
+        # Theme with raw XML fallback
+        if theme
+          content['word/theme/theme1.xml'] = theme.raw_xml || theme.to_xml(encoding: 'UTF-8')
+        end
+
+        # Use raw XML for parts not yet modeled
+        content['word/document.xml'] = raw_document_xml if raw_document_xml
+        content['word/styles.xml'] = raw_styles_xml if raw_styles_xml
+        content['word/fontTable.xml'] = raw_font_table_xml if raw_font_table_xml
+        content['word/numbering.xml'] = raw_numbering_xml if raw_numbering_xml
+        content['word/settings.xml'] = raw_settings_xml if raw_settings_xml
+        content['word/webSettings.xml'] = raw_web_settings_xml if raw_web_settings_xml
+
+        # Relationships
+        content['_rels/.rels'] = raw_relationships['root'] if raw_relationships
+        content['word/_rels/document.xml.rels'] = raw_relationships['document'] if raw_relationships
+        content['word/theme/_rels/theme1.xml.rels'] = raw_relationships['theme'] if raw_relationships
+
+        # Content types
+        content['[Content_Types].xml'] = raw_content_types if raw_content_types
+
+        content
+      end
+
+      attr_accessor :raw_content_types
+    end
+  end
+end

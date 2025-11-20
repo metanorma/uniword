@@ -1,0 +1,196 @@
+---
+name: Parcel
+source: Parcel.thmx
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Parcel
+  colors:
+    accent1: F6A21D
+    accent2: 9BAFB5
+    accent3: C96731
+    accent4: 9CA383
+    accent5: 87795D
+    accent6: A0988C
+    dk1: '000000'
+    dk2: 4A5356
+    folHlink: 738F97
+    hlink: 00B0F0
+    lt1: FFFFFF
+    lt2: E8E3CE
+font_scheme:
+  name: Parcel
+  major_font: Gill Sans MT
+  minor_font: Gill Sans MT
+  major_east_asian: ''
+  major_complex_script: ''
+  minor_east_asian: ''
+  minor_complex_script: ''
+variants:
+  variant1:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: F6A21D
+        accent2: 9BAFB5
+        accent3: C96731
+        accent4: 9CA383
+        accent5: 87795D
+        accent6: A0988C
+        dk1: '000000'
+        dk2: 4A5356
+        folHlink: 738F97
+        hlink: 00B0F0
+        lt1: FFFFFF
+        lt2: E8E3CE
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant2:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: 9CBEBD
+        accent2: D2CB6C
+        accent3: 9D9A93
+        accent4: C89F5D
+        accent5: A9A57C
+        accent6: 95A39D
+        dk1: '000000'
+        dk2: 635D4D
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BA
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant3:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: A6B727
+        accent2: 418AB3
+        accent3: F69200
+        accent4: '838383'
+        accent5: FEC306
+        accent6: DF5327
+        dk1: '000000'
+        dk2: 5E5E5E
+        folHlink: B2B2B2
+        hlink: F59E00
+        lt1: FFFFFF
+        lt2: DDDDDD
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant4:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: F6A21D
+        accent2: 9BAFB5
+        accent3: C96731
+        accent4: 9CA383
+        accent5: 87795D
+        accent6: A0988C
+        dk1: '000000'
+        dk2: 4A5356
+        folHlink: 738F97
+        hlink: 00B0F0
+        lt1: FFFFFF
+        lt2: E8E3CE
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant5:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: F6A21D
+        accent2: 9BAFB5
+        accent3: C96731
+        accent4: 9CA383
+        accent5: 87795D
+        accent6: A0988C
+        dk1: '000000'
+        dk2: 4A5356
+        folHlink: 738F97
+        hlink: 00B0F0
+        lt1: FFFFFF
+        lt2: E8E3CE
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant6:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: 9CBEBD
+        accent2: D2CB6C
+        accent3: 9D9A93
+        accent4: C89F5D
+        accent5: A9A57C
+        accent6: 95A39D
+        dk1: '000000'
+        dk2: 635D4D
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BA
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant7:
+    color_scheme:
+      name: Parcel
+      colors:
+        accent1: A6B727
+        accent2: 418AB3
+        accent3: F69200
+        accent4: '838383'
+        accent5: FEC306
+        accent6: DF5327
+        dk1: '000000'
+        dk2: 5E5E5E
+        folHlink: B2B2B2
+        hlink: F59E00
+        lt1: FFFFFF
+        lt2: DDDDDD
+    font_scheme:
+      name: Parcel
+      major_font: Gill Sans MT
+      minor_font: Gill Sans MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''

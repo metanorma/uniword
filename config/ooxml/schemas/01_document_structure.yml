@@ -1,0 +1,44 @@
+# Document Structure Schema
+# ISO/IEC 29500-1:2016 - Section 17.2
+# Core document container elements
+
+schema:
+  namespace: w
+  category: "Document Structure"
+  iso_section: "17.2"
+
+elements:
+  # Root document element
+  document:
+    tag: 'w:document'
+    description: "Root element of document.xml"
+    iso_reference: "17.2.3"
+    children:
+      - element: body
+        required: true
+        multiple: false
+    attributes: []
+
+  # Document body
+  body:
+    tag: 'w:body'
+    description: "Document body containing all content"
+    iso_reference: "17.2.2"
+    children:
+      - element: paragraph
+        multiple: true
+        optional: true
+      - element: table
+        multiple: true
+        optional: true
+      - element: section_properties
+        tag: 'w:sectPr'
+        optional: true
+        multiple: false
+    attributes: []
+
+metadata:
+  element_count: 2
+  priority: "CRITICAL"
+  status: "complete"
+  phase: "1"

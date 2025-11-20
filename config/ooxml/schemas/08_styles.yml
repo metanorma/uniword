@@ -1,0 +1,265 @@
+# Styles Schema
+# ISO/IEC 29500-1:2016 - Section 17.7
+# Complete style and document defaults elements
+
+schema:
+  namespace: w
+  category: "Styles"
+  iso_section: "17.7"
+
+elements:
+  # Root styles container
+  styles:
+    tag: 'w:styles'
+    description: "Root container for style definitions"
+    iso_reference: "17.7.4.18"
+    children:
+      - element: doc_defaults
+        tag: 'w:docDefaults'
+        optional: true
+      - element: latent_styles
+        tag: 'w:latentStyles'
+        optional: true
+      - element: style
+        tag: 'w:style'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Document defaults
+  doc_defaults:
+    tag: 'w:docDefaults'
+    description: "Document-wide default formatting"
+    iso_reference: "17.7.4.7"
+    children:
+      - element: rpr_default
+        tag: 'w:rPrDefault'
+        optional: true
+      - element: ppr_default
+        tag: 'w:pPrDefault'
+        optional: true
+    attributes: []
+
+  # Default run properties
+  rpr_default:
+    tag: 'w:rPrDefault'
+    description: "Default run (character) properties for document"
+    iso_reference: "17.7.4.16"
+    children:
+      - element: rpr
+        tag: 'w:rPr'
+        optional: true
+    attributes: []
+
+  # Default paragraph properties
+  ppr_default:
+    tag: 'w:pPrDefault'
+    description: "Default paragraph properties for document"
+    iso_reference: "17.7.4.14"
+    children:
+      - element: ppr
+        tag: 'w:pPr'
+        optional: true
+    attributes: []
+
+  # Individual style definition
+  style:
+    tag: 'w:style'
+    description: "Style definition (paragraph, character, table, or numbering)"
+    iso_reference: "17.7.4.17"
+    children:
+      - element: name
+        tag: 'w:name'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: aliases
+        tag: 'w:aliases'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: based_on
+        tag: 'w:basedOn'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: next
+        tag: 'w:next'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: link
+        tag: 'w:link'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: auto_redefine
+        tag: 'w:autoRedefine'
+        optional: true
+        presence_only: true
+      - element: hidden
+        tag: 'w:hidden'
+        optional: true
+        presence_only: true
+      - element: ui_priority
+        tag: 'w:uiPriority'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: semi_hidden
+        tag: 'w:semiHidden'
+        optional: true
+        presence_only: true
+      - element: unhide_when_used
+        tag: 'w:unhideWhenUsed'
+        optional: true
+        presence_only: true
+      - element: q_format
+        tag: 'w:qFormat'
+        optional: true
+        presence_only: true
+      - element: locked
+        tag: 'w:locked'
+        optional: true
+        presence_only: true
+      - element: personal
+        tag: 'w:personal'
+        optional: true
+        presence_only: true
+      - element: personal_compose
+        tag: 'w:personalCompose'
+        optional: true
+        presence_only: true
+      - element: personal_reply
+        tag: 'w:personalReply'
+        optional: true
+        presence_only: true
+      - element: rsid
+        tag: 'w:rsid'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: ppr
+        tag: 'w:pPr'
+        optional: true
+      - element: rpr
+        tag: 'w:rPr'
+        optional: true
+      - element: tbl_pr
+        tag: 'w:tblPr'
+        optional: true
+      - element: tr_pr
+        tag: 'w:trPr'
+        optional: true
+      - element: tc_pr
+        tag: 'w:tcPr'
+        optional: true
+      - element: tbl_style_pr
+        tag: 'w:tblStylePr'
+        multiple: true
+        optional: true
+    attributes:
+      - name: type
+        type: enum
+        values: [paragraph, character, table, numbering]
+        required: true
+      - name: styleId
+        type: string
+        required: true
+      - name: default
+        type: boolean
+      - name: customStyle
+        type: boolean
+
+  # Table style properties
+  tbl_style_pr:
+    tag: 'w:tblStylePr'
+    description: "Conditional table style formatting"
+    iso_reference: "17.7.6.6"
+    children:
+      - element: ppr
+        tag: 'w:pPr'
+        optional: true
+      - element: rpr
+        tag: 'w:rPr'
+        optional: true
+      - element: tbl_pr
+        tag: 'w:tblPr'
+        optional: true
+      - element: tr_pr
+        tag: 'w:trPr'
+        optional: true
+      - element: tc_pr
+        tag: 'w:tcPr'
+        optional: true
+    attributes:
+      - name: type
+        type: enum
+        values: [wholeTable, firstRow, lastRow, firstCol, lastCol, band1Vert, band2Vert, band1Horz, band2Horz, neCell, nwCell, seCell, swCell]
+        required: true
+
+  # Latent styles
+  latent_styles:
+    tag: 'w:latentStyles'
+    description: "Latent style definitions for application UI"
+    iso_reference: "17.7.4.9"
+    children:
+      - element: lsd_exception
+        tag: 'w:lsdException'
+        multiple: true
+        optional: true
+    attributes:
+      - name: defLockedState
+        type: boolean
+      - name: defUIPriority
+        type: integer
+      - name: defSemiHidden
+        type: boolean
+      - name: defUnhideWhenUsed
+        type: boolean
+      - name: defQFormat
+        type: boolean
+      - name: count
+        type: integer
+
+  # Latent style exception
+  lsd_exception:
+    tag: 'w:lsdException'
+    description: "Exception to latent style defaults"
+    iso_reference: "17.7.4.10"
+    children: []
+    attributes:
+      - name: name
+        type: string
+        required: true
+      - name: locked
+        type: boolean
+      - name: uiPriority
+        type: integer
+      - name: semiHidden
+        type: boolean
+      - name: unhideWhenUsed
+        type: boolean
+      - name: qFormat
+        type: boolean
+
+metadata:
+  element_count: 10
+  priority: "HIGH"
+  status: "complete"
+  phase: "3"
+  notes: "Complete styles system for Phase 3 (v3.0)"

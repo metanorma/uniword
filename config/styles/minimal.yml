@@ -1,0 +1,90 @@
+# Minimal Style Library
+# External configuration for basic document styles
+# Version: 1.0
+
+style_library:
+  name: "Minimal Styles"
+  version: "1.0"
+  description: "Minimal set of basic styles for simple documents"
+
+  # Paragraph styles
+  paragraph_styles:
+    title:
+      name: "Title"
+      properties:
+        alignment: center
+        spacing_before: 240
+        spacing_after: 180
+      run_properties:
+        font: "Arial"
+        size: 32
+        bold: true
+
+    heading:
+      name: "Heading"
+      properties:
+        spacing_before: 180
+        spacing_after: 100
+        keep_next: true
+      run_properties:
+        font: "Arial"
+        size: 28
+        bold: true
+
+    normal:
+      name: "Normal"
+      properties:
+        alignment: left
+        spacing_after: 120
+      run_properties:
+        font: "Calibri"
+        size: 22
+
+  # Character styles
+  character_styles:
+    bold:
+      name: "Bold"
+      run_properties:
+        bold: true
+
+    italic:
+      name: "Italic"
+      run_properties:
+        italic: true
+
+    underline:
+      name: "Underline"
+      run_properties:
+        underline: "single"
+
+  # List styles
+  list_styles:
+    bullet_list:
+      name: "Bullet List"
+      numbering_definition: 1
+      levels:
+        - level: 0
+          format: bullet
+          text: "•"
+          properties:
+            indent_left: 360
+
+    numbered_list:
+      name: "Numbered List"
+      numbering_definition: 2
+      levels:
+        - level: 0
+          format: decimal
+          text: "%1."
+          properties:
+            indent_left: 360
+
+  # Table styles
+  table_styles:
+    simple_table:
+      name: "Simple Table"
+      table_properties:
+        width: 5000
+        layout: auto
+      cell_properties:
+        vertical_alignment: top

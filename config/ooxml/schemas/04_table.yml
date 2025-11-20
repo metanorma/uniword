@@ -1,0 +1,184 @@
+# Table Schema
+# ISO/IEC 29500-1:2016 - Section 17.4
+# Table elements and properties
+
+schema:
+  namespace: w
+  category: "Table"
+  iso_section: "17.4"
+
+elements:
+  # Table element
+  table:
+    tag: 'w:tbl'
+    description: "Table - block-level element"
+    iso_reference: "17.4.38"
+    children:
+      - element: table_properties
+        tag: 'w:tblPr'
+        optional: true
+      - element: table_grid
+        tag: 'w:tblGrid'
+        optional: true
+      - element: table_row
+        tag: 'w:tr'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Table properties
+  tableproperties:
+    tag: 'w:tblPr'
+    description: "Table formatting properties"
+    iso_reference: "17.4.60"
+    children:
+      - element: table_style
+        tag: 'w:tblStyle'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+      - element: table_width
+        tag: 'w:tblW'
+        optional: true
+        attributes:
+          - name: w
+            type: integer
+          - name: type
+            type: enum
+            values: [auto, dxa, nil, pct]
+      - element: table_alignment
+        tag: 'w:jc'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [left, right, center]
+      - element: table_borders
+        tag: 'w:tblBorders'
+        optional: true
+      - element: table_cell_spacing
+        tag: 'w:tblCellSpacing'
+        optional: true
+        attributes:
+          - name: w
+            type: integer
+          - name: type
+            type: string
+      - element: table_indent
+        tag: 'w:tblInd'
+        optional: true
+        attributes:
+          - name: w
+            type: integer
+          - name: type
+            type: string
+      - element: table_layout
+        tag: 'w:tblLayout'
+        optional: true
+        attributes:
+          - name: type
+            type: enum
+            values: [auto, fixed]
+    attributes: []
+
+  # Table row
+  tablerow:
+    tag: 'w:tr'
+    description: "Table row"
+    iso_reference: "17.4.79"
+    children:
+      - element: table_row_properties
+        tag: 'w:trPr'
+        optional: true
+      - element: table_cell
+        tag: 'w:tc'
+        multiple: true
+    attributes: []
+
+  # Table row properties
+  tablerowproperties:
+    tag: 'w:trPr'
+    description: "Table row properties"
+    iso_reference: "17.4.82"
+    children:
+      - element: row_height
+        tag: 'w:trHeight'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+          - name: hRule
+            type: enum
+            values: [auto, exact, atLeast]
+      - element: table_header
+        tag: 'w:tblHeader'
+        optional: true
+        presence_only: true
+    attributes: []
+
+  # Table cell
+  tablecell:
+    tag: 'w:tc'
+    description: "Table cell"
+    iso_reference: "17.4.66"
+    children:
+      - element: table_cell_properties
+        tag: 'w:tcPr'
+        optional: true
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+    attributes: []
+
+  # Table cell properties
+  tablecellproperties:
+    tag: 'w:tcPr'
+    description: "Table cell properties"
+    iso_reference: "17.4.70"
+    children:
+      - element: cell_width
+        tag: 'w:tcW'
+        optional: true
+        attributes:
+          - name: w
+            type: integer
+          - name: type
+            type: enum
+            values: [auto, dxa, nil, pct]
+      - element: grid_span
+        tag: 'w:gridSpan'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+      - element: vertical_merge
+        tag: 'w:vMerge'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [restart, continue]
+      - element: vertical_align
+        tag: 'w:vAlign'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [top, center, bottom]
+      - element: shading
+        tag: 'w:shd'
+        optional: true
+        attributes:
+          - name: fill
+            type: string
+          - name: val
+            type: enum
+            values: [clear, solid]
+    attributes: []
+
+metadata:
+  element_count: 6
+  priority: "HIGH"
+  status: "complete"
+  phase: "1"

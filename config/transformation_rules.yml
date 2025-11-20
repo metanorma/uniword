@@ -1,0 +1,160 @@
+# Transformation Rules Configuration
+#
+# Defines transformation rules between format DOM models.
+# External configuration following "configuration over convention" principle.
+#
+# Rules are loaded at runtime and registered in TransformationRuleRegistry.
+# This allows modification without changing code (Open/Closed Principle).
+
+# Format-specific property mappings
+property_mappings:
+  # Paragraph properties that map directly between formats
+  paragraph_direct:
+    - alignment
+    - spacing_before
+    - spacing_after
+    - line_spacing
+    - line_rule
+    - indent_left
+    - indent_right
+    - indent_first_line
+    - keep_next
+    - keep_lines
+    - page_break_before
+    - outline_level
+
+  # Paragraph properties that need transformation
+  paragraph_transform:
+    docx_to_mhtml:
+      num_id: list_style_type  # DOCX numbering → CSS list style
+      ilvl: list_indent_level   # DOCX level → CSS indent
+    mhtml_to_docx:
+      list_style_type: num_id
+      list_indent_level: ilvl
+
+  # Run properties that map directly between formats
+  run_direct:
+    - bold
+    - italic
+    - underline
+    - strike
+    - double_strike
+    - size
+    - font
+    - color
+    - highlight
+    - vertical_align
+    - small_caps
+    - all_caps
+    - style
+
+  # Table properties that map directly
+  table_direct:
+    - width
+    - width_type
+    - alignment
+    - border_style
+    - borders
+    - cell_spacing
+    - cell_padding
+
+  # Image properties that map directly
+  image_direct:
+    - inline
+    - horizontal_alignment
+    - vertical_alignment
+    - text_wrapping
+    - width
+    - height
+    - alt_text
+    - title
+
+# Element type mappings
+element_mappings:
+  # 1-to-1 mappings
+  one_to_one:
+    - source: Paragraph
+      target: Paragraph
+      bidirectional: true
+
+    - source: Run
+      target: Run
+      bidirectional: true
+
+    - source: Table
+      target: Table
+      bidirectional: true
+      recursive: true  # Recursively transform rows and cells
+
+    - source: Image
+      target: Image
+      bidirectional: true
+
+    - source: Hyperlink
+      target: Hyperlink
+      bidirectional: true
+      recursive: true  # Recursively transform contained runs
+
+# Style name normalization rules
+style_name_rules:
+  # DOCX style IDs to display names
+  docx_to_display:
+    Heading1: "Heading 1"
+    Heading2: "Heading 2"
+    Heading3: "Heading 3"
+    Heading4: "Heading 4"
+    Heading5: "Heading 5"
+    Heading6: "Heading 6"
+    ListParagraph: "List Paragraph"
+    BodyText: "Body Text"
+
+  # Display names to DOCX style IDs
+  display_to_docx:
+    "Heading 1": Heading1
+    "Heading 2": Heading2
+    "Heading 3": Heading3
+    "Heading 4": Heading4
+    "Heading 5": Heading5
+    "Heading 6": Heading6
+    "List Paragraph": ListParagraph
+    "Body Text": BodyText
+
+# Format-specific defaults
+format_defaults:
+  docx:
+    # Default numbering for lists
+    default_bullet_num_id: 2
+    default_decimal_num_id: 1
+
+    # Default font
+    default_font: "Calibri"
+    default_font_size: 22  # 11pt in half-points
+
+    # Default margins (twips)
+    default_page_margins:
+      top: 1440     # 1 inch
+      bottom: 1440
+      left: 1440
+      right: 1440
+      header: 720   # 0.5 inch
+      footer: 720
+
+  mhtml:
+    # Default CSS classes for styles
+    heading1_class: "Heading1"
+    heading2_class: "Heading2"
+
+    # Default list styles
+    bullet_list_style: "disc"
+    decimal_list_style: "decimal"
+
+    # Default fonts
+    default_font: "Calibri"
+    default_font_size: "11pt"
+
+# Error messages (externalized for i18n)
+error_messages:
+  invalid_source: "Source must be a Document, got %{type}"
+  invalid_format: "Format must be :docx or :mhtml, got %{format}"
+  unsupported_element: "No transformation rule for %{element_type}"
+  transformation_failed: "Transformation failed: %{reason}"

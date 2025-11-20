@@ -1,0 +1,9 @@
+--markup markdown
+--output-dir docs/api
+--readme README.adoc
+--protected
+lib/**/*.rb
+-
+README.adoc
+CHANGELOG.md
+LICENSE.txt

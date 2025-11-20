@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<a:theme xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" name="Integral" mc:Ignorable="w14 w15">
+  <a:themeElements>
+    <a:clrScheme name="Integral">
+      <a:dk1>
+        <a:srgbClr val="000000"/>
+      </a:dk1>
+      <a:lt1>
+        <a:srgbClr val="FFFFFF"/>
+      </a:lt1>
+      <a:dk2>
+        <a:srgbClr val="335B74"/>
+      </a:dk2>
+      <a:lt2>
+        <a:srgbClr val="DFE3E5"/>
+      </a:lt2>
+      <a:accent1>
+        <a:srgbClr val="1CADE4"/>
+      </a:accent1>
+      <a:accent2>
+        <a:srgbClr val="2683C6"/>
+      </a:accent2>
+      <a:accent3>
+        <a:srgbClr val="27CED7"/>
+      </a:accent3>
+      <a:accent4>
+        <a:srgbClr val="42BA97"/>
+      </a:accent4>
+      <a:accent5>
+        <a:srgbClr val="3E8853"/>
+      </a:accent5>
+      <a:accent6>
+        <a:srgbClr val="62A39F"/>
+      </a:accent6>
+      <a:hlink>
+        <a:srgbClr val="6B9F25"/>
+      </a:hlink>
+      <a:folHlink>
+        <a:srgbClr val="B26B02"/>
+      </a:folHlink>
+    </a:clrScheme>
+    <a:fontScheme name="Integral">
+      <a:majorFont>
+        <a:latin typeface="Tw Cen MT Condensed"/>
+        <a:ea typeface=""/>
+        <a:cs typeface=""/>
+      </a:majorFont>
+      <a:minorFont>
+        <a:latin typeface="Tw Cen MT"/>
+        <a:ea typeface=""/>
+        <a:cs typeface=""/>
+      </a:minorFont>
+    </a:fontScheme>
+    <a:fmtScheme name="Office">
+      <a:fillStyleLst/>
+      <a:lnStyleLst/>
+      <a:effectStyleLst/>
+      <a:bgFillStyleLst/>
+    </a:fmtScheme>
+  </a:themeElements>
+</a:theme>

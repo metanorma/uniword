@@ -1,0 +1,233 @@
+# Technical Report Style Library
+# External configuration for technical report styles
+# Version: 1.0
+
+style_library:
+  name: "Technical Report Styles"
+  version: "1.0"
+  description: "Styles optimized for technical reports and documentation"
+
+  # Paragraph styles
+  paragraph_styles:
+    report_title:
+      name: "Report Title"
+      properties:
+        alignment: center
+        spacing_before: 360
+        spacing_after: 240
+        keep_next: true
+      run_properties:
+        font: "Arial"
+        size: 36  # 18pt
+        bold: true
+        color: "2B579A"
+
+    report_subtitle:
+      name: "Report Subtitle"
+      base_style: report_title
+      properties:
+        spacing_before: 120
+        spacing_after: 360
+      run_properties:
+        size: 28
+        bold: false
+
+    abstract:
+      name: "Abstract"
+      properties:
+        alignment: justify
+        spacing_before: 240
+        spacing_after: 240
+        indent_left: 720
+        indent_right: 720
+      run_properties:
+        font: "Times New Roman"
+        size: 22
+        italic: true
+
+    executive_summary:
+      name: "Executive Summary"
+      properties:
+        alignment: left
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        font: "Calibri"
+        size: 22
+
+    section_heading:
+      name: "Section Heading"
+      properties:
+        outline_level: 0
+        spacing_before: 360
+        spacing_after: 180
+        keep_next: true
+      run_properties:
+        font: "Arial"
+        size: 28
+        bold: true
+        color: "2B579A"
+
+    subsection_heading:
+      name: "Subsection Heading"
+      base_style: section_heading
+      properties:
+        outline_level: 1
+        spacing_before: 240
+        spacing_after: 120
+      run_properties:
+        size: 24
+
+    body_text:
+      name: "Body Text"
+      properties:
+        alignment: justify
+        spacing_after: 120
+        line_spacing: 1.5
+        line_rule: "auto"
+      run_properties:
+        font: "Calibri"
+        size: 22
+
+    figure_caption:
+      name: "Figure Caption"
+      properties:
+        alignment: center
+        spacing_before: 60
+        spacing_after: 180
+      run_properties:
+        font: "Calibri"
+        size: 20
+        italic: true
+        color: "666666"
+
+    table_caption:
+      name: "Table Caption"
+      base_style: figure_caption
+      properties:
+        spacing_before: 180
+        spacing_after: 60
+
+    appendix_heading:
+      name: "Appendix Heading"
+      properties:
+        outline_level: 0
+        spacing_before: 480
+        spacing_after: 180
+        page_break_before: true
+      run_properties:
+        font: "Arial"
+        size: 28
+        bold: true
+        color: "2B579A"
+
+  # Character styles
+  character_styles:
+    technical_term:
+      name: "Technical Term"
+      run_properties:
+        font: "Consolas"
+        bold: true
+
+    variable:
+      name: "Variable"
+      run_properties:
+        font: "Consolas"
+        italic: true
+        color: "0066CC"
+
+    code_inline:
+      name: "Code Inline"
+      run_properties:
+        font: "Consolas"
+        size: 20
+        color: "C7254E"
+
+    reference:
+      name: "Reference"
+      run_properties:
+        color: "0563C1"
+        underline: "single"
+
+  # List styles
+  list_styles:
+    requirements_list:
+      name: "Requirements List"
+      numbering_definition: 3
+      levels:
+        - level: 0
+          format: decimal
+          text: "REQ-%1"
+          properties:
+            indent_left: 720
+        - level: 1
+          format: decimal
+          text: "REQ-%1.%2"
+          properties:
+            indent_left: 1080
+
+    procedure_list:
+      name: "Procedure List"
+      numbering_definition: 4
+      levels:
+        - level: 0
+          format: decimal
+          text: "Step %1:"
+          properties:
+            indent_left: 360
+        - level: 1
+          format: lowerLetter
+          text: "%2)"
+          properties:
+            indent_left: 720
+
+  # Table styles
+  table_styles:
+    data_table:
+      name: "Data Table"
+      table_properties:
+        width: 5000
+        layout: fixed
+      cell_properties:
+        vertical_alignment: middle
+      conditional_formatting:
+        first_row:
+          cell_properties:
+            background_color: "2B579A"
+        banded_rows:
+          cell_properties:
+            background_color: "F2F2F2"
+
+  # Semantic styles
+  semantic_styles:
+    note:
+      name: "Note"
+      semantic: note
+      properties:
+        indent_left: 360
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        color: "0066CC"
+
+    warning:
+      name: "Warning"
+      semantic: warning
+      properties:
+        indent_left: 360
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        bold: true
+        color: "FF6600"
+
+    caution:
+      name: "Caution"
+      semantic: caution
+      properties:
+        indent_left: 360
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        bold: true
+        color: "CC0000"

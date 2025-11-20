@@ -1,0 +1,50 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.7
+  SuggestExtensions: false
+  Exclude:
+    - 'vendor/**/*'
+    - 'reference/**/*'
+    - 'DEVELOPMENT_PLAN.md'
+    - 'UNIWORD_DEVELOPMENT_PLAN.md'
+
+Style/Documentation:
+  Enabled: false
+
+Gemspec/DevelopmentDependencies:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - '*.gemspec'
+
+Layout/LineLength:
+  Max: 100
+  Exclude:
+    - '*.gemspec'
+    - 'Rakefile'
+
+# Value objects need complex equality comparisons
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/uniword/properties/**/*'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/uniword/properties/**/*'
+    - 'lib/uniword/infrastructure/zip_packager.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/uniword/properties/**/*'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/uniword/properties/**/*'
+
+Naming/PredicateMethod:
+  Exclude:
+    - 'lib/uniword/validators/**/*'

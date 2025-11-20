@@ -1,0 +1,196 @@
+---
+name: Vapor Trail
+source: Vapor Trail.thmx
+imported_at: '2025-11-01T00:14:43Z'
+color_scheme:
+  name: Vapor Trail
+  colors:
+    accent1: DF2E28
+    accent2: FE801A
+    accent3: E9BF35
+    accent4: 81BB42
+    accent5: 32C7A9
+    accent6: 4A9BDC
+    dk1: '000000'
+    dk2: '454545'
+    folHlink: F38B53
+    hlink: F0532B
+    lt1: FFFFFF
+    lt2: DADADA
+font_scheme:
+  name: Vapor Trail
+  major_font: Century Gothic
+  minor_font: Century Gothic
+  major_east_asian: ''
+  major_complex_script: ''
+  minor_east_asian: ''
+  minor_complex_script: ''
+variants:
+  variant1:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: 01D17D
+        accent2: 84C72A
+        accent3: E1D126
+        accent4: E29932
+        accent5: E56526
+        accent6: D63731
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: BAFC85
+        hlink: 35FA7F
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant2:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: E5224E
+        accent2: 9D074E
+        accent3: 7F2294
+        accent4: 8D65EA
+        accent5: 588FE2
+        accent6: 127CA4
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: F98FE9
+        hlink: FB4AB6
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant3:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: C4220D
+        accent2: EB7712
+        accent3: ECBD31
+        accent4: 92CE4A
+        accent5: 50CFB4
+        accent6: 0D8EC5
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: F09D3A
+        hlink: EA5A0C
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant4:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: DF2E28
+        accent2: FE801A
+        accent3: E9BF35
+        accent4: 81BB42
+        accent5: 32C7A9
+        accent6: 4A9BDC
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: F38B53
+        hlink: F0532B
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant5:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: 01D17D
+        accent2: 84C72A
+        accent3: E1D126
+        accent4: E29932
+        accent5: E56526
+        accent6: D63731
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: BAFC85
+        hlink: 35FA7F
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant6:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: E5224E
+        accent2: 9D074E
+        accent3: 7F2294
+        accent4: 8D65EA
+        accent5: 588FE2
+        accent6: 127CA4
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: F98FE9
+        hlink: FB4AB6
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant7:
+    color_scheme:
+      name: Vapor Trail
+      colors:
+        accent1: C4220D
+        accent2: EB7712
+        accent3: ECBD31
+        accent4: 92CE4A
+        accent5: 50CFB4
+        accent6: 0D8EC5
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: F09D3A
+        hlink: EA5A0C
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Vapor Trail
+      major_font: Century Gothic
+      minor_font: Century Gothic
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''

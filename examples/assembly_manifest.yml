@@ -1,0 +1,58 @@
+# Example Assembly Manifest
+# This file demonstrates how to configure document assembly
+
+document:
+  # Template to use (optional)
+  template: iso_standard
+
+  # Output file path
+  output: assembled_standard.docx
+
+  # Variables for substitution
+  variables:
+    title: "ISO 8601-2:2026"
+    subtitle: "Date and time — Representations for information interchange"
+    date: "2026-01-15"
+    version: "Working Draft 1.0"
+    author: "ISO/TC 154"
+    status: "Draft"
+
+    # Nested variables
+    document:
+      number: "ISO 8601-2"
+      year: "2026"
+      stage: "WD"
+
+    organization:
+      name: "International Organization for Standardization"
+      abbrev: "ISO"
+
+  # Document sections (assembled in order)
+  sections:
+    # Static component
+    - component: cover_page
+
+    # Another static component
+    - component: legal_notice
+
+    # Auto-generated table of contents
+    - component: __toc__
+      options:
+        max_level: 3
+        title: "Table of Contents"
+
+    # Wildcard pattern with alphabetical ordering
+    - component: clauses/*
+      order: alphabetical
+
+    # Wildcard with numeric ordering
+    - component: annexes/*
+      order: numeric
+
+    # Bibliography
+    - component: bibliography
+
+  # Additional options
+  options:
+    include_page_numbers: true
+    resolve_cross_references: true

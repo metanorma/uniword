@@ -1,0 +1,60 @@
+# Document Validation Configuration
+#
+# Defines rules and settings for the 7-layer document validation system.
+# Each layer validates one specific aspect of document integrity (MECE).
+
+document_validation:
+  # General settings
+  fail_fast: true              # Stop validation on first critical error
+  max_file_size: 104857600     # 100MB maximum file size
+
+  # Layer 1: File Structure Validation
+  file_structure:
+    enabled: true
+    check_extension: true
+    check_size: true
+    allowed_extensions:
+      - '.docx'
+      - '.doc'
+
+  # Layer 2: ZIP Integrity Validation
+  zip_integrity:
+    enabled: true
+    check_entries: true         # Verify required entries exist
+    check_corruption: true      # Test each entry for corruption
+    verify_compression: true    # Validate compression method
+
+  # Layer 3: OOXML Part Validation
+  ooxml_parts:
+    enabled: true
+    require_content_types: true       # [Content_Types].xml must exist
+    require_document: true            # word/document.xml must exist
+    require_relationships: true       # _rels/.rels must exist
+    warn_missing_optional: true       # Warn about missing optional parts
+
+  # Layer 4: XML Schema Validation
+  xml_schema:
+    enabled: true
+    strict_parsing: true        # Use strict XML parsing
+    check_encoding: true        # Validate XML encoding
+    validate_namespaces: true   # Check namespace declarations
+
+  # Layer 5: Relationship Validation
+  relationships:
+    enabled: true
+    check_targets_exist: true   # Verify relationship targets exist
+    check_circular_refs: false  # Check for circular references (expensive)
+    validate_types: true        # Validate relationship type URIs
+
+  # Layer 6: Content Type Validation
+  content_types:
+    enabled: true
+    check_consistency: true     # Verify content types are consistent
+    validate_extensions: true   # Check file extensions match declarations
+
+  # Layer 7: Document Semantics Validation
+  document_semantics:
+    enabled: true
+    check_required_elements: true   # Verify required elements (body, etc.)
+    validate_structure: true        # Check document hierarchy
+    check_style_references: true    # Validate style references (future)

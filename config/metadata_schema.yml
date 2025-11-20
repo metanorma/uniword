@@ -1,0 +1,294 @@
+# Metadata Schema Configuration
+#
+# Defines metadata schema for document metadata extraction and validation.
+# External configuration following "configuration over convention" principle.
+#
+# Schema is loaded at runtime by MetadataManager.
+# This allows modification without changing code (Open/Closed Principle).
+
+# Core metadata properties (standard document properties)
+core_properties:
+  title:
+    type: string
+    required: false
+    description: "Document title"
+    max_length: 255
+
+  author:
+    type: string
+    required: false
+    description: "Document author"
+    max_length: 255
+
+  subject:
+    type: string
+    required: false
+    description: "Document subject"
+    max_length: 255
+
+  keywords:
+    type: array
+    required: false
+    description: "Document keywords/tags"
+    item_type: string
+    max_items: 50
+
+  description:
+    type: string
+    required: false
+    description: "Document description"
+    max_length: 1000
+
+  creator:
+    type: string
+    required: false
+    description: "Document creator application"
+    max_length: 255
+
+  created_at:
+    type: datetime
+    required: false
+    description: "Document creation timestamp"
+
+  modified_at:
+    type: datetime
+    required: false
+    description: "Last modification timestamp"
+
+  last_modified_by:
+    type: string
+    required: false
+    description: "Last modifier name"
+    max_length: 255
+
+# Extended metadata properties (additional document properties)
+extended_properties:
+  company:
+    type: string
+    required: false
+    description: "Company name"
+    max_length: 255
+
+  category:
+    type: string
+    required: false
+    description: "Document category"
+    max_length: 100
+
+  manager:
+    type: string
+    required: false
+    description: "Manager name"
+    max_length: 255
+
+  language:
+    type: string
+    required: false
+    description: "Document language (ISO 639-1 code)"
+    pattern: "^[a-z]{2}(-[A-Z]{2})?$"
+
+  version:
+    type: string
+    required: false
+    description: "Document version"
+    max_length: 50
+
+  revision:
+    type: integer
+    required: false
+    description: "Revision number"
+    min_value: 0
+
+  status:
+    type: string
+    required: false
+    description: "Document status"
+    allowed_values:
+      - draft
+      - review
+      - final
+      - archived
+
+# Statistical metadata (computed from document content)
+statistical_metadata:
+  word_count:
+    type: integer
+    required: false
+    description: "Total word count"
+    min_value: 0
+
+  character_count:
+    type: integer
+    required: false
+    description: "Total character count"
+    min_value: 0
+
+  paragraph_count:
+    type: integer
+    required: false
+    description: "Total paragraph count"
+    min_value: 0
+
+  page_count:
+    type: integer
+    required: false
+    description: "Estimated page count"
+    min_value: 0
+
+  table_count:
+    type: integer
+    required: false
+    description: "Number of tables"
+    min_value: 0
+
+  image_count:
+    type: integer
+    required: false
+    description: "Number of images"
+    min_value: 0
+
+  hyperlink_count:
+    type: integer
+    required: false
+    description: "Number of hyperlinks"
+    min_value: 0
+
+  footnote_count:
+    type: integer
+    required: false
+    description: "Number of footnotes"
+    min_value: 0
+
+  endnote_count:
+    type: integer
+    required: false
+    description: "Number of endnotes"
+    min_value: 0
+
+# Content metadata (extracted from document content)
+content_metadata:
+  headings:
+    type: array
+    required: false
+    description: "Document headings hierarchy"
+    item_type: hash
+    max_items: 1000
+
+  first_paragraph:
+    type: string
+    required: false
+    description: "First paragraph text (summary)"
+    max_length: 500
+
+  outline_levels:
+    type: array
+    required: false
+    description: "Outline level structure"
+    item_type: integer
+
+  sections:
+    type: array
+    required: false
+    description: "Document sections"
+    item_type: string
+
+# Validation rules
+validation_rules:
+  # Required fields for specific scenarios
+  required_for_publication:
+    - title
+    - author
+    - subject
+    - keywords
+
+  required_for_archival:
+    - title
+    - author
+    - created_at
+    - category
+    - status
+
+  # Field dependencies
+  dependencies:
+    status:
+      final:
+        requires:
+          - author
+          - created_at
+          - version
+      archived:
+        requires:
+          - author
+          - created_at
+          - modified_at
+          - version
+
+# Export formats configuration
+export_formats:
+  json:
+    enabled: true
+    pretty_print: true
+    include_null_values: false
+
+  yaml:
+    enabled: true
+    include_null_values: false
+
+  csv:
+    enabled: true
+    delimiter: ","
+    quote_char: "\""
+    include_headers: true
+    # Define CSV column order
+    columns:
+      - title
+      - author
+      - subject
+      - created_at
+      - modified_at
+      - word_count
+      - page_count
+      - category
+      - status
+
+  xml:
+    enabled: true
+    root_element: "metadata"
+    include_null_values: false
+
+# Extraction configuration
+extraction_config:
+  # Statistical metadata extraction settings
+  statistics:
+    enabled: true
+    compute_word_count: true
+    compute_character_count: true
+    compute_page_estimate: true
+    page_estimate_words_per_page: 500
+
+  # Content metadata extraction settings
+  content:
+    enabled: true
+    extract_headings: true
+    extract_first_paragraph: true
+    max_heading_levels: 6
+    first_paragraph_max_length: 500
+
+  # Performance settings
+  performance:
+    max_document_size_mb: 100
+    timeout_seconds: 30
+    cache_results: true
+    cache_ttl_seconds: 3600
+
+# Error messages (externalized for i18n)
+error_messages:
+  invalid_document: "Document must be a valid Uniword::Document instance, got %{type}"
+  missing_required_field: "Required field '%{field}' is missing"
+  invalid_field_type: "Field '%{field}' must be of type %{expected_type}, got %{actual_type}"
+  invalid_field_value: "Field '%{field}' has invalid value: %{message}"
+  validation_failed: "Metadata validation failed: %{errors}"
+  extraction_failed: "Metadata extraction failed: %{reason}"
+  update_failed: "Metadata update failed: %{reason}"
+  export_failed: "Metadata export failed: %{reason}"
+  unsupported_format: "Unsupported export format: %{format}"
