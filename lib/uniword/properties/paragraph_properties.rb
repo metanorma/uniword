@@ -25,6 +25,21 @@ module Uniword
         map_element 'pageBreakBefore', to: :page_break_before
         map_element 'outlineLvl', to: :outline_level
         map_element 'numPr', to: :numbering_properties
+        map_element 'pBdr', to: :borders
+        map_element 'shd', to: :shading
+        map_element 'tabs', to: :tab_stops
+        map_element 'suppressLineNumbers', to: :suppress_line_numbers
+        map_element 'contextualSpacing', to: :contextual_spacing
+        map_element 'bidi', to: :bidirectional
+        map_element 'mirrorIndents', to: :mirror_indents
+        map_element 'snapToGrid', to: :snap_to_grid
+        map_element 'widowControl', to: :widow_control
+        map_element 'framePr', to: :frame_properties
+        map_element 'sectPr', to: :section_properties
+        map_element 'textDirection', to: :text_direction
+        map_element 'cnfStyle', to: :conditional_formatting
+        map_element 'rPr', to: :run_properties
+        map_element 'pPrChange', to: :properties_change
       end
 
       # Style reference (name of paragraph style)
@@ -74,18 +89,23 @@ module Uniword
       # Numbering level (0-8)
       attribute :ilvl, :integer
 
-      # Aliases for more readable API
-      alias_method :numbering_id, :num_id
-      alias_method :numbering_id=, :num_id=
-      alias_method :numbering_level, :ilvl
-      alias_method :numbering_level=, :ilvl=
-      alias_method :spacing_line, :line_spacing
-      alias_method :spacing_line=, :line_spacing=
-      alias_method :left_indent, :indent_left
-      alias_method :left_indent=, :indent_left=
+      # Paragraph borders (complete border structure)
+      attribute :borders, ParagraphBorders
 
-      # Paragraph borders
-      attribute :borders, :string  # Will be enhanced with ParagraphBorders class
+      # Shading properties (complete implementation)
+      attribute :shading, ParagraphShading
+
+      # Tab stops collection
+      attribute :tab_stops, TabStopCollection
+
+      # Numbering properties (complete numPr structure)
+      attribute :numbering_properties, NumberingProperties
+
+      # Frame properties for text boxes
+      attribute :frame_properties, FrameProperties
+
+      # Section properties
+      attribute :section_properties, SectionProperties
 
       # Suppress line numbers for this paragraph
       attribute :suppress_line_numbers, :boolean, default: -> { false }
@@ -96,36 +116,88 @@ module Uniword
       # Bidirectional text (right-to-left)
       attribute :bidirectional, :boolean, default: -> { false }
 
-      # Shading pattern type (symbol or string)
-      attr_accessor :_shading_type_internal
+      # Mirror indents (left/right indents swap in RTL text)
+      attribute :mirror_indents, :boolean, default: -> { false }
 
+      # Snap to grid (align text to document grid)
+      attribute :snap_to_grid, :boolean, default: -> { true }
+
+      # Widow/orphan control
+      attribute :widow_control, :boolean, default: -> { true }
+
+      # Text direction
+      attribute :text_direction, :string
+
+      # Conditional formatting style (for tables)
+      attribute :conditional_formatting, :string
+
+      # Run properties applied to paragraph mark
+      attribute :run_properties, RunProperties
+
+      # Properties change tracking
+      attribute :properties_change, PropertiesChange
+
+      # Aliases for more readable API
+      alias_method :numbering_id, :num_id
+      alias_method :numbering_id=, :num_id=
+      alias_method :numbering_level, :ilvl
+      alias_method :numbering_level=, :ilvl=
+      alias_method :spacing_line, :line_spacing
+      alias_method :spacing_line=, :line_spacing=
+      alias_method :left_indent, :indent_left
+      alias_method :left_indent=, :indent_left=
+
+      # Convenience methods for borders
+      def border_top
+        borders&.top
+      end
+
+      def border_bottom
+        borders&.bottom
+      end
+
+      def border_left
+        borders&.left
+      end
+
+      def border_right
+        borders&.right
+      end
+
+      def border_between
+        borders&.between
+      end
+
+      def border_bar
+        borders&.bar
+      end
+
+      # Convenience methods for shading
       def shading_type
-        @_shading_type_internal
+        shading&.shading_type
       end
 
-      def shading_type=(value)
-        @_shading_type_internal = value.is_a?(String) ? value.to_sym : value
+      def shading_color
+        shading&.color
       end
 
-      # Shading foreground color
-      attribute :shading_color, :string
-
-      # Shading background fill color
-      attribute :shading_fill, :string
+      def shading_fill
+        shading&.fill
+      end
 
       # Convenience setter for shading (sets shading_fill)
       #
       # @param value [String] The shading/background color
       # @return [String] The shading value
       def shading=(value)
-        self.shading_fill = value
+        self.shading = ParagraphShading.new(fill: value) unless value.nil?
       end
 
       # Convenience getter for shading (returns shading_fill)
       #
       # @return [String, nil] The shading/background color
       def shading
-        shading_fill
+        shading&.fill
       end
 
       # Value-based equality
@@ -152,12 +224,21 @@ module Uniword
           num_id == other.num_id &&
           ilvl == other.ilvl &&
           borders == other.borders &&
+          shading == other.shading &&
+          tab_stops == other.tab_stops &&
+          numbering_properties == other.numbering_properties &&
+          frame_properties == other.frame_properties &&
+          section_properties == other.section_properties &&
           suppress_line_numbers == other.suppress_line_numbers &&
           contextual_spacing == other.contextual_spacing &&
           bidirectional == other.bidirectional &&
-          shading_type == other.shading_type &&
-          shading_color == other.shading_color &&
-          shading_fill == other.shading_fill
+          mirror_indents == other.mirror_indents &&
+          snap_to_grid == other.snap_to_grid &&
+          widow_control == other.widow_control &&
+          text_direction == other.text_direction &&
+          conditional_formatting == other.conditional_formatting &&
+          run_properties == other.run_properties &&
+          properties_change == other.properties_change
       end
 
       alias eql? ==
@@ -170,9 +251,11 @@ module Uniword
           style, alignment, spacing_before, spacing_after,
           line_spacing, line_rule, indent_left, indent_right, indent_first_line,
           keep_next, keep_lines, page_break_before, outline_level,
-          num_id, ilvl, borders, suppress_line_numbers,
-          contextual_spacing, bidirectional,
-          shading_type, shading_color, shading_fill
+          num_id, ilvl, borders, shading, tab_stops, numbering_properties,
+          frame_properties, section_properties, suppress_line_numbers,
+          contextual_spacing, bidirectional, mirror_indents, snap_to_grid,
+          widow_control, text_direction, conditional_formatting,
+          run_properties, properties_change
         ].hash
       end
 
@@ -183,6 +266,321 @@ module Uniword
         # Don't freeze - allow mutation for easier testing
         # freeze
       end
+    end
+
+    # Paragraph borders container
+    class ParagraphBorders < Lutaml::Model::Serializable
+      xml do
+        root 'pBdr'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_element 'top', to: :top
+        map_element 'bottom', to: :bottom
+        map_element 'left', to: :left
+        map_element 'right', to: :right
+        map_element 'between', to: :between
+        map_element 'bar', to: :bar
+      end
+
+      attribute :top, Border
+      attribute :bottom, Border
+      attribute :left, Border
+      attribute :right, Border
+      attribute :between, Border
+      attribute :bar, Border
+    end
+
+    # Individual border definition
+    class Border < Lutaml::Model::Serializable
+      xml do
+        root :border_element  # Dynamic root based on context
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_attribute 'val', to: :style
+        map_attribute 'color', to: :color
+        map_attribute 'sz', to: :size
+        map_attribute 'space', to: :space
+        map_attribute 'shadow', to: :shadow
+        map_attribute 'frame', to: :frame
+      end
+
+      # Border style (single, double, dashed, etc.)
+      attribute :style, :string
+
+      # Border color (hex color code)
+      attribute :color, :string
+
+      # Border size in eighths of a point
+      attribute :size, :integer
+
+      # Space between border and text in points
+      attribute :space, :integer
+
+      # Shadow effect
+      attribute :shadow, :boolean, default: -> { false }
+
+      # Frame effect
+      attribute :frame, :boolean, default: -> { false }
+    end
+
+    # Paragraph shading properties
+    class ParagraphShading < Lutaml::Model::Serializable
+      xml do
+        root 'shd'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_attribute 'val', to: :shading_type
+        map_attribute 'color', to: :color
+        map_attribute 'fill', to: :fill
+        map_attribute 'themeFill', to: :theme_fill
+        map_attribute 'themeFillShade', to: :theme_fill_shade
+        map_attribute 'themeFillTint', to: :theme_fill_tint
+      end
+
+      # Shading pattern type (clear, solid, pct5, pct10, etc.)
+      attribute :shading_type, :string, default: -> { 'clear' }
+
+      # Foreground color for pattern
+      attribute :color, :string
+
+      # Background fill color
+      attribute :fill, :string
+
+      # Theme color for fill
+      attribute :theme_fill, :string
+
+      # Theme fill shade (0-255)
+      attribute :theme_fill_shade, :string
+
+      # Theme fill tint (0-255)
+      attribute :theme_fill_tint, :string
+    end
+
+    # Tab stop collection
+    class TabStopCollection < Lutaml::Model::Serializable
+      xml do
+        root 'tabs'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_element 'tab', to: :tabs, collection: true
+      end
+
+      attribute :tabs, TabStop, collection: true, default: -> { [] }
+
+      def add_tab(position, alignment = 'left', leader = 'none')
+        tabs << TabStop.new(position: position, alignment: alignment, leader: leader)
+      end
+    end
+
+    # Individual tab stop
+    class TabStop < Lutaml::Model::Serializable
+      xml do
+        root 'tab'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_attribute 'pos', to: :position
+        map_attribute 'val', to: :alignment
+        map_attribute 'leader', to: :leader
+      end
+
+      # Tab position in twips
+      attribute :position, :integer
+
+      # Tab alignment (left, center, right, decimal, bar, num, clear)
+      attribute :alignment, :string, default: -> { 'left' }
+
+      # Tab leader character (none, dot, hyphen, underscore, heavy, middleDot)
+      attribute :leader, :string, default: -> { 'none' }
+    end
+
+    # Numbering properties (complete numPr structure)
+    class NumberingProperties < Lutaml::Model::Serializable
+      xml do
+        root 'numPr'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_element 'ilvl', to: :level
+        map_element 'numId', to: :num_id
+        map_element 'numberingChange', to: :numbering_change
+        map_element 'ins', to: :inserted_numbering
+      end
+
+      # Numbering level (0-8)
+      attribute :level, :integer
+
+      # Numbering ID
+      attribute :num_id, :string
+
+      # Numbering change tracking
+      attribute :numbering_change, :string
+
+      # Inserted numbering
+      attribute :inserted_numbering, :string
+    end
+
+    # Frame properties for text boxes
+    class FrameProperties < Lutaml::Model::Serializable
+      xml do
+        root 'framePr'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_attribute 'dropCap', to: :drop_cap
+        map_attribute 'lines', to: :lines
+        map_attribute 'w', to: :width
+        map_attribute 'h', to: :height
+        map_attribute 'vspace', to: :vspace
+        map_attribute 'hspace', to: :hspace
+        map_attribute 'wrap', to: :wrap
+        map_attribute 'hAnchor', to: :h_anchor
+        map_attribute 'vAnchor', to: :v_anchor
+        map_attribute 'x', to: :x
+        map_attribute 'y', to: :y
+        map_attribute 'hRule', to: :h_rule
+        map_attribute 'anchorLock', to: :anchor_lock
+      end
+
+      # Drop cap style (none, drop, margin)
+      attribute :drop_cap, :string
+
+      # Number of lines for drop cap
+      attribute :lines, :integer
+
+      # Frame width
+      attribute :width, :integer
+
+      # Frame height
+      attribute :height, :integer
+
+      # Vertical space
+      attribute :vspace, :integer
+
+      # Horizontal space
+      attribute :hspace, :integer
+
+      # Text wrapping (none, around, notBeside, through, tight, none)
+      attribute :wrap, :string
+
+      # Horizontal anchor (margin, page, text)
+      attribute :h_anchor, :string
+
+      # Vertical anchor (margin, page, text)
+      attribute :v_anchor, :string
+
+      # Horizontal position
+      attribute :x, :integer
+
+      # Vertical position
+      attribute :y, :integer
+
+      # Height rule (auto, atLeast, exact)
+      attribute :h_rule, :string
+
+      # Anchor lock
+      attribute :anchor_lock, :boolean, default: -> { false }
+    end
+
+    # Section properties
+    class SectionProperties < Lutaml::Model::Serializable
+      xml do
+        root 'sectPr'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_element 'footnotePr', to: :footnote_properties
+        map_element 'endnotePr', to: :endnote_properties
+        map_element 'type', to: :section_type
+        map_element 'pgSz', to: :page_size
+        map_element 'pgMar', to: :page_margins
+        map_element 'pgBorders', to: :page_borders
+        map_element 'lnNumType', to: :line_numbering
+        map_element 'pgNumType', to: :page_numbering
+        map_element 'cols', to: :columns
+        map_element 'formProt', to: :form_protection
+        map_element 'vAlign', to: :vertical_alignment
+        map_element 'noEndnote', to: :no_endnote
+        map_element 'titlePg', to: :title_page
+        map_element 'textDirection', to: :text_direction
+        map_element 'bidi', to: :bidirectional
+        map_element 'rtlGutter', to: :rtl_gutter
+        map_element 'docGrid', to: :document_grid
+      end
+
+      # Footnote properties
+      attribute :footnote_properties, :string
+
+      # Endnote properties
+      attribute :endnote_properties, :string
+
+      # Section type (nextPage, nextColumn, continuous, evenPage, oddPage)
+      attribute :section_type, :string
+
+      # Page size properties
+      attribute :page_size, :string
+
+      # Page margins
+      attribute :page_margins, :string
+
+      # Page borders
+      attribute :page_borders, :string
+
+      # Line numbering
+      attribute :line_numbering, :string
+
+      # Page numbering
+      attribute :page_numbering, :string
+
+      # Columns
+      attribute :columns, :string
+
+      # Form protection
+      attribute :form_protection, :boolean, default: -> { false }
+
+      # Vertical alignment
+      attribute :vertical_alignment, :string
+
+      # No endnote
+      attribute :no_endnote, :boolean, default: -> { false }
+
+      # Title page
+      attribute :title_page, :boolean, default: -> { false }
+
+      # Text direction
+      attribute :text_direction, :string
+
+      # Bidirectional
+      attribute :bidirectional, :boolean, default: -> { false }
+
+      # RTL gutter
+      attribute :rtl_gutter, :boolean, default: -> { false }
+
+      # Document grid
+      attribute :document_grid, :string
+    end
+
+    # Properties change tracking
+    class PropertiesChange < Lutaml::Model::Serializable
+      xml do
+        root 'pPrChange'
+        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+
+        map_attribute 'id', to: :id
+        map_attribute 'author', to: :author
+        map_attribute 'date', to: :date
+      end
+
+      # Change ID
+      attribute :id, :string
+
+      # Author
+      attribute :author, :string
+
+      # Date
+      attribute :date, :string
+    end
+
+    # Run properties for paragraph mark
+    class RunProperties < Lutaml::Model::Serializable
+      # This will be defined in run_properties.rb, but we need a placeholder
+      # The actual implementation will be imported from the RunProperties class
     end
   end
 end
