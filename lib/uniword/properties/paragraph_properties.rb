@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+require_relative 'border'
+require_relative 'shading'
+require_relative 'tab_stop'
+require_relative 'numbering_properties'
+require_relative 'frame_properties'
+require_relative '../ooxml/namespaces'
+
 module Uniword
   module Properties
     # Value object representing paragraph formatting properties
@@ -12,8 +19,9 @@ module Uniword
     class ParagraphProperties < Lutaml::Model::Serializable
       # OOXML namespace configuration
       xml do
-        root 'pPr', mixed: true
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+        element 'pPr'
+        namespace Ooxml::Namespaces::WordProcessingML
+        mixed_content
 
         # All mapped elements will be in the 'w' namespace
         map_element 'pStyle', to: :style
@@ -132,10 +140,10 @@ module Uniword
       attribute :conditional_formatting, :string
 
       # Run properties applied to paragraph mark
-      attribute :run_properties, RunProperties
+      attribute :run_properties, :string  # Will be replaced with RunProperties when available
 
       # Properties change tracking
-      attribute :properties_change, PropertiesChange
+      attribute :properties_change, :string  # Simple string for now, can be enhanced later
 
       # Aliases for more readable API
       alias_method :numbering_id, :num_id
@@ -189,14 +197,14 @@ module Uniword
       #
       # @param value [String] The shading/background color
       # @return [String] The shading value
-      def shading=(value)
+      def shading_color=(value)
         self.shading = ParagraphShading.new(fill: value) unless value.nil?
       end
 
       # Convenience getter for shading (returns shading_fill)
       #
       # @return [String, nil] The shading/background color
-      def shading
+      def shading_color
         shading&.fill
       end
 
@@ -268,294 +276,6 @@ module Uniword
       end
     end
 
-    # Paragraph borders container
-    class ParagraphBorders < Lutaml::Model::Serializable
-      xml do
-        root 'pBdr'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_element 'top', to: :top
-        map_element 'bottom', to: :bottom
-        map_element 'left', to: :left
-        map_element 'right', to: :right
-        map_element 'between', to: :between
-        map_element 'bar', to: :bar
-      end
-
-      attribute :top, Border
-      attribute :bottom, Border
-      attribute :left, Border
-      attribute :right, Border
-      attribute :between, Border
-      attribute :bar, Border
-    end
-
-    # Individual border definition
-    class Border < Lutaml::Model::Serializable
-      xml do
-        root :border_element  # Dynamic root based on context
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_attribute 'val', to: :style
-        map_attribute 'color', to: :color
-        map_attribute 'sz', to: :size
-        map_attribute 'space', to: :space
-        map_attribute 'shadow', to: :shadow
-        map_attribute 'frame', to: :frame
-      end
-
-      # Border style (single, double, dashed, etc.)
-      attribute :style, :string
-
-      # Border color (hex color code)
-      attribute :color, :string
-
-      # Border size in eighths of a point
-      attribute :size, :integer
-
-      # Space between border and text in points
-      attribute :space, :integer
-
-      # Shadow effect
-      attribute :shadow, :boolean, default: -> { false }
-
-      # Frame effect
-      attribute :frame, :boolean, default: -> { false }
-    end
-
-    # Paragraph shading properties
-    class ParagraphShading < Lutaml::Model::Serializable
-      xml do
-        root 'shd'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_attribute 'val', to: :shading_type
-        map_attribute 'color', to: :color
-        map_attribute 'fill', to: :fill
-        map_attribute 'themeFill', to: :theme_fill
-        map_attribute 'themeFillShade', to: :theme_fill_shade
-        map_attribute 'themeFillTint', to: :theme_fill_tint
-      end
-
-      # Shading pattern type (clear, solid, pct5, pct10, etc.)
-      attribute :shading_type, :string, default: -> { 'clear' }
-
-      # Foreground color for pattern
-      attribute :color, :string
-
-      # Background fill color
-      attribute :fill, :string
-
-      # Theme color for fill
-      attribute :theme_fill, :string
-
-      # Theme fill shade (0-255)
-      attribute :theme_fill_shade, :string
-
-      # Theme fill tint (0-255)
-      attribute :theme_fill_tint, :string
-    end
-
-    # Tab stop collection
-    class TabStopCollection < Lutaml::Model::Serializable
-      xml do
-        root 'tabs'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_element 'tab', to: :tabs, collection: true
-      end
-
-      attribute :tabs, TabStop, collection: true, default: -> { [] }
-
-      def add_tab(position, alignment = 'left', leader = 'none')
-        tabs << TabStop.new(position: position, alignment: alignment, leader: leader)
-      end
-    end
-
-    # Individual tab stop
-    class TabStop < Lutaml::Model::Serializable
-      xml do
-        root 'tab'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_attribute 'pos', to: :position
-        map_attribute 'val', to: :alignment
-        map_attribute 'leader', to: :leader
-      end
-
-      # Tab position in twips
-      attribute :position, :integer
-
-      # Tab alignment (left, center, right, decimal, bar, num, clear)
-      attribute :alignment, :string, default: -> { 'left' }
-
-      # Tab leader character (none, dot, hyphen, underscore, heavy, middleDot)
-      attribute :leader, :string, default: -> { 'none' }
-    end
-
-    # Numbering properties (complete numPr structure)
-    class NumberingProperties < Lutaml::Model::Serializable
-      xml do
-        root 'numPr'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_element 'ilvl', to: :level
-        map_element 'numId', to: :num_id
-        map_element 'numberingChange', to: :numbering_change
-        map_element 'ins', to: :inserted_numbering
-      end
-
-      # Numbering level (0-8)
-      attribute :level, :integer
-
-      # Numbering ID
-      attribute :num_id, :string
-
-      # Numbering change tracking
-      attribute :numbering_change, :string
-
-      # Inserted numbering
-      attribute :inserted_numbering, :string
-    end
-
-    # Frame properties for text boxes
-    class FrameProperties < Lutaml::Model::Serializable
-      xml do
-        root 'framePr'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_attribute 'dropCap', to: :drop_cap
-        map_attribute 'lines', to: :lines
-        map_attribute 'w', to: :width
-        map_attribute 'h', to: :height
-        map_attribute 'vspace', to: :vspace
-        map_attribute 'hspace', to: :hspace
-        map_attribute 'wrap', to: :wrap
-        map_attribute 'hAnchor', to: :h_anchor
-        map_attribute 'vAnchor', to: :v_anchor
-        map_attribute 'x', to: :x
-        map_attribute 'y', to: :y
-        map_attribute 'hRule', to: :h_rule
-        map_attribute 'anchorLock', to: :anchor_lock
-      end
-
-      # Drop cap style (none, drop, margin)
-      attribute :drop_cap, :string
-
-      # Number of lines for drop cap
-      attribute :lines, :integer
-
-      # Frame width
-      attribute :width, :integer
-
-      # Frame height
-      attribute :height, :integer
-
-      # Vertical space
-      attribute :vspace, :integer
-
-      # Horizontal space
-      attribute :hspace, :integer
-
-      # Text wrapping (none, around, notBeside, through, tight, none)
-      attribute :wrap, :string
-
-      # Horizontal anchor (margin, page, text)
-      attribute :h_anchor, :string
-
-      # Vertical anchor (margin, page, text)
-      attribute :v_anchor, :string
-
-      # Horizontal position
-      attribute :x, :integer
-
-      # Vertical position
-      attribute :y, :integer
-
-      # Height rule (auto, atLeast, exact)
-      attribute :h_rule, :string
-
-      # Anchor lock
-      attribute :anchor_lock, :boolean, default: -> { false }
-    end
-
-    # Section properties
-    class SectionProperties < Lutaml::Model::Serializable
-      xml do
-        root 'sectPr'
-        namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-
-        map_element 'footnotePr', to: :footnote_properties
-        map_element 'endnotePr', to: :endnote_properties
-        map_element 'type', to: :section_type
-        map_element 'pgSz', to: :page_size
-        map_element 'pgMar', to: :page_margins
-        map_element 'pgBorders', to: :page_borders
-        map_element 'lnNumType', to: :line_numbering
-        map_element 'pgNumType', to: :page_numbering
-        map_element 'cols', to: :columns
-        map_element 'formProt', to: :form_protection
-        map_element 'vAlign', to: :vertical_alignment
-        map_element 'noEndnote', to: :no_endnote
-        map_element 'titlePg', to: :title_page
-        map_element 'textDirection', to: :text_direction
-        map_element 'bidi', to: :bidirectional
-        map_element 'rtlGutter', to: :rtl_gutter
-        map_element 'docGrid', to: :document_grid
-      end
-
-      # Footnote properties
-      attribute :footnote_properties, :string
-
-      # Endnote properties
-      attribute :endnote_properties, :string
-
-      # Section type (nextPage, nextColumn, continuous, evenPage, oddPage)
-      attribute :section_type, :string
-
-      # Page size properties
-      attribute :page_size, :string
-
-      # Page margins
-      attribute :page_margins, :string
-
-      # Page borders
-      attribute :page_borders, :string
-
-      # Line numbering
-      attribute :line_numbering, :string
-
-      # Page numbering
-      attribute :page_numbering, :string
-
-      # Columns
-      attribute :columns, :string
-
-      # Form protection
-      attribute :form_protection, :boolean, default: -> { false }
-
-      # Vertical alignment
-      attribute :vertical_alignment, :string
-
-      # No endnote
-      attribute :no_endnote, :boolean, default: -> { false }
-
-      # Title page
-      attribute :title_page, :boolean, default: -> { false }
-
-      # Text direction
-      attribute :text_direction, :string
-
-      # Bidirectional
-      attribute :bidirectional, :boolean, default: -> { false }
-
-      # RTL gutter
-      attribute :rtl_gutter, :boolean, default: -> { false }
-
-      # Document grid
-      attribute :document_grid, :string
-    end
-
     # Properties change tracking
     class PropertiesChange < Lutaml::Model::Serializable
       xml do
@@ -575,12 +295,6 @@ module Uniword
 
       # Date
       attribute :date, :string
-    end
-
-    # Run properties for paragraph mark
-    class RunProperties < Lutaml::Model::Serializable
-      # This will be defined in run_properties.rb, but we need a placeholder
-      # The actual implementation will be imported from the RunProperties class
     end
   end
 end

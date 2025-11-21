@@ -111,7 +111,6 @@ module Uniword
               r = Run.new(text: run_or_text)
               # Apply formatting options
               if options.any?
-                require_relative 'properties/run_properties'
                 r.properties = Properties::RunProperties.new(
                   bold: options[:bold],
                   italic: options[:italic],
@@ -157,7 +156,6 @@ module Uniword
       if properties
         run.properties = properties
       elsif options.any?
-        require_relative 'properties/run_properties'
         run.properties = Properties::RunProperties.new(
           bold: options[:bold],
           italic: options[:italic],
@@ -182,7 +180,7 @@ module Uniword
     # @param tooltip [String, nil] Tooltip text
     # @param properties [Properties::RunProperties, nil] Optional run properties
     # @param options [Hash] Additional formatting options (bold, italic, etc.)
-    # @return [self] Returns self for method chaining
+    #
     def add_hyperlink(text_or_url, text_or_options = nil, url: nil, anchor: nil, tooltip: nil, properties: nil, **options)
       # Handle both APIs:
       # Old: add_hyperlink(url, text)
@@ -211,7 +209,6 @@ module Uniword
         if properties
           run.properties = properties
         elsif options.any?
-          require_relative 'properties/run_properties'
           run.properties = Properties::RunProperties.new(
             bold: options[:bold],
             italic: options[:italic],
