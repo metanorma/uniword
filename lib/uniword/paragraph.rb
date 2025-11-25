@@ -8,6 +8,7 @@ require_relative 'comment_range'
 require_relative 'hyperlink'
 require_relative 'bookmark'
 require_relative 'unknown_element'
+require_relative 'ooxml/namespaces'
 
 module Uniword
   # Represents a paragraph (block-level text element).
@@ -42,8 +43,9 @@ module Uniword
   class Paragraph < Element
     # OOXML namespace configuration
     xml do
-      root 'p', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'p'
+      namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
       map_element 'pPr', to: :properties, render_nil: false
       map_element 'r', to: :runs
@@ -173,8 +175,7 @@ module Uniword
     # Add a hyperlink to this paragraph
     # Supports both positional and keyword arguments for compatibility
     #
-    # @param text_or_url [String] The link text or URL (when second arg is text)
-    # @param text_or_options [String, Hash] The text (old API) or options (new API)
+    # @param text_or_url [String] The link text
     # @param url [String, nil] External URL (keyword arg)
     # @param anchor [String, nil] Internal bookmark reference
     # @param tooltip [String, nil] Tooltip text
@@ -584,6 +585,7 @@ module Uniword
       return {} unless properties
 
       {
+        # Basic properties
         style: properties.style,
         alignment: properties.alignment,
         spacing_before: properties.spacing_before,
@@ -598,7 +600,25 @@ module Uniword
         page_break_before: properties.page_break_before,
         outline_level: properties.outline_level,
         num_id: properties.num_id,
-        ilvl: properties.ilvl
+        ilvl: properties.ilvl,
+
+        # Enhanced properties (42+ total)
+        borders: properties.borders,
+        shading: properties.shading,
+        tab_stops: properties.tab_stops,
+        numbering_properties: properties.numbering_properties,
+        frame_properties: properties.frame_properties,
+        section_properties: properties.section_properties,
+        suppress_line_numbers: properties.suppress_line_numbers,
+        contextual_spacing: properties.contextual_spacing,
+        bidirectional: properties.bidirectional,
+        mirror_indents: properties.mirror_indents,
+        snap_to_grid: properties.snap_to_grid,
+        widow_control: properties.widow_control,
+        text_direction: properties.text_direction,
+        conditional_formatting: properties.conditional_formatting,
+        run_properties: properties.run_properties,
+        properties_change: properties.properties_change
       }.compact
     end
 
@@ -681,22 +701,6 @@ module Uniword
       value
     end
 
-    # Get line spacing
-    # Returns hash format for fine control or numeric for simple cases
-    #
-    # @return [Numeric, Hash] line spacing value or hash with :rule and :value
-    def line_spacing
-      return nil unless properties
-
-      # Return simple numeric value for auto/multiple spacing (backward compatibility)
-      if properties.line_rule == 'auto' || properties.line_rule.nil?
-        properties.line_spacing
-      elsif properties.line_spacing
-        # Return hash format for exact/atLeast rules
-        { rule: properties.line_rule, value: properties.line_spacing }
-      end
-    end
-
     # Set left indentation
     # Creates properties if needed
     #
@@ -725,6 +729,70 @@ module Uniword
     def indent_first_line=(value)
       ensure_properties
       properties.indent_first_line = value
+    end
+
+    # Set paragraph borders
+    # Creates properties if needed
+    #
+    # @param top [String, Hash, nil] Top border color or border hash
+    # @param bottom [String, Hash, nil] Bottom border color or border hash
+    # @param left [String, Hash, nil] Left border color or border hash
+    # @param right [String, Hash, nil] Right border color or border hash
+    # @param between [String, Hash, nil] Between border for consecutive paragraphs
+    # @param bar [String, Hash, nil] Bar border (vertical line on left)
+    # @return [self] Returns self for method chaining
+    def set_borders(top: nil, bottom: nil, left: nil, right: nil, between: nil, bar: nil)
+      ensure_properties
+
+      borders = Properties::ParagraphBorders.new(
+        top: border_from_param(top),
+        bottom: border_from_param(bottom),
+        left: border_from_param(left),
+        right: border_from_param(right),
+        between: border_from_param(between),
+        bar: border_from_param(bar)
+      )
+
+      update_properties(borders: borders)
+      self
+    end
+
+    # Set paragraph shading (background color)
+    # Creates properties if needed
+    #
+    # @param fill [String, nil] Background fill color (hex)
+    # @param color [String, nil] Foreground color (hex)
+    # @param pattern [String, nil] Shading pattern ('clear', 'solid', etc.)
+    # @return [self] Returns self for method chaining
+    def set_shading(fill: nil, color: nil, pattern: nil)
+      ensure_properties
+
+      shading = Properties::ParagraphShading.new(
+        fill: fill,
+        color: color,
+        shading_type: pattern || 'clear'
+      )
+
+      update_properties(shading: shading)
+      self
+    end
+
+    # Add a tab stop to this paragraph
+    # Creates properties if needed
+    #
+    # @param position [Integer] Tab stop position in twips
+    # @param alignment [String] Tab alignment ('left', 'center', 'right', 'decimal', 'bar')
+    # @param leader [String, nil] Tab leader character ('none', 'dot', 'hyphen', 'underscore', 'middleDot')
+    # @return [self] Returns self for method chaining
+    def add_tab_stop(position:, alignment: 'left', leader: nil)
+      ensure_properties
+
+      current_tabs = properties.tab_stops || Properties::TabStopCollection.new
+      # Use the TabStopCollection's add_tab method
+      current_tabs.add_tab(position, alignment, leader || 'none')
+
+      update_properties(tab_stops: current_tabs)
+      self
     end
 
     # Get contextual spacing setting
@@ -908,6 +976,33 @@ module Uniword
     # @return [Properties::ParagraphProperties] the properties object
     def ensure_properties
       @properties ||= Properties::ParagraphProperties.new
+    end
+
+    # Convert a border parameter to a Border object
+    # Accepts string (color), hash (full border spec), or nil
+    #
+    # @param param [String, Hash, nil] Border specification
+    # @return [Properties::Border, nil] Border object or nil
+    private def border_from_param(param)
+      return nil if param.nil?
+
+      case param
+      when String
+        # Simple color string - create default border with that color
+        Properties::Border.new(style: 'single', size: 4, color: param)
+      when Hash
+        # Full border specification
+        Properties::Border.new(
+          style: param[:style] || 'single',
+          size: param[:size] || 4,
+          color: param[:color],
+          space: param[:space],
+          shadow: param[:shadow],
+          frame: param[:frame]
+        )
+      else
+        nil
+      end
     end
   end
 end

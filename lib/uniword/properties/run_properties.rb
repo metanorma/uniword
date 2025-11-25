@@ -249,6 +249,9 @@ module Uniword
       # Font size for complex script in half-points
       attribute :size_complex, :integer
 
+      # Simple font name (for convenience - single font for all contexts)
+      attribute :font, :string
+
       # Highlight color
       attribute :highlight, :string
 

@@ -3,6 +3,7 @@
 require_relative 'paragraph'
 require_relative 'table'
 require_relative 'unknown_element'
+require_relative 'ooxml/namespaces'
 
 module Uniword
   # Represents the document body containing all block-level elements
@@ -13,8 +14,9 @@ module Uniword
   class Body < Lutaml::Model::Serializable
     # OOXML namespace configuration
     xml do
-      root 'body', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'body'
+      namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
       map_element 'p', to: :paragraphs
       map_element 'tbl', to: :tables

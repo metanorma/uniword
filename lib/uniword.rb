@@ -209,10 +209,8 @@ module Uniword
     autoload :MimePackager, 'uniword/infrastructure/mime_packager'
   end
 
-  # Autoload serialization
+  # Autoload HTML serialization (OOXML uses native lutaml-model serialization via DocxPackage)
   module Serialization
-    autoload :OoxmlDeserializer, 'uniword/serialization/ooxml_deserializer'
-    autoload :OoxmlSerializer, 'uniword/serialization/ooxml_serializer'
     autoload :HtmlDeserializer, 'uniword/serialization/html_deserializer'
     autoload :HtmlSerializer, 'uniword/serialization/html_serializer'
   end

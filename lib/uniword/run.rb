@@ -2,6 +2,7 @@
 
 require_relative 'element'
 require_relative 'properties/run_properties'
+require_relative 'ooxml/namespaces'
 
 module Uniword
   # Represents a text run (inline text element with formatting).
@@ -29,8 +30,9 @@ module Uniword
   class Run < Element
     # OOXML namespace configuration
     xml do
-      root 'r', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'r'
+      namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
       map_element 'rPr', to: :properties
       map_element 't', to: :text_element
@@ -41,14 +43,6 @@ module Uniword
 
     # The text element containing the actual text content
     attribute :text_element, TextElement
-
-    # Properties getter - returns nil if not explicitly set
-    # This ensures compatibility with tests expecting nil for default runs
-    #
-    # @return [Properties::RunProperties, nil] the properties object or nil
-    def properties
-      @properties
-    end
 
     # Page break marker
     attr_accessor :page_break
@@ -501,6 +495,230 @@ module Uniword
     # @return [Boolean] true if all caps
     def all_caps
       properties&.all_caps || false
+    end
+
+    # Set character spacing
+    # Creates properties if needed
+    #
+    # @param value [Integer] Character spacing in twentieths of a point
+    # @return [Integer] the value set
+    def character_spacing=(value)
+      ensure_properties
+      @properties.character_spacing = value
+    end
+
+    # Get character spacing
+    #
+    # @return [Integer, nil] Character spacing in twentieths of a point
+    def character_spacing
+      properties&.character_spacing
+    end
+
+    # Set kerning threshold
+    # Creates properties if needed
+    #
+    # @param value [Integer] Kerning threshold in half-points
+    # @return [Integer] the value set
+    def kerning=(value)
+      ensure_properties
+      @properties.kerning = value
+    end
+
+    # Get kerning threshold
+    #
+    # @return [Integer, nil] Kerning threshold in half-points
+    def kerning
+      properties&.kerning
+    end
+
+    # Set text shading (character background)
+    # Creates properties if needed
+    #
+    # @param fill [String, nil] Background fill color (hex)
+    # @param color [String, nil] Foreground color (hex)
+    # @param pattern [String, nil] Shading pattern ('clear', 'solid', etc.)
+    # @return [self] Returns self for method chaining
+    def set_shading(fill: nil, color: nil, pattern: nil)
+      ensure_properties
+
+      shading = Properties::RunShading.new(
+        fill: fill,
+        color: color,
+        shading_type: pattern || 'clear'
+      )
+
+      @properties.shading = shading
+      self
+    end
+
+    # Get text shading
+    #
+    # @return [Properties::RunShading, nil] Shading object
+    def shading
+      properties&.shading
+    end
+
+    # Set raised/lowered position
+    # Creates properties if needed
+    #
+    # @param value [Integer] Position in half-points (positive = raised, negative = lowered)
+    # @return [Integer] the value set
+    def position=(value)
+      ensure_properties
+      @properties.position = value
+    end
+
+    # Get raised/lowered position
+    #
+    # @return [Integer, nil] Position in half-points
+    def position
+      properties&.position
+    end
+
+    # Set text expansion/compression
+    # Creates properties if needed
+    #
+    # @param value [Integer] Expansion percentage (100 = normal, >100 = expanded, <100 = compressed)
+    # @return [Integer] the value set
+    def text_expansion=(value)
+      ensure_properties
+      @properties.text_expansion = value
+    end
+
+    # Get text expansion/compression
+    #
+    # @return [Integer, nil] Expansion percentage
+    def text_expansion
+      properties&.text_expansion
+    end
+
+    # Set outline effect
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true for outline effect
+    # @return [Boolean] the value set
+    def outline=(value)
+      ensure_properties
+      @properties.outline = value
+    end
+
+    # Get outline effect
+    #
+    # @return [Boolean] true if outline effect enabled
+    def outline
+      properties&.outline || false
+    end
+
+    # Set shadow effect
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true for shadow effect
+    # @return [Boolean] the value set
+    def shadow=(value)
+      ensure_properties
+      @properties.shadow = value
+    end
+
+    # Get shadow effect
+    #
+    # @return [Boolean] true if shadow effect enabled
+    def shadow
+      properties&.shadow || false
+    end
+
+    # Set emboss effect
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true for emboss effect
+    # @return [Boolean] the value set
+    def emboss=(value)
+      ensure_properties
+      @properties.emboss = value
+    end
+
+    # Get emboss effect
+    #
+    # @return [Boolean] true if emboss effect enabled
+    def emboss
+      properties&.emboss || false
+    end
+
+    # Set imprint effect
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true for imprint effect
+    # @return [Boolean] the value set
+    def imprint=(value)
+      ensure_properties
+      @properties.imprint = value
+    end
+
+    # Get imprint effect
+    #
+    # @return [Boolean] true if imprint effect enabled
+    def imprint
+      properties&.imprint || false
+    end
+
+    # Set hidden text
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true to hide text
+    # @return [Boolean] the value set
+    def hidden=(value)
+      ensure_properties
+      @properties.hidden = value
+    end
+
+    # Get hidden text setting
+    #
+    # @return [Boolean] true if text is hidden
+    def hidden
+      properties&.hidden || false
+    end
+
+    # Set emphasis mark
+    # Creates properties if needed
+    #
+    # @param value [String] Emphasis mark type ('dot', 'comma', 'circle', 'underDot')
+    # @return [String] the value set
+    def emphasis_mark=(value)
+      ensure_properties
+      @properties.emphasis_mark = value
+    end
+
+    # Get emphasis mark
+    #
+    # @return [String, nil] Emphasis mark type
+    def emphasis_mark
+      properties&.emphasis_mark
+    end
+
+    # Set language
+    # Creates properties if needed
+    #
+    # @param value [String] Language code (e.g., 'en-US', 'fr-FR')
+    # @return [String] the value set
+    def language=(value)
+      ensure_properties
+      @properties.language = value
+    end
+
+    # Get language
+    #
+    # @return [String, nil] Language code
+    def language
+      properties&.language
+    end
+
+    # Set strike-through formatting
+    # Creates properties if needed
+    #
+    # @param value [Boolean] true for strike-through
+    # @return [Boolean] the value set
+    def strike=(value)
+      ensure_properties
+      @properties.strike = value
     end
 
     # Set hyperlink URL

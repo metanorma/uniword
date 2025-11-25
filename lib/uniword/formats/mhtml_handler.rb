@@ -3,23 +3,22 @@
 require_relative 'base_handler'
 require_relative '../infrastructure/mime_parser'
 require_relative '../infrastructure/mime_packager'
-require_relative '../serialization/html_deserializer'
-require_relative '../serialization/html_serializer'
+require_relative '../html_importer'
 
 module Uniword
   module Formats
     # Handles MHTML (MIME HTML) format files.
     #
     # Responsibility: Coordinate MHTML file operations by delegating to
-    # infrastructure and serialization classes. Follows Single Responsibility
+    # infrastructure classes. Follows Single Responsibility
     # Principle - the handler orchestrates but doesn't implement details.
     #
     # MHTML files are MIME multipart documents containing HTML and embedded
     # resources. This handler uses:
     # - MimeParser for reading MIME content
     # - MimePackager for creating MIME files
-    # - HtmlDeserializer for converting HTML to Document
-    # - HtmlSerializer for converting Document to HTML
+    # - HtmlImporter for converting HTML to Document
+    # - Document#to_html for converting Document to HTML
     #
     # @example Read an MHTML file
     #   handler = Uniword::Formats::MhtmlHandler.new
@@ -50,22 +49,30 @@ module Uniword
 
       # Deserialize HTML content into a Document.
       #
-      # Delegates to HtmlDeserializer to parse HTML and build document model.
+      # Uses HtmlImporter to parse HTML and build document model.
       #
       # @param mime_parts [Hash] The extracted MIME parts
       # @return [Document] The deserialized document
       def deserialize(mime_parts)
-        html_deserializer.deserialize(mime_parts)
+        # Extract HTML content from MIME parts
+        html_content = mime_parts[:html] || mime_parts['html'] || ''
+
+        # Use HtmlImporter to convert HTML to Document
+        importer = HtmlImporter.new(html_content)
+        importer.to_document
       end
 
       # Serialize a Document into HTML format.
       #
-      # Delegates to HtmlSerializer to convert document model to HTML.
+      # Uses Document#to_html to convert document model to HTML.
       #
       # @param document [Document] The document to serialize
       # @return [Hash] Hash containing HTML, CSS, and images
       def serialize(document)
-        html_serializer.serialize(document)
+        {
+          html: document.to_html,
+          images: extract_images(document)
+        }
       end
 
       # Package HTML content and save as MHTML file.
@@ -98,25 +105,20 @@ module Uniword
         @mime_parser ||= Infrastructure::MimeParser.new
       end
 
-      # Get or create MimePackager instance.
+      # Extract images from document for MHTML packaging
       #
-      # @return [Infrastructure::MimePackager]
-      def mime_packager
-        @mime_packager ||= Infrastructure::MimePackager.new
-      end
-
-      # Get or create HtmlDeserializer instance.
-      #
-      # @return [Serialization::HtmlDeserializer]
-      def html_deserializer
-        @html_deserializer ||= Serialization::HtmlDeserializer.new
-      end
-
-      # Get or create HtmlSerializer instance.
-      #
-      # @return [Serialization::HtmlSerializer]
-      def html_serializer
-        @html_serializer ||= Serialization::HtmlSerializer.new
+      # @param document [Document] The document
+      # @return [Hash] Hash of image filenames to binary data
+      def extract_images(document)
+        images = {}
+        document.images.each do |image|
+          # Store image data if available
+          if image.respond_to?(:data) && image.data
+            filename = image.filename || "image_#{image.object_id}.png"
+            images[filename] = image.data
+          end
+        end
+        images
       end
     end
   end

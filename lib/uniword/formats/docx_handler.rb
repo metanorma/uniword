@@ -3,8 +3,7 @@
 require_relative 'base_handler'
 require_relative '../infrastructure/zip_extractor'
 require_relative '../infrastructure/zip_packager'
-require_relative '../serialization/ooxml_deserializer'
-require_relative '../serialization/ooxml_serializer'
+require_relative '../ooxml/docx_package'
 
 module Uniword
   module Formats
@@ -50,22 +49,64 @@ module Uniword
 
       # Deserialize OOXML content into a Document.
       #
-      # Delegates to OoxmlDeserializer to parse XML and build document model.
+      # Uses DocxPackage to parse properties and theme, then parses
+      # the main document XML using Document.from_xml().
       #
       # @param content [Hash<String, String>] The extracted ZIP content
       # @return [Document] The deserialized document
       def deserialize(content)
-        ooxml_deserializer.deserialize(content)
+        # Load package with properties and theme
+        package = Ooxml::DocxPackage.from_zip_content(content)
+
+        # Parse main document XML
+        require_relative '../document'
+        document = if package.raw_document_xml
+                     Document.from_xml(package.raw_document_xml)
+                   else
+                     Document.new
+                   end
+
+        # Transfer properties from package to document
+        document.core_properties = package.core_properties if package.core_properties
+        document.app_properties = package.app_properties if package.app_properties
+        document.theme = package.theme if package.theme
+
+        # Store raw XML for parts not yet fully modeled
+        document.raw_styles_xml = package.raw_styles_xml
+        document.raw_font_table_xml = package.raw_font_table_xml
+        document.raw_numbering_xml = package.raw_numbering_xml
+        document.raw_settings_xml = package.raw_settings_xml
+
+        document
       end
 
       # Serialize a Document into OOXML format.
       #
-      # Delegates to OoxmlSerializer to convert document model to XML.
+      # Uses Document.to_xml() for main content and DocxPackage
+      # for properties and theme.
       #
       # @param document [Document] The document to serialize
       # @return [Hash<String, String>] Hash mapping file paths to XML content
       def serialize(document)
-        ooxml_serializer.serialize_package(document)
+        # Create package
+        package = Ooxml::DocxPackage.new
+
+        # Transfer properties to package
+        package.core_properties = document.core_properties || Ooxml::CoreProperties.new
+        package.app_properties = document.app_properties || Ooxml::AppProperties.new
+        package.theme = document.theme
+
+        # Serialize main document
+        package.raw_document_xml = document.to_xml(encoding: 'UTF-8')
+
+        # Use raw XML for parts not yet fully modeled
+        package.raw_styles_xml = document.raw_styles_xml
+        package.raw_font_table_xml = document.raw_font_table_xml
+        package.raw_numbering_xml = document.raw_numbering_xml
+        package.raw_settings_xml = document.raw_settings_xml
+
+        # Convert package to ZIP content
+        package.to_zip_content
       end
 
       # Package OOXML content and save as DOCX file.
@@ -94,20 +135,6 @@ module Uniword
       # @return [Infrastructure::ZipPackager]
       def zip_packager
         @zip_packager ||= Infrastructure::ZipPackager.new
-      end
-
-      # Get or create OoxmlDeserializer instance.
-      #
-      # @return [Serialization::OoxmlDeserializer]
-      def ooxml_deserializer
-        @ooxml_deserializer ||= Serialization::OoxmlDeserializer.new
-      end
-
-      # Get or create OoxmlSerializer instance.
-      #
-      # @return [Serialization::OoxmlSerializer]
-      def ooxml_serializer
-        @ooxml_serializer ||= Serialization::OoxmlSerializer.new
       end
     end
   end

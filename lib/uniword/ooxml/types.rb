@@ -28,3 +28,5 @@ require_relative 'types/cp_revision_type'
 
 # Dublin Core Terms Types (dcterms: namespace) - includes XsiTypeType
 require_relative 'types/dcterms_w3cdtf_type'
+require_relative 'types/dcterms_created_type'
+require_relative 'types/dcterms_modified_type'

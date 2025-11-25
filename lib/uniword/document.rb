@@ -13,6 +13,7 @@ require_relative 'comments_part'
 require_relative 'tracked_changes'
 require_relative 'ooxml/core_properties'
 require_relative 'ooxml/app_properties'
+require_relative 'ooxml/namespaces'
 
 module Uniword
   # Main document class representing a Word document.
@@ -62,8 +63,8 @@ module Uniword
     xml do
       root 'document'
       # Note: First namespace is used for root element prefix
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-      namespace 'http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'r'
+      namespace Ooxml::Namespaces::WordProcessingML
+      namespace Ooxml::Namespaces::Relationships
 
       map_element 'body', to: :body
     end
