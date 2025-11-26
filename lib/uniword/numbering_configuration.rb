@@ -11,8 +11,8 @@ module Uniword
     attribute :definitions, NumberingDefinition, collection: true, default: -> { [] }
     attribute :instances, NumberingInstance, collection: true, default: -> { [] }
 
-    def initialize(**attributes)
-      super
+    def initialize(attributes = {})
+      super(attributes)
       @definitions ||= []
       @instances ||= []
       @next_abstract_num_id = 0

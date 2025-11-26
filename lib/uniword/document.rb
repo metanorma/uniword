@@ -59,18 +59,18 @@ module Uniword
   # @see Builder For fluent document creation
   class Document < Lutaml::Model::Serializable
     extend LazyLoader
+    # Document body containing all content
+    attribute :body, Body, default: -> { Body.new }
+
     # OOXML namespace configuration for WordProcessingML
     xml do
       root 'document'
       # Note: First namespace is used for root element prefix
       namespace Ooxml::Namespaces::WordProcessingML
-      namespace Ooxml::Namespaces::Relationships
+      mixed_content  # Required for nested body serialization
 
-      map_element 'body', to: :body
+      map_element 'body', to: :body, render_default: true
     end
-
-    # Document body containing all content
-    attribute :body, Body, default: -> { Body.new }
 
     # Document styles configuration (not serialized in document.xml)
     # This is managed separately and written to styles.xml
@@ -106,12 +106,6 @@ module Uniword
     # Document bookmarks collection (Hash for docx gem compatibility)
     attr_accessor :bookmarks
 
-    # Raw XML preservation for perfect round-trip (temporary until full modeling)
-    attr_accessor :raw_styles_xml
-    attr_accessor :raw_font_table_xml
-    attr_accessor :raw_numbering_xml
-    attr_accessor :raw_settings_xml
-
     # Document comments collection (not serialized in document.xml)
     # This is managed separately and written to comments.xml
     attr_accessor :comments_part
@@ -129,18 +123,20 @@ module Uniword
     # @param attributes [Hash] Document attributes
     def initialize(attributes = {})
       super
-      @styles_configuration = StylesConfiguration.new
-      @numbering_configuration = NumberingConfiguration.new
-      @theme = nil
-      @core_properties = Ooxml::CoreProperties.new
-      @app_properties = Ooxml::AppProperties.new
-      @sections = [Section.new]
-      @footnotes = []
-      @endnotes = []
-      @bookmarks = {}  # Hash for docx gem compatibility
-      @comments_part = CommentsPart.new
-      @tracked_changes = TrackedChanges.new
-      @charts = []
+      # Only initialize non-lutaml-model attributes (attr_accessor, not attribute)
+      # lutaml-model attributes (body) are initialized by super or their default lambdas
+      @styles_configuration ||= StylesConfiguration.new
+      @numbering_configuration ||= NumberingConfiguration.new
+      @theme ||= nil
+      @core_properties ||= Ooxml::CoreProperties.new
+      @app_properties ||= Ooxml::AppProperties.new
+      @sections ||= [Section.new]
+      @footnotes ||= []
+      @endnotes ||= []
+      @bookmarks ||= {}  # Hash for docx gem compatibility
+      @comments_part ||= CommentsPart.new
+      @tracked_changes ||= TrackedChanges.new
+      @charts ||= []
     end
 
     # Get the current section (last section)

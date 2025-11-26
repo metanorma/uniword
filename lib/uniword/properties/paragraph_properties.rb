@@ -5,6 +5,7 @@ require_relative 'shading'
 require_relative 'tab_stop'
 require_relative 'numbering_properties'
 require_relative 'frame_properties'
+require_relative 'paragraph_spacing'
 require_relative '../ooxml/namespaces'
 
 module Uniword
@@ -56,6 +57,13 @@ module Uniword
       # Text alignment (left, center, right, justify, etc.)
       attribute :alignment, :string
 
+      # Paragraph spacing (wrapper for <w:spacing> element)
+      attribute :spacing, ParagraphSpacing
+
+      # Paragraph indentation (wrapper for <w:ind> element)
+      attribute :indentation, ParagraphIndentation
+
+      # Convenience attributes for spacing (delegate to spacing wrapper)
       # Spacing before paragraph (in points or twips)
       attribute :spacing_before, :integer
 
@@ -69,6 +77,7 @@ module Uniword
       # Line spacing rule: "auto" (multiple), "exact", or "atLeast"
       attribute :line_rule, :string
 
+      # Convenience attributes for indentation (delegate to indentation wrapper)
       # Indentation from left margin
       attribute :indent_left, :integer
 

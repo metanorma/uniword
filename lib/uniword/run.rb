@@ -34,7 +34,7 @@ module Uniword
       namespace Ooxml::Namespaces::WordProcessingML
       mixed_content
 
-      map_element 'rPr', to: :properties
+      map_element 'rPr', to: :properties, render_nil: false
       map_element 't', to: :text_element
     end
 
@@ -53,8 +53,8 @@ module Uniword
     # Create a new Run instance
     #
     # @param attributes [Hash] Initial attributes
-    # @option attributes [String] :text Plain text (will be wrapped in TextElement)
-    # @option attributes [String, TextElement] :text_element Text element or string
+    # @option attributes [String] :Text Plain text (will be wrapped in TextElement)
+    # @option attributes [String, TextElement] :Text_element Text element or string
     # @return [Run] The new Run instance
     def initialize(attributes = {})
       # Handle text parameter - it takes priority over text_element
@@ -100,32 +100,6 @@ module Uniword
     def add_text(content)
       self.text = content
       self
-    end
-
-    # Get text_element content (returns string for compatibility)
-    # This provides compatibility with the docx gem API which expects strings
-    #
-    # @return [String, nil] The text content
-    def text_element
-      return nil unless @text_element
-      @text_element.content
-    end
-
-    # Set text_element attribute
-    # Accepts both strings and TextElement objects, always stores as TextElement
-    #
-    # @param value [String, TextElement, nil] The text or element to set
-    def text_element=(value)
-      @text_element = case value
-                      when nil
-                        nil
-                      when String
-                        TextElement.new(content: value)
-                      when TextElement
-                        value
-                      else
-                        raise ArgumentError, "text_element must be String or TextElement"
-                      end
     end
 
     # Accept a visitor for the visitor pattern
@@ -504,14 +478,14 @@ module Uniword
     # @return [Integer] the value set
     def character_spacing=(value)
       ensure_properties
-      @properties.character_spacing = value
+      @properties.character_spacing = Properties::CharacterSpacing.new(val: value)
     end
 
     # Get character spacing
     #
     # @return [Integer, nil] Character spacing in twentieths of a point
     def character_spacing
-      properties&.character_spacing
+      properties&.character_spacing&.val
     end
 
     # Set kerning threshold
@@ -521,41 +495,14 @@ module Uniword
     # @return [Integer] the value set
     def kerning=(value)
       ensure_properties
-      @properties.kerning = value
+      @properties.kerning = Properties::Kerning.new(val: value)
     end
 
     # Get kerning threshold
     #
     # @return [Integer, nil] Kerning threshold in half-points
     def kerning
-      properties&.kerning
-    end
-
-    # Set text shading (character background)
-    # Creates properties if needed
-    #
-    # @param fill [String, nil] Background fill color (hex)
-    # @param color [String, nil] Foreground color (hex)
-    # @param pattern [String, nil] Shading pattern ('clear', 'solid', etc.)
-    # @return [self] Returns self for method chaining
-    def set_shading(fill: nil, color: nil, pattern: nil)
-      ensure_properties
-
-      shading = Properties::RunShading.new(
-        fill: fill,
-        color: color,
-        shading_type: pattern || 'clear'
-      )
-
-      @properties.shading = shading
-      self
-    end
-
-    # Get text shading
-    #
-    # @return [Properties::RunShading, nil] Shading object
-    def shading
-      properties&.shading
+      properties&.kerning&.val
     end
 
     # Set raised/lowered position
@@ -565,14 +512,14 @@ module Uniword
     # @return [Integer] the value set
     def position=(value)
       ensure_properties
-      @properties.position = value
+      @properties.position = Properties::Position.new(val: value)
     end
 
     # Get raised/lowered position
     #
     # @return [Integer, nil] Position in half-points
     def position
-      properties&.position
+      properties&.position&.val
     end
 
     # Set text expansion/compression
@@ -582,14 +529,14 @@ module Uniword
     # @return [Integer] the value set
     def text_expansion=(value)
       ensure_properties
-      @properties.text_expansion = value
+      @properties.text_expansion = Properties::TextExpansion.new(val: value)
     end
 
     # Get text expansion/compression
     #
     # @return [Integer, nil] Expansion percentage
     def text_expansion
-      properties&.text_expansion
+      properties&.text_expansion&.val
     end
 
     # Set outline effect
@@ -684,14 +631,14 @@ module Uniword
     # @return [String] the value set
     def emphasis_mark=(value)
       ensure_properties
-      @properties.emphasis_mark = value
+      @properties.emphasis_mark = Properties::EmphasisMark.new(val: value)
     end
 
     # Get emphasis mark
     #
     # @return [String, nil] Emphasis mark type
     def emphasis_mark
-      properties&.emphasis_mark
+      properties&.emphasis_mark&.val
     end
 
     # Set language
@@ -701,14 +648,32 @@ module Uniword
     # @return [String] the value set
     def language=(value)
       ensure_properties
-      @properties.language = value
+      @properties.language = Properties::Language.new(val: value)
     end
 
     # Get language
     #
     # @return [String, nil] Language code
     def language
-      properties&.language
+      properties&.language&.val
+    end
+
+    # Set shading (background color and pattern)
+    # Creates properties if needed
+    #
+    # @param fill [String, nil] Background fill color (hex)
+    # @param color [String, nil] Foreground color (hex)
+    # @param pattern [String, nil] Shading pattern ('clear', 'solid', etc.)
+    # @return [self] Returns self for method chaining
+    def set_shading(fill: nil, color: nil, pattern: nil)
+      ensure_properties
+      shading = Properties::RunShading.new(
+        fill: fill,
+        color: color,
+        shading_type: pattern || 'clear'
+      )
+      @properties.shading = shading
+      self
     end
 
     # Set strike-through formatting

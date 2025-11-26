@@ -2,6 +2,7 @@
 
 require_relative 'border'
 require_relative 'shading'
+require_relative 'simple_val_properties'
 require_relative '../ooxml/namespaces'
 
 module Uniword
@@ -281,13 +282,13 @@ module Uniword
       attribute :complex_script, :boolean, default: -> { false }
 
       # Emphasis mark (dot, comma, circle, underDot)
-      attribute :emphasis_mark, :string
+      attribute :emphasis_mark, EmphasisMark
 
       # Hyphenation control
       attribute :hyphenation, :string
 
       # Language settings
-      attribute :language, :string
+      attribute :language, Language
       attribute :language_bidi, :string
       attribute :language_east_asia, :string
 
@@ -304,16 +305,16 @@ module Uniword
       attribute :font_properties, RunFontProperties
 
       # Character spacing in twentieths of a point
-      attribute :character_spacing, :integer
+      attribute :character_spacing, CharacterSpacing
 
       # Text expansion/compression percentage
-      attribute :text_expansion, :integer
+      attribute :text_expansion, TextExpansion
 
       # Kerning threshold in half-points
-      attribute :kerning, :integer
+      attribute :kerning, Kerning
 
       # Raised/lowered position in half-points
-      attribute :position, :integer
+      attribute :position, Position
 
       # Custom getter returns the string underline value
       # For API compatibility: returns the actual string value (e.g., "single")

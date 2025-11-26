@@ -60,29 +60,6 @@ module Uniword
       required_attributes_valid?
     end
 
-    # Serialize element to OOXML XML using schema definition
-    #
-    # v2.0.0: Schema-driven element serialization.
-    # Uses external YAML schema to determine XML structure.
-    #
-    # @param options [Hash] Serialization options
-    # @option options [Boolean] :pretty (false) Pretty print XML
-    # @option options [Boolean] :standalone (false) Include XML declaration
-    # @return [String] OOXML XML string
-    # @raise [ArgumentError] if element has no schema definition
-    #
-    # @example Serialize paragraph
-    #   para = Uniword::Paragraph.new
-    #   para.add_text("Hello")
-    #   xml = para.to_xml
-    #   # => "<w:p><w:r><w:t>Hello</w:t></w:r></w:p>"
-    def to_xml(options = {})
-      require_relative 'ooxml/schema/element_serializer'
-
-      serializer = Ooxml::Schema::ElementSerializer.new
-      serializer.serialize(self, options)
-    end
-
     protected
 
     # Check if required attributes are valid
@@ -92,5 +69,31 @@ module Uniword
     def required_attributes_valid?
       true # Base implementation, override in subclasses if needed
     end
+
+    # COMMENTED OUT: Custom to_xml method was interfering with lutaml-model's
+    # nested object serialization. Lutaml-model handles this automatically.
+    #
+    # # Serialize element to OOXML XML using schema definition
+    # #
+    # # v2.0.0: Schema-driven element serialization.
+    # # Uses external YAML schema to determine XML structure.
+    # #
+    # # @param options [Hash] Serialization options
+    # # @option options [Boolean] :pretty (false) Pretty print XML
+    # # @option options [Boolean] :standalone (false) Include XML declaration
+    # # @return [String] OOXML XML string
+    # # @raise [ArgumentError] if element has no schema definition
+    # #
+    # # @example Serialize paragraph
+    # #   para = Uniword::Paragraph.new
+    # #   para.add_text("Hello")
+    # #   xml = para.to_xml
+    # #   # => "<w:p><w:r><w:t>Hello</w:t></w:r></w:p>"
+    # def to_xml(options = {})
+    #   require_relative 'ooxml/schema/element_serializer'
+    #
+    #   serializer = Ooxml::Schema::ElementSerializer.new
+    #   serializer.serialize(self, options)
+    # end
   end
 end

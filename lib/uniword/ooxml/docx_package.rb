@@ -5,6 +5,8 @@ require_relative 'namespaces'
 require_relative 'core_properties'
 require_relative 'app_properties'
 require_relative '../theme'
+require_relative '../styles_configuration'
+require_relative '../numbering_configuration'
 
 module Uniword
   module Ooxml
@@ -32,11 +34,15 @@ module Uniword
       # Document theme
       attribute :theme, Theme
 
-      # Raw XML for parts not yet fully modeled
+      # Document styles configuration
+      attribute :styles_configuration, StylesConfiguration
+
+      # Document numbering configuration
+      attribute :numbering_configuration, NumberingConfiguration
+
+      # Raw XML for parts not yet fully modeled (fontTable, settings, webSettings)
       attr_accessor :raw_document_xml
-      attr_accessor :raw_styles_xml
       attr_accessor :raw_font_table_xml
-      attr_accessor :raw_numbering_xml
       attr_accessor :raw_settings_xml
       attr_accessor :raw_web_settings_xml
       attr_accessor :raw_relationships
@@ -75,11 +81,18 @@ module Uniword
           package.theme.raw_xml = zip_content['word/theme/theme1.xml']
         end
 
-        # Store raw XML for parts not yet modeled
+        # Parse styles and numbering as models
+        if zip_content['word/styles.xml']
+          package.styles_configuration = StylesConfiguration.from_xml(zip_content['word/styles.xml'])
+        end
+
+        if zip_content['word/numbering.xml']
+          package.numbering_configuration = NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
+        end
+
+        # Store raw XML for parts not yet modeled (document, fonts, settings)
         package.raw_document_xml = zip_content['word/document.xml']
-        package.raw_styles_xml = zip_content['word/styles.xml']
         package.raw_font_table_xml = zip_content['word/fontTable.xml']
-        package.raw_numbering_xml = zip_content['word/numbering.xml']
         package.raw_settings_xml = zip_content['word/settings.xml']
         package.raw_web_settings_xml = zip_content['word/webSettings.xml']
         package.raw_content_types = zip_content['[Content_Types].xml']
@@ -119,11 +132,18 @@ module Uniword
           content['word/theme/theme1.xml'] = theme.raw_xml || theme.to_xml(encoding: 'UTF-8')
         end
 
-        # Use raw XML for parts not yet modeled
+        # Serialize model-based configurations
+        if styles_configuration
+          content['word/styles.xml'] = styles_configuration.to_xml(encoding: 'UTF-8')
+        end
+
+        if numbering_configuration
+          content['word/numbering.xml'] = numbering_configuration.to_xml(encoding: 'UTF-8')
+        end
+
+        # Use raw XML for parts not yet modeled (document, fonts, settings)
         content['word/document.xml'] = raw_document_xml if raw_document_xml
-        content['word/styles.xml'] = raw_styles_xml if raw_styles_xml
         content['word/fontTable.xml'] = raw_font_table_xml if raw_font_table_xml
-        content['word/numbering.xml'] = raw_numbering_xml if raw_numbering_xml
         content['word/settings.xml'] = raw_settings_xml if raw_settings_xml
         content['word/webSettings.xml'] = raw_web_settings_xml if raw_web_settings_xml
 

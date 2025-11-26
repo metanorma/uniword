@@ -25,8 +25,8 @@ module Uniword
     # Initialize with optional default styles
     #
     # @param attributes [Hash] Configuration attributes
-    # @param include_defaults [Boolean] Whether to include default styles
-    def initialize(attributes = {}, include_defaults: true)
+    def initialize(attributes = {})
+      include_defaults = attributes.delete(:include_defaults) != false
       super(attributes)
       add_default_styles if include_defaults && styles.empty?
     end

@@ -70,12 +70,10 @@ module Uniword
         document.core_properties = package.core_properties if package.core_properties
         document.app_properties = package.app_properties if package.app_properties
         document.theme = package.theme if package.theme
-
-        # Store raw XML for parts not yet fully modeled
-        document.raw_styles_xml = package.raw_styles_xml
-        document.raw_font_table_xml = package.raw_font_table_xml
-        document.raw_numbering_xml = package.raw_numbering_xml
-        document.raw_settings_xml = package.raw_settings_xml
+        
+        # Transfer model-based configurations
+        document.styles_configuration = package.styles_configuration if package.styles_configuration
+        document.numbering_configuration = package.numbering_configuration if package.numbering_configuration
 
         document
       end
@@ -99,11 +97,9 @@ module Uniword
         # Serialize main document
         package.raw_document_xml = document.to_xml(encoding: 'UTF-8')
 
-        # Use raw XML for parts not yet fully modeled
-        package.raw_styles_xml = document.raw_styles_xml
-        package.raw_font_table_xml = document.raw_font_table_xml
-        package.raw_numbering_xml = document.raw_numbering_xml
-        package.raw_settings_xml = document.raw_settings_xml
+        # Transfer model-based configurations
+        package.styles_configuration = document.styles_configuration
+        package.numbering_configuration = document.numbering_configuration
 
         # Convert package to ZIP content
         package.to_zip_content
