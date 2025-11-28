@@ -109,14 +109,19 @@ module Uniword
 
     # Validate the document.
     #
+    # Accepts both the aliased Document class and the full Generated class.
+    #
     # @param doc [Object] The document to validate
     # @return [void]
     # @raise [ArgumentError] if document is invalid
     def validate_document(doc)
       raise ArgumentError, 'Document cannot be nil' if doc.nil?
+      
+      # Accept both the alias (Uniword::Document) and the full generated class
       return if doc.is_a?(Document)
+      return if doc.is_a?(Generated::Wordprocessingml::DocumentRoot)
 
-      raise ArgumentError, 'Must be a Document instance'
+      raise ArgumentError, "Must be a Document instance, got #{doc.class}"
     end
 
     # Validate the output path.

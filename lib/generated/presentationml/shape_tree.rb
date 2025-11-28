@@ -1,0 +1,37 @@
+# frozen_string_literal: true
+
+require 'lutaml/model'
+
+module Uniword
+  module Generated
+    module Presentationml
+      # Container for all shapes and content on a slide
+      #
+      # Generated from OOXML schema: presentationml.yml
+      # Element: <p:sp_tree>
+      class ShapeTree < Lutaml::Model::Serializable
+          attribute :nv_grp_sp_pr, :string
+          attribute :grp_sp_pr, :string
+          attribute :sp, Shape, collection: true, default: -> { [] }
+          attribute :grp_sp, GroupShape, collection: true, default: -> { [] }
+          attribute :graphic_frame, GraphicFrame, collection: true, default: -> { [] }
+          attribute :cxn_sp, ConnectionShape, collection: true, default: -> { [] }
+          attribute :pic, Picture, collection: true, default: -> { [] }
+
+          xml do
+            root 'sp_tree'
+            namespace 'http://schemas.openxmlformats.org/presentationml/2006/main', 'p'
+            mixed_content
+
+            map_element 'nvGrpSpPr', to: :nv_grp_sp_pr, render_nil: false
+            map_element 'grpSpPr', to: :grp_sp_pr, render_nil: false
+            map_element 'sp', to: :sp, render_nil: false
+            map_element 'grpSp', to: :grp_sp, render_nil: false
+            map_element 'graphicFrame', to: :graphic_frame, render_nil: false
+            map_element 'cxnSp', to: :cxn_sp, render_nil: false
+            map_element 'pic', to: :pic, render_nil: false
+          end
+      end
+    end
+  end
+end

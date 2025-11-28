@@ -75,7 +75,7 @@ module Uniword
       #
       # @param stream [IO, StringIO, String] The binary stream or data
       # @param format [Symbol] The format (:auto, :docx, :mhtml)
-      # @return [Document] The loaded document
+      # @return [Document] The loaded document (Generated::Wordprocessingml::DocumentRoot)
       #
       # @example Load from stream
       #   stream = StringIO.new(File.binread("doc.docx"))

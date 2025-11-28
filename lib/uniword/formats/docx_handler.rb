@@ -52,14 +52,17 @@ module Uniword
       # Uses DocxPackage to parse properties and theme, then parses
       # the main document XML using Document.from_xml().
       #
+      # Document is aliased to Generated::Wordprocessingml::DocumentRoot
+      # in lib/uniword.rb, so this uses the generated v2.0 classes.
+      #
       # @param content [Hash<String, String>] The extracted ZIP content
-      # @return [Document] The deserialized document
+      # @return [Document] The deserialized document (Generated class)
       def deserialize(content)
         # Load package with properties and theme
         package = Ooxml::DocxPackage.from_zip_content(content)
 
-        # Parse main document XML
-        require_relative '../document'
+        # Parse main document XML using generated classes
+        # Document is aliased in lib/uniword.rb to Generated::Wordprocessingml::DocumentRoot
         document = if package.raw_document_xml
                      Document.from_xml(package.raw_document_xml)
                    else
@@ -102,7 +105,12 @@ module Uniword
         package.numbering_configuration = document.numbering_configuration
 
         # Convert package to ZIP content
-        package.to_zip_content
+        zip_content = package.to_zip_content
+        
+        # Add required OOXML infrastructure files
+        add_required_files(zip_content)
+        
+        zip_content
       end
 
       # Package OOXML content and save as DOCX file.
@@ -131,6 +139,30 @@ module Uniword
       # @return [Infrastructure::ZipPackager]
       def zip_packager
         @zip_packager ||= Infrastructure::ZipPackager.new
+      end
+      
+      # Add required OOXML files for a valid DOCX package
+      #
+      # @param zip_content [Hash] The ZIP content hash
+      # @return [void]
+      def add_required_files(zip_content)
+        require_relative '../ooxml/content_types'
+        require_relative '../ooxml/relationships'
+        
+        # Add [Content_Types].xml if not present
+        unless zip_content['[Content_Types].xml']
+          zip_content['[Content_Types].xml'] = Ooxml::ContentTypes.generate
+        end
+        
+        # Add _rels/.rels if not present
+        unless zip_content['_rels/.rels']
+          zip_content['_rels/.rels'] = Ooxml::Relationships.generate_package_rels
+        end
+        
+        # Add word/_rels/document.xml.rels if not present
+        unless zip_content['word/_rels/document.xml.rels']
+          zip_content['word/_rels/document.xml.rels'] = Ooxml::Relationships.generate_document_rels
+        end
       end
     end
   end

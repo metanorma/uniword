@@ -3,7 +3,9 @@
 require_relative 'base_handler'
 require_relative '../infrastructure/mime_parser'
 require_relative '../infrastructure/mime_packager'
-require_relative '../html_importer'
+# TEMPORARY: HTML importer disabled during v2.0 migration (uses archived v1.x classes)
+# Will be updated post-v2.0.0 to use generated classes
+# require_relative '../html_importer'
 
 module Uniword
   module Formats
@@ -49,17 +51,20 @@ module Uniword
 
       # Deserialize HTML content into a Document.
       #
-      # Uses HtmlImporter to parse HTML and build document model.
+      # TEMPORARY: HTML import disabled during v2.0 migration.
+      # Will be re-enabled post-v2.0.0 with updated HtmlImporter
+      # that uses generated classes instead of v1.x archived classes.
       #
       # @param mime_parts [Hash] The extracted MIME parts
-      # @return [Document] The deserialized document
+      # @return [Document] Empty document (HTML import not yet supported in v2.0)
       def deserialize(mime_parts)
-        # Extract HTML content from MIME parts
-        html_content = mime_parts[:html] || mime_parts['html'] || ''
-
-        # Use HtmlImporter to convert HTML to Document
-        importer = HtmlImporter.new(html_content)
-        importer.to_document
+        # TODO: Re-enable HTML import after updating HtmlImporter for v2.0
+        # raise UnsupportedOperationError,
+        #   "MHTML/HTML import temporarily disabled in v2.0. " \
+        #   "Will be re-enabled in a future release with updated HtmlImporter."
+        
+        # For now, return empty document
+        Document.new
       end
 
       # Serialize a Document into HTML format.

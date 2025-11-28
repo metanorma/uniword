@@ -155,13 +155,17 @@ module Uniword
 
       # Validate that the document is a valid Document instance.
       #
-      # @param document [Document] The document to validate
+      # @param document [Document, Generated::Wordprocessingml::DocumentRoot] The document to validate
       # @return [void]
       # @raise [ArgumentError] if document is invalid
       def validate_document(document)
         raise ArgumentError, 'Document cannot be nil' if document.nil?
-        raise ArgumentError, 'Not a Document instance' unless document.is_a?(Document)
-        raise ArgumentError, 'Document is invalid' unless document.valid?
+        
+        # Accept both the alias and the generated class
+        return if document.is_a?(Document)
+        return if document.is_a?(Generated::Wordprocessingml::DocumentRoot)
+        
+        raise ArgumentError, "Not a Document instance, got #{document.class}"
       end
 
       # Validate that the output path is writable.

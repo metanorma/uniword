@@ -40,12 +40,15 @@ module Uniword
       # Document numbering configuration
       attribute :numbering_configuration, NumberingConfiguration
 
-      # Raw XML for parts not yet fully modeled (fontTable, settings, webSettings)
-      attr_accessor :raw_document_xml
-      attr_accessor :raw_font_table_xml
-      attr_accessor :raw_settings_xml
-      attr_accessor :raw_web_settings_xml
-      attr_accessor :raw_relationships
+      # TODO v2.0: Add proper lutaml-model attributes for:
+      # - Document (word/document.xml)
+      # - FontTable (word/fontTable.xml)
+      # - Settings (word/settings.xml)
+      # - WebSettings (word/webSettings.xml)
+      # - Relationships (.rels files)
+      # - ContentTypes ([Content_Types].xml)
+      #
+      # NO RAW XML STORAGE ALLOWED
 
       # Load DOCX package from file
       #
@@ -78,7 +81,6 @@ module Uniword
 
         if zip_content['word/theme/theme1.xml']
           package.theme = Theme.from_xml(zip_content['word/theme/theme1.xml'])
-          package.theme.raw_xml = zip_content['word/theme/theme1.xml']
         end
 
         # Parse styles and numbering as models
@@ -90,21 +92,20 @@ module Uniword
           package.numbering_configuration = NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
         end
 
-        # Store raw XML for parts not yet modeled (document, fonts, settings)
-        package.raw_document_xml = zip_content['word/document.xml']
-        package.raw_font_table_xml = zip_content['word/fontTable.xml']
-        package.raw_settings_xml = zip_content['word/settings.xml']
-        package.raw_web_settings_xml = zip_content['word/webSettings.xml']
-        package.raw_content_types = zip_content['[Content_Types].xml']
-        package.raw_relationships = {
-          'root' => zip_content['_rels/.rels'],
-          'document' => zip_content['word/_rels/document.xml.rels'],
-          'theme' => zip_content['word/theme/_rels/theme1.xml.rels']
-        }
+        # Store raw document XML (will be parsed by DocxHandler)
+        if zip_content['word/document.xml']
+          package.raw_document_xml = zip_content['word/document.xml']
+        end
+
+        # TODO v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
+        # TODO v2.0: Parse relationships and content types
 
         package
       end
 
+      # Access raw document XML (for compatibility)
+      attr_accessor :raw_document_xml
+      
       # Save package to file
       #
       # @param path [String] Output path
@@ -127,9 +128,9 @@ module Uniword
         content['docProps/core.xml'] = core_properties.to_xml(encoding: 'UTF-8', prefix: false) if core_properties
         content['docProps/app.xml'] = app_properties.to_xml(encoding: 'UTF-8', prefix: false) if app_properties
 
-        # Theme with raw XML fallback
+        # Theme serialization (no raw XML fallback)
         if theme
-          content['word/theme/theme1.xml'] = theme.raw_xml || theme.to_xml(encoding: 'UTF-8')
+          content['word/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
         end
 
         # Serialize model-based configurations
@@ -141,24 +142,19 @@ module Uniword
           content['word/numbering.xml'] = numbering_configuration.to_xml(encoding: 'UTF-8')
         end
 
-        # Use raw XML for parts not yet modeled (document, fonts, settings)
-        content['word/document.xml'] = raw_document_xml if raw_document_xml
-        content['word/fontTable.xml'] = raw_font_table_xml if raw_font_table_xml
-        content['word/settings.xml'] = raw_settings_xml if raw_settings_xml
-        content['word/webSettings.xml'] = raw_web_settings_xml if raw_web_settings_xml
+        # Serialize main document (word/document.xml)
+        if @document
+          content['word/document.xml'] = @document.to_xml(encoding: 'UTF-8')
+        elsif @raw_document_xml
+          # Fallback to raw XML if document wasn't parsed yet
+          content['word/document.xml'] = @raw_document_xml
+        end
 
-        # Relationships
-        content['_rels/.rels'] = raw_relationships['root'] if raw_relationships
-        content['word/_rels/document.xml.rels'] = raw_relationships['document'] if raw_relationships
-        content['word/theme/_rels/theme1.xml.rels'] = raw_relationships['theme'] if raw_relationships
-
-        # Content types
-        content['[Content_Types].xml'] = raw_content_types if raw_content_types
+        # TODO v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
+        # TODO v2.0: Serialize relationships and content types
 
         content
       end
-
-      attr_accessor :raw_content_types
     end
   end
 end

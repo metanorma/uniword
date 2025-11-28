@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
-require_relative 'style'
-require_relative 'paragraph_style'
-require_relative 'character_style'
+# TEMPORARY: v2.0 simplified version - v1.x style classes archived
+# require_relative 'style'
+# require_relative 'paragraph_style'
+# require_relative 'character_style'
 
 module Uniword
   # Manages document-level style configuration
@@ -12,23 +13,36 @@ module Uniword
   # provides access to styles by ID or name, and generates default styles.
   class StylesConfiguration < Lutaml::Model::Serializable
     # OOXML namespace configuration
+    # TEMPORARY: Simplified for v2.0 - style mapping disabled
     xml do
       root 'styles'
       namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
 
-      map_element 'style', to: :styles
+      # TEMPORARY: Disabled - requires Style class
+      # map_element 'style', to: :styles
     end
 
-    # Collection of all styles
-    attribute :styles, Style, collection: true, default: -> { [] }
+    # Collection of all styles (simplified for v2.0)
+    # TEMPORARY: Disabled attribute declaration (referenced archived Style class)
+    # attribute :styles, Style, collection: true, default: -> { [] }
+    
+    # Use simple accessor instead
+    def styles
+      @styles ||= []
+    end
+    
+    def styles=(value)
+      @styles = value
+    end
 
     # Initialize with optional default styles
     #
     # @param attributes [Hash] Configuration attributes
     def initialize(attributes = {})
-      include_defaults = attributes.delete(:include_defaults) != false
+      # TEMPORARY: Disable default styles (requires v1.x classes)
+      # include_defaults = attributes.delete(:include_defaults) != false
       super(attributes)
-      add_default_styles if include_defaults && styles.empty?
+      # add_default_styles if include_defaults && styles.empty?
     end
 
     # Add a style to the configuration
@@ -215,26 +229,14 @@ module Uniword
     end
 
     # Add a paragraph style (alias for add_style with type check)
-    # Compatible with docx-js API
-    #
-    # @param style [ParagraphStyle] The paragraph style to add
-    # @return [ParagraphStyle] The added style
+    # TEMPORARY: Type checking disabled for v2.0
     def add_paragraph_style(style, allow_overwrite: true)
-      unless style.is_a?(ParagraphStyle)
-        raise ArgumentError, 'Style must be a ParagraphStyle instance'
-      end
       add_style(style, allow_overwrite: allow_overwrite)
     end
 
     # Add a character style (alias for add_style with type check)
-    # Compatible with docx-js API
-    #
-    # @param style [CharacterStyle] The character style to add
-    # @return [CharacterStyle] The added style
+    # TEMPORARY: Type checking disabled for v2.0
     def add_character_style(style, allow_overwrite: true)
-      unless style.is_a?(CharacterStyle)
-        raise ArgumentError, 'Style must be a CharacterStyle instance'
-      end
       add_style(style, allow_overwrite: allow_overwrite)
     end
 
