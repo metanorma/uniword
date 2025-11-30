@@ -22,8 +22,8 @@ module Uniword
   class Hyperlink < Run
     # OOXML namespace configuration
     xml do
-      root 'hyperlink', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'hyperlink', mixed: true
+      namespace Ooxml::Namespaces::WordProcessingML
 
       map_attribute 'anchor', to: :anchor, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
       map_attribute 'tooltip', to: :tooltip, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'

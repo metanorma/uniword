@@ -20,7 +20,7 @@ module Uniword
       attribute :modified, Types::DctermsModifiedType
 
       xml do
-        root 'coreProperties'
+        element 'coreProperties'
         namespace Namespaces::CoreProperties
 
         # Declare all namespaces used by child elements (new lutaml-model syntax)

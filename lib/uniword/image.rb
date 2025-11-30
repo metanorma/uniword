@@ -16,12 +16,12 @@ module Uniword
     extend LazyLoader
     # OOXML namespace configuration for images (drawing elements)
     xml do
-      root 'drawing', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
-      namespace 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing', 'wp'
-      namespace 'http://schemas.openxmlformats.org/drawingml/2006/main', 'a'
-      namespace 'http://schemas.openxmlformats.org/drawingml/2006/picture', 'pic'
-      namespace 'http://schemas.openxmlformats.org/officeDocument/2006/relationships', 'r'
+      element 'drawing', mixed: true
+      namespace Ooxml::Namespaces::WordProcessingML
+      namespace Ooxml::Namespaces::WordProcessingDrawing
+      namespace Ooxml::Namespaces::DrawingML
+      namespace Ooxml::Namespaces::Picture
+      namespace Ooxml::Namespaces::Relationships
     end
 
     # Image relationship ID (reference to the image file in the package)

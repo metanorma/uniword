@@ -1,0 +1,93 @@
+namespace:
+  uri: 'http://schemas.openxmlformats.org/package/2006/content-types'
+  prefix: 'ct'
+  description: 'Content Types - MIME type definitions for OOXML package parts'
+
+elements:
+  # Root Element
+  Types:
+    class_name: Types
+    description: 'Content types root element for [Content_Types].xml'
+    attributes:
+      - name: defaults
+        type: Default
+        collection: true
+        xml_name: Default
+        description: 'Default content types by file extension'
+      - name: overrides
+        type: Override
+        collection: true
+        xml_name: Override
+        description: 'Override content types for specific parts'
+
+  # Default Content Type
+  Default:
+    class_name: Default
+    description: 'Default content type for file extension'
+    attributes:
+      - name: extension
+        type: String
+        xml_name: Extension
+        xml_attribute: true
+        required: true
+        description: 'File extension (without dot)'
+      - name: content_type
+        type: String
+        xml_name: ContentType
+        xml_attribute: true
+        required: true
+        description: 'MIME type for this extension'
+
+  # Override Content Type
+  Override:
+    class_name: Override
+    description: 'Override content type for specific part'
+    attributes:
+      - name: part_name
+        type: String
+        xml_name: PartName
+        xml_attribute: true
+        required: true
+        description: 'Part name (path in package, starts with /)'
+      - name: content_type
+        type: String
+        xml_name: ContentType
+        xml_attribute: true
+        required: true
+        description: 'MIME type for this part'
+
+# Common Content Type Constants (for reference, not generated as classes)
+# These are the standard MIME types used in OOXML packages:
+#
+# XML-based types:
+#   - application/xml (generic XML)
+#   - application/vnd.openxmlformats-package.relationships+xml (relationships)
+#
+# Document types:
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml (document.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml (styles.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml (numbering.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml (settings.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml (webSettings.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml (fontTable.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml (footer.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml (header.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml (endnotes.xml)
+#   - application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml (footnotes.xml)
+#
+# Theme types:
+#   - application/vnd.openxmlformats-officedocument.theme+xml (theme1.xml)
+#
+# Document properties:
+#   - application/vnd.openxmlformats-package.core-properties+xml (core.xml)
+#   - application/vnd.openxmlformats-officedocument.extended-properties+xml (app.xml)
+#   - application/vnd.openxmlformats-officedocument.custom-properties+xml (custom.xml)
+#
+# Image types:
+#   - image/png
+#   - image/jpeg
+#   - image/gif
+#   - image/tiff
+#   - image/bmp
+#   - image/x-emf (Enhanced Metafile)
+#   - image/x-wmf (Windows Metafile)

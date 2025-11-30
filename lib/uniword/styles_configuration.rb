@@ -15,8 +15,8 @@ module Uniword
     # OOXML namespace configuration
     # TEMPORARY: Simplified for v2.0 - style mapping disabled
     xml do
-      root 'styles'
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'styles'
+      namespace Ooxml::Namespaces::WordProcessingML
 
       # TEMPORARY: Disabled - requires Style class
       # map_element 'style', to: :styles
@@ -25,12 +25,12 @@ module Uniword
     # Collection of all styles (simplified for v2.0)
     # TEMPORARY: Disabled attribute declaration (referenced archived Style class)
     # attribute :styles, Style, collection: true, default: -> { [] }
-    
+
     # Use simple accessor instead
     def styles
       @styles ||= []
     end
-    
+
     def styles=(value)
       @styles = value
     end

@@ -1,0 +1,205 @@
+# WordProcessingML 2016 Extended Namespace Schema
+# Word 2016 Accessibility and Modern Formatting
+# URI: http://schemas.microsoft.com/office/word/2015/wordml
+# Prefix: w16
+
+namespace:
+  uri: 'http://schemas.microsoft.com/office/word/2015/wordml'
+  prefix: 'w16'
+  description: 'Word 2016 Extended - Accessibility and modern formatting'
+
+# Element definitions
+# Word 2016 introduces accessibility features, persistent document IDs,
+# and enhanced revision tracking
+
+elements:
+  # Accessibility (5 elements)
+  
+  sdtAppearance:
+    class_name: SdtAppearance2016
+    description: 'Enhanced SDT appearance for accessibility'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Appearance type (boundingBox, tags, hidden, default)'
+  
+  dataBinding:
+    class_name: DataBinding2016
+    description: 'Enhanced data binding with accessibility features'
+    attributes:
+      - name: xpath
+        type: String
+        xml_name: xpath
+        xml_attribute: true
+        description: 'XPath expression'
+      - name: store_item_id
+        type: String
+        xml_name: storeItemID
+        xml_attribute: true
+        description: 'Custom XML part ID'
+      - name: prefix_mappings
+        type: String
+        xml_name: prefixMappings
+        xml_attribute: true
+        description: 'XML namespace prefix mappings'
+  
+  persistentDocumentId:
+    class_name: PersistentDocumentId
+    description: 'Persistent document identifier for tracking across sessions'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Document GUID'
+  
+  conflictMode:
+    class_name: ConflictMode2016
+    description: 'Enhanced conflict resolution mode'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Conflict mode (acceptMine, acceptTheirs, merge)'
+  
+  commentsExt:
+    class_name: CommentsExt
+    description: 'Extended comments properties'
+    attributes:
+      - name: para_id
+        type: String
+        xml_name: paraId
+        xml_attribute: true
+        description: 'Paragraph ID reference'
+      - name: done
+        type: String
+        xml_name: done
+        xml_attribute: true
+        description: 'Comment resolved flag'
+  
+  # Modern Formatting (5 elements)
+  
+  cid:
+    class_name: ContentId
+    description: 'Content identifier for enhanced tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Content ID (integer)'
+  
+  sepx:
+    class_name: SeparatorExtension
+    description: 'Separator extension properties'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Separator extension value'
+  
+  rowRsid:
+    class_name: RowRsid
+    description: 'Row revision save ID for change tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Row RSID (hex)'
+  
+  cellRsid:
+    class_name: CellRsid
+    description: 'Cell revision save ID for change tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Cell RSID (hex)'
+  
+  tblRsid:
+    class_name: TableRsid
+    description: 'Table revision save ID for change tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Table RSID (hex)'
+  
+  # Integration Features (5 elements)
+  
+  webVideoProperty:
+    class_name: WebVideoProperty
+    description: 'Web video embedding properties'
+    attributes:
+      - name: embed_code
+        type: String
+        xml_name: embedCode
+        xml_attribute: true
+        description: 'Video embed code'
+      - name: video_url
+        type: String
+        xml_name: videoUrl
+        xml_attribute: true
+        description: 'Video URL'
+  
+  chartStyle:
+    class_name: ChartStyle2016
+    description: 'Enhanced chart style reference'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Chart style ID'
+  
+  chartColorStyle:
+    class_name: ChartColorStyle
+    description: 'Chart color style reference'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Color style ID'
+  
+  extLst:
+    class_name: ExtensionList
+    description: 'Extension list for future extensibility'
+    attributes:
+      - name: extensions
+        type: Extension
+        collection: true
+        xml_name: ext
+        description: 'Individual extensions'
+  
+  ext:
+    class_name: Extension
+    description: 'Individual extension element'
+    attributes:
+      - name: uri
+        type: String
+        xml_name: uri
+        xml_attribute: true
+        required: true
+        description: 'Extension URI'
+      - name: content
+        type: String
+        xml_name: content
+        description: 'Extension content'
+
+# Total elements: 15
+# Coverage: Accessibility (SDT appearance, data binding, persistent IDs, comments),
+# modern formatting (content IDs, RSID tracking for rows/cells/tables), and 
+# integration features (web video, chart styles, extensibility)

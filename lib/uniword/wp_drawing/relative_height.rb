@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+require 'lutaml/model'
+
+module Uniword
+    module WpDrawing
+      # Relative Z-order position
+      #
+      # Generated from OOXML schema: wp_drawing.yml
+      # Element: <wp:relativeHeight>
+      class RelativeHeight < Lutaml::Model::Serializable
+          attribute :value, Integer
+
+          xml do
+            element 'relativeHeight'
+            namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
+
+            map_element '', to: :value, render_nil: false
+          end
+      end
+    end
+end

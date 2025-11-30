@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 module Uniword
-  module Generated
-    module Wordprocessingml
-      class DocumentRoot
+  module Wordprocessingml
+    class DocumentRoot
         # Additional attributes for DOCX metadata (not part of document.xml)
         # These are stored in separate files within the DOCX package
         attr_accessor :core_properties      # docProps/core.xml
@@ -148,8 +147,7 @@ module Uniword
           styleset = Uniword::StyleSets::YamlStyleSetLoader.load_bundled(name.to_s)
           styleset.apply_to(self, strategy: strategy)
           self
-        end
-      end
     end
   end
 end
+    end

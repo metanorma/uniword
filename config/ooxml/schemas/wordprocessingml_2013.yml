@@ -1,0 +1,286 @@
+# WordProcessingML 2013 Extended Namespace Schema
+# Word 2013 Collaborative Features
+# URI: http://schemas.microsoft.com/office/word/2012/wordml
+# Prefix: w15
+
+namespace:
+  uri: 'http://schemas.microsoft.com/office/word/2012/wordml'
+  prefix: 'w15'
+  description: 'Word 2013 Extended - Collaborative features and enhanced comments'
+
+# Element definitions
+# Word 2013 introduces enhanced collaborative features, threaded comments, 
+# and repeating sections
+
+elements:
+  # Comments Enhanced (6 elements)
+  
+  commentEx:
+    class_name: CommentEx
+    description: 'Extended comment properties for Word 2013+'
+    attributes:
+      - name: para_id
+        type: String
+        xml_name: paraId
+        xml_attribute: true
+        description: 'Paragraph ID reference'
+      - name: para_id_parent
+        type: String
+        xml_name: paraIdParent
+        xml_attribute: true
+        description: 'Parent paragraph ID for threaded comments'
+      - name: done
+        type: String
+        xml_name: done
+        xml_attribute: true
+        description: 'Comment resolved flag'
+  
+  person:
+    class_name: Person
+    description: 'Person reference for collaborative editing'
+    attributes:
+      - name: author
+        type: String
+        xml_name: author
+        xml_attribute: true
+        required: true
+        description: 'Person name'
+      - name: provider_id
+        type: String
+        xml_name: providerId
+        xml_attribute: true
+        description: 'Identity provider ID'
+      - name: user_id
+        type: String
+        xml_name: userId
+        xml_attribute: true
+        description: 'User ID'
+  
+  presenceInfo:
+    class_name: PresenceInfo
+    description: 'Presence information for real-time collaboration'
+    attributes:
+      - name: provider_id
+        type: String
+        xml_name: providerId
+        xml_attribute: true
+        description: 'Presence provider ID'
+      - name: user_id
+        type: String
+        xml_name: userId
+        xml_attribute: true
+        description: 'User ID for presence'
+  
+  author:
+    class_name: CommentAuthor
+    description: 'Enhanced comment author information'
+    attributes:
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Author name'
+      - name: initials
+        type: String
+        xml_name: initials
+        xml_attribute: true
+        description: 'Author initials'
+      - name: provider_id
+        type: String
+        xml_name: providerId
+        xml_attribute: true
+        description: 'Identity provider ID'
+  
+  done:
+    class_name: CommentDone
+    description: 'Comment done/resolved flag'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Done state (true/false)'
+  
+  collapsed:
+    class_name: CommentCollapsed
+    description: 'Comment collapsed state in UI'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Collapsed state (true/false)'
+  
+  # Appearance Properties (5 elements)
+  
+  appearance:
+    class_name: SdtAppearance
+    description: 'SDT appearance settings for Word 2013+'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Appearance type (boundingBox, tags, hidden)'
+  
+  color:
+    class_name: SdtColor
+    description: 'SDT color settings'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Color value (hex)'
+  
+  dataBinding:
+    class_name: SdtDataBinding
+    description: 'Enhanced data binding for content controls'
+    attributes:
+      - name: xpath
+        type: String
+        xml_name: xpath
+        xml_attribute: true
+        description: 'XPath expression'
+      - name: store_item_id
+        type: String
+        xml_name: storeItemID
+        xml_attribute: true
+        description: 'Custom XML part ID'
+  
+  repeatingSection:
+    class_name: RepeatingSection
+    description: 'Repeating section content control'
+    attributes:
+      - name: section_title
+        type: String
+        xml_name: sectionTitle
+        xml_attribute: true
+        description: 'Section title'
+      - name: do_not_allow_insert_delete_section
+        type: String
+        xml_name: doNotAllowInsertDeleteSection
+        xml_attribute: true
+        description: 'Lock insert/delete operations'
+  
+  repeatingSectionItem:
+    class_name: RepeatingSectionItem
+    description: 'Individual item in repeating section'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        description: 'Item ID'
+  
+  # Chart Integration (4 elements)
+  
+  chartTrackingRefBased:
+    class_name: ChartTrackingRefBased
+    description: 'Chart tracking reference mode'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Tracking mode enabled'
+  
+  chartProps:
+    class_name: ChartProps
+    description: 'Chart properties for embedded charts'
+    attributes:
+      - name: style
+        type: String
+        xml_name: style
+        xml_attribute: true
+        description: 'Chart style ID'
+      - name: color_mapping
+        type: String
+        xml_name: colorMapping
+        description: 'Chart color mapping'
+  
+  footnoteColumns:
+    class_name: FootnoteColumns
+    description: 'Footnote column layout'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Number of footnote columns'
+  
+  docPart:
+    class_name: DocumentPart
+    description: 'Document part reference for building blocks'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Document part ID'
+  
+  # Collaboration (3 elements)
+  
+  peopleGroup:
+    class_name: PeopleGroup
+    description: 'Group of people for collaborative editing'
+    attributes:
+      - name: group_id
+        type: String
+        xml_name: groupId
+        xml_attribute: true
+        description: 'Group identifier'
+      - name: people
+        type: String
+        xml_name: people
+        description: 'People in group'
+  
+  webExtension:
+    class_name: WebExtension
+    description: 'Web extension reference for Office Add-ins'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Extension ID'
+  
+  webExtensionLinked:
+    class_name: WebExtensionLinked
+    description: 'Linked web extension'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Extension ID'
+  
+  # Document Features (2 elements)
+  
+  commentsIds:
+    class_name: CommentsIds
+    description: 'Collection of comment IDs'
+    attributes:
+      - name: comment_id
+        type: String
+        collection: true
+        xml_name: commentId
+        description: 'Individual comment IDs'
+  
+  docPartAnchor:
+    class_name: DocPartAnchor
+    description: 'Document part anchor for content positioning'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Anchor value'
+
+# Total elements: 20
+# Coverage: Enhanced comments (threaded, resolved, presence), appearance settings,
+# repeating sections, chart integration, collaborative features (people, groups, 
+# web extensions), and document part management

@@ -11,9 +11,9 @@ module Uniword
         attribute :type, :string
 
         xml do
-          root 'modified'
-          namespace 'http://purl.org/dc/terms/', 'dcterms'
-          
+          element 'modified'
+          namespace Ooxml::Namespaces::DublinCoreTerms
+
           map_content to: :value
           map_attribute 'type', to: :type, namespace: 'http://www.w3.org/2001/XMLSchema-instance', prefix: 'xsi'
         end

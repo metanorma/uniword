@@ -17,7 +17,7 @@ module Uniword
         attribute :type, XsiTypeType
 
         xml do
-          root 'created'
+          element 'created'
           namespace Namespaces::DublinCoreTerms
           map_attribute 'type', to: :type
           map_content to: :value
@@ -35,7 +35,7 @@ module Uniword
         attribute :type, XsiTypeType
 
         xml do
-          root 'modified'
+          element 'modified'
           namespace Namespaces::DublinCoreTerms
           map_attribute 'type', to: :type
           map_content to: :value

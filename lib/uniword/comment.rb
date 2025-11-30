@@ -35,8 +35,8 @@ module Uniword
   class Comment < Element
     # OOXML namespace configuration for comments
     xml do
-      root 'comment'
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'comment'
+      namespace Ooxml::Namespaces::WordProcessingML
 
       map_attribute 'id', to: :comment_id
       map_attribute 'author', to: :author

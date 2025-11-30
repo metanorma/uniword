@@ -26,8 +26,8 @@ module Uniword
   class CommentsPart < Lutaml::Model::Serializable
     # OOXML namespace configuration for comments
     xml do
-      root 'comments'
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'comments'
+      namespace Ooxml::Namespaces::WordProcessingML
 
       map_element 'comment', to: :comments
     end

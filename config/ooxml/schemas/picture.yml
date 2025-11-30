@@ -1,0 +1,213 @@
+# Picture Namespace Schema
+# ISO 29500-1 Part 4: DrawingML - Picture
+# URI: http://schemas.openxmlformats.org/drawingml/2006/picture
+# Prefix: pic
+# 
+# This schema defines Picture elements for embedded images in OOXML documents.
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/drawingml/2006/picture'
+  prefix: 'pic'
+  description: 'Picture namespace for embedded images'
+
+elements:
+  # Picture element
+  pic:
+    class_name: Picture
+    description: 'Picture element'
+    attributes:
+      - name: nv_pic_pr
+        type: NonVisualPictureProperties
+        xml_name: nvPicPr
+        required: true
+        description: 'Non-visual picture properties'
+      - name: blip_fill
+        type: BlipFill
+        xml_name: blipFill
+        required: true
+        description: 'Picture fill'
+      - name: sp_pr
+        type: ShapeProperties
+        xml_name: spPr
+        required: true
+        description: 'Shape properties'
+  
+  # Non-visual picture properties
+  nvPicPr:
+    class_name: NonVisualPictureProperties
+    description: 'Non-visual picture properties'
+    attributes:
+      - name: c_nv_pr
+        type: String
+        xml_name: cNvPr
+        required: true
+        description: 'Non-visual drawing properties (from DrawingML)'
+      - name: c_nv_pic_pr
+        type: NonVisualPictureDrawingProperties
+        xml_name: cNvPicPr
+        required: true
+        description: 'Non-visual picture drawing properties'
+  
+  # Non-visual picture drawing properties
+  cNvPicPr:
+    class_name: NonVisualPictureDrawingProperties
+    description: 'Non-visual picture drawing properties'
+    attributes:
+      - name: prefer_relative_resize
+        type: String
+        xml_name: preferRelativeResize
+        xml_attribute: true
+        description: 'Prefer relative resize flag'
+      - name: pic_locks
+        type: PictureLocks
+        xml_name: picLocks
+        description: 'Picture locks'
+  
+  # Picture locks
+  picLocks:
+    class_name: PictureLocks
+    description: 'Picture locks'
+    attributes:
+      - name: no_change_aspect
+        type: String
+        xml_name: noChangeAspect
+        xml_attribute: true
+        description: 'No change aspect flag'
+      - name: no_change_arrowheads
+        type: String
+        xml_name: noChangeArrowheads
+        xml_attribute: true
+        description: 'No change arrowheads flag'
+  
+  # Blip fill (picture fill using DrawingML blip)
+  blipFill:
+    class_name: PictureBlipFill
+    description: 'Picture fill using blip reference'
+    attributes:
+      - name: blip
+        type: String
+        xml_name: blip
+        required: true
+        description: 'Blip reference (from DrawingML)'
+      - name: src_rect
+        type: SourceRect
+        xml_name: srcRect
+        description: 'Source rectangle'
+      - name: stretch
+        type: Stretch
+        xml_name: stretch
+        description: 'Stretch properties'
+      - name: tile
+        type: Tile
+        xml_name: tile
+        description: 'Tile properties'
+  
+  # Source rectangle
+  srcRect:
+    class_name: PictureSourceRect
+    description: 'Source rectangle for picture cropping'
+    attributes:
+      - name: l
+        type: Integer
+        xml_name: l
+        xml_attribute: true
+        description: 'Left offset percentage'
+      - name: t
+        type: Integer
+        xml_name: t
+        xml_attribute: true
+        description: 'Top offset percentage'
+      - name: r
+        type: Integer
+        xml_name: r
+        xml_attribute: true
+        description: 'Right offset percentage'
+      - name: b
+        type: Integer
+        xml_name: b
+        xml_attribute: true
+        description: 'Bottom offset percentage'
+  
+  # Stretch properties
+  stretch:
+    class_name: PictureStretch
+    description: 'Stretch fill properties'
+    attributes:
+      - name: fill_rect
+        type: FillRect
+        xml_name: fillRect
+        description: 'Fill rectangle'
+  
+  # Fill rectangle
+  fillRect:
+    class_name: FillRect
+    description: 'Fill rectangle insets'
+    attributes:
+      - name: l
+        type: Integer
+        xml_name: l
+        xml_attribute: true
+        description: 'Left inset percentage'
+      - name: t
+        type: Integer
+        xml_name: t
+        xml_attribute: true
+        description: 'Top inset percentage'
+      - name: r
+        type: Integer
+        xml_name: r
+        xml_attribute: true
+        description: 'Right inset percentage'
+      - name: b
+        type: Integer
+        xml_name: b
+        xml_attribute: true
+        description: 'Bottom inset percentage'
+  
+  # Tile properties
+  tile:
+    class_name: Tile
+    description: 'Tile properties for picture fill'
+    attributes:
+      - name: tx
+        type: Integer
+        xml_name: tx
+        xml_attribute: true
+        description: 'Horizontal tile offset in EMUs'
+      - name: ty
+        type: Integer
+        xml_name: ty
+        xml_attribute: true
+        description: 'Vertical tile offset in EMUs'
+      - name: sx
+        type: Integer
+        xml_name: sx
+        xml_attribute: true
+        description: 'Horizontal tile scale percentage'
+      - name: sy
+        type: Integer
+        xml_name: sy
+        xml_attribute: true
+        description: 'Vertical tile scale percentage'
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Tile alignment (tl, t, tr, l, ctr, r, bl, b, br)'
+  
+  # Shape properties (reference to DrawingML)
+  spPr:
+    class_name: PictureShapeProperties
+    description: 'Picture shape properties'
+    attributes:
+      - name: xfrm
+        type: String
+        xml_name: xfrm
+        description: '2D transform (from DrawingML)'
+      - name: ln
+        type: String
+        xml_name: ln
+        description: 'Line properties (from DrawingML)'
+
+# Total: 10 Picture elements defined
+# This namespace handles embedded images in OOXML documents

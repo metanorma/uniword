@@ -12,13 +12,16 @@ end
 
 require_relative 'uniword/version'
 
-# Load all generated classes from Phase 2
-require_relative 'generated/wordprocessingml'
-require_relative 'generated/drawingml'
-require_relative 'generated/math'
-require_relative 'generated/shared_types'
-require_relative 'generated/content_types'
-require_relative 'generated/document_properties'
+# Load OOXML namespaces FIRST (needed by generated classes)
+require_relative 'uniword/ooxml/namespaces'
+
+# Load all generated classes
+require_relative 'uniword/wordprocessingml'
+require_relative 'uniword/drawingml'
+require_relative 'uniword/math'
+require_relative 'uniword/shared_types'
+require_relative 'uniword/content_types'
+require_relative 'uniword/document_properties'
 
 # Load extension modules that add convenience methods to generated classes
 require_relative 'uniword/extensions/document_extensions'
@@ -49,32 +52,32 @@ require_relative 'uniword/extensions/properties_extensions'
 #   doc.apply_styleset('distinctive')
 #   doc.save('output.docx')
 #
-# @see Document Main document class (alias for Generated::Wordprocessingml::DocumentRoot)
+# @see Document Main document class (alias for Wordprocessingml::DocumentRoot)
 # @see DocumentFactory Factory for reading documents
 module Uniword
   # Re-export generated classes as primary API
-  # These are the schema-generated classes from lib/generated/wordprocessingml/
-  Document = Generated::Wordprocessingml::DocumentRoot
-  Body = Generated::Wordprocessingml::Body
-  Paragraph = Generated::Wordprocessingml::Paragraph
-  Run = Generated::Wordprocessingml::Run
-  Table = Generated::Wordprocessingml::Table
-  TableRow = Generated::Wordprocessingml::TableRow
-  TableCell = Generated::Wordprocessingml::TableCell
+  # These are the schema-generated classes from lib/uniword/wordprocessingml/
+  Document = Wordprocessingml::DocumentRoot
+  Body = Wordprocessingml::Body
+  Paragraph = Wordprocessingml::Paragraph
+  Run = Wordprocessingml::Run
+  Table = Wordprocessingml::Table
+  TableRow = Wordprocessingml::TableRow
+  TableCell = Wordprocessingml::TableCell
   
   # Properties classes
-  ParagraphProperties = Generated::Wordprocessingml::ParagraphProperties
-  RunProperties = Generated::Wordprocessingml::RunProperties
-  TableProperties = Generated::Wordprocessingml::TableProperties
-  SectionProperties = Generated::Wordprocessingml::SectionProperties
+  ParagraphProperties = Wordprocessingml::ParagraphProperties
+  RunProperties = Wordprocessingml::RunProperties
+  TableProperties = Wordprocessingml::TableProperties
+  SectionProperties = Wordprocessingml::SectionProperties
   
   # Additional element classes
-  Hyperlink = Generated::Wordprocessingml::Hyperlink
-  BookmarkStart = Generated::Wordprocessingml::BookmarkStart
-  BookmarkEnd = Generated::Wordprocessingml::BookmarkEnd
+  Hyperlink = Wordprocessingml::Hyperlink
+  BookmarkStart = Wordprocessingml::BookmarkStart
+  BookmarkEnd = Wordprocessingml::BookmarkEnd
   
   # Math support
-  MathElement = Generated::Math::OMath
+  MathElement = Math::OMath
   
   # Autoload infrastructure classes (still needed)
   autoload :DocumentFactory, 'uniword/document_factory'

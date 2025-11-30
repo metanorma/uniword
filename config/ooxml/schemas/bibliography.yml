@@ -1,0 +1,351 @@
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/bibliography'
+  prefix: 'b'
+  description: 'Bibliography - Citation and reference management for academic and professional documents'
+
+elements:
+  sources:
+    class_name: Sources
+    description: 'Container for all bibliography sources in the document'
+    attributes:
+      - name: selected_style
+        type: :string
+        xml_name: SelectedStyle
+        xml_attribute: true
+        description: 'Currently selected citation style (APA, MLA, Chicago, etc.)'
+      - name: style_name
+        type: :string
+        xml_name: StyleName
+        xml_attribute: true
+        description: 'Name of the citation style'
+      - name: source
+        type: Source
+        xml_name: Source
+        collection: true
+        description: 'Individual bibliography source entries'
+
+  source:
+    class_name: Source
+    description: 'Individual bibliography source entry with publication details'
+    attributes:
+      - name: source_type
+        type: :string
+        xml_name: SourceType
+        required: true
+        description: 'Type of source (Book, JournalArticle, ArticleInAPeriodical, etc.)'
+      - name: tag
+        type: :string
+        xml_name: Tag
+        required: true
+        description: 'Unique identifier tag for citation references'
+      - name: guid
+        type: :string
+        xml_name: GUID
+        description: 'Globally unique identifier for the source'
+      - name: lcid
+        type: :integer
+        xml_name: LCID
+        description: 'Locale identifier for language-specific formatting'
+      - name: author
+        type: Author
+        xml_name: Author
+        description: 'Author information for the source'
+      - name: title
+        type: :string
+        xml_name: Title
+        required: true
+        description: 'Title of the source'
+      - name: year
+        type: :string
+        xml_name: Year
+        description: 'Publication year'
+      - name: month
+        type: :string
+        xml_name: Month
+        description: 'Publication month'
+      - name: day
+        type: :string
+        xml_name: Day
+        description: 'Publication day'
+      - name: publisher
+        type: :string
+        xml_name: Publisher
+        description: 'Publisher name'
+      - name: city
+        type: :string
+        xml_name: City
+        description: 'City of publication'
+      - name: pages
+        type: :string
+        xml_name: Pages
+        description: 'Page range (e.g., "123-145")'
+      - name: volume
+        type: :string
+        xml_name: Volume
+        description: 'Volume number'
+      - name: issue
+        type: :string
+        xml_name: Issue
+        description: 'Issue number'
+      - name: edition
+        type: :string
+        xml_name: Edition
+        description: 'Edition information'
+      - name: url
+        type: :string
+        xml_name: URL
+        description: 'Web URL for online sources'
+      - name: ref_order
+        type: :integer
+        xml_name: RefOrder
+        description: 'Reference order in bibliography'
+
+  source_type:
+    class_name: SourceType
+    description: 'Type of bibliography source'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Source type value (Book, JournalArticle, etc.)'
+
+  tag:
+    class_name: Tag
+    description: 'Unique identifier tag for source citations'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Tag identifier'
+
+  guid:
+    class_name: Guid
+    description: 'Globally unique identifier for bibliography source'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'GUID value'
+
+  lcid:
+    class_name: Lcid
+    description: 'Locale identifier for language-specific formatting'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Locale ID (e.g., 1033 for en-US)'
+
+  author:
+    class_name: Author
+    description: 'Author information container for bibliography sources'
+    attributes:
+      - name: name_list
+        type: NameList
+        xml_name: NameList
+        description: 'List of author names'
+      - name: corporate
+        type: :string
+        xml_name: Corporate
+        description: 'Corporate author name'
+
+  name_list:
+    class_name: NameList
+    description: 'List of individual author names'
+    attributes:
+      - name: person
+        type: Person
+        xml_name: Person
+        collection: true
+        description: 'Individual person entries'
+
+  person:
+    class_name: Person
+    description: 'Individual person with first and last names'
+    attributes:
+      - name: first
+        type: :string
+        xml_name: First
+        description: 'First name or given name'
+      - name: middle
+        type: :string
+        xml_name: Middle
+        description: 'Middle name or initial'
+      - name: last
+        type: :string
+        xml_name: Last
+        required: true
+        description: 'Last name or family name'
+
+  corporate:
+    class_name: Corporate
+    description: 'Corporate author entity'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Corporate entity name'
+
+  first:
+    class_name: First
+    description: 'First name of an author'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'First name value'
+
+  last:
+    class_name: Last
+    description: 'Last name of an author'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Last name value'
+
+  title:
+    class_name: Title
+    description: 'Title of the bibliography source'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Title text'
+
+  year:
+    class_name: Year
+    description: 'Publication year'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Year value (e.g., "2024")'
+
+  month:
+    class_name: Month
+    description: 'Publication month'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Month value (1-12 or name)'
+
+  day:
+    class_name: Day
+    description: 'Publication day'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Day value (1-31)'
+
+  publisher:
+    class_name: Publisher
+    description: 'Publisher name'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Publisher name'
+
+  city:
+    class_name: City
+    description: 'City of publication'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'City name'
+
+  pages:
+    class_name: Pages
+    description: 'Page range for the source'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Page range (e.g., "123-145")'
+
+  volume_number:
+    class_name: VolumeNumber
+    description: 'Volume number for periodicals'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Volume number'
+
+  issue:
+    class_name: Issue
+    description: 'Issue number for periodicals'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Issue number'
+
+  edition:
+    class_name: Edition
+    description: 'Edition information'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Edition text (e.g., "2nd edition")'
+
+  url:
+    class_name: Url
+    description: 'Web URL for online sources'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'URL address'
+
+  ref_order:
+    class_name: RefOrder
+    description: 'Reference order in bibliography'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Order number'

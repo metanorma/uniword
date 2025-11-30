@@ -4,6 +4,35 @@ require_relative 'color_scheme'
 require_relative 'font_scheme'
 
 module Uniword
+  # Container for theme elements (color scheme, font scheme, format scheme)
+  class ThemeElements < Lutaml::Model::Serializable
+    # Color scheme
+    attribute :clr_scheme, ColorScheme
+
+    # Font scheme
+    attribute :font_scheme, FontScheme
+
+    # Format scheme (placeholder for now)
+    # TODO: Implement FormatScheme class for full round-trip
+    # attribute :fmt_scheme, FormatScheme
+
+    # XML configuration
+    xml do
+      element 'themeElements'
+      namespace Ooxml::Namespaces::DrawingML
+
+      map_element 'clrScheme', to: :clr_scheme
+      map_element 'fontScheme', to: :font_scheme
+      # map_element 'fmtScheme', to: :fmt_scheme
+    end
+
+    def initialize(attributes = {})
+      super
+      @clr_scheme ||= ColorScheme.new
+      @font_scheme ||= FontScheme.new
+    end
+  end
+
   # Represents a document theme containing color and font schemes.
   #
   # Themes provide a consistent set of colors, fonts, and effects
@@ -18,26 +47,20 @@ module Uniword
   #   doc = Uniword::Document.new
   #   doc.theme = theme
   class Theme < Lutaml::Model::Serializable
+    # Theme name
+    attribute :name, :string, default: -> { 'Office Theme' }
+
+    # Theme elements container
+    attribute :theme_elements, ThemeElements
+
     # OOXML namespace configuration
     xml do
-      root 'theme'
-      namespace 'http://schemas.openxmlformats.org/drawingml/2006/main', 'a'
+      element 'theme'
+      namespace Ooxml::Namespaces::DrawingML
 
       map_attribute 'name', to: :name
       map_element 'themeElements', to: :theme_elements
     end
-
-    # Theme name
-    attribute :name, :string, default: -> { 'Office Theme' }
-
-    # Theme elements container (for lutaml-model from_xml)
-    attribute :theme_elements, :string
-
-    # Color scheme for the theme
-    attr_accessor :color_scheme
-
-    # Font scheme for the theme
-    attr_accessor :font_scheme
 
     # Theme variants (Hash of variant_id => ThemeVariant)
     attr_accessor :variants
@@ -58,11 +81,32 @@ module Uniword
     # @param attributes [Hash] Theme attributes
     def initialize(attributes = {})
       super
-      @color_scheme = ColorScheme.new
-      @font_scheme = FontScheme.new
+      @theme_elements ||= ThemeElements.new
       @variants = {}
       @source_file = nil
       @media_files ||= {}
+    end
+
+    # Get color scheme (compatibility accessor)
+    def color_scheme
+      @theme_elements&.clr_scheme
+    end
+
+    # Set color scheme (compatibility accessor)
+    def color_scheme=(scheme)
+      @theme_elements ||= ThemeElements.new
+      @theme_elements.clr_scheme = scheme
+    end
+
+    # Get font scheme (compatibility accessor)
+    def font_scheme
+      @theme_elements&.font_scheme
+    end
+
+    # Set font scheme (compatibility accessor)
+    def font_scheme=(scheme)
+      @theme_elements ||= ThemeElements.new
+      @theme_elements.font_scheme = scheme
     end
 
     # Duplicate the theme

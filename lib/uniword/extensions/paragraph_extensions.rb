@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module Uniword
-  module Generated
-    module Wordprocessingml
-      class Paragraph
+  
+  module Wordprocessingml
+    class Paragraph
         # Add text run to paragraph
         #
         # @param text [String] Text content
@@ -21,12 +21,12 @@ module Uniword
             run.properties.color = options[:color] if options[:color]
             run.properties.sz = options[:size] * 2 if options[:size]
             run.properties.font = options[:font] if options[:font]
-          end
+        end
           
           self.runs ||= []
           runs << run
           run
-        end
+      end
         
         # Add run to paragraph
         #
@@ -35,7 +35,7 @@ module Uniword
         # @return [Run] The created run
         def add_run(text = nil, **options)
           add_text(text, **options) if text
-        end
+      end
         
         # Get paragraph text
         #
@@ -43,14 +43,14 @@ module Uniword
         def text
           return '' unless runs
           runs.map { |r| r.text.to_s }.join
-        end
+      end
         
         # Check if paragraph is empty
         #
         # @return [Boolean] true if no runs or all runs empty
         def empty?
           !runs || runs.empty? || runs.all? { |r| r.text.to_s.empty? }
-        end
+      end
         
         # Set paragraph alignment (fluent interface)
         #
@@ -60,7 +60,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.alignment = alignment.to_s
           self
-        end
+      end
         
         # Set paragraph style
         #
@@ -70,7 +70,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.style = style_name
           self
-        end
+      end
         
         # Set paragraph numbering
         #
@@ -82,7 +82,7 @@ module Uniword
           properties.num_id = num_id
           properties.ilvl = level
           self
-        end
+      end
         
         # Set spacing before paragraph
         #
@@ -92,7 +92,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.spacing_before = value
           self
-        end
+      end
         
         # Set spacing after paragraph
         #
@@ -102,7 +102,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.spacing_after = value
           self
-        end
+      end
         
         # Set line spacing
         #
@@ -114,7 +114,7 @@ module Uniword
           properties.line_spacing = value
           properties.line_rule = rule
           self
-        end
+      end
         
         # Set left indent
         #
@@ -124,7 +124,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.indent_left = value
           self
-        end
+      end
         
         # Set right indent
         #
@@ -134,7 +134,7 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.indent_right = value
           self
-        end
+      end
         
         # Set first line indent
         #
@@ -144,7 +144,6 @@ module Uniword
           self.properties ||= ParagraphProperties.new
           properties.indent_first_line = value
           self
-        end
       end
     end
   end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Uniword
-  module Generated
-    module Wordprocessingml
+  
+  module Wordprocessingml
       # ParagraphProperties extensions for fluent interface
-      class ParagraphProperties
+    class ParagraphProperties
         # Set alignment (fluent interface)
         #
         # @param value [String, Symbol] Alignment (left, center, right, justify)
@@ -12,7 +12,7 @@ module Uniword
         def align(value)
           self.alignment = value.to_s
           self
-        end
+      end
         
         # Set spacing before (fluent interface)
         #
@@ -21,7 +21,7 @@ module Uniword
         def before(value)
           self.spacing_before = value
           self
-        end
+      end
         
         # Set spacing after (fluent interface)
         #
@@ -30,7 +30,7 @@ module Uniword
         def after(value)
           self.spacing_after = value
           self
-        end
+      end
         
         # Set line spacing (fluent interface)
         #
@@ -41,7 +41,7 @@ module Uniword
           self.line_spacing = value
           self.line_rule = rule
           self
-        end
+      end
         
         # Set left indent (fluent interface)
         #
@@ -50,7 +50,7 @@ module Uniword
         def left(value)
           self.indent_left = value
           self
-        end
+      end
         
         # Set right indent (fluent interface)
         #
@@ -59,7 +59,7 @@ module Uniword
         def right(value)
           self.indent_right = value
           self
-        end
+      end
         
         # Set first line indent (fluent interface)
         #
@@ -68,11 +68,11 @@ module Uniword
         def first_line(value)
           self.indent_first_line = value
           self
-        end
       end
+    end
       
       # RunProperties extensions for fluent interface
-      class RunProperties
+    class RunProperties
         # Set bold (fluent interface)
         #
         # @param value [Boolean] true for bold
@@ -80,7 +80,7 @@ module Uniword
         def set_bold(value = true)
           self.bold = value
           self
-        end
+      end
         
         # Set italic (fluent interface)
         #
@@ -89,7 +89,7 @@ module Uniword
         def set_italic(value = true)
           self.italic = value
           self
-        end
+      end
         
         # Set underline (fluent interface)
         #
@@ -98,7 +98,7 @@ module Uniword
         def set_underline(value = true)
           self.underline = value == true ? 'single' : value.to_s
           self
-        end
+      end
         
         # Set color (fluent interface)
         #
@@ -107,7 +107,7 @@ module Uniword
         def set_color(value)
           self.color = value
           self
-        end
+      end
         
         # Set font (fluent interface)
         #
@@ -116,7 +116,7 @@ module Uniword
         def set_font(value)
           self.font = value
           self
-        end
+      end
         
         # Set size in points (fluent interface)
         #
@@ -125,7 +125,7 @@ module Uniword
         def set_size(value)
           self.sz = value * 2  # Convert to half-points
           self
-        end
+      end
         
         # Set strike-through (fluent interface)
         #
@@ -134,7 +134,7 @@ module Uniword
         def set_strike(value = true)
           self.strike = value
           self
-        end
+      end
         
         # Set highlight (fluent interface)
         #
@@ -143,11 +143,11 @@ module Uniword
         def set_highlight(value)
           self.highlight = value
           self
-        end
       end
+    end
       
       # TableProperties extensions for fluent interface
-      class TableProperties
+    class TableProperties
         # Set table width (fluent interface)
         #
         # @param value [Integer] Width value
@@ -157,7 +157,7 @@ module Uniword
           self.width_value = value
           self.width_type = type
           self
-        end
+      end
         
         # Set table alignment (fluent interface)
         #
@@ -166,7 +166,6 @@ module Uniword
         def align(value)
           self.alignment = value.to_s
           self
-        end
       end
     end
   end

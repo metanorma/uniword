@@ -24,7 +24,7 @@ module Uniword
     #   props = AppProperties.from_xml(xml_string)
     class AppProperties < Lutaml::Model::Serializable
       xml do
-        root 'Properties'
+        element 'Properties'
 
         # Extended properties namespace
         namespace Namespaces::ExtendedProperties

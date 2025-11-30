@@ -1,0 +1,648 @@
+# Office Namespace Schema
+# URI: urn:schemas-microsoft-com:office:office
+# Prefix: o
+# 
+# This schema defines Office-specific extensions and legacy features for Word documents.
+# These elements provide backward compatibility with Office 2003 and Word-specific extensions.
+
+namespace:
+  uri: 'urn:schemas-microsoft-com:office:office'
+  prefix: 'o'
+  description: 'Office - Word-specific extensions and legacy features'
+
+elements:
+  # Callouts & Annotations (8 elements)
+  callout:
+    class_name: Callout
+    description: 'Callout shape properties'
+    attributes:
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable callout'
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Callout type'
+      - name: gap
+        type: String
+        xml_attribute: true
+        description: 'Gap distance'
+      - name: angle
+        type: String
+        xml_attribute: true
+        description: 'Callout angle'
+      - name: dropauto
+        type: String
+        xml_attribute: true
+        description: 'Auto drop flag'
+      - name: drop
+        type: String
+        xml_attribute: true
+        description: 'Drop distance'
+      - name: distance
+        type: String
+        xml_attribute: true
+        description: 'Distance from anchor'
+      - name: lengthspecified
+        type: String
+        xml_attribute: true
+        description: 'Length specified flag'
+  
+  calloutanchor:
+    class_name: CalloutAnchor
+    description: 'Callout anchor point'
+    attributes:
+      - name: position
+        type: String
+        xml_attribute: true
+        description: 'Anchor position'
+  
+  lock:
+    class_name: Lock
+    description: 'Lock object properties'
+    attributes:
+      - name: text
+        type: String
+        xml_attribute: true
+        description: 'Lock text flag'
+      - name: shapetype
+        type: String
+        xml_attribute: true
+        description: 'Lock shape type flag'
+      - name: rotation
+        type: String
+        xml_attribute: true
+        description: 'Lock rotation flag'
+      - name: aspectratio
+        type: String
+        xml_attribute: true
+        description: 'Lock aspect ratio flag'
+      - name: position
+        type: String
+        xml_attribute: true
+        description: 'Lock position flag'
+  
+  ink:
+    class_name: Ink
+    description: 'Ink annotation'
+    attributes:
+      - name: i
+        type: String
+        xml_attribute: true
+        description: 'Ink data'
+      - name: contentType
+        type: String
+        xml_attribute: true
+        description: 'Content type'
+  
+  inkannotation:
+    class_name: InkAnnotation
+    description: 'Ink annotation properties'
+    attributes:
+      - name: author
+        type: String
+        xml_attribute: true
+        description: 'Annotation author'
+      - name: date
+        type: String
+        xml_attribute: true
+        description: 'Annotation date'
+  
+  field:
+    class_name: Field
+    description: 'Field properties'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Field type'
+      - name: data
+        type: String
+        xml_attribute: true
+        description: 'Field data'
+  
+  button:
+    class_name: Button
+    description: 'Button control'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Button type'
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Button value'
+      - name: caption
+        type: String
+        xml_attribute: true
+        description: 'Button caption'
+  
+  checkbox:
+    class_name: Checkbox
+    description: 'Checkbox control'
+    attributes:
+      - name: checked
+        type: String
+        xml_attribute: true
+        description: 'Checked state'
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Checkbox value'
+
+  # 3D Effects (10 elements)
+  extrusion:
+    class_name: Extrusion
+    description: '3D extrusion effect for shapes'
+    attributes:
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable extrusion'
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Extrusion type (perspective, parallel)'
+      - name: render
+        type: String
+        xml_attribute: true
+        description: 'Render mode (solid, wireframe, boundingBox)'
+      - name: viewpointorigin
+        type: String
+        xml_attribute: true
+        description: 'Viewpoint origin'
+      - name: viewpoint
+        type: String
+        xml_attribute: true
+        description: 'Viewpoint coordinates'
+      - name: skewangle
+        type: String
+        xml_attribute: true
+        description: 'Skew angle'
+      - name: skewamt
+        type: String
+        xml_attribute: true
+        description: 'Skew amount'
+      - name: foredepth
+        type: String
+        xml_attribute: true
+        description: 'Front depth'
+      - name: backdepth
+        type: String
+        xml_attribute: true
+        description: 'Back depth'
+      - name: orientation
+        type: String
+        xml_attribute: true
+        description: 'Orientation angle'
+      - name: orientationangle
+        type: String
+        xml_attribute: true
+        description: 'Orientation angle value'
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Extrusion color'
+      - name: rotationangle
+        type: String
+        xml_attribute: true
+        description: 'Rotation angle'
+      - name: lightposition
+        type: String
+        xml_attribute: true
+        description: 'Light position'
+      - name: lightlevel
+        type: String
+        xml_attribute: true
+        description: 'Light level'
+      - name: lightharsh
+        type: String
+        xml_attribute: true
+        description: 'Harsh light flag'
+      - name: lightface
+        type: String
+        xml_attribute: true
+        description: 'Light face'
+  
+  extrusionok:
+    class_name: ExtrusionOk
+    description: 'Allow extrusion flag'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Allow extrusion'
+  
+  skew:
+    class_name: Skew
+    description: 'Skew transformation'
+    attributes:
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable skew'
+      - name: offset
+        type: String
+        xml_attribute: true
+        description: 'Skew offset'
+      - name: origin
+        type: String
+        xml_attribute: true
+        description: 'Skew origin'
+      - name: matrix
+        type: String
+        xml_attribute: true
+        description: 'Skew matrix'
+  
+  extrusioncolor:
+    class_name: ExtrusionColor
+    description: 'Extrusion color'
+    attributes:
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Color value'
+      - name: opacity
+        type: String
+        xml_attribute: true
+        description: 'Color opacity'
+  
+  extrusioncolormode:
+    class_name: ExtrusionColorMode
+    description: 'Extrusion color mode'
+    attributes:
+      - name: mode
+        type: String
+        xml_attribute: true
+        description: 'Color mode (auto, custom)'
+  
+  brightness:
+    class_name: Brightness
+    description: 'Brightness setting'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Brightness value'
+  
+  specularity:
+    class_name: Specularity
+    description: 'Specularity value'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Specularity value'
+  
+  diffusity:
+    class_name: Diffusity
+    description: 'Diffusity value'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Diffusity value'
+  
+  metal:
+    class_name: Metal
+    description: 'Metallic effect'
+    attributes:
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable metallic effect'
+  
+  edge:
+    class_name: Edge
+    description: 'Edge properties'
+    attributes:
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Edge color'
+      - name: weight
+        type: String
+        xml_attribute: true
+        description: 'Edge weight'
+
+  # Diagram Properties (8 elements)
+  diagram:
+    class_name: Diagram
+    description: 'Diagram container'
+    attributes:
+      - name: dgmstyle
+        type: String
+        xml_attribute: true
+        description: 'Diagram style'
+      - name: autoformat
+        type: String
+        xml_attribute: true
+        description: 'Auto format flag'
+      - name: reverse
+        type: String
+        xml_attribute: true
+        description: 'Reverse flag'
+      - name: autolayout
+        type: String
+        xml_attribute: true
+        description: 'Auto layout flag'
+      - name: dgmscalex
+        type: String
+        xml_attribute: true
+        description: 'Scale X'
+      - name: dgmscaley
+        type: String
+        xml_attribute: true
+        description: 'Scale Y'
+      - name: dgmfontsize
+        type: String
+        xml_attribute: true
+        description: 'Font size'
+      - name: constrainbounds
+        type: String
+        xml_attribute: true
+        description: 'Constrain bounds'
+  
+  relationtable:
+    class_name: RelationTable
+    description: 'Relationship table'
+    attributes:
+      - name: data
+        type: String
+        xml_content: true
+        description: 'Relationship data'
+  
+  rules:
+    class_name: Rules
+    description: 'Diagram rules'
+    attributes:
+      - name: rule
+        type: String
+        collection: true
+        description: 'Individual rules'
+  
+  regrouptable:
+    class_name: RegroupTable
+    description: 'Regroup table'
+    attributes:
+      - name: data
+        type: String
+        xml_content: true
+        description: 'Regroup data'
+  
+  shapelayout:
+    class_name: ShapeLayout
+    description: 'Shape layout'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Layout extension'
+      - name: idmap
+        type: String
+        xml_name: idmap
+        description: 'ID map element'
+  
+  idmap:
+    class_name: IdMap
+    description: 'ID mapping'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: data
+        type: String
+        xml_attribute: true
+        description: 'Mapping data'
+  
+  regroup:
+    class_name: Regroup
+    description: 'Regroup properties'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Regroup ID'
+  
+  signatureline:
+    class_name: SignatureLine
+    description: 'Signature line'
+    attributes:
+      - name: issignatureline
+        type: String
+        xml_attribute: true
+        description: 'Is signature line flag'
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Signature line ID'
+      - name: provid
+        type: String
+        xml_attribute: true
+        description: 'Provider ID'
+      - name: signinginstructionsset
+        type: String
+        xml_attribute: true
+        description: 'Signing instructions set flag'
+      - name: allowcomments
+        type: String
+        xml_attribute: true
+        description: 'Allow comments flag'
+      - name: showsigndate
+        type: String
+        xml_attribute: true
+        description: 'Show sign date flag'
+      - name: suggestedsigner
+        type: String
+        xml_attribute: true
+        description: 'Suggested signer'
+      - name: suggestedsigner2
+        type: String
+        xml_attribute: true
+        description: 'Suggested signer 2'
+      - name: suggestedsigneremail
+        type: String
+        xml_attribute: true
+        description: 'Suggested signer email'
+      - name: signinginstructions
+        type: String
+        xml_attribute: true
+        description: 'Signing instructions'
+
+  # Complex Properties (8 elements)
+  complex:
+    class_name: Complex
+    description: 'Complex property'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+  
+  left:
+    class_name: Left
+    description: 'Left position'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Left value'
+  
+  top:
+    class_name: Top
+    description: 'Top position'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Top value'
+  
+  right:
+    class_name: Right
+    description: 'Right position'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Right value'
+  
+  bottom:
+    class_name: Bottom
+    description: 'Bottom position'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Bottom value'
+  
+  shapedefaults:
+    class_name: ShapeDefaults
+    description: 'Shape defaults'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: spidmax
+        type: String
+        xml_attribute: true
+        description: 'Max shape ID'
+      - name: fill
+        type: String
+        xml_name: fill
+        description: 'Default fill'
+      - name: stroke
+        type: String
+        xml_name: stroke
+        description: 'Default stroke'
+  
+  colormru:
+    class_name: ColorMru
+    description: 'Color MRU list'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: colors
+        type: String
+        xml_attribute: true
+        description: 'MRU colors'
+  
+  colormenu:
+    class_name: ColorMenu
+    description: 'Color menu'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: colors
+        type: String
+        xml_attribute: true
+        description: 'Menu colors'
+
+  # Document Protection (6 elements)
+  DocumentProtection:
+    class_name: DocumentProtection
+    description: 'Document protection settings'
+    attributes:
+      - name: edit
+        type: String
+        xml_attribute: true
+        description: 'Edit protection type'
+      - name: formatting
+        type: String
+        xml_attribute: true
+        description: 'Formatting restrictions'
+      - name: enforcement
+        type: String
+        xml_attribute: true
+        description: 'Protection enforcement'
+  
+  writingstyle:
+    class_name: WritingStyle
+    description: 'Writing style settings'
+    attributes:
+      - name: lang
+        type: String
+        xml_attribute: true
+        description: 'Language'
+      - name: vendorID
+        type: String
+        xml_attribute: true
+        description: 'Vendor ID'
+      - name: dllVersion
+        type: String
+        xml_attribute: true
+        description: 'DLL version'
+      - name: nlcheck
+        type: String
+        xml_attribute: true
+        description: 'Natural language check'
+  
+  zoom:
+    class_name: Zoom
+    description: 'Zoom level'
+    attributes:
+      - name: percent
+        type: String
+        xml_attribute: true
+        description: 'Zoom percentage'
+  
+  view:
+    class_name: DocumentView
+    description: 'Document view settings'
+    attributes:
+      - name: val
+        type: String
+        xml_attribute: true
+        description: 'View type (print, outline, web, normal)'
+  
+  proofstate:
+    class_name: ProofState
+    description: 'Proof state'
+    attributes:
+      - name: spelling
+        type: String
+        xml_attribute: true
+        description: 'Spelling check state'
+      - name: grammar
+        type: String
+        xml_attribute: true
+        description: 'Grammar check state'
+  
+  forms:
+    class_name: Forms
+    description: 'Form settings'
+    attributes:
+      - name: checked
+        type: String
+        xml_attribute: true
+        description: 'Forms checked flag'
+
+# Total: 40 Office elements defined
+# This namespace provides Word-specific extensions and legacy features

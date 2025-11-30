@@ -1,0 +1,1881 @@
+# WordProcessingML Namespace Schema
+# ISO 29500-1 Part 1: Main Namespace
+# URI: http://schemas.openxmlformats.org/wordprocessingml/2006/main
+# Prefix: w
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+  prefix: 'w'
+  description: 'WordprocessingML - Main document structure and formatting'
+
+# Element definitions
+# Each element requires:
+# - class_name: Ruby class name (CamelCase)
+# - attributes: Array of attribute definitions
+# - description: Element purpose
+
+elements:
+  # Root document element
+  document:
+    class_name: DocumentRoot
+    description: 'Root element of a WordprocessingML document'
+    attributes:
+      - name: body
+        type: Body
+        xml_name: body
+        required: true
+        description: 'Document body containing all content'
+  
+  # Body element
+  body:
+    class_name: Body
+    description: 'Document body - main content container'
+    attributes:
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Paragraphs in the body'
+      - name: tables
+        type: Table
+        collection: true
+        xml_name: tbl
+        description: 'Tables in the body'
+      - name: section_properties
+        type: SectionProperties
+        xml_name: sectPr
+        description: 'Section properties'
+  
+  # Paragraph element
+  p:
+    class_name: Paragraph
+    description: 'Paragraph - block-level text element'
+    attributes:
+      - name: properties
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph formatting properties'
+      - name: runs
+        type: Run
+        collection: true
+        xml_name: r
+        description: 'Text runs with formatting'
+      - name: hyperlinks
+        type: Hyperlink
+        collection: true
+        xml_name: hyperlink
+        description: 'Hyperlinks in paragraph'
+      - name: bookmark_starts
+        type: BookmarkStart
+        collection: true
+        xml_name: bookmarkStart
+        description: 'Bookmark start markers'
+      - name: bookmark_ends
+        type: BookmarkEnd
+        collection: true
+        xml_name: bookmarkEnd
+        description: 'Bookmark end markers'
+      - name: field_chars
+        type: FieldChar
+        collection: true
+        xml_name: fldChar
+        description: 'Field characters'
+      - name: instr_text
+        type: InstrText
+        collection: true
+        xml_name: instrText
+        description: 'Field instruction text'
+      - name: comment_range_starts
+        type: CommentRangeStart
+        collection: true
+        xml_name: commentRangeStart
+        description: 'Comment range start markers'
+      - name: comment_range_ends
+        type: CommentRangeEnd
+        collection: true
+        xml_name: commentRangeEnd
+        description: 'Comment range end markers'
+      - name: comment_references
+        type: CommentReference
+        collection: true
+        xml_name: commentReference
+        description: 'Comment reference markers'
+  
+  # Paragraph properties
+  pPr:
+    class_name: ParagraphProperties
+    description: 'Paragraph formatting properties'
+    attributes:
+      - name: style
+        type: String
+        xml_name: pStyle
+        xml_attribute: val
+        description: 'Paragraph style ID'
+      - name: num_id
+        type: Integer
+        xml_name: numPr/numId
+        xml_attribute: val
+        description: 'Numbering definition instance ID'
+      - name: ilvl
+        type: Integer
+        xml_name: numPr/ilvl
+        xml_attribute: val
+        description: 'Numbering level'
+      - name: alignment
+        type: String
+        xml_name: jc
+        xml_attribute: val
+        description: 'Text alignment'
+      - name: spacing_before
+        type: Integer
+        xml_name: spacing
+        xml_attribute: before
+        description: 'Spacing before paragraph in twips'
+      - name: spacing_after
+        type: Integer
+        xml_name: spacing
+        xml_attribute: after
+        description: 'Spacing after paragraph in twips'
+      - name: line_spacing
+        type: Float
+        xml_name: spacing
+        xml_attribute: line
+        description: 'Line spacing value'
+      - name: line_rule
+        type: String
+        xml_name: spacing
+        xml_attribute: lineRule
+        description: 'Line spacing rule'
+      - name: indent_left
+        type: Integer
+        xml_name: ind
+        xml_attribute: left
+        description: 'Left indentation in twips'
+      - name: indent_right
+        type: Integer
+        xml_name: ind
+        xml_attribute: right
+        description: 'Right indentation in twips'
+      - name: indent_first_line
+        type: Integer
+        xml_name: ind
+        xml_attribute: firstLine
+        description: 'First line indentation in twips'
+      - name: borders
+        type: ParagraphBorders
+        xml_name: pBdr
+        description: 'Paragraph borders'
+      - name: shading
+        type: ParagraphShading
+        xml_name: shd
+        description: 'Paragraph shading'
+      - name: tab_stops
+        type: TabStopCollection
+        xml_name: tabs
+        description: 'Tab stops'
+  
+  # Run element
+  r:
+    class_name: Run
+    description: 'Text run - inline text with formatting'
+    attributes:
+      - name: properties
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run formatting properties'
+      - name: text
+        type: String
+        xml_name: t
+        description: 'Text content'
+      - name: tab
+        type: Tab
+        xml_name: tab
+        description: 'Tab character'
+      - name: break
+        type: Break
+        xml_name: br
+        description: 'Line/page break'
+  
+  # Run properties
+  rPr:
+    class_name: RunProperties
+    description: 'Run formatting properties'
+    attributes:
+      - name: bold
+        type: Boolean
+        xml_name: b
+        description: 'Bold text'
+      - name: italic
+        type: Boolean
+        xml_name: i
+        description: 'Italic text'
+      - name: underline
+        type: String
+        xml_name: u
+        xml_attribute: val
+        description: 'Underline style'
+      - name: font
+        type: String
+        xml_name: rFonts
+        xml_attribute: ascii
+        description: 'Font name'
+      - name: size
+        type: Integer
+        xml_name: sz
+        xml_attribute: val
+        description: 'Font size in half-points'
+      - name: color
+        type: String
+        xml_name: color
+        xml_attribute: val
+        description: 'Text color (hex)'
+  
+  # Table element
+  tbl:
+    class_name: Table
+    description: 'Table structure'
+    attributes:
+      - name: properties
+        type: TableProperties
+        xml_name: tblPr
+        description: 'Table properties'
+      - name: grid
+        type: TableGrid
+        xml_name: tblGrid
+        description: 'Table grid definition'
+      - name: rows
+        type: TableRow
+        collection: true
+        xml_name: tr
+        description: 'Table rows'
+  
+  # Table Properties
+  tblPr:
+    class_name: TableProperties
+    description: 'Table formatting properties'
+    attributes:
+      - name: style
+        type: String
+        xml_name: tblStyle
+        xml_attribute: val
+        description: 'Table style ID'
+      - name: width
+        type: Integer
+        xml_name: tblW
+        xml_attribute: w
+        description: 'Table width'
+      - name: width_type
+        type: String
+        xml_name: tblW
+        xml_attribute: type
+        description: 'Table width type'
+      - name: alignment
+        type: String
+        xml_name: jc
+        xml_attribute: val
+        description: 'Table alignment'
+      - name: borders
+        type: TableBorders
+        xml_name: tblBorders
+        description: 'Table borders'
+      - name: cell_spacing
+        type: Integer
+        xml_name: tblCellSpacing
+        xml_attribute: w
+        description: 'Cell spacing'
+      - name: indent
+        type: Integer
+        xml_name: tblInd
+        xml_attribute: w
+        description: 'Table indentation'
+      - name: look
+        type: String
+        xml_name: tblLook
+        xml_attribute: val
+        description: 'Table look flags'
+  
+  # Table Borders
+  tblBorders:
+    class_name: TableBorders
+    description: 'Table border definitions'
+    attributes:
+      - name: top
+        type: Border
+        xml_name: top
+        description: 'Top border'
+      - name: bottom
+        type: Border
+        xml_name: bottom
+        description: 'Bottom border'
+      - name: left
+        type: Border
+        xml_name: left
+        description: 'Left border'
+      - name: right
+        type: Border
+        xml_name: right
+        description: 'Right border'
+      - name: inside_h
+        type: Border
+        xml_name: insideH
+        description: 'Inside horizontal border'
+      - name: inside_v
+        type: Border
+        xml_name: insideV
+        description: 'Inside vertical border'
+  
+  # Table Grid
+  tblGrid:
+    class_name: TableGrid
+    description: 'Table grid column definitions'
+    attributes:
+      - name: columns
+        type: GridCol
+        collection: true
+        xml_name: gridCol
+        description: 'Grid columns'
+  
+  # Grid Column
+  gridCol:
+    class_name: GridCol
+    description: 'Grid column definition'
+    attributes:
+      - name: width
+        type: Integer
+        xml_name: w
+        xml_attribute: true
+        description: 'Column width in twips'
+  
+  # Table Row
+  tr:
+    class_name: TableRow
+    description: 'Table row'
+    attributes:
+      - name: properties
+        type: TableRowProperties
+        xml_name: trPr
+        description: 'Row properties'
+      - name: cells
+        type: TableCell
+        collection: true
+        xml_name: tc
+        description: 'Table cells'
+  
+  # Table Row Properties
+  trPr:
+    class_name: TableRowProperties
+    description: 'Table row properties'
+    attributes:
+      - name: height
+        type: Integer
+        xml_name: trHeight
+        xml_attribute: val
+        description: 'Row height'
+      - name: height_rule
+        type: String
+        xml_name: trHeight
+        xml_attribute: hRule
+        description: 'Height rule'
+      - name: header
+        type: Boolean
+        xml_name: tblHeader
+        description: 'Repeat as header row'
+      - name: cant_split
+        type: Boolean
+        xml_name: cantSplit
+        description: 'Row cannot split across pages'
+  
+  # Table Cell
+  tc:
+    class_name: TableCell
+    description: 'Table cell'
+    attributes:
+      - name: properties
+        type: TableCellProperties
+        xml_name: tcPr
+        description: 'Cell properties'
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Cell paragraphs'
+      - name: tables
+        type: Table
+        collection: true
+        xml_name: tbl
+        description: 'Nested tables'
+  
+  # Table Cell Properties
+  tcPr:
+    class_name: TableCellProperties
+    description: 'Table cell properties'
+    attributes:
+      - name: width
+        type: Integer
+        xml_name: tcW
+        xml_attribute: w
+        description: 'Cell width'
+      - name: width_type
+        type: String
+        xml_name: tcW
+        xml_attribute: type
+        description: 'Cell width type'
+      - name: borders
+        type: TableCellBorders
+        xml_name: tcBorders
+        description: 'Cell borders'
+      - name: shading
+        type: Shading
+        xml_name: shd
+        description: 'Cell shading'
+      - name: v_align
+        type: String
+        xml_name: vAlign
+        xml_attribute: val
+        description: 'Vertical alignment'
+      - name: gridSpan
+        type: Integer
+        xml_name: gridSpan
+        xml_attribute: val
+        description: 'Number of grid columns spanned'
+      - name: v_merge
+        type: String
+        xml_name: vMerge
+        xml_attribute: val
+        description: 'Vertical merge'
+  
+  # Table Cell Borders
+  tcBorders:
+    class_name: TableCellBorders
+    description: 'Table cell borders'
+    attributes:
+      - name: top
+        type: Border
+        xml_name: top
+        description: 'Top border'
+      - name: bottom
+        type: Border
+        xml_name: bottom
+        description: 'Bottom border'
+      - name: left
+        type: Border
+        xml_name: left
+        description: 'Left border'
+      - name: right
+        type: Border
+        xml_name: right
+        description: 'Right border'
+  
+  # Section Properties
+  sectPr:
+    class_name: SectionProperties
+    description: 'Section properties for page layout'
+    attributes:
+      - name: page_size
+        type: PageSize
+        xml_name: pgSz
+        description: 'Page dimensions'
+      - name: page_margins
+        type: PageMargins
+        xml_name: pgMar
+        description: 'Page margins'
+      - name: columns
+        type: Columns
+        xml_name: cols
+        description: 'Column layout'
+      - name: header_reference
+        type: HeaderReference
+        xml_name: headerReference
+        description: 'Header reference'
+      - name: footer_reference
+        type: FooterReference
+        xml_name: footerReference
+        description: 'Footer reference'
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: val
+        description: 'Section type'
+      - name: page_numbering
+        type: PageNumbering
+        xml_name: pgNumType
+        description: 'Page numbering'
+  
+  # Page Size
+  pgSz:
+    class_name: PageSize
+    description: 'Page dimensions'
+    attributes:
+      - name: width
+        type: Integer
+        xml_name: w
+        xml_attribute: true
+        description: 'Page width in twips'
+      - name: height
+        type: Integer
+        xml_name: h
+        xml_attribute: true
+        description: 'Page height in twips'
+      - name: orientation
+        type: String
+        xml_name: orient
+        xml_attribute: true
+        description: 'Page orientation'
+  
+  # Page Margins
+  pgMar:
+    class_name: PageMargins
+    description: 'Page margin settings'
+    attributes:
+      - name: top
+        type: Integer
+        xml_name: top
+        xml_attribute: true
+        description: 'Top margin in twips'
+      - name: bottom
+        type: Integer
+        xml_name: bottom
+        xml_attribute: true
+        description: 'Bottom margin in twips'
+      - name: left
+        type: Integer
+        xml_name: left
+        xml_attribute: true
+        description: 'Left margin in twips'
+      - name: right
+        type: Integer
+        xml_name: right
+        xml_attribute: true
+        description: 'Right margin in twips'
+      - name: header
+        type: Integer
+        xml_name: header
+        xml_attribute: true
+        description: 'Header margin in twips'
+      - name: footer
+        type: Integer
+        xml_name: footer
+        xml_attribute: true
+        description: 'Footer margin in twips'
+      - name: gutter
+        type: Integer
+        xml_name: gutter
+        xml_attribute: true
+        description: 'Gutter margin'
+  
+  # Columns
+  cols:
+    class_name: Columns
+    description: 'Column layout definition'
+    attributes:
+      - name: num
+        type: Integer
+        xml_name: num
+        xml_attribute: true
+        description: 'Number of columns'
+      - name: space
+        type: Integer
+        xml_name: space
+        xml_attribute: true
+        description: 'Space between columns'
+      - name: separate
+        type: Boolean
+        xml_name: sep
+        xml_attribute: true
+        description: 'Draw separator line'
+  
+  # Header Reference
+  headerReference:
+    class_name: HeaderReference
+    description: 'Reference to header part'
+    attributes:
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Header type (default, first, even)'
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        description: 'Relationship ID'
+  
+  # Footer Reference
+  footerReference:
+    class_name: FooterReference
+    description: 'Reference to footer part'
+    attributes:
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Footer type (default, first, even)'
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        description: 'Relationship ID'
+  
+  # Page Numbering
+  pgNumType:
+    class_name: PageNumbering
+    description: 'Page numbering format'
+    attributes:
+      - name: format
+        type: String
+        xml_name: fmt
+        xml_attribute: true
+        description: 'Numbering format'
+      - name: start
+        type: Integer
+        xml_name: start
+        xml_attribute: true
+        description: 'Starting page number'
+  
+  # Hyperlink
+  hyperlink:
+    class_name: Hyperlink
+    description: 'Hyperlink element'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        description: 'Relationship ID'
+      - name: anchor
+        type: String
+        xml_name: anchor
+        xml_attribute: true
+        description: 'Bookmark name'
+      - name: tooltip
+        type: String
+        xml_name: tooltip
+        xml_attribute: true
+        description: 'Tooltip text'
+      - name: runs
+        type: Run
+        collection: true
+        xml_name: r
+        description: 'Hyperlink text runs'
+  
+  # Bookmark Start
+  bookmarkStart:
+    class_name: BookmarkStart
+    description: 'Bookmark start marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Bookmark ID'
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Bookmark name'
+  
+  # Bookmark End
+  bookmarkEnd:
+    class_name: BookmarkEnd
+    description: 'Bookmark end marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Bookmark ID'
+  
+  # Field Character
+  fldChar:
+    class_name: FieldChar
+    description: 'Field character marker'
+    attributes:
+      - name: fldCharType
+        type: String
+        xml_name: fldCharType
+        xml_attribute: true
+        required: true
+        description: 'Field character type (begin, separate, end)'
+      - name: dirty
+        type: Boolean
+        xml_name: dirty
+        xml_attribute: true
+        description: 'Field value is dirty'
+  
+  # Instruction Text
+  instrText:
+    class_name: InstrText
+    description: 'Field instruction text'
+    attributes:
+      - name: text
+        type: String
+        xml_name: text
+        description: 'Instruction text content'
+  
+  # Comment Range Start
+  commentRangeStart:
+    class_name: CommentRangeStart
+    description: 'Comment range start marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Comment ID'
+  
+  # Comment Range End
+  commentRangeEnd:
+    class_name: CommentRangeEnd
+    description: 'Comment range end marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Comment ID'
+  
+  # Comment Reference
+  commentReference:
+    class_name: CommentReference
+    description: 'Comment reference marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Comment ID'
+  
+  # Tab
+  tab:
+    class_name: Tab
+    description: 'Tab character'
+    attributes: []
+  
+  # Break
+  br:
+    class_name: Break
+    description: 'Line or page break'
+    attributes:
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Break type (page, column, textWrapping)'
+      - name: clear
+        type: String
+        xml_name: clear
+        xml_attribute: true
+        description: 'Text wrapping restart location'
+  
+  # Drawing
+  drawing:
+    class_name: Drawing
+    description: 'DrawingML object'
+    attributes:
+      - name: inline
+        type: Inline
+        xml_name: inline
+        description: 'Inline drawing object'
+      - name: anchor
+        type: Anchor
+        xml_name: anchor
+        description: 'Anchored drawing object'
+  
+  # Inline Drawing
+  inline:
+    class_name: Inline
+    description: 'Inline drawing object'
+    attributes:
+      - name: extent
+        type: Extent
+        xml_name: extent
+        description: 'Object extents'
+      - name: docPr
+        type: DocPr
+        xml_name: docPr
+        description: 'Drawing object properties'
+      - name: graphic
+        type: Graphic
+        xml_name: graphic
+        description: 'Graphic data'
+  
+  # Anchor Drawing
+  anchor:
+    class_name: Anchor
+    description: 'Anchored drawing object'
+    attributes:
+      - name: distT
+        type: Integer
+        xml_name: distT
+        xml_attribute: true
+        description: 'Distance from text (top)'
+      - name: distB
+        type: Integer
+        xml_name: distB
+        xml_attribute: true
+        description: 'Distance from text (bottom)'
+      - name: distL
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text (left)'
+      - name: distR
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text (right)'
+      - name: simplePos
+        type: SimplePos
+        xml_name: simplePos
+        description: 'Simple positioning'
+      - name: extent
+        type: Extent
+        xml_name: extent
+        description: 'Object extents'
+      - name: docPr
+        type: DocPr
+        xml_name: docPr
+        description: 'Drawing object properties'
+  
+  # Extent
+  extent:
+    class_name: Extent
+    description: 'Object extent dimensions'
+    attributes:
+      - name: cx
+        type: Integer
+        xml_name: cx
+        xml_attribute: true
+        description: 'Width in EMUs'
+      - name: cy
+        type: Integer
+        xml_name: cy
+        xml_attribute: true
+        description: 'Height in EMUs'
+  
+  # Document Properties (Drawing)
+  docPr:
+    class_name: DocPr
+    description: 'Drawing object non-visual properties'
+    attributes:
+      - name: id
+        type: Integer
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Unique ID'
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Object name'
+      - name: descr
+        type: String
+        xml_name: descr
+        xml_attribute: true
+        description: 'Description'
+  
+  # Simple Position
+  simplePos:
+    class_name: SimplePos
+    description: 'Simple 2D position'
+    attributes:
+      - name: x
+        type: Integer
+        xml_name: x
+        xml_attribute: true
+        description: 'X coordinate'
+      - name: y
+        type: Integer
+        xml_name: y
+        xml_attribute: true
+        description: 'Y coordinate'
+  
+  # Graphic
+  graphic:
+    class_name: Graphic
+    description: 'Graphic object container'
+    attributes:
+      - name: graphicData
+        type: GraphicData
+        xml_name: graphicData
+        description: 'Graphic data'
+  
+  # Graphic Data
+  graphicData:
+    class_name: GraphicData
+    description: 'Graphic data holder'
+    attributes:
+      - name: uri
+        type: String
+        xml_name: uri
+        xml_attribute: true
+        description: 'Graphic type URI'
+  
+  # Symbol
+  sym:
+    class_name: Symbol
+    description: 'Symbol character'
+    attributes:
+      - name: font
+        type: String
+        xml_name: font
+        xml_attribute: true
+        description: 'Symbol font'
+      - name: char
+        type: String
+        xml_name: char
+        xml_attribute: true
+        description: 'Character code'
+  
+  # Picture
+  pict:
+    class_name: Picture
+    description: 'VML picture object'
+    attributes:
+      - name: shape
+        type: Shape
+        xml_name: shape
+        description: 'VML shape'
+  
+  # Object
+  object:
+    class_name: Object
+    description: 'Embedded object'
+    attributes:
+      - name: dxaOrig
+        type: Integer
+        xml_name: dxaOrig
+        xml_attribute: true
+        description: 'Original width'
+      - name: dyaOrig
+        type: Integer
+        xml_name: dyaOrig
+        xml_attribute: true
+        description: 'Original height'
+  
+  # Style
+  style:
+    class_name: Style
+    description: 'Style definition'
+    attributes:
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        required: true
+        description: 'Style type (paragraph, character, table, numbering)'
+      - name: styleId
+        type: String
+        xml_name: styleId
+        xml_attribute: true
+        required: true
+        description: 'Style ID'
+      - name: default
+        type: Boolean
+        xml_name: default
+        xml_attribute: true
+        description: 'Default style flag'
+      - name: customStyle
+        type: Boolean
+        xml_name: customStyle
+        xml_attribute: true
+        description: 'Custom style flag'
+      - name: name
+        type: StyleName
+        xml_name: name
+        description: 'Style name'
+      - name: basedOn
+        type: BasedOn
+        xml_name: basedOn
+        description: 'Base style'
+      - name: next
+        type: Next
+        xml_name: next
+        description: 'Next style'
+      - name: link
+        type: Link
+        xml_name: link
+        description: 'Linked style'
+      - name: uiPriority
+        type: UiPriority
+        xml_name: uiPriority
+        description: 'UI priority'
+      - name: qFormat
+        type: Boolean
+        xml_name: qFormat
+        description: 'Primary style'
+      - name: pPr
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph properties'
+      - name: rPr
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run properties'
+      - name: tblPr
+        type: TableProperties
+        xml_name: tblPr
+        description: 'Table properties'
+      - name: tcPr
+        type: TableCellProperties
+        xml_name: tcPr
+        description: 'Table cell properties'
+  
+  # Style Name
+  name:
+    class_name: StyleName
+    description: 'Style name'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Name value'
+  
+  # Based On
+  basedOn:
+    class_name: BasedOn
+    description: 'Base style reference'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Base style ID'
+  
+  # Next Style
+  next:
+    class_name: Next
+    description: 'Next paragraph style'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Next style ID'
+  
+  # Linked Style
+  link:
+    class_name: Link
+    description: 'Linked style reference'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Linked style ID'
+  
+  # UI Priority
+  uiPriority:
+    class_name: UiPriority
+    description: 'UI sort order priority'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Priority value'
+  
+  # Latent Styles
+  latentStyles:
+    class_name: LatentStyles
+    description: 'Latent style exception'
+    attributes:
+      - name: defLockedState
+        type: Boolean
+        xml_name: defLockedState
+        xml_attribute: true
+        description: 'Default locked state'
+      - name: defUIPriority
+        type: Integer
+        xml_name: defUIPriority
+        xml_attribute: true
+        description: 'Default UI priority'
+      - name: defSemiHidden
+        type: Boolean
+        xml_name: defSemiHidden
+        xml_attribute: true
+        description: 'Default semi-hidden'
+      - name: defUnhideWhenUsed
+        type: Boolean
+        xml_name: defUnhideWhenUsed
+        xml_attribute: true
+        description: 'Default unhide when used'
+      - name: defQFormat
+        type: Boolean
+        xml_name: defQFormat
+        xml_attribute: true
+        description: 'Default primary style'
+      - name: count
+        type: Integer
+        xml_name: count
+        xml_attribute: true
+        description: 'Exception count'
+  
+  # Document Defaults
+  docDefaults:
+    class_name: DocDefaults
+    description: 'Document default formatting'
+    attributes:
+      - name: rPrDefault
+        type: RPrDefault
+        xml_name: rPrDefault
+        description: 'Default run properties'
+      - name: pPrDefault
+        type: PPrDefault
+        xml_name: pPrDefault
+        description: 'Default paragraph properties'
+  
+  # Run Properties Default
+  rPrDefault:
+    class_name: RPrDefault
+    description: 'Default run properties container'
+    attributes:
+      - name: rPr
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run properties'
+  
+  # Paragraph Properties Default
+  pPrDefault:
+    class_name: PPrDefault
+    description: 'Default paragraph properties container'
+    attributes:
+      - name: pPr
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph properties'
+  
+  # Numbering Definitions Root
+  numbering:
+    class_name: Numbering
+    description: 'Numbering definitions'
+    attributes:
+      - name: abstractNums
+        type: AbstractNum
+        collection: true
+        xml_name: abstractNum
+        description: 'Abstract numbering definitions'
+      - name: nums
+        type: Num
+        collection: true
+        xml_name: num
+        description: 'Numbering instances'
+  
+  # Abstract Numbering Definition
+  abstractNum:
+    class_name: AbstractNum
+    description: 'Abstract numbering definition'
+    attributes:
+      - name: abstractNumId
+        type: Integer
+        xml_name: abstractNumId
+        xml_attribute: true
+        required: true
+        description: 'Abstract numbering ID'
+      - name: multiLevelType
+        type: MultiLevelType
+        xml_name: multiLevelType
+        description: 'Multilevel type'
+      - name: levels
+        type: Level
+        collection: true
+        xml_name: lvl
+        description: 'Numbering levels'
+  
+  # Numbering Level
+  lvl:
+    class_name: Level
+    description: 'Numbering level definition'
+    attributes:
+      - name: ilvl
+        type: Integer
+        xml_name: ilvl
+        xml_attribute: true
+        required: true
+        description: 'Level index'
+      - name: start
+        type: Start
+        xml_name: start
+        description: 'Start value'
+      - name: numFmt
+        type: NumFmt
+        xml_name: numFmt
+        description: 'Number format'
+      - name: lvlText
+        type: LvlText
+        xml_name: lvlText
+        description: 'Level text'
+      - name: lvlJc
+        type: LvlJc
+        xml_name: lvlJc
+        description: 'Level justification'
+      - name: pPr
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph properties'
+      - name: rPr
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run properties'
+  
+  # Start Value
+  start:
+    class_name: Start
+    description: 'Numbering start value'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Start value'
+  
+  # Number Format
+  numFmt:
+    class_name: NumFmt
+    description: 'Numbering format'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Format type (decimal, lowerLetter, etc.)'
+  
+  # Level Text
+  lvlText:
+    class_name: LvlText
+    description: 'Level text format'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Text format string'
+  
+  # Level Justification
+  lvlJc:
+    class_name: LvlJc
+    description: 'Level justification'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Justification (left, center, right)'
+  
+  # Multilevel Type
+  multiLevelType:
+    class_name: MultiLevelType
+    description: 'Multilevel type'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Type (singleLevel, multilevel, hybridMultilevel)'
+  
+  # Numbering Instance
+  num:
+    class_name: Num
+    description: 'Numbering instance'
+    attributes:
+      - name: numId
+        type: Integer
+        xml_name: numId
+        xml_attribute: true
+        required: true
+        description: 'Numbering ID'
+      - name: abstractNumId
+        type: AbstractNumId
+        xml_name: abstractNumId
+        description: 'Abstract numbering reference'
+  
+  # Abstract Num ID Reference
+  abstractNumId:
+    class_name: AbstractNumId
+    description: 'Abstract numbering ID reference'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Abstract numbering ID'
+  
+  # Fonts Table
+  fonts:
+    class_name: Fonts
+    description: 'Font table'
+    attributes:
+      - name: font_entries
+        type: Font
+        collection: true
+        xml_name: font
+        description: 'Font definitions'
+  
+  # Font Definition
+  font:
+    class_name: Font
+    description: 'Font definition'
+    attributes:
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Font name'
+      - name: charset
+        type: String
+        xml_name: charset
+        xml_attribute: true
+        description: 'Character set'
+      - name: family
+        type: String
+        xml_name: family
+        xml_attribute: true
+        description: 'Font family'
+      - name: pitch
+        type: String
+        xml_name: pitch
+        xml_attribute: true
+        description: 'Font pitch'
+  
+  # Footnotes Root
+  footnotes:
+    class_name: Footnotes
+    description: 'Footnotes collection'
+    attributes:
+      - name: footnote_entries
+        type: Footnote
+        collection: true
+        xml_name: footnote
+        description: 'Footnote definitions'
+  
+  # Footnote
+  footnote:
+    class_name: Footnote
+    description: 'Footnote definition'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Footnote ID'
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Footnote type'
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Footnote paragraphs'
+  
+  # Footnote Reference
+  footnoteReference:
+    class_name: FootnoteReference
+    description: 'Footnote reference marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Footnote ID'
+  
+  # Endnotes Root
+  endnotes:
+    class_name: Endnotes
+    description: 'Endnotes collection'
+    attributes:
+      - name: endnote_entries
+        type: Endnote
+        collection: true
+        xml_name: endnote
+        description: 'Endnote definitions'
+  
+  # Endnote
+  endnote:
+    class_name: Endnote
+    description: 'Endnote definition'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Endnote ID'
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Endnote type'
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Endnote paragraphs'
+  
+  # Endnote Reference
+  endnoteReference:
+    class_name: EndnoteReference
+    description: 'Endnote reference marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Endnote ID'
+  
+  # Border Definition
+  border:
+    class_name: Border
+    description: 'Border formatting'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Border style'
+      - name: color
+        type: String
+        xml_name: color
+        xml_attribute: true
+        description: 'Border color'
+      - name: sz
+        type: Integer
+        xml_name: sz
+        xml_attribute: true
+        description: 'Border size'
+      - name: space
+        type: Integer
+        xml_name: space
+        xml_attribute: true
+        description: 'Border spacing'
+      - name: shadow
+        type: Boolean
+        xml_name: shadow
+        xml_attribute: true
+        description: 'Shadow effect'
+  
+  # Paragraph Borders
+  pBdr:
+    class_name: ParagraphBorders
+    description: 'Paragraph borders'
+    attributes:
+      - name: top
+        type: Border
+        xml_name: top
+        description: 'Top border'
+      - name: bottom
+        type: Border
+        xml_name: bottom
+        description: 'Bottom border'
+      - name: left
+        type: Border
+        xml_name: left
+        description: 'Left border'
+      - name: right
+        type: Border
+        xml_name: right
+        description: 'Right border'
+      - name: between
+        type: Border
+        xml_name: between
+        description: 'Between border'
+      - name: bar
+        type: Border
+        xml_name: bar
+        description: 'Bar border'
+  
+  # Shading
+  shd:
+    class_name: Shading
+    description: 'Shading pattern'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Shading pattern'
+      - name: color
+        type: String
+        xml_name: color
+        xml_attribute: true
+        description: 'Foreground color'
+      - name: fill
+        type: String
+        xml_name: fill
+        xml_attribute: true
+        description: 'Background color'
+  
+  # Tab Stops Collection
+  tabs:
+    class_name: TabStopCollection
+    description: 'Tab stops collection'
+    attributes:
+      - name: tab_entries
+        type: TabStop
+        collection: true
+        xml_name: tab
+        description: 'Individual tab stops'
+  
+  # Tab Stop
+  tabStop:
+    class_name: TabStop
+    description: 'Tab stop definition'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Tab stop type'
+      - name: pos
+        type: Integer
+        xml_name: pos
+        xml_attribute: true
+        description: 'Tab position'
+      - name: leader
+        type: String
+        xml_name: leader
+        xml_attribute: true
+        description: 'Tab leader character'
+  
+  # Character Spacing
+  spacing:
+    class_name: CharacterSpacing
+    description: 'Character spacing'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Spacing value in twips'
+  
+  # Kerning
+  kern:
+    class_name: Kerning
+    description: 'Font kerning'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Kerning value in half-points'
+  
+  # Position (Raised/Lowered)
+  position:
+    class_name: Position
+    description: 'Text position (raised/lowered)'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        description: 'Position offset in half-points'
+  
+  # Text Effects - Outline
+  outline:
+    class_name: Outline
+    description: 'Outline text effect'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Outline enabled'
+  
+  # Text Effects - Shadow
+  shadow:
+    class_name: Shadow
+    description: 'Shadow text effect'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Shadow enabled'
+  
+  # Text Effects - Emboss
+  emboss:
+    class_name: Emboss
+    description: 'Emboss text effect'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Emboss enabled'
+  
+  # Text Effects - Imprint
+  imprint:
+    class_name: Imprint
+    description: 'Imprint text effect'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Imprint enabled'
+  
+  # Small Caps
+  smallCaps:
+    class_name: SmallCaps
+    description: 'Small caps formatting'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Small caps enabled'
+  
+  # All Caps
+  caps:
+    class_name: Caps
+    description: 'All caps formatting'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'All caps enabled'
+  
+  # Strike Through
+  strike:
+    class_name: Strike
+    description: 'Strikethrough formatting'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Strike enabled'
+  
+  # Double Strike Through
+  dstrike:
+    class_name: DoubleStrike
+    description: 'Double strikethrough formatting'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Double strike enabled'
+  
+  # Vanish (Hidden Text)
+  vanish:
+    class_name: Vanish
+    description: 'Hidden text'
+    attributes:
+      - name: val
+        type: Boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Text hidden'
+  
+  # Highlight
+  highlight:
+    class_name: Highlight
+    description: 'Text highlight color'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Highlight color'
+  
+  # Vertical Alignment
+  vertAlign:
+    class_name: VertAlign
+    description: 'Vertical text alignment (superscript/subscript)'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Alignment (superscript, subscript, baseline)'
+  
+  # Run Fonts
+  rFonts:
+    class_name: RunFonts
+    description: 'Run font information'
+    attributes:
+      - name: ascii
+        type: String
+        xml_name: ascii
+        xml_attribute: true
+        description: 'ASCII font'
+      - name: hAnsi
+        type: String
+        xml_name: hAnsi
+        xml_attribute: true
+        description: 'High ANSI font'
+      - name: cs
+        type: String
+        xml_name: cs
+        xml_attribute: true
+        description: 'Complex script font'
+      - name: eastAsia
+        type: String
+        xml_name: eastAsia
+        xml_attribute: true
+        description: 'East Asian font'
+  
+  # Language
+  lang:
+    class_name: Language
+    description: 'Language settings'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Language code'
+      - name: eastAsia
+        type: String
+        xml_name: eastAsia
+        xml_attribute: true
+        description: 'East Asian language'
+      - name: bidi
+        type: String
+        xml_name: bidi
+        xml_attribute: true
+        description: 'Bidirectional language'
+  
+  # Settings Root
+  settings:
+    class_name: Settings
+    description: 'Document settings'
+    attributes:
+      - name: zoom
+        type: Zoom
+        xml_name: zoom
+        description: 'Zoom percentage'
+      - name: compat
+        type: Compat
+        xml_name: compat
+        description: 'Compatibility settings'
+  
+  # Zoom
+  zoom:
+    class_name: Zoom
+    description: 'Document zoom level'
+    attributes:
+      - name: percent
+        type: Integer
+        xml_name: percent
+        xml_attribute: true
+        description: 'Zoom percentage'
+  
+  # Compatibility Settings
+  compat:
+    class_name: Compat
+    description: 'Compatibility settings'
+    attributes:
+      - name: compatSetting
+        type: CompatSetting
+        collection: true
+        xml_name: compatSetting
+        description: 'Individual compatibility settings'
+  
+  # Compatibility Setting
+  compatSetting:
+    class_name: CompatSetting
+    description: 'Individual compatibility setting'
+    attributes:
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Setting name'
+      - name: uri
+        type: String
+        xml_name: uri
+        xml_attribute: true
+        description: 'Setting URI'
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Setting value'
+  
+  # Header
+  hdr:
+    class_name: Header
+    description: 'Header content'
+    attributes:
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Header paragraphs'
+      - name: tables
+        type: Table
+        collection: true
+        xml_name: tbl
+        description: 'Header tables'
+  
+  # Footer
+  ftr:
+    class_name: Footer
+    description: 'Footer content'
+    attributes:
+      - name: paragraphs
+        type: Paragraph
+        collection: true
+        xml_name: p
+        description: 'Footer paragraphs'
+      - name: tables
+        type: Table
+        collection: true
+        xml_name: tbl
+        description: 'Footer tables'
+  
+  # Shape (VML)
+  shape:
+    class_name: Shape
+    description: 'VML shape object'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        description: 'Shape ID'
+      - name: type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'Shape type'
+      - name: style
+        type: String
+        xml_name: style
+        xml_attribute: true
+        description: 'Shape style'
+
+# Total elements defined: 100+
+# Coverage: Complete document structure, tables, sections, fields, bookmarks,
+# drawings, styles, numbering, fonts, footnotes, endnotes, borders, shading,
+# character formatting, settings, headers, footers, and VML shapes

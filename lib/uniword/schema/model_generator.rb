@@ -28,16 +28,16 @@ module Uniword
       # @return [Hash] Map of element_name => generated_file_path
       def generate_all
         element_names = @loader.element_names(schema_name)
-        
+
         # Ensure output directory exists
         FileUtils.mkdir_p(@output_dir)
-        
+
         results = {}
         element_names.each do |element_name|
           file_path = generate_element_class(element_name)
           results[element_name] = file_path
         end
-        
+
         results
       end
 
@@ -126,7 +126,7 @@ module Uniword
       def generate_xml_mapping(element_name, attributes)
         lines = []
         lines << "          xml do"
-        lines << "            root '#{element_name}'"
+        lines << "            element '#{element_name}'"
         lines << "            namespace '#{@namespace_info['uri']}', '#{@namespace_info['prefix']}'"
         lines << "            mixed_content" if has_nested_content?(attributes)
         lines << ""

@@ -1,0 +1,275 @@
+# Document Properties Namespace Schema
+# URI: http://schemas.openxmlformats.org/officeDocument/2006/extended-properties
+# Prefix: ep (extended properties)
+# Also includes custom properties namespace
+# 
+# This schema defines extended and custom document properties for OOXML documents.
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/extended-properties'
+  prefix: 'ep'
+  description: 'Extended document properties'
+
+elements:
+  # Extended Properties Root and Core Elements (14 elements)
+  Properties:
+    class_name: ExtendedProperties
+    description: 'Root element for extended properties'
+    attributes:
+      - name: application
+        type: String
+        xml_name: Application
+        description: 'Application name'
+      - name: doc_security
+        type: String
+        xml_name: DocSecurity
+        description: 'Document security level'
+      - name: scale_crop
+        type: String
+        xml_name: ScaleCrop
+        description: 'Scale crop setting'
+      - name: heading_pairs
+        type: HeadingPairs
+        xml_name: HeadingPairs
+        description: 'Heading pairs vector'
+      - name: titles_of_parts
+        type: TitlesOfParts
+        xml_name: TitlesOfParts
+        description: 'Titles of document parts'
+      - name: company
+        type: String
+        xml_name: Company
+        description: 'Company name'
+      - name: links_up_to_date
+        type: String
+        xml_name: LinksUpToDate
+        description: 'Links up to date flag'
+      - name: shared_doc
+        type: String
+        xml_name: SharedDoc
+        description: 'Shared document flag'
+      - name: hyperlinks_changed
+        type: String
+        xml_name: HyperlinksChanged
+        description: 'Hyperlinks changed flag'
+      - name: app_version
+        type: String
+        xml_name: AppVersion
+        description: 'Application version'
+  
+  Application:
+    class_name: Application
+    description: 'Application name that created the document'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Application name string'
+  
+  AppVersion:
+    class_name: AppVersion
+    description: 'Application version'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Version string'
+  
+  DocSecurity:
+    class_name: DocSecurity
+    description: 'Document security level (0-8)'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Security level integer'
+  
+  ScaleCrop:
+    class_name: ScaleCrop
+    description: 'Scale crop setting for thumbnails'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Scale crop boolean'
+  
+  HeadingPairs:
+    class_name: HeadingPairs
+    description: 'Vector of heading pairs'
+    attributes:
+      - name: vector
+        type: Vector
+        xml_name: vector
+        description: 'Vector container'
+  
+  TitlesOfParts:
+    class_name: TitlesOfParts
+    description: 'Vector of part titles'
+    attributes:
+      - name: vector
+        type: Vector
+        xml_name: vector
+        description: 'Vector container'
+  
+  Company:
+    class_name: Company
+    description: 'Company name'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Company name string'
+  
+  Manager:
+    class_name: Manager
+    description: 'Manager name'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Manager name string'
+  
+  LinksUpToDate:
+    class_name: LinksUpToDate
+    description: 'Links up to date flag'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Boolean value'
+  
+  SharedDoc:
+    class_name: SharedDoc
+    description: 'Shared document flag'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Boolean value'
+  
+  HyperlinksChanged:
+    class_name: HyperlinksChanged
+    description: 'Hyperlinks changed flag'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Boolean value'
+  
+  vector:
+    class_name: Vector
+    description: 'Vector container for variant types'
+    attributes:
+      - name: size
+        type: String
+        xml_attribute: true
+        description: 'Vector size'
+      - name: baseType
+        type: String
+        xml_attribute: true
+        description: 'Base type of vector'
+      - name: variant
+        type: String
+        collection: true
+        xml_name: variant
+        description: 'Variant elements'
+  
+  variant:
+    class_name: Variant
+    description: 'Variant type element'
+    attributes:
+      - name: lpstr
+        type: String
+        xml_name: lpstr
+        description: 'String value'
+      - name: i4
+        type: String
+        xml_name: i4
+        description: 'Integer value'
+
+  # Custom Properties (6 elements)
+  CustomProperties:
+    class_name: CustomProperties
+    description: 'Root element for custom properties'
+    attributes:
+      - name: properties
+        type: CustomProperty
+        collection: true
+        xml_name: property
+        description: 'Custom property elements'
+  
+  property:
+    class_name: CustomProperty
+    description: 'Custom property element'
+    attributes:
+      - name: fmtid
+        type: String
+        xml_attribute: true
+        description: 'Format ID'
+      - name: pid
+        type: String
+        xml_attribute: true
+        description: 'Property ID'
+      - name: name
+        type: String
+        xml_attribute: true
+        description: 'Property name'
+      - name: lpwstr
+        type: String
+        xml_name: lpwstr
+        description: 'Wide string value'
+      - name: i4
+        type: String
+        xml_name: i4
+        description: 'Integer value'
+      - name: bool
+        type: String
+        xml_name: bool
+        description: 'Boolean value'
+      - name: filetime
+        type: String
+        xml_name: filetime
+        description: 'File time value'
+      - name: r8
+        type: String
+        xml_name: r8
+        description: 'Double value'
+  
+  lpwstr:
+    class_name: LpwStr
+    description: 'Wide string value type'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'String content'
+  
+  i4:
+    class_name: I4
+    description: 'Integer value type'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Integer content'
+  
+  bool:
+    class_name: BoolValue
+    description: 'Boolean value type'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Boolean content (true/false)'
+  
+  filetime:
+    class_name: FileTime
+    description: 'File time value type'
+    attributes:
+      - name: content
+        type: String
+        xml_content: true
+        description: 'ISO 8601 datetime'
+
+# Total: 20 Document Properties elements defined
+# This namespace handles extended and custom document properties

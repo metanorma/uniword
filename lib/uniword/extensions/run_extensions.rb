@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
 module Uniword
-  module Generated
-    module Wordprocessingml
-      class Run
+  
+  module Wordprocessingml
+    class Run
         # Check if run is bold
         #
         # @return [Boolean] true if bold
         def bold?
           properties&.bold || false
-        end
+      end
         
         # Check if run is italic
         #
         # @return [Boolean] true if italic
         def italic?
           properties&.italic || false
-        end
+      end
         
         # Check if run is underlined
         #
         # @return [Boolean] true if underlined
         def underline?
           properties&.underline && properties.underline != 'none'
-        end
+      end
         
         # Set bold formatting
         #
@@ -33,7 +33,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.bold = value
           self
-        end
+      end
         
         # Set italic formatting
         #
@@ -43,7 +43,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.italic = value
           self
-        end
+      end
         
         # Set underline formatting
         #
@@ -53,7 +53,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.underline = value == true ? 'single' : value.to_s
           self
-        end
+      end
         
         # Set text color
         #
@@ -63,7 +63,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.color = value
           self
-        end
+      end
         
         # Set font
         #
@@ -73,7 +73,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.font = value
           self
-        end
+      end
         
         # Set font size in points
         #
@@ -83,7 +83,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.sz = value * 2  # Convert to half-points
           self
-        end
+      end
         
         # Set strike-through formatting
         #
@@ -93,7 +93,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.strike = value
           self
-        end
+      end
         
         # Set double-strike-through formatting
         #
@@ -103,7 +103,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.double_strike = value
           self
-        end
+      end
         
         # Set small caps formatting
         #
@@ -113,7 +113,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.small_caps = value
           self
-        end
+      end
         
         # Set all caps formatting
         #
@@ -123,7 +123,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.caps = value
           self
-        end
+      end
         
         # Set highlight color
         #
@@ -133,7 +133,7 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.highlight = value
           self
-        end
+      end
         
         # Set vertical alignment (superscript/subscript)
         #
@@ -143,7 +143,6 @@ module Uniword
           self.properties ||= RunProperties.new
           properties.vert_align = value
           self
-        end
       end
     end
   end

@@ -10,8 +10,8 @@ module Uniword
   class TableRow < Element
     # OOXML namespace configuration
     xml do
-      root 'tr', mixed: true
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'tr', mixed: true
+      namespace Ooxml::Namespaces::WordProcessingML
 
       map_element 'trPr', to: :row_properties, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
       map_element 'tc', to: :cells, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'

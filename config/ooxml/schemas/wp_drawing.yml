@@ -1,0 +1,528 @@
+namespace:
+  uri: 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing'
+  prefix: 'wp'
+  description: 'WordprocessingDrawing - Drawing positioning and anchoring in Word documents'
+
+elements:
+  # Core Anchor and Inline Elements
+  anchor:
+    class_name: Anchor
+    description: 'Anchor object for positioned drawing object'
+    attributes:
+      - name: dist_t
+        type: Integer
+        xml_name: distT
+        xml_attribute: true
+        description: 'Distance from text on top edge'
+      - name: dist_b
+        type: Integer
+        xml_name: distB
+        xml_attribute: true
+        description: 'Distance from text on bottom edge'
+      - name: dist_l
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text on left edge'
+      - name: dist_r
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text on right edge'
+      - name: simple_pos
+        type: String
+        xml_name: simplePos
+        description: 'Simple positioning coordinates'
+      - name: relative_height
+        type: Integer
+        xml_name: relativeHeight
+        xml_attribute: true
+        description: 'Relative Z-ordering position'
+      - name: behind_doc
+        type: String
+        xml_name: behindDoc
+        xml_attribute: true
+        description: 'Display behind document text'
+      - name: locked
+        type: String
+        xml_attribute: true
+        description: 'Lock anchor'
+      - name: layout_in_cell
+        type: String
+        xml_name: layoutInCell
+        xml_attribute: true
+        description: 'Layout in table cell'
+      - name: allow_overlap
+        type: String
+        xml_name: allowOverlap
+        xml_attribute: true
+        description: 'Allow overlap'
+      - name: hidden
+        type: String
+        xml_attribute: true
+        description: 'Hidden'
+      - name: extent
+        type: String
+        description: 'Drawing extent (size)'
+      - name: effect_extent
+        type: String
+        xml_name: effectExtent
+        description: 'Effect extent for shadows/glows'
+      - name: wrap_square
+        type: String
+        xml_name: wrapSquare
+        description: 'Square text wrapping'
+      - name: wrap_tight
+        type: String
+        xml_name: wrapTight
+        description: 'Tight text wrapping'
+      - name: wrap_through
+        type: String
+        xml_name: wrapThrough
+        description: 'Through text wrapping'
+      - name: wrap_top_and_bottom
+        type: String
+        xml_name: wrapTopAndBottom
+        description: 'Top and bottom wrapping'
+      - name: wrap_none
+        type: String
+        xml_name: wrapNone
+        description: 'No text wrapping'
+      - name: doc_pr
+        type: String
+        xml_name: docPr
+        description: 'Drawing object non-visual properties'
+      - name: c_nv_graphic_frame_pr
+        type: String
+        xml_name: cNvGraphicFramePr
+        description: 'Non-visual graphic frame properties'
+      - name: position_h
+        type: String
+        xml_name: positionH
+        description: 'Horizontal positioning'
+      - name: position_v
+        type: String
+        xml_name: positionV
+        description: 'Vertical positioning'
+
+  inline:
+    class_name: Inline
+    description: 'Inline drawing object'
+    attributes:
+      - name: dist_t
+        type: Integer
+        xml_name: distT
+        xml_attribute: true
+        description: 'Distance from text on top'
+      - name: dist_b
+        type: Integer
+        xml_name: distB
+        xml_attribute: true
+        description: 'Distance from text on bottom'
+      - name: dist_l
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text on left'
+      - name: dist_r
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text on right'
+      - name: extent
+        type: String
+        description: 'Drawing extent (size)'
+      - name: effect_extent
+        type: String
+        xml_name: effectExtent
+        description: 'Effect extent'
+      - name: doc_pr
+        type: String
+        xml_name: docPr
+        description: 'Drawing object non-visual properties'
+      - name: c_nv_graphic_frame_pr
+        type: String
+        xml_name: cNvGraphicFramePr
+        description: 'Non-visual graphic frame properties'
+
+  # Size and Extent Elements
+  extent:
+    class_name: Extent
+    description: 'Drawing object size extent'
+    attributes:
+      - name: cx
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Extent width (EMUs)'
+      - name: cy
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Extent height (EMUs)'
+
+  effectExtent:
+    class_name: EffectExtent
+    description: 'Object effect extent (shadow/glow space)'
+    attributes:
+      - name: l
+        type: Integer
+        xml_attribute: true
+        description: 'Effect extent on left'
+      - name: t
+        type: Integer
+        xml_attribute: true
+        description: 'Effect extent on top'
+      - name: r
+        type: Integer
+        xml_attribute: true
+        description: 'Effect extent on right'
+      - name: b
+        type: Integer
+        xml_attribute: true
+        description: 'Effect extent on bottom'
+
+  # Document Properties
+  docPr:
+    class_name: DocPr
+    description: 'Drawing object non-visual properties'
+    attributes:
+      - name: id
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Unique identifier'
+      - name: name
+        type: String
+        xml_attribute: true
+        required: true
+        description: 'Name'
+      - name: descr
+        type: String
+        xml_attribute: true
+        description: 'Description'
+      - name: hidden
+        type: String
+        xml_attribute: true
+        description: 'Hidden'
+      - name: title
+        type: String
+        xml_attribute: true
+        description: 'Title'
+
+  cNvGraphicFramePr:
+    class_name: CNvGraphicFramePr
+    description: 'Non-visual graphic frame properties'
+    attributes:
+      - name: graphic_frame_locks
+        type: String
+        xml_name: graphicFrameLocks
+        description: 'Graphic frame locks'
+
+  # Positioning Elements
+  simplePos:
+    class_name: SimplePos
+    description: 'Simple positioning coordinates'
+    attributes:
+      - name: x
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'X coordinate'
+      - name: y
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Y coordinate'
+
+  positionH:
+    class_name: PositionH
+    description: 'Horizontal positioning'
+    attributes:
+      - name: relative_from
+        type: String
+        xml_name: relativeFrom
+        xml_attribute: true
+        required: true
+        description: 'Relative positioning base'
+      - name: align
+        type: String
+        description: 'Alignment'
+      - name: pos_offset
+        type: Integer
+        xml_name: posOffset
+        description: 'Position offset'
+
+  positionV:
+    class_name: PositionV
+    description: 'Vertical positioning'
+    attributes:
+      - name: relative_from
+        type: String
+        xml_name: relativeFrom
+        xml_attribute: true
+        required: true
+        description: 'Relative positioning base'
+      - name: align
+        type: String
+        description: 'Alignment'
+      - name: pos_offset
+        type: Integer
+        xml_name: posOffset
+        description: 'Position offset'
+
+  align:
+    class_name: Align
+    description: 'Alignment type'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Alignment value (left, center, right, inside, outside)'
+
+  posOffset:
+    class_name: PosOffset
+    description: 'Position offset in EMUs'
+    attributes:
+      - name: value
+        type: Integer
+        xml_content: true
+        description: 'Offset value'
+
+  # Relative Size Elements
+  sizeRelH:
+    class_name: SizeRelH
+    description: 'Relative horizontal size'
+    attributes:
+      - name: relative_from
+        type: String
+        xml_name: relativeFrom
+        xml_attribute: true
+        description: 'Relative size base (margin, page, leftMargin, rightMargin, insideMargin, outsideMargin)'
+      - name: pct_width
+        type: Integer
+        xml_name: pctWidth
+        description: 'Percentage width'
+
+  sizeRelV:
+    class_name: SizeRelV
+    description: 'Relative vertical size'
+    attributes:
+      - name: relative_from
+        type: String
+        xml_name: relativeFrom
+        xml_attribute: true
+        description: 'Relative size base (margin, page, topMargin, bottomMargin, insideMargin, outsideMargin)'
+      - name: pct_height
+        type: Integer
+        xml_name: pctHeight
+        description: 'Percentage height'
+
+  # Text Wrapping Elements
+  wrapSquare:
+    class_name: WrapSquare
+    description: 'Square text wrapping'
+    attributes:
+      - name: wrap_text
+        type: String
+        xml_name: wrapText
+        xml_attribute: true
+        description: 'Wrap text mode (bothSides, left, right, largest)'
+      - name: dist_t
+        type: Integer
+        xml_name: distT
+        xml_attribute: true
+        description: 'Distance from text top'
+      - name: dist_b
+        type: Integer
+        xml_name: distB
+        xml_attribute: true
+        description: 'Distance from text bottom'
+      - name: dist_l
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text left'
+      - name: dist_r
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text right'
+      - name: effect_extent
+        type: String
+        xml_name: effectExtent
+        description: 'Effect extent'
+
+  wrapTight:
+    class_name: WrapTight
+    description: 'Tight text wrapping along object edges'
+    attributes:
+      - name: wrap_text
+        type: String
+        xml_name: wrapText
+        xml_attribute: true
+        description: 'Wrap text mode (bothSides, left, right, largest)'
+      - name: dist_l
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text left'
+      - name: dist_r
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text right'
+      - name: wrap_polygon
+        type: String
+        xml_name: wrapPolygon
+        description: 'Wrapping polygon'
+
+  wrapThrough:
+    class_name: WrapThrough
+    description: 'Through text wrapping'
+    attributes:
+      - name: wrap_text
+        type: String
+        xml_name: wrapText
+        xml_attribute: true
+        description: 'Wrap text mode (bothSides, left, right, largest)'
+      - name: dist_l
+        type: Integer
+        xml_name: distL
+        xml_attribute: true
+        description: 'Distance from text left'
+      - name: dist_r
+        type: Integer
+        xml_name: distR
+        xml_attribute: true
+        description: 'Distance from text right'
+      - name: wrap_polygon
+        type: String
+        xml_name: wrapPolygon
+        description: 'Wrapping polygon'
+
+  wrapTopAndBottom:
+    class_name: WrapTopAndBottom
+    description: 'Top and bottom text wrapping'
+    attributes:
+      - name: dist_t
+        type: Integer
+        xml_name: distT
+        xml_attribute: true
+        description: 'Distance from text top'
+      - name: dist_b
+        type: Integer
+        xml_name: distB
+        xml_attribute: true
+        description: 'Distance from text bottom'
+      - name: effect_extent
+        type: String
+        xml_name: effectExtent
+        description: 'Effect extent'
+
+  wrapNone:
+    class_name: WrapNone
+    description: 'No text wrapping'
+    attributes: []
+
+  wrapPolygon:
+    class_name: WrapPolygon
+    description: 'Text wrapping polygon'
+    attributes:
+      - name: edited
+        type: String
+        xml_attribute: true
+        description: 'Polygon has been edited'
+      - name: start
+        type: String
+        description: 'Polygon start point'
+      - name: line_to
+        type: String
+        xml_name: lineTo
+        collection: true
+        description: 'Polygon points'
+
+  start:
+    class_name: Start
+    description: 'Wrapping polygon start point'
+    attributes:
+      - name: x
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'X coordinate'
+      - name: y
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Y coordinate'
+
+  lineTo:
+    class_name: LineTo
+    description: 'Wrapping polygon point'
+    attributes:
+      - name: x
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'X coordinate'
+      - name: y
+        type: Integer
+        xml_attribute: true
+        required: true
+        description: 'Y coordinate'
+
+  # Additional Properties
+  relativeHeight:
+    class_name: RelativeHeight
+    description: 'Relative Z-order position'
+    attributes:
+      - name: value
+        type: Integer
+        xml_content: true
+        description: 'Z-order value'
+
+  behindDoc:
+    class_name: BehindDoc
+    description: 'Display object behind document text'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Behind document flag'
+
+  locked:
+    class_name: Locked
+    description: 'Lock anchor flag'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Locked flag'
+
+  layoutInCell:
+    class_name: LayoutInCell
+    description: 'Layout object in table cell'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Layout in cell flag'
+
+  allowOverlap:
+    class_name: AllowOverlap
+    description: 'Allow object overlap'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Allow overlap flag'
+
+  hidden:
+    class_name: Hidden
+    description: 'Hidden object flag'
+    attributes:
+      - name: value
+        type: String
+        xml_content: true
+        description: 'Hidden flag'

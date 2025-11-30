@@ -31,8 +31,8 @@ module Uniword
   class CommentRange < Element
     # OOXML namespace configuration
     xml do
-      root 'commentRangeStart'
-      namespace 'http://schemas.openxmlformats.org/wordprocessingml/2006/main', 'w'
+      element 'commentRangeStart'
+      namespace Ooxml::Namespaces::WordProcessingML
 
       map_attribute 'id', to: :comment_id
     end
