@@ -10,9 +10,9 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:textbox>
       class Textbox < Lutaml::Model::Serializable
-        attribute :style, String
-        attribute :inset, String
-        attribute :content, String
+        attribute :style, :string
+        attribute :inset, :string
+        attribute :content, :string
 
         xml do
           element 'textbox'

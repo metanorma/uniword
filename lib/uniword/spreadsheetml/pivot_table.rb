@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:pivotTable>
     class PivotTable < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :cache_id, Integer
+      attribute :name, :string
+      attribute :cache_id, :integer
 
       xml do
         element 'pivotTable'

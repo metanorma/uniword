@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:rPr>
     class TextCharacterProperties < Lutaml::Model::Serializable
-      attribute :sz, Integer
-      attribute :b, String
-      attribute :i, String
+      attribute :sz, :integer
+      attribute :b, :string
+      attribute :i, :string
       attribute :latin, TextFont
       attribute :ea, TextFont
       attribute :cs, TextFont

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:align>
     class Align < Lutaml::Model::Serializable
-      attribute :value, String
+      attribute :value, :string
 
       xml do
         element 'align'

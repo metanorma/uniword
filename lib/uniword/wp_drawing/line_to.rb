@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:lineTo>
     class LineTo < Lutaml::Model::Serializable
-      attribute :x, Integer
-      attribute :y, Integer
+      attribute :x, :integer
+      attribute :y, :integer
 
       xml do
         element 'lineTo'

@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:r>
     class MathRun < Lutaml::Model::Serializable
       attribute :properties, MathRunProperties
-      attribute :text, String
+      attribute :text, :string
 
       xml do
         element 'r'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:brightness>
     class Brightness < Lutaml::Model::Serializable
-      attribute :value, String
+      attribute :value, :string
 
       xml do
         element 'brightness'

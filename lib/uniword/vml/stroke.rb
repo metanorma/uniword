@@ -10,13 +10,13 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:stroke>
       class Stroke < Lutaml::Model::Serializable
-        attribute :color, String
-        attribute :weight, String
-        attribute :opacity, String
-        attribute :linestyle, String
-        attribute :joinstyle, String
-        attribute :endcap, String
-        attribute true, String
+        attribute :color, :string
+        attribute :weight, :string
+        attribute :opacity, :string
+        attribute :linestyle, :string
+        attribute :joinstyle, :string
+        attribute :endcap, :string
+        attribute true, :string
 
         xml do
           element 'stroke'

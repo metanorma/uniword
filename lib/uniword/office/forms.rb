@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:forms>
     class Forms < Lutaml::Model::Serializable
-      attribute :checked, String
+      attribute :checked, :string
 
       xml do
         element 'forms'

@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:wrapTight>
     class WrapTight < Lutaml::Model::Serializable
-      attribute :wrap_text, String
-      attribute :dist_l, Integer
-      attribute :dist_r, Integer
-      attribute :wrap_polygon, String
+      attribute :wrap_text, :string
+      attribute :dist_l, :integer
+      attribute :dist_r, :integer
+      attribute :wrap_polygon, :string
 
       xml do
         element 'wrapTight'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:left>
     class VmlLeft < Lutaml::Model::Serializable
-      attribute :value, String
-      attribute :units, String
+      attribute :value, :string
+      attribute :units, :string
 
       xml do
         element 'left'

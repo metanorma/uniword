@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:row>
     class Row < Lutaml::Model::Serializable
-      attribute :r, Integer
-      attribute :spans, String
-      attribute :ht, String
-      attribute :custom_height, String
-      attribute :hidden, String
+      attribute :r, :integer
+      attribute :spans, :string
+      attribute :ht, :string
+      attribute :custom_height, :string
+      attribute :hidden, :string
       attribute :cells, Cell, collection: true, default: -> { [] }
 
       xml do

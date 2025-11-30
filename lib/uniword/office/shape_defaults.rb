@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:shapedefaults>
     class ShapeDefaults < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :spidmax, String
-      attribute :fill, String
-      attribute :stroke, String
+      attribute :ext, :string
+      attribute :spidmax, :string
+      attribute :fill, :string
+      attribute :stroke, :string
 
       xml do
         element 'shapedefaults'

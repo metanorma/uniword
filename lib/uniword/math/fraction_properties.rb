@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:fPr>
     class FractionProperties < Lutaml::Model::Serializable
-      attribute :type, String
+      attribute :type, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

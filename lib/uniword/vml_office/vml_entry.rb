@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:entry>
     class VmlEntry < Lutaml::Model::Serializable
-      attribute :new, String
-      attribute :old, String
+      attribute :new, :string
+      attribute :old, :string
 
       xml do
         element 'entry'

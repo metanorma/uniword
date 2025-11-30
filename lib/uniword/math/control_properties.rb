@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:ctrlPr>
     class ControlProperties < Lutaml::Model::Serializable
-      attribute :run_properties, String
+      attribute :run_properties, :string
 
       xml do
         element 'ctrlPr'

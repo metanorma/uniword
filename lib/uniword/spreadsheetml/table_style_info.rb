@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:tableStyleInfo>
     class TableStyleInfo < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :show_first_column, String
-      attribute :show_last_column, String
-      attribute :show_row_stripes, String
-      attribute :show_column_stripes, String
+      attribute :name, :string
+      attribute :show_first_column, :string
+      attribute :show_last_column, :string
+      attribute :show_row_stripes, :string
+      attribute :show_column_stripes, :string
 
       xml do
         element 'tableStyleInfo'

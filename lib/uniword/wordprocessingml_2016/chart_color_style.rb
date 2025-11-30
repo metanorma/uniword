@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:chartColorStyle>
     class ChartColorStyle < Lutaml::Model::Serializable
-      attribute :val, Integer
+      attribute :val, :integer
 
       xml do
         element 'chartColorStyle'

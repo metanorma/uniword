@@ -10,10 +10,10 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:path>
       class Path < Lutaml::Model::Serializable
-        attribute :v, String
-        attribute :textpathok, String
-        attribute :fillok, String
-        attribute :strokeok, String
+        attribute :v, :string
+        attribute :textpathok, :string
+        attribute :fillok, :string
+        attribute :strokeok, :string
 
         xml do
           element 'path'

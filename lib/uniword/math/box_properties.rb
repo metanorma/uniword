@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:boxPr>
     class BoxProperties < Lutaml::Model::Serializable
-      attribute :opEmu, String
-      attribute :no_break, String
-      attribute :diff, String
+      attribute :opEmu, :string
+      attribute :no_break, :string
+      attribute :diff, :string
       attribute :brk, MathBreak
-      attribute :aln, String
+      attribute :aln, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

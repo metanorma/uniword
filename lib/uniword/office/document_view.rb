@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:view>
     class DocumentView < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'view'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:srgbClr>
     class SrgbColor < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'srgbClr'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:mergeCell>
     class MergeCell < Lutaml::Model::Serializable
-      attribute :ref, String
+      attribute :ref, :string
 
       xml do
         element 'mergeCell'

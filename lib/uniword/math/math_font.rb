@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:mathFont>
     class MathFont < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'mathFont'

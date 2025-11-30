@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:pattFill>
     class PatternFill < Lutaml::Model::Serializable
-      attribute :prst, String
-      attribute :fg_clr, String
-      attribute :bg_clr, String
+      attribute :prst, :string
+      attribute :fg_clr, :string
+      attribute :bg_clr, :string
 
       xml do
         element 'pattFill'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:fileSharing>
     class FileSharing < Lutaml::Model::Serializable
-      attribute :read_only_recommended, String
+      attribute :read_only_recommended, :string
 
       xml do
         element 'fileSharing'

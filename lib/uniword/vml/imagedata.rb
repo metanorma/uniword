@@ -10,13 +10,13 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:imagedata>
       class Imagedata < Lutaml::Model::Serializable
-        attribute :src, String
-        attribute :relid, String
-        attribute :title, String
-        attribute :croptop, String
-        attribute :cropbottom, String
-        attribute :cropleft, String
-        attribute :cropright, String
+        attribute :src, :string
+        attribute :relid, :string
+        attribute :title, :string
+        attribute :croptop, :string
+        attribute :cropbottom, :string
+        attribute :cropleft, :string
+        attribute :cropright, :string
 
         xml do
           element 'imagedata'

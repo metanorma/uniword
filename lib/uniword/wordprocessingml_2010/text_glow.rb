@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:glow>
     class TextGlow < Lutaml::Model::Serializable
-      attribute :radius, Integer
-      attribute :color, String
+      attribute :radius, :integer
+      attribute :color, :string
 
       xml do
         element 'glow'

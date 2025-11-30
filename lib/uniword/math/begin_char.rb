@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:begChr>
     class BeginChar < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'begChr'

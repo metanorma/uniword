@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sst>
     class SharedStringTable < Lutaml::Model::Serializable
-      attribute :count, Integer
-      attribute :unique_count, Integer
-      attribute :si_entries, StringItem, collection: true, default: -> { [] }
+      attribute :count, :integer
+      attribute :unique_count, :integer
+      attribute :si_entries, :stringItem, collection: true, default: -> { [] }
 
       xml do
         element 'sst'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:defPPr>
     class DefaultParagraphProperties < Lutaml::Model::Serializable
-      attribute :algn, String
-      attribute :lvl, Integer
+      attribute :algn, :string
+      attribute :lvl, :integer
 
       xml do
         element 'defPPr'

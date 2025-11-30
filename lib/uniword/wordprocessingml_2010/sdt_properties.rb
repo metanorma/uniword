@@ -11,7 +11,7 @@ module Uniword
     class SdtProperties < Lutaml::Model::Serializable
       attribute :checkbox, Checkbox
       attribute :doc_part_obj, DocPartObj
-      attribute :data_binding, String
+      attribute :data_binding, :string
 
       xml do
         element 'sdtPr'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:ext>
     class Extents < Lutaml::Model::Serializable
-      attribute :cx, Integer
-      attribute :cy, Integer
+      attribute :cx, :integer
+      attribute :cy, :integer
 
       xml do
         element 'ext'

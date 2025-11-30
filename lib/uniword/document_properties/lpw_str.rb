@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:lpwstr>
     class LpwStr < Lutaml::Model::Serializable
-      attribute :content, String
+      attribute :content, :string
 
       xml do
         element 'lpwstr'

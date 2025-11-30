@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:conflictDel>
     class ConflictDeletion < Lutaml::Model::Serializable
-      attribute :id, String
-      attribute :author, String
-      attribute :date, String
+      attribute :id, :string
+      attribute :author, :string
+      attribute :date, :string
 
       xml do
         element 'conflictDel'

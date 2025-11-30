@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:bottom>
     class Bottom < Lutaml::Model::Serializable
-      attribute :value, String
+      attribute :value, :string
 
       xml do
         element 'bottom'

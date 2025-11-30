@@ -9,16 +9,16 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:Properties>
     class ExtendedProperties < Lutaml::Model::Serializable
-      attribute :application, String
-      attribute :doc_security, String
-      attribute :scale_crop, String
+      attribute :application, :string
+      attribute :doc_security, :string
+      attribute :scale_crop, :string
       attribute :heading_pairs, HeadingPairs
       attribute :titles_of_parts, TitlesOfParts
-      attribute :company, String
-      attribute :links_up_to_date, String
-      attribute :shared_doc, String
-      attribute :hyperlinks_changed, String
-      attribute :app_version, String
+      attribute :company, :string
+      attribute :links_up_to_date, :string
+      attribute :shared_doc, :string
+      attribute :hyperlinks_changed, :string
+      attribute :app_version, :string
 
       xml do
         element 'Properties'

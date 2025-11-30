@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:ink>
     class VmlInk < Lutaml::Model::Serializable
-      attribute :i, String
-      attribute :annotation, String
-      attribute :contentType, String
+      attribute :i, :string
+      attribute :annotation, :string
+      attribute :contentType, :string
 
       xml do
         element 'ink'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:gs>
     class GradientStop < Lutaml::Model::Serializable
-      attribute :pos, Integer
+      attribute :pos, :integer
       attribute :srgb_clr, SrgbColor
       attribute :scheme_clr, SchemeColor
 

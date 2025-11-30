@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:queryTable>
     class QueryTable < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :connection_id, Integer
+      attribute :name, :string
+      attribute :connection_id, :integer
 
       xml do
         element 'queryTable'

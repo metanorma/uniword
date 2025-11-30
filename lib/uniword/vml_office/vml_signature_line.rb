@@ -9,15 +9,15 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:signatureline>
     class VmlSignatureLine < Lutaml::Model::Serializable
-      attribute :issignatureline, String
-      attribute :id, String
-      attribute :provid, String
-      attribute :signinginstructionsset, String
-      attribute :allowcomments, String
-      attribute :showsigndate, String
-      attribute :suggestedsigner, String
-      attribute :suggestedsigneremail, String
-      attribute :signinginstructions, String
+      attribute :issignatureline, :string
+      attribute :id, :string
+      attribute :provid, :string
+      attribute :signinginstructionsset, :string
+      attribute :allowcomments, :string
+      attribute :showsigndate, :string
+      attribute :suggestedsigner, :string
+      attribute :suggestedsigneremail, :string
+      attribute :signinginstructions, :string
 
       xml do
         element 'signatureline'

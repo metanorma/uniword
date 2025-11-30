@@ -2,6 +2,10 @@
 
 require_relative 'color_scheme'
 require_relative 'font_scheme'
+require_relative 'format_scheme'
+require_relative 'object_defaults'
+require_relative 'extra_color_scheme_list'
+require_relative 'extension_list'
 
 module Uniword
   # Container for theme elements (color scheme, font scheme, format scheme)
@@ -12,9 +16,8 @@ module Uniword
     # Font scheme
     attribute :font_scheme, FontScheme
 
-    # Format scheme (placeholder for now)
-    # TODO: Implement FormatScheme class for full round-trip
-    # attribute :fmt_scheme, FormatScheme
+    # Format scheme
+    attribute :fmt_scheme, FormatScheme
 
     # XML configuration
     xml do
@@ -23,13 +26,14 @@ module Uniword
 
       map_element 'clrScheme', to: :clr_scheme
       map_element 'fontScheme', to: :font_scheme
-      # map_element 'fmtScheme', to: :fmt_scheme
+      map_element 'fmtScheme', to: :fmt_scheme
     end
 
     def initialize(attributes = {})
       super
       @clr_scheme ||= ColorScheme.new
       @font_scheme ||= FontScheme.new
+      @fmt_scheme ||= FormatScheme.new
     end
   end
 
@@ -53,6 +57,15 @@ module Uniword
     # Theme elements container
     attribute :theme_elements, ThemeElements
 
+    # Object defaults (usually empty)
+    attribute :object_defaults, ObjectDefaults
+
+    # Extra color scheme list (usually empty)
+    attribute :extra_clr_scheme_lst, ExtraColorSchemeList
+
+    # Extension list (may contain theme family info)
+    attribute :ext_lst, ExtensionList
+
     # OOXML namespace configuration
     xml do
       element 'theme'
@@ -60,6 +73,9 @@ module Uniword
 
       map_attribute 'name', to: :name
       map_element 'themeElements', to: :theme_elements
+      map_element 'objectDefaults', to: :object_defaults
+      map_element 'extraClrSchemeLst', to: :extra_clr_scheme_lst
+      map_element 'extLst', to: :ext_lst
     end
 
     # Theme variants (Hash of variant_id => ThemeVariant)
@@ -82,6 +98,9 @@ module Uniword
     def initialize(attributes = {})
       super
       @theme_elements ||= ThemeElements.new
+      @object_defaults ||= ObjectDefaults.new
+      @extra_clr_scheme_lst ||= ExtraColorSchemeList.new
+      @ext_lst ||= ExtensionList.new
       @variants = {}
       @source_file = nil
       @media_files ||= {}

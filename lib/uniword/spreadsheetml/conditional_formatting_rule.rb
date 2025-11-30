@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:cfRule>
     class ConditionalFormattingRule < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :priority, Integer
-      attribute :formula, String, collection: true, default: -> { [] }
+      attribute :type, :string
+      attribute :priority, :integer
+      attribute :formula, :string, collection: true, default: -> { [] }
 
       xml do
         element 'cfRule'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:name>
     class FontName < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'name'

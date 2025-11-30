@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:wrapPolygon>
     class WrapPolygon < Lutaml::Model::Serializable
-      attribute :edited, String
-      attribute :start, String
-      attribute :line_to, String, collection: true, default: -> { [] }
+      attribute :edited, :string
+      attribute :start, :string
+      attribute :line_to, :string, collection: true, default: -> { [] }
 
       xml do
         element 'wrapPolygon'

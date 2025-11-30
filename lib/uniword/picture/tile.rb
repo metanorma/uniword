@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:tile>
     class Tile < Lutaml::Model::Serializable
-      attribute :tx, Integer
-      attribute :ty, Integer
-      attribute :sx, Integer
-      attribute :sy, Integer
-      attribute :algn, String
+      attribute :tx, :integer
+      attribute :ty, :integer
+      attribute :sx, :integer
+      attribute :sy, :integer
+      attribute :algn, :string
 
       xml do
         element 'tile'

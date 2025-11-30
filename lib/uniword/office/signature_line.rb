@@ -9,16 +9,16 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:signatureline>
     class SignatureLine < Lutaml::Model::Serializable
-      attribute :issignatureline, String
-      attribute :id, String
-      attribute :provid, String
-      attribute :signinginstructionsset, String
-      attribute :allowcomments, String
-      attribute :showsigndate, String
-      attribute :suggestedsigner, String
-      attribute :suggestedsigner2, String
-      attribute :suggestedsigneremail, String
-      attribute :signinginstructions, String
+      attribute :issignatureline, :string
+      attribute :id, :string
+      attribute :provid, :string
+      attribute :signinginstructionsset, :string
+      attribute :allowcomments, :string
+      attribute :showsigndate, :string
+      attribute :suggestedsigner, :string
+      attribute :suggestedsigner2, :string
+      attribute :suggestedsigneremail, :string
+      attribute :signinginstructions, :string
 
       xml do
         element 'signatureline'

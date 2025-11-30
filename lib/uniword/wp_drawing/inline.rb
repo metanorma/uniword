@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:inline>
     class Inline < Lutaml::Model::Serializable
-      attribute :dist_t, Integer
-      attribute :dist_b, Integer
-      attribute :dist_l, Integer
-      attribute :dist_r, Integer
-      attribute :extent, String
-      attribute :effect_extent, String
-      attribute :doc_pr, String
-      attribute :c_nv_graphic_frame_pr, String
+      attribute :dist_t, :integer
+      attribute :dist_b, :integer
+      attribute :dist_l, :integer
+      attribute :dist_r, :integer
+      attribute :extent, :string
+      attribute :effect_extent, :string
+      attribute :doc_pr, :string
+      attribute :c_nv_graphic_frame_pr, :string
 
       xml do
         element 'inline'

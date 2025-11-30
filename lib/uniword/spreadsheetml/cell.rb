@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:c>
     class Cell < Lutaml::Model::Serializable
-      attribute :r, String
-      attribute :s, Integer
-      attribute :t, String
+      attribute :r, :string
+      attribute :s, :integer
+      attribute :t, :string
       attribute :v, CellValue
       attribute :f, CellFormula
 

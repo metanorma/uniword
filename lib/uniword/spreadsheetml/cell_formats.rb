@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:cellXfs>
     class CellFormats < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :formats, CellFormat, collection: true, default: -> { [] }
 
       xml do

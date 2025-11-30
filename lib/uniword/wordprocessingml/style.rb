@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../ooxml/wordprocessingml/paragraph_properties'
+require_relative '../ooxml/wordprocessingml/run_properties'
+require_relative '../ooxml/wordprocessingml/table_properties'
 
 module Uniword
   module Wordprocessingml
@@ -19,9 +22,9 @@ module Uniword
       attribute :link, Link
       attribute :uiPriority, UiPriority
       attribute :qFormat, :boolean
-      attribute :pPr, ParagraphProperties
-      attribute :rPr, RunProperties
-      attribute :tblPr, TableProperties
+      attribute :pPr, Uniword::Ooxml::WordProcessingML::ParagraphProperties
+      attribute :rPr, Uniword::Ooxml::WordProcessingML::RunProperties
+      attribute :tblPr, Uniword::Ooxml::WordProcessingML::TableProperties
       attribute :tcPr, TableCellProperties
 
       xml do

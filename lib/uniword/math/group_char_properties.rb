@@ -10,8 +10,8 @@ module Uniword
     # Element: <m:groupChrPr>
     class GroupCharProperties < Lutaml::Model::Serializable
       attribute :chr, Char
-      attribute :pos, String
-      attribute :vert_jc, String
+      attribute :pos, :string
+      attribute :vert_jc, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:relationtable>
     class RelationTable < Lutaml::Model::Serializable
-      attribute :data, String
+      attribute :data, :string
 
       xml do
         element 'relationtable'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:workbookProtection>
     class WorkbookProtection < Lutaml::Model::Serializable
-      attribute :lock_structure, String
-      attribute :lock_windows, String
+      attribute :lock_structure, :string
+      attribute :lock_windows, :string
 
       xml do
         element 'workbookProtection'

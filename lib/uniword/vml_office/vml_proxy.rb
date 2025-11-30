@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:proxy>
     class VmlProxy < Lutaml::Model::Serializable
-      attribute :start, String
-      attribute :end, String
-      attribute :idref, String
-      attribute :connectloc, String
+      attribute :start, :string
+      attribute :end, :string
+      attribute :idref, :string
+      attribute :connectloc, :string
 
       xml do
         element 'proxy'

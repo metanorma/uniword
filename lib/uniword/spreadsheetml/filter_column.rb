@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:filterColumn>
     class FilterColumn < Lutaml::Model::Serializable
-      attribute :col_id, Integer
+      attribute :col_id, :integer
 
       xml do
         element 'filterColumn'

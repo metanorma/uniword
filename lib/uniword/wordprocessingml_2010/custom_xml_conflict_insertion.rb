@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:customXmlConflictIns>
     class CustomXmlConflictInsertion < Lutaml::Model::Serializable
-      attribute :id, String
-      attribute :uri, String
+      attribute :id, :string
+      attribute :uri, :string
 
       xml do
         element 'customXmlConflictIns'

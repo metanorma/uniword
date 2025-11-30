@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: content_types.yml
     # Element: <ct:Default>
     class Default < Lutaml::Model::Serializable
-      attribute :extension, String
-      attribute :content_type, String
+      attribute :extension, :string
+      attribute :content_type, :string
 
       xml do
         element 'Default'

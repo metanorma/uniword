@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:proofstate>
     class ProofState < Lutaml::Model::Serializable
-      attribute :spelling, String
-      attribute :grammar, String
+      attribute :spelling, :string
+      attribute :grammar, :string
 
       xml do
         element 'proofstate'

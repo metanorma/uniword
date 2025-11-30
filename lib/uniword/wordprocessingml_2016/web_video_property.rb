@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:webVideoProperty>
     class WebVideoProperty < Lutaml::Model::Serializable
-      attribute :embed_code, String
-      attribute :video_url, String
+      attribute :embed_code, :string
+      attribute :video_url, :string
 
       xml do
         element 'webVideoProperty'

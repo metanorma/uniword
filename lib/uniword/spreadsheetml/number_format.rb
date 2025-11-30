@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:numFmt>
     class NumberFormat < Lutaml::Model::Serializable
-      attribute :num_fmt_id, Integer
-      attribute :format_code, String
+      attribute :num_fmt_id, :integer
+      attribute :format_code, :string
 
       xml do
         element 'numFmt'

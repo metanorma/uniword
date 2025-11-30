@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sortState>
     class SortState < Lutaml::Model::Serializable
-      attribute :ref, String
+      attribute :ref, :string
 
       xml do
         element 'sortState'

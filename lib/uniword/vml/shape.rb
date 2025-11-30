@@ -10,19 +10,19 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:shape>
       class Shape < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :type, String
-        attribute :style, String
-        attribute :fillcolor, String
-        attribute :strokecolor, String
-        attribute :strokeweight, String
-        attribute :coordsize, String
-        attribute :coordorigin, String
-        attribute :path, String
-        attribute :fill, String
-        attribute :stroke, String
-        attribute :textbox, String
-        attribute :imagedata, String
+        attribute :id, :string
+        attribute :type, :string
+        attribute :style, :string
+        attribute :fillcolor, :string
+        attribute :strokecolor, :string
+        attribute :strokeweight, :string
+        attribute :coordsize, :string
+        attribute :coordorigin, :string
+        attribute :path, :string
+        attribute :fill, :string
+        attribute :stroke, :string
+        attribute :textbox, :string
+        attribute :imagedata, :string
 
         xml do
           element 'shape'

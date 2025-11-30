@@ -10,10 +10,10 @@ module Uniword
     # Element: <m:naryPr>
     class NaryProperties < Lutaml::Model::Serializable
       attribute :chr, Char
-      attribute :lim_loc, String
-      attribute :grow, String
-      attribute :sub_hide, String
-      attribute :sup_hide, String
+      attribute :lim_loc, :string
+      attribute :grow, :string
+      attribute :sub_hide, :string
+      attribute :sup_hide, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

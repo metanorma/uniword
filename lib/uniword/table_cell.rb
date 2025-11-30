@@ -24,7 +24,7 @@ module Uniword
     end
 
     # Cell properties (formatting) - TableProperties object for span/width support
-    attribute :cell_properties, Properties::TableProperties
+    attribute :cell_properties, Ooxml::WordProcessingML::TableProperties
 
     # Array of paragraphs in this cell
     attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
@@ -106,7 +106,7 @@ module Uniword
     # Create and add a paragraph with the given text
     #
     # @param text [String] The text content
-    # @param properties [Properties::ParagraphProperties, nil] Optional properties
+    # @param properties [Ooxml::WordProcessingML::ParagraphProperties, nil] Optional properties
     # @return [TableCell] Returns self for method chaining
     def add_text(text, properties: nil)
       paragraph = Paragraph.new(properties: properties)

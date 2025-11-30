@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:tileRect>
     class TileRect < Lutaml::Model::Serializable
-      attribute :l, Integer
-      attribute :t, Integer
-      attribute :r, Integer
-      attribute :b, Integer
+      attribute :l, :integer
+      attribute :t, :integer
+      attribute :r, :integer
+      attribute :b, :integer
 
       xml do
         element 'tileRect'

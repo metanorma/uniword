@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:moveTo>
     class MoveTo < Lutaml::Model::Serializable
-      attribute :pt, String
+      attribute :pt, :string
 
       xml do
         element 'moveTo'

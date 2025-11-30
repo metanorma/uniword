@@ -10,13 +10,13 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:oval>
       class Oval < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :style, String
-        attribute :fillcolor, String
-        attribute :strokecolor, String
-        attribute :strokeweight, String
-        attribute :fill, String
-        attribute :stroke, String
+        attribute :id, :string
+        attribute :style, :string
+        attribute :fillcolor, :string
+        attribute :strokecolor, :string
+        attribute :strokeweight, :string
+        attribute :fill, :string
+        attribute :stroke, :string
 
         xml do
           element 'oval'

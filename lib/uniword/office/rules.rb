@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:rules>
     class Rules < Lutaml::Model::Serializable
-      attribute :rule, String, collection: true, default: -> { [] }
+      attribute :rule, :string, collection: true, default: -> { [] }
 
       xml do
         element 'rules'

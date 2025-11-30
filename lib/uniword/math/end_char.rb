@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:endChr>
     class EndChar < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'endChr'

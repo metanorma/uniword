@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:right>
     class Right < Lutaml::Model::Serializable
-      attribute :value, String
+      attribute :value, :string
 
       xml do
         element 'right'

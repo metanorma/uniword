@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:argPr>
     class ArgumentProperties < Lutaml::Model::Serializable
-      attribute :arg_size, Integer
+      attribute :arg_size, :integer
 
       xml do
         element 'argPr'

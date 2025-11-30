@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:hueOff>
     class HueOffset < Lutaml::Model::Serializable
-      attribute :val, Integer
+      attribute :val, :integer
 
       xml do
         element 'hueOff'

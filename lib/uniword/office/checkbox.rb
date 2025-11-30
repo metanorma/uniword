@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:checkbox>
     class Checkbox < Lutaml::Model::Serializable
-      attribute :checked, String
-      attribute :value, String
+      attribute :checked, :string
+      attribute :value, :string
 
       xml do
         element 'checkbox'

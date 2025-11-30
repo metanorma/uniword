@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:hyperlink>
     class Hyperlink < Lutaml::Model::Serializable
-      attribute :ref, String
-      attribute :id, String
-      attribute :location, String
-      attribute :tooltip, String
-      attribute :display, String
+      attribute :ref, :string
+      attribute :id, :string
+      attribute :location, :string
+      attribute :tooltip, :string
+      attribute :display, :string
 
       xml do
         element 'hyperlink'

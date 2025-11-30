@@ -10,8 +10,8 @@ module Uniword
     # Element: <w14:docPartObj>
     class DocPartObj < Lutaml::Model::Serializable
       attribute :doc_part_gallery, DocPartGallery
-      attribute :doc_part_category, String
-      attribute :doc_part_unique, String
+      attribute :doc_part_category, :string
+      attribute :doc_part_unique, :string
 
       xml do
         element 'docPartObj'

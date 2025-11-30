@@ -11,7 +11,7 @@ module Uniword
     class Picture < Lutaml::Model::Serializable
       attribute :nv_pic_pr, NonVisualPictureProperties
       attribute :blip_fill, PictureBlipFill
-      attribute :sp_pr, String
+      attribute :sp_pr, :string
 
       xml do
         element 'pic'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:pathLst>
     class PathList < Lutaml::Model::Serializable
-      attribute :paths, String, collection: true, default: -> { [] }
+      attribute :paths, :string, collection: true, default: -> { [] }
 
       xml do
         element 'pathLst'

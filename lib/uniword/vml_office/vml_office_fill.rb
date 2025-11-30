@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:fill>
     class VmlOfficeFill < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute true, String
-      attribute :color, String
-      attribute :opacity, String
-      attribute :detectmouseclick, String
-      attribute :relid, String
+      attribute :type, :string
+      attribute true, :string
+      attribute :color, :string
+      attribute :opacity, :string
+      attribute :detectmouseclick, :string
+      attribute :relid, :string
 
       xml do
         element 'fill'

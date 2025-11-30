@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:cNvPicPr>
     class NonVisualPictureDrawingProperties < Lutaml::Model::Serializable
-      attribute :prefer_relative_resize, String
+      attribute :prefer_relative_resize, :string
       attribute :pic_locks, PictureLocks
 
       xml do

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:fileVersion>
     class FileVersion < Lutaml::Model::Serializable
-      attribute :app_name, String
-      attribute :last_edited, String
+      attribute :app_name, :string
+      attribute :last_edited, :string
 
       xml do
         element 'fileVersion'

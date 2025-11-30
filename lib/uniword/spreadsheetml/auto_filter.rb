@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:autoFilter>
     class AutoFilter < Lutaml::Model::Serializable
-      attribute :ref, String
-      attribute :filter_columns, String, collection: true, default: -> { [] }
+      attribute :ref, :string
+      attribute :filter_columns, :string, collection: true, default: -> { [] }
 
       xml do
         element 'autoFilter'

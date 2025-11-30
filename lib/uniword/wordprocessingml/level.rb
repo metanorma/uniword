@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../ooxml/wordprocessingml/paragraph_properties'
+require_relative '../ooxml/wordprocessingml/run_properties'
 
 module Uniword
   module Wordprocessingml
@@ -14,8 +16,8 @@ module Uniword
       attribute :numFmt, NumFmt
       attribute :lvlText, LvlText
       attribute :lvlJc, LvlJc
-      attribute :pPr, ParagraphProperties
-      attribute :rPr, RunProperties
+      attribute :pPr, Uniword::Ooxml::WordProcessingML::ParagraphProperties
+      attribute :rPr, Uniword::Ooxml::WordProcessingML::RunProperties
 
       xml do
         element 'lvl'

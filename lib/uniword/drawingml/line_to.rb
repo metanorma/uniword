@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:lnTo>
     class LineTo < Lutaml::Model::Serializable
-      attribute :pt, String
+      attribute :pt, :string
 
       xml do
         element 'lnTo'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:rowBreaks>
     class RowBreaks < Lutaml::Model::Serializable
-      attribute :count, Integer
-      attribute :breaks, String, collection: true, default: -> { [] }
+      attribute :count, :integer
+      attribute :breaks, :string, collection: true, default: -> { [] }
 
       xml do
         element 'rowBreaks'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:phoneticPr>
     class PhoneticProperties < Lutaml::Model::Serializable
-      attribute :font_id, Integer
-      attribute :type, String
+      attribute :font_id, :integer
+      attribute :type, :string
 
       xml do
         element 'phoneticPr'

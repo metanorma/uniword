@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:colormru>
     class VmlColorMru < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :colors, String
+      attribute :ext, :string
+      attribute :colors, :string
 
       xml do
         element 'colormru'

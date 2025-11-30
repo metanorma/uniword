@@ -9,17 +9,17 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:dataValidation>
     class DataValidation < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :operator, String
-      attribute :sqref, String
-      attribute :formula1, String
-      attribute :formula2, String
-      attribute :show_input_message, String
-      attribute :show_error_message, String
-      attribute :prompt_title, String
-      attribute :prompt, String
-      attribute :error_title, String
-      attribute :error, String
+      attribute :type, :string
+      attribute :operator, :string
+      attribute :sqref, :string
+      attribute :formula1, :string
+      attribute :formula2, :string
+      attribute :show_input_message, :string
+      attribute :show_error_message, :string
+      attribute :prompt_title, :string
+      attribute :prompt, :string
+      attribute :error_title, :string
+      attribute :error, :string
 
       xml do
         element 'dataValidation'

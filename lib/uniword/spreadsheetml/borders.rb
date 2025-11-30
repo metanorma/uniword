@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:borders>
     class Borders < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :border_entries, Border, collection: true, default: -> { [] }
 
       xml do

@@ -9,23 +9,23 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:extrusion>
     class Extrusion < Lutaml::Model::Serializable
-      attribute true, String
-      attribute :type, String
-      attribute :render, String
-      attribute :viewpointorigin, String
-      attribute :viewpoint, String
-      attribute :skewangle, String
-      attribute :skewamt, String
-      attribute :foredepth, String
-      attribute :backdepth, String
-      attribute :orientation, String
-      attribute :orientationangle, String
-      attribute :color, String
-      attribute :rotationangle, String
-      attribute :lightposition, String
-      attribute :lightlevel, String
-      attribute :lightharsh, String
-      attribute :lightface, String
+      attribute true, :string
+      attribute :type, :string
+      attribute :render, :string
+      attribute :viewpointorigin, :string
+      attribute :viewpoint, :string
+      attribute :skewangle, :string
+      attribute :skewamt, :string
+      attribute :foredepth, :string
+      attribute :backdepth, :string
+      attribute :orientation, :string
+      attribute :orientationangle, :string
+      attribute :color, :string
+      attribute :rotationangle, :string
+      attribute :lightposition, :string
+      attribute :lightlevel, :string
+      attribute :lightharsh, :string
+      attribute :lightface, :string
 
       xml do
         element 'extrusion'

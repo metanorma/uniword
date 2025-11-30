@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:positionH>
     class PositionH < Lutaml::Model::Serializable
-      attribute :relative_from, String
-      attribute :align, String
-      attribute :pos_offset, Integer
+      attribute :relative_from, :string
+      attribute :align, :string
+      attribute :pos_offset, :integer
 
       xml do
         element 'positionH'

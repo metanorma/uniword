@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:alphaBiLevel>
     class AlphaBiLevel < Lutaml::Model::Serializable
-      attribute :thresh, Integer
+      attribute :thresh, :integer
 
       xml do
         element 'alphaBiLevel'

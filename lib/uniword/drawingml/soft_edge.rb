@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:softEdge>
     class SoftEdge < Lutaml::Model::Serializable
-      attribute :rad, Integer
+      attribute :rad, :integer
 
       xml do
         element 'softEdge'

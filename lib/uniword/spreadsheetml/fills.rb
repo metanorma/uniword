@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:fills>
     class Fills < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :fill_entries, Fill, collection: true, default: -> { [] }
 
       xml do

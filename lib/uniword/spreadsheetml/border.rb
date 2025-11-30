@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:border>
     class Border < Lutaml::Model::Serializable
-      attribute :left, String
-      attribute :right, String
-      attribute :top, String
-      attribute :bottom, String
-      attribute :diagonal, String
+      attribute :left, :string
+      attribute :right, :string
+      attribute :top, :string
+      attribute :bottom, :string
+      attribute :diagonal, :string
 
       xml do
         element 'border'

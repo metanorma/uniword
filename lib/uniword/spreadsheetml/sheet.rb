@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sheet>
     class Sheet < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :sheet_id, Integer
-      attribute :id, String
-      attribute :state, String
+      attribute :name, :string
+      attribute :sheet_id, :integer
+      attribute :id, :string
+      attribute :state, :string
 
       xml do
         element 'sheet'

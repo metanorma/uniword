@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:sSubSupPr>
     class SubSuperscriptProperties < Lutaml::Model::Serializable
-      attribute :aln_scr, String
+      attribute :aln_scr, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

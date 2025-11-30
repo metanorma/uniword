@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:diagram>
     class VmlDiagram < Lutaml::Model::Serializable
-      attribute :dgmstyle, String
-      attribute :autoformat, String
-      attribute :reverse, String
-      attribute :autolayout, String
-      attribute :dgmscalex, String
-      attribute :dgmscaley, String
+      attribute :dgmstyle, :string
+      attribute :autoformat, :string
+      attribute :reverse, :string
+      attribute :autolayout, :string
+      attribute :dgmscalex, :string
+      attribute :dgmscaley, :string
 
       xml do
         element 'diagram'

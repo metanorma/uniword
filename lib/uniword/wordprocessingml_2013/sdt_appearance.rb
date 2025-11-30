@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:appearance>
     class SdtAppearance < Lutaml::Model::Serializable
-      attribute :val, String
+      attribute :val, :string
 
       xml do
         element 'appearance'

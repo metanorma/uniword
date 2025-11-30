@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:skew>
     class Skew < Lutaml::Model::Serializable
-      attribute true, String
-      attribute :offset, String
-      attribute :origin, String
-      attribute :matrix, String
+      attribute true, :string
+      attribute :offset, :string
+      attribute :origin, :string
+      attribute :matrix, :string
 
       xml do
         element 'skew'

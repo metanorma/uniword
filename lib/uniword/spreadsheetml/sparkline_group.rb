@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sparklineGroup>
     class SparklineGroup < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :display_empty_cells_as, String
+      attribute :type, :string
+      attribute :display_empty_cells_as, :string
 
       xml do
         element 'sparklineGroup'

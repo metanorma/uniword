@@ -24,10 +24,6 @@ require_relative 'uniword/content_types'
 require_relative 'uniword/document_properties'
 
 # Load extension modules that add convenience methods to generated classes
-require_relative 'uniword/extensions/document_extensions'
-require_relative 'uniword/extensions/paragraph_extensions'
-require_relative 'uniword/extensions/run_extensions'
-require_relative 'uniword/extensions/properties_extensions'
 
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
 # documents in DOCX format using a schema-driven architecture.
@@ -66,9 +62,9 @@ module Uniword
   TableCell = Wordprocessingml::TableCell
 
   # Properties classes
-  ParagraphProperties = Wordprocessingml::ParagraphProperties
-  RunProperties = Wordprocessingml::RunProperties
-  TableProperties = Wordprocessingml::TableProperties
+  ParagraphProperties = Ooxml::WordProcessingML::ParagraphProperties
+  RunProperties = Ooxml::WordProcessingML::RunProperties
+  TableProperties = Ooxml::WordProcessingML::TableProperties
   SectionProperties = Wordprocessingml::SectionProperties
 
   # Additional element classes

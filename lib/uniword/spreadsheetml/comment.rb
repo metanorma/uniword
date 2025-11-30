@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:comment>
     class Comment < Lutaml::Model::Serializable
-      attribute :ref, String
-      attribute :author_id, Integer
-      attribute :text, String
+      attribute :ref, :string
+      attribute :author_id, :integer
+      attribute :text, :string
 
       xml do
         element 'comment'

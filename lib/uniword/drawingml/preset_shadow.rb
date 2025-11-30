@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:prstShdw>
     class PresetShadow < Lutaml::Model::Serializable
-      attribute :prst, String
-      attribute :dist, Integer
-      attribute :dir, Integer
+      attribute :prst, :string
+      attribute :dist, :integer
+      attribute :dir, :integer
 
       xml do
         element 'prstShdw'

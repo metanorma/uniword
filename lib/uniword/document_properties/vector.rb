@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:vector>
     class Vector < Lutaml::Model::Serializable
-      attribute :size, String
-      attribute :baseType, String
-      attribute :variant, String, collection: true, default: -> { [] }
+      attribute :size, :string
+      attribute :baseType, :string
+      attribute :variant, :string, collection: true, default: -> { [] }
 
       xml do
         element 'vector'

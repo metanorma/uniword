@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:field>
     class Field < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :data, String
+      attribute :type, :string
+      attribute :data, :string
 
       xml do
         element 'field'

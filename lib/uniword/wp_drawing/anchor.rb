@@ -9,28 +9,28 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:anchor>
     class Anchor < Lutaml::Model::Serializable
-      attribute :dist_t, Integer
-      attribute :dist_b, Integer
-      attribute :dist_l, Integer
-      attribute :dist_r, Integer
-      attribute :simple_pos, String
-      attribute :relative_height, Integer
-      attribute :behind_doc, String
-      attribute :locked, String
-      attribute :layout_in_cell, String
-      attribute :allow_overlap, String
-      attribute :hidden, String
-      attribute :extent, String
-      attribute :effect_extent, String
-      attribute :wrap_square, String
-      attribute :wrap_tight, String
-      attribute :wrap_through, String
-      attribute :wrap_top_and_bottom, String
-      attribute :wrap_none, String
-      attribute :doc_pr, String
-      attribute :c_nv_graphic_frame_pr, String
-      attribute :position_h, String
-      attribute :position_v, String
+      attribute :dist_t, :integer
+      attribute :dist_b, :integer
+      attribute :dist_l, :integer
+      attribute :dist_r, :integer
+      attribute :simple_pos, :string
+      attribute :relative_height, :integer
+      attribute :behind_doc, :string
+      attribute :locked, :string
+      attribute :layout_in_cell, :string
+      attribute :allow_overlap, :string
+      attribute :hidden, :string
+      attribute :extent, :string
+      attribute :effect_extent, :string
+      attribute :wrap_square, :string
+      attribute :wrap_tight, :string
+      attribute :wrap_through, :string
+      attribute :wrap_top_and_bottom, :string
+      attribute :wrap_none, :string
+      attribute :doc_pr, :string
+      attribute :c_nv_graphic_frame_pr, :string
+      attribute :position_h, :string
+      attribute :position_v, :string
 
       xml do
         element 'anchor'

@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:wrapSquare>
     class WrapSquare < Lutaml::Model::Serializable
-      attribute :wrap_text, String
-      attribute :dist_t, Integer
-      attribute :dist_b, Integer
-      attribute :dist_l, Integer
-      attribute :dist_r, Integer
-      attribute :effect_extent, String
+      attribute :wrap_text, :string
+      attribute :dist_t, :integer
+      attribute :dist_b, :integer
+      attribute :dist_l, :integer
+      attribute :dist_r, :integer
+      attribute :effect_extent, :string
 
       xml do
         element 'wrapSquare'

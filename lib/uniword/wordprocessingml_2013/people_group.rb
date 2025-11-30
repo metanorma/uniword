@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:peopleGroup>
     class PeopleGroup < Lutaml::Model::Serializable
-      attribute :group_id, String
-      attribute :people, String
+      attribute :group_id, :string
+      attribute :people, :string
 
       xml do
         element 'peopleGroup'

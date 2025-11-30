@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:ln>
     class LineProperties < Lutaml::Model::Serializable
-      attribute :w, Integer
+      attribute :w, :integer
 
       xml do
         element 'ln'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:ext>
     class Extension < Lutaml::Model::Serializable
-      attribute :uri, String
-      attribute :content, String
+      attribute :uri, :string
+      attribute :content, :string
 
       xml do
         element 'ext'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:patternFill>
     class PatternFill < Lutaml::Model::Serializable
-      attribute :pattern_type, String
+      attribute :pattern_type, :string
       attribute :fg_color, Color
       attribute :bg_color, Color
 

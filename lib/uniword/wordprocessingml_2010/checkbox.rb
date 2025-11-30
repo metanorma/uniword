@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:checkbox>
     class Checkbox < Lutaml::Model::Serializable
-      attribute :checked, String
+      attribute :checked, :string
       attribute :checked_state, CheckedState
       attribute :unchecked_state, UncheckedState
 

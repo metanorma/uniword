@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:Company>
     class Company < Lutaml::Model::Serializable
-      attribute :content, String
+      attribute :content, :string
 
       xml do
         element 'Company'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:shapelayout>
     class ShapeLayout < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :idmap, String
+      attribute :ext, :string
+      attribute :idmap, :string
 
       xml do
         element 'shapelayout'

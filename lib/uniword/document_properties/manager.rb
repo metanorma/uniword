@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:Manager>
     class Manager < Lutaml::Model::Serializable
-      attribute :content, String
+      attribute :content, :string
 
       xml do
         element 'Manager'

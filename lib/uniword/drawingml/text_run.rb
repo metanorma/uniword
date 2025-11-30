@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:r>
     class TextRun < Lutaml::Model::Serializable
-      attribute :t, String
+      attribute :t, :string
 
       xml do
         element 'r'

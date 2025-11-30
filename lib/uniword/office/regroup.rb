@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:regroup>
     class Regroup < Lutaml::Model::Serializable
-      attribute :id, String
+      attribute :id, :string
 
       xml do
         element 'regroup'

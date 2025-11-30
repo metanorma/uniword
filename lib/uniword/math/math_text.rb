@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:t>
     class MathText < Lutaml::Model::Serializable
-      attribute :value, String
+      attribute :value, :string
 
       xml do
         element 't'

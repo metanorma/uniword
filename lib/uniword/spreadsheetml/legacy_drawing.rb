@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:legacyDrawing>
     class LegacyDrawing < Lutaml::Model::Serializable
-      attribute :id, String
+      attribute :id, :string
 
       xml do
         element 'legacyDrawing'

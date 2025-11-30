@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:callout>
     class Callout < Lutaml::Model::Serializable
-      attribute true, String
-      attribute :type, String
-      attribute :gap, String
-      attribute :angle, String
-      attribute :dropauto, String
-      attribute :drop, String
-      attribute :distance, String
-      attribute :lengthspecified, String
+      attribute true, :string
+      attribute :type, :string
+      attribute :gap, :string
+      attribute :angle, :string
+      attribute :dropauto, :string
+      attribute :drop, :string
+      attribute :distance, :string
+      attribute :lengthspecified, :string
 
       xml do
         element 'callout'

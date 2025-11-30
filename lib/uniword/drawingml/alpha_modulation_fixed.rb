@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:alphaModFix>
     class AlphaModulationFixed < Lutaml::Model::Serializable
-      attribute :amt, Integer
+      attribute :amt, :integer
 
       xml do
         element 'alphaModFix'

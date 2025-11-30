@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:cNvPr>
     class NonVisualDrawingProperties < Lutaml::Model::Serializable
-      attribute :id, Integer
-      attribute :name, String
+      attribute :id, :integer
+      attribute :name, :string
 
       xml do
         element 'cNvPr'

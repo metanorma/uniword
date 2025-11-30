@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sheetProtection>
     class SheetProtection < Lutaml::Model::Serializable
-      attribute :password, String
-      attribute :sheet, String
-      attribute :objects, String
-      attribute :scenarios, String
+      attribute :password, :string
+      attribute :sheet, :string
+      attribute :objects, :string
+      attribute :scenarios, :string
 
       xml do
         element 'sheetProtection'

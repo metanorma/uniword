@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:arcTo>
     class ArcTo < Lutaml::Model::Serializable
-      attribute :wR, String
-      attribute :hR, String
-      attribute :stAng, String
-      attribute :swAng, String
+      attribute :wR, :string
+      attribute :hR, :string
+      attribute :stAng, :string
+      attribute :swAng, :string
 
       xml do
         element 'arcTo'

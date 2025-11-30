@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:wrapTopAndBottom>
     class WrapTopAndBottom < Lutaml::Model::Serializable
-      attribute :dist_t, Integer
-      attribute :dist_b, Integer
-      attribute :effect_extent, String
+      attribute :dist_t, :integer
+      attribute :dist_b, :integer
+      attribute :effect_extent, :string
 
       xml do
         element 'wrapTopAndBottom'

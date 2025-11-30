@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:variant>
     class Variant < Lutaml::Model::Serializable
-      attribute :lpstr, String
-      attribute :i4, String
+      attribute :lpstr, :string
+      attribute :i4, :string
 
       xml do
         element 'variant'

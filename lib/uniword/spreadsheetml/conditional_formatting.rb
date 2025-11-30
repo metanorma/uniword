@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:conditionalFormatting>
     class ConditionalFormatting < Lutaml::Model::Serializable
-      attribute :sqref, String
+      attribute :sqref, :string
       attribute :rules, ConditionalFormattingRule, collection: true, default: -> { [] }
 
       xml do

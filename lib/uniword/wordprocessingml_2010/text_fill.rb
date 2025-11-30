@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:textFill>
     class TextFill < Lutaml::Model::Serializable
-      attribute :solid_fill, String
-      attribute :gradient_fill, String
-      attribute :no_fill, String
+      attribute :solid_fill, :string
+      attribute :gradient_fill, :string
+      attribute :no_fill, :string
 
       xml do
         element 'textFill'

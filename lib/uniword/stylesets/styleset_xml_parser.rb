@@ -89,9 +89,9 @@ module Uniword
       # Parse w:pPr (Paragraph Properties) into ParagraphProperties object
       #
       # @param pPr_node [Nokogiri::XML::Element] The w:pPr element
-      # @return [Properties::ParagraphProperties] Parsed properties
+      # @return [Ooxml::WordProcessingML::ParagraphProperties] Parsed properties
       def parse_paragraph_properties(pPr_node)
-        require_relative '../properties/paragraph_properties'
+        require_relative '../ooxml/wordprocessingml/paragraph_properties'
         require_relative '../properties/spacing'
         require_relative '../properties/indentation'
         require_relative '../properties/alignment'
@@ -105,7 +105,7 @@ module Uniword
         require_relative '../properties/tab_stop'
         require_relative '../properties/shading'
 
-        props = Properties::ParagraphProperties.new
+        props = Ooxml::WordProcessingML::ParagraphProperties.new
 
         # Style reference - create wrapper object
         if (pStyle = pPr_node.at_xpath('./w:pStyle', WORDML_NS))
@@ -257,9 +257,9 @@ module Uniword
       # Parse w:rPr (Run Properties) into RunProperties object
       #
       # @param rPr_node [Nokogiri::XML::Element] The w:rPr element
-      # @return [Properties::RunProperties] Parsed properties
+      # @return [Ooxml::WordProcessingML::RunProperties] Parsed properties
       def parse_run_properties(rPr_node)
-        require_relative '../properties/run_properties'
+        require_relative '../ooxml/wordprocessingml/run_properties'
         require_relative '../properties/run_fonts'
         require_relative '../properties/font_size'
         require_relative '../properties/color_value'
@@ -277,7 +277,7 @@ module Uniword
         require_relative '../properties/text_fill'
         require_relative '../properties/text_outline'
 
-        props = Properties::RunProperties.new
+        props = Ooxml::WordProcessingML::RunProperties.new
 
         # Style reference - create wrapper object
         if (rStyle = rPr_node.at_xpath('./w:rStyle', WORDML_NS))
@@ -452,11 +452,11 @@ module Uniword
       # Parse w:tblPr (Table Properties) into TableProperties object
       #
       # @param tblPr_node [Nokogiri::XML::Element] The w:tblPr element
-      # @return [Properties::TableProperties] Parsed properties
+      # @return [Ooxml::WordProcessingML::TableProperties] Parsed properties
       def parse_table_properties(tblPr_node)
-        require_relative '../properties/table_properties'
+        require_relative '../ooxml/wordprocessingml/table_properties'
 
-        props = Properties::TableProperties.new
+        props = Ooxml::WordProcessingML::TableProperties.new
 
         # Style reference
         if (tblStyle = tblPr_node.at_xpath('./w:tblStyle', WORDML_NS))

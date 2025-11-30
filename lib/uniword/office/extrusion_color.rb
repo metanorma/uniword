@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:extrusioncolor>
     class ExtrusionColor < Lutaml::Model::Serializable
-      attribute :color, String
-      attribute :opacity, String
+      attribute :color, :string
+      attribute :opacity, :string
 
       xml do
         element 'extrusioncolor'

@@ -10,7 +10,7 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:handles>
       class Handles < Lutaml::Model::Serializable
-        attribute :handles, String, collection: true, default: -> { [] }
+        attribute :handles, :string, collection: true, default: -> { [] }
 
         xml do
           element 'handles'

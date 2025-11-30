@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:zoom>
     class Zoom < Lutaml::Model::Serializable
-      attribute :percent, String
+      attribute :percent, :string
 
       xml do
         element 'zoom'

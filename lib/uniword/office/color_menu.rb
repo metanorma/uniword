@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:colormenu>
     class ColorMenu < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :colors, String
+      attribute :ext, :string
+      attribute :colors, :string
 
       xml do
         element 'colormenu'

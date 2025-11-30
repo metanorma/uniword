@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:chartProps>
     class ChartProps < Lutaml::Model::Serializable
-      attribute :style, String
-      attribute :color_mapping, String
+      attribute :style, :string
+      attribute :color_mapping, :string
 
       xml do
         element 'chartProps'

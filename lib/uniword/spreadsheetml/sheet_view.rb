@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sheetView>
     class SheetView < Lutaml::Model::Serializable
-      attribute :workbook_view_id, Integer
-      attribute :show_grid_lines, String
-      attribute :show_row_col_headers, String
-      attribute :tab_selected, String
-      attribute :zoom_scale, Integer
+      attribute :workbook_view_id, :integer
+      attribute :show_grid_lines, :string
+      attribute :show_row_col_headers, :string
+      attribute :tab_selected, :string
+      attribute :zoom_scale, :integer
 
       xml do
         element 'sheetView'

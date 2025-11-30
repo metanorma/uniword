@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../ooxml/wordprocessingml/paragraph_properties'
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +10,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:pPrDefault>
     class PPrDefault < Lutaml::Model::Serializable
-      attribute :pPr, ParagraphProperties
+      attribute :pPr, Uniword::Ooxml::WordProcessingML::ParagraphProperties
 
       xml do
         element 'pPrDefault'

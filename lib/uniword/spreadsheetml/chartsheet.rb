@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:chartsheet>
     class Chartsheet < Lutaml::Model::Serializable
-      attribute :sheet_views, String
+      attribute :sheet_views, :string
       attribute :drawing, Drawing
 
       xml do

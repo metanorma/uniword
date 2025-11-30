@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:checkedState>
     class CheckedState < Lutaml::Model::Serializable
-      attribute :font, String
-      attribute :val, String
+      attribute :font, :string
+      attribute :val, :string
 
       xml do
         element 'checkedState'

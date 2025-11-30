@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:spPr>
     class PictureShapeProperties < Lutaml::Model::Serializable
-      attribute :xfrm, String
-      attribute :ln, String
+      attribute :xfrm, :string
+      attribute :ln, :string
 
       xml do
         element 'spPr'

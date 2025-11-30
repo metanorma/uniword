@@ -10,12 +10,12 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:polyline>
       class Polyline < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :style, String
-        attribute :points, String
-        attribute :strokecolor, String
-        attribute :strokeweight, String
-        attribute :stroke, String
+        attribute :id, :string
+        attribute :style, :string
+        attribute :points, :string
+        attribute :strokecolor, :string
+        attribute :strokeweight, :string
+        attribute :stroke, :string
 
         xml do
           element 'polyline'

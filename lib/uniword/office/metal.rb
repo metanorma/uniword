@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:metal>
     class Metal < Lutaml::Model::Serializable
-      attribute true, String
+      attribute true, :string
 
       xml do
         element 'metal'

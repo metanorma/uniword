@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:ds>
     class DashStop < Lutaml::Model::Serializable
-      attribute :d, Integer
-      attribute :sp, Integer
+      attribute :d, :integer
+      attribute :sp, :integer
 
       xml do
         element 'ds'

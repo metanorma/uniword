@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:presenceInfo>
     class PresenceInfo < Lutaml::Model::Serializable
-      attribute :provider_id, String
-      attribute :user_id, String
+      attribute :provider_id, :string
+      attribute :user_id, :string
 
       xml do
         element 'presenceInfo'

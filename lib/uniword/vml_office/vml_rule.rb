@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:rule>
     class VmlRule < Lutaml::Model::Serializable
-      attribute :id, String
-      attribute :type, String
-      attribute :data, String
+      attribute :id, :string
+      attribute :type, :string
+      attribute :data, :string
 
       xml do
         element 'rule'

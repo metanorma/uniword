@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:brk>
     class MathBreak < Lutaml::Model::Serializable
-      attribute :aln_at, Integer
+      attribute :aln_at, :integer
 
       xml do
         element 'brk'

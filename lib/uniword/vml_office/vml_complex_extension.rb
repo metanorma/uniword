@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:complexExtension>
     class VmlComplexExtension < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :data, String
+      attribute :type, :string
+      attribute :data, :string
 
       xml do
         element 'complexExtension'

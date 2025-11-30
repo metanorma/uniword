@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:innerShdw>
     class InnerShadow < Lutaml::Model::Serializable
-      attribute :blur_rad, Integer
-      attribute :dist, Integer
-      attribute :dir, Integer
+      attribute :blur_rad, :integer
+      attribute :dist, :integer
+      attribute :dir, :integer
 
       xml do
         element 'innerShdw'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:bodyPr>
     class BodyProperties < Lutaml::Model::Serializable
-      attribute :wrap, String
+      attribute :wrap, :string
 
       xml do
         element 'bodyPr'

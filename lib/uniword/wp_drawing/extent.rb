@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:extent>
     class Extent < Lutaml::Model::Serializable
-      attribute :cx, Integer
-      attribute :cy, Integer
+      attribute :cx, :integer
+      attribute :cy, :integer
 
       xml do
         element 'extent'

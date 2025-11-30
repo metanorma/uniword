@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:effectDag>
     class EffectContainer < Lutaml::Model::Serializable
-      attribute :effects, String, collection: true, default: -> { [] }
+      attribute :effects, :string, collection: true, default: -> { [] }
 
       xml do
         element 'effectDag'

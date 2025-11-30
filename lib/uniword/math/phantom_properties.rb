@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:phantPr>
     class PhantomProperties < Lutaml::Model::Serializable
-      attribute :show, String
-      attribute :zero_wid, String
-      attribute :zero_asc, String
-      attribute :zero_desc, String
-      attribute :transp, String
+      attribute :show, :string
+      attribute :zero_wid, :string
+      attribute :zero_asc, :string
+      attribute :zero_desc, :string
+      attribute :transp, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

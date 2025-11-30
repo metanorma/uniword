@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:reflection>
     class Reflection < Lutaml::Model::Serializable
-      attribute :blur_rad, Integer
-      attribute :st_a, Integer
-      attribute :end_a, Integer
-      attribute :dist, Integer
+      attribute :blur_rad, :integer
+      attribute :st_a, :integer
+      attribute :end_a, :integer
+      attribute :dist, :integer
 
       xml do
         element 'reflection'

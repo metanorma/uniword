@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:clippath>
     class VmlClipPath < Lutaml::Model::Serializable
-      attribute :coords, String
-      attribute :path, String
+      attribute :coords, :string
+      attribute :path, :string
 
       xml do
         element 'clippath'

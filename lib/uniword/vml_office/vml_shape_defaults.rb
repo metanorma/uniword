@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:shapedefaults>
     class VmlShapeDefaults < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :spidmax, String
-      attribute :fill, String
-      attribute :stroke, String
-      attribute :textbox, String
+      attribute :ext, :string
+      attribute :spidmax, :string
+      attribute :fill, :string
+      attribute :stroke, :string
+      attribute :textbox, :string
 
       xml do
         element 'shapedefaults'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:drawing>
     class Drawing < Lutaml::Model::Serializable
-      attribute :id, String
+      attribute :id, :string
 
       xml do
         element 'drawing'

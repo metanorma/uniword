@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:rPr>
     class MathRunProperties < Lutaml::Model::Serializable
-      attribute :lit, String
-      attribute :nor, String
-      attribute :scr, String
-      attribute :sty, String
+      attribute :lit, :string
+      attribute :nor, :string
+      attribute :scr, :string
+      attribute :sty, :string
       attribute :brk, MathBreak
-      attribute :aln, String
+      attribute :aln, :string
 
       xml do
         element 'rPr'

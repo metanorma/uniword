@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'properties/paragraph_properties'
-require_relative 'properties/run_properties'
-require_relative 'properties/table_properties'
+require_relative 'ooxml/wordprocessingml/paragraph_properties'
+require_relative 'ooxml/wordprocessingml/run_properties'
+require_relative 'ooxml/wordprocessingml/table_properties'
 
 module Uniword
   # Represents a style definition
@@ -50,9 +50,9 @@ module Uniword
     attribute :unhide_when_used, :boolean, default: -> { false }
 
     # Formatting properties
-    attribute :paragraph_properties, Properties::ParagraphProperties
-    attribute :run_properties, Properties::RunProperties
-    attribute :table_properties, Properties::TableProperties
+    attribute :paragraph_properties, Ooxml::WordProcessingML::ParagraphProperties
+    attribute :run_properties, Ooxml::WordProcessingML::RunProperties
+    attribute :table_properties, Ooxml::WordProcessingML::TableProperties
 
     # XML mappings come AFTER attributes
     xml do

@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:scenarios>
     class Scenarios < Lutaml::Model::Serializable
-      attribute :current, Integer
-      attribute :show, Integer
-      attribute :entries, String, collection: true, default: -> { [] }
+      attribute :current, :integer
+      attribute :show, :integer
+      attribute :entries, :string, collection: true, default: -> { [] }
 
       xml do
         element 'scenarios'

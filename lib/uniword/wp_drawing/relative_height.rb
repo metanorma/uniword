@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:relativeHeight>
     class RelativeHeight < Lutaml::Model::Serializable
-      attribute :value, Integer
+      attribute :value, :integer
 
       xml do
         element 'relativeHeight'

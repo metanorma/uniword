@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:ink>
     class Ink < Lutaml::Model::Serializable
-      attribute :i, String
-      attribute :contentType, String
+      attribute :i, :string
+      attribute :contentType, :string
 
       xml do
         element 'ink'

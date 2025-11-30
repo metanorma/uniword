@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:color>
     class Color < Lutaml::Model::Serializable
-      attribute :rgb, String
-      attribute :theme, Integer
-      attribute :tint, String
-      attribute :indexed, Integer
+      attribute :rgb, :string
+      attribute :theme, :integer
+      attribute :tint, :string
+      attribute :indexed, :integer
 
       xml do
         element 'color'

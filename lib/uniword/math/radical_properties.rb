@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:radPr>
     class RadicalProperties < Lutaml::Model::Serializable
-      attribute :deg_hide, String
+      attribute :deg_hide, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

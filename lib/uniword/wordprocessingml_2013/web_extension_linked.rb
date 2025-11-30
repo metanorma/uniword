@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:webExtensionLinked>
     class WebExtensionLinked < Lutaml::Model::Serializable
-      attribute :id, String
+      attribute :id, :string
 
       xml do
         element 'webExtensionLinked'

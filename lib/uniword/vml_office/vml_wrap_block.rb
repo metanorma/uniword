@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:wrapblock>
     class VmlWrapBlock < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :side, String
+      attribute :type, :string
+      attribute :side, :string
 
       xml do
         element 'wrapblock'

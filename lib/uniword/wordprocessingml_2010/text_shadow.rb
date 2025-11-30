@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:shadow>
     class TextShadow < Lutaml::Model::Serializable
-      attribute :blur_radius, Integer
-      attribute :distance, Integer
-      attribute :direction, Integer
-      attribute :alignment, String
+      attribute :blur_radius, :integer
+      attribute :distance, :integer
+      attribute :direction, :integer
+      attribute :alignment, :string
 
       xml do
         element 'shadow'

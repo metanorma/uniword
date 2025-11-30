@@ -10,13 +10,13 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:line>
       class Line < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :style, String
-        attribute :from, String
-        attribute :to, String
-        attribute :strokecolor, String
-        attribute :strokeweight, String
-        attribute :stroke, String
+        attribute :id, :string
+        attribute :style, :string
+        attribute :from, :string
+        attribute :to, :string
+        attribute :strokecolor, :string
+        attribute :strokeweight, :string
+        attribute :stroke, :string
 
         xml do
           element 'line'

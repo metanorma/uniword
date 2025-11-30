@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:calcPr>
     class CalcProperties < Lutaml::Model::Serializable
-      attribute :calc_mode, String
-      attribute :calc_id, Integer
-      attribute :full_calc_on_load, String
+      attribute :calc_mode, :string
+      attribute :calc_id, :integer
+      attribute :full_calc_on_load, :string
 
       xml do
         element 'calcPr'

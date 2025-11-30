@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:pPr>
     class TextParagraphProperties < Lutaml::Model::Serializable
-      attribute :algn, String
-      attribute :marL, Integer
-      attribute :marR, Integer
+      attribute :algn, :string
+      attribute :marL, :integer
+      attribute :marR, :integer
 
       xml do
         element 'pPr'

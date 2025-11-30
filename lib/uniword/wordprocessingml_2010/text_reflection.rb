@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:reflection>
     class TextReflection < Lutaml::Model::Serializable
-      attribute :blur_radius, Integer
-      attribute :start_opacity, Integer
-      attribute :end_opacity, Integer
-      attribute :distance, Integer
+      attribute :blur_radius, :integer
+      attribute :start_opacity, :integer
+      attribute :end_opacity, :integer
+      attribute :distance, :integer
 
       xml do
         element 'reflection'

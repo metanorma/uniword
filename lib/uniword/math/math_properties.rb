@@ -10,21 +10,21 @@ module Uniword
     # Element: <m:mathPr>
     class MathProperties < Lutaml::Model::Serializable
       attribute :math_font, MathFont
-      attribute :brk_bin, String
-      attribute :brk_bin_sub, String
-      attribute :small_frac, String
-      attribute :disp_def, String
-      attribute :lMargin, Integer
-      attribute :rMargin, Integer
-      attribute :def_jc, String
-      attribute :pre_sp, Integer
-      attribute :post_sp, Integer
-      attribute :inter_sp, Integer
-      attribute :intra_sp, Integer
-      attribute :wrap_indent, Integer
-      attribute :wrap_right, String
-      attribute :int_lim, String
-      attribute :n_ary_lim, String
+      attribute :brk_bin, :string
+      attribute :brk_bin_sub, :string
+      attribute :small_frac, :string
+      attribute :disp_def, :string
+      attribute :lMargin, :integer
+      attribute :rMargin, :integer
+      attribute :def_jc, :string
+      attribute :pre_sp, :integer
+      attribute :post_sp, :integer
+      attribute :inter_sp, :integer
+      attribute :intra_sp, :integer
+      attribute :wrap_indent, :integer
+      attribute :wrap_right, :string
+      attribute :int_lim, :string
+      attribute :n_ary_lim, :string
 
       xml do
         element 'mathPr'

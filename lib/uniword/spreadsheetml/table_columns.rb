@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:tableColumns>
     class TableColumns < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :columns, TableColumn, collection: true, default: -> { [] }
 
       xml do

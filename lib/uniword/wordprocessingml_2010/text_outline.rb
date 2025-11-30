@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:textOutline>
     class TextOutline < Lutaml::Model::Serializable
-      attribute :width, Integer
-      attribute :cap, String
-      attribute :compound, String
-      attribute :align, String
+      attribute :width, :integer
+      attribute :cap, :string
+      attribute :compound, :string
+      attribute :align, :string
 
       xml do
         element 'textOutline'

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:oleObject>
     class OleObject < Lutaml::Model::Serializable
-      attribute :prog_id, String
-      attribute :id, String
+      attribute :prog_id, :string
+      attribute :id, :string
 
       xml do
         element 'oleObject'

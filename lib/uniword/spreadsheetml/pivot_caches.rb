@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:pivotCaches>
     class PivotCaches < Lutaml::Model::Serializable
-      attribute :caches, String, collection: true, default: -> { [] }
+      attribute :caches, :string, collection: true, default: -> { [] }
 
       xml do
         element 'pivotCaches'

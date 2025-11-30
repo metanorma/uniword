@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:eqArrPr>
     class EquationArrayProperties < Lutaml::Model::Serializable
-      attribute :base_jc, String
-      attribute :max_dist, String
-      attribute :obj_dist, String
-      attribute :row_spacing_rule, Integer
-      attribute :row_spacing, Integer
+      attribute :base_jc, :string
+      attribute :max_dist, :string
+      attribute :obj_dist, :string
+      attribute :row_spacing_rule, :integer
+      attribute :row_spacing, :integer
       attribute :ctrl_pr, ControlProperties
 
       xml do

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:fillOverlay>
     class FillOverlay < Lutaml::Model::Serializable
-      attribute :blend, String
+      attribute :blend, :string
 
       xml do
         element 'fillOverlay'

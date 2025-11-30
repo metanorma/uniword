@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:DocumentProtection>
     class DocumentProtection < Lutaml::Model::Serializable
-      attribute :edit, String
-      attribute :formatting, String
-      attribute :enforcement, String
+      attribute :edit, :string
+      attribute :formatting, :string
+      attribute :enforcement, :string
 
       xml do
         element 'DocumentProtection'

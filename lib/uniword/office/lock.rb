@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:lock>
     class Lock < Lutaml::Model::Serializable
-      attribute :text, String
-      attribute :shapetype, String
-      attribute :rotation, String
-      attribute :aspectratio, String
-      attribute :position, String
+      attribute :text, :string
+      attribute :shapetype, :string
+      attribute :rotation, :string
+      attribute :aspectratio, :string
+      attribute :position, :string
 
       xml do
         element 'lock'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:oMathParaPr>
     class OMathParaProperties < Lutaml::Model::Serializable
-      attribute :justification, String
+      attribute :justification, :string
 
       xml do
         element 'oMathParaPr'

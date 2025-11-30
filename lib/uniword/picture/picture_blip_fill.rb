@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:blipFill>
     class PictureBlipFill < Lutaml::Model::Serializable
-      attribute :blip, String
+      attribute :blip, :string
       attribute :src_rect, PictureSourceRect
       attribute :stretch, PictureStretch
       attribute :tile, Tile

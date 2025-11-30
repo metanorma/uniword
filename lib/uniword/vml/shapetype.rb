@@ -10,12 +10,12 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:shapetype>
       class Shapetype < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :coordsize, String
-        attribute :coordorigin, String
-        attribute :path, String
-        attribute :stroke, String
-        attribute :fill, String
+        attribute :id, :string
+        attribute :coordsize, :string
+        attribute :coordorigin, :string
+        attribute :path, :string
+        attribute :stroke, :string
+        attribute :fill, :string
 
         xml do
           element 'shapetype'

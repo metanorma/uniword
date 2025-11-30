@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:lin>
     class LinearGradient < Lutaml::Model::Serializable
-      attribute :ang, Integer
-      attribute :scaled, String
+      attribute :ang, :integer
+      attribute :scaled, :string
 
       xml do
         element 'lin'

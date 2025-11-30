@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:calloutanchor>
     class CalloutAnchor < Lutaml::Model::Serializable
-      attribute :position, String
+      attribute :position, :string
 
       xml do
         element 'calloutanchor'

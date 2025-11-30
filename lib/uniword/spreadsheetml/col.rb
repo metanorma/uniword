@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:col>
     class Col < Lutaml::Model::Serializable
-      attribute :min, Integer
-      attribute :max, Integer
-      attribute :width, String
-      attribute :style, Integer
-      attribute :hidden, String
-      attribute :custom_width, String
+      attribute :min, :integer
+      attribute :max, :integer
+      attribute :width, :string
+      attribute :style, :integer
+      attribute :hidden, :string
+      attribute :custom_width, :string
 
       xml do
         element 'col'

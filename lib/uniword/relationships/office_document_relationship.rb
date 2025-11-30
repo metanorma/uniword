@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: relationships.yml
     # Element: <r:OfficeDocumentRelationship>
     class OfficeDocumentRelationship < Lutaml::Model::Serializable
-      attribute :constant_type, String
+      attribute :constant_type, :string
 
       xml do
         element 'OfficeDocumentRelationship'

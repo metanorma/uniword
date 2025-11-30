@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:anchorlock>
     class VmlAnchorLock < Lutaml::Model::Serializable
-      attribute :locked, String
+      attribute :locked, :string
 
       xml do
         element 'anchorlock'

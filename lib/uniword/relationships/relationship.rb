@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: relationships.yml
     # Element: <r:Relationship>
     class Relationship < Lutaml::Model::Serializable
-      attribute :id, String
-      attribute :type, String
-      attribute :target, String
-      attribute :target_mode, String
+      attribute :id, :string
+      attribute :type, :string
+      attribute :target, :string
+      attribute :target_mode, :string
 
       xml do
         element 'Relationship'

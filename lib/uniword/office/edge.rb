@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:edge>
     class Edge < Lutaml::Model::Serializable
-      attribute :color, String
-      attribute :weight, String
+      attribute :color, :string
+      attribute :weight, :string
 
       xml do
         element 'edge'

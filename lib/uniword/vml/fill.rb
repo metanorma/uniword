@@ -10,12 +10,12 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:fill>
       class Fill < Lutaml::Model::Serializable
-        attribute :type, String
-        attribute :color, String
-        attribute :color2, String
-        attribute :opacity, String
-        attribute :angle, String
-        attribute true, String
+        attribute :type, :string
+        attribute :color, :string
+        attribute :color2, :string
+        attribute :opacity, :string
+        attribute :angle, :string
+        attribute true, :string
 
         xml do
           element 'fill'

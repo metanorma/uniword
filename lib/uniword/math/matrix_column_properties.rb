@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:mcPr>
     class MatrixColumnProperties < Lutaml::Model::Serializable
-      attribute :count, Integer
-      attribute :column_jc, String
+      attribute :count, :integer
+      attribute :column_jc, :string
 
       xml do
         element 'mcPr'

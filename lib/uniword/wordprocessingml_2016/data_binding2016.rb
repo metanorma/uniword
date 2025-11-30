@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:dataBinding>
     class DataBinding2016 < Lutaml::Model::Serializable
-      attribute :xpath, String
-      attribute :store_item_id, String
-      attribute :prefix_mappings, String
+      attribute :xpath, :string
+      attribute :store_item_id, :string
+      attribute :prefix_mappings, :string
 
       xml do
         element 'dataBinding'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:graphicData>
     class GraphicData < Lutaml::Model::Serializable
-      attribute :uri, String
+      attribute :uri, :string
 
       xml do
         element 'graphicData'

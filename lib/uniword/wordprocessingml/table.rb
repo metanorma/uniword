@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../ooxml/wordprocessingml/table_properties'
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +10,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:tbl>
     class Table < Lutaml::Model::Serializable
-      attribute :properties, TableProperties
+      attribute :properties, Uniword::Ooxml::WordProcessingML::TableProperties
       attribute :grid, TableGrid
       attribute :rows, TableRow, collection: true, default: -> { [] }
 

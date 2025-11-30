@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:dataValidations>
     class DataValidations < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :validations, DataValidation, collection: true, default: -> { [] }
 
       xml do

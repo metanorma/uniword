@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:v>
     class CellValue < Lutaml::Model::Serializable
-      attribute :text, String
+      attribute :text, :string
 
       xml do
         element 'v'

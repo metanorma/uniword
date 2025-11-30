@@ -12,8 +12,8 @@ module Uniword
       attribute :begin_char, BeginChar
       attribute :end_char, EndChar
       attribute :separator_char, SeparatorChar
-      attribute :grow, String
-      attribute :shape, String
+      attribute :grow, :string
+      attribute :shape, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

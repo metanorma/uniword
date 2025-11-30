@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:blur>
     class Blur < Lutaml::Model::Serializable
-      attribute :rad, Integer
-      attribute :grow, String
+      attribute :rad, :integer
+      attribute :grow, :string
 
       xml do
         element 'blur'

@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:deg>
     class Degree < Lutaml::Model::Serializable
       attribute :arg_properties, ArgumentProperties
-      attribute :elements, String, collection: true, default: -> { [] }
+      attribute :elements, :string, collection: true, default: -> { [] }
 
       xml do
         element 'deg'

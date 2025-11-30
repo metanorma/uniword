@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:complex>
     class Complex < Lutaml::Model::Serializable
-      attribute :ext, String
+      attribute :ext, :string
 
       xml do
         element 'complex'

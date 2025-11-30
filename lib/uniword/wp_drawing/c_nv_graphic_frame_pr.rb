@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:cNvGraphicFramePr>
     class CNvGraphicFramePr < Lutaml::Model::Serializable
-      attribute :graphic_frame_locks, String
+      attribute :graphic_frame_locks, :string
 
       xml do
         element 'cNvGraphicFramePr'

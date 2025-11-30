@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: relationships.yml
     # Element: <r:ImageRelationship>
     class ImageRelationship < Lutaml::Model::Serializable
-      attribute :constant_type, String
+      attribute :constant_type, :string
 
       xml do
         element 'ImageRelationship'

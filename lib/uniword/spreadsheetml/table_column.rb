@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:tableColumn>
     class TableColumn < Lutaml::Model::Serializable
-      attribute :id, Integer
-      attribute :name, String
+      attribute :id, :integer
+      attribute :name, :string
 
       xml do
         element 'tableColumn'

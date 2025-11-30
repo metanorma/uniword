@@ -9,15 +9,15 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:xf>
     class CellFormat < Lutaml::Model::Serializable
-      attribute :num_fmt_id, Integer
-      attribute :font_id, Integer
-      attribute :fill_id, Integer
-      attribute :border_id, Integer
-      attribute :apply_number_format, String
-      attribute :apply_font, String
-      attribute :apply_fill, String
-      attribute :apply_border, String
-      attribute :apply_alignment, String
+      attribute :num_fmt_id, :integer
+      attribute :font_id, :integer
+      attribute :fill_id, :integer
+      attribute :border_id, :integer
+      attribute :apply_number_format, :string
+      attribute :apply_font, :string
+      attribute :apply_fill, :string
+      attribute :apply_border, :string
+      attribute :apply_alignment, :string
       attribute :alignment, Alignment
 
       xml do

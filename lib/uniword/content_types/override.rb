@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: content_types.yml
     # Element: <ct:Override>
     class Override < Lutaml::Model::Serializable
-      attribute :part_name, String
-      attribute :content_type, String
+      attribute :part_name, :string
+      attribute :content_type, :string
 
       xml do
         element 'Override'

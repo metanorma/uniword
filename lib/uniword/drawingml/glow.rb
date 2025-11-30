@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:glow>
     class Glow < Lutaml::Model::Serializable
-      attribute :rad, Integer
+      attribute :rad, :integer
       attribute :srgb_clr, SrgbColor
       attribute :scheme_clr, SchemeColor
 

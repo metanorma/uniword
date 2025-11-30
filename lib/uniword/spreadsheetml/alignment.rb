@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:alignment>
     class Alignment < Lutaml::Model::Serializable
-      attribute :horizontal, String
-      attribute :vertical, String
-      attribute :text_rotation, Integer
-      attribute :wrap_text, String
-      attribute :indent, Integer
-      attribute :shrink_to_fit, String
+      attribute :horizontal, :string
+      attribute :vertical, :string
+      attribute :text_rotation, :integer
+      attribute :wrap_text, :string
+      attribute :indent, :integer
+      attribute :shrink_to_fit, :string
 
       xml do
         element 'alignment'

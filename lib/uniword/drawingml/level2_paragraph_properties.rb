@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:lvl2pPr>
     class Level2ParagraphProperties < Lutaml::Model::Serializable
-      attribute :algn, String
-      attribute :def_tab_sz, Integer
+      attribute :algn, :string
+      attribute :def_tab_sz, :integer
 
       xml do
         element 'lvl2pPr'

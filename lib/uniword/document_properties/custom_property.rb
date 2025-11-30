@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:property>
     class CustomProperty < Lutaml::Model::Serializable
-      attribute :fmtid, String
-      attribute :pid, String
-      attribute :name, String
-      attribute :lpwstr, String
-      attribute :i4, String
-      attribute :bool, String
-      attribute :filetime, String
-      attribute :r8, String
+      attribute :fmtid, :string
+      attribute :pid, :string
+      attribute :name, :string
+      attribute :lpwstr, :string
+      attribute :i4, :string
+      attribute :bool, :string
+      attribute :filetime, :string
+      attribute :r8, :string
 
       xml do
         element 'property'

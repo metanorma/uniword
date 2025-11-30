@@ -100,7 +100,7 @@ module Uniword
 
           # Apply paragraph properties
           if resolved[:properties]&.any?
-            para.properties = Properties::ParagraphProperties.new(
+            para.properties = Ooxml::WordProcessingML::ParagraphProperties.new(
               **resolved[:properties]
             )
           end

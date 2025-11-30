@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:workbookView>
     class WorkbookView < Lutaml::Model::Serializable
-      attribute :active_tab, Integer
-      attribute :window_width, Integer
-      attribute :window_height, Integer
+      attribute :active_tab, :integer
+      attribute :window_width, :integer
+      attribute :window_height, :integer
 
       xml do
         element 'workbookView'

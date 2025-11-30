@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:idmap>
     class VmlIdMap < Lutaml::Model::Serializable
-      attribute :ext, String
-      attribute :data, String
+      attribute :ext, :string
+      attribute :data, :string
 
       xml do
         element 'idmap'

@@ -10,11 +10,11 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:group>
       class Group < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :style, String
-        attribute :coordsize, String
-        attribute :coordorigin, String
-        attribute :shapes, String, collection: true, default: -> { [] }
+        attribute :id, :string
+        attribute :style, :string
+        attribute :coordsize, :string
+        attribute :coordorigin, :string
+        attribute :shapes, :string, collection: true, default: -> { [] }
 
         xml do
           element 'group'

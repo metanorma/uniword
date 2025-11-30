@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:column>
     class VmlColumn < Lutaml::Model::Serializable
-      attribute :count, String
-      attribute :spacing, String
+      attribute :count, :string
+      attribute :spacing, :string
 
       xml do
         element 'column'

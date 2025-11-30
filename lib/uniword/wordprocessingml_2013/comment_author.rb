@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:author>
     class CommentAuthor < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :initials, String
-      attribute :provider_id, String
+      attribute :name, :string
+      attribute :initials, :string
+      attribute :provider_id, :string
 
       xml do
         element 'author'

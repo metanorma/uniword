@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:docPr>
     class DocPr < Lutaml::Model::Serializable
-      attribute :id, Integer
-      attribute :name, String
-      attribute :descr, String
-      attribute :hidden, String
-      attribute :title, String
+      attribute :id, :integer
+      attribute :name, :string
+      attribute :descr, :string
+      attribute :hidden, :string
+      attribute :title, :string
 
       xml do
         element 'docPr'

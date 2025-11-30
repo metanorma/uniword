@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:ea>
     class EastAsianFont < Lutaml::Model::Serializable
-      attribute :typeface, String
-      attribute :charset, Integer
+      attribute :typeface, :string
+      attribute :charset, :integer
 
       xml do
         element 'ea'

@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:borderBoxPr>
     class BorderBoxProperties < Lutaml::Model::Serializable
-      attribute :hide_top, String
-      attribute :hide_bot, String
-      attribute :hide_left, String
-      attribute :hide_right, String
-      attribute :strike_h, String
-      attribute :strike_v, String
-      attribute :strike_bltr, String
-      attribute :strike_tlbr, String
+      attribute :hide_top, :string
+      attribute :hide_bot, :string
+      attribute :hide_left, :string
+      attribute :hide_right, :string
+      attribute :strike_h, :string
+      attribute :strike_v, :string
+      attribute :strike_bltr, :string
+      attribute :strike_tlbr, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

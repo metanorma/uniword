@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:diagram>
     class Diagram < Lutaml::Model::Serializable
-      attribute :dgmstyle, String
-      attribute :autoformat, String
-      attribute :reverse, String
-      attribute :autolayout, String
-      attribute :dgmscalex, String
-      attribute :dgmscaley, String
-      attribute :dgmfontsize, String
-      attribute :constrainbounds, String
+      attribute :dgmstyle, :string
+      attribute :autoformat, :string
+      attribute :reverse, :string
+      attribute :autolayout, :string
+      attribute :dgmscalex, :string
+      attribute :dgmscaley, :string
+      attribute :dgmfontsize, :string
+      attribute :constrainbounds, :string
 
       xml do
         element 'diagram'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:barPr>
     class BarProperties < Lutaml::Model::Serializable
-      attribute :pos, String
+      attribute :pos, :string
       attribute :ctrl_pr, ControlProperties
 
       xml do

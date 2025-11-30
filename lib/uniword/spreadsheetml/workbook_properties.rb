@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:workbookPr>
     class WorkbookProperties < Lutaml::Model::Serializable
-      attribute :date1904, String
-      attribute :show_ink_annotation, String
-      attribute :default_theme_version, Integer
+      attribute :date1904, :string
+      attribute :show_ink_annotation, :string
+      attribute :default_theme_version, :integer
 
       xml do
         element 'workbookPr'

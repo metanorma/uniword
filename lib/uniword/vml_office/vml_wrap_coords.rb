@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: vml_office.yml
     # Element: <o:wrapcoords>
     class VmlWrapCoords < Lutaml::Model::Serializable
-      attribute :coords, String
+      attribute :coords, :string
 
       xml do
         element 'wrapcoords'

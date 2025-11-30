@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:props3d>
     class Props3d < Lutaml::Model::Serializable
-      attribute :extrusion_height, Integer
-      attribute :contour_width, Integer
-      attribute :material, String
+      attribute :extrusion_height, :integer
+      attribute :contour_width, :integer
+      attribute :material, :string
 
       xml do
         element 'props3d'

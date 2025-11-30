@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:outerShdw>
     class OuterShadow < Lutaml::Model::Serializable
-      attribute :blur_rad, Integer
-      attribute :dist, Integer
-      attribute :dir, Integer
-      attribute :algn, String
+      attribute :blur_rad, :integer
+      attribute :dist, :integer
+      attribute :dir, :integer
+      attribute :algn, :string
 
       xml do
         element 'outerShdw'

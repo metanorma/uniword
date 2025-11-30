@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:false>
     class Offset < Lutaml::Model::Serializable
-      attribute :x, Integer
-      attribute :y, Integer
+      attribute :x, :integer
+      attribute :y, :integer
 
       xml do
         element 'false'

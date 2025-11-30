@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:commentsExt>
     class CommentsExt < Lutaml::Model::Serializable
-      attribute :para_id, String
-      attribute :done, String
+      attribute :para_id, :string
+      attribute :done, :string
 
       xml do
         element 'commentsExt'

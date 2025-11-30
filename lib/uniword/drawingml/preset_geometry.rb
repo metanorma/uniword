@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:prstGeom>
     class PresetGeometry < Lutaml::Model::Serializable
-      attribute :prst, String
+      attribute :prst, :string
       attribute :av_lst, AdjustValueList
 
       xml do

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:blip>
     class Blip < Lutaml::Model::Serializable
-      attribute :embed, String
-      attribute :link, String
+      attribute :embed, :string
+      attribute :link, :string
 
       xml do
         element 'blip'

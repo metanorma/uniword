@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:inkannotation>
     class InkAnnotation < Lutaml::Model::Serializable
-      attribute :author, String
-      attribute :date, String
+      attribute :author, :string
+      attribute :date, :string
 
       xml do
         element 'inkannotation'

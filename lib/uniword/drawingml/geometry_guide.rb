@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:gd>
     class GeometryGuide < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :fmla, String
+      attribute :name, :string
+      attribute :fmla, :string
 
       xml do
         element 'gd'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:path>
     class PathGradient < Lutaml::Model::Serializable
-      attribute :path, String
+      attribute :path, :string
       attribute :fill_to_rect, FillToRect
 
       xml do

@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wp_drawing.yml
     # Element: <wp:sizeRelH>
     class SizeRelH < Lutaml::Model::Serializable
-      attribute :relative_from, String
-      attribute :pct_width, Integer
+      attribute :relative_from, :string
+      attribute :pct_width, :integer
 
       xml do
         element 'sizeRelH'

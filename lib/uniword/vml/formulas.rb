@@ -10,7 +10,7 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:formulas>
       class Formulas < Lutaml::Model::Serializable
-        attribute :formulas, String, collection: true, default: -> { [] }
+        attribute :formulas, :string, collection: true, default: -> { [] }
 
         xml do
           element 'formulas'

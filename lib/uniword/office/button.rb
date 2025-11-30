@@ -9,9 +9,9 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:button>
     class Button < Lutaml::Model::Serializable
-      attribute :type, String
-      attribute :value, String
-      attribute :caption, String
+      attribute :type, :string
+      attribute :value, :string
+      attribute :caption, :string
 
       xml do
         element 'button'

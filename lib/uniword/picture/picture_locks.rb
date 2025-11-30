@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:picLocks>
     class PictureLocks < Lutaml::Model::Serializable
-      attribute :no_change_aspect, String
-      attribute :no_change_arrowheads, String
+      attribute :no_change_aspect, :string
+      attribute :no_change_arrowheads, :string
 
       xml do
         element 'picLocks'

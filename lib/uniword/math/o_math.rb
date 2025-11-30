@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:oMath>
     class OMath < Lutaml::Model::Serializable
-      attribute :elements, String, collection: true, default: -> { [] }
+      attribute :elements, :string, collection: true, default: -> { [] }
 
       xml do
         element 'oMath'

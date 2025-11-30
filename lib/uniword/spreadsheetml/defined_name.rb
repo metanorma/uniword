@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:definedName>
     class DefinedName < Lutaml::Model::Serializable
-      attribute :name, String
-      attribute :comment, String
-      attribute :local_sheet_id, Integer
-      attribute :hidden, String
+      attribute :name, :string
+      attribute :comment, :string
+      attribute :local_sheet_id, :integer
+      attribute :hidden, :string
 
       xml do
         element 'definedName'

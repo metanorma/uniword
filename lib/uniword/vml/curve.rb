@@ -10,14 +10,14 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:curve>
       class Curve < Lutaml::Model::Serializable
-        attribute :id, String
-        attribute :style, String
-        attribute :from, String
-        attribute :to, String
-        attribute :control1, String
-        attribute :control2, String
-        attribute :strokecolor, String
-        attribute :stroke, String
+        attribute :id, :string
+        attribute :style, :string
+        attribute :from, :string
+        attribute :to, :string
+        attribute :control1, :string
+        attribute :control2, :string
+        attribute :strokecolor, :string
+        attribute :stroke, :string
 
         xml do
           element 'curve'

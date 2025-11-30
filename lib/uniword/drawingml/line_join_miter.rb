@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:miter>
     class LineJoinMiter < Lutaml::Model::Serializable
-      attribute :lim, Integer
+      attribute :lim, :integer
 
       xml do
         element 'miter'

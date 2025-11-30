@@ -9,10 +9,10 @@ module Uniword
     # Generated from OOXML schema: office.yml
     # Element: <o:writingstyle>
     class WritingStyle < Lutaml::Model::Serializable
-      attribute :lang, String
-      attribute :vendorID, String
-      attribute :dllVersion, String
-      attribute :nlcheck, String
+      attribute :lang, :string
+      attribute :vendorID, :string
+      attribute :dllVersion, :string
+      attribute :nlcheck, :string
 
       xml do
         element 'writingstyle'

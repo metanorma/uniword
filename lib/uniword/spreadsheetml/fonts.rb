@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:fonts>
     class Fonts < Lutaml::Model::Serializable
-      attribute :count, Integer
+      attribute :count, :integer
       attribute :font_entries, Font, collection: true, default: -> { [] }
 
       xml do

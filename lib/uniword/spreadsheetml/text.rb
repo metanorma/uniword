@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:t>
     class Text < Lutaml::Model::Serializable
-      attribute :text, String
-      attribute :space, String
+      attribute :text, :string
+      attribute :space, :string
 
       xml do
         element 't'

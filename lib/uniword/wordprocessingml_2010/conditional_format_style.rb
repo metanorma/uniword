@@ -9,11 +9,11 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2010.yml
     # Element: <w14:cnfStyle>
     class ConditionalFormatStyle < Lutaml::Model::Serializable
-      attribute :val, String
-      attribute :first_row, String
-      attribute :last_row, String
-      attribute :first_column, String
-      attribute :last_column, String
+      attribute :val, :string
+      attribute :first_row, :string
+      attribute :last_row, :string
+      attribute :first_column, :string
+      attribute :last_column, :string
 
       xml do
         element 'cnfStyle'

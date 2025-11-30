@@ -71,10 +71,10 @@ module Uniword
 
       # Transform DOCX paragraph properties to MHTML format
       #
-      # @param source_props [Properties::ParagraphProperties] Source properties
+      # @param source_props [Ooxml::WordProcessingML::ParagraphProperties] Source properties
       # @param target_para [Paragraph] Target paragraph
       def transform_properties_docx_to_mhtml(source_props, target_para)
-        target_props = Properties::ParagraphProperties.new
+        target_props = Ooxml::WordProcessingML::ParagraphProperties.new
 
         # Direct mappings (format-agnostic)
         target_props.alignment = source_props.alignment
@@ -100,7 +100,7 @@ module Uniword
 
       # Transform MHTML paragraph properties to DOCX format
       #
-      # @param source_props [Properties::ParagraphProperties] Source properties
+      # @param source_props [Ooxml::WordProcessingML::ParagraphProperties] Source properties
       # @param target_para [Paragraph] Target paragraph
       def transform_properties_mhtml_to_docx(source_props, target_para)
         # Same transformation as docx_to_mhtml since both use same model
@@ -110,10 +110,10 @@ module Uniword
 
       # Copy properties directly (same format)
       #
-      # @param source_props [Properties::ParagraphProperties] Source properties
+      # @param source_props [Ooxml::WordProcessingML::ParagraphProperties] Source properties
       # @param target_para [Paragraph] Target paragraph
       def copy_properties(source_props, target_para)
-        target_para.properties = Properties::ParagraphProperties.new(
+        target_para.properties = Ooxml::WordProcessingML::ParagraphProperties.new(
           alignment: source_props.alignment,
           spacing_before: source_props.spacing_before,
           spacing_after: source_props.spacing_after,
