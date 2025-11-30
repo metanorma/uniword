@@ -16,11 +16,11 @@ module Uniword
     # a numbering definition ID for lists (bullets, numbers)
     class NumberingId < Lutaml::Model::Serializable
       attribute :value, NumberingIdValue
-      
+
       xml do
         element 'numId'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

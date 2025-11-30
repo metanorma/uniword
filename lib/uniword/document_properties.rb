@@ -14,7 +14,8 @@ module Uniword
     autoload :CustomProperties, File.expand_path('document_properties/custom_properties', __dir__)
     autoload :CustomProperty, File.expand_path('document_properties/custom_property', __dir__)
     autoload :DocSecurity, File.expand_path('document_properties/doc_security', __dir__)
-    autoload :ExtendedProperties, File.expand_path('document_properties/extended_properties', __dir__)
+    autoload :ExtendedProperties,
+             File.expand_path('document_properties/extended_properties', __dir__)
     autoload :FileTime, File.expand_path('document_properties/file_time', __dir__)
     autoload :HeadingPairs, File.expand_path('document_properties/heading_pairs', __dir__)
     autoload :HyperlinksChanged, File.expand_path('document_properties/hyperlinks_changed', __dir__)

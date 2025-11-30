@@ -64,26 +64,26 @@ module Uniword
   Table = Wordprocessingml::Table
   TableRow = Wordprocessingml::TableRow
   TableCell = Wordprocessingml::TableCell
-  
+
   # Properties classes
   ParagraphProperties = Wordprocessingml::ParagraphProperties
   RunProperties = Wordprocessingml::RunProperties
   TableProperties = Wordprocessingml::TableProperties
   SectionProperties = Wordprocessingml::SectionProperties
-  
+
   # Additional element classes
   Hyperlink = Wordprocessingml::Hyperlink
   BookmarkStart = Wordprocessingml::BookmarkStart
   BookmarkEnd = Wordprocessingml::BookmarkEnd
-  
+
   # Math support
   MathElement = Math::OMath
-  
+
   # Autoload infrastructure classes (still needed)
   autoload :DocumentFactory, 'uniword/document_factory'
   autoload :DocumentWriter, 'uniword/document_writer'
   autoload :FormatDetector, 'uniword/format_detector'
-  
+
   # Autoload error classes
   autoload :Error, 'uniword/errors'
   autoload :FileNotFoundError, 'uniword/errors'
@@ -94,30 +94,30 @@ module Uniword
   autoload :DependencyError, 'uniword/errors'
   autoload :UnsupportedOperationError, 'uniword/errors'
   autoload :ConversionError, 'uniword/errors'
-  
+
   # Autoload styles
   autoload :StylesConfiguration, 'uniword/styles_configuration'
   autoload :Style, 'uniword/style'
-  
+
   # Autoload themes
   autoload :ThemeModel, 'uniword/theme'
   autoload :ColorScheme, 'uniword/color_scheme'
   autoload :FontScheme, 'uniword/font_scheme'
-  
+
   # Autoload stylesets
   autoload :StyleSet, 'uniword/styleset'
-  
+
   # Autoload numbering
   autoload :NumberingConfiguration, 'uniword/numbering_configuration'
-  
+
   # Autoload theme infrastructure (renamed to avoid conflict with Theme class)
   autoload :ThemeLoader, 'uniword/theme/theme_loader'
   autoload :ThemePackageReader, 'uniword/theme/theme_package_reader'
-  
+
   # Autoload styleset infrastructure
   autoload :StylesetLoader, 'uniword/stylesets/styleset_loader'
   autoload :StylesetXmlParser, 'uniword/stylesets/styleset_xml_parser'
-  
+
   # Autoload format handlers
   module Formats
     autoload :BaseHandler, 'uniword/formats/base_handler'
@@ -125,7 +125,7 @@ module Uniword
     autoload :MhtmlHandler, 'uniword/formats/mhtml_handler'
     autoload :FormatHandlerRegistry, 'uniword/formats/format_handler_registry'
   end
-  
+
   # Autoload infrastructure
   module Infrastructure
     autoload :ZipExtractor, 'uniword/infrastructure/zip_extractor'
@@ -133,13 +133,13 @@ module Uniword
     autoload :MimeParser, 'uniword/infrastructure/mime_parser'
     autoload :MimePackager, 'uniword/infrastructure/mime_packager'
   end
-  
+
   # Autoload OOXML support
   module Ooxml
     autoload :ContentTypes, 'uniword/ooxml/content_types'
     autoload :Relationships, 'uniword/ooxml/relationships'
     autoload :DocxPackage, 'uniword/ooxml/docx_package'
-    
+
     # Namespace definitions
     module Namespaces
       WORDPROCESSINGML = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
@@ -148,20 +148,20 @@ module Uniword
       MATH = 'http://schemas.openxmlformats.org/officeDocument/2006/math'
     end
   end
-  
+
   # Schema infrastructure (v2.0)
   module Schema
     autoload :SchemaLoader, 'uniword/schema/schema_loader'
     autoload :ModelGenerator, 'uniword/schema/model_generator'
   end
-  
+
   # Autoload CLI
   autoload :CLI, 'uniword/cli'
-  
+
   # Eagerly load format handlers to trigger self-registration
   require_relative 'uniword/formats/docx_handler'
   require_relative 'uniword/formats/mhtml_handler'
-  
+
   # Module-level convenience methods
   class << self
     # Create a new document
@@ -170,7 +170,7 @@ module Uniword
     def new
       Document.new
     end
-    
+
     # Load document from file
     #
     # @param path [String] File path
@@ -178,9 +178,9 @@ module Uniword
     def load(path)
       DocumentFactory.from_file(path)
     end
-    
-    alias_method :open, :load
-    
+
+    alias open load
+
     # Import HTML into a Uniword document
     #
     # TEMPORARY: Disabled during v2.0 migration (HtmlImporter uses archived v1.x classes)
@@ -189,12 +189,12 @@ module Uniword
     # @param html [String] HTML content
     # @param options [Hash] Import options
     # @return [Document] The generated document
-    def from_html(html, **options)
+    def from_html(_html, **_options)
       raise UnsupportedOperationError,
-        "HTML import temporarily disabled in v2.0. " \
-        "Will be re-enabled in a future release with updated HtmlImporter."
+            'HTML import temporarily disabled in v2.0. ' \
+            'Will be re-enabled in a future release with updated HtmlImporter.'
     end
-    
+
     # Convert HTML file to Word DOCX format
     #
     # TEMPORARY: Disabled during v2.0 migration
@@ -203,12 +203,12 @@ module Uniword
     # @param output [String] Path to output DOCX file
     # @param options [Hash] Import options
     # @return [void]
-    def html_to_docx(html_file, output, **options)
+    def html_to_docx(_html_file, _output, **_options)
       raise UnsupportedOperationError,
-        "HTML import temporarily disabled in v2.0. " \
-        "Will be re-enabled in a future release."
+            'HTML import temporarily disabled in v2.0. ' \
+            'Will be re-enabled in a future release.'
     end
-    
+
     # Convert HTML file to Word DOC (MHTML) format
     #
     # TEMPORARY: Disabled during v2.0 migration
@@ -217,10 +217,10 @@ module Uniword
     # @param output [String] Path to output DOC file
     # @param options [Hash] Import options
     # @return [void]
-    def html_to_doc(html_file, output, **options)
+    def html_to_doc(_html_file, _output, **_options)
       raise UnsupportedOperationError,
-        "HTML import temporarily disabled in v2.0. " \
-        "Will be re-enabled in a future release."
+            'HTML import temporarily disabled in v2.0. ' \
+            'Will be re-enabled in a future release.'
     end
   end
 end

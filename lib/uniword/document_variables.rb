@@ -13,8 +13,10 @@ module Uniword
     autoload :DocVars, File.expand_path('document_variables/doc_vars', __dir__)
     autoload :ReadOnly, File.expand_path('document_variables/read_only', __dir__)
     autoload :VariableBinding, File.expand_path('document_variables/variable_binding', __dir__)
-    autoload :VariableCollection, File.expand_path('document_variables/variable_collection', __dir__)
-    autoload :VariableExpression, File.expand_path('document_variables/variable_expression', __dir__)
+    autoload :VariableCollection,
+             File.expand_path('document_variables/variable_collection', __dir__)
+    autoload :VariableExpression,
+             File.expand_path('document_variables/variable_expression', __dir__)
     autoload :VariableFormat, File.expand_path('document_variables/variable_format', __dir__)
     autoload :VariableScope, File.expand_path('document_variables/variable_scope', __dir__)
   end

@@ -43,9 +43,9 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     end
 
     it 'raises error for non-existent directory' do
-      expect {
+      expect do
         described_class.new('/nonexistent/path')
-      }.to raise_error(ArgumentError, /not found/)
+      end.to raise_error(ArgumentError, /not found/)
     end
 
     it 'enables caching by default' do
@@ -217,9 +217,9 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     let(:registry) { described_class.new(components_dir) }
 
     it 'raises error for non-existent component' do
-      expect {
+      expect do
         registry.get('nonexistent')
-      }.to raise_error(ArgumentError, /not found/)
+      end.to raise_error(ArgumentError, /not found/)
     end
   end
 end

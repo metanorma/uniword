@@ -40,7 +40,7 @@ RSpec.describe Uniword::Style do
 
   describe 'style inheritance' do
     it 'supports basedOn property' do
-      base_style = described_class.new(
+      described_class.new(
         id: 'Base',
         name: 'Base',
         type: 'paragraph'
@@ -110,7 +110,7 @@ RSpec.describe Uniword::ParagraphStyle do
         style = described_class.heading(level)
 
         expect(style.id).to eq("Heading#{level}")
-        expect(style.name).to eq("Heading #{level}")  # Name has space per OOXML spec
+        expect(style.name).to eq("Heading #{level}") # Name has space per OOXML spec
         expect(style.type).to eq('paragraph')
         expect(style.based_on).to eq('Normal')
       end
@@ -274,9 +274,9 @@ RSpec.describe Uniword::StylesConfiguration do
 
       config.add_style(style1)
 
-      expect {
+      expect do
         config.add_style(style2)
-      }.to raise_error(ArgumentError, /already exists/)
+      end.to raise_error(ArgumentError, /already exists/)
     end
 
     it 'removes a style' do

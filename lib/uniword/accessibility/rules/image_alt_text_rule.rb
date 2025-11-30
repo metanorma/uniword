@@ -70,7 +70,7 @@ module Uniword
           end
 
           # Check for unhelpful generic text
-          unhelpful = ["image", "picture", "photo", "img", "graphic", "icon"]
+          unhelpful = %w[image picture photo img graphic icon]
           alt_lower = image.alt_text.downcase
           if unhelpful.any? { |word| alt_lower == word || alt_lower.start_with?("#{word} of") }
             violations << create_violation(

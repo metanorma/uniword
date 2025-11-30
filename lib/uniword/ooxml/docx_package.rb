@@ -40,7 +40,7 @@ module Uniword
       # Document numbering configuration
       attribute :numbering_configuration, NumberingConfiguration
 
-      # TODO v2.0: Add proper lutaml-model attributes for:
+      # TODO: v2.0: Add proper lutaml-model attributes for:
       # - Document (word/document.xml)
       # - FontTable (word/fontTable.xml)
       # - Settings (word/settings.xml)
@@ -97,7 +97,7 @@ module Uniword
           package.raw_document_xml = zip_content['word/document.xml']
         end
 
-        # TODO v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
+        # TODO: v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
         # TODO v2.0: Parse relationships and content types
 
         package
@@ -105,7 +105,7 @@ module Uniword
 
       # Access raw document XML (for compatibility)
       attr_accessor :raw_document_xml
-      
+
       # Save package to file
       #
       # @param path [String] Output path
@@ -125,13 +125,17 @@ module Uniword
         content = {}
 
         # Serialize lutaml-model files with prefix: false
-        content['docProps/core.xml'] = core_properties.to_xml(encoding: 'UTF-8', prefix: false) if core_properties
-        content['docProps/app.xml'] = app_properties.to_xml(encoding: 'UTF-8', prefix: false) if app_properties
+        if core_properties
+          content['docProps/core.xml'] =
+            core_properties.to_xml(encoding: 'UTF-8', prefix: false)
+        end
+        if app_properties
+          content['docProps/app.xml'] =
+            app_properties.to_xml(encoding: 'UTF-8', prefix: false)
+        end
 
         # Theme serialization (no raw XML fallback)
-        if theme
-          content['word/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
-        end
+        content['word/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8') if theme
 
         # Serialize model-based configurations
         if styles_configuration
@@ -150,7 +154,7 @@ module Uniword
           content['word/document.xml'] = @raw_document_xml
         end
 
-        # TODO v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
+        # TODO: v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
         # TODO v2.0: Serialize relationships and content types
 
         content

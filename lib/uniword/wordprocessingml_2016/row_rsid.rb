@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Wordprocessingml2016
-      # Row revision save ID for change tracking
-      #
-      # Generated from OOXML schema: wordprocessingml_2016.yml
-      # Element: <w16:rowRsid>
-      class RowRsid < Lutaml::Model::Serializable
-          attribute :val, String
+  module Wordprocessingml2016
+    # Row revision save ID for change tracking
+    #
+    # Generated from OOXML schema: wordprocessingml_2016.yml
+    # Element: <w16:rowRsid>
+    class RowRsid < Lutaml::Model::Serializable
+      attribute :val, String
 
-          xml do
-            element 'rowRsid'
-            namespace Uniword::Ooxml::Namespaces::Word2015
+      xml do
+        element 'rowRsid'
+        namespace Uniword::Ooxml::Namespaces::Word2015
 
-            map_attribute 'val', to: :val
-          end
+        map_attribute 'val', to: :val
       end
     end
+  end
 end

@@ -16,11 +16,11 @@ module Uniword
     # - baseline, superscript, subscript
     class VerticalAlign < Lutaml::Model::Serializable
       attribute :value, VerticalAlignValue
-      
+
       xml do
         element 'vertAlign'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

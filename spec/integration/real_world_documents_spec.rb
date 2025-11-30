@@ -12,7 +12,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
   describe 'ISO 8601-2 Complex Document' do
     let(:iso_doc_path) do
       '/Users/mulgogi/src/mn/iso-8601-2/_site/documents/' \
-      'iso-8601-2-2026/iso-wd-8601-2-2026.docx'
+        'iso-8601-2-2026/iso-wd-8601-2-2026.docx'
     end
 
     before(:each) do
@@ -38,7 +38,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         text = doc.text
 
         expect(text).not_to be_empty
-        expect(text.length).to be > 10000
+        expect(text.length).to be > 10_000
 
         puts "\n  Text Statistics:"
         puts "    Total characters: #{text.length}"
@@ -113,7 +113,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Round-trip text length: #{roundtrip.text.length}"
           puts "    Text preserved: #{roundtrip.text == original_text}"
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          FileUtils.rm_f(temp_path)
         end
       end
 
@@ -133,7 +133,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Tables preserved: #{roundtrip.tables.count == original.tables.count}"
           puts "    Sections preserved: #{roundtrip.sections.count == original.sections.count}"
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          FileUtils.rm_f(temp_path)
         end
       end
 
@@ -154,7 +154,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Original styles: #{original_style_count}"
           puts "    Round-trip styles: #{roundtrip.styles_configuration.styles.count}"
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          FileUtils.rm_f(temp_path)
         end
       end
     end
@@ -169,7 +169,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
         puts "\n  Performance - Reading:"
         puts "    Time: #{read_time.round(3)}s"
-        puts "    Target: < 6.0s"
+        puts '    Target: < 6.0s'
         puts "    Status: #{read_time < 6.0 ? 'PASS' : 'FAIL'}"
       end
 
@@ -185,10 +185,10 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
         puts "\n  Performance - Writing:"
         puts "    Time: #{write_time.round(3)}s"
-        puts "    Target: < 10.0s"
+        puts '    Target: < 10.0s'
         puts "    Status: #{write_time < 10.0 ? 'PASS' : 'FAIL'}"
 
-        File.delete(temp_path) if File.exist?(temp_path)
+        FileUtils.rm_f(temp_path)
       end
 
       it 'handles document without memory issues' do
@@ -208,7 +208,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
         puts "\n  Performance - Memory:"
         puts "    Memory growth: #{memory_growth_mb}MB"
-        puts "    Target: < 50MB"
+        puts '    Target: < 50MB'
         puts "    Status: #{memory_growth_mb < 50 ? 'PASS' : 'FAIL'}"
       end
 
@@ -225,7 +225,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
         puts "\n  Performance - Text Extraction:"
         puts "    Average time (10 runs): #{(avg_time * 1000).round(2)}ms"
-        puts "    Target: < 100ms"
+        puts '    Target: < 100ms'
         puts "    Status: #{avg_time < 0.1 ? 'PASS' : 'FAIL'}"
       end
     end
@@ -301,11 +301,11 @@ RSpec.describe 'Real-World Document Testing', :integration do
     it 'handles very long paragraphs' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      para.add_text('x' * 100000) # 100k characters
+      para.add_text('x' * 100_000) # 100k characters
 
       doc.add_paragraph(para)
 
-      expect(doc.text.length).to eq(100000)
+      expect(doc.text.length).to eq(100_000)
     end
 
     it 'handles documents with unusual characters' do
@@ -329,31 +329,32 @@ RSpec.describe 'Real-World Document Testing', :integration do
         'Document creation' => -> { Uniword::Document.new },
         'Document opening' => -> { Uniword::Document.open(iso_doc) if File.exist?(iso_doc) },
         'Paragraph creation' => -> { Uniword::Paragraph.new },
-        'Text addition' => -> { p = Uniword::Paragraph.new; p.add_text('test') },
+        'Text addition' => lambda {
+          p = Uniword::Paragraph.new
+          p.add_text('test')
+        },
         'Table creation' => -> { Uniword::Table.new },
         'Document saving' => lambda {
           doc = Uniword::Document.new
           doc.add_paragraph.add_text('test')
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")
           doc.save(path)
-          File.delete(path) if File.exist?(path)
+          FileUtils.rm_f(path)
         }
       }
 
       failures = []
       checklist.each do |name, test|
-        begin
-          test.call
-        rescue StandardError => e
-          failures << "#{name}: #{e.message}"
-        end
+        test.call
+      rescue StandardError => e
+        failures << "#{name}: #{e.message}"
       end
 
       expect(failures).to be_empty, "Failed checks: #{failures.join(', ')}"
 
       puts "\n  Production Readiness:"
-      puts "    All critical functions: PASS"
-      puts "    Ready for v1.1.0 release: YES"
+      puts '    All critical functions: PASS'
+      puts '    Ready for v1.1.0 release: YES'
     end
   end
 end

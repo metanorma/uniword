@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents line numbering configuration for a section
@@ -33,7 +33,7 @@ module Uniword
     attribute :start, :integer, default: -> { 1 }
     attribute :count_by, :integer, default: -> { 1 }
     attribute :restart, :string, default: -> { 'newPage' }
-    attribute :distance, :integer, default: -> { 360 }  # 0.25 inch
+    attribute :distance, :integer, default: -> { 360 } # 0.25 inch
 
     def initialize(**attributes)
       super
@@ -110,7 +110,8 @@ module Uniword
     def validate_restart
       return unless restart && !RESTART_OPTIONS.include?(restart)
 
-      raise ArgumentError, "Invalid restart option: #{restart}. Must be one of: #{RESTART_OPTIONS.join(', ')}"
+      raise ArgumentError,
+            "Invalid restart option: #{restart}. Must be one of: #{RESTART_OPTIONS.join(', ')}"
     end
 
     def validate_start

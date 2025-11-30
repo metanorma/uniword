@@ -65,8 +65,8 @@ RSpec.describe Uniword::Metadata::Metadata do
   describe '#has_key?' do
     it 'checks if key exists' do
       metadata[:title] = 'Test'
-      expect(metadata.has_key?(:title)).to be true
-      expect(metadata.has_key?(:missing)).to be false
+      expect(metadata.key?(:title)).to be true
+      expect(metadata.key?(:missing)).to be false
     end
   end
 
@@ -74,7 +74,7 @@ RSpec.describe Uniword::Metadata::Metadata do
     it 'returns all keys' do
       metadata[:title] = 'Test'
       metadata[:author] = 'John'
-      expect(metadata.keys).to match_array([:title, :author])
+      expect(metadata.keys).to match_array(%i[title author])
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.describe Uniword::Metadata::Metadata do
     it 'returns all values' do
       metadata[:title] = 'Test'
       metadata[:author] = 'John'
-      expect(metadata.values).to match_array(['Test', 'John'])
+      expect(metadata.values).to match_array(%w[Test John])
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe Uniword::Metadata::Metadata do
 
       expect(result[:title]).to eq('Original')
       expect(result[:author]).to eq('John')
-      expect(metadata[:author]).to be_nil  # Original unchanged
+      expect(metadata[:author]).to be_nil # Original unchanged
     end
 
     it 'merges with hash' do
@@ -124,9 +124,9 @@ RSpec.describe Uniword::Metadata::Metadata do
       metadata[:author] = 'John'
       metadata[:pages] = 10
 
-      result = metadata.select { |k, v| v.is_a?(String) }
+      result = metadata.select { |_k, v| v.is_a?(String) }
 
-      expect(result.keys).to match_array([:title, :author])
+      expect(result.keys).to match_array(%i[title author])
     end
   end
 
@@ -135,7 +135,7 @@ RSpec.describe Uniword::Metadata::Metadata do
       metadata[:title] = 'Test'
       metadata[:author] = nil
 
-      result = metadata.reject { |k, v| v.nil? }
+      result = metadata.compact
 
       expect(result.keys).to eq([:title])
     end
@@ -167,7 +167,7 @@ RSpec.describe Uniword::Metadata::Metadata do
 
       hash = metadata.to_h
 
-      expect(hash.keys).to match_array([:title, :author])
+      expect(hash.keys).to match_array(%i[title author])
     end
   end
 
@@ -281,7 +281,7 @@ RSpec.describe Uniword::Metadata::Metadata do
   describe '#clone' do
     it 'clones metadata' do
       metadata[:title] = 'Test'
-      metadata[:tags] = ['tag1', 'tag2']
+      metadata[:tags] = %w[tag1 tag2]
 
       copy = metadata.clone
       copy[:tags] << 'tag3'

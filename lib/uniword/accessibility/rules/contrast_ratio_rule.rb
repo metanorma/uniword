@@ -14,8 +14,8 @@ module Uniword
         #
         # @param document [Document] Document to check
         # @return [Array<AccessibilityViolation>] Found violations
-        def check(document)
-          violations = []
+        def check(_document)
+          []
 
           # Contrast ratio checking requires color analysis
           # This is a placeholder implementation
@@ -24,8 +24,6 @@ module Uniword
           # - Minimum ratio of 4.5:1 for normal text (AA)
           # - Minimum ratio of 3:1 for large text (AA)
           # - Higher ratios for AAA compliance
-
-          violations
         end
       end
     end

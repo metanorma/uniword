@@ -130,7 +130,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.theme.color(:accent1)).to eq('FF0000')
 
         # Cleanup
-        File.delete(source_path) if File.exist?(source_path)
+        FileUtils.rm_f(source_path)
       end
     end
 
@@ -152,7 +152,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.styles_configuration.style_by_id('CustomStyle')).not_to be_nil
 
         # Cleanup
-        File.delete(source_path) if File.exist?(source_path)
+        FileUtils.rm_f(source_path)
       end
     end
 
@@ -176,7 +176,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.styles_configuration.style_by_id('TemplateStyle')).not_to be_nil
 
         # Cleanup
-        File.delete(template_path) if File.exist?(template_path)
+        FileUtils.rm_f(template_path)
       end
     end
   end
@@ -198,7 +198,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         source.styles_configuration.create_paragraph_style('Existing', 'Existing')
 
         target = Uniword::Document.new
-        original_style = target.styles_configuration.create_paragraph_style(
+        target.styles_configuration.create_paragraph_style(
           'Existing',
           'Original'
         )
@@ -265,9 +265,9 @@ RSpec.describe 'Theme Extraction and Reuse' do
         target = Uniword::StylesConfiguration.new
         source = Uniword::StylesConfiguration.new
 
-        expect {
+        expect do
           target.merge(source, conflict_resolution: :invalid)
-        }.to raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
       end
     end
 
@@ -318,7 +318,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(reloaded.theme.major_font).to eq('Helvetica')
 
       # Cleanup
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
 
     it 'preserves theme when document has no explicit theme' do
@@ -335,7 +335,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(reloaded.theme).to be_nil
 
       # Cleanup
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 
@@ -377,7 +377,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(style.run_properties.font).to eq('Helvetica')
 
       # Cleanup
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 end

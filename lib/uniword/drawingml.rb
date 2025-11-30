@@ -15,35 +15,37 @@ module Uniword
     autoload :BlipFill, File.expand_path('drawingml/blip_fill', __dir__)
     autoload :Stretch, File.expand_path('drawingml/stretch', __dir__)
     autoload :SourceRect, File.expand_path('drawingml/source_rect', __dir__)
-      
+
     # Shapes (4)
     autoload :Shape, File.expand_path('drawingml/shape', __dir__)
-    autoload :NonVisualShapeProperties, File.expand_path('drawingml/non_visual_shape_properties', __dir__)
-    autoload :NonVisualDrawingProperties, File.expand_path('drawingml/non_visual_drawing_properties', __dir__)
+    autoload :NonVisualShapeProperties,
+             File.expand_path('drawingml/non_visual_shape_properties', __dir__)
+    autoload :NonVisualDrawingProperties,
+             File.expand_path('drawingml/non_visual_drawing_properties', __dir__)
     autoload :ShapeProperties, File.expand_path('drawingml/shape_properties', __dir__)
-      
+
     # Transforms (3)
     autoload :Transform2D, File.expand_path('drawingml/transform2_d', __dir__)
     autoload :Offset, File.expand_path('drawingml/offset', __dir__)
     autoload :Extents, File.expand_path('drawingml/extents', __dir__)
-      
+
     # Lines (1)
     autoload :LineProperties, File.expand_path('drawingml/line_properties', __dir__)
-      
+
     # Text (4)
     autoload :TextBody, File.expand_path('drawingml/text_body', __dir__)
     autoload :BodyProperties, File.expand_path('drawingml/body_properties', __dir__)
     autoload :TextParagraph, File.expand_path('drawingml/text_paragraph', __dir__)
     autoload :TextRun, File.expand_path('drawingml/text_run', __dir__)
-      
+
     # Fills (2)
     autoload :SolidFill, File.expand_path('drawingml/solid_fill', __dir__)
     autoload :NoFill, File.expand_path('drawingml/no_fill', __dir__)
-      
+
     # Colors (2)
     autoload :SrgbColor, File.expand_path('drawingml/srgb_color', __dir__)
     autoload :SchemeColor, File.expand_path('drawingml/scheme_color', __dir__)
-      
+
     # Gradient fills (10)
     autoload :GradientStopList, File.expand_path('drawingml/gradient_stop_list', __dir__)
     autoload :GradientStop, File.expand_path('drawingml/gradient_stop', __dir__)
@@ -55,7 +57,7 @@ module Uniword
     autoload :PatternFill, File.expand_path('drawingml/pattern_fill', __dir__)
     autoload :ForegroundColor, File.expand_path('drawingml/foreground_color', __dir__)
     autoload :BackgroundColor, File.expand_path('drawingml/background_color', __dir__)
-      
+
     # Effects (15)
     autoload :EffectList, File.expand_path('drawingml/effect_list', __dir__)
     autoload :EffectContainer, File.expand_path('drawingml/effect_container', __dir__)
@@ -72,7 +74,7 @@ module Uniword
     autoload :AlphaModulationFixed, File.expand_path('drawingml/alpha_modulation_fixed', __dir__)
     autoload :BiLevel, File.expand_path('drawingml/bi_level', __dir__)
     autoload :Grayscale, File.expand_path('drawingml/grayscale', __dir__)
-      
+
     # Color transforms (21)
     autoload :Alpha, File.expand_path('drawingml/alpha', __dir__)
     autoload :AlphaOffset, File.expand_path('drawingml/alpha_offset', __dir__)
@@ -95,7 +97,7 @@ module Uniword
     autoload :InverseGamma, File.expand_path('drawingml/inverse_gamma', __dir__)
     autoload :Tint, File.expand_path('drawingml/tint', __dir__)
     autoload :Shade, File.expand_path('drawingml/shade', __dir__)
-      
+
     # Shapes & geometry (9)
     autoload :PresetGeometry, File.expand_path('drawingml/preset_geometry', __dir__)
     autoload :CustomGeometry, File.expand_path('drawingml/custom_geometry', __dir__)
@@ -106,19 +108,25 @@ module Uniword
     autoload :LineTo, File.expand_path('drawingml/line_to', __dir__)
     autoload :ArcTo, File.expand_path('drawingml/arc_to', __dir__)
     autoload :ClosePath, File.expand_path('drawingml/close_path', __dir__)
-      
+
     # Text properties (10)
     autoload :ListStyle, File.expand_path('drawingml/list_style', __dir__)
-    autoload :DefaultParagraphProperties, File.expand_path('drawingml/default_paragraph_properties', __dir__)
-    autoload :Level1ParagraphProperties, File.expand_path('drawingml/level1_paragraph_properties', __dir__)
-    autoload :Level2ParagraphProperties, File.expand_path('drawingml/level2_paragraph_properties', __dir__)
-    autoload :Level3ParagraphProperties, File.expand_path('drawingml/level3_paragraph_properties', __dir__)
-    autoload :TextParagraphProperties, File.expand_path('drawingml/text_paragraph_properties', __dir__)
-    autoload :TextCharacterProperties, File.expand_path('drawingml/text_character_properties', __dir__)
+    autoload :DefaultParagraphProperties,
+             File.expand_path('drawingml/default_paragraph_properties', __dir__)
+    autoload :Level1ParagraphProperties,
+             File.expand_path('drawingml/level1_paragraph_properties', __dir__)
+    autoload :Level2ParagraphProperties,
+             File.expand_path('drawingml/level2_paragraph_properties', __dir__)
+    autoload :Level3ParagraphProperties,
+             File.expand_path('drawingml/level3_paragraph_properties', __dir__)
+    autoload :TextParagraphProperties,
+             File.expand_path('drawingml/text_paragraph_properties', __dir__)
+    autoload :TextCharacterProperties,
+             File.expand_path('drawingml/text_character_properties', __dir__)
     autoload :TextFont, File.expand_path('drawingml/text_font', __dir__)
     autoload :EastAsianFont, File.expand_path('drawingml/east_asian_font', __dir__)
     autoload :ComplexScriptFont, File.expand_path('drawingml/complex_script_font', __dir__)
-      
+
     # Line properties (5)
     autoload :PresetDash, File.expand_path('drawingml/preset_dash', __dir__)
     autoload :CustomDash, File.expand_path('drawingml/custom_dash', __dir__)

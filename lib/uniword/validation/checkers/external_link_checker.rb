@@ -58,7 +58,7 @@ module Uniword
           return false unless link.respond_to?(:url)
 
           url = link.url
-          url && url.to_s.match?(%r{^https?://})
+          url&.to_s&.match?(%r{^https?://})
         end
 
         # Validate the external link.
@@ -69,8 +69,8 @@ module Uniword
         #
         # @example
         #   result = checker.check(hyperlink)
-        def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+        def check(link, _document = nil)
+          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
 
           url = link.url
           retry_count = config_value(:retry_count, DEFAULTS[:retry_count])
@@ -78,12 +78,10 @@ module Uniword
           # Attempt with retries
           last_error = nil
           (retry_count + 1).times do |attempt|
-            begin
-              return perform_check(url, link)
-            rescue StandardError => e
-              last_error = e
-              sleep(config_value(:retry_delay, DEFAULTS[:retry_delay])) if attempt < retry_count
-            end
+            return perform_check(url, link)
+          rescue StandardError => e
+            last_error = e
+            sleep(config_value(:retry_delay, DEFAULTS[:retry_delay])) if attempt < retry_count
           end
 
           # All retries failed
@@ -148,7 +146,7 @@ module Uniword
 
             # Success
             metadata = { status_code: status_code }
-            metadata[:redirects] = redirects_followed if redirects_followed > 0
+            metadata[:redirects] = redirects_followed if redirects_followed.positive?
 
             return ValidationResult.success(link, metadata: metadata)
           end
@@ -157,7 +155,7 @@ module Uniword
         rescue SocketError => e
           ValidationResult.failure(link, "Host not found: #{e.message}")
         rescue Timeout::Error
-          ValidationResult.failure(link, "Request timeout")
+          ValidationResult.failure(link, 'Request timeout')
         rescue StandardError => e
           ValidationResult.failure(
             link,

@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Drawingml
-      # Default paragraph properties
-      #
-      # Generated from OOXML schema: drawingml.yml
-      # Element: <a:defPPr>
-      class DefaultParagraphProperties < Lutaml::Model::Serializable
-          attribute :algn, String
-          attribute :lvl, Integer
+  module Drawingml
+    # Default paragraph properties
+    #
+    # Generated from OOXML schema: drawingml.yml
+    # Element: <a:defPPr>
+    class DefaultParagraphProperties < Lutaml::Model::Serializable
+      attribute :algn, String
+      attribute :lvl, Integer
 
-          xml do
-            element 'defPPr'
-            namespace Uniword::Ooxml::Namespaces::DrawingML
+      xml do
+        element 'defPPr'
+        namespace Uniword::Ooxml::Namespaces::DrawingML
 
-            map_attribute 'algn', to: :algn
-            map_attribute 'lvl', to: :lvl
-          end
+        map_attribute 'algn', to: :algn
+        map_attribute 'lvl', to: :lvl
       end
     end
+  end
 end

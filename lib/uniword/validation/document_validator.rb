@@ -88,9 +88,7 @@ module Uniword
           report.add_layer_result(validator.layer_name, result)
 
           # Fail fast if critical failure and configured to do so
-          if result.critical_failures? && fail_fast?
-            break
-          end
+          break if result.critical_failures? && fail_fast?
         end
 
         report
@@ -252,24 +250,24 @@ module Uniword
       def to_s
         lines = [
           "Document Validation Report: #{@file_path}",
-          "=" * 60,
-          ""
+          '=' * 60,
+          ''
         ]
 
-        @layer_results.each do |layer_name, result|
+        @layer_results.each_value do |result|
           lines << result.to_s
         end
 
-        lines << ""
-        lines << "Summary:"
+        lines << ''
+        lines << 'Summary:'
         lines << "  Valid: #{valid?}"
         lines << "  Errors: #{errors.count}"
         lines << "  Warnings: #{warnings.count}"
         lines << "  Info: #{infos.count}"
 
         if errors.any?
-          lines << ""
-          lines << "Errors:"
+          lines << ''
+          lines << 'Errors:'
           errors.each do |error|
             lines << "  [#{error[:layer]}] #{error[:message]}"
           end

@@ -106,7 +106,7 @@ module Uniword
     #
     # @return [String] Empty string (bookmarks don't contain direct text)
     def text
-      ""
+      ''
     end
 
     # Set the text content of this bookmark

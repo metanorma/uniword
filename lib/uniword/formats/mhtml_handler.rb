@@ -57,12 +57,12 @@ module Uniword
       #
       # @param mime_parts [Hash] The extracted MIME parts
       # @return [Document] Empty document (HTML import not yet supported in v2.0)
-      def deserialize(mime_parts)
+      def deserialize(_mime_parts)
         # TODO: Re-enable HTML import after updating HtmlImporter for v2.0
         # raise UnsupportedOperationError,
         #   "MHTML/HTML import temporarily disabled in v2.0. " \
         #   "Will be re-enabled in a future release with updated HtmlImporter."
-        
+
         # For now, return empty document
         Document.new
       end

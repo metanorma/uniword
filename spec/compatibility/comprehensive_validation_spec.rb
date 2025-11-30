@@ -287,13 +287,13 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
       it 'creates bullet lists' do
         doc = Uniword::Document.new
         para1 = doc.add_paragraph('Bullet 1', numbering: { level: 0, format: 'bullet' })
-        para2 = doc.add_paragraph('Bullet 2', numbering: { level: 0, format: 'bullet' })
+        doc.add_paragraph('Bullet 2', numbering: { level: 0, format: 'bullet' })
         expect(para1.numbering).not_to be_nil
       end
 
       it 'handles multi-level lists' do
         doc = Uniword::Document.new
-        para1 = doc.add_paragraph('Level 1', numbering: { level: 0, format: 'decimal' })
+        doc.add_paragraph('Level 1', numbering: { level: 0, format: 'decimal' })
         para2 = doc.add_paragraph('Level 2', numbering: { level: 1, format: 'decimal' })
         expect(para2.numbering[:level]).to eq(1)
       end
@@ -356,7 +356,7 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
         temp_file = 'tmp/test_document.mhtml'
         doc.save(temp_file, format: :mhtml)
         expect(File.exist?(temp_file)).to be true
-        File.delete(temp_file) if File.exist?(temp_file)
+        FileUtils.rm_f(temp_file)
       end
 
       it 'MHTML contains document content' do
@@ -366,7 +366,7 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
         doc.save(temp_file, format: :mhtml)
         content = File.read(temp_file)
         expect(content).to include('Test content')
-        File.delete(temp_file) if File.exist?(temp_file)
+        FileUtils.rm_f(temp_file)
       end
     end
   end
@@ -374,7 +374,7 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
   describe 'UNIQUE FEATURES: Uniword superiority' do
     it 'has track changes capability (not in docx-js)' do
       doc = Uniword::Document.new
-      para = doc.add_paragraph('Original')
+      doc.add_paragraph('Original')
 
       revision = Uniword::Revision.new(
         type: 'delete',
@@ -390,7 +390,7 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
 
     it 'has comments capability (not in docx gem)' do
       doc = Uniword::Document.new
-      para = doc.add_paragraph('Text with comment')
+      doc.add_paragraph('Text with comment')
 
       comment = Uniword::Comment.new(
         author: 'Reviewer',
@@ -416,8 +416,8 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
       doc.save(mhtml_file, format: :mhtml)
       expect(File.exist?(mhtml_file)).to be true
 
-      File.delete(docx_file) if File.exist?(docx_file)
-      File.delete(mhtml_file) if File.exist?(mhtml_file)
+      FileUtils.rm_f(docx_file)
+      FileUtils.rm_f(mhtml_file)
     end
 
     it 'extracts themes (neither library has this)' do

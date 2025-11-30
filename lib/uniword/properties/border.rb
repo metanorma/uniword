@@ -30,11 +30,11 @@ module Uniword
       attribute :size, :integer      # Size in eighths of a point (1-96)
       attribute :space, :integer     # Spacing offset in points (0-31)
       attribute :color, :string      # RGB hex or 'auto'
-      
+
       xml do
         # Element name set dynamically by parent (top, bottom, left, right)
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :style
         map_attribute 'sz', to: :size
         map_attribute 'space', to: :space

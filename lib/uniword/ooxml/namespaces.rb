@@ -228,7 +228,6 @@ module Uniword
         prefix_default 'v'
         element_form_default :qualified
       end
-
     end
   end
 end

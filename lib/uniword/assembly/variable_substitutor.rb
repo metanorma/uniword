@@ -27,7 +27,7 @@ module Uniword
       attr_reader :variables
 
       # Pattern to match variable placeholders
-      VARIABLE_PATTERN = /\{([a-zA-Z0-9_.]+)\}/
+      VARIABLE_PATTERN = /\{([a-zA-Z0-9_.]+)\}/.freeze
 
       # Initialize substitutor with variables.
       #
@@ -52,7 +52,7 @@ module Uniword
       def substitute(text)
         return text unless text.is_a?(String)
 
-        text.gsub(VARIABLE_PATTERN) do |match|
+        text.gsub(VARIABLE_PATTERN) do |_match|
           var_name = ::Regexp.last_match(1)
           resolve_variable(var_name)
         end
@@ -84,11 +84,11 @@ module Uniword
             end
 
             # Process footers if section has them
-            if section.respond_to?(:footers)
-              section.footers.each do |footer|
-                footer.paragraphs.each do |paragraph|
-                  substitute_paragraph(paragraph)
-                end
+            next unless section.respond_to?(:footers)
+
+            section.footers.each do |footer|
+              footer.paragraphs.each do |paragraph|
+                substitute_paragraph(paragraph)
               end
             end
           end
@@ -227,9 +227,7 @@ module Uniword
           full_key = prefix.empty? ? key : "#{prefix}.#{key}"
           keys << full_key
 
-          if value.is_a?(Hash)
-            keys.concat(collect_all_keys(value, full_key))
-          end
+          keys.concat(collect_all_keys(value, full_key)) if value.is_a?(Hash)
         end
 
         keys

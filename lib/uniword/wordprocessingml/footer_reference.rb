@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Wordprocessingml
-      # Reference to footer part
-      #
-      # Generated from OOXML schema: wordprocessingml.yml
-      # Element: <w:footerReference>
-      class FooterReference < Lutaml::Model::Serializable
-          attribute :type, :string
-          attribute :id, :string
+  module Wordprocessingml
+    # Reference to footer part
+    #
+    # Generated from OOXML schema: wordprocessingml.yml
+    # Element: <w:footerReference>
+    class FooterReference < Lutaml::Model::Serializable
+      attribute :type, :string
+      attribute :id, :string
 
-          xml do
-            element 'footerReference'
-            namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      xml do
+        element 'footerReference'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-            map_attribute 'type', to: :type
-            map_attribute 'id', to: :id
-          end
+        map_attribute 'type', to: :type
+        map_attribute 'id', to: :id
       end
     end
+  end
 end

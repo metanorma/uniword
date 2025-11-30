@@ -15,7 +15,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     attr_reader :processed_documents
 
     def initialize(options = {})
-      super(options)
+      super
       @processed_documents = []
     end
 
@@ -58,7 +58,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it 'raises error for non-stage objects' do
-      expect { processor.add_stage("not a stage") }.to raise_error(ArgumentError)
+      expect { processor.add_stage('not a stage') }.to raise_error(ArgumentError)
     end
   end
 
@@ -130,7 +130,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it 'records failure when error occurs' do
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(StandardError, "Test error")
+      allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(StandardError, 'Test error')
 
       result = processor.process_file(input_file.path, output_file.path)
 
@@ -171,9 +171,9 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it 'raises error when input directory does not exist' do
-      expect {
+      expect do
         processor.process_batch(input_dir: 'nonexistent', output_dir: output_dir)
-      }.to raise_error(ArgumentError, /does not exist/)
+      end.to raise_error(ArgumentError, /does not exist/)
     end
 
     it 'processes files matching pattern' do

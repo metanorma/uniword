@@ -153,14 +153,14 @@ module Uniword
       # @return [String] Summary text
       def summary_text
         lines = []
-        lines << "Batch Processing Results"
-        lines << "=" * 40
+        lines << 'Batch Processing Results'
+        lines << ('=' * 40)
         lines << "Total files:      #{total_count}"
         lines << "Successful:       #{success_count}"
         lines << "Failed:           #{failure_count}"
         lines << "Success rate:     #{success_rate}%"
         lines << "Elapsed time:     #{elapsed_time}s"
-        lines << "Average duration: #{average_duration}s" if success_count > 0
+        lines << "Average duration: #{average_duration}s" if success_count.positive?
         lines.join("\n")
       end
 
@@ -201,7 +201,7 @@ module Uniword
       def export_csv(path)
         CSV.open(path, 'wb') do |csv|
           # Header row
-          csv << ['File', 'Status', 'Duration', 'Error', 'Stage']
+          csv << %w[File Status Duration Error Stage]
 
           # Success rows
           successes.each do |success|

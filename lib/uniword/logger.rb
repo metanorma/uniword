@@ -23,9 +23,7 @@ module Uniword
       #
       # @param custom_logger [::Logger] Custom logger instance
       # @return [::Logger] The logger that was set
-      def logger=(custom_logger)
-        @logger = custom_logger
-      end
+      attr_writer :logger
 
       # Log an info message
       #
@@ -67,7 +65,7 @@ module Uniword
       def create_default_logger
         log = ::Logger.new($stdout)
         log.level = ::Logger::WARN
-        log.formatter = proc do |severity, datetime, _progname, msg|
+        log.formatter = proc do |severity, _datetime, _progname, msg|
           "[Uniword] #{severity}: #{msg}\n"
         end
         log

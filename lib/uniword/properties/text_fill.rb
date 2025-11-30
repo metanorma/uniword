@@ -14,13 +14,13 @@ module Uniword
     #   fill = TextFill.new(color: 'FF0000')
     class TextFill < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
-      attribute :color, :string      # RGB hex color for solid fill
+      attribute :color, :string # RGB hex color for solid fill
 
       xml do
         element 'textFill'
         namespace Ooxml::Namespaces::WordProcessingML
 
-        # Note: Simplified - actual OOXML has nested solidFill/gradFill elements
+        # NOTE: Simplified - actual OOXML has nested solidFill/gradFill elements
         # For now, we store just the color value for basic support
         # Full structure will be added in v2.0
         map_attribute 'color', to: :color

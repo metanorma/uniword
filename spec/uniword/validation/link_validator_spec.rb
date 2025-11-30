@@ -33,13 +33,12 @@ RSpec.describe Uniword::Validation::LinkValidator do
   describe '#validate' do
     let(:mock_document) do
       double('Document',
-        paragraphs: paragraphs,
-        tables: [],
-        headers: [],
-        footers: [],
-        bookmarks: {},
-        footnotes: {}
-      )
+             paragraphs: paragraphs,
+             tables: [],
+             headers: [],
+             footers: [],
+             bookmarks: {},
+             footnotes: {})
     end
 
     let(:hyperlink) do
@@ -68,11 +67,10 @@ RSpec.describe Uniword::Validation::LinkValidator do
       let(:paragraphs) do
         [
           double('Paragraph',
-            runs: [
-              Uniword::Hyperlink.new(url: 'https://example.com', text: 'Link')
-            ],
-            hyperlinks: []
-          )
+                 runs: [
+                   Uniword::Hyperlink.new(url: 'https://example.com', text: 'Link')
+                 ],
+                 hyperlinks: [])
         ]
       end
 
@@ -101,13 +99,12 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
       let(:mock_document) do
         double('Document',
-          paragraphs: paragraphs,
-          tables: [],
-          headers: [],
-          footers: [],
-          bookmarks: { 'section1' => Uniword::Bookmark.new(name: 'section1') },
-          footnotes: {}
-        )
+               paragraphs: paragraphs,
+               tables: [],
+               headers: [],
+               footers: [],
+               bookmarks: { 'section1' => Uniword::Bookmark.new(name: 'section1') },
+               footnotes: {})
       end
 
       it 'validates internal bookmark links' do
@@ -124,10 +121,9 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
       let(:mock_cell) do
         double('Cell',
-          paragraphs: [
-            double('Paragraph', runs: [table_link], hyperlinks: [])
-          ]
-        )
+               paragraphs: [
+                 double('Paragraph', runs: [table_link], hyperlinks: [])
+               ])
       end
 
       let(:mock_row) do
@@ -140,13 +136,12 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
       let(:mock_document) do
         double('Document',
-          paragraphs: [],
-          tables: [mock_table],
-          headers: [],
-          footers: [],
-          bookmarks: {},
-          footnotes: {}
-        )
+               paragraphs: [],
+               tables: [mock_table],
+               headers: [],
+               footers: [],
+               bookmarks: {},
+               footnotes: {})
       end
 
       it 'validates links in tables' do
@@ -163,13 +158,12 @@ RSpec.describe Uniword::Validation::LinkValidator do
     context 'with empty document' do
       let(:empty_document) do
         double('Document',
-          paragraphs: [],
-          tables: [],
-          headers: [],
-          footers: [],
-          bookmarks: {},
-          footnotes: {}
-        )
+               paragraphs: [],
+               tables: [],
+               headers: [],
+               footers: [],
+               bookmarks: {},
+               footnotes: {})
       end
 
       it 'returns empty report' do

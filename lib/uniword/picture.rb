@@ -10,8 +10,10 @@ module Uniword
   module Picture
     # Autoload all Picture classes
     autoload :Picture, File.expand_path('picture/picture', __dir__)
-    autoload :NonVisualPictureProperties, File.expand_path('picture/non_visual_picture_properties', __dir__)
-    autoload :NonVisualPictureDrawingProperties, File.expand_path('picture/non_visual_picture_drawing_properties', __dir__)
+    autoload :NonVisualPictureProperties,
+             File.expand_path('picture/non_visual_picture_properties', __dir__)
+    autoload :NonVisualPictureDrawingProperties,
+             File.expand_path('picture/non_visual_picture_drawing_properties', __dir__)
     autoload :PictureLocks, File.expand_path('picture/picture_locks', __dir__)
     autoload :PictureBlipFill, File.expand_path('picture/picture_blip_fill', __dir__)
     autoload :PictureSourceRect, File.expand_path('picture/picture_source_rect', __dir__)

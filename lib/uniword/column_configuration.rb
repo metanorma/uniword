@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a single column in a multi-column layout
@@ -35,7 +35,7 @@ module Uniword
   class ColumnConfiguration < Lutaml::Model::Serializable
     attribute :count, :integer, default: -> { 1 }
     attribute :equal_width, :boolean, default: -> { true }
-    attribute :space, :integer, default: -> { 720 }  # 0.5 inch
+    attribute :space, :integer, default: -> { 720 } # 0.5 inch
     attribute :separator, :boolean, default: -> { false }
     attribute :columns, Column, collection: true, default: -> { [] }
 
@@ -104,7 +104,8 @@ module Uniword
       return if equal_width || columns.empty?
       return if columns.size == count
 
-      raise ArgumentError, "Number of column definitions (#{columns.size}) must match count (#{count})"
+      raise ArgumentError,
+            "Number of column definitions (#{columns.size}) must match count (#{count})"
     end
   end
 end

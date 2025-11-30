@@ -105,10 +105,10 @@ module Uniword
       # @param document [Object] The document to validate
       # @raise [ArgumentError] if document is invalid
       def validate_document(document)
-        unless document.respond_to?(:paragraphs)
-          raise ArgumentError,
-                "Document must respond to :paragraphs, got #{document.class}"
-        end
+        return if document.respond_to?(:paragraphs)
+
+        raise ArgumentError,
+              "Document must respond to :paragraphs, got #{document.class}"
       end
 
       # Check if extraction is enabled for a category.
@@ -157,16 +157,16 @@ module Uniword
       # @param document [Document] The document
       # @param metadata [Metadata] Metadata to populate
       def extract_extended_properties(document, metadata)
-        if document.respond_to?(:extended_properties)
-          props = document.extended_properties
-          metadata[:company] = props[:company] if props[:company]
-          metadata[:category] = props[:category] if props[:category]
-          metadata[:manager] = props[:manager] if props[:manager]
-          metadata[:language] = props[:language] if props[:language]
-          metadata[:version] = props[:version] if props[:version]
-          metadata[:revision] = props[:revision] if props[:revision]
-          metadata[:status] = props[:status] if props[:status]
-        end
+        return unless document.respond_to?(:extended_properties)
+
+        props = document.extended_properties
+        metadata[:company] = props[:company] if props[:company]
+        metadata[:category] = props[:category] if props[:category]
+        metadata[:manager] = props[:manager] if props[:manager]
+        metadata[:language] = props[:language] if props[:language]
+        metadata[:version] = props[:version] if props[:version]
+        metadata[:revision] = props[:revision] if props[:revision]
+        metadata[:status] = props[:status] if props[:status]
       end
 
       # Extract statistical metadata from document.
@@ -201,45 +201,39 @@ module Uniword
         end
 
         # Table count
-        if document.respond_to?(:tables)
-          metadata[:table_count] = document.tables.size
-        end
+        metadata[:table_count] = document.tables.size if document.respond_to?(:tables)
 
         # Image count
-        if document.respond_to?(:images)
-          metadata[:image_count] = document.images.size
-        end
+        metadata[:image_count] = document.images.size if document.respond_to?(:images)
 
         # Hyperlink count
-        if document.respond_to?(:hyperlinks)
-          metadata[:hyperlink_count] = document.hyperlinks.size
-        end
+        metadata[:hyperlink_count] = document.hyperlinks.size if document.respond_to?(:hyperlinks)
 
         # Footnote count
         if document.respond_to?(:footnotes)
           footnotes = document.footnotes
           metadata[:footnote_count] = case footnotes
-                                       when Array
-                                         footnotes.size
-                                       when Hash
-                                         footnotes.size
-                                       else
-                                         0
-                                       end
-        end
-
-        # Endnote count
-        if document.respond_to?(:endnotes)
-          endnotes = document.endnotes
-          metadata[:endnote_count] = case endnotes
                                       when Array
-                                        endnotes.size
+                                        footnotes.size
                                       when Hash
-                                        endnotes.size
+                                        footnotes.size
                                       else
                                         0
                                       end
         end
+
+        # Endnote count
+        return unless document.respond_to?(:endnotes)
+
+        endnotes = document.endnotes
+        metadata[:endnote_count] = case endnotes
+                                   when Array
+                                     endnotes.size
+                                   when Hash
+                                     endnotes.size
+                                   else
+                                     0
+                                   end
       end
 
       # Extract content metadata from document.
@@ -260,12 +254,12 @@ module Uniword
         end
 
         # Extract first paragraph
-        if content_config.fetch(:extract_first_paragraph, true)
-          metadata[:first_paragraph] = extract_first_paragraph(
-            document,
-            max_length: content_config.fetch(:first_paragraph_max_length, 500)
-          )
-        end
+        return unless content_config.fetch(:extract_first_paragraph, true)
+
+        metadata[:first_paragraph] = extract_first_paragraph(
+          document,
+          max_length: content_config.fetch(:first_paragraph_max_length, 500)
+        )
       end
 
       # Extract title from document content.
@@ -280,6 +274,7 @@ module Uniword
         # Look for first heading-styled paragraph
         first_heading = document.paragraphs.find do |para|
           next false unless para.respond_to?(:style)
+
           style = para.style
           style && (style.include?('Heading') || style.include?('heading'))
         end
@@ -325,7 +320,7 @@ module Uniword
       def estimate_page_count(word_count, words_per_page)
         return 0 if word_count.zero?
 
-        ((word_count.to_f / words_per_page).ceil).to_i
+        (word_count.to_f / words_per_page).ceil.to_i
       end
 
       # Extract headings from document.
@@ -384,6 +379,7 @@ module Uniword
         # Find first non-empty paragraph that's not a heading
         first_para = document.paragraphs.find do |para|
           next false unless para.respond_to?(:text)
+
           text = para.text
           next false if text.nil? || text.strip.empty?
 

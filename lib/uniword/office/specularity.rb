@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Specularity value
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:specularity>
-      class Specularity < Lutaml::Model::Serializable
-          attribute :value, String
+  module Office
+    # Specularity value
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:specularity>
+    class Specularity < Lutaml::Model::Serializable
+      attribute :value, String
 
-          xml do
-            element 'specularity'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'specularity'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'value', to: :value
-          end
+        map_attribute 'value', to: :value
       end
     end
+  end
 end

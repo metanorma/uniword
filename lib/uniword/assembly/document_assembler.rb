@@ -206,7 +206,7 @@ module Uniword
       # @param substitutor [VariableSubstitutor] Variable substitutor
       # @param resolver [CrossReferenceResolver] Cross-reference resolver
       # @return [void]
-      def process_section(document, section, substitutor, resolver)
+      def process_section(document, section, substitutor, _resolver)
         component_name = section['component']
         options = section['options']
 

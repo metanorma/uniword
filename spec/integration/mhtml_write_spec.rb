@@ -11,7 +11,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
   end
 
   after do
-    FileUtils.rm_f(output_path) if File.exist?(output_path)
+    FileUtils.rm_f(output_path)
   end
 
   describe 'basic document generation' do

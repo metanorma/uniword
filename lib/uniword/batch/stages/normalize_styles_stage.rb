@@ -24,7 +24,7 @@ module Uniword
       # @option options [Boolean] :preserve_semantic_styles Preserve semantic styles
       # @option options [Hash] :target_styles Target style mappings
       def initialize(options = {})
-        super(options)
+        super
         @remove_direct_formatting = options.fetch(:remove_direct_formatting, true)
         @apply_standard_styles = options.fetch(:apply_standard_styles, true)
         @preserve_semantic_styles = options.fetch(:preserve_semantic_styles, true)
@@ -42,7 +42,7 @@ module Uniword
         normalize_paragraph_styles(document) if @apply_standard_styles
         remove_direct_formatting_from_runs(document) if @remove_direct_formatting
 
-        log "Style normalization complete"
+        log 'Style normalization complete'
         document
       end
 
@@ -50,7 +50,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        "Normalize document styles"
+        'Normalize document styles'
       end
 
       private
@@ -147,12 +147,10 @@ module Uniword
         clear_all_run_properties(run)
 
         # Restore semantic properties
-        if props.respond_to?(:bold=) && bold
-          props.bold = bold
-        end
-        if props.respond_to?(:italic=) && italic
-          props.italic = italic
-        end
+        props.bold = bold if props.respond_to?(:bold=) && bold
+        return unless props.respond_to?(:italic=) && italic
+
+        props.italic = italic
       end
 
       # Clear all run properties

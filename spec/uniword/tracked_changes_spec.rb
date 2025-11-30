@@ -53,9 +53,9 @@ RSpec.describe Uniword::TrackedChanges do
     end
 
     it 'raises error if not a Revision instance' do
-      expect {
+      expect do
         tracked_changes.add_revision('not a revision')
-      }.to raise_error(ArgumentError, /must be a Revision instance/)
+      end.to raise_error(ArgumentError, /must be a Revision instance/)
     end
 
     it 'returns the added revision' do

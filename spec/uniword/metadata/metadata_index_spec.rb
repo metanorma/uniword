@@ -129,7 +129,7 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
     end
 
     it 'filters entries by condition' do
-      filtered = index.filter { |path, meta| meta[:author] == 'John' }
+      filtered = index.filter { |_path, meta| meta[:author] == 'John' }
 
       expect(filtered.size).to eq(1)
     end
@@ -142,7 +142,7 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
     end
 
     it 'finds first matching entry' do
-      result = index.find { |path, meta| meta[:title] == 'Test' }
+      result = index.find { |_path, meta| meta[:title] == 'Test' }
 
       expect(result).to be_a(Array)
       expect(result[0]).to eq('doc1.docx')
@@ -183,7 +183,7 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
       index.export_json(tempfile.path, pretty: true)
 
       content = File.read(tempfile.path)
-      expect(content).to include("\n")  # Pretty printed
+      expect(content).to include("\n") # Pretty printed
     end
   end
 
@@ -208,9 +208,9 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
 
     it 'exports to CSV file' do
       index.add('doc.docx', Uniword::Metadata::Metadata.new(
-        title: 'Test',
-        author: 'John'
-      ))
+                              title: 'Test',
+                              author: 'John'
+                            ))
 
       index.export_csv(tempfile.path)
 
@@ -221,9 +221,9 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
 
     it 'exports with custom columns' do
       index.add('doc.docx', Uniword::Metadata::Metadata.new(
-        title: 'Test',
-        author: 'John'
-      ))
+                              title: 'Test',
+                              author: 'John'
+                            ))
 
       index.export_csv(tempfile.path, columns: [:title])
 
@@ -287,7 +287,7 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
       merged = index.merge(other_index)
 
       expect(merged.size).to eq(2)
-      expect(index.size).to eq(1)  # Original unchanged
+      expect(index.size).to eq(1) # Original unchanged
     end
   end
 

@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Left position
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:left>
-      class Left < Lutaml::Model::Serializable
-          attribute :value, String
+  module Office
+    # Left position
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:left>
+    class Left < Lutaml::Model::Serializable
+      attribute :value, String
 
-          xml do
-            element 'left'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'left'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'value', to: :value
-          end
+        map_attribute 'value', to: :value
       end
     end
+  end
 end

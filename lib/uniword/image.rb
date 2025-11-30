@@ -14,6 +14,7 @@ module Uniword
   # which improves memory efficiency for documents with many images.
   class Image < Element
     extend LazyLoader
+
     # OOXML namespace configuration for images (drawing elements)
     xml do
       element 'drawing', mixed: true
@@ -66,9 +67,9 @@ module Uniword
     #
     # @return [String, nil] The binary image data
     def image_data
-      return @cached_data if defined?(@cached_data)
+      return @image_data if defined?(@image_data)
 
-      @cached_data = @data_loader&.call
+      @image_data = @data_loader&.call
     end
 
     # Check if image data is loaded
@@ -129,7 +130,7 @@ module Uniword
     #
     # @return [String] Empty string (images don't have text)
     def text
-      ""
+      ''
     end
 
     # Get properties (images don't have RunProperties)
@@ -216,7 +217,7 @@ module Uniword
         height: height,
         alt_text: alt_text,
         title: title,
-        relationship_id: 'temp_' + SecureRandom.hex(8)
+        relationship_id: "temp_#{SecureRandom.hex(8)}"
       )
       image.image_data = binary_data
       image

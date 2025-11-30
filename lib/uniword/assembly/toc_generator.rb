@@ -42,7 +42,7 @@ module Uniword
       #     max_level: 3,
       #     title: "Contents"
       #   )
-      def initialize(max_level: 9, title: "Table of Contents",
+      def initialize(max_level: 9, title: 'Table of Contents',
                      include_page_numbers: true)
         @max_level = max_level
         @title = title
@@ -111,14 +111,14 @@ module Uniword
         document.paragraphs.each_with_index do |paragraph, index|
           level = heading_level(paragraph)
 
-          if level && level <= @max_level
-            headings << {
-              text: extract_text(paragraph),
-              level: level,
-              index: index,
-              paragraph: paragraph
-            }
-          end
+          next unless level && level <= @max_level
+
+          headings << {
+            text: extract_text(paragraph),
+            level: level,
+            index: index,
+            paragraph: paragraph
+          }
         end
 
         headings
@@ -137,9 +137,7 @@ module Uniword
         return match[1].to_i if match
 
         # Check for outline level
-        if paragraph.properties&.outline_level
-          return paragraph.properties.outline_level
-        end
+        return paragraph.properties.outline_level if paragraph.properties&.outline_level
 
         nil
       end
@@ -195,7 +193,7 @@ module Uniword
           require_relative '../properties/run_properties'
           run.properties = Properties::RunProperties.new(
             bold: true,
-            size: 48  # 24pt = 48 half-points
+            size: 48 # 24pt = 48 half-points
           )
         end
 
@@ -228,7 +226,7 @@ module Uniword
 
           # Add page number placeholder
           page_run = Run.new
-          page_run.text = "1"  # Placeholder - would be updated by Word
+          page_run.text = '1' # Placeholder - would be updated by Word
           para.add_run(page_run)
         end
 

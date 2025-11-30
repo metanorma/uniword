@@ -53,10 +53,8 @@ module Uniword
           # Apply level-specific formatting if defined
           if level_def && level_def[:properties]
             para.properties = Properties::ParagraphProperties.new(
-              **level_def[:properties].merge(
-                num_id: @style_def.numbering_definition,
-                ilvl: item_level
-              )
+              **level_def[:properties], num_id: @style_def.numbering_definition,
+                                        ilvl: item_level
             )
           end
 

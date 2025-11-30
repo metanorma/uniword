@@ -20,11 +20,11 @@ module Uniword
     # - "underDot" = dot below text
     class EmphasisMark < Lutaml::Model::Serializable
       attribute :value, EmphasisMarkValue
-      
+
       xml do
         element 'em'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

@@ -35,10 +35,8 @@ module Uniword
       def self.generate_style_css(styles_config)
         return '' unless styles_config
 
-        css_rules = []
-
-        styles_config.styles.each do |style|
-          css_rules << build_style_rule(style)
+        css_rules = styles_config.styles.map do |style|
+          build_style_rule(style)
         end
 
         css_rules.compact.join("\n")
@@ -51,10 +49,8 @@ module Uniword
       def self.generate_list_css(numbering_config)
         return '' unless numbering_config
 
-        css_rules = []
-
-        numbering_config.instances.each do |instance|
-          css_rules << build_list_rule(instance)
+        css_rules = numbering_config.instances.map do |instance|
+          build_list_rule(instance)
         end
 
         css_rules.compact.join("\n")
@@ -99,7 +95,7 @@ module Uniword
           rules << "size: #{w_in} #{h_in}"
         else
           # Default letter size
-          rules << "size: 8.5in 11in"
+          rules << 'size: 8.5in 11in'
         end
 
         # Margins
@@ -147,7 +143,8 @@ module Uniword
         # Font properties
         properties << "font-family: '#{style.font}'" if style.respond_to?(:font) && style.font
         if style.respond_to?(:font_size) && style.font_size
-          properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt', precision: 1)}"
+          properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt',
+                                                                precision: 1)}"
         end
         properties << 'font-weight: bold' if style.respond_to?(:bold) && style.bold
         properties << 'font-style: italic' if style.respond_to?(:italic) && style.italic

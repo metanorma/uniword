@@ -3,21 +3,21 @@
 require 'lutaml/model'
 
 module Uniword
-    module Wordprocessingml
-      # Tab stops collection
-      #
-      # Generated from OOXML schema: wordprocessingml.yml
-      # Element: <w:tabs>
-      class TabStopCollection < Lutaml::Model::Serializable
-          attribute :tab_entries, TabStop, collection: true, default: -> { [] }
+  module Wordprocessingml
+    # Tab stops collection
+    #
+    # Generated from OOXML schema: wordprocessingml.yml
+    # Element: <w:tabs>
+    class TabStopCollection < Lutaml::Model::Serializable
+      attribute :tab_entries, TabStop, collection: true, default: -> { [] }
 
-          xml do
-            element 'tabs'
-            namespace Uniword::Ooxml::Namespaces::WordProcessingML
-            mixed_content
+      xml do
+        element 'tabs'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        mixed_content
 
-            map_element 'tab', to: :tab_entries, render_nil: false
-          end
+        map_element 'tab', to: :tab_entries, render_nil: false
       end
     end
+  end
 end

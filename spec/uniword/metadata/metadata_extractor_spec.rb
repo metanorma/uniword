@@ -81,7 +81,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
       it 'extracts heading hierarchy' do
         metadata = extractor.extract(document)
 
-        if metadata[:headings] && metadata[:headings].any?
+        if metadata[:headings]&.any?
           expect(metadata[:headings].first).to have_key(:level)
           expect(metadata[:headings].first).to have_key(:text)
         end
@@ -103,7 +103,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
         metadata = extractor.extract(long_doc)
 
-        expect(metadata[:first_paragraph].length).to be <= 503  # 500 + '...'
+        expect(metadata[:first_paragraph].length).to be <= 503 # 500 + '...'
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
     it 'computes accurate word count' do
       metadata = extractor.extract(document)
 
-      expect(metadata[:word_count]).to eq(15)  # 3 words per paragraph * 5
+      expect(metadata[:word_count]).to eq(15) # 3 words per paragraph * 5
     end
 
     it 'computes character count' do

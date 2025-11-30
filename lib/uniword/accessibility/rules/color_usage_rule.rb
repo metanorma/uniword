@@ -14,8 +14,8 @@ module Uniword
         #
         # @param document [Document] Document to check
         # @return [Array<AccessibilityViolation>] Found violations
-        def check(document)
-          violations = []
+        def check(_document)
+          []
 
           # Color usage checking requires analyzing text runs and styles
           # This is a placeholder implementation
@@ -23,8 +23,6 @@ module Uniword
           # - Text colored differently without other indicators
           # - Links that rely only on color
           # - Form elements using only color for errors
-
-          violations
         end
       end
     end

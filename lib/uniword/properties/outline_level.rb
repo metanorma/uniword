@@ -16,11 +16,11 @@ module Uniword
     # Used for table of contents generation
     class OutlineLevel < Lutaml::Model::Serializable
       attribute :value, OutlineLevelValue
-      
+
       xml do
         element 'outlineLvl'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

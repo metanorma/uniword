@@ -10,15 +10,15 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:handles>
       class Handles < Lutaml::Model::Serializable
-          attribute :handles, String, collection: true, default: -> { [] }
+        attribute :handles, String, collection: true, default: -> { [] }
 
-          xml do
-            element 'handles'
-            namespace Uniword::Ooxml::Namespaces::Vml
-            mixed_content
+        xml do
+          element 'handles'
+          namespace Uniword::Ooxml::Namespaces::Vml
+          mixed_content
 
-            map_element 'h', to: :handles, render_nil: false
-          end
+          map_element 'h', to: :handles, render_nil: false
+        end
       end
     end
   end

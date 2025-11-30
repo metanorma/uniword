@@ -44,7 +44,7 @@ module Uniword
       # @example Add a result
       #   report.add_result(ValidationResult.success(link))
       def add_result(result)
-        raise ArgumentError, "Expected ValidationResult" unless
+        raise ArgumentError, 'Expected ValidationResult' unless
           result.is_a?(ValidationResult)
 
         @results << result
@@ -280,9 +280,9 @@ module Uniword
         {
           summary: summary,
           results: @results.map(&:to_h),
-          by_type: group_by_type.transform_values { |results|
+          by_type: group_by_type.transform_values do |results|
             results.map(&:to_h)
-          }
+          end
         }
       end
 
@@ -294,27 +294,27 @@ module Uniword
       #   puts report.to_s
       def to_s
         lines = [
-          "Link Validation Report",
-          "=" * 50,
+          'Link Validation Report',
+          '=' * 50,
           "Total: #{total_count}",
           "Successes: #{success_count}",
           "Failures: #{failure_count}",
           "Warnings: #{warning_count}",
           "Unknowns: #{unknown_count}",
           "Valid: #{valid?}",
-          ""
+          ''
         ]
 
         if failures.any?
-          lines << "Failed Links:"
+          lines << 'Failed Links:'
           failures.each do |result|
             lines << "  - #{result}"
           end
         end
 
         if warnings.any?
-          lines << ""
-          lines << "Warnings:"
+          lines << ''
+          lines << 'Warnings:'
           warnings.each do |result|
             lines << "  - #{result}"
           end
@@ -398,11 +398,11 @@ module Uniword
       # @return [String] Escaped text
       def escape_html(text)
         text.to_s
-          .gsub('&', '&amp;')
-          .gsub('<', '&lt;')
-          .gsub('>', '&gt;')
-          .gsub('"', '&quot;')
-          .gsub("'", '&#39;')
+            .gsub('&', '&amp;')
+            .gsub('<', '&lt;')
+            .gsub('>', '&gt;')
+            .gsub('"', '&quot;')
+            .gsub("'", '&#39;')
       end
     end
   end

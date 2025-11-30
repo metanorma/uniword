@@ -30,14 +30,14 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
   describe '#set_shading' do
     it 'sets text shading with fill color' do
       run.set_shading(fill: 'FFFF00')
-      
+
       expect(run.shading).not_to be_nil
       expect(run.shading.fill).to eq('FFFF00')
     end
 
     it 'sets shading with pattern' do
       run.set_shading(fill: 'FF00FF', pattern: 'solid')
-      
+
       expect(run.shading.fill).to eq('FF00FF')
       expect(run.shading.shading_type).to eq('solid')
     end
@@ -167,7 +167,7 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
     end
 
     it 'supports various language codes' do
-      codes = ['en-US', 'fr-FR', 'de-DE', 'ja-JP']
+      codes = %w[en-US fr-FR de-DE ja-JP]
       codes.each do |code|
         run.language = code
         expect(run.language).to eq(code)
@@ -188,7 +188,7 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
       run.outline = true
       run.shadow = true
       run.set_shading(fill: 'FFFF00', pattern: 'solid')
-      
+
       expect(run.character_spacing).to eq(20)
       expect(run.kerning).to eq(24)
       expect(run.position).to eq(5)
@@ -203,9 +203,9 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
   describe 'property object creation' do
     it 'creates properties when setting any enhanced property' do
       expect(run.properties).to be_nil
-      
+
       run.character_spacing = 20
-      
+
       expect(run.properties).not_to be_nil
       expect(run.properties).to be_a(Uniword::Properties::RunProperties)
     end
@@ -213,9 +213,9 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
     it 'reuses existing properties object' do
       run.bold = true
       props_object_id = run.properties.object_id
-      
+
       run.character_spacing = 20
-      
+
       expect(run.properties.object_id).to eq(props_object_id)
     end
   end

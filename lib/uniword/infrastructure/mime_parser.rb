@@ -61,9 +61,9 @@ module Uniword
       # @return [String] The boundary string
       # @raise [RuntimeError] if no boundary found
       def extract_boundary
-        if match = @content.match(/boundary="([^"]+)"/)
+        if (match = @content.match(/boundary="([^"]+)"/))
           match[1]
-        elsif match = @content.match(/boundary=([^\s;]+)/)
+        elsif (match = @content.match(/boundary=([^\s;]+)/))
           match[1]
         else
           raise 'No MIME boundary found in content'
@@ -113,7 +113,7 @@ module Uniword
       # @param header_name [String] The header name to extract
       # @return [String, nil] The header value or nil
       def extract_header(headers, header_name)
-        if match = headers.match(/^#{header_name}:\s*(.+?)$/i)
+        if (match = headers.match(/^#{header_name}:\s*(.+?)$/i))
           match[1].strip
         end
       end
@@ -143,7 +143,7 @@ module Uniword
       def decode_quoted_printable(content)
         content
           .gsub(/=\r?\n/, '')
-          .gsub(/=([0-9A-F]{2})/i) { $1.hex.chr }
+          .gsub(/=([0-9A-F]{2})/i) { ::Regexp.last_match(1).hex.chr }
       end
 
       # Store parsed part in appropriate location.
@@ -156,17 +156,13 @@ module Uniword
         return unless content_type
 
         case content_type
-        when /text\/html/i
+        when %r{text/html}i
           # Keep the largest HTML part (main document content)
           # MHTML files may have multiple HTML parts, we want the biggest one
-          if @parts[:html].nil? || content.length > @parts[:html].length
-            @parts[:html] = content
-          end
-        when /text\/xml/i
-          if content_location && content_location.include?('filelist')
-            @parts[:filelist] = content
-          end
-        when /image\//i
+          @parts[:html] = content if @parts[:html].nil? || content.length > @parts[:html].length
+        when %r{text/xml}i
+          @parts[:filelist] = content if content_location&.include?('filelist')
+        when %r{image/}i
           @parts[:images] ||= {}
           filename = extract_filename(content_location)
           @parts[:images][filename] = content if filename
@@ -186,7 +182,7 @@ module Uniword
         # Handle various formats:
         # - file:///C:/path/to/file.png
         # - filename.png
-        if match = location.match(%r{([^/\\]+\.[a-z0-9]+)$}i)
+        if (match = location.match(%r{([^/\\]+\.[a-z0-9]+)$}i))
           match[1]
         end
       end

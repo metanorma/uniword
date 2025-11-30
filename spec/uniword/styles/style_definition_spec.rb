@@ -11,8 +11,8 @@ RSpec.describe Uniword::Styles::StyleDefinition do
         style = library.paragraph_style(:body_text)
         resolved = style.resolve_inheritance(library)
 
-        expect(resolved[:properties]).to include(alignment: "left")
-        expect(resolved[:run_properties]).to include(font: "Calibri")
+        expect(resolved[:properties]).to include(alignment: 'left')
+        expect(resolved[:run_properties]).to include(font: 'Calibri')
       end
 
       it 'merges properties with base style' do
@@ -23,7 +23,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
         # Should have its own spacing
         expect(resolved[:properties][:spacing_before]).to eq(120)
         # Should inherit alignment from title
-        expect(resolved[:properties][:alignment]).to eq("center")
+        expect(resolved[:properties][:alignment]).to eq('center')
       end
 
       it 'merges run properties with base style' do
@@ -34,7 +34,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
         # Should have its own size
         expect(resolved[:run_properties][:size]).to eq(28)
         # Should inherit font from title
-        expect(resolved[:run_properties][:font]).to eq("Arial")
+        expect(resolved[:run_properties][:font]).to eq('Arial')
       end
 
       it 'overrides base properties' do
@@ -53,7 +53,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
         resolved = style.resolve_inheritance(library)
 
         # Should have font from heading_1
-        expect(resolved[:run_properties][:font]).to eq("Arial")
+        expect(resolved[:run_properties][:font]).to eq('Arial')
         # Should have its own outline level
         expect(resolved[:properties][:outline_level]).to eq(2)
       end
@@ -111,7 +111,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
     it 'has cell properties' do
       style = library.table_style(:standard_table)
 
-      expect(style.cell_properties).to include(vertical_alignment: "top")
+      expect(style.cell_properties).to include(vertical_alignment: 'top')
     end
 
     it 'has conditional formatting' do
@@ -131,22 +131,22 @@ RSpec.describe Uniword::Styles::StyleDefinition do
     end
 
     it 'validates semantic type' do
-      expect {
+      expect do
         Uniword::Styles::SemanticStyle.new(
-          name: "Invalid",
+          name: 'Invalid',
           semantic: :invalid_type
         )
-      }.to raise_error(ArgumentError, /Invalid semantic type/)
+      end.to raise_error(ArgumentError, /Invalid semantic type/)
     end
 
     it 'allows valid semantic types' do
-      expect {
+      expect do
         Uniword::Styles::SemanticStyle.new(
-          name: "Example",
+          name: 'Example',
           semantic: :example,
           run_properties: {}
         )
-      }.not_to raise_error
+      end.not_to raise_error
     end
   end
 end

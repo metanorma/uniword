@@ -145,8 +145,8 @@ RSpec.describe Uniword::Builder do
 
     it 'returns the constructed document' do
       doc = builder
-        .add_paragraph('Test')
-        .build
+            .add_paragraph('Test')
+            .build
 
       expect(doc).to be_a(Uniword::Document)
       expect(doc.paragraphs.count).to eq(1)
@@ -156,26 +156,26 @@ RSpec.describe Uniword::Builder do
   describe 'complex document building' do
     it 'builds a document with mixed content' do
       doc = Uniword::Builder.new
-        .add_heading('Document Title', level: 1)
-        .add_blank_line
-        .add_paragraph('Introduction paragraph with ', bold: false)
-        .add_paragraph('A paragraph with bold text', bold: true)
-        .add_blank_line
-        .add_heading('Section 1', level: 2)
-        .add_paragraph('Section content')
-        .add_table do
-          row do
-            cell 'Header 1', bold: true
-            cell 'Header 2', bold: true
-          end
-          row do
-            cell 'Data 1'
-            cell 'Data 2'
-          end
+                            .add_heading('Document Title', level: 1)
+                            .add_blank_line
+                            .add_paragraph('Introduction paragraph with ', bold: false)
+                            .add_paragraph('A paragraph with bold text', bold: true)
+                            .add_blank_line
+                            .add_heading('Section 1', level: 2)
+                            .add_paragraph('Section content')
+                            .add_table do
+        row do
+          cell 'Header 1', bold: true
+          cell 'Header 2', bold: true
         end
+        row do
+          cell 'Data 1'
+          cell 'Data 2'
+        end
+      end
         .build
 
-      expect(doc.paragraphs.count).to eq(7)  # Headings and paragraphs
+      expect(doc.paragraphs.count).to eq(7) # Headings and paragraphs
       expect(doc.tables.count).to eq(1)
       expect(doc.paragraphs.first.style_id).to eq('Heading1')
     end

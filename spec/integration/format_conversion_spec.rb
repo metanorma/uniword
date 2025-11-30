@@ -195,7 +195,7 @@ RSpec.describe 'Format Conversion', type: :integration do
     it 'converts complex document with mixed content' do
       doc = create_complex_document
 
-      original_text = doc.text
+      doc.text
       original_para_count = doc.paragraphs.count
       original_table_count = doc.tables.count
 
@@ -459,8 +459,8 @@ RSpec.describe 'Format Conversion', type: :integration do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties&.respond_to?(:bold)
-          count += 1 if run.properties.bold
+        if run.respond_to?(:properties) && run.properties.respond_to?(:bold) && run.properties.bold
+          count += 1
         end
       end
     end

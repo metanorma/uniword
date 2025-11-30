@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require 'spec_helper'
 
-RSpec.describe "Metanorma MHTML to DOCX Conversion" do
-  let(:samples_dir) { "/Users/mulgogi/src/mn/mn-samples-iso/_site" }
+RSpec.describe 'Metanorma MHTML to DOCX Conversion' do
+  let(:samples_dir) { '/Users/mulgogi/src/mn/mn-samples-iso/_site' }
 
   # Helper method to count bold runs
   def count_bold_runs(document)
@@ -17,18 +17,20 @@ RSpec.describe "Metanorma MHTML to DOCX Conversion" do
   end
 
   before(:all) do
-    FileUtils.mkdir_p("tmp/metanorma")
+    FileUtils.mkdir_p('tmp/metanorma')
   end
 
-  context "rice-amendment conversion" do
-    let(:source_path) { File.join(samples_dir, "documents/amendment/rice-2017/document-en.final.doc") }
-    let(:docx_output) { "tmp/metanorma/rice-amendment.docx" }
+  context 'rice-amendment conversion' do
+    let(:source_path) do
+      File.join(samples_dir, 'documents/amendment/rice-2017/document-en.final.doc')
+    end
+    let(:docx_output) { 'tmp/metanorma/rice-amendment.docx' }
 
     before do
-      skip "Sample file not found" unless File.exist?(source_path)
+      skip 'Sample file not found' unless File.exist?(source_path)
     end
 
-    it "converts MHTML to DOCX successfully" do
+    it 'converts MHTML to DOCX successfully' do
       # Read MHTML
       doc = Uniword::DocumentFactory.from_file(source_path, format: :mhtml)
 
@@ -44,7 +46,7 @@ RSpec.describe "Metanorma MHTML to DOCX Conversion" do
       expect(File.size(docx_output)).to be > 1000 # Reasonable size
     end
 
-    it "preserves content in MHTML→DOCX conversion" do
+    it 'preserves content in MHTML→DOCX conversion' do
       # Read MHTML
       doc_mhtml = Uniword::DocumentFactory.from_file(source_path, format: :mhtml)
       original_text = doc_mhtml.text
@@ -63,7 +65,7 @@ RSpec.describe "Metanorma MHTML to DOCX Conversion" do
       expect(doc_docx.tables.count).to eq(table_count)
     end
 
-    it "preserves formatting in conversion" do
+    it 'preserves formatting in conversion' do
       doc_mhtml = Uniword::DocumentFactory.from_file(source_path)
       doc_mhtml.save(docx_output, format: :docx)
       doc_docx = Uniword::DocumentFactory.from_file(docx_output)
@@ -79,18 +81,18 @@ RSpec.describe "Metanorma MHTML to DOCX Conversion" do
 
   # Test multiple samples
   [
-    "documents/amendment/rice-2017/document-en.final.doc",
-    "documents/directives/part1/document.doc",
-    "documents/technical-specification/document.doc",
-    "documents/guide/document.doc"
+    'documents/amendment/rice-2017/document-en.final.doc',
+    'documents/directives/part1/document.doc',
+    'documents/technical-specification/document.doc',
+    'documents/guide/document.doc'
   ].each do |sample_path|
     context File.basename(sample_path) do
-      it "converts to DOCX without errors" do
+      it 'converts to DOCX without errors' do
         full_path = File.join(samples_dir, sample_path)
-        skip "File not found" unless File.exist?(full_path)
+        skip 'File not found' unless File.exist?(full_path)
 
         doc = Uniword::DocumentFactory.from_file(full_path)
-        output = "tmp/metanorma/#{File.basename(sample_path, ".doc")}.docx"
+        output = "tmp/metanorma/#{File.basename(sample_path, '.doc')}.docx"
 
         expect { doc.save(output, format: :docx) }.not_to raise_error
         expect(File.exist?(output)).to be true
@@ -99,22 +101,24 @@ RSpec.describe "Metanorma MHTML to DOCX Conversion" do
   end
 end
 
-RSpec.describe "Metanorma MHTML Round-trip" do
-  let(:samples_dir) { "/Users/mulgogi/src/mn/mn-samples-iso/_site" }
+RSpec.describe 'Metanorma MHTML Round-trip' do
+  let(:samples_dir) { '/Users/mulgogi/src/mn/mn-samples-iso/_site' }
 
   before(:all) do
-    FileUtils.mkdir_p("tmp/metanorma")
+    FileUtils.mkdir_p('tmp/metanorma')
   end
 
-  context "rice-amendment round-trip" do
-    let(:source_path) { File.join(samples_dir, "documents/amendment/rice-2017/document-en.final.doc") }
-    let(:roundtrip_output) { "tmp/metanorma/rice-amendment-roundtrip.doc" }
+  context 'rice-amendment round-trip' do
+    let(:source_path) do
+      File.join(samples_dir, 'documents/amendment/rice-2017/document-en.final.doc')
+    end
+    let(:roundtrip_output) { 'tmp/metanorma/rice-amendment-roundtrip.doc' }
 
     before do
-      skip "Sample file not found" unless File.exist?(source_path)
+      skip 'Sample file not found' unless File.exist?(source_path)
     end
 
-    it "round-trips without data loss" do
+    it 'round-trips without data loss' do
       # Read original
       doc1 = Uniword::DocumentFactory.from_file(source_path, format: :mhtml)
       original_para_count = doc1.paragraphs.count
@@ -133,7 +137,7 @@ RSpec.describe "Metanorma MHTML Round-trip" do
       expect(doc2.text.length).to be_within(100).of(original_text_length)
     end
 
-    it "preserves text content exactly" do
+    it 'preserves text content exactly' do
       doc1 = Uniword::DocumentFactory.from_file(source_path)
       original_text = doc1.text
 
@@ -144,10 +148,10 @@ RSpec.describe "Metanorma MHTML Round-trip" do
       expect(doc2.text.length).to be_within(50).of(original_text.length)
 
       # Sample key phrases that should be preserved
-      expect(doc2.text).to include("ISO") if original_text.include?("ISO")
+      expect(doc2.text).to include('ISO') if original_text.include?('ISO')
     end
 
-    it "preserves table structure" do
+    it 'preserves table structure' do
       doc1 = Uniword::DocumentFactory.from_file(source_path)
       table1_cells = doc1.tables.first&.rows&.first&.cells&.count
 
@@ -158,7 +162,7 @@ RSpec.describe "Metanorma MHTML Round-trip" do
       expect(table2_cells).to eq(table1_cells)
     end
 
-    it "preserves styles" do
+    it 'preserves styles' do
       doc1 = Uniword::DocumentFactory.from_file(source_path)
       style_count1 = doc1.styles_configuration.all_styles.count
 
@@ -171,14 +175,16 @@ RSpec.describe "Metanorma MHTML Round-trip" do
   end
 
   # Test multiple round-trips
-  context "multiple round-trips" do
-    let(:source_path) { File.join(samples_dir, "documents/amendment/rice-2017/document-en.final.doc") }
-
-    before do
-      skip "Sample file not found" unless File.exist?(source_path)
+  context 'multiple round-trips' do
+    let(:source_path) do
+      File.join(samples_dir, 'documents/amendment/rice-2017/document-en.final.doc')
     end
 
-    it "survives multiple round-trips" do
+    before do
+      skip 'Sample file not found' unless File.exist?(source_path)
+    end
+
+    it 'survives multiple round-trips' do
       doc1 = Uniword::DocumentFactory.from_file(source_path)
       text1 = doc1.text
 
@@ -195,21 +201,23 @@ RSpec.describe "Metanorma MHTML Round-trip" do
   end
 end
 
-RSpec.describe "Metanorma Workflow Integration" do
-  let(:samples_dir) { "/Users/mulgogi/src/mn/mn-samples-iso/_site" }
+RSpec.describe 'Metanorma Workflow Integration' do
+  let(:samples_dir) { '/Users/mulgogi/src/mn/mn-samples-iso/_site' }
 
   before(:all) do
-    FileUtils.mkdir_p("tmp/metanorma")
+    FileUtils.mkdir_p('tmp/metanorma')
   end
 
-  context "complete document lifecycle" do
-    let(:source_mhtml) { File.join(samples_dir, "documents/amendment/rice-2017/document-en.final.doc") }
-
-    before do
-      skip "Sample file not found" unless File.exist?(source_mhtml)
+  context 'complete document lifecycle' do
+    let(:source_mhtml) do
+      File.join(samples_dir, 'documents/amendment/rice-2017/document-en.final.doc')
     end
 
-    it "supports complete Metanorma document lifecycle" do
+    before do
+      skip 'Sample file not found' unless File.exist?(source_mhtml)
+    end
+
+    it 'supports complete Metanorma document lifecycle' do
       # Scenario: Metanorma generates MHTML, user converts to DOCX for editing,
       # then converts back to MHTML for archival
 
@@ -218,7 +226,7 @@ RSpec.describe "Metanorma Workflow Integration" do
       expect(doc.paragraphs.count).to be > 50
 
       # Step 2: Convert to DOCX for editing
-      docx_path = "tmp/metanorma/for_editing.docx"
+      docx_path = 'tmp/metanorma/for_editing.docx'
       doc.save(docx_path, format: :docx)
 
       # Step 3: Open DOCX (simulate editing)
@@ -226,7 +234,7 @@ RSpec.describe "Metanorma Workflow Integration" do
       expect(doc_docx.paragraphs.count).to eq(doc.paragraphs.count)
 
       # Step 4: Convert back to MHTML
-      final_mhtml = "tmp/metanorma/final.doc"
+      final_mhtml = 'tmp/metanorma/final.doc'
       doc_docx.save(final_mhtml, format: :mhtml)
 
       # Step 5: Verify final MHTML is valid

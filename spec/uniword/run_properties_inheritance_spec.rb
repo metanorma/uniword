@@ -15,7 +15,7 @@ RSpec.describe 'Run Properties Inheritance' do
       type: 'paragraph',
       run_properties: Uniword::Properties::RunProperties.new(
         bold: true,
-        size: 32,  # 16pt = 32 half-points
+        size: 32, # 16pt = 32 half-points
         color: 'FF0000'
       ),
       paragraph_properties: Uniword::Properties::ParagraphProperties.new(
@@ -71,8 +71,8 @@ RSpec.describe 'Run Properties Inheritance' do
       para.parent_document = doc
 
       run = Uniword::Run.new(text: 'Custom text')
-      run.bold = false  # Explicitly override
-      run.font_size = 10  # Explicitly override
+      run.bold = false # Explicitly override
+      run.font_size = 10 # Explicitly override
       para.add_run(run)
 
       # Run should use explicit values, not inherited
@@ -81,7 +81,7 @@ RSpec.describe 'Run Properties Inheritance' do
     end
 
     it 'returns nil when no style and no explicit property' do
-      para = Uniword::Paragraph.new  # No style
+      para = Uniword::Paragraph.new # No style
       para.parent_document = doc
 
       run = Uniword::Run.new(text: 'Plain text')
@@ -121,8 +121,8 @@ RSpec.describe 'Run Properties Inheritance' do
       expect(run1.color).to eq('FF0000')
 
       expect(run2.bold?).to be false
-      expect(run2.font_size).to eq(16)  # Still inherited
-      expect(run2.color).to eq('FF0000')  # Still inherited
+      expect(run2.font_size).to eq(16) # Still inherited
+      expect(run2.color).to eq('FF0000') # Still inherited
 
       expect(run3.bold?).to be false
       expect(run3.font_size).to eq(8)

@@ -160,11 +160,11 @@ module Uniword
       # @raise [ArgumentError] if document is invalid
       def validate_document(document)
         raise ArgumentError, 'Document cannot be nil' if document.nil?
-        
+
         # Accept both the alias and the generated class
         return if document.is_a?(Document)
         return if document.is_a?(Generated::Wordprocessingml::DocumentRoot)
-        
+
         raise ArgumentError, "Not a Document instance, got #{document.class}"
       end
 

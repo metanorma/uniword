@@ -26,9 +26,9 @@ RSpec.describe Uniword::TableBorder do
     end
 
     it 'raises error for invalid style' do
-      expect {
+      expect do
         Uniword::TableBorder.new(style: 'invalid')
-      }.to raise_error(ArgumentError, /Invalid border style/)
+      end.to raise_error(ArgumentError, /Invalid border style/)
     end
   end
 

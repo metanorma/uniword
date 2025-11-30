@@ -19,9 +19,9 @@ RSpec.describe Uniword::Styles::StyleLibrary do
     end
 
     it 'raises error for non-existent library' do
-      expect {
+      expect do
         described_class.load('non_existent')
-      }.to raise_error(Uniword::Configuration::ConfigurationError)
+      end.to raise_error(Uniword::Configuration::ConfigurationError)
     end
   end
 
@@ -36,9 +36,9 @@ RSpec.describe Uniword::Styles::StyleLibrary do
     end
 
     it 'raises error for non-existent style' do
-      expect {
+      expect do
         library.paragraph_style(:non_existent)
-      }.to raise_error(ArgumentError, /Paragraph style not found/)
+      end.to raise_error(ArgumentError, /Paragraph style not found/)
     end
   end
 
@@ -53,9 +53,9 @@ RSpec.describe Uniword::Styles::StyleLibrary do
     end
 
     it 'raises error for non-existent style' do
-      expect {
+      expect do
         library.character_style(:non_existent)
-      }.to raise_error(ArgumentError, /Character style not found/)
+      end.to raise_error(ArgumentError, /Character style not found/)
     end
   end
 

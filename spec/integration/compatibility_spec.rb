@@ -34,13 +34,13 @@ RSpec.describe 'DOCX Compatibility Testing' do
       Zip::File.open(test_path) do |zip|
         # Required parts for minimal DOCX
         expect(zip.find_entry('[Content_Types].xml')).not_to be_nil,
-               'Missing [Content_Types].xml'
+                                                             'Missing [Content_Types].xml'
         expect(zip.find_entry('word/document.xml')).not_to be_nil,
-               'Missing word/document.xml'
+                                                           'Missing word/document.xml'
         expect(zip.find_entry('_rels/.rels')).not_to be_nil,
-               'Missing _rels/.rels'
+                                                     'Missing _rels/.rels'
         expect(zip.find_entry('word/_rels/document.xml.rels')).not_to be_nil,
-               'Missing word/_rels/document.xml.rels'
+                                                                      'Missing word/_rels/document.xml.rels'
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
 
       Zip::File.open(test_path) do |zip|
         expect(zip.find_entry('word/styles.xml')).not_to be_nil,
-               'Missing word/styles.xml'
+                                                         'Missing word/styles.xml'
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
 
       Zip::File.open(test_path) do |zip|
         # Numbering.xml should be present when document has numbered lists
-        entry = zip.find_entry('word/numbering.xml')
+        zip.find_entry('word/numbering.xml')
         # This may be optional depending on implementation
         # Just verify structure is valid if present
         expect(test_path).to be_a(String)
@@ -99,7 +99,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
           xml_content = zip.read(entry.name)
 
           # Parse XML to verify it's well-formed
-          expect { Nokogiri::XML(xml_content) { |config| config.strict } }
+          expect { Nokogiri::XML(xml_content, &:strict) }
             .not_to raise_error, "Malformed XML in #{entry.name}"
         end
       end
@@ -180,7 +180,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
         doc_node.xpath('//*').each do |element|
           # All elements should have a namespace (no default namespace elements)
           expect(element.namespace).not_to be_nil,
-                 "Element #{element.name} has no namespace"
+                                           "Element #{element.name} has no namespace"
         end
       end
     end
@@ -317,7 +317,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
                       end
 
           expect(zip.find_entry(full_path)).not_to be_nil,
-                 "Relationship target not found: #{full_path}"
+                                                   "Relationship target not found: #{full_path}"
         end
       end
     end
@@ -354,7 +354,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
 
         required_parts.each do |part|
           expect(zip.find_entry(part)).not_to be_nil,
-                 "Missing required part: #{part}"
+                                              "Missing required part: #{part}"
         end
       end
     end
@@ -405,7 +405,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
         document_xml = zip.read('word/document.xml')
 
         # XML should be well-formed despite special characters
-        expect { Nokogiri::XML(document_xml) { |config| config.strict } }
+        expect { Nokogiri::XML(document_xml, &:strict) }
           .not_to raise_error
       end
     end

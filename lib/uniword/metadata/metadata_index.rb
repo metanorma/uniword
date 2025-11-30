@@ -232,9 +232,7 @@ module Uniword
 
         CSV.open(output_path, 'w', col_sep: delimiter, quote_char: quote_char) do |csv|
           # Write headers
-          if include_headers
-            csv << (['path'] + columns.map(&:to_s))
-          end
+          csv << (['path'] + columns.map(&:to_s)) if include_headers
 
           # Write data rows
           @entries.each do |path, metadata|
@@ -269,8 +267,8 @@ module Uniword
       # @example Convert to hash
       #   hash = index.to_h
       def to_h(include_null: true)
-        @entries.each_with_object({}) do |(path, metadata), result|
-          result[path] = metadata.to_h(include_nil: include_null)
+        @entries.transform_values do |metadata|
+          metadata.to_h(include_nil: include_null)
         end
       end
 
@@ -326,11 +324,11 @@ module Uniword
       # @param config_file [String] Configuration file name or path
       # @return [Hash] Export configuration
       def load_export_config(config_file)
-        if File.exist?(config_file)
-          config = Configuration::ConfigurationLoader.load_file(config_file)
-        else
-          config = Configuration::ConfigurationLoader.load(config_file)
-        end
+        config = if File.exist?(config_file)
+                   Configuration::ConfigurationLoader.load_file(config_file)
+                 else
+                   Configuration::ConfigurationLoader.load(config_file)
+                 end
 
         config[:export_formats] || default_export_config
       rescue Configuration::ConfigurationError
@@ -408,6 +406,7 @@ module Uniword
 
           metadata.to_h(include_nil: include_null).each do |key, value|
             next if value.nil? && !include_null
+
             xml << "        <#{key}>#{escape_xml(format_xml_value(value))}</#{key}>"
           end
 

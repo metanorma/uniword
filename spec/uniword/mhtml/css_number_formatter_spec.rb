@@ -157,7 +157,7 @@ RSpec.describe Uniword::Mhtml::CssNumberFormatter do
   describe 'edge cases' do
     it 'handles very large numbers' do
       expect(described_class.format(9999, 'pt')).to eq('9999pt')
-      expect(described_class.format(10000.5, 'px')).to eq('10000.5px')
+      expect(described_class.format(10_000.5, 'px')).to eq('10000.5px')
     end
 
     it 'handles negative numbers' do

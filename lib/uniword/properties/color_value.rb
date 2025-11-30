@@ -15,11 +15,11 @@ module Uniword
     # Represents <w:color w:val="..."/> where value is RGB hex (e.g., "FF0000")
     class ColorValue < Lutaml::Model::Serializable
       attribute :value, ColorValueType
-      
+
       xml do
         element 'color'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

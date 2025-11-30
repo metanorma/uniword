@@ -44,9 +44,9 @@ module Uniword
     def initialize(attributes = {})
       super
       # Only set default if BOTH are nil
-      if @srgb_clr.nil? && @sys_clr.nil?
-        @srgb_clr = SrgbColor.new
-      end
+      return unless @srgb_clr.nil? && @sys_clr.nil?
+
+      @srgb_clr = SrgbColor.new
     end
 
     # Get the effective color value

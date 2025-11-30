@@ -7,7 +7,7 @@
 module Uniword
   module Math
     # Autoload all Math classes (lazy loading)
-      
+
     # Simple value classes
     autoload :BeginChar, File.expand_path('math/begin_char', __dir__)
     autoload :EndChar, File.expand_path('math/end_char', __dir__)
@@ -16,7 +16,7 @@ module Uniword
     autoload :MathText, File.expand_path('math/math_text', __dir__)
     autoload :MathBreak, File.expand_path('math/math_break', __dir__)
     autoload :MathFont, File.expand_path('math/math_font', __dir__)
-      
+
     # Property classes
     autoload :ArgumentProperties, File.expand_path('math/argument_properties', __dir__)
     autoload :ControlProperties, File.expand_path('math/control_properties', __dir__)
@@ -31,7 +31,8 @@ module Uniword
     autoload :MatrixProperties, File.expand_path('math/matrix_properties', __dir__)
     autoload :SubscriptProperties, File.expand_path('math/subscript_properties', __dir__)
     autoload :SuperscriptProperties, File.expand_path('math/superscript_properties', __dir__)
-    autoload :PreSubSuperscriptProperties, File.expand_path('math/pre_sub_superscript_properties', __dir__)
+    autoload :PreSubSuperscriptProperties,
+             File.expand_path('math/pre_sub_superscript_properties', __dir__)
     autoload :SubSuperscriptProperties, File.expand_path('math/sub_superscript_properties', __dir__)
     autoload :RadicalProperties, File.expand_path('math/radical_properties', __dir__)
     autoload :LowerLimitProperties, File.expand_path('math/lower_limit_properties', __dir__)
@@ -45,7 +46,7 @@ module Uniword
     autoload :BorderBoxProperties, File.expand_path('math/border_box_properties', __dir__)
     autoload :PhantomProperties, File.expand_path('math/phantom_properties', __dir__)
     autoload :MathProperties, File.expand_path('math/math_properties', __dir__)
-      
+
     # Element content classes
     autoload :Element, File.expand_path('math/element', __dir__)
     autoload :Numerator, File.expand_path('math/numerator', __dir__)
@@ -55,7 +56,7 @@ module Uniword
     autoload :Sup, File.expand_path('math/sup', __dir__)
     autoload :Degree, File.expand_path('math/degree', __dir__)
     autoload :Lim, File.expand_path('math/lim', __dir__)
-      
+
     # Structure classes
     autoload :Fraction, File.expand_path('math/fraction', __dir__)
     autoload :Function, File.expand_path('math/function', __dir__)
@@ -78,7 +79,7 @@ module Uniword
     autoload :Bar, File.expand_path('math/bar', __dir__)
     autoload :BorderBox, File.expand_path('math/border_box', __dir__)
     autoload :Phantom, File.expand_path('math/phantom', __dir__)
-      
+
     # Root classes
     autoload :OMath, File.expand_path('math/o_math', __dir__)
     autoload :OMathPara, File.expand_path('math/o_math_para', __dir__)

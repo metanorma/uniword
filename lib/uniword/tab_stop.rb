@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a tab stop in a paragraph
@@ -72,7 +72,8 @@ module Uniword
     def validate_alignment
       return unless alignment && !ALIGNMENTS.include?(alignment)
 
-      raise ArgumentError, "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
+      raise ArgumentError,
+            "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
     end
 
     def validate_leader

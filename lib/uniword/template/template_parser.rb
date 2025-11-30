@@ -70,14 +70,14 @@ module Uniword
           end
 
           # Check run comments
-          if para.respond_to?(:runs)
-            para.runs.each do |run|
-              if run.respond_to?(:comments) && run.comments
-                run.comments.each do |comment|
-                  marker = parse_comment_text(comment.text, run, index)
-                  @markers << marker if marker
-                end
-              end
+          next unless para.respond_to?(:runs)
+
+          para.runs.each do |run|
+            next unless run.respond_to?(:comments) && run.comments
+
+            run.comments.each do |comment|
+              marker = parse_comment_text(comment.text, run, index)
+              @markers << marker if marker
             end
           end
         end
@@ -90,32 +90,28 @@ module Uniword
       def parse_tables(tables)
         tables.each_with_index do |table, table_index|
           # Calculate base position for table
-          base_position = @document.paragraphs.size + table_index * 100
+          base_position = @document.paragraphs.size + (table_index * 100)
 
           # Parse table rows
-          if table.respond_to?(:rows)
-            table.rows.each_with_index do |row, row_index|
-              row_position = base_position + row_index * 10
+          next unless table.respond_to?(:rows)
 
-              # Check row comments
-              if row.respond_to?(:comments) && row.comments
-                row.comments.each do |comment|
-                  marker = parse_comment_text(comment.text, row, row_position)
-                  @markers << marker if marker
-                end
+          table.rows.each_with_index do |row, row_index|
+            row_position = base_position + (row_index * 10)
+
+            # Check row comments
+            if row.respond_to?(:comments) && row.comments
+              row.comments.each do |comment|
+                marker = parse_comment_text(comment.text, row, row_position)
+                @markers << marker if marker
               end
+            end
 
-              # Parse cells
-              if row.respond_to?(:cells)
-                row.cells.each_with_index do |cell, cell_index|
-                  cell_position = row_position + cell_index
+            # Parse cells
+            next unless row.respond_to?(:cells)
 
-                  # Parse cell paragraphs
-                  if cell.respond_to?(:paragraphs)
-                    parse_paragraphs(cell.paragraphs)
-                  end
-                end
-              end
+            row.cells.each_with_index do |cell, _cell_index|
+              # Parse cell paragraphs
+              parse_paragraphs(cell.paragraphs) if cell.respond_to?(:paragraphs)
             end
           end
         end

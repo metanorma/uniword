@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Uniword
   module Spreadsheetml
     autoload :Alignment, File.expand_path('spreadsheetml/alignment', __dir__)
@@ -21,8 +23,10 @@ module Uniword
     autoload :Comment, File.expand_path('spreadsheetml/comment', __dir__)
     autoload :CommentList, File.expand_path('spreadsheetml/comment_list', __dir__)
     autoload :Comments, File.expand_path('spreadsheetml/comments', __dir__)
-    autoload :ConditionalFormatting, File.expand_path('spreadsheetml/conditional_formatting', __dir__)
-    autoload :ConditionalFormattingRule, File.expand_path('spreadsheetml/conditional_formatting_rule', __dir__)
+    autoload :ConditionalFormatting,
+             File.expand_path('spreadsheetml/conditional_formatting', __dir__)
+    autoload :ConditionalFormattingRule,
+             File.expand_path('spreadsheetml/conditional_formatting_rule', __dir__)
     autoload :CustomWorkbookViews, File.expand_path('spreadsheetml/custom_workbook_views', __dir__)
     autoload :DataValidation, File.expand_path('spreadsheetml/data_validation', __dir__)
     autoload :DataValidations, File.expand_path('spreadsheetml/data_validations', __dir__)
@@ -54,7 +58,8 @@ module Uniword
     autoload :PhoneticProperties, File.expand_path('spreadsheetml/phonetic_properties', __dir__)
     autoload :PivotCaches, File.expand_path('spreadsheetml/pivot_caches', __dir__)
     autoload :PivotTable, File.expand_path('spreadsheetml/pivot_table', __dir__)
-    autoload :PivotTableDefinition, File.expand_path('spreadsheetml/pivot_table_definition', __dir__)
+    autoload :PivotTableDefinition,
+             File.expand_path('spreadsheetml/pivot_table_definition', __dir__)
     autoload :ProtectedRanges, File.expand_path('spreadsheetml/protected_ranges', __dir__)
     autoload :QueryTable, File.expand_path('spreadsheetml/query_table', __dir__)
     autoload :RichTextRun, File.expand_path('spreadsheetml/rich_text_run', __dir__)

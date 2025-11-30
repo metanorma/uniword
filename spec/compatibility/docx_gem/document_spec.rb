@@ -16,14 +16,14 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
     context 'when reading a file made by Office365' do
       it 'supports it' do
         expect do
-          Uniword::Document.open(@fixtures_path + '/office365.docx')
+          Uniword::Document.open("#{@fixtures_path}/office365.docx")
         end.to_not raise_error
       end
     end
 
     context 'when reading an unsupported file' do
       it 'throws file not found error' do
-        invalid_path = @fixtures_path + '/invalid_file_path.docx'
+        invalid_path = "#{@fixtures_path}/invalid_file_path.docx"
         expect do
           Uniword::Document.open(invalid_path)
         end.to raise_error(Errno::ENOENT, /No such file/)
@@ -33,7 +33,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
   describe '#inspect' do
     it "isn't too long" do
-      doc = Uniword::Document.open(@fixtures_path + '/office365.docx')
+      doc = Uniword::Document.open("#{@fixtures_path}/office365.docx")
 
       expect(doc.inspect.length).to be < 1000
 
@@ -46,7 +46,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
   describe 'reading basic document' do
     context 'using normal file' do
       before do
-        @doc = Uniword::Document.open(@fixtures_path + '/basic.docx')
+        @doc = Uniword::Document.open("#{@fixtures_path}/basic.docx")
       end
 
       it 'reads the document' do
@@ -77,7 +77,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
     context 'using stream' do
       before do
-        stream = File.binread(@fixtures_path + '/basic.docx')
+        stream = File.binread("#{@fixtures_path}/basic.docx")
         @doc = Uniword::Document.open(StringIO.new(stream))
       end
 
@@ -96,7 +96,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
   describe 'reading tables' do
     before do
-      @doc = Uniword::Document.open(@fixtures_path + '/tables.docx')
+      @doc = Uniword::Document.open("#{@fixtures_path}/tables.docx")
     end
 
     it 'has tables with rows and cells' do
@@ -143,7 +143,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
   describe 'editing' do
     before do
-      @doc = Uniword::Document.open(@fixtures_path + '/editing.docx')
+      @doc = Uniword::Document.open("#{@fixtures_path}/editing.docx")
     end
 
     it 'allows text changes' do
@@ -163,7 +163,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
   describe 'reading formatting' do
     before do
-      @doc = Uniword::Document.open(@fixtures_path + '/formatting.docx')
+      @doc = Uniword::Document.open("#{@fixtures_path}/formatting.docx")
       @formatting_line_count = 15
     end
 
@@ -229,11 +229,11 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
   describe 'saving' do
     context 'from a normal file' do
       before do
-        @doc = Uniword::Document.open(@fixtures_path + '/saving.docx')
+        @doc = Uniword::Document.open("#{@fixtures_path}/saving.docx")
       end
 
       it 'saves to a normal file path' do
-        @new_doc_path = @fixtures_path + '/new_save.docx'
+        @new_doc_path = "#{@fixtures_path}/new_save.docx"
         @doc.save(@new_doc_path)
         @new_doc = Uniword::Document.open(@new_doc_path)
         expect(@new_doc.paragraphs.size).to eq(@doc.paragraphs.size)
@@ -246,12 +246,12 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
     context 'from a stream' do
       before do
-        stream = File.binread(@fixtures_path + '/saving.docx')
+        stream = File.binread("#{@fixtures_path}/saving.docx")
         @doc = Uniword::Document.open(StringIO.new(stream))
       end
 
       it 'saves to a normal file path' do
-        @new_doc_path = @fixtures_path + '/new_save_stream.docx'
+        @new_doc_path = "#{@fixtures_path}/new_save_stream.docx"
         @doc.save(@new_doc_path)
         @new_doc = Uniword::Document.open(@new_doc_path)
         expect(@new_doc.paragraphs.size).to eq(@doc.paragraphs.size)
@@ -264,11 +264,11 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
     context 'wps modified docx file' do
       before do
-        @doc = Uniword::Document.open(@fixtures_path + '/saving_wps.docx')
+        @doc = Uniword::Document.open("#{@fixtures_path}/saving_wps.docx")
       end
 
       it 'saves to a normal file path' do
-        @new_doc_path = @fixtures_path + '/new_save_wps.docx'
+        @new_doc_path = "#{@fixtures_path}/new_save_wps.docx"
         @doc.save(@new_doc_path)
         @new_doc = Uniword::Document.open(@new_doc_path)
         expect(@new_doc.paragraphs.size).to eq(@doc.paragraphs.size)
@@ -282,7 +282,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
   describe 'paragraph styles' do
     before do
-      @doc = Uniword::Document.open(@fixtures_path + '/styles.docx')
+      @doc = Uniword::Document.open("#{@fixtures_path}/styles.docx")
     end
 
     it 'reads paragraph styles' do
@@ -304,7 +304,7 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
   end
 
   describe '#to_s' do
-    let(:doc) { Uniword::Document.open(@fixtures_path + '/weird_docx.docx') }
+    let(:doc) { Uniword::Document.open("#{@fixtures_path}/weird_docx.docx") }
 
     it 'does not raise error' do
       expect { doc.to_s }.to_not raise_error

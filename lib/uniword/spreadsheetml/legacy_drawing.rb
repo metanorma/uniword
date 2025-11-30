@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Spreadsheetml
-      # Legacy drawing reference
-      #
-      # Generated from OOXML schema: spreadsheetml.yml
-      # Element: <xls:legacyDrawing>
-      class LegacyDrawing < Lutaml::Model::Serializable
-          attribute :id, String
+  module Spreadsheetml
+    # Legacy drawing reference
+    #
+    # Generated from OOXML schema: spreadsheetml.yml
+    # Element: <xls:legacyDrawing>
+    class LegacyDrawing < Lutaml::Model::Serializable
+      attribute :id, String
 
-          xml do
-            element 'legacyDrawing'
-            namespace Uniword::Ooxml::Namespaces::SpreadsheetML
+      xml do
+        element 'legacyDrawing'
+        namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-            map_attribute 'id', to: :id
-          end
+        map_attribute 'id', to: :id
       end
     end
+  end
 end

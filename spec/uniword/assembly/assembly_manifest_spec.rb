@@ -31,7 +31,7 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
   end
 
   after do
-    manifest_file.unlink if manifest_file
+    manifest_file&.unlink
   end
 
   describe '#initialize' do
@@ -44,19 +44,19 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
     end
 
     it 'raises error for non-existent file' do
-      expect {
+      expect do
         described_class.new('nonexistent.yml')
-      }.to raise_error(ArgumentError, /not found/)
+      end.to raise_error(ArgumentError, /not found/)
     end
 
     it 'raises error for invalid YAML' do
       file = Tempfile.new(['invalid', '.yml'])
-      file.write("invalid: yaml: content:")
+      file.write('invalid: yaml: content:')
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /Invalid YAML/)
+      end.to raise_error(ArgumentError, /Invalid YAML/)
 
       file.unlink
     end
@@ -66,9 +66,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write("- item1\n- item2")
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /must be a Hash/)
+      end.to raise_error(ArgumentError, /must be a Hash/)
 
       file.unlink
     end
@@ -78,9 +78,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump({ 'invalid' => 'data' }))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /must have 'document' key/)
+      end.to raise_error(ArgumentError, /must have 'document' key/)
 
       file.unlink
     end
@@ -93,9 +93,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump(data))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /must specify 'output'/)
+      end.to raise_error(ArgumentError, /must specify 'output'/)
 
       file.unlink
     end
@@ -108,9 +108,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump(data))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /must have 'sections' array/)
+      end.to raise_error(ArgumentError, /must have 'sections' array/)
 
       file.unlink
     end
@@ -218,9 +218,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump(data))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /Section at index 0 must be a Hash/)
+      end.to raise_error(ArgumentError, /Section at index 0 must be a Hash/)
 
       file.unlink
     end
@@ -233,9 +233,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump(data))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /must have 'component' key/)
+      end.to raise_error(ArgumentError, /must have 'component' key/)
 
       file.unlink
     end
@@ -282,9 +282,9 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       file.write(YAML.dump(data))
       file.close
 
-      expect {
+      expect do
         described_class.new(file.path)
-      }.to raise_error(ArgumentError, /Variables must be a Hash/)
+      end.to raise_error(ArgumentError, /Variables must be a Hash/)
 
       file.unlink
     end

@@ -56,7 +56,7 @@ RSpec.describe 'Style Round-Trip Fidelity' do
       )
 
       expect(result.equivalent?).to be(true),
-        "Style XML round-trip failed:\n\nOriginal:\n#{sample_style_xml}\n\nOutput:\n#{output_xml}"
+                                    "Style XML round-trip failed:\n\nOriginal:\n#{sample_style_xml}\n\nOutput:\n#{output_xml}"
     end
 
     it 'captures style attributes' do

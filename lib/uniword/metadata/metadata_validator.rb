@@ -236,9 +236,9 @@ module Uniword
                   true
                 end
 
-        unless valid
-          errors << "#{key} must be of type #{expected_type}, got #{value.class}"
-        end
+        return if valid
+
+        errors << "#{key} must be of type #{expected_type}, got #{value.class}"
       end
 
       # Validate field constraints.
@@ -249,30 +249,22 @@ module Uniword
       # @param errors [Array] Errors array to populate
       def validate_constraints(key, value, rules, errors)
         # Max length for strings
-        if rules[:max_length] && value.is_a?(String)
-          if value.length > rules[:max_length]
-            errors << "#{key} exceeds maximum length of #{rules[:max_length]}"
-          end
+        if rules[:max_length] && value.is_a?(String) && (value.length > rules[:max_length])
+          errors << "#{key} exceeds maximum length of #{rules[:max_length]}"
         end
 
         # Min/max value for numbers
-        if rules[:min_value] && value.is_a?(Numeric)
-          if value < rules[:min_value]
-            errors << "#{key} must be at least #{rules[:min_value]}"
-          end
+        if rules[:min_value] && value.is_a?(Numeric) && (value < rules[:min_value])
+          errors << "#{key} must be at least #{rules[:min_value]}"
         end
 
-        if rules[:max_value] && value.is_a?(Numeric)
-          if value > rules[:max_value]
-            errors << "#{key} cannot exceed #{rules[:max_value]}"
-          end
+        if rules[:max_value] && value.is_a?(Numeric) && (value > rules[:max_value])
+          errors << "#{key} cannot exceed #{rules[:max_value]}"
         end
 
         # Max items for arrays
-        if rules[:max_items] && value.is_a?(Array)
-          if value.size > rules[:max_items]
-            errors << "#{key} exceeds maximum of #{rules[:max_items]} items"
-          end
+        if rules[:max_items] && value.is_a?(Array) && (value.size > rules[:max_items])
+          errors << "#{key} exceeds maximum of #{rules[:max_items]} items"
         end
 
         # Allowed values
@@ -281,11 +273,10 @@ module Uniword
         end
 
         # Pattern matching for strings
-        if rules[:pattern] && value.is_a?(String)
-          unless value.match?(Regexp.new(rules[:pattern]))
-            errors << "#{key} does not match required pattern"
-          end
-        end
+        return unless rules[:pattern] && value.is_a?(String)
+        return if value.match?(Regexp.new(rules[:pattern]))
+
+        errors << "#{key} does not match required pattern"
       end
 
       # Validate scenario-specific requirements.
@@ -296,15 +287,13 @@ module Uniword
       def validate_scenario_requirements(metadata, scenario, errors)
         return unless @schema[:validation_rules]
 
-        scenario_key = "required_for_#{scenario}".to_sym
+        scenario_key = :"required_for_#{scenario}"
         required_fields = @schema[:validation_rules][scenario_key]
         return unless required_fields
 
         required_fields.each do |field|
           field_key = field.to_sym
-          if metadata[field_key].nil?
-            errors << "#{field_key} is required for #{scenario}"
-          end
+          errors << "#{field_key} is required for #{scenario}" if metadata[field_key].nil?
         end
       end
 

@@ -75,19 +75,13 @@ module Uniword
 
         # NEW: Parse property containers
         pPr_node = style_node.at_xpath('./w:pPr', WORDML_NS)
-        if pPr_node
-          style.paragraph_properties = parse_paragraph_properties(pPr_node)
-        end
+        style.paragraph_properties = parse_paragraph_properties(pPr_node) if pPr_node
 
         rPr_node = style_node.at_xpath('./w:rPr', WORDML_NS)
-        if rPr_node
-          style.run_properties = parse_run_properties(rPr_node)
-        end
+        style.run_properties = parse_run_properties(rPr_node) if rPr_node
 
         tblPr_node = style_node.at_xpath('./w:tblPr', WORDML_NS)
-        if tblPr_node
-          style.table_properties = parse_table_properties(tblPr_node)
-        end
+        style.table_properties = parse_table_properties(tblPr_node) if tblPr_node
 
         style
       end
@@ -130,9 +124,9 @@ module Uniword
           spacing_attrs[:after] = spacing_node['w:after']&.to_i if spacing_node['w:after']
           spacing_attrs[:line] = spacing_node['w:line']&.to_f if spacing_node['w:line']
           spacing_attrs[:line_rule] = spacing_node['w:lineRule'] if spacing_node['w:lineRule']
-          
+
           props.spacing = Properties::Spacing.new(spacing_attrs)
-          
+
           # Also set flat attributes for compatibility
           props.spacing_before = spacing_attrs[:before]
           props.spacing_after = spacing_attrs[:after]
@@ -147,9 +141,9 @@ module Uniword
           ind_attrs[:right] = ind_node['w:right']&.to_i if ind_node['w:right']
           ind_attrs[:first_line] = ind_node['w:firstLine']&.to_i if ind_node['w:firstLine']
           ind_attrs[:hanging] = ind_node['w:hanging']&.to_i if ind_node['w:hanging']
-          
+
           props.indentation = Properties::Indentation.new(ind_attrs)
-          
+
           # Also set flat attributes for compatibility
           props.indent_left = ind_attrs[:left]
           props.indent_right = ind_attrs[:right]
@@ -186,13 +180,13 @@ module Uniword
             props.numbering_id = Properties::NumberingId.new(
               value: numId['w:val']&.to_i
             )
-            props.num_id = numId['w:val']  # Flat alias for compatibility
+            props.num_id = numId['w:val'] # Flat alias for compatibility
           end
           if (ilvl = numPr.at_xpath('./w:ilvl', WORDML_NS))
             props.numbering_level = Properties::NumberingLevel.new(
               value: ilvl['w:val']&.to_i
             )
-            props.ilvl = ilvl['w:val']&.to_i  # Flat alias for compatibility
+            props.ilvl = ilvl['w:val']&.to_i # Flat alias for compatibility
           end
         end
 
@@ -202,9 +196,9 @@ module Uniword
           shading_attrs[:pattern] = shd['w:val'] if shd['w:val']
           shading_attrs[:color] = shd['w:color'] if shd['w:color']
           shading_attrs[:fill] = shd['w:fill'] if shd['w:fill']
-          
+
           props.shading = Properties::Shading.new(shading_attrs)
-          
+
           # Also set flat attributes for compatibility
           props.shading_fill = shading_attrs[:fill]
           props.shading_color = shading_attrs[:color]
@@ -214,37 +208,40 @@ module Uniword
         # Borders (w:pBdr)
         if (pBdr = pPr_node.at_xpath('./w:pBdr', WORDML_NS))
           borders_hash = {}
-          
+
           # Parse each border side
           %w[top bottom left right].each do |side|
             border_node = pBdr.at_xpath("./w:#{side}", WORDML_NS)
             next unless border_node
-            
+
             border_attrs = {}
             border_attrs[:style] = border_node['w:val'] if border_node['w:val']
             border_attrs[:size] = border_node['w:sz']&.to_i if border_node['w:sz']
             border_attrs[:space] = border_node['w:space']&.to_i if border_node['w:space']
             border_attrs[:color] = border_node['w:color'] if border_node['w:color']
-            
-            borders_hash[side.to_sym] = Properties::Border.new(border_attrs) unless border_attrs.empty?
+
+            unless border_attrs.empty?
+              borders_hash[side.to_sym] =
+                Properties::Border.new(border_attrs)
+            end
           end
-          
+
           props.borders = Properties::Borders.new(borders_hash) unless borders_hash.empty?
         end
 
         # Tabs (w:tabs)
         if (tabs_node = pPr_node.at_xpath('./w:tabs', WORDML_NS))
           tab_stops = []
-          
+
           tabs_node.xpath('./w:tab', WORDML_NS).each do |tab_node|
             tab_attrs = {}
             tab_attrs[:alignment] = tab_node['w:val'] if tab_node['w:val']
             tab_attrs[:position] = tab_node['w:pos']&.to_i if tab_node['w:pos']
             tab_attrs[:leader] = tab_node['w:leader'] if tab_node['w:leader']
-            
+
             tab_stops << Properties::TabStop.new(tab_attrs) unless tab_attrs.empty?
           end
-          
+
           props.tabs = Properties::Tabs.new(tab_stops: tab_stops) unless tab_stops.empty?
         end
 
@@ -295,7 +292,7 @@ module Uniword
           fonts_attrs[:east_asia] = rFonts['w:eastAsia'] if rFonts['w:eastAsia']
           fonts_attrs[:cs] = rFonts['w:cs'] if rFonts['w:cs']
           fonts_attrs[:hint] = rFonts['w:hint'] if rFonts['w:hint']
-          
+
           props.fonts = Properties::RunFonts.new(fonts_attrs)
         end
 
@@ -329,7 +326,7 @@ module Uniword
         # Caps formatting
         props.small_caps = !rPr_node.at_xpath('./w:smallCaps', WORDML_NS).nil?
         props.caps = !rPr_node.at_xpath('./w:caps', WORDML_NS).nil?
-        props.all_caps = props.caps  # Alias
+        props.all_caps = props.caps # Alias
 
         # Hidden text (w:vanish)
         props.hidden = !rPr_node.at_xpath('./w:vanish', WORDML_NS).nil?
@@ -354,7 +351,7 @@ module Uniword
           props.character_spacing = Properties::CharacterSpacing.new(
             value: spacing['w:val']&.to_i
           )
-          props.spacing = spacing['w:val']&.to_i  # Flat alias for compatibility
+          props.spacing = spacing['w:val']&.to_i # Flat alias for compatibility
         end
 
         # Position (raised/lowered text in half-points) - create wrapper object
@@ -367,7 +364,7 @@ module Uniword
           props.kerning = Properties::Kerning.new(
             value: kern['w:val']&.to_i
           )
-          props.kern = kern['w:val']&.to_i  # Flat alias for compatibility
+          props.kern = kern['w:val']&.to_i # Flat alias for compatibility
         end
 
         # Width scale (w:w as percentage 50-600) - create wrapper object
@@ -375,7 +372,7 @@ module Uniword
           props.width_scale = Properties::WidthScale.new(
             value: w['w:val']&.to_i
           )
-          props.w_scale = w['w:val']&.to_i  # Flat alias for compatibility
+          props.w_scale = w['w:val']&.to_i # Flat alias for compatibility
         end
 
         # Emphasis mark (w:em) - create wrapper object
@@ -383,7 +380,7 @@ module Uniword
           props.emphasis_mark = Properties::EmphasisMark.new(
             value: em['w:val']
           )
-          props.em = em['w:val']  # Flat alias for compatibility
+          props.em = em['w:val'] # Flat alias for compatibility
         end
 
         # Language (w:lang) - create Language object
@@ -392,9 +389,9 @@ module Uniword
           lang_attrs[:val] = lang['w:val'] if lang['w:val']
           lang_attrs[:bidi] = lang['w:bidi'] if lang['w:bidi']
           lang_attrs[:east_asia] = lang['w:eastAsia'] if lang['w:eastAsia']
-          
+
           props.language = Properties::Language.new(lang_attrs)
-          
+
           # Also set flat attributes for compatibility
           props.language_val = lang_attrs[:val]
           props.language_bidi = lang_attrs[:bidi]
@@ -407,22 +404,23 @@ module Uniword
           shading_attrs[:pattern] = shd['w:val'] if shd['w:val']
           shading_attrs[:color] = shd['w:color'] if shd['w:color']
           shading_attrs[:fill] = shd['w:fill'] if shd['w:fill']
-          
+
           props.shading = Properties::Shading.new(shading_attrs)
-          
+
           # Also set flat attribute for compatibility
           props.shading_fill = shading_attrs[:fill]
         end
 
         # Text fill (w:textFill) - basic solid color support
-        if (textFill = rPr_node.at_xpath('./w:textFill', WORDML_NS))
-          # Try to extract color from nested solidFill element
-          if (solidFill = textFill.at_xpath('./w:solidFill', WORDML_NS))
-            if (schemeClr = solidFill.at_xpath('./w:schemeClr', WORDML_NS))
-              props.text_fill = Properties::TextFill.new(color: schemeClr['w:val'])
-            elsif (srgbClr = solidFill.at_xpath('./w:srgbClr', WORDML_NS))
-              props.text_fill = Properties::TextFill.new(color: srgbClr['w:val'])
-            end
+        # Try to extract color from nested solidFill element
+        if (textFill = rPr_node.at_xpath('./w:textFill',
+                                         WORDML_NS)) && (solidFill = textFill.at_xpath(
+                                           './w:solidFill', WORDML_NS
+                                         ))
+          if (schemeClr = solidFill.at_xpath('./w:schemeClr', WORDML_NS))
+            props.text_fill = Properties::TextFill.new(color: schemeClr['w:val'])
+          elsif (srgbClr = solidFill.at_xpath('./w:srgbClr', WORDML_NS))
+            props.text_fill = Properties::TextFill.new(color: srgbClr['w:val'])
           end
         end
 
@@ -430,7 +428,7 @@ module Uniword
         if (textOutline = rPr_node.at_xpath('./w:textOutline', WORDML_NS))
           outline_attrs = {}
           outline_attrs[:width] = textOutline['w:w']&.to_i if textOutline['w:w']
-          
+
           # Try to extract color from nested fill element
           if (fill = textOutline.at_xpath('./w:solidFill', WORDML_NS))
             if (schemeClr = fill.at_xpath('./w:schemeClr', WORDML_NS))
@@ -439,8 +437,10 @@ module Uniword
               outline_attrs[:color] = srgbClr['w:val']
             end
           end
-          
-          props.text_outline = Properties::TextOutline.new(outline_attrs) unless outline_attrs.empty?
+
+          unless outline_attrs.empty?
+            props.text_outline = Properties::TextOutline.new(outline_attrs)
+          end
         end
 
         # TODO: Add more properties:
@@ -466,10 +466,10 @@ module Uniword
         # Table width (w:tblW)
         if (tblW = tblPr_node.at_xpath('./w:tblW', WORDML_NS))
           props.width = tblW['w:w']&.to_i
-          props.width_type = tblW['w:type']  # auto, dxa, pct, nil
+          props.width_type = tblW['w:type'] # auto, dxa, pct, nil
         end
 
-        #Table alignment (w:jc)
+        # Table alignment (w:jc)
         if (jc = tblPr_node.at_xpath('./w:jc', WORDML_NS))
           props.alignment = jc['w:val']
         end
@@ -486,7 +486,7 @@ module Uniword
 
         # Table layout (w:tblLayout)
         if (tblLayout = tblPr_node.at_xpath('./w:tblLayout', WORDML_NS))
-          props.layout = tblLayout['w:type']  # autofit, fixed
+          props.layout = tblLayout['w:type'] # autofit, fixed
         end
 
         # Table borders (w:tblBorders)
@@ -549,7 +549,7 @@ module Uniword
       # @param xml [String] Styles XML content
       # @return [String] StyleSet name
       def extract_name(xml)
-        doc = Nokogiri::XML(xml)
+        Nokogiri::XML(xml)
 
         # Try to find a custom name in comments or metadata
         # For now, return a default that can be overridden

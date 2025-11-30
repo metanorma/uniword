@@ -24,7 +24,7 @@ module Uniword
         element 'textOutline'
         namespace Ooxml::Namespaces::WordProcessingML
 
-        # Note: Simplified - actual OOXML has nested fill/compound/cap/join elements
+        # NOTE: Simplified - actual OOXML has nested fill/compound/cap/join elements
         # For now, we store just width and color for basic support
         # Full structure will be added in v2.0
         map_attribute 'width', to: :width

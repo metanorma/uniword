@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Note: element_validator is already loaded by uniword.rb
+# NOTE: element_validator is already loaded by uniword.rb
 # No need to require it here to avoid circular dependencies
 
 module Uniword
@@ -43,9 +43,7 @@ module Uniword
         return ['Element is nil'] if element.nil?
 
         # Check table type first (more specific than base check)
-        unless element.is_a?(Uniword::Table)
-          return ['Element must be a Table']
-        end
+        return ['Element must be a Table'] unless element.is_a?(Uniword::Table)
 
         # Validate rows - collect all specific errors
         errors.concat(row_errors(element))

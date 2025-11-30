@@ -169,7 +169,7 @@ module Uniword
         if include_nil
           @properties.dup
         else
-          @properties.reject { |_k, v| v.nil? }
+          @properties.compact
         end
       end
 
@@ -252,11 +252,7 @@ module Uniword
       # @return [Boolean] true if method exists
       def respond_to_missing?(method, include_private = false)
         method_str = method.to_s
-        if method_str.end_with?('=')
-          true
-        else
-          @properties.key?(method.to_sym) || super
-        end
+        method_str.end_with?('=') || @properties.key?(method.to_sym) || super
       end
 
       # Equality comparison.
@@ -268,6 +264,7 @@ module Uniword
       #   metadata1 == metadata2
       def ==(other)
         return false unless other.is_a?(Metadata)
+
         @properties == other.properties
       end
 
@@ -318,13 +315,17 @@ module Uniword
       def deep_clone(value)
         case value
         when Hash
-          value.each_with_object({}) do |(k, v), result|
-            result[k] = deep_clone(v)
+          value.transform_values do |v|
+            deep_clone(v)
           end
         when Array
           value.map { |item| deep_clone(item) }
         else
-          value.dup rescue value
+          begin
+            value.dup
+          rescue StandardError
+            value
+          end
         end
       end
     end

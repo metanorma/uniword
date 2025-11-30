@@ -87,7 +87,7 @@ module Uniword
 
       # Called when an element starts
       def start_element(name, attributes = [])
-        attrs = Hash[attributes]
+        attrs = attributes.to_h
         @element_stack.push(name)
 
         case name
@@ -188,7 +188,7 @@ module Uniword
       end
 
       # Start parsing text
-      def start_text(attrs)
+      def start_text(_attrs)
         return unless @current_run
 
         @current_text = String.new

@@ -113,7 +113,7 @@ RSpec.describe Uniword::MathEquation do
     end
 
     it 'returns false when formula does not respond to to_latex' do
-      equation = described_class.new(formula: "invalid")
+      equation = described_class.new(formula: 'invalid')
       expect(equation.valid?).to be false
     end
   end

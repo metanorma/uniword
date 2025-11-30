@@ -78,9 +78,7 @@ module Uniword
         # Get attributes for this child
         #
         # @return [Array<Hash>] Attribute definitions
-        def attributes
-          @attributes
-        end
+        attr_reader :attributes
 
         # Get property name for accessing child in model
         #

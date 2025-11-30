@@ -68,14 +68,10 @@ module Uniword
           doc = Nokogiri::XML(xml_content)
 
           # Check for required elements
-          if check_required_elements?
-            validate_required_elements(doc, result)
-          end
+          validate_required_elements(doc, result) if check_required_elements?
 
           # Validate document structure
-          if validate_structure?
-            validate_document_hierarchy(doc, result)
-          end
+          validate_document_hierarchy(doc, result) if validate_structure?
         rescue Nokogiri::XML::SyntaxError => e
           result.add_error(
             "Malformed document.xml: #{e.message}",
@@ -109,9 +105,9 @@ module Uniword
           end
 
           # Check if body is empty
-          if body_elem.children.select(&:element?).empty?
-            result.add_warning('Document body is empty')
-          end
+          return unless body_elem.children.none?(&:element?)
+
+          result.add_warning('Document body is empty')
         end
 
         def validate_document_hierarchy(doc, result)
@@ -123,20 +119,20 @@ module Uniword
 
           paragraphs.each do |p|
             # Check if paragraph is descendant of body
-            unless p.ancestors.include?(body)
-              result.add_warning(
-                'Paragraph found outside document body'
-              )
-            end
+            next if p.ancestors.include?(body)
+
+            result.add_warning(
+              'Paragraph found outside document body'
+            )
           end
 
           # Check for section properties
           sect_pr = doc.at_xpath('//w:body/w:sectPr', 'w' => WORDML_NAMESPACE)
-          unless sect_pr
-            result.add_info(
-              'No section properties defined (using defaults)'
-            )
-          end
+          return if sect_pr
+
+          result.add_info(
+            'No section properties defined (using defaults)'
+          )
         end
 
         def check_required_elements?

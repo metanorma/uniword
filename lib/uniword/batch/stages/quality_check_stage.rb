@@ -25,7 +25,7 @@ module Uniword
       # @option options [Boolean] :fail_on_warnings Raise error if warnings found
       # @option options [Boolean] :generate_report Generate quality report file
       def initialize(options = {})
-        super(options)
+        super
         @rules_file = options[:rules_file]
         @fail_on_errors = options.fetch(:fail_on_errors, false)
         @fail_on_warnings = options.fetch(:fail_on_warnings, false)
@@ -51,9 +51,7 @@ module Uniword
         log_report_summary(report)
 
         # Generate report file if requested
-        if @generate_report && context[:output_path]
-          generate_report_file(report, context)
-        end
+        generate_report_file(report, context) if @generate_report && context[:output_path]
 
         # Check if we should fail
         check_failure_conditions(report, context[:filename])
@@ -65,7 +63,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        "Run quality checks"
+        'Run quality checks'
       end
 
       private
@@ -90,16 +88,16 @@ module Uniword
       # @param report [Quality::QualityReport] Quality report
       def log_report_summary(report)
         if report.valid?
-          log "Quality check passed - no violations found"
+          log 'Quality check passed - no violations found'
         else
           error_count = report.errors.size
           warning_count = report.warnings.size
           info_count = report.infos.size
 
-          log "Quality check found violations:", level: :warn
-          log "  Errors: #{error_count}", level: :warn if error_count > 0
-          log "  Warnings: #{warning_count}", level: :warn if warning_count > 0
-          log "  Info: #{info_count}" if info_count > 0
+          log 'Quality check found violations:', level: :warn
+          log "  Errors: #{error_count}", level: :warn if error_count.positive?
+          log "  Warnings: #{warning_count}", level: :warn if warning_count.positive?
+          log "  Info: #{info_count}" if info_count.positive?
 
           # Log first few violations
           report.violations.first(5).each do |violation|
@@ -143,11 +141,11 @@ module Uniword
                 "#{report.errors.size} error(s) found"
         end
 
-        if @fail_on_warnings && report.has_warnings?
-          raise Quality::QualityCheckError,
-                "Quality check failed for #{filename}: " \
-                "#{report.warnings.size} warning(s) found"
-        end
+        return unless @fail_on_warnings && report.has_warnings?
+
+        raise Quality::QualityCheckError,
+              "Quality check failed for #{filename}: " \
+              "#{report.warnings.size} warning(s) found"
       end
     end
   end

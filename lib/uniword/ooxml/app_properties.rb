@@ -47,11 +47,11 @@ module Uniword
         map_element 'Paragraphs', to: :paragraphs
         map_element 'ScaleCrop', to: :scale_crop
         map_element 'Company', to: :company,
-                    render_nil: true,
-                    value_map: {
-                      from: { empty: :empty },
-                      to: { empty: :empty, nil: :empty }
-                    }
+                               render_nil: true,
+                               value_map: {
+                                 from: { empty: :empty },
+                                 to: { empty: :empty, nil: :empty }
+                               }
         map_element 'LinksUpToDate', to: :links_up_to_date
         map_element 'CharactersWithSpaces', to: :characters_with_spaces
         map_element 'SharedDoc', to: :shared_doc

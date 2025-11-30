@@ -125,7 +125,7 @@ module Uniword
 
         # For strings, validate
         raise ArgumentError, 'Path cannot be empty' if path.respond_to?(:empty?) && path.empty?
-        raise FileNotFoundError.new(path) unless File.exist?(path)
+        raise FileNotFoundError, path unless File.exist?(path)
       end
     end
   end

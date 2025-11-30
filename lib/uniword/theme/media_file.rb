@@ -45,7 +45,7 @@ module Uniword
         @source_path = attributes[:source_path]
 
         validate!
-        freeze  # Immutable
+        freeze # Immutable
       end
 
       # Get file size in bytes
@@ -67,7 +67,8 @@ module Uniword
       # @return [String, nil] File extension without dot
       def extension
         return nil unless filename
-        File.extname(filename)[1..-1]
+
+        File.extname(filename)[1..]
       end
 
       # Value-based equality

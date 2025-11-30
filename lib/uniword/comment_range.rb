@@ -50,7 +50,7 @@ module Uniword
     # @option attributes [Symbol] :marker_type Marker type (:start, :end, :reference)
     def initialize(attributes = {})
       @marker_type = attributes.delete(:marker_type) || :start
-      super(attributes)
+      super
     end
 
     # Accept a visitor for the visitor pattern

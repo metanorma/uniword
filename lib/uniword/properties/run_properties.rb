@@ -61,7 +61,7 @@ module Uniword
       attribute :double_strike, :boolean, default: -> { false }
       attribute :small_caps, :boolean, default: -> { false }
       attribute :caps, :boolean, default: -> { false }
-      attribute :all_caps, :boolean, default: -> { false }  # Alias for caps
+      attribute :all_caps, :boolean, default: -> { false } # Alias for caps
       attribute :hidden, :boolean, default: -> { false }
 
       # Flat attributes (kept as aliases for compatibility)
@@ -73,10 +73,10 @@ module Uniword
       # Flat language attributes (deprecated, kept for compatibility)
       attribute :language_val, :string      # Language code (e.g., "en-US")
       attribute :language_bidi, :string     # BiDi language
-      attribute :language_east_asia, :string  # East Asian language
+      attribute :language_east_asia, :string # East Asian language
 
       # Flat shading (deprecated, kept for compatibility)
-      attribute :shading_fill, :string      # Background fill color (flat)
+      attribute :shading_fill, :string # Background fill color (flat)
 
       # XML mappings come AFTER attributes
       xml do

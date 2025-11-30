@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Ink annotation
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:ink>
-      class Ink < Lutaml::Model::Serializable
-          attribute :i, String
-          attribute :contentType, String
+  module Office
+    # Ink annotation
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:ink>
+    class Ink < Lutaml::Model::Serializable
+      attribute :i, String
+      attribute :contentType, String
 
-          xml do
-            element 'ink'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'ink'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'i', to: :i
-            map_attribute 'contentType', to: :contentType
-          end
+        map_attribute 'i', to: :i
+        map_attribute 'contentType', to: :contentType
       end
     end
+  end
 end

@@ -153,7 +153,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
 
         expect(xml).to be_a(String)
         # Pretty print adds newlines and indentation
-        expect(xml.scan(/\n/).count).to be > 0
+        expect(xml.scan("\n").count).to be > 0
       end
 
       it 'supports standalone option' do
@@ -167,15 +167,15 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
 
     context 'with invalid input' do
       it 'raises error for non-element' do
-        expect {
-          serializer.serialize("not an element")
-        }.to raise_error(ArgumentError, /must be a Uniword::Element/)
+        expect do
+          serializer.serialize('not an element')
+        end.to raise_error(ArgumentError, /must be a Uniword::Element/)
       end
 
       it 'raises error for nil' do
-        expect {
+        expect do
           serializer.serialize(nil)
-        }.to raise_error(ArgumentError)
+        end.to raise_error(ArgumentError)
       end
     end
   end

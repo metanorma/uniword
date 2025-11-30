@@ -47,7 +47,7 @@ module Uniword
     # @param kwargs [Hash] Optional cell properties (colspan, rowspan, etc.)
     # @yield [TableCell] Optional block to configure the cell
     # @return [TableCell] The added cell
-    def add_cell(cell_or_text = nil, **kwargs, &block)
+    def add_cell(cell_or_text = nil, **kwargs)
       cell = case cell_or_text
              when TableCell
                # Old API: add_cell(cell_instance)
@@ -196,6 +196,5 @@ module Uniword
 
       cell
     end
-
   end
 end

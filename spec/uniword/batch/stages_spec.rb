@@ -11,7 +11,9 @@ require_relative '../../../lib/uniword/document'
 
 RSpec.describe 'Batch Processing Stages' do
   let(:document) { Uniword::Document.new }
-  let(:context) { { filename: 'test.docx', input_path: 'input/test.docx', output_path: 'output/test.docx' } }
+  let(:context) do
+    { filename: 'test.docx', input_path: 'input/test.docx', output_path: 'output/test.docx' }
+  end
 
   describe Uniword::Batch::NormalizeStylesStage do
     let(:stage) { described_class.new }

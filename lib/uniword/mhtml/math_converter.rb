@@ -47,7 +47,7 @@ module Uniword
         if plurimath_available?
           begin
             Plurimath::Math.parse(mathml_string, :mathml).to_omml
-          rescue StandardError => e
+          rescue StandardError
             # Fallback on error
             wrap_in_omml(mathml_string)
           end
@@ -67,14 +67,14 @@ module Uniword
       #
       # @example Convert AsciiMath formula
       #   omml = MathConverter.asciimath_to_omml("x^2 + y^2 = z^2")
-      def self.asciimath_to_omml(asciimath_string, delimiters = ['$$', '$$'])
+      def self.asciimath_to_omml(asciimath_string, _delimiters = ['$$', '$$'])
         return '' if asciimath_string.nil? || asciimath_string.empty?
 
         if plurimath_available?
           begin
             parsed = Plurimath::Math.parse(asciimath_string, :asciimath)
             parsed.to_omml
-          rescue StandardError => e
+          rescue StandardError
             # Fallback to plain text
             asciimath_string
           end

@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Ink annotation properties
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:inkannotation>
-      class InkAnnotation < Lutaml::Model::Serializable
-          attribute :author, String
-          attribute :date, String
+  module Office
+    # Ink annotation properties
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:inkannotation>
+    class InkAnnotation < Lutaml::Model::Serializable
+      attribute :author, String
+      attribute :date, String
 
-          xml do
-            element 'inkannotation'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'inkannotation'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'author', to: :author
-            map_attribute 'date', to: :date
-          end
+        map_attribute 'author', to: :author
+        map_attribute 'date', to: :date
       end
     end
+  end
 end

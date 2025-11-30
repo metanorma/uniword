@@ -91,9 +91,9 @@ module Uniword
       # @return [String] StyleSet name for YAML file (e.g., 'distinctive')
       def styleset_name_from_file(path)
         File.basename(path, '.dotx')
-          .downcase
-          .gsub(/[^a-z0-9]+/, '_')
-          .gsub(/^_|_$/, '')
+            .downcase
+            .gsub(/[^a-z0-9]+/, '_')
+            .gsub(/^_|_$/, '')
       end
     end
   end

@@ -47,33 +47,33 @@ RSpec.describe Uniword::Transformation::Transformer do
       end
 
       it 'requires source parameter' do
-        expect {
+        expect do
           transformer.transform(
             source: nil,
             source_format: :docx,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Source must be a Document/)
+        end.to raise_error(ArgumentError, /Source must be a Document/)
       end
 
       it 'requires valid source_format' do
-        expect {
+        expect do
           transformer.transform(
             source: source_doc,
             source_format: :invalid,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Source format must be/)
+        end.to raise_error(ArgumentError, /Source format must be/)
       end
 
       it 'requires valid target_format' do
-        expect {
+        expect do
           transformer.transform(
             source: source_doc,
             source_format: :docx,
             target_format: :invalid
           )
-        }.to raise_error(ArgumentError, /Target format must be/)
+        end.to raise_error(ArgumentError, /Target format must be/)
       end
     end
 

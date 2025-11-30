@@ -25,9 +25,7 @@ module Uniword
       # @raise [Zip::Error] if ZIP extraction fails
       def extract(path)
         # Handle streams directly
-        if path.is_a?(IO) || path.is_a?(StringIO)
-          return extract_from_stream(path)
-        end
+        return extract_from_stream(path) if path.is_a?(IO) || path.is_a?(StringIO)
 
         validate_path(path)
 
@@ -43,7 +41,8 @@ module Uniword
           # Explicitly extract theme if present
           theme_entry = zip_file.find_entry('word/theme/theme1.xml')
           if theme_entry && !content.key?('word/theme/theme1.xml')
-            content['word/theme/theme1.xml'] = theme_entry.get_input_stream.read.force_encoding('UTF-8')
+            content['word/theme/theme1.xml'] =
+              theme_entry.get_input_stream.read.force_encoding('UTF-8')
           end
         end
 
@@ -67,7 +66,8 @@ module Uniword
           # Explicitly extract theme if present
           theme_entry = zip_file.find_entry('word/theme/theme1.xml')
           if theme_entry && !content.key?('word/theme/theme1.xml')
-            content['word/theme/theme1.xml'] = theme_entry.get_input_stream.read.force_encoding('UTF-8')
+            content['word/theme/theme1.xml'] =
+              theme_entry.get_input_stream.read.force_encoding('UTF-8')
           end
         end
 

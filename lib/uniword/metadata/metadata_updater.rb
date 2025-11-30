@@ -97,10 +97,10 @@ module Uniword
       # @param document [Object] The document to validate
       # @raise [ArgumentError] if document is invalid
       def validate_document(document)
-        unless document.is_a?(Object)
-          raise ArgumentError,
-                "Document must be an object, got #{document.class}"
-        end
+        return if document.is_a?(Object)
+
+        raise ArgumentError,
+              "Document must be an object, got #{document.class}"
       end
 
       # Update core properties.
@@ -173,7 +173,7 @@ module Uniword
       # @param metadata [Metadata] Source metadata
       # @param key [Symbol] Property key
       def update_if_present(properties, metadata, key)
-        return unless metadata.has_key?(key)
+        return unless metadata.key?(key)
 
         value = metadata[key]
         properties[key] = value

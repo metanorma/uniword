@@ -8,7 +8,7 @@ RSpec.describe Uniword::Batch::ProcessingStage do
   class TestStage < Uniword::Batch::ProcessingStage
     attr_reader :process_called
 
-    def process(document, context = {})
+    def process(document, _context = {})
       @process_called = true
       document
     end
@@ -69,7 +69,9 @@ RSpec.describe Uniword::Batch::ProcessingStage do
 
     it 'handles multi-word class names' do
       class MultiWordTestStage < Uniword::Batch::ProcessingStage
-        def process(document, context = {}); document; end
+        def process(document, _context = {})
+          document
+        end
       end
 
       stage = MultiWordTestStage.new
@@ -78,7 +80,9 @@ RSpec.describe Uniword::Batch::ProcessingStage do
 
     it 'removes Stage suffix' do
       class CustomProcessingStage < Uniword::Batch::ProcessingStage
-        def process(document, context = {}); document; end
+        def process(document, _context = {})
+          document
+        end
       end
 
       stage = CustomProcessingStage.new

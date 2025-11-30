@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Math
-      # Break in math equation
-      #
-      # Generated from OOXML schema: math.yml
-      # Element: <m:brk>
-      class MathBreak < Lutaml::Model::Serializable
-          attribute :aln_at, Integer
+  module Math
+    # Break in math equation
+    #
+    # Generated from OOXML schema: math.yml
+    # Element: <m:brk>
+    class MathBreak < Lutaml::Model::Serializable
+      attribute :aln_at, Integer
 
-          xml do
-            element 'brk'
-            namespace Uniword::Ooxml::Namespaces::MathML
+      xml do
+        element 'brk'
+        namespace Uniword::Ooxml::Namespaces::MathML
 
-            map_attribute 'val', to: :aln_at
-          end
+        map_attribute 'val', to: :aln_at
       end
     end
+  end
 end

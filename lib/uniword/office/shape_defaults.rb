@@ -3,27 +3,27 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Shape defaults
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:shapedefaults>
-      class ShapeDefaults < Lutaml::Model::Serializable
-          attribute :ext, String
-          attribute :spidmax, String
-          attribute :fill, String
-          attribute :stroke, String
+  module Office
+    # Shape defaults
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:shapedefaults>
+    class ShapeDefaults < Lutaml::Model::Serializable
+      attribute :ext, String
+      attribute :spidmax, String
+      attribute :fill, String
+      attribute :stroke, String
 
-          xml do
-            element 'shapedefaults'
-            namespace Uniword::Ooxml::Namespaces::Office
-            mixed_content
+      xml do
+        element 'shapedefaults'
+        namespace Uniword::Ooxml::Namespaces::Office
+        mixed_content
 
-            map_attribute 'ext', to: :ext
-            map_attribute 'spidmax', to: :spidmax
-            map_element 'fill', to: :fill, render_nil: false
-            map_element 'stroke', to: :stroke, render_nil: false
-          end
+        map_attribute 'ext', to: :ext
+        map_attribute 'spidmax', to: :spidmax
+        map_element 'fill', to: :fill, render_nil: false
+        map_element 'stroke', to: :stroke, render_nil: false
       end
     end
+  end
 end

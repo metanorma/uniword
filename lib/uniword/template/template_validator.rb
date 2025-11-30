@@ -64,17 +64,17 @@ module Uniword
 
             if depth.negative?
               @errors << "Unmatched {{@end}} at position #{marker.position} " \
-                         "without corresponding {{@each}}"
+                         'without corresponding {{@each}}'
             end
           end
         end
 
         # Check for unclosed loops
-        if depth.positive?
-          loop_stack.each do |unclosed|
-            @errors << "Unclosed loop {{@each #{unclosed.collection}}} " \
-                       "at position #{unclosed.position}: missing {{@end}}"
-          end
+        return unless depth.positive?
+
+        loop_stack.each do |unclosed|
+          @errors << "Unclosed loop {{@each #{unclosed.collection}}} " \
+                     "at position #{unclosed.position}: missing {{@end}}"
         end
       end
 
@@ -152,10 +152,10 @@ module Uniword
         end
 
         # Check for valid identifier syntax
-        unless expr.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
-          @errors << "Invalid variable expression '#{expr}' at position #{marker.position}. " \
-                     "Expected format: variable or object.property"
-        end
+        return if expr.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
+
+        @errors << "Invalid variable expression '#{expr}' at position #{marker.position}. " \
+                   'Expected format: variable or object.property'
       end
 
       # Validate loop collection
@@ -171,10 +171,10 @@ module Uniword
         end
 
         # Check for valid identifier syntax
-        unless collection.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
-          @errors << "Invalid collection name '#{collection}' at position #{marker.position}. " \
-                     "Expected format: collection or object.collection"
-        end
+        return if collection.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
+
+        @errors << "Invalid collection name '#{collection}' at position #{marker.position}. " \
+                   'Expected format: collection or object.collection'
       end
 
       # Validate conditional expression
@@ -193,9 +193,9 @@ module Uniword
         # Allow: variable, object.property, comparisons
         valid_pattern = /^[\w.]+(\s*(==|!=|>|<|>=|<=)\s*[\w."']+)?$/
 
-        unless condition.match?(valid_pattern)
-          @errors << "Invalid condition syntax '#{condition}' at position #{marker.position}"
-        end
+        return if condition.match?(valid_pattern)
+
+        @errors << "Invalid condition syntax '#{condition}' at position #{marker.position}"
       end
     end
   end

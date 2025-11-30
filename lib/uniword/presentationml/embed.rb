@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Presentationml
-      # Embedded object reference
-      #
-      # Generated from OOXML schema: presentationml.yml
-      # Element: <p:embed>
-      class Embed < Lutaml::Model::Serializable
-          attribute :r_id, :string
+  module Presentationml
+    # Embedded object reference
+    #
+    # Generated from OOXML schema: presentationml.yml
+    # Element: <p:embed>
+    class Embed < Lutaml::Model::Serializable
+      attribute :r_id, :string
 
-          xml do
-            element 'embed'
-            namespace Uniword::Ooxml::Namespaces::PresentationalML
+      xml do
+        element 'embed'
+        namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-            map_attribute 'id', to: :r_id
-          end
+        map_attribute 'id', to: :r_id
       end
     end
+  end
 end

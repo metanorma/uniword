@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Note: element_validator is already loaded by uniword.rb
+# NOTE: element_validator is already loaded by uniword.rb
 # No need to require it here to avoid circular dependencies
 
 module Uniword
@@ -42,9 +42,7 @@ module Uniword
         return ['Element is nil'] if element.nil?
 
         # Check paragraph type first (more specific than base check)
-        unless element.is_a?(Uniword::Paragraph)
-          return ['Element must be a Paragraph']
-        end
+        return ['Element must be a Paragraph'] unless element.is_a?(Uniword::Paragraph)
 
         # Validate runs - collect all specific errors
         errors.concat(run_errors(element))

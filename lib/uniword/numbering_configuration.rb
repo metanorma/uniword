@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
-require_relative "numbering_definition"
-require_relative "numbering_instance"
+require 'lutaml/model'
+require_relative 'numbering_definition'
+require_relative 'numbering_instance'
 
 module Uniword
   # Document-level numbering configuration manager
@@ -12,7 +12,7 @@ module Uniword
     attribute :instances, NumberingInstance, collection: true, default: -> { [] }
 
     def initialize(attributes = {})
-      super(attributes)
+      super
       @definitions ||= []
       @instances ||= []
       @next_abstract_num_id = 0
@@ -23,9 +23,7 @@ module Uniword
     def add_definition(definition = nil, **attrs)
       defn = definition || NumberingDefinition.new(**attrs)
 
-      unless defn.abstract_num_id
-        defn.abstract_num_id = next_abstract_num_id
-      end
+      defn.abstract_num_id = next_abstract_num_id unless defn.abstract_num_id
 
       definitions << defn
       defn
@@ -105,12 +103,12 @@ module Uniword
 
     # Get default decimal numbering (create if not exists)
     def default_decimal_num_id
-      @default_decimal_num_id ||= create_numbering(:decimal, name: "Default Decimal")
+      @default_decimal_num_id ||= create_numbering(:decimal, name: 'Default Decimal')
     end
 
     # Get default bullet numbering (create if not exists)
     def default_bullet_num_id
-      @default_bullet_num_id ||= create_numbering(:bullet, name: "Default Bullet")
+      @default_bullet_num_id ||= create_numbering(:bullet, name: 'Default Bullet')
     end
 
     private

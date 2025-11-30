@@ -10,19 +10,19 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   describe '#open and file loading' do
     context 'with valid DOCX files' do
       it 'opens Office365 generated documents' do
-        doc = Uniword::DocumentFactory.from_file(fixtures_path + '/office365.docx')
+        doc = Uniword::DocumentFactory.from_file("#{fixtures_path}/office365.docx")
         expect(doc).not_to be_nil
         expect(doc.paragraphs.count).to be > 0
       end
 
       it 'opens basic documents from file path' do
-        doc = Uniword::DocumentFactory.from_file(fixtures_path + '/basic.docx')
+        doc = Uniword::DocumentFactory.from_file("#{fixtures_path}/basic.docx")
         expect(doc).not_to be_nil
         expect(doc.paragraphs).not_to be_empty
       end
 
       it 'opens documents from binary stream' do
-        stream = File.binread(fixtures_path + '/basic.docx')
+        stream = File.binread("#{fixtures_path}/basic.docx")
         doc = Uniword::DocumentFactory.from_file_data(stream)
         expect(doc).not_to be_nil
         expect(doc.paragraphs.size).to eq(2)
@@ -31,14 +31,14 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
 
     context 'with invalid files' do
       it 'raises error for non-existent file' do
-        invalid_path = fixtures_path + '/invalid_file_path.docx'
+        invalid_path = "#{fixtures_path}/invalid_file_path.docx"
         expect { Uniword::DocumentFactory.from_file(invalid_path) }.to raise_error
       end
     end
   end
 
   describe 'reading paragraphs' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/basic.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/basic.docx") }
 
     it 'reads correct number of paragraphs' do
       expect(doc.paragraphs.size).to eq(2)
@@ -61,7 +61,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'reading tables' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/tables.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/tables.docx") }
 
     it 'reads all tables' do
       expect(doc.tables.count).to eq(2)
@@ -97,7 +97,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'reading formatting' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/formatting.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/formatting.docx") }
 
     it 'reads paragraphs with correct text' do
       expect(doc.paragraphs[0].text).to eq('Normal')
@@ -131,15 +131,13 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
     it 'detects centered paragraphs' do
       # Paragraph 6 in formatting.docx is centered
       doc.paragraphs.each_with_index do |para, idx|
-        if idx == 6
-          expect(para.alignment).to eq('center')
-        end
+        expect(para.alignment).to eq('center') if idx == 6
       end
     end
   end
 
   describe 'editing paragraphs' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/editing.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/editing.docx") }
 
     it 'changes paragraph text' do
       original_text = doc.paragraphs.first.text
@@ -158,7 +156,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
 
     it 'inserts new paragraphs after existing ones' do
       original_count = doc.paragraphs.size
-      first_p = doc.paragraphs.first
+      doc.paragraphs.first
       new_p = Uniword::Paragraph.new
       new_p.text = 'inserted paragraph'
       # Assuming we can insert (method may vary)
@@ -167,7 +165,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'format-preserving substitution' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/substitution.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/substitution.docx") }
 
     it 'substitutes text in paragraphs' do
       # Test basic substitution on first non-empty paragraph
@@ -186,7 +184,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'bookmarks' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/basic.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/basic.docx") }
 
     it 'reads bookmarks from document' do
       bookmarks = doc.bookmarks
@@ -195,7 +193,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'hyperlinks' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/tables.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/tables.docx") }
 
     it 'identifies hyperlinks in table cells' do
       # The tables.docx file contains hyperlinks
@@ -205,7 +203,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
   end
 
   describe 'saving documents' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/basic.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/basic.docx") }
 
     it 'saves document to file path' do
       temp_file = Tempfile.new(['uniword_test', '.docx'])
@@ -220,7 +218,7 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
         reopened = Uniword::DocumentFactory.from_file(temp_path)
         expect(reopened.paragraphs.size).to eq(doc.paragraphs.size)
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        FileUtils.rm_f(temp_path)
       end
     end
 
@@ -235,13 +233,13 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
         expect(reopened.paragraphs.size).to eq(doc.paragraphs.size)
         expect(reopened.text).to eq(doc.text)
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        FileUtils.rm_f(temp_path)
       end
     end
   end
 
   describe 'document styles' do
-    let(:doc) { Uniword::DocumentFactory.from_file(fixtures_path + '/test_with_style.docx') }
+    let(:doc) { Uniword::DocumentFactory.from_file("#{fixtures_path}/test_with_style.docx") }
 
     it 'reads document with styles' do
       expect(doc).not_to be_nil
@@ -251,13 +249,13 @@ RSpec.describe 'Uniword docx gem compatibility - Document operations', :compatib
 
   describe 'special documents' do
     it 'handles documents with no styles' do
-      doc = Uniword::DocumentFactory.from_file(fixtures_path + '/no_styles.docx')
+      doc = Uniword::DocumentFactory.from_file("#{fixtures_path}/no_styles.docx")
       expect(doc).not_to be_nil
       expect(doc.paragraphs).not_to be_empty
     end
 
     it 'handles documents with unusual structure' do
-      doc = Uniword::DocumentFactory.from_file(fixtures_path + '/weird_docx.docx')
+      doc = Uniword::DocumentFactory.from_file("#{fixtures_path}/weird_docx.docx")
       expect(doc).not_to be_nil
     end
   end

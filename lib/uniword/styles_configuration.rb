@@ -31,9 +31,7 @@ module Uniword
       @styles ||= []
     end
 
-    def styles=(value)
-      @styles = value
-    end
+    attr_writer :styles
 
     # Initialize with optional default styles
     #
@@ -41,7 +39,7 @@ module Uniword
     def initialize(attributes = {})
       # TEMPORARY: Disable default styles (requires v1.x classes)
       # include_defaults = attributes.delete(:include_defaults) != false
-      super(attributes)
+      super
       # add_default_styles if include_defaults && styles.empty?
     end
 
@@ -54,22 +52,17 @@ module Uniword
       raise ArgumentError, 'Style must be a Style instance' unless style.is_a?(Style)
 
       # Skip if ID is empty
-      if style.id.to_s.strip.empty?
-        raise ArgumentError, 'Style must have a non-empty ID'
-      end
+      raise ArgumentError, 'Style must have a non-empty ID' if style.id.to_s.strip.empty?
 
       existing = style_by_id(style.id)
       if existing
-        if allow_overwrite
-          # Remove existing and add new
-          remove_style(style.id)
-          styles << style
-        else
-          raise ArgumentError, "Style with ID '#{style.id}' already exists"
-        end
-      else
-        styles << style
+        raise ArgumentError, "Style with ID '#{style.id}' already exists" unless allow_overwrite
+
+        # Remove existing and add new
+        remove_style(style.id)
+
       end
+      styles << style
 
       style
     end
@@ -179,9 +172,7 @@ module Uniword
       add_style(ParagraphStyle.normal) unless style_by_id('Normal')
 
       # Add default character style
-      unless style_by_id('DefaultParagraphFont')
-        add_style(CharacterStyle.default_char)
-      end
+      add_style(CharacterStyle.default_char) unless style_by_id('DefaultParagraphFont')
 
       # Add heading styles (1-9)
       (1..9).each do |level|

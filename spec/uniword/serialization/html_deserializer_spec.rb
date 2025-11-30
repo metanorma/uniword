@@ -8,11 +8,15 @@ RSpec.describe Uniword::Serialization::HtmlDeserializer do
   describe '#deserialize' do
     context 'with invalid input' do
       it 'raises error when parts is nil' do
-        expect { deserializer.deserialize(nil) }.to raise_error(ArgumentError, /Parts cannot be nil/)
+        expect do
+          deserializer.deserialize(nil)
+        end.to raise_error(ArgumentError, /Parts cannot be nil/)
       end
 
       it 'raises error when parts is not a hash' do
-        expect { deserializer.deserialize('not a hash') }.to raise_error(ArgumentError, /Parts must be a Hash/)
+        expect do
+          deserializer.deserialize('not a hash')
+        end.to raise_error(ArgumentError, /Parts must be a Hash/)
       end
     end
 

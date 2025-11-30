@@ -42,28 +42,28 @@ module Uniword
             violations << create_violation(
               severity: :warning,
               message: "Paragraph #{index + 1} uses direct formatting instead of a style. " \
-                       "Consider applying a standard paragraph style.",
+                       'Consider applying a standard paragraph style.',
               location: "Paragraph #{index + 1}",
               element: para
             )
           end
 
           # Check runs for direct formatting
-          unless @allow_direct_formatting
-            para.runs.each_with_index do |run, run_index|
-              next unless run.respond_to?(:properties)
-              next unless run.properties
+          next if @allow_direct_formatting
 
-              if has_direct_run_formatting?(run)
-                violations << create_violation(
-                  severity: :info,
-                  message: "Direct text formatting detected in paragraph #{index + 1}, run #{run_index + 1}. " \
-                           "Consider using character styles for consistency.",
-                  location: "Paragraph #{index + 1}, Run #{run_index + 1}",
-                  element: run
-                )
-              end
-            end
+          para.runs.each_with_index do |run, run_index|
+            next unless run.respond_to?(:properties)
+            next unless run.properties
+
+            next unless has_direct_run_formatting?(run)
+
+            violations << create_violation(
+              severity: :info,
+              message: "Direct text formatting detected in paragraph #{index + 1}, run #{run_index + 1}. " \
+                       'Consider using character styles for consistency.',
+              location: "Paragraph #{index + 1}, Run #{run_index + 1}",
+              element: run
+            )
           end
         end
 

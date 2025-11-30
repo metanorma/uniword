@@ -16,11 +16,11 @@ module Uniword
     # where value is the style ID being referenced
     class StyleReference < Lutaml::Model::Serializable
       attribute :value, StyleReferenceValue
-      
+
       xml do
-        element 'pStyle'  # Default, can be overridden
+        element 'pStyle' # Default, can be overridden
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

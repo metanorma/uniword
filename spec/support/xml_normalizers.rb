@@ -73,11 +73,10 @@ module XmlNormalizers
     unused_prefixes.each do |prefix|
       # Remove xmlns:prefix declaration if not used in document
       ns_def = root.namespace_definitions.find { |ns| ns.prefix == prefix }
-      if ns_def && !namespace_used?(doc, ns_def)
-        # Nokogiri doesn't provide direct removal, so we recreate without it
-        # For now, just document this limitation
-        # TODO: Implement namespace removal if Canon still fails
-      end
+      next unless ns_def && !namespace_used?(doc, ns_def)
+      # Nokogiri doesn't provide direct removal, so we recreate without it
+      # For now, just document this limitation
+      # TODO: Implement namespace removal if Canon still fails
     end
   end
 

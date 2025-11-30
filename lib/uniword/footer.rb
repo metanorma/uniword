@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a document footer
   # Footers can contain paragraphs, tables, and fields (like page numbers)
   class Footer < Lutaml::Model::Serializable
-    attribute :type, :string, default: -> { "default" }
+    attribute :type, :string, default: -> { 'default' }
     attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
     attribute :tables, Table, collection: true, default: -> { [] }
 
@@ -22,7 +22,10 @@ module Uniword
 
     # Add a paragraph to this footer
     def add_paragraph(paragraph)
-      raise ArgumentError, 'paragraph must be a Paragraph instance' unless paragraph.is_a?(Paragraph)
+      unless paragraph.is_a?(Paragraph)
+        raise ArgumentError,
+              'paragraph must be a Paragraph instance'
+      end
 
       paragraphs << paragraph
     end
@@ -58,7 +61,7 @@ module Uniword
     # Get all content elements (paragraphs and tables) in order
     def elements
       (paragraphs + tables).sort_by do |elem|
-        paragraphs.index(elem) || tables.index(elem) + paragraphs.size
+        paragraphs.index(elem) || (tables.index(elem) + paragraphs.size)
       end
     end
 

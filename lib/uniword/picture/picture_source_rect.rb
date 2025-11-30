@@ -3,26 +3,26 @@
 require 'lutaml/model'
 
 module Uniword
-    module Picture
-      # Source rectangle for picture cropping
-      #
-      # Generated from OOXML schema: picture.yml
-      # Element: <pic:srcRect>
-      class PictureSourceRect < Lutaml::Model::Serializable
-          attribute :l, Integer
-          attribute :t, Integer
-          attribute :r, Integer
-          attribute :b, Integer
+  module Picture
+    # Source rectangle for picture cropping
+    #
+    # Generated from OOXML schema: picture.yml
+    # Element: <pic:srcRect>
+    class PictureSourceRect < Lutaml::Model::Serializable
+      attribute :l, Integer
+      attribute :t, Integer
+      attribute :r, Integer
+      attribute :b, Integer
 
-          xml do
-            element 'srcRect'
-            namespace Uniword::Ooxml::Namespaces::Picture
+      xml do
+        element 'srcRect'
+        namespace Uniword::Ooxml::Namespaces::Picture
 
-            map_attribute 'l', to: :l
-            map_attribute 't', to: :t
-            map_attribute 'r', to: :r
-            map_attribute 'b', to: :b
-          end
+        map_attribute 'l', to: :l
+        map_attribute 't', to: :t
+        map_attribute 'r', to: :r
+        map_attribute 'b', to: :b
       end
     end
+  end
 end

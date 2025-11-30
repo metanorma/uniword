@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
-require_relative "numbering_level"
+require 'lutaml/model'
+require_relative 'numbering_level'
 
 module Uniword
   # Represents an abstract numbering definition with up to 9 levels (0-8)
@@ -22,9 +22,7 @@ module Uniword
 
     # Add a level to this definition
     def add_level(level_obj = nil, **level_attrs)
-      if levels.size >= MAX_LEVELS
-        raise ArgumentError, "Cannot add more than #{MAX_LEVELS} levels"
-      end
+      raise ArgumentError, "Cannot add more than #{MAX_LEVELS} levels" if levels.size >= MAX_LEVELS
 
       # Auto-assign level index based on position in array
       level_index = levels.size
@@ -47,14 +45,14 @@ module Uniword
     end
 
     # Create a simple decimal numbering definition
-    def self.decimal(abstract_num_id:, name: "Decimal")
+    def self.decimal(abstract_num_id:, name: 'Decimal')
       new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
         9.times do |i|
           defn.add_level(
             level: i,
-            format: "decimal",
+            format: 'decimal',
             start: 1,
-            alignment: "left",
+            alignment: 'left',
             left_indent: 720 * (i + 1),
             hanging_indent: 360
           )
@@ -63,7 +61,7 @@ module Uniword
     end
 
     # Create a bullet numbering definition
-    def self.bullet(abstract_num_id:, name: "Bullet", character: "\u2022")
+    def self.bullet(abstract_num_id:, name: 'Bullet', character: "\u2022")
       new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
         9.times do |i|
           level_char = case i % 3
@@ -74,10 +72,10 @@ module Uniword
 
           defn.add_level(
             level: i,
-            format: "bullet",
+            format: 'bullet',
             text: level_char,
-            font_name: "Symbol",
-            alignment: "left",
+            font_name: 'Symbol',
+            alignment: 'left',
             left_indent: 720 * (i + 1),
             hanging_indent: 360
           )
@@ -86,15 +84,15 @@ module Uniword
     end
 
     # Create a roman numeral numbering definition
-    def self.roman(abstract_num_id:, name: "Roman", upper: true)
-      format = upper ? "upperRoman" : "lowerRoman"
+    def self.roman(abstract_num_id:, name: 'Roman', upper: true)
+      format = upper ? 'upperRoman' : 'lowerRoman'
       new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
         9.times do |i|
           defn.add_level(
             level: i,
             format: format,
             start: 1,
-            alignment: "left",
+            alignment: 'left',
             left_indent: 720 * (i + 1),
             hanging_indent: 360
           )
@@ -103,15 +101,15 @@ module Uniword
     end
 
     # Create a letter numbering definition
-    def self.letter(abstract_num_id:, name: "Letter", upper: true)
-      format = upper ? "upperLetter" : "lowerLetter"
+    def self.letter(abstract_num_id:, name: 'Letter', upper: true)
+      format = upper ? 'upperLetter' : 'lowerLetter'
       new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
         9.times do |i|
           defn.add_level(
             level: i,
             format: format,
             start: 1,
-            alignment: "left",
+            alignment: 'left',
             left_indent: 720 * (i + 1),
             hanging_indent: 360
           )

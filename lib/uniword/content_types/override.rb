@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module ContentTypes
-      # Override content type for specific part
-      #
-      # Generated from OOXML schema: content_types.yml
-      # Element: <ct:Override>
-      class Override < Lutaml::Model::Serializable
-          attribute :part_name, String
-          attribute :content_type, String
+  module ContentTypes
+    # Override content type for specific part
+    #
+    # Generated from OOXML schema: content_types.yml
+    # Element: <ct:Override>
+    class Override < Lutaml::Model::Serializable
+      attribute :part_name, String
+      attribute :content_type, String
 
-          xml do
-            element 'Override'
-            namespace Uniword::Ooxml::Namespaces::ContentTypes
+      xml do
+        element 'Override'
+        namespace Uniword::Ooxml::Namespaces::ContentTypes
 
-            map_attribute 'part-name', to: :part_name
-            map_attribute 'content-type', to: :content_type
-          end
+        map_attribute 'part-name', to: :part_name
+        map_attribute 'content-type', to: :content_type
       end
     end
+  end
 end

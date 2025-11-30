@@ -205,7 +205,7 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
     it 'sets page size on section' do
       section = Uniword::SectionProperties.new
       section.set_page_size(:a4, orientation: :landscape)
-      expect(section.page_width).to eq(16838)
+      expect(section.page_width).to eq(16_838)
       expect(section.orientation).to eq('landscape')
     end
 

@@ -121,9 +121,9 @@ RSpec.describe Uniword::Math::PlurimathAdapter do
 
     it 'raises error when equation has no formula' do
       equation = Uniword::MathEquation.new
-      expect {
+      expect do
         described_class.to_omml(equation)
-      }.to raise_error(ArgumentError, /must have a formula/)
+      end.to raise_error(ArgumentError, /must have a formula/)
     end
 
     it 'handles conversion errors gracefully' do
@@ -240,15 +240,15 @@ RSpec.describe Uniword::Math::PlurimathAdapter do
     end
 
     it 'raises error for invalid XML string' do
-      expect {
+      expect do
         described_class.parse_xml_node('')
-      }.to raise_error(ArgumentError, /Invalid XML/)
+      end.to raise_error(ArgumentError, /Invalid XML/)
     end
 
     it 'raises error for invalid input type' do
-      expect {
+      expect do
         described_class.parse_xml_node(123)
-      }.to raise_error(ArgumentError, /Expected String or Nokogiri/)
+      end.to raise_error(ArgumentError, /Expected String or Nokogiri/)
     end
   end
 

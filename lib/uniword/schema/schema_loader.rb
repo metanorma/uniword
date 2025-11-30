@@ -63,7 +63,7 @@ module Uniword
       # @return [Array<String>] Element names
       def element_names(schema_name)
         schema = load_schema(schema_name)
-        schema.dig('elements')&.keys || []
+        schema['elements']&.keys || []
       end
 
       # Clear cached schemas (useful for testing)

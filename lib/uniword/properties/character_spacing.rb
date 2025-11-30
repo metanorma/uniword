@@ -19,11 +19,11 @@ module Uniword
     # - Zero is normal spacing
     class CharacterSpacing < Lutaml::Model::Serializable
       attribute :value, CharacterSpacingValue
-      
+
       xml do
         element 'spacing'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

@@ -21,7 +21,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      styles_with_pPr = styleset.styles.select { |s| s.paragraph_properties }
+      styles_with_pPr = styleset.styles.select(&:paragraph_properties)
 
       expect(styles_with_pPr.count).to be > 0
 
@@ -35,7 +35,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      styles_with_rPr = styleset.styles.select { |s| s.run_properties }
+      styles_with_rPr = styleset.styles.select(&:run_properties)
 
       expect(styles_with_rPr.count).to be > 0
 
@@ -141,7 +141,7 @@ RSpec.describe 'StyleSet Integration' do
       # Check for specific property serialization
       expect(styles_xml).to include('<w:spacing')  # Spacing properties
       expect(styles_xml).to include('<w:sz')       # Font size
-      expect(styles_xml).to include('<w:outlineLvl')  # Outline level for headings
+      expect(styles_xml).to include('<w:outlineLvl') # Outline level for headings
     end
   end
 

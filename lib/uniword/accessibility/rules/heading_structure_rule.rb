@@ -25,23 +25,21 @@ module Uniword
               element: document,
               severity: :warning,
               suggestion: @config[:suggestion] ||
-                "Add headings to structure the content for screen readers"
+                'Add headings to structure the content for screen readers'
             )
             return violations
           end
 
           # Check heading hierarchy
-          if @config[:check_hierarchy]
-            violations.concat(check_hierarchy(headings))
-          end
+          violations.concat(check_hierarchy(headings)) if @config[:check_hierarchy]
 
           # Check for H1 requirement
           if @config[:require_h1] && !has_h1?(headings)
             violations << create_violation(
-              message: "Document missing top-level heading (H1)",
+              message: 'Document missing top-level heading (H1)',
               element: document,
               severity: :error,
-              suggestion: "Start document with a level 1 heading (H1)"
+              suggestion: 'Start document with a level 1 heading (H1)'
             )
           end
 
@@ -56,8 +54,8 @@ module Uniword
         # @return [Array<Hash>] Headings with level and paragraph
         def extract_headings(document)
           document.paragraphs
-            .select { |p| heading_paragraph?(p) }
-            .map { |p| { level: extract_heading_level(p), paragraph: p } }
+                  .select { |p| heading_paragraph?(p) }
+                  .map { |p| { level: extract_heading_level(p), paragraph: p } }
         end
 
         # Check if paragraph is a heading
@@ -106,7 +104,7 @@ module Uniword
                 message: "Heading hierarchy skip: Level #{previous_level} to #{level} (heading #{index + 1})",
                 element: heading[:paragraph],
                 severity: @config[:severity] || :error,
-                suggestion: "Headings should increase by one level at a time (e.g., H1 → H2, not H1 → H3)"
+                suggestion: 'Headings should increase by one level at a time (e.g., H1 → H2, not H1 → H3)'
               )
             end
 

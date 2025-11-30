@@ -56,7 +56,7 @@ module Uniword
 
       # Numbering
       attribute :num_id, :string
-      attribute :ilvl, :integer  # Numbering level (0-8)
+      attribute :ilvl, :integer # Numbering level (0-8)
 
       # Keep together options
       attribute :keep_next, :boolean, default: -> { false }
@@ -70,7 +70,6 @@ module Uniword
 
       # Bidirectional text
       attribute :bidirectional, :boolean, default: -> { false }
-
 
       # Shading (background color)
       attribute :shading_fill, :string      # RGB hex color
@@ -105,12 +104,15 @@ module Uniword
         # Keep options (only render if true)
         map_element 'keepNext', to: :keep_next, render_nil: false, render_default: false
         map_element 'keepLines', to: :keep_lines, render_nil: false, render_default: false
-        map_element 'pageBreakBefore', to: :page_break_before, render_nil: false, render_default: false
+        map_element 'pageBreakBefore', to: :page_break_before, render_nil: false,
+                                       render_default: false
         map_element 'widowControl', to: :widow_control, render_nil: false, render_default: false
 
         # Spacing options (only render if true)
-        map_element 'contextualSpacing', to: :contextual_spacing, render_nil: false, render_default: false
-        map_element 'suppressLineNumbers', to: :suppress_line_numbers, render_nil: false, render_default: false
+        map_element 'contextualSpacing', to: :contextual_spacing, render_nil: false,
+                                         render_default: false
+        map_element 'suppressLineNumbers', to: :suppress_line_numbers, render_nil: false,
+                                           render_default: false
 
         # Bidirectional (only render if true)
         map_element 'bidi', to: :bidirectional, render_nil: false, render_default: false

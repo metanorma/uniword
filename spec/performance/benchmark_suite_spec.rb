@@ -11,13 +11,13 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
   after(:all) do
     # Print summary if running with PROFILE=true
     if ENV['PROFILE']
-      puts "\n" + "=" * 70
-      puts "BENCHMARK SUMMARY"
-      puts "=" * 70
+      puts "\n#{'=' * 70}"
+      puts 'BENCHMARK SUMMARY'
+      puts '=' * 70
       @benchmark_results.each do |name, time|
         puts format('%-50s: %.4f seconds', name, time)
       end
-      puts "=" * 70
+      puts '=' * 70
     end
 
     # Clean up
@@ -25,9 +25,9 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
   end
 
   # Helper to run and record benchmark
-  def run_benchmark(name)
+  def run_benchmark(name, &block)
     require 'benchmark'
-    time = Benchmark.realtime { yield }
+    time = Benchmark.realtime(&block)
     @benchmark_results[name] = time
     time
   end

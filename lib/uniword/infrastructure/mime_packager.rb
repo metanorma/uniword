@@ -194,7 +194,7 @@ module Uniword
       # @return [String] The modified MHTML content
       def contentid(mhtml)
         # Replace img src attributes
-        result = mhtml.gsub(%r{(<img[^<>]*?src=")([^"'<]+)(['"])}m) do |match|
+        result = mhtml.gsub(/(<img[^<>]*?src=")([^"'<]+)(['"])/m) do |match|
           # Keep data: and http: URLs as-is
           if /^data:|^https?:/.match?(Regexp.last_match(2))
             match
@@ -204,7 +204,7 @@ module Uniword
         end
 
         # Replace v:imagedata src attributes (VML images)
-        result.gsub(%r{(<v:imagedata[^<>]*?src=")([^"'<]+)(['"])}m) do |match|
+        result.gsub(/(<v:imagedata[^<>]*?src=")([^"'<]+)(['"])/m) do |match|
           if /^data:|^https?:/.match?(Regexp.last_match(2))
             match
           else

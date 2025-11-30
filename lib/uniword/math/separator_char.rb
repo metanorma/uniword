@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Math
-      # Separator delimiter character
-      #
-      # Generated from OOXML schema: math.yml
-      # Element: <m:sepChr>
-      class SeparatorChar < Lutaml::Model::Serializable
-          attribute :val, String
+  module Math
+    # Separator delimiter character
+    #
+    # Generated from OOXML schema: math.yml
+    # Element: <m:sepChr>
+    class SeparatorChar < Lutaml::Model::Serializable
+      attribute :val, String
 
-          xml do
-            element 'sepChr'
-            namespace Uniword::Ooxml::Namespaces::MathML
+      xml do
+        element 'sepChr'
+        namespace Uniword::Ooxml::Namespaces::MathML
 
-            map_attribute 'val', to: :val
-          end
+        map_attribute 'val', to: :val
       end
     end
+  end
 end

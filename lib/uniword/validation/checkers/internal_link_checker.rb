@@ -43,9 +43,9 @@ module Uniword
           return false unless link.respond_to?(:anchor)
 
           # Internal links have anchor but no URL
-          link.anchor && !link.respond_to?(:url).then { |has_url|
+          link.anchor && !link.respond_to?(:url).then do |has_url|
             has_url ? !link.url : true
-          }
+          end
         end
 
         # Validate the internal link.
@@ -57,17 +57,17 @@ module Uniword
         # @example
         #   result = checker.check(hyperlink, document)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
 
           unless document
             return ValidationResult.warning(
               link,
-              "Cannot validate without document context"
+              'Cannot validate without document context'
             )
           end
 
           anchor = link.anchor
-          return ValidationResult.failure(link, "No anchor specified") unless anchor
+          return ValidationResult.failure(link, 'No anchor specified') unless anchor
 
           # Get bookmarks from document
           bookmarks = extract_bookmarks(document)
@@ -107,9 +107,9 @@ module Uniword
             when Hash
               bookmarks.concat(document.bookmarks.keys.map(&:to_s))
             when Array
-              bookmarks.concat(document.bookmarks.map { |b|
+              bookmarks.concat(document.bookmarks.map do |b|
                 b.respond_to?(:name) ? b.name : b.to_s
-              })
+              end)
             end
           end
 
@@ -128,12 +128,12 @@ module Uniword
         def extract_heading_bookmarks(document)
           return [] unless document.respond_to?(:paragraphs)
 
-          document.paragraphs.select { |p|
+          document.paragraphs.select do |p|
             p.respond_to?(:style) && p.style&.match?(/^Heading/)
-          }.map { |p|
+          end.map do |p|
             # Generate bookmark from heading text
             p.respond_to?(:text) ? heading_to_bookmark(p.text) : nil
-          }.compact
+          end.compact
         end
 
         # Convert heading text to bookmark name.
@@ -169,10 +169,11 @@ module Uniword
           anchor_norm = case_sensitive ? anchor : anchor.downcase
 
           # Find bookmarks that partially match
-          bookmarks.select { |b|
+          # Limit to 3 suggestions
+          bookmarks.select do |b|
             b_norm = case_sensitive ? b : b.downcase
             b_norm.include?(anchor_norm) || anchor_norm.include?(b_norm)
-          }.take(3) # Limit to 3 suggestions
+          end.take(3)
         end
       end
     end

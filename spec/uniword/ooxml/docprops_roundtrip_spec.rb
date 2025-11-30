@@ -17,7 +17,7 @@ RSpec.describe 'DocProps Round-Trip Fidelity' do
     require 'zip'
     Zip::File.open(docx_path) do |zip|
       entry = zip.find_entry(file_path)
-      return entry ? entry.get_input_stream.read : nil
+      return entry&.get_input_stream&.read
     end
   end
 

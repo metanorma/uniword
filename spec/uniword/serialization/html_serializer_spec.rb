@@ -12,7 +12,10 @@ RSpec.describe Uniword::Serialization::HtmlSerializer do
     end
 
     it 'raises ArgumentError for non-Document object' do
-      expect { serializer.serialize('not a document') }.to raise_error(ArgumentError, /Must be a Document instance/)
+      expect do
+        serializer.serialize('not a document')
+      end.to raise_error(ArgumentError,
+                         /Must be a Document instance/)
     end
 
     it 'returns hash with html, css, and images keys' do
@@ -339,7 +342,9 @@ RSpec.describe Uniword::Serialization::HtmlSerializer do
       row = Uniword::TableRow.new
       cell = Uniword::TableCell.new
       cell.instance_variable_set(:@colspan, 2)
-      def cell.colspan; @colspan; end
+      def cell.colspan
+        @colspan
+      end
       para = Uniword::Paragraph.new
       para.add_text('Merged cell')
       cell.add_paragraph(para)
@@ -356,7 +361,9 @@ RSpec.describe Uniword::Serialization::HtmlSerializer do
       row = Uniword::TableRow.new
       cell = Uniword::TableCell.new
       cell.instance_variable_set(:@rowspan, 3)
-      def cell.rowspan; @rowspan; end
+      def cell.rowspan
+        @rowspan
+      end
       para = Uniword::Paragraph.new
       para.add_text('Merged cell')
       cell.add_paragraph(para)

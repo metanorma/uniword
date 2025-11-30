@@ -64,25 +64,25 @@ RSpec.describe Uniword::DocumentFactory do
   describe '.from_file' do
     context 'with non-existent file' do
       it 'raises FileNotFoundError' do
-        expect {
+        expect do
           described_class.from_file('nonexistent.docx')
-        }.to raise_error(Uniword::FileNotFoundError, /nonexistent\.docx/)
+        end.to raise_error(Uniword::FileNotFoundError, /nonexistent\.docx/)
       end
     end
 
     context 'with nil path' do
       it 'raises ArgumentError' do
-        expect {
+        expect do
           described_class.from_file(nil)
-        }.to raise_error(ArgumentError, /cannot be nil/)
+        end.to raise_error(ArgumentError, /cannot be nil/)
       end
     end
 
     context 'with empty path' do
       it 'raises ArgumentError' do
-        expect {
+        expect do
           described_class.from_file('')
-        }.to raise_error(ArgumentError, /cannot be empty/)
+        end.to raise_error(ArgumentError, /cannot be empty/)
       end
     end
   end

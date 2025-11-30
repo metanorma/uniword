@@ -221,11 +221,16 @@ RSpec.describe 'OOXML Round-trip Serialization' do
 
       # Parse and verify structure
       doc = Nokogiri::XML(xml)
-      expect(doc.at_xpath('//w:document', 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
-      expect(doc.at_xpath('//w:body', 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
-      expect(doc.at_xpath('//w:p', 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
-      expect(doc.at_xpath('//w:r', 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
-      expect(doc.at_xpath('//w:t', 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
+      expect(doc.at_xpath('//w:document',
+                          'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
+      expect(doc.at_xpath('//w:body',
+                          'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
+      expect(doc.at_xpath('//w:p',
+                          'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
+      expect(doc.at_xpath('//w:r',
+                          'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
+      expect(doc.at_xpath('//w:t',
+                          'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main')).not_to be_nil
     end
   end
 
@@ -247,7 +252,9 @@ RSpec.describe 'OOXML Round-trip Serialization' do
     end
 
     it 'raises error for invalid XML' do
-      expect { deserializer.deserialize('<invalid>') }.to raise_error(ArgumentError, /Failed to deserialize/)
+      expect do
+        deserializer.deserialize('<invalid>')
+      end.to raise_error(ArgumentError, /Failed to deserialize/)
     end
   end
 end

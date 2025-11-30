@@ -131,9 +131,9 @@ module Uniword
       # @return [String] Theme name for YAML file
       def theme_name_from_file(path)
         File.basename(path, '.thmx')
-          .downcase
-          .gsub(/[^a-z0-9]+/, '_')
-          .gsub(/^_|_$/, '')
+            .downcase
+            .gsub(/[^a-z0-9]+/, '_')
+            .gsub(/^_|_$/, '')
       end
     end
   end

@@ -26,7 +26,7 @@ module Uniword
       # @option options [Boolean] :report_broken Report broken links
       # @option options [String] :broken_link_action Action for broken links ('report', 'remove', 'disable')
       def initialize(options = {})
-        super(options)
+        super
         @check_internal = options.fetch(:check_internal, true)
         @check_external = options.fetch(:check_external, false)
         @check_bookmarks = options.fetch(:check_bookmarks, true)
@@ -64,7 +64,7 @@ module Uniword
             log "  - #{link[:type]}: #{link[:target]}", level: :warn
           end
         else
-          log "All links valid"
+          log 'All links valid'
         end
 
         document
@@ -74,7 +74,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        "Validate document links"
+        'Validate document links'
       end
 
       private
@@ -110,7 +110,7 @@ module Uniword
       def determine_link_type(hyperlink)
         if hyperlink.anchor
           :bookmark
-        elsif hyperlink.target && hyperlink.target.start_with?('#')
+        elsif hyperlink.target&.start_with?('#')
           :internal
         elsif hyperlink.target && (hyperlink.target.start_with?('http://') || hyperlink.target.start_with?('https://'))
           :external
@@ -172,7 +172,7 @@ module Uniword
       #
       # @param link [Hash] Link information
       # @param document [Document] Document containing the link
-      def handle_broken_link(link, document)
+      def handle_broken_link(link, _document)
         case @broken_link_action
         when 'report'
           # Just report - no action needed

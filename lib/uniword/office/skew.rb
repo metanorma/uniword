@@ -3,26 +3,26 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Skew transformation
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:skew>
-      class Skew < Lutaml::Model::Serializable
-          attribute :true, String
-          attribute :offset, String
-          attribute :origin, String
-          attribute :matrix, String
+  module Office
+    # Skew transformation
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:skew>
+    class Skew < Lutaml::Model::Serializable
+      attribute true, String
+      attribute :offset, String
+      attribute :origin, String
+      attribute :matrix, String
 
-          xml do
-            element 'skew'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'skew'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'true', to: :true
-            map_attribute 'offset', to: :offset
-            map_attribute 'origin', to: :origin
-            map_attribute 'matrix', to: :matrix
-          end
+        map_attribute 'true', to: true
+        map_attribute 'offset', to: :offset
+        map_attribute 'origin', to: :origin
+        map_attribute 'matrix', to: :matrix
       end
     end
+  end
 end

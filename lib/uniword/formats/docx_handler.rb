@@ -73,10 +73,12 @@ module Uniword
         document.core_properties = package.core_properties if package.core_properties
         document.app_properties = package.app_properties if package.app_properties
         document.theme = package.theme if package.theme
-        
+
         # Transfer model-based configurations
         document.styles_configuration = package.styles_configuration if package.styles_configuration
-        document.numbering_configuration = package.numbering_configuration if package.numbering_configuration
+        if package.numbering_configuration
+          document.numbering_configuration = package.numbering_configuration
+        end
 
         document
       end
@@ -106,10 +108,10 @@ module Uniword
 
         # Convert package to ZIP content
         zip_content = package.to_zip_content
-        
+
         # Add required OOXML infrastructure files
         add_required_files(zip_content)
-        
+
         zip_content
       end
 
@@ -140,7 +142,7 @@ module Uniword
       def zip_packager
         @zip_packager ||= Infrastructure::ZipPackager.new
       end
-      
+
       # Add required OOXML files for a valid DOCX package
       #
       # @param zip_content [Hash] The ZIP content hash
@@ -148,21 +150,21 @@ module Uniword
       def add_required_files(zip_content)
         require_relative '../ooxml/content_types'
         require_relative '../ooxml/relationships'
-        
+
         # Add [Content_Types].xml if not present
         unless zip_content['[Content_Types].xml']
           zip_content['[Content_Types].xml'] = Ooxml::ContentTypes.generate
         end
-        
+
         # Add _rels/.rels if not present
         unless zip_content['_rels/.rels']
           zip_content['_rels/.rels'] = Ooxml::Relationships.generate_package_rels
         end
-        
+
         # Add word/_rels/document.xml.rels if not present
-        unless zip_content['word/_rels/document.xml.rels']
-          zip_content['word/_rels/document.xml.rels'] = Ooxml::Relationships.generate_document_rels
-        end
+        return if zip_content['word/_rels/document.xml.rels']
+
+        zip_content['word/_rels/document.xml.rels'] = Ooxml::Relationships.generate_document_rels
       end
     end
   end

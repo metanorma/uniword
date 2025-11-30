@@ -55,10 +55,10 @@ module Uniword
       # @return [String] Rule name
       def name
         self.class.name.split('::').last
-          .gsub(/Rule$/, '')
-          .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-          .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-          .downcase
+            .gsub(/Rule$/, '')
+            .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+            .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+            .downcase
       end
 
       protected

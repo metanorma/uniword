@@ -76,6 +76,7 @@ module Uniword
           keys = key_path.split('.')
           value = keys.reduce(config) do |hash, key|
             return default unless hash.is_a?(Hash)
+
             hash[key.to_sym] || hash[key.to_s]
           end
           value || default
@@ -117,10 +118,10 @@ module Uniword
                   "Configuration must be a Hash, got #{config.class} in #{path}"
           end
 
-          if config.empty?
-            raise ConfigurationError,
-                  "Configuration cannot be empty in #{path}"
-          end
+          return unless config.empty?
+
+          raise ConfigurationError,
+                "Configuration cannot be empty in #{path}"
         end
 
         # Convert all string keys to symbols recursively
@@ -148,10 +149,10 @@ module Uniword
         def deep_merge(base, override)
           override.each do |key, value|
             base[key] = if base[key].is_a?(Hash) && value.is_a?(Hash)
-                         deep_merge(base[key], value)
-                       else
-                         value
-                       end
+                          deep_merge(base[key], value)
+                        else
+                          value
+                        end
           end
           base
         end

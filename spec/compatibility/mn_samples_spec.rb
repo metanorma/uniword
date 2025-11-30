@@ -8,7 +8,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
 
   # Helper to get relative path for better output
   def rel_path(full_path)
-    full_path.sub(samples_dir + '/', '')
+    full_path.sub("#{samples_dir}/", '')
   end
 
   # Helper to gather document statistics
@@ -49,14 +49,13 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
 
-          puts "      ✓ Read successfully"
+          puts '      ✓ Read successfully'
           puts "        Paragraphs: #{stats[:paragraphs]}"
           puts "        Tables: #{stats[:tables]}"
           puts "        Text length: #{stats[:text_length]} chars"
 
           results[:success] += 1
-
-        rescue => e
+        rescue StandardError => e
           puts "      ✗ Failed: #{e.class.name}: #{e.message}"
           results[:failed] += 1
           results[:errors] << { file: rel_path(doc_path), error: e.message }
@@ -90,14 +89,13 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
 
-          puts "      ✓ Read successfully"
+          puts '      ✓ Read successfully'
           puts "        Paragraphs: #{stats[:paragraphs]}"
           puts "        Tables: #{stats[:tables]}"
           puts "        Text length: #{stats[:text_length]} chars"
 
           results[:success] += 1
-
-        rescue => e
+        rescue StandardError => e
           puts "      ✗ Failed: #{e.class.name}: #{e.message}"
           results[:failed] += 1
           results[:errors] << { file: rel_path(doc_path), error: e.message }
@@ -128,16 +126,15 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
 
-          puts "      ✓ Read successfully"
+          puts '      ✓ Read successfully'
           puts "        Paragraphs: #{stats[:paragraphs]}"
           puts "        Tables: #{stats[:tables]}"
           puts "        Text length: #{stats[:text_length]} chars"
 
           results[:success] += 1
-
-        rescue => e
+        rescue StandardError => e
           puts "      ✗ Failed: #{e.class.name}: #{e.message}"
-          puts "        (Large files may have issues)"
+          puts '        (Large files may have issues)'
           results[:failed] += 1
           results[:errors] << { file: rel_path(doc_path), error: e.message }
         end
@@ -163,7 +160,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       doc = Uniword::Document.open(sample_file)
 
       # Analyze paragraph types
-      para_with_text = doc.paragraphs.select { |p| p.text.strip.length > 0 }
+      para_with_text = doc.paragraphs.reject { |p| p.text.strip.empty? }
       para_empty = doc.paragraphs.select { |p| p.text.strip.empty? }
 
       puts "\n  Paragraph Analysis:"
@@ -198,55 +195,55 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       expect(doc.paragraphs.count).to be > 0
     end
 
-  describe 'content extraction validation' do
-    let(:sample_file) do
-      File.join(samples_dir,
-                'documents/international-standard/rice-2016/document-en.doc')
+    describe 'content extraction validation' do
+      let(:sample_file) do
+        File.join(samples_dir,
+                  'documents/international-standard/rice-2016/document-en.doc')
+      end
+
+      it 'extracts content from WordSection divs' do
+        skip 'Sample file not found' unless File.exist?(sample_file)
+
+        doc = Uniword::Document.open(sample_file)
+
+        # Should extract MUCH more content now (fixed recursive div processing)
+        expect(doc.paragraphs.count).to be > 200  # Was 20, should be ~323
+        expect(doc.tables.count).to be > 0        # Was 0, should be 6
+        expect(doc.text.length).to be > 20_000 # Was ~2290, should be >26000
+      end
+
+      it 'preserves section structure' do
+        skip 'Sample file not found' unless File.exist?(sample_file)
+
+        doc = Uniword::Document.open(sample_file)
+
+        # Should maintain document structure
+        expect(doc.elements).not_to be_empty
+
+        # Verify content types are extracted
+        expect(doc.paragraphs.count).to be > 0
+        expect(doc.tables.count).to be > 0
+      end
+
+      it 'achieves >95% paragraph extraction rate' do
+        skip 'Sample file not found' unless File.exist?(sample_file)
+
+        doc = Uniword::Document.open(sample_file)
+
+        # The file has ~335 paragraph tags in HTML
+        # We should extract at least 95% of them (>318 paragraphs)
+        expect(doc.paragraphs.count).to be >= 318
+      end
+
+      it 'extracts all tables from nested divs' do
+        skip 'Sample file not found' unless File.exist?(sample_file)
+
+        doc = Uniword::Document.open(sample_file)
+
+        # The file has 6 tables that were previously missed
+        # due to being inside WordSection divs
+        expect(doc.tables.count).to eq(6)
+      end
     end
-
-    it 'extracts content from WordSection divs' do
-      skip 'Sample file not found' unless File.exist?(sample_file)
-
-      doc = Uniword::Document.open(sample_file)
-
-      # Should extract MUCH more content now (fixed recursive div processing)
-      expect(doc.paragraphs.count).to be > 200  # Was 20, should be ~323
-      expect(doc.tables.count).to be > 0        # Was 0, should be 6
-      expect(doc.text.length).to be > 20000     # Was ~2290, should be >26000
-    end
-
-    it 'preserves section structure' do
-      skip 'Sample file not found' unless File.exist?(sample_file)
-
-      doc = Uniword::Document.open(sample_file)
-
-      # Should maintain document structure
-      expect(doc.elements).not_to be_empty
-
-      # Verify content types are extracted
-      expect(doc.paragraphs.count).to be > 0
-      expect(doc.tables.count).to be > 0
-    end
-
-    it 'achieves >95% paragraph extraction rate' do
-      skip 'Sample file not found' unless File.exist?(sample_file)
-
-      doc = Uniword::Document.open(sample_file)
-
-      # The file has ~335 paragraph tags in HTML
-      # We should extract at least 95% of them (>318 paragraphs)
-      expect(doc.paragraphs.count).to be >= 318
-    end
-
-    it 'extracts all tables from nested divs' do
-      skip 'Sample file not found' unless File.exist?(sample_file)
-
-      doc = Uniword::Document.open(sample_file)
-
-      # The file has 6 tables that were previously missed
-      # due to being inside WordSection divs
-      expect(doc.tables.count).to eq(6)
-    end
-  end
   end
 end

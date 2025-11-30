@@ -174,23 +174,21 @@ module Uniword
         index = MetadataIndex.new(config_file: @config_file)
 
         paths.each do |path|
-          begin
-            # Expand glob patterns
-            expanded_paths = if path.include?('*')
-                              Dir.glob(path)
-                            else
-                              [path]
-                            end
+          # Expand glob patterns
+          expanded_paths = if path.include?('*')
+                             Dir.glob(path)
+                           else
+                             [path]
+                           end
 
-            expanded_paths.each do |file_path|
-              next unless File.exist?(file_path)
+          expanded_paths.each do |file_path|
+            next unless File.exist?(file_path)
 
-              metadata = extract(file_path)
-              index.add(file_path, metadata)
-            end
-          rescue StandardError => e
-            warn "Warning: Failed to extract metadata from #{path}: #{e.message}"
+            metadata = extract(file_path)
+            index.add(file_path, metadata)
           end
+        rescue StandardError => e
+          warn "Warning: Failed to extract metadata from #{path}: #{e.message}"
         end
 
         index
@@ -250,24 +248,22 @@ module Uniword
         }
 
         updates.each do |path, metadata|
-          begin
-            result = update(path, metadata, validate: validate)
-            if result[:success]
-              results[:success_count] += 1
-            else
-              results[:failure_count] += 1
-              results[:failures] << {
-                path: path,
-                errors: result[:errors]
-              }
-            end
-          rescue StandardError => e
+          result = update(path, metadata, validate: validate)
+          if result[:success]
+            results[:success_count] += 1
+          else
             results[:failure_count] += 1
             results[:failures] << {
               path: path,
-              errors: [e.message]
+              errors: result[:errors]
             }
           end
+        rescue StandardError => e
+          results[:failure_count] += 1
+          results[:failures] << {
+            path: path,
+            errors: [e.message]
+          }
         end
 
         results

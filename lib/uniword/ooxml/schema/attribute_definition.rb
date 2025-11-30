@@ -28,10 +28,10 @@ module Uniword
           @tag = definition[:tag] || "w:#{definition[:name]}"
           @type = definition.fetch(:type, :string)&.to_sym
           @required = definition.fetch(:required, false)
-          @values = definition[:values]  # For enum types
+          @values = definition[:values] # For enum types
           @namespace = definition[:namespace]
           @prefix = definition[:prefix] || 'w'
-          @property = definition[:property]  # Custom property name mapping
+          @property = definition[:property] # Custom property name mapping
         end
 
         # Check if attribute is required
@@ -71,7 +71,7 @@ module Uniword
           when :boolean
             [true, false, 'true', 'false', '1', '0'].include?(value)
           when :string
-            true  # Any value acceptable
+            true # Any value acceptable
           else
             true
           end

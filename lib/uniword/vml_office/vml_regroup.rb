@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module VmlOffice
-      # Regrouping settings
-      #
-      # Generated from OOXML schema: vml_office.yml
-      # Element: <o:regroup>
-      class VmlRegroup < Lutaml::Model::Serializable
-          attribute :id, String
+  module VmlOffice
+    # Regrouping settings
+    #
+    # Generated from OOXML schema: vml_office.yml
+    # Element: <o:regroup>
+    class VmlRegroup < Lutaml::Model::Serializable
+      attribute :id, String
 
-          xml do
-            element 'regroup'
-            namespace Uniword::Ooxml::Namespaces::Vml
+      xml do
+        element 'regroup'
+        namespace Uniword::Ooxml::Namespaces::Vml
 
-            map_attribute 'id', to: :id
-          end
+        map_attribute 'id', to: :id
       end
     end
+  end
 end

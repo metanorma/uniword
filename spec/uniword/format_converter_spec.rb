@@ -80,69 +80,69 @@ RSpec.describe Uniword::FormatConverter do
       end
 
       it 'requires source parameter' do
-        expect {
+        expect do
           converter.convert(
             source: nil,
             source_format: :docx,
             target: temp_mhtml.path,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Source cannot be nil/)
+        end.to raise_error(ArgumentError, /Source cannot be nil/)
       end
 
       it 'requires source_format parameter' do
-        expect {
+        expect do
           converter.convert(
             source: temp_docx.path,
             source_format: nil,
             target: temp_mhtml.path,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Source format must be specified/)
+        end.to raise_error(ArgumentError, /Source format must be specified/)
       end
 
       it 'requires target parameter' do
-        expect {
+        expect do
           converter.convert(
             source: temp_docx.path,
             source_format: :docx,
             target: nil,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Target cannot be nil/)
+        end.to raise_error(ArgumentError, /Target cannot be nil/)
       end
 
       it 'requires target_format parameter' do
-        expect {
+        expect do
           converter.convert(
             source: temp_docx.path,
             source_format: :docx,
             target: temp_mhtml.path,
             target_format: nil
           )
-        }.to raise_error(ArgumentError, /Target format must be specified/)
+        end.to raise_error(ArgumentError, /Target format must be specified/)
       end
 
       it 'validates source_format is supported' do
-        expect {
+        expect do
           converter.convert(
             source: temp_docx.path,
             source_format: :invalid,
             target: temp_mhtml.path,
             target_format: :mhtml
           )
-        }.to raise_error(ArgumentError, /Unsupported source format/)
+        end.to raise_error(ArgumentError, /Unsupported source format/)
       end
 
       it 'validates target_format is supported' do
-        expect {
+        expect do
           converter.convert(
             source: temp_docx.path,
             source_format: :docx,
             target: temp_mhtml.path,
             target_format: :invalid
           )
-        }.to raise_error(ArgumentError, /Unsupported target format/)
+        end.to raise_error(ArgumentError, /Unsupported target format/)
       end
     end
 

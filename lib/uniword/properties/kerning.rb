@@ -19,11 +19,11 @@ module Uniword
     # - Typical values: 8-72 (4pt to 36pt threshold)
     class Kerning < Lutaml::Model::Serializable
       attribute :value, KerningValue
-      
+
       xml do
         element 'kern'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

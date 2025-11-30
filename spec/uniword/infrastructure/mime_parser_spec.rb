@@ -110,13 +110,13 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
     context 'boundary extraction' do
       it 'extracts boundary with quotes' do
         content = 'Content-Type: multipart/related; boundary="----=_Test_123"'
-        result = parser.parse_content(content + "\n\n------=_Test_123\n\n------=_Test_123--")
+        result = parser.parse_content("#{content}\n\n------=_Test_123\n\n------=_Test_123--")
         expect { result }.not_to raise_error
       end
 
       it 'extracts boundary without quotes' do
         content = 'Content-Type: multipart/related; boundary=----=_Test_456'
-        result = parser.parse_content(content + "\n\n------=_Test_456\n\n------=_Test_456--")
+        result = parser.parse_content("#{content}\n\n------=_Test_456\n\n------=_Test_456--")
         expect { result }.not_to raise_error
       end
 

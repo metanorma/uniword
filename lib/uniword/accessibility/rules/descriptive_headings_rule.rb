@@ -25,28 +25,26 @@ module Uniword
             text = extract_heading_text(heading[:paragraph])
 
             # Check minimum length
-            if text && @config[:min_heading_length]
-              if text.length < @config[:min_heading_length]
-                violations << create_violation(
-                  message: "Heading #{index + 1} is too short to be descriptive: '#{text}'",
-                  element: heading[:paragraph],
-                  severity: @config[:severity] || :warning,
-                  suggestion: @config[:suggestion] ||
-                    "Use descriptive headings that clearly describe content"
-                )
-              end
+            if text && @config[:min_heading_length] && (text.length < @config[:min_heading_length])
+              violations << create_violation(
+                message: "Heading #{index + 1} is too short to be descriptive: '#{text}'",
+                element: heading[:paragraph],
+                severity: @config[:severity] || :warning,
+                suggestion: @config[:suggestion] ||
+                  'Use descriptive headings that clearly describe content'
+              )
             end
 
             # Check for generic headings
-            generic_headings = ["heading", "section", "part", "introduction", "conclusion"]
-            if text && generic_headings.any? { |g| text.downcase == g }
-              violations << create_violation(
-                message: "Heading #{index + 1} is too generic: '#{text}'",
-                element: heading[:paragraph],
-                severity: :warning,
-                suggestion: "Make headings specific to the content they describe"
-              )
-            end
+            generic_headings = %w[heading section part introduction conclusion]
+            next unless text && generic_headings.any? { |g| text.downcase == g }
+
+            violations << create_violation(
+              message: "Heading #{index + 1} is too generic: '#{text}'",
+              element: heading[:paragraph],
+              severity: :warning,
+              suggestion: 'Make headings specific to the content they describe'
+            )
           end
 
           violations
@@ -60,8 +58,8 @@ module Uniword
         # @return [Array<Hash>] Headings with level and paragraph
         def extract_headings(document)
           document.paragraphs
-            .select { |p| heading_paragraph?(p) }
-            .map { |p| { level: extract_heading_level(p), paragraph: p } }
+                  .select { |p| heading_paragraph?(p) }
+                  .map { |p| { level: extract_heading_level(p), paragraph: p } }
         end
 
         # Check if paragraph is a heading
@@ -92,7 +90,7 @@ module Uniword
           if paragraph.respond_to?(:text)
             paragraph.text
           elsif paragraph.respond_to?(:runs)
-            paragraph.runs.map(&:text).join("")
+            paragraph.runs.map(&:text).join
           end
         end
       end

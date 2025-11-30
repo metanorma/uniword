@@ -18,9 +18,9 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
     end
 
     it 'raises error for invalid type' do
-      expect {
+      expect do
         Uniword::Header.new(type: 'invalid')
-      }.to raise_error(ArgumentError, /Invalid header type/)
+      end.to raise_error(ArgumentError, /Invalid header type/)
     end
 
     it 'adds paragraphs' do
@@ -54,28 +54,28 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
 
     it 'creates A4 portrait' do
       props = Uniword::SectionProperties.a4_portrait
-      expect(props.page_width).to eq(11906)
-      expect(props.page_height).to eq(16838)
+      expect(props.page_width).to eq(11_906)
+      expect(props.page_height).to eq(16_838)
       expect(props.orientation).to eq('portrait')
     end
 
     it 'creates A4 landscape' do
       props = Uniword::SectionProperties.a4_landscape
-      expect(props.page_width).to eq(16838)
-      expect(props.page_height).to eq(11906)
+      expect(props.page_width).to eq(16_838)
+      expect(props.page_height).to eq(11_906)
       expect(props.orientation).to eq('landscape')
     end
 
     it 'creates Letter portrait' do
       props = Uniword::SectionProperties.letter_portrait
-      expect(props.page_width).to eq(12240)
-      expect(props.page_height).to eq(15840)
+      expect(props.page_width).to eq(12_240)
+      expect(props.page_height).to eq(15_840)
     end
 
     it 'raises error for invalid orientation' do
-      expect {
+      expect do
         Uniword::SectionProperties.new(orientation: 'invalid')
-      }.to raise_error(ArgumentError, /Invalid orientation/)
+      end.to raise_error(ArgumentError, /Invalid orientation/)
     end
   end
 
@@ -204,9 +204,9 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
     end
 
     it 'raises error for invalid wrapping' do
-      expect {
+      expect do
         Uniword::TextBox.new(wrapping: 'invalid')
-      }.to raise_error(ArgumentError, /Invalid wrapping/)
+      end.to raise_error(ArgumentError, /Invalid wrapping/)
     end
 
     it 'checks if empty' do

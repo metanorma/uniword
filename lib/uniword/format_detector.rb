@@ -38,9 +38,7 @@ module Uniword
     #   # => :docx
     def detect(path)
       # For streams, detect from content
-      if path.is_a?(IO) || path.is_a?(StringIO)
-        return detect_stream_format(path)
-      end
+      return detect_stream_format(path) if path.is_a?(IO) || path.is_a?(StringIO)
 
       validate_path(path)
 

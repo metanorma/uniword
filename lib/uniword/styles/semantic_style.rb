@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "paragraph_style_definition"
+require_relative 'paragraph_style_definition'
 
 module Uniword
   module Styles
@@ -27,7 +27,7 @@ module Uniword
       ].freeze
 
       def initialize(config)
-        super(config)
+        super
         @semantic_type = config[:semantic]&.to_sym
         validate_semantic_type!
       end

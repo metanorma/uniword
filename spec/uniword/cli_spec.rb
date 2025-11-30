@@ -18,9 +18,9 @@ RSpec.describe Uniword::CLI do
 
     context 'with non-existent file' do
       it 'exits with error message' do
-        expect {
+        expect do
           cli.invoke(:convert, ['nonexistent.docx', 'output.docx'])
-        }.to raise_error(SystemExit)
+        end.to raise_error(SystemExit)
       end
     end
 
@@ -37,9 +37,9 @@ RSpec.describe Uniword::CLI do
   describe '#info' do
     context 'with non-existent file' do
       it 'exits with error message' do
-        expect {
+        expect do
           cli.invoke(:info, ['nonexistent.docx'])
-        }.to raise_error(SystemExit)
+        end.to raise_error(SystemExit)
       end
     end
 
@@ -54,9 +54,9 @@ RSpec.describe Uniword::CLI do
   describe '#validate' do
     context 'with non-existent file' do
       it 'exits with error message' do
-        expect {
+        expect do
           cli.invoke(:validate, ['nonexistent.docx'])
-        }.to raise_error(SystemExit)
+        end.to raise_error(SystemExit)
       end
     end
 

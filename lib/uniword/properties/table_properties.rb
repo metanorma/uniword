@@ -16,19 +16,19 @@ module Uniword
 
       # Table width
       attribute :width, :integer
-      attribute :width_type, :string  # auto, dxa (twips), pct, nil
+      attribute :width_type, :string # auto, dxa (twips), pct, nil
 
       # Table alignment
-      attribute :alignment, :string   # left, center, right
+      attribute :alignment, :string # left, center, right
 
       # Table indentation
-      attribute :indent, :integer     # In twips
+      attribute :indent, :integer # In twips
 
       # Cell spacing
-      attribute :cell_spacing, :integer  # In twips
+      attribute :cell_spacing, :integer # In twips
 
       # Table layout
-      attribute :layout, :string      # autofit, fixed
+      attribute :layout, :string # autofit, fixed
 
       # Borders flag
       attribute :borders, :boolean, default: -> { false }
@@ -59,7 +59,7 @@ module Uniword
       attribute :border_inside_v_color, :string
 
       # Background color
-      attribute :background_color, :string  # RGB hex
+      attribute :background_color, :string # RGB hex
 
       # Cell margins (in twips)
       attribute :cell_margin_top, :integer

@@ -57,6 +57,7 @@ module Uniword
         # Navigate through each part
         parts.each do |part|
           break if value.nil?
+
           value = navigate_property(value, part)
         end
 
@@ -110,8 +111,6 @@ module Uniword
         # For objects with methods, call the method
         elsif object.respond_to?(property.to_sym)
           object.send(property.to_sym)
-        else
-          nil
         end
       end
 
@@ -188,6 +187,7 @@ module Uniword
         return value if value.is_a?(Numeric)
         return value.to_i if value.respond_to?(:to_i) && value.to_s.match?(/^\d+$/)
         return value.to_f if value.respond_to?(:to_f) && value.to_s.match?(/^\d+\.\d+$/)
+
         nil
       end
     end

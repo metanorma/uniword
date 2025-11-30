@@ -42,7 +42,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it 'creates MHTML file' do
@@ -97,7 +97,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it 'includes image in MIME structure' do
@@ -178,7 +178,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     {
@@ -221,7 +221,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it 'converts VML imagedata src to cid: reference' do
@@ -240,7 +240,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it 'generates valid XML structure' do
@@ -287,7 +287,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it 'wraps base64 at 76 characters' do
@@ -312,7 +312,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
         break if line.start_with?('--')
 
         # Only check actual base64 content lines (alphanumeric + / + =)
-        next unless line.match?(/^[A-Za-z0-9+\/=]+$/)
+        next unless line.match?(%r{^[A-Za-z0-9+/=]+$})
 
         expect(line.length).to be <= 76
       end

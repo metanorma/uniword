@@ -82,9 +82,9 @@ RSpec.describe Uniword::Metadata::MetadataManager do
 
     it 'updates document metadata' do
       result = manager.update(document, {
-        title: 'Test Title',
-        author: 'Test Author'
-      })
+                                title: 'Test Title',
+                                author: 'Test Author'
+                              })
 
       expect(result[:success]).to be true
     end
@@ -114,7 +114,7 @@ RSpec.describe Uniword::Metadata::MetadataManager do
       it 'returns errors for invalid metadata' do
         # Create metadata that violates constraints
         invalid_metadata = {
-          title: 'x' * 300  # Exceeds max_length
+          title: 'x' * 300 # Exceeds max_length
         }
 
         result = manager.update(

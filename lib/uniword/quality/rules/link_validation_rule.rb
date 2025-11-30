@@ -39,28 +39,24 @@ module Uniword
             link_count += 1
 
             # Check internal links (anchors/bookmarks)
-            if @check_internal && internal_link?(link)
-              unless valid_internal_link?(link, document)
-                violations << create_violation(
-                  severity: :error,
-                  message: "Internal link #{link_count} references non-existent bookmark '#{link.anchor}'",
-                  location: "Paragraph #{para_index + 1}, Link #{link_count}",
-                  element: link
-                )
-              end
+            if @check_internal && internal_link?(link) && !valid_internal_link?(link, document)
+              violations << create_violation(
+                severity: :error,
+                message: "Internal link #{link_count} references non-existent bookmark '#{link.anchor}'",
+                location: "Paragraph #{para_index + 1}, Link #{link_count}",
+                element: link
+              )
             end
 
             # Check external links
-            if @check_external && external_link?(link)
-              unless valid_url?(link.url)
-                violations << create_violation(
-                  severity: :warning,
-                  message: "External link #{link_count} has invalid URL format: '#{link.url}'",
-                  location: "Paragraph #{para_index + 1}, Link #{link_count}",
-                  element: link
-                )
-              end
-            end
+            next unless @check_external && external_link?(link) && !valid_url?(link.url)
+
+            violations << create_violation(
+              severity: :warning,
+              message: "External link #{link_count} has invalid URL format: '#{link.url}'",
+              location: "Paragraph #{para_index + 1}, Link #{link_count}",
+              element: link
+            )
           end
         end
 

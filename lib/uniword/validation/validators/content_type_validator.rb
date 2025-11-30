@@ -73,14 +73,10 @@ module Uniword
           doc = Nokogiri::XML(xml_content)
 
           # Check for required content types
-          if check_consistency?
-            validate_required_types(doc, result)
-          end
+          validate_required_types(doc, result) if check_consistency?
 
           # Validate extensions match actual files
-          if validate_extensions?
-            validate_extension_consistency(zip, doc, result)
-          end
+          validate_extension_consistency(zip, doc, result) if validate_extensions?
         rescue Nokogiri::XML::SyntaxError => e
           result.add_error(
             "Malformed [Content_Types].xml: #{e.message}",
@@ -96,11 +92,11 @@ module Uniword
           declared_types = extract_declared_types(doc)
 
           REQUIRED_CONTENT_TYPES.each do |required_type|
-            unless declared_types.include?(required_type)
-              result.add_warning(
-                "Required content type not declared: #{required_type}"
-              )
-            end
+            next if declared_types.include?(required_type)
+
+            result.add_warning(
+              "Required content type not declared: #{required_type}"
+            )
           end
         end
 
@@ -133,7 +129,7 @@ module Uniword
           zip.entries.each do |entry|
             next if entry.directory?
 
-            ext = File.extname(entry.name)[1..-1] # Remove leading dot
+            ext = File.extname(entry.name)[1..] # Remove leading dot
             next unless ext
 
             if extensions.key?(ext)

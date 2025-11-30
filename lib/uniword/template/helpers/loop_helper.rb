@@ -30,13 +30,13 @@ module Uniword
         # @param end_marker [TemplateMarker] Loop end marker
         # @param document [Document] Document to modify
         # @return [void]
-        def process(start_marker, end_marker, document)
+        def process(start_marker, _end_marker, _document)
           # Resolve collection from current context
           resolver = @context.create_resolver
           collection = resolver.resolve(start_marker.collection)
 
           # Convert to array if needed
-          items = Array(collection)
+          Array(collection)
 
           # For now, we'll mark this as processed
           # Full implementation would clone elements between markers
@@ -103,14 +103,14 @@ module Uniword
           # Find and replace variables in element
           # This is simplified - full implementation would
           # recursively process all text nodes
-          if element.respond_to?(:text)
-            text = element.text
-            # Simple variable replacement ({{var}})
-            text.scan(/\{\{([^@].+?)\}\}/).each do |match|
-              var_name = match[0]
-              value = resolver.resolve(var_name)
-              element.text = text.gsub("{{#{var_name}}}", value.to_s)
-            end
+          return unless element.respond_to?(:text)
+
+          text = element.text
+          # Simple variable replacement ({{var}})
+          text.scan(/\{\{([^@].+?)\}\}/).each do |match|
+            var_name = match[0]
+            value = resolver.resolve(var_name)
+            element.text = text.gsub("{{#{var_name}}}", value.to_s)
           end
         end
       end

@@ -14,8 +14,8 @@ module Uniword
         #
         # @param document [Document] Document to check
         # @return [Array<AccessibilityViolation>] Found violations
-        def check(document)
-          violations = []
+        def check(_document)
+          []
 
           # Reading order checking requires analyzing document structure
           # This is a placeholder implementation
@@ -23,8 +23,6 @@ module Uniword
           # - Tables before their captions
           # - Images before their descriptions
           # - Footnotes in proper sequence
-
-          violations
         end
       end
     end

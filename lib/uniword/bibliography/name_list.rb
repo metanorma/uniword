@@ -3,21 +3,21 @@
 require 'lutaml/model'
 
 module Uniword
-    module Bibliography
-      # List of individual author names
-      #
-      # Generated from OOXML schema: bibliography.yml
-      # Element: <b:name_list>
-      class NameList < Lutaml::Model::Serializable
-          attribute :person, Person, collection: true, default: -> { [] }
+  module Bibliography
+    # List of individual author names
+    #
+    # Generated from OOXML schema: bibliography.yml
+    # Element: <b:name_list>
+    class NameList < Lutaml::Model::Serializable
+      attribute :person, Person, collection: true, default: -> { [] }
 
-          xml do
-            element 'name_list'
-            namespace Uniword::Ooxml::Namespaces::Bibliography
-            mixed_content
+      xml do
+        element 'name_list'
+        namespace Uniword::Ooxml::Namespaces::Bibliography
+        mixed_content
 
-            map_element 'Person', to: :person, render_nil: false
-          end
+        map_element 'Person', to: :person, render_nil: false
       end
     end
+  end
 end

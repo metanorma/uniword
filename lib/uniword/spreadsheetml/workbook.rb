@@ -3,29 +3,29 @@
 require 'lutaml/model'
 
 module Uniword
-    module Spreadsheetml
-      # SpreadsheetML workbook root element
-      #
-      # Generated from OOXML schema: spreadsheetml.yml
-      # Element: <xls:workbook>
-      class Workbook < Lutaml::Model::Serializable
-          attribute :sheets, Sheets
-          attribute :defined_names, DefinedNames
-          attribute :calc_pr, CalcProperties
-          attribute :workbook_pr, WorkbookProperties
-          attribute :book_views, BookViews
+  module Spreadsheetml
+    # SpreadsheetML workbook root element
+    #
+    # Generated from OOXML schema: spreadsheetml.yml
+    # Element: <xls:workbook>
+    class Workbook < Lutaml::Model::Serializable
+      attribute :sheets, Sheets
+      attribute :defined_names, DefinedNames
+      attribute :calc_pr, CalcProperties
+      attribute :workbook_pr, WorkbookProperties
+      attribute :book_views, BookViews
 
-          xml do
-            element 'workbook'
-            namespace Uniword::Ooxml::Namespaces::SpreadsheetML
-            mixed_content
+      xml do
+        element 'workbook'
+        namespace Uniword::Ooxml::Namespaces::SpreadsheetML
+        mixed_content
 
-            map_element 'sheets', to: :sheets
-            map_element 'definedNames', to: :defined_names, render_nil: false
-            map_element 'calcPr', to: :calc_pr, render_nil: false
-            map_element 'workbookPr', to: :workbook_pr, render_nil: false
-            map_element 'bookViews', to: :book_views, render_nil: false
-          end
+        map_element 'sheets', to: :sheets
+        map_element 'definedNames', to: :defined_names, render_nil: false
+        map_element 'calcPr', to: :calc_pr, render_nil: false
+        map_element 'workbookPr', to: :workbook_pr, render_nil: false
+        map_element 'bookViews', to: :book_views, render_nil: false
       end
     end
+  end
 end

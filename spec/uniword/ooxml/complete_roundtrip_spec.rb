@@ -34,7 +34,7 @@ RSpec.describe 'Complete DOCX Round-Trip Fidelity' do
     require 'zip'
     Zip::File.open(docx_path) do |zip|
       entry = zip.find_entry(file_path)
-      return entry ? entry.get_input_stream.read : nil
+      return entry&.get_input_stream&.read
     end
   end
 
@@ -144,7 +144,7 @@ RSpec.describe 'Complete DOCX Round-Trip Fidelity' do
       original = self.class.extract_file(TEST_DOCUMENT, 'word/theme/theme1.xml')
       roundtrip = self.class.extract_file(OUTPUT_PATH, 'word/theme/theme1.xml')
 
-      skip "theme1.xml not found in original" if original.nil?
+      skip 'theme1.xml not found in original' if original.nil?
       expect(roundtrip).to be_xml_equivalent_to(original)
     end
   end
@@ -154,7 +154,7 @@ RSpec.describe 'Complete DOCX Round-Trip Fidelity' do
       original = self.class.extract_file(TEST_DOCUMENT, 'word/theme/_rels/theme1.xml.rels')
       roundtrip = self.class.extract_file(OUTPUT_PATH, 'word/theme/_rels/theme1.xml.rels')
 
-      skip "theme1.xml.rels not found in original" if original.nil?
+      skip 'theme1.xml.rels not found in original' if original.nil?
       expect(roundtrip).to be_xml_equivalent_to(original)
     end
   end

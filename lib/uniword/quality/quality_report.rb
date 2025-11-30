@@ -113,9 +113,7 @@ module Uniword
 
         json_string = JSON.pretty_generate(json_data)
 
-        if file_path
-          File.write(file_path, json_string)
-        end
+        File.write(file_path, json_string) if file_path
 
         json_string
       end
@@ -139,9 +137,7 @@ module Uniword
 
         yaml_string = YAML.dump(yaml_data)
 
-        if file_path
-          File.write(file_path, yaml_string)
-        end
+        File.write(file_path, yaml_string) if file_path
 
         yaml_string
       end
@@ -161,12 +157,12 @@ module Uniword
       # @return [String] Human-readable summary
       def summary
         [
-          "Document Quality Report",
-          "=" * 50,
+          'Document Quality Report',
+          '=' * 50,
           "Checked at: #{checked_at}",
           "Status: #{valid? ? 'VALID' : 'INVALID'}",
-          "",
-          "Summary:",
+          '',
+          'Summary:',
           "  Total violations: #{total_count}",
           "  Errors: #{error_count}",
           "  Warnings: #{warning_count}",
@@ -294,7 +290,7 @@ module Uniword
       #
       # @return [String] HTML content for violations
       def generate_violations_html
-        return "" if violations.empty?
+        return '' if violations.empty?
 
         violations_html = violations.map do |v|
           <<~HTML

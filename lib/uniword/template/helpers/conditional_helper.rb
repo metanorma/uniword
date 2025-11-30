@@ -36,9 +36,9 @@ module Uniword
           condition_result = resolver.evaluate(start_marker.condition)
 
           # If condition is false, remove elements between markers
-          unless condition_result
-            remove_conditional_content(start_marker, end_marker, document)
-          end
+          return if condition_result
+
+          remove_conditional_content(start_marker, end_marker, document)
         end
 
         private
@@ -78,12 +78,12 @@ module Uniword
             end
 
             # Collect elements in block
-            if in_block
-              elements << para
+            next unless in_block
 
-              # Check if this is the end marker's element
-              break if para == end_marker.element
-            end
+            elements << para
+
+            # Check if this is the end marker's element
+            break if para == end_marker.element
           end
 
           elements
@@ -96,9 +96,7 @@ module Uniword
         # @return [void]
         def remove_element(element, document)
           # Remove from paragraphs
-          if document.body.respond_to?(:paragraphs)
-            document.body.paragraphs.delete(element)
-          end
+          document.body.paragraphs.delete(element) if document.body.respond_to?(:paragraphs)
 
           # Clear document cache
           document.clear_element_cache if document.respond_to?(:clear_element_cache)

@@ -110,24 +110,24 @@ module Uniword
         end
 
         # Process sections (headers/footers)
-        if document.respond_to?(:sections)
-          document.sections.each do |section|
-            # Process headers if section has them
-            if section.respond_to?(:headers)
-              section.headers.each do |header|
-                header.paragraphs.each do |paragraph|
-                  collect_paragraph_bookmarks(paragraph)
-                end
+        return unless document.respond_to?(:sections)
+
+        document.sections.each do |section|
+          # Process headers if section has them
+          if section.respond_to?(:headers)
+            section.headers.each do |header|
+              header.paragraphs.each do |paragraph|
+                collect_paragraph_bookmarks(paragraph)
               end
             end
+          end
 
-            # Process footers if section has them
-            if section.respond_to?(:footers)
-              section.footers.each do |footer|
-                footer.paragraphs.each do |paragraph|
-                  collect_paragraph_bookmarks(paragraph)
-                end
-              end
+          # Process footers if section has them
+          next unless section.respond_to?(:footers)
+
+          section.footers.each do |footer|
+            footer.paragraphs.each do |paragraph|
+              collect_paragraph_bookmarks(paragraph)
             end
           end
         end
@@ -159,24 +159,24 @@ module Uniword
         end
 
         # Process sections (headers/footers)
-        if document.respond_to?(:sections)
-          document.sections.each do |section|
-            # Process headers if section has them
-            if section.respond_to?(:headers)
-              section.headers.each do |header|
-                header.paragraphs.each do |paragraph|
-                  resolve_paragraph_references(paragraph)
-                end
+        return unless document.respond_to?(:sections)
+
+        document.sections.each do |section|
+          # Process headers if section has them
+          if section.respond_to?(:headers)
+            section.headers.each do |header|
+              header.paragraphs.each do |paragraph|
+                resolve_paragraph_references(paragraph)
               end
             end
+          end
 
-            # Process footers if section has them
-            if section.respond_to?(:footers)
-              section.footers.each do |footer|
-                footer.paragraphs.each do |paragraph|
-                  resolve_paragraph_references(paragraph)
-                end
-              end
+          # Process footers if section has them
+          next unless section.respond_to?(:footers)
+
+          section.footers.each do |footer|
+            footer.paragraphs.each do |paragraph|
+              resolve_paragraph_references(paragraph)
             end
           end
         end
@@ -189,14 +189,10 @@ module Uniword
       def resolve_paragraph_references(paragraph)
         paragraph.runs.each do |run|
           # Process hyperlinks
-          if run.respond_to?(:hyperlink) && run.hyperlink
-            resolve_hyperlink(run.hyperlink)
-          end
+          resolve_hyperlink(run.hyperlink) if run.respond_to?(:hyperlink) && run.hyperlink
 
           # Process fields (for cross-references)
-          if run.respond_to?(:field) && run.field
-            resolve_field(run.field)
-          end
+          resolve_field(run.field) if run.respond_to?(:field) && run.field
         end
       end
 
@@ -211,9 +207,9 @@ module Uniword
         resolved_id = resolve_bookmark_id(hyperlink.anchor)
 
         # Update if mapping exists
-        if resolved_id != hyperlink.anchor
-          hyperlink.anchor = resolved_id
-        end
+        return unless resolved_id != hyperlink.anchor
+
+        hyperlink.anchor = resolved_id
       end
 
       # Resolve field reference.
@@ -228,9 +224,9 @@ module Uniword
         resolved_id = resolve_bookmark_id(field.bookmark_name)
 
         # Update if mapping exists
-        if resolved_id != field.bookmark_name
-          field.bookmark_name = resolved_id
-        end
+        return unless resolved_id != field.bookmark_name
+
+        field.bookmark_name = resolved_id
       end
 
       # Resolve bookmark ID through mappings.

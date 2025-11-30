@@ -34,15 +34,15 @@ module Uniword
         return violations unless @require_headers
 
         document.tables.each_with_index do |table, index|
-          unless has_header_row?(table)
-            violations << create_violation(
-              severity: :warning,
-              message: "Table #{index + 1} does not have a header row. " \
-                       "Headers improve accessibility and readability.",
-              location: "Table #{index + 1}",
-              element: table
-            )
-          end
+          next if has_header_row?(table)
+
+          violations << create_violation(
+            severity: :warning,
+            message: "Table #{index + 1} does not have a header row. " \
+                     'Headers improve accessibility and readability.',
+            location: "Table #{index + 1}",
+            element: table
+          )
         end
 
         violations

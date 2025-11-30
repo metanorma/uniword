@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Diagram rules
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:rules>
-      class Rules < Lutaml::Model::Serializable
-          attribute :rule, String, collection: true, default: -> { [] }
+  module Office
+    # Diagram rules
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:rules>
+    class Rules < Lutaml::Model::Serializable
+      attribute :rule, String, collection: true, default: -> { [] }
 
-          xml do
-            element 'rules'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'rules'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_element '', to: :rule, render_nil: false
-          end
+        map_element '', to: :rule, render_nil: false
       end
     end
+  end
 end

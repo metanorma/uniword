@@ -55,7 +55,6 @@ module Uniword
 
         new.load(path)
       end
-
     end
   end
 end

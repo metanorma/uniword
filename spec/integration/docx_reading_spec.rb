@@ -99,7 +99,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       all_runs = document.paragraphs.flat_map(&:runs)
 
       # At least some runs should have properties
-      runs_with_properties = all_runs.select { |r| r.properties }
+      runs_with_properties = all_runs.select(&:properties)
       expect(runs_with_properties).not_to be_empty
     end
 
@@ -170,7 +170,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       document = Uniword::Document.open(docx_path)
 
       # At least some paragraphs should have properties
-      paras_with_props = document.paragraphs.select { |p| p.properties }
+      paras_with_props = document.paragraphs.select(&:properties)
       expect(paras_with_props.size).to be >= 0
     end
 
@@ -212,12 +212,12 @@ RSpec.describe 'DOCX Reading Integration', :integration do
         fixture_path = File.join(fixtures_dir, fixture_file)
         next unless File.exist?(fixture_path)
 
-        expect {
+        expect do
           document = Uniword::Document.open(fixture_path)
           # Force some basic operations to ensure parsing works
-          document.paragraphs.each { |p| p.text }
-          document.body.tables.each { |t| t.rows }
-        }.not_to raise_error, "Failed to read #{fixture_file}"
+          document.paragraphs.each(&:text)
+          document.body.tables.each(&:rows)
+        end.not_to raise_error, "Failed to read #{fixture_file}"
       end
     end
   end

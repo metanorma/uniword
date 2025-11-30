@@ -13,7 +13,7 @@ module Uniword
       attribute :subject, Types::DcSubjectType
       attribute :creator, Types::DcCreatorType
       attribute :keywords, Types::CpKeywordsType
-      attribute :description, Types::DcDescriptionType  # Dublin Core, not CP!
+      attribute :description, Types::DcDescriptionType # Dublin Core, not CP!
       attribute :last_modified_by, Types::CpLastModifiedByType
       attribute :revision, Types::CpRevisionType
       attribute :created, Types::DctermsCreatedType
@@ -32,20 +32,20 @@ module Uniword
 
         # Type namespaces automatically applied - NO namespace params needed!
         map_element 'title', to: :title,
-                    render_nil: :as_blank,
-                    render_empty: :as_blank
+                             render_nil: :as_blank,
+                             render_empty: :as_blank
         map_element 'subject', to: :subject,
-                    render_nil: :as_blank,
-                    render_empty: :as_blank
+                               render_nil: :as_blank,
+                               render_empty: :as_blank
         map_element 'creator', to: :creator,
-                    render_nil: :as_blank,
-                    render_empty: :as_blank
+                               render_nil: :as_blank,
+                               render_empty: :as_blank
         map_element 'keywords', to: :keywords,
-                    render_nil: :as_blank,
-                    render_empty: :as_blank
+                                render_nil: :as_blank,
+                                render_empty: :as_blank
         map_element 'description', to: :description,
-                    render_nil: :as_blank,
-                    render_empty: :as_blank
+                                   render_nil: :as_blank,
+                                   render_empty: :as_blank
         map_element 'lastModifiedBy', to: :last_modified_by
         map_element 'revision', to: :revision
 

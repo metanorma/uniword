@@ -10,15 +10,15 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:formulas>
       class Formulas < Lutaml::Model::Serializable
-          attribute :formulas, String, collection: true, default: -> { [] }
+        attribute :formulas, String, collection: true, default: -> { [] }
 
-          xml do
-            element 'formulas'
-            namespace Uniword::Ooxml::Namespaces::Vml
-            mixed_content
+        xml do
+          element 'formulas'
+          namespace Uniword::Ooxml::Namespaces::Vml
+          mixed_content
 
-            map_element 'f', to: :formulas, render_nil: false
-          end
+          map_element 'f', to: :formulas, render_nil: false
+        end
       end
     end
   end

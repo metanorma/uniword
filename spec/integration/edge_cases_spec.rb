@@ -359,7 +359,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # 10,000 character text
       long_text = 'Lorem ipsum dolor sit amet ' * 370
-      run.text = long_text[0, 10000]
+      run.text = long_text[0, 10_000]
       para.add_run(run)
       doc.add_element(para)
 
@@ -389,9 +389,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       5.times do |level|
         para = Uniword::Paragraph.new
 
-        if para.respond_to?(:properties)
-          para.properties.left_indent = 720 * level
-        end
+        para.properties.left_indent = 720 * level if para.respond_to?(:properties)
 
         run = Uniword::Run.new
         run.text = "Level #{level + 1} item"

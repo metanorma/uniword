@@ -28,7 +28,7 @@ module Uniword
 
     # Display type for the equation
     # @return [Symbol] :inline or :block
-    attribute :display_type, :string, default: -> { "inline" }
+    attribute :display_type, :string, default: -> { 'inline' }
 
     # Alignment for block equations
     # @return [Symbol] :left, :center, or :right
@@ -84,7 +84,7 @@ module Uniword
     #   equation.to_latex
     #   # => "x^2 + y^2 = z^2"
     def to_latex
-      return "" unless formula
+      return '' unless formula
 
       formula.to_latex
     end
@@ -97,7 +97,7 @@ module Uniword
     #   equation.to_mathml
     #   # => "<math>...</math>"
     def to_mathml
-      return "" unless formula
+      return '' unless formula
 
       formula.to_mathml
     end
@@ -110,7 +110,7 @@ module Uniword
     #   equation.to_asciimath
     #   # => "x^2 + y^2 = z^2"
     def to_asciimath
-      return "" unless formula
+      return '' unless formula
 
       formula.to_asciimath
     end
@@ -119,14 +119,14 @@ module Uniword
     #
     # @return [Boolean]
     def inline?
-      display_type.to_s == "inline"
+      display_type.to_s == 'inline'
     end
 
     # Check if equation is block/display mode
     #
     # @return [Boolean]
     def block?
-      display_type.to_s == "block"
+      display_type.to_s == 'block'
     end
 
     # Visitor pattern support

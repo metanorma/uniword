@@ -140,16 +140,16 @@ module Uniword
         resolved = style_def.resolve_inheritance(@library)
 
         # Apply paragraph properties
-        if resolved[:properties] && resolved[:properties].any?
+        if resolved[:properties]&.any?
           para.properties = Properties::ParagraphProperties.new(
             **resolved[:properties]
           )
         end
 
         # Store default run properties for text runs to inherit
-        if resolved[:run_properties] && resolved[:run_properties].any?
-          para.instance_variable_set(:@default_run_properties, resolved[:run_properties])
-        end
+        return unless resolved[:run_properties]&.any?
+
+        para.instance_variable_set(:@default_run_properties, resolved[:run_properties])
       end
 
       # Apply run style definition to run
@@ -160,9 +160,9 @@ module Uniword
       def apply_run_style(run, style_def)
         resolved = style_def.resolve_inheritance(@library)
 
-        if resolved && resolved.any?
-          run.properties = Properties::RunProperties.new(**resolved)
-        end
+        return unless resolved&.any?
+
+        run.properties = Properties::RunProperties.new(**resolved)
       end
     end
   end

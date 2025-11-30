@@ -14,8 +14,8 @@ module Uniword
         #
         # @param document [Document] Document to check
         # @return [Array<AccessibilityViolation>] Found violations
-        def check(document)
-          violations = []
+        def check(_document)
+          []
 
           # Check for lists that may be improperly structured
           # This is a simplified check - actual implementation would need
@@ -26,8 +26,6 @@ module Uniword
           # - Proper nesting levels
           # - Maximum nesting depth
           # - Consistent list types
-
-          violations
         end
       end
     end

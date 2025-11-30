@@ -39,9 +39,9 @@ RSpec.describe Uniword::Validation::ValidationReport do
     it 'raises error for non-ValidationResult' do
       report = described_class.new
 
-      expect {
+      expect do
         report.add_result('not a result')
-      }.to raise_error(ArgumentError, /Expected ValidationResult/)
+      end.to raise_error(ArgumentError, /Expected ValidationResult/)
     end
   end
 

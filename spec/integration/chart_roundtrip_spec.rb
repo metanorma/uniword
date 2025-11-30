@@ -43,7 +43,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       loaded_chart = loaded_doc.charts.first
       expect(loaded_chart.chart_type).to eq('bar')
       expect(loaded_chart.title).to eq('Sales Report')
-      expect(loaded_chart.part_path).to match(/charts\/chart\d+\.xml/)
+      expect(loaded_chart.part_path).to match(%r{charts/chart\d+\.xml})
     end
 
     it 'preserves multiple charts' do

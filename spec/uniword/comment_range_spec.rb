@@ -90,9 +90,9 @@ RSpec.describe Uniword::CommentRange do
     it 'raises error for invalid marker type' do
       range = described_class.new(comment_id: '1')
       range.instance_variable_set(:@marker_type, :invalid)
-      expect {
+      expect do
         range.xml_element_name
-      }.to raise_error(ArgumentError, /Invalid marker type/)
+      end.to raise_error(ArgumentError, /Invalid marker type/)
     end
   end
 

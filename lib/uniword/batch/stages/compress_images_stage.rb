@@ -27,7 +27,7 @@ module Uniword
       # @option options [Boolean] :skip_small_images Skip images below min size
       # @option options [Integer] :min_size_kb Minimum size to compress (KB)
       def initialize(options = {})
-        super(options)
+        super
         @max_width = options.fetch(:max_width, 1920)
         @max_height = options.fetch(:max_height, 1080)
         @quality = options.fetch(:quality, 85)
@@ -49,20 +49,20 @@ module Uniword
         total_saved = 0
 
         images.each do |image|
-          if should_compress_image?(image)
-            saved_bytes = compress_image(image)
-            if saved_bytes > 0
-              compressed_count += 1
-              total_saved += saved_bytes
-            end
+          next unless should_compress_image?(image)
+
+          saved_bytes = compress_image(image)
+          if saved_bytes.positive?
+            compressed_count += 1
+            total_saved += saved_bytes
           end
         end
 
-        if compressed_count > 0
+        if compressed_count.positive?
           saved_kb = (total_saved / 1024.0).round(2)
           log "Compressed #{compressed_count} image(s), saved #{saved_kb} KB"
         else
-          log "No images needed compression"
+          log 'No images needed compression'
         end
 
         document
@@ -72,7 +72,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        "Compress document images"
+        'Compress document images'
       end
 
       private

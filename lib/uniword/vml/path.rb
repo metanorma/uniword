@@ -10,20 +10,20 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:path>
       class Path < Lutaml::Model::Serializable
-          attribute :v, String
-          attribute :textpathok, String
-          attribute :fillok, String
-          attribute :strokeok, String
+        attribute :v, String
+        attribute :textpathok, String
+        attribute :fillok, String
+        attribute :strokeok, String
 
-          xml do
-            element 'path'
-            namespace Uniword::Ooxml::Namespaces::Vml
+        xml do
+          element 'path'
+          namespace Uniword::Ooxml::Namespaces::Vml
 
-            map_attribute 'v', to: :v
-            map_attribute 'textpathok', to: :textpathok
-            map_attribute 'fillok', to: :fillok
-            map_attribute 'strokeok', to: :strokeok
-          end
+          map_attribute 'v', to: :v
+          map_attribute 'textpathok', to: :textpathok
+          map_attribute 'fillok', to: :fillok
+          map_attribute 'strokeok', to: :strokeok
+        end
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "style_definition"
+require_relative 'style_definition'
 
 module Uniword
   module Styles
@@ -15,7 +15,7 @@ module Uniword
       attr_reader :table_properties, :cell_properties, :conditional_formatting
 
       def initialize(config)
-        super(config)
+        super
         @table_properties = config[:table_properties] || {}
         @cell_properties = config[:cell_properties] || {}
         @conditional_formatting = config[:conditional_formatting] || {}

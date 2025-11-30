@@ -47,9 +47,7 @@ module Uniword
         numeric_value = value.to_f
 
         # Handle zero specially - omit unit
-        if numeric_value.zero? && OMIT_UNIT_FOR_ZERO.include?(unit)
-          return '0'
-        end
+        return '0' if numeric_value.zero? && OMIT_UNIT_FOR_ZERO.include?(unit)
 
         # Round to specified precision
         rounded = numeric_value.round(precision)
@@ -59,7 +57,7 @@ module Uniword
                       rounded.to_i.to_s
                     else
                       # Format with precision, then remove trailing zeros
-                      sprintf("%.#{precision}f", rounded).sub(/\.?0+$/, '')
+                      format("%.#{precision}f", rounded).sub(/\.?0+$/, '')
                     end
 
         "#{formatted}#{unit}"

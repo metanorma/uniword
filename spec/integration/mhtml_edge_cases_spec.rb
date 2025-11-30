@@ -233,7 +233,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       para = Uniword::Paragraph.new
 
       long_text = 'Lorem ipsum dolor sit amet ' * 370
-      para.add_text(long_text[0, 10000])
+      para.add_text(long_text[0, 10_000])
       doc.add_element(para)
 
       doc.save(output_path, format: :mhtml)

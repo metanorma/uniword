@@ -91,9 +91,9 @@ RSpec.describe Uniword::Comment do
 
     it 'raises error if not a Paragraph' do
       comment = described_class.new(author: 'Editor')
-      expect {
+      expect do
         comment.add_paragraph('not a paragraph')
-      }.to raise_error(ArgumentError, /must be a Paragraph instance/)
+      end.to raise_error(ArgumentError, /must be a Paragraph instance/)
     end
 
     it 'returns self for chaining' do

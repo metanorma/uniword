@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a concrete numbering instance that references an abstract definition
@@ -22,13 +22,11 @@ module Uniword
     private
 
     def validate_ids
-      if num_id && num_id < 1
-        raise ArgumentError, "num_id must be >= 1"
-      end
+      raise ArgumentError, 'num_id must be >= 1' if num_id && num_id < 1
 
-      if abstract_num_id && abstract_num_id < 0
-        raise ArgumentError, "abstract_num_id must be >= 0"
-      end
+      return unless abstract_num_id&.negative?
+
+      raise ArgumentError, 'abstract_num_id must be >= 0'
     end
   end
 end

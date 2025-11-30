@@ -85,19 +85,13 @@ module Uniword
         theme = ::Uniword::Theme.new(name: data['name'])
 
         # Deserialize color scheme
-        if data['color_scheme']
-          theme.color_scheme = deserialize_color_scheme(data['color_scheme'])
-        end
+        theme.color_scheme = deserialize_color_scheme(data['color_scheme']) if data['color_scheme']
 
         # Deserialize font scheme
-        if data['font_scheme']
-          theme.font_scheme = deserialize_font_scheme(data['font_scheme'])
-        end
+        theme.font_scheme = deserialize_font_scheme(data['font_scheme']) if data['font_scheme']
 
         # Deserialize variants
-        if data['variants']
-          theme.variants = deserialize_variants(data['variants'])
-        end
+        theme.variants = deserialize_variants(data['variants']) if data['variants']
 
         # Set source reference
         theme.source_file = data['source'] if data['source']
@@ -114,10 +108,8 @@ module Uniword
 
         scheme = ColorScheme.new(name: data['name'])
 
-        if data['colors']
-          data['colors'].each do |color_name, color_value|
-            scheme[color_name.to_sym] = color_value if color_value
-          end
+        data['colors']&.each do |color_name, color_value|
+          scheme[color_name.to_sym] = color_value if color_value
         end
 
         scheme
@@ -186,11 +178,11 @@ module Uniword
         end
 
         # Apply variant fonts
-        if variant_data['font_scheme']
-          fs = variant_data['font_scheme']
-          theme.font_scheme.major_font = fs['major_font'] if fs['major_font']
-          theme.font_scheme.minor_font = fs['minor_font'] if fs['minor_font']
-        end
+        return unless variant_data['font_scheme']
+
+        fs = variant_data['font_scheme']
+        theme.font_scheme.major_font = fs['major_font'] if fs['major_font']
+        theme.font_scheme.minor_font = fs['minor_font'] if fs['minor_font']
       end
 
       # Normalize variant ID to standard format

@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Spreadsheetml
-      # Cell value element
-      #
-      # Generated from OOXML schema: spreadsheetml.yml
-      # Element: <xls:v>
-      class CellValue < Lutaml::Model::Serializable
-          attribute :text, String
+  module Spreadsheetml
+    # Cell value element
+    #
+    # Generated from OOXML schema: spreadsheetml.yml
+    # Element: <xls:v>
+    class CellValue < Lutaml::Model::Serializable
+      attribute :text, String
 
-          xml do
-            element 'v'
-            namespace Uniword::Ooxml::Namespaces::SpreadsheetML
+      xml do
+        element 'v'
+        namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-            map_element '', to: :text, render_nil: false
-          end
+        map_element '', to: :text, render_nil: false
       end
     end
+  end
 end

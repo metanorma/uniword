@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "style_definition"
+require_relative 'style_definition'
 
 module Uniword
   module Styles
@@ -15,7 +15,7 @@ module Uniword
       attr_reader :numbering_definition, :levels
 
       def initialize(config)
-        super(config)
+        super
         @numbering_definition = config[:numbering_definition]
         @levels = config[:levels] || []
       end

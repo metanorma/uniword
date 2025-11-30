@@ -12,10 +12,10 @@ module Uniword
     # This allows circular dependencies to resolve naturally
     Dir[File.join(__dir__, 'wordprocessingml', '*.rb')].sort.each do |file|
       class_name = File.basename(file, '.rb')
-        .split('_')
-        .map(&:capitalize)
-        .join
-      
+                       .split('_')
+                       .map(&:capitalize)
+                       .join
+
       autoload class_name.to_sym, file
     end
   end

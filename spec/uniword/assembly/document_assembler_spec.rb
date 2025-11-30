@@ -157,12 +157,12 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     it 'passes variables to assembly' do
       allow_any_instance_of(Uniword::Document).to receive(:save)
 
-      expect {
+      expect do
         assembler.assemble_and_save(
           manifest_file,
           variables: { custom: 'value' }
         )
-      }.not_to raise_error
+      end.not_to raise_error
     end
   end
 
@@ -239,8 +239,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
     before do
       create_manifest(sections: [
-        { 'component' => '__toc__', 'options' => { 'max_level' => 3 } }
-      ])
+                        { 'component' => '__toc__', 'options' => { 'max_level' => 3 } }
+                      ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file)
         .and_return(Uniword::Document.new)
@@ -261,8 +261,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
       create_component('clauses/clause_2')
 
       create_manifest(sections: [
-        { 'component' => 'clauses/*', 'order' => 'alphabetical' }
-      ])
+                        { 'component' => 'clauses/*', 'order' => 'alphabetical' }
+                      ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file) do
         doc = Uniword::Document.new
@@ -292,9 +292,9 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     it 'raises error for invalid manifest' do
       File.write(manifest_file, 'invalid: yaml: content:')
 
-      expect {
+      expect do
         assembler.assemble(manifest_file)
-      }.to raise_error(ArgumentError)
+      end.to raise_error(ArgumentError)
     end
   end
 end

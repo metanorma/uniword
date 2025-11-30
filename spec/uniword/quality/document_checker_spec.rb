@@ -72,9 +72,9 @@ RSpec.describe Uniword::Quality::DocumentChecker do
     end
 
     it 'raises error for invalid document' do
-      expect {
-        checker.check("not a document")
-      }.to raise_error(ArgumentError, /must respond to/)
+      expect do
+        checker.check('not a document')
+      end.to raise_error(ArgumentError, /must respond to/)
     end
   end
 

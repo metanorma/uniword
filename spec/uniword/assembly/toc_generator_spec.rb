@@ -68,7 +68,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
     it 'includes heading entries' do
       toc = gen.generate(document)
       # Skip title paragraph
-      entries = toc[1..-1]
+      entries = toc[1..]
 
       texts = entries.map { |p| p.runs.first.text }
       expect(texts).to include('Introduction', 'Methods', 'Conclusion')
@@ -78,7 +78,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       gen = described_class.new(max_level: 1)
       toc = gen.generate(document)
 
-      entries = toc[1..-1]
+      entries = toc[1..]
       texts = entries.map { |p| p.runs.first.text }
 
       # Should only include level 1 headings
@@ -144,7 +144,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       toc = gen.generate(document)
 
       # Check that different heading levels are represented
-      entries = toc[1..-1]
+      entries = toc[1..]
       expect(entries.size).to eq(6) # All headings
     end
 
@@ -176,7 +176,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
 
     it 'sets appropriate styles for different levels' do
       toc = gen.generate(document)
-      entries = toc[1..-1]
+      entries = toc[1..]
 
       # Each entry should have a TOC style
       entries.each do |entry|

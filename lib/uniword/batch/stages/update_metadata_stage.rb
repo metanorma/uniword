@@ -27,7 +27,7 @@ module Uniword
       # @option options [String] :company Company name
       # @option options [String] :title Document title
       def initialize(options = {})
-        super(options)
+        super
         @update_author = options.fetch(:update_author, true)
         @update_modified_date = options.fetch(:update_modified_date, true)
         @update_revision_number = options.fetch(:update_revision_number, true)
@@ -47,7 +47,7 @@ module Uniword
         update_core_properties(document)
         update_extended_properties(document) if @company
 
-        log "Metadata update complete"
+        log 'Metadata update complete'
         document
       end
 
@@ -55,7 +55,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        "Update document metadata"
+        'Update document metadata'
       end
 
       private
@@ -64,7 +64,7 @@ module Uniword
       #
       # @param document [Document] Document to update
       def update_core_properties(document)
-        # Note: Actual implementation depends on Document API
+        # NOTE: Actual implementation depends on Document API
         # This is a placeholder that shows the intended structure
 
         if @update_author && document.respond_to?(:author=)
@@ -80,18 +80,18 @@ module Uniword
           document.revision = (current_revision.to_i + 1).to_s
         end
 
-        if @title && document.respond_to?(:title=)
-          document.title = @title
-        end
+        return unless @title && document.respond_to?(:title=)
+
+        document.title = @title
       end
 
       # Update extended document properties
       #
       # @param document [Document] Document to update
       def update_extended_properties(document)
-        if @company && document.respond_to?(:company=)
-          document.company = @company
-        end
+        return unless @company && document.respond_to?(:company=)
+
+        document.company = @company
       end
 
       # Get current user name

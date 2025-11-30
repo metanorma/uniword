@@ -12,27 +12,27 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Document opening' do
     it 'opens a basic DOCX file' do
-      doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/basic.docx')
+      doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/basic.docx")
       expect(doc).not_to be_nil
       expect(doc.paragraphs).not_to be_nil
     end
 
     it 'raises error for non-existent file' do
-      invalid_path = @fixtures_path + '/nonexistent.docx'
-      expect {
+      invalid_path = "#{@fixtures_path}/nonexistent.docx"
+      expect do
         Uniword::DocumentFactory.from_file(invalid_path)
-      }.to raise_error
+      end.to raise_error
     end
 
     it 'opens Office365 formatted DOCX' do
-      doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/office365.docx')
+      doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/office365.docx")
       expect(doc).not_to be_nil
     end
   end
 
   describe 'Reading paragraphs' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/basic.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/basic.docx")
     end
 
     it 'reads paragraphs from document' do
@@ -54,7 +54,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Reading tables' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/tables.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/tables.docx")
     end
 
     it 'reads tables from document' do
@@ -99,7 +99,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Reading formatting' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/formatting.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/formatting.docx")
     end
 
     it 'reads document with formatting' do
@@ -139,7 +139,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Hyperlinks and bookmarks' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/basic.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/basic.docx")
     end
 
     it 'reads bookmarks from document' do
@@ -151,7 +151,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Document stream support' do
     it 'opens document from binary stream' do
-      stream = File.binread(@fixtures_path + '/basic.docx')
+      stream = File.binread("#{@fixtures_path}/basic.docx")
       doc = Uniword::Document.open(stream)
       expect(doc).not_to be_nil
       expect(doc.paragraphs.size).to be > 0
@@ -160,7 +160,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Paragraph iteration' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/basic.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/basic.docx")
     end
 
     it 'iterates through all paragraphs' do
@@ -180,7 +180,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Text run access' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/formatting.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/formatting.docx")
     end
 
     it 'accesses text runs in paragraphs' do
@@ -190,7 +190,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
     it 'reads text from runs' do
       para = @doc.paragraphs.first
-      if para.runs.size > 0
+      unless para.runs.empty?
         text = para.runs.map(&:text).join
         expect(text).to be_a(String)
       end
@@ -199,7 +199,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Styles and properties' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/styles.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/styles.docx")
     end
 
     it 'reads document with styles' do
@@ -215,11 +215,11 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Editing capabilities' do
     before do
-      @doc = Uniword::DocumentFactory.from_file(@fixtures_path + '/editing.docx')
+      @doc = Uniword::DocumentFactory.from_file("#{@fixtures_path}/editing.docx")
     end
 
     it 'modifies paragraph text' do
-      original_text = @doc.paragraphs.first.text
+      @doc.paragraphs.first.text
       new_text = 'Modified text'
       @doc.paragraphs.first.text = new_text
       expect(@doc.paragraphs.first.text).to eq(new_text)
@@ -234,7 +234,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Compatibility layer - Docx::Document alias' do
     it 'supports Docx::Document.open syntax' do
-      doc = Uniword::Document.open(@fixtures_path + '/basic.docx')
+      doc = Uniword::Document.open("#{@fixtures_path}/basic.docx")
       expect(doc).not_to be_nil
       expect(doc.paragraphs.size).to be > 0
     end

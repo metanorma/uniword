@@ -10,24 +10,24 @@ module Uniword
       # Generated from OOXML schema: vml.yml
       # Element: <v:shapetype>
       class Shapetype < Lutaml::Model::Serializable
-          attribute :id, String
-          attribute :coordsize, String
-          attribute :coordorigin, String
-          attribute :path, String
-          attribute :stroke, String
-          attribute :fill, String
+        attribute :id, String
+        attribute :coordsize, String
+        attribute :coordorigin, String
+        attribute :path, String
+        attribute :stroke, String
+        attribute :fill, String
 
-          xml do
-            element 'shapetype'
-            namespace Uniword::Ooxml::Namespaces::Vml
+        xml do
+          element 'shapetype'
+          namespace Uniword::Ooxml::Namespaces::Vml
 
-            map_attribute 'id', to: :id
-            map_attribute 'coordsize', to: :coordsize
-            map_attribute 'coordorigin', to: :coordorigin
-            map_attribute 'path', to: :path
-            map_element '', to: :stroke, render_nil: false
-            map_element '', to: :fill, render_nil: false
-          end
+          map_attribute 'id', to: :id
+          map_attribute 'coordsize', to: :coordsize
+          map_attribute 'coordorigin', to: :coordorigin
+          map_attribute 'path', to: :path
+          map_element '', to: :stroke, render_nil: false
+          map_element '', to: :fill, render_nil: false
+        end
       end
     end
   end

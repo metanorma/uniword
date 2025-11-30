@@ -145,10 +145,10 @@ module Uniword
       #
       # @raise [ArgumentError] If directory doesn't exist
       def validate_directory!
-        unless Dir.exist?(@components_dir)
-          raise ArgumentError,
-                "Components directory not found: #{@components_dir}"
-        end
+        return if Dir.exist?(@components_dir)
+
+        raise ArgumentError,
+              "Components directory not found: #{@components_dir}"
       end
 
       # Load component document from file.
@@ -158,9 +158,7 @@ module Uniword
       def load_component(name)
         path = find_component_path(name)
 
-        unless path
-          raise ArgumentError, "Component not found: #{name}"
-        end
+        raise ArgumentError, "Component not found: #{name}" unless path
 
         DocumentFactory.from_file(path)
       end
@@ -234,7 +232,7 @@ module Uniword
       # @return [String] Component name
       def extract_component_name(path)
         # Get relative path from components directory
-        relative = path.sub(@components_dir + '/', '')
+        relative = path.sub("#{@components_dir}/", '')
 
         # Remove extension
         relative.sub(/\.(docx|doc)$/, '')

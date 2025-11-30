@@ -3,23 +3,23 @@
 require 'lutaml/model'
 
 module Uniword
-    module Math
-      # Mathematical matrix
-      #
-      # Generated from OOXML schema: math.yml
-      # Element: <m:m>
-      class Matrix < Lutaml::Model::Serializable
-          attribute :properties, MatrixProperties
-          attribute :rows, MatrixRow, collection: true, default: -> { [] }
+  module Math
+    # Mathematical matrix
+    #
+    # Generated from OOXML schema: math.yml
+    # Element: <m:m>
+    class Matrix < Lutaml::Model::Serializable
+      attribute :properties, MatrixProperties
+      attribute :rows, MatrixRow, collection: true, default: -> { [] }
 
-          xml do
-            element 'm'
-            namespace Uniword::Ooxml::Namespaces::MathML
-            mixed_content
+      xml do
+        element 'm'
+        namespace Uniword::Ooxml::Namespaces::MathML
+        mixed_content
 
-            map_element 'mPr', to: :properties, render_nil: false
-            map_element 'mr', to: :rows, render_nil: false
-          end
+        map_element 'mPr', to: :properties, render_nil: false
+        map_element 'mr', to: :rows, render_nil: false
       end
     end
+  end
 end

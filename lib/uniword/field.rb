@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a field (dynamic content like page numbers, dates, etc.)
@@ -21,10 +21,6 @@ module Uniword
       ref: 'REF',
       hyperlink: 'HYPERLINK'
     }.freeze
-
-    def initialize(**attributes)
-      super
-    end
 
     # Create a page number field
     def self.page_number(format: 'ARABIC')

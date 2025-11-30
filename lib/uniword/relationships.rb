@@ -12,7 +12,9 @@ module Uniword
     autoload :Relationships, File.expand_path('relationships/relationships', __dir__)
     autoload :Relationship, File.expand_path('relationships/relationship', __dir__)
     autoload :ImageRelationship, File.expand_path('relationships/image_relationship', __dir__)
-    autoload :HyperlinkRelationship, File.expand_path('relationships/hyperlink_relationship', __dir__)
-    autoload :OfficeDocumentRelationship, File.expand_path('relationships/office_document_relationship', __dir__)
+    autoload :HyperlinkRelationship,
+             File.expand_path('relationships/hyperlink_relationship', __dir__)
+    autoload :OfficeDocumentRelationship,
+             File.expand_path('relationships/office_document_relationship', __dir__)
   end
 end

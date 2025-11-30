@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 require_relative 'page_borders'
 require_relative 'column_configuration'
 require_relative 'line_numbering'
@@ -22,11 +22,11 @@ module Uniword
     attribute :margin_footer, :integer
 
     # Page orientation
-    attribute :orientation, :string, default: -> { "portrait" }
+    attribute :orientation, :string, default: -> { 'portrait' }
 
     # Alias for docx-js compatibility
-    alias_method :page_orientation, :orientation
-    alias_method :page_orientation=, :orientation=
+    alias page_orientation orientation
+    alias page_orientation= orientation=
 
     # Title page (different first page header/footer)
     attribute :title_page, :boolean, default: -> { false }
@@ -39,7 +39,7 @@ module Uniword
     attribute :page_number_start, :integer
 
     # Section type (continuous, nextPage, nextColumn, evenPage, oddPage)
-    attribute :section_type, :string, default: -> { "nextPage" }
+    attribute :section_type, :string, default: -> { 'nextPage' }
 
     # Header/footer references (relationship IDs)
     attribute :header_default_rel_id, :string
@@ -60,12 +60,12 @@ module Uniword
 
     # Page size presets (width x height in twips)
     PAGE_SIZES = {
-      letter: [12240, 15840],   # 8.5" x 11"
-      a4: [11906, 16838],        # 210mm x 297mm
-      a3: [16838, 23811],        # 297mm x 420mm
-      legal: [12240, 20160],     # 8.5" x 14"
-      tabloid: [15840, 24480],   # 11" x 17"
-      a5: [8391, 11906]          # 148mm x 210mm
+      letter: [12_240, 15_840], # 8.5" x 11"
+      a4: [11_906, 16_838],        # 210mm x 297mm
+      a3: [16_838, 23_811],        # 297mm x 420mm
+      legal: [12_240, 20_160],     # 8.5" x 14"
+      tabloid: [15_840, 24_480],   # 11" x 17"
+      a5: [8391, 11_906] # 148mm x 210mm
     }.freeze
 
     # Valid orientations
@@ -88,8 +88,8 @@ module Uniword
     # Set A4 page size (portrait)
     def self.a4_portrait
       new(
-        page_width: 11906,  # 210mm in twips
-        page_height: 16838, # 297mm in twips
+        page_width: 11_906,  # 210mm in twips
+        page_height: 16_838, # 297mm in twips
         orientation: 'portrait'
       )
     end
@@ -97,8 +97,8 @@ module Uniword
     # Set A4 page size (landscape)
     def self.a4_landscape
       new(
-        page_width: 16838,  # 297mm in twips
-        page_height: 11906, # 210mm in twips
+        page_width: 16_838,  # 297mm in twips
+        page_height: 11_906, # 210mm in twips
         orientation: 'landscape'
       )
     end
@@ -106,8 +106,8 @@ module Uniword
     # Set Letter page size (portrait)
     def self.letter_portrait
       new(
-        page_width: 12240,  # 8.5in in twips
-        page_height: 15840, # 11in in twips
+        page_width: 12_240,  # 8.5in in twips
+        page_height: 15_840, # 11in in twips
         orientation: 'portrait'
       )
     end
@@ -115,8 +115,8 @@ module Uniword
     # Set Letter page size (landscape)
     def self.letter_landscape
       new(
-        page_width: 15840,  # 11in in twips
-        page_height: 12240, # 8.5in in twips
+        page_width: 15_840,  # 11in in twips
+        page_height: 12_240, # 8.5in in twips
         orientation: 'landscape'
       )
     end
@@ -177,10 +177,10 @@ module Uniword
       return unless name
 
       size_key = name.to_s.downcase.to_sym
-      if PAGE_SIZES.key?(size_key)
-        @page_size = name
-        set_page_size(size_key, orientation: orientation&.to_sym || :portrait)
-      end
+      return unless PAGE_SIZES.key?(size_key)
+
+      @page_size = name
+      set_page_size(size_key, orientation: orientation&.to_sym || :portrait)
     end
 
     private
@@ -188,13 +188,15 @@ module Uniword
     def validate_orientation
       return unless orientation && !ORIENTATIONS.include?(orientation)
 
-      raise ArgumentError, "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(', ')}"
+      raise ArgumentError,
+            "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(', ')}"
     end
 
     def validate_section_type
       return unless section_type && !SECTION_TYPES.include?(section_type)
 
-      raise ArgumentError, "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(', ')}"
+      raise ArgumentError,
+            "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(', ')}"
     end
   end
 end

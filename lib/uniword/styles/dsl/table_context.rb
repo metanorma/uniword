@@ -99,16 +99,16 @@ module Uniword
           resolved = style_def.resolve_inheritance(@library)
 
           # Apply paragraph properties
-          if resolved[:properties] && resolved[:properties].any?
+          if resolved[:properties]&.any?
             para.properties = Properties::ParagraphProperties.new(
               **resolved[:properties]
             )
           end
 
           # Store default run properties
-          if resolved[:run_properties] && resolved[:run_properties].any?
-            para.instance_variable_set(:@default_run_properties, resolved[:run_properties])
-          end
+          return unless resolved[:run_properties]&.any?
+
+          para.instance_variable_set(:@default_run_properties, resolved[:run_properties])
         end
       end
     end

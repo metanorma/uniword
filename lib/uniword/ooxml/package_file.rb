@@ -86,13 +86,13 @@ module Uniword
         Zip::File.open(output_path, Zip::File::CREATE) do |zipfile|
           Dir.glob(File.join(@extracted_dir, '**', '*')).each do |file_path|
             next if File.directory?(file_path)
-  
+
             # Calculate relative path within package
             relative_path = file_path.sub("#{@extracted_dir}/", '')
-            
+
             # Skip if entry already exists (prevents duplicates)
             next if zipfile.find_entry(relative_path)
-            
+
             zipfile.add(relative_path, file_path)
           end
         end
@@ -109,7 +109,7 @@ module Uniword
       def cleanup
         return unless @extracted_dir
 
-        FileUtils.rm_rf(@extracted_dir) if Dir.exist?(@extracted_dir)
+        FileUtils.rm_rf(@extracted_dir)
         @extracted_dir = nil
       end
 
@@ -212,8 +212,6 @@ module Uniword
 
         output_path
       end
-
-      private
 
       # Create an empty package template
       #

@@ -71,22 +71,22 @@ module Uniword
           REQUIRED_PARTS.each do |part_name, description|
             next unless should_check_part?(part_name)
 
-            unless zip.find_entry(part_name)
-              result.add_error(
-                "Missing #{description}: #{part_name}",
-                critical: true
-              )
-            end
+            next if zip.find_entry(part_name)
+
+            result.add_error(
+              "Missing #{description}: #{part_name}",
+              critical: true
+            )
           end
         end
 
         def validate_optional_parts(zip, result)
           OPTIONAL_PARTS.each do |part_name, description|
-            unless zip.find_entry(part_name)
-              result.add_info(
-                "Missing #{description}: #{part_name} (optional)"
-              )
-            end
+            next if zip.find_entry(part_name)
+
+            result.add_info(
+              "Missing #{description}: #{part_name} (optional)"
+            )
           end
         end
 

@@ -213,7 +213,7 @@ module Uniword
         suggestions = warning_config[:element_suggestions] || {}
         suggestions[element_tag] ||
           suggestions[element_tag.to_sym] ||
-          "This element is not yet supported. Data may be lost in round-trip."
+          'This element is not yet supported. Data may be lost in round-trip.'
       end
 
       def log_warning(warning)
@@ -223,9 +223,9 @@ module Uniword
         # Use Uniword logger if available
         if defined?(Uniword::Logger)
           Uniword::Logger.send(level, message)
-        else
+        elsif %i[warn error].include?(level)
           # Fall back to standard output
-          puts message if level == :warn || level == :error
+          puts message
         end
       end
     end

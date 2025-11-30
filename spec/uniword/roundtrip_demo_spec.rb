@@ -15,8 +15,8 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
     @doc.save('examples/demo_formal_integral_roundtrip_spec.docx')
 
     # Extract both packages
-    system("cd examples && unzip -qo demo_formal_integral_proper.docx -d roundtrip_spec_original")
-    system("cd examples && unzip -qo demo_formal_integral_roundtrip_spec.docx -d roundtrip_spec_saved")
+    system('cd examples && unzip -qo demo_formal_integral_proper.docx -d roundtrip_spec_original')
+    system('cd examples && unzip -qo demo_formal_integral_roundtrip_spec.docx -d roundtrip_spec_saved')
   end
 
   describe 'Document Loading' do

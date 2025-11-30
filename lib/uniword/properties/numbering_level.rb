@@ -16,11 +16,11 @@ module Uniword
     # (9 levels of list nesting/indentation)
     class NumberingLevel < Lutaml::Model::Serializable
       attribute :value, NumberingLevelValue
-      
+
       xml do
         element 'ilvl'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

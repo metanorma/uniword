@@ -177,11 +177,9 @@ module Uniword
       # @param target [Document] Target document
       # @param source_format [Symbol] Source format
       # @param target_format [Symbol] Target format
-      def transform_metadata(source, target, source_format, target_format)
+      def transform_metadata(source, target, _source_format, target_format)
         # Copy styles configuration
-        if source.styles_configuration
-          target.styles_configuration = source.styles_configuration.dup
-        end
+        target.styles_configuration = source.styles_configuration.dup if source.styles_configuration
 
         # Copy numbering configuration
         if source.numbering_configuration
@@ -189,19 +187,15 @@ module Uniword
         end
 
         # Theme is DOCX-specific, copy only if target is DOCX
-        if source.theme && target_format == :docx
-          target.theme = source.theme.dup
-        end
+        target.theme = source.theme.dup if source.theme && target_format == :docx
 
         # Copy sections
-        if source.sections
-          target.sections = source.sections.map(&:dup)
-        end
+        target.sections = source.sections.map(&:dup) if source.sections
 
         # Copy bookmarks
-        if source.bookmarks
-          target.bookmarks = source.bookmarks.dup
-        end
+        return unless source.bookmarks
+
+        target.bookmarks = source.bookmarks.dup
       end
 
       # Register default transformation rules
@@ -288,15 +282,15 @@ module Uniword
       def validate_transformation(source, source_format, target_format)
         raise ArgumentError, 'Source must be a Document' unless source.is_a?(Document)
 
-        unless [:docx, :mhtml].include?(source_format)
+        unless %i[docx mhtml].include?(source_format)
           raise ArgumentError,
                 "Source format must be :docx or :mhtml, got #{source_format.inspect}"
         end
 
-        unless [:docx, :mhtml].include?(target_format)
-          raise ArgumentError,
-                "Target format must be :docx or :mhtml, got #{target_format.inspect}"
-        end
+        return if %i[docx mhtml].include?(target_format)
+
+        raise ArgumentError,
+              "Target format must be :docx or :mhtml, got #{target_format.inspect}"
       end
     end
   end

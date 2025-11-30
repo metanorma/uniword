@@ -157,12 +157,10 @@ module Uniword
                 child_node = serialize_child_to_node(doc, child, child_def, options)
                 node.add_child(child_node) if child_node
               end
-            else
+            elsif children
               # Serialize single child
-              if children
-                child_node = serialize_child_to_node(doc, children, child_def, options)
-                node.add_child(child_node) if child_node
-              end
+              child_node = serialize_child_to_node(doc, children, child_def, options)
+              node.add_child(child_node) if child_node
             end
           end
         end
@@ -194,7 +192,7 @@ module Uniword
             node
           elsif child.respond_to?(:is_a?) && child.is_a?(Element)
             # Check if this is a TextElement that needs special handling
-            if child.class.name == 'Uniword::TextElement' && child.respond_to?(:content)
+            if child.instance_of?(::Uniword::TextElement) && child.respond_to?(:content)
               # TextElement: serialize as element with text content
               node = Nokogiri::XML::Node.new(local_name, doc)
               node.namespace = node.add_namespace_definition(prefix, namespace_uri)
@@ -221,9 +219,7 @@ module Uniword
                 child_def.attributes.each do |attr_config|
                   attr_def = AttributeDefinition.new(attr_config)
                   value = get_attribute_value(child, attr_def)
-                  if value
-                    node[attr_def.attribute_name] = attr_def.format_value(value)
-                  end
+                  node[attr_def.attribute_name] = attr_def.format_value(value) if value
                 end
               end
               node
@@ -236,9 +232,7 @@ module Uniword
             child_def.attributes.each do |attr_config|
               attr_def = AttributeDefinition.new(attr_config)
               value = get_attribute_value(child, attr_def)
-              if value
-                node[attr_def.attribute_name] = attr_def.format_value(value)
-              end
+              node[attr_def.attribute_name] = attr_def.format_value(value) if value
             end
             node
           elsif child.is_a?(String)

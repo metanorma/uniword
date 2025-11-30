@@ -64,7 +64,7 @@ RSpec.describe 'Memory Performance' do
       10.times do
         doc = create_large_document(paragraphs: 1000)
         doc.save('tmp/mem_test.docx')
-        doc = nil
+        nil
       end
 
       GC.start
@@ -83,7 +83,7 @@ RSpec.describe 'Memory Performance' do
       100.times do
         doc = create_large_document(paragraphs: 100)
         _ = doc.paragraphs.map(&:runs)
-        doc = nil
+        nil
       end
 
       GC.start
@@ -143,7 +143,7 @@ RSpec.describe 'Memory Performance' do
       before_allocations = ObjectSpace.count_objects
 
       # Parse the document
-      parsed_doc = Uniword::DocumentFactory.from_file('tmp/alloc_test.docx')
+      Uniword::DocumentFactory.from_file('tmp/alloc_test.docx')
 
       GC.start
       after_allocations = ObjectSpace.count_objects
@@ -192,7 +192,7 @@ RSpec.describe 'Memory Performance' do
       before_strings = ObjectSpace.count_objects[:T_STRING]
 
       doc = create_large_document(paragraphs: 100)
-      xml = Uniword::Serialization::OoxmlSerializer.new.serialize(doc)
+      Uniword::Serialization::OoxmlSerializer.new.serialize(doc)
 
       GC.start
       after_strings = ObjectSpace.count_objects[:T_STRING]
@@ -206,7 +206,7 @@ RSpec.describe 'Memory Performance' do
 
     it 'uses string freezing for constants' do
       # All string literals in serializers should be frozen
-      serializer = Uniword::Serialization::OoxmlSerializer.new
+      Uniword::Serialization::OoxmlSerializer.new
 
       # This is a design check - frozen strings reduce allocations
       expect('frozen_string_literal: true').to be_truthy

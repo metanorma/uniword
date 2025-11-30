@@ -55,14 +55,10 @@ module Uniword
             end
 
             # Check required entries
-            if check_entries?
-              validate_required_entries(zip_file, result)
-            end
+            validate_required_entries(zip_file, result) if check_entries?
 
             # Check for corrupted entries
-            if check_corruption?
-              validate_entry_integrity(zip_file, result)
-            end
+            validate_entry_integrity(zip_file, result) if check_corruption?
           end
         end
 
@@ -73,12 +69,12 @@ module Uniword
           ]
 
           required_entries.each do |entry_name|
-            unless zip_file.find_entry(entry_name)
-              result.add_error(
-                "Missing required file: #{entry_name}",
-                critical: true
-              )
-            end
+            next if zip_file.find_entry(entry_name)
+
+            result.add_error(
+              "Missing required file: #{entry_name}",
+              critical: true
+            )
           end
         end
 

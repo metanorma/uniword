@@ -13,6 +13,7 @@ module Uniword
   # Uses caching for efficient text extraction from large tables.
   class TableCell < Element
     extend LazyLoader
+
     # OOXML namespace configuration
     xml do
       element 'tc', mixed: true
@@ -44,14 +45,14 @@ module Uniword
     attribute :rowspan, :integer, default: -> { 1 }
 
     # Alias for backward compatibility
-    alias_method :properties, :cell_properties
-    alias_method :properties=, :cell_properties=
+    alias properties cell_properties
+    alias properties= cell_properties=
 
     # Aliases for docx-js compatibility
-    alias_method :column_span, :colspan
-    alias_method :column_span=, :colspan=
-    alias_method :row_span, :rowspan
-    alias_method :row_span=, :rowspan=
+    alias column_span colspan
+    alias column_span= colspan=
+    alias row_span rowspan
+    alias row_span= rowspan=
 
     # Accept a visitor for the visitor pattern
     #
@@ -67,7 +68,7 @@ module Uniword
     #
     # @return [String] The combined text from all paragraphs
     def text
-      @cached_text ||= paragraphs.map(&:text).join("\n")
+      @text ||= paragraphs.map(&:text).join("\n")
     end
 
     # Set the plain text content of this cell

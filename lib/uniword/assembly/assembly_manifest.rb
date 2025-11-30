@@ -99,9 +99,7 @@ module Uniword
       # @param path [String] Path to YAML file
       # @return [Hash] Parsed YAML content
       def load_yaml(path)
-        unless File.exist?(path)
-          raise ArgumentError, "Manifest file not found: #{path}"
-        end
+        raise ArgumentError, "Manifest file not found: #{path}" unless File.exist?(path)
 
         YAML.load_file(path)
       rescue Psych::SyntaxError => e
@@ -112,9 +110,7 @@ module Uniword
       #
       # @raise [ArgumentError] If manifest structure is invalid
       def validate_structure!
-        unless @raw_data.is_a?(Hash)
-          raise ArgumentError, "Manifest must be a Hash"
-        end
+        raise ArgumentError, 'Manifest must be a Hash' unless @raw_data.is_a?(Hash)
 
         unless @raw_data['document'].is_a?(Hash)
           raise ArgumentError, "Manifest must have 'document' key"
@@ -122,13 +118,11 @@ module Uniword
 
         doc = @raw_data['document']
 
-        unless doc['output']
-          raise ArgumentError, "Manifest must specify 'output' path"
-        end
+        raise ArgumentError, "Manifest must specify 'output' path" unless doc['output']
 
-        unless doc['sections'].is_a?(Array)
-          raise ArgumentError, "Manifest must have 'sections' array"
-        end
+        return if doc['sections'].is_a?(Array)
+
+        raise ArgumentError, "Manifest must have 'sections' array"
       end
 
       # Parse manifest data.
@@ -149,9 +143,7 @@ module Uniword
       def parse_variables(vars)
         return {} if vars.nil?
 
-        unless vars.is_a?(Hash)
-          raise ArgumentError, "Variables must be a Hash"
-        end
+        raise ArgumentError, 'Variables must be a Hash' unless vars.is_a?(Hash)
 
         # Convert all keys to strings for consistency
         vars.transform_keys(&:to_s)

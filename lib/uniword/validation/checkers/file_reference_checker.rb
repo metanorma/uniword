@@ -66,10 +66,10 @@ module Uniword
         # @example
         #   result = checker.check(file_link)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
 
           file_path = extract_file_path(link)
-          return ValidationResult.failure(link, "No file path specified") unless file_path
+          return ValidationResult.failure(link, 'No file path specified') unless file_path
 
           # Resolve the file path
           resolved_path = resolve_path(file_path, document)
@@ -79,14 +79,14 @@ module Uniword
             unless config_value(:check_absolute_paths, DEFAULTS[:check_absolute_paths])
               return ValidationResult.warning(
                 link,
-                "Absolute path checking disabled"
+                'Absolute path checking disabled'
               )
             end
           else
             unless config_value(:check_relative_paths, DEFAULTS[:check_relative_paths])
               return ValidationResult.warning(
                 link,
-                "Relative path checking disabled"
+                'Relative path checking disabled'
               )
             end
           end
@@ -162,7 +162,7 @@ module Uniword
         # @return [String] Base path
         def determine_base_path(document)
           # Try to get document's directory
-          if document&.respond_to?(:file_path)
+          if document.respond_to?(:file_path)
             File.dirname(document.file_path)
           else
             # Use configured base path

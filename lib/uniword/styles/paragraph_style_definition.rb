@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "style_definition"
+require_relative 'style_definition'
 
 module Uniword
   module Styles
@@ -15,7 +15,7 @@ module Uniword
       attr_reader :next_style, :run_properties
 
       def initialize(config)
-        super(config)
+        super
         @next_style = config[:next_style]
         @run_properties = config[:run_properties] || {}
       end

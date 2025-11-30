@@ -31,15 +31,15 @@ RSpec.describe 'Numbering Feature' do
       end
 
       it 'raises error for invalid format' do
-        expect {
+        expect do
           Uniword::NumberingLevel.new(format: 'invalid')
-        }.to raise_error(ArgumentError, /Invalid format/)
+        end.to raise_error(ArgumentError, /Invalid format/)
       end
 
       it 'raises error for invalid alignment' do
-        expect {
+        expect do
           Uniword::NumberingLevel.new(alignment: 'invalid')
-        }.to raise_error(ArgumentError, /Invalid alignment/)
+        end.to raise_error(ArgumentError, /Invalid alignment/)
       end
     end
 
@@ -106,9 +106,9 @@ RSpec.describe 'Numbering Feature' do
       it 'raises error when exceeding max levels' do
         defn = Uniword::NumberingDefinition.new(abstract_num_id: 0)
         9.times { defn.add_level(format: 'decimal') }
-        expect {
+        expect do
           defn.add_level(format: 'decimal')
-        }.to raise_error(ArgumentError, /Cannot add more than 9 levels/)
+        end.to raise_error(ArgumentError, /Cannot add more than 9 levels/)
       end
     end
 
@@ -182,15 +182,15 @@ RSpec.describe 'Numbering Feature' do
       end
 
       it 'raises error for invalid num_id' do
-        expect {
+        expect do
           Uniword::NumberingInstance.new(num_id: 0, abstract_num_id: 0)
-        }.to raise_error(ArgumentError, /num_id must be >= 1/)
+        end.to raise_error(ArgumentError, /num_id must be >= 1/)
       end
 
       it 'raises error for invalid abstract_num_id' do
-        expect {
+        expect do
           Uniword::NumberingInstance.new(num_id: 1, abstract_num_id: -1)
-        }.to raise_error(ArgumentError, /abstract_num_id must be >= 0/)
+        end.to raise_error(ArgumentError, /abstract_num_id must be >= 0/)
       end
     end
 
@@ -262,27 +262,27 @@ RSpec.describe 'Numbering Feature' do
 
       it 'creates bullet numbering' do
         config = Uniword::NumberingConfiguration.new
-        num_id = config.create_numbering(:bullet)
+        config.create_numbering(:bullet)
         expect(config.definitions.first.levels.first.format).to eq('bullet')
       end
 
       it 'creates roman numbering' do
         config = Uniword::NumberingConfiguration.new
-        num_id = config.create_numbering(:roman, upper: true)
+        config.create_numbering(:roman, upper: true)
         expect(config.definitions.first.levels.first.format).to eq('upperRoman')
       end
 
       it 'creates letter numbering' do
         config = Uniword::NumberingConfiguration.new
-        num_id = config.create_numbering(:letter, upper: false)
+        config.create_numbering(:letter, upper: false)
         expect(config.definitions.first.levels.first.format).to eq('lowerLetter')
       end
 
       it 'raises error for unknown type' do
         config = Uniword::NumberingConfiguration.new
-        expect {
+        expect do
           config.create_numbering(:invalid)
-        }.to raise_error(ArgumentError, /Unknown numbering type/)
+        end.to raise_error(ArgumentError, /Unknown numbering type/)
       end
     end
 

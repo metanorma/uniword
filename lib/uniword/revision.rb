@@ -75,7 +75,7 @@ module Uniword
       text_content = attributes.delete(:text)
       @content = attributes.delete(:content)
 
-      super(attributes)
+      super
 
       # Auto-generate revision_id if not provided
       @revision_id ||= generate_revision_id
@@ -84,9 +84,9 @@ module Uniword
       @date ||= format_date(Time.now)
 
       # Set content from text if provided
-      if text_content && !text_content.empty?
-        @content = text_content
-      end
+      return unless text_content && !text_content.empty?
+
+      @content = text_content
     end
 
     # Accept a visitor for the visitor pattern
@@ -168,7 +168,7 @@ module Uniword
     #
     # @return [Boolean] true if valid type
     def valid_type?
-      [:insert, :delete, :format_change].include?(type)
+      %i[insert delete format_change].include?(type)
     end
 
     # Generate a unique revision ID
@@ -176,7 +176,7 @@ module Uniword
     # @return [String] A unique revision ID
     def generate_revision_id
       # Use timestamp + random component for uniqueness
-      "#{Time.now.to_i}_#{rand(10000)}"
+      "#{Time.now.to_i}_#{rand(10_000)}"
     end
 
     # Format date for OOXML
@@ -185,6 +185,7 @@ module Uniword
     # @return [String] ISO 8601 formatted date string
     def format_date(time)
       return time if time.is_a?(String)
+
       time.utc.iso8601
     end
   end

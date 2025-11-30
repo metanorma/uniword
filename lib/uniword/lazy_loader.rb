@@ -37,7 +37,9 @@ module Uniword
         instance_variable = "@#{name}"
 
         # Return cached value if already loaded
-        return instance_variable_get(instance_variable) if instance_variable_defined?(instance_variable)
+        if instance_variable_defined?(instance_variable)
+          return instance_variable_get(instance_variable)
+        end
 
         # Load and cache the value
         value = instance_exec(&loader)
@@ -77,7 +79,9 @@ module Uniword
         instance_variable = "@#{name}"
 
         # Return cached collection if already loaded
-        return instance_variable_get(instance_variable) if instance_variable_defined?(instance_variable)
+        if instance_variable_defined?(instance_variable)
+          return instance_variable_get(instance_variable)
+        end
 
         # Load and cache the collection
         collection = instance_exec(&loader)
@@ -101,7 +105,9 @@ module Uniword
       # Define method to get collection size without loading all items
       define_method("#{name}_count") do
         instance_variable = "@#{name}"
-        return instance_variable_get(instance_variable).size if instance_variable_defined?(instance_variable)
+        if instance_variable_defined?(instance_variable)
+          return instance_variable_get(instance_variable).size
+        end
 
         # If not loaded, try to get count without loading
         # This is a hook for subclasses to override

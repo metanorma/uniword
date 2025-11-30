@@ -81,7 +81,7 @@ RSpec.describe 'Styles Integration', :integration do
       doc = Uniword::Document.new
 
       # Create custom paragraph style
-      custom_style = doc.styles_configuration.create_paragraph_style(
+      doc.styles_configuration.create_paragraph_style(
         'MyCustomStyle',
         'My Custom Style',
         paragraph_properties: Uniword::Properties::ParagraphProperties.new(

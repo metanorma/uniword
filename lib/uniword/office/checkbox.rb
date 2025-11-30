@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Checkbox control
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:checkbox>
-      class Checkbox < Lutaml::Model::Serializable
-          attribute :checked, String
-          attribute :value, String
+  module Office
+    # Checkbox control
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:checkbox>
+    class Checkbox < Lutaml::Model::Serializable
+      attribute :checked, String
+      attribute :value, String
 
-          xml do
-            element 'checkbox'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'checkbox'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'checked', to: :checked
-            map_attribute 'value', to: :value
-          end
+        map_attribute 'checked', to: :checked
+        map_attribute 'value', to: :value
       end
     end
+  end
 end

@@ -14,7 +14,7 @@ module Uniword
     autoload :Title, File.expand_path('chart/title', __dir__)
     autoload :AutoTitleDeleted, File.expand_path('chart/auto_title_deleted', __dir__)
     autoload :PlotArea, File.expand_path('chart/plot_area', __dir__)
-      
+
     # Chart Types (15 elements)
     autoload :BarChart, File.expand_path('chart/bar_chart', __dir__)
     autoload :Bar3DChart, File.expand_path('chart/bar3_d_chart', __dir__)
@@ -31,7 +31,7 @@ module Uniword
     autoload :DoughnutChart, File.expand_path('chart/doughnut_chart', __dir__)
     autoload :BubbleChart, File.expand_path('chart/bubble_chart', __dir__)
     autoload :StockChart, File.expand_path('chart/stock_chart', __dir__)
-      
+
     # Series & Data (10 elements)
     autoload :Series, File.expand_path('chart/series', __dir__)
     autoload :Index, File.expand_path('chart/index', __dir__)
@@ -43,7 +43,7 @@ module Uniword
     autoload :YValues, File.expand_path('chart/y_values', __dir__)
     autoload :BubbleSize, File.expand_path('chart/bubble_size', __dir__)
     autoload :NumberReference, File.expand_path('chart/number_reference', __dir__)
-      
+
     # Axes (12 elements)
     autoload :CatAx, File.expand_path('chart/cat_ax', __dir__)
     autoload :ValAx, File.expand_path('chart/val_ax', __dir__)
@@ -57,7 +57,7 @@ module Uniword
     autoload :MinorGridlines, File.expand_path('chart/minor_gridlines', __dir__)
     autoload :NumberingFormat, File.expand_path('chart/numbering_format', __dir__)
     autoload :TickLabelPosition, File.expand_path('chart/tick_label_position', __dir__)
-      
+
     # Legend & Labels (8 elements)
     autoload :Legend, File.expand_path('chart/legend', __dir__)
     autoload :LegendPosition, File.expand_path('chart/legend_position', __dir__)
@@ -67,7 +67,7 @@ module Uniword
     autoload :ShowLegendKey, File.expand_path('chart/show_legend_key', __dir__)
     autoload :ShowValue, File.expand_path('chart/show_value', __dir__)
     autoload :ShowCategoryName, File.expand_path('chart/show_category_name', __dir__)
-      
+
     # Styling & Formatting (10 elements)
     autoload :ShapeProperties, File.expand_path('chart/shape_properties', __dir__)
     autoload :TextProperties, File.expand_path('chart/text_properties', __dir__)
@@ -79,7 +79,7 @@ module Uniword
     autoload :Smooth, File.expand_path('chart/smooth', __dir__)
     autoload :Explosion, File.expand_path('chart/explosion', __dir__)
     autoload :GapWidth, File.expand_path('chart/gap_width', __dir__)
-      
+
     # Advanced Features (10 elements)
     autoload :Trendline, File.expand_path('chart/trendline', __dir__)
     autoload :TrendlineType, File.expand_path('chart/trendline_type', __dir__)

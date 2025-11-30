@@ -103,14 +103,14 @@ module Uniword
           end
 
           # Validate relationship type
-          if validate_types? && type
-            validate_relationship_type(type, result)
-          end
+          return unless validate_types? && type
+
+          validate_relationship_type(type, result)
         end
 
         def resolve_target_path(base_dir, target)
           # Handle absolute paths (starting with /)
-          return target[1..-1] if target.start_with?('/')
+          return target[1..] if target.start_with?('/')
 
           # Handle relative paths
           if base_dir.empty?
@@ -122,11 +122,11 @@ module Uniword
 
         def validate_relationship_type(type, result)
           # Just validate it's a URI-like string
-          unless type.include?('/')
-            result.add_warning(
-              "Unusual relationship type: #{type}"
-            )
-          end
+          return if type.include?('/')
+
+          result.add_warning(
+            "Unusual relationship type: #{type}"
+          )
         end
 
         def check_targets_exist?

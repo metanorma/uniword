@@ -20,7 +20,7 @@ module Uniword
     #     max_level: 6
     #     require_sequential: true
     class HeadingHierarchyRule < QualityRule
-      HEADING_PATTERN = /^heading\s*(\d+)$/i
+      HEADING_PATTERN = /^heading\s*(\d+)$/i.freeze
 
       def initialize(config = {})
         super
@@ -51,16 +51,14 @@ module Uniword
           end
 
           # Check sequential hierarchy
-          if @require_sequential && previous_level > 0
-            if heading_level > previous_level + 1
-              violations << create_violation(
-                severity: :warning,
-                message: "Heading level skips from #{previous_level} to #{heading_level} " \
-                         "(expected #{previous_level + 1} or less)",
-                location: "Paragraph #{index + 1}",
-                element: para
-              )
-            end
+          if @require_sequential && previous_level.positive? && (heading_level > previous_level + 1)
+            violations << create_violation(
+              severity: :warning,
+              message: "Heading level skips from #{previous_level} to #{heading_level} " \
+                       "(expected #{previous_level + 1} or less)",
+              location: "Paragraph #{index + 1}",
+              element: para
+            )
           end
 
           previous_level = heading_level

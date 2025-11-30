@@ -42,9 +42,9 @@ RSpec.describe Uniword::CommentsPart do
     end
 
     it 'raises error if not a Comment instance' do
-      expect {
+      expect do
         comments_part.add_comment('not a comment')
-      }.to raise_error(ArgumentError, /must be a Comment instance/)
+      end.to raise_error(ArgumentError, /must be a Comment instance/)
     end
 
     it 'returns the added comment' do

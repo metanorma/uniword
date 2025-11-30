@@ -78,7 +78,7 @@ module Uniword
         end
 
         def validate_strict(filename, xml_content, result)
-          doc = Nokogiri::XML(xml_content) { |config| config.strict }
+          doc = Nokogiri::XML(xml_content, &:strict)
 
           unless doc.errors.empty?
             doc.errors.each do |error|

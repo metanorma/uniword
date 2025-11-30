@@ -3,22 +3,22 @@
 require 'lutaml/model'
 
 module Uniword
-    module Office
-      # Color MRU list
-      #
-      # Generated from OOXML schema: office.yml
-      # Element: <o:colormru>
-      class ColorMru < Lutaml::Model::Serializable
-          attribute :ext, String
-          attribute :colors, String
+  module Office
+    # Color MRU list
+    #
+    # Generated from OOXML schema: office.yml
+    # Element: <o:colormru>
+    class ColorMru < Lutaml::Model::Serializable
+      attribute :ext, String
+      attribute :colors, String
 
-          xml do
-            element 'colormru'
-            namespace Uniword::Ooxml::Namespaces::Office
+      xml do
+        element 'colormru'
+        namespace Uniword::Ooxml::Namespaces::Office
 
-            map_attribute 'ext', to: :ext
-            map_attribute 'colors', to: :colors
-          end
+        map_attribute 'ext', to: :ext
+        map_attribute 'colors', to: :colors
       end
     end
+  end
 end

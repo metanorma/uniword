@@ -16,16 +16,19 @@ module Uniword
     autoload :Embed, File.expand_path('presentationml/embed', __dir__)
     autoload :EmbeddedFont, File.expand_path('presentationml/embedded_font', __dir__)
     autoload :EndConditionsList, File.expand_path('presentationml/end_conditions_list', __dir__)
-    autoload :EndParagraphRunProperties, File.expand_path('presentationml/end_paragraph_run_properties', __dir__)
+    autoload :EndParagraphRunProperties,
+             File.expand_path('presentationml/end_paragraph_run_properties', __dir__)
     autoload :Extension, File.expand_path('presentationml/extension', __dir__)
     autoload :ExtensionList, File.expand_path('presentationml/extension_list', __dir__)
     autoload :Field, File.expand_path('presentationml/field', __dir__)
     autoload :GraphicFrame, File.expand_path('presentationml/graphic_frame', __dir__)
     autoload :GroupShape, File.expand_path('presentationml/group_shape', __dir__)
     autoload :HandoutMaster, File.expand_path('presentationml/handout_master', __dir__)
-    autoload :HandoutMasterIdList, File.expand_path('presentationml/handout_master_id_list', __dir__)
+    autoload :HandoutMasterIdList,
+             File.expand_path('presentationml/handout_master_id_list', __dir__)
     autoload :ListStyle, File.expand_path('presentationml/list_style', __dir__)
-    autoload :NonVisualShapeProperties, File.expand_path('presentationml/non_visual_shape_properties', __dir__)
+    autoload :NonVisualShapeProperties,
+             File.expand_path('presentationml/non_visual_shape_properties', __dir__)
     autoload :Notes, File.expand_path('presentationml/notes', __dir__)
     autoload :NotesMasterIdList, File.expand_path('presentationml/notes_master_id_list', __dir__)
     autoload :NotesSize, File.expand_path('presentationml/notes_size', __dir__)

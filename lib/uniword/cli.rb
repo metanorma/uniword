@@ -24,14 +24,15 @@ module Uniword
         $ uniword styleset list
         $ uniword styleset list --verbose
     DESC
-    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean, default: false
+    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
+                     default: false
     def list
       require_relative 'styleset'
 
       stylesets = StyleSet.available_stylesets
 
       if stylesets.empty?
-        say "No bundled StyleSets found.", :yellow
+        say 'No bundled StyleSets found.', :yellow
         say "Run 'uniword styleset import' to import .dotx StyleSets.", :yellow
         return
       end
@@ -68,9 +69,9 @@ module Uniword
         $ uniword styleset import --source stylesets/ --output data/stylesets
     DESC
     option :source, type: :string, default: 'references/word-package/style-sets',
-           desc: 'Source directory with .dotx files'
+                    desc: 'Source directory with .dotx files'
     option :output, type: :string, default: 'data/stylesets',
-           desc: 'Output directory for YAML files'
+                    desc: 'Output directory for YAML files'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def import
       require_relative 'stylesets/styleset_importer'
@@ -83,11 +84,12 @@ module Uniword
       say "Successfully imported #{count} StyleSets to #{options[:output]}/", :green
 
       if options[:verbose]
-        stylesets = Dir.glob(File.join(options[:output], '*.yml')).map { |f| File.basename(f, '.yml') }.sort
+        stylesets = Dir.glob(File.join(options[:output], '*.yml')).map do |f|
+          File.basename(f, '.yml')
+        end.sort
         say "\nAvailable StyleSets:", :cyan
         stylesets.each { |name| say "  - #{name}" }
       end
-
     rescue StandardError => e
       say "Error importing StyleSets: #{e.message}", :red
       exit 1
@@ -110,23 +112,24 @@ module Uniword
         $ uniword styleset apply input.docx output.docx --file Distinctive.dotx
     DESC
     option :name, type: :string,
-           desc: 'Bundled StyleSet name (e.g., distinctive, basic)'
+                  desc: 'Bundled StyleSet name (e.g., distinctive, basic)'
     option :file, type: :string,
-           desc: 'Path to .dotx StyleSet file'
+                  desc: 'Path to .dotx StyleSet file'
     option :strategy, type: :string, default: 'keep_existing',
-           desc: 'Application strategy (keep_existing, replace, rename)'
+                      desc: 'Application strategy (keep_existing, replace, rename)'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def apply(input_path, output_path)
       require_relative 'document'
 
       # Validate that either --name or --file is provided
       unless options[:name] || options[:file]
-        say "✗ Error: Must specify either --name for bundled StyleSet or --file for .dotx file", :red
+        say '✗ Error: Must specify either --name for bundled StyleSet or --file for .dotx file',
+            :red
         exit 1
       end
 
       if options[:name] && options[:file]
-        say "✗ Error: Cannot specify both --name and --file", :red
+        say '✗ Error: Cannot specify both --name and --file', :red
         exit 1
       end
 
@@ -136,7 +139,7 @@ module Uniword
       doc = DocumentFactory.from_file(input_path)
 
       if options[:verbose]
-        say "  Loaded document:", :cyan
+        say '  Loaded document:', :cyan
         say "    Paragraphs: #{doc.paragraphs.count}"
         say "    Current styles: #{doc.styles.count}"
       end
@@ -161,7 +164,7 @@ module Uniword
         end
 
         if options[:verbose]
-          say "  Applied StyleSet:", :cyan
+          say '  Applied StyleSet:', :cyan
           say "    Total styles: #{doc.styles.count}"
           say "    Strategy: #{options[:strategy]}"
         end
@@ -174,7 +177,6 @@ module Uniword
       doc.save(output_path)
 
       say "StyleSet applied successfully to #{output_path}", :green
-
     rescue Uniword::Error => e
       say "Error: #{e.message}", :red
       exit 1
@@ -202,14 +204,15 @@ module Uniword
         $ uniword theme list
         $ uniword theme list --verbose
     DESC
-    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean, default: false
+    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
+                     default: false
     def list
       require_relative 'theme'
 
       themes = Theme.available_themes
 
       if themes.empty?
-        say "No bundled themes found.", :yellow
+        say 'No bundled themes found.', :yellow
         say "Run 'uniword theme import' to import Office themes.", :yellow
         return
       end
@@ -244,9 +247,9 @@ module Uniword
         $ uniword theme import --source themes/ --output data/themes
     DESC
     option :source, type: :string, default: 'references/word-package/office-themes',
-           desc: 'Source directory with .thmx files'
+                    desc: 'Source directory with .thmx files'
     option :output, type: :string, default: 'data/themes',
-           desc: 'Output directory for YAML files'
+                    desc: 'Output directory for YAML files'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def import
       require_relative 'themes/theme_importer'
@@ -259,11 +262,12 @@ module Uniword
       say "Successfully imported #{count} themes to #{options[:output]}/", :green
 
       if options[:verbose]
-        themes = Dir.glob(File.join(options[:output], '*.yml')).map { |f| File.basename(f, '.yml') }.sort
+        themes = Dir.glob(File.join(options[:output], '*.yml')).map do |f|
+          File.basename(f, '.yml')
+        end.sort
         say "\nAvailable themes:", :cyan
         themes.each { |name| say "  - #{name}" }
       end
-
     rescue StandardError => e
       say "Error importing themes: #{e.message}", :red
       exit 1
@@ -288,23 +292,23 @@ module Uniword
         $ uniword theme apply input.docx output.docx --file themes/Office.thmx --variant 2
     DESC
     option :name, type: :string,
-           desc: 'Bundled theme name (e.g., atlas, office_theme)'
+                  desc: 'Bundled theme name (e.g., atlas, office_theme)'
     option :file, type: :string,
-           desc: 'Path to .thmx theme file'
+                  desc: 'Path to .thmx theme file'
     option :variant, type: :string,
-           desc: 'Theme variant (variant1, variant2, etc. or numeric 1, 2, etc.)'
+                     desc: 'Theme variant (variant1, variant2, etc. or numeric 1, 2, etc.)'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def apply(input_path, output_path)
       require_relative 'document'
 
       # Validate that either --name or --file is provided
       unless options[:name] || options[:file]
-        say "✗ Error: Must specify either --name for bundled theme or --file for .thmx file", :red
+        say '✗ Error: Must specify either --name for bundled theme or --file for .thmx file', :red
         exit 1
       end
 
       if options[:name] && options[:file]
-        say "✗ Error: Cannot specify both --name and --file", :red
+        say '✗ Error: Cannot specify both --name and --file', :red
         exit 1
       end
 
@@ -314,7 +318,7 @@ module Uniword
       doc = DocumentFactory.from_file(input_path)
 
       if options[:verbose]
-        say "  Loaded document:", :cyan
+        say '  Loaded document:', :cyan
         say "    Paragraphs: #{doc.paragraphs.count}"
         say "    Current theme: #{doc.theme&.name || 'None'}"
       end
@@ -336,7 +340,7 @@ module Uniword
         end
 
         if options[:verbose]
-          say "  Applied theme:", :cyan
+          say '  Applied theme:', :cyan
           say "    Theme name: #{doc.theme.name}"
           say "    Colors: #{doc.theme.color_scheme.colors.keys.join(', ')}"
           say "    Major font: #{doc.theme.major_font}"
@@ -354,7 +358,6 @@ module Uniword
       doc.save(output_path)
 
       say "Theme applied successfully to #{output_path}", :green
-
     rescue Uniword::Error => e
       say "Error: #{e.message}", :red
       exit 1
@@ -401,7 +404,7 @@ module Uniword
       doc = DocumentFactory.from_file(input_path, format: from_format)
 
       if options[:verbose]
-        say "  Loaded document:", :cyan
+        say '  Loaded document:', :cyan
         say "    Paragraphs: #{doc.paragraphs.count}"
         say "    Tables: #{doc.tables.count}"
         say "    Styles: #{doc.styles_configuration&.all_styles&.count || 0}"
@@ -433,7 +436,8 @@ module Uniword
         $ uniword info document.docx
         $ uniword info report.mhtml --verbose
     DESC
-    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean, default: false
+    option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
+                     default: false
     def info(path)
       say "Analyzing #{path}...", :green
 
@@ -452,7 +456,7 @@ module Uniword
       say "  Text length: #{doc.text.length} characters"
 
       # Styles information
-      if doc.styles_configuration && doc.styles_configuration.all_styles.any?
+      if doc.styles_configuration&.all_styles&.any?
         say "  Styles: #{doc.styles_configuration.all_styles.count}"
       end
 
@@ -462,7 +466,7 @@ module Uniword
 
         # Show first few paragraphs
         if doc.paragraphs.any?
-          say "  First paragraphs:"
+          say '  First paragraphs:'
           doc.paragraphs.first(3).each_with_index do |para, i|
             text = para.text[0..80]
             text += '...' if para.text.length > 80
@@ -472,7 +476,7 @@ module Uniword
 
         # Show tables
         if doc.tables.any?
-          say "  Tables:"
+          say '  Tables:'
           doc.tables.each_with_index do |table, i|
             say "    #{i + 1}. #{table.row_count} rows × #{table.column_count} columns"
           end
@@ -502,7 +506,8 @@ module Uniword
         $ uniword validate document.docx
         $ uniword validate report.mhtml --verbose
     DESC
-    option :verbose, aliases: '-v', desc: 'Show detailed validation results', type: :boolean, default: false
+    option :verbose, aliases: '-v', desc: 'Show detailed validation results', type: :boolean,
+                     default: false
     def validate(path)
       say "Validating #{path}...", :green
 
@@ -543,8 +548,8 @@ module Uniword
         say "\nDetailed Validation:", :cyan
 
         # Check paragraphs
-        empty_paras = doc.paragraphs.count { |p| p.empty? }
-        if empty_paras > 0
+        empty_paras = doc.paragraphs.count(&:empty?)
+        if empty_paras.positive?
           say "  ⚠ #{empty_paras} empty paragraph(s) found", :yellow
         else
           say '  ✓ All paragraphs have content', :green
@@ -552,8 +557,8 @@ module Uniword
 
         # Check tables
         if doc.tables.any?
-          empty_tables = doc.tables.count { |t| t.empty? }
-          if empty_tables > 0
+          empty_tables = doc.tables.count(&:empty?)
+          if empty_tables.positive?
             say "  ⚠ #{empty_tables} empty table(s) found", :yellow
           else
             say '  ✓ All tables have content', :green

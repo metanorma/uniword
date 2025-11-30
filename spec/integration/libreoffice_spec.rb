@@ -162,7 +162,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         if run.respond_to?(:properties=)
           props = Uniword::Properties::RunProperties.new
-          props.size = 48  # font_size * 2
+          props.size = 48 # font_size * 2
           run.properties = props
         end
 
@@ -359,9 +359,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       doc.save(test_path)
 
       # Try to open and immediately close (validates structure)
-      result = system("soffice --headless --invisible --view #{test_path} > /dev/null 2>&1")
+      system("soffice --headless --invisible --view #{test_path} > /dev/null 2>&1")
 
-      # Note: This may not work on all systems, so we just check the file is valid
+      # NOTE: This may not work on all systems, so we just check the file is valid
       expect(File.exist?(test_path)).to be true
     end
 
@@ -416,7 +416,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       doc.save(test_path)
 
       doc2 = Uniword::DocumentFactory.from_file(test_path)
-      text = extract_text(doc2)
+      extract_text(doc2)
       # Emoji might be converted or stripped, just verify document is valid
       expect(doc2.paragraphs.count).to eq(1)
     end

@@ -126,7 +126,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'adds max right tab stop' do
       # TypeScript: new Paragraph({ tabStops: [{ type: TabStopType.RIGHT, position: TabStopPosition.MAX }] })
       para = Uniword::Paragraph.new
-      # Note: Tab stops may need implementation
+      # NOTE: Tab stops may need implementation
       # This test documents the expected API
 
       expect(para).to respond_to(:properties)
@@ -187,7 +187,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'adds left and right borders' do
       # TypeScript: new Paragraph({ border: { left: {...}, right: {...} } })
       para = Uniword::Paragraph.new
-      # Note: Paragraph borders need implementation
+      # NOTE: Paragraph borders need implementation
 
       expect(para).to respond_to(:properties)
     end

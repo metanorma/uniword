@@ -20,8 +20,8 @@ module Uniword
       # @return [AccessibilityProfile] Loaded profile
       # @raise [ArgumentError] If profile not found
       def self.load(config, profile_name)
-        profiles_config = config[:profiles] || config["profiles"]
-        raise ArgumentError, "No profiles found in configuration" unless profiles_config
+        profiles_config = config[:profiles] || config['profiles']
+        raise ArgumentError, 'No profiles found in configuration' unless profiles_config
 
         profile_config = profiles_config[profile_name] || profiles_config[profile_name.to_s]
         raise ArgumentError, "Profile '#{profile_name}' not found" unless profile_config
@@ -36,10 +36,10 @@ module Uniword
       def initialize(config, all_profiles = {})
         @config = config
         @all_profiles = all_profiles
-        @name = config[:name] || config["name"]
-        @level = config[:level] || config["level"]
-        @inherits = config[:inherits] || config["inherits"]
-        @overrides = config[:overrides] || config["overrides"] || {}
+        @name = config[:name] || config['name']
+        @level = config[:level] || config['level']
+        @inherits = config[:inherits] || config['inherits']
+        @overrides = config[:overrides] || config['overrides'] || {}
         @rules = build_rules_config
       end
 
@@ -59,7 +59,7 @@ module Uniword
         config = rule_config(rule_name)
         return false unless config
 
-        config.fetch(:enabled, config.fetch("enabled", true))
+        config.fetch(:enabled, config.fetch('enabled', true))
       end
 
       private
@@ -80,17 +80,15 @@ module Uniword
         end
 
         # Merge in this profile's rules
-        profile_rules = @config[:rules] || @config["rules"] || {}
+        profile_rules = @config[:rules] || @config['rules'] || {}
         rules.merge!(normalize_keys(profile_rules))
 
         # Apply overrides
-        overrides_rules = @overrides[:rules] || @overrides["rules"] || @overrides
+        overrides_rules = @overrides[:rules] || @overrides['rules'] || @overrides
         if overrides_rules && !overrides_rules.empty?
           # Only apply overrides that affect existing rules
           normalize_keys(overrides_rules).each do |rule_name, override_config|
-            if rules[rule_name]
-              rules[rule_name] = deep_merge(rules[rule_name], override_config)
-            end
+            rules[rule_name] = deep_merge(rules[rule_name], override_config) if rules[rule_name]
           end
         end
 
@@ -107,10 +105,10 @@ module Uniword
         hash.each_with_object({}) do |(key, value), result|
           normalized_key = key.to_sym
           result[normalized_key] = if value.is_a?(Hash)
-                                      normalize_keys(value)
-                                    else
-                                      value
-                                    end
+                                     normalize_keys(value)
+                                   else
+                                     value
+                                   end
         end
       end
 

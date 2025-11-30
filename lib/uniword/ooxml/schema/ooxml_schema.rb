@@ -154,7 +154,7 @@ module Uniword
         def validate_schema_config(config)
           unless config.is_a?(Hash)
             raise Configuration::ConfigurationError,
-                  "Schema configuration must be a Hash"
+                  'Schema configuration must be a Hash'
           end
 
           unless config[:schema]
@@ -162,10 +162,10 @@ module Uniword
                   "Schema configuration must have 'schema' section"
           end
 
-          unless config[:elements]
-            raise Configuration::ConfigurationError,
-                  "Schema configuration must have 'elements' section"
-          end
+          return if config[:elements]
+
+          raise Configuration::ConfigurationError,
+                "Schema configuration must have 'elements' section"
         end
 
         # Raise error for element not found
@@ -204,9 +204,7 @@ module Uniword
             file_config = Configuration::ConfigurationLoader.load_file(file_path)
 
             # Merge elements from this file
-            if file_config[:elements]
-              all_elements.merge!(file_config[:elements])
-            end
+            all_elements.merge!(file_config[:elements]) if file_config[:elements]
           end
 
           # Build combined schema configuration

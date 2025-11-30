@@ -79,7 +79,8 @@ RSpec.describe Uniword::Paragraph do
     it 'raises error for non-Run objects' do
       paragraph = described_class.new
       expect { paragraph.add_run(123) }
-        .to raise_error(ArgumentError, /must be a Run, Image, Hyperlink, Bookmark, or UnknownElement instance/)
+        .to raise_error(ArgumentError,
+                        /must be a Run, Image, Hyperlink, Bookmark, or UnknownElement instance/)
     end
 
     it 'returns the updated runs array' do

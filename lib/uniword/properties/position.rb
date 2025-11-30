@@ -18,11 +18,11 @@ module Uniword
     # - Negative values lower text (subscript-like)
     class Position < Lutaml::Model::Serializable
       attribute :value, PositionValue
-      
+
       xml do
         element 'position'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

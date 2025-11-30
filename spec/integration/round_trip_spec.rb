@@ -338,7 +338,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
         properties: Uniword::Properties::RunProperties.new(
           bold: true,
           italic: true,
-          size: 48  # font_size * 2
+          size: 48 # font_size * 2
         )
       )
 
@@ -357,9 +357,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
   private
 
   def extract_text(document)
-    text = []
-    document.paragraphs.each do |para|
-      text << extract_paragraph_text(para)
+    text = document.paragraphs.map do |para|
+      extract_paragraph_text(para)
     end
     document.tables.each do |table|
       table.rows.each do |row|
@@ -405,8 +404,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties&.respond_to?(:bold)
-          count += 1 if run.properties.bold
+        if run.respond_to?(:properties) && run.properties.respond_to?(:bold) && run.properties.bold
+          count += 1
         end
       end
     end
@@ -419,8 +418,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties&.respond_to?(:italic)
-          count += 1 if run.properties.italic
+        if run.respond_to?(:properties) && run.properties.respond_to?(:italic) && run.properties.italic
+          count += 1
         end
       end
     end
@@ -433,8 +432,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties&.respond_to?(:font)
-          fonts << run.properties.font if run.properties.font
+        if run.respond_to?(:properties) && run.properties.respond_to?(:font) && run.properties.font
+          fonts << run.properties.font
         end
       end
     end
@@ -442,14 +441,12 @@ RSpec.describe 'DOCX Round-trip Validation' do
   end
 
   def collect_table_structures(document)
-    structures = []
-    document.tables.each do |table|
-      structures << {
+    document.tables.map do |table|
+      {
         row_count: table.rows.count,
         cell_counts: table.rows.map { |row| row.cells.count }
       }
     end
-    structures
   end
 
   def collect_table_cell_texts(document)
@@ -468,7 +465,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
   def collect_table_borders(document)
     borders = []
     document.tables.each do |table|
-      if table.respond_to?(:properties) && table.properties&.respond_to?(:borders)
+      if table.respond_to?(:properties) && table.properties.respond_to?(:borders)
         borders << table.properties.borders
       end
     end
@@ -490,7 +487,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
   def collect_applied_styles(document)
     styles = []
     document.paragraphs.each do |para|
-      if para.respond_to?(:properties) && para.properties&.respond_to?(:style)
+      if para.respond_to?(:properties) && para.properties.respond_to?(:style)
         styles << para.properties.style
       end
     end
@@ -502,7 +499,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
     document.paragraphs.each do |para|
       if para.respond_to?(:style_id)
         styles << para.style_id
-      elsif para.respond_to?(:properties) && para.properties&.respond_to?(:style)
+      elsif para.respond_to?(:properties) && para.properties.respond_to?(:style)
         styles << para.properties.style
       end
     end
@@ -517,19 +514,19 @@ RSpec.describe 'DOCX Round-trip Validation' do
       para = Uniword::Paragraph.new
 
       # Create run with properties
-      if i.even?
-        run = Uniword::Run.new(
-          text: "Paragraph #{i + 1} with content",
-          properties: Uniword::Properties::RunProperties.new(bold: true)
-        )
-      elsif i.odd?
-        run = Uniword::Run.new(
-          text: "Paragraph #{i + 1} with content",
-          properties: Uniword::Properties::RunProperties.new(italic: true)
-        )
-      else
-        run = Uniword::Run.new(text: "Paragraph #{i + 1} with content")
-      end
+      run = if i.even?
+              Uniword::Run.new(
+                text: "Paragraph #{i + 1} with content",
+                properties: Uniword::Properties::RunProperties.new(bold: true)
+              )
+            elsif i.odd?
+              Uniword::Run.new(
+                text: "Paragraph #{i + 1} with content",
+                properties: Uniword::Properties::RunProperties.new(italic: true)
+              )
+            else
+              Uniword::Run.new(text: "Paragraph #{i + 1} with content")
+            end
 
       para.add_run(run)
       doc.add_element(para)

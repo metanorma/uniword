@@ -12,7 +12,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
   end
 
   after(:each) do
-    FileUtils.rm_f(temp_path) if File.exist?(temp_path)
+    FileUtils.rm_f(temp_path)
   end
 
   describe 'Basic Round-trip' do
@@ -286,7 +286,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
     it 'preserves multiple heading levels' do
       doc1 = Uniword::Document.new
 
-      ['Heading1', 'Heading2', 'Heading3'].each_with_index do |style, i|
+      %w[Heading1 Heading2 Heading3].each_with_index do |style, _i|
         para = Uniword::Paragraph.new(
           properties: Uniword::Properties::ParagraphProperties.new(style: style)
         )
@@ -338,7 +338,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       para2.add_text('Conclusion')
       doc1.add_element(para2)
 
-      original_text = extract_text(doc1)
+      extract_text(doc1)
       original_elements = doc1.paragraphs.count + doc1.tables.count
 
       doc1.save(temp_path, format: :mhtml)
@@ -430,9 +430,8 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
   private
 
   def extract_text(document)
-    text = []
-    document.paragraphs.each do |para|
-      text << extract_paragraph_text(para)
+    text = document.paragraphs.map do |para|
+      extract_paragraph_text(para)
     end
     document.tables.each do |table|
       text << extract_table_text(table)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a single page border side
@@ -103,13 +103,15 @@ module Uniword
     def validate_display
       return unless display && !DISPLAY_OPTIONS.include?(display)
 
-      raise ArgumentError, "Invalid display: #{display}. Must be one of: #{DISPLAY_OPTIONS.join(', ')}"
+      raise ArgumentError,
+            "Invalid display: #{display}. Must be one of: #{DISPLAY_OPTIONS.join(', ')}"
     end
 
     def validate_offset_from
       return unless offset_from && !OFFSET_OPTIONS.include?(offset_from)
 
-      raise ArgumentError, "Invalid offset_from: #{offset_from}. Must be one of: #{OFFSET_OPTIONS.join(', ')}"
+      raise ArgumentError,
+            "Invalid offset_from: #{offset_from}. Must be one of: #{OFFSET_OPTIONS.join(', ')}"
     end
   end
 end

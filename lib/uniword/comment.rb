@@ -75,7 +75,7 @@ module Uniword
       # Extract text before calling super to handle it specially
       text_content = attributes.delete(:text)
 
-      super(attributes)
+      super
 
       # Ensure paragraphs is initialized as array (lutaml-model handles this via default)
       @paragraphs ||= []
@@ -87,9 +87,9 @@ module Uniword
       @date ||= format_date(Time.now)
 
       # Add text as a paragraph if provided
-      if text_content && !text_content.empty?
-        add_text(text_content)
-      end
+      return unless text_content && !text_content.empty?
+
+      add_text(text_content)
     end
 
     # Accept a visitor for the visitor pattern
@@ -120,7 +120,9 @@ module Uniword
     def add_paragraph(paragraph)
       # Lazy load Paragraph class when needed
       require_relative 'paragraph' unless defined?(Uniword::Paragraph)
-      raise ArgumentError, 'paragraph must be a Paragraph instance' unless paragraph.is_a?(Uniword::Paragraph)
+      unless paragraph.is_a?(Uniword::Paragraph)
+        raise ArgumentError, 'paragraph must be a Paragraph instance'
+      end
 
       paragraphs << paragraph
       self
@@ -166,7 +168,7 @@ module Uniword
     # @return [String] A unique comment ID
     def generate_comment_id
       # Use timestamp + random component for uniqueness
-      "#{Time.now.to_i}_#{rand(10000)}"
+      "#{Time.now.to_i}_#{rand(10_000)}"
     end
 
     # Format date for OOXML
@@ -175,6 +177,7 @@ module Uniword
     # @return [String] ISO 8601 formatted date string
     def format_date(time)
       return time if time.is_a?(String)
+
       time.utc.iso8601
     end
   end

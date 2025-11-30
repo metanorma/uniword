@@ -27,19 +27,19 @@ module Uniword
                 element: table,
                 severity: @config[:severity] || :error,
                 suggestion: @config[:suggestion] ||
-                  "Mark first row as header: table.rows.first.header = true"
+                  'Mark first row as header: table.rows.first.header = true'
               )
             end
 
             # Check for caption if required
-            if @config[:require_caption] && !table_has_caption?(table)
-              violations << create_violation(
-                message: "Table #{index + 1} missing caption",
-                element: table,
-                severity: :warning,
-                suggestion: "Add table caption to describe the data presented"
-              )
-            end
+            next unless @config[:require_caption] && !table_has_caption?(table)
+
+            violations << create_violation(
+              message: "Table #{index + 1} missing caption",
+              element: table,
+              severity: :warning,
+              suggestion: 'Add table caption to describe the data presented'
+            )
           end
 
           violations

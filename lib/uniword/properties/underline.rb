@@ -16,11 +16,11 @@ module Uniword
     # - single, double, thick, dotted, dashed, wave, none, etc.
     class Underline < Lutaml::Model::Serializable
       attribute :value, UnderlineValue
-      
+
       xml do
         element 'u'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

@@ -65,7 +65,7 @@ module Uniword
         validate_directories!(input_dir, output_dir)
 
         # Create output directory if it doesn't exist
-        FileUtils.mkdir_p(output_dir) unless Dir.exist?(output_dir)
+        FileUtils.mkdir_p(output_dir)
 
         # Find all matching files
         files = Dir.glob(File.join(input_dir, pattern))
@@ -114,7 +114,7 @@ module Uniword
 
           # Save output
           output_dir = File.dirname(output_path)
-          FileUtils.mkdir_p(output_dir) unless Dir.exist?(output_dir)
+          FileUtils.mkdir_p(output_dir)
           document.save(output_path)
 
           duration = Time.now - start_time
@@ -136,7 +136,7 @@ module Uniword
       # @return [self]
       def add_stage(stage)
         unless stage.is_a?(ProcessingStage)
-          raise ArgumentError, "Stage must inherit from ProcessingStage"
+          raise ArgumentError, 'Stage must inherit from ProcessingStage'
         end
 
         @custom_stages << stage
@@ -177,7 +177,7 @@ module Uniword
       rescue Configuration::ConfigurationError => e
         # Use default configuration if file not found
         warn "Warning: Could not load pipeline configuration: #{e.message}"
-        warn "Using default configuration"
+        warn 'Using default configuration'
         default_configuration
       end
 
@@ -260,9 +260,9 @@ module Uniword
       # @param output_dir [String] Output directory
       # @param result [BatchResult] Result tracker
       def process_parallel(files, input_dir, output_dir, result)
-        # Note: Actual parallel implementation would require thread-safe operations
+        # NOTE: Actual parallel implementation would require thread-safe operations
         # For now, fall back to sequential processing
-        warn "Warning: Parallel processing not yet implemented, using sequential"
+        warn 'Warning: Parallel processing not yet implemented, using sequential'
         process_sequential(files, input_dir, output_dir, result)
       end
 
@@ -298,7 +298,7 @@ module Uniword
 
           # Save output
           output_dir = File.dirname(output_path)
-          FileUtils.mkdir_p(output_dir) unless Dir.exist?(output_dir)
+          FileUtils.mkdir_p(output_dir)
           document.save(output_path)
 
           duration = Time.now - start_time
@@ -336,10 +336,10 @@ module Uniword
       # @param input_dir [String] Input directory
       # @param output_dir [String] Output directory
       # @raise [ArgumentError] if input directory doesn't exist
-      def validate_directories!(input_dir, output_dir)
-        unless Dir.exist?(input_dir)
-          raise ArgumentError, "Input directory does not exist: #{input_dir}"
-        end
+      def validate_directories!(input_dir, _output_dir)
+        return if Dir.exist?(input_dir)
+
+        raise ArgumentError, "Input directory does not exist: #{input_dir}"
       end
     end
   end

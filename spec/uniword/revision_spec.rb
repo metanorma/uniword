@@ -121,9 +121,9 @@ RSpec.describe Uniword::Revision do
     it 'raises error for invalid type' do
       revision = described_class.new(author: 'John')
       revision.instance_variable_set(:@type, :invalid)
-      expect {
+      expect do
         revision.xml_element_name
-      }.to raise_error(ArgumentError, /Invalid revision type/)
+      end.to raise_error(ArgumentError, /Invalid revision type/)
     end
   end
 

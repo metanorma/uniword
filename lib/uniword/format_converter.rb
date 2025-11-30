@@ -66,7 +66,7 @@ module Uniword
     #     target_format: :docx
     #   )
     #   puts result  # "Conversion: mhtml → docx (SUCCESS)"
-    def convert(source:, source_format:, target:, target_format:, **options)
+    def convert(source:, source_format:, target:, target_format:, **_options)
       validate_conversion_params(source, source_format, target, target_format)
 
       log_conversion_start(source, source_format, target, target_format)
@@ -175,7 +175,7 @@ module Uniword
     #   results.each { |r| puts r }
     def batch_convert(sources:, source_format:, target_format:, target_dir:)
       # Ensure target directory exists
-      FileUtils.mkdir_p(target_dir) unless Dir.exist?(target_dir)
+      FileUtils.mkdir_p(target_dir)
 
       sources.map do |source|
         basename = File.basename(source, File.extname(source))
@@ -227,8 +227,8 @@ module Uniword
       def to_s
         if success?
           "Conversion: #{source_format} → #{target_format} " \
-          "(#{paragraphs_count} paragraphs, #{tables_count} tables, " \
-          "#{images_count} images) - SUCCESS"
+            "(#{paragraphs_count} paragraphs, #{tables_count} tables, " \
+            "#{images_count} images) - SUCCESS"
         else
           "Conversion: #{source_format} → #{target_format} - FAILED: #{error}"
         end
@@ -287,17 +287,17 @@ module Uniword
       raise ArgumentError, 'Target format must be specified' if target_format.nil?
 
       # Validate formats are supported
-      supported = [:docx, :mhtml]
+      supported = %i[docx mhtml]
       unless supported.include?(source_format)
         raise ArgumentError,
               "Unsupported source format: #{source_format}. " \
               "Supported: #{supported.join(', ')}"
       end
-      unless supported.include?(target_format)
-        raise ArgumentError,
-              "Unsupported target format: #{target_format}. " \
-              "Supported: #{supported.join(', ')}"
-      end
+      return if supported.include?(target_format)
+
+      raise ArgumentError,
+            "Unsupported target format: #{target_format}. " \
+            "Supported: #{supported.join(', ')}"
     end
 
     # Log conversion start

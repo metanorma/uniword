@@ -20,8 +20,8 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
 
     it 'handles nested variables' do
       sub = described_class.new({
-        doc: { title: 'Test', version: '1.0' }
-      })
+                                  doc: { title: 'Test', version: '1.0' }
+                                })
       expect(sub.variables['doc']['title']).to eq('Test')
     end
   end
@@ -29,10 +29,10 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#substitute' do
     let(:sub) do
       described_class.new({
-        title: 'ISO 8601',
-        version: '2.0',
-        date: '2026-01-15'
-      })
+                            title: 'ISO 8601',
+                            version: '2.0',
+                            date: '2026-01-15'
+                          })
     end
 
     it 'substitutes single variable' do
@@ -67,20 +67,20 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
 
     it 'substitutes nested variables' do
       sub = described_class.new({
-        doc: { title: 'Test Doc' }
-      })
+                                  doc: { title: 'Test Doc' }
+                                })
       result = sub.substitute('Title: {doc.title}')
       expect(result).to eq('Title: Test Doc')
     end
 
     it 'handles multiple nested levels' do
       sub = described_class.new({
-        org: {
-          info: {
-            name: 'ISO'
-          }
-        }
-      })
+                                  org: {
+                                    info: {
+                                      name: 'ISO'
+                                    }
+                                  }
+                                })
       result = sub.substitute('Organization: {org.info.name}')
       expect(result).to eq('Organization: ISO')
     end
@@ -89,9 +89,9 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#substitute_document' do
     let(:sub) do
       described_class.new({
-        title: 'Test Document',
-        version: '1.0'
-      })
+                            title: 'Test Document',
+                            version: '1.0'
+                          })
     end
 
     let(:document) do
@@ -159,9 +159,9 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#get_variable' do
     let(:sub) do
       described_class.new({
-        title: 'Test',
-        doc: { version: '1.0' }
-      })
+                            title: 'Test',
+                            doc: { version: '1.0' }
+                          })
     end
 
     it 'gets simple variable' do
@@ -184,9 +184,9 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#variable?' do
     let(:sub) do
       described_class.new({
-        title: 'Test',
-        doc: { version: '1.0' }
-      })
+                            title: 'Test',
+                            doc: { version: '1.0' }
+                          })
     end
 
     it 'returns true for existing variable' do
@@ -209,13 +209,13 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#variable_names' do
     let(:sub) do
       described_class.new({
-        title: 'Test',
-        version: '1.0',
-        doc: {
-          number: 'ISO 8601',
-          year: '2026'
-        }
-      })
+                            title: 'Test',
+                            version: '1.0',
+                            doc: {
+                              number: 'ISO 8601',
+                              year: '2026'
+                            }
+                          })
     end
 
     it 'returns all variable names including nested' do

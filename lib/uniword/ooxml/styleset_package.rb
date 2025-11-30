@@ -113,7 +113,7 @@ module Uniword
 
         # Create StylesConfiguration from StyleSet
         config = StylesConfiguration.new
-        
+
         # Copy styles from styleset
         styleset.styles.each do |style|
           config.styles << style

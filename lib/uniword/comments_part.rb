@@ -51,9 +51,7 @@ module Uniword
       raise ArgumentError, 'comment must be a Comment instance' unless comment.is_a?(Comment)
 
       # Assign sequential ID if not already set
-      unless comment.comment_id && !comment.comment_id.empty?
-        comment.comment_id = next_comment_id
-      end
+      comment.comment_id = next_comment_id unless comment.comment_id && !comment.comment_id.empty?
 
       comments << comment
       comment

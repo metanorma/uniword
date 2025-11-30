@@ -107,10 +107,15 @@ module Uniword
 
         lines = attributes.map do |attr|
           # Convert type to symbol for primitive types
-          type_str = ['String', 'Integer'].include?(attr['type']) ? ":#{attr['type'].downcase}" : attr['type']
+          type_str = if %w[String
+                           Integer].include?(attr['type'])
+                       ":#{attr['type'].downcase}"
+                     else
+                       attr['type']
+                     end
           attr_code = "          attribute :#{attr['name']}, #{type_str}"
           attr_code += ', collection: true' if attr['collection']
-          attr_code += ", default: -> { [] }" if attr['collection']
+          attr_code += ', default: -> { [] }' if attr['collection']
           attr_code
         end
 
@@ -125,11 +130,11 @@ module Uniword
       # @return [String] XML mapping code
       def generate_xml_mapping(element_name, attributes)
         lines = []
-        lines << "          xml do"
+        lines << '          xml do'
         lines << "            element '#{element_name}'"
         lines << "            namespace '#{@namespace_info['uri']}', '#{@namespace_info['prefix']}'"
-        lines << "            mixed_content" if has_nested_content?(attributes)
-        lines << ""
+        lines << '            mixed_content' if has_nested_content?(attributes)
+        lines << ''
 
         # Map each attribute
         attributes.each do |attr|
@@ -139,12 +144,12 @@ module Uniword
           else
             # Element value (e.g., <w:p><w:pPr>...</w:pPr></w:p>)
             map_line = "            map_element '#{attr['xml_name']}', to: :#{attr['name']}"
-            map_line += ", render_nil: false" unless attr['required']
+            map_line += ', render_nil: false' unless attr['required']
             lines << map_line
           end
         end
 
-        lines << "          end"
+        lines << '          end'
         lines.join("\n")
       end
 

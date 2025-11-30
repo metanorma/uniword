@@ -32,7 +32,7 @@ module Uniword
     class TabStop < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :alignment, TabAlignmentValue
-      attribute :position, :integer      # Position in twips
+      attribute :position, :integer # Position in twips
       attribute :leader, TabLeaderValue
 
       xml do

@@ -70,12 +70,11 @@ RSpec.describe Uniword::Mhtml::MathConverter do
       let(:asciimath) { 'x^2 + y^2 = z^2' }
 
       it 'converts to OMML format when Plurimath available' do
+        result = described_class.asciimath_to_omml(asciimath)
         if described_class.plurimath_available?
-          result = described_class.asciimath_to_omml(asciimath)
           expect(result).to be_a(String)
           expect(result).not_to be_empty
         else
-          result = described_class.asciimath_to_omml(asciimath)
           expect(result).to eq(asciimath)
         end
       end
@@ -171,7 +170,7 @@ RSpec.describe Uniword::Mhtml::MathConverter do
       it 'returns false for paragraph' do
         element = double('element', name: 'p')
         allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]) do |arg|
+        allow(element).to receive(:[]) do |_arg|
           nil
         end
 

@@ -186,7 +186,7 @@ module Uniword
         else
           ValidationResult.unknown(
             link,
-            "No checker available for this link type"
+            'No checker available for this link type'
           )
         end
       end
@@ -243,9 +243,7 @@ module Uniword
         end
 
         # Check for hyperlinks collection
-        if para.respond_to?(:hyperlinks)
-          links.concat(para.hyperlinks)
-        end
+        links.concat(para.hyperlinks) if para.respond_to?(:hyperlinks)
 
         links
       end
@@ -259,13 +257,13 @@ module Uniword
 
         if table.respond_to?(:rows)
           table.rows.each do |row|
-            if row.respond_to?(:cells)
-              row.cells.each do |cell|
-                if cell.respond_to?(:paragraphs)
-                  cell.paragraphs.each do |para|
-                    links.concat(extract_links_from_paragraph(para))
-                  end
-                end
+            next unless row.respond_to?(:cells)
+
+            row.cells.each do |cell|
+              next unless cell.respond_to?(:paragraphs)
+
+              cell.paragraphs.each do |para|
+                links.concat(extract_links_from_paragraph(para))
               end
             end
           end

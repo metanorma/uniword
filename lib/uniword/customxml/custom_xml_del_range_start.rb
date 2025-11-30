@@ -3,24 +3,24 @@
 require 'lutaml/model'
 
 module Uniword
-    module Customxml
-      # Start marker for custom XML deletion range in track changes
-      #
-      # Generated from OOXML schema: customxml.yml
-      # Element: <cxml:custom_xml_del_range_start>
-      class CustomXmlDelRangeStart < Lutaml::Model::Serializable
-          attribute :id, :string
-          attribute :author, :string
-          attribute :date, :string
+  module Customxml
+    # Start marker for custom XML deletion range in track changes
+    #
+    # Generated from OOXML schema: customxml.yml
+    # Element: <cxml:custom_xml_del_range_start>
+    class CustomXmlDelRangeStart < Lutaml::Model::Serializable
+      attribute :id, :string
+      attribute :author, :string
+      attribute :date, :string
 
-          xml do
-            element 'custom_xml_del_range_start'
-            namespace Uniword::Ooxml::Namespaces::CustomXml
+      xml do
+        element 'custom_xml_del_range_start'
+        namespace Uniword::Ooxml::Namespaces::CustomXml
 
-            map_attribute 'id', to: :id
-            map_attribute 'author', to: :author
-            map_attribute 'date', to: :date
-          end
+        map_attribute 'id', to: :id
+        map_attribute 'author', to: :author
+        map_attribute 'date', to: :date
       end
     end
+  end
 end

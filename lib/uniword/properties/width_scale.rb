@@ -19,11 +19,11 @@ module Uniword
     # - > 100 = expanded (e.g., 150 = 150% width)
     class WidthScale < Lutaml::Model::Serializable
       attribute :value, WidthScaleValue
-      
+
       xml do
         element 'w'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

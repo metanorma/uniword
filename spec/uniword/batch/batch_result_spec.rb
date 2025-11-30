@@ -31,12 +31,12 @@ RSpec.describe Uniword::Batch::BatchResult do
       result.add_success(
         file: 'test.docx',
         duration: 1.0,
-        stages: ['normalize', 'validate'],
+        stages: %w[normalize validate],
         metadata: { custom: 'data' }
       )
 
       success = result.successes.first
-      expect(success[:stages]).to eq(['normalize', 'validate'])
+      expect(success[:stages]).to eq(%w[normalize validate])
       expect(success[:metadata]).to eq({ custom: 'data' })
     end
 
@@ -243,7 +243,7 @@ RSpec.describe Uniword::Batch::BatchResult do
         result.export_csv(file.path)
 
         rows = CSV.read(file.path)
-        expect(rows[0]).to eq(['File', 'Status', 'Duration', 'Error', 'Stage'])
+        expect(rows[0]).to eq(%w[File Status Duration Error Stage])
         expect(rows[1][0]).to eq('test1.docx')
         expect(rows[1][1]).to eq('SUCCESS')
         expect(rows[2][0]).to eq('test2.docx')

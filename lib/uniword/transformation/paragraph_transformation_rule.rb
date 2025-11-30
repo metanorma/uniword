@@ -147,22 +147,22 @@ module Uniword
         source.runs.each do |source_run|
           # Handle different run types (Run, Image, Hyperlink)
           transformed = if source_run.is_a?(Image)
-                         require_relative 'image_transformation_rule'
-                         image_rule = ImageTransformationRule.new(
-                           source_format: @source_format,
-                           target_format: @target_format
-                         )
-                         image_rule.transform(source_run)
-                       elsif source_run.is_a?(Hyperlink)
-                         require_relative 'hyperlink_transformation_rule'
-                         link_rule = HyperlinkTransformationRule.new(
-                           source_format: @source_format,
-                           target_format: @target_format
-                         )
-                         link_rule.transform(source_run)
-                       else
-                         run_rule.transform(source_run)
-                       end
+                          require_relative 'image_transformation_rule'
+                          image_rule = ImageTransformationRule.new(
+                            source_format: @source_format,
+                            target_format: @target_format
+                          )
+                          image_rule.transform(source_run)
+                        elsif source_run.is_a?(Hyperlink)
+                          require_relative 'hyperlink_transformation_rule'
+                          link_rule = HyperlinkTransformationRule.new(
+                            source_format: @source_format,
+                            target_format: @target_format
+                          )
+                          link_rule.transform(source_run)
+                        else
+                          run_rule.transform(source_run)
+                        end
 
           target.add_run(transformed)
         end

@@ -60,9 +60,9 @@ module Uniword
         def apply_run_style(run, style_def)
           resolved = style_def.resolve_inheritance(@library)
 
-          if resolved && resolved.any?
-            run.properties = Properties::RunProperties.new(**resolved)
-          end
+          return unless resolved&.any?
+
+          run.properties = Properties::RunProperties.new(**resolved)
         end
       end
     end

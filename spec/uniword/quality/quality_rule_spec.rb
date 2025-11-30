@@ -5,11 +5,11 @@ require 'spec_helper'
 RSpec.describe Uniword::Quality::QualityRule do
   # Create a test rule class for testing
   class TestRule < Uniword::Quality::QualityRule
-    def check(document)
+    def check(_document)
       [create_violation(
         severity: :error,
-        message: "Test violation",
-        location: "Test location"
+        message: 'Test violation',
+        location: 'Test location'
       )]
     end
   end
@@ -48,10 +48,9 @@ RSpec.describe Uniword::Quality::QualityRule do
 
     it 'creates a violation with required fields' do
       violation = rule.send(:create_violation,
-        severity: :warning,
-        message: 'Test message',
-        location: 'Line 10'
-      )
+                            severity: :warning,
+                            message: 'Test message',
+                            location: 'Line 10')
 
       expect(violation).to be_a(Uniword::Quality::QualityViolation)
       expect(violation.severity).to eq(:warning)
@@ -79,14 +78,14 @@ RSpec.describe Uniword::Quality::QualityViolation do
     end
 
     it 'raises error for invalid severity' do
-      expect {
+      expect do
         described_class.new(
           rule: 'test',
           severity: :invalid,
           message: 'Test',
           location: 'Test'
         )
-      }.to raise_error(ArgumentError, /Invalid severity/)
+      end.to raise_error(ArgumentError, /Invalid severity/)
     end
   end
 

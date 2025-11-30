@@ -16,7 +16,7 @@ RSpec.describe Uniword::Styles::StyleBuilder do
   describe '#build' do
     it 'executes DSL block and returns document' do
       result = builder.build do
-        paragraph :title, "Test Title"
+        paragraph :title, 'Test Title'
       end
 
       expect(result).to eq(document)
@@ -26,22 +26,22 @@ RSpec.describe Uniword::Styles::StyleBuilder do
 
   describe '#paragraph' do
     it 'creates paragraph with style' do
-      para = builder.paragraph(:title, "Document Title")
+      para = builder.paragraph(:title, 'Document Title')
 
       expect(para).to be_a(Uniword::Paragraph)
-      expect(para.text).to eq("Document Title")
+      expect(para.text).to eq('Document Title')
       expect(document.paragraphs).to include(para)
     end
 
     it 'applies paragraph properties from style' do
-      para = builder.paragraph(:title, "Centered Title")
+      para = builder.paragraph(:title, 'Centered Title')
 
       expect(para.properties).not_to be_nil
-      expect(para.properties.alignment).to eq("center")
+      expect(para.properties.alignment).to eq('center')
     end
 
     it 'applies run properties from style' do
-      para = builder.paragraph(:title, "Bold Title")
+      para = builder.paragraph(:title, 'Bold Title')
 
       # Check that default run properties are stored
       default_props = para.instance_variable_get(:@default_run_properties)
@@ -51,28 +51,28 @@ RSpec.describe Uniword::Styles::StyleBuilder do
 
     it 'creates paragraph with block' do
       para = builder.paragraph(:normal) do |p|
-        p.text "Hello "
-        p.text "World", :bold
+        p.text 'Hello '
+        p.text 'World', :bold
       end
 
-      expect(para.text).to include("Hello")
+      expect(para.text).to include('Hello')
     end
   end
 
   describe '#list' do
     it 'creates list with items' do
       builder.list(:bullet_list) do
-        item "First point"
-        item "Second point"
+        item 'First point'
+        item 'Second point'
       end
 
       expect(document.paragraphs.size).to eq(2)
-      expect(document.paragraphs.first.text).to eq("First point")
+      expect(document.paragraphs.first.text).to eq('First point')
     end
 
     it 'applies numbering to list items' do
       builder.list(:bullet_list) do
-        item "First"
+        item 'First'
       end
 
       para = document.paragraphs.first
@@ -81,8 +81,8 @@ RSpec.describe Uniword::Styles::StyleBuilder do
 
     it 'supports nested list items' do
       builder.list(:bullet_list) do
-        item "Level 0"
-        item "Level 1", level: 1
+        item 'Level 0'
+        item 'Level 1', level: 1
       end
 
       expect(document.paragraphs.size).to eq(2)
@@ -93,8 +93,8 @@ RSpec.describe Uniword::Styles::StyleBuilder do
     it 'creates table' do
       tbl = builder.table do
         row do
-          cell "Cell 1"
-          cell "Cell 2"
+          cell 'Cell 1'
+          cell 'Cell 2'
         end
       end
 
@@ -105,8 +105,8 @@ RSpec.describe Uniword::Styles::StyleBuilder do
     it 'creates table with header row' do
       builder.table do
         row header: true do
-          cell "Header 1"
-          cell "Header 2"
+          cell 'Header 1'
+          cell 'Header 2'
         end
       end
 
@@ -117,7 +117,7 @@ RSpec.describe Uniword::Styles::StyleBuilder do
     it 'supports cell spanning' do
       builder.table do
         row do
-          cell "Merged", colspan: 2
+          cell 'Merged', colspan: 2
         end
       end
 
@@ -132,30 +132,30 @@ RSpec.describe Uniword::Styles::StyleBuilder do
 
     it 'builds complete document' do
       builder.build do
-        paragraph :title, "ISO 8601-2:2026"
-        paragraph :subtitle, "Date and time"
+        paragraph :title, 'ISO 8601-2:2026'
+        paragraph :subtitle, 'Date and time'
 
-        paragraph :heading_1, "1. Scope"
-        paragraph :body_text, "This document specifies..."
+        paragraph :heading_1, '1. Scope'
+        paragraph :body_text, 'This document specifies...'
 
         list :bullet_list do
-          item "First point"
-          item "Second point"
+          item 'First point'
+          item 'Second point'
         end
 
         table do
           row header: true do
-            cell "Column 1"
-            cell "Column 2"
+            cell 'Column 1'
+            cell 'Column 2'
           end
           row do
-            cell "Data 1"
-            cell "Data 2"
+            cell 'Data 1'
+            cell 'Data 2'
           end
         end
       end
 
-      expect(document.paragraphs.size).to eq(6)  # 4 paragraphs + 2 list items
+      expect(document.paragraphs.size).to eq(6) # 4 paragraphs + 2 list items
       expect(document.tables.size).to eq(1)
     end
   end
@@ -165,11 +165,11 @@ RSpec.describe Uniword::Styles::StyleBuilder do
 
     it 'inherits properties from base style' do
       # heading_2 inherits from heading_1
-      para = builder.paragraph(:heading_2, "Subheading")
+      para = builder.paragraph(:heading_2, 'Subheading')
 
       # Should inherit font from heading_1
       default_props = para.instance_variable_get(:@default_run_properties)
-      expect(default_props[:font]).to eq("Arial")
+      expect(default_props[:font]).to eq('Arial')
     end
   end
 end

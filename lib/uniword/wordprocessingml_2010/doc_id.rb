@@ -3,20 +3,20 @@
 require 'lutaml/model'
 
 module Uniword
-    module Wordprocessingml2010
-      # Document unique identifier
-      #
-      # Generated from OOXML schema: wordprocessingml_2010.yml
-      # Element: <w14:docId>
-      class DocId < Lutaml::Model::Serializable
-          attribute :val, String
+  module Wordprocessingml2010
+    # Document unique identifier
+    #
+    # Generated from OOXML schema: wordprocessingml_2010.yml
+    # Element: <w14:docId>
+    class DocId < Lutaml::Model::Serializable
+      attribute :val, String
 
-          xml do
-            element 'docId'
-            namespace Uniword::Ooxml::Namespaces::Word2010
+      xml do
+        element 'docId'
+        namespace Uniword::Ooxml::Namespaces::Word2010
 
-            map_attribute 'val', to: :val
-          end
+        map_attribute 'val', to: :val
       end
     end
+  end
 end

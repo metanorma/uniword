@@ -76,7 +76,7 @@ RSpec.describe 'DOCX Generation Integration' do
         expect(doc_xml).to include('First paragraph')
         expect(doc_xml).to include('Second paragraph')
         # Should have two <w:p> tags
-        expect(doc_xml.scan(/<w:p>/).count).to eq(2)
+        expect(doc_xml.scan('<w:p>').count).to eq(2)
       end
     end
 
@@ -100,232 +100,232 @@ RSpec.describe 'DOCX Generation Integration' do
       end
     end
 
-  describe 'formatted text generation' do
-    it 'generates DOCX with bold and italic text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    describe 'formatted text generation' do
+      it 'generates DOCX with bold and italic text' do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
 
-      # Bold text
-      run1 = Uniword::Run.new(text: 'Bold ')
-      run1.properties = Uniword::Properties::RunProperties.new(bold: true)
-      para.add_run(run1)
+        # Bold text
+        run1 = Uniword::Run.new(text: 'Bold ')
+        run1.properties = Uniword::Properties::RunProperties.new(bold: true)
+        para.add_run(run1)
 
-      # Italic text
-      run2 = Uniword::Run.new(text: 'Italic')
-      run2.properties = Uniword::Properties::RunProperties.new(italic: true)
-      para.add_run(run2)
+        # Italic text
+        run2 = Uniword::Run.new(text: 'Italic')
+        run2.properties = Uniword::Properties::RunProperties.new(italic: true)
+        para.add_run(run2)
 
-      doc.add_element(para)
+        doc.add_element(para)
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      expect(xml).to include('<w:b/>')
-      expect(xml).to include('<w:i/>')
-      expect(xml).to include('Bold ')
-      expect(xml).to include('Italic')
+        expect(xml).to include('<w:b/>')
+        expect(xml).to include('<w:i/>')
+        expect(xml).to include('Bold ')
+        expect(xml).to include('Italic')
+      end
+
+      it 'generates DOCX with font size and color' do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+
+        run = Uniword::Run.new(text: 'Colored Text')
+        run.properties = Uniword::Properties::RunProperties.new(
+          size: 28, # 14pt in half-points
+          color: 'FF0000' # Red
+        )
+        para.add_run(run)
+        doc.add_element(para)
+
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
+
+        expect(xml).to include('<w:sz w:val="28"/>')
+        expect(xml).to include('<w:color w:val="FF0000"/>')
+      end
+
+      it 'generates DOCX with underline and strike-through' do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+
+        run = Uniword::Run.new(text: 'Formatted')
+        run.properties = Uniword::Properties::RunProperties.new(
+          underline: 'single',
+          strike: true
+        )
+        para.add_run(run)
+        doc.add_element(para)
+
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
+
+        expect(xml).to include('<w:u w:val="single"/>')
+        expect(xml).to include('<w:strike/>')
+      end
     end
 
-    it 'generates DOCX with font size and color' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    describe 'paragraph formatting' do
+      it 'generates DOCX with paragraph alignment' do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+        para.properties = Uniword::Properties::ParagraphProperties.new(
+          alignment: 'center'
+        )
+        para.add_text('Centered Text')
+        doc.add_element(para)
 
-      run = Uniword::Run.new(text: 'Colored Text')
-      run.properties = Uniword::Properties::RunProperties.new(
-        size: 28,  # 14pt in half-points
-        color: 'FF0000'  # Red
-      )
-      para.add_run(run)
-      doc.add_element(para)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        expect(xml).to include('<w:jc w:val="center"/>')
+      end
 
-      expect(xml).to include('<w:sz w:val="28"/>')
-      expect(xml).to include('<w:color w:val="FF0000"/>')
+      it 'generates DOCX with paragraph spacing' do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+        para.properties = Uniword::Properties::ParagraphProperties.new(
+          spacing_before: 240,
+          spacing_after: 120
+        )
+        para.add_text('Spaced Paragraph')
+        doc.add_element(para)
+
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
+
+        expect(xml).to include('<w:spacing w:before="240" w:after="120"/>')
+      end
     end
 
-    it 'generates DOCX with underline and strike-through' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    describe 'table generation' do
+      it 'generates DOCX with a simple table' do
+        doc = Uniword::Document.new
 
-      run = Uniword::Run.new(text: 'Formatted')
-      run.properties = Uniword::Properties::RunProperties.new(
-        underline: 'single',
-        strike: true
-      )
-      para.add_run(run)
-      doc.add_element(para)
+        table = Uniword::Table.new
+        row = Uniword::TableRow.new
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        cell1 = Uniword::TableCell.new
+        cell1.add_text('Cell 1')
+        row.add_cell(cell1)
 
-      expect(xml).to include('<w:u w:val="single"/>')
-      expect(xml).to include('<w:strike/>')
-    end
-  end
+        cell2 = Uniword::TableCell.new
+        cell2.add_text('Cell 2')
+        row.add_cell(cell2)
 
-  describe 'paragraph formatting' do
-    it 'generates DOCX with paragraph alignment' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.properties = Uniword::Properties::ParagraphProperties.new(
-        alignment: 'center'
-      )
-      para.add_text('Centered Text')
-      doc.add_element(para)
+        table.add_row(row)
+        doc.add_element(table)
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      expect(xml).to include('<w:jc w:val="center"/>')
-    end
+        expect(xml).to include('<w:tbl>')
+        expect(xml).to include('<w:tr>')
+        expect(xml).to include('<w:tc>')
+        expect(xml).to include('Cell 1')
+        expect(xml).to include('Cell 2')
+      end
 
-    it 'generates DOCX with paragraph spacing' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.properties = Uniword::Properties::ParagraphProperties.new(
-        spacing_before: 240,
-        spacing_after: 120
-      )
-      para.add_text('Spaced Paragraph')
-      doc.add_element(para)
+      it 'generates DOCX with table containing multiple rows' do
+        doc = Uniword::Document.new
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        table = Uniword::Table.new
 
-      expect(xml).to include('<w:spacing w:before="240" w:after="120"/>')
-    end
-  end
+        # Header row
+        header_row = Uniword::TableRow.new
+        header_row.header = true
+        header_row.add_text_cell('Header 1')
+        header_row.add_text_cell('Header 2')
+        table.add_row(header_row)
 
-  describe 'table generation' do
-    it 'generates DOCX with a simple table' do
-      doc = Uniword::Document.new
+        # Data row
+        data_row = Uniword::TableRow.new
+        data_row.add_text_cell('Data 1')
+        data_row.add_text_cell('Data 2')
+        table.add_row(data_row)
 
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
+        doc.add_element(table)
 
-      cell1 = Uniword::TableCell.new
-      cell1.add_text('Cell 1')
-      row.add_cell(cell1)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      cell2 = Uniword::TableCell.new
-      cell2.add_text('Cell 2')
-      row.add_cell(cell2)
+        expect(xml).to include('<w:tblHeader/>')
+        expect(xml).to include('Header 1')
+        expect(xml).to include('Data 1')
+      end
 
-      table.add_row(row)
-      doc.add_element(table)
+      it 'generates DOCX with table properties' do
+        doc = Uniword::Document.new
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        table = Uniword::Table.new
+        table.properties = Uniword::Properties::TableProperties.new(
+          width: '5000',
+          alignment: 'center'
+        )
 
-      expect(xml).to include('<w:tbl>')
-      expect(xml).to include('<w:tr>')
-      expect(xml).to include('<w:tc>')
-      expect(xml).to include('Cell 1')
-      expect(xml).to include('Cell 2')
-    end
+        row = Uniword::TableRow.new
+        row.add_text_cell('Content')
+        table.add_row(row)
 
-    it 'generates DOCX with table containing multiple rows' do
-      doc = Uniword::Document.new
+        doc.add_element(table)
 
-      table = Uniword::Table.new
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      # Header row
-      header_row = Uniword::TableRow.new
-      header_row.header = true
-      header_row.add_text_cell('Header 1')
-      header_row.add_text_cell('Header 2')
-      table.add_row(header_row)
+        expect(xml).to include('<w:tblW w:w="5000" w:type="dxa"/>')
+        expect(xml).to include('<w:jc w:val="center"/>')
+      end
 
-      # Data row
-      data_row = Uniword::TableRow.new
-      data_row.add_text_cell('Data 1')
-      data_row.add_text_cell('Data 2')
-      table.add_row(data_row)
+      it 'generates DOCX with cell background color' do
+        doc = Uniword::Document.new
 
-      doc.add_element(table)
+        table = Uniword::Table.new
+        row = Uniword::TableRow.new
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        cell = Uniword::TableCell.new
+        cell.background_color = 'FFFF00' # Yellow
+        cell.add_text('Highlighted')
+        row.add_cell(cell)
 
-      expect(xml).to include('<w:tblHeader/>')
-      expect(xml).to include('Header 1')
-      expect(xml).to include('Data 1')
+        table.add_row(row)
+        doc.add_element(table)
+
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
+
+        expect(xml).to include('<w:shd w:val="clear" w:color="auto" w:fill="FFFF00"/>')
+      end
     end
 
-    it 'generates DOCX with table properties' do
-      doc = Uniword::Document.new
+    describe 'mixed content generation' do
+      it 'generates DOCX with paragraphs and tables' do
+        doc = Uniword::Document.new
 
-      table = Uniword::Table.new
-      table.properties = Uniword::Properties::TableProperties.new(
-        width: '5000',
-        alignment: 'center'
-      )
+        # Add a paragraph
+        para1 = Uniword::Paragraph.new
+        para1.add_text('Introduction text')
+        doc.add_element(para1)
 
-      row = Uniword::TableRow.new
-      row.add_text_cell('Content')
-      table.add_row(row)
+        # Add a table
+        table = Uniword::Table.new
+        row = Uniword::TableRow.new
+        row.add_text_cell('Table content')
+        table.add_row(row)
+        doc.add_element(table)
 
-      doc.add_element(table)
+        # Add another paragraph
+        para2 = Uniword::Paragraph.new
+        para2.add_text('Conclusion text')
+        doc.add_element(para2)
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        xml = serializer.serialize(doc)
 
-      expect(xml).to include('<w:tblW w:w="5000" w:type="dxa"/>')
-      expect(xml).to include('<w:jc w:val="center"/>')
+        expect(xml).to include('Introduction text')
+        expect(xml).to include('<w:tbl>')
+        expect(xml).to include('Table content')
+        expect(xml).to include('Conclusion text')
+      end
     end
-
-    it 'generates DOCX with cell background color' do
-      doc = Uniword::Document.new
-
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-
-      cell = Uniword::TableCell.new
-      cell.background_color = 'FFFF00'  # Yellow
-      cell.add_text('Highlighted')
-      row.add_cell(cell)
-
-      table.add_row(row)
-      doc.add_element(table)
-
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
-
-      expect(xml).to include('<w:shd w:val="clear" w:color="auto" w:fill="FFFF00"/>')
-    end
-  end
-
-  describe 'mixed content generation' do
-    it 'generates DOCX with paragraphs and tables' do
-      doc = Uniword::Document.new
-
-      # Add a paragraph
-      para1 = Uniword::Paragraph.new
-      para1.add_text('Introduction text')
-      doc.add_element(para1)
-
-      # Add a table
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      row.add_text_cell('Table content')
-      table.add_row(row)
-      doc.add_element(table)
-
-      # Add another paragraph
-      para2 = Uniword::Paragraph.new
-      para2.add_text('Conclusion text')
-      doc.add_element(para2)
-
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
-
-      expect(xml).to include('Introduction text')
-      expect(xml).to include('<w:tbl>')
-      expect(xml).to include('Table content')
-      expect(xml).to include('Conclusion text')
-    end
-  end
   end
 end

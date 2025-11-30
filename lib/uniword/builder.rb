@@ -47,7 +47,7 @@ module Uniword
     # @example Without block
     #   builder = Uniword::Builder.new
     #   builder.add_paragraph("Hello World")
-    def initialize(document = nil, &block)
+    def initialize(document = nil)
       @document = document || Document.new
       yield(self) if block_given?
     end
@@ -126,16 +126,16 @@ module Uniword
     end
 
     # Alias for add_paragraph for more natural DSL
-    alias_method :paragraph, :add_paragraph
+    alias paragraph add_paragraph
 
     # Alias for add_table for more natural DSL
-    alias_method :table, :add_table
+    alias table add_table
 
     # Alias for add_heading for more natural DSL
-    alias_method :heading, :add_heading
+    alias heading add_heading
 
     # Alias for add_blank_line for more natural DSL
-    alias_method :blank_line, :add_blank_line
+    alias blank_line add_blank_line
 
     # Get the built document
     # This is an alias for build for more natural usage

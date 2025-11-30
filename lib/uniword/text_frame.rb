@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
+require 'lutaml/model'
 
 module Uniword
   # Represents a text frame for positioned text
@@ -129,29 +129,33 @@ module Uniword
 
     def validate_anchors
       if h_anchor && !ANCHOR_TYPES.include?(h_anchor)
-        raise ArgumentError, "Invalid h_anchor: #{h_anchor}. Must be one of: #{ANCHOR_TYPES.join(', ')}"
+        raise ArgumentError,
+              "Invalid h_anchor: #{h_anchor}. Must be one of: #{ANCHOR_TYPES.join(', ')}"
       end
-      if v_anchor && !ANCHOR_TYPES.include?(v_anchor)
-        raise ArgumentError, "Invalid v_anchor: #{v_anchor}. Must be one of: #{ANCHOR_TYPES.join(', ')}"
-      end
+      return unless v_anchor && !ANCHOR_TYPES.include?(v_anchor)
+
+      raise ArgumentError,
+            "Invalid v_anchor: #{v_anchor}. Must be one of: #{ANCHOR_TYPES.join(', ')}"
     end
 
     def validate_alignments
       if h_alignment && !H_ALIGNMENTS.include?(h_alignment)
-        raise ArgumentError, "Invalid h_alignment: #{h_alignment}. Must be one of: #{H_ALIGNMENTS.join(', ')}"
+        raise ArgumentError,
+              "Invalid h_alignment: #{h_alignment}. Must be one of: #{H_ALIGNMENTS.join(', ')}"
       end
-      if v_alignment && !V_ALIGNMENTS.include?(v_alignment)
-        raise ArgumentError, "Invalid v_alignment: #{v_alignment}. Must be one of: #{V_ALIGNMENTS.join(', ')}"
-      end
+      return unless v_alignment && !V_ALIGNMENTS.include?(v_alignment)
+
+      raise ArgumentError,
+            "Invalid v_alignment: #{v_alignment}. Must be one of: #{V_ALIGNMENTS.join(', ')}"
     end
 
     def validate_rules
       if h_rule && !SIZE_RULES.include?(h_rule)
         raise ArgumentError, "Invalid h_rule: #{h_rule}. Must be one of: #{SIZE_RULES.join(', ')}"
       end
-      if w_rule && !SIZE_RULES.include?(w_rule)
-        raise ArgumentError, "Invalid w_rule: #{w_rule}. Must be one of: #{SIZE_RULES.join(', ')}"
-      end
+      return unless w_rule && !SIZE_RULES.include?(w_rule)
+
+      raise ArgumentError, "Invalid w_rule: #{w_rule}. Must be one of: #{SIZE_RULES.join(', ')}"
     end
 
     def validate_wrap

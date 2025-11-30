@@ -32,7 +32,7 @@ module Uniword
     # @see ISO/IEC 29500-1 Section 22.1 OMML specification
     class PlurimathAdapter
       # OMML namespace URI
-      OMML_NAMESPACE = "http://schemas.openxmlformats.org/officeDocument/2006/math"
+      OMML_NAMESPACE = 'http://schemas.openxmlformats.org/officeDocument/2006/math'
 
       # Create a MathEquation from OMML XML
       #
@@ -78,7 +78,7 @@ module Uniword
       #
       # @raise [ArgumentError] if equation has no formula
       def self.to_omml(equation, options = {})
-        raise ArgumentError, "Equation must have a formula" unless equation.formula
+        raise ArgumentError, 'Equation must have a formula' unless equation.formula
 
         # Convert Plurimath formula to OMML using Plurimath's OMML serializer
         omml_content = formula_to_omml(equation.formula)
@@ -124,7 +124,7 @@ module Uniword
       rescue StandardError => e
         Uniword::Logger.warn("Failed to convert formula to OMML: #{e.message}")
         # Return minimal valid OMML
-        '<m:oMath xmlns:m="' + OMML_NAMESPACE + '"/>'
+        "<m:oMath xmlns:m=\"#{OMML_NAMESPACE}\"/>"
       end
 
       # Determine if equation is inline or block display
@@ -136,7 +136,7 @@ module Uniword
       def self.determine_display_type(node)
         # m:oMathPara indicates block/display mode
         # m:oMath alone indicates inline mode
-        node.name == "oMathPara" ? "block" : "inline"
+        node.name == 'oMathPara' ? 'block' : 'inline'
       end
 
       # Extract equation properties from OMML
@@ -149,21 +149,21 @@ module Uniword
         properties = {}
 
         # Check for paragraph properties if this is oMathPara
-        if node.name == "oMathPara"
-          para_props = node.at_xpath(".//m:oMathParaPr", "m" => OMML_NAMESPACE)
+        if node.name == 'oMathPara'
+          para_props = node.at_xpath('.//m:oMathParaPr', 'm' => OMML_NAMESPACE)
 
           if para_props
             # Extract alignment (m:jc)
-            jc_node = para_props.at_xpath(".//m:jc", "m" => OMML_NAMESPACE)
+            jc_node = para_props.at_xpath('.//m:jc', 'm' => OMML_NAMESPACE)
             if jc_node
-              jc_val = jc_node.attr("m:val")
+              jc_val = jc_node.attr('m:val')
               properties[:alignment] = normalize_alignment(jc_val)
             end
           end
         end
 
         # Check for break settings (m:brk)
-        brk_node = node.at_xpath(".//m:brk", "m" => OMML_NAMESPACE)
+        brk_node = node.at_xpath('.//m:brk', 'm' => OMML_NAMESPACE)
         properties[:break_enabled] = !brk_node.nil?
 
         properties
@@ -177,10 +177,9 @@ module Uniword
       # @api private
       def self.normalize_alignment(omml_alignment)
         case omml_alignment&.downcase
-        when "left" then "left"
-        when "center" then "center"
-        when "right" then "right"
-        else nil
+        when 'left' then 'left'
+        when 'center' then 'center'
+        when 'right' then 'right'
         end
       end
 
@@ -192,7 +191,7 @@ module Uniword
       # @return [String] Wrapped OMML
       #
       # @api private
-      def self.wrap_omml(omml_content, equation, options = {})
+      def self.wrap_omml(omml_content, equation, _options = {})
         if equation.block?
           wrap_block_equation(omml_content, equation)
         else
@@ -224,9 +223,7 @@ module Uniword
             # Add paragraph properties if needed
             if equation.alignment || equation.break_enabled
               xml['m'].oMathParaPr do
-                if equation.alignment
-                  xml['m'].jc('m:val' => equation.alignment)
-                end
+                xml['m'].jc('m:val' => equation.alignment) if equation.alignment
               end
             end
 
@@ -265,7 +262,7 @@ module Uniword
           xml
         when String
           doc = Nokogiri::XML(xml)
-          doc.root || raise(ArgumentError, "Invalid XML: no root element")
+          doc.root || raise(ArgumentError, 'Invalid XML: no root element')
         else
           raise ArgumentError, "Expected String or Nokogiri::XML::Node, got #{xml.class}"
         end
@@ -278,14 +275,14 @@ module Uniword
       #
       # @api private
       def self.extract_math_node(node)
-        if node.name == "oMath"
+        if node.name == 'oMath'
           node
-        elsif node.name == "oMathPara"
+        elsif node.name == 'oMathPara'
           # Extract m:oMath from m:oMathPara
-          node.at_xpath(".//m:oMath", "m" => OMML_NAMESPACE) || node
+          node.at_xpath('.//m:oMath', 'm' => OMML_NAMESPACE) || node
         else
           # Try to find m:oMath descendant
-          node.at_xpath(".//m:oMath", "m" => OMML_NAMESPACE) || node
+          node.at_xpath('.//m:oMath', 'm' => OMML_NAMESPACE) || node
         end
       end
     end

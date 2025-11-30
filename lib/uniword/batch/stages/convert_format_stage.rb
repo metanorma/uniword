@@ -23,7 +23,7 @@ module Uniword
       # @option options [Symbol] :target_format Target format (:docx or :mhtml)
       # @option options [Boolean] :preserve_original Keep original format file
       def initialize(options = {})
-        super(options)
+        super
         @target_format = options.fetch(:target_format, :docx)
         @preserve_original = options.fetch(:preserve_original, true)
 
@@ -55,7 +55,7 @@ module Uniword
           )
         end
 
-        log "Format conversion complete"
+        log 'Format conversion complete'
         document
       end
 
@@ -72,7 +72,7 @@ module Uniword
       #
       # @raise [ArgumentError] if target format is invalid
       def validate_target_format!
-        valid_formats = [:docx, :mhtml]
+        valid_formats = %i[docx mhtml]
         return if valid_formats.include?(@target_format)
 
         raise ArgumentError,

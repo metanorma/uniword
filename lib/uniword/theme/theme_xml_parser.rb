@@ -38,14 +38,14 @@ module Uniword
 
         # Create theme_elements if not exists
         theme.theme_elements ||= ::Uniword::ThemeElements.new
-        
+
         # Parse color scheme
         color_scheme_node = doc.at_xpath('//a:themeElements/a:clrScheme', THEME_NS)
         if color_scheme_node
           scheme = parse_color_scheme(color_scheme_node)
           theme.theme_elements.clr_scheme = scheme
         end
-  
+
         # Parse font scheme
         font_scheme_node = doc.at_xpath('//a:themeElements/a:fontScheme', THEME_NS)
         if font_scheme_node
@@ -75,18 +75,18 @@ module Uniword
 
           # Extract color information
           color_obj = extract_color_object(color_node, color_name)
-          
+
           # Set the color using the appropriate attribute
           attr_name = color_name == 'folHlink' ? :fol_hlink : color_name.to_sym
           scheme.instance_variable_set("@#{attr_name}", color_obj)
         end
-        
+
         # Sync hash interface
         scheme.sync_colors_hash
 
         scheme
       end
-      
+
       # Extract color object with proper class
       def extract_color_object(node, color_name)
         # Determine the color class
@@ -105,16 +105,16 @@ module Uniword
                       when 'folHlink' then Uniword::FolHlinkColor
                       else Uniword::Dk1Color
                       end
-        
+
         # Check for srgbClr first
         srgb_node = node.at_xpath('.//a:srgbClr', THEME_NS)
         if srgb_node
           color_obj = color_class.new
           color_obj.srgb_clr = Uniword::SrgbColor.new(val: srgb_node['val'])
-          color_obj.sys_clr = nil  # Explicitly clear sys_clr
+          color_obj.sys_clr = nil # Explicitly clear sys_clr
           return color_obj
         end
-        
+
         # Check for sysClr
         sys_node = node.at_xpath('.//a:sysClr', THEME_NS)
         if sys_node
@@ -123,10 +123,10 @@ module Uniword
             val: sys_node['val'],
             last_clr: sys_node['lastClr']
           )
-          color_obj.srgb_clr = nil  # Explicitly clear srgb_clr
+          color_obj.srgb_clr = nil # Explicitly clear srgb_clr
           return color_obj
         end
-        
+
         # Default - create with srgbClr
         color_class.new
       end
@@ -152,9 +152,7 @@ module Uniword
 
         # Try preset color (named color)
         prst_node = node.at_xpath('.//a:prstClr', THEME_NS)
-        if prst_node
-          return convert_preset_color(prst_node['val'])
-        end
+        return convert_preset_color(prst_node['val']) if prst_node
 
         # Scheme color references would need color resolution
         # For now, return nil and let default colors be used
@@ -193,25 +191,21 @@ module Uniword
 
         # Parse major font
         major_font_node = node.at_xpath('a:majorFont', THEME_NS)
-        if major_font_node
-          scheme.major_font_obj = parse_font_container(major_font_node, :major)
-        end
+        scheme.major_font_obj = parse_font_container(major_font_node, :major) if major_font_node
 
         # Parse minor font
         minor_font_node = node.at_xpath('a:minorFont', THEME_NS)
-        if minor_font_node
-          scheme.minor_font_obj = parse_font_container(minor_font_node, :minor)
-        end
+        scheme.minor_font_obj = parse_font_container(minor_font_node, :minor) if minor_font_node
 
         scheme
       end
-      
+
       # Parse major or minor font container
       def parse_font_container(node, type)
         require_relative '../font_scheme'
-        
+
         container = type == :major ? Uniword::MajorFont.new : Uniword::MinorFont.new
-        
+
         # Parse latin font
         latin_node = node.at_xpath('a:latin', THEME_NS)
         if latin_node
@@ -220,7 +214,7 @@ module Uniword
             panose: latin_node['panose']
           )
         end
-        
+
         # Parse ea font
         ea_node = node.at_xpath('a:ea', THEME_NS)
         if ea_node
@@ -228,7 +222,7 @@ module Uniword
             typeface: ea_node['typeface'] || ''
           )
         end
-        
+
         # Parse cs font
         cs_node = node.at_xpath('a:cs', THEME_NS)
         if cs_node
@@ -236,7 +230,7 @@ module Uniword
             typeface: cs_node['typeface'] || ''
           )
         end
-        
+
         # Parse script-specific fonts
         font_nodes = node.xpath('a:font', THEME_NS)
         container.fonts = font_nodes.map do |font_node|
@@ -245,7 +239,7 @@ module Uniword
             typeface: font_node['typeface'] || ''
           )
         end
-        
+
         container
       end
     end

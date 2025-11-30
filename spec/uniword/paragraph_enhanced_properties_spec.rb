@@ -196,11 +196,11 @@ RSpec.describe Uniword::Paragraph, 'Enhanced Properties' do
   describe 'method chaining' do
     it 'allows chaining multiple property methods' do
       result = paragraph
-        .set_style('Heading1')
-        .align('center')
-        .set_borders(top: '000000', bottom: '000000')
-        .set_shading(fill: 'FFFF00')
-        .add_tab_stop(position: 1440)
+               .set_style('Heading1')
+               .align('center')
+               .set_borders(top: '000000', bottom: '000000')
+               .set_shading(fill: 'FFFF00')
+               .add_tab_stop(position: 1440)
 
       expect(result).to eq(paragraph)
       expect(paragraph.style).to eq('Heading1')

@@ -16,11 +16,11 @@ module Uniword
     # - left, center, right, both (justified), distribute
     class Alignment < Lutaml::Model::Serializable
       attribute :value, AlignmentValue
-      
+
       xml do
         element 'jc'
         namespace Ooxml::Namespaces::WordProcessingML
-        
+
         map_attribute 'val', to: :value
       end
     end

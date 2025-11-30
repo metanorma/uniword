@@ -22,25 +22,23 @@ module Uniword
           # Check if title exists
           if @config[:require_title] && (title.nil? || title.strip.empty?)
             violations << create_violation(
-              message: "Document missing title",
+              message: 'Document missing title',
               element: document,
               severity: @config[:severity] || :error,
               suggestion: @config[:suggestion] ||
-                "Document must have a descriptive title"
+                'Document must have a descriptive title'
             )
             return violations
           end
 
           # Check minimum title length
-          if title && @config[:min_title_length]
-            if title.length < @config[:min_title_length]
-              violations << create_violation(
-                message: "Document title too short (#{title.length} chars)",
-                element: document,
-                severity: :warning,
-                suggestion: "Title should be descriptive (min #{@config[:min_title_length]} chars)"
-              )
-            end
+          if title && @config[:min_title_length] && (title.length < @config[:min_title_length])
+            violations << create_violation(
+              message: "Document title too short (#{title.length} chars)",
+              element: document,
+              severity: :warning,
+              suggestion: "Title should be descriptive (min #{@config[:min_title_length]} chars)"
+            )
           end
 
           violations

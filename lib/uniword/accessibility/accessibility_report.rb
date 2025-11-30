@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "json"
+require 'json'
 
 module Uniword
   module Accessibility
@@ -78,7 +78,7 @@ module Uniword
         lines << "  Errors: #{errors.count} (must fix)"
         lines << "  Warnings: #{warnings.count} (should fix)"
         lines << "  Info: #{infos.count} (recommended)"
-        lines << ""
+        lines << ''
 
         # Group by rule
         by_rule = @violations.group_by(&:rule_id)
@@ -177,7 +177,7 @@ module Uniword
       #
       # @return [String] HTML content for violations
       def violations_html
-        return "<p>No violations found.</p>" if @violations.empty?
+        return '<p>No violations found.</p>' if @violations.empty?
 
         @violations.group_by(&:rule_id).map do |rule_id, rule_violations|
           severity_class = rule_violations.first.severity
@@ -188,9 +188,9 @@ module Uniword
               </div>
               <div class="wcag-ref">WCAG: #{rule_violations.first.wcag_criterion}</div>
               <ul>
-                #{rule_violations.map { |v|
+                #{rule_violations.map do |v|
                   "<li>#{v.message}<div class=\"suggestion\">💡 #{v.suggestion}</div></li>"
-                }.join("\n")}
+                end.join("\n")}
               </ul>
             </div>
           HTML
@@ -203,9 +203,9 @@ module Uniword
       # @return [String] Formatted rule name
       def format_rule_name(rule_id)
         rule_id.to_s
-          .split("_")
-          .map(&:capitalize)
-          .join(" ")
+               .split('_')
+               .map(&:capitalize)
+               .join(' ')
       end
     end
   end

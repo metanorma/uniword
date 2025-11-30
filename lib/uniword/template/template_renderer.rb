@@ -89,8 +89,12 @@ module Uniword
         end
 
         # Process in order: conditionals, loops, then variables
-        conditional_pairs.each { |start_marker, end_marker| process_conditional(start_marker, end_marker, document) }
-        loop_pairs.each { |start_marker, end_marker| process_loop(start_marker, end_marker, document) }
+        conditional_pairs.each do |start_marker, end_marker|
+          process_conditional(start_marker, end_marker, document)
+        end
+        loop_pairs.each do |start_marker, end_marker|
+          process_loop(start_marker, end_marker, document)
+        end
         variable_markers.each { |marker| process_variable(marker, document) }
       end
 
@@ -127,7 +131,7 @@ module Uniword
       # @param marker [TemplateMarker] Variable marker
       # @param document [Document] Document to modify
       # @return [void]
-      def process_variable(marker, document)
+      def process_variable(marker, _document)
         resolver = @context.create_resolver
         value = resolver.resolve(marker.expression)
 

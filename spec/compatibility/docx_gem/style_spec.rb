@@ -16,7 +16,8 @@ RSpec.describe 'Docx Gem Compatibility - Styles' do
   let(:style) do
     # Manually create style from XML for testing
     style_id = node['w:styleId']
-    style_name = node.at_xpath('./w:name', {'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'})&.[]('w:val')
+    style_name = node.at_xpath('./w:name',
+                               { 'w' => 'http://schemas.openxmlformats.org/wordprocessingml/2006/main' })&.[]('w:val')
 
     Uniword::ParagraphStyle.new(
       id: style_id,

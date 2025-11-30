@@ -153,7 +153,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       expect(content).to include('<html')
       expect(content).to include('<head>')
       expect(content).to include('</head>')
-      expect(content).to match(/<body[>\s]/)  # Match <body> with or without attributes
+      expect(content).to match(/<body[>\s]/) # Match <body> with or without attributes
       expect(content).to include('</body>')
       expect(content).to include('</html>')
     end
@@ -293,8 +293,8 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc.save(output_path, format: :mhtml)
 
       file_size = File.size(output_path)
-      expect(file_size).to be > 1000  # Has substantial content
-      expect(file_size).to be < 100_000  # Not unreasonably large
+      expect(file_size).to be > 1000 # Has substantial content
+      expect(file_size).to be < 100_000 # Not unreasonably large
     end
 
     it 'does not duplicate CSS unnecessarily' do
@@ -304,7 +304,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       content = File.read(output_path, encoding: 'UTF-8')
 
       # Count <style> tags - should only be one
-      style_count = content.scan(/<style>/).count
+      style_count = content.scan('<style>').count
       expect(style_count).to eq(1)
     end
 
@@ -321,7 +321,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
       expect(File.exist?(output_path)).to be true
       file_size = File.size(output_path)
-      expect(file_size).to be < 1_000_000  # Should be under 1MB
+      expect(file_size).to be < 1_000_000 # Should be under 1MB
     end
   end
 
@@ -427,7 +427,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
         image_data = File.binread(image_path)
         image = Uniword::Image.from_data(
           image_data,
-          width: 100 * 9525,  # 100 pixels in EMUs
+          width: 100 * 9525, # 100 pixels in EMUs
           height: 100 * 9525,
           alt_text: 'Test Image',
           title: 'Test Image'
