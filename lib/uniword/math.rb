@@ -16,6 +16,7 @@ module Uniword
     autoload :MathText, File.expand_path('math/math_text', __dir__)
     autoload :MathBreak, File.expand_path('math/math_break', __dir__)
     autoload :MathFont, File.expand_path('math/math_font', __dir__)
+    autoload :MathStyle, File.expand_path('math/math_style', __dir__)
 
     # Property classes
     autoload :ArgumentProperties, File.expand_path('math/argument_properties', __dir__)

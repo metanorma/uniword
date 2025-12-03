@@ -20,11 +20,11 @@ module Uniword
         attribute :coordsize, :string
         attribute :coordorigin, :string
         attribute :path, :string
-        attribute :fill, :string
-        attribute :stroke, :string
+        attribute :fill, Fill
+        attribute :stroke, Stroke
         attribute :textbox, Textbox
         attribute :wrap, Wrap
-        attribute :imagedata, :string
+        attribute :imagedata, Imagedata
 
         xml do
           root 'shape'

@@ -15,7 +15,7 @@ module Uniword
         attribute :color2, :string
         attribute :opacity, :string
         attribute :angle, :string
-        attribute true, :string
+        attribute :on, :string
 
         xml do
           element 'fill'
@@ -26,7 +26,7 @@ module Uniword
           map_attribute 'color2', to: :color2
           map_attribute 'opacity', to: :opacity
           map_attribute 'angle', to: :angle
-          map_attribute 'true', to: true
+          map_attribute 'on', to: :on
         end
       end
     end

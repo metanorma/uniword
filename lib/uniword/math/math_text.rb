@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:t>
     class MathText < Lutaml::Model::Serializable
+      # Pattern 0: Attribute BEFORE xml mapping
       attribute :value, :string
 
       xml do
         element 't'
         namespace Uniword::Ooxml::Namespaces::MathML
-        mixed_content
 
-        map_element 'value', to: :value, render_nil: false
+        map_content to: :value
       end
     end
   end

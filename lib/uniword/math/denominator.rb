@@ -9,8 +9,9 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:den>
     class Denominator < Lutaml::Model::Serializable
+      # Pattern 0: Attributes BEFORE xml mappings
       attribute :arg_properties, ArgumentProperties
-      attribute :elements, :string, collection: true, default: -> { [] }
+      attribute :runs, MathRun, collection: true, default: -> { [] }
 
       xml do
         element 'den'
@@ -18,7 +19,7 @@ module Uniword
         mixed_content
 
         map_element 'argPr', to: :arg_properties, render_nil: false
-        map_element '*', to: :elements, render_nil: false
+        map_element 'r', to: :runs, render_nil: false
       end
     end
   end

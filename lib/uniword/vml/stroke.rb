@@ -16,7 +16,7 @@ module Uniword
         attribute :linestyle, :string
         attribute :joinstyle, :string
         attribute :endcap, :string
-        attribute true, :string
+        attribute :on, :string
 
         xml do
           element 'stroke'
@@ -28,7 +28,7 @@ module Uniword
           map_attribute 'linestyle', to: :linestyle
           map_attribute 'joinstyle', to: :joinstyle
           map_attribute 'endcap', to: :endcap
-          map_attribute 'true', to: true
+          map_attribute 'on', to: :on
         end
       end
     end

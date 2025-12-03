@@ -10,8 +10,10 @@ module Uniword
     module Vml
       autoload :Curve, File.expand_path('vml/curve', __dir__)
       autoload :Fill, File.expand_path('vml/fill', __dir__)
+      autoload :Formula, File.expand_path('vml/formula', __dir__)
       autoload :Formulas, File.expand_path('vml/formulas', __dir__)
       autoload :Group, File.expand_path('vml/group', __dir__)
+      autoload :Handle, File.expand_path('vml/handle', __dir__)
       autoload :Handles, File.expand_path('vml/handles', __dir__)
       autoload :Imagedata, File.expand_path('vml/imagedata', __dir__)
       autoload :Line, File.expand_path('vml/line', __dir__)

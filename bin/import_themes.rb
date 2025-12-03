@@ -11,9 +11,9 @@ require_relative '../lib/uniword/themes/theme_importer'
 SOURCE_DIR = 'references/word-package/office-themes'
 OUTPUT_DIR = 'data/themes'
 
-puts "=" * 80
-puts "Office Theme Import Script"
-puts "=" * 80
+puts '=' * 80
+puts 'Office Theme Import Script'
+puts '=' * 80
 puts
 puts "Source: #{SOURCE_DIR}"
 puts "Output: #{OUTPUT_DIR}"
@@ -27,17 +27,16 @@ begin
   count = importer.import_all(SOURCE_DIR, OUTPUT_DIR)
 
   puts
-  puts "=" * 80
-  puts "Import Complete!"
-  puts "=" * 80
+  puts '=' * 80
+  puts 'Import Complete!'
+  puts '=' * 80
   puts "Imported #{count} themes to #{OUTPUT_DIR}/"
   puts
 
   # List imported themes
   themes = Dir.glob(File.join(OUTPUT_DIR, '*.yml')).map { |f| File.basename(f, '.yml') }.sort
-  puts "Available themes:"
+  puts 'Available themes:'
   themes.each { |name| puts "  - #{name}" }
-
 rescue StandardError => e
   puts
   puts "ERROR: #{e.message}"

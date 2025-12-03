@@ -9,14 +9,17 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:ctrlPr>
     class ControlProperties < Lutaml::Model::Serializable
-      attribute :run_properties, :string
+      # Pattern 0: Attribute BEFORE xml mapping
+      attribute :run_properties, Uniword::Ooxml::WordProcessingML::RunProperties
 
       xml do
         element 'ctrlPr'
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'rPr', to: :run_properties, render_nil: false
+        map_element 'rPr', to: :run_properties,
+                    namespace: Uniword::Ooxml::Namespaces::WordProcessingML,
+                    render_nil: false
       end
     end
   end

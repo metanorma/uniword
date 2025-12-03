@@ -21,9 +21,9 @@ require_relative '../lib/uniword/stylesets/styleset_loader'
 SOURCE_DIR = 'references/word-package/style-sets'
 OUTPUT_DIR = 'data/stylesets'
 
-puts "=" * 80
-puts "StyleSet Import Script (Standalone)"
-puts "=" * 80
+puts '=' * 80
+puts 'StyleSet Import Script (Standalone)'
+puts '=' * 80
 puts
 puts "Source: #{SOURCE_DIR}"
 puts "Output: #{OUTPUT_DIR}"
@@ -36,9 +36,9 @@ FileUtils.mkdir_p(OUTPUT_DIR)
 count = 0
 Dir.glob(File.join(SOURCE_DIR, '*.dotx')).each do |dotx_file|
   styleset_name = File.basename(dotx_file, '.dotx')
-    .downcase
-    .gsub(/[^a-z0-9]+/, '_')
-    .gsub(/^_|_$/, '')
+                      .downcase
+                      .gsub(/[^a-z0-9]+/, '_')
+                      .gsub(/^_|_$/, '')
 
   output_file = File.join(OUTPUT_DIR, "#{styleset_name}.yml")
 
@@ -53,9 +53,9 @@ Dir.glob(File.join(SOURCE_DIR, '*.dotx')).each do |dotx_file|
     File.write(output_file, styleset.to_yaml)
 
     puts "  ✓ Imported: #{styleset.styles.count} styles"
-    puts "    - With paragraph properties: #{styleset.styles.count { |s| s.paragraph_properties }}"
-    puts "    - With run properties: #{styleset.styles.count { |s| s.run_properties }}"
-    puts "    - With table properties: #{styleset.styles.count { |s| s.table_properties }}"
+    puts "    - With paragraph properties: #{styleset.styles.count(&:paragraph_properties)}"
+    puts "    - With run properties: #{styleset.styles.count(&:run_properties)}"
+    puts "    - With table properties: #{styleset.styles.count(&:table_properties)}"
 
     count += 1
   rescue StandardError => e
@@ -65,13 +65,13 @@ Dir.glob(File.join(SOURCE_DIR, '*.dotx')).each do |dotx_file|
   puts
 end
 
-puts "=" * 80
-puts "Import Complete!"
-puts "=" * 80
+puts '=' * 80
+puts 'Import Complete!'
+puts '=' * 80
 puts "Imported #{count} StyleSets to #{OUTPUT_DIR}/"
 puts
 
 # List imported StyleSets
 stylesets = Dir.glob(File.join(OUTPUT_DIR, '*.yml')).map { |f| File.basename(f, '.yml') }.sort
-puts "Available StyleSets:"
+puts 'Available StyleSets:'
 stylesets.each { |name| puts "  - #{name}" }

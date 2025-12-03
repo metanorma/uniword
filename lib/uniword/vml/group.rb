@@ -14,7 +14,7 @@ module Uniword
         attribute :style, :string
         attribute :coordsize, :string
         attribute :coordorigin, :string
-        attribute :shapes, :string, collection: true, default: -> { [] }
+        attribute :shapes, Shape, collection: true, default: -> { [] }
 
         xml do
           element 'group'
@@ -24,7 +24,7 @@ module Uniword
           map_attribute 'style', to: :style
           map_attribute 'coordsize', to: :coordsize
           map_attribute 'coordorigin', to: :coordorigin
-          map_element '', to: :shapes, render_nil: false
+          map_element 'shape', to: :shapes, render_nil: false
         end
       end
     end
