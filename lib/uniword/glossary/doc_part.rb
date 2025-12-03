@@ -13,8 +13,8 @@ module Uniword
       attribute :doc_part_body, DocPartBody
 
       xml do
-        element 'doc_part'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'docPart'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'docPartPr', to: :doc_part_pr, render_nil: false

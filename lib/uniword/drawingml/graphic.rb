@@ -4,19 +4,18 @@ require 'lutaml/model'
 
 module Uniword
   module Drawingml
-    # Graphic container element
-    #
-    # Generated from OOXML schema: drawingml.yml
-    # Element: <a:graphic>
+    # Graphic container
+    # Contains GraphicData with the actual picture/shape
     class Graphic < Lutaml::Model::Serializable
+      # PATTERN 0: Attributes FIRST
       attribute :graphic_data, GraphicData
 
       xml do
-        element 'graphic'
+        root 'graphic'
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
 
-        map_element 'graphicData', to: :graphic_data
+        map_element 'graphicData', to: :graphic_data, render_nil: false
       end
     end
   end

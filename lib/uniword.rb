@@ -18,10 +18,13 @@ require_relative 'uniword/ooxml/namespaces'
 # Load all generated classes
 require_relative 'uniword/wordprocessingml'
 require_relative 'uniword/drawingml'
+require_relative 'uniword/wp_drawing'
+require_relative 'uniword/vml'
 require_relative 'uniword/math'
 require_relative 'uniword/shared_types'
 require_relative 'uniword/content_types'
 require_relative 'uniword/document_properties'
+require_relative 'uniword/glossary'
 
 # Load extension modules that add convenience methods to generated classes
 

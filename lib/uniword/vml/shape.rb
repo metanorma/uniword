@@ -6,10 +6,11 @@ module Uniword
   module Generated
     module Vml
       # VML shape element
+      # Enhanced to support proper textbox and wrap model classes
       #
-      # Generated from OOXML schema: vml.yml
       # Element: <v:shape>
       class Shape < Lutaml::Model::Serializable
+        # PATTERN 0: Attributes FIRST
         attribute :id, :string
         attribute :type, :string
         attribute :style, :string
@@ -21,26 +22,29 @@ module Uniword
         attribute :path, :string
         attribute :fill, :string
         attribute :stroke, :string
-        attribute :textbox, :string
+        attribute :textbox, Textbox
+        attribute :wrap, Wrap
         attribute :imagedata, :string
 
         xml do
-          element 'shape'
+          root 'shape'
           namespace Uniword::Ooxml::Namespaces::Vml
+          mixed_content
 
-          map_attribute 'id', to: :id
-          map_attribute 'type', to: :type
-          map_attribute 'style', to: :style
-          map_attribute 'fillcolor', to: :fillcolor
-          map_attribute 'strokecolor', to: :strokecolor
-          map_attribute 'strokeweight', to: :strokeweight
-          map_attribute 'coordsize', to: :coordsize
-          map_attribute 'coordorigin', to: :coordorigin
-          map_attribute 'path', to: :path
-          map_element '', to: :fill, render_nil: false
-          map_element '', to: :stroke, render_nil: false
-          map_element '', to: :textbox, render_nil: false
-          map_element '', to: :imagedata, render_nil: false
+          map_attribute 'id', to: :id, render_nil: false
+          map_attribute 'type', to: :type, render_nil: false
+          map_attribute 'style', to: :style, render_nil: false
+          map_attribute 'fillcolor', to: :fillcolor, render_nil: false
+          map_attribute 'strokecolor', to: :strokecolor, render_nil: false
+          map_attribute 'strokeweight', to: :strokeweight, render_nil: false
+          map_attribute 'coordsize', to: :coordsize, render_nil: false
+          map_attribute 'coordorigin', to: :coordorigin, render_nil: false
+          map_attribute 'path', to: :path, render_nil: false
+          map_element 'fill', to: :fill, render_nil: false
+          map_element 'stroke', to: :stroke, render_nil: false
+          map_element 'textbox', to: :textbox, render_nil: false
+          map_element 'wrap', to: :wrap, render_nil: false
+          map_element 'imagedata', to: :imagedata, render_nil: false
         end
       end
     end

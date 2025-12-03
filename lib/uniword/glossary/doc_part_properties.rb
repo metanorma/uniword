@@ -10,18 +10,20 @@ module Uniword
     # Element: <g:doc_part_properties>
     class DocPartProperties < Lutaml::Model::Serializable
       attribute :name, DocPartName
+      attribute :style, StyleId
       attribute :category, DocPartCategory
       attribute :types, DocPartTypes
       attribute :behaviors, DocPartBehaviors
       attribute :description, DocPartDescription
-      attribute :guid, :string
+      attribute :guid, DocPartId
 
       xml do
-        element 'doc_part_properties'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'docPartPr'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'name', to: :name, render_nil: false
+        map_element 'style', to: :style, render_nil: false
         map_element 'category', to: :category, render_nil: false
         map_element 'types', to: :types, render_nil: false
         map_element 'behaviors', to: :behaviors, render_nil: false

@@ -22,7 +22,7 @@ require_relative '../lib/uniword'
 #
 # =============================================================================
 
-puts "Creating structure-matched document..."
+puts 'Creating structure-matched document...'
 
 # Create document
 doc = Uniword::Document.new
@@ -34,7 +34,7 @@ doc.apply_theme_file('references/word-package/office-themes/Integral.thmx')
 doc.apply_styleset('formal')
 
 # Build content using Builder DSL
-builder = Uniword::Builder.new(doc) do |b|
+Uniword::Builder.new(doc) do |b|
   # =========================================================================
   # FRONT MATTER (Lines 1-9)
   # =========================================================================
@@ -95,7 +95,8 @@ builder = Uniword::Builder.new(doc) do |b|
   b.add_paragraph('"Excellence is not a destination. (Quotation style)"', style: 'Quote')
   b.add_blank_line
 
-  b.add_paragraph('"It is a continuous journey that never ends. (Intense quotation style)"', style: 'Intense Quote')
+  b.add_paragraph('"It is a continuous journey that never ends. (Intense quotation style)"',
+                  style: 'Intense Quote')
   b.add_blank_line
   b.add_blank_line
 
@@ -244,26 +245,26 @@ output_path = 'examples/demo_formal_integral_structure_match.docx'
 doc.save(output_path)
 
 # Display statistics
-puts "\n" + "="*70
+puts "\n#{'=' * 70}"
 puts "Document created: #{output_path}"
-puts "="*70
-puts "Theme: Integral"
-puts "StyleSet: Formal"
-puts ""
-puts "Document Structure:"
+puts '=' * 70
+puts 'Theme: Integral'
+puts 'StyleSet: Formal'
+puts ''
+puts 'Document Structure:'
 puts "  Total paragraphs: #{doc.paragraphs.count}"
 puts "  Total tables: #{doc.tables.count}"
 puts "  Table rows: #{doc.tables.first&.row_count || 0}" if doc.tables.any?
-puts ""
-puts "Content Sections:"
-puts "  1. Front Matter (Title, Subtitle, metadata)"
-puts "  2. Executive Summary (H1 + 3 paragraphs)"
-puts "  3. Introduction (H1 + 2 H2 subsections)"
-puts "  4. Quotations (2 quote styles)"
-puts "  5. Methodology (H1 + 2 H2 subsections + 5 list items)"
-puts "  6. Results (H1 + 2 H2 subsections + data table)"
-puts "  7. Conclusion (H1 + 2 H2 subsections)"
-puts ""
-puts "Ready for Canon verification against:"
-puts "  examples/demo_formal_integral_proper.docx"
-puts "="*70
+puts ''
+puts 'Content Sections:'
+puts '  1. Front Matter (Title, Subtitle, metadata)'
+puts '  2. Executive Summary (H1 + 3 paragraphs)'
+puts '  3. Introduction (H1 + 2 H2 subsections)'
+puts '  4. Quotations (2 quote styles)'
+puts '  5. Methodology (H1 + 2 H2 subsections + 5 list items)'
+puts '  6. Results (H1 + 2 H2 subsections + data table)'
+puts '  7. Conclusion (H1 + 2 H2 subsections)'
+puts ''
+puts 'Ready for Canon verification against:'
+puts '  examples/demo_formal_integral_proper.docx'
+puts '=' * 70

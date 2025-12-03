@@ -21,11 +21,24 @@ module Uniword
       attribute :comment_range_starts, CommentRangeStart, collection: true, default: -> { [] }
       attribute :comment_range_ends, CommentRangeEnd, collection: true, default: -> { [] }
       attribute :comment_references, CommentReference, collection: true, default: -> { [] }
+      attribute :alternate_content, AlternateContent, default: nil
+      attribute :sdts, StructuredDocumentTag, collection: true, default: -> { [] }
+      attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, default: -> { [] }
+      
+      # Pattern 0: Revision tracking attributes (rsid)
+      attribute :rsid_r, :string          # Revision ID for paragraph creation
+      attribute :rsid_r_default, :string  # Default revision ID
+      attribute :rsid_p, :string          # Revision ID for properties
 
       xml do
         element 'p'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
+        
+        # Revision tracking attributes
+        map_attribute 'rsidR', to: :rsid_r, render_nil: false
+        map_attribute 'rsidRDefault', to: :rsid_r_default, render_nil: false
+        map_attribute 'rsidP', to: :rsid_p, render_nil: false
 
         map_element 'pPr', to: :properties, render_nil: false
         map_element 'r', to: :runs, render_nil: false
@@ -37,6 +50,11 @@ module Uniword
         map_element 'commentRangeStart', to: :comment_range_starts, render_nil: false
         map_element 'commentRangeEnd', to: :comment_range_ends, render_nil: false
         map_element 'commentReference', to: :comment_references, render_nil: false
+        map_element 'AlternateContent', to: :alternate_content, render_nil: false
+        map_element 'sdt', to: :sdts, render_nil: false
+        map_element 'oMathPara', to: :o_math_paras,
+                    namespace: Uniword::Ooxml::Namespaces::MathML,
+                    render_nil: false
       end
 
       # Add text run to paragraph

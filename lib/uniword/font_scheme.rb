@@ -3,12 +3,11 @@
 module Uniword
   # Represents a latin, ea, or cs font element
   class FontTypeface < Lutaml::Model::Serializable
-    attribute :typeface, :string
+    attribute :typeface, :string, default: -> { "" }
     attribute :panose, :string
 
     def initialize(attributes = {})
       super
-      @typeface ||= ''
       @panose ||= nil
     end
   end
@@ -28,7 +27,9 @@ module Uniword
     xml do
       element 'ea'
       namespace Ooxml::Namespaces::DrawingML
-      map_attribute 'typeface', to: :typeface
+      map_attribute 'typeface', to: :typeface, value_map: {
+        to: { empty: :empty, nil: :empty, omitted: :omitted }
+      }
     end
   end
 
@@ -37,7 +38,9 @@ module Uniword
     xml do
       element 'cs'
       namespace Ooxml::Namespaces::DrawingML
-      map_attribute 'typeface', to: :typeface
+      map_attribute 'typeface', to: :typeface, value_map: {
+        to: { empty: :empty, nil: :empty, omitted: :omitted }
+      }
     end
   end
 
@@ -49,14 +52,13 @@ module Uniword
     xml do
       element 'font'
       namespace Ooxml::Namespaces::DrawingML
-      map_attribute 'script', to: :script
-      map_attribute 'typeface', to: :typeface
+      map_attribute 'script', to: :script, render_nil: false
+      map_attribute 'typeface', to: :typeface, render_nil: false
     end
 
     def initialize(attributes = {})
       super
-      @script ||= ''
-      @typeface ||= ''
+      # Don't set default empty strings - let lutaml-model handle nil
     end
   end
 

@@ -11,13 +11,20 @@ module Uniword
     class Blip < Lutaml::Model::Serializable
       attribute :embed, :string
       attribute :link, :string
+      attribute :duotone, Duotone
 
       xml do
         element 'blip'
         namespace Uniword::Ooxml::Namespaces::DrawingML
+        mixed_content
 
-        map_attribute 'embed', to: :embed
-        map_attribute 'link', to: :link
+        map_attribute 'embed', to: :embed,
+                      namespace: Uniword::Ooxml::Namespaces::Relationships,
+                      render_nil: false
+        map_attribute 'link', to: :link,
+                      namespace: Uniword::Ooxml::Namespaces::Relationships,
+                      render_nil: false
+        map_element 'duotone', to: :duotone, render_nil: false
       end
     end
   end

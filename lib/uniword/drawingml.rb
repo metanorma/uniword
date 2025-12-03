@@ -8,12 +8,13 @@
 
 module Uniword
   module Drawingml
-    # Graphics primitives (6)
+    # Graphics primitives (7)
     autoload :Graphic, File.expand_path('drawingml/graphic', __dir__)
     autoload :GraphicData, File.expand_path('drawingml/graphic_data', __dir__)
     autoload :Blip, File.expand_path('drawingml/blip', __dir__)
     autoload :BlipFill, File.expand_path('drawingml/blip_fill', __dir__)
     autoload :Stretch, File.expand_path('drawingml/stretch', __dir__)
+    autoload :Tile, File.expand_path('drawingml/tile', __dir__)
     autoload :SourceRect, File.expand_path('drawingml/source_rect', __dir__)
 
     # Shapes (4)
@@ -23,6 +24,12 @@ module Uniword
     autoload :NonVisualDrawingProperties,
              File.expand_path('drawingml/non_visual_drawing_properties', __dir__)
     autoload :ShapeProperties, File.expand_path('drawingml/shape_properties', __dir__)
+
+    # Style & references (4)
+    autoload :StyleMatrix, File.expand_path('drawingml/style_matrix', __dir__)
+    autoload :StyleReference, File.expand_path('drawingml/style_reference', __dir__)
+    autoload :FontReference, File.expand_path('drawingml/font_reference', __dir__)
+    autoload :LineDefaults, File.expand_path('drawingml/line_defaults', __dir__)
 
     # Transforms (3)
     autoload :Transform2D, File.expand_path('drawingml/transform2_d', __dir__)
@@ -133,5 +140,13 @@ module Uniword
     autoload :DashStop, File.expand_path('drawingml/dash_stop', __dir__)
     autoload :LineJoinRound, File.expand_path('drawingml/line_join_round', __dir__)
     autoload :LineJoinMiter, File.expand_path('drawingml/line_join_miter', __dir__)
+
+    # 3D properties (6)
+    autoload :Rotation, File.expand_path('drawingml/rotation', __dir__)
+    autoload :Camera, File.expand_path('drawingml/camera', __dir__)
+    autoload :LightRig, File.expand_path('drawingml/light_rig', __dir__)
+    autoload :Scene3D, File.expand_path('drawingml/scene_3d', __dir__)
+    autoload :Shape3D, File.expand_path('drawingml/shape_3d', __dir__)
+    autoload :BevelTop, File.expand_path('drawingml/bevel_top', __dir__)
   end
 end

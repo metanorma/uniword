@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../../properties/table_width'
+require_relative '../../properties/shading'
+require_relative '../../properties/table_cell_margin'
+require_relative '../../properties/table_look'
 
 module Uniword
   module Ooxml
@@ -15,9 +19,8 @@ module Uniword
         # Style reference
         attribute :style, :string
 
-        # Table width
-        attribute :width, :integer
-        attribute :width_type, :string # auto, dxa (twips), pct, nil
+        # Table width (wrapper class)
+        attribute :table_width, Uniword::Properties::TableWidth
 
         # Table alignment
         attribute :alignment, :string # left, center, right
@@ -59,34 +62,34 @@ module Uniword
         attribute :border_inside_v_size, :integer
         attribute :border_inside_v_color, :string
 
-        # Background color
-        attribute :background_color, :string # RGB hex
+        # Table shading (wrapper class with themeFill support)
+        attribute :shading, Uniword::Properties::Shading
 
-        # Cell margins (in twips)
-        attribute :cell_margin_top, :integer
-        attribute :cell_margin_bottom, :integer
-        attribute :cell_margin_left, :integer
-        attribute :cell_margin_right, :integer
+        # Table cell margins (wrapper class)
+        attribute :table_cell_margin, Uniword::Properties::TableCellMargin
 
-        # Table look (style flags as hex string)
-        attribute :look, :string
+        # Table look - conditional formatting flags (wrapper class)
+        attribute :table_look, Uniword::Properties::TableLook
 
         # XML mappings come AFTER attributes
         xml do
-          element 'tblPr'
+          root 'tblPr'
           namespace Uniword::Ooxml::Namespaces::WordProcessingML
           mixed_content
 
-          # All table properties parsed manually, serialization TODO for Session 3
+          # High-priority mappings (Phase 4 Session 1-2)
+          map_element 'tblW', to: :table_width, render_nil: false
+          map_element 'shd', to: :shading, render_nil: false
+          map_element 'tblCellMar', to: :table_cell_margin, render_nil: false
+          map_element 'tblLook', to: :table_look, render_nil: false
+          
+          # TODO: Remaining mappings for Phase 4 Session 3+
           # map_element 'tblStyle', to: :style, render_nil: false
-          # map_element 'tblW', render_nil: false
           # map_element 'jc', to: :alignment, render_nil: false
           # map_element 'tblInd', render_nil: false
           # map_element 'tblCellSpacing', render_nil: false
           # map_element 'tblLayout', to: :layout, render_nil: false
           # map_element 'tblBorders', render_nil: false
-          # map_element 'tblLook', to: :look, render_nil: false
-          # map_element 'shd', render_nil: false
         end
 
         # Initialize with defaults

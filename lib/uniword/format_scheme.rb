@@ -9,11 +9,15 @@ module Uniword
   # Represents an effect style in DrawingML format scheme
   class EffectStyle < Lutaml::Model::Serializable
     attribute :effect_lst, Drawingml::EffectList
+    attribute :scene3d, Drawingml::Scene3D
+    attribute :sp3d, Drawingml::Shape3D
 
     xml do
       element 'effectStyle'
       namespace Ooxml::Namespaces::DrawingML
       map_element 'effectLst', to: :effect_lst
+      map_element 'scene3d', to: :scene3d, render_nil: false
+      map_element 'sp3d', to: :sp3d, render_nil: false
     end
 
     def initialize(attributes = {})
@@ -26,6 +30,7 @@ module Uniword
   class FillStyleList < Lutaml::Model::Serializable
     attribute :solid_fills, Drawingml::SolidFill, collection: true
     attribute :gradient_fills, Drawingml::GradientFill, collection: true
+    attribute :blip_fills, Drawingml::BlipFill, collection: true
 
     xml do
       element 'fillStyleLst'
@@ -33,12 +38,14 @@ module Uniword
       mixed_content
       map_element 'solidFill', to: :solid_fills
       map_element 'gradFill', to: :gradient_fills
+      map_element 'blipFill', to: :blip_fills
     end
 
     def initialize(attributes = {})
       super
       @solid_fills ||= []
       @gradient_fills ||= []
+      @blip_fills ||= []
     end
   end
 
@@ -78,6 +85,7 @@ module Uniword
   class BackgroundFillStyleList < Lutaml::Model::Serializable
     attribute :solid_fills, Drawingml::SolidFill, collection: true
     attribute :gradient_fills, Drawingml::GradientFill, collection: true
+    attribute :blip_fills, Drawingml::BlipFill, collection: true
 
     xml do
       element 'bgFillStyleLst'
@@ -85,12 +93,14 @@ module Uniword
       mixed_content
       map_element 'solidFill', to: :solid_fills
       map_element 'gradFill', to: :gradient_fills
+      map_element 'blipFill', to: :blip_fills
     end
 
     def initialize(attributes = {})
       super
       @solid_fills ||= []
       @gradient_fills ||= []
+      @blip_fills ||= []
     end
   end
 

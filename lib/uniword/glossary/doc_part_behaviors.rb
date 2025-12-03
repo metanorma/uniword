@@ -12,8 +12,8 @@ module Uniword
       attribute :behavior, DocPartBehavior, collection: true, default: -> { [] }
 
       xml do
-        element 'doc_part_behaviors'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'behaviors'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'behavior', to: :behavior, render_nil: false

@@ -74,8 +74,8 @@ def verify_sample(input_path, output_dir)
 end
 
 def main
-  puts "Metanorma Sample Verification"
-  puts "=" * 80
+  puts 'Metanorma Sample Verification'
+  puts '=' * 80
   puts "Samples directory: #{SAMPLES_DIR}"
   puts "Output directory: #{OUTPUT_DIR}"
   puts
@@ -88,13 +88,13 @@ def main
   samples = Dir.glob(pattern).sort
 
   puts "Found #{samples.count} sample files"
-  puts "-" * 80
+  puts '-' * 80
   puts
 
   results = []
 
   samples.each_with_index do |sample_path, index|
-    relative_path = sample_path.sub(SAMPLES_DIR + '/', '')
+    relative_path = sample_path.sub("#{SAMPLES_DIR}/", '')
     print "[#{index + 1}/#{samples.count}] #{relative_path}... "
 
     result = verify_sample(sample_path, OUTPUT_DIR)
@@ -112,9 +112,9 @@ def main
 
   # Print summary
   puts
-  puts "=" * 80
-  puts "SUMMARY"
-  puts "=" * 80
+  puts '=' * 80
+  puts 'SUMMARY'
+  puts '=' * 80
 
   successful = results.count { |r| r[:success] }
   failed = results.count { |r| !r[:success] }
@@ -124,23 +124,27 @@ def main
   puts "Failed: #{failed}"
   puts
 
-  if successful > 0
+  if successful.positive?
     successful_results = results.select { |r| r[:success] }
 
-    avg_para_pres = successful_results.sum { |r| r[:preservation][:paragraphs] } / successful_results.count
-    avg_text_pres = successful_results.sum { |r| r[:preservation][:text] } / successful_results.count
+    avg_para_pres = successful_results.sum do |r|
+      r[:preservation][:paragraphs]
+    end / successful_results.count
+    avg_text_pres = successful_results.sum do |r|
+      r[:preservation][:text]
+    end / successful_results.count
     tables_preserved = successful_results.count { |r| r[:preservation][:tables] }
 
-    puts "Average preservation rates:"
+    puts 'Average preservation rates:'
     puts "  Paragraphs: #{avg_para_pres.round(1)}%"
     puts "  Text: #{avg_text_pres.round(1)}%"
     puts "  Tables: #{tables_preserved}/#{successful_results.count} (#{(tables_preserved.to_f / successful_results.count * 100).round(1)}%)"
   end
 
-  if failed > 0
+  if failed.positive?
     puts
-    puts "Failed conversions:"
-    results.select { |r| !r[:success] }.each do |r|
+    puts 'Failed conversions:'
+    results.reject { |r| r[:success] }.each do |r|
       puts "  ❌ #{r[:file]}"
       puts "     Error: #{r[:error]}"
     end
@@ -148,12 +152,10 @@ def main
 
   puts
   puts "Output files saved to: #{OUTPUT_DIR}"
-  puts "=" * 80
+  puts '=' * 80
 
   # Return exit code
-  failed == 0 ? 0 : 1
+  failed.zero? ? 0 : 1
 end
 
-if __FILE__ == $PROGRAM_NAME
-  exit main
-end
+exit main if __FILE__ == $PROGRAM_NAME

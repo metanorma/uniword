@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe 'StyleSet Integration' do
-  let(:dotx_file) { 'references/word-package/style-sets/Distinctive.dotx' }
+  let(:dotx_file) { 'references/word-resources/style-sets/Distinctive.dotx' }
 
   describe 'Loading StyleSets from .dotx files' do
     it 'loads Distinctive.dotx successfully' do

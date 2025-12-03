@@ -12,8 +12,8 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'category_name'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'name'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'val', to: :val
       end

@@ -23,6 +23,7 @@ module Uniword
       autoload :Shapetype, File.expand_path('vml/shapetype', __dir__)
       autoload :Stroke, File.expand_path('vml/stroke', __dir__)
       autoload :Textbox, File.expand_path('vml/textbox', __dir__)
+      autoload :Wrap, File.expand_path('vml/wrap', __dir__)
     end
   end
 end

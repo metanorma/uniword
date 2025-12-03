@@ -4,20 +4,20 @@ require 'lutaml/model'
 
 module Uniword
   module WpDrawing
-    # Drawing object size extent
-    #
-    # Generated from OOXML schema: wp_drawing.yml
-    # Element: <wp:extent>
+    # Extent - Size of drawing object
+    # Dimensions in EMUs (English Metric Units)
     class Extent < Lutaml::Model::Serializable
-      attribute :cx, :integer
-      attribute :cy, :integer
+      # PATTERN 0: Attributes FIRST
+      attribute :cx, :integer  # Width
+      attribute :cy, :integer  # Height
 
       xml do
-        element 'extent'
+        root 'extent'
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
+        mixed_content
 
-        map_attribute 'cx', to: :cx
-        map_attribute 'cy', to: :cy
+        map_attribute 'cx', to: :cx, render_nil: false
+        map_attribute 'cy', to: :cy, render_nil: false
       end
     end
   end

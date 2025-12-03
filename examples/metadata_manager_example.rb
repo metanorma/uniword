@@ -18,36 +18,36 @@ puts "=== Uniword Metadata Manager Example ===\n\n"
 # Initialize the Metadata Manager
 manager = Uniword::Metadata::MetadataManager.new
 
-puts "1. Creating a sample document..."
+puts '1. Creating a sample document...'
 doc = Uniword::Document.new
 para1 = Uniword::Paragraph.new
-para1.add_text("This is a sample document for metadata extraction.")
+para1.add_text('This is a sample document for metadata extraction.')
 para2 = Uniword::Paragraph.new
-para2.add_text("It contains multiple paragraphs to demonstrate word count and other statistics.")
+para2.add_text('It contains multiple paragraphs to demonstrate word count and other statistics.')
 doc.add_element(para1)
 doc.add_element(para2)
 
 puts "   Document created with 2 paragraphs\n\n"
 
 # Extract metadata
-puts "2. Extracting metadata from document..."
+puts '2. Extracting metadata from document...'
 metadata = manager.extract(doc)
 
-puts "   Extracted metadata:"
+puts '   Extracted metadata:'
 puts "   - Word count: #{metadata[:word_count]}"
 puts "   - Character count: #{metadata[:character_count]}"
 puts "   - Paragraph count: #{metadata[:paragraph_count]}"
 puts "   - Page count (estimated): #{metadata[:page_count]}\n\n"
 
 # Update metadata
-puts "3. Updating document metadata..."
+puts '3. Updating document metadata...'
 update_result = manager.update(doc, {
-  title: "Sample Document",
-  author: "Metadata Manager Example",
-  subject: "Demonstration",
-  keywords: ["example", "metadata", "uniword"],
-  category: "Documentation"
-})
+                                 title: 'Sample Document',
+                                 author: 'Metadata Manager Example',
+                                 subject: 'Demonstration',
+                                 keywords: %w[example metadata uniword],
+                                 category: 'Documentation'
+                               })
 
 if update_result[:success]
   puts "   ✓ Metadata updated successfully\n\n"
@@ -56,18 +56,16 @@ else
 end
 
 # Extract and validate
-puts "4. Extracting and validating metadata..."
+puts '4. Extracting and validating metadata...'
 result = manager.extract_and_validate(doc)
 
 puts "   Validation result: #{result[:validation][:valid] ? '✓ Valid' : '✗ Invalid'}"
-if result[:validation][:errors]&.any?
-  puts "   Errors: #{result[:validation][:errors].join(', ')}"
-end
+puts "   Errors: #{result[:validation][:errors].join(', ')}" if result[:validation][:errors]&.any?
 puts "\n"
 
 # Demonstrate metadata object operations
-puts "5. Working with metadata object..."
-metadata[:custom_field] = "Custom value"
+puts '5. Working with metadata object...'
+metadata[:custom_field] = 'Custom value'
 puts "   Added custom field: #{metadata[:custom_field]}"
 
 # Convert to different formats
@@ -75,44 +73,44 @@ puts "   - JSON format: #{metadata.to_json_hash.keys.join(', ')}"
 puts "   - YAML format keys: #{metadata.to_yaml_hash.keys.join(', ')}\n\n"
 
 # Batch operations example
-puts "6. Demonstrating batch operations..."
+puts '6. Demonstrating batch operations...'
 index = Uniword::Metadata::MetadataIndex.new
 
 # Add multiple document metadata
 index.add('document1.docx', Uniword::Metadata::Metadata.new(
-  title: "Document 1",
-  author: "Author A",
-  word_count: 500,
-  category: "Report"
-))
+                              title: 'Document 1',
+                              author: 'Author A',
+                              word_count: 500,
+                              category: 'Report'
+                            ))
 
 index.add('document2.docx', Uniword::Metadata::Metadata.new(
-  title: "Document 2",
-  author: "Author B",
-  word_count: 750,
-  category: "Report"
-))
+                              title: 'Document 2',
+                              author: 'Author B',
+                              word_count: 750,
+                              category: 'Report'
+                            ))
 
 index.add('document3.docx', Uniword::Metadata::Metadata.new(
-  title: "Document 3",
-  author: "Author A",
-  word_count: 300,
-  category: "Letter"
-))
+                              title: 'Document 3',
+                              author: 'Author A',
+                              word_count: 300,
+                              category: 'Letter'
+                            ))
 
 puts "   Index contains #{index.size} documents\n"
 
 # Query operations
 puts "   Querying documents by category 'Report'..."
-reports = index.query(:category, "Report")
+reports = index.query(:category, 'Report')
 puts "   Found #{reports.size} reports\n"
 
-puts "   Filtering documents by Author A..."
-by_author = index.filter { |_path, meta| meta[:author] == "Author A" }
+puts '   Filtering documents by Author A...'
+by_author = index.filter { |_path, meta| meta[:author] == 'Author A' }
 puts "   Found #{by_author.size} documents by Author A\n\n"
 
 # Summary statistics
-puts "7. Computing summary statistics..."
+puts '7. Computing summary statistics...'
 summary = manager.summary(index)
 puts "   - Total documents: #{summary[:document_count]}"
 puts "   - Total words: #{summary[:total_words]}"
@@ -120,7 +118,7 @@ puts "   - Authors: #{summary[:authors].join(', ')}"
 puts "   - Categories: #{summary[:categories].join(', ')}\n\n"
 
 # Export examples
-puts "8. Exporting metadata index..."
+puts '8. Exporting metadata index...'
 
 begin
   require 'tempfile'
@@ -137,7 +135,7 @@ begin
 
   # Export to CSV
   csv_file = Tempfile.new(['metadata', '.csv'])
-  index.export_csv(csv_file.path, columns: [:title, :author, :word_count, :category])
+  index.export_csv(csv_file.path, columns: %i[title author word_count category])
   puts "   ✓ Exported to CSV: #{csv_file.path}"
 
   # Export to XML
@@ -146,8 +144,8 @@ begin
   puts "   ✓ Exported to XML: #{xml_file.path}\n\n"
 
   # Show CSV sample
-  puts "   CSV content preview:"
-  puts "   " + File.readlines(csv_file.path).first(3).join("   ")
+  puts '   CSV content preview:'
+  puts "   #{File.readlines(csv_file.path).first(3).join('   ')}"
   puts "\n"
 
   # Cleanup
@@ -157,27 +155,25 @@ rescue StandardError => e
 end
 
 # Validation with scenarios
-puts "9. Validating metadata for publication..."
+puts '9. Validating metadata for publication...'
 pub_metadata = Uniword::Metadata::Metadata.new(
-  title: "Publication Ready Document",
-  author: "Published Author",
-  subject: "Important Topic",
-  keywords: ["published", "ready"]
+  title: 'Publication Ready Document',
+  author: 'Published Author',
+  subject: 'Important Topic',
+  keywords: %w[published ready]
 )
 
 pub_result = manager.validate(pub_metadata, scenario: :publication)
 puts "   Publication validation: #{pub_result[:valid] ? '✓ Valid' : '✗ Invalid'}"
-if pub_result[:errors]&.any?
-  puts "   Errors: #{pub_result[:errors].join(', ')}"
-end
+puts "   Errors: #{pub_result[:errors].join(', ')}" if pub_result[:errors]&.any?
 puts "\n"
 
 puts "=== Example Complete ===\n"
 puts "\nMetadata Manager provides:"
-puts "  • Automatic metadata extraction"
-puts "  • Flexible metadata storage and manipulation"
-puts "  • Schema-based validation"
-puts "  • Batch processing and indexing"
-puts "  • Multiple export formats (JSON, YAML, CSV, XML)"
-puts "  • Query and filter capabilities"
-puts "  • Summary statistics"
+puts '  • Automatic metadata extraction'
+puts '  • Flexible metadata storage and manipulation'
+puts '  • Schema-based validation'
+puts '  • Batch processing and indexing'
+puts '  • Multiple export formats (JSON, YAML, CSV, XML)'
+puts '  • Query and filter capabilities'
+puts '  • Summary statistics'

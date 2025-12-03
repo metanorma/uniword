@@ -22,7 +22,7 @@ def example_basic_conversion
   # Read MHTML document
   doc = Uniword::DocumentFactory.from_file(input_file, format: :mhtml)
 
-  puts "Loaded document:"
+  puts 'Loaded document:'
   puts "  Paragraphs: #{doc.paragraphs.count}"
   puts "  Tables: #{doc.tables.count}"
   puts "  Text length: #{doc.text.length} characters"
@@ -33,7 +33,7 @@ def example_basic_conversion
   puts "Converted to #{output_file}"
   puts "  File size: #{File.size(output_file)} bytes"
 rescue Errno::ENOENT
-  puts "⚠️  File not found. Please provide a valid Metanorma .doc file"
+  puts '⚠️  File not found. Please provide a valid Metanorma .doc file'
 end
 
 # Example 2: Batch conversion
@@ -75,7 +75,7 @@ def example_batch_conversion
 
   # Print summary
   puts "\nConversion Results:"
-  puts "-" * 60
+  puts '-' * 60
   results.each do |r|
     if r[:status] == '✅'
       puts "#{r[:status]} #{r[:file]}: #{r[:paragraphs]} paras, #{r[:tables]} tables"
@@ -100,7 +100,7 @@ def example_roundtrip_conversion
       text_length: original.text.length
     }
 
-    puts "Original document:"
+    puts 'Original document:'
     puts "  Paragraphs: #{original_stats[:paragraphs]}"
     puts "  Tables: #{original_stats[:tables]}"
     puts "  Text length: #{original_stats[:text_length]}"
@@ -140,11 +140,10 @@ def example_roundtrip_conversion
     puts "  Tables: #{tables_preserved ? '✅ Preserved' : '❌ Lost'}"
 
     # Cleanup
-    File.delete(temp_docx) if File.exist?(temp_docx)
-    File.delete(temp_doc) if File.exist?(temp_doc)
-
+    FileUtils.rm_f(temp_docx)
+    FileUtils.rm_f(temp_doc)
   rescue Errno::ENOENT
-    puts "⚠️  File not found. Please provide a valid Metanorma .doc file"
+    puts '⚠️  File not found. Please provide a valid Metanorma .doc file'
   end
 end
 
@@ -160,13 +159,13 @@ def example_quality_check
 
     # Perform quality checks
     checks = {
-      'Has paragraphs' => doc.paragraphs.count > 0,
-      'Has tables' => doc.tables.count > 0,
+      'Has paragraphs' => doc.paragraphs.any?,
+      'Has tables' => doc.tables.any?,
       'Has text content' => doc.text.length > 100,
-      'Has styles' => doc.styles_configuration.all_styles.count > 0
+      'Has styles' => doc.styles_configuration.all_styles.any?
     }
 
-    puts "Quality checks:"
+    puts 'Quality checks:'
     checks.each do |check, result|
       status = result ? '✅' : '❌'
       puts "  #{status} #{check}"
@@ -182,10 +181,11 @@ def example_quality_check
 
     puts "\nFormatting analysis:"
     puts "  Bold runs: #{bold_count}"
-    puts "  Average runs per paragraph: #{(doc.paragraphs.sum { |p| p.runs.count }.to_f / doc.paragraphs.count).round(1)}"
-
+    puts "  Average runs per paragraph: #{(doc.paragraphs.sum do |p|
+      p.runs.count
+    end.to_f / doc.paragraphs.count).round(1)}"
   rescue Errno::ENOENT
-    puts "⚠️  File not found. Please provide a valid Metanorma .doc file"
+    puts '⚠️  File not found. Please provide a valid Metanorma .doc file'
   end
 end
 
@@ -215,13 +215,13 @@ def example_content_analysis
       end
     end
 
-    puts "Paragraph analysis:"
+    puts 'Paragraph analysis:'
     puts "  Headings: #{heading_count}"
     puts "  Normal: #{normal_count}"
     puts "  Lists: #{list_count}"
 
     # Analyze tables
-    if doc.tables.count > 0
+    if doc.tables.any?
       puts "\nTable analysis:"
       doc.tables.each_with_index do |table, i|
         row_count = table.rows.count
@@ -229,16 +229,15 @@ def example_content_analysis
         puts "  Table #{i + 1}: #{row_count} rows × #{col_count} columns"
       end
     end
-
   rescue Errno::ENOENT
-    puts "⚠️  File not found. Please provide a valid Metanorma .doc file"
+    puts '⚠️  File not found. Please provide a valid Metanorma .doc file'
   end
 end
 
 # Run all examples
 if __FILE__ == $PROGRAM_NAME
-  puts "Metanorma Conversion Examples"
-  puts "=" * 60
+  puts 'Metanorma Conversion Examples'
+  puts '=' * 60
 
   # Uncomment the examples you want to run:
   example_basic_conversion
@@ -247,6 +246,6 @@ if __FILE__ == $PROGRAM_NAME
   # example_quality_check
   # example_content_analysis
 
-  puts "\n" + "=" * 60
-  puts "Examples complete!"
+  puts "\n#{'=' * 60}"
+  puts 'Examples complete!'
 end

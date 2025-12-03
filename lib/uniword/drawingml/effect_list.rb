@@ -12,6 +12,8 @@ module Uniword
       attribute :glow, Glow
       attribute :inner_shdw, InnerShadow
       attribute :outer_shdw, OuterShadow
+      attribute :reflection, Reflection
+      attribute :soft_edge, SoftEdge
 
       xml do
         element 'effectLst'
@@ -21,6 +23,8 @@ module Uniword
         map_element 'glow', to: :glow, render_nil: false
         map_element 'innerShdw', to: :inner_shdw, render_nil: false
         map_element 'outerShdw', to: :outer_shdw, render_nil: false
+        map_element 'reflection', to: :reflection, render_nil: false
+        map_element 'softEdge', to: :soft_edge, render_nil: false
       end
     end
   end

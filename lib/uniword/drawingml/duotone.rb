@@ -9,14 +9,14 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:duotone>
     class Duotone < Lutaml::Model::Serializable
-      attribute :colors, :string, collection: true, default: -> { [] }
+      attribute :scheme_colors, SchemeColor, collection: true, default: -> { [] }
 
       xml do
         element 'duotone'
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
 
-        map_element 'color', to: :colors, render_nil: false
+        map_element 'schemeClr', to: :scheme_colors
       end
     end
   end

@@ -6,7 +6,7 @@ require 'uniword/ooxml/theme_package'
 
 RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
   # Directory containing reference theme files
-  THEME_DIR = 'references/word-package/office-themes'
+  THEME_DIR = 'references/word-resources/office-themes'
 
   # Output directory for round-trip tests
   OUTPUT_DIR = 'tmp/theme_roundtrip'

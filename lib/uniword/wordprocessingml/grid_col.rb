@@ -15,7 +15,7 @@ module Uniword
         element 'gridCol'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'width', to: :width
+        map_attribute 'w', to: :width
       end
     end
   end

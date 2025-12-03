@@ -44,13 +44,13 @@ doc.add_element(para)
 
 # Add another paragraph using fluent interface
 para2 = Uniword::Paragraph.new
-  .add_text('This paragraph demonstrates the fluent interface.')
-  .align('justify')
+                          .add_text('This paragraph demonstrates the fluent interface.')
+                          .align('justify')
 doc.add_element(para2)
 
 # Save as DOCX
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 docx_path = File.join(output_dir, 'basic_usage.docx')
 doc.save(docx_path)
@@ -59,15 +59,15 @@ puts "✓ Created #{docx_path}"
 # Also demonstrate the Builder pattern
 puts "\nUsing Builder pattern..."
 doc2 = Uniword::Builder.new
-  .add_heading('Document Created with Builder', level: 1)
-  .add_blank_line
-  .add_paragraph('The builder provides a convenient fluent interface.')
-  .add_paragraph('You can chain multiple operations together.', bold: true)
-  .build
+                       .add_heading('Document Created with Builder', level: 1)
+                       .add_blank_line
+                       .add_paragraph('The builder provides a convenient fluent interface.')
+                       .add_paragraph('You can chain multiple operations together.', bold: true)
+                       .build
 
 builder_path = File.join(output_dir, 'basic_usage_builder.docx')
 doc2.save(builder_path)
 puts "✓ Created #{builder_path}"
 
 puts "\nBasic usage example complete!"
-puts "Check the examples/output directory for the generated files."
+puts 'Check the examples/output directory for the generated files.'

@@ -10,10 +10,10 @@ require 'uniword'
 puts 'Creating a document with lists...'
 
 doc = Uniword::Builder.new
-  .add_heading('Lists Example', level: 1)
-  .add_paragraph('This document demonstrates numbered and bulleted lists.')
-  .add_blank_line
-  .build
+                      .add_heading('Lists Example', level: 1)
+                      .add_paragraph('This document demonstrates numbered and bulleted lists.')
+                      .add_blank_line
+                      .build
 
 # Add a heading for numbered list
 heading = Uniword::Paragraph.new
@@ -40,7 +40,7 @@ heading2.set_style('Heading2')
 doc.add_element(heading2)
 
 # Create bulleted list items
-['Apple', 'Banana', 'Cherry', 'Date'].each do |text|
+%w[Apple Banana Cherry Date].each do |text|
   para = Uniword::Paragraph.new
   para.add_text("• #{text}")
   # TODO: Use set_numbering(2, 0) when bulleted lists are fully implemented
@@ -76,11 +76,11 @@ doc.add_element(para2)
 
 # Save the document
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 output_path = File.join(output_dir, 'lists_example.docx')
 doc.save(output_path)
 
 puts "✓ Created #{output_path}"
 puts "\nLists example complete!"
-puts "Note: Full numbering support will be enhanced in future versions."
+puts 'Note: Full numbering support will be enhanced in future versions.'

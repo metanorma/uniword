@@ -13,8 +13,8 @@ module Uniword
       attribute :gallery, DocPartGallery
 
       xml do
-        element 'doc_part_category'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'category'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'name', to: :name, render_nil: false

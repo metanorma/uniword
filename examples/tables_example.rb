@@ -11,32 +11,32 @@ puts 'Creating a document with tables...'
 
 # Method 1: Using Builder pattern
 doc = Uniword::Builder.new
-  .add_heading('Tables Example', level: 1)
-  .add_paragraph('This document demonstrates table creation in Uniword.')
-  .add_blank_line
-  .add_heading('Simple Table', level: 2)
-  .add_table do
-    row do
-      cell 'Name', bold: true
-      cell 'Age', bold: true
-      cell 'City', bold: true
-    end
-    row do
-      cell 'Alice'
-      cell '30'
-      cell 'New York'
-    end
-    row do
-      cell 'Bob'
-      cell '25'
-      cell 'San Francisco'
-    end
-    row do
-      cell 'Charlie'
-      cell '35'
-      cell 'Seattle'
-    end
+                      .add_heading('Tables Example', level: 1)
+                      .add_paragraph('This document demonstrates table creation in Uniword.')
+                      .add_blank_line
+                      .add_heading('Simple Table', level: 2)
+                      .add_table do
+  row do
+    cell 'Name', bold: true
+    cell 'Age', bold: true
+    cell 'City', bold: true
   end
+  row do
+    cell 'Alice'
+    cell '30'
+    cell 'New York'
+  end
+  row do
+    cell 'Bob'
+    cell '25'
+    cell 'San Francisco'
+  end
+  row do
+    cell 'Charlie'
+    cell '35'
+    cell 'Seattle'
+  end
+end
   .build
 
 # Method 2: Manual table creation
@@ -53,7 +53,7 @@ table = Uniword::Table.new
 
 # Header row
 header_row = Uniword::TableRow.new(header: true)
-['Product', 'Price', 'Quantity', 'Total'].each do |header|
+%w[Product Price Quantity Total].each do |header|
   cell = Uniword::TableCell.new
   para = Uniword::Paragraph.new
   para.add_text(header, bold: true)
@@ -100,7 +100,7 @@ doc.add_element(table)
 
 # Save the document
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 output_path = File.join(output_dir, 'tables_example.docx')
 doc.save(output_path)

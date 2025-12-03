@@ -10,10 +10,10 @@ require 'uniword'
 puts 'Creating a document with various styles...'
 
 doc = Uniword::Builder.new
-  .add_heading('Styles Example', level: 1)
-  .add_paragraph('This document demonstrates various text styles and formatting.')
-  .add_blank_line
-  .build
+                      .add_heading('Styles Example', level: 1)
+                      .add_paragraph('This document demonstrates various text styles and formatting.')
+                      .add_blank_line
+                      .build
 
 # Different heading levels
 (1..3).each do |level|
@@ -82,7 +82,7 @@ doc.add_element(heading)
 
 [16, 24, 32, 40].each do |size|
   para = Uniword::Paragraph.new
-  para.add_text("This text is #{size/2} points", size: size)
+  para.add_text("This text is #{size / 2} points", size: size)
   doc.add_element(para)
 end
 
@@ -102,7 +102,7 @@ end
 
 # Save the document
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 output_path = File.join(output_dir, 'styles_example.docx')
 doc.save(output_path)

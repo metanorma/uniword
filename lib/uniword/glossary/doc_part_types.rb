@@ -13,8 +13,8 @@ module Uniword
       attribute :all, :boolean
 
       xml do
-        element 'doc_part_types'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'types'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'type', to: :type, render_nil: false

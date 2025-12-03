@@ -4,16 +4,15 @@ require 'lutaml/model'
 
 module Uniword
   module Wordprocessingml
-    # DrawingML object
-    #
-    # Generated from OOXML schema: wordprocessingml.yml
-    # Element: <w:drawing>
+    # Drawing container
+    # Contains either Inline (inline with text) or Anchor (positioned/floating)
     class Drawing < Lutaml::Model::Serializable
-      attribute :inline, Inline
-      attribute :anchor, Anchor
+      # PATTERN 0: Attributes FIRST
+      attribute :inline, WpDrawing::Inline
+      attribute :anchor, WpDrawing::Anchor
 
       xml do
-        element 'drawing'
+        root 'drawing'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 

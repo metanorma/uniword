@@ -12,8 +12,8 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'doc_part_description'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'description'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'val', to: :val
       end

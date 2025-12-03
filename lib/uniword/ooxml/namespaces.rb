@@ -228,6 +228,15 @@ module Uniword
         prefix_default 'v'
         element_form_default :qualified
       end
+
+      # Markup Compatibility namespace
+      # Used for forward compatibility (Ignorable attribute)
+      class MarkupCompatibility < Lutaml::Model::XmlNamespace
+        uri 'http://schemas.openxmlformats.org/markup-compatibility/2006'
+        prefix_default 'mc'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
     end
   end
 end

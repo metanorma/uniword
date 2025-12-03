@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'English'
 require 'zip'
 require 'nokogiri'
 require 'fileutils'
@@ -23,9 +24,9 @@ def extract_and_format_document_xml(docx_path, output_path)
 end
 
 # Main execution
-puts "="*70
-puts "Document Structure Comparison"
-puts "="*70
+puts '=' * 70
+puts 'Document Structure Comparison'
+puts '=' * 70
 
 reference_docx = 'examples/demo_formal_integral_proper.docx'
 generated_docx = 'examples/demo_formal_integral_structure_match.docx'
@@ -42,14 +43,14 @@ extract_and_format_document_xml(reference_docx, reference_xml)
 extract_and_format_document_xml(generated_docx, generated_xml)
 
 puts "\nRunning diff comparison..."
-diff_result = `diff -u "#{reference_xml}" "#{generated_xml}" > "#{diff_output}" 2>&1`
-exit_code = $?.exitstatus
+`diff -u "#{reference_xml}" "#{generated_xml}" > "#{diff_output}" 2>&1`
+exit_code = $CHILD_STATUS.exitstatus
 
 puts "\nComparison Results:"
-puts "-"*70
+puts '-' * 70
 
-if exit_code == 0
-  puts "✅ PERFECT MATCH - Documents have identical structure!"
+if exit_code.zero?
+  puts '✅ PERFECT MATCH - Documents have identical structure!'
   File.write(diff_output, "No differences found - documents are structurally identical.\n")
 elsif exit_code == 1
   diff_content = File.read(diff_output)
@@ -58,9 +59,9 @@ elsif exit_code == 1
   puts "⚠️  DIFFERENCES FOUND - #{line_count} lines of differences"
   puts "\nDiff saved to: #{diff_output}"
   puts "\nFirst 50 lines of diff:"
-  puts "-"*70
+  puts '-' * 70
   puts diff_content.lines.first(50).join
-  puts "-"*70
+  puts '-' * 70
   puts "(See #{diff_output} for full diff)"
 else
   puts "❌ ERROR - Diff command failed with exit code #{exit_code}"
@@ -70,4 +71,4 @@ puts "\nGenerated files:"
 puts "  Reference XML: #{reference_xml}"
 puts "  Generated XML: #{generated_xml}"
 puts "  Diff output:   #{diff_output}"
-puts "="*70
+puts '=' * 70

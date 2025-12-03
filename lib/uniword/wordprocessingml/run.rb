@@ -14,6 +14,7 @@ module Uniword
       attribute :text, :string
       attribute :tab, Tab
       attribute :break, Break
+      attribute :alternate_content, AlternateContent, default: nil
 
       xml do
         element 'r'
@@ -24,6 +25,7 @@ module Uniword
         map_element 't', to: :text, render_nil: false
         map_element 'tab', to: :tab, render_nil: false
         map_element 'br', to: :break, render_nil: false
+        map_element 'AlternateContent', to: :alternate_content, render_nil: false
       end
 
       # Check if run is bold

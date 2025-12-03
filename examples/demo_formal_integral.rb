@@ -13,11 +13,11 @@ doc.apply_theme_file('references/word-package/office-themes/Integral.thmx')
 doc.apply_styleset('formal')
 
 # Build content using Builder DSL
-builder = Uniword::Builder.new(doc) do |b|
+Uniword::Builder.new(doc) do |b|
   # Title Section
   b.add_paragraph('Strategic Business Analysis Report', style: 'Title')
   b.add_paragraph('Q4 2024 Performance Review', style: 'Subtitle')
-  b.add_paragraph('Prepared by: Research and Analytics Division', style: "Emphasis")
+  b.add_paragraph('Prepared by: Research and Analytics Division', style: 'Emphasis')
   b.add_paragraph('Date: November 1, 2024', style: 'Date')
   b.add_blank_line
 
@@ -51,7 +51,8 @@ builder = Uniword::Builder.new(doc) do |b|
 
   # Quote section
   b.add_paragraph('"Excellence is not a destination. (Quotation style)"', style: 'Quote')
-  b.add_paragraph('"It is a continuous journey that never ends. (Intense quotation style)"', style: 'Intense Quote')
+  b.add_paragraph('"It is a continuous journey that never ends. (Intense quotation style)"',
+                  style: 'Intense Quote')
   b.add_blank_line
 
   # Methodology
@@ -66,7 +67,8 @@ builder = Uniword::Builder.new(doc) do |b|
   b.add_heading('Data Collection Methods', level: 2)
 
   # Bulleted list
-  b.add_paragraph('The research methodology incorporated multiple data collection approaches:', bold: true)
+  b.add_paragraph('The research methodology incorporated multiple data collection approaches:',
+                  bold: true)
 
   # TODO: These have to be changed to real bulleted list items when that feature is implemented
   b.add_paragraph('• Primary quantitative surveys with stakeholder groups')
@@ -160,17 +162,17 @@ doc.save(output_path)
 
 # Display statistics
 puts "Document created: #{output_path}"
-puts "Theme: Integral"
-puts "StyleSet: Formal"
+puts 'Theme: Integral'
+puts 'StyleSet: Formal'
 puts "Paragraphs: #{doc.paragraphs.count}"
 puts "Tables: #{doc.tables.count}"
-puts ""
-puts "Please open in Microsoft Word to view the fully styled document."
-puts "The document demonstrates:"
-puts "  • Integral theme colors and fonts"
-puts "  • Formal StyleSet styling"
-puts "  • Professional business document structure"
-puts "  • Multiple heading levels"
-puts "  • Quote styling"
-puts "  • Bulleted lists"
-puts "  • Data tables"
+puts ''
+puts 'Please open in Microsoft Word to view the fully styled document.'
+puts 'The document demonstrates:'
+puts '  • Integral theme colors and fonts'
+puts '  • Formal StyleSet styling'
+puts '  • Professional business document structure'
+puts '  • Multiple heading levels'
+puts '  • Quote styling'
+puts '  • Bulleted lists'
+puts '  • Data tables'

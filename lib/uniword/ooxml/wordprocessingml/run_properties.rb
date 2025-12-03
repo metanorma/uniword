@@ -64,6 +64,7 @@ module Uniword
         attribute :caps, :boolean, default: -> { false }
         attribute :all_caps, :boolean, default: -> { false } # Alias for caps
         attribute :hidden, :boolean, default: -> { false }
+        attribute :no_proof, :boolean, default: -> { false } # Disable spell/grammar check
 
         # Flat attributes (kept as aliases for compatibility)
         attribute :spacing, :integer          # Flat attribute (deprecated)
@@ -103,6 +104,7 @@ module Uniword
           map_element 'smallCaps', to: :small_caps, render_nil: false, render_default: false
           map_element 'caps', to: :caps, render_nil: false, render_default: false
           map_element 'vanish', to: :hidden, render_nil: false, render_default: false
+          map_element 'noProof', to: :no_proof, render_nil: false, render_default: false
 
           # Color (wrapper object)
           map_element 'color', to: :color, render_nil: false
@@ -153,6 +155,7 @@ module Uniword
           @caps ||= false
           @all_caps ||= false
           @hidden ||= false
+          @no_proof ||= false
           @character_spacing = @spacing if @spacing
         end
       end

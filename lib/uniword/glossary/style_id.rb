@@ -12,8 +12,8 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'style_id'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'style'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'val', to: :val
       end

@@ -12,8 +12,8 @@ module Uniword
       attribute :doc_part, DocPart, collection: true, default: -> { [] }
 
       xml do
-        element 'doc_parts'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'docParts'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'docPart', to: :doc_part, render_nil: false

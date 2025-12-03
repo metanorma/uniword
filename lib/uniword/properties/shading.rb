@@ -27,6 +27,7 @@ module Uniword
       attribute :pattern, ShadingPatternValue
       attribute :color, :string      # Foreground color (RGB hex or 'auto')
       attribute :fill, :string       # Background fill color (RGB hex)
+      attribute :theme_fill, :string # Theme color reference (e.g., 'accent1')
 
       xml do
         element 'shd'
@@ -35,6 +36,7 @@ module Uniword
         map_attribute 'val', to: :pattern
         map_attribute 'color', to: :color
         map_attribute 'fill', to: :fill
+        map_attribute 'themeFill', to: :theme_fill, render_nil: false
       end
     end
   end

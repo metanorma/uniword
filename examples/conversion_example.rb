@@ -13,35 +13,35 @@ puts '=' * 50
 # Create a sample document
 puts "\n1. Creating a sample document..."
 doc = Uniword::Builder.new
-  .add_heading('Document Conversion', level: 1)
-  .add_paragraph('This document demonstrates format conversion capabilities.')
-  .add_blank_line
-  .add_heading('Features', level: 2)
-  .add_paragraph('Uniword can convert between different document formats:', bold: false)
-  .add_paragraph('• DOCX (Office Open XML)', bold: false)
-  .add_paragraph('• MHTML (MIME HTML)', bold: false)
-  .add_blank_line
-  .add_table do
-    row do
-      cell 'Format', bold: true
-      cell 'Extension', bold: true
-      cell 'Description', bold: true
-    end
-    row do
-      cell 'DOCX'
-      cell '.docx'
-      cell 'Modern Word format'
-    end
-    row do
-      cell 'MHTML'
-      cell '.mhtml, .mht'
-      cell 'Web archive format'
-    end
+                      .add_heading('Document Conversion', level: 1)
+                      .add_paragraph('This document demonstrates format conversion capabilities.')
+                      .add_blank_line
+                      .add_heading('Features', level: 2)
+                      .add_paragraph('Uniword can convert between different document formats:', bold: false)
+                      .add_paragraph('• DOCX (Office Open XML)', bold: false)
+                      .add_paragraph('• MHTML (MIME HTML)', bold: false)
+                      .add_blank_line
+                      .add_table do
+  row do
+    cell 'Format', bold: true
+    cell 'Extension', bold: true
+    cell 'Description', bold: true
   end
+  row do
+    cell 'DOCX'
+    cell '.docx'
+    cell 'Modern Word format'
+  end
+  row do
+    cell 'MHTML'
+    cell '.mhtml, .mht'
+    cell 'Web archive format'
+  end
+end
   .build
 
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 # Save as DOCX
 docx_path = File.join(output_dir, 'conversion_source.docx')
@@ -64,7 +64,7 @@ puts "✓ Converted back to DOCX: #{docx_roundtrip_path}"
 
 # Display statistics
 puts "\n4. Conversion Statistics:"
-puts "   Original DOCX:"
+puts '   Original DOCX:'
 puts "     - Paragraphs: #{doc.paragraphs.count}"
 puts "     - Tables: #{doc.tables.count}"
 puts "     - File size: #{File.size(docx_path)} bytes"
@@ -86,9 +86,9 @@ detector = Uniword::FormatDetector.new
   puts "   #{File.basename(path)}: #{format.to_s.upcase}"
 end
 
-puts "\n" + "=" * 50
-puts "Conversion example complete!"
+puts "\n#{'=' * 50}"
+puts 'Conversion example complete!'
 puts "\nAll files saved to: #{output_dir}"
 puts "\nYou can also use the CLI for conversions:"
-puts "  $ uniword convert input.docx output.mhtml"
-puts "  $ uniword convert input.mhtml output.docx --verbose"
+puts '  $ uniword convert input.docx output.mhtml'
+puts '  $ uniword convert input.mhtml output.docx --verbose'

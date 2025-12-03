@@ -1,22 +1,28 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../wordprocessingml_2010'
 
 module Uniword
   module Glossary
     # Body content of a document part (building block content)
+    # Contains WordprocessingML elements like paragraphs, tables, and SDTs
     #
     # Generated from OOXML schema: glossary.yml
-    # Element: <g:doc_part_body>
+    # Element: <w:docPartBody>
     class DocPartBody < Lutaml::Model::Serializable
-      attribute :content, :string
+      attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true, default: -> { [] }
+      attribute :tables, Uniword::Wordprocessingml::Table, collection: true, default: -> { [] }
+      attribute :sdts, Uniword::Wordprocessingml::StructuredDocumentTag, collection: true, default: -> { [] }
 
       xml do
-        element 'doc_part_body'
-        namespace Uniword::Ooxml::Namespaces::Glossary
+        root 'docPartBody'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'content', to: :content, render_nil: false
+        map_element 'p', to: :paragraphs, render_nil: false
+        map_element 'tbl', to: :tables, render_nil: false
+        map_element 'sdt', to: :sdts, render_nil: false
       end
     end
   end

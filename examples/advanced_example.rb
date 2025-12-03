@@ -11,10 +11,10 @@ puts 'Creating an advanced document with mixed content...'
 
 # Create document using Builder
 doc = Uniword::Builder.new
-  .add_heading('Advanced Document Example', level: 1)
-  .add_paragraph('Created with Uniword - A unified Word document library', italic: true)
-  .add_blank_line
-  .build
+                      .add_heading('Advanced Document Example', level: 1)
+                      .add_paragraph('Created with Uniword - A unified Word document library', italic: true)
+                      .add_blank_line
+                      .build
 
 # Executive Summary section
 doc.add_element(
@@ -71,7 +71,7 @@ table = Uniword::Table.new
 
 # Header row
 header_row = Uniword::TableRow.new(header: true)
-['Metric', 'Q1', 'Q2', 'Q3', 'Q4'].each do |header|
+%w[Metric Q1 Q2 Q3 Q4].each do |header|
   cell = Uniword::TableCell.new
   para = Uniword::Paragraph.new
   para.add_text(header, bold: true).align('center')
@@ -119,7 +119,9 @@ conclusion_parts = [
   [' and ', false],
   ['flexible', true],
   [' solution for document generation in Ruby. ', false],
-  ['Its object-oriented architecture makes it easy to create, modify, and convert documents programmatically.', false]
+  [
+    'Its object-oriented architecture makes it easy to create, modify, and convert documents programmatically.', false
+  ]
 ]
 
 conclusion_para = Uniword::Paragraph.new
@@ -140,7 +142,7 @@ doc.add_element(footer_para)
 
 # Save the document
 output_dir = File.join(__dir__, 'output')
-Dir.mkdir(output_dir) unless Dir.exist?(output_dir)
+FileUtils.mkdir_p(output_dir)
 
 output_path = File.join(output_dir, 'advanced_example.docx')
 doc.save(output_path)

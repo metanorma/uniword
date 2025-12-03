@@ -7,7 +7,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
   # Test both directories
   %w[style-sets quick-styles].each do |dir_name|
     describe "#{dir_name}/" do
-      Dir.glob("references/word-package/#{dir_name}/*.dotx").sort.each do |styleset_file|
+      Dir.glob("references/word-resources/#{dir_name}/*.dotx").sort.each do |styleset_file|
         styleset_name = File.basename(styleset_file, '.dotx')
 
         describe styleset_name do
@@ -100,14 +100,14 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
 
   # Summary statistics
   after(:all) do
-    total_stylesets = Dir.glob('references/word-package/style-sets/*.dotx').count +
-                      Dir.glob('references/word-package/quick-styles/*.dotx').count
+    total_stylesets = Dir.glob('references/word-resources/style-sets/*.dotx').count +
+                      Dir.glob('references/word-resources/quick-styles/*.dotx').count
     puts "\n#{'=' * 60}"
     puts 'StyleSet Round-Trip Summary'
     puts '=' * 60
     puts "Total StyleSets tested: #{total_stylesets}"
-    puts "  - style-sets: #{Dir.glob('references/word-package/style-sets/*.dotx').count}"
-    puts "  - quick-styles: #{Dir.glob('references/word-package/quick-styles/*.dotx').count}"
+    puts "  - style-sets: #{Dir.glob('references/word-resources/style-sets/*.dotx').count}"
+    puts "  - quick-styles: #{Dir.glob('references/word-resources/quick-styles/*.dotx').count}"
     puts '=' * 60
   end
 end
