@@ -15,16 +15,21 @@ require_relative 'uniword/version'
 # Load OOXML namespaces FIRST (needed by generated classes)
 require_relative 'uniword/ooxml/namespaces'
 
-# Load all generated classes
-require_relative 'uniword/wordprocessingml'
-require_relative 'uniword/drawingml'
-require_relative 'uniword/wp_drawing'
-require_relative 'uniword/vml'
-require_relative 'uniword/math'
-require_relative 'uniword/shared_types'
-require_relative 'uniword/content_types'
-require_relative 'uniword/document_properties'
-require_relative 'uniword/glossary'
+# Load namespaces required for immediate constant assignments (lines 59-79) and cross-dependencies
+# These MUST be eagerly loaded due to extensive dependency chains.
+# Analysis shows deep cross-dependencies between core namespaces that prevent autoloading.
+require_relative 'uniword/wordprocessingml'  # Used: Document, Body, Paragraph, Run, Table, etc.
+require_relative 'uniword/wp_drawing'        # Required by: Wordprocessingml::Drawing
+require_relative 'uniword/drawingml'         # Required by: WpDrawing::Inline
+require_relative 'uniword/vml'               # Required by: Wordprocessingml classes (Pict, etc.)
+require_relative 'uniword/math'              # Used: MathElement = Math::OMath
+require_relative 'uniword/shared_types'      # Required by: Multiple namespace property classes
+
+# Autoload remaining namespace modules (loaded only when accessed)
+# These provide ~33% autoload coverage for namespace modules (3/9)
+autoload :ContentTypes, 'uniword/content_types'
+autoload :DocumentProperties, 'uniword/document_properties'
+autoload :Glossary, 'uniword/glossary'
 
 # Load extension modules that add convenience methods to generated classes
 

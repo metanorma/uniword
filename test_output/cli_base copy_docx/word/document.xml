@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/wordprocessingml/2006/math" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" mc:Ignorable="w14 w15 w16">
+  <w:body>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading 1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>CLI Test Document</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr/>
+      <w:r>
+        <w:t>Testing CLI theme and styleset application.</w:t>
+      </w:r>
+    </w:p>
+  </w:body>
+</w:document>

@@ -1,0 +1,301 @@
+
+[Lutaml::Model] WARN: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+
+[Lutaml::Model] WARN: Attribute name `display` conflicts with a built-in method
+Run options: include {:last_run_status=>"failed"}
+
+Randomized with seed 57252
+
+Real-World Document Testing
+  ISO 8601-2 Complex Document
+    Performance Benchmarks
+      reads document in under 5 seconds (FAILED - 1)
+
+Uniword docx gem compatibility - Document operations
+  reading formatting
+    detects centered paragraphs (FAILED - 2)
+
+Uniword::Paragraph
+  #alignment
+    returns alignment from properties (FAILED - 3)
+    returns nil when no properties (FAILED - 4)
+
+Uniword::Builder
+  #add_paragraph
+    adds paragraph with alignment (FAILED - 5)
+  #add_heading
+    adds a heading with alignment (FAILED - 6)
+
+docx gem API Compatibility
+  Paragraph operations
+    supports paragraph.to_html (FAILED - 7)
+    supports paragraph.alignment (FAILED - 8)
+  Document operations
+    supports doc.to_html for HTML export (FAILED - 9)
+
+Uniword::Serialization::HtmlDeserializer
+  #deserialize
+    with paragraph alignment
+      parses text alignment (FAILED - 10)
+
+Comprehensive Library Supersession Validation
+  FEATURE PARITY: docx-js compatibility
+    Run properties (bold, italic, etc.)
+      sets font name (FAILED - 11)
+      sets bold on runs (FAILED - 12)
+      sets italic on runs (FAILED - 13)
+      sets font color (FAILED - 14)
+      sets font size (FAILED - 15)
+    Shading and highlighting
+      applies text highlighting (FAILED - 16)
+
+OOXML Round-trip Serialization
+  paragraph properties preservation
+    preserves paragraph alignment (FAILED - 17)
+
+Uniword::Transformation::Transformer
+  #transform
+    with complex document
+      preserves formatting (FAILED - 18)
+
+Numbering Feature
+  Paragraph Integration
+    #set_numbering
+      preserves other properties (FAILED - 19)
+
+DOCX Edge Case Handling
+  Maximum Values
+    handles maximum font size (FAILED - 20)
+
+Failures:
+
+  1) Real-World Document Testing ISO 8601-2 Complex Document Performance Benchmarks reads document in under 5 seconds
+     Failure/Error: expect(read_time).to be < 5.0
+
+       expected: < 5.0
+            got:   5.572991000022739
+     # ./spec/integration/real_world_documents_spec.rb:168:in `block (4 levels) in <top (required)>'
+
+  2) Uniword docx gem compatibility - Document operations reading formatting detects centered paragraphs
+     Failure/Error: expect(para.alignment).to eq('center')
+
+       expected: "center"
+            got: :center
+
+       (compared using ==)
+
+       Diff:
+       @@ -1 +1 @@
+       -"center"
+       +:center
+     # ./spec/compatibility/docx_gem/document_compatibility_spec.rb:135:in `block (4 levels) in <top (required)>'
+     # ./spec/compatibility/docx_gem/document_compatibility_spec.rb:133:in `each'
+     # ./spec/compatibility/docx_gem/document_compatibility_spec.rb:133:in `each_with_index'
+     # ./spec/compatibility/docx_gem/document_compatibility_spec.rb:133:in `block (3 levels) in <top (required)>'
+
+  3) Uniword::Paragraph#alignment returns alignment from properties
+     Failure/Error: expect(paragraph.alignment).to eq('left')
+
+       expected: "left"
+            got: :left
+
+       (compared using ==)
+
+       Diff:
+       @@ -1 +1 @@
+       -"left"
+       +:left
+     # ./spec/uniword/paragraph_spec.rb:163:in `block (3 levels) in <top (required)>'
+
+  4) Uniword::Paragraph#alignment returns nil when no properties
+     Failure/Error: expect(paragraph.alignment).to be_nil
+
+       expected: nil
+            got: :left
+     # ./spec/uniword/paragraph_spec.rb:158:in `block (3 levels) in <top (required)>'
+
+  5) Uniword::Builder#add_paragraph adds paragraph with alignment
+     Failure/Error: expect(para.alignment).to eq('center')
+
+       expected: "center"
+            got: :center
+
+       (compared using ==)
+
+       Diff:
+       @@ -1 +1 @@
+       -"center"
+       +:center
+     # ./spec/uniword/builder_spec.rb:42:in `block (3 levels) in <top (required)>'
+
+  6) Uniword::Builder#add_heading adds a heading with alignment
+     Failure/Error: expect(para.alignment).to eq('center')
+
+       expected: "center"
+            got: :center
+
+       (compared using ==)
+
+       Diff:
+       @@ -1 +1 @@
+       -"center"
+       +:center
+     # ./spec/uniword/builder_spec.rb:85:in `block (3 levels) in <top (required)>'
+
+  7) docx gem API Compatibility Paragraph operations supports paragraph.to_html
+     Failure/Error: expect(html).to include("<p>")
+       expected "<p style=\"text-align: left\">Hello World</p>" to include "<p>"
+     # ./spec/compatibility/docx_gem_api_spec.rb:88:in `block (3 levels) in <top (required)>'
+
+  8) docx gem API Compatibility Paragraph operations supports paragraph.alignment
+     Failure/Error: expect(para.alignment).to eq("center")
+
+       expected: "center"
+            got: :center
+
+       (compared using ==)
+
+       Diff:
+       @@ -1 +1 @@
+       -"center"
+       +:center
+     # ./spec/compatibility/docx_gem_api_spec.rb:125:in `block (3 levels) in <top (required)>'
+
+  9) docx gem API Compatibility Document operations supports doc.to_html for HTML export
+     Failure/Error: expect(html).to include("<p>")
+       expected "<p style=\"text-align: left\">Hello World</p>" to include "<p>"
+     # ./spec/compatibility/docx_gem_api_spec.rb:29:in `block (3 levels) in <top (required)>'
+
+  10) Uniword::Serialization::HtmlDeserializer#deserialize with paragraph alignment parses text alignment
+      Failure/Error: expect(document.paragraphs[0].alignment).to eq('center')
+
+        expected: "center"
+             got: :center
+
+        (compared using ==)
+
+        Diff:
+        @@ -1 +1 @@
+        -"center"
+        +:center
+      # ./spec/uniword/serialization/html_deserializer_spec.rb:160:in `block (4 levels) in <top (required)>'
+
+  11) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font name
+      Failure/Error: run.properties.font_name = 'Arial'
+
+      NoMethodError:
+        undefined method `font_name=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:194:in `block (4 levels) in <top (required)>'
+
+  12) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets bold on runs
+      Failure/Error: run.properties.bold = true
+
+      NoMethodError:
+        undefined method `bold=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:162:in `block (4 levels) in <top (required)>'
+
+  13) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets italic on runs
+      Failure/Error: run.properties.italic = true
+
+      NoMethodError:
+        undefined method `italic=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:170:in `block (4 levels) in <top (required)>'
+
+  14) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font color
+      Failure/Error: run.properties.color = 'FF0000'
+
+      NoMethodError:
+        undefined method `color=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:186:in `block (4 levels) in <top (required)>'
+
+  15) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font size
+      Failure/Error: run.properties.font_size = 24
+
+      NoMethodError:
+        undefined method `font_size=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:178:in `block (4 levels) in <top (required)>'
+
+  16) Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Shading and highlighting applies text highlighting
+      Failure/Error: run.properties.highlight = 'yellow'
+
+      NoMethodError:
+        undefined method `highlight=' for nil
+      # ./spec/compatibility/comprehensive_validation_spec.rb:251:in `block (4 levels) in <top (required)>'
+
+  17) OOXML Round-trip Serialization paragraph properties preservation preserves paragraph alignment
+      Failure/Error: expect(restored_para.alignment).to eq('center')
+
+        expected: "center"
+             got: :center
+
+        (compared using ==)
+
+        Diff:
+        @@ -1 +1 @@
+        -"center"
+        +:center
+      # ./spec/uniword/serialization/ooxml_round_trip_spec.rb:174:in `block (3 levels) in <top (required)>'
+
+  18) Uniword::Transformation::Transformer#transform with complex document preserves formatting
+      Failure/Error: expect(para.alignment).to eq('center')
+
+        expected: "center"
+             got: :center
+
+        (compared using ==)
+
+        Diff:
+        @@ -1 +1 @@
+        -"center"
+        +:center
+      # ./spec/uniword/transformation/transformer_spec.rb:134:in `block (4 levels) in <top (required)>'
+
+  19) Numbering Feature Paragraph Integration #set_numbering preserves other properties
+      Failure/Error: expect(para.alignment).to eq('left')
+
+        expected: "left"
+             got: :left
+
+        (compared using ==)
+
+        Diff:
+        @@ -1 +1 @@
+        -"left"
+        +:left
+      # ./spec/uniword/numbering_spec.rb:353:in `block (4 levels) in <top (required)>'
+
+  20) DOCX Edge Case Handling Maximum Values handles maximum font size
+      Failure/Error: run.properties.font_size = 144 # 72 points = 144 half-points
+
+      NoMethodError:
+        undefined method `font_size=' for nil
+      # ./spec/integration/edge_cases_spec.rb:378:in `block (3 levels) in <top (required)>'
+
+Finished in 5.74 seconds (files took 0.3413 seconds to load)
+20 examples, 20 failures
+
+Failed examples:
+
+rspec ./spec/integration/real_world_documents_spec.rb:163 # Real-World Document Testing ISO 8601-2 Complex Document Performance Benchmarks reads document in under 5 seconds
+rspec ./spec/compatibility/docx_gem/document_compatibility_spec.rb:131 # Uniword docx gem compatibility - Document operations reading formatting detects centered paragraphs
+rspec ./spec/uniword/paragraph_spec.rb:161 # Uniword::Paragraph#alignment returns alignment from properties
+rspec ./spec/uniword/paragraph_spec.rb:156 # Uniword::Paragraph#alignment returns nil when no properties
+rspec ./spec/uniword/builder_spec.rb:39 # Uniword::Builder#add_paragraph adds paragraph with alignment
+rspec ./spec/uniword/builder_spec.rb:82 # Uniword::Builder#add_heading adds a heading with alignment
+rspec ./spec/compatibility/docx_gem_api_spec.rb:83 # docx gem API Compatibility Paragraph operations supports paragraph.to_html
+rspec ./spec/compatibility/docx_gem_api_spec.rb:121 # docx gem API Compatibility Paragraph operations supports paragraph.alignment
+rspec ./spec/compatibility/docx_gem_api_spec.rb:21 # docx gem API Compatibility Document operations supports doc.to_html for HTML export
+rspec ./spec/uniword/serialization/html_deserializer_spec.rb:156 # Uniword::Serialization::HtmlDeserializer#deserialize with paragraph alignment parses text alignment
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:190 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font name
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:158 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets bold on runs
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:166 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets italic on runs
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:182 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font color
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:174 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Run properties (bold, italic, etc.) sets font size
+rspec ./spec/compatibility/comprehensive_validation_spec.rb:247 # Comprehensive Library Supersession Validation FEATURE PARITY: docx-js compatibility Shading and highlighting applies text highlighting
+rspec ./spec/uniword/serialization/ooxml_round_trip_spec.rb:159 # OOXML Round-trip Serialization paragraph properties preservation preserves paragraph alignment
+rspec ./spec/uniword/transformation/transformer_spec.rb:126 # Uniword::Transformation::Transformer#transform with complex document preserves formatting
+rspec ./spec/uniword/numbering_spec.rb:343 # Numbering Feature Paragraph Integration #set_numbering preserves other properties
+rspec ./spec/integration/edge_cases_spec.rb:372 # DOCX Edge Case Handling Maximum Values handles maximum font size
+
+Randomized with seed 57252
+

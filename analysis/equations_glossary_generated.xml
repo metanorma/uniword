@@ -1,0 +1,13 @@
+
+[Lutaml::Model] WARN: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+/Users/mulgogi/src/mn/uniword/lib/uniword/ooxml/namespaces.rb:10:in `<module:Namespaces>': uninitialized constant Lutaml::Model::XmlNamespace (NameError)
+
+      class WordProcessingML < Lutaml::Model::XmlNamespace
+                                            ^^^^^^^^^^^^^^
+	from /Users/mulgogi/src/mn/uniword/lib/uniword/ooxml/namespaces.rb:7:in `<module:Ooxml>'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword/ooxml/namespaces.rb:6:in `<module:Uniword>'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword/ooxml/namespaces.rb:5:in `<top (required)>'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword.rb:16:in `require_relative'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword.rb:16:in `<top (required)>'
+	from -e:2:in `require_relative'
+	from -e:2:in `<main>'

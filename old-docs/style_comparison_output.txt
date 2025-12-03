@@ -1,0 +1,1036 @@
+================================================================================
+WORD DOCUMENT STYLE COMPARISON ANALYSIS
+================================================================================
+
+BROKEN (Generated): examples/demo_formal_integral.docx
+--------------------------------------------------------------------------------
+
+### STYLES (word/styles.xml) ###
+Total styles: 42
+
+--- PARAGRAPH STYLES (18) ---
+  Style ID: Normal
+    Name: Normal
+    Based On: none
+    Alignment: left
+    Spacing After: 200
+    Line Spacing: 66240
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading1
+    Name: Heading 1
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 32
+    Bold: yes
+
+  Style ID: Heading2
+    Name: Heading 2
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 26
+    Bold: yes
+
+  Style ID: Heading3
+    Name: Heading 3
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 24
+    Bold: yes
+
+  Style ID: Heading4
+    Name: Heading 4
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading5
+    Name: Heading 5
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading6
+    Name: Heading 6
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading7
+    Name: Heading 7
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading8
+    Name: Heading 8
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Heading9
+    Name: Heading 9
+    Based On: Normal
+    Spacing Before: 200
+    Spacing After: 100
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Caption
+    Name: caption
+    Based On: Normal
+
+  Style ID: Title
+    Name: Title
+    Based On: Normal
+
+  Style ID: Subtitle
+    Name: Subtitle
+    Based On: Normal
+
+  Style ID: NoSpacing
+    Name: No Spacing
+    Based On: Normal
+
+  Style ID: ListParagraph
+    Name: List Paragraph
+    Based On: Normal
+
+  Style ID: Quote
+    Name: Quote
+    Based On: Normal
+
+  Style ID: IntenseQuote
+    Name: Intense Quote
+    Based On: Normal
+
+  Style ID: TOCHeading
+    Name: TOC Heading
+    Based On: Normal
+
+--- CHARACTER STYLES (22) ---
+  Style ID: DefaultParagraphFont
+    Name: Default Paragraph Font
+    Based On: none
+    Font (ASCII): Calibri
+    Font Size: 22
+
+  Style ID: Emphasis
+    Name: Emphasis
+    Based On: none
+    Italic: yes
+
+  Style ID: Strong
+    Name: Strong
+    Based On: none
+    Bold: yes
+
+  Style ID: Heading1Char
+    Name: Heading 1 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading2Char
+    Name: Heading 2 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading3Char
+    Name: Heading 3 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading4Char
+    Name: Heading 4 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading5Char
+    Name: Heading 5 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading6Char
+    Name: Heading 6 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading7Char
+    Name: Heading 7 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading8Char
+    Name: Heading 8 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: Heading9Char
+    Name: Heading 9 Char
+    Based On: DefaultParagraphFont
+
+  Style ID: TitleChar
+    Name: Title Char
+    Based On: DefaultParagraphFont
+
+  Style ID: SubtitleChar
+    Name: Subtitle Char
+    Based On: DefaultParagraphFont
+
+  Style ID: NoSpacingChar
+    Name: No Spacing Char
+    Based On: DefaultParagraphFont
+
+  Style ID: QuoteChar
+    Name: Quote Char
+    Based On: DefaultParagraphFont
+
+  Style ID: IntenseQuoteChar
+    Name: Intense Quote Char
+    Based On: DefaultParagraphFont
+
+  Style ID: SubtleEmphasis
+    Name: Subtle Emphasis
+    Based On: none
+
+  Style ID: IntenseEmphasis
+    Name: Intense Emphasis
+    Based On: none
+
+  Style ID: SubtleReference
+    Name: Subtle Reference
+    Based On: DefaultParagraphFont
+
+  Style ID: IntenseReference
+    Name: Intense Reference
+    Based On: none
+
+  Style ID: BookTitle
+    Name: Book Title
+    Based On: none
+
+--- TABLE STYLES (1) ---
+  Style ID: TableNormal
+    Name: Normal Table
+    Based On: none
+
+--- NUMBERING STYLES (1) ---
+  Style ID: NoList
+    Name: No List
+    Based On: none
+
+
+--- KEY STYLES CHECK ---
+  ✓ Title found
+  ✓ Subtitle found
+  ✗ Date MISSING
+  ✓ Heading1 found
+  ✓ Heading2 found
+  ✓ Normal found
+
+
+### PARAGRAPHS (word/document.xml) ###
+Total paragraphs: 72
+
+First 10 paragraphs:
+
+--- Paragraph 1 ---
+  Text: Strategic Business Analysis Report
+  Style: Title
+  Direct Alignment: center
+
+--- Paragraph 2 ---
+  Text: Q4 2024 Performance Review
+  Style: Subtitle
+  Direct Alignment: center
+
+--- Paragraph 3 ---
+  Text: Prepared by: Research and Analytics Division
+  Style: (none - using Normal)
+  Direct Alignment: center
+  Run 1 formatting:
+    Italic: yes
+
+--- Paragraph 4 ---
+  Text: Date: November 1, 2024
+  Style: (none - using Normal)
+  Direct Alignment: center
+  Run 1 formatting:
+    Italic: yes
+
+--- Paragraph 5 ---
+  Text: (empty)
+  Style: (none - using Normal)
+
+--- Paragraph 6 ---
+  Text: Executive Summary
+  Style: Heading1
+
+--- Paragraph 7 ---
+  Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ...
+  Style: (none - using Normal)
+
+--- Paragraph 8 ---
+  Text: Ut enim ad minim veniam, quis nostrud exercitation ullamco la...
+  Style: (none - using Normal)
+
+--- Paragraph 9 ---
+  Text: Duis aute irure dolor in reprehenderit in voluptate velit ess...
+  Style: (none - using Normal)
+
+--- Paragraph 10 ---
+  Text: (empty)
+  Style: (none - using Normal)
+
+
+
+### THEME (word/theme/theme1.xml) ###
+Theme Name: Integral
+
+Color Scheme: Integral
+  dk1: #000000
+  lt1: #FFFFFF
+  dk2: #335B74
+  lt2: #DFE3E5
+  accent1: #1CADE4
+  accent2: #2683C6
+  accent3: #27CED7
+  accent4: #42BA97
+  accent5: #3E8853
+  accent6: #62A39F
+  hlink: #6B9F25
+  folHlink: #B26B02
+
+Font Scheme: Integral
+  Major Font: Tw Cen MT Condensed
+  Minor Font: Tw Cen MT
+
+================================================================================
+PROPER (Reference): examples/demo_formal_integral_proper.docx
+--------------------------------------------------------------------------------
+
+### STYLES (word/styles.xml) ###
+Total styles: 45
+
+--- PARAGRAPH STYLES (20) ---
+  Style ID: Normal
+    Name: Normal
+    Based On: none
+
+  Style ID: Heading1
+    Name: heading 1
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 400
+    Font Size: 28
+    Color: 134163
+
+  Style ID: Heading2
+    Name: heading 2
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 400
+    Font Size: 24
+    Color: 134163
+
+  Style ID: Heading3
+    Name: heading 3
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 300
+    Font Size: 24
+    Color: 134162
+
+  Style ID: Heading4
+    Name: heading 4
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 134162
+
+  Style ID: Heading5
+    Name: heading 5
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 320
+    Spacing After: 120
+    Color: 134162
+
+  Style ID: Heading6
+    Name: heading 6
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 1C6194
+
+  Style ID: Heading7
+    Name: heading 7
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 1C6194
+    Italic: yes
+
+  Style ID: Heading8
+    Name: heading 8
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Font Size: 20
+
+  Style ID: Heading9
+    Name: heading 9
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Font Size: 20
+    Italic: yes
+
+  Style ID: Title
+    Name: Title
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 500
+    Spacing After: 300
+    Line Spacing: 240
+    Font Size: 44
+    Color: 134163
+
+  Style ID: Subtitle
+    Name: Subtitle
+    Based On: Normal
+    Alignment: center
+    Spacing After: 560
+    Line Spacing: 240
+    Font Size: 18
+
+  Style ID: Quote
+    Name: Quote
+    Based On: Normal
+    Italic: yes
+
+  Style ID: ListParagraph
+    Name: List Paragraph
+    Based On: Normal
+
+  Style ID: IntenseQuote
+    Name: Intense Quote
+    Based On: Normal
+    Spacing Before: 160
+    Line Spacing: 300
+    Font Size: 20
+    Color: 134162
+
+  Style ID: Caption
+    Name: caption
+    Based On: Normal
+    Font Size: 18
+
+  Style ID: NoSpacing
+    Name: No Spacing
+    Based On: Normal
+    Spacing After: 0
+    Line Spacing: 240
+
+  Style ID: TOCHeading
+    Name: TOC Heading
+    Based On: Heading1
+
+  Style ID: Date
+    Name: Date
+    Based On: Normal
+
+  Style ID: ListBullet
+    Name: List Bullet
+    Based On: Normal
+
+--- CHARACTER STYLES (23) ---
+  Style ID: DefaultParagraphFont
+    Name: Default Paragraph Font
+    Based On: none
+
+  Style ID: Heading1Char
+    Name: Heading 1 Char
+    Based On: DefaultParagraphFont
+    Font Size: 28
+    Color: 134163
+
+  Style ID: Heading2Char
+    Name: Heading 2 Char
+    Based On: DefaultParagraphFont
+    Font Size: 24
+    Color: 134163
+
+  Style ID: Heading3Char
+    Name: Heading 3 Char
+    Based On: DefaultParagraphFont
+    Font Size: 24
+    Color: 134162
+
+  Style ID: Heading4Char
+    Name: Heading 4 Char
+    Based On: DefaultParagraphFont
+    Color: 134162
+
+  Style ID: Heading5Char
+    Name: Heading 5 Char
+    Based On: DefaultParagraphFont
+    Color: 134162
+
+  Style ID: Heading6Char
+    Name: Heading 6 Char
+    Based On: DefaultParagraphFont
+    Color: 1C6194
+
+  Style ID: Heading7Char
+    Name: Heading 7 Char
+    Based On: DefaultParagraphFont
+    Color: 1C6194
+    Italic: yes
+
+  Style ID: Heading8Char
+    Name: Heading 8 Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+
+  Style ID: Heading9Char
+    Name: Heading 9 Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+    Italic: yes
+
+  Style ID: TitleChar
+    Name: Title Char
+    Based On: DefaultParagraphFont
+    Font Size: 44
+    Color: 134163
+
+  Style ID: SubtitleChar
+    Name: Subtitle Char
+    Based On: DefaultParagraphFont
+    Font Size: 18
+
+  Style ID: QuoteChar
+    Name: Quote Char
+    Based On: DefaultParagraphFont
+    Italic: yes
+
+  Style ID: IntenseEmphasis
+    Name: Intense Emphasis
+    Based On: none
+    Font Size: 20
+    Italic: yes
+
+  Style ID: IntenseQuoteChar
+    Name: Intense Quote Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+    Color: 134162
+
+  Style ID: IntenseReference
+    Name: Intense Reference
+    Based On: none
+    Color: 134162
+    Bold: yes
+    Italic: yes
+
+  Style ID: Strong
+    Name: Strong
+    Based On: none
+    Color: 1C6194
+    Bold: yes
+
+  Style ID: Emphasis
+    Name: Emphasis
+    Based On: none
+    Font Size: 20
+
+  Style ID: NoSpacingChar
+    Name: No Spacing Char
+    Based On: DefaultParagraphFont
+
+  Style ID: SubtleEmphasis
+    Name: Subtle Emphasis
+    Based On: none
+    Italic: yes
+
+  Style ID: SubtleReference
+    Name: Subtle Reference
+    Based On: DefaultParagraphFont
+    Color: 134162
+    Italic: yes
+
+  Style ID: BookTitle
+    Name: Book Title
+    Based On: none
+    Color: 134162
+
+  Style ID: DateChar
+    Name: Date Char
+    Based On: DefaultParagraphFont
+
+--- TABLE STYLES (1) ---
+  Style ID: TableNormal
+    Name: Normal Table
+    Based On: none
+
+--- NUMBERING STYLES (1) ---
+  Style ID: NoList
+    Name: No List
+    Based On: none
+
+
+--- KEY STYLES CHECK ---
+  ✓ Title found
+  ✓ Subtitle found
+  ✓ Date found
+  ✓ Heading1 found
+  ✓ Heading2 found
+  ✓ Normal found
+
+
+### PARAGRAPHS (word/document.xml) ###
+Total paragraphs: 74
+
+First 10 paragraphs:
+
+--- Paragraph 1 ---
+  Text: Strategic Business Analysis Report
+  Style: Title
+
+--- Paragraph 2 ---
+  Text: Q4 2024 Performance Review
+  Style: Subtitle
+
+--- Paragraph 3 ---
+  Text: Prepared by: Research and Analytics Division
+  Style: (none - using Normal)
+  Run 1 formatting:
+
+--- Paragraph 4 ---
+  Text: Date: November 1, 2024
+  Style: Date
+
+--- Paragraph 5 ---
+  Text: (empty)
+  Style: (none - using Normal)
+
+--- Paragraph 6 ---
+  Text: Executive Summary
+  Style: Heading2
+
+--- Paragraph 7 ---
+  Text: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ...
+  Style: (none - using Normal)
+
+--- Paragraph 8 ---
+  Text: Ut enim ad minim veniam, quis nostrud exercitation ullamco la...
+  Style: (none - using Normal)
+
+--- Paragraph 9 ---
+  Text: Duis aute irure dolor in reprehenderit in voluptate velit ess...
+  Style: (none - using Normal)
+
+--- Paragraph 10 ---
+  Text: (empty)
+  Style: (none - using Normal)
+
+
+
+### THEME (word/theme/theme1.xml) ###
+Theme Name: Integral
+
+Color Scheme: Integral
+  dk1: windowText (last=#000000)
+  lt1: window (last=#FFFFFF)
+  dk2: #335B74
+  lt2: #DFE3E5
+  accent1: #1CADE4
+  accent2: #2683C6
+  accent3: #27CED7
+  accent4: #42BA97
+  accent5: #3E8853
+  accent6: #62A39F
+  hlink: #6B9F25
+  folHlink: #B26B02
+
+Font Scheme: Integral
+  Major Font: Tw Cen MT Condensed
+  Minor Font: Tw Cen MT
+
+================================================================================
+STYLESET (Formal.dotx): references/word-package/style-sets/Formal.dotx
+--------------------------------------------------------------------------------
+
+### STYLES (word/styles.xml) ###
+Total styles: 42
+
+--- PARAGRAPH STYLES (18) ---
+  Style ID: Normal
+    Name: Normal
+    Based On: none
+
+  Style ID: Heading1
+    Name: heading 1
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 400
+    Font Size: 28
+    Color: 632423
+
+  Style ID: Heading2
+    Name: heading 2
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 400
+    Font Size: 24
+    Color: 632423
+
+  Style ID: Heading3
+    Name: heading 3
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 300
+    Font Size: 24
+    Color: 622423
+
+  Style ID: Heading4
+    Name: heading 4
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 622423
+
+  Style ID: Heading5
+    Name: heading 5
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 320
+    Spacing After: 120
+    Color: 622423
+
+  Style ID: Heading6
+    Name: heading 6
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 943634
+
+  Style ID: Heading7
+    Name: heading 7
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Color: 943634
+    Italic: yes
+
+  Style ID: Heading8
+    Name: heading 8
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Font Size: 20
+
+  Style ID: Heading9
+    Name: heading 9
+    Based On: Normal
+    Alignment: center
+    Spacing After: 120
+    Font Size: 20
+    Italic: yes
+
+  Style ID: Caption
+    Name: caption
+    Based On: Normal
+    Font Size: 18
+
+  Style ID: Title
+    Name: Title
+    Based On: Normal
+    Alignment: center
+    Spacing Before: 500
+    Spacing After: 300
+    Line Spacing: 240
+    Font Size: 44
+    Color: 632423
+
+  Style ID: Subtitle
+    Name: Subtitle
+    Based On: Normal
+    Alignment: center
+    Spacing After: 560
+    Line Spacing: 240
+    Font Size: 18
+
+  Style ID: NoSpacing
+    Name: No Spacing
+    Based On: Normal
+    Spacing After: 0
+    Line Spacing: 240
+
+  Style ID: ListParagraph
+    Name: List Paragraph
+    Based On: Normal
+
+  Style ID: Quote
+    Name: Quote
+    Based On: Normal
+    Italic: yes
+
+  Style ID: IntenseQuote
+    Name: Intense Quote
+    Based On: Normal
+    Spacing Before: 160
+    Line Spacing: 300
+    Font Size: 20
+    Color: 622423
+
+  Style ID: TOCHeading
+    Name: TOC Heading
+    Based On: Heading1
+
+--- CHARACTER STYLES (22) ---
+  Style ID: DefaultParagraphFont
+    Name: Default Paragraph Font
+    Based On: none
+
+  Style ID: Heading1Char
+    Name: Heading 1 Char
+    Based On: DefaultParagraphFont
+    Font Size: 28
+    Color: 632423
+
+  Style ID: Heading2Char
+    Name: Heading 2 Char
+    Based On: DefaultParagraphFont
+    Font Size: 24
+    Color: 632423
+
+  Style ID: Heading3Char
+    Name: Heading 3 Char
+    Based On: DefaultParagraphFont
+    Font Size: 24
+    Color: 622423
+
+  Style ID: Heading4Char
+    Name: Heading 4 Char
+    Based On: DefaultParagraphFont
+    Color: 622423
+
+  Style ID: Heading5Char
+    Name: Heading 5 Char
+    Based On: DefaultParagraphFont
+    Color: 622423
+
+  Style ID: Heading6Char
+    Name: Heading 6 Char
+    Based On: DefaultParagraphFont
+    Color: 943634
+
+  Style ID: Heading7Char
+    Name: Heading 7 Char
+    Based On: DefaultParagraphFont
+    Color: 943634
+    Italic: yes
+
+  Style ID: Heading8Char
+    Name: Heading 8 Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+
+  Style ID: Heading9Char
+    Name: Heading 9 Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+    Italic: yes
+
+  Style ID: TitleChar
+    Name: Title Char
+    Based On: DefaultParagraphFont
+    Font Size: 44
+    Color: 632423
+
+  Style ID: SubtitleChar
+    Name: Subtitle Char
+    Based On: DefaultParagraphFont
+    Font Size: 18
+
+  Style ID: Strong
+    Name: Strong
+    Based On: none
+    Color: 943634
+    Bold: yes
+
+  Style ID: Emphasis
+    Name: Emphasis
+    Based On: none
+    Font Size: 20
+
+  Style ID: NoSpacingChar
+    Name: No Spacing Char
+    Based On: DefaultParagraphFont
+
+  Style ID: QuoteChar
+    Name: Quote Char
+    Based On: DefaultParagraphFont
+    Italic: yes
+
+  Style ID: IntenseQuoteChar
+    Name: Intense Quote Char
+    Based On: DefaultParagraphFont
+    Font Size: 20
+    Color: 622423
+
+  Style ID: SubtleEmphasis
+    Name: Subtle Emphasis
+    Based On: none
+    Italic: yes
+
+  Style ID: IntenseEmphasis
+    Name: Intense Emphasis
+    Based On: none
+    Font Size: 20
+    Italic: yes
+
+  Style ID: SubtleReference
+    Name: Subtle Reference
+    Based On: DefaultParagraphFont
+    Color: 622423
+    Italic: yes
+
+  Style ID: IntenseReference
+    Name: Intense Reference
+    Based On: none
+    Color: 622423
+    Bold: yes
+    Italic: yes
+
+  Style ID: BookTitle
+    Name: Book Title
+    Based On: none
+    Color: 622423
+
+--- TABLE STYLES (1) ---
+  Style ID: TableNormal
+    Name: Normal Table
+    Based On: none
+
+--- NUMBERING STYLES (1) ---
+  Style ID: NoList
+    Name: No List
+    Based On: none
+
+
+--- KEY STYLES CHECK ---
+  ✓ Title found
+  ✓ Subtitle found
+  ✗ Date MISSING
+  ✓ Heading1 found
+  ✓ Heading2 found
+  ✓ Normal found
+
+
+### PARAGRAPHS (word/document.xml) ###
+Total paragraphs: 1
+
+First 10 paragraphs:
+
+--- Paragraph 1 ---
+  Text: (empty)
+  Style: (none - using Normal)
+
+
+
+### THEME (word/theme/theme1.xml) ###
+Theme Name: Office Theme
+
+Color Scheme: Office
+  dk1: windowText (last=#)
+  lt1: window (last=#)
+  dk2: #1F497D
+  lt2: #EEECE1
+  accent1: #4F81BD
+  accent2: #C0504D
+  accent3: #9BBB59
+  accent4: #8064A2
+  accent5: #4BACC6
+  accent6: #F79646
+  hlink: #0000FF
+  folHlink: #800080
+
+Font Scheme: Office
+  Major Font: Cambria
+  Minor Font: Calibri
+
+================================================================================
+COMPARISON SUMMARY
+================================================================================
+
+### Style Count Comparison ###
+Broken:   42 styles
+Proper:   45 styles
+StyleSet: 42 styles
+
+### Styles in Proper but missing in Broken ###
+  - Date
+  - DateChar
+  - ListBullet
+
+### Styles in Broken but missing in Proper ###
+(none)
+
+### Styles in StyleSet but missing in Broken ###
+(none)
+
+### Detailed Comparison for Key Styles ###
+
+--- Title ---
+Broken:   EXISTS
+Proper:   EXISTS
+StyleSet: EXISTS
+
+Property Differences:
+  Font Size: '' vs '44'
+  Alignment: '' vs 'center'
+
+--- Subtitle ---
+Broken:   EXISTS
+Proper:   EXISTS
+StyleSet: EXISTS
+
+Property Differences:
+  Font Size: '' vs '18'
+  Alignment: '' vs 'center'
+
+--- Date ---
+Broken:   MISSING
+Proper:   EXISTS
+StyleSet: MISSING
+
+--- Heading1 ---
+Broken:   EXISTS
+Proper:   EXISTS
+StyleSet: EXISTS
+
+Property Differences:
+  Name: 'Heading 1' vs 'heading 1'
+  Font Size: '32' vs '28'
+  Alignment: '' vs 'center'
+
+--- Normal ---
+Broken:   EXISTS
+Proper:   EXISTS
+StyleSet: EXISTS
+
+Property Differences:
+  Font Size: '22' vs ''
+  Alignment: 'left' vs ''

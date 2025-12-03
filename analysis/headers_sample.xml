@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:glossaryDocument xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 w15 wp14">
+  <w:docParts>
+    <w:docPart>
+      <w:docPartPr>
+        <w:name w:val=" Blank (Three Columns)"/>
+        <w:style w:val="Normal"/>
+        <w:category>
+          <w:name w:val="Built-in"/>
+          <w:gallery w:val="hdrs"/>
+        </w:category>
+        <w:behaviors>
+          <w:behavior w:val="content"/>
+        </w:behaviors>
+        <w:description w:val="Blank header set up for left, right, and center alignment"/>
+        <w:guid w:val="{65DACAE8-82B8-4DDF-A6A8-37C528D3FDA4}"/>
+      </w:docPartPr>
+      <w:docPartBody>
+        <w:p>
+          <w:pPr>
+            <w:pStyle w:val="BlankThreeColumns"/>
+          </w:pPr>
+          <w:sdt>
+            <w:sdtPr>
+              <w:id w:val="1704979692"/>
+              <w:placeholder>
+                <w:docPart w:val="20570245BAAA4558B05A24B5AD0ACF12"/>
+              </w:placeholder>
+              <w:temporary/>
+              <w:showingPlcHdr/>
+              <w15:appearance w15:val="hidden"/>
+            </w:sdtPr>
+            <w:sdtContent>
+              <w:r>
+                <w:t>[Type here]</w:t>
+              </w:r>
+            </w:sdtContent>
+          </w:sdt>
+          <w:r>
+            <w:ptab w:relativeTo="margin" w:alignment="center" w:leader="none"/>
+          </w:r>
+          <w:sdt>
+            <w:sdtPr>
+              <w:id w:val="968859947"/>
+              <w:placeholder>
+                <w:docPart w:val="20570245BAAA4558B05A24B5AD0ACF12"/>
+              </w:placeholder>
+              <w:temporary/>
+              <w:showingPlcHdr/>
+              <w15:appearance w15:val="hidden"/>
+            </w:sdtPr>
+            <w:sdtContent>
+              <w:r>
+                <w:t>[Type here]</w:t>
+              </w:r>
+            </w:sdtContent>
+          </w:sdt>
+          <w:r>
+            <w:ptab w:relativeTo="margin" w:alignment="right" w:leader="none"/>
+          </w:r>
+          <w:sdt>
+            <w:sdtPr>
+              <w:id w:val="968859952"/>
+              <w:placeholder>
+                <w:docPart w:val="20570245BAAA4558B05A24B5AD0ACF12"/>
+              </w:placeholder>
+              <w:temporary/>
+              <w:showingPlcHdr/>
+              <w15:appearance w15:val="hidden"/>
+            </w:sdtPr>
+            <w:sdtContent>
+              <w:r>
+                <w:t>[Type here]</w:t>
+              </w:r>
+            </w:sdtContent>
+          </w:sdt>
+        </w:p>
+      </w:docPartBody>
+    </w:docPart>
+    <w:docPart>
+      <w:docPartPr>
+        <w:name w:val="20570245BAAA4558B05A24B5AD0ACF12"/>
+        <w:category>
+          <w:name w:val="General"/>
+          <w:gallery w:val="placeholder"/>
+        </w:category>
+        <w:types>
+          <w:type w:val="bbPlcHdr"/>
+        </w:types>
+        <w:behaviors>
+          <w:behavior w:val="content"/>
+        </w:behaviors>
+        <w:guid w:val="{5570234B-FC24-4258-94B2-274BCD358940}"/>
+      </w:docPartPr>
+      <w:docPartBody>
+        <w:p>
+          <w:pPr>
+            <w:pStyle w:val="20570245BAAA4558B05A24B5AD0ACF12"/>
+          </w:pPr>
+          <w:r>
+            <w:t>[Type here]</w:t>
+          </w:r>
+        </w:p>
+      </w:docPartBody>
+    </w:docPart>
+    <w:docPart>
+      <w:docPartPr>
+        <w:name w:val="Filigree"/>
+        <w:style w:val="Header/Footer"/>
+        <w:category>
+          <w:name w:val="Built-in"/>
+          <w:gallery w:val="hdrs"/>
+        </w:category>
+        <w:behaviors>
+          <w:behavior w:val="content"/>
+        </w:behaviors>
+        <w:description w:val="Title and author name"/>
+        <w:guid w:val="{05485E5B-0BF4-49A9-BF79-9162B9590967}"/>
+      </w:docPartPr>
+      <w:docPartBody>
+        <w:p>
+          <w:pPr>
+            <w:pStyle w:val="Header"/>
+            <w:tabs>
+              <w:tab w:val="clear" w:pos="4680"/>
+              <w:tab w:val="clear" w:pos="9360"/>
+            </w:tabs>
+            <w:jc w:val="right"/>
+            <w:rPr>
+              <w:color w:val="5B9BD5" w:themeColor="accent1"/>
+            </w:rPr>
+          </w:pPr>
+          <w:sdt>
+            <w:sdtPr>
+              <w:rPr>
+                <w:color w:val="5B9BD5" w:themeColor="accent1"/>
+              </w:rPr>
+              <w:alias w:val="Title"/>
+              <w:tag w:val=""/>
+              <w:id w:val="664756013"/>
+              <w:placeholder>
+                <w:docPart w:val="69EB442D3C784712BC21DE599CA2194F"/>
+              </w:placeholder>
+              <w:showingPlcHdr/>
+              <w:dataBinding w:prefixMappings="xmlns:ns0='http://purl.org/dc/elements/1.1/' xmlns:ns1='http://schemas.openxmlformats.org/package/2006/metadata/core-properties' " w:xpath="/ns1:coreProperties[1]/ns0:title[1]" w:storeItemID="{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"/>
+              <w:text/>
+            </w:sdtPr>
+            <w:sdtContent>
+              <w:r>
+                <w:rPr>

@@ -1,0 +1,2359 @@
+
+[Lutaml::Model] WARN: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+
+[Lutaml::Model] WARN: Attribute name `display` conflicts with a built-in method
+
+Randomized with seed 42640
+
+Uniword::Visitor::BaseVisitor
+  #visit_document
+    accepts a document parameter
+    provides a no-op default implementation
+  #visit_table_row
+    accepts a table row parameter
+    provides a no-op default implementation
+  #visit_table_cell
+    accepts a table cell parameter
+    provides a no-op default implementation
+  #visit_table
+    accepts a table parameter
+    provides a no-op default implementation
+  #visit_image
+    accepts an image parameter
+    provides a no-op default implementation
+  #visit_run
+    provides a no-op default implementation
+    accepts a run parameter
+  #visit_paragraph
+    provides a no-op default implementation
+    accepts a paragraph parameter
+  inheritance
+    can be subclassed to create custom visitors
+  visitor pattern support
+    works with element accept methods
+    allows elements to dispatch to appropriate visit methods
+
+Uniword::ElementRegistry
+  .registered?
+    is case-insensitive
+    returns true for registered tags
+    returns false for unregistered tags
+  .clear
+    clears all registered elements
+  .find
+    finds a registered element class
+    returns nil for unregistered tags
+    accepts symbol tag names
+    is case-insensitive
+  automatic registration
+    element classes are automatically registered when loaded
+  .register
+    registers an element class
+    registers multiple element classes
+    does not register abstract classes
+  .all
+    returns empty array when no elements registered
+    returns all registered element classes
+  .count
+    returns the number of registered elements
+    returns 0 when no elements registered
+  .create
+    returns nil for unregistered tags
+    creates an element with attributes
+    creates an element by tag name
+    accepts symbol tag names
+    is case-insensitive
+  .tags
+    returns all registered tag names
+    returns empty array when no elements registered
+
+Uniword::Loggable
+  logging methods
+    logs error messages
+    logs warning messages
+    logs info messages
+    logs debug messages
+  #logger
+    returns the Uniword logger
+
+Uniword::Bookmark
+  #initialize
+    creates a bookmark with name and target element
+    creates a bookmark with name
+  #==
+    ignores target element in comparison
+    returns false for bookmarks with different names
+    returns true for bookmarks with same name
+    returns false when comparing with non-bookmark
+  attribute accessors
+    allows modification of target element
+    allows modification of name
+  #anchor_name
+    converts to lowercase
+    preserves hyphens and underscores
+    converts spaces to underscores
+    returns sanitized anchor name
+    removes special characters
+  #target?
+    returns true when bookmark has target element
+    returns false when bookmark has no target element
+  #to_h
+    returns hash representation
+    includes nil target element in hash
+  #hash
+    allows bookmarks to be used in hash structures
+    returns hash code based on name
+    returns same hash for bookmarks with same name
+  #eql?
+    is alias for ==
+
+Uniword::Endnote
+  #to_h
+    returns hash representation
+  #initialize
+    creates an endnote with default empty content
+    creates an endnote with id and content
+    accepts string id
+  #content?
+    returns false when endnote has no content
+    returns false when content is nil
+    returns true when endnote has content
+  #add_paragraph
+    adds a paragraph to the endnote content
+    adds multiple paragraphs
+  attribute accessors
+    allows modification of content
+    allows modification of id
+  #text
+    returns empty string for endnote without content
+    returns combined text from all paragraphs
+
+Uniword
+  custom logger
+    allows setting a custom logger
+  .debug?
+    returns false when not debug level
+    returns true when debug level is set
+  .enable_debug_logging
+    sets logger to DEBUG level
+  .logger
+    returns a Logger instance
+    uses WARN level by default
+  .disable_debug_logging
+    sets logger to WARN level
+
+Uniword::TableCell
+  #empty?
+    returns true for cell with no paragraphs
+    returns false for cell with text
+    returns true for cell with empty paragraphs
+  #initialize
+    defaults colspan to 1
+    creates a cell with width
+    creates a cell with vertical alignment
+    creates a cell with no paragraphs
+    defaults rowspan to 1
+    creates a cell with background color
+  #add_text
+    creates and adds a paragraph with text
+    creates and adds a paragraph with properties
+    returns the created paragraph
+  #accept
+    accepts a visitor
+  #paragraph_count
+    returns 0 for cell with no paragraphs
+    returns correct count for multiple paragraphs
+  #text
+    returns empty string for cell with no paragraphs
+    concatenates text from multiple paragraphs with newlines
+    returns text from a single paragraph
+  #add_paragraph
+    adds multiple paragraphs
+    raises error for non-Paragraph objects
+    returns the updated paragraphs array
+    adds a paragraph to the cell
+  inheritance
+    is not abstract
+    inherits from Element
+
+Uniword::Formats::MhtmlHandler
+  #write
+    raises ArgumentError for nil document
+    raises ArgumentError for invalid document type
+    raises ArgumentError for nil path
+    serializes and packages document to MHTML file
+  #can_handle?
+    returns true for .mhtml files
+    returns false for non-existent files
+    returns false for non-MHTML files
+    returns true for .mht files
+  #supported_extensions
+    returns array of MHTML extensions
+  integration
+    performs full read-write cycle
+  #read
+    raises ArgumentError for non-existent file
+    raises ArgumentError for nil path
+    reads and deserializes MHTML file
+
+Uniword::TrackedChanges
+  #deletions
+    returns all deletion revisions
+  #insertions
+    returns all insertion revisions
+  #clear
+    resets revision counter
+    removes all revisions
+  #add_insertion
+    supports custom date
+    creates and adds an insertion revision
+  #find_revision
+    finds revision by ID
+    handles numeric IDs
+    returns nil for non-existent ID
+  #authors
+    excludes nil authors
+    returns unique author names
+    returns empty array for no revisions
+  #reject_all
+    returns count of rejected changes
+    clears all revisions
+  #empty?
+    returns false with revisions
+    returns true for new tracked changes
+  #add_revision
+    raises error if not a Revision instance
+    adds a revision to the collection
+    preserves existing revision ID
+    assigns sequential ID if not set
+    returns the added revision
+  #remove_revision
+    removes revision by ID
+    returns nil for non-existent revision
+  #revisions_by_type
+    returns format changes
+    returns insertions
+    returns deletions
+  #enabled
+    can disable track changes
+    can enable track changes
+  #format_changes
+    returns all format change revisions
+  #accept_all
+    clears all revisions
+    returns count of accepted changes
+  #count
+    returns correct count with revisions
+    returns zero for empty collection
+  #initialize
+    creates with track changes disabled by default
+    can be initialized with enabled flag
+  #add_format_change
+    creates and adds a format change revision
+  #revisions_by_author
+    returns revisions by specific author
+    returns empty array for unknown author
+  #add_deletion
+    creates and adds a deletion revision
+
+Uniword::Formats::FormatHandlerRegistry
+  .reset_registry
+    clears all registrations
+    allows re-registration after reset
+  .handler_for_file
+    includes registered formats in error message
+    raises error for nil path
+    returns handler that can handle the file
+    raises error for empty path
+    raises error if no handler can handle the file
+    returns correct handler for .docx files
+  .registered_formats
+    returns array of registered format symbols
+    returns empty array for empty registry
+  integration scenarios
+    supports multiple handlers with different extensions
+    maintains isolation between different format registrations
+  .register
+    registers a handler for a format
+    raises error if handler doesn't inherit from BaseHandler
+    raises error for non-class handler
+    registers multiple formats
+    allows overriding existing registrations
+    raises error for non-symbol format
+  .registered?
+    returns true for registered format
+    returns false after registry reset
+    returns false for unregistered format
+  .handler_for
+    includes available formats in error message
+    returns an instance of the registered handler
+    raises error for non-symbol format
+    raises error for unregistered format
+    returns a new instance each time
+  .registry
+    contains registered handlers
+    returns the same hash instance
+    returns a hash
+
+Theme Extraction and Reuse
+  Uniword::FontScheme
+    has default Office theme fonts
+    allows custom fonts
+    can be duplicated
+  Uniword::Document
+    #theme
+      can have a theme assigned
+      starts with no theme
+    #apply_theme_from
+      applies theme from source document (FAILED - 1)
+    #apply_styles_from
+      applies styles from source document with conflict resolution (FAILED - 2)
+    #apply_template
+      applies both theme and styles from template (FAILED - 3)
+  Uniword::StylesConfiguration
+    #merge
+      renames conflicting styles when requested
+      replaces existing styles when requested
+      raises error for invalid conflict resolution
+      keeps existing styles by default
+    #style_exists?
+      checks if style exists by ID
+    #find_by_id
+      finds style by ID
+    #export_styles
+      exports all styles as copies
+    #import_from_document
+      skips existing styles
+      imports styles from another document
+  Uniword::Theme
+    can be duplicated
+    validates correctly
+    can be created programmatically
+  Integration: Using theme colors in styles
+    allows defining styles using theme colors (FAILED - 4)
+  Uniword::ColorScheme
+    can be duplicated
+    allows custom colors
+    has default Office theme colors
+  Theme serialization and deserialization
+    preserves theme when document has no explicit theme (FAILED - 5)
+    round-trips theme through DOCX (FAILED - 6)
+
+Uniword::Mhtml::MathConverter
+  .plurimath_available?
+    checks if Plurimath is available
+  .mathml_to_omml
+    with valid MathML
+      wraps in OMML structure when Plurimath unavailable
+      converts to OMML format
+    with empty string
+      returns empty string
+    with complex MathML
+      converts complex expressions
+    with nil input
+      returns empty string
+  .asciimath_to_omml
+    with custom delimiters
+      accepts delimiter parameter
+    with nil input
+      returns empty string
+    with valid AsciiMath
+      returns plain text when Plurimath unavailable
+      converts to OMML format when Plurimath available
+    with empty string
+      returns empty string
+  .wrap_in_omml
+    includes proper namespace
+    wraps content in OMML structure
+  .math_element?
+    with math element
+      detects mml:math tag
+      detects math class
+      detects math tag
+      detects data-mathml attribute
+      detects m:oMath tag
+    with non-math element
+      returns false for paragraph
+      returns false for nil
+  .extract_math
+    with data-mathml attribute
+      extracts MathML from attribute
+    with math tag
+      extracts MathML from element
+    with asciimath class
+      extracts AsciiMath from text
+    with unknown math content
+      returns unknown type
+    with m:oMath tag
+      extracts OMML from element
+
+Uniword::Style
+  style type checks
+    identifies character styles
+    identifies paragraph styles
+  basic style creation
+    creates a style with required attributes
+    validates style type
+  style inheritance
+    supports basedOn property
+
+Uniword::TableRow
+  #add_cell
+    raises error for non-TableCell objects
+    adds multiple cells
+    adds a cell to the row
+    returns the updated cells array
+  #add_text_cell
+    creates and adds a cell with text
+    returns the created cell
+    creates and adds a cell with properties
+  #accept
+    accepts a visitor
+  inheritance
+    inherits from Element
+    is not abstract
+  #initialize
+    defaults header to false
+    creates a row with no cells
+    creates a header row
+    defaults allow_break to true
+    creates a row with height
+  #header?
+    returns false for non-header row
+    returns true for header row
+  #cell_count
+    returns correct count for multiple cells
+    returns 0 for row with no cells
+  #empty?
+    returns true for row with empty cells
+    returns false for row with text
+    returns true for row with no cells
+
+Uniword::Builder
+  #build
+    returns the constructed document
+  #add_table
+    adds a table with rows and cells
+    returns self for chaining
+    supports cell formatting
+  #add_paragraph
+    adds paragraph with alignment
+    returns self for chaining
+    adds paragraph with bold text
+    adds paragraph with italic text
+    supports method chaining
+    adds a paragraph with text
+    adds paragraph with style (FAILED - 7)
+  #add_blank_line
+    adds an empty paragraph
+  complex document building
+    builds a document with mixed content (FAILED - 8)
+  #add_heading
+    adds a heading with default level 1 (FAILED - 9)
+    adds a heading with custom level (FAILED - 10)
+    adds a heading with alignment
+  #initialize
+    creates a new document by default
+    accepts an existing document
+
+Uniword::DocumentFactory
+  .create
+    creates documents with independent state
+    creates a new empty document
+  .from_file
+    with DOCX file
+      loads DOCX file with explicit format (FAILED - 11)
+      loads DOCX file with auto format detection (FAILED - 12)
+    with MHTML file
+      loads MHTML file with auto format detection (FAILED - 13)
+      loads MHTML file with explicit format (FAILED - 14)
+    with invalid arguments
+      raises ArgumentError when format is not supported
+      raises ArgumentError when path is nil
+      raises ArgumentError when path is empty
+      raises FileNotFoundError when file does not exist
+  .detect_format
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises FileNotFoundError when file does not exist
+    with unsupported file
+      raises ArgumentError for unknown format
+    with MHTML file
+      detects MHT format
+      detects MHTML format
+    with DOCX file
+      detects DOCX format
+
+Uniword::DocumentFactory
+  .from_file
+    with empty path
+      raises ArgumentError
+    with non-existent file
+      raises FileNotFoundError
+    with nil path
+      raises ArgumentError
+
+Uniword::Infrastructure::ZipPackager
+  #remove_file
+    when file does not exist
+      returns false
+      does not modify other files
+    with invalid arguments
+      raises ArgumentError when zip_path is nil
+    when file exists
+      removes file from ZIP
+      returns true
+  #package
+    with invalid arguments
+      raises ArgumentError when output path is empty
+      raises ArgumentError when content is nil
+      raises ArgumentError when content is not a Hash
+      raises ArgumentError when output path is nil
+      raises ArgumentError when content is empty
+      raises ArgumentError when entry content is nil
+      raises ArgumentError when entry path is nil
+      raises ArgumentError when entry path is empty
+    with valid arguments
+      overwrites existing file
+      creates ZIP file with content
+      creates output directory if it does not exist
+  #add_file
+    with valid arguments
+      adds file to existing ZIP
+      overwrites existing entry with same path
+    with invalid arguments
+      raises ArgumentError when entry_path is empty
+      raises ArgumentError when entry_path is nil
+      raises ArgumentError when zip_path is nil
+
+Inspection helpers
+  Uniword::Run
+    provides readable inspect output
+    truncates long text
+    shows formatting flags
+  Uniword::Document
+    provides readable inspect output (FAILED - 15)
+  Uniword::Paragraph
+    provides readable inspect output
+    truncates long text
+
+Uniword::DocumentWriter
+  #infer_format
+    infers MHTML format from .mht extension
+    infers DOCX format from .docx extension
+    infers MHTML format from .mhtml extension
+    is case-insensitive
+    with unsupported extension
+      raises ArgumentError for .pdf extension
+      raises ArgumentError for no extension
+      raises ArgumentError for .txt extension
+  #save
+    with DOCX format
+      saves document as DOCX with auto format (FAILED - 16)
+      saves document with explicit DOCX format (FAILED - 17)
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when path is empty
+      raises ArgumentError when format is not supported
+    with MHTML format
+      saves document as MHTML with auto format (FAILED - 18)
+      saves document with explicit MHTML format (FAILED - 19)
+  integration
+    performs full write-read cycle for MHTML (FAILED - 20)
+    performs full write-read cycle for DOCX (FAILED - 21)
+  #initialize
+    creates writer with document
+    with invalid arguments
+      raises ArgumentError when not a Document instance
+      raises ArgumentError when document is nil
+
+Numbering Feature
+  Document Integration
+    initializes with numbering configuration
+    creates numbered list in document
+  Paragraph Integration
+    #set_numbering
+      sets numbering on paragraph (FAILED - 22)
+      preserves other properties (FAILED - 23)
+    #numbered?
+      returns true for numbered paragraph
+      returns false for non-numbered paragraph
+  Uniword::NumberingInstance
+    #initialize
+      raises error for invalid num_id
+      creates instance with valid IDs
+      raises error for invalid abstract_num_id
+    #uses_definition?
+      returns true for matching definition
+      returns false for non-matching definition
+  Uniword::NumberingDefinition
+    #add_level
+      adds a level to the definition
+      auto-assigns level index
+      raises error when exceeding max levels
+    .decimal
+      creates decimal numbering definition
+    #initialize
+      creates empty definition
+    .letter
+      creates upper letter numbering
+      creates lower letter numbering
+    .roman
+      creates upper roman numbering
+      creates lower roman numbering
+    .bullet
+      creates bullet numbering definition
+    #level
+      retrieves level by index
+  Uniword::NumberingConfiguration
+    #get_instance
+      retrieves instance by ID
+    #default_bullet_num_id
+      creates default bullet numbering
+    #default_decimal_num_id
+      creates default decimal numbering
+    #add_instance
+      adds instance with auto-assigned num_id
+      respects provided num_id
+    #initialize
+      creates empty configuration
+    #create_numbering
+      creates roman numbering
+      raises error for unknown type
+      creates letter numbering
+      creates bullet numbering
+      creates decimal numbering
+    #get_definition
+      retrieves definition by ID
+    #add_definition
+      respects provided abstract_num_id
+      adds definition with auto-assigned ID
+    #get_definition_for_num_id
+      retrieves definition via instance
+  Uniword::NumberingLevel
+    #numbering_text
+      returns custom text if provided
+      returns bullet character for bullet format
+      returns default decimal text
+    #initialize
+      raises error for invalid format
+      creates a level with custom values
+      creates a level with default values
+      raises error for invalid alignment
+    #bullet!
+      sets level as bullet
+      allows custom font
+
+Uniword::Image
+  #accept
+    accepts a visitor
+  #aspect_ratio
+    handles square images
+    returns nil when only height is set
+    returns nil when only width is set
+    returns nil when dimensions are not set
+    calculates aspect ratio
+  #width_in_pixels
+    converts EMUs to pixels (96 DPI)
+    returns nil when width is not set
+  #height_in_pixels
+    returns nil when height is not set
+    converts EMUs to pixels (96 DPI)
+  #height_in_points
+    converts EMUs to points
+    returns nil when height is not set
+  #valid?
+    returns false when relationship_id is nil
+    returns true when relationship_id is present
+    returns false when relationship_id is empty
+  inheritance
+    inherits from Element
+    is not abstract
+  #initialize
+    creates an image with filename
+    creates an image with alt text
+    creates an image with title
+    creates an image with relationship_id
+    creates an image with dimensions
+  #width_in_points
+    converts EMUs to points
+    returns nil when width is not set
+
+Uniword::CommentsPart
+  #comments_by_author
+    returns empty array for unknown author
+    returns comments by specific author
+  XML serialization
+    serializes to XML with correct structure (PENDING: Full OOXML serialization support will be implemented with OoxmlSerializer integration)
+  #remove_comment
+    returns nil for non-existent comment
+    removes comment by ID
+  #initialize
+    creates an empty comments collection
+  #clear
+    removes all comments
+    resets comment counter
+  #empty?
+    returns false with comments
+    returns true for new comments part
+  #find_comment
+    finds comment by ID
+    returns nil for non-existent ID
+    handles numeric IDs
+  #add_comment
+    preserves existing comment ID
+    returns the added comment
+    adds a comment to the collection
+    raises error if not a Comment instance
+    assigns sequential ID if not set
+  #count
+    returns correct count with comments
+    returns zero for empty collection
+  #authors
+    excludes nil authors
+    returns empty array for no comments
+    returns unique author names
+
+Uniword::Serialization::HtmlSerializer
+  table serialization
+    applies table width
+    applies cell rowspan
+    serializes table with rows and cells
+    applies cell colspan
+    serializes table with borders
+    serializes empty table
+  run serialization
+    serializes font color
+    serializes underlined text
+    serializes font size
+    serializes highlight color
+    serializes superscript
+    serializes subscript
+    combines multiple formatting properties
+    serializes font family
+    serializes strikethrough text
+    serializes italic text
+    serializes bold text
+  paragraph serialization
+    maps Heading1 style
+    escapes HTML special characters
+    applies spacing styles
+    applies alignment style
+    serializes empty paragraph
+    serializes paragraph with text
+    applies indentation styles
+    maps Heading2 style
+  CSS generation
+    includes MsoNormal style
+    includes heading styles
+    includes table styles
+    includes hyperlink styles
+  complex document
+    serializes document with mixed content
+    serializes document with multiple paragraphs
+  #serialize
+    includes Word namespaces
+    returns valid HTML structure
+    includes generator meta tag
+    returns CSS styles
+    includes WordSection1 div
+    returns hash with html, css, and images keys
+    raises ArgumentError for nil document
+    raises ArgumentError for non-Document object
+
+Uniword::Comment
+  #valid?
+    returns false without author
+    returns false with empty author
+    returns true for valid comment
+    returns false without comment_id
+  XML serialization
+    serializes to XML with correct structure (FAILED - 24)
+  #add_paragraph
+    returns self for chaining
+    raises error if not a Paragraph
+    adds a paragraph to comment
+  #add_text
+    supports multiple text additions
+    adds text as a paragraph
+    returns self for chaining
+  #empty?
+    returns true for comment without paragraphs
+    returns true for comment with empty paragraphs
+    returns false for comment with text
+  #initialize
+    auto-generates comment_id if not provided
+    uses provided date
+    uses provided comment_id
+    creates a comment with required attributes
+    accepts initials
+    sets date to current time if not provided
+  #accept
+    calls visitor visit_comment method
+  #text
+    returns text from single paragraph
+    joins multiple paragraphs with newlines
+    returns empty string for new comment
+
+v1.1.0 Features Smoke Test
+  Integration with existing classes
+    adds hyperlink to paragraph
+    adds page borders to section
+    enables line numbering on section
+    sets columns on section
+    sets page size on section
+  TextFrame
+    creates absolute positioned frame
+    creates aligned frame
+  ParagraphBorders
+    creates paragraph border box
+  LineNumbering
+    creates continuous line numbering
+    creates per-page line numbering
+  PageBorders
+    creates page borders with all sides
+  TabStop
+    creates left-aligned tab stop
+  Feature class loading
+    loads LineNumbering class
+    loads Column classes
+    loads TabStop class
+    loads Hyperlink class
+    loads HtmlImporter class
+    loads PageBorders classes
+    loads Shading class
+    loads TextFrame class
+    loads ParagraphBorders classes
+  Shading
+    creates pattern shading
+    creates solid shading
+  ColumnConfiguration
+    creates two-column layout
+    creates three-column layout
+  Hyperlink
+    creates internal hyperlink
+    creates external hyperlink
+  HtmlImporter
+    imports simple HTML
+    imports headings
+  Image base64 support
+    creates image from base64
+  Module-level HTML API
+    has from_html method
+    has html_to_docx method
+    has html_to_doc method
+    converts HTML to document
+
+Uniword::Properties::ParagraphProperties
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  #initialize
+    freezes the object after initialization (FAILED - 25)
+    creates properties with provided attributes
+    creates properties with default values
+  immutability
+    cannot modify attributes after creation (FAILED - 26)
+    is frozen (FAILED - 27)
+  #eql?
+    is an alias for ==
+  boolean attributes
+    allows setting boolean attributes
+    defaults boolean attributes to false
+  #hash
+    returns different hash for different objects
+    allows use as hash keys
+    returns same hash for equal objects
+  #==
+    compares all attributes
+    returns false for different types
+    returns true for identical properties
+    returns false for different properties
+
+Uniword::Table
+  #empty?
+    returns true for table with no rows
+    returns false for table with data
+    returns true for table with empty rows
+  #add_text_row
+    creates a data row by default
+    creates and adds a row with text cells
+    returns the created row
+    creates a header row when specified
+  #row_count
+    returns 0 for table with no rows
+    returns correct count for multiple rows
+  #add_row
+    returns the updated rows array
+    adds multiple rows
+    adds a row to the table
+    raises error for non-TableRow objects
+  #data_rows
+    returns all rows when no headers
+    returns only data rows
+  inheritance
+    is not abstract
+    inherits from Element
+  #initialize
+    creates a table with properties
+    creates a table with no rows
+  #column_count
+    returns 0 for table with no rows
+    returns column count based on first row
+  #header_rows
+    returns empty array when no header rows
+    returns only header rows
+  #accept
+    accepts a visitor
+
+Uniword::Revision
+  #delete?
+    returns false for non-deletion
+    returns true for deletion
+  #insert?
+    returns false for non-insertion
+    returns true for insertion
+  #initialize
+    uses provided revision_id
+    creates a format change
+    sets date to current time if not provided
+    uses provided date
+    creates a deletion
+    creates an insertion by default
+    auto-generates revision_id if not provided
+  #format_change?
+    returns false for non-format change
+    returns true for format change
+  #accept
+    calls visitor visit_revision method
+  #xml_element_name
+    returns correct name for insertion
+    returns correct name for format change
+    raises error for invalid type
+    returns correct name for deletion
+  #valid?
+    returns false without type
+    returns false without author
+    returns false with invalid type
+    returns false with empty author
+    returns false without revision_id
+    returns true for valid insertion
+  #text
+    returns empty string for nil content
+    returns text content
+
+Uniword::Footnote
+  attribute accessors
+    allows modification of content
+    allows modification of id
+  #text
+    returns empty string for footnote without content
+    returns combined text from all paragraphs
+  #content?
+    returns false when footnote has no content
+    returns false when content is nil
+    returns true when footnote has content
+  #initialize
+    creates a footnote with default empty content
+    accepts string id
+    creates a footnote with id and content
+  #add_paragraph
+    adds multiple paragraphs
+    adds a paragraph to the footnote content
+  #to_h
+    returns hash representation
+
+Uniword::Infrastructure::MimeParser
+  #parse
+    filename extraction
+      extracts filenames from various location formats
+    with base64 encoded images
+      decodes base64 images
+    with valid MHTML content
+      extracts filelist content
+      returns images hash
+      extracts HTML content
+    with quoted-printable encoding
+      decodes quoted-printable content
+    with invalid input
+      raises error when path is nil
+      raises error when file does not exist
+    boundary extraction
+      extracts boundary without quotes
+      raises error when no boundary found
+      extracts boundary with quotes
+  #parse_content
+    handles empty parts gracefully
+    returns hash with expected keys
+
+Uniword::Paragraph
+  #add_text
+    returns the created run
+    adds multiple text runs
+    creates and adds a run with text
+    creates and adds a run with properties
+  #empty?
+    returns true for paragraph with nil text runs
+    returns true for paragraph with no runs
+    returns true for paragraph with empty runs
+    returns false for paragraph with text
+  #text
+    returns empty string for paragraph with no runs
+    concatenates text from multiple runs
+    returns text from a single run
+    handles runs with nil text
+  #accept
+    accepts a visitor
+  inheritance
+    is not abstract
+    inherits from Element
+  #run_count
+    returns correct count for multiple runs
+    returns 0 for paragraph with no runs
+  #style
+    returns nil when no properties
+    returns style from properties
+  #alignment
+    returns nil when no properties
+    returns alignment from properties
+  #initialize
+    creates a paragraph with no runs
+    creates a paragraph with an id
+    creates a paragraph with properties
+  #valid?
+    returns true for paragraph with runs
+    returns true for empty paragraph
+  #add_run
+    adds a run to the paragraph
+    raises error for non-Run objects
+    adds multiple runs
+    returns the updated runs array
+
+Uniword::Infrastructure::ZipExtractor
+  #extract_file
+    with invalid arguments
+      raises ArgumentError when path is nil
+    when file does not exist
+      returns nil
+    when file exists
+      extracts different file
+      extracts specific file
+  #list_files
+    excludes directories
+    returns array of file paths
+    returns empty array for empty ZIP
+    with invalid arguments
+      raises ArgumentError when path is nil
+  #extract
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when path is a directory
+      raises ArgumentError when file does not exist
+      raises ArgumentError when path is empty
+    with valid ZIP file
+      extracts all files from ZIP archive
+      returns empty hash for empty ZIP
+      skips directories
+
+Uniword::Validators::ElementValidator
+  .register
+    raises ArgumentError if validator doesn't inherit from ElementValidator
+    registers a custom validator for an element class
+    allows overriding existing validator registrations
+  .for
+    returns base validator for unregistered element types
+    raises ArgumentError for non-Element class
+    returns a TableValidator for Table class
+    returns a ParagraphValidator for Paragraph class
+    raises ArgumentError for non-class argument
+    returns an ElementValidator for Element class
+  #errors
+    returns error for non-Element object
+    returns generic error for invalid element
+    returns error for nil element
+    returns empty array for valid element
+  .validator_registry
+    returns a hash
+    includes registered validators
+  #valid?
+    delegates to element's valid? method
+    returns false for nil element
+    returns true for valid element
+    returns false for non-Element object
+  .reset_registry
+    clears the validator registry
+  integration with element classes
+    validates paragraphs correctly
+    validates runs correctly
+    validates tables correctly
+    validates images correctly
+
+Uniword::CharacterStyle
+  built-in character styles
+    creates Emphasis style
+    creates Strong style
+  default character style
+    creates default character style
+  custom character style
+    creates custom style with formatting
+
+Uniword::Validators::ParagraphValidator
+  #errors
+    returns multiple errors for multiple issues
+    returns type error for non-Paragraph element
+    returns element error for nil
+    returns run errors for invalid runs
+    returns empty array for valid paragraph
+    returns property error for invalid properties
+  inheritance
+    inherits from ElementValidator
+  edge cases
+    handles paragraph with nil runs array
+    handles paragraph with nil properties
+    handles paragraph with empty runs array
+  #valid?
+    returns false for nil
+    returns false for non-Paragraph element
+    returns true for paragraph with valid runs
+    returns false for paragraph with invalid run
+    returns true for paragraph with valid properties
+    returns true for empty paragraph
+    returns false for paragraph with invalid properties
+  realistic scenarios
+    detects mixed valid and invalid runs
+    validates a complex paragraph with multiple runs and properties
+  integration with ElementValidator.for
+    validates paragraphs through the registry
+    is returned when requesting validator for Paragraph class (FAILED - 28)
+
+Uniword::Infrastructure::MimePackager
+  boundary uniqueness
+    uses boundary consistently within document
+    generates different boundaries for different instances
+  VML image handling
+    converts VML imagedata src to cid: reference
+  filelist.xml generation
+    accepts custom filelist.xml
+    includes all resources in filelist
+    generates valid XML structure
+  base64 encoding
+    wraps base64 at 76 characters
+  #package
+    creates MHTML file
+    raises ArgumentError for nil path
+    includes HTML content
+    raises ArgumentError for empty path
+    writes valid MIME structure
+    includes filelist.xml
+  MIME type detection
+    detects application/octet-stream for unknown.xyz
+    detects text/css; charset="utf-8" for style.css
+    detects image/jpeg for photo.jpg
+    detects image/bmp for bitmap.bmp
+    detects image/svg+xml for vector.svg
+    detects image/webp for modern.webp
+    detects image/gif for animation.gif
+    detects text/html; charset="utf-8" for page.html
+    detects image/jpeg for photo.jpeg
+    detects image/tiff for photo.tif
+    detects image/png for image.png
+    detects text/xml; charset="utf-8" for data.xml
+    detects image/tiff for photo.tiff
+  image handling
+    preserves http: URLs
+    includes image in MIME structure
+    converts image src to cid: reference
+    encodes image data as base64
+    lists images in filelist.xml
+    handles multiple images
+    preserves data: URLs
+  #initialize
+    creates packager with resources
+    creates packager with empty resources by default
+    creates packager with HTML content
+    generates unique boundary
+    boundary matches expected format
+
+Uniword::Serialization::HtmlDeserializer
+  #deserialize
+    with table
+      parses table structure (PENDING: Temporarily skipped with xit)
+    with paragraph spacing
+      parses spacing measurements
+    with span styling
+      parses inline styles
+    measurement conversion
+      converts pt to twips
+      converts px to twips
+      converts cm to twips
+    with paragraph alignment
+      parses text alignment
+    with simple paragraph
+      parses paragraph correctly
+    with formatted text
+      parses inline formatting
+    with empty HTML
+      returns empty document
+    with nested inline elements
+      handles nested formatting
+    with mixed content
+      parses mixed elements in order (PENDING: Temporarily skipped with xit)
+    with heading elements
+      parses headings with correct styles (FAILED - 29)
+    with invalid input
+      raises error when parts is not a hash
+      raises error when parts is nil
+    with paragraph indentation
+      parses indentation
+    with MSO class names
+      maps MSO classes to styles (FAILED - 30)
+    with line breaks
+      handles br elements
+    with empty paragraphs
+      skips empty paragraphs
+
+Uniword::Run
+  #underline?
+    returns true when underline is set
+    returns false when underline is nil
+    returns false when no properties
+    returns false when underline is "none"
+  #font_size
+    returns nil when size is not set
+    returns font size in points (half of size attribute)
+    handles odd sizes correctly
+    returns nil when no properties
+  #italic?
+    returns false when italic is false
+    returns true when italic is true
+    returns false when no properties
+  #initialize
+    creates a run with text
+    prefers text over text_element when both provided
+    accepts text_element parameter for compatibility
+    creates a run with an id
+    creates a run with properties
+  #bold?
+    returns false when no properties
+    returns false when bold is false
+    returns true when bold is true
+  #valid?
+    returns true when text is present
+    returns true when text is empty string
+    returns false when text is nil
+  #text_element=
+    sets the text content
+  #text_element
+    returns the text content (FAILED - 31)
+    returns nil when no text
+  #accept
+    accepts a visitor
+  inheritance
+    inherits from Element
+    is not abstract
+
+Headers, Footers, Fields, and Text Boxes
+  Uniword::Footer
+    adds text
+    creates footer with specific type
+    creates footer with default type
+  Document Integration
+    adds header to section
+    adds sections
+    initializes with default section
+    creates document with page numbers in footer
+  Uniword::Section
+    checks for headers
+    gets or creates header
+    adds headers
+    creates with default properties
+  Uniword::Header
+    checks if empty
+    creates header with default type
+    adds paragraphs
+    adds text
+    raises error for invalid type
+    creates header with specific type
+  Uniword::Field
+    .total_pages
+      creates total pages field
+    .sequence
+      creates sequence field for captions
+    .date
+      creates date field
+    .caption
+      creates caption field
+    .page_number
+      creates page number field
+  Uniword::TextBox
+    adds text to text box
+    checks if empty
+    creates text box with default wrapping
+    raises error for invalid wrapping
+    creates text box with position and size
+  Uniword::SectionProperties
+    raises error for invalid orientation
+    creates Letter portrait
+    creates with default values
+    creates A4 landscape
+    creates A4 portrait
+
+Uniword::ParagraphStyle
+  Normal style creation
+    creates default Normal style
+    Normal style has default formatting
+  Heading styles
+    creates heading styles for levels 1-9
+    Lower heading levels are bold
+    Heading 1 has larger font than Heading 2
+    raises error for invalid heading level
+  custom paragraph style
+    creates custom style with properties
+
+Uniword::Mhtml::WordCss
+  CSS file existence
+    wordstyle.css file exists
+    wordstyle.css is not empty
+    wordstyle.css is readable
+  .build_list_rule
+    builds @list rule
+    returns nil for nil instance
+  .generate_list_css
+    returns empty string for nil config
+    handles multiple numbering instances
+    generates CSS for numbering
+  .basic_css
+    includes essential styles
+    returns fallback CSS
+  .build_style_rule
+    builds CSS rule for style with multiple properties
+    returns nil for style with no properties
+    returns nil for nil style
+    builds CSS rule for style with font
+  .default_css
+    includes heading styles
+    includes list definitions
+    includes MsoNormal style
+    includes table styles
+    includes page definitions
+    returns CSS string
+    includes font definitions
+  .generate_style_css
+    handles styles without optional properties
+    generates CSS for styles
+    returns empty string for nil config
+
+Table Properties with Borders
+  equality works with border properties
+  creates table properties with individual borders
+  creates table properties with cell spacing and padding
+
+Uniword::TableBorder
+  .none
+    creates no border
+  .thick
+    creates thick border
+  .dotted
+    creates dotted border
+  #initialize
+    creates border with default values
+    raises error for invalid style
+    creates border with custom values
+  .dashed
+    creates dashed border
+  .single
+    accepts custom width and color
+    creates single border with defaults
+  .double
+    creates double border
+
+OOXML Round-trip Serialization
+  paragraph properties preservation
+    preserves paragraph alignment
+    preserves paragraph style
+  XML structure validation
+    generates properly nested elements
+    generates valid OOXML with proper namespaces
+  run properties preservation
+    preserves multiple formatting properties
+    preserves bold formatting
+    preserves italic formatting
+  error handling
+    raises error for invalid document type
+    raises error for invalid XML
+    raises error for nil content
+    raises error for empty content
+    raises error for nil document
+  paragraph with multiple runs
+    preserves multiple runs in a paragraph
+  simple document round-trip
+    preserves empty document structure
+    preserves document with single paragraph
+    preserves document with multiple paragraphs
+
+Uniword::CommentRange
+  #xml_element_name
+    returns correct name for end marker
+    returns correct name for start marker
+    raises error for invalid marker type
+    returns correct name for reference marker
+  #reference?
+    returns true for reference marker
+    returns false for non-reference marker
+  #initialize
+    creates an end marker
+    creates a reference marker
+    creates a start marker by default
+    creates a start marker explicitly
+  #valid?
+    returns false without comment_id
+    returns false without marker_type
+    returns true with valid attributes
+    returns false with empty comment_id
+  #accept
+    calls visitor visit_comment_range method
+  #start?
+    returns true for start marker
+    returns false for non-start marker
+  #end?
+    returns true for end marker
+    returns false for non-end marker
+
+Uniword::FormatDetector
+  #detect
+    with DOCX file
+      detects DOCX by ZIP signature
+      detects DOCX by extension when signature missing
+    with unsupported file
+      raises ArgumentError for .pdf extension
+      raises ArgumentError for unknown extension
+    with MHTML file
+      detects MHTML by .mht extension
+      detects MHTML by .mhtml extension
+      detects MHTML by MIME header
+    with empty file
+      falls back to extension detection
+    with invalid arguments
+      raises ArgumentError when file does not exist (FAILED - 32)
+      raises ArgumentError when path is empty
+      raises ArgumentError when path is nil
+      raises ArgumentError when path is a directory
+    signature detection priority
+      prefers signature over extension
+
+Uniword::Formats::DocxHandler
+  #supported_extensions
+    returns .docx extension
+  end-to-end workflow
+    can write a document using the full pipeline
+    validates document before writing
+  dependency injection
+    allows custom ZipExtractor
+    allows custom OoxmlSerializer (FAILED - 33)
+    allows custom ZipPackager
+    allows custom OoxmlDeserializer
+  inheritance
+    inherits from BaseHandler
+  integration with FormatHandlerRegistry
+    can be retrieved by file extension (FAILED - 34)
+    is registered for :docx format (FAILED - 35)
+  #extract_content
+    delegates to ZipExtractor
+    reuses the same ZipExtractor instance
+  #serialize
+    reuses the same OoxmlSerializer instance
+    delegates to OoxmlSerializer (FAILED - 36)
+  #package_and_save
+    delegates to ZipPackager
+    reuses the same ZipPackager instance
+  #can_handle?
+    returns true for uppercase .DOCX files
+    returns false for non-.docx files
+    returns true for .docx files
+  #deserialize
+    reuses the same OoxmlDeserializer instance
+    delegates to OoxmlDeserializer
+
+OOXML Namespace Configuration
+  Round-trip serialization
+    preserves document structure through XML round-trip (FAILED - 37)
+    preserves table structure through XML round-trip (FAILED - 38)
+  Uniword::TableRow
+    serializes cells with w:tc elements (FAILED - 39)
+    uses w:tr as root element
+    has correct OOXML namespaces configured
+  Uniword::Run
+    has correct OOXML namespaces configured
+    uses w:r as root element
+    serializes text with w:t element
+  Uniword::TableCell
+    serializes paragraphs with w:p elements (FAILED - 40)
+    uses w:tc as root element
+    has correct OOXML namespaces configured
+  Namespace prefix consistency
+    uses correct namespaces for different element types (FAILED - 41)
+    uses consistent w: prefix for WordProcessingML elements (FAILED - 42)
+  Uniword::Image
+    includes drawing namespaces (FAILED - 43)
+    has correct OOXML namespaces configured
+  Uniword::Paragraph
+    serializes runs with w:r elements (FAILED - 44)
+    has correct OOXML namespaces configured (FAILED - 45)
+    uses w:p as root element (FAILED - 46)
+  Uniword::Document
+    includes WordProcessingML main namespace
+    includes relationships namespace
+    has correct OOXML namespaces configured
+    uses w:document as root element (FAILED - 47)
+  Uniword::Table
+    has correct OOXML namespaces configured
+    serializes rows with w:tr elements (FAILED - 48)
+    uses w:tbl as root element
+
+Uniword::StylesConfiguration
+  style creation helpers
+    creates custom character style
+    creates custom paragraph style
+  validation
+    validates all styles
+  style filtering
+    filters default styles
+    filters paragraph styles
+    filters character styles
+    filters custom styles
+  initialization
+    creates configuration with default styles
+    includes default character styles
+    creates empty configuration without defaults
+    includes all default heading styles
+  style management
+    finds style by name
+    finds style by ID or name
+    removes a style
+    prevents duplicate style IDs
+    adds a style
+  style inheritance resolution
+    resolves simple inheritance
+
+Uniword::Properties::RunProperties
+  #eql?
+    is an alias for ==
+  #hash
+    returns same hash for equal objects
+    allows use as hash keys
+    returns different hash for different objects
+  mutability (for test compatibility)
+    allows modification of attributes
+    is not frozen
+  #initialize
+    creates properties with provided attributes
+    allows mutation for test compatibility
+    creates properties with default values
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  boolean attributes
+    allows setting boolean attributes
+    defaults boolean attributes to false
+  #==
+    returns false for different types
+    returns false for different properties
+    compares all attributes
+    returns true for identical properties
+
+Uniword
+  custom errors
+    Uniword::InvalidFormatError
+      has a message with path and format
+    Uniword::FileNotFoundError
+      has a message with the path
+    Uniword::ValidationError
+      has a message with element name and errors
+    Uniword::CorruptedFileError
+      has a message with path and reason
+    Uniword::ConversionError
+      has a message with formats and reason
+
+Uniword::Validators::TableValidator
+  #valid?
+    returns false for non-Table element
+    returns false for table with invalid row
+    returns true for empty table
+    returns false for nil
+    returns true for table with valid properties
+    returns false for table with invalid properties
+    returns true for table with valid rows
+  realistic scenarios
+    detects mixed valid and invalid rows
+    validates a complex table with header and data rows
+    warns about inconsistent columns while still being valid
+  #warnings
+    returns warning for inconsistent column counts
+    returns empty array for non-Table element
+    returns empty array for table with consistent column counts
+    returns empty array for empty table
+  edge cases
+    handles table with nil rows array
+    handles table with nil properties
+    handles table with empty rows array
+  integration with ElementValidator.for
+    is returned when requesting validator for Table class (FAILED - 49)
+    validates tables through the registry
+  inheritance
+    inherits from ElementValidator
+  #errors
+    returns element error for nil
+    returns multiple errors for multiple issues
+    returns property error for invalid properties
+    returns row errors for invalid rows
+    returns empty array for valid table
+    returns type error for non-Table element
+
+Uniword::Element
+  .inherited
+    allows multiple subclasses to be created
+    is called when a subclass is created
+  #id
+    allows id to be nil
+    allows updating the id
+    allows setting an id attribute
+  object creation
+    creates instances with default values
+    creates instances with provided attributes
+  #valid?
+    returns true by default
+    can be called multiple times
+    with custom validation in subclass
+      returns false when validation fails
+      returns true when validation passes
+  inheritance from Lutaml::Model::Serializable
+    supports lutaml-model attributes
+    inherits from Lutaml::Model::Serializable
+  #accept
+    when not implemented by subclass
+      includes class name in error message
+      raises NotImplementedError
+    when implemented by subclass
+      accepts a visitor object
+  .abstract?
+    returns true for the base Element class
+    returns false for concrete subclasses
+
+Uniword::Document
+  #add_element
+    raises error for non-element objects
+    adds an element to the document (FAILED - 50)
+  .new
+    creates a new document
+    initializes with empty elements array
+
+Uniword::Formats::BaseHandler
+  #can_handle?
+    returns false when no extensions are supported
+    returns true for supported extensions
+    returns false for unsupported extensions
+    returns true for uppercase extensions
+    returns false for non-existent files
+  #read
+    implements the template method pattern
+    raises error for nil path
+    raises error for directory path
+    raises error for empty path
+    validates path before extraction
+  #write
+    raises error for non-Document object
+    validates document before serialization
+    implements the template method pattern
+    raises error for invalid document
+  validation methods
+    #validate_read_path
+      raises error for non-existent file
+      accepts valid file path
+      raises error for directory
+      raises error for empty path
+      raises error for nil path
+    #validate_document
+      accepts valid document
+      raises error for nil document
+      raises error for non-Document object
+      raises error for invalid document
+    #validate_write_path
+      raises error for empty path
+      raises error for nil path
+      accepts valid write path
+      raises error for non-existent directory
+  error classes
+    defines NotImplementedError
+    defines InvalidFormatError
+  #supported_extensions
+    can be overridden by subclasses
+    returns empty array by default
+  abstract class behavior
+    raises NotImplementedError for serialize
+    raises NotImplementedError for package_and_save
+    raises NotImplementedError for deserialize
+    raises NotImplementedError for extract_content
+
+Uniword::Properties::TableProperties
+  #eql?
+    is an alias for ==
+  #initialize
+    allows mutation for test compatibility
+    creates properties with default values
+    creates properties with provided attributes
+  #hash
+    returns different hash for different objects
+    returns same hash for equal objects
+    allows use as hash keys
+  #==
+    compares all attributes
+    returns false for different properties
+    returns true for identical properties
+    returns false for different types
+  boolean attributes
+    defaults borders to true
+    defaults allow_break to true
+    allows setting boolean attributes
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  mutability (for test compatibility)
+    allows modification of attributes
+    is not frozen
+
+Uniword::CLI
+  #validate
+    with verbose option
+      shows detailed validation results (PENDING: Requires fixture files)
+    with non-existent file
+Validating nonexistent.docx...
+✗ File not found: nonexistent.docx
+      exits with error message
+  #info
+    with non-existent file
+Analyzing nonexistent.docx...
+Error: File not found: nonexistent.docx
+      exits with error message
+    with verbose option
+      shows detailed information (PENDING: Requires fixture files)
+  #version
+    displays the version
+  #convert
+    with non-existent file
+Error: File not found: nonexistent.docx
+      exits with error message
+    with verbose option
+      shows detailed output (PENDING: Requires fixture files)
+
+Uniword::Visitor::TextExtractor
+  #initialize
+    accepts a separator parameter
+    defaults to newline separator
+  #text
+    uses custom separator when provided
+    returns extracted text joined by separator
+    returns empty string initially
+  complex document extraction
+    handles nested table cells with multiple paragraphs
+    extracts text from mixed content document (FAILED - 51)
+  #visit_table
+    extracts text from all table rows
+    handles empty tables
+  #visit_table_row
+    handles empty rows
+    extracts text from all cells separated by pipes
+  #visit_paragraph
+    handles empty paragraphs
+    handles paragraphs with empty runs
+    extracts text from all runs in paragraph
+  #visit_table_cell
+    handles empty cells
+    extracts text from all paragraphs in cell
+  #visit_image
+    does not extract any text from images
+  #visit_run
+    handles runs with nil text
+    extracts text from run
+    handles runs with empty text
+  inheritance from BaseVisitor
+    inherits from BaseVisitor
+    overrides all visit methods
+  #visit_document
+    handles empty documents
+    extracts text from all document elements
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) Uniword::CommentsPart XML serialization serializes to XML with correct structure
+     # Full OOXML serialization support will be implemented with OoxmlSerializer integration
+     Failure/Error: expect(xml).to include('author="John"')
+       expected "<w:comments xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "author=\"John\""
+     # ./spec/uniword/comments_part_spec.rb:218:in `block (3 levels) in <top (required)>'
+
+  2) Uniword::Serialization::HtmlDeserializer#deserialize with table parses table structure
+     # Temporarily skipped with xit
+     # ./spec/uniword/serialization/html_deserializer_spec.rb:229
+
+  3) Uniword::Serialization::HtmlDeserializer#deserialize with mixed content parses mixed elements in order
+     # Temporarily skipped with xit
+     # ./spec/uniword/serialization/html_deserializer_spec.rb:259
+
+  4) Uniword::CLI#validate with verbose option shows detailed validation results
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:64
+
+  5) Uniword::CLI#info with verbose option shows detailed information
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:47
+
+  6) Uniword::CLI#convert with verbose option shows detailed output
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:28
+
+Failures:
+
+  1) Theme Extraction and Reuse Uniword::Document#apply_theme_from applies theme from source document
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:122:in `block (4 levels) in <top (required)>'
+
+  2) Theme Extraction and Reuse Uniword::Document#apply_styles_from applies styles from source document with conflict resolution
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:146:in `block (4 levels) in <top (required)>'
+
+  3) Theme Extraction and Reuse Uniword::Document#apply_template applies both theme and styles from template
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:169:in `block (4 levels) in <top (required)>'
+
+  4) Theme Extraction and Reuse Integration: Using theme colors in styles allows defining styles using theme colors
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:370:in `block (3 levels) in <top (required)>'
+
+  5) Theme Extraction and Reuse Theme serialization and deserialization preserves theme when document has no explicit theme
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:331:in `block (3 levels) in <top (required)>'
+
+  6) Theme Extraction and Reuse Theme serialization and deserialization round-trips theme through DOCX
+     Failure/Error:
+       raise ArgumentError,
+             "No handler registered for format: #{format}. " \
+             "Available formats: #{registered_formats.join(', ')}"
+
+     ArgumentError:
+       No handler registered for format: docx. Available formats: 
+     # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+     # ./lib/uniword/document_writer.rb:49:in `save'
+     # ./lib/uniword/document.rb:241:in `save'
+     # ./spec/uniword/theme_extraction_spec.rb:311:in `block (3 levels) in <top (required)>'
+
+  7) Uniword::Builder#add_paragraph adds paragraph with style
+     Failure/Error: expect(para.style).to eq('Heading1')
+
+       expected: "Heading1"
+            got: "Heading 1"
+
+       (compared using ==)
+     # ./spec/uniword/builder_spec.rb:36:in `block (3 levels) in <top (required)>'
+
+  8) Uniword::Builder complex document building builds a document with mixed content
+     Failure/Error: expect(doc.paragraphs.count).to eq(6)  # Headings and paragraphs
+
+       expected: 6
+            got: 7
+
+       (compared using ==)
+     # ./spec/uniword/builder_spec.rb:178:in `block (3 levels) in <top (required)>'
+
+  9) Uniword::Builder#add_heading adds a heading with default level 1
+     Failure/Error: expect(para.style).to eq('Heading1')
+
+       expected: "Heading1"
+            got: "Heading 1"
+
+       (compared using ==)
+     # ./spec/uniword/builder_spec.rb:73:in `block (3 levels) in <top (required)>'
+
+  10) Uniword::Builder#add_heading adds a heading with custom level
+      Failure/Error: expect(para.style).to eq('Heading2')
+
+        expected: "Heading2"
+             got: "Heading 2"
+
+        (compared using ==)
+      # ./spec/uniword/builder_spec.rb:79:in `block (3 levels) in <top (required)>'
+
+  11) Uniword::DocumentFactory.from_file with DOCX file loads DOCX file with explicit format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_factory.rb:49:in `from_file'
+      # ./spec/uniword/document_factory_spec.rb:48:in `block (4 levels) in <top (required)>'
+
+  12) Uniword::DocumentFactory.from_file with DOCX file loads DOCX file with auto format detection
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_factory.rb:49:in `from_file'
+      # ./spec/uniword/document_factory_spec.rb:42:in `block (4 levels) in <top (required)>'
+
+  13) Uniword::DocumentFactory.from_file with MHTML file loads MHTML file with auto format detection
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: mhtml. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_factory.rb:49:in `from_file'
+      # ./spec/uniword/document_factory_spec.rb:77:in `block (4 levels) in <top (required)>'
+
+  14) Uniword::DocumentFactory.from_file with MHTML file loads MHTML file with explicit format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: mhtml. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_factory.rb:49:in `from_file'
+      # ./spec/uniword/document_factory_spec.rb:83:in `block (4 levels) in <top (required)>'
+
+  15) Inspection helpers Uniword::Document provides readable inspect output
+      Failure/Error:
+        raise ArgumentError,
+              "Unsupported element type: #{element.class}"
+
+      ArgumentError:
+        Unsupported element type: Uniword::Run
+      # ./lib/uniword/document.rb:201:in `add_element'
+      # ./spec/uniword/logger_spec.rb:116:in `block (3 levels) in <top (required)>'
+
+  16) Uniword::DocumentWriter#save with DOCX format saves document as DOCX with auto format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:37:in `block (4 levels) in <top (required)>'
+
+  17) Uniword::DocumentWriter#save with DOCX format saves document with explicit DOCX format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:48:in `block (4 levels) in <top (required)>'
+
+  18) Uniword::DocumentWriter#save with MHTML format saves document as MHTML with auto format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: mhtml. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:61:in `block (4 levels) in <top (required)>'
+
+  19) Uniword::DocumentWriter#save with MHTML format saves document with explicit MHTML format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: mhtml. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:74:in `block (4 levels) in <top (required)>'
+
+  20) Uniword::DocumentWriter integration performs full write-read cycle for MHTML
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: mhtml. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:171:in `block (3 levels) in <top (required)>'
+
+  21) Uniword::DocumentWriter integration performs full write-read cycle for DOCX
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./lib/uniword/document_writer.rb:49:in `save'
+      # ./spec/uniword/document_writer_spec.rb:156:in `block (3 levels) in <top (required)>'
+
+  22) Numbering Feature Paragraph Integration #set_numbering sets numbering on paragraph
+      Failure/Error: expect(para.num_id).to eq(1)
+
+        expected: 1
+             got: "1"
+
+        (compared using ==)
+      # ./spec/uniword/numbering_spec.rb:339:in `block (4 levels) in <top (required)>'
+
+  23) Numbering Feature Paragraph Integration #set_numbering preserves other properties
+      Failure/Error: expect(para.num_id).to eq(2)
+
+        expected: 2
+             got: "2"
+
+        (compared using ==)
+      # ./spec/uniword/numbering_spec.rb:350:in `block (4 levels) in <top (required)>'
+
+  24) Uniword::Comment XML serialization serializes to XML with correct structure FIXED
+      Expected pending 'Full OOXML serialization support will be implemented with OoxmlSerializer integration' to fail. No error was raised.
+      # ./spec/uniword/comment_spec.rb:180
+
+  25) Uniword::Properties::ParagraphProperties#initialize freezes the object after initialization
+      Failure/Error: expect(props).to be_frozen
+        expected `#<Uniword::Properties::ParagraphProperties:0x00000001206ef570 @using_default={:style=>false, :alignme...mbers=false, @contextual_spacing=false, @bidirectional=false, @shading_color=nil, @shading_fill=nil>.frozen?` to be truthy, got false
+      # ./spec/uniword/properties/paragraph_properties_spec.rb:29:in `block (3 levels) in <top (required)>'
+
+  26) Uniword::Properties::ParagraphProperties immutability cannot modify attributes after creation
+      Failure/Error: expect { props.style = 'Changed' }.to raise_error(FrozenError)
+        expected FrozenError but nothing was raised
+      # ./spec/uniword/properties/paragraph_properties_spec.rb:37:in `block (3 levels) in <top (required)>'
+
+  27) Uniword::Properties::ParagraphProperties immutability is frozen
+      Failure/Error: expect(props.frozen?).to be true
+
+        expected true
+             got false
+      # ./spec/uniword/properties/paragraph_properties_spec.rb:41:in `block (3 levels) in <top (required)>'
+
+  28) Uniword::Validators::ParagraphValidator integration with ElementValidator.for is returned when requesting validator for Paragraph class
+      Failure/Error: expect(validator).to be_a(described_class)
+        expected #<Uniword::Validators::ElementValidator:0x000000012080d538> to be a kind of Uniword::Validators::ParagraphValidator
+      # ./spec/uniword/validators/paragraph_validator_spec.rb:118:in `block (3 levels) in <top (required)>'
+
+  29) Uniword::Serialization::HtmlDeserializer#deserialize with heading elements parses headings with correct styles
+      Failure/Error: expect(document.paragraphs[0].style).to eq('Heading1')
+
+        expected: "Heading1"
+             got: "Heading 1"
+
+        (compared using ==)
+      # ./spec/uniword/serialization/html_deserializer_spec.rb:112:in `block (4 levels) in <top (required)>'
+
+  30) Uniword::Serialization::HtmlDeserializer#deserialize with MSO class names maps MSO classes to styles
+      Failure/Error: expect(document.paragraphs[1].style).to eq('Heading1')
+
+        expected: "Heading1"
+             got: "Heading 1"
+
+        (compared using ==)
+      # ./spec/uniword/serialization/html_deserializer_spec.rb:136:in `block (4 levels) in <top (required)>'
+
+  31) Uniword::Run#text_element returns the text content
+      Failure/Error: expect(run.text_element).to eq('Hello')
+
+        expected: "Hello"
+             got: #<Uniword::TextElement:0x00000001204dfe10 @using_default={:content=>false, :space=>false}, @__register=:default, @content="Hello", @space=nil>
+
+        (compared using ==)
+
+        Diff:
+        @@ -1 +1 @@
+        -"Hello"
+        +#<Uniword::TextElement:0x00000001204dfe10 @content="Hello", @space=nil>
+      # ./spec/uniword/run_spec.rb:44:in `block (3 levels) in <top (required)>'
+
+  32) Uniword::FormatDetector#detect with invalid arguments raises ArgumentError when file does not exist
+      Failure/Error:
+        expect { detector.detect('nonexistent.docx') }.to raise_error(
+          ArgumentError,
+          /File not found/
+        )
+
+        expected ArgumentError with message matching /File not found/, got #<Uniword::FileNotFoundError: File not found: nonexistent.docx> with backtrace:
+          # ./lib/uniword/format_detector.rb:70:in `validate_path'
+          # ./lib/uniword/format_detector.rb:45:in `detect'
+          # ./spec/uniword/format_detector_spec.rb:134:in `block (5 levels) in <top (required)>'
+          # ./spec/uniword/format_detector_spec.rb:134:in `block (4 levels) in <top (required)>'
+      # ./spec/uniword/format_detector_spec.rb:134:in `block (4 levels) in <top (required)>'
+
+  33) Uniword::Formats::DocxHandler dependency injection allows custom OoxmlSerializer
+      Failure/Error: ooxml_serializer.serialize_package(document)
+        #<InstanceDouble(Uniword::Serialization::OoxmlSerializer) (anonymous)> received unexpected message :serialize_package with (#<Uniword::Document:17920 @using_default=... @__register=... @body=... @styles_configuration=... @num.... @sections=... @footnotes=... @endnotes=... @bookmarks=... @comments_part=... @tracked_changes=...>)
+      # ./lib/uniword/formats/docx_handler.rb:68:in `serialize'
+      # ./spec/uniword/formats/docx_handler_spec.rb:208:in `block (3 levels) in <top (required)>'
+
+  34) Uniword::Formats::DocxHandler integration with FormatHandlerRegistry can be retrieved by file extension
+      Failure/Error:
+        raise ArgumentError,
+              "No handler found for file: #{path}. " \
+              "Registered formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler found for file: /var/folders/2t/xmdrn2sd2lv2w49dv0zw9_q00000gp/T/test20251027-29445-xiycqf.docx. Registered formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:79:in `handler_for_file'
+      # ./spec/uniword/formats/docx_handler_spec.rb:146:in `block (3 levels) in <top (required)>'
+
+  35) Uniword::Formats::DocxHandler integration with FormatHandlerRegistry is registered for :docx format
+      Failure/Error:
+        raise ArgumentError,
+              "No handler registered for format: #{format}. " \
+              "Available formats: #{registered_formats.join(', ')}"
+
+      ArgumentError:
+        No handler registered for format: docx. Available formats: 
+      # ./lib/uniword/formats/format_handler_registry.rb:52:in `handler_for'
+      # ./spec/uniword/formats/docx_handler_spec.rb:141:in `block (3 levels) in <top (required)>'
+
+  36) Uniword::Formats::DocxHandler#serialize delegates to OoxmlSerializer
+      Failure/Error: ooxml_serializer.serialize_package(document)
+        #<InstanceDouble(Uniword::Serialization::OoxmlSerializer) (anonymous)> received unexpected message :serialize_package with (#<Uniword::Document:18240 @using_default=... @__register=... @body=... @styles_configuration=... @num.... @sections=... @footnotes=... @endnotes=... @bookmarks=... @comments_part=... @tracked_changes=...>)
+      # ./lib/uniword/formats/docx_handler.rb:68:in `serialize'
+      # ./spec/uniword/formats/docx_handler_spec.rb:102:in `block (3 levels) in <top (required)>'
+
+  37) OOXML Namespace Configuration Round-trip serialization preserves document structure through XML round-trip
+      Failure/Error: expect(parsed_doc.paragraphs).not_to be_empty
+        expected `[].empty?` to be falsey, got true
+      # ./spec/uniword/ooxml/namespace_spec.rb:182:in `block (3 levels) in <top (required)>'
+
+  38) OOXML Namespace Configuration Round-trip serialization preserves table structure through XML round-trip
+      Failure/Error: expect(parsed_table.row_count).to eq(2)
+
+        expected: 2
+             got: 0
+
+        (compared using ==)
+      # ./spec/uniword/ooxml/namespace_spec.rb:199:in `block (3 levels) in <top (required)>'
+
+  39) OOXML Namespace Configuration Uniword::TableRow serializes cells with w:tc elements
+      Failure/Error: expect(xml).to include('<w:tc')
+        expected "<w:tr xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "<w:tc"
+      # ./spec/uniword/ooxml/namespace_spec.rb:124:in `block (3 levels) in <top (required)>'
+
+  40) OOXML Namespace Configuration Uniword::TableCell serializes paragraphs with w:p elements
+      Failure/Error: expect(xml).to include('<w:p')
+        expected "<w:tc xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "<w:p"
+      # ./spec/uniword/ooxml/namespace_spec.rb:147:in `block (3 levels) in <top (required)>'
+
+  41) OOXML Namespace Configuration Namespace prefix consistency uses correct namespaces for different element types
+      Failure/Error: expect(xml).to include('xmlns:wp=')
+        expected "<r:drawing xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/>" to include "xmlns:wp="
+      # ./spec/uniword/ooxml/namespace_spec.rb:228:in `block (3 levels) in <top (required)>'
+
+  42) OOXML Namespace Configuration Namespace prefix consistency uses consistent w: prefix for WordProcessingML elements
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+        +"<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      # ./spec/uniword/ooxml/namespace_spec.rb:214:in `block (3 levels) in <top (required)>'
+
+  43) OOXML Namespace Configuration Uniword::Image includes drawing namespaces
+      Failure/Error: expect(xml).to include('xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"')
+        expected "<r:drawing xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/>" to include "xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\""
+      # ./spec/uniword/ooxml/namespace_spec.rb:162:in `block (3 levels) in <top (required)>'
+
+  44) OOXML Namespace Configuration Uniword::Paragraph serializes runs with w:r elements
+      Failure/Error: xml = para.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^
+      # ./spec/uniword/ooxml/namespace_spec.rb:53:in `block (3 levels) in <top (required)>'
+
+  45) OOXML Namespace Configuration Uniword::Paragraph has correct OOXML namespaces configured
+      Failure/Error: expect { para.to_xml }.not_to raise_error
+
+        expected no Exception, got #<NoMethodError: undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^> with backtrace:
+          # ./spec/uniword/ooxml/namespace_spec.rb:40:in `block (4 levels) in <top (required)>'
+          # ./spec/uniword/ooxml/namespace_spec.rb:40:in `block (3 levels) in <top (required)>'
+      # ./spec/uniword/ooxml/namespace_spec.rb:40:in `block (3 levels) in <top (required)>'
+
+  46) OOXML Namespace Configuration Uniword::Paragraph uses w:p as root element
+      Failure/Error: xml = para.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^
+      # ./spec/uniword/ooxml/namespace_spec.rb:45:in `block (3 levels) in <top (required)>'
+
+  47) OOXML Namespace Configuration Uniword::Document uses w:document as root element
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+        +"<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      # ./spec/uniword/ooxml/namespace_spec.rb:32:in `block (3 levels) in <top (required)>'
+
+  48) OOXML Namespace Configuration Uniword::Table serializes rows with w:tr elements
+      Failure/Error: expect(xml).to include('<w:tr')
+        expected "<w:tbl xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "<w:tr"
+      # ./spec/uniword/ooxml/namespace_spec.rb:101:in `block (3 levels) in <top (required)>'
+
+  49) Uniword::Validators::TableValidator integration with ElementValidator.for is returned when requesting validator for Table class
+      Failure/Error: expect(validator).to be_a(described_class)
+        expected #<Uniword::Validators::ElementValidator:0x0000000117db6ad8> to be a kind of Uniword::Validators::TableValidator
+      # ./spec/uniword/validators/table_validator_spec.rb:152:in `block (3 levels) in <top (required)>'
+
+  50) Uniword::Document#add_element adds an element to the document
+      Failure/Error:
+        raise ArgumentError,
+              "Unsupported element type: #{element.class}"
+
+      ArgumentError:
+        Unsupported element type: Uniword::Element
+      # ./lib/uniword/document.rb:201:in `add_element'
+      # ./spec/uniword/document_spec.rb:23:in `block (3 levels) in <top (required)>'
+
+  51) Uniword::Visitor::TextExtractor complex document extraction extracts text from mixed content document
+      Failure/Error: expect(extractor.text).to eq(expected_text)
+
+        expected: "This is a paragraph.\nHeader 1 | Header 2\nData 1 | Data 2\nFinal paragraph"
+             got: "This is a paragraph.\nFinal paragraph"
+
+        (compared using ==)
+
+        Diff:
+        @@ -1,4 +1,2 @@
+         This is a paragraph.
+        -Header 1 | Header 2
+        -Data 1 | Data 2
+         Final paragraph
+      # ./spec/uniword/visitor/text_extractor_spec.rb:208:in `block (3 levels) in <top (required)>'
+
+Finished in 2.46 seconds (files took 0.44207 seconds to load)
+1152 examples, 51 failures, 6 pending
+
+Failed examples:
+
+rspec ./spec/uniword/theme_extraction_spec.rb:116 # Theme Extraction and Reuse Uniword::Document#apply_theme_from applies theme from source document
+rspec ./spec/uniword/theme_extraction_spec.rb:138 # Theme Extraction and Reuse Uniword::Document#apply_styles_from applies styles from source document with conflict resolution
+rspec ./spec/uniword/theme_extraction_spec.rb:160 # Theme Extraction and Reuse Uniword::Document#apply_template applies both theme and styles from template
+rspec ./spec/uniword/theme_extraction_spec.rb:343 # Theme Extraction and Reuse Integration: Using theme colors in styles allows defining styles using theme colors
+rspec ./spec/uniword/theme_extraction_spec.rb:324 # Theme Extraction and Reuse Theme serialization and deserialization preserves theme when document has no explicit theme
+rspec ./spec/uniword/theme_extraction_spec.rb:297 # Theme Extraction and Reuse Theme serialization and deserialization round-trips theme through DOCX
+rspec ./spec/uniword/builder_spec.rb:33 # Uniword::Builder#add_paragraph adds paragraph with style
+rspec ./spec/uniword/builder_spec.rb:157 # Uniword::Builder complex document building builds a document with mixed content
+rspec ./spec/uniword/builder_spec.rb:70 # Uniword::Builder#add_heading adds a heading with default level 1
+rspec ./spec/uniword/builder_spec.rb:76 # Uniword::Builder#add_heading adds a heading with custom level
+rspec ./spec/uniword/document_factory_spec.rb:47 # Uniword::DocumentFactory.from_file with DOCX file loads DOCX file with explicit format
+rspec ./spec/uniword/document_factory_spec.rb:41 # Uniword::DocumentFactory.from_file with DOCX file loads DOCX file with auto format detection
+rspec ./spec/uniword/document_factory_spec.rb:76 # Uniword::DocumentFactory.from_file with MHTML file loads MHTML file with auto format detection
+rspec ./spec/uniword/document_factory_spec.rb:82 # Uniword::DocumentFactory.from_file with MHTML file loads MHTML file with explicit format
+rspec ./spec/uniword/logger_spec.rb:115 # Inspection helpers Uniword::Document provides readable inspect output
+rspec ./spec/uniword/document_writer_spec.rb:34 # Uniword::DocumentWriter#save with DOCX format saves document as DOCX with auto format
+rspec ./spec/uniword/document_writer_spec.rb:45 # Uniword::DocumentWriter#save with DOCX format saves document with explicit DOCX format
+rspec ./spec/uniword/document_writer_spec.rb:58 # Uniword::DocumentWriter#save with MHTML format saves document as MHTML with auto format
+rspec ./spec/uniword/document_writer_spec.rb:71 # Uniword::DocumentWriter#save with MHTML format saves document with explicit MHTML format
+rspec ./spec/uniword/document_writer_spec.rb:167 # Uniword::DocumentWriter integration performs full write-read cycle for MHTML
+rspec ./spec/uniword/document_writer_spec.rb:152 # Uniword::DocumentWriter integration performs full write-read cycle for DOCX
+rspec ./spec/uniword/numbering_spec.rb:336 # Numbering Feature Paragraph Integration #set_numbering sets numbering on paragraph
+rspec ./spec/uniword/numbering_spec.rb:343 # Numbering Feature Paragraph Integration #set_numbering preserves other properties
+rspec ./spec/uniword/comment_spec.rb:180 # Uniword::Comment XML serialization serializes to XML with correct structure
+rspec ./spec/uniword/properties/paragraph_properties_spec.rb:27 # Uniword::Properties::ParagraphProperties#initialize freezes the object after initialization
+rspec ./spec/uniword/properties/paragraph_properties_spec.rb:36 # Uniword::Properties::ParagraphProperties immutability cannot modify attributes after creation
+rspec ./spec/uniword/properties/paragraph_properties_spec.rb:40 # Uniword::Properties::ParagraphProperties immutability is frozen
+rspec ./spec/uniword/validators/paragraph_validator_spec.rb:116 # Uniword::Validators::ParagraphValidator integration with ElementValidator.for is returned when requesting validator for Paragraph class
+rspec ./spec/uniword/serialization/html_deserializer_spec.rb:107 # Uniword::Serialization::HtmlDeserializer#deserialize with heading elements parses headings with correct styles
+rspec ./spec/uniword/serialization/html_deserializer_spec.rb:131 # Uniword::Serialization::HtmlDeserializer#deserialize with MSO class names maps MSO classes to styles
+rspec ./spec/uniword/run_spec.rb:42 # Uniword::Run#text_element returns the text content
+rspec ./spec/uniword/format_detector_spec.rb:133 # Uniword::FormatDetector#detect with invalid arguments raises ArgumentError when file does not exist
+rspec ./spec/uniword/formats/docx_handler_spec.rb:203 # Uniword::Formats::DocxHandler dependency injection allows custom OoxmlSerializer
+rspec ./spec/uniword/formats/docx_handler_spec.rb:145 # Uniword::Formats::DocxHandler integration with FormatHandlerRegistry can be retrieved by file extension
+rspec ./spec/uniword/formats/docx_handler_spec.rb:140 # Uniword::Formats::DocxHandler integration with FormatHandlerRegistry is registered for :docx format
+rspec ./spec/uniword/formats/docx_handler_spec.rb:95 # Uniword::Formats::DocxHandler#serialize delegates to OoxmlSerializer
+rspec ./spec/uniword/ooxml/namespace_spec.rb:167 # OOXML Namespace Configuration Round-trip serialization preserves document structure through XML round-trip
+rspec ./spec/uniword/ooxml/namespace_spec.rb:185 # OOXML Namespace Configuration Round-trip serialization preserves table structure through XML round-trip
+rspec ./spec/uniword/ooxml/namespace_spec.rb:119 # OOXML Namespace Configuration Uniword::TableRow serializes cells with w:tc elements
+rspec ./spec/uniword/ooxml/namespace_spec.rb:142 # OOXML Namespace Configuration Uniword::TableCell serializes paragraphs with w:p elements
+rspec ./spec/uniword/ooxml/namespace_spec.rb:221 # OOXML Namespace Configuration Namespace prefix consistency uses correct namespaces for different element types
+rspec ./spec/uniword/ooxml/namespace_spec.rb:204 # OOXML Namespace Configuration Namespace prefix consistency uses consistent w: prefix for WordProcessingML elements
+rspec ./spec/uniword/ooxml/namespace_spec.rb:158 # OOXML Namespace Configuration Uniword::Image includes drawing namespaces
+rspec ./spec/uniword/ooxml/namespace_spec.rb:50 # OOXML Namespace Configuration Uniword::Paragraph serializes runs with w:r elements
+rspec ./spec/uniword/ooxml/namespace_spec.rb:37 # OOXML Namespace Configuration Uniword::Paragraph has correct OOXML namespaces configured
+rspec ./spec/uniword/ooxml/namespace_spec.rb:43 # OOXML Namespace Configuration Uniword::Paragraph uses w:p as root element
+rspec ./spec/uniword/ooxml/namespace_spec.rb:28 # OOXML Namespace Configuration Uniword::Document uses w:document as root element
+rspec ./spec/uniword/ooxml/namespace_spec.rb:96 # OOXML Namespace Configuration Uniword::Table serializes rows with w:tr elements
+rspec ./spec/uniword/validators/table_validator_spec.rb:150 # Uniword::Validators::TableValidator integration with ElementValidator.for is returned when requesting validator for Table class
+rspec ./spec/uniword/document_spec.rb:22 # Uniword::Document#add_element adds an element to the document
+rspec ./spec/uniword/visitor/text_extractor_spec.rb:181 # Uniword::Visitor::TextExtractor complex document extraction extracts text from mixed content document
+
+Randomized with seed 42640
+

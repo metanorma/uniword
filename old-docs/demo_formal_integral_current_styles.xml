@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:style w:type="paragraph" w:styleId="Normal" w:default="1">
+    <w:name w:val="Normal"/>
+    <w:pPr>
+      <w:jc w:val="left"/>
+      <w:spacing w:after="200" w:line="66240" w:lineRule="auto"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="character" w:styleId="DefaultParagraphFont" w:default="1">
+    <w:name w:val="Default Paragraph Font"/>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading1">
+    <w:name w:val="Heading 1"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="0"/>
+    </w:pPr>
+    <w:rPr>
+      <w:b/>
+      <w:sz w:val="32"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading2">
+    <w:name w:val="Heading 2"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="1"/>
+    </w:pPr>
+    <w:rPr>
+      <w:b/>
+      <w:sz w:val="26"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading3">
+    <w:name w:val="Heading 3"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="2"/>
+    </w:pPr>
+    <w:rPr>
+      <w:b/>
+      <w:sz w:val="24"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading4">
+    <w:name w:val="Heading 4"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="3"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading5">
+    <w:name w:val="Heading 5"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="4"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading6">
+    <w:name w:val="Heading 6"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="5"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading7">
+    <w:name w:val="Heading 7"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="6"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading8">
+    <w:name w:val="Heading 8"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="7"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Heading9">
+    <w:name w:val="Heading 9"/>
+    <w:basedOn w:val="Normal"/>
+    <w:next w:val="Normal"/>
+    <w:pPr>
+      <w:spacing w:before="200" w:after="100"/>
+      <w:keepNext/>
+      <w:keepLines/>
+      <w:outlineLvl w:val="8"/>
+    </w:pPr>
+    <w:rPr>
+      <w:sz w:val="22"/>
+      <w:rFonts w:ascii="Calibri" w:hAnsi="Calibri"/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="character" w:styleId="Emphasis">
+    <w:name w:val="Emphasis"/>
+    <w:rPr>
+      <w:i/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="character" w:styleId="Strong">
+    <w:name w:val="Strong"/>
+    <w:rPr>
+      <w:b/>
+    </w:rPr>
+  </w:style>
+  <w:style w:type="table" w:styleId="TableNormal" w:default="1">
+    <w:name w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="numbering" w:styleId="NoList" w:default="1">
+    <w:name w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading1Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading2Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading3Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading4Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading5Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading6Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading7Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading8Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="Heading9Char" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Caption">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Title">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:link w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="TitleChar" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Subtitle">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:link w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="SubtitleChar" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="NoSpacing">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="NoSpacingChar" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="ListParagraph">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="Quote">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:link w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="QuoteChar" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="IntenseQuote">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:link w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="IntenseQuoteChar" w:customStyle="1">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:link w:val=""/>
+  </w:style>
+  <w:style w:type="character" w:styleId="SubtleEmphasis">
+    <w:name w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="IntenseEmphasis">
+    <w:name w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="SubtleReference">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="IntenseReference">
+    <w:name w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="character" w:styleId="BookTitle">
+    <w:name w:val=""/>
+    <w:qFormat/>
+  </w:style>
+  <w:style w:type="paragraph" w:styleId="TOCHeading">
+    <w:name w:val=""/>
+    <w:basedOn w:val=""/>
+    <w:next w:val=""/>
+    <w:qFormat/>
+  </w:style>
+</w:styles>

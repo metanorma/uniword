@@ -1,0 +1,200 @@
+     Failure/Error: xml = comment.to_xml
+
+     NoMethodError:
+       undefined method `collection?' for nil:NilClass
+
+                 if !attribute.collection? || attribute.collection_instance?(value)
+--
+     Failure/Error: expect(xml).to include('author="John"')
+       expected "<w:comments xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "author=\"John\""
+     # ./spec/uniword/comments_part_spec.rb:218:in `block (3 levels) in <top (required)>'
+
+Failures:
+
+--
+     Failure/Error: expect(para.style).to eq('Heading1')
+
+       expected: "Heading1"
+            got: "Heading 1"
+
+       (compared using ==)
+--
+     Failure/Error: expect(para.style).to eq('Heading2')
+
+       expected: "Heading2"
+            got: "Heading 2"
+
+       (compared using ==)
+--
+     Failure/Error: expect(para.style).to eq('Heading1')
+
+       expected: "Heading1"
+            got: "Heading 1"
+
+       (compared using ==)
+--
+     Failure/Error: expect(doc.paragraphs.count).to eq(6)  # Headings and paragraphs
+
+       expected: 6
+            got: 7
+
+       (compared using ==)
+--
+     Failure/Error: expect(errors).to include('Run at index 1 must be a Run instance')
+       expected ["Element validation failed"] to include "Run at index 1 must be a Run instance"
+     # ./spec/uniword/validators/paragraph_validator_spec.rb:176:in `block (3 levels) in <top (required)>'
+
+  6) Uniword::Validators::ParagraphValidator#errors returns property error for invalid properties
+     Failure/Error: expect(errors).to include('Properties must be a ParagraphProperties instance')
+       expected ["Element validation failed"] to include "Properties must be a ParagraphProperties instance"
+     # ./spec/uniword/validators/paragraph_validator_spec.rb:100:in `block (3 levels) in <top (required)>'
+
+  7) Uniword::Validators::ParagraphValidator#errors returns run errors for invalid runs
+     Failure/Error: expect(errors).to include('Run at index 0 must be a Run instance')
+       expected ["Element validation failed"] to include "Run at index 0 must be a Run instance"
+     # ./spec/uniword/validators/paragraph_validator_spec.rb:90:in `block (3 levels) in <top (required)>'
+
+  8) Uniword::Validators::ParagraphValidator#errors returns multiple errors for multiple issues
+     Failure/Error: expect(errors.size).to eq(2)
+
+       expected: 2
+            got: 1
+
+       (compared using ==)
+--
+     Failure/Error: expect(errors).to include('Element must be a Paragraph')
+       expected ["Element validation failed"] to include "Element must be a Paragraph"
+     # ./spec/uniword/validators/paragraph_validator_spec.rb:72:in `block (3 levels) in <top (required)>'
+
+  10) Inspection helpers Uniword::Document provides readable inspect output
+      Failure/Error:
+        raise ArgumentError,
+              "Unsupported element type: #{element.class}"
+
+      ArgumentError:
+        Unsupported element type: Uniword::Run
+--
+      Failure/Error: expect(xml).to include('xmlns:wp=')
+        expected "<r:drawing xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/>" to include "xmlns:wp="
+      # ./spec/uniword/ooxml/namespace_spec.rb:228:in `block (3 levels) in <top (required)>'
+
+  12) OOXML Namespace Configuration Namespace prefix consistency uses consistent w: prefix for WordProcessingML elements
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+--
+      Failure/Error: xml = para.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: expect { para.to_xml }.not_to raise_error
+
+        expected no Exception, got #<NoMethodError: undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^> with backtrace:
+--
+      Failure/Error: xml = para.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: xml = cell.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: expect { cell.to_xml }.not_to raise_error
+
+        expected no Exception, got #<NoMethodError: undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^> with backtrace:
+--
+      Failure/Error: xml = cell.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: expect(xml).to include('xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"')
+        expected "<r:drawing xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\"/>" to include "xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\""
+      # ./spec/uniword/ooxml/namespace_spec.rb:162:in `block (3 levels) in <top (required)>'
+
+  20) OOXML Namespace Configuration Uniword::TableRow uses w:tr as root element
+      Failure/Error: xml = row.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: xml = row.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: expect { row.to_xml }.not_to raise_error
+
+        expected no Exception, got #<NoMethodError: undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+                               ^^^^^^^^^^^^> with backtrace:
+--
+      Failure/Error: expect(parsed_doc.paragraphs).not_to be_empty
+        expected `[].empty?` to be falsey, got true
+      # ./spec/uniword/ooxml/namespace_spec.rb:182:in `block (3 levels) in <top (required)>'
+
+  24) OOXML Namespace Configuration Round-trip serialization preserves table structure through XML round-trip
+      Failure/Error: xml = table.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass
+
+                  if !attribute.collection? || attribute.collection_instance?(value)
+--
+      Failure/Error: expect { run.to_xml }.not_to raise_error
+
+        expected no Exception, got #<NoMethodError: undefined method `space' for "Test":String
+
+                  model.public_send(to)
+                       ^^^^^^^^^^^^> with backtrace:
+--
+      Failure/Error: xml = run.to_xml
+
+      NoMethodError:
+        undefined method `space' for "Test":String
+
+                  model.public_send(to)
+--
+      Failure/Error: xml = run.to_xml
+
+      NoMethodError:
+        undefined method `space' for "Hello":String
+
+                  model.public_send(to)
+--
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+--
+      Failure/Error: xml = table.to_xml
+
+      NoMethodError:
+        undefined method `collection?' for nil:NilClass

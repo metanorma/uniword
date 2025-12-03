@@ -1,0 +1,79 @@
+
+[Lutaml::Model] WARN: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+
+[Lutaml::Model] WARN: Attribute name `display` conflicts with a built-in method
+================================================================================
+ISO 8601-2 Document Import Test
+================================================================================
+
+================================================================================
+Testing: iso-wd-8601-2-2026.docx
+================================================================================
+
+📥 Importing document...
+✅ Import successful (6.99s)
+
+📊 Document Statistics:
+  Paragraphs: 2399
+  Tables: 31
+  Images: 4
+  Text length: 197231 chars
+
+📝 Text Preview (first 500 chars):
+  "ISO/WD 8601-2 \nTC 154/WG 5 \nSecretariat: SAC \nFirst edition \nDate and time — Representations for information interchange — Part 2: Extensions \n\nWD stage\n\nWarning for WDs and CDs\nThis document is not an ISO International Standard. It is distributed for review and comment. It is subject to change without notice and may not be referred to as an International Standard.\nRecipients of this draft are invited to submit, with their comments, notification of any relevant patent rights of which they are awa"
+
+🔍 Feature Detection:
+  Numbering: ❌ None
+  Styles: ✅ Present
+  Headers: ✅ Present
+  Footers: ✅ Present
+
+💾 Testing round-trip...
+✅ Round-trip saved to: /Users/mulgogi/src/mn/iso-8601-2/_site/documents/iso-8601-2-2026/iso-wd-8601-2-2026_roundtrip.docx (0.9s)
+
+🔄 Verifying round-trip...
+  Text preserved: ❌ (197231 → 186525 chars)
+  Paragraphs preserved: ✅ (2399 → 2399)
+  Tables preserved: ✅ (31 → 31)
+  Images preserved: ✅ (4 → 4)
+
+⚠️  Text Differences Detected:
+    Character difference: 10706 chars
+    First difference at position 1102:
+      Original: " 22 749 01 11Email: copyright@iso.orgWebs"
+      Round-trip: " 22 749 01 11Email: Website: \nPublished i"
+
+================================================================================
+Testing: document.doc
+================================================================================
+
+📥 Importing document...
+✅ Import successful (0.98s)
+
+📊 Document Statistics:
+  Paragraphs: 2339
+  Tables: 31
+  Images: 0
+  Text length: 203871 chars
+
+📝 Text Preview (first 500 chars):
+  "ISO/WD 8601-2 \nTC 154/WG 5\nSecretariat: SAC\nFirst edition\nDate and time — Representations for information interchange —Part 2: \nExtensions\n \nWD stage\n \nWarning for WDs and CDs\nThis document is not an ISO International Standard. It is distributed for review and comment. It is subject to change without notice and may not be referred to as an International Standard.\nRecipients of this draft are invited to submit, with their comments, notification of any relevant patent rights of which they are aware"
+
+🔍 Feature Detection:
+  Numbering: ❌ None
+  Styles: ✅ Present
+  Headers: ✅ Present
+  Footers: ✅ Present
+
+💾 Testing round-trip...
+✅ Round-trip saved to: /Users/mulgogi/src/mn/iso-8601-2/_site/documents/iso-8601-2-2026/document_roundtrip.docx (1.32s)
+
+🔄 Verifying round-trip...
+  Text preserved: ✅ (203871 → 203871 chars)
+  Paragraphs preserved: ✅ (2339 → 2339)
+  Tables preserved: ✅ (31 → 31)
+  Images preserved: ✅ (0 → 0)
+
+================================================================================
+Test Complete
+================================================================================

@@ -1,0 +1,4443 @@
+
+[Lutaml::Model] WARN: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+
+[Lutaml::Model] WARN: Attribute name `display` conflicts with a built-in method
+
+Randomized with seed 18281
+
+docx gem API Compatibility
+  Integration scenarios
+    supports table manipulation workflow
+    supports complex text substitution workflow
+  Run operations
+    supports run.bold?
+    supports run.substitute_with_block for captures
+    supports run.italic?
+    supports run.substitute for simple replacement
+    supports run.font_size
+    supports run.text to get content
+    supports run.text= to set content
+    supports run.substitute_with_block for multiple captures
+    supports run.underline?
+    supports run.to_html
+    supports run.strike? / run.striked?
+    supports run.substitute with regex
+  Document operations
+    supports doc.text to get plain text
+    supports Document.open(path)
+    supports doc.stream for StringIO output
+    supports doc.to_html for HTML export
+    supports doc.tables
+    supports doc.paragraphs
+  Paragraph operations
+    supports paragraph.alignment
+    supports paragraph.text= to set content
+    supports paragraph.remove!
+    supports paragraph.text to get content
+    supports paragraph.to_html
+    supports paragraph.each_text_run
+    supports paragraph.style
+  Table operations
+    supports row.copy to duplicate a row
+    supports table.column_count
+    supports table.columns for column-based iteration
+    supports cell.paragraphs
+    supports row.insert_before to insert row before another
+    supports row.cells
+    supports table.row_count
+    supports table.rows
+
+Uniword::TrackedChanges
+  #authors
+    returns unique author names
+    excludes nil authors
+    returns empty array for no revisions
+  #add_deletion
+    creates and adds a deletion revision
+  #remove_revision
+    removes revision by ID
+    returns nil for non-existent revision
+  #revisions_by_author
+    returns empty array for unknown author
+    returns revisions by specific author
+  #find_revision
+    handles numeric IDs
+    finds revision by ID
+    returns nil for non-existent ID
+  #deletions
+    returns all deletion revisions
+  #add_insertion
+    creates and adds an insertion revision
+    supports custom date
+  #empty?
+    returns false with revisions
+    returns true for new tracked changes
+  #reject_all
+    returns count of rejected changes
+    clears all revisions
+  #add_revision
+    assigns sequential ID if not set
+    raises error if not a Revision instance
+    adds a revision to the collection
+    preserves existing revision ID
+    returns the added revision
+  #count
+    returns correct count with revisions
+    returns zero for empty collection
+  #revisions_by_type
+    returns format changes
+    returns insertions
+    returns deletions
+  #clear
+    resets revision counter
+    removes all revisions
+  #insertions
+    returns all insertion revisions
+  #format_changes
+    returns all format change revisions
+  #enabled
+    can enable track changes
+    can disable track changes
+  #accept_all
+    returns count of accepted changes
+    clears all revisions
+  #initialize
+    creates with track changes disabled by default
+    can be initialized with enabled flag
+  #add_format_change
+    creates and adds a format change revision
+
+Real-World Document Testing
+  Multiple Document Types
+    handles documents with embedded images (PENDING: Create image-heavy test document)
+    handles simple documents efficiently (PENDING: Create simple test document)
+    handles documents with many tables (PENDING: Create table-heavy test document)
+    handles documents with heavy formatting (PENDING: Create heavily formatted test document)
+  Concurrent Access
+    handles multiple documents simultaneously (PENDING: Performance test for concurrent documents)
+    supports thread-safe reading (PENDING: Need to verify thread safety requirements)
+  Production Readiness Checklist
+
+  Production Readiness:
+    All critical functions: PASS
+    Ready for v1.1.0 release: YES
+    validates all critical functionality works
+  Edge Cases
+    handles very long paragraphs
+    handles documents with unusual characters
+    handles empty documents
+  ISO 8601-2 Complex Document
+    Document Reading
+
+  Text Statistics:
+    Total characters: 197231
+    Total words: 28923
+      extracts all text content
+
+  Table Statistics:
+    Total tables: 31
+    First table rows: 17
+    First table columns: 2
+      handles tables correctly
+
+  Document Statistics:
+    Paragraphs: 2399
+    Tables: 31
+    Sections: 1
+      opens complex ISO document successfully
+
+  Structure Statistics:
+    Sections: 1
+    Styles: 252
+      preserves document structure
+
+  Formatting Statistics:
+    Formatted paragraphs: 1984
+    Total paragraphs: 2399
+      preserves formatting properties
+    Performance Benchmarks
+
+  Performance - Memory:
+    Memory growth: 23MB
+    Target: < 50MB
+    Status: PASS
+      handles document without memory issues
+
+  Performance - Text Extraction:
+    Average time (10 runs): 3.95ms
+    Target: < 100ms
+    Status: PASS
+      provides responsive text extraction
+
+  Performance - Reading:
+    Time: 2.083s
+    Target: < 6.0s
+    Status: PASS
+      reads document in under 6 seconds
+
+  Performance - Writing:
+    Time: 0.348s
+    Target: < 10.0s
+    Status: PASS
+      writes document in under 10 seconds
+    Round-Trip Preservation
+
+  Style preservation:
+    Original styles: 252
+    Round-trip styles: 252
+      preserves styles through round-trip
+
+  Structure preservation:
+    Tables preserved: true
+    Sections preserved: true
+      preserves structure through round-trip
+
+  Round-trip validation:
+    Original text length: 197231
+    Round-trip text length: 197231
+    Text preserved: true
+      preserves content through write-read cycle
+    Error Resilience
+      handles corrupted elements gracefully
+      provides meaningful error messages
+
+Uniword::Endnote
+  attribute accessors
+    allows modification of id
+    allows modification of content
+  #to_h
+    returns hash representation
+  #content?
+    returns false when endnote has no content
+    returns true when endnote has content
+    returns false when content is nil
+  #text
+    returns combined text from all paragraphs
+    returns empty string for endnote without content
+  #initialize
+    creates an endnote with default empty content
+    creates an endnote with id and content
+    accepts string id
+  #add_paragraph
+    adds multiple paragraphs
+    adds a paragraph to the endnote content
+
+Styles Integration
+  styles configuration
+    preserves custom styles
+    includes default styles in new document
+  style inheritance
+    creates styles with basedOn relationship
+  all heading levels
+    creates document with all 9 heading levels
+  character styles
+    applies character styles to runs
+  document with styled paragraphs
+    creates and reads back styled paragraphs
+
+Uniword::Properties::TableProperties
+  boolean attributes
+    defaults allow_break to true
+    defaults borders to true
+    allows setting boolean attributes
+  #initialize
+    allows mutation for test compatibility
+    creates properties with default values
+    creates properties with provided attributes
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  #==
+    returns false for different properties
+    returns false for different types
+    returns true for identical properties
+    compares all attributes
+  mutability (for test compatibility)
+    allows modification of attributes
+    is not frozen
+  #hash
+    returns same hash for equal objects
+    allows use as hash keys
+    returns different hash for different objects
+  #eql?
+    is an alias for ==
+
+Uniword
+  custom errors
+    Uniword::ConversionError
+      has a message with formats and reason
+    Uniword::ValidationError
+      has a message with element name and errors
+    Uniword::CorruptedFileError
+      has a message with path and reason
+    Uniword::FileNotFoundError
+      has a message with the path
+    Uniword::InvalidFormatError
+      has a message with path and format
+
+MHTML Write Integration
+  file size and structure
+    creates reasonably sized files
+  table generation
+    creates file with table
+  complex documents
+    creates complex document with multiple elements
+  format detection
+    detects .mhtml extension for MHTML format
+    detects .doc extension for MHTML format
+  character encoding
+    escapes HTML special characters
+    handles UTF-8 characters correctly
+  CSS integration
+    includes Word CSS stylesheet
+  basic document generation
+    creates file with formatted text
+    creates file with headings
+    creates valid MHTML file with simple text
+
+Uniword::Mhtml::CssNumberFormatter
+  .format_font_size
+    converts half-points to points
+    uses precision of 1 by default
+    handles decimal half-point values
+    handles nil values
+    handles zero values
+  .twips_to_pt
+    handles zero values
+    removes trailing zeros
+    handles nil values
+    converts twips to points
+    handles decimal conversions
+  .format
+    omits unit for zero values with common units
+    rounds to specified precision
+    formats decimal values with appropriate precision
+    supports various CSS units
+    formats integer values with unit
+    handles nil values
+    removes trailing zeros
+    handles very small decimals
+  .twips_to_in
+    formats with appropriate precision
+    handles zero values
+    handles decimal conversions
+    handles nil values
+    converts twips to inches
+  .format_percentage
+    uses precision of 0 by default
+    handles zero values
+    formats percentage values
+    handles nil values
+    supports custom precision
+  edge cases
+    handles very large numbers
+    handles precision edge cases
+    handles negative numbers
+
+Uniword::Table
+  #add_row
+    returns the added row for method chaining
+    adds multiple rows
+    adds a row to the table
+    raises error for non-TableRow objects
+  #accept
+    accepts a visitor
+  #data_rows
+    returns only data rows
+    returns all rows when no headers
+  #row_count
+    returns correct count for multiple rows
+    returns 0 for table with no rows
+  inheritance
+    is not abstract
+    inherits from Element
+  #column_count
+    returns 0 for table with no rows
+    returns column count based on first row
+  #add_text_row
+    creates a data row by default
+    creates a header row when specified
+    returns the created row
+    creates and adds a row with text cells
+  #initialize
+    creates a table with no rows
+    creates a table with properties
+  #header_rows
+    returns empty array when no header rows
+    returns only header rows
+  #empty?
+    returns true for table with empty rows
+    returns true for table with no rows
+    returns false for table with data
+
+Uniword::Visitor::TextExtractor
+  #visit_run
+    handles runs with empty text
+    handles runs with nil text
+    extracts text from run
+  #visit_paragraph
+    extracts text from all runs in paragraph
+    handles empty paragraphs
+    handles paragraphs with empty runs
+  inheritance from BaseVisitor
+    overrides all visit methods
+    inherits from BaseVisitor
+  #visit_table_row
+    extracts text from all cells separated by pipes
+    handles empty rows
+  #visit_table
+    extracts text from all table rows
+    handles empty tables
+  #visit_document
+    handles empty documents
+    extracts text from all document elements
+  #initialize
+    defaults to newline separator
+    accepts a separator parameter
+  #visit_image
+    does not extract any text from images
+  #visit_table_cell
+    extracts text from all paragraphs in cell
+    handles empty cells
+  #text
+    uses custom separator when provided
+    returns empty string initially
+    returns extracted text joined by separator
+  complex document extraction
+    handles nested table cells with multiple paragraphs
+    extracts text from mixed content document
+
+Docxjs Rendering Compatibility: Format Correctness
+  Line Spacing Rendering
+    should render double line spacing (PENDING: Line spacing not yet implemented)
+    should render 1.5 line spacing (PENDING: Line spacing not yet implemented)
+    should render at least line height (PENDING: At least line height not yet implemented)
+    should render single line spacing (PENDING: Line spacing not yet implemented)
+    should render exact line height (PENDING: Exact line height not yet implemented)
+  Format Compatibility
+    Office 2007+
+      should handle OOXML namespaces correctly (PENDING: OOXML namespace handling not yet verified)
+    Legacy formats
+      should handle doc format conversion (PENDING: DOC format not supported)
+    compatibility mode
+      should detect document compatibility mode (PENDING: Compatibility mode detection not yet implemented)
+  Equation Rendering
+    should render radical equations (PENDING: Radical equations not yet implemented)
+    should render fraction equations (PENDING: Fraction equations not yet implemented)
+    should render simple equations (PENDING: Equation rendering not yet implemented)
+  Break Rendering
+    line breaks
+      should render page breaks (PENDING: Page breaks not yet fully implemented)
+      should render text wrapping breaks
+  Revision Rendering
+    should render deleted content (PENDING: Deletion rendering not yet implemented)
+    should render inserted content (PENDING: Insertion rendering not yet implemented)
+  Text Rendering
+    white space handling
+      should handle leading spaces (PENDING: Leading space preservation not yet implemented)
+      should handle trailing spaces (PENDING: Trailing space preservation not yet implemented)
+      should preserve spaces in text
+    basic text properties
+      should render text with font size
+      should render text with font color
+      should render text with font family
+      should render bold text correctly
+      should render italic text correctly
+    text combinations
+      should handle multiple formatting in single run
+      should handle multiple runs with different formatting
+  Table Rendering
+    basic table structure
+      should render simple tables
+      should render vertical merging (PENDING: Vertical merging not yet fully implemented)
+      should render table borders (PENDING: Table borders not yet fully implemented)
+      should render cell spanning
+  Underline Rendering
+    should render dotted underline (PENDING: Dotted underline not yet implemented)
+    should render dashed underline (PENDING: Dashed underline not yet implemented)
+    should render double underline (PENDING: Double underline not yet implemented)
+    should render single underline
+    should render wavy underline (PENDING: Wavy underline not yet implemented)
+
+Comprehensive Benchmark Suite
+  Serialization Benchmarks
+    benchmarks OOXML serialization
+    benchmarks package creation
+    benchmarks HTML serialization
+  Optimization Effectiveness
+    verifies lazy loading benefits
+    verifies string concatenation optimization
+    verifies XPath optimization effectiveness
+  Deserialization Benchmarks
+    benchmarks table access
+    benchmarks element access
+    benchmarks DOCX parsing
+  Memory Efficiency Benchmarks
+    benchmarks object allocation (PENDING: Allocation benchmark only with PROFILE=true)
+    benchmarks memory usage for document creation (PENDING: Memory benchmark requires get_process_mem)
+  Scalability Tests
+    tests linear scaling with document size (PENDING: Scaling test only with PROFILE=true)
+  Write Performance Benchmarks
+    benchmarks writing small document (50 paragraphs)
+    benchmarks writing medium document (200 paragraphs) (PENDING: Medium benchmark only with PROFILE=true)
+    benchmarks writing document with tables
+  Document Creation Benchmarks
+    benchmarks small document creation (50 paragraphs)
+    benchmarks medium document creation (200 paragraphs) (PENDING: Medium benchmark only with PROFILE=true)
+    benchmarks table creation (20 tables)
+
+Metanorma Workflow Integration
+  complete document lifecycle
+    supports complete Metanorma document lifecycle
+
+Uniword::CommentRange
+  #reference?
+    returns true for reference marker
+    returns false for non-reference marker
+  #accept
+    calls visitor visit_comment_range method
+  #end?
+    returns true for end marker
+    returns false for non-end marker
+  #valid?
+    returns false with empty comment_id
+    returns true with valid attributes
+    returns false without comment_id
+    returns false without marker_type
+  #xml_element_name
+    raises error for invalid marker type
+    returns correct name for end marker
+    returns correct name for reference marker
+    returns correct name for start marker
+  #initialize
+    creates a start marker explicitly
+    creates an end marker
+    creates a reference marker
+    creates a start marker by default
+  #start?
+    returns true for start marker
+    returns false for non-start marker
+
+Uniword::Formats::DocxHandler
+  inheritance
+    inherits from BaseHandler
+  #package_and_save
+    reuses the same ZipPackager instance
+    delegates to ZipPackager
+  #can_handle?
+    returns true for uppercase .DOCX files
+    returns false for non-.docx files
+    returns true for .docx files
+  #extract_content
+    delegates to ZipExtractor
+    reuses the same ZipExtractor instance
+  #deserialize
+    delegates to OoxmlDeserializer
+    reuses the same OoxmlDeserializer instance
+  dependency injection
+    allows custom OoxmlDeserializer
+    allows custom ZipExtractor
+    allows custom ZipPackager
+    allows custom OoxmlSerializer
+  integration with FormatHandlerRegistry
+    is registered for :docx format
+    can be retrieved by file extension
+  end-to-end workflow
+    can write a document using the full pipeline
+    validates document before writing
+  #supported_extensions
+    returns .docx extension
+  #serialize
+    delegates to OoxmlSerializer
+    reuses the same OoxmlSerializer instance
+
+Uniword::DocumentFactory
+  .from_file
+    with nil path
+      raises ArgumentError
+    with non-existent file
+      raises FileNotFoundError
+    with empty path
+      raises ArgumentError
+
+Inspection helpers
+  Uniword::Document
+    provides readable inspect output
+  Uniword::Paragraph
+    provides readable inspect output
+    truncates long text
+  Uniword::Run
+    truncates long text
+    shows formatting flags
+    provides readable inspect output
+
+Docx Gem Compatibility - Styles
+  default styles
+    includes Normal style
+    includes Heading styles
+  attribute extraction
+    extracts ID
+    has type
+    extracts name
+  reading from styles.xml
+    finds specific styles
+    has Heading styles
+    loads document styles
+  style manipulation
+    can add custom styles
+    can remove styles
+  applying styles to paragraphs
+    sets paragraph style via set_style
+    reads paragraph styles
+
+Uniword::Formats::BaseHandler
+  #can_handle?
+    returns true for uppercase extensions
+    returns true for supported extensions
+    returns false for non-existent files
+    returns false when no extensions are supported
+    returns false for unsupported extensions
+  #write
+    raises error for invalid document
+    raises error for non-Document object
+    validates document before serialization
+    implements the template method pattern
+  abstract class behavior
+    raises NotImplementedError for extract_content
+    raises NotImplementedError for serialize
+    raises NotImplementedError for deserialize
+    raises NotImplementedError for package_and_save
+  error classes
+    defines NotImplementedError
+    defines InvalidFormatError
+  #read
+    implements the template method pattern
+    raises error for nil path
+    validates path before extraction
+    raises error for empty path
+    raises error for directory path
+  validation methods
+    #validate_write_path
+      accepts valid write path
+      raises error for empty path
+      raises error for non-existent directory
+      raises error for nil path
+    #validate_document
+      accepts valid document
+      raises error for non-Document object
+      raises error for invalid document
+      raises error for nil document
+    #validate_read_path
+      accepts valid file path
+      raises error for empty path
+      raises error for non-existent file
+      raises error for directory
+      raises error for nil path
+  #supported_extensions
+    returns empty array by default
+    can be overridden by subclasses
+
+Uniword::Validators::TableValidator
+  #warnings
+    returns empty array for table with consistent column counts
+    returns empty array for non-Table element
+    returns warning for inconsistent column counts
+    returns empty array for empty table
+  #errors
+    returns multiple errors for multiple issues
+    returns row errors for invalid rows
+    returns type error for non-Table element
+    returns element error for nil
+    returns property error for invalid properties
+    returns empty array for valid table
+  #valid?
+    returns true for table with valid properties
+    returns true for empty table
+    returns false for table with invalid row
+    returns false for nil
+    returns false for non-Table element
+    returns true for table with valid rows
+    returns false for table with invalid properties
+  inheritance
+    inherits from ElementValidator
+  realistic scenarios
+    warns about inconsistent columns while still being valid
+    detects mixed valid and invalid rows
+    validates a complex table with header and data rows
+  integration with ElementValidator.for
+    is returned when requesting validator for Table class
+    validates tables through the registry
+  edge cases
+    handles table with nil properties
+    handles table with empty rows array
+    handles table with nil rows array
+
+Uniword::Image
+  #height_in_pixels
+    returns nil when height is not set
+    converts EMUs to pixels (96 DPI)
+  #aspect_ratio
+    returns nil when only height is set
+    returns nil when only width is set
+    calculates aspect ratio
+    handles square images
+    returns nil when dimensions are not set
+  #valid?
+    returns true when relationship_id is present
+    returns false when relationship_id is nil
+    returns false when relationship_id is empty
+  inheritance
+    is not abstract
+    inherits from Element
+  #width_in_points
+    converts EMUs to points
+    returns nil when width is not set
+  #width_in_pixels
+    converts EMUs to pixels (96 DPI)
+    returns nil when width is not set
+  #accept
+    accepts a visitor
+  #initialize
+    creates an image with alt text
+    creates an image with relationship_id
+    creates an image with filename
+    creates an image with dimensions
+    creates an image with title
+  #height_in_points
+    returns nil when height is not set
+    converts EMUs to points
+
+v1.1.0 Features Smoke Test
+  Hyperlink
+    creates internal hyperlink
+    creates external hyperlink
+  TextFrame
+    creates absolute positioned frame
+    creates aligned frame
+  LineNumbering
+    creates per-page line numbering
+    creates continuous line numbering
+  Shading
+    creates solid shading
+    creates pattern shading
+  ColumnConfiguration
+    creates three-column layout
+    creates two-column layout
+  Feature class loading
+    loads Hyperlink class
+    loads Shading class
+    loads ParagraphBorders classes
+    loads TextFrame class
+    loads LineNumbering class
+    loads TabStop class
+    loads Column classes
+    loads PageBorders classes
+    loads HtmlImporter class
+  Module-level HTML API
+    has html_to_docx method
+    converts HTML to document
+    has html_to_doc method
+    has from_html method
+  ParagraphBorders
+    creates paragraph border box
+  TabStop
+    creates left-aligned tab stop
+  HtmlImporter
+    imports simple HTML
+    imports headings
+  Integration with existing classes
+    enables line numbering on section
+    adds hyperlink to paragraph
+    adds page borders to section
+    sets columns on section
+    sets page size on section
+  PageBorders
+    creates page borders with all sides
+  Image base64 support
+    creates image from base64
+
+Uniword::Transformation::Transformer
+  #transform
+    with complex document
+      transforms all elements
+      preserves formatting
+      preserves text content
+    with explicit parameters
+      transforms DOCX model to MHTML model
+      requires valid target_format
+      requires valid source_format
+      transforms MHTML model to DOCX model
+      requires source parameter
+  #mhtml_to_docx
+    explicitly names the transformation direction
+  #register_rule
+    allows registering custom transformation rules
+  #docx_to_mhtml
+    explicitly names the transformation direction
+  #initialize
+    creates a new transformer with registered rules
+
+OOXML Namespace Configuration
+  Namespace prefix consistency
+    uses consistent w: prefix for WordProcessingML elements (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+    uses correct namespaces for different element types (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+  Uniword::TableRow
+    has correct OOXML namespaces configured
+    serializes cells with w:tc elements
+    uses w:tr as root element
+  Uniword::Document
+    has correct OOXML namespaces configured
+    includes relationships namespace
+    includes WordProcessingML main namespace
+    uses w:document as root element (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+  Uniword::TableCell
+    uses w:tc as root element
+    serializes paragraphs with w:p elements
+    has correct OOXML namespaces configured
+  Uniword::Run
+    has correct OOXML namespaces configured
+    uses w:r as root element
+    serializes text with w:t element
+  Uniword::Image
+    has correct OOXML namespaces configured
+    includes drawing namespaces (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+  Round-trip serialization
+    preserves document structure through XML round-trip (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+    preserves table structure through XML round-trip (PENDING: Element-level XML serialization will be implemented via OoxmlSerializer integration)
+  Uniword::Table
+    serializes rows with w:tr elements
+    has correct OOXML namespaces configured
+    uses w:tbl as root element
+  Uniword::Paragraph
+    has correct OOXML namespaces configured
+    uses w:p as root element
+    serializes runs with w:r elements
+
+Uniword::DocumentFactory
+  .detect_format
+    with MHTML file
+      detects MHTML format
+      detects MHT format
+    with unsupported file
+      raises ArgumentError for unknown format
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when file does not exist
+    with DOCX file
+      detects DOCX format
+  .create
+    creates a new empty document
+    creates documents with independent state
+  .from_file
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when path is empty
+      raises ArgumentError when format is not supported
+      raises FileNotFoundError when file does not exist
+    with DOCX file
+      loads DOCX file with auto format detection
+      loads DOCX file with explicit format
+    with MHTML file
+      loads MHTML file with auto format detection
+      loads MHTML file with explicit format
+
+Uniword
+  .disable_debug_logging
+    sets logger to WARN level
+  .debug?
+    returns false when not debug level
+    returns true when debug level is set
+  .logger
+    uses WARN level by default
+    returns a Logger instance
+  .enable_debug_logging
+[2025-10-29 12:03:24] DEBUG: Debug logging enabled
+    sets logger to DEBUG level
+  custom logger
+    allows setting a custom logger
+
+Docxjs Parser Compatibility: Edge Cases
+  VML and DrawingML
+    VML elements
+      should handle VML image data (PENDING: VML image data not yet implemented)
+      should parse VML shapes (PENDING: VML parsing not yet implemented)
+    DrawingML elements
+      should parse inline drawings (PENDING: Inline drawings not yet implemented)
+      should parse position properties (PENDING: Position properties not yet implemented)
+      should parse anchored drawings (PENDING: Anchored drawings not yet implemented)
+      should handle drawing extent (PENDING: Drawing extent not yet implemented)
+  Character Formatting
+    should handle all underline types (PENDING: Underline variety not yet implemented)
+    should handle vertical alignment (PENDING: Vertical alignment not yet implemented)
+    should handle complex scripts (PENDING: Complex script support not yet implemented)
+  Malformed XML Recovery
+    alternate content
+      should handle AlternateContent fallbacks (PENDING: AlternateContent not yet implemented)
+      should prioritize Choice over Fallback when supported (PENDING: AlternateContent prioritization not yet implemented)
+    incomplete structures
+      should handle paragraphs without properties (PENDING: Graceful degradation not yet implemented)
+      should handle runs without text (PENDING: Empty run handling not yet implemented)
+      should handle tables without rows (PENDING: Empty table handling not yet implemented)
+    missing namespaces
+      should use default namespaces when missing (PENDING: Default namespace handling not yet implemented)
+      should handle documents with missing namespace declarations (PENDING: Namespace recovery not yet implemented)
+    unexpected nesting
+      should handle unexpected element ordering (PENDING: Flexible element ordering not yet implemented)
+      should handle deeply nested structures (PENDING: Deep nesting not yet tested)
+  Revision Tracking
+    insertions
+      should parse inserted content (PENDING: Insertion tracking not yet implemented)
+      should preserve insertion metadata (PENDING: Insertion metadata not yet implemented)
+    deletions
+      should handle deleted text (PENDING: Deleted text handling not yet implemented)
+      should parse deleted content (PENDING: Deletion tracking not yet implemented)
+  Comments
+    should parse comment references (PENDING: Comment references not yet implemented)
+    should preserve comment metadata (PENDING: Comment metadata not yet implemented)
+    should parse comment content (PENDING: Comment content not yet implemented)
+    should parse comment range markers (PENDING: Comment ranges not yet implemented)
+  Smart Tags
+    should preserve smart tag metadata (PENDING: Smart tag metadata not yet implemented)
+    should parse smart tag elements (PENDING: Smart tags not yet implemented)
+  Math Equations (OMML)
+    should parse math paragraphs (PENDING: Math paragraphs not yet implemented)
+    should parse math elements (PENDING: Math elements not yet implemented)
+    should handle various math structures (PENDING: Math structure variety not yet implemented)
+  Structured Document Tags (SDT)
+    should parse SDT content (PENDING: SDT parsing not yet implemented)
+    should support various SDT types (PENDING: SDT type support not yet implemented)
+    should handle SDT properties (PENDING: SDT properties not yet implemented)
+  Complex Field Handling
+    field characters
+      should extract field instructions (PENDING: Field instruction parsing not yet implemented)
+      should parse field begin/separate/end markers (PENDING: Complex fields not yet implemented)
+      should handle nested fields (PENDING: Nested field handling not yet implemented)
+    simple fields
+      should parse fldSimple elements (PENDING: Simple fields not yet implemented)
+
+Metanorma MHTML Round-trip
+  rice-amendment round-trip
+    preserves text content exactly
+    round-trips without data loss
+    preserves table structure
+    preserves styles
+  multiple round-trips
+    survives multiple round-trips
+
+Uniword::Footnote
+  #initialize
+    creates a footnote with id and content
+    accepts string id
+    creates a footnote with default empty content
+  #content?
+    returns false when footnote has no content
+    returns false when content is nil
+    returns true when footnote has content
+  #to_h
+    returns hash representation
+  #add_paragraph
+    adds a paragraph to the footnote content
+    adds multiple paragraphs
+  attribute accessors
+    allows modification of id
+    allows modification of content
+  #text
+    returns empty string for footnote without content
+    returns combined text from all paragraphs
+
+DOCX Performance
+  XPath optimization
+    uses efficient element access patterns
+  scaling performance
+    scales linearly with document size (PENDING: Scaling test only in CI or with PROFILE=true)
+    handles incremental document building efficiently
+  comparison benchmarks
+    compares different document sizes (PENDING: Comparison benchmark only with PROFILE=true)
+  round-trip performance
+    handles round-trip operations efficiently
+  writing performance
+    writes documents with tables efficiently
+    writes large documents acceptably (PENDING: Large document test only in CI or with PROFILE=true)
+    writes medium documents efficiently
+    writes small documents quickly
+  parsing performance
+    parses small documents quickly (10 paragraphs)
+    parses medium documents efficiently (100 paragraphs)
+    parses documents with tables quickly (10 tables)
+    parses large documents acceptably (500 paragraphs) (PENDING: Large document test only in CI or with PROFILE=true)
+    parses documents with many tables efficiently (50 tables)
+
+Uniword::DocumentWriter
+  #infer_format
+    infers MHTML format from .mhtml extension
+    infers MHTML format from .mht extension
+    is case-insensitive
+    infers DOCX format from .docx extension
+    with unsupported extension
+      raises ArgumentError for .pdf extension
+      raises ArgumentError for no extension
+      raises ArgumentError for .txt extension
+  #save
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when format is not supported
+      raises ArgumentError when path is empty
+    with MHTML format
+      saves document as MHTML with auto format
+      saves document with explicit MHTML format
+    with DOCX format
+      saves document as DOCX with auto format
+      saves document with explicit DOCX format
+  integration
+    performs full write-read cycle for MHTML
+    performs full write-read cycle for DOCX
+  #initialize
+    creates writer with document
+    with invalid arguments
+      raises ArgumentError when not a Document instance
+      raises ArgumentError when document is nil
+
+Theme Extraction and Reuse
+  Integration: Using theme colors in styles
+    allows defining styles using theme colors
+  Uniword::FontScheme
+    allows custom fonts
+    can be duplicated
+    has default Office theme fonts
+  Theme serialization and deserialization
+    round-trips theme through DOCX
+    preserves theme when document has no explicit theme
+  Uniword::ColorScheme
+    allows custom colors
+    has default Office theme colors
+    can be duplicated
+  Uniword::Document
+    #apply_template
+      applies both theme and styles from template
+    #apply_theme_from
+      applies theme from source document
+    #apply_styles_from
+      applies styles from source document with conflict resolution
+    #theme
+      starts with no theme
+      can have a theme assigned
+  Uniword::Theme
+    can be created programmatically
+    can be duplicated
+    validates correctly
+  Uniword::StylesConfiguration
+    #find_by_id
+      finds style by ID
+    #export_styles
+      exports all styles as copies
+    #style_exists?
+      checks if style exists by ID
+    #merge
+      renames conflicting styles when requested
+      keeps existing styles by default
+      replaces existing styles when requested
+      raises error for invalid conflict resolution
+    #import_from_document
+      imports styles from another document
+      skips existing styles
+
+Docx.js Compatibility: Headers and Footers
+  Page numbers
+    should insert current page number in footer (PENDING: Page number fields in footer not yet implemented)
+    should insert current page number in header (PENDING: Page number fields not yet implemented)
+    should support aligned page numbers (PENDING: Aligned page numbers not yet implemented)
+    should support page number with custom text (PENDING: Custom page number text not yet implemented)
+    should support page X of Y format (PENDING: Page X of Y format not yet implemented)
+  Footers
+    should add first page footer (PENDING: First page footers not yet implemented)
+    should add default footer to section (PENDING: Footers not yet implemented)
+    should support both headers and footers (PENDING: Headers and footers together not yet implemented)
+  Page number continuation
+    should continue page numbers across sections (PENDING: Page number continuation not yet implemented)
+  Headers
+    should support different default and first headers (PENDING: Multiple header types not yet implemented)
+    should support even and odd headers (PENDING: Even/odd headers not yet implemented)
+    should add first page header (PENDING: First page headers not yet implemented)
+    should add default header to section (PENDING: Headers not yet implemented)
+  Header and footer formatting
+    should support formatted text in header (PENDING: Formatted header text not yet implemented)
+    should support tables in headers (PENDING: Tables in headers not yet implemented)
+    should support images in headers (PENDING: Images in headers not yet implemented)
+  Section-specific headers and footers
+    should support different footers per section (PENDING: Per-section footers not yet implemented)
+    should support different headers per section (PENDING: Per-section headers not yet implemented)
+
+Docx.js Compatibility: Run (Text Formatting)
+  Language
+    createLanguageComponent
+      should support east asian language
+      should support bidirectional language
+      should create a language component
+      should support simple language
+  TextRun
+    text formatting
+      should support italic text
+      should support underline text
+      should support double-strike text
+      should support strike-through text
+      should support all caps text
+      should support bold text
+      should support multiple formatting properties
+      should support small caps text
+    constructor
+      should create run with text in one step
+      should add empty text into run
+      should add text into run
+    size and color
+      should support highlight color
+      should support font size
+      should support text color
+  EmphasisMark
+    constructor
+      should support comma emphasis mark
+      should support under-dot emphasis mark
+      should support circle emphasis mark
+      should support dot emphasis mark
+      should create emphasis mark with default dot
+  RunFonts
+    constructor
+      supports east asian font
+      supports specific font attributes
+      uses the font name for all font types
+  integrated run creation
+    should create fully formatted run
+    should support multiple runs in paragraph (FAILED - 1)
+    should create run and add to paragraph
+  Color
+    constructor
+      should create color without hash
+      should support hex colors
+      should support various colors
+  CharacterSpacing
+    constructor
+      should create character spacing
+      should support different spacing values
+      should support negative spacing
+
+Uniword::TableBorder
+  #initialize
+    creates border with custom values
+    creates border with default values
+    raises error for invalid style
+  .dashed
+    creates dashed border
+  .single
+    accepts custom width and color
+    creates single border with defaults
+  .thick
+    creates thick border
+  .double
+    creates double border
+  .dotted
+    creates dotted border
+  .none
+    creates no border
+
+MHTML Compatibility
+  Required MIME Parts
+    includes HTML content part
+    includes filelist.xml
+    includes Content-Transfer-Encoding for text parts
+    includes charset declaration
+    includes Word namespace declarations
+  Character Encoding
+    preserves newlines and whitespace
+    declares UTF-8 encoding
+    handles Unicode characters correctly
+    escapes HTML entities properly
+  File Size and Efficiency
+    creates reasonable file sizes
+    handles large documents efficiently
+    does not duplicate CSS unnecessarily
+  Word Compatibility Features
+    includes Office namespace
+    uses WordSection class
+    includes Mso-specific CSS properties
+    includes @page rules for printing
+    includes Word XML namespace
+  Image Encoding
+    properly encodes images when present
+    uses proper Content-Location for images
+  Format Detection
+    detects .doc extension as MHTML
+    detects .mhtml extension as MHTML
+    detects .mht extension as MHTML
+  MIME Structure Validation
+    includes proper MIME version header
+    includes multipart/related content type
+    generates valid MIME structure
+    properly terminates MIME parts
+    uses consistent boundary markers
+  HTML Content Structure
+    includes HTML structure tags
+    includes Word-specific CSS classes
+    includes Word styles in head section
+    includes DOCTYPE declaration
+    includes proper meta tags
+
+Uniword::Document
+  .new
+    creates a new document
+    initializes with empty elements array
+  #add_element
+    raises error for non-element objects
+    adds an element to the document
+
+Uniword::ElementRegistry
+  .create
+    is case-insensitive
+    returns nil for unregistered tags
+    creates an element with attributes
+    creates an element by tag name
+    accepts symbol tag names
+  .tags
+    returns all registered tag names
+    returns empty array when no elements registered
+  .register
+    registers an element class
+    does not register abstract classes
+    registers multiple element classes
+  automatic registration
+    element classes are automatically registered when loaded
+  .clear
+    clears all registered elements
+  .count
+    returns the number of registered elements
+    returns 0 when no elements registered
+  .all
+    returns empty array when no elements registered
+    returns all registered element classes
+  .registered?
+    is case-insensitive
+    returns true for registered tags
+    returns false for unregistered tags
+  .find
+    returns nil for unregistered tags
+    is case-insensitive
+    accepts symbol tag names
+    finds a registered element class
+
+LibreOffice Compatibility Testing
+  Complex Document Features
+    handles large documents
+    handles documents with multiple tables
+    handles documents with mixed content
+  LibreOffice CLI Integration
+    can be converted to PDF by LibreOffice (PENDING: LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux))
+    can be validated by LibreOffice (PENDING: LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux))
+    preserves content through LibreOffice conversion (PENDING: LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux))
+  Feature Compatibility
+    text formatting
+      preserves font families
+      preserves italic text
+      preserves bold text
+      preserves font sizes
+      preserves underlined text
+    tables
+      preserves table structure
+      handles merged cells
+      preserves table borders
+    paragraph formatting
+      handles line spacing
+      handles paragraph alignment
+      handles indentation
+    lists
+      handles numbered lists
+      handles bulleted lists
+  Unicode and Special Characters
+    handles special symbols
+    handles Unicode characters
+    handles emoji
+  LibreOffice Openability
+    preserves basic text content for LibreOffice
+    generates DOCX that LibreOffice can open
+    handles multiple paragraphs for LibreOffice
+    handles tables for LibreOffice
+
+Uniword::Ooxml::Schema::ElementSerializer
+  #serialize
+    with table element
+      includes table rows
+      serializes table to OOXML XML
+      includes cell content
+      includes table cells
+    with options
+      supports standalone option
+      supports pretty print option
+    with run element
+      serializes run to OOXML XML
+      includes formatting
+      includes text content
+    with paragraph element
+      serializes paragraph to OOXML XML
+      includes paragraph content
+      uses schema-defined structure
+    with formatted paragraph
+      includes paragraph properties
+      includes run properties
+    with invalid input
+      raises error for non-element
+      raises error for nil
+  #initialize
+    creates serializer with default schema
+    accepts custom schema
+
+Uniword::Builder
+  #add_heading
+    adds a heading with default level 1
+    adds a heading with custom level
+    adds a heading with alignment
+  #add_blank_line
+    adds an empty paragraph
+  #initialize
+    accepts an existing document
+    creates a new document by default
+  #add_paragraph
+    adds paragraph with bold text
+    returns self for chaining
+    adds paragraph with italic text
+    adds paragraph with style
+    supports method chaining
+    adds a paragraph with text
+    adds paragraph with alignment
+  complex document building
+    builds a document with mixed content
+  #add_table
+    returns self for chaining
+    supports cell formatting
+    adds a table with rows and cells
+  #build
+    returns the constructed document
+
+Uniword::Style
+  style type checks
+    identifies paragraph styles
+    identifies character styles
+  basic style creation
+    creates a style with required attributes
+    validates style type
+  style inheritance
+    supports basedOn property
+
+Uniword::FormatConverter
+  #mhtml_to_docx
+    explicitly declares MHTML to DOCX conversion
+    preserves content in conversion
+  #docx_to_mhtml
+    explicitly declares DOCX to MHTML conversion
+    preserves content in conversion
+  #batch_convert
+    converts multiple files with explicit formats
+  Uniword::FormatConverter::ConversionResult
+    provides source information
+    provides readable summary
+    provides target information
+    provides document statistics
+    provides hash representation
+    provides success status
+    when conversion fails
+      reports failure
+      includes error message
+      shows failure in summary
+  #initialize
+    creates a new converter
+    accepts optional logger
+  #convert
+    with conversion result
+      includes document statistics
+      provides readable summary
+      provides success status
+    with explicit parameters
+      validates target_format is supported
+      converts DOCX to MHTML with all parameters specified
+      validates source_format is supported
+      requires source_format parameter
+      converts MHTML to DOCX with all parameters specified
+      requires source parameter
+      requires target parameter
+      requires target_format parameter
+
+Format Conversion
+  Complex Document Conversion
+    preserves heading styles across formats
+    converts complex document with mixed content
+  Format Detection
+    auto-detects MHTML format for reading
+    auto-detects DOCX format for reading
+    handles explicit format override
+  Round-trip Conversions
+    preserves tables across conversions
+    preserves formatting across DOCX → MHTML → DOCX
+    preserves italic formatting across conversions
+    preserves bold formatting across conversions
+  MHTML to DOCX Conversion
+    converts MHTML to DOCX
+    preserves paragraph structure in conversion
+  Fixture File Conversions
+    converts basic.docx to MHTML and back
+    converts formatting.docx to MHTML
+    converts tables.docx to MHTML
+  DOCX to MHTML Conversion
+    preserves text content across conversion
+    preserves paragraph count in conversion
+    converts DOCX to MHTML
+
+Uniword::Revision
+  #text
+    returns text content
+    returns empty string for nil content
+  #format_change?
+    returns true for format change
+    returns false for non-format change
+  #insert?
+    returns true for insertion
+    returns false for non-insertion
+  #xml_element_name
+    raises error for invalid type
+    returns correct name for format change
+    returns correct name for deletion
+    returns correct name for insertion
+  #delete?
+    returns true for deletion
+    returns false for non-deletion
+  #initialize
+    creates an insertion by default
+    sets date to current time if not provided
+    uses provided date
+    uses provided revision_id
+    auto-generates revision_id if not provided
+    creates a deletion
+    creates a format change
+  #accept
+    calls visitor visit_revision method
+  #valid?
+    returns false without author
+    returns true for valid insertion
+    returns false with empty author
+    returns false without revision_id
+    returns false with invalid type
+    returns false without type
+
+Uniword::Element
+  #accept
+    when not implemented by subclass
+      includes class name in error message
+      raises NotImplementedError
+    when implemented by subclass
+      accepts a visitor object
+  #valid?
+    returns true by default
+    can be called multiple times
+    with custom validation in subclass
+      returns true when validation passes
+      returns false when validation fails
+  inheritance from Lutaml::Model::Serializable
+    inherits from Lutaml::Model::Serializable
+    supports lutaml-model attributes
+  .inherited
+    is called when a subclass is created
+    allows multiple subclasses to be created
+  #id
+    allows updating the id
+    allows setting an id attribute
+    allows id to be nil
+  object creation
+    creates instances with provided attributes
+    creates instances with default values
+  .abstract?
+    returns false for concrete subclasses
+    returns true for the base Element class
+
+DOCX Edge Case Handling
+  Error Recovery
+    provides informative error messages for invalid elements
+    validates document structure on save
+    handles document with mixed valid and edge case content
+    provides informative error messages for invalid paths
+  Special Characters
+    handles Unicode characters
+    handles emoji and symbols
+    handles XML special characters
+    handles mixed LTR and RTL text
+    handles null characters safely
+    handles control characters
+    handles RTL (right-to-left) text
+    handles whitespace characters
+  Malformed Input
+    handles reading non-existent file gracefully
+WARNING: Using the `raise_error` matcher without providing a specific error or message risks false positives, since `raise_error` will match when Ruby raises a `NoMethodError`, `NameError` or `ArgumentError`, potentially allowing the expectation to pass without even executing the method you are intending to call. Actual error raised was #<Uniword::CorruptedFileError: Corrupted file tmp/edge_cases/not_a_docx.docx: Invalid ZIP structure: Zip end of central directory signature not found>. Instead consider providing a specific error class or message. This message can be suppressed by setting: `RSpec::Expectations.configuration.on_potential_false_positives = :nothing`. Called from /Users/mulgogi/src/mn/uniword/spec/integration/edge_cases_spec.rb:323:in `block (3 levels) in <top (required)>'.
+    handles reading non-DOCX file gracefully
+    handles invalid element types gracefully
+    handles nil file path
+    validates document before saving
+    handles empty file path
+  Large Documents
+    handles 50+ tables
+    handles large table with many cells
+    handles many runs per paragraph
+    handles 100+ paragraphs
+    handles deep nesting
+  Empty Elements
+    handles table rows with no cells
+    handles documents with no content
+    handles empty paragraphs
+    handles empty runs
+    handles table with empty cells
+    handles empty tables
+  Maximum Values
+    handles very long text in paragraph
+    handles many list levels
+    handles maximum font size
+    handles extreme indentation values
+    handles wide tables
+  Boundary Conditions
+    handles zero-width spaces
+    handles minimum table (1x1)
+    handles non-breaking spaces
+    handles text with only whitespace
+    handles single character text
+
+Uniword::Paragraph
+  #text
+    returns text from a single run
+    returns empty string for paragraph with no runs
+    handles runs with nil text
+    concatenates text from multiple runs
+  #add_run
+    raises error for non-Run objects
+    returns the updated runs array
+    adds multiple runs
+    adds a run to the paragraph
+  #empty?
+    returns true for paragraph with nil text runs
+    returns true for paragraph with no runs
+    returns false for paragraph with text
+    returns true for paragraph with empty runs
+  #accept
+    accepts a visitor
+  #style
+    returns nil when no properties
+    returns style from properties
+  inheritance
+    is not abstract
+    inherits from Element
+  #initialize
+    creates a paragraph with no runs
+    creates a paragraph with properties
+    creates a paragraph with an id
+  #alignment
+    returns alignment from properties
+    returns nil when no properties
+  #valid?
+    returns true for paragraph with runs
+    returns true for empty paragraph
+  #run_count
+    returns correct count for multiple runs
+    returns 0 for paragraph with no runs
+  #add_text
+    creates and adds a run with text
+    creates and adds a run with properties
+    adds multiple text runs
+    returns the created run
+
+Uniword::CommentsPart
+  #comments_by_author
+    returns empty array for unknown author
+    returns comments by specific author
+  #empty?
+    returns false with comments
+    returns true for new comments part
+  #add_comment
+    raises error if not a Comment instance
+    returns the added comment
+    assigns sequential ID if not set
+    preserves existing comment ID
+    adds a comment to the collection
+  #remove_comment
+    returns nil for non-existent comment
+    removes comment by ID
+  #initialize
+    creates an empty comments collection
+  XML serialization
+    serializes to XML with correct structure (PENDING: Full OOXML serialization support will be implemented with OoxmlSerializer integration)
+  #authors
+    returns unique author names
+    returns empty array for no comments
+    excludes nil authors
+  #clear
+    removes all comments
+    resets comment counter
+  #find_comment
+    returns nil for non-existent ID
+    handles numeric IDs
+    finds comment by ID
+  #count
+    returns correct count with comments
+    returns zero for empty collection
+
+Uniword::TableCell
+  #add_text
+    returns self for method chaining
+    creates and adds a paragraph with text
+    creates and adds a paragraph with properties
+  inheritance
+    inherits from Element
+    is not abstract
+  #initialize
+    creates a cell with no paragraphs
+    creates a cell with width
+    creates a cell with vertical alignment
+    creates a cell with background color
+    defaults colspan to 1
+    defaults rowspan to 1
+  #paragraph_count
+    returns correct count for multiple paragraphs
+    returns 0 for cell with no paragraphs
+  #text
+    returns text from a single paragraph
+    concatenates text from multiple paragraphs with newlines
+    returns empty string for cell with no paragraphs
+  #accept
+    accepts a visitor
+  #add_paragraph
+    adds multiple paragraphs
+    returns the updated paragraphs array
+    raises error for non-Paragraph objects
+    adds a paragraph to the cell
+  #empty?
+    returns true for cell with empty paragraphs
+    returns true for cell with no paragraphs
+    returns false for cell with text
+
+Uniword::Loggable
+  #logger
+    returns the Uniword logger
+  logging methods
+    logs debug messages
+    logs warning messages
+    logs info messages
+    logs error messages
+
+MHTML Edge Cases
+  Special HTML Characters
+    handles CDATA sections as text
+    handles special HTML characters
+    handles script tags as text
+    handles HTML entities
+    handles HTML tags as text
+  Empty Content
+    handles documents with no content
+    handles empty paragraphs
+    handles table with empty cells
+    handles empty tables
+    handles paragraphs with empty runs
+  Large Documents
+    handles many tables
+    handles large tables with many cells
+    handles paragraphs with very long text
+    handles large documents
+  CSS and Style Edge Cases
+    handles runs with multiple formatting properties
+    handles paragraphs without explicit styles
+    handles multiple heading levels
+  Error Handling
+WARNING: Using the `raise_error` matcher without providing a specific error or message risks false positives, since `raise_error` will match when Ruby raises a `NoMethodError`, `NameError` or `ArgumentError`, potentially allowing the expectation to pass without even executing the method you are intending to call. Actual error raised was #<Uniword::CorruptedFileError: Corrupted file spec/tmp/corrupted.doc: No MIME boundary found in content>. Instead consider providing a specific error class or message. This message can be suppressed by setting: `RSpec::Expectations.configuration.on_potential_false_positives = :nothing`. Called from /Users/mulgogi/src/mn/uniword/spec/integration/mhtml_edge_cases_spec.rb:482:in `block (3 levels) in <top (required)>'.
+    handles corrupted MHTML files gracefully
+    handles nil paths gracefully
+    handles invalid file paths gracefully
+    handles non-existent files gracefully
+  Whitespace Handling
+    handles leading and trailing whitespace
+    handles newlines in text
+    preserves multiple spaces
+    handles tabs
+  Unicode and Character Encoding
+    handles non-breaking spaces
+    handles mixed direction text (LTR and RTL)
+    handles zero-width spaces
+    handles Unicode characters
+    handles emoji and symbols
+  Mixed Content Types
+    handles formatted and unformatted text mixed
+    handles alternating paragraphs and tables
+  Boundary Conditions
+    handles text with only whitespace
+    handles minimum table (1x1)
+    handles single character text
+
+Uniword::Serialization::HtmlDeserializer
+  #deserialize
+    with MSO class names
+      maps MSO classes to styles
+    with paragraph spacing
+      parses spacing measurements
+    with nested inline elements
+      handles nested formatting
+    with mixed content
+      parses mixed elements in order (PENDING: Temporarily skipped with xit)
+    with empty HTML
+      returns empty document
+    with line breaks
+      handles br elements
+    with invalid input
+      raises error when parts is not a hash
+      raises error when parts is nil
+    measurement conversion
+      converts px to twips
+      converts pt to twips
+      converts cm to twips
+    with empty paragraphs
+      preserves all paragraphs including empty ones
+    with simple paragraph
+      parses paragraph correctly
+    with paragraph alignment
+      parses text alignment
+    with table
+      parses table structure (PENDING: Temporarily skipped with xit)
+    with span styling
+      parses inline styles
+    with formatted text
+      parses inline formatting
+    with heading elements
+      parses headings with correct styles
+    with paragraph indentation
+      parses indentation
+
+Docx.js Compatibility: Page Breaks
+  Keep together properties
+    should keep paragraph on same page
+    should keep paragraph with next
+    should combine keep properties
+  Page break in run
+    should combine text runs with page break
+    should insert page break in paragraph via run
+  Section breaks
+    should support continuous section break (PENDING: Continuous section breaks not yet implemented)
+    should support section break for new page (PENDING: Section breaks not yet implemented)
+    should support even/odd page section breaks (PENDING: Even/odd page section breaks not yet implemented)
+  Column breaks
+    should insert column break (PENDING: Column breaks not yet implemented)
+  Page break before paragraph
+    should support multiple paragraphs with page breaks
+    should not have page break by default
+    should set page break before on paragraph
+
+Table Properties with Borders
+  equality works with border properties
+  creates table properties with individual borders
+  creates table properties with cell spacing and padding
+
+Uniword::Properties::ParagraphProperties
+  mutability (for test compatibility)
+    allows modification of attributes
+    is not frozen
+  #initialize
+    creates properties with provided attributes
+    allows mutation for test compatibility
+    creates properties with default values
+  #eql?
+    is an alias for ==
+  #==
+    returns false for different properties
+    returns false for different types
+    compares all attributes
+    returns true for identical properties
+  boolean attributes
+    allows setting boolean attributes
+    defaults boolean attributes to false
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  #hash
+    returns same hash for equal objects
+    returns different hash for different objects
+    allows use as hash keys
+
+Docx.js Compatibility: Table
+  Table
+    table alignment
+      should center the table
+      should right align the table
+      should left align the table
+    columnSpan and rowSpan
+      creates a table with rowSpan
+      handles complex span scenarios
+      creates a table with columnSpan
+    Cell
+      prepForXml
+        handles empty cell
+        inserts a paragraph at the end of the cell if it is empty
+        handles cell with multiple paragraphs
+    constructor
+      creates a table with text content
+      creates a table with the correct number of rows and columns
+      handles multiple rows and cells
+    table layout
+      sets the table to auto layout by default
+      sets the table to fixed width layout
+    table borders
+      should set all borders at once
+      should set table borders
+    integrated table operations
+      adds table to document
+      creates a complete table with formatting
+    float properties
+      sets float spacing from text
+      sets the table float properties
+    table width
+      should set the table to provided DXA width
+      should set the table to provided 100% width
+      should set specific column widths
+
+Memory Performance
+  lazy loading benefits
+    delays loading until needed (PENDING: Lazy loading test only in CI or with PROFILE=true)
+  memory leak detection
+    cleans up resources after document operations (PENDING: Memory profiling only in CI or with PROFILE=true)
+    does not leak memory with large documents (PENDING: Memory profiling only in CI or with PROFILE=true)
+  object allocation
+    reuses objects when possible (PENDING: Allocation profiling only in CI or with PROFILE=true)
+    minimizes object allocations during parsing (PENDING: Allocation profiling only in CI or with PROFILE=true)
+  string memory optimization
+    uses string freezing for constants
+    does not create excessive string objects (PENDING: String profiling only in CI or with PROFILE=true)
+  memory efficiency
+    uses acceptable memory for medium documents (PENDING: Memory profiling requires get_process_mem gem)
+    uses acceptable memory for documents with tables (PENDING: Memory profiling requires get_process_mem gem)
+
+Uniword::CharacterStyle
+  default character style
+    creates default character style
+  custom character style
+    creates custom style with formatting
+  built-in character styles
+    creates Strong style
+    creates Emphasis style
+
+Uniword::TableRow
+  #add_cell
+    adds a cell to the row
+    returns the added cell for method chaining
+    accepts string and creates cell with text
+    adds multiple cells
+  #add_text_cell
+    creates and adds a cell with properties
+    returns the created cell
+    creates and adds a cell with text
+  #initialize
+    creates a row with height
+    defaults header to false
+    defaults allow_break to true
+    creates a header row
+    creates a row with no cells
+  #cell_count
+    returns 0 for row with no cells
+    returns correct count for multiple cells
+  #header?
+    returns true for header row
+    returns false for non-header row
+  inheritance
+    is not abstract
+    inherits from Element
+  #empty?
+    returns false for row with text
+    returns true for row with no cells
+    returns true for row with empty cells
+  #accept
+    accepts a visitor
+
+docx-js compatibility: Paragraph
+  numbered lists
+    supports numbering with instance
+    supports custom numbering without ListParagraph style
+    allows custom style with numbering
+    creates numbered paragraph with ListParagraph style
+  outline level
+    sets paragraph outline level
+  tab stops
+    adds center tab stop with middle dot leader
+    adds right tab stop with dot leader
+    adds max right tab stop
+    adds left tab stop with leader
+  paragraph borders
+    adds left and right borders
+  external hyperlinks
+    adds external hyperlink
+  heading styles
+    creates title style
+    creates heading 5
+    creates heading 3
+    creates heading 6
+    creates heading 2
+    creates heading 1
+    creates heading 4
+  text frames
+    sets frame attributes
+  #constructor
+    creates valid paragraph with empty string
+    has valid properties structure
+  keep next
+    sets keep next property
+  style property
+    sets paragraph style to given styleId
+  line number suppression
+    disables line numbers
+  bullet lists
+    creates bullet paragraph with level 1
+    creates bullet paragraph with default level 0
+  bookmarks
+    adds bookmark with children
+  shading
+    sets shading with type, color, and fill
+  keep lines
+    sets keep lines property
+  bidirectional text
+    sets right to left layout
+  alignment
+    sets justified alignment
+    sets center alignment
+    sets end alignment
+    sets start alignment
+    sets distribute alignment
+    sets right alignment
+    sets left alignment
+  indentation
+    sets paragraph indent
+  contextual spacing
+    enables contextual spacing
+    disables contextual spacing
+  thematic break
+    adds thematic break as bottom border
+  page breaks
+    adds page break as run element
+    sets page break before property
+  spacing
+    sets paragraph spacing
+
+Docx.js Compatibility: Styles
+  Styles
+    integrated style usage
+      should support style reuse across document
+      should create and apply complete style system
+    createParagraphStyle
+      should create a new paragraph style
+      should set the paragraph name if given
+      should apply paragraph style to paragraph
+      should support multiple paragraph styles
+      should create paragraph style with id
+    style properties
+      should set paragraph style with paragraph formatting
+      should set character style with formatting
+      should set paragraph style with formatting
+    createCharacterStyle
+      should create a new character style
+      should support multiple character styles
+      should set the character name if given
+      should apply character style to run
+    default styles
+      should have default document styles
+      should support heading styles
+      should support default paragraph style
+    style inheritance
+      should support next style
+      should support based-on style
+
+Docx.js Compatibility: Footnotes
+  Footnote Validation
+    should validate footnote references exist (PENDING: Reference validation not yet implemented)
+    should validate footnote IDs are unique (PENDING: Footnote validation not yet implemented)
+  Footnote Formatting
+    should support hyperlinks in footnotes (PENDING: Hyperlinks in footnotes not yet implemented)
+    should support paragraph styles in footnotes (PENDING: Footnote paragraph styles not yet implemented)
+    should support formatted text in footnotes (PENDING: Formatted footnote text not yet implemented)
+  Footnote Positioning
+    should support footnotes at end of section (PENDING: Footnote positioning not yet implemented)
+    should support footnotes at end of document (PENDING: Footnote positioning not yet implemented)
+    should support footnotes at bottom of page (PENDING: Footnote positioning not yet implemented)
+  Basic Footnotes
+    footnote creation
+      should support creating footnotes (PENDING: Footnotes not yet fully implemented)
+      should support single-paragraph footnotes (PENDING: Single-paragraph footnotes not yet implemented)
+      should support multi-paragraph footnotes (PENDING: Multi-paragraph footnotes not yet implemented)
+    footnote references
+      should support adding footnote references inline (PENDING: Footnote references not yet implemented)
+      should support multiple footnote references in one paragraph (PENDING: Multiple footnote references not yet implemented)
+      should support footnote references between text runs (PENDING: Footnote references between runs not yet implemented)
+  Round-trip preservation
+    should preserve footnotes in round-trip (PENDING: Round-trip testing requires full implementation)
+  Multiple Sections with Footnotes
+    should support footnotes across multiple sections (PENDING: Multi-section footnotes not yet implemented)
+  Footnote Separators
+    should support no separator (PENDING: No separator option not yet implemented)
+    should support custom footnote separators (PENDING: Custom footnote separators not yet implemented)
+  Endnotes
+    should support endnotes as alternative to footnotes (PENDING: Endnotes not yet implemented)
+    should support mixing footnotes and endnotes (PENDING: Mixed notes not yet implemented)
+  Footnote Numbering
+    should support non-sequential footnote IDs (PENDING: Non-sequential footnote IDs not yet implemented)
+    should support automatic footnote numbering (PENDING: Auto-numbering footnotes not yet implemented)
+    should support sequential footnote numbering (PENDING: Footnote numbering not yet implemented)
+
+Uniword::Serialization::HtmlSerializer
+  table serialization
+    serializes table with borders
+    serializes empty table
+    applies cell rowspan
+    applies table width
+    serializes table with rows and cells
+    applies cell colspan
+  run serialization
+    serializes font size
+    serializes font family
+    serializes superscript
+    serializes font color
+    serializes strikethrough text
+    serializes highlight color
+    serializes underlined text
+    combines multiple formatting properties
+    serializes bold text
+    serializes italic text
+    serializes subscript
+  paragraph serialization
+    applies alignment style
+    serializes paragraph with text
+    maps Heading2 style
+    escapes HTML special characters
+    maps Heading1 style
+    applies spacing styles
+    applies indentation styles
+    serializes empty paragraph
+  #serialize
+    raises ArgumentError for non-Document object
+    includes generator meta tag
+    returns CSS styles
+    returns hash with html, css, and images keys
+    includes Word namespaces
+    raises ArgumentError for nil document
+    returns valid HTML structure
+    includes WordSection1 div
+  complex document
+    serializes document with mixed content
+    serializes document with multiple paragraphs
+  CSS generation
+    includes hyperlink styles
+    includes MsoNormal style
+    includes table styles
+    includes heading styles
+
+Docx.js Compatibility: Images
+  Images in Headers and Footers
+    header images
+      should support images in default header (PENDING: Header images not yet implemented)
+      should support images in first page header (PENDING: First page header not yet implemented)
+      should support images in even page header (PENDING: Even page header not yet implemented)
+    combined headers and footers
+      should support images in both header and footer (PENDING: Combined header/footer images not yet implemented)
+    footer images
+      should support images in default footer (PENDING: Footer images not yet implemented)
+      should support images in first page footer (PENDING: First page footer not yet implemented)
+  Image Scaling
+    scaling factors
+      should support scaling up beyond original size (PENDING: Scale up not yet implemented)
+      should support scaling by percentage (PENDING: Percentage scaling not yet implemented)
+    aspect ratio
+      should support non-square dimensions (PENDING: Non-square image dimensions not yet implemented)
+      should support maintaining aspect ratio (PENDING: Aspect ratio maintenance not yet implemented)
+      should calculate height from width when maintaining aspect ratio (PENDING: Aspect ratio calculation not yet implemented)
+    fixed dimensions
+      should support multiple images with different sizes (PENDING: Multiple image sizing not yet fully implemented)
+      should support medium image dimensions (100x100) (PENDING: Image dimension control not yet fully implemented)
+      should support extra large image dimensions (400x400) (PENDING: Image dimension control not yet fully implemented)
+      should support small image dimensions (50x50) (PENDING: Image dimension control not yet fully implemented)
+      should support large image dimensions (250x250) (PENDING: Image dimension control not yet fully implemented)
+  Image Metadata
+    should support image title (PENDING: Image title not yet implemented)
+    should support image alt text (PENDING: Image alt text not yet implemented)
+    should support image description (PENDING: Image description not yet implemented)
+  Round-trip preservation
+    should preserve images in round-trip (PENDING: Round-trip testing requires full implementation)
+  Image from Buffer
+    binary data handling
+      should support images from IO stream (PENDING: IO stream image handling not yet implemented)
+      should support adding images from binary buffer (PENDING: Image from buffer not yet fully implemented)
+      should support images from base64 string (PENDING: Base64 image handling not yet implemented)
+      should support images from file path (PENDING: Test image fixture not available)
+    image formats
+      should support GIF images (PENDING: GIF format support not yet verified)
+      should support PNG images (PENDING: PNG format support not yet verified)
+      should support JPEG images (PENDING: JPEG format support not yet verified)
+  Image Positioning
+    should support inline images
+    should support anchored images (PENDING: Anchored images not yet implemented)
+    should support floating images (PENDING: Floating images not yet implemented)
+
+Docx Gem Compatibility - Document
+  reading formatting
+    detects underline formatting
+    has the correct text
+    detects centered paragraphs
+    detects bold formatting
+    detects right justified paragraphs
+    returns proper font size for paragraphs
+    detects left justified paragraphs
+    detects italic formatting
+    returns proper font size for runs
+  editing
+    allows text changes
+    allows content deletion
+  reading basic document
+    using normal file
+      has properly formatted text runs
+      has paragraphs
+      reads bookmarks
+      reads the document
+    using stream
+      reads bookmarks from stream
+      reads the document from stream
+  Document opening
+    when reading a file made by Office365
+      supports it
+    when reading an unsupported file
+      throws file not found error
+  #inspect
+    isn't too long
+  paragraph styles
+    reads paragraph styles
+    reads style IDs
+  reading tables
+    reads embedded links in tables
+    has tables with rows and cells
+    has tables with proper count
+    has tables with proper text
+    #paragraphs
+      does not grab paragraphs in the tables
+  saving
+    from a stream
+      saves to a normal file path
+    from a normal file
+      saves to a normal file path
+    wps modified docx file
+      saves to a normal file path
+  #to_s
+    does not raise error
+    returns a String
+
+MHTML Round-trip Validation
+  Complex Document Round-trip
+    preserves formatting in complex document
+    preserves mixed content types
+  Basic Round-trip
+    preserves simple text through round-trip
+    preserves empty document
+    preserves multiple paragraphs
+  Table Round-trip
+    preserves tables with content
+    preserves table cell content
+    preserves table structure
+  Style Round-trip
+    preserves multiple heading levels
+    preserves paragraph styles - Heading1
+    preserves paragraph styles - Heading2
+  Character Encoding Round-trip
+    preserves UTF-8 characters
+    preserves emoji and symbols
+    preserves special HTML characters
+  Formatting Round-trip
+    preserves text formatting - italic
+    preserves combined formatting
+    preserves font information
+    preserves text formatting - underline
+    preserves font size
+    preserves text formatting - bold
+
+Uniword::Infrastructure::MimePackager
+  image handling
+    converts image src to cid: reference
+    lists images in filelist.xml
+    encodes image data as base64
+    handles multiple images
+    includes image in MIME structure
+    preserves data: URLs
+    preserves http: URLs
+  base64 encoding
+    wraps base64 at 76 characters
+  MIME type detection
+    detects text/html; charset="utf-8" for page.html
+    detects image/bmp for bitmap.bmp
+    detects text/css; charset="utf-8" for style.css
+    detects image/tiff for photo.tif
+    detects image/gif for animation.gif
+    detects image/webp for modern.webp
+    detects image/svg+xml for vector.svg
+    detects image/jpeg for photo.jpeg
+    detects image/tiff for photo.tiff
+    detects image/jpeg for photo.jpg
+    detects image/png for image.png
+    detects application/octet-stream for unknown.xyz
+    detects text/xml; charset="utf-8" for data.xml
+  #initialize
+    creates packager with resources
+    creates packager with HTML content
+    creates packager with empty resources by default
+    boundary matches expected format
+    generates unique boundary
+  boundary uniqueness
+    generates different boundaries for different instances
+    uses boundary consistently within document
+  filelist.xml generation
+    accepts custom filelist.xml
+    includes all resources in filelist
+    generates valid XML structure
+  VML image handling
+    converts VML imagedata src to cid: reference
+  #package
+    includes HTML content
+    creates MHTML file
+    raises ArgumentError for empty path
+    writes valid MIME structure
+    raises ArgumentError for nil path
+    includes filelist.xml
+
+Uniword::CLI
+  #info
+    with non-existent file
+Analyzing nonexistent.docx...
+Unexpected error: File not found: nonexistent.docx
+      exits with error message
+    with verbose option
+      shows detailed information (PENDING: Requires fixture files)
+  #validate
+    with non-existent file
+Validating nonexistent.docx...
+✗ File not found: nonexistent.docx
+      exits with error message
+    with verbose option
+      shows detailed validation results (PENDING: Requires fixture files)
+  #convert
+    with verbose option
+      shows detailed output (PENDING: Requires fixture files)
+    with non-existent file
+Error: File not found: nonexistent.docx
+      exits with error message
+  #version
+    displays the version
+
+Uniword::Mhtml::WordCss
+  .default_css
+    includes font definitions
+    includes table styles
+    includes list definitions
+    includes heading styles
+    includes MsoNormal style
+    returns CSS string
+    includes page definitions
+  .generate_style_css
+    generates CSS for styles
+    returns empty string for nil config
+    handles styles without optional properties
+  .generate_list_css
+    handles multiple numbering instances
+    returns empty string for nil config
+    generates CSS for numbering
+  .build_list_rule
+    returns nil for nil instance
+    builds @list rule
+  .basic_css
+    returns fallback CSS
+    includes essential styles
+  CSS file existence
+    wordstyle.css is not empty
+    wordstyle.css is readable
+    wordstyle.css file exists
+  .build_style_rule
+    builds CSS rule for style with font
+    returns nil for style with no properties
+    builds CSS rule for style with multiple properties
+    returns nil for nil style
+
+Uniword::Validators::ElementValidator
+  .register
+    allows overriding existing validator registrations
+    registers a custom validator for an element class
+    raises ArgumentError if validator doesn't inherit from ElementValidator
+  .for
+    raises ArgumentError for non-Element class
+    returns a TableValidator for Table class
+    returns an ElementValidator for Element class
+    raises ArgumentError for non-class argument
+    returns a ParagraphValidator for Paragraph class
+    returns base validator for unregistered element types
+  integration with element classes
+    validates paragraphs correctly
+    validates images correctly
+    validates runs correctly
+    validates tables correctly
+  #valid?
+    returns true for valid element
+    delegates to element's valid? method
+    returns false for nil element
+    returns false for non-Element object
+  #errors
+    returns error for nil element
+    returns generic error for invalid element
+    returns empty array for valid element
+    returns error for non-Element object
+  .validator_registry
+    includes registered validators
+    returns a hash
+  .reset_registry
+    clears the validator registry
+
+Uniword::ParagraphStyle
+  Normal style creation
+    Normal style has default formatting
+    creates default Normal style
+  Heading styles
+    raises error for invalid heading level
+    Lower heading levels are bold
+    Heading 1 has larger font than Heading 2
+    creates heading styles for levels 1-9
+  custom paragraph style
+    creates custom style with properties
+
+Docx.js Compatibility: Hyperlinks
+  URL validation
+    should accept valid HTTPS URLs
+    should accept valid HTTP URLs
+    should accept mailto links (PENDING: Mailto links validation not yet implemented)
+  Round-trip preservation
+    should preserve hyperlinks when reading and writing (PENDING: Round-trip testing requires full implementation)
+  Internal Hyperlinks
+    bookmark linking
+      should support internal bookmarks (PENDING: Bookmark hyperlinks not yet implemented)
+    cross-references
+      should support heading cross-references (PENDING: Cross-references not yet implemented)
+  External Hyperlinks
+    hyperlink style configuration
+      should support custom hyperlink style colors (PENDING: Custom hyperlink styles not yet implemented)
+    hyperlinks in footnotes
+      should support hyperlinks within footnotes (PENDING: Footnotes not yet fully implemented)
+    hyperlinks in headers and footers
+      should support hyperlinks in footers (PENDING: Headers and footers not yet fully implemented)
+      should support hyperlinks in headers (PENDING: Headers and footers not yet fully implemented)
+    basic hyperlink creation
+      should support adding hyperlinks to text
+      should support hyperlinks with custom text style (PENDING: Hyperlink style customization not yet implemented)
+      should support multiple hyperlinks in one paragraph
+    hyperlinks with images
+      should support image hyperlinks (PENDING: Image hyperlinks not yet implemented)
+    hyperlinks with formatting
+      should support underlined hyperlinks (PENDING: Underline customization for hyperlinks not yet implemented)
+      should support bold hyperlinks
+      should support formatted text within hyperlinks (PENDING: Formatted hyperlinks not yet fully implemented)
+
+docx-js compatibility: Document
+  Document creation
+    creates valid document with background
+
+DOCX Reading Integration
+  reading basic.docx
+    extracts text content
+    can open and parse the file
+    extracts paragraphs
+  reading tables.docx
+    extracts table structure (rows and cells)
+    extracts cell content (paragraphs in cells)
+    extracts tables from the document
+    can open and parse the file
+  stress test with various fixtures
+    can read all reference DOCX files without crashing
+  reading formatting.docx - text properties
+    extracts text formatting (bold, italic, etc.)
+    extracts font size
+    detects bold formatting
+    extracts font properties
+    detects italic formatting
+  reading formatting.docx - paragraph properties
+    detects paragraph alignment
+    detects paragraph styles
+    extracts paragraph properties
+  reading formatting.docx
+    can open and parse the file
+    extracts paragraphs with runs
+
+Numbering Feature
+  Uniword::NumberingDefinition
+    #level
+      retrieves level by index
+    .bullet
+      creates bullet numbering definition
+    .decimal
+      creates decimal numbering definition
+    .roman
+      creates lower roman numbering
+      creates upper roman numbering
+    #add_level
+      adds a level to the definition
+      auto-assigns level index
+      raises error when exceeding max levels
+    #initialize
+      creates empty definition
+    .letter
+      creates upper letter numbering
+      creates lower letter numbering
+  Uniword::NumberingConfiguration
+    #add_instance
+      respects provided num_id
+      adds instance with auto-assigned num_id
+    #default_decimal_num_id
+      creates default decimal numbering
+    #get_instance
+      retrieves instance by ID
+    #get_definition_for_num_id
+      retrieves definition via instance
+    #initialize
+      creates empty configuration
+    #default_bullet_num_id
+      creates default bullet numbering
+    #add_definition
+      adds definition with auto-assigned ID
+      respects provided abstract_num_id
+    #get_definition
+      retrieves definition by ID
+    #create_numbering
+      creates bullet numbering
+      creates decimal numbering
+      creates letter numbering
+      raises error for unknown type
+      creates roman numbering
+  Uniword::NumberingLevel
+    #bullet!
+      allows custom font
+      sets level as bullet
+    #numbering_text
+      returns bullet character for bullet format
+      returns default decimal text
+      returns custom text if provided
+    #initialize
+      raises error for invalid format
+      raises error for invalid alignment
+      creates a level with default values
+      creates a level with custom values
+  Uniword::NumberingInstance
+    #uses_definition?
+      returns false for non-matching definition
+      returns true for matching definition
+    #initialize
+      raises error for invalid num_id
+      creates instance with valid IDs
+      raises error for invalid abstract_num_id
+  Document Integration
+    creates numbered list in document
+    initializes with numbering configuration
+  Paragraph Integration
+    #set_numbering
+      preserves other properties
+      sets numbering on paragraph
+    #numbered?
+      returns true for numbered paragraph
+      returns false for non-numbered paragraph
+
+Uniword::Formats::FormatHandlerRegistry
+  .registry
+    returns the same hash instance
+    returns a hash
+    contains registered handlers
+  .registered_formats
+    returns array of registered format symbols
+    returns empty array for empty registry
+  .registered?
+    returns false for unregistered format
+    returns true for registered format
+    returns false after registry reset
+  .handler_for
+    raises error for non-symbol format
+    raises error for unregistered format
+    includes available formats in error message
+    returns a new instance each time
+    returns an instance of the registered handler
+  .handler_for_file
+    returns correct handler for .docx files
+    returns handler that can handle the file
+    raises error for empty path
+    raises error if no handler can handle the file
+    includes registered formats in error message
+    raises error for nil path
+  .register
+    raises error for non-symbol format
+    raises error for non-class handler
+    allows overriding existing registrations
+    registers a handler for a format
+    registers multiple formats
+    raises error if handler doesn't inherit from BaseHandler
+  integration scenarios
+    maintains isolation between different format registrations
+    supports multiple handlers with different extensions
+  .reset_registry
+    allows re-registration after reset
+    clears all registrations
+
+Metanorma ISO Sample Compatibility
+  content analysis
+
+  Detailed analysis of: documents/international-standard/rice-2016/document-en.doc
+
+  Paragraph Analysis:
+    Total paragraphs: 324
+    With text: 312
+    Empty: 12
+
+  Table Analysis:
+    Total tables: 6
+    Table 1:
+      Rows: 20
+      Columns: 2
+    Table 2:
+      Rows: 3
+      Columns: 2
+    Table 3:
+      Rows: 2
+      Columns: 2
+
+  Style Analysis:
+    Total styles: 13
+    Paragraph styles: 10
+    Character styles: 3
+
+  Text Sample (first 200 chars):
+       ISO 17301-1         TC 34/SC 4/WG 4     Secretariat: SAC     Second edition     Date: 2016-05-01   Cereals and pulses — Specifications and test methods —       Part 1:   Rice    Céréales et légumin
+    analyzes document structure in detail
+    content extraction validation
+      extracts all tables from nested divs
+      preserves section structure
+      extracts content from WordSection divs
+      achieves >95% paragraph extraction rate
+  reading international standard samples
+
+  Testing 3 international standard files:
+
+    File: documents/international-standard/rice-2016/document-en.awi.doc
+      ✓ Read successfully
+        Paragraphs: 305
+        Tables: 6
+        Text length: 24221 chars
+
+    File: documents/international-standard/rice-2016/document-en.doc
+      ✓ Read successfully
+        Paragraphs: 324
+        Tables: 6
+        Text length: 26750 chars
+
+    File: documents/international-standard/rice-2023/document-en.doc
+      ✓ Read successfully
+        Paragraphs: 286
+        Tables: 6
+        Text length: 21652 chars
+
+  Summary: 3 succeeded, 0 failed
+    reads representative ISO standard files
+  reading smallest files
+
+  Testing 2 smallest amendment files:
+
+    File: documents/amendment/rice-2017/document-en.awi.doc
+      ✓ Read successfully
+        Paragraphs: 65
+        Tables: 2
+        Text length: 5950 chars
+
+    File: documents/amendment/rice-2023/document-en.awi.doc
+      ✓ Read successfully
+        Paragraphs: 70
+        Tables: 2
+        Text length: 6941 chars
+
+  Summary: 2 succeeded, 0 failed
+    reads amendment AWI files
+  reading directive samples (large files)
+
+  Testing 3 large directive files:
+
+    File: documents/directives/part1-consolidated-iso/document.doc
+      Size: 4.72 MB
+      ✓ Read successfully
+        Paragraphs: 2779
+        Tables: 30
+        Text length: 408017 chars
+
+    File: documents/directives/part1/document.doc
+      Size: 11.91 MB
+      ✓ Read successfully
+        Paragraphs: 1257
+        Tables: 4
+        Text length: 199042 chars
+
+    File: documents/directives/part2/document.doc
+      Size: 4.67 MB
+      ✓ Read successfully
+        Paragraphs: 1599
+        Tables: 53
+        Text length: 156017 chars
+
+  Summary: 3 succeeded, 0 failed
+    reads large directive files
+  file discovery
+
+✓ Found 44 DOC files in mn-samples-iso
+    discovers sample DOC files
+
+Metanorma MHTML to DOCX Conversion
+  rice-amendment conversion
+    preserves content in MHTML→DOCX conversion
+    preserves formatting in conversion
+    converts MHTML to DOCX successfully
+  document.doc
+    converts to DOCX without errors
+  document.doc
+    converts to DOCX without errors
+  document.doc
+    converts to DOCX without errors
+  document-en.final.doc
+    converts to DOCX without errors
+
+DOCX Round-trip Validation
+  Styles Round-trip
+    preserves style definitions
+    preserves style applications
+    preserves paragraph styles
+  Table Round-trip
+    preserves table borders
+    preserves table cell content
+    preserves table count
+    preserves table structure
+  Basic Round-trip
+    empty document
+      handles empty document
+    simple paragraph text
+      preserves element structure
+      preserves text content
+      preserves paragraph count
+  Property Preservation
+    preserves paragraph properties
+    preserves run properties
+  Complete Document Round-trip
+    preserves all features in complex document
+    handles mixed content types
+    handles multiple paragraphs with various styles
+  Formatting Round-trip
+    preserves bold text
+    preserves font information
+    preserves text formatting
+    preserves italic text
+
+DOCX Generation Integration
+  generating a minimal DOCX file
+    handles text with whitespace preservation
+    handles multiple paragraphs
+    creates a valid DOCX file structure
+    paragraph formatting
+      generates DOCX with paragraph alignment
+      generates DOCX with paragraph spacing
+    formatted text generation
+      generates DOCX with bold and italic text
+      generates DOCX with underline and strike-through
+      generates DOCX with font size and color
+    table generation
+      generates DOCX with table containing multiple rows
+      generates DOCX with a simple table
+      generates DOCX with table properties
+      generates DOCX with cell background color
+    mixed content generation
+      generates DOCX with paragraphs and tables
+
+Uniword::FormatDetector
+  #detect
+    with DOCX file
+      detects DOCX by extension when signature missing
+      detects DOCX by ZIP signature
+    with empty file
+      falls back to extension detection
+    with unsupported file
+      raises ArgumentError for unknown extension
+      raises ArgumentError for .pdf extension
+    with invalid arguments
+      raises ArgumentError when path is nil
+      raises ArgumentError when file does not exist
+      raises ArgumentError when path is a directory
+      raises ArgumentError when path is empty
+    signature detection priority
+      prefers signature over extension
+    with MHTML file
+      detects MHTML by .mhtml extension
+      detects MHTML by .mht extension
+      detects MHTML by MIME header
+
+Uniword::Infrastructure::ZipPackager
+  #remove_file
+    with invalid arguments
+      raises ArgumentError when zip_path is nil
+    when file exists
+      removes file from ZIP
+      returns true
+    when file does not exist
+      returns false
+      does not modify other files
+  #add_file
+    with valid arguments
+      overwrites existing entry with same path
+      adds file to existing ZIP
+    with invalid arguments
+      raises ArgumentError when entry_path is empty
+      raises ArgumentError when zip_path is nil
+      raises ArgumentError when entry_path is nil
+  #package
+    with valid arguments
+      overwrites existing file
+      creates output directory if it does not exist
+      creates ZIP file with content
+    with invalid arguments
+      raises ArgumentError when output path is nil
+      raises ArgumentError when entry path is empty
+      raises ArgumentError when content is not a Hash
+      raises ArgumentError when output path is empty
+      raises ArgumentError when content is nil
+      raises ArgumentError when entry content is nil
+      raises ArgumentError when content is empty
+      raises ArgumentError when entry path is nil
+
+Uniword::Properties::RunProperties
+  #==
+    returns true for identical properties
+    returns false for different types
+    returns false for different properties
+    compares all attributes
+  mutability (for test compatibility)
+    is not frozen
+    allows modification of attributes
+  inheritance
+    inherits from Lutaml::Model::Serializable
+  #hash
+    returns different hash for different objects
+    allows use as hash keys
+    returns same hash for equal objects
+  #eql?
+    is an alias for ==
+  #initialize
+    creates properties with default values
+    allows mutation for test compatibility
+    creates properties with provided attributes
+  boolean attributes
+    allows setting boolean attributes
+    defaults boolean attributes to false
+
+Docx.js Compatibility: Numbering and Lists
+  Numbered Lists
+    multi-level numbering
+      should support nested numbering levels (PENDING: Multi-level numbering not yet implemented)
+    basic numbering configuration
+      should support padded decimal format with custom text
+      should support decimal numbering format
+      should support upper roman numeral format
+    indentation with numbering
+      should support custom indentation for numbered lists (PENDING: Custom indentation for numbering not yet implemented)
+    numbering instances
+      should support continuing numbering without instance
+      should support restarting numbering with instances
+    contextual spacing
+      should support contextual spacing in numbered paragraphs
+      should support disabling contextual spacing
+  Integration with document structure
+    should preserve numbering in round-trip (PENDING: Round-trip testing requires full implementation)
+  Bullet Points
+    basic bullet lists
+      should support bullet point lists (PENDING: Bullet points not yet fully implemented)
+      should support custom bullet characters (PENDING: Custom bullet characters not yet implemented)
+    mixed bullet and numbered lists
+      should support mixing bullets and numbers (PENDING: Mixed list types not yet fully implemented)
+
+OOXML Round-trip Serialization
+  error handling
+    raises error for invalid XML
+    raises error for nil content
+    raises error for nil document
+    raises error for empty content
+    raises error for invalid document type
+  run properties preservation
+    preserves bold formatting
+    preserves italic formatting
+    preserves multiple formatting properties
+  simple document round-trip
+    preserves document with single paragraph
+    preserves empty document structure
+    preserves document with multiple paragraphs
+  paragraph properties preservation
+    preserves paragraph style
+    preserves paragraph alignment
+  paragraph with multiple runs
+    preserves multiple runs in a paragraph
+  XML structure validation
+    generates valid OOXML with proper namespaces
+    generates properly nested elements
+
+Headers, Footers, Fields, and Text Boxes
+  Uniword::Footer
+    creates footer with specific type
+    adds text
+    creates footer with default type
+  Uniword::SectionProperties
+    creates Letter portrait
+    raises error for invalid orientation
+    creates A4 landscape
+    creates A4 portrait
+    creates with default values
+  Uniword::TextBox
+    creates text box with position and size
+    adds text to text box
+    raises error for invalid wrapping
+    creates text box with default wrapping
+    checks if empty
+  Uniword::Field
+    .page_number
+      creates page number field
+    .caption
+      creates caption field
+    .total_pages
+      creates total pages field
+    .date
+      creates date field
+    .sequence
+      creates sequence field for captions
+  Document Integration
+    creates document with page numbers in footer
+    initializes with default section
+    adds header to section
+    adds sections
+  Uniword::Header
+    checks if empty
+    adds text
+    raises error for invalid type
+    adds paragraphs
+    creates header with specific type
+    creates header with default type
+  Uniword::Section
+    adds headers
+    creates with default properties
+    gets or creates header
+    checks for headers
+
+Line Spacing Fine Control
+  Paragraph#line_spacing=
+    with numeric value (simple API)
+      sets line spacing as multiple (1.5x)
+      sets line spacing as double (2.0x)
+      sets line spacing as single (1.0x)
+    with hash format (fine-grained API)
+      sets "at least" line spacing
+      normalizes "at_least" to "atLeast"
+      sets exact line spacing
+      sets multiple line spacing via hash
+      handles string keys
+  OOXML deserialization
+    deserializes exact line spacing
+    deserializes multiple line spacing
+    deserializes "at least" line spacing
+  OOXML serialization
+    serializes exact line spacing correctly
+    serializes "at least" line spacing correctly
+    serializes multiple line spacing correctly
+  Round-trip serialization
+    preserves "at least" line spacing through round-trip
+    preserves exact line spacing through round-trip
+    preserves multiple line spacing through round-trip
+  Paragraph#line_spacing getter
+    returns numeric value for auto/multiple spacing
+    returns hash with rule and value when rule is set
+
+Docx gem compatibility (Uniword)
+  Styles and properties
+    accesses paragraph properties
+    reads document with styles
+  Reading formatting
+    reads document with formatting
+    detects text alignment (FAILED - 2)
+    detects underline formatting
+    detects bold formatting
+    detects italic formatting
+  Document stream support
+    opens document from binary stream
+  Reading paragraphs
+    reads paragraphs from document
+    concatenates all paragraph text
+    reads paragraph text
+  Text run access
+    reads text from runs
+    accesses text runs in paragraphs
+  Hyperlinks and bookmarks
+    reads bookmarks from document
+  Reading tables
+    reads table cells
+    reads tables from document
+    reads table cell text
+    accesses tables by index
+    reads table rows
+    reads column data
+  Editing capabilities
+    preserves paragraph count after text change
+    modifies paragraph text
+  Document opening
+    opens Office365 formatted DOCX
+WARNING: Using the `raise_error` matcher without providing a specific error or message risks false positives, since `raise_error` will match when Ruby raises a `NoMethodError`, `NameError` or `ArgumentError`, potentially allowing the expectation to pass without even executing the method you are intending to call. Actual error raised was #<Uniword::FileNotFoundError: File not found: spec/fixtures/docx_gem/nonexistent.docx>. Instead consider providing a specific error class or message. This message can be suppressed by setting: `RSpec::Expectations.configuration.on_potential_false_positives = :nothing`. Called from /Users/mulgogi/src/mn/uniword/spec/compatibility/docx_gem_compatibility_spec.rb:22:in `block (3 levels) in <top (required)>'.
+    raises error for non-existent file
+    opens a basic DOCX file
+  Paragraph iteration
+    filters paragraphs by text
+    iterates through all paragraphs
+  Compatibility layer - Docx::Document alias
+    supports Docx::Document.open syntax
+
+DOCX Compatibility Testing
+  Cross-Application Compatibility
+    generates files openable by standard ZIP utilities
+    uses UTF-8 encoding for text content
+    handles special characters correctly
+  Content Type Validation
+    includes .xml content type
+    correctly declares styles.xml when present
+    declares correct MIME types for parts
+    includes .rels content type
+  OOXML Validation
+    generates well-formed XML
+    uses correct OOXML namespaces
+    has no invalid OOXML elements
+    has valid document.xml structure
+    has valid Content_Types.xml
+  Version Compatibility
+    generates DOCX compatible with Office Open XML standard
+    includes version markers in XML
+    uses ECMA-376 compliant structure
+  Relationship Validation
+    references existing targets in relationships
+    has valid document relationships file
+    has valid root relationships file
+  File Signature Validation
+    includes styles.xml when styles are present
+    generates valid ZIP structure
+    contains required OOXML parts
+    has correct ZIP compression
+    includes numbering.xml when lists are present
+
+Run Properties Inheritance
+  Multiple runs with mixed inheritance
+    handles runs with different inheritance patterns
+  Run inherits properties from paragraph style
+    prefers explicit run properties over inherited
+    inherits font size when not explicitly set
+    inherits color when not explicitly set
+    inherits bold property when not explicitly set
+    returns nil when no style and no explicit property
+
+Uniword::Run
+  inheritance
+    inherits from Element
+    is not abstract
+  #text_element
+    returns nil when no text
+    returns the text content
+  #text_element=
+    sets the text content
+  #accept
+    accepts a visitor
+  #font_size
+    returns font size in points (half of size attribute)
+    returns nil when no properties
+    returns nil when size is not set
+    handles odd sizes correctly
+  #underline?
+    returns false when underline is "none"
+    returns false when no properties
+    returns true when underline is set
+    returns false when underline is nil
+  #bold?
+    returns true when bold is true
+    returns false when bold is false
+    returns false when no properties
+  #italic?
+    returns true when italic is true
+    returns false when italic is false
+    returns false when no properties
+  #initialize
+    creates a run with properties
+    prefers text over text_element when both provided
+    accepts text_element parameter for compatibility
+    creates a run with an id
+    creates a run with text
+  #valid?
+    returns true when text is empty string
+    returns true when text is present
+    returns false when text is nil
+
+Uniword::Infrastructure::ZipExtractor
+  #extract
+    with invalid arguments
+      raises ArgumentError when path is a directory
+      raises ArgumentError when file does not exist
+      raises ArgumentError when path is empty
+      raises ArgumentError when path is nil
+    with valid ZIP file
+      extracts all files from ZIP archive
+      returns empty hash for empty ZIP
+      skips directories
+  #extract_file
+    with invalid arguments
+      raises ArgumentError when path is nil
+    when file exists
+      extracts specific file
+      extracts different file
+    when file does not exist
+      returns nil
+  #list_files
+    returns array of file paths
+    excludes directories
+    returns empty array for empty ZIP
+    with invalid arguments
+      raises ArgumentError when path is nil
+
+Uniword::Visitor::BaseVisitor
+  visitor pattern support
+    works with element accept methods
+    allows elements to dispatch to appropriate visit methods
+  #visit_image
+    provides a no-op default implementation
+    accepts an image parameter
+  #visit_run
+    provides a no-op default implementation
+    accepts a run parameter
+  inheritance
+    can be subclassed to create custom visitors
+  #visit_table_cell
+    provides a no-op default implementation
+    accepts a table cell parameter
+  #visit_table
+    accepts a table parameter
+    provides a no-op default implementation
+  #visit_table_row
+    provides a no-op default implementation
+    accepts a table row parameter
+  #visit_document
+    accepts a document parameter
+    provides a no-op default implementation
+  #visit_paragraph
+    accepts a paragraph parameter
+    provides a no-op default implementation
+
+Uniword::StylesConfiguration
+  initialization
+    includes default character styles
+    creates empty configuration without defaults
+    creates configuration with default styles
+    includes all default heading styles
+  style inheritance resolution
+    resolves simple inheritance
+  style management
+    removes a style
+    adds a style
+    prevents duplicate style IDs
+    finds style by name
+    finds style by ID or name
+  style filtering
+    filters character styles
+    filters paragraph styles
+    filters default styles
+    filters custom styles
+  style creation helpers
+    creates custom paragraph style
+    creates custom character style
+  validation
+    validates all styles
+
+Docx.js Compatibility: Page Setup
+  Page Columns
+    should support multiple columns (PENDING: Column configuration not yet implemented)
+    should support single column (default) (PENDING: Column configuration not yet implemented)
+    should support column spacing (PENDING: Column spacing not yet implemented)
+  Page Margins
+    zero margins
+      should support setting all margins to zero
+      should allow content with zero margins
+    custom margins
+      should support setting gutter margin (PENDING: Gutter margins not yet implemented)
+      should support setting custom margins in twips (PENDING: Custom margin values not yet fully implemented)
+  Integration with content
+    should apply page setup to content correctly
+    should support tabs with zero margins (PENDING: Tab support not yet fully implemented)
+  Page Borders
+    border offsets
+      should support border offset from page edge (PENDING: Border offsets not yet implemented)
+    partial borders
+      should support left and right borders only (PENDING: Partial borders not yet implemented)
+      should support top border only (PENDING: Partial borders not yet implemented)
+    border configuration
+      should support page borders (PENDING: Page borders not yet implemented)
+      should support different border styles (PENDING: Border styles not yet implemented)
+      should support border sizes (PENDING: Border sizing not yet implemented)
+      should support border colors (PENDING: Border colors not yet implemented)
+  Page Size
+    standard page sizes
+      should support legal size (PENDING: Page size configuration not yet implemented)
+      should support A4 size (PENDING: Page size configuration not yet implemented)
+      should support letter size (default) (PENDING: Page size configuration not yet implemented)
+    custom page sizes
+      should support custom page dimensions (PENDING: Custom page sizes not yet implemented)
+  Page Orientation
+    should support portrait orientation (default) (PENDING: Page orientation not yet implemented)
+    should support landscape orientation (PENDING: Page orientation not yet implemented)
+  Round-trip preservation
+    should preserve page margins in round-trip (PENDING: Round-trip testing requires full implementation)
+  Multiple sections
+    should support different page setup per section (PENDING: Multiple sections not yet fully implemented)
+
+Uniword docx gem compatibility - Document operations
+  hyperlinks
+    identifies hyperlinks in table cells
+  document styles
+    reads document with styles
+  format-preserving substitution
+    substitutes text in paragraphs
+  bookmarks
+    reads bookmarks from document
+  special documents
+    handles documents with no styles
+    handles documents with unusual structure
+  reading formatting
+    detects centered paragraphs
+    detects bold formatting
+    reads paragraphs with correct text
+    detects normal (non-formatted) text
+    detects underline formatting
+    detects italic formatting
+  editing paragraphs
+    changes paragraph text
+    removes paragraph content
+    inserts new paragraphs after existing ones
+  #open and file loading
+    with invalid files
+WARNING: Using the `raise_error` matcher without providing a specific error or message risks false positives, since `raise_error` will match when Ruby raises a `NoMethodError`, `NameError` or `ArgumentError`, potentially allowing the expectation to pass without even executing the method you are intending to call. Actual error raised was #<Uniword::FileNotFoundError: File not found: spec/fixtures/docx_gem/invalid_file_path.docx>. Instead consider providing a specific error class or message. This message can be suppressed by setting: `RSpec::Expectations.configuration.on_potential_false_positives = :nothing`. Called from /Users/mulgogi/src/mn/uniword/spec/compatibility/docx_gem/document_compatibility_spec.rb:35:in `block (4 levels) in <top (required)>'.
+      raises error for non-existent file
+    with valid DOCX files
+      opens documents from binary stream
+      opens Office365 generated documents
+      opens basic documents from file path
+  saving documents
+    saves document to file path
+    saves to tempfile
+  reading paragraphs
+    reads correct number of paragraphs
+    provides access to text runs in paragraphs
+    joins all text with newlines
+    reads paragraph text correctly
+  reading tables
+    accesses table rows
+    does not include table paragraphs in document paragraphs
+    reads table cell text
+    reads all tables
+    accesses tables by row and column count
+
+html2doc Compatibility: MHTML Conversion
+  Math Equations
+    handles inline equations
+    converts MathML to OMML
+    handles display equations
+  Supersession Demonstration
+    maintains backward compatibility
+    adds improvements over html2doc
+    implements all html2doc features
+  Basic HTML to Word Conversion
+    list conversion
+      handles nested lists
+      converts ordered lists to numbered lists
+      converts unordered lists to bulleted lists
+    table conversion
+      converts simple HTML tables to Word tables
+      preserves table borders
+      converts cell spanning
+      handles table headers
+    heading conversion
+      converts h1 elements with Heading1 style
+      converts h2-h6 elements with appropriate styles
+    paragraph conversion
+      converts simple HTML paragraphs to Word paragraphs
+      preserves paragraph spacing
+      converts paragraphs with inline formatting
+  MIME Multipart Structure
+    embeds images with Content-Location
+    creates valid MIME multipart document
+    embeds HTML content with proper MIME type
+    preserves HTML semantic structure
+    handles base64 encoded images
+  Advanced Features
+    handles endnotes
+    handles footnotes
+    handles special characters
+    preserves document metadata
+  CSS Styling Conversion
+    text decoration
+      converts font-weight bold
+      converts font-style italic
+      converts text-decoration underline
+    text alignment
+      converts text-align justify
+      converts text-align left
+      converts text-align center
+      converts text-align right
+    font properties
+      converts font-family to Word fonts
+      converts font-size to Word sizes
+      converts color to Word colors
+
+Uniword::Formats::MhtmlHandler
+  integration
+    performs full read-write cycle
+  #supported_extensions
+    returns array of MHTML extensions
+  #write
+    raises ArgumentError for nil document
+    raises ArgumentError for nil path
+    serializes and packages document to MHTML file
+    raises ArgumentError for invalid document type
+  #read
+    raises ArgumentError for non-existent file
+    reads and deserializes MHTML file
+    raises ArgumentError for nil path
+  #can_handle?
+    returns false for non-MHTML files
+    returns false for non-existent files
+    returns true for .mhtml files
+    returns true for .mht files
+
+Uniword::Mhtml::MathConverter
+  .wrap_in_omml
+    includes proper namespace
+    wraps content in OMML structure
+  .plurimath_available?
+    checks if Plurimath is available
+  .math_element?
+    with non-math element
+      returns false for nil
+      returns false for paragraph
+    with math element
+      detects mml:math tag
+      detects data-mathml attribute
+      detects m:oMath tag
+      detects math class
+      detects math tag
+  .mathml_to_omml
+    with empty string
+      returns empty string
+    with complex MathML
+      converts complex expressions
+    with valid MathML
+      wraps in OMML structure when Plurimath unavailable
+      converts to OMML format
+    with nil input
+      returns empty string
+  .asciimath_to_omml
+    with valid AsciiMath
+      returns plain text when Plurimath unavailable
+      converts to OMML format when Plurimath available
+    with nil input
+      returns empty string
+    with empty string
+      returns empty string
+    with custom delimiters
+      accepts delimiter parameter
+  .extract_math
+    with data-mathml attribute
+      extracts MathML from attribute
+    with unknown math content
+      returns unknown type
+    with m:oMath tag
+      extracts OMML from element
+    with math tag
+      extracts MathML from element
+    with asciimath class
+      extracts AsciiMath from text
+
+Docx.js Compatibility: Sections
+  Section type
+    should support nextPage section type (PENDING: Section types not yet implemented)
+    should support continuous section type (PENDING: Continuous section not yet implemented)
+    should support evenPage and oddPage section types (PENDING: Even/odd page sections not yet implemented)
+  Section integration
+    should support sections with different page setup (PENDING: Full section page setup not yet implemented)
+    should associate content with sections
+  Page numbering per section
+    should restart page numbering in new section (PENDING: Page numbering restart not yet implemented)
+    should support different number formats per section (PENDING: Multiple page number formats not yet implemented)
+    should continue page numbering by default (PENDING: Page number continuation not yet implemented)
+    should set page number start (PENDING: Page numbering per section not yet implemented)
+  Section properties
+    should set section orientation (PENDING: Section orientation not yet fully implemented)
+    should have different orientations per section (PENDING: Multiple sections with different orientations not yet implemented)
+  Title page
+    should mark section as having title page (PENDING: Title page property not yet implemented)
+    should have different first page header/footer (PENDING: Title page with different headers not yet implemented)
+  Multiple sections
+    should create document with single section by default
+    should get current section
+    should add multiple sections to document
+
+Comprehensive Library Supersession Validation
+  FEATURE PARITY: html2doc compatibility
+    MHTML generation
+      saves document as MHTML
+      MHTML contains document content
+    HTML to DOCX conversion
+      converts HTML tables
+      converts HTML with images
+      converts HTML with formatting
+      converts basic HTML to DOCX
+      converts HTML lists
+  Pass/Fail Report
+    summarizes test results
+  UNIQUE FEATURES: Uniword superiority
+    has comprehensive style management
+    has track changes capability (not in docx-js)
+    supports both DOCX and MHTML (html2doc only does MHTML)
+    has comments capability (not in docx gem)
+    extracts themes (neither library has this)
+  FEATURE PARITY: docx-js compatibility
+    Hyperlinks
+      reads hyperlinks
+      creates hyperlinks
+    Lists
+      handles multi-level lists
+      creates numbered lists
+      creates bullet lists
+    Tables
+      populates table cells
+      creates tables
+      applies table borders
+    Shading and highlighting
+      applies text highlighting
+      applies paragraph shading
+    Document creation
+      creates runs within paragraphs
+      creates a new document
+      adds paragraphs to document
+    Images
+      reads images from document
+      adds images to paragraphs
+    Paragraph properties
+      sets paragraph spacing
+      sets line spacing
+      sets paragraph alignment
+    Run properties (bold, italic, etc.)
+      sets bold on runs
+      sets font color
+      sets font size
+      sets italic on runs
+      sets font name
+  FEATURE PARITY: docx gem compatibility
+    Paragraph editing
+      changes paragraph text
+      supports text substitution
+    Styles
+      reads document styles
+    Bookmarks
+      reads bookmarks from document
+      accesses bookmarks by name
+    Text formatting
+      detects italic formatting
+      detects bold formatting
+      detects paragraph alignment
+      detects underline formatting
+    Document reading
+      supports Office365 generated DOCX files
+      extracts full document text
+      opens DOCX files from binary stream
+      opens DOCX files from file path
+      reads paragraph text correctly
+    Table reading
+      reads table rows
+      reads table cells
+      reads multiple tables
+      handles table columns
+      extracts table text
+
+Uniword::Infrastructure::MimeParser
+  #parse_content
+    returns hash with expected keys
+    handles empty parts gracefully
+  #parse
+    with invalid input
+      raises error when file does not exist
+      raises error when path is nil
+    boundary extraction
+      extracts boundary with quotes
+      raises error when no boundary found
+      extracts boundary without quotes
+    with valid MHTML content
+      returns images hash
+      extracts filelist content
+      extracts HTML content
+    with base64 encoded images
+      decodes base64 images
+    with quoted-printable encoding
+      decodes quoted-printable content
+    filename extraction
+      extracts filenames from various location formats
+
+Uniword::Validators::ParagraphValidator
+  #valid?
+    returns false for paragraph with invalid run
+    returns false for paragraph with invalid properties
+    returns false for nil
+    returns true for paragraph with valid properties
+    returns true for empty paragraph
+    returns false for non-Paragraph element
+    returns true for paragraph with valid runs
+  inheritance
+    inherits from ElementValidator
+  realistic scenarios
+    detects mixed valid and invalid runs
+    validates a complex paragraph with multiple runs and properties
+  integration with ElementValidator.for
+    is returned when requesting validator for Paragraph class (FAILED - 3)
+    validates paragraphs through the registry
+  #errors
+    returns multiple errors for multiple issues
+    returns property error for invalid properties
+    returns element error for nil
+    returns type error for non-Paragraph element
+    returns run errors for invalid runs
+    returns empty array for valid paragraph
+  edge cases
+    handles paragraph with empty runs array
+    handles paragraph with nil properties
+    handles paragraph with nil runs array
+
+Uniword::Bookmark
+  #eql?
+    is alias for ==
+  attribute accessors
+    allows modification of target element
+    allows modification of name
+  #to_h
+    returns hash representation
+    includes nil target element in hash
+  #==
+    returns false for bookmarks with different names
+    returns true for bookmarks with same name
+    returns false when comparing with non-bookmark
+    ignores target element in comparison
+  #target?
+    returns false when bookmark has no target element
+    returns true when bookmark has target element
+  #anchor_name
+    removes special characters
+    converts to lowercase
+    converts spaces to underscores
+    returns sanitized anchor name
+    preserves hyphens and underscores
+  #initialize
+    creates a bookmark with name
+    creates a bookmark with name and target element
+  #hash
+    allows bookmarks to be used in hash structures
+    returns same hash for bookmarks with same name
+    returns hash code based on name
+
+Uniword::Comment
+  #accept
+    calls visitor visit_comment method
+  #add_paragraph
+    raises error if not a Paragraph
+    returns self for chaining
+    adds a paragraph to comment
+  XML serialization
+    serializes to XML with correct structure
+  #add_text
+    supports multiple text additions
+    returns self for chaining
+    adds text as a paragraph
+  #text
+    returns text from single paragraph
+    joins multiple paragraphs with newlines
+    returns empty string for new comment
+  #valid?
+    returns false without author
+    returns false with empty author
+    returns true for valid comment
+    returns false without comment_id
+  #initialize
+    uses provided date
+    sets date to current time if not provided
+    uses provided comment_id
+    accepts initials
+    creates a comment with required attributes
+    auto-generates comment_id if not provided
+  #empty?
+    returns false for comment with text
+    returns true for comment without paragraphs
+    returns true for comment with empty paragraphs
+
+Pending: (Failures listed here are expected and do not affect your suite's status)
+
+  1) Real-World Document Testing Multiple Document Types handles documents with embedded images
+     # Create image-heavy test document
+     # ./spec/integration/real_world_documents_spec.rb:271
+
+  2) Real-World Document Testing Multiple Document Types handles simple documents efficiently
+     # Create simple test document
+     # ./spec/integration/real_world_documents_spec.rb:252
+
+  3) Real-World Document Testing Multiple Document Types handles documents with many tables
+     # Create table-heavy test document
+     # ./spec/integration/real_world_documents_spec.rb:265
+
+  4) Real-World Document Testing Multiple Document Types handles documents with heavy formatting
+     # Create heavily formatted test document
+     # ./spec/integration/real_world_documents_spec.rb:259
+
+  5) Real-World Document Testing Concurrent Access handles multiple documents simultaneously
+     # Performance test for concurrent documents
+     # ./spec/integration/real_world_documents_spec.rb:285
+
+  6) Real-World Document Testing Concurrent Access supports thread-safe reading
+     # Need to verify thread safety requirements
+     # ./spec/integration/real_world_documents_spec.rb:279
+
+  7) Docxjs Rendering Compatibility: Format Correctness Line Spacing Rendering should render double line spacing
+     # Line spacing not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:330
+
+  8) Docxjs Rendering Compatibility: Format Correctness Line Spacing Rendering should render 1.5 line spacing
+     # Line spacing not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:318
+
+  9) Docxjs Rendering Compatibility: Format Correctness Line Spacing Rendering should render at least line height
+     # At least line height not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:357
+
+  10) Docxjs Rendering Compatibility: Format Correctness Line Spacing Rendering should render single line spacing
+     # Line spacing not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:306
+
+  11) Docxjs Rendering Compatibility: Format Correctness Line Spacing Rendering should render exact line height
+     # Exact line height not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:342
+
+  12) Docxjs Rendering Compatibility: Format Correctness Format Compatibility Office 2007+ should handle OOXML namespaces correctly
+     # OOXML namespace handling not yet verified
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:448
+
+  13) Docxjs Rendering Compatibility: Format Correctness Format Compatibility Legacy formats should handle doc format conversion
+     # DOC format not supported
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:460
+
+  14) Docxjs Rendering Compatibility: Format Correctness Format Compatibility compatibility mode should detect document compatibility mode
+     # Compatibility mode detection not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:469
+
+  15) Docxjs Rendering Compatibility: Format Correctness Equation Rendering should render radical equations
+     # Radical equations not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:400
+
+  16) Docxjs Rendering Compatibility: Format Correctness Equation Rendering should render fraction equations
+     # Fraction equations not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:385
+
+  17) Docxjs Rendering Compatibility: Format Correctness Equation Rendering should render simple equations
+     # Equation rendering not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:373
+
+  18) Docxjs Rendering Compatibility: Format Correctness Break Rendering line breaks should render page breaks
+     # Page breaks not yet fully implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:223
+
+  19) Docxjs Rendering Compatibility: Format Correctness Revision Rendering should render deleted content
+     # Deletion rendering not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:431
+
+  20) Docxjs Rendering Compatibility: Format Correctness Revision Rendering should render inserted content
+     # Insertion rendering not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:417
+
+  21) Docxjs Rendering Compatibility: Format Correctness Text Rendering white space handling should handle leading spaces
+     # Leading space preservation not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:117
+
+  22) Docxjs Rendering Compatibility: Format Correctness Text Rendering white space handling should handle trailing spaces
+     # Trailing space preservation not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:126
+
+  23) Docxjs Rendering Compatibility: Format Correctness Table Rendering basic table structure should render vertical merging
+     # Vertical merging not yet fully implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:284
+
+  24) Docxjs Rendering Compatibility: Format Correctness Table Rendering basic table structure should render table borders
+     # Table borders not yet fully implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:254
+
+  25) Docxjs Rendering Compatibility: Format Correctness Underline Rendering should render dotted underline
+     # Dotted underline not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:165
+
+  26) Docxjs Rendering Compatibility: Format Correctness Underline Rendering should render dashed underline
+     # Dashed underline not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:179
+
+  27) Docxjs Rendering Compatibility: Format Correctness Underline Rendering should render double underline
+     # Double underline not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:151
+
+  28) Docxjs Rendering Compatibility: Format Correctness Underline Rendering should render wavy underline
+     # Wavy underline not yet implemented
+     # ./spec/compatibility/docxjs/rendering/format_correctness_spec.rb:193
+
+  29) Comprehensive Benchmark Suite Memory Efficiency Benchmarks benchmarks object allocation
+     # Allocation benchmark only with PROFILE=true
+     # ./spec/performance/benchmark_suite_spec.rb:228
+
+  30) Comprehensive Benchmark Suite Memory Efficiency Benchmarks benchmarks memory usage for document creation
+     # Memory benchmark requires get_process_mem
+     # ./spec/performance/benchmark_suite_spec.rb:210
+
+  31) Comprehensive Benchmark Suite Scalability Tests tests linear scaling with document size
+     # Scaling test only with PROFILE=true
+     # ./spec/performance/benchmark_suite_spec.rb:307
+
+  32) Comprehensive Benchmark Suite Write Performance Benchmarks benchmarks writing medium document (200 paragraphs)
+     # Medium benchmark only with PROFILE=true
+     # ./spec/performance/benchmark_suite_spec.rb:186
+
+  33) Comprehensive Benchmark Suite Document Creation Benchmarks benchmarks medium document creation (200 paragraphs)
+     # Medium benchmark only with PROFILE=true
+     # ./spec/performance/benchmark_suite_spec.rb:81
+
+  34) OOXML Namespace Configuration Namespace prefix consistency uses consistent w: prefix for WordProcessingML elements
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+        +"<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      # ./spec/uniword/ooxml/namespace_spec.rb:219:in `block (3 levels) in <top (required)>'
+
+  35) OOXML Namespace Configuration Namespace prefix consistency uses correct namespaces for different element types
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: expect(xml).not_to match(/<w:drawing/)
+
+        expected "<w:drawing xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" w:relationship_id=\"rId1\" w:width=\"100\" w:height=\"100\"/>" not to match /<w:drawing/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:drawing/
+        +"<w:drawing xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" w:relationship_id=\"rId1\" w:width=\"100\" w:height=\"100\"/>"
+      # ./spec/uniword/ooxml/namespace_spec.rb:233:in `block (3 levels) in <top (required)>'
+
+  36) OOXML Namespace Configuration Uniword::Document uses w:document as root element
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: expect(xml).to match(/<w:document/)
+
+        expected "<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to match /<w:document/
+        Diff:
+        @@ -1 +1 @@
+        -/<w:document/
+        +"<r:document xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>"
+      # ./spec/uniword/ooxml/namespace_spec.rb:33:in `block (3 levels) in <top (required)>'
+
+  37) OOXML Namespace Configuration Uniword::Image includes drawing namespaces
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: expect(xml).to include('xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"')
+        expected "<w:drawing xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\" w:relationship_id=\"rId1\" w:width=\"100\" w:height=\"100\"/>" to include "xmlns:wp=\"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing\""
+      # ./spec/uniword/ooxml/namespace_spec.rb:164:in `block (3 levels) in <top (required)>'
+
+  38) OOXML Namespace Configuration Round-trip serialization preserves document structure through XML round-trip
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: expect(parsed_doc.paragraphs).not_to be_empty
+        expected `[].empty?` to be falsey, got true
+      # ./spec/uniword/ooxml/namespace_spec.rb:185:in `block (3 levels) in <top (required)>'
+
+  39) OOXML Namespace Configuration Round-trip serialization preserves table structure through XML round-trip
+      # Element-level XML serialization will be implemented via OoxmlSerializer integration
+      Failure/Error: parsed_table = Uniword::Table.from_xml(xml)
+
+      RuntimeError:
+        Attribute 'spacing' not found in Uniword::Properties::ParagraphProperties
+      # ./spec/uniword/ooxml/namespace_spec.rb:199:in `block (3 levels) in <top (required)>'
+
+  40) Docxjs Parser Compatibility: Edge Cases VML and DrawingML VML elements should handle VML image data
+     # VML image data not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:247
+
+  41) Docxjs Parser Compatibility: Edge Cases VML and DrawingML VML elements should parse VML shapes
+     # VML parsing not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:240
+
+  42) Docxjs Parser Compatibility: Edge Cases VML and DrawingML DrawingML elements should parse inline drawings
+     # Inline drawings not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:256
+
+  43) Docxjs Parser Compatibility: Edge Cases VML and DrawingML DrawingML elements should parse position properties
+     # Position properties not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:277
+
+  44) Docxjs Parser Compatibility: Edge Cases VML and DrawingML DrawingML elements should parse anchored drawings
+     # Anchored drawings not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:263
+
+  45) Docxjs Parser Compatibility: Edge Cases VML and DrawingML DrawingML elements should handle drawing extent
+     # Drawing extent not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:270
+
+  46) Docxjs Parser Compatibility: Edge Cases Character Formatting should handle all underline types
+     # Underline variety not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:341
+
+  47) Docxjs Parser Compatibility: Edge Cases Character Formatting should handle vertical alignment
+     # Vertical alignment not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:348
+
+  48) Docxjs Parser Compatibility: Edge Cases Character Formatting should handle complex scripts
+     # Complex script support not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:355
+
+  49) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery alternate content should handle AlternateContent fallbacks
+     # AlternateContent not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:117
+
+  50) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery alternate content should prioritize Choice over Fallback when supported
+     # AlternateContent prioritization not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:125
+
+  51) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery incomplete structures should handle paragraphs without properties
+     # Graceful degradation not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:35
+
+  52) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery incomplete structures should handle runs without text
+     # Empty run handling not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:48
+
+  53) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery incomplete structures should handle tables without rows
+     # Empty table handling not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:63
+
+  54) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery missing namespaces should use default namespaces when missing
+     # Default namespace handling not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:26
+
+  55) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery missing namespaces should handle documents with missing namespace declarations
+     # Namespace recovery not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:8
+
+  56) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery unexpected nesting should handle unexpected element ordering
+     # Flexible element ordering not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:108
+
+  57) Docxjs Parser Compatibility: Edge Cases Malformed XML Recovery unexpected nesting should handle deeply nested structures
+     # Deep nesting not yet tested
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:78
+
+  58) Docxjs Parser Compatibility: Edge Cases Revision Tracking insertions should parse inserted content
+     # Insertion tracking not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:167
+
+  59) Docxjs Parser Compatibility: Edge Cases Revision Tracking insertions should preserve insertion metadata
+     # Insertion metadata not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:174
+
+  60) Docxjs Parser Compatibility: Edge Cases Revision Tracking deletions should handle deleted text
+     # Deleted text handling not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:190
+
+  61) Docxjs Parser Compatibility: Edge Cases Revision Tracking deletions should parse deleted content
+     # Deletion tracking not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:183
+
+  62) Docxjs Parser Compatibility: Edge Cases Comments should parse comment references
+     # Comment references not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:318
+
+  63) Docxjs Parser Compatibility: Edge Cases Comments should preserve comment metadata
+     # Comment metadata not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:332
+
+  64) Docxjs Parser Compatibility: Edge Cases Comments should parse comment content
+     # Comment content not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:325
+
+  65) Docxjs Parser Compatibility: Edge Cases Comments should parse comment range markers
+     # Comment ranges not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:311
+
+  66) Docxjs Parser Compatibility: Edge Cases Smart Tags should preserve smart tag metadata
+     # Smart tag metadata not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:207
+
+  67) Docxjs Parser Compatibility: Edge Cases Smart Tags should parse smart tag elements
+     # Smart tags not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:200
+
+  68) Docxjs Parser Compatibility: Edge Cases Math Equations (OMML) should parse math paragraphs
+     # Math paragraphs not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:287
+
+  69) Docxjs Parser Compatibility: Edge Cases Math Equations (OMML) should parse math elements
+     # Math elements not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:294
+
+  70) Docxjs Parser Compatibility: Edge Cases Math Equations (OMML) should handle various math structures
+     # Math structure variety not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:301
+
+  71) Docxjs Parser Compatibility: Edge Cases Structured Document Tags (SDT) should parse SDT content
+     # SDT parsing not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:216
+
+  72) Docxjs Parser Compatibility: Edge Cases Structured Document Tags (SDT) should support various SDT types
+     # SDT type support not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:230
+
+  73) Docxjs Parser Compatibility: Edge Cases Structured Document Tags (SDT) should handle SDT properties
+     # SDT properties not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:223
+
+  74) Docxjs Parser Compatibility: Edge Cases Complex Field Handling field characters should extract field instructions
+     # Field instruction parsing not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:140
+
+  75) Docxjs Parser Compatibility: Edge Cases Complex Field Handling field characters should parse field begin/separate/end markers
+     # Complex fields not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:133
+
+  76) Docxjs Parser Compatibility: Edge Cases Complex Field Handling field characters should handle nested fields
+     # Nested field handling not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:147
+
+  77) Docxjs Parser Compatibility: Edge Cases Complex Field Handling simple fields should parse fldSimple elements
+     # Simple fields not yet implemented
+     # ./spec/compatibility/docxjs/parser/edge_cases_spec.rb:156
+
+  78) DOCX Performance scaling performance scales linearly with document size
+     # Scaling test only in CI or with PROFILE=true
+     # ./spec/performance/docx_performance_spec.rb:188
+
+  79) DOCX Performance comparison benchmarks compares different document sizes
+     # Comparison benchmark only with PROFILE=true
+     # ./spec/performance/docx_performance_spec.rb:251
+
+  80) DOCX Performance writing performance writes large documents acceptably
+     # Large document test only in CI or with PROFILE=true
+     # ./spec/performance/docx_performance_spec.rb:147
+
+  81) DOCX Performance parsing performance parses large documents acceptably (500 paragraphs)
+     # Large document test only in CI or with PROFILE=true
+     # ./spec/performance/docx_performance_spec.rb:90
+
+  82) Docx.js Compatibility: Headers and Footers Page numbers should insert current page number in footer
+     # Page number fields in footer not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:164
+
+  83) Docx.js Compatibility: Headers and Footers Page numbers should insert current page number in header
+     # Page number fields not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:144
+
+  84) Docx.js Compatibility: Headers and Footers Page numbers should support aligned page numbers
+     # Aligned page numbers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:216
+
+  85) Docx.js Compatibility: Headers and Footers Page numbers should support page number with custom text
+     # Custom page number text not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:199
+
+  86) Docx.js Compatibility: Headers and Footers Page numbers should support page X of Y format
+     # Page X of Y format not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:183
+
+  87) Docx.js Compatibility: Headers and Footers Footers should add first page footer
+     # First page footers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:102
+
+  88) Docx.js Compatibility: Headers and Footers Footers should add default footer to section
+     # Footers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:86
+
+  89) Docx.js Compatibility: Headers and Footers Footers should support both headers and footers
+     # Headers and footers together not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:120
+
+  90) Docx.js Compatibility: Headers and Footers Page number continuation should continue page numbers across sections
+     # Page number continuation not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:335
+
+  91) Docx.js Compatibility: Headers and Footers Headers should support different default and first headers
+     # Multiple header types not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:41
+
+  92) Docx.js Compatibility: Headers and Footers Headers should support even and odd headers
+     # Even/odd headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:66
+
+  93) Docx.js Compatibility: Headers and Footers Headers should add first page header
+     # First page headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:23
+
+  94) Docx.js Compatibility: Headers and Footers Headers should add default header to section
+     # Headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:7
+
+  95) Docx.js Compatibility: Headers and Footers Header and footer formatting should support formatted text in header
+     # Formatted header text not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:235
+
+  96) Docx.js Compatibility: Headers and Footers Header and footer formatting should support tables in headers
+     # Tables in headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:250
+
+  97) Docx.js Compatibility: Headers and Footers Header and footer formatting should support images in headers
+     # Images in headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:266
+
+  98) Docx.js Compatibility: Headers and Footers Section-specific headers and footers should support different footers per section
+     # Per-section footers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:311
+
+  99) Docx.js Compatibility: Headers and Footers Section-specific headers and footers should support different headers per section
+     # Per-section headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/headers_footers_spec.rb:287
+
+  100) LibreOffice Compatibility Testing LibreOffice CLI Integration can be converted to PDF by LibreOffice
+     # LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux)
+     # ./spec/integration/libreoffice_spec.rb:345
+
+  101) LibreOffice Compatibility Testing LibreOffice CLI Integration can be validated by LibreOffice
+     # LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux)
+     # ./spec/integration/libreoffice_spec.rb:357
+
+  102) LibreOffice Compatibility Testing LibreOffice CLI Integration preserves content through LibreOffice conversion
+     # LibreOffice not installed. Install with: brew install libreoffice (macOS) or apt-get install libreoffice (Linux)
+     # ./spec/integration/libreoffice_spec.rb:368
+
+  103) Uniword::CommentsPart XML serialization serializes to XML with correct structure
+       # Full OOXML serialization support will be implemented with OoxmlSerializer integration
+       Failure/Error: expect(xml).to include('author="John"')
+         expected "<w:comments xmlns:w=\"http://schemas.openxmlformats.org/wordprocessingml/2006/main\"/>" to include "author=\"John\""
+       # ./spec/uniword/comments_part_spec.rb:218:in `block (3 levels) in <top (required)>'
+
+  104) Uniword::Serialization::HtmlDeserializer#deserialize with mixed content parses mixed elements in order
+     # Temporarily skipped with xit
+     # ./spec/uniword/serialization/html_deserializer_spec.rb:261
+
+  105) Uniword::Serialization::HtmlDeserializer#deserialize with table parses table structure
+     # Temporarily skipped with xit
+     # ./spec/uniword/serialization/html_deserializer_spec.rb:231
+
+  106) Docx.js Compatibility: Page Breaks Section breaks should support continuous section break
+     # Continuous section breaks not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_breaks_spec.rb:108
+
+  107) Docx.js Compatibility: Page Breaks Section breaks should support section break for new page
+     # Section breaks not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_breaks_spec.rb:89
+
+  108) Docx.js Compatibility: Page Breaks Section breaks should support even/odd page section breaks
+     # Even/odd page section breaks not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_breaks_spec.rb:119
+
+  109) Docx.js Compatibility: Page Breaks Column breaks should insert column break
+     # Column breaks not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_breaks_spec.rb:132
+
+  110) Memory Performance lazy loading benefits delays loading until needed
+     # Lazy loading test only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:217
+
+  111) Memory Performance memory leak detection cleans up resources after document operations
+     # Memory profiling only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:77
+
+  112) Memory Performance memory leak detection does not leak memory with large documents
+     # Memory profiling only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:58
+
+  113) Memory Performance object allocation reuses objects when possible
+     # Allocation profiling only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:159
+
+  114) Memory Performance object allocation minimizes object allocations during parsing
+     # Allocation profiling only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:135
+
+  115) Memory Performance string memory optimization does not create excessive string objects
+     # String profiling only in CI or with PROFILE=true
+     # ./spec/performance/memory_spec.rb:188
+
+  116) Memory Performance memory efficiency uses acceptable memory for medium documents
+     # Memory profiling requires get_process_mem gem
+     # ./spec/performance/memory_spec.rb:99
+
+  117) Memory Performance memory efficiency uses acceptable memory for documents with tables
+     # Memory profiling requires get_process_mem gem
+     # ./spec/performance/memory_spec.rb:116
+
+  118) Docx.js Compatibility: Footnotes Footnote Validation should validate footnote references exist
+     # Reference validation not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:402
+
+  119) Docx.js Compatibility: Footnotes Footnote Validation should validate footnote IDs are unique
+     # Footnote validation not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:390
+
+  120) Docx.js Compatibility: Footnotes Footnote Formatting should support hyperlinks in footnotes
+     # Hyperlinks in footnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:253
+
+  121) Docx.js Compatibility: Footnotes Footnote Formatting should support paragraph styles in footnotes
+     # Footnote paragraph styles not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:238
+
+  122) Docx.js Compatibility: Footnotes Footnote Formatting should support formatted text in footnotes
+     # Formatted footnote text not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:219
+
+  123) Docx.js Compatibility: Footnotes Footnote Positioning should support footnotes at end of section
+     # Footnote positioning not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:287
+
+  124) Docx.js Compatibility: Footnotes Footnote Positioning should support footnotes at end of document
+     # Footnote positioning not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:299
+
+  125) Docx.js Compatibility: Footnotes Footnote Positioning should support footnotes at bottom of page
+     # Footnote positioning not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:275
+
+  126) Docx.js Compatibility: Footnotes Basic Footnotes footnote creation should support creating footnotes
+     # Footnotes not yet fully implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:8
+
+  127) Docx.js Compatibility: Footnotes Basic Footnotes footnote creation should support single-paragraph footnotes
+     # Single-paragraph footnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:49
+
+  128) Docx.js Compatibility: Footnotes Basic Footnotes footnote creation should support multi-paragraph footnotes
+     # Multi-paragraph footnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:33
+
+  129) Docx.js Compatibility: Footnotes Basic Footnotes footnote references should support adding footnote references inline
+     # Footnote references not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:65
+
+  130) Docx.js Compatibility: Footnotes Basic Footnotes footnote references should support multiple footnote references in one paragraph
+     # Multiple footnote references not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:86
+
+  131) Docx.js Compatibility: Footnotes Basic Footnotes footnote references should support footnote references between text runs
+     # Footnote references between runs not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:108
+
+  132) Docx.js Compatibility: Footnotes Round-trip preservation should preserve footnotes in round-trip
+     # Round-trip testing requires full implementation
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:367
+
+  133) Docx.js Compatibility: Footnotes Multiple Sections with Footnotes should support footnotes across multiple sections
+     # Multi-section footnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:128
+
+  134) Docx.js Compatibility: Footnotes Footnote Separators should support no separator
+     # No separator option not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:325
+
+  135) Docx.js Compatibility: Footnotes Footnote Separators should support custom footnote separators
+     # Custom footnote separators not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:313
+
+  136) Docx.js Compatibility: Footnotes Endnotes should support endnotes as alternative to footnotes
+     # Endnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:337
+
+  137) Docx.js Compatibility: Footnotes Endnotes should support mixing footnotes and endnotes
+     # Mixed notes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:353
+
+  138) Docx.js Compatibility: Footnotes Footnote Numbering should support non-sequential footnote IDs
+     # Non-sequential footnote IDs not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:189
+
+  139) Docx.js Compatibility: Footnotes Footnote Numbering should support automatic footnote numbering
+     # Auto-numbering footnotes not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:202
+
+  140) Docx.js Compatibility: Footnotes Footnote Numbering should support sequential footnote numbering
+     # Footnote numbering not yet implemented
+     # ./spec/compatibility/docx_js/structure/footnotes_spec.rb:168
+
+  141) Docx.js Compatibility: Images Images in Headers and Footers header images should support images in default header
+     # Header images not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:326
+
+  142) Docx.js Compatibility: Images Images in Headers and Footers header images should support images in first page header
+     # First page header not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:343
+
+  143) Docx.js Compatibility: Images Images in Headers and Footers header images should support images in even page header
+     # Even page header not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:358
+
+  144) Docx.js Compatibility: Images Images in Headers and Footers combined headers and footers should support images in both header and footer
+     # Combined header/footer images not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:409
+
+  145) Docx.js Compatibility: Images Images in Headers and Footers footer images should support images in default footer
+     # Footer images not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:375
+
+  146) Docx.js Compatibility: Images Images in Headers and Footers footer images should support images in first page footer
+     # First page footer not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:392
+
+  147) Docx.js Compatibility: Images Image Scaling scaling factors should support scaling up beyond original size
+     # Scale up not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:307
+
+  148) Docx.js Compatibility: Images Image Scaling scaling factors should support scaling by percentage
+     # Percentage scaling not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:292
+
+  149) Docx.js Compatibility: Images Image Scaling aspect ratio should support non-square dimensions
+     # Non-square image dimensions not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:240
+
+  150) Docx.js Compatibility: Images Image Scaling aspect ratio should support maintaining aspect ratio
+     # Aspect ratio maintenance not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:257
+
+  151) Docx.js Compatibility: Images Image Scaling aspect ratio should calculate height from width when maintaining aspect ratio
+     # Aspect ratio calculation not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:273
+
+  152) Docx.js Compatibility: Images Image Scaling fixed dimensions should support multiple images with different sizes
+     # Multiple image sizing not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:219
+
+  153) Docx.js Compatibility: Images Image Scaling fixed dimensions should support medium image dimensions (100x100)
+     # Image dimension control not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:168
+
+  154) Docx.js Compatibility: Images Image Scaling fixed dimensions should support extra large image dimensions (400x400)
+     # Image dimension control not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:202
+
+  155) Docx.js Compatibility: Images Image Scaling fixed dimensions should support small image dimensions (50x50)
+     # Image dimension control not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:150
+
+  156) Docx.js Compatibility: Images Image Scaling fixed dimensions should support large image dimensions (250x250)
+     # Image dimension control not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:185
+
+  157) Docx.js Compatibility: Images Image Metadata should support image title
+     # Image title not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:512
+
+  158) Docx.js Compatibility: Images Image Metadata should support image alt text
+     # Image alt text not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:495
+
+  159) Docx.js Compatibility: Images Image Metadata should support image description
+     # Image description not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:529
+
+  160) Docx.js Compatibility: Images Round-trip preservation should preserve images in round-trip
+     # Round-trip testing requires full implementation
+     # ./spec/compatibility/docx_js/media/images_spec.rb:548
+
+  161) Docx.js Compatibility: Images Image from Buffer binary data handling should support images from IO stream
+     # IO stream image handling not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:69
+
+  162) Docx.js Compatibility: Images Image from Buffer binary data handling should support adding images from binary buffer
+     # Image from buffer not yet fully implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:8
+
+  163) Docx.js Compatibility: Images Image from Buffer binary data handling should support images from base64 string
+     # Base64 image handling not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:31
+
+  164) Docx.js Compatibility: Images Image from Buffer binary data handling should support images from file path
+     # Test image fixture not available
+     # ./spec/compatibility/docx_js/media/images_spec.rb:49
+
+  165) Docx.js Compatibility: Images Image from Buffer image formats should support GIF images
+     # GIF format support not yet verified
+     # ./spec/compatibility/docx_js/media/images_spec.rb:128
+
+  166) Docx.js Compatibility: Images Image from Buffer image formats should support PNG images
+     # PNG format support not yet verified
+     # ./spec/compatibility/docx_js/media/images_spec.rb:91
+
+  167) Docx.js Compatibility: Images Image from Buffer image formats should support JPEG images
+     # JPEG format support not yet verified
+     # ./spec/compatibility/docx_js/media/images_spec.rb:109
+
+  168) Docx.js Compatibility: Images Image Positioning should support anchored images
+     # Anchored images not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:476
+
+  169) Docx.js Compatibility: Images Image Positioning should support floating images
+     # Floating images not yet implemented
+     # ./spec/compatibility/docx_js/media/images_spec.rb:458
+
+  170) Uniword::CLI#info with verbose option shows detailed information
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:47
+
+  171) Uniword::CLI#validate with verbose option shows detailed validation results
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:64
+
+  172) Uniword::CLI#convert with verbose option shows detailed output
+     # Requires fixture files
+     # ./spec/uniword/cli_spec.rb:28
+
+  173) Docx.js Compatibility: Hyperlinks URL validation should accept mailto links
+     # Mailto links validation not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:328
+
+  174) Docx.js Compatibility: Hyperlinks Round-trip preservation should preserve hyperlinks when reading and writing
+     # Round-trip testing requires full implementation
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:281
+
+  175) Docx.js Compatibility: Hyperlinks Internal Hyperlinks bookmark linking should support internal bookmarks
+     # Bookmark hyperlinks not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:233
+
+  176) Docx.js Compatibility: Hyperlinks Internal Hyperlinks cross-references should support heading cross-references
+     # Cross-references not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:261
+
+  177) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlink style configuration should support custom hyperlink style colors
+     # Custom hyperlink styles not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:208
+
+  178) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks in footnotes should support hyperlinks within footnotes
+     # Footnotes not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:178
+
+  179) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks in headers and footers should support hyperlinks in footers
+     # Headers and footers not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:137
+
+  180) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks in headers and footers should support hyperlinks in headers
+     # Headers and footers not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:118
+
+  181) Docx.js Compatibility: Hyperlinks External Hyperlinks basic hyperlink creation should support hyperlinks with custom text style
+     # Hyperlink style customization not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:23
+
+  182) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks with images should support image hyperlinks
+     # Image hyperlinks not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:158
+
+  183) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks with formatting should support underlined hyperlinks
+     # Underline customization for hyperlinks not yet implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:100
+
+  184) Docx.js Compatibility: Hyperlinks External Hyperlinks hyperlinks with formatting should support formatted text within hyperlinks
+     # Formatted hyperlinks not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/hyperlinks_spec.rb:62
+
+  185) Docx.js Compatibility: Numbering and Lists Numbered Lists multi-level numbering should support nested numbering levels
+     # Multi-level numbering not yet implemented
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:177
+
+  186) Docx.js Compatibility: Numbering and Lists Numbered Lists indentation with numbering should support custom indentation for numbered lists
+     # Custom indentation for numbering not yet implemented
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:204
+
+  187) Docx.js Compatibility: Numbering and Lists Integration with document structure should preserve numbering in round-trip
+     # Round-trip testing requires full implementation
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:283
+
+  188) Docx.js Compatibility: Numbering and Lists Bullet Points basic bullet lists should support bullet point lists
+     # Bullet points not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:224
+
+  189) Docx.js Compatibility: Numbering and Lists Bullet Points basic bullet lists should support custom bullet characters
+     # Custom bullet characters not yet implemented
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:241
+
+  190) Docx.js Compatibility: Numbering and Lists Bullet Points mixed bullet and numbered lists should support mixing bullets and numbers
+     # Mixed list types not yet fully implemented
+     # ./spec/compatibility/docx_js/formatting/numbering_spec.rb:255
+
+  191) Docx.js Compatibility: Page Setup Page Columns should support multiple columns
+     # Column configuration not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:292
+
+  192) Docx.js Compatibility: Page Setup Page Columns should support single column (default)
+     # Column configuration not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:284
+
+  193) Docx.js Compatibility: Page Setup Page Columns should support column spacing
+     # Column spacing not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:302
+
+  194) Docx.js Compatibility: Page Setup Page Margins custom margins should support setting gutter margin
+     # Gutter margins not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:64
+
+  195) Docx.js Compatibility: Page Setup Page Margins custom margins should support setting custom margins in twips
+     # Custom margin values not yet fully implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:45
+
+  196) Docx.js Compatibility: Page Setup Integration with content should support tabs with zero margins
+     # Tab support not yet fully implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:340
+
+  197) Docx.js Compatibility: Page Setup Page Borders border offsets should support border offset from page edge
+     # Border offsets not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:183
+
+  198) Docx.js Compatibility: Page Setup Page Borders partial borders should support left and right borders only
+     # Partial borders not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:164
+
+  199) Docx.js Compatibility: Page Setup Page Borders partial borders should support top border only
+     # Partial borders not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:150
+
+  200) Docx.js Compatibility: Page Setup Page Borders border configuration should support page borders
+     # Page borders not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:84
+
+  201) Docx.js Compatibility: Page Setup Page Borders border configuration should support different border styles
+     # Border styles not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:103
+
+  202) Docx.js Compatibility: Page Setup Page Borders border configuration should support border sizes
+     # Border sizing not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:133
+
+  203) Docx.js Compatibility: Page Setup Page Borders border configuration should support border colors
+     # Border colors not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:118
+
+  204) Docx.js Compatibility: Page Setup Page Size standard page sizes should support legal size
+     # Page size configuration not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:226
+
+  205) Docx.js Compatibility: Page Setup Page Size standard page sizes should support A4 size
+     # Page size configuration not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:211
+
+  206) Docx.js Compatibility: Page Setup Page Size standard page sizes should support letter size (default)
+     # Page size configuration not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:200
+
+  207) Docx.js Compatibility: Page Setup Page Size custom page sizes should support custom page dimensions
+     # Custom page sizes not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:242
+
+  208) Docx.js Compatibility: Page Setup Page Orientation should support portrait orientation (default)
+     # Page orientation not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:260
+
+  209) Docx.js Compatibility: Page Setup Page Orientation should support landscape orientation
+     # Page orientation not yet implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:268
+
+  210) Docx.js Compatibility: Page Setup Round-trip preservation should preserve page margins in round-trip
+     # Round-trip testing requires full implementation
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:397
+
+  211) Docx.js Compatibility: Page Setup Multiple sections should support different page setup per section
+     # Multiple sections not yet fully implemented
+     # ./spec/compatibility/docx_js/layout/page_setup_spec.rb:367
+
+  212) Docx.js Compatibility: Sections Section type should support nextPage section type
+     # Section types not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:159
+
+  213) Docx.js Compatibility: Sections Section type should support continuous section type
+     # Continuous section not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:170
+
+  214) Docx.js Compatibility: Sections Section type should support evenPage and oddPage section types
+     # Even/odd page sections not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:181
+
+  215) Docx.js Compatibility: Sections Section integration should support sections with different page setup
+     # Full section page setup not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:245
+
+  216) Docx.js Compatibility: Sections Page numbering per section should restart page numbering in new section
+     # Page numbering restart not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:95
+
+  217) Docx.js Compatibility: Sections Page numbering per section should support different number formats per section
+     # Multiple page number formats not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:115
+
+  218) Docx.js Compatibility: Sections Page numbering per section should continue page numbering by default
+     # Page number continuation not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:141
+
+  219) Docx.js Compatibility: Sections Page numbering per section should set page number start
+     # Page numbering per section not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:81
+
+  220) Docx.js Compatibility: Sections Section properties should set section orientation
+     # Section orientation not yet fully implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:42
+
+  221) Docx.js Compatibility: Sections Section properties should have different orientations per section
+     # Multiple sections with different orientations not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:53
+
+  222) Docx.js Compatibility: Sections Title page should mark section as having title page
+     # Title page property not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:200
+
+  223) Docx.js Compatibility: Sections Title page should have different first page header/footer
+     # Title page with different headers not yet implemented
+     # ./spec/compatibility/docx_js/layout/sections_spec.rb:211
+
+Failures:
+
+  1) Docx.js Compatibility: Run (Text Formatting) integrated run creation should support multiple runs in paragraph
+     Failure/Error: expect(para.runs[2].properties).to be_nil
+
+       expected: nil
+            got: #<Uniword::Properties::RunProperties:0x000000013705b058 @using_default={:style=>false, :bold=>true, :...nil, @double_strike=false, @all_caps=false, @kerning=nil, @position=nil, @w_scale=nil, @shading=nil>
+     # ./spec/compatibility/docx_js/text/run_spec.rb:370:in `block (3 levels) in <top (required)>'
+
+  2) Docx gem compatibility (Uniword) Reading formatting detects text alignment
+     Failure/Error: expect([centered, left_aligned].compact.size).to be > 0
+
+       expected: > 0
+            got:   0
+     # ./spec/compatibility/docx_gem_compatibility_spec.rb:136:in `block (3 levels) in <top (required)>'
+
+  3) Uniword::Validators::ParagraphValidator integration with ElementValidator.for is returned when requesting validator for Paragraph class
+     Failure/Error: expect(validator).to be_a(described_class)
+       expected #<Uniword::Validators::ElementValidator:0x0000000133d34fd0> to be a kind of Uniword::Validators::ParagraphValidator
+     # ./spec/uniword/validators/paragraph_validator_spec.rb:118:in `block (3 levels) in <top (required)>'
+
+Finished in 1 minute 19.11 seconds (files took 0.96025 seconds to load)
+2188 examples, 3 failures, 223 pending
+
+Failed examples:
+
+rspec ./spec/compatibility/docx_js/text/run_spec.rb:349 # Docx.js Compatibility: Run (Text Formatting) integrated run creation should support multiple runs in paragraph
+rspec ./spec/compatibility/docx_gem_compatibility_spec.rb:128 # Docx gem compatibility (Uniword) Reading formatting detects text alignment
+rspec ./spec/uniword/validators/paragraph_validator_spec.rb:116 # Uniword::Validators::ParagraphValidator integration with ElementValidator.for is returned when requesting validator for Paragraph class
+
+Randomized with seed 18281
+
