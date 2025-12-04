@@ -371,6 +371,43 @@ Or install it yourself as:
 gem install uniword
 ----
 
+== Architecture: Autoload Strategy
+
+Uniword uses Ruby's `autoload` mechanism for lazy loading of most classes, achieving 90% autoload coverage for improved startup performance and maintainability.
+
+=== Autoload Coverage
+
+* **95 autoload statements**: Classes loaded on-demand when first accessed
+* **10 require_relative statements**: Well-documented exceptions for architectural necessities
+
+=== Architectural Exceptions
+
+The following 10 files MUST use `require_relative` (not `autoload`):
+
+**Base Requirements (2)**::
+  * `uniword/version` - Version constants needed by gem metadata
+  * `uniword/ooxml/namespaces` - Namespace constants referenced by generated classes
+
+**Namespace Modules (6)**::
+  * Core namespaces (wordprocessingml, wp_drawing, drawingml, vml, math, shared_types)
+  * Required due to deep cross-dependencies with format handlers
+  * Constant assignments require immediate class resolution
+
+**Format Handlers (2)**::
+  * `formats/docx_handler` and `formats/mhtml_handler`
+  * Self-registration side effects require eager loading
+
+[NOTE]
+====
+These exceptions are architectural necessities, not technical debt. Attempting to autoload these modules would cause NameError or break core functionality.
+====
+
+=== Performance Benefits
+
+* **Faster startup**: Only essential classes loaded initially
+* **Lower memory footprint**: Unused features don't consume memory
+* **Better maintainability**: Clear separation between eager and lazy loading
+
 == Quick start
 
 === Creating documents

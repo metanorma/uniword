@@ -163,6 +163,86 @@ The project uses several design patterns:
 
 When adding new features, consider which patterns apply.
 
+## Adding New Classes
+
+When adding new classes to Uniword, follow these guidelines to maintain our autoload architecture:
+
+### Default Approach: Use Autoload
+
+For most new classes, use autoload for lazy loading:
+
+```ruby
+# In lib/uniword.rb
+autoload :YourNewClass, 'uniword/your_new_class'
+```
+
+Place the autoload statement in the appropriate category section:
+- Document structure and components
+- Table components
+- Formatting and styling
+- Infrastructure and utilities
+- Office ML variants
+
+### When to Use require_relative
+
+Only use `require_relative` if your class meets ALL these criteria:
+
+1. **Has side effects at load time**
+   - Self-registration with registries
+   - Module-level code execution
+   - Class-level method calls
+
+2. **Is referenced in module-level constants**
+   ```ruby
+   Document = Wordprocessingml::DocumentRoot  # Requires immediate loading
+   ```
+
+3. **Has deep cross-dependencies with eagerly loaded modules**
+   - Format handlers
+   - Core namespace modules
+
+### Documentation Requirements
+
+If using `require_relative`, you MUST add clear documentation:
+
+```ruby
+# NOTE: This class MUST use require_relative because:
+# - Specific architectural reason
+# - Impact if autoload were used instead
+require_relative 'uniword/special_class'
+```
+
+### Testing Requirements
+
+After adding any class (autoload or require_relative):
+
+1. Run full test suite: `bundle exec rspec`
+2. Verify autoload works: `ruby -e "require './lib/uniword'; Uniword::YourNewClass"`
+3. Check API compatibility: Ensure existing code still works
+4. Update documentation: Add to README.adoc if public API
+
+### Examples
+
+**Good (autoload)**:
+```ruby
+# New utility class with no dependencies
+autoload :DocumentValidator, 'uniword/document_validator'
+```
+
+**Good (require_relative with documentation)**:
+```ruby
+# New format handler that self-registers
+# NOTE: MUST use require_relative because format handlers self-register
+# with FormatHandlerRegistry at load time (side effect)
+require_relative 'uniword/formats/pdf_handler'
+```
+
+**Bad (autoload without considering dependencies)**:
+```ruby
+# Don't do this if the class is used in module-level constants!
+autoload :CoreNamespace, 'uniword/core_namespace'  # Will cause NameError
+```
+
 ## Adding New Features
 
 ### Before You Start
