@@ -15,20 +15,18 @@ require_relative 'uniword/version'
 # Load OOXML namespaces FIRST (needed by generated classes)
 require_relative 'uniword/ooxml/namespaces'
 
-# Namespace modules with cross-dependencies MUST be eagerly loaded
-# These cannot use autoload because:
-# 1. Format handlers (loaded at line 220) depend on these namespaces
-# 2. Format handlers execute self-registration code at load time (side effects)
-# 3. Cross-dependencies between namespaces prevent deferred loading
-# 4. Autoload triggers inside module definition fail (NameError before autoload executes)
-require_relative 'uniword/wordprocessingml'
-require_relative 'uniword/wp_drawing'
-require_relative 'uniword/drawingml'
-require_relative 'uniword/vml'
-require_relative 'uniword/math'
-require_relative 'uniword/shared_types'
+# Load namespaces required for immediate constant assignments (lines 59-79) and cross-dependencies
+# These MUST be eagerly loaded due to extensive dependency chains.
+# Analysis shows deep cross-dependencies between core namespaces that prevent autoloading.
+require_relative 'uniword/wordprocessingml'  # Used: Document, Body, Paragraph, Run, Table, etc.
+require_relative 'uniword/wp_drawing'        # Required by: Wordprocessingml::Drawing
+require_relative 'uniword/drawingml'         # Required by: WpDrawing::Inline
+require_relative 'uniword/vml'               # Required by: Wordprocessingml classes (Pict, etc.)
+require_relative 'uniword/math'              # Used: MathElement = Math::OMath
+require_relative 'uniword/shared_types'      # Required by: Multiple namespace property classes
 
-# Autoload remaining namespace modules (no cross-dependencies with format handlers)
+# Autoload remaining namespace modules (loaded only when accessed)
+# These provide ~33% autoload coverage for namespace modules (3/9)
 autoload :ContentTypes, 'uniword/content_types'
 autoload :DocumentProperties, 'uniword/document_properties'
 autoload :Glossary, 'uniword/glossary'
@@ -63,7 +61,6 @@ autoload :Glossary, 'uniword/glossary'
 module Uniword
   # Re-export generated classes as primary API
   # These are the schema-generated classes from lib/uniword/wordprocessingml/
-  # NOTE: These constants require namespaces to be eagerly loaded (see lines 18-23)
   Document = Wordprocessingml::DocumentRoot
   Body = Wordprocessingml::Body
   Paragraph = Wordprocessingml::Paragraph
@@ -165,81 +162,7 @@ module Uniword
   # Autoload CLI
   autoload :CLI, 'uniword/cli'
 
-  # === Top-Level Classes (Comprehensive Autoload) ===
-  # All top-level classes in lib/uniword/*.rb use autoload for maintenance simplicity
-  
-  # Document structure and components
-  autoload :Bibliography, 'uniword/bibliography'
-  autoload :Bookmark, 'uniword/bookmark'
-  autoload :Chart, 'uniword/chart'
-  autoload :Comment, 'uniword/comment'
-  autoload :CommentRange, 'uniword/comment_range'
-  autoload :CommentsPart, 'uniword/comments_part'
-  autoload :DocumentVariables, 'uniword/document_variables'
-  autoload :Endnote, 'uniword/endnote'
-  autoload :Field, 'uniword/field'
-  autoload :Footer, 'uniword/footer'
-  autoload :Footnote, 'uniword/footnote'
-  autoload :Header, 'uniword/header'
-  autoload :Hyperlink, 'uniword/hyperlink'
-  autoload :Image, 'uniword/image'
-  autoload :MathEquation, 'uniword/math_equation'
-  autoload :Picture, 'uniword/picture'
-  autoload :Revision, 'uniword/revision'
-  autoload :Section, 'uniword/section'
-  autoload :SectionProperties, 'uniword/section_properties'
-  autoload :TextBox, 'uniword/text_box'
-  autoload :TextFrame, 'uniword/text_frame'
-  autoload :TrackedChanges, 'uniword/tracked_changes'
-  
-  # Table components
-  autoload :TableBorder, 'uniword/table_border'
-  autoload :TableCell, 'uniword/table_cell'
-  autoload :TableColumn, 'uniword/table_column'
-  autoload :TableRow, 'uniword/table_row'
-  
-  # Formatting and styling
-  autoload :ColumnConfiguration, 'uniword/column_configuration'
-  autoload :Extension, 'uniword/extension'
-  autoload :ExtensionList, 'uniword/extension_list'
-  autoload :ExtraColorSchemeList, 'uniword/extra_color_scheme_list'
-  autoload :FormatScheme, 'uniword/format_scheme'
-  autoload :LineNumbering, 'uniword/line_numbering'
-  autoload :NumberingDefinition, 'uniword/numbering_definition'
-  autoload :NumberingInstance, 'uniword/numbering_instance'
-  autoload :NumberingLevel, 'uniword/numbering_level'
-  autoload :ObjectDefaults, 'uniword/object_defaults'
-  autoload :PageBorders, 'uniword/page_borders'
-  autoload :ParagraphBorder, 'uniword/paragraph_border'
-  autoload :Shading, 'uniword/shading'
-  autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
-  autoload :TabStop, 'uniword/tab_stop'
-  
-  # Infrastructure and utilities
-  autoload :Builder, 'uniword/builder'
-  autoload :Customxml, 'uniword/customxml'
-  autoload :ElementRegistry, 'uniword/element_registry'
-  autoload :FormatConverter, 'uniword/format_converter'
-  autoload :LazyLoader, 'uniword/lazy_loader'
-  autoload :Logger, 'uniword/logger'
-  autoload :StreamingParser, 'uniword/streaming_parser'
-  
-  # Additional namespace loaders (Office ML variants)
-  autoload :Office, 'uniword/office'
-  autoload :Presentationml, 'uniword/presentationml'
-  autoload :Spreadsheetml, 'uniword/spreadsheetml'
-  autoload :VmlOffice, 'uniword/vml_office'
-  autoload :Wordprocessingml2010, 'uniword/wordprocessingml_2010'
-  autoload :Wordprocessingml2013, 'uniword/wordprocessingml_2013'
-  autoload :Wordprocessingml2016, 'uniword/wordprocessingml_2016'
-
   # Eagerly load format handlers to trigger self-registration
-  # NOTE: These MUST use require_relative (not autoload) because:
-  # 1. Format handlers self-register with FormatHandlerRegistry on load
-  # 2. Registration happens via class-level code execution (side effect)
-  # 3. Autoload would defer registration until first use
-  # Combined with namespace require_relative above, this is an acceptable
-  # exception to the autoload-first strategy due to architectural constraints
   require_relative 'uniword/formats/docx_handler'
   require_relative 'uniword/formats/mhtml_handler'
 
