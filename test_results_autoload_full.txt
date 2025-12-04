@@ -1,0 +1,859 @@
+
+[Lutaml::Model] WARN:/Users/mulgogi/src/mn/uniword/lib/uniword.rb:8: Usage of `Lutaml::Model::XmlAdapter::NokogiriAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::NokogiriAdapter` instead.
+
+An error occurred while loading ./spec/uniword/accessibility/accessibility_checker_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::AccessibilityChecker do
+    let(:config_file) { File.expand_path('../../../config/accessibility_profiles.yml', __dir__) }
+  
+    describe '#initialize' do
+      it 'loads default profile (wcag_2_1_aa)' do
+        checker = described_class.new
+        expect(checker.profile).to be_a(Uniword::Accessibility::AccessibilityProfile)
+        expect(checker.profile.name).to eq('WCAG 2.1')
+        expect(checker.profile.level).to eq('Level AA')
+      end
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/accessibility_checker_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/accessibility/accessibility_profile_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::AccessibilityProfile do
+    let(:base_profile_config) do
+      {
+        name: 'WCAG 2.1',
+        level: 'Level AA',
+        rules: {
+          image_alt_text: {
+            enabled: true,
+            wcag_criterion: '1.1.1 Non-text Content',
+            level: 'A',
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/accessibility_profile_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/accessibility/accessibility_report_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::AccessibilityReport do
+    let(:profile_name) { 'WCAG 2.1' }
+    let(:profile_level) { 'Level AA' }
+  
+    subject(:report) do
+      described_class.new(
+        profile_name: profile_name,
+        profile_level: profile_level
+      )
+    end
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/accessibility_report_spec.rb:6:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/accessibility/accessibility_rule_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::AccessibilityRule do
+    # Create a concrete test rule for testing
+    class TestAccessibilityRule < Uniword::Accessibility::AccessibilityRule
+      def check(_document)
+        []
+      end
+    end
+  
+    let(:config) do
+      {
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/accessibility_rule_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/accessibility/accessibility_violation_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::AccessibilityViolation do
+    let(:violation_attributes) do
+      {
+        rule_id: :image_alt_text,
+        wcag_criterion: '1.1.1 Non-text Content',
+        level: 'A',
+        message: 'Image 1 missing alternative text',
+        element: double('Image'),
+        severity: :error,
+        suggestion: 'Add descriptive alternative text for images'
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/accessibility_violation_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/accessibility/rules/image_alt_text_rule_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
+    let(:config) do
+      {
+        wcag_criterion: '1.1.1 Non-text Content',
+        level: 'A',
+        enabled: true,
+        severity: :error,
+        check_quality: true,
+        min_length: 10,
+        max_length: 150,
+
+NameError:
+  uninitialized constant Uniword::Accessibility
+# ./spec/uniword/accessibility/rules/image_alt_text_rule_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/assembly/component_registry_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/element_registry_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/assembly/component_registry_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/assembly/cross_reference_resolver_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/assembly/toc_generator_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/assembly/cross_reference_resolver_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/assembly/document_assembler_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/assembly/toc_generator_spec.rb
+
+Failure/Error: require_relative '../document'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/document
+# ./lib/uniword/assembly/document_assembler.rb:8:in `require_relative'
+# ./lib/uniword/assembly/document_assembler.rb:8:in `<top (required)>'
+# ./spec/uniword/assembly/document_assembler_spec.rb:4:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/assembly/toc_generator_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/assembly/component_registry_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/assembly/toc_generator_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/assembly/variable_substitutor_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/assembly/document_assembler_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/assembly/variable_substitutor_spec.rb:5:in `<top (required)>'
+
+[Lutaml::Model] WARN:/Users/mulgogi/src/mn/uniword/lib/uniword/page_borders.rb:67:in `<class:PageBorders>' Attribute name `display` conflicts with a built-in method
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:230: warning: method redefined; discarding old columns
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:230: warning: previous definition of columns was here
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:234: warning: method redefined; discarding old columns=
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:234: warning: previous definition of columns= was here
+/Users/mulgogi/src/mn/uniword/lib/uniword/section_properties.rb:173: warning: method redefined; discarding old page_size
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:230: warning: previous definition of page_size was here
+/Users/mulgogi/src/mn/uniword/lib/uniword/section_properties.rb:173: warning: method redefined; discarding old page_size=
+/Users/mulgogi/src/lutaml/lutaml-model/lib/lutaml/model/serialize.rb:234: warning: previous definition of page_size= was here
+/Users/mulgogi/src/mn/uniword/lib/uniword/section_properties.rb:176: warning: method redefined; discarding old page_size=
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/xml_engine/ox_engine/element.rb:48: warning: method redefined; discarding old attributes
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/xml_engine/ox_engine/element.rb:52: warning: method redefined; discarding old attributes=
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb:51: warning: assigned but unused variable - ee
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/asciimath.rb:3: warning: /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/asciimath.rb:3: warning: loading in progress, circular require considered harmful - /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/bundle:25:in  `<main>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/bundle:25:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/exe/bundle:20:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/friendly_errors.rb:117:in  `with_friendly_errors'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/exe/bundle:28:in  `block in <top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:29:in  `start'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/base.rb:584:in  `start'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:35:in  `dispatch'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor.rb:538:in  `dispatch'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in  `invoke_command'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/command.rb:28:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:452:in  `exec'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:23:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:59:in  `kernel_load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:59:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/rspec:25:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/rspec:25:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/exe/rspec:4:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:45:in  `invoke'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:71:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:86:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:102:in  `setup'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1641:in  `load_spec_files'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1641:in  `each'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1643:in  `block in load_spec_files'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:2144:in  `load_file_handling_errors'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:2144:in  `load'
+	from /Users/mulgogi/src/mn/uniword/spec/uniword/math/plurimath_adapter_spec.rb:4:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword/math/plurimath_adapter.rb:3:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath.rb:22:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb:3:in  `<top (required)>'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb:3:in  `require_relative'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/asciimath.rb:3:in  `<top (required)>'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/asciimath.rb:3:in  `require_relative'
+
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/mathml.rb:3: warning: /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/mathml.rb:3: warning: loading in progress, circular require considered harmful - /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/bundle:25:in  `<main>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/bundle:25:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/exe/bundle:20:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/friendly_errors.rb:117:in  `with_friendly_errors'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/exe/bundle:28:in  `block in <top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:29:in  `start'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/base.rb:584:in  `start'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:35:in  `dispatch'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor.rb:538:in  `dispatch'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/invocation.rb:127:in  `invoke_command'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/vendor/thor/lib/thor/command.rb:28:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli.rb:452:in  `exec'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:23:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:59:in  `kernel_load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/bundler-2.6.9/lib/bundler/cli/exec.rb:59:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/rspec:25:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/bin/rspec:25:in  `load'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/exe/rspec:4:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:45:in  `invoke'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:71:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:86:in  `run'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/runner.rb:102:in  `setup'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1641:in  `load_spec_files'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1641:in  `each'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:1643:in  `block in load_spec_files'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:2144:in  `load_file_handling_errors'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/rspec-core-3.13.6/lib/rspec/core/configuration.rb:2144:in  `load'
+	from /Users/mulgogi/src/mn/uniword/spec/uniword/math/plurimath_adapter_spec.rb:4:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/mn/uniword/lib/uniword/math/plurimath_adapter.rb:3:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath.rb:22:in  `<top (required)>'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `block (2 levels) in replace_require'
+	from /Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/3.3.0/bundled_gems.rb:74:in  `require'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb:6:in  `<top (required)>'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math.rb:6:in  `require_relative'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/mathml.rb:3:in  `<top (required)>'
+	from /Users/mulgogi/src/plurimath/plurimath/lib/plurimath/mathml.rb:3:in  `require_relative'
+
+/Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/unitsml-0.5.1/lib/unitsml/formula.rb:172: warning: assigned but unused variable - e
+
+[Lutaml::Model] WARN:/Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/mml-2.0.3/lib/mml/math_with_namespace.rb:5:in `<class:MathWithNamespace>' Attribute name `display` conflicts with a built-in method
+
+[Lutaml::Model] WARN:/Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/mml-2.0.3/lib/mml/math_with_nil_namespace.rb:5:in `<class:MathWithNilNamespace>' Attribute name `display` conflicts with a built-in method
+[Lutaml::Model] DEPRECATED: no_root is deprecated. Simply omit the element declaration for type-only models. Use type_name() to set the XSD type name.
+
+[Lutaml::Model] WARN:/Users/mulgogi/.asdf/installs/ruby/3.3.2/lib/ruby/gems/3.3.0/gems/mml-2.0.3/lib/mml.rb:24: Usage of `Lutaml::Model::XmlAdapter::OxAdapter` is deprecated and will be removed in the next major release. Please use `Lutaml::Model::Xml::OxAdapter` instead.
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/formatter/numeric_formatter.rb:38: warning: assigned but unused variable - ret
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/formatter/numeric_formatter.rb:47: warning: method redefined; discarding old localize_number
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/number.rb:79: warning: method redefined; discarding old value=
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/symbols/symbol.rb:43: warning: method redefined; discarding old value=
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/symbols/twocups.rb:39: warning: method redefined; discarding old to_html
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/symbols/twocups.rb:35: warning: previous definition of to_html was here
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/formula.rb:57: warning: assigned but unused variable - output
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/function/td.rb:91: warning: method redefined; discarding old to_unicodemath_math_zone
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/math/function/td.rb:84: warning: previous definition of to_unicodemath_math_zone was here
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/unicode_math/transform.rb:1249: warning: assigned but unused variable - color_obj
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/unicode_math/transform.rb:1258: warning: assigned but unused variable - color_obj
+/Users/mulgogi/src/plurimath/plurimath/lib/plurimath/utility.rb:251: warning: assigned but unused variable - e
+
+An error occurred while loading ./spec/uniword/batch/document_processor_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/document_writer_spec.rb
+
+Failure/Error: require_relative '../../../lib/uniword/document'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/document
+# ./spec/uniword/batch/document_processor_spec.rb:6:in `require_relative'
+# ./spec/uniword/batch/document_processor_spec.rb:6:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/batch/stages_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/batch/batch_result_spec.rb
+                    rspec ./spec/uniword/styles_spec.rb
+                    rspec ./spec/uniword/chart_spec.rb
+
+Failure/Error: require_relative '../../../lib/uniword/document'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/document
+# ./spec/uniword/batch/stages_spec.rb:10:in `require_relative'
+# ./spec/uniword/batch/stages_spec.rb:10:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/bookmark_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/chart_spec.rb
+                    rspec ./spec/uniword/table_spec.rb
+                    rspec ./spec/uniword/table_row_spec.rb
+
+Failure/Error: require 'uniword/paragraph'
+
+LoadError:
+  cannot load such file -- uniword/paragraph
+# ./spec/uniword/bookmark_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/builder_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/numbering_spec.rb
+                    rspec ./spec/uniword/table_row_spec.rb
+                    rspec ./spec/uniword/table_spec.rb
+
+Failure/Error: require_relative 'document'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/document
+# ./lib/uniword/builder.rb:3:in `require_relative'
+# ./lib/uniword/builder.rb:3:in `<top (required)>'
+# ./spec/uniword/builder_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/comment_range_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/comments_part_spec.rb
+                    rspec ./spec/uniword/comment_spec.rb
+                    rspec ./spec/uniword/document_factory_spec.rb
+
+Failure/Error: require_relative 'element'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/element
+# ./lib/uniword/comment_range.rb:3:in `require_relative'
+# ./lib/uniword/comment_range.rb:3:in `<top (required)>'
+# ./spec/uniword/comment_range_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/comment_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/document_spec.rb
+                    rspec ./spec/uniword/comment_range_spec.rb
+                    rspec ./spec/uniword/comments_part_spec.rb
+
+Failure/Error: require_relative 'element'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/element
+# ./lib/uniword/comment.rb:3:in `require_relative'
+# ./lib/uniword/comment.rb:3:in `<top (required)>'
+# ./spec/uniword/comment_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/comments_part_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/comment_range_spec.rb
+                    rspec ./spec/uniword/comment_spec.rb
+                    rspec ./spec/uniword/document_factory_spec.rb
+
+Failure/Error: require_relative 'element'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/element
+# ./lib/uniword/comment.rb:3:in `require_relative'
+# ./lib/uniword/comment.rb:3:in `<top (required)>'
+# ./lib/uniword/comments_part.rb:3:in `require_relative'
+# ./lib/uniword/comments_part.rb:3:in `<top (required)>'
+# ./spec/uniword/comments_part_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/element_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Element do
+    # Create a concrete test subclass for testing
+    let(:test_element_class) do
+      Class.new(described_class) do
+        def accept(visitor)
+          visitor.visit_test_element(self)
+        end
+      end
+    end
+  
+
+NameError:
+  uninitialized constant Uniword::Element
+# ./spec/uniword/element_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/endnote_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/comment_spec.rb
+                    rspec ./spec/uniword/element_spec.rb
+                    rspec ./spec/uniword/styles_spec.rb
+
+Failure/Error: require 'uniword/paragraph'
+
+LoadError:
+  cannot load such file -- uniword/paragraph
+# ./spec/uniword/endnote_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/footnote_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/image_spec.rb
+                    rspec ./spec/uniword/comment_spec.rb
+                    rspec ./spec/uniword/endnote_spec.rb
+
+Failure/Error: require 'uniword/paragraph'
+
+LoadError:
+  cannot load such file -- uniword/paragraph
+# ./spec/uniword/footnote_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/image_spec.rb.
+Failure/Error:
+    class Image < Element
+      extend LazyLoader
+  
+      # OOXML namespace configuration for images (drawing elements)
+      xml do
+        element 'drawing', mixed: true
+        namespace Ooxml::Namespaces::WordProcessingML
+        namespace Ooxml::Namespaces::WordProcessingDrawing
+        namespace Ooxml::Namespaces::DrawingML
+        namespace Ooxml::Namespaces::Picture
+
+NameError:
+  uninitialized constant Uniword::Element
+# ./lib/uniword/image.rb:15:in `<module:Uniword>'
+# ./lib/uniword/image.rb:6:in `<top (required)>'
+# ./spec/uniword/image_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/logger_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Loggable do
+    let(:test_class) do
+      Class.new do
+        include Uniword::Loggable
+  
+        def test_logging
+          log_debug('Debug message')
+          log_info('Info message')
+          log_warn('Warning message')
+          log_error('Error message')
+
+NameError:
+  uninitialized constant Uniword::Loggable
+# ./spec/uniword/logger_spec.rb:54:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/math/plurimath_adapter_spec.rb.
+Failure/Error:
+    class MathEquation < Element
+      # The Plurimath formula object representing the equation
+      # @return [Plurimath::Math::Formula, nil]
+      attr_accessor :formula
+  
+      # Display type for the equation
+      # @return [Symbol] :inline or :block
+      attribute :display_type, :string, default: -> { 'inline' }
+  
+      # Alignment for block equations
+
+NameError:
+  uninitialized constant Uniword::Element
+# ./lib/uniword/math_equation.rb:24:in `<module:Uniword>'
+# ./lib/uniword/math_equation.rb:3:in `<top (required)>'
+# ./spec/uniword/math/plurimath_adapter_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/math_equation_spec.rb.
+Failure/Error:
+    class MathEquation < Element
+      # The Plurimath formula object representing the equation
+      # @return [Plurimath::Math::Formula, nil]
+      attr_accessor :formula
+  
+      # Display type for the equation
+      # @return [Symbol] :inline or :block
+      attribute :display_type, :string, default: -> { 'inline' }
+  
+      # Alignment for block equations
+
+NameError:
+  uninitialized constant Uniword::Element
+# ./lib/uniword/math_equation.rb:24:in `<module:Uniword>'
+# ./lib/uniword/math_equation.rb:3:in `<top (required)>'
+# ./spec/uniword/math_equation_spec.rb:4:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/metadata/metadata_extractor_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/metadata/metadata_index_spec.rb
+                    rspec ./spec/uniword/metadata/metadata_spec.rb
+                    rspec ./spec/uniword/metadata/metadata_validator_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/metadata/metadata_extractor_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/metadata/metadata_manager_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/metadata/metadata_index_spec.rb
+                    rspec ./spec/uniword/metadata/metadata_spec.rb
+                    rspec ./spec/uniword/metadata/metadata_validator_spec.rb
+
+Failure/Error: require 'uniword/document'
+
+LoadError:
+  cannot load such file -- uniword/document
+# ./spec/uniword/metadata/metadata_manager_spec.rb:5:in `<top (required)>'
+/Users/mulgogi/src/mn/uniword/spec/uniword/ooxml/docx_package_roundtrip_spec.rb:7: warning: already initialized constant TEST_DOCUMENT
+/Users/mulgogi/src/mn/uniword/spec/uniword/ooxml/complete_roundtrip_spec.rb:7: warning: previous definition of TEST_DOCUMENT was here
+/Users/mulgogi/src/mn/uniword/spec/uniword/ooxml/docx_package_roundtrip_spec.rb:8: warning: already initialized constant OUTPUT_PATH
+/Users/mulgogi/src/mn/uniword/spec/uniword/ooxml/complete_roundtrip_spec.rb:8: warning: previous definition of OUTPUT_PATH was here
+
+An error occurred while loading ./spec/uniword/ooxml/namespace_spec.rb.
+Failure/Error:
+    class Image < Element
+      extend LazyLoader
+  
+      # OOXML namespace configuration for images (drawing elements)
+      xml do
+        element 'drawing', mixed: true
+        namespace Ooxml::Namespaces::WordProcessingML
+        namespace Ooxml::Namespaces::WordProcessingDrawing
+        namespace Ooxml::Namespaces::DrawingML
+        namespace Ooxml::Namespaces::Picture
+
+NameError:
+  uninitialized constant Uniword::Element
+# ./lib/uniword/image.rb:15:in `<module:Uniword>'
+# ./lib/uniword/image.rb:6:in `<top (required)>'
+# ./spec/uniword/ooxml/namespace_spec.rb:152:in `block in <top (required)>'
+# ./spec/uniword/ooxml/namespace_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/ooxml/schema/element_serializer_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
+    let(:serializer) { described_class.new }
+  
+    describe '#initialize' do
+      it 'creates serializer with default schema' do
+        expect(serializer).to be_a(described_class)
+      end
+  
+      it 'accepts custom schema' do
+        schema = double('OoxmlSchema')
+
+NameError:
+  uninitialized constant Uniword::Ooxml::Schema
+# ./spec/uniword/ooxml/schema/element_serializer_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/properties/paragraph_properties_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Properties::ParagraphProperties do
+    describe '#initialize' do
+      it 'creates properties with default values' do
+        props = described_class.new
+        expect(props.style).to be_nil
+        expect(props.alignment).to be_nil
+        expect(props.keep_next).to be false
+      end
+  
+      it 'creates properties with provided attributes' do
+
+NameError:
+  uninitialized constant Uniword::Properties::ParagraphProperties
+# ./spec/uniword/properties/paragraph_properties_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/properties/run_properties_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Properties::RunProperties do
+    describe '#initialize' do
+      it 'creates properties with default values' do
+        props = described_class.new
+        expect(props.bold).to be false
+        expect(props.italic).to be false
+        expect(props.strike).to be false
+        expect(props.small_caps).to be false
+        expect(props.caps).to be false
+        expect(props.hidden).to be false
+
+NameError:
+  uninitialized constant Uniword::Properties::RunProperties
+# ./spec/uniword/properties/run_properties_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/properties/table_properties_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Properties::TableProperties do
+    describe '#initialize' do
+      it 'creates properties with default values' do
+        props = described_class.new
+        expect(props.style).to be_nil
+        expect(props.borders).to be true
+        expect(props.allow_break).to be true
+      end
+  
+      it 'creates properties with provided attributes' do
+
+NameError:
+  uninitialized constant Uniword::Properties::TableProperties
+# ./spec/uniword/properties/table_properties_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/quality/rules/quality_rules_spec.rb.
+Failure/Error:
+    describe Uniword::Quality::HeadingHierarchyRule do
+      let(:rule) { described_class.new(max_level: 6, require_sequential: true) }
+  
+      it 'passes for sequential headings' do
+        para1 = Uniword::Paragraph.new
+        para1.set_style('Heading 1')
+        para1.add_text('Heading 1')
+  
+        para2 = Uniword::Paragraph.new
+        para2.set_style('Heading 2')
+
+NameError:
+  uninitialized constant Uniword::Quality::HeadingHierarchyRule
+# ./spec/uniword/quality/rules/quality_rules_spec.rb:8:in `block in <top (required)>'
+# ./spec/uniword/quality/rules/quality_rules_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/revision_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/run_spec.rb
+                    rspec ./spec/uniword/logger_spec.rb
+                    rspec ./spec/uniword/builder_spec.rb
+
+Failure/Error: require_relative 'element'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/element
+# ./lib/uniword/revision.rb:3:in `require_relative'
+# ./lib/uniword/revision.rb:3:in `<top (required)>'
+# ./spec/uniword/revision_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/serialization/html_deserializer_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Serialization::HtmlDeserializer do
+    let(:deserializer) { described_class.new }
+  
+    describe '#deserialize' do
+      context 'with invalid input' do
+        it 'raises error when parts is nil' do
+          expect do
+            deserializer.deserialize(nil)
+          end.to raise_error(ArgumentError, /Parts cannot be nil/)
+        end
+
+NameError:
+  uninitialized constant Uniword::Serialization
+# ./spec/uniword/serialization/html_deserializer_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/serialization/html_serializer_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Serialization::HtmlSerializer do
+    let(:serializer) { described_class.new }
+    let(:document) { Uniword::Document.new }
+  
+    describe '#serialize' do
+      it 'raises ArgumentError for nil document' do
+        expect { serializer.serialize(nil) }.to raise_error(ArgumentError, /cannot be nil/)
+      end
+  
+      it 'raises ArgumentError for non-Document object' do
+
+NameError:
+  uninitialized constant Uniword::Serialization
+# ./spec/uniword/serialization/html_serializer_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/styles/style_builder_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Styles::StyleBuilder do
+    let(:document) { Uniword::Document.new }
+    let(:builder) { described_class.new(document, style_library: 'minimal') }
+  
+    describe '#initialize' do
+      it 'initializes with document and style library' do
+        expect(builder.document).to eq(document)
+        expect(builder.library).to be_a(Uniword::Styles::StyleLibrary)
+      end
+    end
+
+NameError:
+  uninitialized constant Uniword::Styles
+# ./spec/uniword/styles/style_builder_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/styles/style_definition_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Styles::StyleDefinition do
+    describe 'ParagraphStyleDefinition' do
+      let(:library) { Uniword::Styles::StyleLibrary.load('iso_standard') }
+  
+      describe '#resolve_inheritance' do
+        it 'returns properties without base style' do
+          style = library.paragraph_style(:body_text)
+          resolved = style.resolve_inheritance(library)
+  
+          expect(resolved[:properties]).to include(alignment: 'left')
+
+NameError:
+  uninitialized constant Uniword::Styles
+# ./spec/uniword/styles/style_definition_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/styles/style_library_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Styles::StyleLibrary do
+    describe '.load' do
+      it 'loads iso_standard style library' do
+        library = described_class.load('iso_standard')
+  
+        expect(library.name).to eq('ISO Standard Styles')
+        expect(library.version).to eq('1.0')
+      end
+  
+      it 'loads minimal style library' do
+
+NameError:
+  uninitialized constant Uniword::Styles
+# ./spec/uniword/styles/style_library_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/styles_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/table_spec.rb
+                    rspec ./spec/uniword/cli_spec.rb
+                    rspec ./spec/uniword/endnote_spec.rb
+
+Failure/Error: require 'uniword/paragraph_style'
+
+LoadError:
+  cannot load such file -- uniword/paragraph_style
+# ./spec/uniword/styles_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/template/template_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Template::Template do
+    let(:document) { Uniword::Document.new }
+    let(:template) { described_class.new(document) }
+  
+    describe '#initialize' do
+      it 'initializes with a document' do
+        expect(template.document).to eq(document)
+      end
+  
+      it 'extracts markers from document' do
+
+NameError:
+  uninitialized constant Uniword::Template
+# ./spec/uniword/template/template_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/template/variable_resolver_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Template::VariableResolver do
+    describe '#resolve' do
+      context 'with hash data' do
+        let(:data) { { title: 'Test Title', count: 42 } }
+        let(:resolver) { described_class.new(data) }
+  
+        it 'resolves simple variables' do
+          expect(resolver.resolve('title')).to eq('Test Title')
+          expect(resolver.resolve('count')).to eq(42)
+        end
+
+NameError:
+  uninitialized constant Uniword::Template
+# ./spec/uniword/template/variable_resolver_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/tracked_changes_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/chart_spec.rb
+
+Failure/Error: require_relative 'element'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/element
+# ./lib/uniword/revision.rb:3:in `require_relative'
+# ./lib/uniword/revision.rb:3:in `<top (required)>'
+# ./lib/uniword/tracked_changes.rb:3:in `require_relative'
+# ./lib/uniword/tracked_changes.rb:3:in `<top (required)>'
+# ./spec/uniword/tracked_changes_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/validation/link_validator_spec.rb. - Did you mean?
+                    rspec ./spec/uniword/validators/element_validator_spec.rb
+                    rspec ./spec/uniword/validators/table_validator_spec.rb
+                    rspec ./spec/uniword/validators/paragraph_validator_spec.rb
+
+Failure/Error: require_relative 'run'
+
+LoadError:
+  cannot load such file -- /Users/mulgogi/src/mn/uniword/lib/uniword/run
+# ./lib/uniword/hyperlink.rb:3:in `require_relative'
+# ./lib/uniword/hyperlink.rb:3:in `<top (required)>'
+# ./spec/uniword/validation/link_validator_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/validators/element_validator_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Validators::ElementValidator do
+    let(:validator) { described_class.new }
+  
+    # Ensure validators are registered before each test
+    before do
+      # Register validators if not already registered
+      unless described_class.validator_registry[Uniword::Paragraph]
+        described_class.register(Uniword::Paragraph, Uniword::Validators::ParagraphValidator)
+      end
+      unless described_class.validator_registry[Uniword::Table]
+
+NameError:
+  uninitialized constant Uniword::Validators
+# ./spec/uniword/validators/element_validator_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/validators/paragraph_validator_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Validators::ParagraphValidator do
+    let(:validator) { described_class.new }
+  
+    describe 'inheritance' do
+      it 'inherits from ElementValidator' do
+        expect(described_class).to be < Uniword::Validators::ElementValidator
+      end
+    end
+  
+    describe '#valid?' do
+
+NameError:
+  uninitialized constant Uniword::Validators
+# ./spec/uniword/validators/paragraph_validator_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/validators/table_validator_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Validators::TableValidator do
+    let(:validator) { described_class.new }
+  
+    describe 'inheritance' do
+      it 'inherits from ElementValidator' do
+        expect(described_class).to be < Uniword::Validators::ElementValidator
+      end
+    end
+  
+    describe '#valid?' do
+
+NameError:
+  uninitialized constant Uniword::Validators
+# ./spec/uniword/validators/table_validator_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/visitor/base_visitor_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Visitor::BaseVisitor do
+    let(:visitor) { described_class.new }
+  
+    describe '#visit_document' do
+      it 'provides a no-op default implementation' do
+        document = Uniword::Document.new
+        expect { visitor.visit_document(document) }.not_to raise_error
+      end
+  
+      it 'accepts a document parameter' do
+
+NameError:
+  uninitialized constant Uniword::Visitor
+# ./spec/uniword/visitor/base_visitor_spec.rb:5:in `<top (required)>'
+
+An error occurred while loading ./spec/uniword/visitor/text_extractor_spec.rb.
+Failure/Error:
+  RSpec.describe Uniword::Visitor::TextExtractor do
+    let(:extractor) { described_class.new }
+  
+    describe '#initialize' do
+      it 'accepts a separator parameter' do
+        custom_extractor = described_class.new(separator: ' | ')
+        expect(custom_extractor).to be_a(described_class)
+      end
+  
+      it 'defaults to newline separator' do
+
+NameError:
+  uninitialized constant Uniword::Visitor
+# ./spec/uniword/visitor/text_extractor_spec.rb:5:in `<top (required)>'
+
+Finished in 0.00004 seconds (files took 2.57 seconds to load)
+0 examples, 0 failures, 49 errors occurred outside of examples
+

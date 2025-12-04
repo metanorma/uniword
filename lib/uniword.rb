@@ -122,8 +122,7 @@ module Uniword
   autoload :ThemePackageReader, 'uniword/theme/theme_package_reader'
 
   # Autoload styleset infrastructure
-  autoload :StylesetLoader, 'uniword/stylesets/styleset_loader'
-  autoload :StylesetXmlParser, 'uniword/stylesets/styleset_xml_parser'
+  # Note: StylesetLoader and StylesetXmlParser deleted (anti-pattern - should use lutaml-model)
 
   # Autoload format handlers
   module Formats

@@ -106,10 +106,11 @@ module Uniword
     # @example Load StyleSet
     #   styleset = StyleSet.from_dotx('Distinctive.dotx')
     def self.from_dotx(path)
-      require_relative 'stylesets/styleset_loader'
-
-      loader = StyleSets::StyleSetLoader.new
-      loader.load(path)
+      # TODO: Implement using StylesetPackage (lutaml-model)
+      # Should be: StylesetPackage.from_file(path).styleset
+      raise NotImplementedError,
+            'StyleSet.from_dotx requires StylesetPackage implementation. ' \
+            'Use StyleSet.load(name) for bundled stylesets.'
     end
 
     # Load bundled StyleSet by name
