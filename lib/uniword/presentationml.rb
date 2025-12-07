@@ -1,62 +1,67 @@
 # frozen_string_literal: true
 
-# Auto-generated autoload index for PresentationML namespace
+# Presentationml namespace module
+# This file explicitly autoloads all Presentationml classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# PresentationML namespace - PowerPoint support
+# Namespace: http://schemas.openxmlformats.org/presentationml/2006/main
+# Prefix: p:
 # Generated: 2024-11-28
-# Namespace: http://schemas.openxmlformats.org/presentationml/2006/main (p:)
+
+require 'lutaml/model'
 
 module Uniword
   module Presentationml
-    autoload :Audio, File.expand_path('presentationml/audio', __dir__)
-    autoload :BodyProperties, File.expand_path('presentationml/body_properties', __dir__)
-    autoload :Break, File.expand_path('presentationml/break', __dir__)
-    autoload :ColorMap, File.expand_path('presentationml/color_map', __dir__)
-    autoload :CommonSlideData, File.expand_path('presentationml/common_slide_data', __dir__)
-    autoload :CommonTimeNode, File.expand_path('presentationml/common_time_node', __dir__)
-    autoload :ConnectionShape, File.expand_path('presentationml/connection_shape', __dir__)
-    autoload :Embed, File.expand_path('presentationml/embed', __dir__)
-    autoload :EmbeddedFont, File.expand_path('presentationml/embedded_font', __dir__)
-    autoload :EndConditionsList, File.expand_path('presentationml/end_conditions_list', __dir__)
-    autoload :EndParagraphRunProperties,
-             File.expand_path('presentationml/end_paragraph_run_properties', __dir__)
-    autoload :Extension, File.expand_path('presentationml/extension', __dir__)
-    autoload :ExtensionList, File.expand_path('presentationml/extension_list', __dir__)
-    autoload :Field, File.expand_path('presentationml/field', __dir__)
-    autoload :GraphicFrame, File.expand_path('presentationml/graphic_frame', __dir__)
-    autoload :GroupShape, File.expand_path('presentationml/group_shape', __dir__)
-    autoload :HandoutMaster, File.expand_path('presentationml/handout_master', __dir__)
-    autoload :HandoutMasterIdList,
-             File.expand_path('presentationml/handout_master_id_list', __dir__)
-    autoload :ListStyle, File.expand_path('presentationml/list_style', __dir__)
-    autoload :NonVisualShapeProperties,
-             File.expand_path('presentationml/non_visual_shape_properties', __dir__)
-    autoload :Notes, File.expand_path('presentationml/notes', __dir__)
-    autoload :NotesMasterIdList, File.expand_path('presentationml/notes_master_id_list', __dir__)
-    autoload :NotesSize, File.expand_path('presentationml/notes_size', __dir__)
-    autoload :OleObject, File.expand_path('presentationml/ole_object', __dir__)
-    autoload :Paragraph, File.expand_path('presentationml/paragraph', __dir__)
-    autoload :ParagraphProperties, File.expand_path('presentationml/paragraph_properties', __dir__)
-    autoload :ParallelTimeNode, File.expand_path('presentationml/parallel_time_node', __dir__)
-    autoload :Picture, File.expand_path('presentationml/picture', __dir__)
-    autoload :Presentation, File.expand_path('presentationml/presentation', __dir__)
-    autoload :Run, File.expand_path('presentationml/run', __dir__)
-    autoload :RunProperties, File.expand_path('presentationml/run_properties', __dir__)
-    autoload :SequenceTimeNode, File.expand_path('presentationml/sequence_time_node', __dir__)
-    autoload :Shape, File.expand_path('presentationml/shape', __dir__)
-    autoload :ShapeProperties, File.expand_path('presentationml/shape_properties', __dir__)
-    autoload :ShapeTree, File.expand_path('presentationml/shape_tree', __dir__)
-    autoload :Slide, File.expand_path('presentationml/slide', __dir__)
-    autoload :SlideId, File.expand_path('presentationml/slide_id', __dir__)
-    autoload :SlideIdList, File.expand_path('presentationml/slide_id_list', __dir__)
-    autoload :SlideLayout, File.expand_path('presentationml/slide_layout', __dir__)
-    autoload :SlideMaster, File.expand_path('presentationml/slide_master', __dir__)
-    autoload :SlideMasterId, File.expand_path('presentationml/slide_master_id', __dir__)
-    autoload :SlideMasterIdList, File.expand_path('presentationml/slide_master_id_list', __dir__)
-    autoload :SlideSize, File.expand_path('presentationml/slide_size', __dir__)
-    autoload :StartConditionsList, File.expand_path('presentationml/start_conditions_list', __dir__)
-    autoload :TextBody, File.expand_path('presentationml/text_body', __dir__)
-    autoload :TimeNodeList, File.expand_path('presentationml/time_node_list', __dir__)
-    autoload :Timing, File.expand_path('presentationml/timing', __dir__)
-    autoload :Transition, File.expand_path('presentationml/transition', __dir__)
-    autoload :Video, File.expand_path('presentationml/video', __dir__)
+    # Autoload all Presentationml classes (51)
+    autoload :Audio, 'uniword/presentationml/audio'
+    autoload :BodyProperties, 'uniword/presentationml/body_properties'
+    autoload :Break, 'uniword/presentationml/break'
+    autoload :ColorMap, 'uniword/presentationml/color_map'
+    autoload :CommonSlideData, 'uniword/presentationml/common_slide_data'
+    autoload :CommonTimeNode, 'uniword/presentationml/common_time_node'
+    autoload :ConnectionShape, 'uniword/presentationml/connection_shape'
+    autoload :Embed, 'uniword/presentationml/embed'
+    autoload :EmbeddedFont, 'uniword/presentationml/embedded_font'
+    autoload :EndConditionsList, 'uniword/presentationml/end_conditions_list'
+    autoload :EndParagraphRunProperties, 'uniword/presentationml/end_paragraph_run_properties'
+    autoload :Extension, 'uniword/presentationml/extension'
+    autoload :ExtensionList, 'uniword/presentationml/extension_list'
+    autoload :Field, 'uniword/presentationml/field'
+    autoload :GraphicFrame, 'uniword/presentationml/graphic_frame'
+    autoload :GroupShape, 'uniword/presentationml/group_shape'
+    autoload :HandoutMaster, 'uniword/presentationml/handout_master'
+    autoload :HandoutMasterIdList, 'uniword/presentationml/handout_master_id_list'
+    autoload :ListStyle, 'uniword/presentationml/list_style'
+    autoload :NonVisualShapeProperties, 'uniword/presentationml/non_visual_shape_properties'
+    autoload :Notes, 'uniword/presentationml/notes'
+    autoload :NotesMasterIdList, 'uniword/presentationml/notes_master_id_list'
+    autoload :NotesSize, 'uniword/presentationml/notes_size'
+    autoload :OleObject, 'uniword/presentationml/ole_object'
+    autoload :Paragraph, 'uniword/presentationml/paragraph'
+    autoload :ParagraphProperties, 'uniword/presentationml/paragraph_properties'
+    autoload :ParallelTimeNode, 'uniword/presentationml/parallel_time_node'
+    autoload :Picture, 'uniword/presentationml/picture'
+    autoload :Presentation, 'uniword/presentationml/presentation'
+    autoload :Run, 'uniword/presentationml/run'
+    autoload :RunProperties, 'uniword/presentationml/run_properties'
+    autoload :SequenceTimeNode, 'uniword/presentationml/sequence_time_node'
+    autoload :Shape, 'uniword/presentationml/shape'
+    autoload :ShapeProperties, 'uniword/presentationml/shape_properties'
+    autoload :ShapeTree, 'uniword/presentationml/shape_tree'
+    autoload :Slide, 'uniword/presentationml/slide'
+    autoload :SlideId, 'uniword/presentationml/slide_id'
+    autoload :SlideIdList, 'uniword/presentationml/slide_id_list'
+    autoload :SlideLayout, 'uniword/presentationml/slide_layout'
+    autoload :SlideMaster, 'uniword/presentationml/slide_master'
+    autoload :SlideMasterId, 'uniword/presentationml/slide_master_id'
+    autoload :SlideMasterIdList, 'uniword/presentationml/slide_master_id_list'
+    autoload :SlideSize, 'uniword/presentationml/slide_size'
+    autoload :StartConditionsList, 'uniword/presentationml/start_conditions_list'
+    autoload :TextBody, 'uniword/presentationml/text_body'
+    autoload :TimeNodeList, 'uniword/presentationml/time_node_list'
+    autoload :Timing, 'uniword/presentationml/timing'
+    autoload :Transition, 'uniword/presentationml/transition'
+    autoload :Video, 'uniword/presentationml/video'
   end
 end

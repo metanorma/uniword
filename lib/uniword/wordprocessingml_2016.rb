@@ -1,28 +1,33 @@
 # frozen_string_literal: true
 
-# Autoload index for WordprocessingML 2016 Extended namespace
-# Generated classes for w16: namespace
+# Wordprocessingml2016 namespace module
+# This file explicitly autoloads all Wordprocessingml2016 classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# WordprocessingML 2016 Extended namespace
+# Namespace: http://schemas.microsoft.com/office/word/2016/wordml
+# Prefix: w16:
+# Generated classes for Word 2016 features
+
+require 'lutaml/model'
 
 module Uniword
   module Wordprocessingml2016
-    autoload :CellRsid, File.expand_path('wordprocessingml_2016/cell_rsid', __dir__)
-    autoload :ChartColorStyle, File.expand_path('wordprocessingml_2016/chart_color_style', __dir__)
-    autoload :ChartStyle2016, File.expand_path('wordprocessingml_2016/chart_style2016', __dir__)
-    autoload :CommentsExt, File.expand_path('wordprocessingml_2016/comments_ext', __dir__)
-    autoload :ConflictMode2016, File.expand_path('wordprocessingml_2016/conflict_mode2016', __dir__)
-    autoload :ContentId, File.expand_path('wordprocessingml_2016/content_id', __dir__)
-    autoload :DataBinding2016, File.expand_path('wordprocessingml_2016/data_binding2016', __dir__)
-    autoload :ExtensionList, File.expand_path('wordprocessingml_2016/extension_list', __dir__)
-    autoload :Extension, File.expand_path('wordprocessingml_2016/extension', __dir__)
-    autoload :PersistentDocumentId,
-             File.expand_path('wordprocessingml_2016/persistent_document_id', __dir__)
-    autoload :RowRsid, File.expand_path('wordprocessingml_2016/row_rsid', __dir__)
-    autoload :SdtAppearance2016,
-             File.expand_path('wordprocessingml_2016/sdt_appearance2016', __dir__)
-    autoload :SeparatorExtension,
-             File.expand_path('wordprocessingml_2016/separator_extension', __dir__)
-    autoload :TableRsid, File.expand_path('wordprocessingml_2016/table_rsid', __dir__)
-    autoload :WebVideoProperty,
-             File.expand_path('wordprocessingml_2016/web_video_property', __dir__)
+    # Autoload all Wordprocessingml2016 classes (15)
+    autoload :CellRsid, 'uniword/wordprocessingml_2016/cell_rsid'
+    autoload :ChartColorStyle, 'uniword/wordprocessingml_2016/chart_color_style'
+    autoload :ChartStyle2016, 'uniword/wordprocessingml_2016/chart_style2016'
+    autoload :CommentsExt, 'uniword/wordprocessingml_2016/comments_ext'
+    autoload :ConflictMode2016, 'uniword/wordprocessingml_2016/conflict_mode2016'
+    autoload :ContentId, 'uniword/wordprocessingml_2016/content_id'
+    autoload :DataBinding2016, 'uniword/wordprocessingml_2016/data_binding2016'
+    autoload :ExtensionList, 'uniword/wordprocessingml_2016/extension_list'
+    autoload :Extension, 'uniword/wordprocessingml_2016/extension'
+    autoload :PersistentDocumentId, 'uniword/wordprocessingml_2016/persistent_document_id'
+    autoload :RowRsid, 'uniword/wordprocessingml_2016/row_rsid'
+    autoload :SdtAppearance2016, 'uniword/wordprocessingml_2016/sdt_appearance2016'
+    autoload :SeparatorExtension, 'uniword/wordprocessingml_2016/separator_extension'
+    autoload :TableRsid, 'uniword/wordprocessingml_2016/table_rsid'
+    autoload :WebVideoProperty, 'uniword/wordprocessingml_2016/web_video_property'
   end
 end

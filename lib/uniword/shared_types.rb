@@ -1,26 +1,31 @@
 # frozen_string_literal: true
 
-# SharedTypes Namespace Autoload Index
+# SharedTypes namespace module
+# This file explicitly autoloads all SharedTypes classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# Common value types shared across OOXML namespaces
 # Generated from: config/ooxml/schemas/shared_types.yml
-# Total classes: 15
+
+require 'lutaml/model'
 
 module Uniword
   module SharedTypes
-    # Autoload all SharedTypes classes
-    autoload :Angle, File.expand_path('shared_types/angle', __dir__)
-    autoload :BooleanValue, File.expand_path('shared_types/boolean_value', __dir__)
-    autoload :DecimalNumber, File.expand_path('shared_types/decimal_number', __dir__)
-    autoload :EmuMeasure, File.expand_path('shared_types/emu_measure', __dir__)
-    autoload :FixedPercentage, File.expand_path('shared_types/fixed_percentage', __dir__)
-    autoload :HexColor, File.expand_path('shared_types/hex_color', __dir__)
-    autoload :OnOff, File.expand_path('shared_types/on_off', __dir__)
-    autoload :PercentValue, File.expand_path('shared_types/percent_value', __dir__)
-    autoload :PixelMeasure, File.expand_path('shared_types/pixel_measure', __dir__)
-    autoload :PointMeasure, File.expand_path('shared_types/point_measure', __dir__)
-    autoload :PositivePercentage, File.expand_path('shared_types/positive_percentage', __dir__)
-    autoload :StringType, File.expand_path('shared_types/string_type', __dir__)
-    autoload :TextAlignment, File.expand_path('shared_types/text_alignment', __dir__)
-    autoload :TwipsMeasure, File.expand_path('shared_types/twips_measure', __dir__)
-    autoload :VerticalAlignment, File.expand_path('shared_types/vertical_alignment', __dir__)
+    # Autoload all SharedTypes classes (15)
+    autoload :Angle, 'uniword/shared_types/angle'
+    autoload :BooleanValue, 'uniword/shared_types/boolean_value'
+    autoload :DecimalNumber, 'uniword/shared_types/decimal_number'
+    autoload :EmuMeasure, 'uniword/shared_types/emu_measure'
+    autoload :FixedPercentage, 'uniword/shared_types/fixed_percentage'
+    autoload :HexColor, 'uniword/shared_types/hex_color'
+    autoload :OnOff, 'uniword/shared_types/on_off'
+    autoload :PercentValue, 'uniword/shared_types/percent_value'
+    autoload :PixelMeasure, 'uniword/shared_types/pixel_measure'
+    autoload :PointMeasure, 'uniword/shared_types/point_measure'
+    autoload :PositivePercentage, 'uniword/shared_types/positive_percentage'
+    autoload :StringType, 'uniword/shared_types/string_type'
+    autoload :TextAlignment, 'uniword/shared_types/text_alignment'
+    autoload :TwipsMeasure, 'uniword/shared_types/twips_measure'
+    autoload :VerticalAlignment, 'uniword/shared_types/vertical_alignment'
   end
 end

@@ -1,32 +1,38 @@
 # frozen_string_literal: true
 
-# Autoload index for WordprocessingML 2013 Extended namespace
-# Generated classes for w15: namespace
+# Wordprocessingml2013 namespace module
+# This file explicitly autoloads all Wordprocessingml2013 classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# WordprocessingML 2013 Extended namespace
+# Namespace: http://schemas.microsoft.com/office/word/2013/wordml
+# Prefix: w15:
+# Generated classes for Word 2013 features
+
+require 'lutaml/model'
 
 module Uniword
   module Wordprocessingml2013
-    autoload :ChartProps, File.expand_path('wordprocessingml_2013/chart_props', __dir__)
-    autoload :ChartTrackingRefBased,
-             File.expand_path('wordprocessingml_2013/chart_tracking_ref_based', __dir__)
-    autoload :CommentAuthor, File.expand_path('wordprocessingml_2013/comment_author', __dir__)
-    autoload :CommentCollapsed, File.expand_path('wordprocessingml_2013/comment_collapsed', __dir__)
-    autoload :CommentDone, File.expand_path('wordprocessingml_2013/comment_done', __dir__)
-    autoload :CommentEx, File.expand_path('wordprocessingml_2013/comment_ex', __dir__)
-    autoload :CommentsIds, File.expand_path('wordprocessingml_2013/comments_ids', __dir__)
-    autoload :DocPartAnchor, File.expand_path('wordprocessingml_2013/doc_part_anchor', __dir__)
-    autoload :DocumentPart, File.expand_path('wordprocessingml_2013/document_part', __dir__)
-    autoload :FootnoteColumns, File.expand_path('wordprocessingml_2013/footnote_columns', __dir__)
-    autoload :PeopleGroup, File.expand_path('wordprocessingml_2013/people_group', __dir__)
-    autoload :Person, File.expand_path('wordprocessingml_2013/person', __dir__)
-    autoload :PresenceInfo, File.expand_path('wordprocessingml_2013/presence_info', __dir__)
-    autoload :RepeatingSectionItem,
-             File.expand_path('wordprocessingml_2013/repeating_section_item', __dir__)
-    autoload :RepeatingSection, File.expand_path('wordprocessingml_2013/repeating_section', __dir__)
-    autoload :SdtAppearance, File.expand_path('wordprocessingml_2013/sdt_appearance', __dir__)
-    autoload :SdtColor, File.expand_path('wordprocessingml_2013/sdt_color', __dir__)
-    autoload :SdtDataBinding, File.expand_path('wordprocessingml_2013/sdt_data_binding', __dir__)
-    autoload :WebExtensionLinked,
-             File.expand_path('wordprocessingml_2013/web_extension_linked', __dir__)
-    autoload :WebExtension, File.expand_path('wordprocessingml_2013/web_extension', __dir__)
+    # Autoload all Wordprocessingml2013 classes (20)
+    autoload :ChartProps, 'uniword/wordprocessingml_2013/chart_props'
+    autoload :ChartTrackingRefBased, 'uniword/wordprocessingml_2013/chart_tracking_ref_based'
+    autoload :CommentAuthor, 'uniword/wordprocessingml_2013/comment_author'
+    autoload :CommentCollapsed, 'uniword/wordprocessingml_2013/comment_collapsed'
+    autoload :CommentDone, 'uniword/wordprocessingml_2013/comment_done'
+    autoload :CommentEx, 'uniword/wordprocessingml_2013/comment_ex'
+    autoload :CommentsIds, 'uniword/wordprocessingml_2013/comments_ids'
+    autoload :DocPartAnchor, 'uniword/wordprocessingml_2013/doc_part_anchor'
+    autoload :DocumentPart, 'uniword/wordprocessingml_2013/document_part'
+    autoload :FootnoteColumns, 'uniword/wordprocessingml_2013/footnote_columns'
+    autoload :PeopleGroup, 'uniword/wordprocessingml_2013/people_group'
+    autoload :Person, 'uniword/wordprocessingml_2013/person'
+    autoload :PresenceInfo, 'uniword/wordprocessingml_2013/presence_info'
+    autoload :RepeatingSectionItem, 'uniword/wordprocessingml_2013/repeating_section_item'
+    autoload :RepeatingSection, 'uniword/wordprocessingml_2013/repeating_section'
+    autoload :SdtAppearance, 'uniword/wordprocessingml_2013/sdt_appearance'
+    autoload :SdtColor, 'uniword/wordprocessingml_2013/sdt_color'
+    autoload :SdtDataBinding, 'uniword/wordprocessingml_2013/sdt_data_binding'
+    autoload :WebExtensionLinked, 'uniword/wordprocessingml_2013/web_extension_linked'
+    autoload :WebExtension, 'uniword/wordprocessingml_2013/web_extension'
   end
 end

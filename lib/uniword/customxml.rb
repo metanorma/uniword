@@ -1,51 +1,51 @@
 # frozen_string_literal: true
 
-# Autoload index for Customxml namespace
+# Customxml namespace module
+# This file explicitly autoloads all Customxml classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# Custom XML markup and smart tags
 # Generated from OOXML schema
+
+require 'lutaml/model'
 
 module Uniword
   module Customxml
-    autoload :CustomXml, File.expand_path('customxml/custom_xml', __dir__)
-    autoload :CustomXmlAttribute, File.expand_path('customxml/custom_xml_attribute', __dir__)
-    autoload :CustomXmlBlock, File.expand_path('customxml/custom_xml_block', __dir__)
-    autoload :CustomXmlCell, File.expand_path('customxml/custom_xml_cell', __dir__)
-    autoload :CustomXmlDelRangeStart,
-             File.expand_path('customxml/custom_xml_del_range_start', __dir__)
-    autoload :CustomXmlInsRangeEnd, File.expand_path('customxml/custom_xml_ins_range_end', __dir__)
-    autoload :CustomXmlInsRangeStart,
-             File.expand_path('customxml/custom_xml_ins_range_start', __dir__)
-    autoload :CustomXmlMoveFromRangeEnd,
-             File.expand_path('customxml/custom_xml_move_from_range_end', __dir__)
-    autoload :CustomXmlMoveFromRangeStart,
-             File.expand_path('customxml/custom_xml_move_from_range_start', __dir__)
-    autoload :CustomXmlMoveToRangeEnd,
-             File.expand_path('customxml/custom_xml_move_to_range_end', __dir__)
-    autoload :CustomXmlMoveToRangeStart,
-             File.expand_path('customxml/custom_xml_move_to_range_start', __dir__)
-    autoload :CustomXmlProperties, File.expand_path('customxml/custom_xml_properties', __dir__)
-    autoload :CustomXmlRow, File.expand_path('customxml/custom_xml_row', __dir__)
-    autoload :CustomXmlRun, File.expand_path('customxml/custom_xml_run', __dir__)
-    autoload :DataBinding, File.expand_path('customxml/data_binding', __dir__)
-    autoload :DataStoreItem, File.expand_path('customxml/data_store_item', __dir__)
-    autoload :ElementName, File.expand_path('customxml/element_name', __dir__)
-    autoload :Name, File.expand_path('customxml/name', __dir__)
-    autoload :NamespaceUri, File.expand_path('customxml/namespace_uri', __dir__)
-    autoload :Placeholder, File.expand_path('customxml/placeholder', __dir__)
-    autoload :PlaceholderText, File.expand_path('customxml/placeholder_text', __dir__)
-    autoload :PrefixMappings, File.expand_path('customxml/prefix_mappings', __dir__)
-    autoload :SchemaReference, File.expand_path('customxml/schema_reference', __dir__)
-    autoload :ShowingPlaceholder, File.expand_path('customxml/showing_placeholder', __dir__)
-    autoload :ShowingPlaceholderHeader,
-             File.expand_path('customxml/showing_placeholder_header', __dir__)
-    autoload :SmartTag, File.expand_path('customxml/smart_tag', __dir__)
-    autoload :SmartTagAttribute, File.expand_path('customxml/smart_tag_attribute', __dir__)
-    autoload :SmartTagElement, File.expand_path('customxml/smart_tag_element', __dir__)
-    autoload :SmartTagName, File.expand_path('customxml/smart_tag_name', __dir__)
-    autoload :SmartTagProperties, File.expand_path('customxml/smart_tag_properties', __dir__)
-    autoload :SmartTagType, File.expand_path('customxml/smart_tag_type', __dir__)
-    autoload :SmartTagUri, File.expand_path('customxml/smart_tag_uri', __dir__)
-    autoload :StoreItemId, File.expand_path('customxml/store_item_id', __dir__)
-    autoload :XPath, File.expand_path('customxml/x_path', __dir__)
-    autoload :XPathExpression, File.expand_path('customxml/x_path_expression', __dir__)
+    # Autoload all Customxml classes (34)
+    autoload :CustomXml, 'uniword/customxml/custom_xml'
+    autoload :CustomXmlAttribute, 'uniword/customxml/custom_xml_attribute'
+    autoload :CustomXmlBlock, 'uniword/customxml/custom_xml_block'
+    autoload :CustomXmlCell, 'uniword/customxml/custom_xml_cell'
+    autoload :CustomXmlDelRangeStart, 'uniword/customxml/custom_xml_del_range_start'
+    autoload :CustomXmlInsRangeEnd, 'uniword/customxml/custom_xml_ins_range_end'
+    autoload :CustomXmlInsRangeStart, 'uniword/customxml/custom_xml_ins_range_start'
+    autoload :CustomXmlMoveFromRangeEnd, 'uniword/customxml/custom_xml_move_from_range_end'
+    autoload :CustomXmlMoveFromRangeStart, 'uniword/customxml/custom_xml_move_from_range_start'
+    autoload :CustomXmlMoveToRangeEnd, 'uniword/customxml/custom_xml_move_to_range_end'
+    autoload :CustomXmlMoveToRangeStart, 'uniword/customxml/custom_xml_move_to_range_start'
+    autoload :CustomXmlProperties, 'uniword/customxml/custom_xml_properties'
+    autoload :CustomXmlRow, 'uniword/customxml/custom_xml_row'
+    autoload :CustomXmlRun, 'uniword/customxml/custom_xml_run'
+    autoload :DataBinding, 'uniword/customxml/data_binding'
+    autoload :DataStoreItem, 'uniword/customxml/data_store_item'
+    autoload :ElementName, 'uniword/customxml/element_name'
+    autoload :Name, 'uniword/customxml/name'
+    autoload :NamespaceUri, 'uniword/customxml/namespace_uri'
+    autoload :Placeholder, 'uniword/customxml/placeholder'
+    autoload :PlaceholderText, 'uniword/customxml/placeholder_text'
+    autoload :PrefixMappings, 'uniword/customxml/prefix_mappings'
+    autoload :SchemaReference, 'uniword/customxml/schema_reference'
+    autoload :ShowingPlaceholder, 'uniword/customxml/showing_placeholder'
+    autoload :ShowingPlaceholderHeader, 'uniword/customxml/showing_placeholder_header'
+    autoload :SmartTag, 'uniword/customxml/smart_tag'
+    autoload :SmartTagAttribute, 'uniword/customxml/smart_tag_attribute'
+    autoload :SmartTagElement, 'uniword/customxml/smart_tag_element'
+    autoload :SmartTagName, 'uniword/customxml/smart_tag_name'
+    autoload :SmartTagProperties, 'uniword/customxml/smart_tag_properties'
+    autoload :SmartTagType, 'uniword/customxml/smart_tag_type'
+    autoload :SmartTagUri, 'uniword/customxml/smart_tag_uri'
+    autoload :StoreItemId, 'uniword/customxml/store_item_id'
+    autoload :XPath, 'uniword/customxml/x_path'
+    autoload :XPathExpression, 'uniword/customxml/x_path_expression'
   end
 end

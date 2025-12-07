@@ -1,92 +1,100 @@
 # frozen_string_literal: true
 
+# Spreadsheetml namespace module
+# This file explicitly autoloads all Spreadsheetml classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
+# SpreadsheetML namespace - Excel support
+# Namespace: http://schemas.openxmlformats.org/spreadsheetml/2006/main
+# Prefix: (none - default namespace in Excel files)
+
+require 'lutaml/model'
+
 module Uniword
   module Spreadsheetml
-    autoload :Alignment, File.expand_path('spreadsheetml/alignment', __dir__)
-    autoload :Authors, File.expand_path('spreadsheetml/authors', __dir__)
-    autoload :AutoFilter, File.expand_path('spreadsheetml/auto_filter', __dir__)
-    autoload :Bold, File.expand_path('spreadsheetml/bold', __dir__)
-    autoload :BookViews, File.expand_path('spreadsheetml/book_views', __dir__)
-    autoload :Border, File.expand_path('spreadsheetml/border', __dir__)
-    autoload :Borders, File.expand_path('spreadsheetml/borders', __dir__)
-    autoload :CalcProperties, File.expand_path('spreadsheetml/calc_properties', __dir__)
-    autoload :Cell, File.expand_path('spreadsheetml/cell', __dir__)
-    autoload :CellFormat, File.expand_path('spreadsheetml/cell_format', __dir__)
-    autoload :CellFormats, File.expand_path('spreadsheetml/cell_formats', __dir__)
-    autoload :CellFormula, File.expand_path('spreadsheetml/cell_formula', __dir__)
-    autoload :CellValue, File.expand_path('spreadsheetml/cell_value', __dir__)
-    autoload :Chartsheet, File.expand_path('spreadsheetml/chartsheet', __dir__)
-    autoload :Col, File.expand_path('spreadsheetml/col', __dir__)
-    autoload :ColBreaks, File.expand_path('spreadsheetml/col_breaks', __dir__)
-    autoload :Color, File.expand_path('spreadsheetml/color', __dir__)
-    autoload :Cols, File.expand_path('spreadsheetml/cols', __dir__)
-    autoload :Comment, File.expand_path('spreadsheetml/comment', __dir__)
-    autoload :CommentList, File.expand_path('spreadsheetml/comment_list', __dir__)
-    autoload :Comments, File.expand_path('spreadsheetml/comments', __dir__)
-    autoload :ConditionalFormatting,
-             File.expand_path('spreadsheetml/conditional_formatting', __dir__)
-    autoload :ConditionalFormattingRule,
-             File.expand_path('spreadsheetml/conditional_formatting_rule', __dir__)
-    autoload :CustomWorkbookViews, File.expand_path('spreadsheetml/custom_workbook_views', __dir__)
-    autoload :DataValidation, File.expand_path('spreadsheetml/data_validation', __dir__)
-    autoload :DataValidations, File.expand_path('spreadsheetml/data_validations', __dir__)
-    autoload :DefinedName, File.expand_path('spreadsheetml/defined_name', __dir__)
-    autoload :DefinedNames, File.expand_path('spreadsheetml/defined_names', __dir__)
-    autoload :Dimension, File.expand_path('spreadsheetml/dimension', __dir__)
-    autoload :Drawing, File.expand_path('spreadsheetml/drawing', __dir__)
-    autoload :ExternalReferences, File.expand_path('spreadsheetml/external_references', __dir__)
-    autoload :FileSharing, File.expand_path('spreadsheetml/file_sharing', __dir__)
-    autoload :FileVersion, File.expand_path('spreadsheetml/file_version', __dir__)
-    autoload :Fill, File.expand_path('spreadsheetml/fill', __dir__)
-    autoload :Fills, File.expand_path('spreadsheetml/fills', __dir__)
-    autoload :FilterColumn, File.expand_path('spreadsheetml/filter_column', __dir__)
-    autoload :Font, File.expand_path('spreadsheetml/font', __dir__)
-    autoload :FontName, File.expand_path('spreadsheetml/font_name', __dir__)
-    autoload :FontSize, File.expand_path('spreadsheetml/font_size', __dir__)
-    autoload :Fonts, File.expand_path('spreadsheetml/fonts', __dir__)
-    autoload :Hyperlink, File.expand_path('spreadsheetml/hyperlink', __dir__)
-    autoload :Hyperlinks, File.expand_path('spreadsheetml/hyperlinks', __dir__)
-    autoload :Italic, File.expand_path('spreadsheetml/italic', __dir__)
-    autoload :LegacyDrawing, File.expand_path('spreadsheetml/legacy_drawing', __dir__)
-    autoload :MergeCell, File.expand_path('spreadsheetml/merge_cell', __dir__)
-    autoload :MergeCells, File.expand_path('spreadsheetml/merge_cells', __dir__)
-    autoload :NumberFormat, File.expand_path('spreadsheetml/number_format', __dir__)
-    autoload :NumberFormats, File.expand_path('spreadsheetml/number_formats', __dir__)
-    autoload :OleObject, File.expand_path('spreadsheetml/ole_object', __dir__)
-    autoload :OleObjects, File.expand_path('spreadsheetml/ole_objects', __dir__)
-    autoload :PatternFill, File.expand_path('spreadsheetml/pattern_fill', __dir__)
-    autoload :PhoneticProperties, File.expand_path('spreadsheetml/phonetic_properties', __dir__)
-    autoload :PivotCaches, File.expand_path('spreadsheetml/pivot_caches', __dir__)
-    autoload :PivotTable, File.expand_path('spreadsheetml/pivot_table', __dir__)
-    autoload :PivotTableDefinition,
-             File.expand_path('spreadsheetml/pivot_table_definition', __dir__)
-    autoload :ProtectedRanges, File.expand_path('spreadsheetml/protected_ranges', __dir__)
-    autoload :QueryTable, File.expand_path('spreadsheetml/query_table', __dir__)
-    autoload :RichTextRun, File.expand_path('spreadsheetml/rich_text_run', __dir__)
-    autoload :Row, File.expand_path('spreadsheetml/row', __dir__)
-    autoload :RowBreaks, File.expand_path('spreadsheetml/row_breaks', __dir__)
-    autoload :RunProperties, File.expand_path('spreadsheetml/run_properties', __dir__)
-    autoload :Scenarios, File.expand_path('spreadsheetml/scenarios', __dir__)
-    autoload :SharedStringTable, File.expand_path('spreadsheetml/shared_string_table', __dir__)
-    autoload :Sheet, File.expand_path('spreadsheetml/sheet', __dir__)
-    autoload :SheetData, File.expand_path('spreadsheetml/sheet_data', __dir__)
-    autoload :SheetProtection, File.expand_path('spreadsheetml/sheet_protection', __dir__)
-    autoload :SheetView, File.expand_path('spreadsheetml/sheet_view', __dir__)
-    autoload :SheetViews, File.expand_path('spreadsheetml/sheet_views', __dir__)
-    autoload :Sheets, File.expand_path('spreadsheetml/sheets', __dir__)
-    autoload :SortState, File.expand_path('spreadsheetml/sort_state', __dir__)
-    autoload :SparklineGroup, File.expand_path('spreadsheetml/sparkline_group', __dir__)
-    autoload :SparklineGroups, File.expand_path('spreadsheetml/sparkline_groups', __dir__)
-    autoload :StringItem, File.expand_path('spreadsheetml/string_item', __dir__)
-    autoload :Table, File.expand_path('spreadsheetml/table', __dir__)
-    autoload :TableColumn, File.expand_path('spreadsheetml/table_column', __dir__)
-    autoload :TableColumns, File.expand_path('spreadsheetml/table_columns', __dir__)
-    autoload :TableStyleInfo, File.expand_path('spreadsheetml/table_style_info', __dir__)
-    autoload :Text, File.expand_path('spreadsheetml/text', __dir__)
-    autoload :Workbook, File.expand_path('spreadsheetml/workbook', __dir__)
-    autoload :WorkbookProperties, File.expand_path('spreadsheetml/workbook_properties', __dir__)
-    autoload :WorkbookProtection, File.expand_path('spreadsheetml/workbook_protection', __dir__)
-    autoload :WorkbookView, File.expand_path('spreadsheetml/workbook_view', __dir__)
-    autoload :Worksheet, File.expand_path('spreadsheetml/worksheet', __dir__)
+    # Autoload all Spreadsheetml classes (86)
+    autoload :Alignment, 'uniword/spreadsheetml/alignment'
+    autoload :Authors, 'uniword/spreadsheetml/authors'
+    autoload :AutoFilter, 'uniword/spreadsheetml/auto_filter'
+    autoload :Bold, 'uniword/spreadsheetml/bold'
+    autoload :BookViews, 'uniword/spreadsheetml/book_views'
+    autoload :Border, 'uniword/spreadsheetml/border'
+    autoload :Borders, 'uniword/spreadsheetml/borders'
+    autoload :CalcProperties, 'uniword/spreadsheetml/calc_properties'
+    autoload :Cell, 'uniword/spreadsheetml/cell'
+    autoload :CellFormat, 'uniword/spreadsheetml/cell_format'
+    autoload :CellFormats, 'uniword/spreadsheetml/cell_formats'
+    autoload :CellFormula, 'uniword/spreadsheetml/cell_formula'
+    autoload :CellValue, 'uniword/spreadsheetml/cell_value'
+    autoload :Chartsheet, 'uniword/spreadsheetml/chartsheet'
+    autoload :Col, 'uniword/spreadsheetml/col'
+    autoload :ColBreaks, 'uniword/spreadsheetml/col_breaks'
+    autoload :Color, 'uniword/spreadsheetml/color'
+    autoload :Cols, 'uniword/spreadsheetml/cols'
+    autoload :Comment, 'uniword/spreadsheetml/comment'
+    autoload :CommentList, 'uniword/spreadsheetml/comment_list'
+    autoload :Comments, 'uniword/spreadsheetml/comments'
+    autoload :ConditionalFormatting, 'uniword/spreadsheetml/conditional_formatting'
+    autoload :ConditionalFormattingRule, 'uniword/spreadsheetml/conditional_formatting_rule'
+    autoload :CustomWorkbookViews, 'uniword/spreadsheetml/custom_workbook_views'
+    autoload :DataValidation, 'uniword/spreadsheetml/data_validation'
+    autoload :DataValidations, 'uniword/spreadsheetml/data_validations'
+    autoload :DefinedName, 'uniword/spreadsheetml/defined_name'
+    autoload :DefinedNames, 'uniword/spreadsheetml/defined_names'
+    autoload :Dimension, 'uniword/spreadsheetml/dimension'
+    autoload :Drawing, 'uniword/spreadsheetml/drawing'
+    autoload :ExternalReferences, 'uniword/spreadsheetml/external_references'
+    autoload :FileSharing, 'uniword/spreadsheetml/file_sharing'
+    autoload :FileVersion, 'uniword/spreadsheetml/file_version'
+    autoload :Fill, 'uniword/spreadsheetml/fill'
+    autoload :Fills, 'uniword/spreadsheetml/fills'
+    autoload :FilterColumn, 'uniword/spreadsheetml/filter_column'
+    autoload :Font, 'uniword/spreadsheetml/font'
+    autoload :FontName, 'uniword/spreadsheetml/font_name'
+    autoload :FontSize, 'uniword/spreadsheetml/font_size'
+    autoload :Fonts, 'uniword/spreadsheetml/fonts'
+    autoload :Hyperlink, 'uniword/spreadsheetml/hyperlink'
+    autoload :Hyperlinks, 'uniword/spreadsheetml/hyperlinks'
+    autoload :Italic, 'uniword/spreadsheetml/italic'
+    autoload :LegacyDrawing, 'uniword/spreadsheetml/legacy_drawing'
+    autoload :MergeCell, 'uniword/spreadsheetml/merge_cell'
+    autoload :MergeCells, 'uniword/spreadsheetml/merge_cells'
+    autoload :NumberFormat, 'uniword/spreadsheetml/number_format'
+    autoload :NumberFormats, 'uniword/spreadsheetml/number_formats'
+    autoload :OleObject, 'uniword/spreadsheetml/ole_object'
+    autoload :OleObjects, 'uniword/spreadsheetml/ole_objects'
+    autoload :PatternFill, 'uniword/spreadsheetml/pattern_fill'
+    autoload :PhoneticProperties, 'uniword/spreadsheetml/phonetic_properties'
+    autoload :PivotCaches, 'uniword/spreadsheetml/pivot_caches'
+    autoload :PivotTable, 'uniword/spreadsheetml/pivot_table'
+    autoload :PivotTableDefinition, 'uniword/spreadsheetml/pivot_table_definition'
+    autoload :ProtectedRanges, 'uniword/spreadsheetml/protected_ranges'
+    autoload :QueryTable, 'uniword/spreadsheetml/query_table'
+    autoload :RichTextRun, 'uniword/spreadsheetml/rich_text_run'
+    autoload :Row, 'uniword/spreadsheetml/row'
+    autoload :RowBreaks, 'uniword/spreadsheetml/row_breaks'
+    autoload :RunProperties, 'uniword/spreadsheetml/run_properties'
+    autoload :Scenarios, 'uniword/spreadsheetml/scenarios'
+    autoload :SharedStringTable, 'uniword/spreadsheetml/shared_string_table'
+    autoload :Sheet, 'uniword/spreadsheetml/sheet'
+    autoload :SheetData, 'uniword/spreadsheetml/sheet_data'
+    autoload :SheetProtection, 'uniword/spreadsheetml/sheet_protection'
+    autoload :SheetView, 'uniword/spreadsheetml/sheet_view'
+    autoload :SheetViews, 'uniword/spreadsheetml/sheet_views'
+    autoload :Sheets, 'uniword/spreadsheetml/sheets'
+    autoload :SortState, 'uniword/spreadsheetml/sort_state'
+    autoload :SparklineGroup, 'uniword/spreadsheetml/sparkline_group'
+    autoload :SparklineGroups, 'uniword/spreadsheetml/sparkline_groups'
+    autoload :StringItem, 'uniword/spreadsheetml/string_item'
+    autoload :Table, 'uniword/spreadsheetml/table'
+    autoload :TableColumn, 'uniword/spreadsheetml/table_column'
+    autoload :TableColumns, 'uniword/spreadsheetml/table_columns'
+    autoload :TableStyleInfo, 'uniword/spreadsheetml/table_style_info'
+    autoload :Text, 'uniword/spreadsheetml/text'
+    autoload :Workbook, 'uniword/spreadsheetml/workbook'
+    autoload :WorkbookProperties, 'uniword/spreadsheetml/workbook_properties'
+    autoload :WorkbookProtection, 'uniword/spreadsheetml/workbook_protection'
+    autoload :WorkbookView, 'uniword/spreadsheetml/workbook_view'
+    autoload :Worksheet, 'uniword/spreadsheetml/worksheet'
   end
 end
