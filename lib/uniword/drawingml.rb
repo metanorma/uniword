@@ -1,152 +1,145 @@
 # frozen_string_literal: true
 
-# DrawingML Namespace Autoload Index
-# Generated from: config/ooxml/schemas/drawingml.yml
+# DrawingML namespace module
+# This file explicitly autoloads all DrawingML classes
+# Using explicit autoload instead of dynamic Dir[] for maintainability
+#
 # Namespace: http://schemas.openxmlformats.org/drawingml/2006/main
-# Prefix: a
-# Total classes: 92
+# Prefix: a:
+
+require 'lutaml/model'
 
 module Uniword
   module Drawingml
-    # Graphics primitives (7)
-    autoload :Graphic, File.expand_path('drawingml/graphic', __dir__)
-    autoload :GraphicData, File.expand_path('drawingml/graphic_data', __dir__)
-    autoload :Blip, File.expand_path('drawingml/blip', __dir__)
-    autoload :BlipFill, File.expand_path('drawingml/blip_fill', __dir__)
-    autoload :Stretch, File.expand_path('drawingml/stretch', __dir__)
-    autoload :Tile, File.expand_path('drawingml/tile', __dir__)
-    autoload :SourceRect, File.expand_path('drawingml/source_rect', __dir__)
+    # Graphics Primitives (7)
+    autoload :Graphic, 'uniword/drawingml/graphic'
+    autoload :GraphicData, 'uniword/drawingml/graphic_data'
+    autoload :Blip, 'uniword/drawingml/blip'
+    autoload :BlipFill, 'uniword/drawingml/blip_fill'
+    autoload :Stretch, 'uniword/drawingml/stretch'
+    autoload :Tile, 'uniword/drawingml/tile'
+    autoload :SourceRect, 'uniword/drawingml/source_rect'
 
     # Shapes (4)
-    autoload :Shape, File.expand_path('drawingml/shape', __dir__)
-    autoload :NonVisualShapeProperties,
-             File.expand_path('drawingml/non_visual_shape_properties', __dir__)
-    autoload :NonVisualDrawingProperties,
-             File.expand_path('drawingml/non_visual_drawing_properties', __dir__)
-    autoload :ShapeProperties, File.expand_path('drawingml/shape_properties', __dir__)
+    autoload :Shape, 'uniword/drawingml/shape'
+    autoload :NonVisualShapeProperties, 'uniword/drawingml/non_visual_shape_properties'
+    autoload :NonVisualDrawingProperties, 'uniword/drawingml/non_visual_drawing_properties'
+    autoload :ShapeProperties, 'uniword/drawingml/shape_properties'
 
-    # Style & references (4)
-    autoload :StyleMatrix, File.expand_path('drawingml/style_matrix', __dir__)
-    autoload :StyleReference, File.expand_path('drawingml/style_reference', __dir__)
-    autoload :FontReference, File.expand_path('drawingml/font_reference', __dir__)
-    autoload :LineDefaults, File.expand_path('drawingml/line_defaults', __dir__)
+    # Style & References (4)
+    autoload :StyleMatrix, 'uniword/drawingml/style_matrix'
+    autoload :StyleReference, 'uniword/drawingml/style_reference'
+    autoload :FontReference, 'uniword/drawingml/font_reference'
+    autoload :LineDefaults, 'uniword/drawingml/line_defaults'
 
     # Transforms (3)
-    autoload :Transform2D, File.expand_path('drawingml/transform2_d', __dir__)
-    autoload :Offset, File.expand_path('drawingml/offset', __dir__)
-    autoload :Extents, File.expand_path('drawingml/extents', __dir__)
+    autoload :Transform2D, 'uniword/drawingml/transform2_d'
+    autoload :Offset, 'uniword/drawingml/offset'
+    autoload :Extents, 'uniword/drawingml/extents'
 
-    # Lines (1)
-    autoload :LineProperties, File.expand_path('drawingml/line_properties', __dir__)
+    # Line Properties (6)
+    autoload :LineProperties, 'uniword/drawingml/line_properties'
+    autoload :PresetDash, 'uniword/drawingml/preset_dash'
+    autoload :CustomDash, 'uniword/drawingml/custom_dash'
+    autoload :DashStop, 'uniword/drawingml/dash_stop'
+    autoload :LineJoinRound, 'uniword/drawingml/line_join_round'
+    autoload :LineJoinMiter, 'uniword/drawingml/line_join_miter'
 
-    # Text (4)
-    autoload :TextBody, File.expand_path('drawingml/text_body', __dir__)
-    autoload :BodyProperties, File.expand_path('drawingml/body_properties', __dir__)
-    autoload :TextParagraph, File.expand_path('drawingml/text_paragraph', __dir__)
-    autoload :TextRun, File.expand_path('drawingml/text_run', __dir__)
+    # Text Body & Structure (4)
+    autoload :TextBody, 'uniword/drawingml/text_body'
+    autoload :BodyProperties, 'uniword/drawingml/body_properties'
+    autoload :TextParagraph, 'uniword/drawingml/text_paragraph'
+    autoload :TextRun, 'uniword/drawingml/text_run'
 
-    # Fills (2)
-    autoload :SolidFill, File.expand_path('drawingml/solid_fill', __dir__)
-    autoload :NoFill, File.expand_path('drawingml/no_fill', __dir__)
+    # Text Properties (10)
+    autoload :ListStyle, 'uniword/drawingml/list_style'
+    autoload :DefaultParagraphProperties, 'uniword/drawingml/default_paragraph_properties'
+    autoload :Level1ParagraphProperties, 'uniword/drawingml/level1_paragraph_properties'
+    autoload :Level2ParagraphProperties, 'uniword/drawingml/level2_paragraph_properties'
+    autoload :Level3ParagraphProperties, 'uniword/drawingml/level3_paragraph_properties'
+    autoload :TextParagraphProperties, 'uniword/drawingml/text_paragraph_properties'
+    autoload :TextCharacterProperties, 'uniword/drawingml/text_character_properties'
+    autoload :TextFont, 'uniword/drawingml/text_font'
+    autoload :EastAsianFont, 'uniword/drawingml/east_asian_font'
+    autoload :ComplexScriptFont, 'uniword/drawingml/complex_script_font'
+
+    # Basic Fills (2)
+    autoload :SolidFill, 'uniword/drawingml/solid_fill'
+    autoload :NoFill, 'uniword/drawingml/no_fill'
 
     # Colors (2)
-    autoload :SrgbColor, File.expand_path('drawingml/srgb_color', __dir__)
-    autoload :SchemeColor, File.expand_path('drawingml/scheme_color', __dir__)
+    autoload :SrgbColor, 'uniword/drawingml/srgb_color'
+    autoload :SchemeColor, 'uniword/drawingml/scheme_color'
 
-    # Gradient fills (10)
-    autoload :GradientStopList, File.expand_path('drawingml/gradient_stop_list', __dir__)
-    autoload :GradientStop, File.expand_path('drawingml/gradient_stop', __dir__)
-    autoload :LinearGradient, File.expand_path('drawingml/linear_gradient', __dir__)
-    autoload :PathGradient, File.expand_path('drawingml/path_gradient', __dir__)
-    autoload :FillToRect, File.expand_path('drawingml/fill_to_rect', __dir__)
-    autoload :TileRect, File.expand_path('drawingml/tile_rect', __dir__)
-    autoload :GradientFill, File.expand_path('drawingml/gradient_fill', __dir__)
-    autoload :PatternFill, File.expand_path('drawingml/pattern_fill', __dir__)
-    autoload :ForegroundColor, File.expand_path('drawingml/foreground_color', __dir__)
-    autoload :BackgroundColor, File.expand_path('drawingml/background_color', __dir__)
+    # Gradient Fills (10)
+    autoload :GradientFill, 'uniword/drawingml/gradient_fill'
+    autoload :GradientStopList, 'uniword/drawingml/gradient_stop_list'
+    autoload :GradientStop, 'uniword/drawingml/gradient_stop'
+    autoload :LinearGradient, 'uniword/drawingml/linear_gradient'
+    autoload :PathGradient, 'uniword/drawingml/path_gradient'
+    autoload :FillToRect, 'uniword/drawingml/fill_to_rect'
+    autoload :TileRect, 'uniword/drawingml/tile_rect'
+    autoload :PatternFill, 'uniword/drawingml/pattern_fill'
+    autoload :ForegroundColor, 'uniword/drawingml/foreground_color'
+    autoload :BackgroundColor, 'uniword/drawingml/background_color'
 
     # Effects (15)
-    autoload :EffectList, File.expand_path('drawingml/effect_list', __dir__)
-    autoload :EffectContainer, File.expand_path('drawingml/effect_container', __dir__)
-    autoload :Glow, File.expand_path('drawingml/glow', __dir__)
-    autoload :InnerShadow, File.expand_path('drawingml/inner_shadow', __dir__)
-    autoload :OuterShadow, File.expand_path('drawingml/outer_shadow', __dir__)
-    autoload :PresetShadow, File.expand_path('drawingml/preset_shadow', __dir__)
-    autoload :Reflection, File.expand_path('drawingml/reflection', __dir__)
-    autoload :SoftEdge, File.expand_path('drawingml/soft_edge', __dir__)
-    autoload :Blur, File.expand_path('drawingml/blur', __dir__)
-    autoload :FillOverlay, File.expand_path('drawingml/fill_overlay', __dir__)
-    autoload :Duotone, File.expand_path('drawingml/duotone', __dir__)
-    autoload :AlphaBiLevel, File.expand_path('drawingml/alpha_bi_level', __dir__)
-    autoload :AlphaModulationFixed, File.expand_path('drawingml/alpha_modulation_fixed', __dir__)
-    autoload :BiLevel, File.expand_path('drawingml/bi_level', __dir__)
-    autoload :Grayscale, File.expand_path('drawingml/grayscale', __dir__)
+    autoload :EffectList, 'uniword/drawingml/effect_list'
+    autoload :EffectContainer, 'uniword/drawingml/effect_container'
+    autoload :Glow, 'uniword/drawingml/glow'
+    autoload :InnerShadow, 'uniword/drawingml/inner_shadow'
+    autoload :OuterShadow, 'uniword/drawingml/outer_shadow'
+    autoload :PresetShadow, 'uniword/drawingml/preset_shadow'
+    autoload :Reflection, 'uniword/drawingml/reflection'
+    autoload :SoftEdge, 'uniword/drawingml/soft_edge'
+    autoload :Blur, 'uniword/drawingml/blur'
+    autoload :FillOverlay, 'uniword/drawingml/fill_overlay'
+    autoload :Duotone, 'uniword/drawingml/duotone'
+    autoload :AlphaBiLevel, 'uniword/drawingml/alpha_bi_level'
+    autoload :AlphaModulationFixed, 'uniword/drawingml/alpha_modulation_fixed'
+    autoload :BiLevel, 'uniword/drawingml/bi_level'
+    autoload :Grayscale, 'uniword/drawingml/grayscale'
 
-    # Color transforms (21)
-    autoload :Alpha, File.expand_path('drawingml/alpha', __dir__)
-    autoload :AlphaOffset, File.expand_path('drawingml/alpha_offset', __dir__)
-    autoload :AlphaModulation, File.expand_path('drawingml/alpha_modulation', __dir__)
-    autoload :Hue, File.expand_path('drawingml/hue', __dir__)
-    autoload :HueOffset, File.expand_path('drawingml/hue_offset', __dir__)
-    autoload :HueModulation, File.expand_path('drawingml/hue_modulation', __dir__)
-    autoload :Saturation, File.expand_path('drawingml/saturation', __dir__)
-    autoload :SaturationOffset, File.expand_path('drawingml/saturation_offset', __dir__)
-    autoload :SaturationModulation, File.expand_path('drawingml/saturation_modulation', __dir__)
-    autoload :Luminance, File.expand_path('drawingml/luminance', __dir__)
-    autoload :LuminanceOffset, File.expand_path('drawingml/luminance_offset', __dir__)
-    autoload :LuminanceModulation, File.expand_path('drawingml/luminance_modulation', __dir__)
-    autoload :Red, File.expand_path('drawingml/red', __dir__)
-    autoload :RedOffset, File.expand_path('drawingml/red_offset', __dir__)
-    autoload :RedModulation, File.expand_path('drawingml/red_modulation', __dir__)
-    autoload :Green, File.expand_path('drawingml/green', __dir__)
-    autoload :Blue, File.expand_path('drawingml/blue', __dir__)
-    autoload :Gamma, File.expand_path('drawingml/gamma', __dir__)
-    autoload :InverseGamma, File.expand_path('drawingml/inverse_gamma', __dir__)
-    autoload :Tint, File.expand_path('drawingml/tint', __dir__)
-    autoload :Shade, File.expand_path('drawingml/shade', __dir__)
+    # Color Transforms (21)
+    autoload :Alpha, 'uniword/drawingml/alpha'
+    autoload :AlphaOffset, 'uniword/drawingml/alpha_offset'
+    autoload :AlphaModulation, 'uniword/drawingml/alpha_modulation'
+    autoload :Hue, 'uniword/drawingml/hue'
+    autoload :HueOffset, 'uniword/drawingml/hue_offset'
+    autoload :HueModulation, 'uniword/drawingml/hue_modulation'
+    autoload :Saturation, 'uniword/drawingml/saturation'
+    autoload :SaturationOffset, 'uniword/drawingml/saturation_offset'
+    autoload :SaturationModulation, 'uniword/drawingml/saturation_modulation'
+    autoload :Luminance, 'uniword/drawingml/luminance'
+    autoload :LuminanceOffset, 'uniword/drawingml/luminance_offset'
+    autoload :LuminanceModulation, 'uniword/drawingml/luminance_modulation'
+    autoload :Red, 'uniword/drawingml/red'
+    autoload :RedOffset, 'uniword/drawingml/red_offset'
+    autoload :RedModulation, 'uniword/drawingml/red_modulation'
+    autoload :Green, 'uniword/drawingml/green'
+    autoload :Blue, 'uniword/drawingml/blue'
+    autoload :Gamma, 'uniword/drawingml/gamma'
+    autoload :InverseGamma, 'uniword/drawingml/inverse_gamma'
+    autoload :Tint, 'uniword/drawingml/tint'
+    autoload :Shade, 'uniword/drawingml/shade'
 
-    # Shapes & geometry (9)
-    autoload :PresetGeometry, File.expand_path('drawingml/preset_geometry', __dir__)
-    autoload :CustomGeometry, File.expand_path('drawingml/custom_geometry', __dir__)
-    autoload :AdjustValueList, File.expand_path('drawingml/adjust_value_list', __dir__)
-    autoload :GeometryGuide, File.expand_path('drawingml/geometry_guide', __dir__)
-    autoload :PathList, File.expand_path('drawingml/path_list', __dir__)
-    autoload :MoveTo, File.expand_path('drawingml/move_to', __dir__)
-    autoload :LineTo, File.expand_path('drawingml/line_to', __dir__)
-    autoload :ArcTo, File.expand_path('drawingml/arc_to', __dir__)
-    autoload :ClosePath, File.expand_path('drawingml/close_path', __dir__)
+    # Shapes & Geometry (9)
+    autoload :PresetGeometry, 'uniword/drawingml/preset_geometry'
+    autoload :CustomGeometry, 'uniword/drawingml/custom_geometry'
+    autoload :AdjustValueList, 'uniword/drawingml/adjust_value_list'
+    autoload :GeometryGuide, 'uniword/drawingml/geometry_guide'
+    autoload :PathList, 'uniword/drawingml/path_list'
+    autoload :MoveTo, 'uniword/drawingml/move_to'
+    autoload :LineTo, 'uniword/drawingml/line_to'
+    autoload :ArcTo, 'uniword/drawingml/arc_to'
+    autoload :ClosePath, 'uniword/drawingml/close_path'
 
-    # Text properties (10)
-    autoload :ListStyle, File.expand_path('drawingml/list_style', __dir__)
-    autoload :DefaultParagraphProperties,
-             File.expand_path('drawingml/default_paragraph_properties', __dir__)
-    autoload :Level1ParagraphProperties,
-             File.expand_path('drawingml/level1_paragraph_properties', __dir__)
-    autoload :Level2ParagraphProperties,
-             File.expand_path('drawingml/level2_paragraph_properties', __dir__)
-    autoload :Level3ParagraphProperties,
-             File.expand_path('drawingml/level3_paragraph_properties', __dir__)
-    autoload :TextParagraphProperties,
-             File.expand_path('drawingml/text_paragraph_properties', __dir__)
-    autoload :TextCharacterProperties,
-             File.expand_path('drawingml/text_character_properties', __dir__)
-    autoload :TextFont, File.expand_path('drawingml/text_font', __dir__)
-    autoload :EastAsianFont, File.expand_path('drawingml/east_asian_font', __dir__)
-    autoload :ComplexScriptFont, File.expand_path('drawingml/complex_script_font', __dir__)
-
-    # Line properties (5)
-    autoload :PresetDash, File.expand_path('drawingml/preset_dash', __dir__)
-    autoload :CustomDash, File.expand_path('drawingml/custom_dash', __dir__)
-    autoload :DashStop, File.expand_path('drawingml/dash_stop', __dir__)
-    autoload :LineJoinRound, File.expand_path('drawingml/line_join_round', __dir__)
-    autoload :LineJoinMiter, File.expand_path('drawingml/line_join_miter', __dir__)
-
-    # 3D properties (6)
-    autoload :Rotation, File.expand_path('drawingml/rotation', __dir__)
-    autoload :Camera, File.expand_path('drawingml/camera', __dir__)
-    autoload :LightRig, File.expand_path('drawingml/light_rig', __dir__)
-    autoload :Scene3D, File.expand_path('drawingml/scene_3d', __dir__)
-    autoload :Shape3D, File.expand_path('drawingml/shape_3d', __dir__)
-    autoload :BevelTop, File.expand_path('drawingml/bevel_top', __dir__)
+    # 3D Properties (6)
+    autoload :Rotation, 'uniword/drawingml/rotation'
+    autoload :Camera, 'uniword/drawingml/camera'
+    autoload :LightRig, 'uniword/drawingml/light_rig'
+    autoload :Scene3D, 'uniword/drawingml/scene_3d'
+    autoload :Shape3D, 'uniword/drawingml/shape_3d'
+    autoload :BevelTop, 'uniword/drawingml/bevel_top'
   end
 end
