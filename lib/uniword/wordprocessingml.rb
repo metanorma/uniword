@@ -42,6 +42,14 @@ module Uniword
     autoload :SdtContent, 'uniword/wordprocessingml/sdt_content'
     autoload :SdtEndProperties, 'uniword/wordprocessingml/sdt_end_properties'
     autoload :SectionProperties, 'uniword/wordprocessingml/section_properties'
+    autoload :PageSize, 'uniword/wordprocessingml/page_size'
+    autoload :PageMargins, 'uniword/wordprocessingml/page_margins'
+    autoload :PageNumbering, 'uniword/wordprocessingml/page_numbering'
+    autoload :Columns, 'uniword/wordprocessingml/columns'
+    autoload :HeaderReference, 'uniword/wordprocessingml/header_reference'
+    autoload :FooterReference, 'uniword/wordprocessingml/footer_reference'
+    autoload :Header, 'uniword/wordprocessingml/header'
+    autoload :Footer, 'uniword/wordprocessingml/footer'
 
     # Numbering
     autoload :Start, 'uniword/wordprocessingml/start'
@@ -60,6 +68,9 @@ module Uniword
     autoload :TableCellProperties, 'uniword/wordprocessingml/table_cell_properties'
     autoload :TableRowProperties, 'uniword/wordprocessingml/table_row_properties'
     autoload :TableCellBorders, 'uniword/wordprocessingml/table_cell_borders'
+    autoload :Border, 'uniword/wordprocessingml/border'
+    autoload :ParagraphBorders, 'uniword/wordprocessingml/paragraph_borders'
+    autoload :TableBorders, 'uniword/wordprocessingml/table_borders'
     autoload :RPrDefault, 'uniword/wordprocessingml/r_pr_default'
     autoload :PPrDefault, 'uniword/wordprocessingml/p_pr_default'
 

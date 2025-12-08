@@ -101,6 +101,7 @@ module Uniword
 
   # Autoload styles
   autoload :StylesConfiguration, 'uniword/styles_configuration'
+  autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
   autoload :Style, 'uniword/style'
 
   # Autoload themes
