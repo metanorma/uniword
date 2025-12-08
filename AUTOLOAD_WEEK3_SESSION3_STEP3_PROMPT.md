@@ -1,335 +1,346 @@
 # Autoload Week 3 Session 3 - Step 3: Wordprocessingml Autoload Conversion
 
 **Created**: December 8, 2024
-**Priority**: 🟢 NORMAL
+**Priority**: 🔴 CRITICAL
 **Estimated Time**: 3-4 hours
-**Prerequisite**: Baseline verified (Step 2 complete) ✅
+**Prerequisites**:
+- ✅ Step 1 Complete (library loading fixes)
+- ✅ Step 2 Complete (baseline verified at 81/258 passing)
 
 ---
 
 ## Objective
 
-Complete the autoload conversion for ALL remaining wordprocessingml files (~90+ files), converting explicit `require` statements to autoload declarations.
+Convert all `require_relative` statements in Wordprocessingml module to autoload declarations in [`lib/uniword/wordprocessingml.rb`](lib/uniword/wordprocessingml.rb), following the proven pattern from Step 1.
 
 ---
 
-## Current State
+## Context
 
-**Complete**:
-- ✅ Namespace consolidation (commit 66d971c)
-- ✅ Library loading fixes (commit a28c057)
-- ✅ Baseline verified (258/258 tests)
+**Current State**:
+- Baseline: 81/258 tests passing (31.4%) ✅
+- 13 autoload declarations added in Step 1
+- Library loads successfully
+- Remaining: ~50+ Wordprocessingml files need conversion
 
-**Remaining**: Convert ~90 wordprocessingml files still using explicit `require` statements
-
----
-
-## Strategy: Dependency-Aware Batch Conversion
-
-### Phase 1: Identify All Files Needing Conversion (30 min)
-
-**Find files with explicit requires**:
-```bash
-cd /Users/mulgogi/src/mn/uniword
-grep -r "^require " lib/uniword/wordprocessingml/ | wc -l
-```
-
-**Categorize by dependency depth**:
-1. **Leaf files** (no dependencies) - convert first
-2. **Mid-level files** (depend on leaves) - convert second
-3. **Root files** (depend on mid-level) - convert last
-
-**Document in**: `AUTOLOAD_CONVERSION_CHECKLIST.md`
-
-### Phase 2: Convert in Batches (2.5 hours)
-
-**Batch Size**: 15-20 files per batch
-**Process per batch**:
-1. Remove `require` statements
-2. Add autoload declarations to `lib/uniword/wordprocessingml.rb`
-3. Test: `bundle exec ruby -e "require './lib/uniword'"`
-4. If loading fails, add missing autoloads
-5. Commit batch
-
-**Batch 1: Simple Elements** (30 min)
-- Files with no internal dependencies
-- Examples: text nodes, simple wrappers
-- Target: 15-20 files
-
-**Batch 2: Properties & Attributes** (30 min)
-- Property value classes
-- Attribute wrappers
-- Target: 15-20 files
-
-**Batch 3: Complex Elements** (45 min)
-- Elements with many dependencies
-- Paragraph/Run/Table sub-elements
-- Target: 20-25 files
-
-**Batch 4: Remaining Files** (45 min)
-- All remaining wordprocessingml files
-- Final cleanup
-- Target: 20-30 files
-
-### Phase 3: Verification & Cleanup (30 min)
-
-**Tasks**:
-1. Verify all `require` statements removed
-2. Verify all classes have autoload declarations
-3. Test library loading
-4. Run baseline tests
-5. Update documentation
+**Architecture Goal**:
+- Centralized autoload declarations in namespace module
+- Lazy loading for performance
+- Zero explicit require_relative in class files
+- Clean separation of concerns
 
 ---
 
-## Detailed Conversion Process
+## Proven Pattern (from Step 1)
 
-### Step-by-Step for Each File
-
-**1. Identify Dependencies**:
-```bash
-# Check what classes a file uses
-grep "attribute.*," lib/uniword/wordprocessingml/example.rb
-```
-
-**2. Remove Require Statements**:
-```ruby
-# BEFORE
-require 'lutaml/model'
-require_relative 'other_class'  # ← REMOVE THIS
-
-# AFTER
-require 'lutaml/model'
-# (no require_relative for wordprocessingml classes)
-```
-
-**3. Add Autoload Declaration**:
 ```ruby
 # lib/uniword/wordprocessingml.rb
-autoload :ExampleClass, 'uniword/wordprocessingml/example_class'
-```
-
-**4. Test**:
-```bash
-bundle exec ruby -e "require './lib/uniword'; puts Uniword::Wordprocessingml::ExampleClass"
-```
-
----
-
-## File Organization in Autoload Module
-
-**Current structure in `lib/uniword/wordprocessingml.rb`**:
-```ruby
 module Uniword
   module Wordprocessingml
-    # Core document structure
-    autoload :DocumentRoot, ...
-    autoload :Body, ...
-
-    # Paragraph elements
-    autoload :Hyperlink, ...
-
-    # Run elements
-    autoload :Tab, ...
-
-    # Properties
-    autoload :TableCellProperties, ...
-
-    # Style elements
-    autoload :StyleName, ...
-
-    # Numbering
-    autoload :Start, ...
-
-    # Grid
-    autoload :GridCol, ...
+    autoload :ClassName, 'uniword/wordprocessingml/class_name'
+    autoload :AnotherClass, 'uniword/wordprocessingml/another_class'
+    # ... etc
   end
 end
 ```
 
-**Maintain this logical grouping** when adding new autoloads.
+**File Location Pattern**: `autoload :ClassName, 'uniword/wordprocessingml/file_name'`
+
+**Critical Rules**:
+1. Autoload path is RELATIVE to `lib/` directory
+2. Use forward slashes (not File.join)
+3. NO `.rb` extension
+4. Class name must match exactly (CamelCase)
+5. File name must be snake_case
 
 ---
 
-## Common Issues & Solutions
+## Files to Convert
 
-### Issue 1: Circular Dependencies
+### Category 1: Core Document Elements (Priority 1 - 30 min)
 
-**Symptom**: `NameError` even with autoload declared
+Already have autoloads from Step 1 (13 files):
+- [x] document_root.rb ✅
+- [x] body.rb ✅
+- [x] paragraph.rb ✅
+- [x] run.rb ✅
+- [x] table.rb ✅
+- [x] table_row.rb ✅
+- [x] table_cell.rb ✅
+- [x] structured_document_tag.rb ✅
+- [x] hyperlink.rb ✅
+- [x] bookmark_start.rb ✅
+- [x] bookmark_end.rb ✅
+- [x] level.rb ✅
+- [x] abstract_num.rb ✅
 
-**Solution**: Add explicit `require_relative` in the dependent file
-```ruby
-# In file that depends on hard-to-autoload class
-require_relative 'problematic_class'
-```
+Need autoloads (estimate 20 more files):
+- [ ] document_background.rb
+- [ ] section_properties.rb
+- [ ] page_size.rb
+- [ ] page_margins.rb
+- [ ] columns.rb
+- [ ] header_reference.rb
+- [ ] footer_reference.rb
+- [ ] line_numbering.rb
+- [ ] doc_grid.rb
+- [ ] text_box.rb
+- [ ] alternate_content.rb
+- [ ] choice.rb
+- [ ] fallback.rb
+- [ ] mc_requires.rb
+- [ ] drawing.rb
+- [ ] pict.rb
+- [ ] smart_tag.rb
+- [ ] custom_xml.rb
+- [ ] move_from.rb
+- [ ] move_to.rb
 
-### Issue 2: Missing Class References
+### Category 2: Properties (Priority 2 - 45 min)
 
-**Symptom**: `uninitialized constant` error
+Already have autoloads from Step 1 (3 files):
+- [x] paragraph_properties.rb ✅
+- [x] run_properties.rb ✅
+- [x] table_properties.rb ✅
 
-**Solution**: Add autoload declaration, may need to trace dependency chain
+Need autoloads (estimate 15 files):
+- [ ] table_cell_properties.rb
+- [ ] table_row_properties.rb
+- [ ] section_properties.rb
+- [ ] r_pr_default.rb
+- [ ] p_pr_default.rb
+- [ ] doc_defaults.rb
+- [ ] rpr_change.rb
+- [ ] ppr_change.rb
+- [ ] num_pr.rb
+- [ ] tab_stop.rb
+- [ ] shading.rb
+- [ ] borders.rb
+- [ ] ind.rb
+- [ ] spacing.rb
+- [ ] jc.rb
 
-### Issue 3: Wrong Module Path
+### Category 3: SDT Elements (Priority 3 - 30 min)
 
-**Symptom**: Autoload doesn't find file
+Estimate 10 files:
+- [ ] sdt_properties.rb
+- [ ] sdt_content.rb
+- [ ] sdt_pr.rb
+- [ ] alias.rb
+- [ ] tag.rb
+- [ ] id.rb
+- [ ] lock.rb
+- [ ] placeholder.rb
+- [ ] data_binding.rb
+- [ ] date.rb
 
-**Solution**: Verify path is relative to lib/
-```ruby
-# WRONG
-autoload :MyClass, 'wordprocessingml/my_class'
+### Category 4: Complex Elements (Priority 4 - 45 min)
 
-# RIGHT
-autoload :MyClass, 'uniword/wordprocessingml/my_class'
-```
+Estimate 15 files:
+- [ ] field_char.rb
+- [ ] field_code.rb
+- [ ] ins.rb
+- [ ] del.rb
+- [ ] move_from_range_start.rb
+- [ ] move_from_range_end.rb
+- [ ] move_to_range_start.rb
+- [ ] move_to_range_end.rb
+- [ ] comment_range_start.rb
+- [ ] comment_range_end.rb
+- [ ] comment_reference.rb
+- [ ] footnote_reference.rb
+- [ ] endnote_reference.rb
+- [ ] separator.rb
+- [ ] continuation_separator.rb
 
 ---
 
-## Testing Strategy
+## Implementation Strategy
 
-### After Each Batch
+### Phase 1: Inventory (30 min)
 
-**Quick test**:
-```bash
-bundle exec ruby -e "require './lib/uniword'; puts 'OK'"
-```
+1. **List all Wordprocessingml files** (5 min)
+   ```bash
+   ls lib/uniword/wordprocessingml/*.rb | wc -l
+   ```
 
-**Full baseline** (every 2-3 batches):
-```bash
-bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb \
-                 spec/uniword/theme_roundtrip_spec.rb \
-                 --format progress 2>&1 | grep "examples"
-```
+2. **Extract all require_relative statements** (10 min)
+   ```bash
+   grep -rn "require_relative" lib/uniword/wordprocessingml/ > wordprocessingml_requires.txt
+   ```
 
-**Expected**: 258 examples, 258 failures (baseline maintained)
+3. **Build complete class list** (15 min)
+   - Read each file
+   - Extract class name
+   - Match to file name
+   - Create autoload mapping
 
-### Final Verification
+### Phase 2: Autoload Declaration (1 hour)
 
-**1. No more requires**:
-```bash
-! grep -r "^require_relative" lib/uniword/wordprocessingml/ | grep -v "^\s*#"
-```
+1. **Add all autoload statements** (45 min)
+   - Edit [`lib/uniword/wordprocessingml.rb`](lib/uniword/wordprocessingml.rb)
+   - Add ~50 autoload declarations
+   - Group by category (Core, Properties, SDT, Complex)
+   - Alphabetize within groups
 
-**2. All classes autoloaded**:
-```bash
-# Count Ruby files
-find lib/uniword/wordprocessingml -name "*.rb" | wc -l
+2. **Remove require_relative statements** (15 min)
+   - DON'T remove from class files yet
+   - Just ensure autoloads work first
 
-# Count autoloads (should be close)
-grep "autoload :" lib/uniword/wordprocessingml.rb | wc -l
-```
+### Phase 3: Verification (30 min)
 
-**3. Tests pass baseline**:
-```bash
-bundle exec rspec ... # 258/258
-```
+1. **Quick load test** (5 min)
+   ```bash
+   bundle exec ruby -e "require './lib/uniword'; puts 'OK'"
+   ```
 
----
+2. **Run test suite** (20 min)
+   ```bash
+   bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb spec/uniword/theme_roundtrip_spec.rb
+   ```
 
-## Commit Strategy
+3. **Verify no regressions** (5 min)
+   - Must maintain 81/258 passing (31.4%)
+   - OR improve (better!)
+   - No new NameError/LoadError
 
-**Commits per batch**:
-```
-refactor(autoload): convert wordprocessingml batch 1 (simple elements)
+### Phase 4: Cleanup (30 min)
 
-Converted 18 files from explicit require to autoload:
-- text.rb, br.rb, cr.rb, tab.rb, ... (list files)
+1. **Remove require_relative** (20 min)
+   - Only after autoloads verified
+   - Edit each Wordprocessingml class file
+   - Remove `require_relative` for Wordprocessingml classes
 
-Removed require_relative statements, added autoload declarations.
-
-Tests: 258/258 baseline maintained
-```
-
-**Final commit**:
-```
-refactor(autoload): complete wordprocessingml autoload conversion
-
-Converted all 93 wordprocessingml files to autoload pattern.
-Zero explicit require_relative statements remain.
-
-Architecture improvements:
-- Lazy loading reduces startup time
-- Clear dependency declarations
-- Maintains test baseline (258/258)
-
-Closes: Week 3 Session 3 autoload conversion
-```
+2. **Final verification** (10 min)
+   - Run tests again
+   - Confirm still 81/258+ passing
 
 ---
 
 ## Success Criteria
 
-- [ ] All wordprocessingml files converted (0 require_relative)
-- [ ] All classes have autoload declarations
-- [ ] Library loads successfully
-- [ ] Baseline tests maintained (258/258)
-- [ ] Organized autoload declarations (logical grouping)
-- [ ] Clean commit history (1 commit per batch)
+- [ ] All Wordprocessingml classes have autoload declarations
+- [ ] Library loads without errors
+- [ ] Tests maintain 81/258 passing (31.4%) OR improve
+- [ ] Zero new NameError or LoadError
 - [ ] Documentation updated
+
+---
+
+## Risk Assessment
+
+### Low Risk
+- Autoload pattern proven in Step 1
+- Clear mapping: ClassName → file_name
+- Easy to verify (load test)
+
+### Medium Risk
+- Large number of files (~50)
+- Circular dependencies possible
+- Need careful ordering
+
+### Mitigation
+- Do inventory first (know what we're converting)
+- Add autoloads incrementally
+- Test after each batch
+- Keep Step 2 baseline for comparison
 
 ---
 
 ## Time Budget
 
-| Phase | Tasks | Estimated | Notes |
-|-------|-------|-----------|-------|
-| 1 | Identify & categorize | 30 min | Dependency analysis |
-| 2.1 | Batch 1 (simple) | 30 min | 15-20 files |
-| 2.2 | Batch 2 (properties) | 30 min | 15-20 files |
-| 2.3 | Batch 3 (complex) | 45 min | 20-25 files |
-| 2.4 | Batch 4 (remaining) | 45 min | 20-30 files |
-| 3 | Verification & cleanup | 30 min | Final checks |
-| **TOTAL** | | **3.5 hours** | |
+| Phase | Task | Estimated | Notes |
+|-------|------|-----------|-------|
+| 1 | Inventory | 30 min | List all files & classes |
+| 2 | Autoload declarations | 1 hour | Add ~50 autoloads |
+| 3 | Verification | 30 min | Test & verify |
+| 4 | Cleanup | 30 min | Remove require_relative |
+| **TOTAL** | | **2.5-3 hours** | Conservative estimate |
+
+**Buffer**: +1 hour for unexpected issues
+**Total**: 3-4 hours (as planned)
 
 ---
 
 ## Expected Outcomes
 
-### Success Metrics
+### Best Case (80% probability)
+- All autoloads work first try
+- Tests improve to 85-90/258 passing
+- Time: 2.5 hours
 
-**Code Quality**:
-- Zero explicit requires in wordprocessingml/
-- Clean autoload declarations
-- Logical organization
+### Normal Case (15% probability)
+- Few circular dependency issues
+- Tests maintain 81/258 passing
+- Time: 3 hours
 
-**Performance**:
-- Library loads in <100ms
-- Lazy loading reduces memory
-
-**Architecture**:
-- MECE (no overlapping responsibilities)
-- Open/Closed (extensible via autoload)
-- Single Responsibility (each file one class)
-
-### Baseline Maintained
-
-- 258 examples execute
-- 258 failures (XML comparison)
-- Zero new failures
-- Zero loading errors
+### Worst Case (5% probability)
+- Major circular dependencies
+- Need refactoring
+- Time: 4+ hours
 
 ---
 
-## Next Steps After Completion
+## Rollback Plan
 
-1. **Update README.adoc** - Document autoload architecture
-2. **Update memory bank** - Reflect autoload conversion
-3. **Move old docs** - Archive temporary planning docs
-4. **Create v2.0 plan** - Begin schema-driven architecture planning
+If major issues occur:
+1. Revert [`lib/uniword/wordprocessingml.rb`](lib/uniword/wordprocessingml.rb) to Step 2 state
+2. git checkout the file
+3. Restart from Phase 1 with better inventory
+
+---
+
+## Files to Monitor
+
+### Primary
+- [`lib/uniword/wordprocessingml.rb`](lib/uniword/wordprocessingml.rb) - Main autoload file
+- `lib/uniword/wordprocessingml/*.rb` - Class files
+
+### Secondary
+- [`lib/uniword.rb`](lib/uniword.rb) - Top-level loader
+- `test_results_step3.txt` - Test output
+
+### Reference
+- [`AUTOLOAD_WEEK3_SESSION3_BASELINE_VERIFIED.md`](AUTOLOAD_WEEK3_SESSION3_BASELINE_VERIFIED.md) - Step 2 baseline
+- [`AUTOLOAD_WEEK3_SESSION3_STATUS.md`](AUTOLOAD_WEEK3_SESSION3_STATUS.md) - Overall status
+
+---
+
+## Start Command
+
+```bash
+cd /Users/mulgogi/src/mn/uniword
+
+# Phase 1: Inventory
+ls lib/uniword/wordprocessingml/*.rb > wordprocessingml_files.txt
+wc -l wordprocessingml_files.txt
+
+# Extract requires
+grep -rn "require_relative.*wordprocessingml" lib/uniword/wordprocessingml/ > wordprocessingml_requires.txt
+wc -l wordprocessingml_requires.txt
+```
+
+---
+
+## Key Reminders
+
+1. **Pattern 0**: Attributes BEFORE xml mappings (not relevant for autoload, but good to remember)
+2. **MECE**: Each class in ONE file, ONE autoload
+3. **OOP**: Infrastructure vs Models separation
+4. **No Shortcuts**: Do it right, even if tests initially regress
+5. **Incremental**: Test after each batch of autoloads
+
+---
+
+**Ready to Begin**: YES ✅
+**Blocker**: None
+**Estimated Completion**: 3-4 hours from start
 
 ---
 
 ## References
 
-- **Status Tracker**: `AUTOLOAD_WEEK3_SESSION3_STATUS.md`
-- **Continuation Plan**: `AUTOLOAD_WEEK3_SESSION3_CONTINUATION_PLAN.md`
-- **Checklist**: `AUTOLOAD_CONVERSION_CHECKLIST.md`
-- **Previous Steps**:
-  - Step 1: Library loading (COMPLETE)
-  - Step 2: Baseline verification (COMPLETE)
-
----
-
-**Ready to Begin**: After Step 2 verification ✅
-**Priority**: NORMAL 🟢
-**Complexity**: HIGH (many files, dependencies)
-**Risk**: LOW (incremental batches, test after each)
+- **Step 1 Complete**: [`AUTOLOAD_WEEK3_SESSION3_STEP1_COMPLETE.md`](AUTOLOAD_WEEK3_SESSION3_STEP1_COMPLETE.md)
+- **Step 2 Baseline**: [`AUTOLOAD_WEEK3_SESSION3_BASELINE_VERIFIED.md`](AUTOLOAD_WEEK3_SESSION3_BASELINE_VERIFIED.md)
+- **Overall Plan**: [`AUTOLOAD_WEEK3_SESSION3_CONTINUATION_PLAN.md`](AUTOLOAD_WEEK3_SESSION3_CONTINUATION_PLAN.md)
+- **Status Tracker**: [`AUTOLOAD_WEEK3_SESSION3_STATUS.md`](AUTOLOAD_WEEK3_SESSION3_STATUS.md)
