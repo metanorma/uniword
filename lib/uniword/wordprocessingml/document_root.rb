@@ -42,7 +42,7 @@ module Uniword
 
           # Apply run formatting from options
           if options.any?
-            run.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+            run.properties ||= RunProperties.new
             run.properties.bold = true if options[:bold]
             run.properties.italic = true if options[:italic]
             run.properties.underline = options[:underline] if options[:underline]
@@ -56,7 +56,7 @@ module Uniword
 
         # Apply paragraph formatting from options
         if options[:style] || options[:alignment] || options[:heading]
-          para.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+          para.properties ||= ParagraphProperties.new
 
           # Handle heading option
           if options[:heading]

@@ -88,7 +88,7 @@ module Uniword
       def validate_properties(paragraph)
         return true if paragraph.properties.nil?
 
-        paragraph.properties.is_a?(Uniword::Ooxml::WordProcessingML::ParagraphProperties)
+        paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
       end
 
       # Get errors related to properties
@@ -98,7 +98,7 @@ module Uniword
       def property_errors(paragraph)
         return [] if paragraph.properties.nil?
 
-        unless paragraph.properties.is_a?(Uniword::Ooxml::WordProcessingML::ParagraphProperties)
+        unless paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
           return ['Properties must be a ParagraphProperties instance']
         end
 

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:tbl>
     class Table < Lutaml::Model::Serializable
-      attribute :properties, Uniword::Ooxml::WordProcessingML::TableProperties
+      attribute :properties, TableProperties
       attribute :grid, TableGrid
       attribute :rows, TableRow, collection: true, default: -> { [] }
       attribute :alternate_content, AlternateContent, default: nil

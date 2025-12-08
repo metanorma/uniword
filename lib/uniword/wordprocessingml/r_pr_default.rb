@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:rPrDefault>
     class RPrDefault < Lutaml::Model::Serializable
-      attribute :rPr, Uniword::Ooxml::WordProcessingML::RunProperties
+      attribute :rPr, RunProperties
 
       xml do
         element 'rPrDefault'

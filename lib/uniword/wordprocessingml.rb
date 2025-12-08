@@ -63,6 +63,11 @@ module Uniword
     autoload :RPrDefault, 'uniword/wordprocessingml/r_pr_default'
     autoload :PPrDefault, 'uniword/wordprocessingml/p_pr_default'
 
+    # Properties classes (consolidated from Ooxml::WordProcessingML)
+    autoload :ParagraphProperties, 'uniword/wordprocessingml/paragraph_properties'
+    autoload :RunProperties, 'uniword/wordprocessingml/run_properties'
+    autoload :TableProperties, 'uniword/wordprocessingml/table_properties'
+
     # Grid
     autoload :GridCol, 'uniword/wordprocessingml/grid_col'
   end

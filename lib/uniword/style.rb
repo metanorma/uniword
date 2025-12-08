@@ -50,9 +50,9 @@ module Uniword
     attribute :unhide_when_used, :boolean, default: -> { false }
 
     # Formatting properties
-    attribute :paragraph_properties, Ooxml::WordProcessingML::ParagraphProperties
-    attribute :run_properties, Ooxml::WordProcessingML::RunProperties
-    attribute :table_properties, Ooxml::WordProcessingML::TableProperties
+    attribute :paragraph_properties, Wordprocessingml::ParagraphProperties
+    attribute :run_properties, Wordprocessingml::RunProperties
+    attribute :table_properties, Wordprocessingml::TableProperties
 
     # XML mappings come AFTER attributes
     xml do

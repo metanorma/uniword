@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:r>
     class Run < Lutaml::Model::Serializable
-      attribute :properties, Uniword::Ooxml::WordProcessingML::RunProperties
+      attribute :properties, RunProperties
       attribute :text, :string
       attribute :tab, Tab
       attribute :break, Break
@@ -44,84 +44,84 @@ module Uniword
 
       # Set bold formatting
       def bold=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.bold = value
         self
       end
 
       # Set italic formatting
       def italic=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.italic = value
         self
       end
 
       # Set underline formatting
       def underline=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.underline = value == true ? 'single' : value.to_s
         self
       end
 
       # Set text color
       def color=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.color = value
         self
       end
 
       # Set font
       def font=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.font = value
         self
       end
 
       # Set font size in points
       def size=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.sz = value * 2
         self
       end
 
       # Set strike-through formatting
       def strike=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.strike = value
         self
       end
 
       # Set double-strike-through formatting
       def double_strike=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.double_strike = value
         self
       end
 
       # Set small caps formatting
       def small_caps=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.small_caps = value
         self
       end
 
       # Set all caps formatting
       def caps=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.caps = value
         self
       end
 
       # Set highlight color
       def highlight=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.highlight = value
         self
       end
 
       # Set vertical alignment (superscript/subscript)
       def vert_align=(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+        self.properties ||= RunProperties.new
         properties.vert_align = value
         self
       end

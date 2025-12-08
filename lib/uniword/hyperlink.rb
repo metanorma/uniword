@@ -61,7 +61,7 @@ module Uniword
         text_content = attributes.delete(:text)
         run = Run.new(text: text_content)
         # Apply default hyperlink style
-        run.properties = Ooxml::WordProcessingML::RunProperties.new(
+        run.properties = Wordprocessingml::RunProperties.new(
           color: '0563C1',
           underline: 'single'
         )

@@ -14,7 +14,6 @@ require_relative 'uniword/version'
 
 # Load OOXML namespaces FIRST (needed by generated classes)
 require_relative 'uniword/ooxml/namespaces'
-require_relative 'uniword/ooxml/wordprocessingml'
 require_relative 'uniword/properties'
 
 # Namespace modules with cross-dependencies MUST be eagerly loaded
@@ -70,9 +69,9 @@ module Uniword
   TableCell = Wordprocessingml::TableCell
 
   # Properties classes
-  ParagraphProperties = Ooxml::WordProcessingML::ParagraphProperties
-  RunProperties = Ooxml::WordProcessingML::RunProperties
-  TableProperties = Ooxml::WordProcessingML::TableProperties
+  ParagraphProperties = Wordprocessingml::ParagraphProperties
+  RunProperties = Wordprocessingml::RunProperties
+  TableProperties = Wordprocessingml::TableProperties
   SectionProperties = Wordprocessingml::SectionProperties
 
   # Additional element classes

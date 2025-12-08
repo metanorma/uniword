@@ -19,9 +19,9 @@ module Uniword
       attribute :link, Link
       attribute :uiPriority, UiPriority
       attribute :qFormat, :boolean
-      attribute :pPr, Uniword::Ooxml::WordProcessingML::ParagraphProperties
-      attribute :rPr, Uniword::Ooxml::WordProcessingML::RunProperties
-      attribute :tblPr, Uniword::Ooxml::WordProcessingML::TableProperties
+      attribute :pPr, ParagraphProperties
+      attribute :rPr, RunProperties
+      attribute :tblPr, TableProperties
       attribute :tcPr, TableCellProperties
 
       xml do

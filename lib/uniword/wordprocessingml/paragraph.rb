@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:p>
     class Paragraph < Lutaml::Model::Serializable
-      attribute :properties, Uniword::Ooxml::WordProcessingML::ParagraphProperties
+      attribute :properties, ParagraphProperties
       attribute :runs, Run, collection: true, default: -> { [] }
       attribute :hyperlinks, Hyperlink, collection: true, default: -> { [] }
       attribute :bookmark_starts, BookmarkStart, collection: true, default: -> { [] }
@@ -65,7 +65,7 @@ module Uniword
         run.text = text
 
         if options.any?
-          run.properties ||= Uniword::Ooxml::WordProcessingML::RunProperties.new
+          run.properties ||= RunProperties.new
           run.properties.bold = true if options[:bold]
           run.properties.italic = true if options[:italic]
           run.properties.underline = options[:underline] if options[:underline]
@@ -108,7 +108,7 @@ module Uniword
       # @param alignment [String, Symbol] Alignment value (left, center, right, justify)
       # @return [self] For method chaining
       def align(alignment)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.alignment = alignment.to_s
         self
       end
@@ -118,7 +118,7 @@ module Uniword
       # @param style_name [String] Style name or ID
       # @return [self] For method chaining
       def set_style(style_name)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.style = style_name
         self
       end
@@ -129,7 +129,7 @@ module Uniword
       # @param level [Integer] Numbering level (0-based)
       # @return [self] For method chaining
       def set_numbering(num_id, level = 0)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.num_id = num_id
         properties.ilvl = level
         self
@@ -140,7 +140,7 @@ module Uniword
       # @param value [Integer] Spacing in twips (1/1440 inch)
       # @return [self] For method chaining
       def spacing_before(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.spacing_before = value
         self
       end
@@ -150,7 +150,7 @@ module Uniword
       # @param value [Integer] Spacing in twips (1/1440 inch)
       # @return [self] For method chaining
       def spacing_after(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.spacing_after = value
         self
       end
@@ -161,7 +161,7 @@ module Uniword
       # @param rule [String] Line rule (auto, exact, atLeast)
       # @return [self] For method chaining
       def line_spacing(value, rule = 'auto')
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.line_spacing = value
         properties.line_rule = rule
         self
@@ -172,7 +172,7 @@ module Uniword
       # @param value [Integer] Indent in twips (1/1440 inch)
       # @return [self] For method chaining
       def indent_left(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.indent_left = value
         self
       end
@@ -182,7 +182,7 @@ module Uniword
       # @param value [Integer] Indent in twips (1/1440 inch)
       # @return [self] For method chaining
       def indent_right(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.indent_right = value
         self
       end
@@ -192,7 +192,7 @@ module Uniword
       # @param value [Integer] Indent in twips (1/1440 inch)
       # @return [self] For method chaining
       def indent_first_line(value)
-        self.properties ||= Uniword::Ooxml::WordProcessingML::ParagraphProperties.new
+        self.properties ||= ParagraphProperties.new
         properties.indent_first_line = value
         self
       end

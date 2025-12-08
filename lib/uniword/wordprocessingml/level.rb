@@ -14,8 +14,8 @@ module Uniword
       attribute :numFmt, NumFmt
       attribute :lvlText, LvlText
       attribute :lvlJc, LvlJc
-      attribute :pPr, Uniword::Ooxml::WordProcessingML::ParagraphProperties
-      attribute :rPr, Uniword::Ooxml::WordProcessingML::RunProperties
+      attribute :pPr, ParagraphProperties
+      attribute :rPr, RunProperties
 
       xml do
         element 'lvl'

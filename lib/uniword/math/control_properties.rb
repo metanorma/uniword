@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:ctrlPr>
     class ControlProperties < Lutaml::Model::Serializable
       # Pattern 0: Attribute BEFORE xml mapping
-      attribute :run_properties, Uniword::Ooxml::WordProcessingML::RunProperties
+      attribute :run_properties, Uniword::Wordprocessingml::RunProperties
 
       xml do
         element 'ctrlPr'
