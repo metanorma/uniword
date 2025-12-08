@@ -126,12 +126,12 @@ module Uniword
         :dotm
       when '.thmx'
         :thmx
-      when '.mhtml', '.mht'
+      when '.mhtml', '.mht', '.doc'
         :mhtml
       else
         raise ArgumentError,
               "Unsupported file extension: #{extension}. " \
-              'Supported extensions: .docx, .dotx, .dotm, .thmx, .mhtml, .mht'
+              'Supported extensions: .docx, .dotx, .dotm, .thmx, .mhtml, .mht, .doc'
       end
     end
   end

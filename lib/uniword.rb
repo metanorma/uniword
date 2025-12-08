@@ -141,6 +141,7 @@ module Uniword
     autoload :DocxPackage, 'uniword/ooxml/docx_package'
     autoload :DotxPackage, 'uniword/ooxml/dotx_package'
     autoload :ThmxPackage, 'uniword/ooxml/thmx_package'
+    autoload :MhtmlPackage, 'uniword/ooxml/mhtml_package'
 
     # Namespace definitions
     module Namespaces

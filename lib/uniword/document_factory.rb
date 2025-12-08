@@ -61,8 +61,8 @@ module Uniword
           require_relative 'ooxml/dotx_package'
           Ooxml::DotxPackage.from_file(path)
         when :mhtml
-          # TODO: Session 2 will implement this
-          raise ArgumentError, "MHTML format not yet migrated to model-driven architecture"
+          require_relative 'ooxml/mhtml_package'
+          Ooxml::MhtmlPackage.from_file(path)
         else
           raise ArgumentError, "Unsupported format: #{format}"
         end

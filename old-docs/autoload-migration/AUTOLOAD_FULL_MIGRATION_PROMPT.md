@@ -1,477 +1,224 @@
-# Uniword: Full Autoload Migration - Session 2 Start
+# Uniword: Complete Autoload Migration - Week 1, Day 1
 
-**Context**: Converting all `require_relative` to `autoload` for maintenance simplification
-**Current Status**: Session 1 complete (3/9 namespaces autoloaded)
-**Next**: Session 2 - Complete main file autoload conversion
-**Duration**: ~2 hours
+**Task**: Migrate Wordprocessingml namespace module to use autoload
+**Goal**: Convert ~50 require_relative → autoload in wordprocessingml module
+**Duration**: 4 hours (Day 1 of Week 1)
+**Prerequisites**: Read AUTOLOAD_FULL_MIGRATION_PLAN.md and AUTOLOAD_FULL_MIGRATION_STATUS.md
 
 ---
 
-## Quick Start
+## Quick Context
+
+We've only migrated `lib/uniword.rb` (12 → 10 require_relative). There are still **404 require_relative calls** in the codebase across namespace modules, property files, and feature files.
+
+**Current state**: 416 require_relative total
+**Target state**: ~45 require_relative (89% reduction)
+**Week 1 Goal**: Migrate namespace modules (150 → 10)
+
+---
+
+## Week 1, Day 1: Wordprocessingml Module
+
+### Objective
+Convert the Wordprocessingml namespace module from require_relative to autoload for ~50 classes.
+
+### Current State Analysis
 
 ```bash
+# Check current require_relative usage in wordprocessingml
 cd /Users/mulgogi/src/mn/uniword
-git checkout feature/autoload-migration  # Or create if needed
-bundle install
-bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb  # Verify baseline
+grep -r "require_relative" lib/uniword/wordprocessingml/ --include="*.rb" | wc -l
+# Expected: ~50
 ```
 
----
+### Step 1: Analyze Wordprocessingml Classes (30 minutes)
 
-## Session 2 Overview
-
-**Goal**: Convert ALL `lib/uniword.rb` to use autoload (except critical requires)
-
-**Tasks**:
-1. Remove 6 namespace require_relative statements (convert to autoload)
-2. Add ~50 missing top-level class autoloads
-3. Keep format handler require_relative (with comments)
-4. Convert constant assignments to class methods
-
-**Expected Outcome**:
-- `lib/uniword.rb` uses autoload for all classes
-- Only 3 require_relative remain (version, namespaces, format handlers)
-- All 84 tests still passing
-- API compatibility maintained via methods
-
----
-
-## Task 2.1: Convert Namespace require_relative (15 min)
-
-### Step 1: Backup Current File
+List all classes in wordprocessingml namespace:
 
 ```bash
-cp lib/uniword.rb lib/uniword.rb.session2_backup
+ls -1 lib/uniword/wordprocessingml/*.rb | head -20
 ```
 
-### Step 2: Find and Replace (Lines 18-30)
+Identify which can use autoload:
+- ✅ Classes with no side effects
+- ✅ Classes not used in module-level constants
+- ✅ Classes without circular dependencies
+- ❌ Classes that must be eager-loaded (document as exceptions)
 
-**FIND** (exact match):
+### Step 2: Update lib/uniword/wordprocessingml.rb (2 hours)
+
+Read the current wordprocessingml.rb file:
+
 ```ruby
-# Load namespaces required for immediate constant assignments (lines 59-79) and cross-dependencies
-# These MUST be eagerly loaded due to extensive dependency chains.
-# Analysis shows deep cross-dependencies between core namespaces that prevent autoloading.
-require_relative 'uniword/wordprocessingml'  # Used: Document, Body, Paragraph, Run, Table, etc.
-require_relative 'uniword/wp_drawing'        # Required by: Wordprocessingml::Drawing
-require_relative 'uniword/drawingml'         # Required by: WpDrawing::Inline
-require_relative 'uniword/vml'               # Required by: Wordprocessingml classes (Pict, etc.)
-require_relative 'uniword/math'              # Used: MathElement = Math::OMath
-require_relative 'uniword/shared_types'      # Required by: Multiple namespace property classes
-
-# Autoload remaining namespace modules (loaded only when accessed)
-# These provide ~33% autoload coverage for namespace modules (3/9)
-autoload :ContentTypes, 'uniword/content_types'
-autoload :DocumentProperties, 'uniword/document_properties'
-autoload :Glossary, 'uniword/glossary'
+read_file lib/uniword/wordprocessingml.rb
 ```
 
-**REPLACE WITH**:
+Transform require_relative to autoload. Pattern:
+
+**Before**:
 ```ruby
-# Autoload all namespace modules for maintenance simplicity
-# Strategy: Declarative loading reduces dependency tracking burden
-autoload :Wordprocessingml, 'uniword/wordprocessingml'
-autoload :WpDrawing, 'uniword/wp_drawing'
-autoload :DrawingML, 'uniword/drawingml'
-autoload :Vml, 'uniword/vml'
-autoload :Math, 'uniword/math'
-autoload :SharedTypes, 'uniword/shared_types'
-autoload :ContentTypes, 'uniword/content_types'
-autoload :DocumentProperties, 'uniword/document_properties'
-autoload :Glossary, 'uniword/glossary'
+require_relative 'wordprocessingml/paragraph'
+require_relative 'wordprocessingml/run'
+require_relative 'wordprocessingml/table'
 ```
 
-### Step 3: Verify Syntax
-
-```bash
-ruby -c lib/uniword.rb
-```
-
-**CHECKPOINT**: File syntax is valid
-
----
-
-## Task 2.2: Convert Constant Assignments to Methods (1 hour)
-
-**Critical**: This enables autoload by deferring class resolution
-
-### Step 1: Find Constants Section (Lines 56-79)
-
-**FIND** (exact match):
+**After**:
 ```ruby
 module Uniword
-  # Re-export generated classes as primary API
-  # These are the schema-generated classes from lib/uniword/wordprocessingml/
-  Document = Wordprocessingml::DocumentRoot
-  Body = Wordprocessingml::Body
-  Paragraph = Wordprocessingml::Paragraph
-  Run = Wordprocessingml::Run
-  Table = Wordprocessingml::Table
-  TableRow = Wordprocessingml::TableRow
-  TableCell = Wordprocessingml::TableCell
-
-  # Properties classes
-  ParagraphProperties = Ooxml::WordProcessingML::ParagraphProperties
-  RunProperties = Ooxml::WordProcessingML::RunProperties
-  TableProperties = Ooxml::WordProcessingML::TableProperties
-  SectionProperties = Wordprocessingml::SectionProperties
-
-  # Additional element classes
-  Hyperlink = Wordprocessingml::Hyperlink
-  BookmarkStart = Wordprocessingml::BookmarkStart
-  BookmarkEnd = Wordprocessingml::BookmarkEnd
-
-  # Math support
-  MathElement = Math::OMath
-```
-
-**REPLACE WITH**:
-```ruby
-module Uniword
-  # Re-export generated classes as primary API (lazy evaluation via methods)
-  # These are the schema-generated classes from lib/uniword/wordprocessingml/
-  # Using class methods instead of constants enables autoload while maintaining API compatibility
-  class << self
-    # Document structure classes
-    def Document
-      Wordprocessingml::DocumentRoot
-    end
-    
-    def Body
-      Wordprocessingml::Body
-    end
-    
-    def Paragraph
-      Wordprocessingml::Paragraph
-    end
-    
-    def Run
-      Wordprocessingml::Run
-    end
-    
-    def Table
-      Wordprocessingml::Table
-    end
-    
-    def TableRow
-      Wordprocessingml::TableRow
-    end
-    
-    def TableCell
-      Wordprocessingml::TableCell
-    end
-    
-    # Properties classes
-    def ParagraphProperties
-      Ooxml::WordProcessingML::ParagraphProperties
-    end
-    
-    def RunProperties
-      Ooxml::WordProcessingML::RunProperties
-    end
-    
-    def TableProperties
-      Ooxml::WordProcessingML::TableProperties
-    end
-    
-    def SectionProperties
-      Wordprocessingml::SectionProperties
-    end
-    
-    # Additional element classes
-    def Hyperlink
-      Wordprocessingml::Hyperlink
-    end
-    
-    def BookmarkStart
-      Wordprocessingml::BookmarkStart
-    end
-    
-    def BookmarkEnd
-      Wordprocessingml::BookmarkEnd
-    end
-    
-    # Math support
-    def MathElement
-      Math::OMath
-    end
+  module Wordprocessingml
+    autoload :Paragraph, 'uniword/wordprocessingml/paragraph'
+    autoload :Run, 'uniword/wordprocessingml/run'
+    autoload :Table, 'uniword/wordprocessingml/table'
+    # ... ~50 classes total
   end
+end
 ```
 
-### Step 2: Test API Compatibility
+**Organization**: Group autoloads by category:
+- Document structure (Paragraph, Run, Table, etc.)
+- Properties (ParagraphProperties, RunProperties, etc.)
+- Specialty elements (Math, Drawing, Footnote, etc.)
+
+### Step 3: Remove require_relative from Individual Files (1 hour)
+
+For each wordprocessingml/*.rb file that was autoloaded:
+
+1. Check if it has require_relative for other wordprocessingml classes
+2. If yes, those classes should also be autoloaded in the parent module
+3. Remove the require_relative
+
+**Example**: If `paragraph.rb` has:
+```ruby
+require_relative 'run'
+require_relative 'paragraph_properties'
+```
+
+These should be autoloaded in `wordprocessingml.rb`, and removed from `paragraph.rb`.
+
+### Step 4: Handle Parent Class Loading (30 minutes)
+
+Some classes MUST use require_relative for their parent:
+
+```ruby
+# child_class.rb
+require_relative 'base_element'  # MUST keep - parent class
+class ChildClass < BaseElement
+```
+
+**Rule**: If a class inherits from another class in the same namespace, it MUST require_relative the parent. Document these as exceptions.
+
+### Step 5: Test Changes (1 hour)
+
+Run tests after migration:
 
 ```bash
-bundle exec ruby -e "
-require './lib/uniword'
-puts 'Testing API compatibility...'
-puts 'Document class: ' + Uniword::Document.to_s
-doc = Uniword::Document.new
-puts 'Document.new works: ' + doc.class.to_s
-puts 'SUCCESS: API compatible'
-"
+bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb spec/uniword/theme_roundtrip_spec.rb
 ```
 
-**Expected Output**:
-```
-Testing API compatibility...
-Document class: Uniword::Wordprocessingml::DocumentRoot
-Document.new works: Uniword::Wordprocessingml::DocumentRoot
-SUCCESS: API compatible
-```
+**Expected**: 258/258 tests passing (no regressions)
 
-**CHECKPOINT**: API compatibility verified
+If tests fail:
+1. Check for NameError (uninitialized constant)
+2. Check for circular dependencies
+3. Add require_relative back if autoload isn't feasible
+4. Document why in comments
+
+### Step 6: Update Status Tracker (15 minutes)
+
+Update AUTOLOAD_FULL_MIGRATION_STATUS.md:
+
+```markdown
+## Week 1: Namespace Modules (50/150 complete)
+
+### Day 1-2: Wordprocessingml Module
+**Target**: 50 require_relative → autoload
+**Status**: ✅ COMPLETE
+
+- [x] Analyzed all classes in lib/uniword/wordprocessingml/
+- [x] Created 50 autoload statements
+- [x] Removed require_relative from individual files
+- [x] Tested round-trip preservation (258/258 passing)
+- [x] Updated documentation
+
+**Files migrated**: ~50 wordprocessingml/*.rb files
+**Exceptions documented**: X parent class requires
+```
 
 ---
 
-## Task 2.3: Add Top-Level Class Autoloads (40 min)
+## Expected Outcome
 
-### Step 1: Generate Autoload List
+### Metrics
+| Metric | Before | After | Change |
+|--------|--------|-------|--------|
+| Wordprocessingml require_relative | ~50 | ~5 | -45 (-90%) |
+| Total require_relative | 416 | ~371 | -45 (-11%) |
+| Tests passing | 258/258 | 258/258 | ✅ 0 regressions |
 
-```bash
-cd lib/uniword
-ls *.rb | grep -v "^uniword.rb$" | while read file; do
-  base=$(basename "$file" .rb)
-  class_name=$(echo "$base" | ruby -e 'puts ARGF.read.split("_").map(&:capitalize).join')
-  echo "autoload :$class_name, 'uniword/$base'"
-done | sort > /tmp/top_level_autoloads.txt
+### Files Changed
+- lib/uniword/wordprocessingml.rb (+50 autoloads, -0 require_relative)
+- lib/uniword/wordprocessingml/*.rb (~45 files, -1 require_relative each)
 
-cat /tmp/top_level_autoloads.txt
-```
-
-### Step 2: Add to lib/uniword.rb
-
-**Location**: After existing autoloads (around line 120, after CLI autoload)
-
-**Insert**:
-```ruby
-# === Top-Level Classes (Comprehensive) ===
-# All classes in lib/uniword/*.rb use autoload for maintenance simplicity
-
-# Infrastructure Classes
-autoload :Builder, 'uniword/builder'
-autoload :ElementRegistry, 'uniword/element_registry'
-autoload :LazyLoader, 'uniword/lazy_loader'
-autoload :StreamingParser, 'uniword/streaming_parser'
-autoload :FormatConverter, 'uniword/format_converter'
-autoload :Logger, 'uniword/logger'
-
-# Document Structure Elements
-autoload :Bookmark, 'uniword/bookmark'
-autoload :Chart, 'uniword/chart'
-autoload :ColorScheme, 'uniword/color_scheme'
-autoload :ColumnConfiguration, 'uniword/column_configuration'
-autoload :Comment, 'uniword/comment'
-autoload :CommentRange, 'uniword/comment_range'
-autoload :CommentsPart, 'uniword/comments_part'
-autoload :DocumentVariables, 'uniword/document_variables'
-autoload :Endnote, 'uniword/endnote'
-autoload :Extension, 'uniword/extension'
-autoload :ExtensionList, 'uniword/extension_list'
-autoload :ExtraColorSchemeList, 'uniword/extra_color_scheme_list'
-autoload :Field, 'uniword/field'
-autoload :FontScheme, 'uniword/font_scheme'
-autoload :Footer, 'uniword/footer'
-autoload :Footnote, 'uniword/footnote'
-autoload :FormatScheme, 'uniword/format_scheme'
-autoload :Header, 'uniword/header'
-autoload :Image, 'uniword/image'
-autoload :LineNumbering, 'uniword/line_numbering'
-autoload :MathEquation, 'uniword/math_equation'
-autoload :NumberingDefinition, 'uniword/numbering_definition'
-autoload :NumberingInstance, 'uniword/numbering_instance'
-autoload :NumberingLevel, 'uniword/numbering_level'
-autoload :ObjectDefaults, 'uniword/object_defaults'
-autoload :PageBorders, 'uniword/page_borders'
-autoload :ParagraphBorder, 'uniword/paragraph_border'
-autoload :Picture, 'uniword/picture'
-autoload :Revision, 'uniword/revision'
-autoload :Section, 'uniword/section'
-autoload :SectionProperties, 'uniword/section_properties'
-autoload :Shading, 'uniword/shading'
-autoload :TabStop, 'uniword/tab_stop'
-autoload :TableBorder, 'uniword/table_border'
-autoload :TableCell, 'uniword/table_cell'
-autoload :TableColumn, 'uniword/table_column'
-autoload :TextBox, 'uniword/text_box'
-autoload :TextFrame, 'uniword/text_frame'
-autoload :TrackedChanges, 'uniword/tracked_changes'
-
-# Add any other classes found in lib/uniword/*.rb
-```
-
-**Note**: Verify each file exists before adding autoload. Skip files that don't exist.
-
-### Step 3: Verify Added Autoloads
-
-```bash
-# Count autoloads in main file
-grep "autoload :" lib/uniword.rb | wc -l
-# Expected: ~60+ (was ~40, now ~100+)
-
-# Verify syntax
-ruby -c lib/uniword.rb
-```
-
-**CHECKPOINT**: All top-level classes have autoload statements
-
----
-
-## Task 2.4: Document Format Handler Exception (5 min)
-
-### Update Format Handler Section (Lines 161-162)
-
-**FIND**:
-```ruby
-# Eagerly load format handlers to trigger self-registration
-require_relative 'uniword/formats/docx_handler'
-require_relative 'uniword/formats/mhtml_handler'
-```
-
-**REPLACE WITH**:
-```ruby
-# Eagerly load format handlers to trigger self-registration
-# NOTE: These MUST use require_relative (not autoload) because:
-# 1. Format handlers self-register with FormatHandlerRegistry on load
-# 2. Registration happens via class-level code execution (side effect)
-# 3. Autoload would defer registration until first use
-# This is the ONLY acceptable use of require_relative for non-base files
-require_relative 'uniword/formats/docx_handler'
-require_relative 'uniword/formats/mhtml_handler'
-```
-
-**CHECKPOINT**: Exception documented clearly
-
----
-
-## Final Validation (10 min)
-
-### Step 1: Run Full Test Suite
-
-```bash
-bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb
-```
-
-**Expected**: 84/84 tests passing
-
-### Step 2: Test Autoload Functionality
-
-```bash
-bundle exec ruby -e "
-require './lib/uniword'
-puts 'Files loaded initially: ' + \$LOADED_FEATURES.grep(/uniword/).size.to_s
-
-# Access a class to trigger autoload
-Uniword::DrawingML::SrgbColor
-
-puts 'Files loaded after access: ' + \$LOADED_FEATURES.grep(/uniword/).size.to_s
-puts 'Autoload working: files loaded on demand'
-"
-```
-
-### Step 3: Verify API Still Works
-
-```bash
-bundle exec ruby -e "
-require './lib/uniword'
-doc = Uniword::Document.new
-para = Uniword::Paragraph.new
-puts 'API compatibility: SUCCESS'
-"
-```
-
-### Step 4: Count require_relative
-
-```bash
-grep "require_relative" lib/uniword.rb | grep -v "^#" | wc -l
-```
-
-**Expected**: 3 (version, namespaces, 2 format handlers)
+### Documentation Exceptions
+Document any classes that MUST use require_relative:
+- Parent class loading (e.g., base_element.rb)
+- Circular dependencies
+- Module initialization requirements
 
 ---
 
 ## Success Criteria
 
-- [ ] All namespace loaders use autoload (9/9)
-- [ ] All top-level classes have autoload (~50+)
-- [ ] Only 3 require_relative remain
-- [ ] All 84 tests passing
-- [ ] API compatibility maintained
-- [ ] Autoload functionality verified
-
----
-
-## Commit Changes
-
-```bash
-git add lib/uniword.rb lib/uniword.rb.session2_backup
-git commit -m "feat(autoload): Session 2 - Complete main file autoload conversion
-
-- Converted all 9 namespace modules to autoload
-- Added ~50 top-level class autoloads
-- Converted constant assignments to class methods
-- Maintained API compatibility via method-based access
-- Only 3 require_relative remain (version, namespaces, format handlers)
-
-Changes:
-- lib/uniword.rb: Complete autoload migration
-- All 84 tests passing
-- Zero breaking changes
-- Maintenance burden significantly reduced
-
-Autoload coverage: 33% → 90%"
-```
-
----
-
-## Troubleshooting
-
-### Issue: Tests Fail After Conversion
-
-**Solution**: Check that class methods work correctly
-
-```bash
-bundle exec ruby -e "
-require './lib/uniword'
-puts Uniword::Document
-puts Uniword::Document.new
-"
-```
-
-### Issue: Method Missing Errors
-
-**Solution**: Verify autoload paths are correct
-
-```bash
-# Check file exists
-ls lib/uniword/builder.rb
-
-# Check autoload statement
-grep "autoload :Builder" lib/uniword.rb
-```
-
-### Issue: Constant Not Found
-
-**Solution**: Use method syntax instead of constant syntax
-
-```ruby
-# Before (constant)
-Uniword::Document
-
-# After (method)
-Uniword.Document  # or Uniword::Document (both work)
-```
+- ✅ ~50 require_relative → autoload in wordprocessingml module
+- ✅ All 258 baseline tests passing
+- ✅ Zero regressions
+- ✅ Autoload functionality verified
+- ✅ Exceptions documented
+- ✅ Status tracker updated
 
 ---
 
 ## Next Steps
 
-After Session 2 complete:
-1. Proceed to Session 3 (Create specialized namespace loaders)
-2. Run `bundle exec rspec` to verify all tests
-3. Update implementation status document
+After Day 1 complete:
+1. Update AUTOLOAD_FULL_MIGRATION_STATUS.md
+2. Commit changes: `feat(autoload): Migrate Wordprocessingml module to autoload`
+3. Continue to Week 1, Day 3: Drawing Modules
 
 ---
 
-**Document Ready**: Session 2 implementation guide
-**Estimated Time**: 2 hours
-**Prerequisites**: Session 1 complete
-**Branch**: feature/autoload-migration
+## Troubleshooting
+
+### Issue: NameError (uninitialized constant)
+**Solution**: Class may have circular dependency. Use require_relative and document exception.
+
+### Issue: Tests failing
+**Solution**: Check if class is used in module-level constants. If yes, use require_relative.
+
+### Issue: Autoload not triggering
+**Solution**: Verify file path matches autoload path exactly.
+
+---
+
+## Commands Reference
+
+```bash
+# Count require_relative in wordprocessingml
+grep -r "require_relative" lib/uniword/wordprocessingml/ --include="*.rb" | wc -l
+
+# List all wordprocessingml files
+ls -1 lib/uniword/wordprocessingml/*.rb
+
+# Run tests
+bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb spec/uniword/theme_roundtrip_spec.rb
+
+# Check for circular dependencies
+ruby -e "require './lib/uniword'; puts 'OK'"
+```
+
+---
+
+**Created**: December 4, 2024
+**Status**: Ready to execute
+**Estimated Time**: 4 hours
+**Expected Result**: 50 require_relative → autoload, 0 regressions

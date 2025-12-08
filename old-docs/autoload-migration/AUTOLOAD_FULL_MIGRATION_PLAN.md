@@ -1,483 +1,244 @@
 # Uniword: Complete Autoload Migration Plan
 
-**Goal**: Convert ALL `require_relative` statements to `autoload` for maintenance simplicity
-**Rationale**: Reduce dependency tracking burden, create self-documenting code structure
-**Target**: 100% autoload coverage (except gem requires and critical base files)
-**Timeline**: Compressed - 3 sessions, ~4 hours total
+**Current State**: Only `lib/uniword.rb` migrated (12 require_relative → 10)
+**Remaining**: 404 require_relative calls across 100+ files
+**Goal**: Migrate ALL feasible require_relative to autoload
 
 ---
 
-## Strategic Shift: Maintenance Over Performance
+## Current State Analysis
 
-### Previous Analysis (Session 1)
-- Found only 1.2% file reduction due to cross-dependencies
-- Recommended halting migration due to minimal performance benefit
+```
+Total require_relative calls: 416
+├── lib/uniword.rb: 12 (10 remain - documented exceptions)
+├── Module files: ~150 (namespace modules loading internal classes)
+├── Property files: ~100 (properties loading nested classes)
+├── Feature files: ~154 (individual files loading dependencies)
+```
 
-### New Direction
-**Maintenance Simplification Takes Priority**:
-- `require_relative` creates implicit dependency tracking burden
-- `autoload` is declarative and self-documenting
-- Easier to see what's available without reading individual files
-- Reduces cognitive load for contributors
-- Simplifies future refactoring
-
-**Accept Trade-off**:
-- Performance improvement may be minimal
-- But maintenance burden reduction is significant
-- Self-documenting structure worth the effort
+### Top Offenders
+| File | Count | Type |
+|------|-------|------|
+| stylesets/styleset_xml_parser.rb | 32 | Properties |
+| ooxml/wordprocessingml/run_properties.rb | 16 | Properties |
+| structured_document_tag_properties.rb | 13 | Properties |
+| theme.rb | 11 | Model |
+| cli.rb | 11 | Infrastructure |
+| ooxml/wordprocessingml/paragraph_properties.rb | 10 | Properties |
 
 ---
 
-## Current State (Post-Session 1)
+## Migration Strategy
 
-### ✅ Already Autoloaded (9 namespace loaders exist)
-1. `wordprocessingml.rb` - 200+ classes (dynamic autoload pattern)
-2. `drawingml.rb` - 92 classes
-3. `wp_drawing.rb` - 26 classes
-4. `vml.rb` - 18 classes
-5. `math.rb` - 66 classes
-6. `shared_types.rb` - 15 classes
-7. `content_types.rb` - 3 classes
-8. `document_properties.rb` - 19 classes
-9. `glossary.rb` - 19 classes
+### Phase 1: Namespace Module Files (Priority 1)
+**Target**: ~150 require_relative in 22 namespace files
 
-### ⚠️ Partially Migrated (lib/uniword.rb)
-- Lines 18-30: 3 namespaces autoloaded, 6 require_relative
-- Lines 82-158: Most classes already use autoload
-- Lines 161-162: Format handlers use require_relative (self-registration)
+Convert internal class loading to autoload in:
+- `lib/uniword/wordprocessingml.rb`
+- `lib/uniword/wp_drawing.rb`
+- `lib/uniword/drawingml.rb`
+- `lib/uniword/vml.rb`
+- `lib/uniword/math.rb`
+- `lib/uniword/shared_types.rb`
+- Plus 16 other namespace modules
 
-### ❌ Not Autoloaded Yet
-**Top-level classes** (~50+ classes in lib/uniword/*.rb):
-- Individual element classes
-- Infrastructure classes
-- Format/serialization classes
-- Property classes
+**Example** (wordprocessingml.rb currently has ~0, should have ~50 autoloads):
+```ruby
+module Uniword
+  module Wordprocessingml
+    # Instead of require_relative
+    autoload :Paragraph, 'uniword/wordprocessingml/paragraph'
+    autoload :Run, 'uniword/wordprocessingml/run'
+    # ... etc for ~50 classes
+  end
+end
+```
+
+### Phase 2: Property Files (Priority 2)
+**Target**: ~100 require_relative in property files
+
+Convert nested property loading:
+- `lib/uniword/ooxml/wordprocessingml/run_properties.rb` (16)
+- `lib/uniword/ooxml/wordprocessingml/paragraph_properties.rb` (10)
+- `lib/uniword/ooxml/wordprocessingml/table_properties.rb` (4)
+- `lib/uniword/structured_document_tag_properties.rb` (13)
+
+**Example** (run_properties.rb):
+```ruby
+module Uniword
+  module Ooxml
+    module WordProcessingML
+      class RunProperties
+        # Instead of require_relative for each property
+        autoload :Bold, 'uniword/properties/bold'
+        autoload :Italic, 'uniword/properties/italic'
+        # ... etc
+      end
+    end
+  end
+end
+```
+
+### Phase 3: Feature Files (Priority 3)
+**Target**: ~154 require_relative in feature files
+
+Convert feature dependencies:
+- `lib/uniword/stylesets/styleset_xml_parser.rb` (32)
+- `lib/uniword/theme.rb` (11)
+- `lib/uniword/cli.rb` (11)
+- Others
 
 ---
 
 ## Implementation Plan
 
-### Session 2: Complete Main File Autoload (2 hours)
+### Week 1: Namespace Modules (20 hours)
 
-**Goal**: Convert ALL lib/uniword.rb to use autoload (except critical requires)
+**Day 1-2**: Wordprocessingml module (50+ classes)
+- Analyze all classes in wordprocessingml/
+- Create autoload statements
+- Test round-trip preservation
+- Target: 50 require_relative → autoload
 
-#### Task 2.1: Remove Namespace require_relative (15 min)
+**Day 3**: Drawing modules (wp_drawing, drawingml)
+- WpDrawing: ~15 classes
+- DrawingML: ~25 classes
+- Target: 40 require_relative → autoload
 
-Currently (lines 18-30):
-```ruby
-require_relative 'uniword/wordprocessingml'
-require_relative 'uniword/wp_drawing'
-require_relative 'uniword/drawingml'
-require_relative 'uniword/vml'
-require_relative 'uniword/math'
-require_relative 'uniword/shared_types'
-```
+**Day 4**: Other namespace modules
+- VML, Math, SharedTypes
+- Plus 16 specialty namespaces
+- Target: 60 require_relative → autoload
 
-**Convert to**:
-```ruby
-autoload :Wordprocessingml, 'uniword/wordprocessingml'
-autoload :WpDrawing, 'uniword/wp_drawing'
-autoload :DrawingML, 'uniword/drawingml'
-autoload :Vml, 'uniword/vml'
-autoload :Math, 'uniword/math'
-autoload :SharedTypes, 'uniword/shared_types'
-```
+**Day 5**: Testing & validation
+- Run full test suite
+- Verify autoload functionality
+- Fix any regressions
 
-**Issue**: Lines 59-79 have constant assignments that need immediate resolution.
+**Outcome**: ~150 require_relative → autoload
 
-**Solution**: Convert constant assignments to lazy methods:
-```ruby
-# Before
-Document = Wordprocessingml::DocumentRoot
+### Week 2: Property Files (8 hours)
 
-# After
-def self.Document
-  Wordprocessingml::DocumentRoot
-end
-```
+**Day 1**: Run and Paragraph properties
+- run_properties.rb (16 → autoload)
+- paragraph_properties.rb (10 → autoload)
+- Target: 26 require_relative → autoload
 
-This maintains API compatibility while enabling autoload.
+**Day 2**: Table and SDT properties
+- table_properties.rb (4 → autoload)
+- structured_document_tag_properties.rb (13 → autoload)
+- Target: 17 require_relative → autoload
 
-#### Task 2.2: Add Missing Top-Level Autoloads (1 hour)
+**Day 3**: Remaining property files
+- All other property containers
+- Target: 57 require_relative → autoload
 
-Scan `lib/uniword/*.rb` and add autoload for each:
+**Day 4**: Testing & validation
 
-```bash
-cd lib/uniword
-ls *.rb | grep -v ".rb$" | while read file; do
-  class_name=$(basename "$file" .rb | ruby -e 'puts ARGF.read.split("_").map(&:capitalize).join')
-  echo "autoload :$class_name, 'uniword/$(basename "$file" .rb)'"
-done
-```
+**Outcome**: ~100 require_relative → autoload
 
-Expected additions (~50 classes):
-- `autoload :Bookmark, 'uniword/bookmark'`
-- `autoload :Builder, 'uniword/builder'`
-- `autoload :Chart, 'uniword/chart'`
-- `autoload :ColorScheme, 'uniword/color_scheme'`
-- `autoload :Comment, 'uniword/comment'`
-- ... (continue for all top-level files)
+### Week 3: Feature Files (12 hours)
 
-#### Task 2.3: Handle Format Handler Registration (30 min)
+**Day 1-2**: Large feature files
+- styleset_xml_parser.rb (32 → autoload)
+- theme.rb (11 → autoload)
+- cli.rb (11 → autoload)
 
-**Current Issue**: Format handlers self-register via require_relative
+**Day 3-4**: Medium feature files
+- Document validators, transformers, etc.
+- Target: 100 require_relative → autoload
 
-**Solution**: Keep minimal require_relative for self-registration:
-```ruby
-# Keep these for side-effects (registration)
-require_relative 'uniword/formats/docx_handler'
-require_relative 'uniword/formats/mhtml_handler'
-```
+**Day 5**: Testing & validation
 
-**Rationale**: Self-registration pattern requires eager loading
-
-#### Task 2.4: Convert Constant Assignments to Methods (15 min)
-
-Replace lines 59-79 constant assignments with methods:
-
-```ruby
-# Instead of constants
-class << self
-  def Document
-    Wordprocessingml::DocumentRoot
-  end
-  
-  def Body
-    Wordprocessingml::Body
-  end
-  
-  def Paragraph
-    Wordprocessingml::Paragraph
-  end
-  
-  # ... etc for all constants
-end
-```
-
-**API Compatibility**: `Uniword::Document.new` still works!
+**Outcome**: ~154 require_relative → autoload
 
 ---
 
-### Session 3: Create Missing Namespace Loaders (1.5 hours)
+## Expected Results
 
-**Goal**: Create autoload loaders for specialized namespaces
+### Final State
+| Stage | Before | After | Improvement |
+|-------|--------|-------|-------------|
+| Main entry | 12 | 10 | -2 |
+| Namespace modules | ~150 | ~10 | -140 |
+| Property files | ~100 | ~5 | -95 |
+| Feature files | ~154 | ~20 | -134 |
+| **Total** | **416** | **~45** | **-371 (-89%)** |
 
-#### Task 3.1: Create lib/uniword/accessibility.rb (15 min)
-
-```ruby
-# frozen_string_literal: true
-
-module Uniword
-  module Accessibility
-    autoload :AccessibilityChecker, 'uniword/accessibility/accessibility_checker'
-    autoload :AccessibilityProfile, 'uniword/accessibility/accessibility_profile'
-    autoload :AccessibilityReport, 'uniword/accessibility/accessibility_report'
-    autoload :AccessibilityRule, 'uniword/accessibility/accessibility_rule'
-    autoload :AccessibilityViolation, 'uniword/accessibility/accessibility_violation'
-
-    module Rules
-      autoload :ColorUsageRule, 'uniword/accessibility/rules/color_usage_rule'
-      autoload :ContrastRatioRule, 'uniword/accessibility/rules/contrast_ratio_rule'
-      autoload :DescriptiveHeadingsRule, 'uniword/accessibility/rules/descriptive_headings_rule'
-      autoload :DocumentTitleRule, 'uniword/accessibility/rules/document_title_rule'
-      autoload :HeadingStructureRule, 'uniword/accessibility/rules/heading_structure_rule'
-      autoload :ImageAltTextRule, 'uniword/accessibility/rules/image_alt_text_rule'
-      autoload :LanguageSpecificationRule, 'uniword/accessibility/rules/language_specification_rule'
-      autoload :ListStructureRule, 'uniword/accessibility/rules/list_structure_rule'
-      autoload :ReadingOrderRule, 'uniword/accessibility/rules/reading_order_rule'
-      autoload :TableHeadersRule, 'uniword/accessibility/rules/table_headers_rule'
-    end
-  end
-end
-```
-
-#### Task 3.2: Create lib/uniword/assembly.rb (10 min)
-
-```ruby
-# frozen_string_literal: true
-
-module Uniword
-  module Assembly
-    autoload :AssemblyManifest, 'uniword/assembly/assembly_manifest'
-    autoload :ComponentRegistry, 'uniword/assembly/component_registry'
-    autoload :CrossReferenceResolver, 'uniword/assembly/cross_reference_resolver'
-    autoload :DocumentAssembler, 'uniword/assembly/document_assembler'
-    autoload :TocGenerator, 'uniword/assembly/toc_generator'
-    autoload :VariableSubstitutor, 'uniword/assembly/variable_substitutor'
-  end
-end
-```
-
-#### Task 3.3: Create lib/uniword/batch.rb (15 min)
-
-```ruby
-# frozen_string_literal: true
-
-module Uniword
-  module Batch
-    autoload :BatchResult, 'uniword/batch/batch_result'
-    autoload :DocumentProcessor, 'uniword/batch/document_processor'
-    autoload :ProcessingStage, 'uniword/batch/processing_stage'
-
-    module Stages
-      autoload :CompressImagesStage, 'uniword/batch/stages/compress_images_stage'
-      autoload :ConvertFormatStage, 'uniword/batch/stages/convert_format_stage'
-      autoload :NormalizeStylesStage, 'uniword/batch/stages/normalize_styles_stage'
-      autoload :QualityCheckStage, 'uniword/batch/stages/quality_check_stage'
-      autoload :UpdateMetadataStage, 'uniword/batch/stages/update_metadata_stage'
-      autoload :ValidateLinksStage, 'uniword/batch/stages/validate_links_stage'
-    end
-  end
-end
-```
-
-#### Task 3.4: Register New Namespaces in Main File (10 min)
-
-Add to `lib/uniword.rb`:
-```ruby
-autoload :Accessibility, 'uniword/accessibility'
-autoload :Assembly, 'uniword/assembly'
-autoload :Batch, 'uniword/batch'
-```
+### Remaining require_relative (~45)
+1. **Base requirements** (2): version, ooxml/namespaces
+2. **Namespace cross-deps** (6): Core namespace modules
+3. **Format handlers** (2): docx_handler, mhtml_handler
+4. **Parent class loading** (~20): Classes that must load parent first
+5. **Circular dependencies** (~15): Small set of unavoidable cycles
 
 ---
 
-### Session 4: Testing & Documentation (30 min)
+## Architectural Considerations
 
-**Goal**: Validate changes and update documentation
+### When require_relative is Required
 
-#### Task 4.1: Run Full Test Suite (10 min)
+1. **Parent Class Loading**
+   ```ruby
+   # Child MUST load parent first
+   require_relative 'base_element'
+   class Paragraph < BaseElement
+   ```
 
-```bash
-bundle exec rspec
-# Expected: All tests pass (no API changes)
-```
+2. **Circular Dependencies**
+   ```ruby
+   # Document → Body → Paragraph → Run
+   # Run needs Document constants
+   require_relative '../document'  # Must use require_relative
+   ```
 
-#### Task 4.2: Verify Autoload Coverage (5 min)
+3. **Namespace Initialization**
+   ```ruby
+   # Namespace module must be loaded before classes
+   require_relative 'wordprocessingml'  # Then autoload classes inside
+   ```
 
-```bash
-# Count autoload statements
-grep -r "autoload" lib/uniword/*.rb lib/uniword/**/*.rb | wc -l
-# Expected: 500+ autoload statements
-```
+### Testing Strategy
 
-#### Task 4.3: Update README.adoc (10 min)
-
-Add section:
-```asciidoc
-== Architecture: Autoload-Based Loading
-
-Uniword uses Ruby's `autoload` feature throughout for clean dependency management:
-
-* **Declarative structure**: All available classes visible in loader files
-* **Reduced maintenance**: No manual dependency tracking needed
-* **Self-documenting**: Loader files serve as module indexes
-* **Lazy loading**: Classes load only when accessed
-
-All namespace modules use autoload exclusively, making the codebase structure transparent and easy to navigate.
-```
-
-#### Task 4.4: Move Old Documentation (5 min)
-
-```bash
-mv docs/AUTOLOAD_MIGRATION_COMPLETE.md old-docs/
-mv docs/AUTOLOAD_CONTINUATION_PLAN.md old-docs/
-mv docs/AUTOLOAD_CONTINUATION_PROMPT.md old-docs/
-```
-
----
-
-## Critical Implementation Details
-
-### Handling Constant Assignment Issue
-
-**Problem**: Lines 59-79 in lib/uniword.rb assign constants at module load time
-
-**Solution**: Convert to class methods for lazy resolution:
-
-```ruby
-# lib/uniword.rb
-module Uniword
-  class << self
-    # Re-export generated classes as methods (lazy evaluation)
-    def Document
-      Wordprocessingml::DocumentRoot
-    end
-    
-    def Body
-      Wordprocessingml::Body
-    end
-    
-    def Paragraph
-      Wordprocessingml::Paragraph
-    end
-    
-    def Run
-      Wordprocessingml::Run
-    end
-    
-    def Table
-      Wordprocessingml::Table
-    end
-    
-    def TableRow
-      Wordprocessingml::TableRow
-    end
-    
-    def TableCell
-      Wordprocessingml::TableCell
-    end
-    
-    # Properties classes
-    def ParagraphProperties
-      Ooxml::WordProcessingML::ParagraphProperties
-    end
-    
-    def RunProperties
-      Ooxml::WordProcessingML::RunProperties
-    end
-    
-    def TableProperties
-      Ooxml::WordProcessingML::TableProperties
-    end
-    
-    def SectionProperties
-      Wordprocessingml::SectionProperties
-    end
-    
-    # Additional element classes
-    def Hyperlink
-      Wordprocessingml::Hyperlink
-    end
-    
-    def BookmarkStart
-      Wordprocessingml::BookmarkStart
-    end
-    
-    def BookmarkEnd
-      Wordprocessingml::BookmarkEnd
-    end
-    
-    # Math support
-    def MathElement
-      Math::OMath
-    end
-  end
-end
-```
-
-**API Compatibility**:
-- ✅ `Uniword::Document.new` works (method call)
-- ✅ `Uniword.Document` works (method call)
-- ✅ `doc.is_a?(Uniword::Document)` works (returns the class)
-- ❌ `Uniword::Document` direct constant reference won't work initially
-
-**Alternative** (if constant compatibility critical):
-Use `const_set` with lazy evaluation:
-```ruby
-def self.Document
-  @document_class ||= begin
-    klass = Wordprocessingml::DocumentRoot
-    const_set(:Document, klass) unless const_defined?(:Document, false)
-    klass
-  end
-end
-```
-
-### Format Handler Self-Registration
-
-**Keep these require_relative**:
-```ruby
-# Eagerly load format handlers to trigger self-registration
-require_relative 'uniword/formats/docx_handler'
-require_relative 'uniword/formats/mhtml_handler'
-```
-
-**Rationale**: Self-registration pattern needs side effects at load time.
-
----
-
-## Testing Strategy
-
-### Test Coverage Goals
-
-1. **API Compatibility**: Verify `Uniword::Document.new` still works
-2. **Autoload Functionality**: Verify lazy loading works
-3. **Performance**: Measure file loading (informational only)
-4. **Regression**: All existing tests must pass
-
-### Test Plan
-
-```ruby
-# spec/uniword/autoload_full_spec.rb
-RSpec.describe 'Full Autoload Implementation' do
-  it 'loads minimal files on require' do
-    loaded_before = $LOADED_FEATURES.grep(/uniword/).size
-    require 'uniword'
-    loaded_after = $LOADED_FEATURES.grep(/uniword/).size
-    
-    # Expect < 50 files loaded (vs 257 before)
-    expect(loaded_after - loaded_before).to be < 50
-  end
-  
-  it 'provides API compatibility' do
-    # These should work via method calls
-    expect { Uniword::Document.new }.not_to raise_error
-    expect { Uniword::Paragraph.new }.not_to raise_error
-  end
-  
-  it 'loads classes on demand' do
-    files_before = $LOADED_FEATURES.grep(/uniword/).size
-    
-    # Access a class
-    Uniword::DrawingML::SrgbColor
-    
-    files_after = $LOADED_FEATURES.grep(/uniword/).size
-    expect(files_after).to be > files_before
-  end
-end
-```
+After each phase:
+1. Run full test suite (342+ tests)
+2. Verify autoload triggers correctly
+3. Check no circular dependency errors
+4. Validate memory usage improvements
+5. Measure startup time improvements
 
 ---
 
 ## Success Criteria
 
-1. ✅ **Zero require_relative** (except version, namespaces, format handlers)
-2. ✅ **All tests passing** (84/84 styleset + all others)
-3. ✅ **API compatibility maintained** (method-based access works)
-4. ✅ **Self-documenting structure** (all autoloads visible in loader files)
-5. ✅ **Reduced maintenance burden** (no manual dependency tracking)
+- ✅ 89% reduction in require_relative calls (416 → 45)
+- ✅ All 342+ baseline tests passing
+- ✅ Zero regressions in functionality
+- ✅ Documented exceptions for remaining require_relative
+- ✅ Updated documentation reflecting full migration
+- ✅ Faster startup time (lazy loading)
+- ✅ Lower memory footprint
 
 ---
 
-## Rollback Plan
+## Timeline
 
-If critical issues arise:
-
-```bash
-# Restore from git
-git checkout lib/uniword.rb
-
-# Or revert specific commit
-git revert HEAD
-```
-
-Autoload changes are **non-breaking** since API remains compatible through methods.
+- **Week 1**: Namespace modules (20 hours)
+- **Week 2**: Property files (8 hours)
+- **Week 3**: Feature files (12 hours)
+- **Total**: 40 hours (compressed from 60 hours)
 
 ---
 
-## Timeline Summary
+## Next Steps
 
-- **Session 2**: Complete main file autoload (2 hours)
-- **Session 3**: Create missing namespace loaders (1.5 hours)
-- **Session 4**: Testing & documentation (30 min)
-
-**Total**: ~4 hours (compressed from original 6.5 hours)
-
-**Priority**: Maintenance simplification over performance optimization
+1. Review and approve this plan
+2. Begin Week 1, Day 1: Wordprocessingml module migration
+3. Use systematic approach: analyze → migrate → test → document
+4. Track progress in AUTOLOAD_FULL_MIGRATION_STATUS.md
 
 ---
 
-**Document Version**: 2.0 (Revised Strategy)
-**Status**: Ready for Implementation
-**Next**: Begin Session 2
+**Created**: December 4, 2024
+**Status**: Ready to begin
+**Estimated Completion**: 3 weeks (compressed timeline)
