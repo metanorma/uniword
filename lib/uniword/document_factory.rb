@@ -103,6 +103,46 @@ module Uniword
         from_file(stream, format: format)
       end
 
+      # Create a Theme from a theme file (.thmx).
+      #
+      # IMPORTANT: This returns a Theme object, NOT a Document!
+      # Theme files (.thmx) are standalone packages containing only theme data.
+      #
+      # @param path [String] The file path to .thmx file
+      # @param format [Symbol] The format (:auto, :thmx)
+      # @return [Theme] The loaded theme
+      # @raise [ArgumentError] if path is invalid or not a theme format
+      #
+      # @example Load theme file
+      #   theme = DocumentFactory.from_theme_file("celestial.thmx")
+      #   theme.name # => "Celestial"
+      def from_theme_file(path, format: :auto)
+        validate_path(path)
+
+        format = detect_format(path) if format == :auto
+
+        case format
+        when :thmx
+          require_relative 'ooxml/thmx_package'
+          Ooxml::ThmxPackage.from_file(path)
+        else
+          raise ArgumentError, "Not a theme format: #{format}. Use from_file() for documents."
+        end
+      rescue ArgumentError
+        # Re-raise validation errors as-is
+        raise
+      rescue Zip::Error => e
+        raise CorruptedFileError.new(path.to_s, "Invalid ZIP structure: #{e.message}")
+      rescue Nokogiri::XML::SyntaxError => e
+        raise CorruptedFileError.new(path.to_s, "Invalid XML: #{e.message}")
+      rescue StandardError => e
+        # Re-raise our custom errors
+        raise if e.is_a?(Uniword::Error)
+
+        # Wrap other errors
+        raise CorruptedFileError.new(path.to_s, e.message)
+      end
+
       # Detect the format of a file.
       #
       # Uses FormatDetector for signature-based detection with extension fallback.

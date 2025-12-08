@@ -1,160 +1,137 @@
 # frozen_string_literal: true
 
-require_relative 'package_file'
+require 'lutaml/model'
+require_relative 'namespaces'
+require_relative '../theme'
 
 module Uniword
   module Ooxml
-    # Package handler for theme files (.thmx)
+    # THMX Package - Word Theme format
     #
-    # .thmx files are ZIP packages containing PowerPoint theme definitions:
-    # - theme/theme/theme1.xml: Main theme definition
-    # - theme/media/: Theme images and media
-    # - themeVariants/: Theme variant packages
-    # - [Content_Types].xml: Content type declarations
+    # Represents .thmx (theme) files, which are standalone theme packages.
+    # Unlike DOCX/DOTX, THMX contains ONLY a theme1.xml file.
     #
-    # Note: The theme structure is nested - theme1.xml is at
-    # theme/theme/theme1.xml, not theme/theme1.xml as might be expected.
+    # This is the CORRECT OOP approach:
+    # - ONE model class for the container
+    # - Theme as the sole content attribute
+    # - No serializer/deserializer anti-pattern
     #
-    # @example Access theme1.xml
-    #   package = ThmxPackage.new(path: 'MyTheme.thmx')
-    #   package.extract
-    #   theme_xml = package.read_theme
-    #   package.write_theme(modified_xml)
-    #   package.package('output.thmx')
-    #   package.cleanup
-    class ThmxPackage < PackageFile
-      # Theme directory within package
-      THEME_DIR = 'theme'
+    # @example Load theme
+    #   theme = ThmxPackage.from_file('celestial.thmx')
+    #   theme.name # => "Celestial"
+    #
+    # @example Save theme
+    #   ThmxPackage.to_file(theme, 'output.thmx')
+    class ThmxPackage < Lutaml::Model::Serializable
+      # Theme (the only content in a .thmx file)
+      attribute :theme, Theme
 
-      # Common file paths within package
-      THEME_XML_PATH = 'theme/theme/theme1.xml'
-      THEME_MEDIA_DIR = 'theme/media'
-      VARIANTS_DIR = 'themeVariants'
-      CONTENT_TYPES_PATH = '[Content_Types].xml'
-
-      # Read theme1.xml from package
+      # Load THMX package from file
       #
-      # @return [String] Theme XML content
-      # @raise [Errno::ENOENT] if theme1.xml not found
-      def read_theme
-        read_file(THEME_XML_PATH)
+      # @param path [String] Path to .thmx file
+      # @return [Theme] Loaded theme
+      def self.from_file(path)
+        require_relative '../infrastructure/zip_extractor'
+
+        # Extract ZIP content
+        extractor = Infrastructure::ZipExtractor.new
+        zip_content = extractor.extract(path)
+
+        # Parse package
+        package = from_zip_content(zip_content)
+
+        # Return theme directly (NOT a Document!)
+        package.theme || Theme.new
       end
 
-      # Write theme1.xml to package
+      # Create package from extracted ZIP content
       #
-      # @param xml [String] Theme XML content
+      # @param zip_content [Hash] Extracted ZIP files
+      # @return [ThmxPackage] Package object
+      def self.from_zip_content(zip_content)
+        package = new
+
+        # Parse theme (the only content)
+        if zip_content['theme/theme1.xml']
+          package.theme = Theme.from_xml(zip_content['theme/theme1.xml'])
+        end
+
+        package
+      end
+
+      # Access theme
+      attr_accessor :theme
+
+      # Get supported file extensions
+      #
+      # @return [Array<String>] Array of supported extensions
+      def self.supported_extensions
+        ['.thmx']
+      end
+
+      # Save theme to file
+      #
+      # @param theme [Theme] The theme to save
+      # @param path [String] Output path
+      def self.to_file(theme, path)
+        require_relative '../infrastructure/zip_packager'
+
+        # Create package
+        package = new
+        package.theme = theme
+
+        # Generate ZIP content
+        zip_content = package.to_zip_content
+
+        # Add required OOXML infrastructure files
+        add_required_files(zip_content)
+
+        # Package and save
+        packager = Infrastructure::ZipPackager.new
+        packager.package(zip_content, path)
+      end
+
+      # Generate ZIP content hash
+      #
+      # @return [Hash] File paths => content
+      def to_zip_content
+        content = {}
+
+        # Serialize theme (the only content)
+        if theme
+          content['theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
+        end
+
+        content
+      end
+
+      # Add required OOXML files for a valid THMX package
+      #
+      # @param zip_content [Hash] The ZIP content hash
       # @return [void]
-      def write_theme(xml)
-        write_file(THEME_XML_PATH, xml)
+      def self.add_required_files(zip_content)
+        # Add [Content_Types].xml if not present
+        unless zip_content['[Content_Types].xml']
+          require_relative '../content_types'
+          zip_content['[Content_Types].xml'] =
+            ContentTypes.generate_for_theme.to_xml(declaration: true)
+        end
+
+        # Add _rels/.rels if not present
+        unless zip_content['_rels/.rels']
+          require_relative '../relationships/relationships'
+          zip_content['_rels/.rels'] =
+            Relationships::Relationships.generate_theme_package_rels.to_xml(declaration: true)
+        end
+
+        # Add theme/_rels/theme1.xml.rels if not present (optional but recommended)
+        unless zip_content['theme/_rels/theme1.xml.rels']
+          zip_content['theme/_rels/theme1.xml.rels'] =
+            Relationships::Relationships.generate_theme_rels.to_xml(declaration: true)
+        end
       end
 
-      # Read [Content_Types].xml from package
-      #
-      # @return [String] Content types XML
-      # @raise [Errno::ENOENT] if [Content_Types].xml not found
-      def read_content_types
-        read_file(CONTENT_TYPES_PATH)
-      end
-
-      # Write [Content_Types].xml to package
-      #
-      # @param xml [String] Content types XML
-      # @return [void]
-      def write_content_types(xml)
-        write_file(CONTENT_TYPES_PATH, xml)
-      end
-
-      # Check if package has theme1.xml
-      #
-      # @return [Boolean] true if theme1.xml exists
-      def has_theme?
-        file_exists?(THEME_XML_PATH)
-      end
-
-      # List all media files in theme/media/
-      #
-      # @return [Array<String>] Relative paths of media files
-      def media_files
-        return [] unless extracted_dir
-
-        pattern = File.join(extracted_dir, THEME_MEDIA_DIR, '*')
-        Dir.glob(pattern).select { |f| File.file?(f) }
-           .map { |f| f.sub("#{extracted_dir}/", '') }
-      end
-
-      # Read a media file from package
-      #
-      # @param filename [String] Media filename (e.g., 'image1.png')
-      # @return [String] Binary content of media file
-      # @raise [Errno::ENOENT] if file not found
-      def read_media(filename)
-        path = File.join(THEME_MEDIA_DIR, filename)
-        read_file(path)
-      end
-
-      # Write a media file to package
-      #
-      # @param filename [String] Media filename
-      # @param content [String] Binary content
-      # @return [void]
-      def write_media(filename, content)
-        path = File.join(THEME_MEDIA_DIR, filename)
-        write_file(path, content)
-      end
-
-      # List all theme variants
-      #
-      # Returns variant IDs (e.g., 'variant1', 'variant2')
-      #
-      # @return [Array<String>] Variant identifiers
-      def variants
-        return [] unless extracted_dir
-
-        pattern = File.join(extracted_dir, VARIANTS_DIR, 'variant*')
-        Dir.glob(pattern).select { |f| File.directory?(f) }
-           .map { |f| File.basename(f) }
-           .sort
-      end
-
-      # Read a variant's theme XML
-      #
-      # @param variant_id [String] Variant identifier (e.g., 'variant1')
-      # @return [String] Variant theme XML content
-      # @raise [Errno::ENOENT] if variant not found
-      def read_variant(variant_id)
-        path = File.join(VARIANTS_DIR, variant_id, 'theme/theme/theme1.xml')
-        read_file(path)
-      end
-
-      # Write a variant's theme XML
-      #
-      # @param variant_id [String] Variant identifier
-      # @param xml [String] Variant theme XML content
-      # @return [void]
-      def write_variant(variant_id, xml)
-        path = File.join(VARIANTS_DIR, variant_id, 'theme/theme/theme1.xml')
-        write_file(path, xml)
-      end
-
-      # Check if package has a specific variant
-      #
-      # @param variant_id [String] Variant identifier
-      # @return [Boolean] true if variant exists
-      def has_variant?(variant_id)
-        path = File.join(VARIANTS_DIR, variant_id, 'theme/theme/theme1.xml')
-        file_exists?(path)
-      end
-
-      # List all files in theme/ directory
-      #
-      # @return [Array<String>] Relative paths of files in theme/
-      def theme_files
-        return [] unless extracted_dir
-
-        pattern = File.join(extracted_dir, THEME_DIR, '**', '*')
-        Dir.glob(pattern).select { |f| File.file?(f) }
-           .map { |f| f.sub("#{extracted_dir}/", '') }
-      end
+      private_class_method :add_required_files
     end
   end
 end

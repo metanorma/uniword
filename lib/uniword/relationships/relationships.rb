@@ -45,6 +45,30 @@ module Uniword
         )
       end
 
+      # Generate theme package-level .rels file
+      #
+      # @return [Relationships] Relationships object for _rels/.rels in theme package
+      def self.generate_theme_package_rels
+        new(
+          relationships: [
+            Relationship.new(
+              id: 'rId1',
+              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme',
+              target: 'theme/theme1.xml'
+            )
+          ]
+        )
+      end
+
+      # Generate theme-level .rels file
+      #
+      # @return [Relationships] Relationships object for theme/_rels/theme1.xml.rels
+      def self.generate_theme_rels
+        new(
+          relationships: []
+        )
+      end
+
     end
   end
 end

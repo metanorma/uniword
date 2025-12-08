@@ -84,6 +84,7 @@ module Uniword
   # Autoload infrastructure classes (still needed)
   autoload :DocumentFactory, 'uniword/document_factory'
   autoload :DocumentWriter, 'uniword/document_writer'
+  autoload :ThemeWriter, 'uniword/theme_writer'
   autoload :FormatDetector, 'uniword/format_detector'
 
   # Autoload error classes
@@ -139,6 +140,7 @@ module Uniword
     autoload :Relationships, 'uniword/ooxml/relationships'
     autoload :DocxPackage, 'uniword/ooxml/docx_package'
     autoload :DotxPackage, 'uniword/ooxml/dotx_package'
+    autoload :ThmxPackage, 'uniword/ooxml/thmx_package'
 
     # Namespace definitions
     module Namespaces
