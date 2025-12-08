@@ -22,9 +22,57 @@ module Uniword
     #   package.save_content(my_theme)
     #   package.package('output.thmx')
     #   package.cleanup
-    class ThemePackage < ThmxPackage
+    class ThemePackage
+      # Source file path
+      attr_accessor :path
+
+      # Extracted content (Hash of file paths => content)
+      attr_accessor :extracted_content
+
       # Domain model loaded from package
       attr_reader :theme
+
+      # Initialize with file path
+      #
+      # @param path [String] Path to .thmx file
+      def initialize(path:)
+        @path = path
+        @extracted_content = nil
+        @theme = nil
+      end
+
+      # Extract ZIP package
+      #
+      # @return [void]
+      def extract
+        require_relative '../infrastructure/zip_extractor'
+
+        extractor = Infrastructure::ZipExtractor.new
+        @extracted_content = extractor.extract(@path)
+      end
+
+      # Check if extracted
+      #
+      # @return [Boolean]
+      def extracted_dir
+        @extracted_content
+      end
+
+      # Cleanup extracted content (no-op since we use memory)
+      #
+      # @return [void]
+      def cleanup
+        @extracted_content = nil
+      end
+
+      # Read theme XML from extracted package
+      #
+      # @return [String] Theme XML content
+      def read_theme
+        raise 'Must extract before reading' unless @extracted_content
+
+        @extracted_content['theme/theme1.xml']
+      end
 
       # Load Theme from package
       #
@@ -34,7 +82,7 @@ module Uniword
       # @return [Theme] Loaded Theme model
       # @raise [ArgumentError] if package is invalid
       def load_content
-        extract
+        extract unless @extracted_content
 
         # Read theme XML
         theme_xml = read_theme
@@ -44,13 +92,7 @@ module Uniword
         @theme = Theme.from_xml(theme_xml)
 
         # Store source file reference
-        @theme.source_file = path
-
-        # Load media files
-        @theme.media_files = load_media_files
-
-        # Load variants (if any)
-        @theme.variants = load_variants
+        @theme.source_file = path if @theme
 
         @theme
       end
@@ -64,21 +106,15 @@ module Uniword
       # @return [void]
       # @raise [RuntimeError] if package not extracted
       def save_content(theme)
-        raise 'Must extract before saving' unless extracted_dir
+        raise 'Must extract before saving' unless @extracted_content
 
         @theme = theme
 
         # Serialize Theme to XML using lutaml-model
         theme_xml = theme.to_xml
 
-        # Write to package
-        write_theme(theme_xml)
-
-        # Save media files if any
-        save_media_files(theme.media_files) if theme.media_files&.any?
-
-        # Save variants if any
-        save_variants(theme.variants) if theme.variants&.any?
+        # Update content hash
+        @extracted_content['theme/theme1.xml'] = theme_xml
       end
 
       # Convenience: Load Theme from file

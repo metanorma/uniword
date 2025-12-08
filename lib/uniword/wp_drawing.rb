@@ -7,8 +7,6 @@
 # Namespace: http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing
 # Prefix: wp:
 
-require 'lutaml/model'
-
 module Uniword
   module WpDrawing
     # Drawing Containers (2)

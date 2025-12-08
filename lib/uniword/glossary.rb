@@ -7,8 +7,6 @@
 # Building blocks and document parts (AutoText, Quick Parts, etc.)
 # Generated from: config/ooxml/schemas/glossary.yml
 
-require 'lutaml/model'
-
 module Uniword
   module Glossary
     # Autoload all Glossary classes (19)

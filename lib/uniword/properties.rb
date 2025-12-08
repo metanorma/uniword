@@ -31,9 +31,12 @@ module Uniword
     autoload :Language, 'uniword/properties/language'
     autoload :TextFill, 'uniword/properties/text_fill'
     autoload :TextOutline, 'uniword/properties/text_outline'
+    autoload :Margin, 'uniword/properties/margin'
 
     # Table-specific
     autoload :TableWidth, 'uniword/properties/table_width'
+    autoload :TableCellMargin, 'uniword/properties/table_cell_margin'
+    autoload :TableLook, 'uniword/properties/table_look'
     autoload :CellWidth, 'uniword/properties/cell_width'
     autoload :CellVerticalAlign, 'uniword/properties/cell_vertical_align'
   end

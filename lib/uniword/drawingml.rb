@@ -7,8 +7,6 @@
 # Namespace: http://schemas.openxmlformats.org/drawingml/2006/main
 # Prefix: a:
 
-require 'lutaml/model'
-
 module Uniword
   module Drawingml
     # Graphics Primitives (7)

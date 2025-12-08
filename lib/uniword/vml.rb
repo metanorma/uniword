@@ -8,8 +8,6 @@
 # Namespace: urn:schemas-microsoft-com:vml
 # Prefix: v:
 
-require 'lutaml/model'
-
 module Uniword
   module Generated
     module Vml

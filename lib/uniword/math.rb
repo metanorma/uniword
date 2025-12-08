@@ -7,8 +7,6 @@
 # Office Math Markup Language (OMML) support for equations
 # Auto-generated index file for Math namespace classes
 
-require 'lutaml/model'
-
 module Uniword
   module Math
     # Simple value classes (9)
