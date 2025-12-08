@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../structured_document_tag_properties'
 
 module Uniword
   module Wordprocessingml

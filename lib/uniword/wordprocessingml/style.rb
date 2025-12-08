@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../ooxml/wordprocessingml/paragraph_properties'
-require_relative '../ooxml/wordprocessingml/run_properties'
-require_relative '../ooxml/wordprocessingml/table_properties'
 
 module Uniword
   module Wordprocessingml

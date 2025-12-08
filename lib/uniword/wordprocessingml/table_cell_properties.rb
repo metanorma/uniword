@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../properties/cell_width'
-require_relative '../properties/cell_vertical_align'
-require_relative '../properties/shading'
 
 module Uniword
   module Wordprocessingml

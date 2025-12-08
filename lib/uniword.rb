@@ -14,6 +14,8 @@ require_relative 'uniword/version'
 
 # Load OOXML namespaces FIRST (needed by generated classes)
 require_relative 'uniword/ooxml/namespaces'
+require_relative 'uniword/ooxml/wordprocessingml'
+require_relative 'uniword/properties'
 
 # Namespace modules with cross-dependencies MUST be eagerly loaded
 # These cannot use autoload because:

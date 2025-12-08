@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../ooxml/wordprocessingml/paragraph_properties'
-require_relative '../ooxml/wordprocessingml/run_properties'
 
 module Uniword
   module Wordprocessingml
@@ -24,7 +22,7 @@ module Uniword
       attribute :alternate_content, AlternateContent, default: nil
       attribute :sdts, StructuredDocumentTag, collection: true, default: -> { [] }
       attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, default: -> { [] }
-      
+
       # Pattern 0: Revision tracking attributes (rsid)
       attribute :rsid_r, :string          # Revision ID for paragraph creation
       attribute :rsid_r_default, :string  # Default revision ID
@@ -34,7 +32,7 @@ module Uniword
         element 'p'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        
+
         # Revision tracking attributes
         map_attribute 'rsidR', to: :rsid_r, render_nil: false
         map_attribute 'rsidRDefault', to: :rsid_r_default, render_nil: false
