@@ -120,12 +120,16 @@ module Uniword
       case extension
       when '.docx'
         :docx
+      when '.dotx'
+        :dotx
+      when '.dotm'
+        :dotm
       when '.mhtml', '.mht'
         :mhtml
       else
         raise ArgumentError,
               "Unsupported file extension: #{extension}. " \
-              'Supported extensions: .docx, .mhtml, .mht'
+              'Supported extensions: .docx, .dotx, .dotm, .mhtml, .mht'
       end
     end
   end

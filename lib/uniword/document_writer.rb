@@ -51,6 +51,9 @@ module Uniword
       when :docx
         require_relative 'ooxml/docx_package'
         Ooxml::DocxPackage.to_file(document, path)
+      when :dotx, :dotm
+        require_relative 'ooxml/dotx_package'
+        Ooxml::DotxPackage.to_file(document, path)
       when :mhtml
         # TODO: Session 2 will implement this
         raise ArgumentError, "MHTML format not yet migrated to model-driven architecture"
@@ -74,12 +77,16 @@ module Uniword
       case extension
       when '.docx'
         :docx
+      when '.dotx'
+        :dotx
+      when '.dotm'
+        :dotm
       when '.doc', '.mhtml', '.mht'
         :mhtml
       else
         raise ArgumentError,
               "Cannot infer format from extension: #{extension}. " \
-              'Supported extensions: .docx, .doc, .mhtml, .mht'
+              'Supported extensions: .docx, .dotx, .dotm, .doc, .mhtml, .mht'
       end
     end
 

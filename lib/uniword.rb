@@ -138,6 +138,7 @@ module Uniword
   module Ooxml
     autoload :Relationships, 'uniword/ooxml/relationships'
     autoload :DocxPackage, 'uniword/ooxml/docx_package'
+    autoload :DotxPackage, 'uniword/ooxml/dotx_package'
 
     # Namespace definitions
     module Namespaces

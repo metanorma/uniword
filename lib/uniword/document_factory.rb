@@ -57,6 +57,9 @@ module Uniword
         when :docx
           require_relative 'ooxml/docx_package'
           Ooxml::DocxPackage.from_file(path)
+        when :dotx, :dotm
+          require_relative 'ooxml/dotx_package'
+          Ooxml::DotxPackage.from_file(path)
         when :mhtml
           # TODO: Session 2 will implement this
           raise ArgumentError, "MHTML format not yet migrated to model-driven architecture"
