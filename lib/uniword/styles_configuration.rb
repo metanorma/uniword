@@ -12,26 +12,19 @@ module Uniword
   # This class maintains the collection of all styles in a document,
   # provides access to styles by ID or name, and generates default styles.
   class StylesConfiguration < Lutaml::Model::Serializable
+    # Pattern 0: ATTRIBUTES FIRST
+    # Collection of all styles
+    attribute :styles, Style, collection: true, default: -> { [] }
+
     # OOXML namespace configuration
-    # TEMPORARY: Simplified for v2.0 - style mapping disabled
     xml do
-      element 'styles'
+      root 'styles'
       namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
-      # TEMPORARY: Disabled - requires Style class
-      # map_element 'style', to: :styles
+      # Map style elements
+      map_element 'style', to: :styles
     end
-
-    # Collection of all styles (simplified for v2.0)
-    # TEMPORARY: Disabled attribute declaration (referenced archived Style class)
-    # attribute :styles, Style, collection: true, default: -> { [] }
-
-    # Use simple accessor instead
-    def styles
-      @styles ||= []
-    end
-
-    attr_writer :styles
 
     # Initialize with optional default styles
     #

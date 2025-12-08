@@ -28,11 +28,6 @@ require_relative 'uniword/vml'
 require_relative 'uniword/math'
 require_relative 'uniword/shared_types'
 
-# Autoload remaining namespace modules (no cross-dependencies with format handlers)
-autoload :ContentTypes, 'uniword/content_types'
-autoload :DocumentProperties, 'uniword/document_properties'
-autoload :Glossary, 'uniword/glossary'
-
 # Load extension modules that add convenience methods to generated classes
 
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
@@ -122,7 +117,10 @@ module Uniword
   autoload :ThemePackageReader, 'uniword/theme/theme_package_reader'
 
   # Autoload styleset infrastructure
-  # Note: StylesetLoader and StylesetXmlParser deleted (anti-pattern - should use lutaml-model)
+  module Stylesets
+    autoload :Package, 'uniword/stylesets/package'
+    autoload :YamlStyleSetLoader, 'uniword/stylesets/yaml_styleset_loader'
+  end
 
   # Autoload format handlers
   module Formats
@@ -140,9 +138,12 @@ module Uniword
     autoload :MimePackager, 'uniword/infrastructure/mime_packager'
   end
 
+  autoload :ContentTypes, 'uniword/content_types'
+  autoload :DocumentProperties, 'uniword/document_properties'
+  autoload :Glossary, 'uniword/glossary'
+
   # Autoload OOXML support
   module Ooxml
-    autoload :ContentTypes, 'uniword/ooxml/content_types'
     autoload :Relationships, 'uniword/ooxml/relationships'
     autoload :DocxPackage, 'uniword/ooxml/docx_package'
 
@@ -166,7 +167,7 @@ module Uniword
 
   # === Top-Level Classes (Comprehensive Autoload) ===
   # All top-level classes in lib/uniword/*.rb use autoload for maintenance simplicity
-  
+
   # Document structure and components
   autoload :Bibliography, 'uniword/bibliography'
   autoload :Bookmark, 'uniword/bookmark'
@@ -190,13 +191,13 @@ module Uniword
   autoload :TextBox, 'uniword/text_box'
   autoload :TextFrame, 'uniword/text_frame'
   autoload :TrackedChanges, 'uniword/tracked_changes'
-  
+
   # Table components
   autoload :TableBorder, 'uniword/table_border'
   autoload :TableCell, 'uniword/table_cell'
   autoload :TableColumn, 'uniword/table_column'
   autoload :TableRow, 'uniword/table_row'
-  
+
   # Formatting and styling
   autoload :ColumnConfiguration, 'uniword/column_configuration'
   autoload :Extension, 'uniword/extension'
@@ -213,7 +214,7 @@ module Uniword
   autoload :Shading, 'uniword/shading'
   autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
   autoload :TabStop, 'uniword/tab_stop'
-  
+
   # Infrastructure and utilities
   autoload :Builder, 'uniword/builder'
   autoload :Customxml, 'uniword/customxml'
@@ -222,7 +223,7 @@ module Uniword
   autoload :LazyLoader, 'uniword/lazy_loader'
   autoload :Logger, 'uniword/logger'
   autoload :StreamingParser, 'uniword/streaming_parser'
-  
+
   # Additional namespace loaders (Office ML variants)
   autoload :Office, 'uniword/office'
   autoload :Presentationml, 'uniword/presentationml'

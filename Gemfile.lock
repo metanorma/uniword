@@ -11,7 +11,7 @@ PATH
 PATH
   remote: /Users/mulgogi/src/lutaml/canon
   specs:
-    canon (0.1.4)
+    canon (0.1.6)
       diff-lcs
       json
       moxml

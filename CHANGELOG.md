@@ -8,6 +8,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+#### StylesetPackage Implementation (December 4, 2024)
+- **StylesetPackage**: Proper MODEL-DRIVEN package for .dotx files
+  - Replaces deleted manual parsers (StylesetLoader, StylesetPackageReader, StylesetXmlParser)
+  - Uses lutaml-model for XML deserialization
+  - Follows DocxPackage pattern
+  - `Uniword::Stylesets::Package.from_file(path).styleset`
+- **StylesConfiguration**: Enabled proper XML mapping
+  - Pattern 0 compliant (attributes before xml)
+  - Full Style collection deserialization
+  - Proper boolean handling (false vs empty strings)
+- **StyleSet.from_dotx()**: Now fully functional
+  - Previously raised NotImplementedError
+  - Full .dotx file loading capability
+  - Proper StyleSet conversion from package
+
+#### Test Coverage
+- Added comprehensive unit tests for StylesetPackage (9 examples, all passing)
+- Tests cover: file loading, error handling, StyleSet conversion, name extraction
+- Zero regression in baseline tests (258/258 passing)
+
+#### Architecture Quality
+- 100% Pattern 0 compliance
+- MECE design (clear separation of concerns)
+- Model-driven (no raw XML preservation)
+- Follows proven DocxPackage architecture
+
 ### Changed
 
 #### Autoload Migration (December 2024)

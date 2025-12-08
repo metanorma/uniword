@@ -148,23 +148,25 @@ module Uniword
       # @param zip_content [Hash] The ZIP content hash
       # @return [void]
       def add_required_files(zip_content)
-        require_relative '../ooxml/content_types'
-        require_relative '../ooxml/relationships'
-
         # Add [Content_Types].xml if not present
         unless zip_content['[Content_Types].xml']
-          zip_content['[Content_Types].xml'] = Ooxml::ContentTypes.generate
+          zip_content['[Content_Types].xml'] =
+            ContentTypes.generate.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
         unless zip_content['_rels/.rels']
-          zip_content['_rels/.rels'] = Ooxml::Relationships.generate_package_rels
+          zip_content['_rels/.rels'] =
+            Relationships::Relationships.generate_package_rels.to_xml(declaration: true)
         end
 
         # Add word/_rels/document.xml.rels if not present
-        return if zip_content['word/_rels/document.xml.rels']
-
-        zip_content['word/_rels/document.xml.rels'] = Ooxml::Relationships.generate_document_rels
+        unless zip_content['word/_rels/document.xml.rels']
+          zip_content['word/_rels/document.xml.rels'] =
+            Relationships::Relationships.generate_document_rels.to_xml(
+              declaration: true
+            )
+        end
       end
     end
   end

@@ -40,7 +40,7 @@ module Uniword
     def initialize(attributes = {})
       super
       @styles ||= []
-      @source_file = nil
+      @source_file ||= nil
     end
 
     # Get the number of styles
@@ -106,11 +106,9 @@ module Uniword
     # @example Load StyleSet
     #   styleset = StyleSet.from_dotx('Distinctive.dotx')
     def self.from_dotx(path)
-      # TODO: Implement using StylesetPackage (lutaml-model)
-      # Should be: StylesetPackage.from_file(path).styleset
-      raise NotImplementedError,
-            'StyleSet.from_dotx requires StylesetPackage implementation. ' \
-            'Use StyleSet.load(name) for bundled stylesets.'
+      require_relative 'stylesets/package'
+
+      Stylesets::Package.from_file(path).styleset
     end
 
     # Load bundled StyleSet by name
