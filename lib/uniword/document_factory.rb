@@ -52,9 +52,17 @@ module Uniword
         validate_path(path)
 
         format = detect_format(path) if format == :auto
-        handler = Formats::FormatHandlerRegistry.handler_for(format)
 
-        handler.read(path)
+        case format
+        when :docx
+          require_relative 'ooxml/docx_package'
+          Ooxml::DocxPackage.from_file(path)
+        when :mhtml
+          # TODO: Session 2 will implement this
+          raise ArgumentError, "MHTML format not yet migrated to model-driven architecture"
+        else
+          raise ArgumentError, "Unsupported format: #{format}"
+        end
       rescue ArgumentError
         # Re-raise validation errors as-is
         raise

@@ -7,6 +7,7 @@ require_relative 'app_properties'
 require_relative '../theme'
 require_relative '../styles_configuration'
 require_relative '../numbering_configuration'
+require_relative '../document'
 
 module Uniword
   module Ooxml
@@ -53,14 +54,37 @@ module Uniword
       # Load DOCX package from file
       #
       # @param path [String] Path to .docx file
-      # @return [DocxPackage] Loaded package
+      # @return [Document] Loaded document (Generated::Wordprocessingml::DocumentRoot)
       def self.from_file(path)
         require_relative '../infrastructure/zip_extractor'
 
+        # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
 
-        from_zip_content(zip_content)
+        # Parse package with properties and theme
+        package = from_zip_content(zip_content)
+
+        # Parse main document XML using generated classes
+        # Document is aliased in lib/uniword.rb to Generated::Wordprocessingml::DocumentRoot
+        document = if package.raw_document_xml
+                     Document.from_xml(package.raw_document_xml)
+                   else
+                     Document.new
+                   end
+
+        # Transfer properties from package to document
+        document.core_properties = package.core_properties if package.core_properties
+        document.app_properties = package.app_properties if package.app_properties
+        document.theme = package.theme if package.theme
+
+        # Transfer model-based configurations
+        document.styles_configuration = package.styles_configuration if package.styles_configuration
+        if package.numbering_configuration
+          document.numbering_configuration = package.numbering_configuration
+        end
+
+        document
       end
 
       # Create package from extracted ZIP content
@@ -105,6 +129,46 @@ module Uniword
 
       # Access raw document XML (for compatibility)
       attr_accessor :raw_document_xml
+
+      # Get supported file extensions
+      #
+      # @return [Array<String>] Array of supported extensions
+      def self.supported_extensions
+        ['.docx']
+      end
+
+      # Save document to file
+      #
+      # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
+      # @param path [String] Output path
+      def self.to_file(document, path)
+        require_relative '../infrastructure/zip_packager'
+
+        # Create package
+        package = new
+
+        # Transfer properties to package
+        package.core_properties = document.core_properties || CoreProperties.new
+        package.app_properties = document.app_properties || AppProperties.new
+        package.theme = document.theme
+
+        # Transfer model-based configurations
+        package.styles_configuration = document.styles_configuration
+        package.numbering_configuration = document.numbering_configuration
+
+        # Serialize main document
+        package.raw_document_xml = document.to_xml(encoding: 'UTF-8')
+
+        # Generate ZIP content
+        zip_content = package.to_zip_content
+
+        # Add required OOXML infrastructure files
+        add_required_files(zip_content)
+
+        # Package and save
+        packager = Infrastructure::ZipPackager.new
+        packager.package(zip_content, path)
+      end
 
       # Save package to file
       #
@@ -159,6 +223,36 @@ module Uniword
 
         content
       end
+
+      # Add required OOXML files for a valid DOCX package
+      #
+      # @param zip_content [Hash] The ZIP content hash
+      # @return [void]
+      def self.add_required_files(zip_content)
+        # Add [Content_Types].xml if not present
+        unless zip_content['[Content_Types].xml']
+          require_relative '../content_types'
+          zip_content['[Content_Types].xml'] =
+            ContentTypes.generate.to_xml(declaration: true)
+        end
+
+        # Add _rels/.rels if not present
+        unless zip_content['_rels/.rels']
+          require_relative '../relationships/relationships'
+          zip_content['_rels/.rels'] =
+            Relationships::Relationships.generate_package_rels.to_xml(declaration: true)
+        end
+
+        # Add word/_rels/document.xml.rels if not present
+        unless zip_content['word/_rels/document.xml.rels']
+          zip_content['word/_rels/document.xml.rels'] =
+            Relationships::Relationships.generate_document_rels.to_xml(
+              declaration: true
+            )
+        end
+      end
+
+      private_class_method :add_required_files
     end
   end
 end

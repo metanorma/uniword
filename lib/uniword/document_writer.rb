@@ -46,8 +46,17 @@ module Uniword
       validate_path(path)
 
       format = infer_format(path) if format == :auto
-      handler = Formats::FormatHandlerRegistry.handler_for(format)
-      handler.write(document, path)
+
+      case format
+      when :docx
+        require_relative 'ooxml/docx_package'
+        Ooxml::DocxPackage.to_file(document, path)
+      when :mhtml
+        # TODO: Session 2 will implement this
+        raise ArgumentError, "MHTML format not yet migrated to model-driven architecture"
+      else
+        raise ArgumentError, "Unsupported format for save: #{format}"
+      end
     end
 
     # Infer the format from file extension.

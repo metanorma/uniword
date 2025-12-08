@@ -122,14 +122,6 @@ module Uniword
     autoload :YamlStyleSetLoader, 'uniword/stylesets/yaml_styleset_loader'
   end
 
-  # Autoload format handlers
-  module Formats
-    autoload :BaseHandler, 'uniword/formats/base_handler'
-    autoload :DocxHandler, 'uniword/formats/docx_handler'
-    autoload :MhtmlHandler, 'uniword/formats/mhtml_handler'
-    autoload :FormatHandlerRegistry, 'uniword/formats/format_handler_registry'
-  end
-
   # Autoload infrastructure
   module Infrastructure
     autoload :ZipExtractor, 'uniword/infrastructure/zip_extractor'
@@ -232,16 +224,6 @@ module Uniword
   autoload :Wordprocessingml2010, 'uniword/wordprocessingml_2010'
   autoload :Wordprocessingml2013, 'uniword/wordprocessingml_2013'
   autoload :Wordprocessingml2016, 'uniword/wordprocessingml_2016'
-
-  # Eagerly load format handlers to trigger self-registration
-  # NOTE: These MUST use require_relative (not autoload) because:
-  # 1. Format handlers self-register with FormatHandlerRegistry on load
-  # 2. Registration happens via class-level code execution (side effect)
-  # 3. Autoload would defer registration until first use
-  # Combined with namespace require_relative above, this is an acceptable
-  # exception to the autoload-first strategy due to architectural constraints
-  require_relative 'uniword/formats/docx_handler'
-  require_relative 'uniword/formats/mhtml_handler'
 
   # Module-level convenience methods
   class << self
