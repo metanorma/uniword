@@ -71,7 +71,7 @@ module Uniword
       def read_theme
         raise 'Must extract before reading' unless @extracted_content
 
-        @extracted_content['theme/theme1.xml']
+        @extracted_content['theme/theme/theme1.xml']
       end
 
       # Load Theme from package
@@ -114,7 +114,21 @@ module Uniword
         theme_xml = theme.to_xml
 
         # Update content hash
-        @extracted_content['theme/theme1.xml'] = theme_xml
+        @extracted_content['theme/theme/theme1.xml'] = theme_xml
+      end
+
+      # Package extracted content into ZIP file
+      #
+      # @param output_path [String] Path to output .thmx file
+      # @return [void]
+      # @raise [RuntimeError] if package not extracted
+      def package(output_path)
+        raise 'Must extract before packaging' unless @extracted_content
+
+        require_relative '../infrastructure/zip_packager'
+
+        packager = Infrastructure::ZipPackager.new
+        packager.package(@extracted_content, output_path)
       end
 
       # Convenience: Load Theme from file

@@ -15,6 +15,7 @@ module Uniword
         element 'gsLst'
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
+        ordered
 
         map_element 'gs', to: :gradient_stops, render_nil: false
       end

@@ -17,6 +17,9 @@ require_relative '../properties/shading'
 require_relative '../properties/language'
 require_relative '../properties/text_fill'
 require_relative '../properties/text_outline'
+require_relative '../properties/bold'
+require_relative '../properties/italic'
+require_relative '../properties/boolean_formatting'
 
 module Uniword
   module Wordprocessingml
@@ -54,16 +57,17 @@ module Uniword
       attribute :text_fill, Properties::TextFill
       attribute :text_outline, Properties::TextOutline
 
-      # Boolean formatting
-      attribute :bold, :boolean, default: -> { false }
-      attribute :italic, :boolean, default: -> { false }
-      attribute :strike, :boolean, default: -> { false }
-      attribute :double_strike, :boolean, default: -> { false }
-      attribute :small_caps, :boolean, default: -> { false }
-      attribute :caps, :boolean, default: -> { false }
-      attribute :all_caps, :boolean, default: -> { false } # Alias for caps
-      attribute :hidden, :boolean, default: -> { false }
-      attribute :no_proof, :boolean, default: -> { false } # Disable spell/grammar check
+      # Boolean formatting wrapper objects
+      attribute :bold, Properties::Bold
+      attribute :bold_cs, Properties::BoldCs
+      attribute :italic, Properties::Italic
+      attribute :italic_cs, Properties::ItalicCs
+      attribute :strike, Properties::Strike
+      attribute :double_strike, Properties::DoubleStrike
+      attribute :small_caps, Properties::SmallCaps
+      attribute :caps, Properties::Caps
+      attribute :hidden, Properties::Vanish
+      attribute :no_proof, Properties::NoProof
 
       # Flat attributes (kept as aliases for compatibility)
       attribute :spacing, :integer          # Flat attribute (deprecated)
@@ -95,15 +99,17 @@ module Uniword
         map_element 'sz', to: :size, render_nil: false
         map_element 'szCs', to: :size_cs, render_nil: false
 
-        # Boolean formatting (only render if true)
-        map_element 'b', to: :bold, render_nil: false, render_default: false
-        map_element 'i', to: :italic, render_nil: false, render_default: false
-        map_element 'strike', to: :strike, render_nil: false, render_default: false
-        map_element 'dstrike', to: :double_strike, render_nil: false, render_default: false
-        map_element 'smallCaps', to: :small_caps, render_nil: false, render_default: false
-        map_element 'caps', to: :caps, render_nil: false, render_default: false
-        map_element 'vanish', to: :hidden, render_nil: false, render_default: false
-        map_element 'noProof', to: :no_proof, render_nil: false, render_default: false
+        # Boolean formatting (wrapper objects)
+        map_element 'b', to: :bold, render_nil: false
+        map_element 'bCs', to: :bold_cs, render_nil: false
+        map_element 'i', to: :italic, render_nil: false
+        map_element 'iCs', to: :italic_cs, render_nil: false
+        map_element 'strike', to: :strike, render_nil: false
+        map_element 'dstrike', to: :double_strike, render_nil: false
+        map_element 'smallCaps', to: :small_caps, render_nil: false
+        map_element 'caps', to: :caps, render_nil: false
+        map_element 'vanish', to: :hidden, render_nil: false
+        map_element 'noProof', to: :no_proof, render_nil: false
 
         # Color (wrapper object)
         map_element 'color', to: :color, render_nil: false
@@ -143,18 +149,23 @@ module Uniword
         map_element 'textOutline', to: :text_outline, render_nil: false
       end
 
+      # Helper methods for boolean values (check wrapper.value)
+      def bold?
+        bold&.value == true
+      end
+
+      def italic?
+        italic&.value == true
+      end
+
+      def strike?
+        strike&.value == true
+      end
+
       # Initialize with defaults
       def initialize(attrs = {})
         super
-        @bold ||= false
-        @italic ||= false
-        @strike ||= false
-        @double_strike ||= false
-        @small_caps ||= false
-        @caps ||= false
-        @all_caps ||= false
-        @hidden ||= false
-        @no_proof ||= false
+        # Use ||= to not override parsed values (Pattern 0)
         @character_spacing = @spacing if @spacing
       end
     end

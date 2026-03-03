@@ -52,8 +52,8 @@ module Uniword
         package = new
 
         # Parse theme (the only content)
-        if zip_content['theme/theme1.xml']
-          package.theme = Theme.from_xml(zip_content['theme/theme1.xml'])
+        if zip_content['theme/theme/theme1.xml']
+          package.theme = Theme.from_xml(zip_content['theme/theme/theme1.xml'])
         end
 
         package
@@ -99,7 +99,7 @@ module Uniword
 
         # Serialize theme (the only content)
         if theme
-          content['theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
+          content['theme/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
         end
 
         content
