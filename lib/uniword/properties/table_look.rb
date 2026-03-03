@@ -8,8 +8,8 @@ module Uniword
     # Table conditional formatting flags
     # Represents visual appearance settings for table rows/columns
     # Reference XML:
-    # <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" 
-    #            w:firstColumn="1" w:lastColumn="0" 
+    # <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0"
+    #            w:firstColumn="1" w:lastColumn="0"
     #            w:noHBand="0" w:noVBand="1"/>
     class TableLook < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 require 'uniword/validation/link_validator'
-require 'uniword/hyperlink'
+require 'uniword/wordprocessingml/hyperlink'
 require 'uniword/bookmark'
 require 'uniword/footnote'
 

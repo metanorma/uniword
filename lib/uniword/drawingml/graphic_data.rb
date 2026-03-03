@@ -9,7 +9,7 @@ module Uniword
     class GraphicData < Lutaml::Model::Serializable
       # PATTERN 0: Attributes FIRST
       attribute :uri, :string
-      attribute :picture, :string  # Will be enhanced to Picture class later
+      attribute :picture, :string # Will be enhanced to Picture class later
 
       xml do
         root 'graphicData'

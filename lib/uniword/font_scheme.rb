@@ -3,7 +3,7 @@
 module Uniword
   # Represents a latin, ea, or cs font element
   class FontTypeface < Lutaml::Model::Serializable
-    attribute :typeface, :string, default: -> { "" }
+    attribute :typeface, :string, default: -> { '' }
     attribute :panose, :string
 
     def initialize(attributes = {})

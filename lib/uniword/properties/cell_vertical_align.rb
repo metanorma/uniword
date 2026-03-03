@@ -21,7 +21,7 @@ module Uniword
     #   valign = CellVerticalAlign.new(value: 'center')
     class CellVerticalAlign < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
-      attribute :value, CellVerticalAlignValue  # Alignment: top, center, bottom
+      attribute :value, CellVerticalAlignValue # Alignment: top, center, bottom
 
       xml do
         root 'vAlign'

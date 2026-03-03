@@ -31,7 +31,7 @@ def analyze_document_content(doc, label)
   return unless unknown_count.positive?
 
   puts '    - Unknown element types:'
-  doc.body.elements.select { |e| e.is_a?(Uniword::UnknownElement) }.each do |elem|
+  doc.body.elements.grep(Uniword::UnknownElement).each do |elem|
     puts "      * #{elem.tag_name} (#{elem.element_type})"
   end
 end

@@ -2,8 +2,8 @@
 
 require 'spec_helper'
 require 'uniword/style'
-require 'uniword/paragraph_style'
-require 'uniword/character_style'
+require 'uniword/styles/paragraph_style_definition'
+require 'uniword/styles/character_style_definition'
 require 'uniword/styles_configuration'
 
 RSpec.describe Uniword::Style do
@@ -84,7 +84,7 @@ RSpec.describe Uniword::Style do
   end
 end
 
-RSpec.describe Uniword::ParagraphStyle do
+RSpec.describe Uniword::ParagraphStyleDefinition do
   describe 'Normal style creation' do
     it 'creates default Normal style' do
       style = described_class.normal
@@ -164,7 +164,7 @@ RSpec.describe Uniword::ParagraphStyle do
   end
 end
 
-RSpec.describe Uniword::CharacterStyle do
+RSpec.describe Uniword::CharacterStyleDefinition do
   describe 'default character style' do
     it 'creates default character style' do
       style = described_class.default_char
@@ -248,7 +248,7 @@ RSpec.describe Uniword::StylesConfiguration do
     let(:config) { described_class.new({}, include_defaults: false) }
 
     it 'adds a style' do
-      style = Uniword::ParagraphStyle.new(
+      style = Uniword::ParagraphStyleDefinition.new(
         id: 'Custom',
         name: 'Custom',
         type: 'paragraph'
@@ -261,12 +261,12 @@ RSpec.describe Uniword::StylesConfiguration do
     end
 
     it 'prevents duplicate style IDs' do
-      style1 = Uniword::ParagraphStyle.new(
+      style1 = Uniword::ParagraphStyleDefinition.new(
         id: 'Custom',
         name: 'Custom',
         type: 'paragraph'
       )
-      style2 = Uniword::ParagraphStyle.new(
+      style2 = Uniword::ParagraphStyleDefinition.new(
         id: 'Custom',
         name: 'Custom 2',
         type: 'paragraph'
@@ -280,7 +280,7 @@ RSpec.describe Uniword::StylesConfiguration do
     end
 
     it 'removes a style' do
-      style = Uniword::ParagraphStyle.new(
+      style = Uniword::ParagraphStyleDefinition.new(
         id: 'Custom',
         name: 'Custom',
         type: 'paragraph'
@@ -294,7 +294,7 @@ RSpec.describe Uniword::StylesConfiguration do
     end
 
     it 'finds style by name' do
-      style = Uniword::ParagraphStyle.new(
+      style = Uniword::ParagraphStyleDefinition.new(
         id: 'CustomID',
         name: 'Custom Name',
         type: 'paragraph'
@@ -306,7 +306,7 @@ RSpec.describe Uniword::StylesConfiguration do
     end
 
     it 'finds style by ID or name' do
-      style = Uniword::ParagraphStyle.new(
+      style = Uniword::ParagraphStyleDefinition.new(
         id: 'CustomID',
         name: 'Custom Name',
         type: 'paragraph'
@@ -343,7 +343,7 @@ RSpec.describe Uniword::StylesConfiguration do
     end
 
     it 'filters custom styles' do
-      custom_style = Uniword::ParagraphStyle.new(
+      custom_style = Uniword::ParagraphStyleDefinition.new(
         id: 'Custom',
         name: 'Custom',
         type: 'paragraph',
@@ -370,7 +370,7 @@ RSpec.describe Uniword::StylesConfiguration do
         )
       )
 
-      expect(style).to be_a(Uniword::ParagraphStyle)
+      expect(style).to be_a(Uniword::ParagraphStyleDefinition)
       expect(style.id).to eq('MyStyle')
       expect(style.custom).to be true
       expect(config.style_by_id('MyStyle')).to eq(style)
@@ -385,7 +385,7 @@ RSpec.describe Uniword::StylesConfiguration do
         )
       )
 
-      expect(style).to be_a(Uniword::CharacterStyle)
+      expect(style).to be_a(Uniword::CharacterStyleDefinition)
       expect(style.id).to eq('MyCharStyle')
       expect(style.custom).to be true
       expect(config.style_by_id('MyCharStyle')).to eq(style)
@@ -396,7 +396,7 @@ RSpec.describe Uniword::StylesConfiguration do
     let(:config) { described_class.new({}, include_defaults: false) }
 
     it 'validates all styles' do
-      valid_style = Uniword::ParagraphStyle.new(
+      valid_style = Uniword::ParagraphStyleDefinition.new(
         id: 'Valid',
         name: 'Valid',
         type: 'paragraph'
@@ -412,7 +412,7 @@ RSpec.describe Uniword::StylesConfiguration do
     let(:config) { described_class.new({}, include_defaults: false) }
 
     it 'resolves simple inheritance' do
-      base = Uniword::ParagraphStyle.new(
+      base = Uniword::ParagraphStyleDefinition.new(
         id: 'Base',
         name: 'Base',
         type: 'paragraph',
@@ -421,7 +421,7 @@ RSpec.describe Uniword::StylesConfiguration do
         )
       )
 
-      derived = Uniword::ParagraphStyle.new(
+      derived = Uniword::ParagraphStyleDefinition.new(
         id: 'Derived',
         name: 'Derived',
         type: 'paragraph',

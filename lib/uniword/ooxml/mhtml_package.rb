@@ -73,7 +73,9 @@ module Uniword
         document.app_properties = package.app_properties if package.app_properties
         document.theme = package.theme if package.theme
         document.styles_configuration = package.styles_configuration if package.styles_configuration
-        document.numbering_configuration = package.numbering_configuration if package.numbering_configuration
+        if package.numbering_configuration
+          document.numbering_configuration = package.numbering_configuration
+        end
 
         document
       end
@@ -146,7 +148,7 @@ module Uniword
         package.images = extract_images(document)
 
         # Generate MIME parts and package
-        mime_parts = package.to_mime_parts
+        package.to_mime_parts
 
         # Package and save
         packager = Infrastructure::MimePackager.new(
@@ -180,10 +182,8 @@ module Uniword
         html << '<body>'
 
         # Serialize document body if present
-        if document.body && document.body.elements
-          document.body.elements.each do |element|
-            html << element_to_html(element)
-          end
+        document.body&.elements&.each do |element|
+          html << element_to_html(element)
         end
 
         html << '</body></html>'
@@ -212,10 +212,8 @@ module Uniword
       # @return [String] HTML fragment
       def self.paragraph_to_html(paragraph)
         html = +'<p>'
-        if paragraph.runs
-          paragraph.runs.each do |run|
-            html << run_to_html(run)
-          end
+        paragraph.runs&.each do |run|
+          html << run_to_html(run)
         end
         html << '</p>'
         html
@@ -247,7 +245,7 @@ module Uniword
       #
       # @param document [Document] The document
       # @return [Hash] Images hash
-      def self.extract_images(document)
+      def self.extract_images(_document)
         # TODO: Implement image extraction from document
         {}
       end

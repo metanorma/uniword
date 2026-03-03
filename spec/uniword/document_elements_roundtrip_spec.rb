@@ -18,7 +18,7 @@ RSpec.describe 'Document Elements Round-Trip' do
     'Watermarks.dotx' => 'watermark'
   }.freeze
 
-  DOCUMENT_ELEMENT_FILES.each do |filename, element_type|
+  DOCUMENT_ELEMENT_FILES.each_key do |filename|
     describe filename do
       let(:dotx_path) { File.join(DOCUMENT_ELEMENTS_DIR, filename) }
       let(:temp_dir) { Dir.mktmpdir }
@@ -26,7 +26,7 @@ RSpec.describe 'Document Elements Round-Trip' do
       let(:roundtrip_dir) { File.join(temp_dir, 'roundtrip') }
 
       after do
-        FileUtils.rm_rf(temp_dir) if File.exist?(temp_dir)
+        FileUtils.rm_rf(temp_dir)
       end
 
       context 'Glossary Document' do

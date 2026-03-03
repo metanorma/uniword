@@ -5,10 +5,7 @@ require 'nokogiri'
 require 'zip'
 
 # Configure lutaml-model to use Nokogiri adapter for XML
-require 'lutaml/model/xml_adapter/nokogiri_adapter'
-Lutaml::Model::Config.configure do |config|
-  config.xml_adapter = Lutaml::Model::Xml::NokogiriAdapter
-end
+Lutaml::Model::Config.xml_adapter_type = :nokogiri
 
 require_relative 'uniword/version'
 
@@ -104,7 +101,20 @@ module Uniword
   autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
   autoload :Style, 'uniword/style'
 
+  # Autoload styles module
+  module Styles
+    autoload :StyleDefinition, 'uniword/styles/style_definition'
+    autoload :ParagraphStyleDefinition, 'uniword/styles/paragraph_style_definition'
+    autoload :CharacterStyleDefinition, 'uniword/styles/character_style_definition'
+    autoload :TableStyleDefinition, 'uniword/styles/table_style_definition'
+    autoload :ListStyleDefinition, 'uniword/styles/list_style_definition'
+    autoload :SemanticStyle, 'uniword/styles/semantic_style'
+    autoload :StyleBuilder, 'uniword/styles/style_builder'
+    autoload :StyleLibrary, 'uniword/styles/style_library'
+  end
+
   # Autoload themes
+  autoload :Theme, 'uniword/theme'
   autoload :ThemeModel, 'uniword/theme'
   autoload :ColorScheme, 'uniword/color_scheme'
   autoload :FontScheme, 'uniword/font_scheme'
@@ -118,6 +128,30 @@ module Uniword
   # Autoload theme infrastructure (renamed to avoid conflict with Theme class)
   autoload :ThemeLoader, 'uniword/theme/theme_loader'
   autoload :ThemePackageReader, 'uniword/theme/theme_package_reader'
+
+  # Autoload template classes
+  module Template
+    autoload :Template, 'uniword/template/template'
+    autoload :VariableResolver, 'uniword/template/variable_resolver'
+    autoload :TemplateParser, 'uniword/template/template_parser'
+    autoload :TemplateRenderer, 'uniword/template/template_renderer'
+    autoload :TemplateValidator, 'uniword/template/template_validator'
+    autoload :TemplateContext, 'uniword/template/template_context'
+    autoload :TemplateMarker, 'uniword/template/template_marker'
+  end
+
+  # Autoload visitor classes
+  module Visitor
+    autoload :BaseVisitor, 'uniword/visitor/base_visitor'
+    autoload :TextExtractor, 'uniword/visitor/text_extractor'
+  end
+
+  # Autoload validators classes
+  module Validators
+    autoload :ElementValidator, 'uniword/validators/element_validator'
+    autoload :ParagraphValidator, 'uniword/validators/paragraph_validator'
+    autoload :TableValidator, 'uniword/validators/table_validator'
+  end
 
   # Autoload styleset infrastructure
   module Stylesets
@@ -179,7 +213,6 @@ module Uniword
   autoload :Footer, 'uniword/footer'
   autoload :Footnote, 'uniword/footnote'
   autoload :Header, 'uniword/header'
-  autoload :Hyperlink, 'uniword/hyperlink'
   autoload :Image, 'uniword/image'
   autoload :MathEquation, 'uniword/math_equation'
   autoload :Picture, 'uniword/picture'

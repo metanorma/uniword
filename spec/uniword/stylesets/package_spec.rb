@@ -23,9 +23,9 @@ RSpec.describe Uniword::Stylesets::Package do
 
     context 'with missing file' do
       it 'raises FileNotFoundError' do
-        expect {
+        expect do
           described_class.from_file('nonexistent.dotx')
-        }.to raise_error(Uniword::FileNotFoundError, /File not found/)
+        end.to raise_error(Uniword::FileNotFoundError, /File not found/)
       end
     end
 
@@ -36,9 +36,9 @@ RSpec.describe Uniword::Stylesets::Package do
         temp_file.write('not a zip file')
         temp_file.close
 
-        expect {
+        expect do
           described_class.from_file(temp_file.path)
-        }.to raise_error(Uniword::CorruptedFileError, /Failed to extract/)
+        end.to raise_error(Uniword::CorruptedFileError, /Failed to extract/)
 
         temp_file.unlink
       end

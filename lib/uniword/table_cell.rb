@@ -19,8 +19,8 @@ module Uniword
       element 'tc', mixed: true
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_element 'tcPr', to: :cell_properties, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-      map_element 'p', to: :paragraphs, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+      map_element 'tcPr', to: :cell_properties
+      map_element 'p', to: :paragraphs
     end
 
     # Cell properties (formatting) - TableProperties object for span/width support

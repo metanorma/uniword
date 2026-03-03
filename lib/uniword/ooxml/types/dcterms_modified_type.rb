@@ -15,8 +15,8 @@ module Uniword
           namespace Ooxml::Namespaces::DublinCoreTerms
 
           map_content to: :value
-          map_attribute 'type', to: :type, namespace: 'http://www.w3.org/2001/XMLSchema-instance',
-                                prefix: 'xsi'
+          # xsi:type attribute - handled without explicit namespace in new lutaml-model
+          map_attribute 'type', to: :type
         end
       end
     end

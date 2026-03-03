@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'run'
+require_relative 'wordprocessingml/run'
 
 module Uniword
   # Represents a hyperlink within a document
@@ -25,9 +25,11 @@ module Uniword
       element 'hyperlink', mixed: true
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_attribute 'anchor', to: :anchor, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-      map_attribute 'tooltip', to: :tooltip, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-      map_attribute 'id', to: :relationship_id, prefix: 'r', namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+      map_attribute 'anchor', to: :anchor
+      map_attribute 'tooltip', to: :tooltip
+      # NOTE: r:id attribute from Relationships namespace - handled by attribute_form_default
+      # The relationship_id attribute maps to r:id in the output
+      map_attribute 'id', to: :relationship_id
       map_element 'r', to: :runs
     end
 

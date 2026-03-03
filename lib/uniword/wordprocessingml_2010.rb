@@ -20,7 +20,8 @@ module Uniword
     autoload :ConflictDeletion, 'uniword/wordprocessingml_2010/conflict_deletion'
     autoload :ConflictInsertion, 'uniword/wordprocessingml_2010/conflict_insertion'
     autoload :ConflictMode, 'uniword/wordprocessingml_2010/conflict_mode'
-    autoload :CustomXmlConflictInsertion, 'uniword/wordprocessingml_2010/custom_xml_conflict_insertion'
+    autoload :CustomXmlConflictInsertion,
+             'uniword/wordprocessingml_2010/custom_xml_conflict_insertion'
     autoload :DocId, 'uniword/wordprocessingml_2010/doc_id'
     autoload :DocPartGallery, 'uniword/wordprocessingml_2010/doc_part_gallery'
     autoload :DocPartObj, 'uniword/wordprocessingml_2010/doc_part_obj'

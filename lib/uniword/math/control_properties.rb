@@ -17,9 +17,10 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
+        # rPr element from WordProcessingML namespace
+        # The RunProperties class declares its own namespace
         map_element 'rPr', to: :run_properties,
-                    namespace: Uniword::Ooxml::Namespaces::WordProcessingML,
-                    render_nil: false
+                           render_nil: false
       end
     end
   end

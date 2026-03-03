@@ -118,7 +118,7 @@ RSpec.describe Uniword::Metadata::MetadataIndex do
 
       expect(all).to be_a(Array)
       expect(all.size).to eq(2)
-      expect(all.all? { |m| m.is_a?(Uniword::Metadata::Metadata) }).to be true
+      expect(all.all?(Uniword::Metadata::Metadata)).to be true
     end
   end
 

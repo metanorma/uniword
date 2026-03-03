@@ -21,11 +21,8 @@ module Uniword
 
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
-      attr_accessor :core_properties      # docProps/core.xml
-      attr_accessor :app_properties       # docProps/app.xml
-      attr_accessor :theme                # word/theme/theme1.xml
-      attr_accessor :styles_configuration # word/styles.xml
-      attr_accessor :numbering_configuration # word/numbering.xml
+      attr_accessor :core_properties # docProps/core.xml
+      attr_accessor :app_properties, :theme, :styles_configuration, :numbering_configuration # docProps/app.xml                # word/theme/theme1.xml # word/styles.xml # word/numbering.xml
 
       # Add paragraph with optional text and formatting
       #
@@ -124,7 +121,8 @@ module Uniword
       #
       # @return [String] Combined text from all paragraphs
       def text
-        return '' unless body && body.paragraphs
+        return '' unless body&.paragraphs
+
         body.paragraphs.map(&:text).join("\n")
       end
 

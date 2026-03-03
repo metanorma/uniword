@@ -82,7 +82,7 @@ module Uniword
       def validate_rows(table)
         return true if table.rows.nil? || table.rows.empty?
 
-        table.rows.all? { |row| row.is_a?(Uniword::TableRow) }
+        table.rows.all?(Uniword::TableRow)
       end
 
       # Get errors related to rows

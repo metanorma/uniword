@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'element'
-
 module Uniword
   # Represents a single revision (change) in a Word document.
   #
@@ -35,7 +33,7 @@ module Uniword
   # @attr [String] text Content affected by the revision
   #
   # @see TrackedChanges For revision collection management
-  class Revision < Element
+  class Revision < Lutaml::Model::Serializable
     # OOXML namespace configuration
     xml do
       element 'ins'

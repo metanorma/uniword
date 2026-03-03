@@ -5,8 +5,8 @@ require 'lutaml/model'
 module Uniword
   module Sdt
     # Data binding for Structured Document Tag
-    # Reference XML: <w:dataBinding w:xpath="/root/element" 
-    #                               w:storeItemID="{GUID}" 
+    # Reference XML: <w:dataBinding w:xpath="/root/element"
+    #                               w:storeItemID="{GUID}"
     #                               w:prefixMappings="xmlns:ns='http://example.com'"/>
     class DataBinding < Lutaml::Model::Serializable
       attribute :xpath, :string

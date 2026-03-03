@@ -112,7 +112,7 @@ module Uniword
         map_element 'contextualSpacing', to: :contextual_spacing, render_nil: false,
                                          render_default: false
         map_element 'suppressLineNumbers', to: :suppress_line_numbers, render_nil: false,
-                                             render_default: false
+                                           render_default: false
 
         # Bidirectional (only render if true)
         map_element 'bidi', to: :bidirectional, render_nil: false, render_default: false

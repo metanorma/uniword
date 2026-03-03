@@ -62,7 +62,7 @@ module Uniword
       def validate_runs(paragraph)
         return true if paragraph.runs.nil? || paragraph.runs.empty?
 
-        paragraph.runs.all? { |run| run.is_a?(Uniword::Run) }
+        paragraph.runs.all?(Uniword::Run)
       end
 
       # Get errors related to runs

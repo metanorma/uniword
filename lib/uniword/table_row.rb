@@ -13,8 +13,8 @@ module Uniword
       element 'tr', mixed: true
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_element 'trPr', to: :row_properties, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-      map_element 'tc', to: :cells, prefix: 'w', namespace: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+      map_element 'trPr', to: :row_properties
+      map_element 'tc', to: :cells
     end
 
     # Row properties

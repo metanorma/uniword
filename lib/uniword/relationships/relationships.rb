@@ -68,7 +68,6 @@ module Uniword
           relationships: []
         )
       end
-
     end
   end
 end

@@ -2,6 +2,7 @@
 
 module Uniword
   # Represents a theme family element in extension
+  # Uses ThemeML namespace (Office 2013+)
   class ThemeFamily < Lutaml::Model::Serializable
     attribute :name, :string
     attribute :id, :string
@@ -9,7 +10,8 @@ module Uniword
 
     xml do
       element 'themeFamily'
-      namespace Ooxml::Namespaces::DrawingML
+      # ThemeML namespace for theme metadata
+      namespace Ooxml::Namespaces::ThemeML
       map_attribute 'name', to: :name
       map_attribute 'id', to: :id
       map_attribute 'vid', to: :vid

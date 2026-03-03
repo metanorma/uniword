@@ -98,9 +98,7 @@ module Uniword
         content = {}
 
         # Serialize theme (the only content)
-        if theme
-          content['theme/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8')
-        end
+        content['theme/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8') if theme
 
         content
       end
@@ -125,10 +123,10 @@ module Uniword
         end
 
         # Add theme/_rels/theme1.xml.rels if not present (optional but recommended)
-        unless zip_content['theme/_rels/theme1.xml.rels']
-          zip_content['theme/_rels/theme1.xml.rels'] =
-            Relationships::Relationships.generate_theme_rels.to_xml(declaration: true)
-        end
+        return if zip_content['theme/_rels/theme1.xml.rels']
+
+        zip_content['theme/_rels/theme1.xml.rels'] =
+          Relationships::Relationships.generate_theme_rels.to_xml(declaration: true)
       end
 
       private_class_method :add_required_files

@@ -20,11 +20,13 @@ module Uniword
     def self.generate
       Types.new(
         defaults: [
-          Default.new(extension: 'rels', content_type: 'application/vnd.openxmlformats-package.relationships+xml'),
+          Default.new(extension: 'rels',
+                      content_type: 'application/vnd.openxmlformats-package.relationships+xml'),
           Default.new(extension: 'xml', content_type: 'application/xml')
         ],
         overrides: [
-          Override.new(part_name: '/word/document.xml', content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml')
+          Override.new(part_name: '/word/document.xml',
+                       content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml')
         ]
       )
     end
@@ -36,15 +38,16 @@ module Uniword
     def self.generate_for_theme
       Types.new(
         defaults: [
-          Default.new(extension: 'rels', content_type: 'application/vnd.openxmlformats-package.relationships+xml'),
+          Default.new(extension: 'rels',
+                      content_type: 'application/vnd.openxmlformats-package.relationships+xml'),
           Default.new(extension: 'xml', content_type: 'application/xml')
         ],
         overrides: [
-          Override.new(part_name: '/theme/theme1.xml', content_type: 'application/vnd.openxmlformats-officedocument.theme+xml')
+          Override.new(part_name: '/theme/theme1.xml',
+                       content_type: 'application/vnd.openxmlformats-officedocument.theme+xml')
         ]
       )
     end
     module_function :generate_for_theme
-
   end
 end

@@ -39,18 +39,14 @@ module Uniword
       #   pkg = Package.from_file('Distinctive.dotx')
       def self.from_file(path)
         # Validate file exists
-        unless File.exist?(path)
-          raise Uniword::FileNotFoundError.new(path)
-        end
+        raise Uniword::FileNotFoundError, path unless File.exist?(path)
 
         # Extract ZIP
         extracted = extract_zip(path)
 
         # Deserialize styles.xml using lutaml-model (MODEL-DRIVEN!)
         styles_xml = extracted['word/styles.xml']
-        unless styles_xml
-          raise Uniword::CorruptedFileError.new(path, 'styles.xml missing')
-        end
+        raise Uniword::CorruptedFileError.new(path, 'styles.xml missing') unless styles_xml
 
         styles_config = StylesConfiguration.from_xml(styles_xml)
 

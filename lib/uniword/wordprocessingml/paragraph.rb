@@ -50,9 +50,9 @@ module Uniword
         map_element 'commentReference', to: :comment_references, render_nil: false
         map_element 'AlternateContent', to: :alternate_content, render_nil: false
         map_element 'sdt', to: :sdts, render_nil: false
+        # oMathPara from MathML namespace - the target class declares its namespace
         map_element 'oMathPara', to: :o_math_paras,
-                    namespace: Uniword::Ooxml::Namespaces::MathML,
-                    render_nil: false
+                                 render_nil: false
       end
 
       # Add text run to paragraph
@@ -93,6 +93,7 @@ module Uniword
       # @return [String] Combined text from all runs
       def text
         return '' unless runs
+
         runs.map { |r| r.text.to_s }.join
       end
 

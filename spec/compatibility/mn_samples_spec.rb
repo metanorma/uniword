@@ -160,8 +160,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       doc = Uniword::Document.open(sample_file)
 
       # Analyze paragraph types
-      para_with_text = doc.paragraphs.reject { |p| p.text.strip.empty? }
-      para_empty = doc.paragraphs.select { |p| p.text.strip.empty? }
+      para_empty, para_with_text = doc.paragraphs.partition { |p| p.text.strip.empty? }
 
       puts "\n  Paragraph Analysis:"
       puts "    Total paragraphs: #{doc.paragraphs.count}"

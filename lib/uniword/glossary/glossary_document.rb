@@ -18,9 +18,9 @@ module Uniword
         mixed_content
 
         map_element 'docParts', to: :doc_parts, render_nil: false
+        # mc:Ignorable attribute from MarkupCompatibility namespace
         map_attribute 'Ignorable', to: :ignorable,
-                      namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility,
-                      render_nil: false
+                                   render_nil: false
       end
     end
   end

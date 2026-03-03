@@ -110,8 +110,9 @@ module Uniword
 
         @theme = theme
 
-        # Serialize Theme to XML using lutaml-model
-        theme_xml = theme.to_xml
+        # Serialize Theme to XML using lutaml-model with prefix: true
+        # to preserve namespace prefixes for cross-namespace elements
+        theme_xml = theme.to_xml(prefix: true)
 
         # Update content hash
         @extracted_content['theme/theme/theme1.xml'] = theme_xml

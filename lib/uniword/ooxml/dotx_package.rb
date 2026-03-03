@@ -245,12 +245,12 @@ module Uniword
         end
 
         # Add word/_rels/document.xml.rels if not present
-        unless zip_content['word/_rels/document.xml.rels']
-          zip_content['word/_rels/document.xml.rels'] =
-            Relationships::Relationships.generate_document_rels.to_xml(
-              declaration: true
-            )
-        end
+        return if zip_content['word/_rels/document.xml.rels']
+
+        zip_content['word/_rels/document.xml.rels'] =
+          Relationships::Relationships.generate_document_rels.to_xml(
+            declaration: true
+          )
       end
 
       private_class_method :add_required_files

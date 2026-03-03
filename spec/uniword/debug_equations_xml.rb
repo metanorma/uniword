@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Debug script to compare input vs output XML directly
 require 'bundler/setup'
 require 'uniword'
@@ -29,16 +31,16 @@ roundtrip_xml = File.read("#{output_dir}/roundtrip/word/glossary/document.xml")
 File.write("#{output_dir}/original_glossary.xml", original_xml)
 File.write("#{output_dir}/roundtrip_glossary.xml", roundtrip_xml)
 
-puts "=" * 80
-puts "ORIGINAL XML (first 2000 chars):"
-puts "=" * 80
+puts '=' * 80
+puts 'ORIGINAL XML (first 2000 chars):'
+puts '=' * 80
 puts original_xml[0, 2000]
-puts "\n" + "=" * 80
-puts "ROUNDTRIP XML (first 2000 chars):"
-puts "=" * 80
+puts "\n#{'=' * 80}"
+puts 'ROUNDTRIP XML (first 2000 chars):'
+puts '=' * 80
 puts roundtrip_xml[0, 2000]
-puts "\n" + "=" * 80
+puts "\n#{'=' * 80}"
 puts "Files written to: #{output_dir}"
-puts "  - original_glossary.xml"
-puts "  - roundtrip_glossary.xml"
-puts "=" * 80
+puts '  - original_glossary.xml'
+puts '  - roundtrip_glossary.xml'
+puts '=' * 80

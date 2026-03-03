@@ -10,8 +10,11 @@ gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 # Use local lutaml-model with namespace support
 gem 'lutaml-model', path: '/Users/mulgogi/src/lutaml/lutaml-model'
 
-# Use local canon gem for XML semantic comparison in tests
-gem 'canon', path: '/Users/mulgogi/src/lutaml/canon'
+gem 'canon'
+
+# TOML adapter (required by lutaml-model for TOML format support)
+gem 'tomlib'
+gem 'toml-rb'
 
 # Development and testing gems
 gem 'rake'
