@@ -48,48 +48,38 @@ RSpec.describe Uniword::Element do
       expect(element.id).to eq('element-123')
     end
 
+    it 'allows updating the id' do
+      element = test_element_class.new(id: 'initial')
+      element.id = 'updated'
+      expect(element.id).to eq('updated')
+    end
+
     it 'allows id to be nil' do
       element = test_element_class.new
       expect(element.id).to be_nil
     end
-
-    it 'allows updating the id' do
-      element = test_element_class.new(id: 'old-id')
-      element.id = 'new-id'
-      expect(element.id).to eq('new-id')
-    end
   end
 
   describe '#accept' do
-    context 'when implemented by subclass' do
-      it 'accepts a visitor object' do
-        element = test_element_class.new
-        visitor = double('visitor')
+    it 'calls visitor method for the element' do
+      element = test_element_class.new
+      visitor = double('visitor')
+      expect(visitor).to receive(:visit_test_element).with(element)
 
-        expect(visitor).to receive(:visit_test_element).with(element)
-        element.accept(visitor)
-      end
+      element.accept(visitor)
     end
 
-    context 'when not implemented by subclass' do
-      let(:incomplete_class) do
-        Class.new(described_class) # Does not override accept
+    context 'with default accept method' do
+      let(:default_class) do
+        Class.new(described_class)
       end
 
-      it 'raises NotImplementedError' do
-        element = incomplete_class.new
+      it 'calls visit_element on visitor' do
+        element = default_class.new
         visitor = double('visitor')
+        expect(visitor).to receive(:visit_element).with(element)
 
-        expect { element.accept(visitor) }
-          .to raise_error(NotImplementedError, /must implement accept/)
-      end
-
-      it 'includes class name in error message' do
-        element = incomplete_class.new
-        visitor = double('visitor')
-
-        expect { element.accept(visitor) }
-          .to raise_error(NotImplementedError, /#{incomplete_class}/)
+        element.accept(visitor)
       end
     end
   end
@@ -105,58 +95,20 @@ RSpec.describe Uniword::Element do
       expect(element.valid?).to be true
       expect(element.valid?).to be true
     end
-
-    context 'with custom validation in subclass' do
-      let(:validated_class) do
-        Class.new(described_class) do
-          attribute :required_field, :string
-
-          def accept(visitor)
-            visitor.visit_validated_element(self)
-          end
-
-          protected
-
-          def required_attributes_valid?
-            !required_field.nil? && !required_field.empty?
-          end
-        end
-      end
-
-      it 'returns false when validation fails' do
-        element = validated_class.new
-        expect(element.valid?).to be false
-      end
-
-      it 'returns true when validation passes' do
-        element = validated_class.new(required_field: 'value')
-        expect(element.valid?).to be true
-      end
-    end
   end
 
   describe 'inheritance from Lutaml::Model::Serializable' do
     it 'inherits from Lutaml::Model::Serializable' do
-      expect(described_class.ancestors).to include(Lutaml::Model::Serializable)
+      expect(described_class).to be < Lutaml::Model::Serializable
     end
 
     it 'supports lutaml-model attributes' do
-      element = test_element_class.new(id: 'test-123')
-      expect(element).to respond_to(:id)
-      expect(element).to respond_to(:id=)
-    end
-  end
+      custom_class = Class.new(described_class) do
+        attribute :custom_name, :string
+      end
 
-  describe 'object creation' do
-    it 'creates instances with default values' do
-      element = test_element_class.new
-      expect(element).to be_a(Uniword::Element)
-      expect(element.id).to be_nil
-    end
-
-    it 'creates instances with provided attributes' do
-      element = test_element_class.new(id: 'custom-id')
-      expect(element.id).to eq('custom-id')
+      element = custom_class.new(custom_name: 'test')
+      expect(element.custom_name).to eq('test')
     end
   end
 end

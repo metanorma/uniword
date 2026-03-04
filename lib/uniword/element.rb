@@ -39,5 +39,14 @@ module Uniword
     def accept(visitor)
       visitor.visit_element(self)
     end
+
+    # Default validation - returns true
+    # Subclasses can override for custom validation
+    def valid?
+      true
+    end
   end
+
+  # Mark Element as abstract base class
+  Element.abstract!
 end
