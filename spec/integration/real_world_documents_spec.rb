@@ -21,7 +21,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
     describe 'Document Reading' do
       it 'opens complex ISO document successfully' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
 
         expect(doc).to be_a(Uniword::Document)
         expect(doc.paragraphs.count).to be > 100
@@ -34,7 +34,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'extracts all text content' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
         text = doc.text
 
         expect(text).not_to be_empty
@@ -46,7 +46,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'preserves document structure' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
 
         expect(doc.sections.count).to be >= 1
         expect(doc.styles_configuration).not_to be_nil
@@ -61,7 +61,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'handles tables correctly' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
         tables = doc.tables
 
         expect(tables).not_to be_empty
@@ -78,7 +78,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'preserves formatting properties' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
 
         # Find paragraphs with formatting
         formatted_paras = doc.paragraphs.select do |p|
@@ -95,7 +95,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
     describe 'Round-Trip Preservation' do
       it 'preserves content through write-read cycle' do
-        original = Uniword::Document.open(iso_doc_path)
+        original = Uniword.load(iso_doc_path)
         original_text = original.text
         original_para_count = original.paragraphs.count
 
@@ -103,7 +103,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
         begin
           original.save(temp_path)
-          roundtrip = Uniword::Document.open(temp_path)
+          roundtrip = Uniword.load(temp_path)
 
           expect(roundtrip.text).to eq(original_text)
           expect(roundtrip.paragraphs.count).to eq(original_para_count)
@@ -118,13 +118,13 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'preserves structure through round-trip' do
-        original = Uniword::Document.open(iso_doc_path)
+        original = Uniword.load(iso_doc_path)
 
         temp_path = File.join(Dir.tmpdir, "iso_structure_#{Time.now.to_i}.docx")
 
         begin
           original.save(temp_path)
-          roundtrip = Uniword::Document.open(temp_path)
+          roundtrip = Uniword.load(temp_path)
 
           expect(roundtrip.tables.count).to eq(original.tables.count)
           expect(roundtrip.sections.count).to eq(original.sections.count)
@@ -138,14 +138,14 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'preserves styles through round-trip' do
-        original = Uniword::Document.open(iso_doc_path)
+        original = Uniword.load(iso_doc_path)
         original_style_count = original.styles_configuration.styles.count
 
         temp_path = File.join(Dir.tmpdir, "iso_styles_#{Time.now.to_i}.docx")
 
         begin
           original.save(temp_path)
-          roundtrip = Uniword::Document.open(temp_path)
+          roundtrip = Uniword.load(temp_path)
 
           expect(roundtrip.styles_configuration).not_to be_nil
           expect(roundtrip.styles_configuration.styles.count).to eq(original_style_count)
@@ -162,7 +162,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
     describe 'Performance Benchmarks' do
       it 'reads document in under 6 seconds' do
         read_time = Benchmark.realtime do
-          Uniword::Document.open(iso_doc_path)
+          Uniword.load(iso_doc_path)
         end
 
         expect(read_time).to be < 6.0
@@ -174,7 +174,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'writes document in under 10 seconds' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
         temp_path = File.join(Dir.tmpdir, "iso_perf_#{Time.now.to_i}.docx")
 
         write_time = Benchmark.realtime do
@@ -196,7 +196,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         GC.start
         before_memory = `ps -o rss= -p #{Process.pid}`.to_i
 
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
         _ = doc.text
 
         GC.start
@@ -213,7 +213,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
 
       it 'provides responsive text extraction' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
 
         # Text extraction should be fast (< 1 second for cached)
         extraction_time = Benchmark.realtime do
@@ -232,7 +232,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
     describe 'Error Resilience' do
       it 'handles corrupted elements gracefully' do
-        doc = Uniword::Document.open(iso_doc_path)
+        doc = Uniword.load(iso_doc_path)
 
         # Should not raise errors when accessing all elements
         expect { doc.paragraphs.each(&:text) }.not_to raise_error
@@ -242,7 +242,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       it 'provides meaningful error messages' do
         # Test with non-existent file
         expect do
-          Uniword::Document.open('/nonexistent/file.docx')
+          Uniword.load('/nonexistent/file.docx')
         end.to raise_error(Errno::ENOENT, /No such file or directory/)
       end
     end
@@ -327,7 +327,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
       checklist = {
         'Document creation' => -> { Uniword::Document.new },
-        'Document opening' => -> { Uniword::Document.open(iso_doc) if File.exist?(iso_doc) },
+        'Document opening' => -> { Uniword.load(iso_doc) if File.exist?(iso_doc) },
         'Paragraph creation' => -> { Uniword::Paragraph.new },
         'Text addition' => lambda {
           p = Uniword::Paragraph.new

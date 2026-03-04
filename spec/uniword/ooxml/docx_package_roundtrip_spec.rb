@@ -8,8 +8,6 @@ RSpec.describe 'DocxPackage Complete Round-Trip' do
   OUTPUT_PATH = 'test_output/docx_package_complete.docx'
 
   before(:all) do
-    require_relative '../../../lib/uniword/ooxml/docx_package'
-
     # Load and save with DocxPackage (proper OOP model)
     package = Uniword::Ooxml::DocxPackage.from_file(TEST_DOCUMENT)
     package.to_file(OUTPUT_PATH)

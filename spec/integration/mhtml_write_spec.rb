@@ -45,7 +45,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       para = Uniword::Paragraph.new
 
       # Bold text
-      props = Uniword::Properties::RunProperties.new(bold: true)
+      props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_text('Bold text', properties: props)
 
       document.add_element(para)
@@ -60,7 +60,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
 
       # Add heading
-      heading_props = Uniword::Properties::ParagraphProperties.new(style: 'Heading1')
+      heading_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
       heading = Uniword::Paragraph.new(properties: heading_props)
       heading.add_text('Document Title')
       document.add_element(heading)
@@ -207,16 +207,16 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
 
       # Heading
-      h1_props = Uniword::Properties::ParagraphProperties.new(style: 'Heading1')
+      h1_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
       h1 = Uniword::Paragraph.new(properties: h1_props)
       h1.add_text('Main Title')
       document.add_element(h1)
 
       # Normal paragraph with formatting
       para1 = Uniword::Paragraph.new
-      bold_props = Uniword::Properties::RunProperties.new(bold: true)
+      bold_props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para1.add_text('Bold text ', properties: bold_props)
-      italic_props = Uniword::Properties::RunProperties.new(italic: true)
+      italic_props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       para1.add_text('and italic text.', properties: italic_props)
       document.add_element(para1)
 

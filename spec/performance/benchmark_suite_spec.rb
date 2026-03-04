@@ -44,7 +44,7 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
         )
       )
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     tables.times do |t|
@@ -63,7 +63,7 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
         end
         table.add_row(row)
       end
-      doc.add_element(table)
+      doc.body.tables << table
     end
 
     doc

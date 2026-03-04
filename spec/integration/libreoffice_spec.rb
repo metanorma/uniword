@@ -100,7 +100,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
 
         if run.respond_to?(:properties=)
-          props = Uniword::Properties::RunProperties.new
+          props = Uniword::Wordprocessingml::RunProperties.new
           props.bold = true
           run.properties = props
         end
@@ -121,7 +121,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
 
         if run.respond_to?(:properties=)
-          props = Uniword::Properties::RunProperties.new
+          props = Uniword::Wordprocessingml::RunProperties.new
           props.italic = true
           run.properties = props
         end
@@ -141,7 +141,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
 
         if run.respond_to?(:properties=)
-          props = Uniword::Properties::RunProperties.new
+          props = Uniword::Wordprocessingml::RunProperties.new
           props.underline = 'single'
           run.properties = props
         end
@@ -161,7 +161,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
 
         if run.respond_to?(:properties=)
-          props = Uniword::Properties::RunProperties.new
+          props = Uniword::Wordprocessingml::RunProperties.new
           props.size = 48 # font_size * 2
           run.properties = props
         end
@@ -181,7 +181,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
 
         if run.respond_to?(:properties=)
-          props = Uniword::Properties::RunProperties.new
+          props = Uniword::Wordprocessingml::RunProperties.new
           props.font = 'Arial'
           run.properties = props
         end
@@ -202,7 +202,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         para = Uniword::Paragraph.new
 
         if para.respond_to?(:properties=)
-          props = Uniword::Properties::ParagraphProperties.new
+          props = Uniword::Wordprocessingml::ParagraphProperties.new
           props.alignment = 'center'
           para.properties = props
         end
@@ -222,7 +222,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         para = Uniword::Paragraph.new
 
         if para.respond_to?(:properties=)
-          props = Uniword::Properties::ParagraphProperties.new
+          props = Uniword::Wordprocessingml::ParagraphProperties.new
           props.line_spacing = 240
           para.properties = props
         end
@@ -242,7 +242,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         para = Uniword::Paragraph.new
 
         if para.respond_to?(:properties=)
-          props = Uniword::Properties::ParagraphProperties.new
+          props = Uniword::Wordprocessingml::ParagraphProperties.new
           props.left_indent = 720
           para.properties = props
         end

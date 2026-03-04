@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../../../lib/uniword/batch/stages/normalize_styles_stage'
-require_relative '../../../lib/uniword/batch/stages/update_metadata_stage'
-require_relative '../../../lib/uniword/batch/stages/validate_links_stage'
-require_relative '../../../lib/uniword/batch/stages/convert_format_stage'
-require_relative '../../../lib/uniword/batch/stages/compress_images_stage'
-require_relative '../../../lib/uniword/batch/stages/quality_check_stage'
 
 RSpec.describe 'Batch Processing Stages' do
   let(:document) { Uniword::Document.new }

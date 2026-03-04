@@ -24,9 +24,7 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create a simple DOCX file for testing
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test content', bold: true)
-      doc.add_element(para)
+      doc.add_paragraph('Test content', bold: true)
       doc.save(temp_docx.path)
     end
 
@@ -55,9 +53,7 @@ RSpec.describe Uniword::FormatConverter do
       it 'converts MHTML to DOCX with all parameters specified' do
         # First create an MHTML file
         doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        para.add_text('MHTML content')
-        doc.add_element(para)
+        doc.add_paragraph('MHTML content')
         doc.save(temp_mhtml.path, format: :mhtml)
 
         # Convert to DOCX
@@ -193,9 +189,7 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create MHTML file
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('MHTML content')
-      doc.add_element(para)
+      doc.add_paragraph('MHTML content')
       doc.save(temp_mhtml.path, format: :mhtml)
     end
 
@@ -238,9 +232,7 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create DOCX file
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('DOCX content', italic: true)
-      doc.add_element(para)
+      doc.add_paragraph('DOCX content', italic: true)
       doc.save(temp_docx.path)
     end
 
@@ -284,9 +276,7 @@ RSpec.describe Uniword::FormatConverter do
       # Create 3 test DOCX files
       3.times do |i|
         doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        para.add_text("Document #{i + 1}")
-        doc.add_element(para)
+        doc.add_paragraph("Document #{i + 1}")
         doc.save(File.join(temp_dir, "test#{i + 1}.docx"))
       end
     end

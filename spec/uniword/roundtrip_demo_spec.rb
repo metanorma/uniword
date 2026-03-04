@@ -11,7 +11,7 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
 
   before(:all) do
     # Load and save document once for all tests
-    @doc = Uniword::Document.open('examples/demo_formal_integral_proper.docx')
+    @doc = Uniword.load('examples/demo_formal_integral_proper.docx')
     @doc.save('examples/demo_formal_integral_roundtrip_spec.docx')
 
     # Extract both packages

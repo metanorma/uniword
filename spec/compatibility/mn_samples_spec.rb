@@ -44,7 +44,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
         puts "\n    File: #{rel_path(doc_path)}"
 
         begin
-          doc = Uniword::Document.open(doc_path)
+          doc = Uniword.load(doc_path)
 
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
@@ -84,7 +84,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
         puts "\n    File: #{rel_path(doc_path)}"
 
         begin
-          doc = Uniword::Document.open(doc_path)
+          doc = Uniword.load(doc_path)
 
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
@@ -121,7 +121,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
         puts "      Size: #{(File.size(doc_path) / 1024.0 / 1024.0).round(2)} MB"
 
         begin
-          doc = Uniword::Document.open(doc_path)
+          doc = Uniword.load(doc_path)
 
           expect(doc).to be_a(Uniword::Document)
           stats = gather_stats(doc)
@@ -157,7 +157,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
 
       puts "\n  Detailed analysis of: #{rel_path(sample_file)}"
 
-      doc = Uniword::Document.open(sample_file)
+      doc = Uniword.load(sample_file)
 
       # Analyze paragraph types
       para_empty, para_with_text = doc.paragraphs.partition { |p| p.text.strip.empty? }
@@ -203,7 +203,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       it 'extracts content from WordSection divs' do
         skip 'Sample file not found' unless File.exist?(sample_file)
 
-        doc = Uniword::Document.open(sample_file)
+        doc = Uniword.load(sample_file)
 
         # Should extract MUCH more content now (fixed recursive div processing)
         expect(doc.paragraphs.count).to be > 200  # Was 20, should be ~323
@@ -214,7 +214,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       it 'preserves section structure' do
         skip 'Sample file not found' unless File.exist?(sample_file)
 
-        doc = Uniword::Document.open(sample_file)
+        doc = Uniword.load(sample_file)
 
         # Should maintain document structure
         expect(doc.elements).not_to be_empty
@@ -227,7 +227,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       it 'achieves >95% paragraph extraction rate' do
         skip 'Sample file not found' unless File.exist?(sample_file)
 
-        doc = Uniword::Document.open(sample_file)
+        doc = Uniword.load(sample_file)
 
         # The file has ~335 paragraph tags in HTML
         # We should extract at least 95% of them (>318 paragraphs)
@@ -237,7 +237,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
       it 'extracts all tables from nested divs' do
         skip 'Sample file not found' unless File.exist?(sample_file)
 
-        doc = Uniword::Document.open(sample_file)
+        doc = Uniword.load(sample_file)
 
         # The file has 6 tables that were previously missed
         # due to being inside WordSection divs

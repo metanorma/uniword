@@ -72,7 +72,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       # Bold text
       run1 = Uniword::Run.new(
         text: 'Bold',
-        properties: Uniword::Properties::RunProperties.new(bold: true)
+        properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
       )
       para.add_run(run1)
 
@@ -93,7 +93,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       run = Uniword::Run.new(
         text: 'Italic text',
-        properties: Uniword::Properties::RunProperties.new(italic: true)
+        properties: Uniword::Wordprocessingml::RunProperties.new(italic: true)
       )
       para.add_run(run)
 
@@ -112,7 +112,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       run = Uniword::Run.new(
         text: 'Underlined',
-        properties: Uniword::Properties::RunProperties.new(underline: 'single')
+        properties: Uniword::Wordprocessingml::RunProperties.new(underline: 'single')
       )
       para.add_run(run)
 
@@ -130,7 +130,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       run = Uniword::Run.new(
         text: 'Bold and Italic',
-        properties: Uniword::Properties::RunProperties.new(
+        properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           italic: true
         )
@@ -152,7 +152,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       run = Uniword::Run.new(
         text: 'Arial text',
-        properties: Uniword::Properties::RunProperties.new(font: 'Arial')
+        properties: Uniword::Wordprocessingml::RunProperties.new(font: 'Arial')
       )
       para.add_run(run)
 
@@ -170,7 +170,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       run = Uniword::Run.new(
         text: 'Large text',
-        properties: Uniword::Properties::RunProperties.new(size: 48)
+        properties: Uniword::Wordprocessingml::RunProperties.new(size: 48)
       )
       para.add_run(run)
 
@@ -250,7 +250,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
     it 'preserves paragraph styles - Heading1' do
       doc1 = Uniword::Document.new
       heading = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading1'
         )
       )
@@ -268,7 +268,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
     it 'preserves paragraph styles - Heading2' do
       doc1 = Uniword::Document.new
       heading = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading2'
         )
       )
@@ -288,7 +288,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       %w[Heading1 Heading2 Heading3].each_with_index do |style, _i|
         para = Uniword::Paragraph.new(
-          properties: Uniword::Properties::ParagraphProperties.new(style: style)
+          properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
         )
         para.add_text("#{style} text")
         doc1.add_element(para)
@@ -310,7 +310,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       # Heading
       heading = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading1'
         )
       )
@@ -358,7 +358,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       para1 = Uniword::Paragraph.new
       bold_run = Uniword::Run.new
       bold_run.text = 'Bold text'
-      bold_run.properties = Uniword::Properties::RunProperties.new(bold: true)
+      bold_run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para1.add_run(bold_run)
       doc1.add_element(para1)
 
@@ -366,7 +366,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       para2 = Uniword::Paragraph.new
       italic_run = Uniword::Run.new
       italic_run.text = 'Italic text'
-      italic_run.properties = Uniword::Properties::RunProperties.new(
+      italic_run.properties = Uniword::Wordprocessingml::RunProperties.new(
         italic: true
       )
       para2.add_run(italic_run)

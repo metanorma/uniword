@@ -27,7 +27,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify properties preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -50,7 +50,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify shading preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -68,7 +68,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify tab stops preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -96,7 +96,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify character spacing preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -114,7 +114,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify kerning preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -132,7 +132,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify position preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -150,7 +150,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify text expansion preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -168,7 +168,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify emphasis mark preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -186,7 +186,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify language preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -206,7 +206,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify text effects preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -228,7 +228,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify all properties preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -250,7 +250,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify all properties preserved
       loaded_para = loaded_doc.paragraphs.first
@@ -277,7 +277,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify each paragraph preserved its properties
       expect(loaded_doc.paragraphs.size).to eq(3)
@@ -295,7 +295,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Document should load without errors
       expect(loaded_doc.paragraphs.size).to eq(1)
@@ -312,7 +312,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Save and reload
       doc.save(test_file)
-      loaded_doc = Uniword::Document.open(test_file)
+      loaded_doc = Uniword.load(test_file)
 
       # Verify negative values preserved
       loaded_para = loaded_doc.paragraphs.first

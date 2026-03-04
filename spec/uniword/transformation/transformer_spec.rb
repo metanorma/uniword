@@ -14,9 +14,7 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#transform' do
     let(:source_doc) do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Hello World', bold: true)
-      doc.add_element(para)
+      doc.add_paragraph('Hello World', bold: true)
       doc
     end
 
@@ -85,17 +83,17 @@ RSpec.describe Uniword::Transformation::Transformer do
         para1 = Uniword::Paragraph.new
         para1.add_text('Bold text', bold: true)
         para1.add_text(' and italic text', italic: true)
-        para1.alignment = 'center'
-        doc.add_element(para1)
+        para1.properties = Uniword::ParagraphProperties.new(alignment: 'center')
+        doc.body.paragraphs << para1
 
         # Add table
         table = Uniword::Table.new
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        cell.add_text('Cell content')
-        row.add_cell(cell)
-        table.add_row(row)
-        doc.add_element(table)
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        row.cells << cell
+        table.rows << row
+        doc.body.tables << table
 
         doc
       end
@@ -141,9 +139,7 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#docx_to_mhtml' do
     it 'explicitly names the transformation direction' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test')
-      doc.add_element(para)
+      doc.add_paragraph('Test')
 
       result = transformer.docx_to_mhtml(doc)
 
@@ -155,9 +151,7 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#mhtml_to_docx' do
     it 'explicitly names the transformation direction' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test')
-      doc.add_element(para)
+      doc.add_paragraph('Test')
 
       result = transformer.mhtml_to_docx(doc)
 

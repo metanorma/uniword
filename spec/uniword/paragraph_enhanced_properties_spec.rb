@@ -148,7 +148,7 @@ RSpec.describe Uniword::Paragraph, 'Enhanced Properties' do
 
     it 'includes all 42+ property types' do
       # Set various properties
-      paragraph.properties = Uniword::Properties::ParagraphProperties.new(
+      paragraph.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         style: 'Normal',
         alignment: 'left',
         spacing_before: 120,

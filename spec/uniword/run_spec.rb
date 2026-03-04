@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Uniword::Run do
   let(:properties) do
-    Uniword::Properties::RunProperties.new(
+    Uniword::Wordprocessingml::RunProperties.new(
       bold: true,
       italic: false,
       size: 24
@@ -75,13 +75,13 @@ RSpec.describe Uniword::Run do
     end
 
     it 'returns false when bold is false' do
-      props = Uniword::Properties::RunProperties.new(bold: false)
+      props = Uniword::Wordprocessingml::RunProperties.new(bold: false)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.bold?).to be false
     end
 
     it 'returns true when bold is true' do
-      props = Uniword::Properties::RunProperties.new(bold: true)
+      props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.bold?).to be true
     end
@@ -94,13 +94,13 @@ RSpec.describe Uniword::Run do
     end
 
     it 'returns false when italic is false' do
-      props = Uniword::Properties::RunProperties.new(italic: false)
+      props = Uniword::Wordprocessingml::RunProperties.new(italic: false)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.italic?).to be false
     end
 
     it 'returns true when italic is true' do
-      props = Uniword::Properties::RunProperties.new(italic: true)
+      props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.italic?).to be true
     end
@@ -113,19 +113,19 @@ RSpec.describe Uniword::Run do
     end
 
     it 'returns false when underline is nil' do
-      props = Uniword::Properties::RunProperties.new
+      props = Uniword::Wordprocessingml::RunProperties.new
       run = described_class.new(text: 'Test', properties: props)
       expect(run.underline?).to be false
     end
 
     it 'returns false when underline is "none"' do
-      props = Uniword::Properties::RunProperties.new(underline: 'none')
+      props = Uniword::Wordprocessingml::RunProperties.new(underline: 'none')
       run = described_class.new(text: 'Test', properties: props)
       expect(run.underline?).to be false
     end
 
     it 'returns true when underline is set' do
-      props = Uniword::Properties::RunProperties.new(underline: 'single')
+      props = Uniword::Wordprocessingml::RunProperties.new(underline: 'single')
       run = described_class.new(text: 'Test', properties: props)
       expect(run.underline?).to be true
     end
@@ -138,19 +138,19 @@ RSpec.describe Uniword::Run do
     end
 
     it 'returns nil when size is not set' do
-      props = Uniword::Properties::RunProperties.new
+      props = Uniword::Wordprocessingml::RunProperties.new
       run = described_class.new(text: 'Test', properties: props)
       expect(run.font_size).to be_nil
     end
 
     it 'returns font size in points (half of size attribute)' do
-      props = Uniword::Properties::RunProperties.new(size: 24)
+      props = Uniword::Wordprocessingml::RunProperties.new(size: 24)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.font_size).to eq(12)
     end
 
     it 'handles odd sizes correctly' do
-      props = Uniword::Properties::RunProperties.new(size: 25)
+      props = Uniword::Wordprocessingml::RunProperties.new(size: 25)
       run = described_class.new(text: 'Test', properties: props)
       expect(run.font_size).to eq(12)
     end

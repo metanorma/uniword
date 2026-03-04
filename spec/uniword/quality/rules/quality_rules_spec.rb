@@ -227,7 +227,7 @@ RSpec.describe 'Quality Rules' do
 
     it 'warns for direct formatting without styles' do
       para = Uniword::Paragraph.new
-      para.properties = Uniword::Properties::ParagraphProperties.new(
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         alignment: 'center'
       )
       para.add_text('Unst yled paragraph')

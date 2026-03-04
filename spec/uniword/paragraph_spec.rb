@@ -6,7 +6,7 @@ RSpec.describe Uniword::Paragraph do
   let(:run1) { Uniword::Run.new(text: 'Hello ') }
   let(:run2) { Uniword::Run.new(text: 'World') }
   let(:properties) do
-    Uniword::Properties::ParagraphProperties.new(
+    Uniword::Wordprocessingml::ParagraphProperties.new(
       style: 'Normal',
       alignment: 'left'
     )
@@ -100,7 +100,7 @@ RSpec.describe Uniword::Paragraph do
     end
 
     it 'creates and adds a run with properties' do
-      run_props = Uniword::Properties::RunProperties.new(bold: true)
+      run_props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       paragraph.add_text('Bold text', properties: run_props)
       expect(paragraph.runs.first.properties).to eq(run_props)
     end

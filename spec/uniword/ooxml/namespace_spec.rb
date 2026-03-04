@@ -96,7 +96,14 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'serializes rows with w:tr elements' do
       table = Uniword::Table.new
-      table.add_text_row(['Cell 1', 'Cell 2'])
+      row = Uniword::TableRow.new
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+      end
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+      end
+      table.rows << row
       xml = table.to_xml
 
       expect(xml).to include('<w:tr')
@@ -119,7 +126,9 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'serializes cells with w:tc elements' do
       row = Uniword::TableRow.new
-      row.add_text_cell('Test Cell')
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Test Cell') }
+      end
       xml = row.to_xml
 
       expect(xml).to include('<w:tc')
@@ -142,7 +151,7 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'serializes paragraphs with w:p elements' do
       cell = Uniword::TableCell.new
-      cell.add_text('Cell content')
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
       xml = cell.to_xml
 
       expect(xml).to include('<w:p')
@@ -170,9 +179,7 @@ RSpec.describe 'OOXML Namespace Configuration' do
       pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
       # Create a document with content
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test content')
-      doc.add_element(para)
+      doc.add_paragraph('Test content')
 
       # Serialize to XML
       xml = doc.to_xml
@@ -189,8 +196,26 @@ RSpec.describe 'OOXML Namespace Configuration' do
       pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
       # Create a table
       table = Uniword::Table.new
-      table.add_text_row(['Header 1', 'Header 2'], header: true)
-      table.add_text_row(['Data 1', 'Data 2'])
+
+      # Header row
+      header_row = Uniword::TableRow.new
+      header_row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 1') }
+      end
+      header_row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 2') }
+      end
+      table.rows << header_row
+
+      # Data row
+      data_row = Uniword::TableRow.new
+      data_row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 1') }
+      end
+      data_row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 2') }
+      end
+      table.rows << data_row
 
       # Serialize to XML
       xml = table.to_xml
@@ -200,7 +225,7 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
       # Verify structure is preserved
       expect(parsed_table).to be_a(Uniword::Table)
-      expect(parsed_table.row_count).to eq(2)
+      expect(parsed_table.rows.count).to eq(2)
     end
   end
 
@@ -208,10 +233,7 @@ RSpec.describe 'OOXML Namespace Configuration' do
     it 'uses consistent w: prefix for WordProcessingML elements' do
       pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test')
-      para.add_run(run)
-      doc.add_element(para)
+      doc.add_paragraph('Test')
 
       xml = doc.to_xml
 

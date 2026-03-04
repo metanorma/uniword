@@ -291,7 +291,7 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
       # Save and reload
       temp_path = '/tmp/numbering_test.docx'
       original.save(temp_path)
-      reloaded = Uniword::Document.open(temp_path)
+      reloaded = Uniword.load(temp_path)
 
       # Verify numbering preserved
       expect(reloaded.paragraphs[0].numbering).to be_truthy

@@ -26,15 +26,13 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.add_chart(chart)
 
       # Add a paragraph
-      para = Uniword::Paragraph.new
-      para.add_text('Document with chart')
-      doc.add_element(para)
+      doc.add_paragraph('Document with chart')
 
       # Save document
       doc.save(temp_file.path)
 
       # Read it back
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify chart was preserved
       expect(loaded_doc.charts).not_to be_empty
@@ -69,7 +67,7 @@ RSpec.describe 'Chart Round-trip Integration' do
 
       # Save and reload
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify both charts preserved
       expect(loaded_doc.charts.length).to eq(2)
@@ -79,12 +77,10 @@ RSpec.describe 'Chart Round-trip Integration' do
 
     it 'handles documents without charts' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('No charts here')
-      doc.add_element(para)
+      doc.add_paragraph('No charts here')
 
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       expect(loaded_doc.charts).to be_empty
     end
@@ -120,7 +116,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.add_chart(chart)
       doc.save(temp_file.path)
 
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
       loaded_chart = loaded_doc.charts.first
 
       expect(loaded_chart.chart_type).to eq('scatter')
@@ -134,7 +130,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc = create_doc_with_chart(minimal_chart_xml)
       doc.save(temp_file.path)
 
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
       expect(loaded_doc.charts.first.chart_type).to eq('bar')
     end
 
@@ -142,7 +138,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc = create_doc_with_chart(minimal_line_chart_xml)
       doc.save(temp_file.path)
 
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
       expect(loaded_doc.charts.first.chart_type).to eq('line')
     end
 
@@ -150,7 +146,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc = create_doc_with_chart(minimal_pie_chart_xml)
       doc.save(temp_file.path)
 
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
       expect(loaded_doc.charts.first.chart_type).to eq('pie')
     end
   end

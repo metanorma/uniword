@@ -341,7 +341,7 @@ RSpec.describe 'Numbering Feature' do
       end
 
       it 'preserves other properties' do
-        props = Uniword::Properties::ParagraphProperties.new(
+        props = Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Normal',
           alignment: 'left'
         )

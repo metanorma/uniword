@@ -88,7 +88,7 @@ end
 
 RSpec.describe 'Table Properties with Borders' do
   it 'creates table properties with individual borders' do
-    props = Uniword::Properties::TableProperties.new(
+    props = Uniword::Wordprocessingml::TableProperties.new(
       top_border: Uniword::TableBorder.single,
       bottom_border: Uniword::TableBorder.double,
       left_border: Uniword::TableBorder.dashed,
@@ -106,7 +106,7 @@ RSpec.describe 'Table Properties with Borders' do
   end
 
   it 'creates table properties with cell spacing and padding' do
-    props = Uniword::Properties::TableProperties.new(
+    props = Uniword::Wordprocessingml::TableProperties.new(
       cell_spacing: 100,
       cell_padding: 80
     )
@@ -119,8 +119,8 @@ RSpec.describe 'Table Properties with Borders' do
     border1 = Uniword::TableBorder.single
     border2 = Uniword::TableBorder.single
 
-    props1 = Uniword::Properties::TableProperties.new(top_border: border1)
-    props2 = Uniword::Properties::TableProperties.new(top_border: border2)
+    props1 = Uniword::Wordprocessingml::TableProperties.new(top_border: border1)
+    props2 = Uniword::Wordprocessingml::TableProperties.new(top_border: border2)
 
     expect(props1).to eq(props2)
   end

@@ -32,7 +32,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support bold text' do
         run = Uniword::Run.new
         run.text = 'Bold text'
-        run.properties = Uniword::Properties::RunProperties.new(bold: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
 
         expect(run.properties.bold).to be true
         expect(run.text).to eq('Bold text')
@@ -41,7 +41,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support italic text' do
         run = Uniword::Run.new
         run.text = 'Italic text'
-        run.properties = Uniword::Properties::RunProperties.new(italic: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
 
         expect(run.properties.italic).to be true
       end
@@ -49,7 +49,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support underline text' do
         run = Uniword::Run.new
         run.text = 'Underlined text'
-        run.properties = Uniword::Properties::RunProperties.new(underline: 'single')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(underline: 'single')
 
         expect(run.properties.underline).to eq('single')
       end
@@ -57,7 +57,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support strike-through text' do
         run = Uniword::Run.new
         run.text = 'Strike text'
-        run.properties = Uniword::Properties::RunProperties.new(strike: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(strike: true)
 
         expect(run.properties.strike).to be true
       end
@@ -65,7 +65,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support double-strike text' do
         run = Uniword::Run.new
         run.text = 'Double strike'
-        run.properties = Uniword::Properties::RunProperties.new(double_strike: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(double_strike: true)
 
         expect(run.properties.double_strike).to be true
       end
@@ -73,7 +73,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support all caps text' do
         run = Uniword::Run.new
         run.text = 'all caps'
-        run.properties = Uniword::Properties::RunProperties.new(all_caps: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(all_caps: true)
 
         expect(run.properties.all_caps).to be true
       end
@@ -81,7 +81,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support small caps text' do
         run = Uniword::Run.new
         run.text = 'small caps'
-        run.properties = Uniword::Properties::RunProperties.new(small_caps: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(small_caps: true)
 
         expect(run.properties.small_caps).to be true
       end
@@ -89,7 +89,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support multiple formatting properties' do
         run = Uniword::Run.new
         run.text = 'Formatted'
-        run.properties = Uniword::Properties::RunProperties.new(
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           italic: true,
           underline: 'single'
@@ -105,7 +105,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support font size' do
         run = Uniword::Run.new
         run.text = 'Sized text'
-        run.properties = Uniword::Properties::RunProperties.new(size: 24)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(size: 24)
 
         expect(run.properties.size).to eq(24)
       end
@@ -113,7 +113,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support text color' do
         run = Uniword::Run.new
         run.text = 'Colored text'
-        run.properties = Uniword::Properties::RunProperties.new(color: 'FF0000')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(color: 'FF0000')
 
         expect(run.properties.color).to eq('FF0000')
       end
@@ -121,7 +121,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support highlight color' do
         run = Uniword::Run.new
         run.text = 'Highlighted'
-        run.properties = Uniword::Properties::RunProperties.new(highlight: 'yellow')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(highlight: 'yellow')
 
         expect(run.properties.highlight).to eq('yellow')
       end
@@ -133,7 +133,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'uses the font name for all font types' do
         run = Uniword::Run.new
         run.text = 'Times font'
-        run.properties = Uniword::Properties::RunProperties.new(font: 'Times')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(font: 'Times')
 
         expect(run.properties.font).to eq('Times')
       end
@@ -141,7 +141,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'supports specific font attributes' do
         run = Uniword::Run.new
         run.text = 'Custom fonts'
-        run.properties = Uniword::Properties::RunProperties.new(
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(
           font: 'Times',
           font_ascii: 'Arial'
         )
@@ -153,7 +153,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'supports east asian font' do
         run = Uniword::Run.new
         run.text = '东亚字体'
-        run.properties = Uniword::Properties::RunProperties.new(
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(
           font: 'Times',
           font_east_asia: 'KaiTi'
         )
@@ -168,7 +168,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should create emphasis mark with default dot' do
         run = Uniword::Run.new
         run.text = 'Emphasized'
-        run.properties = Uniword::Properties::RunProperties.new(emphasis_mark: 'dot')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'dot')
 
         expect(run.properties.emphasis_mark).to eq('dot')
       end
@@ -176,7 +176,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support dot emphasis mark' do
         run = Uniword::Run.new
         run.text = 'Dot emphasis'
-        run.properties = Uniword::Properties::RunProperties.new(emphasis_mark: 'dot')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'dot')
 
         expect(run.properties.emphasis_mark).to eq('dot')
       end
@@ -184,7 +184,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support comma emphasis mark' do
         run = Uniword::Run.new
         run.text = 'Comma emphasis'
-        run.properties = Uniword::Properties::RunProperties.new(emphasis_mark: 'comma')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'comma')
 
         expect(run.properties.emphasis_mark).to eq('comma')
       end
@@ -192,7 +192,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support circle emphasis mark' do
         run = Uniword::Run.new
         run.text = 'Circle emphasis'
-        run.properties = Uniword::Properties::RunProperties.new(emphasis_mark: 'circle')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'circle')
 
         expect(run.properties.emphasis_mark).to eq('circle')
       end
@@ -200,7 +200,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support under-dot emphasis mark' do
         run = Uniword::Run.new
         run.text = 'Under-dot emphasis'
-        run.properties = Uniword::Properties::RunProperties.new(emphasis_mark: 'underDot')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'underDot')
 
         expect(run.properties.emphasis_mark).to eq('underDot')
       end
@@ -212,7 +212,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should create a language component' do
         run = Uniword::Run.new
         run.text = 'Multi-language'
-        run.properties = Uniword::Properties::RunProperties.new(
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(
           language: 'en-US',
           language_east_asia: 'zh-CN',
           language_bidi: 'ar-SA'
@@ -226,7 +226,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support simple language' do
         run = Uniword::Run.new
         run.text = 'English'
-        run.properties = Uniword::Properties::RunProperties.new(language: 'en-US')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(language: 'en-US')
 
         expect(run.properties.language).to eq('en-US')
       end
@@ -234,7 +234,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support east asian language' do
         run = Uniword::Run.new
         run.text = '中文'
-        run.properties = Uniword::Properties::RunProperties.new(language_east_asia: 'zh-CN')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(language_east_asia: 'zh-CN')
 
         expect(run.properties.language_east_asia).to eq('zh-CN')
       end
@@ -242,7 +242,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support bidirectional language' do
         run = Uniword::Run.new
         run.text = 'عربي'
-        run.properties = Uniword::Properties::RunProperties.new(language_bidi: 'ar-SA')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(language_bidi: 'ar-SA')
 
         expect(run.properties.language_bidi).to eq('ar-SA')
       end
@@ -254,7 +254,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should create character spacing' do
         run = Uniword::Run.new
         run.text = 'Spaced text'
-        run.properties = Uniword::Properties::RunProperties.new(character_spacing: 32)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: 32)
 
         expect(run.properties.character_spacing).to eq(32)
       end
@@ -262,7 +262,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support different spacing values' do
         run = Uniword::Run.new
         run.text = 'Wide spacing'
-        run.properties = Uniword::Properties::RunProperties.new(character_spacing: 100)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: 100)
 
         expect(run.properties.character_spacing).to eq(100)
       end
@@ -270,7 +270,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support negative spacing' do
         run = Uniword::Run.new
         run.text = 'Tight spacing'
-        run.properties = Uniword::Properties::RunProperties.new(character_spacing: -20)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: -20)
 
         expect(run.properties.character_spacing).to eq(-20)
       end
@@ -282,7 +282,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should create color without hash' do
         run = Uniword::Run.new
         run.text = 'White text'
-        run.properties = Uniword::Properties::RunProperties.new(color: 'FFFFFF')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(color: 'FFFFFF')
 
         expect(run.properties.color).to eq('FFFFFF')
       end
@@ -290,7 +290,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       it 'should support hex colors' do
         run = Uniword::Run.new
         run.text = 'Red text'
-        run.properties = Uniword::Properties::RunProperties.new(color: 'FF0000')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(color: 'FF0000')
 
         expect(run.properties.color).to eq('FF0000')
       end
@@ -301,7 +301,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         colors.each do |color|
           run = Uniword::Run.new
           run.text = 'Colored'
-          run.properties = Uniword::Properties::RunProperties.new(color: color)
+          run.properties = Uniword::Wordprocessingml::RunProperties.new(color: color)
 
           expect(run.properties.color).to eq(color)
         end
@@ -313,7 +313,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
     it 'should create fully formatted run' do
       run = Uniword::Run.new
       run.text = 'Fully formatted text'
-      run.properties = Uniword::Properties::RunProperties.new(
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(
         bold: true,
         italic: true,
         underline: 'single',
@@ -337,7 +337,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       para = Uniword::Paragraph.new
       run = Uniword::Run.new
       run.text = 'In paragraph'
-      run.properties = Uniword::Properties::RunProperties.new(bold: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
 
       para.add_run(run)
 
@@ -351,11 +351,11 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
 
       run1 = Uniword::Run.new
       run1.text = 'Bold '
-      run1.properties = Uniword::Properties::RunProperties.new(bold: true)
+      run1.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
 
       run2 = Uniword::Run.new
       run2.text = 'Italic '
-      run2.properties = Uniword::Properties::RunProperties.new(italic: true)
+      run2.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
 
       run3 = Uniword::Run.new
       run3.text = 'Normal'

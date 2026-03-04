@@ -14,7 +14,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
 
     it 'has valid properties structure' do
       para = Uniword::Paragraph.new
-      expect(para.properties).to be_a(Uniword::Properties::ParagraphProperties)
+      expect(para.properties).to be_a(Uniword::Wordprocessingml::ParagraphProperties)
     end
   end
 

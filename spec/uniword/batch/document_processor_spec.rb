@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../../../lib/uniword/batch/document_processor'
-require_relative '../../../lib/uniword/batch/processing_stage'
 require 'tempfile'
 require 'fileutils'
 

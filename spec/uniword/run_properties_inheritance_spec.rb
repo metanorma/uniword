@@ -13,12 +13,12 @@ RSpec.describe 'Run Properties Inheritance' do
       id: 'TestHeading1',
       name: 'Test Heading 1',
       type: 'paragraph',
-      run_properties: Uniword::Properties::RunProperties.new(
+      run_properties: Uniword::Wordprocessingml::RunProperties.new(
         bold: true,
         size: 32, # 16pt = 32 half-points
         color: 'FF0000'
       ),
-      paragraph_properties: Uniword::Properties::ParagraphProperties.new(
+      paragraph_properties: Uniword::Wordprocessingml::ParagraphProperties.new(
         spacing_before: 240,
         spacing_after: 120
       )

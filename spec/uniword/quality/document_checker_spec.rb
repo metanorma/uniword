@@ -46,9 +46,7 @@ RSpec.describe Uniword::Quality::DocumentChecker do
 
     it 'executes enabled rules' do
       # Add a paragraph that will trigger violations
-      para = Uniword::Paragraph.new
-      para.add_text('word ' * 600) # Exceeds max length
-      document.add_element(para)
+      document.add_paragraph(('word ' * 600).strip) # Exceeds max length
 
       report = checker.check(document)
       expect(report.violations).not_to be_empty
@@ -62,9 +60,7 @@ RSpec.describe Uniword::Quality::DocumentChecker do
       }
       checker = described_class.new(config: config)
 
-      para = Uniword::Paragraph.new
-      para.add_text('word ' * 600)
-      document.add_element(para)
+      document.add_paragraph(('word ' * 600).strip)
 
       report = checker.check(document)
       # Should have fewer violations since paragraph_length is disabled

@@ -41,7 +41,7 @@ RSpec.describe 'Docx Gem Compatibility - Styles' do
   end
 
   describe 'reading from styles.xml' do
-    let(:doc) { Uniword::Document.open('spec/fixtures/docx_gem/styles.docx') }
+    let(:doc) { Uniword.load('spec/fixtures/docx_gem/styles.docx') }
 
     it 'loads document styles' do
       expect(doc.styles_configuration).not_to be_nil
@@ -62,7 +62,7 @@ RSpec.describe 'Docx Gem Compatibility - Styles' do
   end
 
   describe 'style manipulation' do
-    let(:doc) { Uniword::Document.open('spec/fixtures/docx_gem/styles.docx') }
+    let(:doc) { Uniword.load('spec/fixtures/docx_gem/styles.docx') }
 
     it 'can add custom styles' do
       initial_count = doc.styles_configuration.all_styles.count
@@ -92,7 +92,7 @@ RSpec.describe 'Docx Gem Compatibility - Styles' do
   end
 
   describe 'applying styles to paragraphs' do
-    let(:doc) { Uniword::Document.open('spec/fixtures/docx_gem/styles.docx') }
+    let(:doc) { Uniword.load('spec/fixtures/docx_gem/styles.docx') }
 
     it 'reads paragraph styles' do
       para = doc.paragraphs.find { |p| p.style == 'Heading 1' }

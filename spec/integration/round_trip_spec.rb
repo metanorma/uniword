@@ -310,7 +310,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       # Create paragraph with properties
       para = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center',
           line_spacing: 240
         )
@@ -335,7 +335,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       # Create run with properties
       run = Uniword::Run.new(
         text: 'Formatted text',
-        properties: Uniword::Properties::RunProperties.new(
+        properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           italic: true,
           size: 48 # font_size * 2
@@ -517,12 +517,12 @@ RSpec.describe 'DOCX Round-trip Validation' do
       run = if i.even?
               Uniword::Run.new(
                 text: "Paragraph #{i + 1} with content",
-                properties: Uniword::Properties::RunProperties.new(bold: true)
+                properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
               )
             elsif i.odd?
               Uniword::Run.new(
                 text: "Paragraph #{i + 1} with content",
-                properties: Uniword::Properties::RunProperties.new(italic: true)
+                properties: Uniword::Wordprocessingml::RunProperties.new(italic: true)
               )
             else
               Uniword::Run.new(text: "Paragraph #{i + 1} with content")

@@ -113,9 +113,7 @@ RSpec.describe 'Inspection helpers' do
     let(:doc) { Uniword::Document.new }
 
     it 'provides readable inspect output' do
-      para = Uniword::Paragraph.new
-      para.add_text('Test')
-      doc.add_element(para)
+      doc.add_paragraph('Test')
       expect(doc.inspect).to include('Uniword::Document')
       expect(doc.inspect).to include('@body=...')
     end
@@ -147,7 +145,7 @@ RSpec.describe 'Inspection helpers' do
     end
 
     it 'shows formatting flags' do
-      run.properties = Uniword::Properties::RunProperties.new(bold: true, italic: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true, italic: true)
       expect(run.inspect).to include('bold')
       expect(run.inspect).to include('italic')
     end

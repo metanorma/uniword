@@ -405,7 +405,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       para = Uniword::Paragraph.new
 
       if para.respond_to?(:properties=)
-        props = Uniword::Properties::ParagraphProperties.new
+        props = Uniword::Wordprocessingml::ParagraphProperties.new
         props.left_indent = 5040 # 7 inches in twips
         para.properties = props
       end

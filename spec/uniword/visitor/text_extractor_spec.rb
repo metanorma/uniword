@@ -47,13 +47,8 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_document' do
     it 'extracts text from all document elements' do
       document = Uniword::Document.new
-      paragraph1 = Uniword::Paragraph.new
-      paragraph1.add_text('First paragraph')
-      paragraph2 = Uniword::Paragraph.new
-      paragraph2.add_text('Second paragraph')
-
-      document.add_element(paragraph1)
-      document.add_element(paragraph2)
+      document.add_paragraph('First paragraph')
+      document.add_paragraph('Second paragraph')
 
       extractor.visit_document(document)
 
@@ -97,8 +92,22 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_table' do
     it 'extracts text from all table rows' do
       table = Uniword::Table.new
-      table.add_text_row(['Cell 1', 'Cell 2'])
-      table.add_text_row(['Cell 3', 'Cell 4'])
+      table.rows << Uniword::TableRow.new.tap do |row|
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+        end
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        end
+      end
+      table.rows << Uniword::TableRow.new.tap do |row|
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 3') }
+        end
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 4') }
+        end
+      end
 
       extractor.visit_table(table)
 
@@ -115,9 +124,15 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_table_row' do
     it 'extracts text from all cells separated by pipes' do
       row = Uniword::TableRow.new
-      row.add_text_cell('Cell 1')
-      row.add_text_cell('Cell 2')
-      row.add_text_cell('Cell 3')
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+      end
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+      end
+      row.cells << Uniword::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 3') }
+      end
 
       extractor.visit_table_row(row)
 
@@ -134,8 +149,8 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_table_cell' do
     it 'extracts text from all paragraphs in cell' do
       cell = Uniword::TableCell.new
-      cell.add_text('First line')
-      cell.add_text('Second line')
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('First line') }
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Second line') }
 
       extractor.visit_table_cell(cell)
 
@@ -182,21 +197,30 @@ RSpec.describe Uniword::Visitor::TextExtractor do
       document = Uniword::Document.new
 
       # Add paragraph
-      paragraph = Uniword::Paragraph.new
-      paragraph.add_text('This is a ')
-      paragraph.add_text('paragraph.')
-      document.add_element(paragraph)
+      document.add_paragraph('This is a paragraph.')
 
       # Add table
       table = Uniword::Table.new
-      table.add_text_row(['Header 1', 'Header 2'], header: true)
-      table.add_text_row(['Data 1', 'Data 2'])
-      document.add_element(table)
+      table.rows << Uniword::TableRow.new.tap do |row|
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 1') }
+        end
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 2') }
+        end
+      end
+      table.rows << Uniword::TableRow.new.tap do |row|
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 1') }
+        end
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 2') }
+        end
+      end
+      document.body.tables << table
 
       # Add another paragraph
-      paragraph2 = Uniword::Paragraph.new
-      paragraph2.add_text('Final paragraph')
-      document.add_element(paragraph2)
+      document.add_paragraph('Final paragraph')
 
       extractor.visit_document(document)
 
@@ -213,15 +237,15 @@ RSpec.describe Uniword::Visitor::TextExtractor do
       row = Uniword::TableRow.new
 
       cell = Uniword::TableCell.new
-      cell.add_text('Line 1')
-      cell.add_text('Line 2')
-      row.add_cell(cell)
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Line 1') }
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Line 2') }
+      row.cells << cell
 
       cell2 = Uniword::TableCell.new
-      cell2.add_text('Cell 2')
-      row.add_cell(cell2)
+      cell2.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+      row.cells << cell2
 
-      table.add_row(row)
+      table.rows << row
 
       extractor.visit_table(table)
 

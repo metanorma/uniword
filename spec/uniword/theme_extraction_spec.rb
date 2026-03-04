@@ -310,7 +310,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       path = 'spec/fixtures/temp_theme_roundtrip.docx'
       doc.save(path)
 
-      reloaded = Uniword::Document.open(path)
+      reloaded = Uniword.load(path)
 
       expect(reloaded.theme).not_to be_nil
       expect(reloaded.theme.name).to eq('Round Trip Theme')
@@ -330,7 +330,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       path = 'spec/fixtures/temp_no_theme.docx'
       doc.save(path)
 
-      reloaded = Uniword::Document.open(path)
+      reloaded = Uniword.load(path)
 
       expect(reloaded.theme).to be_nil
 
@@ -350,7 +350,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       doc.styles_configuration.create_paragraph_style(
         'CorporateHeading',
         'Corporate Heading',
-        run_properties: Uniword::Properties::RunProperties.new(
+        run_properties: Uniword::Wordprocessingml::RunProperties.new(
           color: doc.theme.color(:accent1),
           font: doc.theme.major_font,
           bold: true,
@@ -360,7 +360,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
 
       # Use the style - create paragraph with properties first
       heading = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(style: 'CorporateHeading')
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: 'CorporateHeading')
       )
       heading.add_text('Corporate Heading')
       doc.add_element(heading)
@@ -369,7 +369,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       path = 'spec/fixtures/temp_themed_style.docx'
       doc.save(path)
 
-      reloaded = Uniword::Document.open(path)
+      reloaded = Uniword.load(path)
       style = reloaded.styles_configuration.style_by_id('CorporateHeading')
 
       expect(style).not_to be_nil

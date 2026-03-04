@@ -152,7 +152,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
   describe 'Document stream support' do
     it 'opens document from binary stream' do
       stream = File.binread("#{@fixtures_path}/basic.docx")
-      doc = Uniword::Document.open(stream)
+      doc = Uniword.load(stream)
       expect(doc).not_to be_nil
       expect(doc.paragraphs.size).to be > 0
     end
@@ -234,7 +234,7 @@ RSpec.describe 'Docx gem compatibility (Uniword)', :compatibility do
 
   describe 'Compatibility layer - Docx::Document alias' do
     it 'supports Docx::Document.open syntax' do
-      doc = Uniword::Document.open("#{@fixtures_path}/basic.docx")
+      doc = Uniword.load("#{@fixtures_path}/basic.docx")
       expect(doc).not_to be_nil
       expect(doc.paragraphs.size).to be > 0
     end

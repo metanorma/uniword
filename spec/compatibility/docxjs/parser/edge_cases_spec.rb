@@ -19,7 +19,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
         doc.save(temp_path)
 
         # Should still be able to read it
-        reloaded = Uniword::Document.open(temp_path)
+        reloaded = Uniword.load(temp_path)
         expect(reloaded.paragraphs.first.text).to eq('Test content')
       end
 
@@ -40,7 +40,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         temp_path = '/tmp/no_props.docx'
         doc.save(temp_path)
-        reloaded = Uniword::Document.open(temp_path)
+        reloaded = Uniword.load(temp_path)
 
         expect(reloaded.paragraphs.first.text).to eq('No properties')
       end
@@ -55,7 +55,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         temp_path = '/tmp/empty_run.docx'
         doc.save(temp_path)
-        reloaded = Uniword::Document.open(temp_path)
+        reloaded = Uniword.load(temp_path)
 
         expect(reloaded.paragraphs.first.runs.count).to eq(1)
       end
@@ -68,7 +68,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         temp_path = '/tmp/empty_table.docx'
         doc.save(temp_path)
-        reloaded = Uniword::Document.open(temp_path)
+        reloaded = Uniword.load(temp_path)
 
         expect(reloaded.tables.first.rows.count).to eq(0)
       end
@@ -97,7 +97,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         temp_path = '/tmp/deep_nesting.docx'
         doc.save(temp_path)
-        reloaded = Uniword::Document.open(temp_path)
+        reloaded = Uniword.load(temp_path)
 
         nested_para = reloaded.tables.first.rows.first.cells.first
                               .tables.first.rows.first.cells.first

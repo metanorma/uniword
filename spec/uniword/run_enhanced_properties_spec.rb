@@ -207,7 +207,7 @@ RSpec.describe Uniword::Run, 'Enhanced Properties' do
       run.character_spacing = 20
 
       expect(run.properties).not_to be_nil
-      expect(run.properties).to be_a(Uniword::Properties::RunProperties)
+      expect(run.properties).to be_a(Uniword::Wordprocessingml::RunProperties)
     end
 
     it 'reuses existing properties object' do

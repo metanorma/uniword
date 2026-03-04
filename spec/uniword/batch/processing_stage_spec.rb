@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require_relative '../../../lib/uniword/batch/processing_stage'
 
 RSpec.describe Uniword::Batch::ProcessingStage do
   # Create a test stage implementation

@@ -66,9 +66,7 @@ RSpec.describe 'Format Conversion', type: :integration do
     it 'converts MHTML to DOCX' do
       # Create MHTML document
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test conversion')
-      doc.add_element(para)
+      doc.add_paragraph('Test conversion')
       doc.save(mhtml_path, format: :mhtml)
 
       # Read MHTML
@@ -88,9 +86,7 @@ RSpec.describe 'Format Conversion', type: :integration do
       # Create MHTML with multiple paragraphs
       doc = Uniword::Document.new
       3.times do |i|
-        para = Uniword::Paragraph.new
-        para.add_text("Paragraph #{i + 1}")
-        doc.add_element(para)
+        doc.add_paragraph("Paragraph #{i + 1}")
       end
       doc.save(mhtml_path, format: :mhtml)
 
@@ -132,9 +128,9 @@ RSpec.describe 'Format Conversion', type: :integration do
 
       run = Uniword::Run.new
       run.text = 'Bold text'
-      run.properties = Uniword::Properties::RunProperties.new(bold: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       # DOCX → MHTML → DOCX
       doc.save(temp_docx1)
@@ -155,9 +151,9 @@ RSpec.describe 'Format Conversion', type: :integration do
 
       run = Uniword::Run.new
       run.text = 'Italic text'
-      run.properties = Uniword::Properties::RunProperties.new(italic: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       # DOCX → MHTML → DOCX
       doc.save(temp_docx1)
@@ -220,12 +216,12 @@ RSpec.describe 'Format Conversion', type: :integration do
       doc = Uniword::Document.new
 
       heading = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading1'
         )
       )
       heading.add_text('Heading')
-      doc.add_element(heading)
+      doc.body.paragraphs << heading
 
       # Convert DOCX → MHTML
       doc.save(docx_path)
@@ -317,9 +313,7 @@ RSpec.describe 'Format Conversion', type: :integration do
       # Create MHTML file
       mhtml_path = "#{tmp_dir}/test.doc"
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test')
-      doc.add_element(para)
+      doc.add_paragraph('Test')
       doc.save(mhtml_path, format: :mhtml)
 
       # Read without explicit format
@@ -333,9 +327,7 @@ RSpec.describe 'Format Conversion', type: :integration do
       # Create MHTML file with .mhtml extension
       mhtml_path = "#{tmp_dir}/test.mhtml"
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test MHTML')
-      doc.add_element(para)
+      doc.add_paragraph('Test MHTML')
       doc.save(mhtml_path, format: :mhtml)
 
       # Read with explicit format
@@ -363,22 +355,20 @@ RSpec.describe 'Format Conversion', type: :integration do
     para1 = Uniword::Paragraph.new
     bold_run = Uniword::Run.new
     bold_run.text = 'Bold text'
-    bold_run.properties = Uniword::Properties::RunProperties.new(bold: true)
+    bold_run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
     para1.add_run(bold_run)
-    doc.add_element(para1)
+    doc.body.paragraphs << para1
 
     # Italic paragraph
     para2 = Uniword::Paragraph.new
     italic_run = Uniword::Run.new
     italic_run.text = 'Italic text'
-    italic_run.properties = Uniword::Properties::RunProperties.new(italic: true)
+    italic_run.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
     para2.add_run(italic_run)
-    doc.add_element(para2)
+    doc.body.paragraphs << para2
 
     # Normal paragraph
-    para3 = Uniword::Paragraph.new
-    para3.add_text('Normal text')
-    doc.add_element(para3)
+    doc.add_paragraph('Normal text')
 
     doc
   end
@@ -387,9 +377,7 @@ RSpec.describe 'Format Conversion', type: :integration do
     doc = Uniword::Document.new
 
     # Add paragraph
-    para = Uniword::Paragraph.new
-    para.add_text('Before table')
-    doc.add_element(para)
+    doc.add_paragraph('Before table')
 
     # Add table
     table = Uniword::Table.new
@@ -400,12 +388,10 @@ RSpec.describe 'Format Conversion', type: :integration do
     cell.add_paragraph(cell_para)
     row.add_cell(cell)
     table.add_row(row)
-    doc.add_element(table)
+    doc.body.tables << table
 
     # Add paragraph after
-    para2 = Uniword::Paragraph.new
-    para2.add_text('After table')
-    doc.add_element(para2)
+    doc.add_paragraph('After table')
 
     doc
   end
@@ -415,24 +401,24 @@ RSpec.describe 'Format Conversion', type: :integration do
 
     # Heading
     heading = Uniword::Paragraph.new(
-      properties: Uniword::Properties::ParagraphProperties.new(
+      properties: Uniword::Wordprocessingml::ParagraphProperties.new(
         style: 'Heading1'
       )
     )
     heading.add_text('Document Title')
-    doc.add_element(heading)
+    doc.body.paragraphs << heading
 
     # Formatted paragraph
     para1 = Uniword::Paragraph.new
     bold_run = Uniword::Run.new
     bold_run.text = 'Bold'
-    bold_run.properties = Uniword::Properties::RunProperties.new(bold: true)
+    bold_run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
     para1.add_run(bold_run)
 
     normal_run = Uniword::Run.new
     normal_run.text = ' and normal'
     para1.add_run(normal_run)
-    doc.add_element(para1)
+    doc.body.paragraphs << para1
 
     # Table
     table = Uniword::Table.new
@@ -443,12 +429,10 @@ RSpec.describe 'Format Conversion', type: :integration do
     cell.add_paragraph(cell_para)
     row.add_cell(cell)
     table.add_row(row)
-    doc.add_element(table)
+    doc.body.tables << table
 
     # Final paragraph
-    para2 = Uniword::Paragraph.new
-    para2.add_text('Conclusion')
-    doc.add_element(para2)
+    doc.add_paragraph('Conclusion')
 
     doc
   end

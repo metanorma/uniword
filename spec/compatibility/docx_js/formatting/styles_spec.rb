@@ -74,7 +74,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
         doc.styles_configuration.add_paragraph_style(style)
 
         para = Uniword::Paragraph.new
-        para.properties = Uniword::Properties::ParagraphProperties.new(style: 'CustomStyle')
+        para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'CustomStyle')
         para.add_text('Styled paragraph')
 
         expect(para.properties.style).to eq('CustomStyle')
@@ -145,7 +145,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
 
         run = Uniword::Run.new
         run.text = 'Styled text'
-        run.properties = Uniword::Properties::RunProperties.new(style: 'CustomChar')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(style: 'CustomChar')
 
         expect(run.properties.style).to eq('CustomChar')
       end
@@ -164,7 +164,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
 
         # Default Normal style should be available
         para = Uniword::Paragraph.new
-        para.properties = Uniword::Properties::ParagraphProperties.new(style: 'Normal')
+        para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Normal')
         para.add_text('Normal text')
 
         expect(para.properties.style).to eq('Normal')
@@ -175,7 +175,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
 
         # Heading styles should be usable
         para = Uniword::Paragraph.new
-        para.properties = Uniword::Properties::ParagraphProperties.new(style: 'Heading1')
+        para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
         para.add_text('Heading 1')
 
         expect(para.properties.style).to eq('Heading1')
@@ -236,7 +236,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
         )
 
         # Styles can have run properties
-        style.run_properties = Uniword::Properties::RunProperties.new(
+        style.run_properties = Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           size: 24,
           color: 'FF0000'
@@ -262,7 +262,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
         )
 
         # Styles can have paragraph properties
-        style.paragraph_properties = Uniword::Properties::ParagraphProperties.new(
+        style.paragraph_properties = Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center',
           indent_left: 720,
           spacing_before: 240
@@ -287,7 +287,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
           style_name: 'Custom Character'
         )
 
-        style.run_properties = Uniword::Properties::RunProperties.new(
+        style.run_properties = Uniword::Wordprocessingml::RunProperties.new(
           italic: true,
           font: 'Arial',
           size: 20
@@ -314,12 +314,12 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
           style_id: 'CustomHeading',
           style_name: 'Custom Heading'
         )
-        heading_style.run_properties = Uniword::Properties::RunProperties.new(
+        heading_style.run_properties = Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           size: 32,
           color: '0000FF'
         )
-        heading_style.paragraph_properties = Uniword::Properties::ParagraphProperties.new(
+        heading_style.paragraph_properties = Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center',
           spacing_before: 240,
           spacing_after: 120
@@ -331,7 +331,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
           style_id: 'CustomEmphasis',
           style_name: 'Custom Emphasis'
         )
-        emphasis_style.run_properties = Uniword::Properties::RunProperties.new(
+        emphasis_style.run_properties = Uniword::Wordprocessingml::RunProperties.new(
           italic: true,
           color: 'FF0000'
         )
@@ -339,7 +339,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
 
         # Use paragraph style
         para1 = Uniword::Paragraph.new
-        para1.properties = Uniword::Properties::ParagraphProperties.new(style: 'CustomHeading')
+        para1.properties = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'CustomHeading')
         para1.add_text('Styled Heading')
         doc.add_paragraph(para1)
 
@@ -347,7 +347,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
         para2 = Uniword::Paragraph.new
         run = Uniword::Run.new
         run.text = 'Emphasized text'
-        run.properties = Uniword::Properties::RunProperties.new(style: 'CustomEmphasis')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(style: 'CustomEmphasis')
         para2.add_run(run)
         doc.add_paragraph(para2)
 
@@ -370,7 +370,7 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
         # Use same style multiple times
         3.times do |i|
           para = Uniword::Paragraph.new
-          para.properties = Uniword::Properties::ParagraphProperties.new(style: 'Reusable')
+          para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Reusable')
           para.add_text("Paragraph #{i + 1}")
           doc.add_paragraph(para)
         end

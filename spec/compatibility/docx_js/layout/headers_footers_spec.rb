@@ -218,7 +218,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
 
       footer = Uniword::Footer.new
       para = Uniword::Paragraph.new
-      para.properties = Uniword::Properties::ParagraphProperties.new(
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         alignment: 'right'
       )
 
@@ -239,7 +239,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       para = Uniword::Paragraph.new
 
       run = Uniword::Run.new(text: 'Bold Header')
-      run.properties = Uniword::Properties::RunProperties.new(bold: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_run(run)
 
       header.add_element(para)
@@ -254,9 +254,9 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       table = Uniword::Table.new
       row = Uniword::TableRow.new
       cell = Uniword::TableCell.new
-      cell.add_text('Header table cell')
-      row.add_cell(cell)
-      table.add_row(row)
+      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header table cell') }
+      row.cells << cell
+      table.rows << row
 
       header.add_element(table)
 

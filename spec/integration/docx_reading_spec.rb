@@ -9,17 +9,17 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     let(:docx_path) { File.join(fixtures_dir, 'basic.docx') }
 
     it 'can open and parse the file' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Document)
     end
 
     it 'extracts paragraphs' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       expect(document.paragraphs).not_to be_empty
     end
 
     it 'extracts text content' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       text = document.paragraphs.map(&:text).join("\n")
       expect(text).to include('hello')
       expect(text).to include('world')
@@ -30,12 +30,12 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
 
     it 'can open and parse the file' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Document)
     end
 
     it 'extracts paragraphs with runs' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       paragraphs = document.paragraphs
       expect(paragraphs).not_to be_empty
 
@@ -49,18 +49,18 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     let(:docx_path) { File.join(fixtures_dir, 'tables.docx') }
 
     it 'can open and parse the file' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Document)
     end
 
     it 'extracts tables from the document' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       tables = document.body.tables
       expect(tables).not_to be_empty
     end
 
     it 'extracts table structure (rows and cells)' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       tables = document.body.tables
 
       # Should have at least one table
@@ -75,7 +75,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'extracts cell content (paragraphs in cells)' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
       table = document.body.tables.first
 
       # Get first cell
@@ -93,7 +93,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
 
     it 'extracts text formatting (bold, italic, etc.)' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Collect all runs from all paragraphs
       all_runs = document.paragraphs.flat_map(&:runs)
@@ -104,7 +104,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'detects bold formatting' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find runs with bold formatting
       bold_runs = []
@@ -120,7 +120,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'detects italic formatting' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find runs with italic formatting
       italic_runs = []
@@ -134,7 +134,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'extracts font properties' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find runs with font specified
       runs_with_font = []
@@ -149,7 +149,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'extracts font size' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find runs with size specified
       runs_with_size = []
@@ -167,7 +167,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
 
     it 'extracts paragraph properties' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # At least some paragraphs should have properties
       paras_with_props = document.paragraphs.select(&:properties)
@@ -175,7 +175,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'detects paragraph alignment' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find paragraphs with alignment
       paras_with_alignment = document.paragraphs.select do |para|
@@ -186,7 +186,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
 
     it 'detects paragraph styles' do
-      document = Uniword::Document.open(docx_path)
+      document = Uniword.load(docx_path)
 
       # Find paragraphs with styles
       paras_with_style = document.paragraphs.select do |para|
@@ -213,7 +213,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
         next unless File.exist?(fixture_path)
 
         expect do
-          document = Uniword::Document.open(fixture_path)
+          document = Uniword.load(fixture_path)
           # Force some basic operations to ensure parsing works
           document.paragraphs.each(&:text)
           document.body.tables.each(&:rows)

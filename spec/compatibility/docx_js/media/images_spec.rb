@@ -560,7 +560,7 @@ RSpec.describe 'Docx.js Compatibility: Images', :compatibility do
       # Save and reload
       temp_path = '/tmp/images_test.docx'
       original.save(temp_path)
-      reloaded = Uniword::Document.open(temp_path)
+      reloaded = Uniword.load(temp_path)
 
       # Verify image preserved
       img = reloaded.paragraphs.first.images.first

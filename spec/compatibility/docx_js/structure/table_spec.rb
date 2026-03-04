@@ -71,7 +71,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         cell1 = Uniword::TableCell.new
         para1 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
         cell1.add_paragraph(para1)
-        cell1.properties = Uniword::Properties::TableProperties.new(column_span: 2)
+        cell1.properties = Uniword::Wordprocessingml::TableProperties.new(column_span: 2)
         row1.add_cell(cell1)
         table.add_row(row1)
 
@@ -107,7 +107,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         cell2_1 = Uniword::TableCell.new
         para2_1 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
         cell2_1.add_paragraph(para2_1)
-        cell2_1.properties = Uniword::Properties::TableProperties.new(row_span: 2)
+        cell2_1.properties = Uniword::Wordprocessingml::TableProperties.new(row_span: 2)
         row2.add_cell(cell2_1)
 
         cell2_2 = Uniword::TableCell.new
@@ -135,7 +135,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('Merged cell') }
         cell.add_paragraph(para)
-        cell.properties = Uniword::Properties::TableProperties.new(
+        cell.properties = Uniword::Wordprocessingml::TableProperties.new(
           column_span: 2,
           row_span: 2
         )
@@ -150,7 +150,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'table layout' do
       it 'sets the table to fixed width layout' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(layout: 'fixed')
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(layout: 'fixed')
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
@@ -182,7 +182,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'table alignment' do
       it 'should center the table' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(alignment: 'center')
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(alignment: 'center')
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
@@ -196,7 +196,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'should left align the table' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(alignment: 'left')
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(alignment: 'left')
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
@@ -210,7 +210,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'should right align the table' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(alignment: 'right')
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(alignment: 'right')
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
@@ -226,7 +226,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'table width' do
       it 'should set the table to provided 100% width' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: 100,
           width_type: 'pct',
           layout: 'fixed'
@@ -246,7 +246,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'should set the table to provided DXA width' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: 1000,
           width_type: 'dxa',
           layout: 'fixed'
@@ -265,14 +265,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'should set specific column widths' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: 5000,
           width_type: 'dxa'
         )
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        cell.properties = Uniword::Properties::TableProperties.new(
+        cell.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: 2500,
           width_type: 'dxa'
         )
@@ -289,7 +289,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'table borders' do
       it 'should set table borders' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           border_top_style: 'single',
           border_top_size: 4,
           border_top_color: 'auto'
@@ -309,7 +309,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'should set all borders at once' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           border_top_style: 'single',
           border_left_style: 'single',
           border_bottom_style: 'single',
@@ -377,7 +377,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'float properties' do
       it 'sets the table float properties' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           float_horizontal_anchor: 'margin',
           float_vertical_anchor: 'page',
           float_absolute_horizontal_position: 10,
@@ -403,7 +403,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
       it 'sets float spacing from text' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           float_bottom_from_text: 30,
           float_top_from_text: 40,
           float_left_from_text: 50,
@@ -427,7 +427,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
     describe 'integrated table operations' do
       it 'creates a complete table with formatting' do
         table = Uniword::Table.new
-        table.properties = Uniword::Properties::TableProperties.new(
+        table.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: 100,
           width_type: 'pct',
           alignment: 'center',
@@ -441,7 +441,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           para = Uniword::Paragraph.new
           run = Uniword::Run.new
           run.text = header
-          run.properties = Uniword::Properties::RunProperties.new(bold: true)
+          run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
           para.add_run(run)
           cell.add_paragraph(para)
           header_row.add_cell(cell)

@@ -27,7 +27,7 @@ RSpec.describe 'StyleSet Integration' do
 
       # Verify properties are actual objects
       styles_with_pPr.each do |style|
-        expect(style.paragraph_properties).to be_a(Uniword::Properties::ParagraphProperties)
+        expect(style.paragraph_properties).to be_a(Uniword::Wordprocessingml::ParagraphProperties)
       end
     end
 
@@ -41,7 +41,7 @@ RSpec.describe 'StyleSet Integration' do
 
       # Verify properties are actual objects
       styles_with_rPr.each do |style|
-        expect(style.run_properties).to be_a(Uniword::Properties::RunProperties)
+        expect(style.run_properties).to be_a(Uniword::Wordprocessingml::RunProperties)
       end
     end
 

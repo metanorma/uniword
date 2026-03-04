@@ -28,7 +28,7 @@ RSpec.describe 'DOCX Performance' do
         )
         para.add_run(run)
       end
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     doc
@@ -58,7 +58,7 @@ RSpec.describe 'DOCX Performance' do
         table.add_row(row)
       end
 
-      doc.add_element(table)
+      doc.body.tables << table
     end
 
     doc
@@ -218,7 +218,7 @@ RSpec.describe 'DOCX Performance' do
             text_element: Uniword::TextElement.new(content: "Paragraph #{i}")
           )
           para.add_run(run)
-          doc.add_element(para)
+          doc.body.paragraphs << para
         end
       end
 

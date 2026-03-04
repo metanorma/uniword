@@ -431,7 +431,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       # Bold run
       bold_run = Uniword::Run.new
       bold_run.text = 'Bold'
-      bold_run.properties = Uniword::Properties::RunProperties.new(bold: true)
+      bold_run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_run(bold_run)
 
       # Normal run
@@ -442,7 +442,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       # Italic run
       italic_run = Uniword::Run.new
       italic_run.text = 'italic'
-      italic_run.properties = Uniword::Properties::RunProperties.new(
+      italic_run.properties = Uniword::Wordprocessingml::RunProperties.new(
         italic: true
       )
       para.add_run(italic_run)
@@ -493,7 +493,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
 
       %w[Heading1 Heading2 Heading3 Heading4 Heading5 Heading6].each do |style|
         para = Uniword::Paragraph.new(
-          properties: Uniword::Properties::ParagraphProperties.new(style: style)
+          properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
         )
         para.add_text("#{style} text")
         doc.add_element(para)
@@ -525,7 +525,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
 
       run = Uniword::Run.new
       run.text = 'Formatted'
-      run.properties = Uniword::Properties::RunProperties.new
+      run.properties = Uniword::Wordprocessingml::RunProperties.new
       run.properties.bold = true
       run.properties.italic = true
       run.properties.underline = true

@@ -160,7 +160,14 @@ RSpec.describe Uniword::Validators::ElementValidator do
 
     it 'validates tables correctly' do
       table = Uniword::Table.new
-      table.add_text_row(['Cell 1', 'Cell 2'])
+      table.rows << Uniword::TableRow.new.tap do |row|
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+        end
+        row.cells << Uniword::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        end
+      end
 
       expect(validator.valid?(table)).to be true
     end

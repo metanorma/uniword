@@ -20,12 +20,8 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
   describe '#extract' do
     let(:document) do
       doc = Uniword::Document.new
-      para1 = Uniword::Paragraph.new
-      para1.add_text('First paragraph with some words')
-      para2 = Uniword::Paragraph.new
-      para2.add_text('Second paragraph content')
-      doc.add_element(para1)
-      doc.add_element(para2)
+      doc.add_paragraph('First paragraph with some words')
+      doc.add_paragraph('Second paragraph content')
       doc
     end
 
@@ -66,7 +62,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
         heading.add_text('Heading 1')
         # Mock the style method
         allow(heading).to receive(:style).and_return('Heading 1')
-        doc.add_element(heading)
+        doc.body.paragraphs << heading
         doc
       end
 
@@ -95,9 +91,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
       it 'limits first paragraph length' do
         long_doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        para.add_text('x' * 1000)
-        long_doc.add_element(para)
+        long_doc.add_paragraph('x' * 1000)
 
         metadata = extractor.extract(long_doc)
 
@@ -116,9 +110,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
     let(:document) do
       doc = Uniword::Document.new
       5.times do |i|
-        para = Uniword::Paragraph.new
-        para.add_text("Paragraph #{i} content")
-        doc.add_element(para)
+        doc.add_paragraph("Paragraph #{i} content")
       end
       doc
     end

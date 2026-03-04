@@ -77,9 +77,9 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
         tbl = Uniword::Table.new
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        cell.add_text('Cell content')
-        row.add_cell(cell)
-        tbl.add_row(row)
+        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        row.cells << cell
+        tbl.rows << row
         tbl
       end
 

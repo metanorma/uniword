@@ -13,7 +13,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
 
       para2 = Uniword::Paragraph.new
       para2.add_text('Hello World on another page')
-      para2.properties = Uniword::Properties::ParagraphProperties.new(
+      para2.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         page_break_before: true
       )
       doc.add_element(para2)
@@ -38,7 +38,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
         para.add_text("Page #{i + 1}")
 
         if i > 0
-          para.properties = Uniword::Properties::ParagraphProperties.new(
+          para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
             page_break_before: true
           )
         end
@@ -149,7 +149,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
     it 'should keep paragraph on same page' do
       para = Uniword::Paragraph.new
       para.add_text('Content to keep on one page')
-      para.properties = Uniword::Properties::ParagraphProperties.new(
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         keep_lines: true
       )
 
@@ -159,7 +159,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
     it 'should keep paragraph with next' do
       para = Uniword::Paragraph.new
       para.add_text('Heading')
-      para.properties = Uniword::Properties::ParagraphProperties.new(
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         keep_next: true
       )
 
@@ -169,7 +169,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
     it 'should combine keep properties' do
       para = Uniword::Paragraph.new
       para.add_text('Important heading')
-      para.properties = Uniword::Properties::ParagraphProperties.new(
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         keep_lines: true,
         keep_next: true
       )

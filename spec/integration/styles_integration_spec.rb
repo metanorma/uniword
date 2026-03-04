@@ -18,30 +18,30 @@ RSpec.describe 'Styles Integration', :integration do
 
       # Add Normal paragraph
       p1 = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Normal'
         )
       )
       p1.add_text('This is a normal paragraph.')
-      doc.add_element(p1)
+      doc.body.paragraphs << p1
 
       # Add Heading 1
       p2 = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading1'
         )
       )
       p2.add_text('This is Heading 1')
-      doc.add_element(p2)
+      doc.body.paragraphs << p2
 
       # Add Heading 2
       p3 = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading2'
         )
       )
       p3.add_text('This is Heading 2')
-      doc.add_element(p3)
+      doc.body.paragraphs << p3
 
       # Save document
       doc.save(temp_file.path)
@@ -51,7 +51,7 @@ RSpec.describe 'Styles Integration', :integration do
       expect(File.size(temp_file.path)).to be > 0
 
       # Read document back
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify paragraphs (style returns NAME, not ID)
       expect(loaded_doc.paragraphs.size).to eq(3)
@@ -84,12 +84,12 @@ RSpec.describe 'Styles Integration', :integration do
       doc.styles_configuration.create_paragraph_style(
         'MyCustomStyle',
         'My Custom Style',
-        paragraph_properties: Uniword::Properties::ParagraphProperties.new(
+        paragraph_properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center',
           spacing_before: 240,
           spacing_after: 120
         ),
-        run_properties: Uniword::Properties::RunProperties.new(
+        run_properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           size: 32,
           color: 'FF0000'
@@ -98,16 +98,16 @@ RSpec.describe 'Styles Integration', :integration do
 
       # Use the custom style
       p = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'MyCustomStyle'
         )
       )
       p.add_text('Styled with custom style')
-      doc.add_element(p)
+      doc.body.paragraphs << p
 
       # Save and reload
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify custom style was preserved
       loaded_style = loaded_doc.styles_configuration.style_by_id('MyCustomStyle')
@@ -132,7 +132,7 @@ RSpec.describe 'Styles Integration', :integration do
         'DerivedHeading',
         'Derived Heading',
         based_on: 'Heading1',
-        paragraph_properties: Uniword::Properties::ParagraphProperties.new(
+        paragraph_properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'right'
         )
       )
@@ -141,15 +141,15 @@ RSpec.describe 'Styles Integration', :integration do
 
       # Save and reload
       p = Uniword::Paragraph.new(
-        properties: Uniword::Properties::ParagraphProperties.new(
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'DerivedHeading'
         )
       )
       p.add_text('Derived heading text')
-      doc.add_element(p)
+      doc.body.paragraphs << p
 
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify inheritance
       loaded_style = loaded_doc.styles_configuration.style_by_id('DerivedHeading')
@@ -167,7 +167,7 @@ RSpec.describe 'Styles Integration', :integration do
       # Add run with Strong style
       p.add_text(
         'Bold text',
-        properties: Uniword::Properties::RunProperties.new(
+        properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Strong'
         )
       )
@@ -175,16 +175,16 @@ RSpec.describe 'Styles Integration', :integration do
       # Add run with Emphasis style
       p.add_text(
         ' and italic text',
-        properties: Uniword::Properties::RunProperties.new(
+        properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Emphasis'
         )
       )
 
-      doc.add_element(p)
+      doc.body.paragraphs << p
 
       # Save and reload
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify character styles
       para = loaded_doc.paragraphs.first
@@ -199,17 +199,17 @@ RSpec.describe 'Styles Integration', :integration do
 
       (1..9).each do |level|
         p = Uniword::Paragraph.new(
-          properties: Uniword::Properties::ParagraphProperties.new(
+          properties: Uniword::Wordprocessingml::ParagraphProperties.new(
             style: "Heading#{level}"
           )
         )
         p.add_text("Heading level #{level}")
-        doc.add_element(p)
+        doc.body.paragraphs << p
       end
 
       # Save and reload
       doc.save(temp_file.path)
-      loaded_doc = Uniword::Document.open(temp_file.path)
+      loaded_doc = Uniword.load(temp_file.path)
 
       # Verify all headings (style returns NAME, not ID)
       expect(loaded_doc.paragraphs.size).to eq(9)
