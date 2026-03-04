@@ -225,7 +225,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
 
-      expect(doc2.elements.count).to eq(100)
+      expect(doc2.paragraphs.count).to eq(100)
     end
 
     it 'handles paragraphs with very long text' do

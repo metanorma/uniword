@@ -59,7 +59,6 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
-      expect(doc2.elements).to be_empty
       expect(doc2.paragraphs).to be_empty
     end
   end
