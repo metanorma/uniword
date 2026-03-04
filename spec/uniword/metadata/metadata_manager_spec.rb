@@ -2,8 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/metadata/metadata_manager'
-require 'uniword/document'
-require 'uniword/paragraph'
 
 RSpec.describe Uniword::Metadata::MetadataManager do
   let(:manager) { described_class.new }

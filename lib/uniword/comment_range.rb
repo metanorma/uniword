@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'element'
-
 module Uniword
   # Represents a comment range marker in a Word document.
   #

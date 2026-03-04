@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Properties::TableProperties do
+RSpec.describe Uniword::Wordprocessingml::TableProperties do
   describe '#initialize' do
     it 'creates properties with default values' do
       props = described_class.new

@@ -2,9 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/assembly/variable_substitutor'
-require 'uniword/document'
-require 'uniword/paragraph'
-require 'uniword/run'
 
 RSpec.describe Uniword::Assembly::VariableSubstitutor do
   describe '#initialize' do

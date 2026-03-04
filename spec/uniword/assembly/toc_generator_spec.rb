@@ -2,9 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/assembly/toc_generator'
-require 'uniword/document'
-require 'uniword/paragraph'
-require 'uniword/run'
 
 RSpec.describe Uniword::Assembly::TocGenerator do
   let(:document) do

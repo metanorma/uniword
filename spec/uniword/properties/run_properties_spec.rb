@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Properties::RunProperties do
+RSpec.describe Uniword::Wordprocessingml::RunProperties do
   describe '#initialize' do
     it 'creates properties with default values' do
       props = described_class.new

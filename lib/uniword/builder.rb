@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'document'
-require_relative 'paragraph'
-require_relative 'table'
-
 module Uniword
   # Document builder with fluent interface and DSL support
   # Provides an easy, chainable API for document construction

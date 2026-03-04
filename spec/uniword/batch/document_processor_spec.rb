@@ -3,7 +3,6 @@
 require 'spec_helper'
 require_relative '../../../lib/uniword/batch/document_processor'
 require_relative '../../../lib/uniword/batch/processing_stage'
-require_relative '../../../lib/uniword/document'
 require 'tempfile'
 require 'fileutils'
 

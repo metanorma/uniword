@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'uniword/assembly/component_registry'
-require 'uniword/document'
 require 'fileutils'
 require 'tmpdir'
 

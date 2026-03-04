@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/footnote'
-require 'uniword/paragraph'
 
 RSpec.describe Uniword::Footnote do
   describe '#initialize' do

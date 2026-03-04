@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/bookmark'
-require 'uniword/paragraph'
 
 RSpec.describe Uniword::Bookmark do
   describe '#initialize' do

@@ -17,12 +17,8 @@ module Uniword
 
     # OOXML namespace configuration for images (drawing elements)
     xml do
-      element 'drawing', mixed: true
+      root 'drawing'
       namespace Ooxml::Namespaces::WordProcessingML
-      namespace Ooxml::Namespaces::WordProcessingDrawing
-      namespace Ooxml::Namespaces::DrawingML
-      namespace Ooxml::Namespaces::Picture
-      namespace Ooxml::Namespaces::Relationships
     end
 
     # Image relationship ID (reference to the image file in the package)

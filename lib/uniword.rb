@@ -167,6 +167,76 @@ module Uniword
     autoload :MimePackager, 'uniword/infrastructure/mime_packager'
   end
 
+  # Autoload accessibility module
+  module Accessibility
+    autoload :AccessibilityChecker, 'uniword/accessibility/accessibility_checker'
+    autoload :AccessibilityProfile, 'uniword/accessibility/accessibility_profile'
+    autoload :AccessibilityReport, 'uniword/accessibility/accessibility_report'
+    autoload :AccessibilityRule, 'uniword/accessibility/accessibility_rule'
+    autoload :AccessibilityViolation, 'uniword/accessibility/accessibility_violation'
+
+    # Rules submodule
+    module Rules
+      autoload :ColorUsageRule, 'uniword/accessibility/rules/color_usage_rule'
+      autoload :ContrastRatioRule, 'uniword/accessibility/rules/contrast_ratio_rule'
+      autoload :DescriptiveHeadingsRule, 'uniword/accessibility/rules/descriptive_headings_rule'
+      autoload :DocumentTitleRule, 'uniword/accessibility/rules/document_title_rule'
+      autoload :HeadingStructureRule, 'uniword/accessibility/rules/heading_structure_rule'
+      autoload :ImageAltTextRule, 'uniword/accessibility/rules/image_alt_text_rule'
+      autoload :LanguageSpecificationRule, 'uniword/accessibility/rules/language_specification_rule'
+      autoload :ListStructureRule, 'uniword/accessibility/rules/list_structure_rule'
+      autoload :ReadingOrderRule, 'uniword/accessibility/rules/reading_order_rule'
+      autoload :TableHeadersRule, 'uniword/accessibility/rules/table_headers_rule'
+    end
+  end
+
+  # Autoload assembly module
+  module Assembly
+    autoload :AssemblyManifest, 'uniword/assembly/assembly_manifest'
+    autoload :ComponentRegistry, 'uniword/assembly/component_registry'
+    autoload :CrossReferenceResolver, 'uniword/assembly/cross_reference_resolver'
+    autoload :DocumentAssembler, 'uniword/assembly/document_assembler'
+    autoload :TocGenerator, 'uniword/assembly/toc_generator'
+    autoload :VariableSubstitutor, 'uniword/assembly/variable_substitutor'
+  end
+
+  # Autoload batch module
+  module Batch
+    autoload :BatchResult, 'uniword/batch/batch_result'
+    autoload :DocumentProcessor, 'uniword/batch/document_processor'
+    autoload :ProcessingStage, 'uniword/batch/processing_stage'
+    # Stages
+    autoload :CompressImagesStage, 'uniword/batch/stages/compress_images_stage'
+    autoload :ConvertFormatStage, 'uniword/batch/stages/convert_format_stage'
+    autoload :NormalizeStylesStage, 'uniword/batch/stages/normalize_styles_stage'
+    autoload :QualityCheckStage, 'uniword/batch/stages/quality_check_stage'
+    autoload :UpdateMetadataStage, 'uniword/batch/stages/update_metadata_stage'
+    autoload :ValidateLinksStage, 'uniword/batch/stages/validate_links_stage'
+  end
+
+  # Autoload metadata module
+  module Metadata
+    autoload :MetadataExtractor, 'uniword/metadata/metadata_extractor'
+    autoload :MetadataIndex, 'uniword/metadata/metadata_index'
+    autoload :MetadataManager, 'uniword/metadata/metadata_manager'
+    autoload :MetadataUpdater, 'uniword/metadata/metadata_updater'
+    autoload :MetadataValidator, 'uniword/metadata/metadata_validator'
+  end
+
+  # Autoload quality module
+  module Quality
+    autoload :DocumentChecker, 'uniword/quality/document_checker'
+    autoload :QualityReport, 'uniword/quality/quality_report'
+    autoload :QualityRule, 'uniword/quality/quality_rule'
+    # Rules
+    autoload :HeadingHierarchyRule, 'uniword/quality/rules/heading_hierarchy_rule'
+    autoload :ImageAltTextRule, 'uniword/quality/rules/image_alt_text_rule'
+    autoload :LinkValidationRule, 'uniword/quality/rules/link_validation_rule'
+    autoload :ParagraphLengthRule, 'uniword/quality/rules/paragraph_length_rule'
+    autoload :StyleConsistencyRule, 'uniword/quality/rules/style_consistency_rule'
+    autoload :TableHeaderRule, 'uniword/quality/rules/table_header_rule'
+  end
+
   autoload :ContentTypes, 'uniword/content_types'
   autoload :DocumentProperties, 'uniword/document_properties'
   autoload :Glossary, 'uniword/glossary'
@@ -178,6 +248,19 @@ module Uniword
     autoload :DotxPackage, 'uniword/ooxml/dotx_package'
     autoload :ThmxPackage, 'uniword/ooxml/thmx_package'
     autoload :MhtmlPackage, 'uniword/ooxml/mhtml_package'
+    autoload :AppProperties, 'uniword/ooxml/app_properties'
+    autoload :CoreProperties, 'uniword/ooxml/core_properties'
+    autoload :Types, 'uniword/ooxml/types'
+    autoload :PackageFile, 'uniword/ooxml/package_file'
+
+    # Schema submodule
+    module Schema
+      autoload :OoxmlSchema, 'uniword/ooxml/schema/ooxml_schema'
+      autoload :ElementSerializer, 'uniword/ooxml/schema/element_serializer'
+      autoload :ElementDefinition, 'uniword/ooxml/schema/element_definition'
+      autoload :AttributeDefinition, 'uniword/ooxml/schema/attribute_definition'
+      autoload :ChildDefinition, 'uniword/ooxml/schema/child_definition'
+    end
 
     # Namespace definitions
     module Namespaces
@@ -199,6 +282,9 @@ module Uniword
 
   # === Top-Level Classes (Comprehensive Autoload) ===
   # All top-level classes in lib/uniword/*.rb use autoload for maintenance simplicity
+
+  # Base element class (required by many classes)
+  autoload :Element, 'uniword/element'
 
   # Document structure and components
   autoload :Bibliography, 'uniword/bibliography'
@@ -253,6 +339,7 @@ module Uniword
   autoload :FormatConverter, 'uniword/format_converter'
   autoload :LazyLoader, 'uniword/lazy_loader'
   autoload :Logger, 'uniword/logger'
+  autoload :Loggable, 'uniword/loggable'
   autoload :StreamingParser, 'uniword/streaming_parser'
 
   # Additional namespace loaders (Office ML variants)

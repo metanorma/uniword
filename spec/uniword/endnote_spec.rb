@@ -2,7 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/endnote'
-require 'uniword/paragraph'
 
 RSpec.describe Uniword::Endnote do
   describe '#initialize' do

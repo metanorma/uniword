@@ -5,7 +5,6 @@ require_relative 'component_registry'
 require_relative 'variable_substitutor'
 require_relative 'toc_generator'
 require_relative 'cross_reference_resolver'
-require_relative '../document'
 
 module Uniword
   module Assembly

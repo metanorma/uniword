@@ -2,9 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/assembly/document_assembler'
-require 'uniword/document'
-require 'uniword/paragraph'
-require 'uniword/run'
 require 'fileutils'
 require 'tmpdir'
 require 'yaml'

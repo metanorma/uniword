@@ -84,7 +84,7 @@ RSpec.describe Uniword::Style do
   end
 end
 
-RSpec.describe Uniword::ParagraphStyleDefinition do
+RSpec.describe Uniword::Styles::ParagraphStyleDefinition do
   describe 'Normal style creation' do
     it 'creates default Normal style' do
       style = described_class.normal
@@ -164,7 +164,7 @@ RSpec.describe Uniword::ParagraphStyleDefinition do
   end
 end
 
-RSpec.describe Uniword::CharacterStyleDefinition do
+RSpec.describe Uniword::Styles::CharacterStyleDefinition do
   describe 'default character style' do
     it 'creates default character style' do
       style = described_class.default_char

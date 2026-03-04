@@ -2,9 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/assembly/cross_reference_resolver'
-require 'uniword/document'
-require 'uniword/paragraph'
-require 'uniword/run'
 
 RSpec.describe Uniword::Assembly::CrossReferenceResolver do
   let(:resolver) { described_class.new }

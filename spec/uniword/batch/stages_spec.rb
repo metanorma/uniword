@@ -7,7 +7,6 @@ require_relative '../../../lib/uniword/batch/stages/validate_links_stage'
 require_relative '../../../lib/uniword/batch/stages/convert_format_stage'
 require_relative '../../../lib/uniword/batch/stages/compress_images_stage'
 require_relative '../../../lib/uniword/batch/stages/quality_check_stage'
-require_relative '../../../lib/uniword/document'
 
 RSpec.describe 'Batch Processing Stages' do
   let(:document) { Uniword::Document.new }

@@ -2,8 +2,6 @@
 
 require 'spec_helper'
 require 'uniword/metadata/metadata_extractor'
-require 'uniword/document'
-require 'uniword/paragraph'
 
 RSpec.describe Uniword::Metadata::MetadataExtractor do
   let(:extractor) { described_class.new }
