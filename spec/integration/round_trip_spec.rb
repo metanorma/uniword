@@ -48,12 +48,14 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       it 'preserves element structure' do
         doc1 = Uniword::DocumentFactory.from_file(fixture_path)
-        original_elements = doc1.elements.count
+        original_paragraphs = doc1.paragraphs.count
+        original_tables = doc1.tables.count
 
         doc1.save(temp_path)
         doc2 = Uniword::DocumentFactory.from_file(temp_path)
 
-        expect(doc2.elements.count).to eq(original_elements)
+        expect(doc2.paragraphs.count).to eq(original_paragraphs)
+        expect(doc2.tables.count).to eq(original_tables)
       end
     end
 
