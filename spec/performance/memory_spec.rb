@@ -18,7 +18,7 @@ RSpec.describe 'Memory Performance' do
         )
         para.add_run(run)
       end
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     doc
@@ -42,13 +42,13 @@ RSpec.describe 'Memory Performance' do
             )
           )
           para.add_run(run)
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
         end
         table.add_row(row)
       end
 
-      doc.add_element(table)
+      doc.body.tables << table
     end
 
     doc
@@ -171,7 +171,7 @@ RSpec.describe 'Memory Performance' do
             text_element: Uniword::TextElement.new(content: 'Same text')
           )
           para.add_run(run)
-          doc.add_element(para)
+          doc.body.paragraphs << para
         end
       end
 

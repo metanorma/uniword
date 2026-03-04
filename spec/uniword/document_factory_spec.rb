@@ -9,7 +9,7 @@ RSpec.describe Uniword::DocumentFactory do
       document = described_class.create
 
       expect(document).to be_a(Uniword::Document)
-      expect(document.elements).to be_empty
+      expect(document.paragraphs).to be_empty
     end
 
     it 'creates documents with independent state' do

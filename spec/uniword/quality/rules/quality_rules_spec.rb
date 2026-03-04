@@ -17,8 +17,8 @@ RSpec.describe 'Quality Rules' do
       para2.set_style('Heading 2')
       para2.add_text('Heading 2')
 
-      document.add_element(para1)
-      document.add_element(para2)
+      document.body.paragraphs << para1
+      document.body.paragraphs << para2
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -33,8 +33,8 @@ RSpec.describe 'Quality Rules' do
       para2.set_style('Heading 3')
       para2.add_text('Heading 3')
 
-      document.add_element(para1)
-      document.add_element(para2)
+      document.body.paragraphs << para1
+      document.body.paragraphs << para2
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -46,7 +46,7 @@ RSpec.describe 'Quality Rules' do
       para = Uniword::Paragraph.new
       para.set_style('Heading 7')
       para.add_text('Heading 7')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -64,7 +64,7 @@ RSpec.describe 'Quality Rules' do
       cell = Uniword::TableCell.new
       row.add_cell(cell)
       table.add_row(row)
-      document.add_element(table)
+      document.body.tables << table
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -72,7 +72,7 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects tables without headers' do
       table = Uniword::Table.new
-      document.add_element(table)
+      document.body.tables << table
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -87,7 +87,7 @@ RSpec.describe 'Quality Rules' do
     it 'passes for short paragraphs' do
       para = Uniword::Paragraph.new
       para.add_text('Short paragraph with few words.')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -96,7 +96,7 @@ RSpec.describe 'Quality Rules' do
     it 'warns for long paragraphs' do
       para = Uniword::Paragraph.new
       para.add_text('word ' * 450) # 450 words
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -107,7 +107,7 @@ RSpec.describe 'Quality Rules' do
     it 'errors for very long paragraphs' do
       para = Uniword::Paragraph.new
       para.add_text('word ' * 600) # 600 words
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -117,7 +117,7 @@ RSpec.describe 'Quality Rules' do
 
     it 'skips empty paragraphs' do
       para = Uniword::Paragraph.new
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -134,7 +134,7 @@ RSpec.describe 'Quality Rules' do
         alt_text: 'Detailed description of the image content'
       )
       para.add_run(image)
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -144,7 +144,7 @@ RSpec.describe 'Quality Rules' do
       para = Uniword::Paragraph.new
       image = Uniword::Image.new(relationship_id: 'rId1')
       para.add_run(image)
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -159,7 +159,7 @@ RSpec.describe 'Quality Rules' do
         alt_text: 'Short'
       )
       para.add_run(image)
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -174,7 +174,7 @@ RSpec.describe 'Quality Rules' do
     it 'passes for valid external links' do
       para = Uniword::Paragraph.new
       para.add_hyperlink('Click here', url: 'https://example.com')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -183,7 +183,7 @@ RSpec.describe 'Quality Rules' do
     it 'detects invalid URL format' do
       para = Uniword::Paragraph.new
       para.add_hyperlink('Click here', url: 'not-a-valid-url')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -198,7 +198,7 @@ RSpec.describe 'Quality Rules' do
         text: 'Link'
       )
       para.add_run(hyperlink)
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -219,7 +219,7 @@ RSpec.describe 'Quality Rules' do
       para = Uniword::Paragraph.new
       para.set_style('Normal')
       para.add_text('Styled paragraph')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations).to be_empty
@@ -231,7 +231,7 @@ RSpec.describe 'Quality Rules' do
         alignment: 'center'
       )
       para.add_text('Unst yled paragraph')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)
@@ -243,7 +243,7 @@ RSpec.describe 'Quality Rules' do
       para = Uniword::Paragraph.new
       para.set_style('Normal')
       para.add_text('Bold text', bold: true)
-      document.add_element(para)
+      document.body.paragraphs << para
 
       violations = rule.check(document)
       expect(violations.size).to eq(1)

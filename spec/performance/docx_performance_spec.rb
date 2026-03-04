@@ -52,7 +52,7 @@ RSpec.describe 'DOCX Performance' do
             )
           )
           para.add_run(run)
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
         end
         table.add_row(row)

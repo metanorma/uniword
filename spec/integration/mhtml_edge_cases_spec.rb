@@ -22,13 +22,13 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc.save(output_path, format: :mhtml)
 
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
-      expect(doc2.elements).to be_empty
+      expect(doc2.paragraphs).to be_empty
     end
 
     it 'handles empty paragraphs' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -42,7 +42,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       run = Uniword::Run.new
       run.text = ''
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -53,7 +53,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     it 'handles empty tables' do
       doc = Uniword::Document.new
       table = Uniword::Table.new
-      doc.add_element(table)
+      doc.body.tables << table
 
       expect { doc.save(output_path, format: :mhtml) }.not_to raise_error
     end
@@ -65,7 +65,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       cell = Uniword::TableCell.new
       row.add_cell(cell)
       table.add_row(row)
-      doc.add_element(table)
+      doc.body.tables << table
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -81,7 +81,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Text with <, >, &, ", \'')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -93,7 +93,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('<html><body>Not actual HTML</body></html>')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -106,7 +106,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('<script>alert("XSS")</script>')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
 
@@ -120,7 +120,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('<![CDATA[Some data]]>')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -132,7 +132,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('&nbsp; &copy; &reg; &trade;')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -150,7 +150,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Unicode: 你好世界 مرحبا בעולם Привет')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -164,7 +164,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Symbols: ™ © ® € ¥ 😀 ✓')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -176,7 +176,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('English مرحبا English again')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -189,7 +189,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text("Word\u200BBreak")
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -201,7 +201,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text("Non\u00A0breaking space")
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -219,7 +219,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       100.times do |i|
         para = Uniword::Paragraph.new
         para.add_text("Paragraph #{i + 1}")
-        doc.add_element(para)
+        doc.body.paragraphs << para
       end
 
       doc.save(output_path, format: :mhtml)
@@ -234,7 +234,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
 
       long_text = 'Lorem ipsum dolor sit amet ' * 370
       para.add_text(long_text[0, 10_000])
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -251,10 +251,10 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new
         para.add_text("Table #{i + 1}")
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
-        doc.add_element(table)
+        doc.body.tables << table
       end
 
       doc.save(output_path, format: :mhtml)
@@ -274,13 +274,13 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
           cell = Uniword::TableCell.new
           para = Uniword::Paragraph.new
           para.add_text("#{r},#{c}")
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
         end
         table.add_row(row)
       end
 
-      doc.add_element(table)
+      doc.body.tables << table
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -297,7 +297,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Multiple  spaces   here')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -310,7 +310,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('  Text with spaces  ')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -322,7 +322,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text("Text\twith\ttabs")
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -334,7 +334,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text("Line 1\nLine 2")
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -351,7 +351,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('A')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -366,10 +366,10 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       cell = Uniword::TableCell.new
       para = Uniword::Paragraph.new
       para.add_text('X')
-      cell.add_paragraph(para)
+      cell.paragraphs << para
       row.add_cell(cell)
       table.add_row(row)
-      doc.add_element(table)
+      doc.body.tables << table
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -383,7 +383,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('   ')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -402,7 +402,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
         # Paragraph
         para = Uniword::Paragraph.new
         para.add_text("Paragraph #{i + 1}")
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         # Table
         table = Uniword::Table.new
@@ -413,7 +413,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
         cell.add_paragraph(cell_para)
         row.add_cell(cell)
         table.add_row(row)
-        doc.add_element(table)
+        doc.body.tables << table
       end
 
       doc.save(output_path, format: :mhtml)
@@ -447,7 +447,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       )
       para.add_run(italic_run)
 
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -496,7 +496,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
         )
         para.add_text("#{style} text")
-        doc.add_element(para)
+        doc.body.paragraphs << para
       end
 
       doc.save(output_path, format: :mhtml)
@@ -511,7 +511,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Normal paragraph')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
@@ -533,7 +533,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       run.properties.size = 48
       para.add_run(run)
 
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)

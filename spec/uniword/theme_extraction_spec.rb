@@ -302,9 +302,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       doc.theme.font_scheme.major_font = 'Helvetica'
 
       # Add content
-      para = Uniword::Paragraph.new
-      para.add_text('Test content')
-      doc.add_element(para)
+      doc.add_paragraph('Test content')
 
       # Save and reload
       path = 'spec/fixtures/temp_theme_roundtrip.docx'
@@ -323,9 +321,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
 
     it 'preserves theme when document has no explicit theme' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('No theme')
-      doc.add_element(para)
+      doc.add_paragraph('No theme')
 
       path = 'spec/fixtures/temp_no_theme.docx'
       doc.save(path)
@@ -363,7 +359,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: 'CorporateHeading')
       )
       heading.add_text('Corporate Heading')
-      doc.add_element(heading)
+      doc.body.paragraphs << heading
 
       # Save and verify
       path = 'spec/fixtures/temp_themed_style.docx'

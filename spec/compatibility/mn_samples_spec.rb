@@ -217,7 +217,7 @@ RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
         doc = Uniword.load(sample_file)
 
         # Should maintain document structure
-        expect(doc.elements).not_to be_empty
+        expect(doc.paragraphs).not_to be_empty
 
         # Verify content types are extracted
         expect(doc.paragraphs.count).to be > 0

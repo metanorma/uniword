@@ -18,7 +18,7 @@ RSpec.describe 'DOCX Generation Integration' do
       doc = Uniword::Document.new
       paragraph = Uniword::Paragraph.new
       paragraph.add_text('Hello, World!')
-      doc.add_element(paragraph)
+      doc.body.paragraphs << paragraph
 
       # Serialize to XML
       serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -56,11 +56,11 @@ RSpec.describe 'DOCX Generation Integration' do
 
       paragraph1 = Uniword::Paragraph.new
       paragraph1.add_text('First paragraph')
-      doc.add_element(paragraph1)
+      doc.body.paragraphs << paragraph1
 
       paragraph2 = Uniword::Paragraph.new
       paragraph2.add_text('Second paragraph')
-      doc.add_element(paragraph2)
+      doc.body.paragraphs << paragraph2
 
       # Serialize and package
       serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -82,7 +82,7 @@ RSpec.describe 'DOCX Generation Integration' do
       doc = Uniword::Document.new
       paragraph = Uniword::Paragraph.new
       paragraph.add_text('  Text with spaces  ')
-      doc.add_element(paragraph)
+      doc.body.paragraphs << paragraph
 
       serializer = Uniword::Serialization::OoxmlSerializer.new
       xml = serializer.serialize(doc)
@@ -112,7 +112,7 @@ RSpec.describe 'DOCX Generation Integration' do
         run2.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
         para.add_run(run2)
 
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -133,7 +133,7 @@ RSpec.describe 'DOCX Generation Integration' do
           color: 'FF0000' # Red
         )
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -152,7 +152,7 @@ RSpec.describe 'DOCX Generation Integration' do
           strike: true
         )
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -170,7 +170,7 @@ RSpec.describe 'DOCX Generation Integration' do
           alignment: 'center'
         )
         para.add_text('Centered Text')
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -186,7 +186,7 @@ RSpec.describe 'DOCX Generation Integration' do
           spacing_after: 120
         )
         para.add_text('Spaced Paragraph')
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -211,7 +211,7 @@ RSpec.describe 'DOCX Generation Integration' do
         row.cells << cell2
 
         table.rows << row
-        doc.add_element(table)
+        doc.body.tables << table
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -241,7 +241,7 @@ RSpec.describe 'DOCX Generation Integration' do
         data_row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 2') } }
         table.rows << data_row
 
-        doc.add_element(table)
+        doc.body.tables << table
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -264,7 +264,7 @@ RSpec.describe 'DOCX Generation Integration' do
         row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Content') } }
         table.rows << row
 
-        doc.add_element(table)
+        doc.body.tables << table
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -285,7 +285,7 @@ RSpec.describe 'DOCX Generation Integration' do
         row.cells << cell
 
         table.rows << row
-        doc.add_element(table)
+        doc.body.tables << table
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
@@ -302,19 +302,19 @@ RSpec.describe 'DOCX Generation Integration' do
         # Add a paragraph
         para1 = Uniword::Paragraph.new
         para1.add_text('Introduction text')
-        doc.add_element(para1)
+        doc.body.paragraphs << para
 
         # Add a table
         table = Uniword::Table.new
         row = Uniword::TableRow.new
         row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Table content') } }
         table.rows << row
-        doc.add_element(table)
+        doc.body.tables << table
 
         # Add another paragraph
         para2 = Uniword::Paragraph.new
         para2.add_text('Conclusion text')
-        doc.add_element(para2)
+        doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)

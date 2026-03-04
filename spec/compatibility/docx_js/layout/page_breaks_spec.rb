@@ -9,14 +9,14 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
 
       para1 = Uniword::Paragraph.new
       para1.add_text('Hello World')
-      doc.add_element(para1)
+      doc.body.paragraphs << para
 
       para2 = Uniword::Paragraph.new
       para2.add_text('Hello World on another page')
       para2.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         page_break_before: true
       )
-      doc.add_element(para2)
+      doc.body.paragraphs << para
 
       expect(doc.paragraphs.count).to eq(2)
       expect(para2.properties.page_break_before).to be true
@@ -43,7 +43,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
           )
         end
 
-        doc.add_element(para)
+        doc.body.paragraphs << para
       end
 
       expect(doc.paragraphs.count).to eq(3)
@@ -64,7 +64,7 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
       run2 = Uniword::Run.new(text: 'Second Page')
       para.add_run(run2)
 
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       expect(para.runs.count).to eq(2)
       expect(run1.page_break).to be true
@@ -94,13 +94,13 @@ RSpec.describe 'Docx.js Compatibility: Page Breaks', :compatibility do
       # First section
       para1 = Uniword::Paragraph.new
       para1.add_text('Section 1')
-      doc.add_element(para1)
+      doc.body.paragraphs << para
 
       # Add new section
       doc.add_section
       para2 = Uniword::Paragraph.new
       para2.add_text('Section 2')
-      doc.add_element(para2)
+      doc.body.paragraphs << para
 
       expect(doc.sections.count).to eq(2)
     end

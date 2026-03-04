@@ -13,7 +13,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       header = Uniword::Header.new
       para = Uniword::Paragraph.new
       para.add_text('My Header')
-      header.add_element(para)
+      header.body.paragraphs << para
 
       section.default_header = header
 
@@ -31,7 +31,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       first_header = Uniword::Header.new
       para = Uniword::Paragraph.new
       para.add_text('First Page Header')
-      first_header.add_element(para)
+      first_header.body.paragraphs << para
 
       section.first_header = first_header
 
@@ -50,14 +50,14 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       default_header = Uniword::Header.new
       para1 = Uniword::Paragraph.new
       para1.add_text('Default Header')
-      default_header.add_element(para1)
+      default_header.body.paragraphs << para1
       section.default_header = default_header
 
       # First page header
       first_header = Uniword::Header.new
       para2 = Uniword::Paragraph.new
       para2.add_text('First Page Header')
-      first_header.add_element(para2)
+      first_header.body.paragraphs << para2
       section.first_header = first_header
 
       expect(section.default_header).not_to eq(section.first_header)
@@ -92,7 +92,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       footer = Uniword::Footer.new
       para = Uniword::Paragraph.new
       para.add_text('My Footer')
-      footer.add_element(para)
+      footer.body.paragraphs << para
 
       section.default_footer = footer
 
@@ -110,7 +110,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       first_footer = Uniword::Footer.new
       para = Uniword::Paragraph.new
       para.add_text('First Page Footer')
-      first_footer.add_element(para)
+      first_footer.body.paragraphs << para
 
       section.first_footer = first_footer
 
@@ -126,13 +126,13 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       header = Uniword::Header.new
       header_para = Uniword::Paragraph.new
       header_para.add_text('Header')
-      header.add_element(header_para)
+      header.body.paragraphs << header_para
       section.default_header = header
 
       footer = Uniword::Footer.new
       footer_para = Uniword::Paragraph.new
       footer_para.add_text('Footer')
-      footer.add_element(footer_para)
+      footer.body.paragraphs << footer_para
       section.default_footer = footer
 
       expect(section.default_header).not_to be_nil
@@ -155,7 +155,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       page_num = Uniword::Field.new(type: 'PAGE')
       para.add_field(page_num)
 
-      header.add_element(para)
+      header.body.paragraphs << para
       section.default_header = header
 
       expect(header).not_to be_nil
@@ -174,7 +174,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       page_num = Uniword::Field.new(type: 'PAGE')
       para.add_field(page_num)
 
-      footer.add_element(para)
+      footer.body.paragraphs << para
       section.default_footer = footer
 
       expect(footer).not_to be_nil
@@ -191,7 +191,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       para.add_text(' of ')
       para.add_field(Uniword::Field.new(type: 'NUMPAGES'))
 
-      footer.add_element(para)
+      footer.body.paragraphs << para
 
       expect(para.runs.count).to be > 0
     end
@@ -208,7 +208,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       page_num_run.add_field(Uniword::Field.new(type: 'PAGE'))
       para.add_run(page_num_run)
 
-      header.add_element(para)
+      header.body.paragraphs << para
 
       expect(header).not_to be_nil
     end
@@ -225,7 +225,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       para.add_text('Page ')
       para.add_field(Uniword::Field.new(type: 'PAGE'))
 
-      footer.add_element(para)
+      footer.body.paragraphs << para
 
       expect(para.properties.alignment).to eq('right')
     end
@@ -242,7 +242,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_run(run)
 
-      header.add_element(para)
+      header.body.paragraphs << para
 
       expect(run.bold?).to be true
     end
@@ -258,7 +258,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       row.cells << cell
       table.rows << row
 
-      header.add_element(table)
+      header.body.tables << table
 
       expect(header).not_to be_nil
     end
@@ -276,8 +276,8 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
         alt_text: 'Header logo'
       )
 
-      para.add_element(image)
-      header.add_element(para)
+      para.runs << image
+      header.body.paragraphs << para
 
       expect(header).not_to be_nil
     end
@@ -294,7 +294,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       header1 = Uniword::Header.new
       para1 = Uniword::Paragraph.new
       para1.add_text('Section 1 Header')
-      header1.add_element(para1)
+      header1.body.paragraphs << para1
       section1.default_header = header1
 
       # Section 2 header
@@ -302,7 +302,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       header2 = Uniword::Header.new
       para2 = Uniword::Paragraph.new
       para2.add_text('Section 2 Header')
-      header2.add_element(para2)
+      header2.body.paragraphs << para2
       section2.default_header = header2
 
       expect(section1.default_header).not_to eq(section2.default_header)
@@ -317,14 +317,14 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       footer1 = Uniword::Footer.new
       para1 = Uniword::Paragraph.new
       para1.add_text('Section 1 Footer')
-      footer1.add_element(para1)
+      footer1.body.paragraphs << para1
       section1.default_footer = footer1
 
       section2 = doc.add_section
       footer2 = Uniword::Footer.new
       para2 = Uniword::Paragraph.new
       para2.add_text('Section 2 Footer')
-      footer2.add_element(para2)
+      footer2.body.paragraphs << para2
       section2.default_footer = footer2
 
       expect(section1.default_footer).not_to eq(section2.default_footer)
@@ -343,7 +343,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       para1 = Uniword::Paragraph.new
       para1.add_text('Page ')
       para1.add_field(Uniword::Field.new(type: 'PAGE'))
-      header1.add_element(para1)
+      header1.body.paragraphs << para1
       section1.default_header = header1
 
       # Section 2 - continues from section 1
@@ -352,7 +352,7 @@ RSpec.describe 'Docx.js Compatibility: Headers and Footers', :compatibility do
       para2 = Uniword::Paragraph.new
       para2.add_text('Page number: ')
       para2.add_field(Uniword::Field.new(type: 'PAGE'))
-      header2.add_element(para2)
+      header2.body.paragraphs << para2
       section2.default_header = header2
 
       expect(doc.sections.count).to eq(2)

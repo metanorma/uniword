@@ -58,7 +58,7 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
             text_element: Uniword::TextElement.new(content: "T#{t}R#{r}C#{c}")
           )
           para.add_run(run)
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
         end
         table.add_row(row)

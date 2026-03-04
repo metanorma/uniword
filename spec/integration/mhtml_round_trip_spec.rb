@@ -21,7 +21,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc1 = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello MHTML World')
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       # Write as MHTML
       doc1.save(temp_path, format: :mhtml)
@@ -40,7 +40,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       3.times do |i|
         para = Uniword::Paragraph.new
         para.add_text("Paragraph #{i + 1}")
-        doc1.add_element(para)
+        doc1.body.paragraphs << para
       end
 
       original_count = doc1.paragraphs.count
@@ -76,7 +76,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run1)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -97,7 +97,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -116,7 +116,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -137,7 +137,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -156,7 +156,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -174,7 +174,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       )
       para.add_run(run)
 
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
@@ -205,12 +205,12 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
           cell = Uniword::TableCell.new
           para = Uniword::Paragraph.new
           para.add_text("R#{r + 1}C#{c + 1}")
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
         end
         table.add_row(row)
       end
-      doc1.add_element(table)
+      doc1.body.tables << table
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -230,10 +230,10 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       cell = Uniword::TableCell.new
       para = Uniword::Paragraph.new
       para.add_text('Cell content')
-      cell.add_paragraph(para)
+      cell.paragraphs << para
       row.add_cell(cell)
       table.add_row(row)
-      doc1.add_element(table)
+      doc1.body.tables << table
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -255,7 +255,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
         )
       )
       heading.add_text('Heading')
-      doc1.add_element(heading)
+      doc1.body.paragraphs << heading
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -273,7 +273,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
         )
       )
       heading.add_text('Subheading')
-      doc1.add_element(heading)
+      doc1.body.paragraphs << heading
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -291,7 +291,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
         )
         para.add_text("#{style} text")
-        doc1.add_element(para)
+        doc1.body.paragraphs << para
       end
 
       doc1.save(temp_path, format: :mhtml)
@@ -315,12 +315,12 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
         )
       )
       heading.add_text('Document Title')
-      doc1.add_element(heading)
+      doc1.body.paragraphs << heading
 
       # Normal paragraph
       para = Uniword::Paragraph.new
       para.add_text('Introduction paragraph')
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       # Table
       table = Uniword::Table.new
@@ -331,12 +331,12 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       cell.add_paragraph(cell_para)
       row.add_cell(cell)
       table.add_row(row)
-      doc1.add_element(table)
+      doc1.body.tables << table
 
       # Another paragraph
       para2 = Uniword::Paragraph.new
       para2.add_text('Conclusion')
-      doc1.add_element(para2)
+      doc1.body.paragraphs << para2
 
       extract_text(doc1)
       original_elements = doc1.paragraphs.count + doc1.tables.count
@@ -360,7 +360,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       bold_run.text = 'Bold text'
       bold_run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para1.add_run(bold_run)
-      doc1.add_element(para1)
+      doc1.body.paragraphs << para1
 
       # Italic paragraph
       para2 = Uniword::Paragraph.new
@@ -370,7 +370,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
         italic: true
       )
       para2.add_run(italic_run)
-      doc1.add_element(para2)
+      doc1.body.paragraphs << para2
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -393,7 +393,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc1 = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello 世界 مرحبا мир')
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -405,7 +405,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc1 = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Text with <, >, &, ", \'')
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -417,7 +417,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc1 = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Symbols: ™ © ® € ¥ 😀 ✓')
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       doc1.save(temp_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
@@ -469,10 +469,10 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
     cell = Uniword::TableCell.new
     para = Uniword::Paragraph.new
     para.add_text('Cell content')
-    cell.add_paragraph(para)
+    cell.paragraphs << para
     row.add_cell(cell)
     table.add_row(row)
-    doc.add_element(table)
+    doc.body.tables << table
 
     doc
   end

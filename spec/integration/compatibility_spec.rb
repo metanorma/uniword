@@ -420,7 +420,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
     run = Uniword::Run.new
     run.text = 'Test document content'
     para.add_run(run)
-    doc.add_element(para)
+    doc.body.paragraphs << para
     doc
   end
 
@@ -432,7 +432,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
     run = Uniword::Run.new
     run.text = 'Styled content'
     para.add_run(run)
-    doc.add_element(para)
+    doc.body.paragraphs << para
 
     doc
   end
@@ -446,7 +446,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
       run = Uniword::Run.new
       run.text = "List item #{i + 1}"
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     doc
@@ -458,7 +458,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
     run = Uniword::Run.new
     run.text = 'Unicode: 你好 مرحبا 🌍 café'
     para.add_run(run)
-    doc.add_element(para)
+    doc.body.paragraphs << para
     doc
   end
 
@@ -468,7 +468,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
     run = Uniword::Run.new
     run.text = 'Special: < > & " \' © ® ™'
     para.add_run(run)
-    doc.add_element(para)
+    doc.body.paragraphs << para
     doc
   end
 
@@ -480,7 +480,7 @@ RSpec.describe 'DOCX Compatibility Testing' do
     run1 = Uniword::Run.new
     run1.add_text('First paragraph')
     para1.add_run(run1)
-    doc.add_element(para1)
+    doc.body.paragraphs << para
 
     # Table
     table = Uniword::Table.new
@@ -493,14 +493,14 @@ RSpec.describe 'DOCX Compatibility Testing' do
     cell.add_paragraph(cell_para)
     row.add_cell(cell)
     table.add_row(row)
-    doc.add_element(table)
+    doc.body.tables << table
 
     # Another paragraph
     para2 = Uniword::Paragraph.new
     run2 = Uniword::Run.new
     run2.add_text('Second paragraph')
     para2.add_run(run2)
-    doc.add_element(para2)
+    doc.body.paragraphs << para
 
     doc
   end

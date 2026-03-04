@@ -36,7 +36,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = 'LibreOffice compatibility test'
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(test_path)
 
@@ -54,7 +54,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
         run.text = "Paragraph #{i + 1}"
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
       end
 
       doc.save(test_path)
@@ -80,7 +80,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         end
         table.add_row(row)
       end
-      doc.add_element(table)
+      doc.body.tables << table
 
       doc.save(test_path)
 
@@ -107,7 +107,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         run.text = 'Bold text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -128,7 +128,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         run.text = 'Italic text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -148,7 +148,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         run.text = 'Underlined text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -168,7 +168,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         run.text = 'Large text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -188,7 +188,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
         run.text = 'Arial text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -210,7 +210,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
         run.text = 'Centered text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -230,7 +230,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
         run.text = 'Spaced text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -250,7 +250,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
         run.text = 'Indented text'
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
 
         doc.save(test_path)
 
@@ -267,7 +267,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
           run = Uniword::Run.new
           run.text = "Bullet point #{i + 1}"
           para.add_run(run)
-          doc.add_element(para)
+          doc.body.paragraphs << para
         end
 
         doc.save(test_path)
@@ -283,7 +283,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
           run = Uniword::Run.new
           run.text = "Numbered item #{i + 1}"
           para.add_run(run)
-          doc.add_element(para)
+          doc.body.paragraphs << para
         end
 
         doc.save(test_path)
@@ -316,7 +316,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         row.add_cell(cell)
 
         table.add_row(row)
-        doc.add_element(table)
+        doc.body.tables << table
 
         doc.save(test_path)
 
@@ -371,7 +371,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = 'Test content for PDF conversion'
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(test_path)
 
@@ -394,7 +394,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = 'Unicode: 你好 مرحبا Здравствуй'
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(test_path)
 
@@ -411,7 +411,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = 'Emoji: 🌍 🎉 ❤️'
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(test_path)
 
@@ -427,7 +427,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = 'Symbols: © ® ™ € £ ¥'
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       doc.save(test_path)
 
@@ -457,7 +457,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
         run = Uniword::Run.new
         run.text = "Paragraph #{i + 1}: " + ('Lorem ipsum ' * 10)
         para.add_run(run)
-        doc.add_element(para)
+        doc.body.paragraphs << para
       end
 
       doc.save(test_path)
@@ -484,7 +484,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
           end
           table.add_row(row)
         end
-        doc.add_element(table)
+        doc.body.tables << table
       end
 
       doc.save(test_path)
@@ -507,7 +507,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     run = Uniword::Run.new
     run.text = 'Test document for LibreOffice'
     para.add_run(run)
-    doc.add_element(para)
+    doc.body.paragraphs << para
     doc
   end
 
@@ -529,7 +529,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       table.add_row(row)
     end
 
-    doc.add_element(table)
+    doc.body.tables << table
     doc
   end
 
@@ -545,7 +545,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
     title_run.text = 'Document Title'
     title.add_run(title_run)
-    doc.add_element(title)
+    doc.body.paragraphs << title
 
     # Regular paragraphs
     3.times do |i|
@@ -553,7 +553,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       run = Uniword::Run.new
       run.text = "This is paragraph #{i + 1} with some content."
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     # Table
@@ -571,7 +571,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
       table.add_row(row)
     end
-    doc.add_element(table)
+    doc.body.tables << table
 
     doc
   end
@@ -584,18 +584,18 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     run1 = Uniword::Run.new
     run1.add_text('Introduction paragraph')
     para1.add_run(run1)
-    doc.add_element(para1)
+    doc.body.paragraphs << para
 
     # Add table
     table = create_document_with_table(rows: 2, cols: 2).tables.first
-    doc.add_element(table)
+    doc.body.tables << table
 
     # Add more paragraphs
     para2 = Uniword::Paragraph.new
     run2 = Uniword::Run.new
     run2.add_text('Conclusion paragraph')
     para2.add_run(run2)
-    doc.add_element(para2)
+    doc.body.paragraphs << para
 
     doc
   end

@@ -13,7 +13,7 @@ RSpec.describe 'docx gem API Compatibility' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello World')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       expect(doc.text).to eq('Hello World')
     end
@@ -22,7 +22,7 @@ RSpec.describe 'docx gem API Compatibility' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello World')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       html = doc.to_html
       expect(html).to be_a(String)
@@ -34,7 +34,7 @@ RSpec.describe 'docx gem API Compatibility' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello World')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       stream = doc.stream
       expect(stream).to be_a(StringIO)
@@ -45,8 +45,8 @@ RSpec.describe 'docx gem API Compatibility' do
       doc = Uniword::Document.new
       para1 = Uniword::Paragraph.new.add_text('Para 1')
       para2 = Uniword::Paragraph.new.add_text('Para 2')
-      doc.add_element(para1)
-      doc.add_element(para2)
+      doc.body.paragraphs << para
+      doc.body.paragraphs << para
 
       expect(doc.paragraphs.count).to eq(2)
       expect(doc.paragraphs.first).to be_a(Uniword::Paragraph)
@@ -55,7 +55,7 @@ RSpec.describe 'docx gem API Compatibility' do
     it 'supports doc.tables' do
       doc = Uniword::Document.new
       table = Uniword::Table.new
-      doc.add_element(table)
+      doc.body.tables << table
 
       expect(doc.tables.count).to eq(1)
       expect(doc.tables.first).to be_a(Uniword::Table)
@@ -94,7 +94,7 @@ RSpec.describe 'docx gem API Compatibility' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Remove me')
-      doc.add_element(para)
+      doc.body.paragraphs << para
 
       expect(doc.paragraphs.count).to eq(1)
       para.remove!
@@ -337,11 +337,11 @@ RSpec.describe 'docx gem API Compatibility' do
 
       para1 = Uniword::Paragraph.new
       para1.add_text('Dear _name_,')
-      doc.add_element(para1)
+      doc.body.paragraphs << para
 
       para2 = Uniword::Paragraph.new
       para2.add_text('Your total is $__amount__.')
-      doc.add_element(para2)
+      doc.body.paragraphs << para
 
       # Substitute placeholders
       doc.paragraphs.each do |p|

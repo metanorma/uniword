@@ -17,14 +17,14 @@ RSpec.describe 'Docx.js Compatibility: Sections', :compatibility do
       # First section (default)
       para1 = Uniword::Paragraph.new
       para1.add_text('Hello World')
-      doc.add_element(para1)
+      doc.body.paragraphs << para
 
       # Add new section
       doc.add_section
 
       para2 = Uniword::Paragraph.new
       para2.add_text('Section 2 content')
-      doc.add_element(para2)
+      doc.body.paragraphs << para
 
       expect(doc.sections.count).to eq(2)
     end
@@ -230,13 +230,13 @@ RSpec.describe 'Docx.js Compatibility: Sections', :compatibility do
 
       para1 = Uniword::Paragraph.new
       para1.add_text('Content in section 1')
-      doc.add_element(para1)
+      doc.body.paragraphs << para
 
       doc.add_section
 
       para2 = Uniword::Paragraph.new
       para2.add_text('Content in section 2')
-      doc.add_element(para2)
+      doc.body.paragraphs << para
 
       expect(doc.paragraphs.count).to eq(2)
       expect(doc.sections.count).to eq(2)

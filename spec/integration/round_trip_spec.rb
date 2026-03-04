@@ -243,7 +243,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
         run = Uniword::Run.new
         run.text = "Paragraph #{i + 1}"
         para.add_run(run)
-        doc1.add_element(para)
+        doc1.body.paragraphs << para
       end
 
       original_texts = doc1.paragraphs.map { |p| extract_paragraph_text(p) }
@@ -263,7 +263,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       run = Uniword::Run.new
       run.text = 'Text before table'
       para.add_run(run)
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       # Add table
       table = Uniword::Table.new
@@ -276,14 +276,14 @@ RSpec.describe 'DOCX Round-trip Validation' do
       cell.add_paragraph(cell_para)
       row.add_cell(cell)
       table.add_row(row)
-      doc1.add_element(table)
+      doc1.body.tables << table
 
       # Add another paragraph
       para2 = Uniword::Paragraph.new
       run2 = Uniword::Run.new
       run2.text = 'Text after table'
       para2.add_run(run2)
-      doc1.add_element(para2)
+      doc1.body.paragraphs << para2
 
       original_structure = {
         elements: doc1.body.paragraphs.count + doc1.body.tables.count,
@@ -318,7 +318,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       run = Uniword::Run.new(text: 'Test paragraph')
       para.add_run(run)
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       doc1.save(temp_path)
       doc2 = Uniword::DocumentFactory.from_file(temp_path)
@@ -343,7 +343,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       )
 
       para.add_run(run)
-      doc1.add_element(para)
+      doc1.body.paragraphs << para
 
       doc1.save(temp_path)
       doc2 = Uniword::DocumentFactory.from_file(temp_path)
@@ -529,7 +529,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
             end
 
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     # Table
@@ -547,7 +547,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       end
       table.add_row(row)
     end
-    doc.add_element(table)
+    doc.body.tables << table
 
     # More paragraphs
     2.times do |i|
@@ -555,7 +555,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       run = Uniword::Run.new
       run.text = "After table paragraph #{i + 1}"
       para.add_run(run)
-      doc.add_element(para)
+      doc.body.paragraphs << para
     end
 
     doc

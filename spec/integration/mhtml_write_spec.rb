@@ -19,7 +19,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello, World!')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       document.save(output_path)
 
@@ -48,7 +48,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       para.add_text('Bold text', properties: props)
 
-      document.add_element(para)
+      document.body.paragraphs << para
       document.save(output_path)
 
       content = File.read(output_path, encoding: 'UTF-8')
@@ -63,7 +63,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       heading_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
       heading = Uniword::Paragraph.new(properties: heading_props)
       heading.add_text('Document Title')
-      document.add_element(heading)
+      document.body.paragraphs << heading
 
       document.save(output_path)
 
@@ -82,7 +82,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       cell = Uniword::TableCell.new
       para = Uniword::Paragraph.new
       para.add_text('Cell content')
-      cell.add_paragraph(para)
+      cell.paragraphs << para
       row.add_cell(cell)
       table.add_row(row)
       document.body.add_table(table)
@@ -103,7 +103,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Test')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       document.save(output_path)
 
@@ -125,7 +125,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       10.times do |i|
         para = Uniword::Paragraph.new
         para.add_text("Paragraph #{i + 1}")
-        document.add_element(para)
+        document.body.paragraphs << para
       end
 
       document.save(output_path)
@@ -143,7 +143,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Test')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       # Save with .doc extension
       doc_path = File.join(output_dir, 'test.doc')
@@ -160,7 +160,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Test')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       # Save with .mhtml extension
       mhtml_path = File.join(output_dir, 'test.mhtml')
@@ -179,7 +179,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('Hello 世界 مرحبا мир')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       document.save(output_path)
 
@@ -192,7 +192,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document = Uniword::Document.new
       para = Uniword::Paragraph.new
       para.add_text('<script>alert("XSS")</script>')
-      document.add_element(para)
+      document.body.paragraphs << para
 
       document.save(output_path)
 
@@ -210,7 +210,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       h1_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
       h1 = Uniword::Paragraph.new(properties: h1_props)
       h1.add_text('Main Title')
-      document.add_element(h1)
+      document.body.paragraphs << h1
 
       # Normal paragraph with formatting
       para1 = Uniword::Paragraph.new
@@ -218,7 +218,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       para1.add_text('Bold text ', properties: bold_props)
       italic_props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       para1.add_text('and italic text.', properties: italic_props)
-      document.add_element(para1)
+      document.body.paragraphs << para1
 
       # Table
       table = Uniword::Table.new
@@ -238,7 +238,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       # Another paragraph
       para2 = Uniword::Paragraph.new
       para2.add_text('Conclusion paragraph.')
-      document.add_element(para2)
+      document.body.paragraphs << para2
 
       document.save(output_path)
 

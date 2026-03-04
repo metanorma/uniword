@@ -17,7 +17,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
             run = Uniword::Run.new
             run.text = 'hello'
             para.add_run(run)
-            cell.add_paragraph(para)
+            cell.paragraphs << para
             row.add_cell(cell)
           end
           table.add_row(row)
@@ -33,7 +33,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -50,7 +50,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           3.times do |j|
             cell = Uniword::TableCell.new
             para = Uniword::Paragraph.new.tap { |p| p.add_text("Cell #{i},#{j}") }
-            cell.add_paragraph(para)
+            cell.paragraphs << para
             row.add_cell(cell)
           end
           table.add_row(row)
@@ -80,7 +80,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         2.times do
           cell = Uniword::TableCell.new
           para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row2.add_cell(cell)
         end
         table.add_row(row2)
@@ -97,7 +97,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         2.times do
           cell = Uniword::TableCell.new
           para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row1.add_cell(cell)
         end
         table.add_row(row1)
@@ -134,7 +134,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('Merged cell') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         cell.properties = Uniword::Wordprocessingml::TableProperties.new(
           column_span: 2,
           row_span: 2
@@ -155,7 +155,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -168,7 +168,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -187,7 +187,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -201,7 +201,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -215,7 +215,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -235,7 +235,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -255,7 +255,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -277,7 +277,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           width_type: 'dxa'
         )
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -298,7 +298,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -319,7 +319,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -337,7 +337,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           row = Uniword::TableRow.new
           cell = Uniword::TableCell.new
           para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           row.add_cell(cell)
           table.add_row(row)
 
@@ -352,8 +352,8 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
           para1 = Uniword::Paragraph.new.tap { |p| p.add_text('First') }
           para2 = Uniword::Paragraph.new.tap { |p| p.add_text('Second') }
-          cell.add_paragraph(para1)
-          cell.add_paragraph(para2)
+          cell.paragraphs << para1
+          cell.paragraphs << para2
 
           row.add_cell(cell)
           table.add_row(row)
@@ -389,7 +389,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -413,7 +413,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
@@ -443,7 +443,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           run.text = header
           run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
           para.add_run(run)
-          cell.add_paragraph(para)
+          cell.paragraphs << para
           header_row.add_cell(cell)
         end
         table.add_row(header_row)
@@ -454,7 +454,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           3.times do |j|
             cell = Uniword::TableCell.new
             para = Uniword::Paragraph.new.tap { |p| p.add_text("Data #{i},#{j}") }
-            cell.add_paragraph(para)
+            cell.paragraphs << para
             row.add_cell(cell)
           end
           table.add_row(row)
@@ -473,7 +473,7 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
-        cell.add_paragraph(para)
+        cell.paragraphs << para
         row.add_cell(cell)
         table.add_row(row)
 
