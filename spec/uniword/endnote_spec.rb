@@ -75,10 +75,10 @@ RSpec.describe Uniword::Endnote do
   describe '#text' do
     it 'returns combined text from all paragraphs' do
       p1 = Uniword::Paragraph.new
-      p1.add_run(Uniword::Run.new(text: 'First paragraph'))
+      p1.runs << Uniword::Run.new(text: 'First paragraph')
 
       p2 = Uniword::Paragraph.new
-      p2.add_run(Uniword::Run.new(text: 'Second paragraph'))
+      p2.runs << Uniword::Run.new(text: 'Second paragraph')
 
       endnote = described_class.new(id: 1, content: [p1, p2])
 

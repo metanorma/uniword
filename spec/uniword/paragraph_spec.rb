@@ -23,19 +23,17 @@ RSpec.describe Uniword::Paragraph do
       expect(paragraph.properties).to eq(properties)
     end
 
-    it 'creates a paragraph with an id' do
-      paragraph = described_class.new(id: 'para-1')
-      expect(paragraph.id).to eq('para-1')
+    it 'does not have an id attribute (v2.0 API)' do
+      paragraph = described_class.new
+      expect(paragraph).not_to respond_to(:id)
     end
   end
 
   describe '#accept' do
-    it 'accepts a visitor' do
+    # v2.0 API: Paragraph does not have accept method (visitor pattern removed)
+    it 'does not have accept method (visitor pattern not in v2.0)' do
       paragraph = described_class.new
-      visitor = double('visitor')
-
-      expect(visitor).to receive(:visit_paragraph).with(paragraph)
-      paragraph.accept(visitor)
+      expect(paragraph).not_to respond_to(:accept)
     end
   end
 
@@ -65,28 +63,29 @@ RSpec.describe Uniword::Paragraph do
   describe '#add_run' do
     let(:paragraph) { described_class.new }
 
-    it 'adds a run to the paragraph' do
-      paragraph.add_run(run1)
-      expect(paragraph.runs).to include(run1)
+    it 'adds a run to the paragraph with text' do
+      run = paragraph.add_run('Hello')
+      expect(run).to be_a(Uniword::Run)
+      expect(run.text).to eq('Hello')
+      expect(paragraph.runs).to include(run)
     end
 
-    it 'adds multiple runs' do
-      paragraph.add_run(run1)
-      paragraph.add_run(run2)
-      expect(paragraph.runs).to eq([run1, run2])
+    it 'adds multiple runs with text' do
+      paragraph.add_run('Hello ')
+      paragraph.add_run('World')
+      expect(paragraph.runs.size).to eq(2)
+      expect(paragraph.text).to eq('Hello World')
     end
 
-    it 'raises error for non-Run objects' do
-      paragraph = described_class.new
-      expect { paragraph.add_run(123) }
-        .to raise_error(ArgumentError,
-                        /must be a Run, Image, Hyperlink, Bookmark, or UnknownElement instance/)
+    it 'returns the created run' do
+      run = paragraph.add_run('Test')
+      expect(run).to be_a(Uniword::Run)
+      expect(run.text).to eq('Test')
     end
 
-    it 'returns the updated runs array' do
-      result = paragraph.add_run(run1)
-      expect(result).to be_an(Array)
-      expect(result).to include(run1)
+    it 'accepts options for formatting' do
+      run = paragraph.add_run('Bold', bold: true)
+      expect(run.properties&.bold).to be_truthy
     end
   end
 
@@ -99,10 +98,9 @@ RSpec.describe Uniword::Paragraph do
       expect(paragraph.runs.first.text).to eq('Hello')
     end
 
-    it 'creates and adds a run with properties' do
-      run_props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-      paragraph.add_text('Bold text', properties: run_props)
-      expect(paragraph.runs.first.properties).to eq(run_props)
+    it 'creates and adds a run with formatting options' do
+      paragraph.add_text('Bold text', bold: true)
+      expect(paragraph.runs.first.properties&.bold).to be_truthy
     end
 
     it 'returns the created run' do
@@ -143,60 +141,62 @@ RSpec.describe Uniword::Paragraph do
   end
 
   describe '#run_count' do
-    it 'returns 0 for paragraph with no runs' do
+    # v2.0 API: run_count method does not exist, use runs.count instead
+    it 'does not have run_count method (use runs.count)' do
       paragraph = described_class.new
-      expect(paragraph.run_count).to eq(0)
+      expect(paragraph).not_to respond_to(:run_count)
+      expect(paragraph.runs.count).to eq(0)
     end
 
-    it 'returns correct count for multiple runs' do
+    it 'uses runs.count for multiple runs' do
       paragraph = described_class.new(runs: [run1, run2])
-      expect(paragraph.run_count).to eq(2)
+      expect(paragraph.runs.count).to eq(2)
     end
   end
 
   describe '#alignment' do
+    # v2.0 API: alignment is not a direct method, access via properties
     it 'returns nil when no properties' do
       paragraph = described_class.new
-      expect(paragraph.alignment).to be_nil
+      expect(paragraph.properties).to be_nil
     end
 
-    it 'returns alignment from properties' do
+    it 'accesses alignment via properties object' do
       paragraph = described_class.new(properties: properties)
-      expect(paragraph.alignment).to eq('left')
+      # Access alignment via properties.alignment
+      expect(paragraph.properties.alignment).to eq('left')
     end
   end
 
   describe '#style' do
+    # v2.0 API: style is not a direct method, access via properties
     it 'returns nil when no properties' do
       paragraph = described_class.new
-      expect(paragraph.style).to be_nil
+      expect(paragraph.properties).to be_nil
     end
 
-    it 'returns style from properties' do
+    it 'accesses style via properties object' do
       paragraph = described_class.new(properties: properties)
-      expect(paragraph.style).to eq('Normal')
+      # Access style via properties.style
+      expect(paragraph.properties.style).to eq('Normal')
     end
   end
 
   describe '#valid?' do
-    it 'returns true for empty paragraph' do
+    # v2.0 API: Paragraph does not have valid? method (lutaml-model handles validation)
+    it 'does not have valid? method (lutaml-model handles validation)' do
       paragraph = described_class.new
-      expect(paragraph.valid?).to be true
-    end
-
-    it 'returns true for paragraph with runs' do
-      paragraph = described_class.new(runs: [run1, run2])
-      expect(paragraph.valid?).to be true
+      expect(paragraph).not_to respond_to(:valid?)
     end
   end
 
   describe 'inheritance' do
-    it 'inherits from Element' do
-      expect(described_class.ancestors).to include(Uniword::Element)
+    it 'is a Lutaml::Model::Serializable' do
+      expect(described_class.ancestors).to include(Lutaml::Model::Serializable)
     end
 
-    it 'is not abstract' do
-      expect(described_class.abstract?).to be false
+    it 'does not inherit from Element (v2.0 uses direct lutaml-model inheritance)' do
+      expect(described_class.ancestors).not_to include(Uniword::Element)
     end
   end
 end
