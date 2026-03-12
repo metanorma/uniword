@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'thmx_package'
 
 module Uniword
   module Ooxml
@@ -45,7 +44,6 @@ module Uniword
       #
       # @return [void]
       def extract
-        require_relative '../infrastructure/zip_extractor'
 
         extractor = Infrastructure::ZipExtractor.new
         @extracted_content = extractor.extract(@path)
@@ -88,7 +86,6 @@ module Uniword
         theme_xml = read_theme
 
         # Parse into Theme using lutaml-model
-        require_relative '../theme'
         @theme = Theme.from_xml(theme_xml)
 
         # Store source file reference
@@ -126,7 +123,6 @@ module Uniword
       def package(output_path)
         raise 'Must extract before packaging' unless @extracted_content
 
-        require_relative '../infrastructure/zip_packager'
 
         packager = Infrastructure::ZipPackager.new
         packager.package(@extracted_content, output_path)
@@ -167,7 +163,6 @@ module Uniword
       #
       # @return [Hash] filename => MediaFile objects
       def load_media_files
-        require_relative '../theme/media_file'
 
         media = {}
 
@@ -199,7 +194,6 @@ module Uniword
       #
       # @return [Hash] variant_id => ThemeVariant
       def load_variants
-        require_relative '../theme/theme_variant'
 
         variant_hash = {}
 

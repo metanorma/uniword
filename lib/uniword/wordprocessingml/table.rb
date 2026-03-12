@@ -24,6 +24,23 @@ module Uniword
         map_element 'tr', to: :rows, render_nil: false
         map_element 'AlternateContent', to: :alternate_content, render_nil: false
       end
+
+      # Add a row to the table
+      #
+      # @param row [TableRow, nil] Row to add
+      # @return [TableRow] The added row
+      def add_row(row = nil)
+        row ||= TableRow.new
+        rows << row
+        row
+      end
+
+      # Get row count
+      #
+      # @return [Integer] Number of rows in table
+      def row_count
+        rows.count
+      end
     end
   end
 end

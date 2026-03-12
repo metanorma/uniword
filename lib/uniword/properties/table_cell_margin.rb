@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../ooxml/namespaces'
-require_relative 'margin'
 
 module Uniword
   module Properties

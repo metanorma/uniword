@@ -62,7 +62,7 @@ module Uniword
 
           return unless resolved&.any?
 
-          run.properties = Properties::RunProperties.new(**resolved)
+          run.properties = RunProperties.new(**resolved)
         end
       end
     end

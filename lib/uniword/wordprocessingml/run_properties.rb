@@ -1,25 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../properties/run_fonts'
-require_relative '../properties/font_size'
-require_relative '../properties/color_value'
-require_relative '../properties/style_reference'
-require_relative '../properties/underline'
-require_relative '../properties/highlight'
-require_relative '../properties/vertical_align'
-require_relative '../properties/position'
-require_relative '../properties/character_spacing'
-require_relative '../properties/kerning'
-require_relative '../properties/width_scale'
-require_relative '../properties/emphasis_mark'
-require_relative '../properties/shading'
-require_relative '../properties/language'
-require_relative '../properties/text_fill'
-require_relative '../properties/text_outline'
-require_relative '../properties/bold'
-require_relative '../properties/italic'
-require_relative '../properties/boolean_formatting'
 
 module Uniword
   module Wordprocessingml
@@ -68,6 +49,10 @@ module Uniword
       attribute :caps, Properties::Caps
       attribute :hidden, Properties::Vanish
       attribute :no_proof, Properties::NoProof
+      attribute :shadow, Properties::Shadow
+      attribute :emboss, Properties::Emboss
+      attribute :imprint, Properties::Imprint
+      attribute :outline_level, Properties::OutlineLevel
 
       # Flat attributes (kept as aliases for compatibility)
       attribute :spacing, :integer          # Flat attribute (deprecated)
@@ -82,6 +67,17 @@ module Uniword
 
       # Flat shading (deprecated, kept for compatibility)
       attribute :shading_fill, :string # Background fill color (flat)
+      attribute :shading_type, :string # Shading pattern (flat)
+
+      # Flat font attributes (convenience for API access)
+      attribute :font, :string           # Primary font (maps to ASCII)
+      attribute :font_ascii, :string     # ASCII font
+      attribute :font_east_asia, :string # East Asian font
+      attribute :font_h_ansi, :string    # High ANSI font
+      attribute :font_cs, :string        # Complex script font
+
+      # Flat boolean attributes (convenience for API access)
+      attribute :all_caps, :boolean # Alias for caps
 
       # XML mappings come AFTER attributes
       xml do
@@ -147,19 +143,188 @@ module Uniword
         # Text effects (complex objects - basic support)
         map_element 'textFill', to: :text_fill, render_nil: false
         map_element 'textOutline', to: :text_outline, render_nil: false
+
+        # Additional boolean formatting
+        map_element 'shadow', to: :shadow, render_nil: false
+        map_element 'emboss', to: :emboss, render_nil: false
+        map_element 'imprint', to: :imprint, render_nil: false
+        map_element 'outline', to: :outline_level, render_nil: false
       end
 
-      # Helper methods for boolean values (check wrapper.value)
+      # Helper methods for boolean values (handle both wrapper and primitive)
       def bold?
-        bold&.value == true
+        val = bold
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
       end
 
       def italic?
-        italic&.value == true
+        val = italic
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
       end
 
       def strike?
-        strike&.value == true
+        val = strike
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      # Get all_caps - returns boolean
+      def all_caps
+        val = @all_caps || caps
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      # Set all_caps
+      def all_caps=(value)
+        @all_caps = value
+        self.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
+        value
+      end
+
+      # Get all_caps? (alias for caps?)
+      def all_caps?
+        caps?
+      end
+
+      # Get caps? predicate
+      def caps?
+        val = caps
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      # Font convenience method - get ASCII font name
+      # Returns flat attribute if set, otherwise falls back to fonts object
+      def font
+        @font || fonts&.ascii
+      end
+
+      # Set font name on all font types
+      def font=(value)
+        @font = value
+        self.fonts ||= Properties::RunFonts.new
+        fonts.ascii = value
+        value
+      end
+
+      # Get East Asian font
+      def font_east_asia
+        @font_east_asia || fonts&.east_asia
+      end
+
+      # Set East Asian font
+      def font_east_asia=(value)
+        @font_east_asia = value
+        self.fonts ||= Properties::RunFonts.new
+        fonts.east_asia = value
+        value
+      end
+
+      # Get High ANSI font
+      def font_h_ansi
+        @font_h_ansi || fonts&.h_ansi
+      end
+
+      # Set High ANSI font
+      def font_h_ansi=(value)
+        @font_h_ansi = value
+        self.fonts ||= Properties::RunFonts.new
+        fonts.h_ansi = value
+        value
+      end
+
+      # Get Complex Script font
+      def font_cs
+        @font_cs || fonts&.cs
+      end
+
+      # Set Complex Script font
+      def font_cs=(value)
+        @font_cs = value
+        self.fonts ||= Properties::RunFonts.new
+        fonts.cs = value
+        value
+      end
+
+      # Get ASCII font (alias for font)
+      def font_ascii
+        @font_ascii || fonts&.ascii
+      end
+
+      # Set ASCII font (alias for font)
+      def font_ascii=(value)
+        @font_ascii = value
+        self.fonts ||= Properties::RunFonts.new
+        fonts.ascii = value
+        value
+      end
+
+      # Convenience methods for RunProperties
+      def small_caps?
+        val = small_caps
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      def shadow?
+        val = shadow
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      def imprint?
+        val = imprint
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      def emboss?
+        val = emboss
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      def hidden?
+        val = hidden
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+
+      def shading_color
+        shading&.fill
+      end
+
+      def shading_color=(value)
+        self.shading ||= Properties::Shading.new
+        shading.fill = value
+        self
+      end
+
+      def page_break=(_value)
+        self
       end
 
       # Initialize with defaults

@@ -7,27 +7,6 @@ require 'zip'
 # Configure lutaml-model to use Nokogiri adapter for XML
 Lutaml::Model::Config.xml_adapter_type = :nokogiri
 
-require_relative 'uniword/version'
-
-# Load OOXML namespaces FIRST (needed by generated classes)
-require_relative 'uniword/ooxml/namespaces'
-require_relative 'uniword/properties'
-
-# Namespace modules with cross-dependencies MUST be eagerly loaded
-# These cannot use autoload because:
-# 1. Format handlers (loaded at line 220) depend on these namespaces
-# 2. Format handlers execute self-registration code at load time (side effects)
-# 3. Cross-dependencies between namespaces prevent deferred loading
-# 4. Autoload triggers inside module definition fail (NameError before autoload executes)
-require_relative 'uniword/wordprocessingml'
-require_relative 'uniword/wp_drawing'
-require_relative 'uniword/drawingml'
-require_relative 'uniword/vml'
-require_relative 'uniword/math'
-require_relative 'uniword/shared_types'
-
-# Load extension modules that add convenience methods to generated classes
-
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
 # documents in DOCX format using a schema-driven architecture.
 #
@@ -54,9 +33,28 @@ require_relative 'uniword/shared_types'
 # @see Document Main document class (alias for Wordprocessingml::DocumentRoot)
 # @see DocumentFactory Factory for reading documents
 module Uniword
+  # Version constant
+  autoload :VERSION, 'uniword/version'
+
+  # === Namespace Modules (autoload) ===
+  # All autoloads MUST be inside the module they're registering constants for
+
+  # OOXML module with Namespaces autoload chain
+  autoload :Ooxml, 'uniword/ooxml'
+
+  # Properties module
+  autoload :Properties, 'uniword/properties'
+
+  # XML namespace modules
+  autoload :Wordprocessingml, 'uniword/wordprocessingml'
+  autoload :WpDrawing, 'uniword/wp_drawing'
+  autoload :Drawingml, 'uniword/drawingml'
+  autoload :Vml, 'uniword/vml'
+  autoload :Math, 'uniword/math'
+  autoload :SharedTypes, 'uniword/shared_types'
+
+  # === API Aliases (WordProcessingML namespace) ===
   # Re-export generated classes as primary API
-  # These are the schema-generated classes from lib/uniword/wordprocessingml/
-  # NOTE: These constants require namespaces to be eagerly loaded (see lines 18-23)
   Document = Wordprocessingml::DocumentRoot
   Body = Wordprocessingml::Body
   Paragraph = Wordprocessingml::Paragraph
@@ -76,16 +74,36 @@ module Uniword
   BookmarkStart = Wordprocessingml::BookmarkStart
   BookmarkEnd = Wordprocessingml::BookmarkEnd
 
+  # SDT properties (WordProcessingML namespace, aliased for convenience)
+  StructuredDocumentTagProperties = Wordprocessingml::StructuredDocumentTagProperties
+
   # Math support
   MathElement = Math::OMath
 
-  # Autoload infrastructure classes (still needed)
+  # === DrawingML Convenience Aliases ===
+  # Classes are in Drawingml namespace, These must be constant assignments,
+  # not autoload, because the files define Uniword::Drawingml::ClassName
+  Theme = Drawingml::Theme
+  ThemeModel = Drawingml::Theme
+  ColorScheme = Drawingml::ColorScheme
+  FontScheme = Drawingml::FontScheme
+  FormatScheme = Drawingml::FormatScheme
+  ObjectDefaults = Drawingml::ObjectDefaults
+  ExtensionList = Drawingml::ExtensionList
+  Extension = Drawingml::Extension
+  ExtraColorSchemeList = Drawingml::ExtraColorSchemeList
+  FillStyleList = Drawingml::FillStyleList
+  LineStyleList = Drawingml::LineStyleList
+  EffectStyleList = Drawingml::EffectStyleList
+  BackgroundFillStyleList = Drawingml::BackgroundFillStyleList
+
+  # === Infrastructure Classes (autoload) ===
   autoload :DocumentFactory, 'uniword/document_factory'
   autoload :DocumentWriter, 'uniword/document_writer'
   autoload :ThemeWriter, 'uniword/theme_writer'
   autoload :FormatDetector, 'uniword/format_detector'
 
-  # Autoload error classes
+  # Error classes
   autoload :Error, 'uniword/errors'
   autoload :FileNotFoundError, 'uniword/errors'
   autoload :InvalidFormatError, 'uniword/errors'
@@ -96,194 +114,47 @@ module Uniword
   autoload :UnsupportedOperationError, 'uniword/errors'
   autoload :ConversionError, 'uniword/errors'
 
-  # Autoload styles
+  # Styles
   autoload :StylesConfiguration, 'uniword/styles_configuration'
-  autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
   autoload :Style, 'uniword/style'
 
-  # Autoload styles module
-  module Styles
-    autoload :StyleDefinition, 'uniword/styles/style_definition'
-    autoload :ParagraphStyleDefinition, 'uniword/styles/paragraph_style_definition'
-    autoload :CharacterStyleDefinition, 'uniword/styles/character_style_definition'
-    autoload :TableStyleDefinition, 'uniword/styles/table_style_definition'
-    autoload :ListStyleDefinition, 'uniword/styles/list_style_definition'
-    autoload :SemanticStyle, 'uniword/styles/semantic_style'
-    autoload :StyleBuilder, 'uniword/styles/style_builder'
-    autoload :StyleLibrary, 'uniword/styles/style_library'
-  end
+  # Namespace autoloads (autoloads done in immediate parent namespace files)
+  autoload :Styles, 'uniword/styles'
+  autoload :Template, 'uniword/template'
+  autoload :Visitor, 'uniword/visitor'
+  autoload :Validators, 'uniword/validators'
+  autoload :Stylesets, 'uniword/stylesets'
+  autoload :Infrastructure, 'uniword/infrastructure'
+  autoload :Accessibility, 'uniword/accessibility'
+  autoload :Assembly, 'uniword/assembly'
+  autoload :Batch, 'uniword/batch'
+  autoload :Metadata, 'uniword/metadata'
+  autoload :Quality, 'uniword/quality'
+  autoload :Schema, 'uniword/schema'
 
-  # Autoload themes
-  autoload :Theme, 'uniword/theme'
-  autoload :ThemeModel, 'uniword/theme'
-  autoload :ColorScheme, 'uniword/color_scheme'
-  autoload :FontScheme, 'uniword/font_scheme'
+  # Namespace autoloads (Phase 2 of autoload migration)
+  autoload :Configuration, 'uniword/configuration'
+  autoload :Transformation, 'uniword/transformation'
+  autoload :Validation, 'uniword/validation'
+  autoload :Warnings, 'uniword/warnings'
+  autoload :Mhtml, 'uniword/mhtml'
+  autoload :Themes, 'uniword/themes'
+  autoload :Sdt, 'uniword/sdt'
 
-  # Autoload stylesets
+  # Stylesets and numbering
   autoload :StyleSet, 'uniword/styleset'
-
-  # Autoload numbering
   autoload :NumberingConfiguration, 'uniword/numbering_configuration'
 
-  # Autoload theme infrastructure (renamed to avoid conflict with Theme class)
-  autoload :ThemeLoader, 'uniword/theme/theme_loader'
-  autoload :ThemePackageReader, 'uniword/theme/theme_package_reader'
-
-  # Autoload template classes
-  module Template
-    autoload :Template, 'uniword/template/template'
-    autoload :VariableResolver, 'uniword/template/variable_resolver'
-    autoload :TemplateParser, 'uniword/template/template_parser'
-    autoload :TemplateRenderer, 'uniword/template/template_renderer'
-    autoload :TemplateValidator, 'uniword/template/template_validator'
-    autoload :TemplateContext, 'uniword/template/template_context'
-    autoload :TemplateMarker, 'uniword/template/template_marker'
-  end
-
-  # Autoload visitor classes
-  module Visitor
-    autoload :BaseVisitor, 'uniword/visitor/base_visitor'
-    autoload :TextExtractor, 'uniword/visitor/text_extractor'
-  end
-
-  # Autoload validators classes
-  module Validators
-    autoload :ElementValidator, 'uniword/validators/element_validator'
-    autoload :ParagraphValidator, 'uniword/validators/paragraph_validator'
-    autoload :TableValidator, 'uniword/validators/table_validator'
-  end
-
-  # Autoload styleset infrastructure
-  module Stylesets
-    autoload :Package, 'uniword/stylesets/package'
-    autoload :YamlStyleSetLoader, 'uniword/stylesets/yaml_styleset_loader'
-  end
-
-  # Autoload infrastructure
-  module Infrastructure
-    autoload :ZipExtractor, 'uniword/infrastructure/zip_extractor'
-    autoload :ZipPackager, 'uniword/infrastructure/zip_packager'
-    autoload :MimeParser, 'uniword/infrastructure/mime_parser'
-    autoload :MimePackager, 'uniword/infrastructure/mime_packager'
-  end
-
-  # Autoload accessibility module
-  module Accessibility
-    autoload :AccessibilityChecker, 'uniword/accessibility/accessibility_checker'
-    autoload :AccessibilityProfile, 'uniword/accessibility/accessibility_profile'
-    autoload :AccessibilityReport, 'uniword/accessibility/accessibility_report'
-    autoload :AccessibilityRule, 'uniword/accessibility/accessibility_rule'
-    autoload :AccessibilityViolation, 'uniword/accessibility/accessibility_violation'
-
-    # Rules submodule
-    module Rules
-      autoload :ColorUsageRule, 'uniword/accessibility/rules/color_usage_rule'
-      autoload :ContrastRatioRule, 'uniword/accessibility/rules/contrast_ratio_rule'
-      autoload :DescriptiveHeadingsRule, 'uniword/accessibility/rules/descriptive_headings_rule'
-      autoload :DocumentTitleRule, 'uniword/accessibility/rules/document_title_rule'
-      autoload :HeadingStructureRule, 'uniword/accessibility/rules/heading_structure_rule'
-      autoload :ImageAltTextRule, 'uniword/accessibility/rules/image_alt_text_rule'
-      autoload :LanguageSpecificationRule, 'uniword/accessibility/rules/language_specification_rule'
-      autoload :ListStructureRule, 'uniword/accessibility/rules/list_structure_rule'
-      autoload :ReadingOrderRule, 'uniword/accessibility/rules/reading_order_rule'
-      autoload :TableHeadersRule, 'uniword/accessibility/rules/table_headers_rule'
-    end
-  end
-
-  # Autoload assembly module
-  module Assembly
-    autoload :AssemblyManifest, 'uniword/assembly/assembly_manifest'
-    autoload :ComponentRegistry, 'uniword/assembly/component_registry'
-    autoload :CrossReferenceResolver, 'uniword/assembly/cross_reference_resolver'
-    autoload :DocumentAssembler, 'uniword/assembly/document_assembler'
-    autoload :TocGenerator, 'uniword/assembly/toc_generator'
-    autoload :VariableSubstitutor, 'uniword/assembly/variable_substitutor'
-  end
-
-  # Autoload batch module
-  module Batch
-    autoload :BatchResult, 'uniword/batch/batch_result'
-    autoload :DocumentProcessor, 'uniword/batch/document_processor'
-    autoload :ProcessingStage, 'uniword/batch/processing_stage'
-    # Stages
-    autoload :CompressImagesStage, 'uniword/batch/stages/compress_images_stage'
-    autoload :ConvertFormatStage, 'uniword/batch/stages/convert_format_stage'
-    autoload :NormalizeStylesStage, 'uniword/batch/stages/normalize_styles_stage'
-    autoload :QualityCheckStage, 'uniword/batch/stages/quality_check_stage'
-    autoload :UpdateMetadataStage, 'uniword/batch/stages/update_metadata_stage'
-    autoload :ValidateLinksStage, 'uniword/batch/stages/validate_links_stage'
-  end
-
-  # Autoload metadata module
-  module Metadata
-    autoload :MetadataExtractor, 'uniword/metadata/metadata_extractor'
-    autoload :MetadataIndex, 'uniword/metadata/metadata_index'
-    autoload :MetadataManager, 'uniword/metadata/metadata_manager'
-    autoload :MetadataUpdater, 'uniword/metadata/metadata_updater'
-    autoload :MetadataValidator, 'uniword/metadata/metadata_validator'
-  end
-
-  # Autoload quality module
-  module Quality
-    autoload :DocumentChecker, 'uniword/quality/document_checker'
-    autoload :QualityReport, 'uniword/quality/quality_report'
-    autoload :QualityRule, 'uniword/quality/quality_rule'
-    # Rules
-    autoload :HeadingHierarchyRule, 'uniword/quality/rules/heading_hierarchy_rule'
-    autoload :ImageAltTextRule, 'uniword/quality/rules/image_alt_text_rule'
-    autoload :LinkValidationRule, 'uniword/quality/rules/link_validation_rule'
-    autoload :ParagraphLengthRule, 'uniword/quality/rules/paragraph_length_rule'
-    autoload :StyleConsistencyRule, 'uniword/quality/rules/style_consistency_rule'
-    autoload :TableHeaderRule, 'uniword/quality/rules/table_header_rule'
-  end
-
+  # Content types and document properties
   autoload :ContentTypes, 'uniword/content_types'
   autoload :DocumentProperties, 'uniword/document_properties'
   autoload :Glossary, 'uniword/glossary'
+  autoload :Relationships, 'uniword/relationships' # Alias for Ooxml::Relationships
 
-  # Autoload OOXML support
-  module Ooxml
-    autoload :Relationships, 'uniword/ooxml/relationships'
-    autoload :DocxPackage, 'uniword/ooxml/docx_package'
-    autoload :DotxPackage, 'uniword/ooxml/dotx_package'
-    autoload :ThmxPackage, 'uniword/ooxml/thmx_package'
-    autoload :MhtmlPackage, 'uniword/ooxml/mhtml_package'
-    autoload :AppProperties, 'uniword/ooxml/app_properties'
-    autoload :CoreProperties, 'uniword/ooxml/core_properties'
-    autoload :Types, 'uniword/ooxml/types'
-    autoload :PackageFile, 'uniword/ooxml/package_file'
-
-    # Schema submodule
-    module Schema
-      autoload :OoxmlSchema, 'uniword/ooxml/schema/ooxml_schema'
-      autoload :ElementSerializer, 'uniword/ooxml/schema/element_serializer'
-      autoload :ElementDefinition, 'uniword/ooxml/schema/element_definition'
-      autoload :AttributeDefinition, 'uniword/ooxml/schema/attribute_definition'
-      autoload :ChildDefinition, 'uniword/ooxml/schema/child_definition'
-    end
-
-    # Namespace definitions
-    module Namespaces
-      WORDPROCESSINGML = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-      DRAWINGML = 'http://schemas.openxmlformats.org/drawingml/2006/main'
-      RELATIONSHIPS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
-      MATH = 'http://schemas.openxmlformats.org/officeDocument/2006/math'
-    end
-  end
-
-  # Schema infrastructure (v2.0)
-  module Schema
-    autoload :SchemaLoader, 'uniword/schema/schema_loader'
-    autoload :ModelGenerator, 'uniword/schema/model_generator'
-  end
-
-  # Autoload CLI
+  # CLI
   autoload :CLI, 'uniword/cli'
 
-  # === Top-Level Classes (Comprehensive Autoload) ===
-  # All top-level classes in lib/uniword/*.rb use autoload for maintenance simplicity
-
-  # Base element class (required by many classes)
+  # === Top-Level Classes (autoload) ===
   autoload :Element, 'uniword/element'
 
   # Document structure and components
@@ -320,16 +191,13 @@ module Uniword
   autoload :Extension, 'uniword/extension'
   autoload :ExtensionList, 'uniword/extension_list'
   autoload :ExtraColorSchemeList, 'uniword/extra_color_scheme_list'
-  autoload :FormatScheme, 'uniword/format_scheme'
   autoload :LineNumbering, 'uniword/line_numbering'
   autoload :NumberingDefinition, 'uniword/numbering_definition'
   autoload :NumberingInstance, 'uniword/numbering_instance'
   autoload :NumberingLevel, 'uniword/numbering_level'
-  autoload :ObjectDefaults, 'uniword/object_defaults'
   autoload :PageBorders, 'uniword/page_borders'
   autoload :ParagraphBorder, 'uniword/paragraph_border'
   autoload :Shading, 'uniword/shading'
-  autoload :StructuredDocumentTagProperties, 'uniword/structured_document_tag_properties'
   autoload :TabStop, 'uniword/tab_stop'
 
   # Infrastructure and utilities
@@ -365,51 +233,31 @@ module Uniword
     # @param path [String] File path
     # @return [Document] Loaded document
     def load(path)
-      DocumentFactory.from_file(path)
+      DocumentFactory.load(path)
     end
 
-    alias open load
-
-    # Import HTML into a Uniword document
+    # Read document from file (alias for load)
     #
-    # TEMPORARY: Disabled during v2.0 migration (HtmlImporter uses archived v1.x classes)
-    # Will be re-enabled post-v2.0.0 with updated HtmlImporter using generated classes.
-    #
-    # @param html [String] HTML content
-    # @param options [Hash] Import options
-    # @return [Document] The generated document
-    def from_html(_html, **_options)
-      raise UnsupportedOperationError,
-            'HTML import temporarily disabled in v2.0. ' \
-            'Will be re-enabled in a future release with updated HtmlImporter.'
+    # @param path [String] File path
+    # @return [Document] Loaded document
+    def read(path)
+      load(path)
     end
 
-    # Convert HTML file to Word DOCX format
+    # Parse document from string
     #
-    # TEMPORARY: Disabled during v2.0 migration
-    #
-    # @param html_file [String] Path to HTML file
-    # @param output [String] Path to output DOCX file
-    # @param options [Hash] Import options
-    # @return [void]
-    def html_to_docx(_html_file, _output, **_options)
-      raise UnsupportedOperationError,
-            'HTML import temporarily disabled in v2.0. ' \
-            'Will be re-enabled in a future release.'
+    # @param data [String] DOCX binary data
+    # @return [Document] Parsed document
+    def parse(data)
+      DocumentFactory.parse(data)
     end
 
-    # Convert HTML file to Word DOC (MHTML) format
+    # Detect format of file
     #
-    # TEMPORARY: Disabled during v2.0 migration
-    #
-    # @param html_file [String] Path to HTML file
-    # @param output [String] Path to output DOC file
-    # @param options [Hash] Import options
-    # @return [void]
-    def html_to_doc(_html_file, _output, **_options)
-      raise UnsupportedOperationError,
-            'HTML import temporarily disabled in v2.0. ' \
-            'Will be re-enabled in a future release.'
+    # @param path [String] File path
+    # @return [Symbol] Format (:docx, :dotx, etc.)
+    def detect_format(path)
+      FormatDetector.detect(path)
     end
   end
 end

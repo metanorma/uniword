@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'extension'
 
 module Uniword
   # Represents an extension list in DrawingML theme

@@ -229,8 +229,8 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       footnote = doc.footnotes[1]
       para = footnote.paragraphs.first
-      expect(para.runs[0].bold).to be true
-      expect(para.runs[2].italic).to be true
+      expect(para.runs[0].bold?).to be true
+      expect(para.runs[2].italic?).to be true
     end
 
     it 'should support paragraph styles in footnotes' do

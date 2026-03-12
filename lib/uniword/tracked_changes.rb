@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'revision'
 
 module Uniword
   # Manages track changes for a Word document.

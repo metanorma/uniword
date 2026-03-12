@@ -9,6 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:style>
     class Style < Lutaml::Model::Serializable
+      # Pattern 0: ATTRIBUTES FIRST
       attribute :type, :string
       attribute :styleId, :string
       attribute :default, :boolean

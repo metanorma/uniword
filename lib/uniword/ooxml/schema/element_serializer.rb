@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'nokogiri'
-require_relative 'ooxml_schema'
 
 module Uniword
   module Ooxml
@@ -67,9 +66,9 @@ module Uniword
           xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, '') unless options.fetch(:standalone, false)
 
           # Add XML declaration if standalone
-          if options.fetch(:standalone, false)
-            xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}"
-          end
+          xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(
+            :standalone, false
+          )
 
           xml_str.strip
         end

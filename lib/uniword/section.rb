@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'section_properties'
-require_relative 'header'
-require_relative 'footer'
 
 module Uniword
   # Represents a document section

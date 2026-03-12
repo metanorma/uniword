@@ -80,7 +80,6 @@ module Uniword
       # @param data [Hash] YAML data
       # @return [Theme] Deserialized theme
       def deserialize_theme(data)
-        require_relative '../theme'
 
         theme = ::Uniword::Theme.new(name: data['name'])
 
@@ -104,7 +103,6 @@ module Uniword
       # @param data [Hash] Color scheme data
       # @return [ColorScheme] Deserialized color scheme
       def deserialize_color_scheme(data)
-        require_relative '../color_scheme'
 
         scheme = ColorScheme.new(name: data['name'])
 
@@ -120,7 +118,6 @@ module Uniword
       # @param data [Hash] Font scheme data
       # @return [FontScheme] Deserialized font scheme
       def deserialize_font_scheme(data)
-        require_relative '../font_scheme'
 
         scheme = FontScheme.new(name: data['name'])
         scheme.major_font = data['major_font']
@@ -137,7 +134,6 @@ module Uniword
       # @param variants_data [Hash] Variants data
       # @return [Hash] Hash of variant_id => ThemeVariant
       def deserialize_variants(variants_data)
-        require_relative '../theme/theme_variant'
 
         variants = {}
 

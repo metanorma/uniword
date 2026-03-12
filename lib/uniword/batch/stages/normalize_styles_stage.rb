@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../processing_stage'
 
 module Uniword
   module Batch

@@ -139,5 +139,21 @@ module Uniword
     autoload :Scene3D, 'uniword/drawingml/scene_3d'
     autoload :Shape3D, 'uniword/drawingml/shape_3d'
     autoload :BevelTop, 'uniword/drawingml/bevel_top'
+
+    # Theme Components (8) - XML namespace: DrawingML
+    autoload :Theme, 'uniword/drawingml/theme'
+    autoload :ThemeElements, 'uniword/drawingml/theme'
+    autoload :ColorScheme, 'uniword/drawingml/color_scheme'
+    autoload :FontScheme, 'uniword/drawingml/font_scheme'
+    autoload :FormatScheme, 'uniword/drawingml/format_scheme'
+    autoload :FillStyleList, 'uniword/drawingml/format_scheme'
+    autoload :LineStyleList, 'uniword/drawingml/format_scheme'
+    autoload :EffectStyleList, 'uniword/drawingml/format_scheme'
+    autoload :EffectStyle, 'uniword/drawingml/format_scheme'
+    autoload :BackgroundFillStyleList, 'uniword/drawingml/format_scheme'
+    autoload :ObjectDefaults, 'uniword/drawingml/object_defaults'
+    autoload :ExtensionList, 'uniword/drawingml/extension_list'
+    autoload :Extension, 'uniword/drawingml/extension'
+    autoload :ExtraColorSchemeList, 'uniword/drawingml/extra_color_scheme_list'
   end
 end

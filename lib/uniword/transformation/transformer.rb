@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'transformation_rule'
-require_relative 'transformation_rule_registry'
-require_relative 'paragraph_transformation_rule'
-require_relative 'run_transformation_rule'
-require_relative 'table_transformation_rule'
-require_relative 'image_transformation_rule'
-require_relative 'hyperlink_transformation_rule'
 
 module Uniword
   module Transformation

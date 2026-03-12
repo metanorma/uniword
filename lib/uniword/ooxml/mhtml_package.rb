@@ -1,13 +1,8 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'namespaces'
-require_relative 'core_properties'
-require_relative 'app_properties'
-require_relative '../theme'
-require_relative '../styles_configuration'
-require_relative '../numbering_configuration'
-require_relative '../document'
+# Document is defined as an alias in lib/uniword.rb
+# Document = Wordprocessingml::DocumentRoot
 
 module Uniword
   module Ooxml
@@ -47,7 +42,6 @@ module Uniword
       # @param path [String] Path to .mht, .mhtml, or .doc file
       # @return [Document] Loaded document
       def self.from_file(path)
-        require_relative '../infrastructure/mime_parser'
 
         # Parse MIME content (DIFFERENT from ZIP!)
         parser = Infrastructure::MimeParser.new
@@ -123,7 +117,6 @@ module Uniword
       # @param document [Document] The document to save
       # @param path [String] Output path
       def self.to_file(document, path)
-        require_relative '../infrastructure/mime_packager'
 
         # Create package
         package = new

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../link_checker'
+# LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

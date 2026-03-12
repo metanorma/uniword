@@ -19,7 +19,6 @@ module Uniword
       # @param path [String] Path to YAML file
       # @return [StyleSet] Loaded StyleSet
       def load(path)
-        require_relative '../styleset'
 
         # Use lutaml-model deserialization
         ::Uniword::StyleSet.from_yaml(File.read(path))

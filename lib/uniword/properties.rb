@@ -6,6 +6,7 @@ module Uniword
     autoload :Alignment, 'uniword/properties/alignment'
     autoload :FontSize, 'uniword/properties/font_size'
     autoload :Color, 'uniword/properties/color'
+    autoload :ColorValue, 'uniword/properties/color_value'
     autoload :StyleReference, 'uniword/properties/style_reference'
     autoload :OutlineLevel, 'uniword/properties/outline_level'
     autoload :Underline, 'uniword/properties/underline'
@@ -18,6 +19,22 @@ module Uniword
     autoload :EmphasisMark, 'uniword/properties/emphasis_mark'
     autoload :NumberingId, 'uniword/properties/numbering_id'
     autoload :NumberingLevel, 'uniword/properties/numbering_level'
+    autoload :Tabs, 'uniword/properties/tabs'
+
+    # Boolean formatting classes (from boolean_formatting.rb)
+    autoload :Strike, 'uniword/properties/boolean_formatting'
+    autoload :DoubleStrike, 'uniword/properties/boolean_formatting'
+    autoload :SmallCaps, 'uniword/properties/boolean_formatting'
+    autoload :Caps, 'uniword/properties/boolean_formatting'
+    autoload :Vanish, 'uniword/properties/boolean_formatting'
+    autoload :NoProof, 'uniword/properties/boolean_formatting'
+    autoload :Shadow, 'uniword/properties/boolean_formatting'
+    autoload :Emboss, 'uniword/properties/boolean_formatting'
+    autoload :Imprint, 'uniword/properties/boolean_formatting'
+
+    # Bold and Italic (from bold.rb and italic.rb)
+    autoload :Bold, 'uniword/properties/bold'
+    autoload :Italic, 'uniword/properties/italic'
 
     # Complex objects
     autoload :Spacing, 'uniword/properties/spacing'
@@ -26,7 +43,6 @@ module Uniword
     autoload :Border, 'uniword/properties/border'
     autoload :Borders, 'uniword/properties/borders'
     autoload :TabStop, 'uniword/properties/tab_stop'
-    autoload :Tabs, 'uniword/properties/tabs'
     autoload :Shading, 'uniword/properties/shading'
     autoload :Language, 'uniword/properties/language'
     autoload :TextFill, 'uniword/properties/text_fill'

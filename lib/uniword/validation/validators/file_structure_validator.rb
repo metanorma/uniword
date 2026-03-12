@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../layer_validator'
+# LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation
@@ -36,7 +36,8 @@ module Uniword
 
           # Check readable
           unless File.readable?(path)
-            return result.add_error('File is not readable', critical: true)
+            return result.add_error('File is not readable',
+                                    critical: true)
           end
 
           # Check extension

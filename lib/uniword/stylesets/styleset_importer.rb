@@ -23,9 +23,6 @@ module Uniword
       # @param output_path [String] Output YAML path
       # @return [void]
       def import(dotx_path, output_path)
-        require_relative 'styleset_package_reader'
-        require_relative '../styles_configuration'
-        require_relative '../styleset'
 
         # Extract .dotx package
         reader = StyleSetPackageReader.new

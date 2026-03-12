@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'style_library'
-require_relative 'dsl/list_context'
-require_relative 'dsl/table_context'
-require_relative 'dsl/paragraph_context'
 
 module Uniword
   module Styles
@@ -162,7 +158,7 @@ module Uniword
 
         return unless resolved&.any?
 
-        run.properties = Properties::RunProperties.new(**resolved)
+        run.properties = Wordprocessingml::RunProperties.new(**resolved)
       end
     end
   end

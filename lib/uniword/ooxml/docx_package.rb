@@ -1,13 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'namespaces'
-require_relative 'core_properties'
-require_relative 'app_properties'
-require_relative '../theme'
-require_relative '../styles_configuration'
-require_relative '../numbering_configuration'
-require_relative '../document'
+# Theme, StylesConfiguration, NumberingConfiguration, Document are autoloaded via lib/uniword.rb
 
 module Uniword
   module Ooxml
@@ -56,7 +50,6 @@ module Uniword
       # @param path [String] Path to .docx file
       # @return [Document] Loaded document (Generated::Wordprocessingml::DocumentRoot)
       def self.from_file(path)
-        require_relative '../infrastructure/zip_extractor'
 
         # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
@@ -66,11 +59,11 @@ module Uniword
         package = from_zip_content(zip_content)
 
         # Parse main document XML using generated classes
-        # Document is aliased in lib/uniword.rb to Generated::Wordprocessingml::DocumentRoot
+        # Document is Uniword::Wordprocessingml::DocumentRoot
         document = if package.raw_document_xml
-                     Document.from_xml(package.raw_document_xml)
+                     Uniword::Wordprocessingml::DocumentRoot.from_xml(package.raw_document_xml)
                    else
-                     Document.new
+                     Uniword::Wordprocessingml::DocumentRoot.new
                    end
 
         # Transfer properties from package to document
@@ -142,7 +135,6 @@ module Uniword
       # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
       # @param path [String] Output path
       def self.to_file(document, path)
-        require_relative '../infrastructure/zip_packager'
 
         # Create package
         package = new
@@ -174,7 +166,6 @@ module Uniword
       #
       # @param path [String] Output path
       def to_file(path)
-        require_relative '../infrastructure/zip_packager'
 
         zip_content = to_zip_content
 
@@ -203,11 +194,13 @@ module Uniword
 
         # Serialize model-based configurations
         if styles_configuration
-          content['word/styles.xml'] = styles_configuration.to_xml(encoding: 'UTF-8')
+          content['word/styles.xml'] =
+            styles_configuration.to_xml(encoding: 'UTF-8')
         end
 
         if numbering_configuration
-          content['word/numbering.xml'] = numbering_configuration.to_xml(encoding: 'UTF-8')
+          content['word/numbering.xml'] =
+            numbering_configuration.to_xml(encoding: 'UTF-8')
         end
 
         # Serialize main document (word/document.xml)
@@ -231,14 +224,12 @@ module Uniword
       def self.add_required_files(zip_content)
         # Add [Content_Types].xml if not present
         unless zip_content['[Content_Types].xml']
-          require_relative '../content_types'
           zip_content['[Content_Types].xml'] =
             ContentTypes.generate.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
         unless zip_content['_rels/.rels']
-          require_relative '../relationships/relationships'
           zip_content['_rels/.rels'] =
             Relationships::Relationships.generate_package_rels.to_xml(declaration: true)
         end

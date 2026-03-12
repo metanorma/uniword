@@ -151,7 +151,8 @@ module Uniword
 
     def validate_rules
       if h_rule && !SIZE_RULES.include?(h_rule)
-        raise ArgumentError, "Invalid h_rule: #{h_rule}. Must be one of: #{SIZE_RULES.join(', ')}"
+        raise ArgumentError,
+              "Invalid h_rule: #{h_rule}. Must be one of: #{SIZE_RULES.join(', ')}"
       end
       return unless w_rule && !SIZE_RULES.include?(w_rule)
 

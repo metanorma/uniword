@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'metadata'
+# All classes autoloaded via lib/uniword/metadata.rb and lib/uniword/configuration.rb
+
 
 module Uniword
   module Metadata

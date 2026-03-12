@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'child_definition'
-require_relative 'attribute_definition'
 
 module Uniword
   module Ooxml

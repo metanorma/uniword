@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'namespaces'
-require_relative '../theme'
 
 module Uniword
   module Ooxml
@@ -31,7 +29,6 @@ module Uniword
       # @param path [String] Path to .thmx file
       # @return [Theme] Loaded theme
       def self.from_file(path)
-        require_relative '../infrastructure/zip_extractor'
 
         # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
@@ -74,7 +71,6 @@ module Uniword
       # @param theme [Theme] The theme to save
       # @param path [String] Output path
       def self.to_file(theme, path)
-        require_relative '../infrastructure/zip_packager'
 
         # Create package
         package = new
@@ -110,14 +106,12 @@ module Uniword
       def self.add_required_files(zip_content)
         # Add [Content_Types].xml if not present
         unless zip_content['[Content_Types].xml']
-          require_relative '../content_types'
           zip_content['[Content_Types].xml'] =
             ContentTypes.generate_for_theme.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
         unless zip_content['_rels/.rels']
-          require_relative '../relationships/relationships'
           zip_content['_rels/.rels'] =
             Relationships::Relationships.generate_theme_package_rels.to_xml(declaration: true)
         end

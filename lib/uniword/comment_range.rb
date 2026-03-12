@@ -80,6 +80,13 @@ module Uniword
       marker_type == :reference
     end
 
+    # Check if the comment range is valid
+    #
+    # @return [Boolean] true if valid, false otherwise
+    def valid?
+      required_attributes_valid?
+    end
+
     # Get the XML element name based on marker type
     #
     # @return [String] The XML element name

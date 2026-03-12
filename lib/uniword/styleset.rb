@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'style'
 
 module Uniword
   # Represents a StyleSet containing a collection of style definitions
@@ -106,7 +105,6 @@ module Uniword
     # @example Load StyleSet
     #   styleset = StyleSet.from_dotx('Distinctive.dotx')
     def self.from_dotx(path)
-      require_relative 'stylesets/package'
 
       Stylesets::Package.from_file(path).styleset
     end
@@ -119,7 +117,6 @@ module Uniword
     # @example Load bundled StyleSet
     #   styleset = StyleSet.load('distinctive')
     def self.load(name)
-      require_relative 'stylesets/yaml_styleset_loader'
 
       StyleSets::YamlStyleSetLoader.load_bundled(name)
     end
@@ -132,7 +129,6 @@ module Uniword
     #   stylesets = StyleSet.available_stylesets
     #   # => ["distinctive", "basic", ...]
     def self.available_stylesets
-      require_relative 'stylesets/yaml_styleset_loader'
 
       StyleSets::YamlStyleSetLoader.available_stylesets
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'layer_validation_result'
+# LayerValidationResult autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

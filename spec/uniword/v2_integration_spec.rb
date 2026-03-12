@@ -18,7 +18,7 @@ RSpec.describe 'Uniword v2.0 Integration' do
   describe 'Document Creation' do
     it 'creates empty document' do
       doc = Uniword::Document.new
-      expect(doc).to be_a(Uniword::Generated::Wordprocessingml::DocumentRoot)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(doc.paragraphs).to be_empty
     end
 
@@ -46,7 +46,7 @@ RSpec.describe 'Uniword v2.0 Integration' do
       para = doc.add_paragraph('Bold text', bold: true)
 
       expect(para.runs.first.properties).not_to be_nil
-      expect(para.runs.first.properties.bold).to be_truthy
+      expect(para.runs.first.properties).to be_bold
     end
   end
 
@@ -98,7 +98,7 @@ RSpec.describe 'Uniword v2.0 Integration' do
         </w:document>
       XML
 
-      doc = Uniword::Generated::Wordprocessingml::DocumentRoot.from_xml(xml)
+      doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
 
       expect(doc.body).not_to be_nil
       expect(doc.body.paragraphs.length).to eq(1)
@@ -120,7 +120,7 @@ RSpec.describe 'Uniword v2.0 Integration' do
         </w:document>
       XML
 
-      doc = Uniword::Generated::Wordprocessingml::DocumentRoot.from_xml(xml)
+      doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
 
       expect(doc.paragraphs.length).to eq(2)
       expect(doc.text).to include('First')
@@ -201,8 +201,8 @@ RSpec.describe 'Uniword v2.0 Integration' do
         para = doc.add_paragraph('Test', bold: true, italic: true)
         run = para.runs.first
 
-        expect(run.properties.bold).to be_truthy
-        expect(run.properties.italic).to be_truthy
+        expect(run.properties).to be_bold
+        expect(run.properties).to be_italic
       end
     end
 
@@ -247,7 +247,7 @@ RSpec.describe 'Uniword v2.0 Integration' do
         para = doc.add_paragraph
         para.add_text('Bold', bold: true)
 
-        expect(para.runs.first.properties.bold).to be_truthy
+        expect(para.runs.first.properties).to be_bold
       end
     end
   end
@@ -294,15 +294,15 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
   describe 'Generated Classes Integration' do
     it 'Document is aliased to generated class' do
-      expect(Uniword::Document).to eq(Uniword::Generated::Wordprocessingml::DocumentRoot)
+      expect(Uniword::Document).to eq(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'Paragraph is aliased to generated class' do
-      expect(Uniword::Paragraph).to eq(Uniword::Generated::Wordprocessingml::Paragraph)
+      expect(Uniword::Paragraph).to eq(Uniword::Wordprocessingml::Paragraph)
     end
 
     it 'Run is aliased to generated class' do
-      expect(Uniword::Run).to eq(Uniword::Generated::Wordprocessingml::Run)
+      expect(Uniword::Run).to eq(Uniword::Wordprocessingml::Run)
     end
 
     it 'generated classes have lutaml-model serialization' do

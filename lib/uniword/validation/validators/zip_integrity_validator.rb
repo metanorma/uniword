@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'zip'
-require_relative '../layer_validator'
+# LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

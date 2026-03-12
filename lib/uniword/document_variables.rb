@@ -7,17 +7,17 @@
 module Uniword
   module DocumentVariables
     # Autoload all DocumentVariables classes
-    autoload :DataType, File.expand_path('document_variables/data_type', __dir__)
-    autoload :DefaultValue, File.expand_path('document_variables/default_value', __dir__)
-    autoload :DocVar, File.expand_path('document_variables/doc_var', __dir__)
-    autoload :DocVars, File.expand_path('document_variables/doc_vars', __dir__)
-    autoload :ReadOnly, File.expand_path('document_variables/read_only', __dir__)
-    autoload :VariableBinding, File.expand_path('document_variables/variable_binding', __dir__)
+    autoload :DataType, "#{__dir__}/document_variables/data_type"
+    autoload :DefaultValue, "#{__dir__}/document_variables/default_value"
+    autoload :DocVar, "#{__dir__}/document_variables/doc_var"
+    autoload :DocVars, "#{__dir__}/document_variables/doc_vars"
+    autoload :ReadOnly, "#{__dir__}/document_variables/read_only"
+    autoload :VariableBinding, "#{__dir__}/document_variables/variable_binding"
     autoload :VariableCollection,
-             File.expand_path('document_variables/variable_collection', __dir__)
+             "#{__dir__}/document_variables/variable_collection"
     autoload :VariableExpression,
-             File.expand_path('document_variables/variable_expression', __dir__)
-    autoload :VariableFormat, File.expand_path('document_variables/variable_format', __dir__)
-    autoload :VariableScope, File.expand_path('document_variables/variable_scope', __dir__)
+             "#{__dir__}/document_variables/variable_expression"
+    autoload :VariableFormat, "#{__dir__}/document_variables/variable_format"
+    autoload :VariableScope, "#{__dir__}/document_variables/variable_scope"
   end
 end

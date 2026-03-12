@@ -79,7 +79,7 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
 
       # Run should use explicit values, not inherited
       expect(run.bold?).to be false
-      expect(run.properties.size.value).to eq(20)
+      expect(run.properties.size).to eq(20)
     end
 
     it 'returns nil when no style and no explicit property' do
@@ -91,8 +91,8 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
 
       # No style, no explicit property = nil/false
       expect(run.bold?).to be false
-      expect(run.properties&.size&.value).to be_nil
-      expect(run.properties&.color&.value).to be_nil
+      expect(run.properties&.size).to be_nil
+      expect(run.properties&.color).to be_nil
     end
   end
 
@@ -119,14 +119,14 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
       para.runs << run3
 
       expect(run1.bold?).to be true
-      expect(run1.properties&.size&.value).to eq(32)
+      expect(run1.properties&.size).to eq(32)
 
       expect(run2.bold?).to be false
-      expect(run2.properties&.size&.value).to eq(32) # Still inherited
+      expect(run2.properties&.size).to eq(32) # Still inherited
 
       expect(run3.bold?).to be false
-      expect(run3.properties.size.value).to eq(16)
-      expect(run3.properties.color.value).to eq('0000FF')
+      expect(run3.properties.size).to eq(16)
+      expect(run3.properties.color).to eq('0000FF')
     end
   end
 end

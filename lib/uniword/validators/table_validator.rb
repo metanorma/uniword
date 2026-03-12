@@ -65,7 +65,7 @@ module Uniword
         return warnings if element.rows.empty?
 
         # Check for inconsistent column counts
-        column_counts = element.rows.map(&:cell_count).uniq
+        column_counts = element.rows.map { |row| row.cells.count }.uniq
         if column_counts.size > 1
           warnings << "Table has inconsistent column counts: #{column_counts.join(', ')}"
         end
@@ -110,7 +110,7 @@ module Uniword
       def validate_properties(table)
         return true if table.properties.nil?
 
-        table.properties.is_a?(Uniword::Properties::TableProperties)
+        table.properties.is_a?(Uniword::Wordprocessingml::TableProperties)
       end
 
       # Get errors related to properties
@@ -120,7 +120,7 @@ module Uniword
       def property_errors(table)
         return [] if table.properties.nil?
 
-        unless table.properties.is_a?(Uniword::Properties::TableProperties)
+        unless table.properties.is_a?(Uniword::Wordprocessingml::TableProperties)
           return ['Properties must be a TableProperties instance']
         end
 

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'numbering_definition'
-require_relative 'numbering_instance'
 
 module Uniword
   # Document-level numbering configuration manager

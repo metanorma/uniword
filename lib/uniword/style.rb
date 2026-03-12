@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'wordprocessingml/paragraph_properties'
-require_relative 'wordprocessingml/run_properties'
-require_relative 'wordprocessingml/table_properties'
 
 module Uniword
   # Represents a style definition
@@ -53,6 +50,14 @@ module Uniword
     attribute :paragraph_properties, Wordprocessingml::ParagraphProperties
     attribute :run_properties, Wordprocessingml::RunProperties
     attribute :table_properties, Wordprocessingml::TableProperties
+
+    # Convenience flat attributes for API access
+    attribute :bold, :boolean
+    attribute :spacing_before, :integer
+    attribute :font_size, :integer
+    attribute :font_color, :string
+    attribute :font_color_theme, :string
+    attribute :font_color_theme_tint, :string
 
     # XML mappings come AFTER attributes
     xml do
@@ -121,6 +126,23 @@ module Uniword
     # Check if this is a table style
     def table_style?
       type == 'table'
+    end
+
+    # Get font family from run properties
+    #
+    # @return [String, nil] Font family name
+    def font_family
+      run_properties&.font
+    end
+
+    # Set font family in run properties
+    #
+    # @param value [String] Font family name
+    # @return [self] For method chaining
+    def font_family=(value)
+      self.run_properties ||= Wordprocessingml::RunProperties.new
+      run_properties.font = value
+      self
     end
 
     # Check if this is a numbering style

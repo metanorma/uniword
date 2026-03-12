@@ -32,7 +32,8 @@ module Uniword
 
         schema_file = File.join(@schema_path, "#{schema_name}.yml")
         unless File.exist?(schema_file)
-          raise SchemaNotFoundError, "Schema file not found: #{schema_file}"
+          raise SchemaNotFoundError,
+                "Schema file not found: #{schema_file}"
         end
 
         @schemas[schema_name] = YAML.load_file(schema_file)

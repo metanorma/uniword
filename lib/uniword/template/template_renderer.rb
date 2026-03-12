@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'template_context'
-require_relative 'variable_resolver'
+# All Template classes autoloaded via lib/uniword/template.rb
+# Helpers autoloaded via lib/uniword/template/helpers.rb
 
 module Uniword
   module Template
@@ -146,8 +146,6 @@ module Uniword
       # @param document [Document] Document to modify
       # @return [void]
       def process_loop(start_marker, end_marker, document)
-        require_relative 'helpers/loop_helper'
-
         helper = Helpers::LoopHelper.new(@context)
         helper.process(start_marker, end_marker, document)
       end
@@ -159,8 +157,6 @@ module Uniword
       # @param document [Document] Document to modify
       # @return [void]
       def process_conditional(start_marker, end_marker, document)
-        require_relative 'helpers/conditional_helper'
-
         helper = Helpers::ConditionalHelper.new(@context)
         helper.process(start_marker, end_marker, document)
       end
@@ -171,8 +167,6 @@ module Uniword
       # @param value [Object] Value to insert
       # @return [void]
       def replace_element_content(element, value)
-        require_relative 'helpers/variable_helper'
-
         helper = Helpers::VariableHelper.new
         helper.replace(element, value)
       end
@@ -187,8 +181,10 @@ module Uniword
           next unless para.respond_to?(:comments)
 
           # Filter out template comments
-          if para.respond_to?(:attached_comments)
-            para.attached_comments.reject! { |c| template_comment?(c) }
+          next unless para.respond_to?(:attached_comments)
+
+          para.attached_comments.reject! do |c|
+            template_comment?(c)
           end
         end
       end

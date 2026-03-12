@@ -9,10 +9,12 @@ RSpec.describe Uniword::Validators::ElementValidator do
   before do
     # Register validators if not already registered
     unless described_class.validator_registry[Uniword::Paragraph]
-      described_class.register(Uniword::Paragraph, Uniword::Validators::ParagraphValidator)
+      described_class.register(Uniword::Paragraph,
+                               Uniword::Validators::ParagraphValidator)
     end
     unless described_class.validator_registry[Uniword::Table]
-      described_class.register(Uniword::Table, Uniword::Validators::TableValidator)
+      described_class.register(Uniword::Table,
+                               Uniword::Validators::TableValidator)
     end
   end
 

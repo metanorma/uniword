@@ -104,7 +104,6 @@ module Uniword
     # @return [self] Returns self for method chaining
     def add_text(text)
       # Lazy load Paragraph class when needed
-      require_relative 'paragraph' unless defined?(Uniword::Paragraph)
       para = Uniword::Paragraph.new
       para.add_text(text)
       paragraphs << para
@@ -117,7 +116,6 @@ module Uniword
     # @return [self] Returns self for method chaining
     def add_paragraph(paragraph)
       # Lazy load Paragraph class when needed
-      require_relative 'paragraph' unless defined?(Uniword::Paragraph)
       unless paragraph.is_a?(Uniword::Paragraph)
         raise ArgumentError, 'paragraph must be a Paragraph instance'
       end

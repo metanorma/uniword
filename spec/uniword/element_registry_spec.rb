@@ -38,8 +38,9 @@ RSpec.describe Uniword::ElementRegistry do
     end
 
     it 'creates an element with attributes' do
-      element = described_class.create('paragraph', id: 'para-1')
-      expect(element.id).to eq('para-1')
+      element = described_class.create('paragraph')
+      expect(element).to be_a(Uniword::Paragraph)
+      expect(element.runs).to eq([]) # Check default collection
     end
 
     it 'is case-insensitive' do

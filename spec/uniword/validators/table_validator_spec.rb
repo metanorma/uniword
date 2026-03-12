@@ -107,10 +107,7 @@ RSpec.describe Uniword::Validators::TableValidator do
       expect(warnings).to be_empty
     end
 
-    # NOTE: These tests are pending because the validator uses cell_count
-    # which doesn't exist in v2.0 (should use cells.count)
     it 'returns empty array for table with consistent column counts' do
-      pending 'Validator needs to be updated for v2.0 API (use cells.count instead of cell_count)'
       table = Uniword::Table.new
       table.rows << create_validator_text_row('A', 'B', 'C')
       table.rows << create_validator_text_row('D', 'E', 'F')
@@ -121,7 +118,6 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns warning for inconsistent column counts' do
-      pending 'Validator needs to be updated for v2.0 API (use cells.count instead of cell_count)'
       table = Uniword::Table.new
       table.rows << create_validator_text_row('A', 'B')
       table.rows << create_validator_text_row('C', 'D', 'E')
@@ -180,20 +176,15 @@ RSpec.describe Uniword::Validators::TableValidator do
   end
 
   describe 'realistic scenarios' do
-    # NOTE: This test is pending because the validator expects
-    # Uniword::Wordprocessingml::TableProperties which doesn't exist in v2.0
     it 'validates a complex table with header and data rows' do
-      pending 'Validator needs to be updated for v2.0 API (use Uniword::TableProperties)'
       properties = Uniword::TableProperties.new
-      table = Uniword::Table.new(properties: properties)
-
+      table = Uniword::Table.new
+      table.properties = properties
       # Add header row
       table.rows << create_validator_text_row('Name', 'Age', 'City')
-
       # Add data rows
       table.rows << create_validator_text_row('John', '30', 'NYC')
       table.rows << create_validator_text_row('Jane', '25', 'LA')
-
       expect(validator.errors(table)).to be_empty
       expect(validator.warnings(table)).to be_empty
     end
@@ -210,7 +201,6 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'warns about inconsistent columns while still being valid' do
-      pending 'Validator needs to be updated for v2.0 API (use cells.count instead of cell_count)'
       table = Uniword::Table.new
       table.rows << create_validator_text_row('A', 'B', 'C')
       table.rows << create_validator_text_row('D', 'E') # Missing one column

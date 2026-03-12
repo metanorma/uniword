@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
+# All classes autoloaded via lib/uniword/metadata.rb and lib/uniword/configuration.rb
+
 require 'json'
 require 'yaml'
 require 'csv'
-require_relative 'metadata'
-require_relative '../configuration/configuration_loader'
 
 module Uniword
   module Metadata

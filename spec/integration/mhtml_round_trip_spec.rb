@@ -81,8 +81,9 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
       # Verify formatting preserved
       first_para = doc2.paragraphs.first
-      first_run = first_para.runs.first
-      expect(first_run.properties.bold).to be true
+      first_run = first_para&.runs&.first
+      expect(first_run).not_to be_nil, 'Paragraph has no runs'
+      expect(first_run.properties).to be_bold
       expect(first_run.text).to eq('Bold')
     end
 
@@ -141,8 +142,8 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       doc2 = Uniword::DocumentFactory.from_file(temp_path, format: :mhtml)
 
       first_run = doc2.paragraphs.first.runs.first
-      expect(first_run.properties.bold).to be true
-      expect(first_run.properties.italic).to be true
+      expect(first_run.properties).to be_bold
+      expect(first_run.properties).to be_italic
     end
 
     it 'preserves font information' do
@@ -378,7 +379,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       expect(para_count).to be >= 2
 
       if para_count >= 2 && doc2.paragraphs[0].runs.any?
-        expect(doc2.paragraphs[0].runs[0].properties.bold).to be true
+        expect(doc2.paragraphs[0].runs[0].properties).to be_bold
       end
 
       if para_count >= 2 && doc2.paragraphs[1].runs.any?

@@ -1,12 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../configuration/configuration_loader'
-require_relative 'validation_report'
-require_relative 'validation_result'
-require_relative 'checkers/external_link_checker'
-require_relative 'checkers/internal_link_checker'
-require_relative 'checkers/file_reference_checker'
-require_relative 'checkers/footnote_reference_checker'
+# All classes autoloaded via lib/uniword/validation.rb and lib/uniword/configuration.rb
 
 module Uniword
   module Validation

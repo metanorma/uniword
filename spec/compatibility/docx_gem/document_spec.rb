@@ -186,12 +186,12 @@ RSpec.describe 'Docx Gem Compatibility - Document' do
 
     it 'detects italic formatting' do
       para = @doc.paragraphs[1]
-      expect(para.runs.first.properties.italic).to eq(true)
+      expect(para.runs.first.properties).to be_italic
     end
 
     it 'detects bold formatting' do
       para = @doc.paragraphs[2]
-      expect(para.runs.first.properties.bold).to eq(true)
+      expect(para.runs.first.properties).to be_bold
     end
 
     it 'detects underline formatting' do

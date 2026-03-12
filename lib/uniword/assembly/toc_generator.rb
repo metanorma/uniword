@@ -190,8 +190,7 @@ module Uniword
 
         # Set run properties
         if run.respond_to?(:properties=)
-          require_relative '../properties/run_properties'
-          run.properties = Properties::RunProperties.new(
+          run.properties = Wordprocessingml::RunProperties.new(
             bold: true,
             size: 48 # 24pt = 48 half-points
           )

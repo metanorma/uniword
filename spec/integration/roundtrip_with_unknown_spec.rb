@@ -347,7 +347,7 @@ RSpec.describe 'Round-trip with Unknown Elements' do
 
       # Run should have bold formatting
       run = para.runs.first
-      expect(run.properties.bold).to be true
+      expect(run.properties).to be_bold
       expect(run.text).to eq('Title')
 
       # Table should be properly parsed

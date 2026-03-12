@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'namespaces'
-require_relative 'types'
 
 module Uniword
   module Ooxml

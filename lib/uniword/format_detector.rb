@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'errors'
 
 module Uniword
   # Detects document format from file signatures and extensions.

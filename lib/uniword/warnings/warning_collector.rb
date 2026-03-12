@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../configuration/configuration_loader'
-require_relative 'warning'
-require_relative 'warning_report'
 
 module Uniword
   module Warnings

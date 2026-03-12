@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'validation_result'
+# ValidationResult autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

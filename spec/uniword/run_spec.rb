@@ -106,7 +106,7 @@ RSpec.describe Uniword::Run do
     end
 
     it 'returns truthy when underline is set (even with "none" value)' do
-      # Note: This is the current behavior - the comparison with 'none' string
+      # NOTE: This is the current behavior - the comparison with 'none' string
       # doesn't work correctly with wrapper objects
       props = Uniword::Wordprocessingml::RunProperties.new(
         underline: Uniword::Properties::Underline.new(value: 'none')
@@ -140,7 +140,7 @@ RSpec.describe Uniword::Run do
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.properties.size.value).to eq(24)
+      expect(run.properties.size&.value).to eq(24)
       # Size in points = value / 2 = 12 points
     end
 

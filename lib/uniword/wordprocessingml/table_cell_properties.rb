@@ -11,6 +11,7 @@ module Uniword
     class TableCellProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :cell_width, Uniword::Properties::CellWidth
+      attribute :width, :integer # Convenience attribute for width
       attribute :borders, TableCellBorders
       attribute :shading, Uniword::Properties::Shading
       attribute :vertical_align, Uniword::Properties::CellVerticalAlign
@@ -28,6 +29,22 @@ module Uniword
         map_element 'vAlign', to: :vertical_align, render_nil: false
         map_element 'gridSpan', to: :grid_span, render_nil: false
         map_element 'vMerge', to: :v_merge, render_nil: false
+      end
+
+      # Set vertical merge
+      #
+      # @param value [String, Integer] Vertical merge value
+      # @return [self] For method chaining
+      def vertical_merge=(value)
+        self.v_merge = value.to_s
+        self
+      end
+
+      # Get vertical merge
+      #
+      # @return [String, nil] Vertical merge value
+      def vertical_merge
+        v_merge
       end
     end
   end

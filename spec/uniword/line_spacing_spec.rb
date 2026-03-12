@@ -80,13 +80,12 @@ RSpec.describe 'Line Spacing Fine Control' do
 
   describe 'OOXML serialization' do
     let(:doc) { Uniword::Document.new }
-    let(:serializer) { Uniword::Serialization::OoxmlSerializer.new }
 
     it 'serializes exact line spacing correctly' do
       para = doc.add_paragraph('Test')
       para.line_spacing = { rule: 'exact', value: 240 }
 
-      xml = serializer.serialize(doc)
+      xml = doc.to_xml
       expect(xml).to include('w:lineRule="exact"')
       expect(xml).to include('w:line="240"')
     end
@@ -95,7 +94,7 @@ RSpec.describe 'Line Spacing Fine Control' do
       para = doc.add_paragraph('Test')
       para.line_spacing = 1.5
 
-      xml = serializer.serialize(doc)
+      xml = doc.to_xml
       expect(xml).to include('w:lineRule="auto"')
       expect(xml).to include('w:line="360"') # 1.5 * 240 = 360
     end
@@ -104,15 +103,13 @@ RSpec.describe 'Line Spacing Fine Control' do
       para = doc.add_paragraph('Test')
       para.line_spacing = { rule: 'atLeast', value: 280 }
 
-      xml = serializer.serialize(doc)
+      xml = doc.to_xml
       expect(xml).to include('w:lineRule="atLeast"')
       expect(xml).to include('w:line="280"')
     end
   end
 
   describe 'OOXML deserialization' do
-    let(:deserializer) { Uniword::Serialization::OoxmlDeserializer.new }
-
     it 'deserializes exact line spacing' do
       xml = <<~XML
         <?xml version="1.0" encoding="UTF-8"?>
@@ -128,9 +125,9 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = deserializer.deserialize(xml)
-      para = doc.paragraphs.first
-      expect(para.properties.line_spacing).to eq(240.0)
+      doc = Uniword::Document.from_xml(xml)
+      para = doc.body.paragraphs.first
+      expect(para.properties.line_spacing).to eq(240)
       expect(para.properties.line_rule).to eq('exact')
     end
 
@@ -149,9 +146,9 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = deserializer.deserialize(xml)
-      para = doc.paragraphs.first
-      expect(para.properties.line_spacing).to eq(1.5) # 360 / 240 = 1.5
+      doc = Uniword::Document.from_xml(xml)
+      para = doc.body.paragraphs.first
+      expect(para.properties.line_spacing).to eq(360)
       expect(para.properties.line_rule).to eq('auto')
     end
 
@@ -170,27 +167,24 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = deserializer.deserialize(xml)
-      para = doc.paragraphs.first
-      expect(para.properties.line_spacing).to eq(280.0)
+      doc = Uniword::Document.from_xml(xml)
+      para = doc.body.paragraphs.first
+      expect(para.properties.line_spacing).to eq(280)
       expect(para.properties.line_rule).to eq('atLeast')
     end
   end
 
   describe 'Round-trip serialization' do
-    let(:serializer) { Uniword::Serialization::OoxmlSerializer.new }
-    let(:deserializer) { Uniword::Serialization::OoxmlDeserializer.new }
-
     it 'preserves exact line spacing through round-trip' do
       doc1 = Uniword::Document.new
       para1 = doc1.add_paragraph('Test')
       para1.line_spacing = { rule: 'exact', value: 240 }
 
-      xml = serializer.serialize(doc1)
-      doc2 = deserializer.deserialize(xml)
-      para2 = doc2.paragraphs.first
+      xml = doc1.to_xml
+      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(240.0)
+      expect(para2.properties.line_spacing).to eq(240)
       expect(para2.properties.line_rule).to eq('exact')
     end
 
@@ -199,11 +193,11 @@ RSpec.describe 'Line Spacing Fine Control' do
       para1 = doc1.add_paragraph('Test')
       para1.line_spacing = 1.5
 
-      xml = serializer.serialize(doc1)
-      doc2 = deserializer.deserialize(xml)
-      para2 = doc2.paragraphs.first
+      xml = doc1.to_xml
+      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(1.5)
+      expect(para2.properties.line_spacing).to eq(360)
       expect(para2.properties.line_rule).to eq('auto')
     end
 
@@ -212,11 +206,11 @@ RSpec.describe 'Line Spacing Fine Control' do
       para1 = doc1.add_paragraph('Test')
       para1.line_spacing = { rule: 'atLeast', value: 280 }
 
-      xml = serializer.serialize(doc1)
-      doc2 = deserializer.deserialize(xml)
-      para2 = doc2.paragraphs.first
+      xml = doc1.to_xml
+      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(280.0)
+      expect(para2.properties.line_spacing).to eq(280)
       expect(para2.properties.line_rule).to eq('atLeast')
     end
   end

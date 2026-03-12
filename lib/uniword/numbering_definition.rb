@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'numbering_level'
 
 module Uniword
   # Represents an abstract numbering definition with up to 9 levels (0-8)

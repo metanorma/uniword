@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'assembly_manifest'
-require_relative 'component_registry'
-require_relative 'variable_substitutor'
-require_relative 'toc_generator'
-require_relative 'cross_reference_resolver'
+# All Assembly classes autoloaded via lib/uniword/assembly.rb
 
 module Uniword
   module Assembly

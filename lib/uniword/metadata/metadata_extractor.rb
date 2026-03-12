@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'metadata'
-require_relative '../configuration/configuration_loader'
+# All classes autoloaded via lib/uniword/metadata.rb and lib/uniword/configuration.rb
+
 
 module Uniword
   module Metadata
@@ -135,6 +135,8 @@ module Uniword
         # Extract from document if it has core properties
         if document.respond_to?(:core_properties)
           props = document.core_properties
+          return unless props
+
           metadata[:title] = props[:title] if props[:title]
           metadata[:author] = props[:author] if props[:author]
           metadata[:subject] = props[:subject] if props[:subject]
@@ -160,6 +162,8 @@ module Uniword
         return unless document.respond_to?(:extended_properties)
 
         props = document.extended_properties
+        return unless props
+
         metadata[:company] = props[:company] if props[:company]
         metadata[:category] = props[:category] if props[:category]
         metadata[:manager] = props[:manager] if props[:manager]
@@ -179,14 +183,14 @@ module Uniword
         stats_config = @config.dig(:extraction_config, :statistics) || {}
 
         # Word count
-        if stats_config.fetch(:compute_word_count, true)
-          metadata[:word_count] = compute_word_count(document)
-        end
+        metadata[:word_count] = compute_word_count(document) if stats_config.fetch(
+          :compute_word_count, true
+        )
 
         # Character count
-        if stats_config.fetch(:compute_character_count, true)
-          metadata[:character_count] = compute_character_count(document)
-        end
+        metadata[:character_count] = compute_character_count(document) if stats_config.fetch(
+          :compute_character_count, true
+        )
 
         # Paragraph count
         metadata[:paragraph_count] = document.paragraphs.size

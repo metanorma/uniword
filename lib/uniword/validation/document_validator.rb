@@ -1,16 +1,8 @@
 # frozen_string_literal: true
 
 require 'json'
-require_relative '../configuration/configuration_loader'
-require_relative 'layer_validator'
-require_relative 'layer_validation_result'
-require_relative 'validators/file_structure_validator'
-require_relative 'validators/zip_integrity_validator'
-require_relative 'validators/ooxml_part_validator'
-require_relative 'validators/xml_schema_validator'
-require_relative 'validators/relationship_validator'
-require_relative 'validators/content_type_validator'
-require_relative 'validators/document_semantics_validator'
+# All Validation classes autoloaded via lib/uniword/validation.rb and validators.rb
+# Configuration::ConfigurationLoader autoloaded via lib/uniword.rb
 
 module Uniword
   module Validation

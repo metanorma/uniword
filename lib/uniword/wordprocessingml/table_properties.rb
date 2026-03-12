@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../properties/table_width'
-require_relative '../properties/shading'
-require_relative '../properties/table_cell_margin'
-require_relative '../properties/table_look'
 
 module Uniword
   module Wordprocessingml
@@ -35,6 +31,9 @@ module Uniword
 
       # Borders flag
       attribute :borders, :boolean, default: -> { false }
+
+      # Allow break flag
+      attribute :allow_break, :boolean, default: -> { true }
 
       # Individual border properties (stored as flat attributes)
       attribute :border_top_style, :string
@@ -95,6 +94,99 @@ module Uniword
       def initialize(attrs = {})
         super
         @borders ||= false
+        @allow_break = true if @allow_break.nil?
+      end
+
+      # Get table width
+      #
+      # @return [Integer, nil] Table width value
+      def width
+        table_width&.value
+      end
+
+      # Set table width
+      #
+      # @param value [Integer] Width value
+      # @return [self] For method chaining
+      def width=(value)
+        self.table_width ||= Properties::TableWidth.new
+        table_width.value = value
+        self
+      end
+
+      # Get cell padding (alias for table_cell_margin)
+      #
+      # @return [TableCellMargin, nil] Cell margin settings
+      def cell_padding
+        table_cell_margin
+      end
+
+      # Set cell padding
+      #
+      # @param value [TableCellMargin, Hash] Cell margin settings
+      # @return [self] For method chaining
+      def cell_padding=(value)
+        self.table_cell_margin = value
+        self
+      end
+
+      # Get top border
+      #
+      # @return [Hash, nil] Top border properties
+      def top_border
+        border_to_hash(:top)
+      end
+
+      # Get bottom border
+      #
+      # @return [Hash, nil] Bottom border properties
+      def bottom_border
+        border_to_hash(:bottom)
+      end
+
+      # Get left border
+      #
+      # @return [Hash, nil] Left border properties
+      def left_border
+        border_to_hash(:left)
+      end
+
+      # Get right border
+      #
+      # @return [Hash, nil] Right border properties
+      def right_border
+        border_to_hash(:right)
+      end
+
+      # Get inside horizontal border
+      #
+      # @return [Hash, nil] Inside horizontal border properties
+      def inside_h_border
+        border_to_hash(:inside_h)
+      end
+
+      # Get inside vertical border
+      #
+      # @return [Hash, nil] Inside vertical border properties
+      def inside_v_border
+        border_to_hash(:inside_v)
+      end
+
+      private
+
+      # Convert border attributes to hash
+      #
+      # @param side [Symbol] Border side (:top, :bottom, :left, :right, :inside_h, :inside_v)
+      # @return [Hash, nil] Border properties hash
+      def border_to_hash(side)
+        style = send("border_#{side}_style")
+        return nil unless style
+
+        {
+          style: style,
+          size: send("border_#{side}_size"),
+          color: send("border_#{side}_color")
+        }
       end
     end
   end

@@ -82,7 +82,6 @@ module Uniword
       #
       # @return [VariableResolver] Resolver with current context
       def create_resolver
-        require_relative 'variable_resolver'
         VariableResolver.new(current_data, @additional_context)
       end
 

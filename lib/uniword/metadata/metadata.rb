@@ -86,9 +86,11 @@ module Uniword
       #
       # @example Check property
       #   metadata.has_key?(:title) # => true
+      #   metadata.key?(:title) # => true
       def has_key?(key)
         @properties.key?(key.to_sym)
       end
+      alias key? has_key?
 
       # Get all property keys.
       #

@@ -31,9 +31,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
     it 'includes proper MIME version header' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Test')
-      doc.body.paragraphs << para
+      doc.add_paragraph('Test')
 
       doc.save(output_path, format: :mhtml)
       content = File.read(output_path, encoding: 'UTF-8')
@@ -234,9 +232,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
     it 'handles Unicode characters correctly' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Unicode: ñ é ü 中文 日本語')
-      doc.body.paragraphs << para
+      doc.add_paragraph('Unicode: ñ é ü 中文 日本語')
 
       doc.save(output_path, format: :mhtml)
       content = File.read(output_path, encoding: 'UTF-8')
@@ -246,9 +242,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
     it 'escapes HTML entities properly' do
       doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      para.add_text('Entities: < > & "')
-      doc.body.paragraphs << para
+      doc.add_paragraph('Entities: < > & "')
 
       doc.save(output_path, format: :mhtml)
       content = File.read(output_path, encoding: 'UTF-8')
@@ -261,13 +255,8 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
     it 'preserves newlines and whitespace' do
       doc = Uniword::Document.new
-      para1 = Uniword::Paragraph.new
-      para1.add_text('Line 1')
-      doc.body.paragraphs << para
-
-      para2 = Uniword::Paragraph.new
-      para2.add_text('Line 2')
-      doc.body.paragraphs << para
+      doc.add_paragraph('Line 1')
+      doc.add_paragraph('Line 2')
 
       doc.save(output_path, format: :mhtml)
       content = File.read(output_path, encoding: 'UTF-8')
@@ -285,9 +274,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = Uniword::Document.new
 
       10.times do |i|
-        para = Uniword::Paragraph.new
-        para.add_text("Paragraph #{i + 1}")
-        doc.body.paragraphs << para
+        doc.add_paragraph("Paragraph #{i + 1}")
       end
 
       doc.save(output_path, format: :mhtml)
@@ -312,9 +299,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = Uniword::Document.new
 
       100.times do |i|
-        para = Uniword::Paragraph.new
-        para.add_text("Paragraph #{i + 1} with some content")
-        doc.body.paragraphs << para
+        doc.add_paragraph("Paragraph #{i + 1} with some content")
       end
 
       doc.save(output_path, format: :mhtml)
@@ -407,17 +392,13 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
 
   def create_test_document
     doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    para.add_text('Test content')
-    doc.body.paragraphs << para
+    doc.add_paragraph('Test content')
     doc
   end
 
   def create_document_with_image
     doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    para.add_text('Document with image')
-    doc.body.paragraphs << para
+    doc.add_paragraph('Document with image')
 
     # Add image if supported
     if defined?(Uniword::Image)
@@ -434,10 +415,10 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
         )
         image.filename = 'replacement.png'
 
-        # Add image to a paragraph
+        # Add image to a new paragraph
         img_para = Uniword::Paragraph.new
         img_para.add_run(image)
-        doc.body.paragraphs << img_para
+        doc.body&.paragraphs&.<<(img_para)
       end
     end
 

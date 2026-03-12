@@ -63,5 +63,35 @@ module Uniword
         map_attribute 'val', to: :value, render_nil: false, render_default: false
       end
     end
+
+    # Shadow formatting
+    class Shadow < Lutaml::Model::Serializable
+      attribute :value, :boolean, default: -> { true }
+      xml do
+        element 'shadow'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute 'val', to: :value, render_nil: false, render_default: false
+      end
+    end
+
+    # Emboss formatting
+    class Emboss < Lutaml::Model::Serializable
+      attribute :value, :boolean, default: -> { true }
+      xml do
+        element 'emboss'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute 'val', to: :value, render_nil: false, render_default: false
+      end
+    end
+
+    # Imprint formatting
+    class Imprint < Lutaml::Model::Serializable
+      attribute :value, :boolean, default: -> { true }
+      xml do
+        element 'imprint'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute 'val', to: :value, render_nil: false, render_default: false
+      end
+    end
   end
 end

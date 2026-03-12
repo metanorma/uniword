@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../quality_rule'
 
 module Uniword
   module Quality

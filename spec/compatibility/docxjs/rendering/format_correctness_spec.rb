@@ -14,7 +14,7 @@ RSpec.describe 'Docxjs Rendering Compatibility: Format Correctness', :compatibil
 
         para = doc.paragraphs.first
         run = para.runs.first
-        expect(run.bold).to be true
+        expect(run.bold?).to be true
         expect(run.text).to eq('Bold text')
       end
 
@@ -26,7 +26,7 @@ RSpec.describe 'Docxjs Rendering Compatibility: Format Correctness', :compatibil
         end
 
         run = doc.paragraphs.first.runs.first
-        expect(run.italic).to be true
+        expect(run.italic?).to be true
       end
 
       it 'should render text with font color' do
@@ -83,9 +83,9 @@ RSpec.describe 'Docxjs Rendering Compatibility: Format Correctness', :compatibil
         end
 
         run = doc.paragraphs.first.runs.first
-        expect(run.bold).to be true
-        expect(run.italic).to be true
-        expect(run.underline).to be true
+        expect(run.bold?).to be true
+        expect(run.italic?).to be true
+        expect(run.underline?).to be true
         expect(run.color).to eq('0000FF')
       end
 
@@ -100,8 +100,8 @@ RSpec.describe 'Docxjs Rendering Compatibility: Format Correctness', :compatibil
 
         runs = doc.paragraphs.first.runs
         expect(runs.count).to eq(3)
-        expect(runs[1].bold).to be true
-        expect(runs[2].italic).to be true
+        expect(runs[1].bold?).to be true
+        expect(runs[2].italic?).to be true
       end
     end
 

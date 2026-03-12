@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'fileutils'
-require_relative 'schema_loader'
 
 module Uniword
   module Schema

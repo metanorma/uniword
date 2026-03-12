@@ -7,26 +7,26 @@
 
 module Uniword
   module DocumentProperties
-    autoload :Application, File.expand_path('document_properties/application', __dir__)
-    autoload :AppVersion, File.expand_path('document_properties/app_version', __dir__)
-    autoload :BoolValue, File.expand_path('document_properties/bool_value', __dir__)
-    autoload :Company, File.expand_path('document_properties/company', __dir__)
-    autoload :CustomProperties, File.expand_path('document_properties/custom_properties', __dir__)
-    autoload :CustomProperty, File.expand_path('document_properties/custom_property', __dir__)
-    autoload :DocSecurity, File.expand_path('document_properties/doc_security', __dir__)
+    autoload :Application, "#{__dir__}/document_properties/application"
+    autoload :AppVersion, "#{__dir__}/document_properties/app_version"
+    autoload :BoolValue, "#{__dir__}/document_properties/bool_value"
+    autoload :Company, "#{__dir__}/document_properties/company"
+    autoload :CustomProperties, "#{__dir__}/document_properties/custom_properties"
+    autoload :CustomProperty, "#{__dir__}/document_properties/custom_property"
+    autoload :DocSecurity, "#{__dir__}/document_properties/doc_security"
     autoload :ExtendedProperties,
-             File.expand_path('document_properties/extended_properties', __dir__)
-    autoload :FileTime, File.expand_path('document_properties/file_time', __dir__)
-    autoload :HeadingPairs, File.expand_path('document_properties/heading_pairs', __dir__)
-    autoload :HyperlinksChanged, File.expand_path('document_properties/hyperlinks_changed', __dir__)
-    autoload :I4, File.expand_path('document_properties/i4', __dir__)
-    autoload :LinksUpToDate, File.expand_path('document_properties/links_up_to_date', __dir__)
-    autoload :LpwStr, File.expand_path('document_properties/lpw_str', __dir__)
-    autoload :Manager, File.expand_path('document_properties/manager', __dir__)
-    autoload :ScaleCrop, File.expand_path('document_properties/scale_crop', __dir__)
-    autoload :SharedDoc, File.expand_path('document_properties/shared_doc', __dir__)
-    autoload :TitlesOfParts, File.expand_path('document_properties/titles_of_parts', __dir__)
-    autoload :Variant, File.expand_path('document_properties/variant', __dir__)
-    autoload :Vector, File.expand_path('document_properties/vector', __dir__)
+             "#{__dir__}/document_properties/extended_properties"
+    autoload :FileTime, "#{__dir__}/document_properties/file_time"
+    autoload :HeadingPairs, "#{__dir__}/document_properties/heading_pairs"
+    autoload :HyperlinksChanged, "#{__dir__}/document_properties/hyperlinks_changed"
+    autoload :I4, "#{__dir__}/document_properties/i4"
+    autoload :LinksUpToDate, "#{__dir__}/document_properties/links_up_to_date"
+    autoload :LpwStr, "#{__dir__}/document_properties/lpw_str"
+    autoload :Manager, "#{__dir__}/document_properties/manager"
+    autoload :ScaleCrop, "#{__dir__}/document_properties/scale_crop"
+    autoload :SharedDoc, "#{__dir__}/document_properties/shared_doc"
+    autoload :TitlesOfParts, "#{__dir__}/document_properties/titles_of_parts"
+    autoload :Variant, "#{__dir__}/document_properties/variant"
+    autoload :Vector, "#{__dir__}/document_properties/vector"
   end
 end

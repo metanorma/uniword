@@ -7,17 +7,17 @@
 
 module Uniword
   module ContentTypes
-    autoload :Default, File.expand_path('content_types/default', __dir__)
-    autoload :Override, File.expand_path('content_types/override', __dir__)
-    autoload :Types, File.expand_path('content_types/types', __dir__)
+    autoload :Default, "#{__dir__}/content_types/default"
+    autoload :Override, "#{__dir__}/content_types/override"
+    autoload :Types, "#{__dir__}/content_types/types"
 
     # Generates [Content_Types].xml for DOCX packages
     # This content tells Office what kind of content each part contains
     #
     # Generate minimal [Content_Types].xml
     #
-    # @return [String] XML content
-    def self.generate
+    # @return [Types] Content types object
+    def generate
       Types.new(
         defaults: [
           Default.new(extension: 'rels',
@@ -35,7 +35,7 @@ module Uniword
     # Generate [Content_Types].xml for THMX (theme) packages
     #
     # @return [Types] Content types object for theme package
-    def self.generate_for_theme
+    def generate_for_theme
       Types.new(
         defaults: [
           Default.new(extension: 'rels',

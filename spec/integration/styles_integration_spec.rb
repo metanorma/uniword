@@ -115,7 +115,7 @@ RSpec.describe 'Styles Integration', :integration do
       expect(loaded_style.name).to eq('My Custom Style')
       expect(loaded_style.custom).to be true
       expect(loaded_style.paragraph_properties.alignment).to eq('center')
-      expect(loaded_style.run_properties.bold).to be true
+      expect(loaded_style.run_properties).to be_bold
       expect(loaded_style.run_properties.color).to eq('FF0000')
 
       # Verify paragraph uses the style (style returns NAME, not ID)

@@ -43,8 +43,8 @@ RSpec.describe 'docx gem API Compatibility' do
 
     it 'supports doc.paragraphs' do
       doc = Uniword::Document.new
-      para1 = Uniword::Paragraph.new.add_text('Para 1')
-      para2 = Uniword::Paragraph.new.add_text('Para 2')
+      Uniword::Paragraph.new.add_text('Para 1')
+      Uniword::Paragraph.new.add_text('Para 2')
       doc.body.paragraphs << para
       doc.body.paragraphs << para
 

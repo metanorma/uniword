@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'pathname'
-require_relative '../link_checker'
+# LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

@@ -93,7 +93,7 @@ RSpec.describe 'Docx.js Compatibility: Hyperlinks', :compatibility do
         end
 
         run = doc.paragraphs.first.runs.first
-        expect(run.bold).to be true
+        expect(run.bold?).to be true
         expect(run.hyperlink).to eq('http://www.example.com')
       end
 

@@ -15,7 +15,7 @@ module Uniword
       # @param element_class [Class] The element class to register
       # @return [void]
       def register(element_class)
-        return if element_class.abstract?
+        return if element_class.respond_to?(:abstract?) && element_class.abstract?
 
         key = element_class_key(element_class)
         return if key.nil? # Skip anonymous classes

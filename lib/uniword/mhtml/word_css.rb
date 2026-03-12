@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'css_number_formatter'
 
 module Uniword
   module Mhtml

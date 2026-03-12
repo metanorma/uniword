@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../structured_document_tag_properties'
+# NOTE: StructuredDocumentTagProperties is autoloaded via wordprocessingml.rb (same namespace)
 
 module Uniword
   module Wordprocessingml
     # Structured document tag (main WordProcessingML namespace)
     # Reference XML: <w:sdt>
     class StructuredDocumentTag < Lutaml::Model::Serializable
-      attribute :properties, Uniword::StructuredDocumentTagProperties
+      attribute :properties, StructuredDocumentTagProperties
       attribute :end_properties, SdtEndProperties
       attribute :content, SdtContent
 
       xml do
         element 'sdt'
-        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'sdtPr', to: :properties, render_nil: false

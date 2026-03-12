@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'errors'
+# All classes autoloaded via lib/uniword.rb
+# No require_relative needed - autoload handles lazy loading
 
 module Uniword
   # Factory for creating Document instances.
@@ -55,13 +56,10 @@ module Uniword
 
         case format
         when :docx
-          require_relative 'ooxml/docx_package'
           Ooxml::DocxPackage.from_file(path)
         when :dotx, :dotm
-          require_relative 'ooxml/dotx_package'
           Ooxml::DotxPackage.from_file(path)
         when :mhtml
-          require_relative 'ooxml/mhtml_package'
           Ooxml::MhtmlPackage.from_file(path)
         else
           raise ArgumentError, "Unsupported format: #{format}"
@@ -123,7 +121,6 @@ module Uniword
 
         case format
         when :thmx
-          require_relative 'ooxml/thmx_package'
           Ooxml::ThmxPackage.from_file(path)
         else
           raise ArgumentError, "Not a theme format: #{format}. Use from_file() for documents."
@@ -155,7 +152,6 @@ module Uniword
       #   format = DocumentFactory.detect_format("document.docx")
       #   # => :docx
       def detect_format(path)
-        require_relative 'format_detector'
         detector = FormatDetector.new
         detector.detect(path)
       end

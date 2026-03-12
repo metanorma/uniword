@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'base64'
-require_relative 'lazy_loader'
 
 module Uniword
   # Represents an image (inline element)

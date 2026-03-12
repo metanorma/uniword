@@ -1,210 +1,97 @@
-# Uniword: Architecture Cleanup & Autoload Migration - Continuation Plan
+# lutaml-model v0.7.7 Migration - Fix All Failures Plan
 
-**Status**: Anti-Pattern Cleanup Complete ✅ | Full Migration Pending
-**Date**: December 4, 2024
-**Branch**: feature/autoload-migration
+## Current Status
 
----
+**Test Results**: `3198 examples, 805 failures, 246 pending`
 
-## What's Complete ✅
+**Progress**: Started at 1101 → 958 → 886 → 857 → 853 → 851 → 850 → 846 → 821 → 809 → 805 failures
+**Total Fixed**: 296 failures (~26.9% reduction)
 
-### Phase 1: Main Entry Point Autoload
-- Migrated `lib/uniword.rb` (12 → 10 require_relative)
-- Added 58 top-level class autoloads
-- Documentation updated (README, CHANGELOG, CONTRIBUTING)
-- Commit: `f7f0edd`, `d4ee4d2`
+## Remaining Error Patterns
 
-### Phase 2: Anti-Pattern Cleanup
-- Deleted 3 manual parser files
-- Removed 37 require_relative calls (416 → 379)
-- Restored MODEL-DRIVEN architecture compliance
-- Commit: `4fa779d`
+### High Priority (Spec Issues)
 
----
+| Error Pattern | Approx Count | Fix Strategy |
+|---------------|--------------|--------------|
+| `undefined method 'value' for true` | ~20 | Use predicate methods (`bold?`, `italic?`, etc.) |
+| `undefined method 'value' for String` | ~5 | Use safe navigation `&.value` |
+| `undefined method 'value' for Integer` | ~3 | Use safe navigation `&.value` |
+| `undefined method 'type' for String` | ~3 | Check spec expectations |
 
-## What's Remaining 🔴
+### Medium Priority (Missing Methods)
 
-### Priority 1: Implement StylesetPackage (MODEL-DRIVEN)
-**Status**: Not started
-**Estimated**: 4-6 hours
-**Blocking**: StyleSet.from_dotx() functionality
+| Method | Class | Status |
+|--------|-------|--------|
+| `add_image` | Run | Need to add |
+| `cell_padding` | TableProperties | Need to add |
+| `comments` | DocumentRoot | Need to add |
+| `compact` | Metadata | Need to add |
+| `create_numbering` | Document | Need to add |
+| `enable_debug_logging` | Uniword module | Need to add |
+| `disable_debug_logging` | Uniword module | Need to add |
+| `font_family` | Style | Need to add |
+| `spacing_before` | Style | Need to add |
+| `stream` | DocumentRoot | Need to add |
+| `revisions` | DocumentRoot | Need to add |
 
-Create proper lutaml-model package following DocxPackage pattern:
+### Low Priority (Nil-Safe Access)
 
-```ruby
-# lib/uniword/stylesets/package.rb
-module Uniword
-  module Stylesets
-    class Package < Lutaml::Model::Serializable
-      # word/styles.xml
-      attribute :styles_configuration, StylesConfiguration
-      
-      def self.from_file(path)
-        # Extract ZIP
-        # Deserialize styles.xml using lutaml-model
-        # Return Package instance
-      end
-      
-      def styleset
-        # Convert StylesConfiguration to StyleSet
-        StyleSet.new(
-          name: extract_name,
-          styles: styles_configuration.styles
-        )
-      end
-    end
-  end
-end
-```
+These are specs that call methods on nil objects - need to update specs:
+- `bold?` for nil (3)
+- `italic?` for nil (1)
+- `underline` for nil (1)
+- `hyperlink` for nil (3)
+- `font` for nil (1)
+- `color` for nil (1)
+- `font_size` for nil (1)
+- `cells` for nil (1)
 
-Then restore `StyleSet.from_dotx()`:
-```ruby
-def self.from_dotx(path)
-  Stylesets::Package.from_file(path).styleset
-end
-```
+## Implementation Tasks
 
-### Priority 2: Full Autoload Migration (379 require_relative)
-**Status**: Planned, not started
-**Estimated**: 3 weeks (40 hours compressed)
+### Phase 1: Fix Remaining `.value` Errors
+- [x] Fix boolean `.value` calls (completed by background agents)
+- [x] Fix String `.value` calls (completed by background agents)
+- [x] Fix Integer `.value` calls (completed by background agents)
+- [ ] Verify all `.value` errors are fixed
 
-**Week 1: Namespace Modules (~150 require_relative)**
-- Wordprocessingml (~50)
-- WpDrawing, DrawingML (~40)
-- VML, Math, SharedTypes, others (~60)
+### Phase 2: Add Missing Methods
+- [ ] Add `add_image` to Run class
+- [ ] Add `cell_padding` to TableProperties
+- [ ] Add `comments` getter to DocumentRoot
+- [ ] Add `compact` to Metadata
+- [ ] Add `create_numbering` to Document/Body
+- [ ] Add debug logging methods to Uniword module
+- [ ] Add `font_family` to Style
+- [ ] Add `spacing_before` to Style
+- [ ] Add `stream` to DocumentRoot
+- [ ] Add `revisions` to DocumentRoot
 
-**Week 2: Property Files (~100 require_relative)**
-- RunProperties (16)
-- ParagraphProperties (10)
-- TableProperties, SDT properties (~74)
+### Phase 3: Fix Nil-Safe Access Issues
+- [ ] Update specs to use safe navigation for potentially nil properties
+- [ ] Add nil checks where appropriate
 
-**Week 3: Feature Files (~129 require_relative)**
-- Theme infrastructure
-- CLI
-- Validators, transformers, etc.
+### Phase 4: Round-Trip Testing
+- [ ] Run complete round-trip tests
+- [ ] Fix any remaining XML serialization issues
+- [ ] Verify all DOCX files round-trip correctly
 
-**Target Final State**: 379 → 45 require_relative (88% reduction)
+## Files Modified This Session
 
-### Priority 3: Similar Anti-Patterns
-**Status**: Not analyzed
-**Estimated**: TBD
+### Implementation Files
+- `lib/uniword/wordprocessingml/run_properties.rb` - Added predicate methods, font_size, font_color, emboss, imprint methods
+- `lib/uniword/wordprocessingml/paragraph.rb` - Added extract_current_properties, each_text_run, alignment, spacing_before, add_image methods
+- `lib/uniword/wordprocessingml/run.rb` - Added font_size, font, color, emboss, imprint methods
+- `lib/uniword/wordprocessingml/paragraph_properties.rb` - Added left_indent= method
 
-Check for similar manual parsers in:
-- `lib/uniword/theme/` - Theme loading
-- Other infrastructure files
+### Spec Files Updated (by agents)
+- Multiple spec files updated to use predicate methods
+- Multiple spec files updated to use safe navigation operator
 
----
+## Next Steps
 
-## Architecture Principles (MUST FOLLOW)
-
-### 1. MODEL-DRIVEN Architecture
-- ✅ Every XML file = lutaml-model class
-- ✅ No manual XML parsing
-- ✅ Use `.from_xml()` / `.to_xml()`
-- ❌ NO manual Nokogiri parsing
-
-### 2. Package Pattern
-```
-Package (lutaml-model)
-├── Part1 (lutaml-model)
-├── Part2 (lutaml-model)
-└── extract() / package() methods
-```
-
-Example: DocxPackage, ThemePackage, StylesetPackage
-
-### 3. Autoload Strategy
-- **Default**: Use autoload
-- **Exception**: Only if architecturally necessary
-  - Parent class loading
-  - Circular dependencies  
-  - Module-level constants
-  - Self-registration side effects
-
-### 4. MECE (Mutually Exclusive, Collectively Exhaustive)
-- One responsibility per class
-- No overlap
-- Complete coverage
-
----
-
-## Testing Strategy
-
-### Baseline Tests (MUST PASS)
-```bash
-bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb
-bundle exec rspec spec/uniword/theme_roundtrip_spec.rb
-# Expected: 258/258 passing
-```
-
-### After Each Change
-1. Run baseline tests
-2. Verify autoload works
-3. Check for regressions
-4. Update documentation
-
----
-
-## Timeline
-
-### Immediate (Next Session)
-1. Implement StylesetPackage (4-6 hours)
-2. Test .dotx loading
-3. Restore full StyleSet functionality
-
-### Short Term (2-4 weeks)
-1. Full autoload migration (40 hours)
-2. Achieve 88% reduction
-3. Document all exceptions
-
-### Long Term
-1. Monitor performance improvements
-2. Maintain architecture compliance
-3. Guide future contributors
-
----
-
-## Success Criteria
-
-- ✅ MODEL-DRIVEN architecture (100% compliance)
-- ✅ Zero manual XML parsers
-- ✅ StyleSet.from_dotx() working
-- ✅ All 258 baseline tests passing
-- ✅ 379 → 45 require_relative (target)
-- ✅ Clear documentation
-
----
-
-## Reference Documents
-
-All planning documents archived in `old-docs/autoload-migration/`:
-- AUTOLOAD_CLEANUP_PLAN.md
-- AUTOLOAD_FULL_MIGRATION_PLAN.md
-- AUTOLOAD_FULL_MIGRATION_STATUS.md
-- AUTOLOAD_FULL_MIGRATION_PROMPT.md
-- AUTOLOAD_MIGRATION_COMPLETE_SUMMARY.md
-- Plus 11 other session documents
-
----
-
-## Commands Reference
-
-```bash
-# Check require_relative count
-grep -r "require_relative" lib/ --include="*.rb" | wc -l
-
-# Run tests
-bundle exec rspec spec/uniword/styleset_roundtrip_spec.rb spec/uniword/theme_roundtrip_spec.rb
-
-# Check git status
-git status
-
-# View commits
-git log --oneline -10
-```
-
----
-
-**Created**: December 4, 2024
-**Status**: Ready for next phase
-**Next Action**: Implement StylesetPackage (Priority 1)
+1. Run tests to verify current failure count
+2. Address remaining `.value` on primitive errors
+3. Add missing methods to classes
+4. Update specs for nil-safe access
+5. Run full test suite
+6. Document changes in README.adoc

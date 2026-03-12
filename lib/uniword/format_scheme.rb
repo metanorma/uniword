@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'drawingml/solid_fill'
-require_relative 'drawingml/gradient_fill'
-require_relative 'drawingml/line_properties'
-require_relative 'drawingml/effect_list'
+# NOTE: Drawingml classes are autoloaded via lib/uniword/drawingml.rb
+# No require_relative needed - autoload handles lazy loading
 
 module Uniword
   # Represents an effect style in DrawingML format scheme

@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../configuration/configuration_loader'
-require_relative 'paragraph_style_definition'
-require_relative 'character_style_definition'
-require_relative 'list_style_definition'
-require_relative 'table_style_definition'
-require_relative 'semantic_style'
 
 module Uniword
   module Styles

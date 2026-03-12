@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../link_checker'
+# LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation
@@ -114,9 +114,9 @@ module Uniword
           end
 
           # Extract heading bookmarks if enabled
-          if config_value(:check_heading_links, DEFAULTS[:check_heading_links])
-            bookmarks.concat(extract_heading_bookmarks(document))
-          end
+          bookmarks.concat(extract_heading_bookmarks(document)) if config_value(
+            :check_heading_links, DEFAULTS[:check_heading_links]
+          )
 
           bookmarks.compact.uniq
         end

@@ -31,7 +31,6 @@ module Uniword
 
         raise ArgumentError, 'Invalid theme XML: missing theme element' unless theme_node
 
-        require_relative '../theme'
 
         theme = ::Uniword::Theme.new
         theme.name = theme_node['name'] || 'Untitled Theme'
@@ -63,7 +62,6 @@ module Uniword
       # @param node [Nokogiri::XML::Element] Color scheme node
       # @return [ColorScheme] Parsed color scheme
       def parse_color_scheme(node)
-        require_relative '../color_scheme'
 
         scheme = ColorScheme.new
         scheme.name = node['name'] || 'Color Scheme'
@@ -184,7 +182,6 @@ module Uniword
       # @param node [Nokogiri::XML::Element] Font scheme node
       # @return [FontScheme] Parsed font scheme
       def parse_font_scheme(node)
-        require_relative '../font_scheme'
 
         scheme = FontScheme.new
         scheme.name = node['name'] || 'Font Scheme'
@@ -202,7 +199,6 @@ module Uniword
 
       # Parse major or minor font container
       def parse_font_container(node, type)
-        require_relative '../font_scheme'
 
         container = type == :major ? Uniword::MajorFont.new : Uniword::MinorFont.new
 

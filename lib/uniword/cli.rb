@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 require 'thor'
-require_relative 'document_factory'
-require_relative 'document_writer'
-require_relative 'format_detector'
-require_relative 'errors'
+
+# All classes are autoloaded via lib/uniword.rb
+# No require_relative needed - autoload handles lazy loading
 
 module Uniword
   # StyleSet subcommands for Uniword CLI
@@ -27,8 +26,6 @@ module Uniword
     option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
                      default: false
     def list
-      require_relative 'styleset'
-
       stylesets = StyleSet.available_stylesets
 
       if stylesets.empty?
@@ -74,11 +71,9 @@ module Uniword
                     desc: 'Output directory for YAML files'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def import
-      require_relative 'stylesets/styleset_importer'
-
       say "Importing StyleSets from #{options[:source]}...", :green if options[:verbose]
 
-      importer = StyleSets::StyleSetImporter.new
+      importer = Stylesets::StyleSetImporter.new
       count = importer.import_all(options[:source], options[:output])
 
       say "Successfully imported #{count} StyleSets to #{options[:output]}/", :green
@@ -119,8 +114,6 @@ module Uniword
                       desc: 'Application strategy (keep_existing, replace, rename)'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def apply(input_path, output_path)
-      require_relative 'document'
-
       # Validate that either --name or --file is provided
       unless options[:name] || options[:file]
         say '✗ Error: Must specify either --name for bundled StyleSet or --file for .dotx file',
@@ -207,8 +200,6 @@ module Uniword
     option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
                      default: false
     def list
-      require_relative 'theme'
-
       themes = Theme.available_themes
 
       if themes.empty?
@@ -252,8 +243,6 @@ module Uniword
                     desc: 'Output directory for YAML files'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def import
-      require_relative 'themes/theme_importer'
-
       say "Importing themes from #{options[:source]}...", :green if options[:verbose]
 
       importer = Themes::ThemeImporter.new
@@ -299,8 +288,6 @@ module Uniword
                      desc: 'Theme variant (variant1, variant2, etc. or numeric 1, 2, etc.)'
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     def apply(input_path, output_path)
-      require_relative 'document'
-
       # Validate that either --name or --file is provided
       unless options[:name] || options[:file]
         say '✗ Error: Must specify either --name for bundled theme or --file for .thmx file', :red
@@ -582,7 +569,6 @@ module Uniword
 
     desc 'version', 'Show Uniword version'
     def version
-      require_relative 'version'
       say "Uniword version #{Uniword::VERSION}", :green
     end
   end

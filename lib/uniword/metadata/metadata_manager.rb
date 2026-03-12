@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'metadata'
-require_relative 'metadata_extractor'
-require_relative 'metadata_updater'
-require_relative 'metadata_validator'
-require_relative 'metadata_index'
-require_relative '../document_factory'
+# All Metadata classes autoloaded via lib/uniword/metadata.rb
+# DocumentFactory autoloaded via lib/uniword.rb
 
 module Uniword
   module Metadata

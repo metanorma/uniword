@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'transformation_rule'
 
 module Uniword
   module Transformation
@@ -59,8 +58,6 @@ module Uniword
       # @param source [Hyperlink] Source hyperlink
       # @param target [Hyperlink] Target hyperlink
       def transform_runs(source, target)
-        require_relative 'run_transformation_rule'
-
         run_rule = RunTransformationRule.new(
           source_format: @source_format,
           target_format: @target_format

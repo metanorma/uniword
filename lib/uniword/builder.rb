@@ -61,11 +61,13 @@ module Uniword
     # @param color [String] Text color
     # @return [self] Returns self for method chaining
     def add_paragraph(text = nil, style: nil, alignment: nil, **run_options)
-      para = Paragraph.new
-      para.set_style(style) if style
-      para.align(alignment) if alignment
-      para.add_text(text, **run_options) if text
-      @document.add_element(para)
+      # Build options hash for document.add_paragraph
+      options = {}
+      options[:style] = style if style
+      options[:alignment] = alignment if alignment
+      options.merge!(run_options)
+
+      @document.add_paragraph(text, **options)
       self
     end
 
@@ -89,7 +91,7 @@ module Uniword
       table = Table.new
       table_builder = TableBuilder.new(table)
       table_builder.instance_eval(&block) if block
-      @document.add_element(table)
+      @document.add_table(table)
       self
     end
 
@@ -108,9 +110,7 @@ module Uniword
     #
     # @return [self] Returns self for method chaining
     def add_blank_line
-      para = Paragraph.new
-      para.add_text('')
-      @document.add_element(para)
+      @document.add_paragraph('')
       self
     end
 

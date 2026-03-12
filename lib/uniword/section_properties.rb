@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative 'page_borders'
-require_relative 'column_configuration'
-require_relative 'line_numbering'
 
 module Uniword
   # Represents section properties
@@ -77,7 +74,8 @@ module Uniword
     def initialize(**attributes)
       # Handle alias parameters
       if attributes.key?(:page_orientation)
-        attributes[:orientation] = attributes.delete(:page_orientation)
+        attributes[:orientation] =
+          attributes.delete(:page_orientation)
       end
 
       super
@@ -128,7 +126,8 @@ module Uniword
     # @return [void]
     def set_page_size(name, orientation: :portrait)
       unless PAGE_SIZES.key?(name)
-        raise ArgumentError, "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(', ')}"
+        raise ArgumentError,
+              "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(', ')}"
       end
 
       width, height = PAGE_SIZES[name]

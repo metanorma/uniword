@@ -4,6 +4,8 @@ require 'spec_helper'
 
 RSpec.describe Uniword::Builder do
   describe '#initialize' do
+    let(:builder) { described_class.new }
+
     it 'creates a new document by default' do
       builder = described_class.new
       expect(builder.document).to be_a(Uniword::Document)
@@ -33,25 +35,29 @@ RSpec.describe Uniword::Builder do
     it 'adds paragraph with style' do
       builder.add_paragraph('Title', style: 'Heading1')
       para = builder.document.paragraphs.first
-      expect(para.style_id).to eq('Heading1')
+      # v2.0 API: access style via properties
+      expect(para.properties&.style).to eq('Heading1')
     end
 
     it 'adds paragraph with alignment' do
       builder.add_paragraph('Centered', alignment: 'center')
       para = builder.document.paragraphs.first
-      expect(para.alignment).to eq('center')
+      # v2.0 API: access alignment via properties
+      expect(para.properties&.alignment).to eq('center')
     end
 
     it 'adds paragraph with bold text' do
       builder.add_paragraph('Bold', bold: true)
       para = builder.document.paragraphs.first
-      expect(para.runs.first.bold?).to be true
+      # v2.0 API: access bold via runs.first.properties
+      expect(para.runs.first.properties&.bold).to be_truthy
     end
 
     it 'adds paragraph with italic text' do
       builder.add_paragraph('Italic', italic: true)
       para = builder.document.paragraphs.first
-      expect(para.runs.first.italic?).to be true
+      # v2.0 API: access italic via runs.first.properties
+      expect(para.runs.first.properties&.italic).to be_truthy
     end
 
     it 'supports method chaining' do
@@ -70,19 +76,22 @@ RSpec.describe Uniword::Builder do
     it 'adds a heading with default level 1' do
       builder.add_heading('Title')
       para = builder.document.paragraphs.first
-      expect(para.style_id).to eq('Heading1')
+      # v2.0 API: access style via properties
+      expect(para.properties&.style).to eq('Heading1')
     end
 
     it 'adds a heading with custom level' do
       builder.add_heading('Subtitle', level: 2)
       para = builder.document.paragraphs.first
-      expect(para.style_id).to eq('Heading2')
+      # v2.0 API: access style via properties
+      expect(para.properties&.style).to eq('Heading2')
     end
 
     it 'adds a heading with alignment' do
       builder.add_heading('Centered Title', level: 1, alignment: 'center')
       para = builder.document.paragraphs.first
-      expect(para.alignment).to eq('center')
+      # v2.0 API: access alignment via properties
+      expect(para.properties&.alignment).to eq('center')
     end
   end
 
@@ -127,7 +136,8 @@ RSpec.describe Uniword::Builder do
 
       table = builder.document.tables.first
       first_cell = table.rows.first.cells.first
-      expect(first_cell.paragraphs.first.runs.first.bold?).to be true
+      # v2.0 API: access bold via runs.first.properties
+      expect(first_cell.paragraphs.first.runs.first.properties&.bold).to be_truthy
     end
 
     it 'returns self for chaining' do
@@ -177,7 +187,8 @@ RSpec.describe Uniword::Builder do
 
       expect(doc.paragraphs.count).to eq(7) # Headings and paragraphs
       expect(doc.tables.count).to eq(1)
-      expect(doc.paragraphs.first.style_id).to eq('Heading1')
+      # v2.0 API: access style via properties
+      expect(doc.paragraphs.first.properties&.style).to eq('Heading1')
     end
   end
 end

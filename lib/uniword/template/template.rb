@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'template_parser'
-require_relative 'template_renderer'
-require_relative 'template_marker'
+# All Template classes autoloaded via lib/uniword/template.rb
 
 module Uniword
   module Template
@@ -34,7 +32,6 @@ module Uniword
       # @param template_path [String] Path to template file
       # @return [Template] Loaded template
       def self.load(template_path)
-        require_relative '../document_factory'
         doc = Uniword::DocumentFactory.from_file(template_path)
         new(doc)
       end
@@ -116,7 +113,6 @@ module Uniword
       #
       # @return [Array<String>] Validation errors (empty if valid)
       def validate
-        require_relative 'template_validator'
         validator = TemplateValidator.new(self)
         validator.validate
       end

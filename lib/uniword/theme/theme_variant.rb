@@ -44,7 +44,6 @@ module Uniword
         return @theme if @theme
         return nil unless @theme_xml
 
-        require_relative 'theme_xml_parser'
         parser = ThemeXmlParser.new
         @theme = parser.parse(@theme_xml)
       end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'plurimath'
-
 module Uniword
   module Math
     # Adapter for Plurimath library integration
@@ -45,6 +43,7 @@ module Uniword
       #
       # @raise [ArgumentError] if XML is invalid or cannot be parsed
       def self.from_omml(omml_xml)
+        require 'plurimath'
         node = parse_xml_node(omml_xml)
 
         # Determine if this is an inline or block equation

@@ -7,19 +7,19 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
     it 'creates properties with default values' do
       props = described_class.new
       expect(props.style).to be_nil
-      expect(props.borders).to be true
+      expect(props.borders).to be false
       expect(props.allow_break).to be true
     end
 
     it 'creates properties with provided attributes' do
       props = described_class.new(
         style: 'TableGrid',
-        width: 100,
+        table_width: Uniword::Properties::TableWidth.new(w: 100),
         alignment: 'center',
         borders: true
       )
       expect(props.style).to eq('TableGrid')
-      expect(props.width).to eq(100)
+      expect(props.table_width.w).to eq(100)
       expect(props.alignment).to eq('center')
       expect(props.borders).to be true
     end
@@ -112,9 +112,9 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
   end
 
   describe 'boolean attributes' do
-    it 'defaults borders to true' do
+    it 'defaults borders to false' do
       props = described_class.new
-      expect(props.borders).to be true
+      expect(props.borders).to be false
     end
 
     it 'defaults allow_break to true' do
@@ -124,10 +124,10 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
 
     it 'allows setting boolean attributes' do
       props = described_class.new(
-        borders: false,
+        borders: true,
         allow_break: false
       )
-      expect(props.borders).to be false
+      expect(props.borders).to be true
       expect(props.allow_break).to be false
     end
   end

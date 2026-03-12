@@ -54,6 +54,7 @@ module Uniword
     autoload :Level, 'uniword/wordprocessingml/level'
     autoload :Style, 'uniword/wordprocessingml/style'
     autoload :StructuredDocumentTag, 'uniword/wordprocessingml/structured_document_tag'
+    autoload :StructuredDocumentTagProperties, 'uniword/wordprocessingml/structured_document_tag_properties'
     autoload :SdtContent, 'uniword/wordprocessingml/sdt_content'
     autoload :SdtEndProperties, 'uniword/wordprocessingml/sdt_end_properties'
     autoload :SectionProperties, 'uniword/wordprocessingml/section_properties'

@@ -24,8 +24,6 @@ module Uniword
       #   - :media => Hash of filename => MediaFile objects
       # @raise [ArgumentError] if file is invalid or missing required theme
       def extract(path)
-        require_relative '../infrastructure/zip_extractor'
-        require_relative 'media_file'
 
         extractor = Infrastructure::ZipExtractor.new
         content = extractor.extract(path)
@@ -82,7 +80,6 @@ module Uniword
       # @param content [Hash] All extracted files from .thmx
       # @return [Hash] filename => MediaFile object
       def extract_media_files(content)
-        require_relative 'media_file'
 
         media = {}
 

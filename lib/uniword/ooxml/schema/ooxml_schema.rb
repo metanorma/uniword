@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../configuration/configuration_loader'
-require_relative 'element_definition'
 
 module Uniword
   module Ooxml

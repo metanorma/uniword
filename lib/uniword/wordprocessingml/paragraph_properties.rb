@@ -1,16 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../properties/spacing'
-require_relative '../properties/indentation'
-require_relative '../properties/alignment'
-require_relative '../properties/style_reference'
-require_relative '../properties/outline_level'
-require_relative '../properties/numbering_id'
-require_relative '../properties/numbering_level'
-require_relative '../properties/borders'
-require_relative '../properties/tabs'
-require_relative '../properties/shading'
 
 module Uniword
   module Wordprocessingml
@@ -55,7 +45,7 @@ module Uniword
       attribute :indent_first_line, :integer
 
       # Numbering
-      attribute :num_id, :string
+      attribute :num_id, :integer
       attribute :ilvl, :integer # Numbering level (0-8)
 
       # Keep together options
@@ -137,6 +127,100 @@ module Uniword
         @contextual_spacing ||= false
         @suppress_line_numbers ||= false
         @bidirectional ||= false
+      end
+
+      # Alias for tabs (API compatibility)
+      #
+      # @return [Properties::Tabs, nil] The tab stops collection
+      def tab_stops
+        tabs
+      end
+
+      # Setter for tab_stops (API compatibility)
+      #
+      # @param value [Properties::Tabs, Array] Tab stops collection or array
+      # @return [Properties::Tabs] The tab stops collection
+      def tab_stops=(value)
+        case value
+        when Properties::Tabs
+          self.tabs = value
+        when Array
+          self.tabs ||= Properties::Tabs.new
+          tabs.tab_stops = value
+        else
+          self.tabs = value
+        end
+      end
+
+      # Get section properties
+      #
+      # @return [SectionProperties, nil] Section properties if present
+      attr_accessor :section_properties
+
+      # Set section properties
+      #
+      # @param value [SectionProperties] Section properties
+
+      # Set left indent (alias for indentation.left)
+      #
+      # @param value [Integer] Left indent in twips
+      # @return [self] For method chaining
+      def left_indent=(value)
+        self.indentation ||= Properties::Indentation.new
+        indentation.left = value
+        self
+      end
+
+      # Get alignment value (returns string directly for API compatibility)
+      # Overrides lutaml-model accessor to return string value
+      #
+      # @return [String, nil] Alignment value (left, center, right, both)
+      def alignment
+        val = @alignment
+        return nil if val.nil?
+
+        # Handle both wrapper object and primitive value
+        val = val.value if val.respond_to?(:value)
+        val.to_s
+      end
+
+      # Set alignment value (accepts string or Alignment object for API compatibility)
+      #
+      # @param value [String, Properties::Alignment] Alignment value or object
+      # @return [self] For method chaining
+      def alignment=(value)
+        case value
+        when Properties::Alignment
+          @alignment = value
+        when String
+          @alignment ||= Properties::Alignment.new
+          @alignment.value = value
+        when nil
+          @alignment = nil
+        else
+          @alignment = value
+        end
+        self
+      end
+
+      # Get alignment value (alias for backward compatibility)
+      #
+      # @return [String, nil] Alignment value (left, center, right, both)
+      def alignment_value
+        val = @alignment
+        return nil if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val.to_s
+      end
+
+      # Set alignment value (alias for backward compatibility)
+      #
+      # @param value [String] Alignment value
+      # @return [self] For method chaining
+      def alignment_value=(value)
+        self.alignment = value
+        self
       end
     end
   end

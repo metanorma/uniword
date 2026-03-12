@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'dotx_package'
 
 module Uniword
   module Ooxml
@@ -40,7 +39,6 @@ module Uniword
         styles_xml = read_styles
 
         # Parse into StyleSet using existing parser
-        require_relative '../stylesets/styleset_xml_parser'
         parser = StyleSets::StyleSetXmlParser.new
         @styleset = parser.parse(styles_xml)
 
@@ -109,7 +107,6 @@ module Uniword
       # @param styleset [StyleSet] StyleSet to serialize
       # @return [String] Serialized XML
       def serialize_styleset(styleset)
-        require_relative '../styles_configuration'
 
         # Create StylesConfiguration from StyleSet
         config = StylesConfiguration.new

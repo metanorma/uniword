@@ -2,7 +2,7 @@
 
 require 'net/http'
 require 'uri'
-require_relative '../link_checker'
+# LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'quality_rule'
-require_relative 'quality_report'
-require_relative '../configuration/configuration_loader'
+# All Quality classes autoloaded via lib/uniword/quality.rb
+# Configuration::ConfigurationLoader autoloaded via lib/uniword.rb
 
 module Uniword
   module Quality
@@ -120,20 +119,12 @@ module Uniword
       # @param config [Hash] Rule configuration
       # @return [QualityRule, nil] Rule instance or nil if class not found
       def instantiate_rule(class_name, config)
-        # Dynamically require and instantiate the rule class
-        require_relative "rules/#{class_name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-                                            .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-                                            .downcase}"
-
+        # Rule classes are autoloaded via lib/uniword/quality.rb
         rule_class = Quality.const_get(class_name)
         rule_class.new(config)
       rescue NameError => e
         # Rule class not found - skip it
         warn "Quality rule class not found: #{class_name} (#{e.message})"
-        nil
-      rescue LoadError => e
-        # Rule file not found - skip it
-        warn "Quality rule file not found for: #{class_name} (#{e.message})"
         nil
       end
 

@@ -22,7 +22,7 @@ RSpec.describe 'DOCX Generation Integration' do
 
       # Serialize to XML
       serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+      serializer.serialize(doc)
 
       # Package into DOCX
       Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
@@ -64,7 +64,7 @@ RSpec.describe 'DOCX Generation Integration' do
 
       # Serialize and package
       serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+      serializer.serialize(doc)
 
       Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
 
@@ -85,7 +85,7 @@ RSpec.describe 'DOCX Generation Integration' do
       doc.body.paragraphs << paragraph
 
       serializer = Uniword::Serialization::OoxmlSerializer.new
-      xml = serializer.serialize(doc)
+      serializer.serialize(doc)
 
       Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
 

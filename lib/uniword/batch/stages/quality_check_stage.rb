@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../processing_stage'
-require_relative '../../quality/document_checker'
 
 module Uniword
   module Batch

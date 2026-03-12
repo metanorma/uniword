@@ -42,7 +42,7 @@ RSpec.describe Uniword::Document do
 
     it 'applies bold formatting' do
       para = document.add_paragraph('Bold text', bold: true)
-      expect(para.runs.first.properties.bold).to be true
+      expect(para.runs.first.properties.bold).to be_truthy
     end
 
     it 'applies italic formatting' do

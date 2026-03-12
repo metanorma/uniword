@@ -453,8 +453,8 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
 
       runs = doc2.paragraphs.first.runs
-      expect(runs[0].properties.bold).to be true
-      expect(runs[2].properties.italic).to be true
+      expect(runs[0].properties).to be_bold
+      expect(runs[2].properties).to be_italic
     end
   end
 
@@ -539,8 +539,8 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
 
       first_run = doc2.paragraphs.first.runs.first
-      expect(first_run.properties.bold).to be true
-      expect(first_run.properties.italic).to be true
+      expect(first_run.properties).to be_bold
+      expect(first_run.properties).to be_italic
       expect(first_run.properties.underline).to be_truthy # Underline is "single" string, not boolean
     end
   end

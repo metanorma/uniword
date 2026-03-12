@@ -146,7 +146,7 @@ RSpec.describe Uniword::Image do
     end
 
     it 'returns true when relationship_id is nil (base class default)' do
-      # Note: The base Element class returns true by default
+      # NOTE: The base Element class returns true by default
       image = described_class.new
       expect(image.valid?).to be true
     end

@@ -24,7 +24,6 @@ module Uniword
       # @param output_path [String] Output YAML path
       # @return [void]
       def import(thmx_path, output_path)
-        require_relative '../theme/theme_loader'
 
         # Load theme using existing ThemeLoader
         loader = Themes::ThemeLoader.new

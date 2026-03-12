@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe 'DOCX Reading Integration', :integration do
-  let(:fixtures_dir) { File.join(__dir__, '..', 'fixtures') }
+  let(:fixtures_dir) { File.join(__dir__, '..', 'fixtures', 'docx_gem') }
 
   describe 'reading basic.docx' do
     let(:docx_path) { File.join(fixtures_dir, 'basic.docx') }
@@ -136,11 +136,11 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     it 'extracts font properties' do
       document = Uniword.load(docx_path)
 
-      # Find runs with font specified
+      # Find runs with fonts specified
       runs_with_font = []
       document.paragraphs.each do |para|
         para.runs.each do |run|
-          runs_with_font << run if run.properties&.font
+          runs_with_font << run if run.properties&.fonts
         end
       end
 

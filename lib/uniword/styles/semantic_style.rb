@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'paragraph_style_definition'
 
 module Uniword
   module Styles

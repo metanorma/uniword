@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'transformation_rule'
 
 module Uniword
   module Transformation
@@ -57,7 +56,7 @@ module Uniword
         source_props = source.properties
 
         # Create new properties object
-        target.properties = Properties::RunProperties.new(
+        target.properties = Wordprocessingml::RunProperties.new(
           bold: source_props.bold,
           italic: source_props.italic,
           underline: source_props.underline,

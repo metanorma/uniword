@@ -113,7 +113,8 @@ module Uniword
         raise ArgumentError, 'Manifest must be a Hash' unless @raw_data.is_a?(Hash)
 
         unless @raw_data['document'].is_a?(Hash)
-          raise ArgumentError, "Manifest must have 'document' key"
+          raise ArgumentError,
+                "Manifest must have 'document' key"
         end
 
         doc = @raw_data['document']

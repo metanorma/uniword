@@ -33,7 +33,6 @@ module Uniword
 
       case format
       when :thmx
-        require_relative 'ooxml/thmx_package'
         Ooxml::ThmxPackage.to_file(theme, path)
       else
         raise ArgumentError, "Unsupported format for theme: #{format}"

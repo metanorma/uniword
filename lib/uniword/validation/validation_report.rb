@@ -2,7 +2,7 @@
 
 require 'json'
 require 'yaml'
-require_relative 'validation_result'
+# ValidationResult autoloaded via lib/uniword/validation.rb
 
 module Uniword
   module Validation

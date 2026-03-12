@@ -142,7 +142,7 @@ RSpec.describe 'Format Conversion', type: :integration do
 
       # Verify bold preserved
       first_run = doc3.paragraphs.first.runs.first
-      expect(first_run.properties.bold).to be true
+      expect(first_run.properties).to be_bold
     end
 
     it 'preserves italic formatting across conversions' do

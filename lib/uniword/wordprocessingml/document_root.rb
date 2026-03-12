@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:document>
     class DocumentRoot < Lutaml::Model::Serializable
-      attribute :body, Body
+      attribute :body, Body, default: -> { Body.new }
 
       xml do
         element 'document'
@@ -22,7 +22,91 @@ module Uniword
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
       attr_accessor :core_properties # docProps/core.xml
-      attr_accessor :app_properties, :theme, :styles_configuration, :numbering_configuration # docProps/app.xml                # word/theme/theme1.xml # word/styles.xml # word/numbering.xml
+      attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks # docProps/app.xml                # word/theme/theme1.xml # word/numbering.xml # Raw HTML content for MHTML format support # API compatibility
+
+      # Lazy initialization for numbering_configuration
+      def numbering_configuration
+        @numbering_configuration ||= Uniword::NumberingConfiguration.new
+      end
+
+      # Setter for numbering_configuration
+      attr_writer :numbering_configuration
+
+      # Set document title (convenience method for core_properties)
+      #
+      # @param value [String] The document title
+      # @return [self] For method chaining
+      def title=(value)
+        self.core_properties ||= {}
+        core_properties[:title] = value
+        self
+      end
+
+      # Get document title
+      #
+      # @return [String, nil] The document title
+      def title
+        core_properties&.dig(:title)
+      end
+
+      # Lazy initialization for styles_configuration
+      def styles_configuration
+        @styles_configuration ||= StylesConfiguration.new
+      end
+
+      # Setter for styles_configuration
+      attr_writer :styles_configuration
+
+      # Get all sections (paragraphs with section properties)
+      #
+      # @return [Array<Paragraph>] Paragraphs that define sections
+      def sections
+        # In OOXML, sections are defined by sectPr elements within paragraphs
+        # Return paragraphs that have section_properties
+        body&.paragraphs&.select { |p| p.properties&.section_properties } || []
+      end
+
+      # Get current section (last section with section properties)
+      #
+      # @return [Paragraph, nil] The current section or nil
+      def current_section
+        sections.last
+      end
+
+      # Set sections (API compatibility - no-op)
+      #
+      # @param value [Array] Section data
+      # @return [Array]
+      def sections=(_value)
+        # Sections are determined by section_properties in paragraphs
+        # This is a no-op for API compatibility
+      end
+
+      # Add chart (API compatibility placeholder)
+      #
+      # @param type [Symbol] Chart type
+      # @return [Chart] The created chart
+      def add_chart(_type = nil)
+        Drawingml::Chart::Chart.new
+        # TODO: Implement chart addition to document
+      end
+
+      # Add element to document (API compatibility)
+      #
+      # @param element [Paragraph, Table, etc.] The element to add
+      # @return [Object] The added element
+      def add_element(element)
+        case element
+        when Paragraph
+          body.paragraphs << element
+        when Table
+          body.tables << element
+        else
+          # Try to add as paragraph if it responds to runs
+          body.paragraphs << element if element.respond_to?(:runs)
+        end
+        element
+      end
 
       # Add paragraph with optional text and formatting
       #
@@ -76,14 +160,22 @@ module Uniword
 
       # Add table with optional dimensions
       #
-      # @param rows [Integer, nil] Number of rows
-      # @param cols [Integer, nil] Number of columns
-      # @return [Table] The created table
-      def add_table(rows = nil, cols = nil)
-        table = Table.new
+      # Add a table to the document
+      #
+      # @param table_or_rows [Table, Integer, nil] Table object or number of rows
+      # @param cols [Integer, nil] Number of columns (if first arg is rows)
+      # @return [Table] The added/created table
+      def add_table(table_or_rows = nil, cols = nil)
+        # Handle different argument patterns
+        case table_or_rows
+        when Table
+          # Add the provided table directly
+          table = table_or_rows
+        when Integer
+          # Create a new table with specified dimensions
+          table = Table.new
+          rows = table_or_rows
 
-        # Create rows and cells if dimensions provided
-        if rows && cols
           rows.times do
             row = TableRow.new
             row.cells = []
@@ -97,6 +189,9 @@ module Uniword
             table.rows ||= []
             table.rows << row
           end
+        else
+          # Create empty table
+          table = Table.new
         end
 
         # Ensure body exists
@@ -112,7 +207,6 @@ module Uniword
       # @param path [String] Output file path
       # @param format [Symbol] Format (:docx, :mhtml, :auto)
       def save(path, format: :auto)
-        require_relative '../document_writer'
         writer = DocumentWriter.new(self)
         writer.save(path, format: format)
       end
@@ -145,7 +239,6 @@ module Uniword
       # @param name [String, Symbol] Theme name (e.g., 'celestial', 'atlas')
       # @return [self] For method chaining
       def apply_theme(name)
-        require_relative '../themes/yaml_theme_loader'
         theme = Uniword::Themes::YamlThemeLoader.load_bundled(name.to_s)
         self.theme = theme
         self
@@ -157,11 +250,23 @@ module Uniword
       # @param strategy [Symbol] Application strategy (:keep_existing, :replace, :rename)
       # @return [self] For method chaining
       def apply_styleset(name, strategy: :keep_existing)
-        require_relative '../stylesets/yaml_styleset_loader'
         styleset = Uniword::StyleSets::YamlStyleSetLoader.load_bundled(name.to_s)
         styleset.apply_to(self, strategy: strategy)
         self
       end
+
+      # Get styles from document
+      #
+      # @return [Array<Style>] Array of styles
+      def styles
+        @styles ||= []
+      end
+
+      # Set styles on document
+      #
+      # @param value [Array<Style>] Styles to set
+      # @return [Array<Style>] The styles
+      attr_writer :styles
     end
   end
 end

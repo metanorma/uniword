@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'transformation/transformer'
-require_relative 'document_factory'
-require_relative 'document_writer'
+# All classes autoloaded via lib/uniword.rb
+# Transformation::Transformer, DocumentFactory, DocumentWriter
 
 module Uniword
   # Explicit format converter with declarative API.

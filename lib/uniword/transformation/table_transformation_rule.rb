@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'transformation_rule'
 
 module Uniword
   module Transformation
@@ -95,14 +94,16 @@ module Uniword
         target_cell = TableCell.new
 
         # Copy cell properties
-        target_cell.width = source_cell.width
-        target_cell.colspan = source_cell.colspan
-        target_cell.rowspan = source_cell.rowspan
-        target_cell.background_color = source_cell.background_color
-        target_cell.vertical_alignment = source_cell.vertical_alignment
+        target_cell.properties = TableCellProperties.new if source_cell.properties
+        if target_cell.properties
+          target_cell.properties.width = source_cell.properties&.width
+          target_cell.properties.grid_span = source_cell.properties&.grid_span
+          target_cell.properties.vertical_merge = source_cell.properties&.vertical_merge
+          target_cell.properties.shading = source_cell.properties&.shading
+          target_cell.properties.vertical_align = source_cell.properties&.vertical_align
+        end
 
         # Transform cell content (paragraphs)
-        require_relative 'paragraph_transformation_rule'
         para_rule = ParagraphTransformationRule.new(
           source_format: @source_format,
           target_format: @target_format
@@ -110,7 +111,7 @@ module Uniword
 
         source_cell.paragraphs.each do |source_para|
           target_para = para_rule.transform(source_para)
-          target_cell.add_paragraph(target_para)
+          target_cell.paragraphs << target_para
         end
 
         target_cell

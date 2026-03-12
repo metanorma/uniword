@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'template_marker'
+# All Template classes autoloaded via lib/uniword/template.rb
 
 module Uniword
   module Template

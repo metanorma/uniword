@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'table_cell'
 
 module Uniword
   # Represents a table row

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'lazy_loader'
-require_relative 'properties/table_properties'
 
 module Uniword
   # Represents a table cell
@@ -96,7 +94,8 @@ module Uniword
     # @return [Array<Paragraph>] The updated paragraphs array
     def add_paragraph(paragraph)
       unless paragraph.is_a?(Paragraph)
-        raise ArgumentError, 'paragraph must be a Paragraph instance'
+        raise ArgumentError,
+              'paragraph must be a Paragraph instance'
       end
 
       clear_text_cache # Invalidate cache when content changes

@@ -9,87 +9,95 @@
 module Uniword
   module Chart
     # Chart Container (5 elements)
-    autoload :ChartSpace, File.expand_path('chart/chart_space', __dir__)
-    autoload :Chart, File.expand_path('chart/chart', __dir__)
-    autoload :Title, File.expand_path('chart/title', __dir__)
-    autoload :AutoTitleDeleted, File.expand_path('chart/auto_title_deleted', __dir__)
-    autoload :PlotArea, File.expand_path('chart/plot_area', __dir__)
+    autoload :ChartSpace, "#{__dir__}/chart/chart_space"
+    autoload :Chart, "#{__dir__}/chart/chart"
+    autoload :Title, "#{__dir__}/chart/title"
+    autoload :AutoTitleDeleted, "#{__dir__}/chart/auto_title_deleted"
+    autoload :PlotArea, "#{__dir__}/chart/plot_area"
 
     # Chart Types (15 elements)
-    autoload :BarChart, File.expand_path('chart/bar_chart', __dir__)
-    autoload :Bar3DChart, File.expand_path('chart/bar3_d_chart', __dir__)
-    autoload :LineChart, File.expand_path('chart/line_chart', __dir__)
-    autoload :Line3DChart, File.expand_path('chart/line3_d_chart', __dir__)
-    autoload :PieChart, File.expand_path('chart/pie_chart', __dir__)
-    autoload :Pie3DChart, File.expand_path('chart/pie3_d_chart', __dir__)
-    autoload :AreaChart, File.expand_path('chart/area_chart', __dir__)
-    autoload :Area3DChart, File.expand_path('chart/area3_d_chart', __dir__)
-    autoload :ScatterChart, File.expand_path('chart/scatter_chart', __dir__)
-    autoload :RadarChart, File.expand_path('chart/radar_chart', __dir__)
-    autoload :SurfaceChart, File.expand_path('chart/surface_chart', __dir__)
-    autoload :Surface3DChart, File.expand_path('chart/surface3_d_chart', __dir__)
-    autoload :DoughnutChart, File.expand_path('chart/doughnut_chart', __dir__)
-    autoload :BubbleChart, File.expand_path('chart/bubble_chart', __dir__)
-    autoload :StockChart, File.expand_path('chart/stock_chart', __dir__)
+    autoload :BarChart, "#{__dir__}/chart/bar_chart"
+    autoload :Bar3DChart, "#{__dir__}/chart/bar3_d_chart"
+    autoload :LineChart, "#{__dir__}/chart/line_chart"
+    autoload :Line3DChart, "#{__dir__}/chart/line3_d_chart"
+    autoload :PieChart, "#{__dir__}/chart/pie_chart"
+    autoload :Pie3DChart, "#{__dir__}/chart/pie3_d_chart"
+    autoload :AreaChart, "#{__dir__}/chart/area_chart"
+    autoload :Area3DChart, "#{__dir__}/chart/area3_d_chart"
+    autoload :ScatterChart, "#{__dir__}/chart/scatter_chart"
+    autoload :RadarChart, "#{__dir__}/chart/radar_chart"
+    autoload :SurfaceChart, "#{__dir__}/chart/surface_chart"
+    autoload :Surface3DChart, "#{__dir__}/chart/surface3_d_chart"
+    autoload :DoughnutChart, "#{__dir__}/chart/doughnut_chart"
+    autoload :BubbleChart, "#{__dir__}/chart/bubble_chart"
+    autoload :StockChart, "#{__dir__}/chart/stock_chart"
 
     # Series & Data (10 elements)
-    autoload :Series, File.expand_path('chart/series', __dir__)
-    autoload :Index, File.expand_path('chart/index', __dir__)
-    autoload :Order, File.expand_path('chart/order', __dir__)
-    autoload :SeriesText, File.expand_path('chart/series_text', __dir__)
-    autoload :CategoryAxisData, File.expand_path('chart/category_axis_data', __dir__)
-    autoload :Values, File.expand_path('chart/values', __dir__)
-    autoload :XValues, File.expand_path('chart/x_values', __dir__)
-    autoload :YValues, File.expand_path('chart/y_values', __dir__)
-    autoload :BubbleSize, File.expand_path('chart/bubble_size', __dir__)
-    autoload :NumberReference, File.expand_path('chart/number_reference', __dir__)
+    autoload :Series, "#{__dir__}/chart/series"
+    autoload :Index, "#{__dir__}/chart/index"
+    autoload :Order, "#{__dir__}/chart/order"
+    autoload :SeriesText, "#{__dir__}/chart/series_text"
+    autoload :CategoryAxisData, "#{__dir__}/chart/category_axis_data"
+    autoload :Values, "#{__dir__}/chart/values"
+    autoload :XValues, "#{__dir__}/chart/x_values"
+    autoload :YValues, "#{__dir__}/chart/y_values"
+    autoload :BubbleSize, "#{__dir__}/chart/bubble_size"
+    autoload :NumberReference, "#{__dir__}/chart/number_reference"
 
     # Axes (12 elements)
-    autoload :CatAx, File.expand_path('chart/cat_ax', __dir__)
-    autoload :ValAx, File.expand_path('chart/val_ax', __dir__)
-    autoload :DateAx, File.expand_path('chart/date_ax', __dir__)
-    autoload :SerAx, File.expand_path('chart/ser_ax', __dir__)
-    autoload :AxisId, File.expand_path('chart/axis_id', __dir__)
-    autoload :Scaling, File.expand_path('chart/scaling', __dir__)
-    autoload :Orientation, File.expand_path('chart/orientation', __dir__)
-    autoload :AxisPosition, File.expand_path('chart/axis_position', __dir__)
-    autoload :MajorGridlines, File.expand_path('chart/major_gridlines', __dir__)
-    autoload :MinorGridlines, File.expand_path('chart/minor_gridlines', __dir__)
-    autoload :NumberingFormat, File.expand_path('chart/numbering_format', __dir__)
-    autoload :TickLabelPosition, File.expand_path('chart/tick_label_position', __dir__)
+    autoload :CatAx, "#{__dir__}/chart/cat_ax"
+    autoload :ValAx, "#{__dir__}/chart/val_ax"
+    autoload :DateAx, "#{__dir__}/chart/date_ax"
+    autoload :SerAx, "#{__dir__}/chart/ser_ax"
+    autoload :AxisId, "#{__dir__}/chart/axis_id"
+    autoload :Scaling, "#{__dir__}/chart/scaling"
+    autoload :Orientation, "#{__dir__}/chart/orientation"
+    autoload :AxisPosition, "#{__dir__}/chart/axis_position"
+    autoload :MajorGridlines, "#{__dir__}/chart/major_gridlines"
+    autoload :MinorGridlines, "#{__dir__}/chart/minor_gridlines"
+    autoload :NumberingFormat, "#{__dir__}/chart/numbering_format"
+    autoload :TickLabelPosition, "#{__dir__}/chart/tick_label_position"
 
     # Legend & Labels (8 elements)
-    autoload :Legend, File.expand_path('chart/legend', __dir__)
-    autoload :LegendPosition, File.expand_path('chart/legend_position', __dir__)
-    autoload :LegendEntry, File.expand_path('chart/legend_entry', __dir__)
-    autoload :DataLabels, File.expand_path('chart/data_labels', __dir__)
-    autoload :DataLabel, File.expand_path('chart/data_label', __dir__)
-    autoload :ShowLegendKey, File.expand_path('chart/show_legend_key', __dir__)
-    autoload :ShowValue, File.expand_path('chart/show_value', __dir__)
-    autoload :ShowCategoryName, File.expand_path('chart/show_category_name', __dir__)
+    autoload :Legend, "#{__dir__}/chart/legend"
+    autoload :LegendPosition, "#{__dir__}/chart/legend_position"
+    autoload :LegendEntry, "#{__dir__}/chart/legend_entry"
+    autoload :DataLabels, "#{__dir__}/chart/data_labels"
+    autoload :DataLabel, "#{__dir__}/chart/data_label"
+    autoload :ShowLegendKey, "#{__dir__}/chart/show_legend_key"
+    autoload :ShowValue, "#{__dir__}/chart/show_value"
+    autoload :ShowCategoryName, "#{__dir__}/chart/show_category_name"
 
     # Styling & Formatting (10 elements)
-    autoload :ShapeProperties, File.expand_path('chart/shape_properties', __dir__)
-    autoload :TextProperties, File.expand_path('chart/text_properties', __dir__)
-    autoload :Style, File.expand_path('chart/style', __dir__)
-    autoload :ColorMapOverride, File.expand_path('chart/color_map_override', __dir__)
-    autoload :Marker, File.expand_path('chart/marker', __dir__)
-    autoload :MarkerStyle, File.expand_path('chart/marker_style', __dir__)
-    autoload :MarkerSize, File.expand_path('chart/marker_size', __dir__)
-    autoload :Smooth, File.expand_path('chart/smooth', __dir__)
-    autoload :Explosion, File.expand_path('chart/explosion', __dir__)
-    autoload :GapWidth, File.expand_path('chart/gap_width', __dir__)
+    autoload :ShapeProperties, "#{__dir__}/chart/shape_properties"
+    autoload :TextProperties, "#{__dir__}/chart/text_properties"
+    autoload :Style, "#{__dir__}/chart/style"
+    autoload :ColorMapOverride, "#{__dir__}/chart/color_map_override"
+    autoload :Marker, "#{__dir__}/chart/marker"
+    autoload :MarkerStyle, "#{__dir__}/chart/marker_style"
+    autoload :MarkerSize, "#{__dir__}/chart/marker_size"
+    autoload :Smooth, "#{__dir__}/chart/smooth"
+    autoload :Explosion, "#{__dir__}/chart/explosion"
+    autoload :GapWidth, "#{__dir__}/chart/gap_width"
 
     # Advanced Features (10 elements)
-    autoload :Trendline, File.expand_path('chart/trendline', __dir__)
-    autoload :TrendlineType, File.expand_path('chart/trendline_type', __dir__)
-    autoload :ErrorBars, File.expand_path('chart/error_bars', __dir__)
-    autoload :ErrorDirection, File.expand_path('chart/error_direction', __dir__)
-    autoload :ErrorBarType, File.expand_path('chart/error_bar_type', __dir__)
-    autoload :UpDownBars, File.expand_path('chart/up_down_bars', __dir__)
-    autoload :HiLowLines, File.expand_path('chart/hi_low_lines', __dir__)
-    autoload :DropLines, File.expand_path('chart/drop_lines', __dir__)
-    autoload :Layout, File.expand_path('chart/layout', __dir__)
-    autoload :PlotVisOnly, File.expand_path('chart/plot_vis_only', __dir__)
+    autoload :Trendline, "#{__dir__}/chart/trendline"
+    autoload :TrendlineType, "#{__dir__}/chart/trendline_type"
+    autoload :ErrorBars, "#{__dir__}/chart/error_bars"
+    autoload :ErrorDirection, "#{__dir__}/chart/error_direction"
+    autoload :ErrorBarType, "#{__dir__}/chart/error_bar_type"
+    autoload :UpDownBars, "#{__dir__}/chart/up_down_bars"
+    autoload :HiLowLines, "#{__dir__}/chart/hi_low_lines"
+    autoload :DropLines, "#{__dir__}/chart/drop_lines"
+    autoload :Layout, "#{__dir__}/chart/layout"
+    autoload :PlotVisOnly, "#{__dir__}/chart/plot_vis_only"
+
+    # Factory method for creating a new ChartSpace
+    #
+    # @param options [Hash] Chart configuration options
+    # @return [ChartSpace] A new chart space instance
+    def self.new(_options = {})
+      ChartSpace.new
+    end
   end
 end

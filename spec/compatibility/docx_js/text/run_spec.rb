@@ -34,7 +34,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Bold text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
 
-        expect(run.properties.bold).to be true
+        expect(run.properties).to be_bold
         expect(run.text).to eq('Bold text')
       end
 
@@ -95,8 +95,8 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
           underline: 'single'
         )
 
-        expect(run.properties.bold).to be true
-        expect(run.properties.italic).to be true
+        expect(run.properties).to be_bold
+        expect(run.properties).to be_italic
         expect(run.properties.underline).to eq('single')
       end
     end
@@ -324,8 +324,8 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       )
 
       expect(run.text).to eq('Fully formatted text')
-      expect(run.properties.bold).to be true
-      expect(run.properties.italic).to be true
+      expect(run.properties).to be_bold
+      expect(run.properties).to be_italic
       expect(run.properties.underline).to eq('single')
       expect(run.properties.size).to eq(24)
       expect(run.properties.color).to eq('FF0000')
@@ -343,7 +343,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
 
       expect(para.runs.count).to eq(1)
       expect(para.runs.first.text).to eq('In paragraph')
-      expect(para.runs.first.properties.bold).to be true
+      expect(para.runs.first.properties).to be_bold
     end
 
     it 'should support multiple runs in paragraph' do
@@ -365,8 +365,8 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       para.add_run(run3)
 
       expect(para.runs.count).to eq(3)
-      expect(para.runs[0].properties.bold).to be true
-      expect(para.runs[1].properties.italic).to be true
+      expect(para.runs[0].properties).to be_bold
+      expect(para.runs[1].properties).to be_italic
       expect(para.runs[2].properties).to be_nil
     end
   end

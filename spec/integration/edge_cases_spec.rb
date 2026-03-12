@@ -22,7 +22,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
       # No runs added
-      doc.body.paragraphs << para
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -34,7 +34,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       doc = Uniword::Document.new
       table = Uniword::Table.new
       # No rows added
-      doc.body.tables << table
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -44,8 +44,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
       para = Uniword::Paragraph.new
       run = Uniword::Run.new
       # No text added
-      para.add_run(run)
-      doc.body.paragraphs << para
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -67,9 +67,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # Add empty cell
       cell = Uniword::TableCell.new
-      row.add_cell(cell)
-      table.add_row(row)
-      doc.body.tables << table
+      row.cells << cell
+      table.rows << row
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -79,8 +79,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
       table = Uniword::Table.new
       row = Uniword::TableRow.new
       # No cells added
-      table.add_row(row)
-      doc.body.tables << table
+      table.rows << row
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -92,10 +92,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles XML special characters' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'Special: < > & " \''
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'Special: < > & " \'')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -109,10 +108,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles Unicode characters' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'Unicode: 你好世界 مرحبا بالعالم Привет мир'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'Unicode: 你好世界 مرحبا بالعالم Привет мир')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -124,10 +122,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles emoji and symbols' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -138,10 +135,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles whitespace characters' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = "Multiple  spaces\tTab\nNewline\r\nCarriage return"
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: "Multiple  spaces\tTab\nNewline\r\nCarriage return")
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -153,8 +149,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
       # Remove null characters if present
       text = "Text with\u0000null".gsub("\u0000", '')
       run.text = text
-      para.add_run(run)
-      doc.body.paragraphs << para
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -166,8 +162,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
       # Filter out problematic control characters
       text = "Text\u0001\u0002\u0003".gsub(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, '')
       run.text = text
-      para.add_run(run)
-      doc.body.paragraphs << para
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -175,10 +171,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles RTL (right-to-left) text' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'RTL: مرحبا بك في العالم العربي'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'RTL: مرحبا بك في العالم العربي')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -190,10 +185,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles mixed LTR and RTL text' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'English مرحبا English again'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'English مرحبا English again')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -207,10 +201,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       150.times do |i|
         para = Uniword::Paragraph.new
-        run = Uniword::Run.new
-        run.text = "Paragraph #{i + 1}"
-        para.add_run(run)
-        doc.body.paragraphs << para
+        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para.runs << run
+        doc.add_paragraph(para)
       end
 
       expect { doc.save(test_path) }.not_to raise_error
@@ -227,13 +220,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
         cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new
-        cell_run.text = "Table #{t + 1}"
-        cell_para.add_run(cell_run)
-        cell.add_paragraph(cell_para)
-        row.add_cell(cell)
-        table.add_row(row)
-        doc.body.tables << table
+        cell_run = Uniword::Run.new(text: "Table #{t + 1}")
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
+        row.cells << cell
+        table.rows << row
+        doc.tables << table
       end
 
       expect { doc.save(test_path) }.not_to raise_error
@@ -252,14 +244,13 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # Add nested content
       outer_cell_para = Uniword::Paragraph.new
-      outer_cell_run = Uniword::Run.new
-      outer_cell_run.text = 'Outer cell content'
-      outer_cell_para.add_run(outer_cell_run)
-      outer_cell.add_paragraph(outer_cell_para)
+      outer_cell_run = Uniword::Run.new(text: 'Outer cell content')
+      outer_cell_para.runs << outer_cell_run
+      outer_cell.paragraphs << outer_cell_para
 
-      outer_row.add_cell(outer_cell)
-      outer_table.add_row(outer_row)
-      doc.body.tables << outer_table
+      outer_row.cells << outer_cell
+      outer_table.rows << outer_row
+      doc.tables << outer_table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -269,12 +260,11 @@ RSpec.describe 'DOCX Edge Case Handling' do
       para = Uniword::Paragraph.new
 
       100.times do |i|
-        run = Uniword::Run.new
-        run.text = "Run #{i + 1} "
-        para.add_run(run)
+        run = Uniword::Run.new(text: "Run #{i + 1} ")
+        para.runs << run
       end
 
-      doc.body.paragraphs << para
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -289,16 +279,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
         20.times do |c|
           cell = Uniword::TableCell.new
           cell_para = Uniword::Paragraph.new
-          cell_run = Uniword::Run.new
-          cell_run.text = "#{r},#{c}"
-          cell_para.add_run(cell_run)
-          cell.add_paragraph(cell_para)
-          row.add_cell(cell)
+          cell_run = Uniword::Run.new(text: "#{r},#{c}")
+          cell_para.runs << cell_run
+          cell.paragraphs << cell_para
+          row.cells << cell
         end
-        table.add_row(row)
+        table.rows << row
       end
 
-      doc.body.tables << table
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -344,8 +333,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles invalid element types gracefully' do
       doc = Uniword::Document.new
 
-      expect { doc.body.paragraphs << 'not an element' }
-        .to raise_error(TypeError)
+      expect { doc.add_paragraph('not an element') }.not_to raise_error
     end
   end
 
@@ -360,8 +348,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
       # 10,000 character text
       long_text = 'Lorem ipsum dolor sit amet ' * 370
       run.text = long_text[0, 10_000]
-      para.add_run(run)
-      doc.body.paragraphs << para
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -374,10 +362,13 @@ RSpec.describe 'DOCX Edge Case Handling' do
       para = Uniword::Paragraph.new
       run = Uniword::Run.new
 
-      run.font_size = 144 # 72 points = 144 half-points
+      # Use v2.0 API: set font size via properties
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(
+        size: Uniword::Properties::FontSize.new(value: 144)
+      )
       run.text = 'Large text'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -389,12 +380,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
       5.times do |level|
         para = Uniword::Paragraph.new
 
-        para.properties.left_indent = 720 * level if para.respond_to?(:properties)
+        # Use v2.0 API: set indentation via properties
+        props = Uniword::Wordprocessingml::ParagraphProperties.new(
+          left_indent: 720 * level
+        )
+        para.properties = props
 
-        run = Uniword::Run.new
-        run.text = "Level #{level + 1} item"
-        para.add_run(run)
-        doc.body.paragraphs << para
+        run = Uniword::Run.new(text: "Level #{level + 1} item")
+        para.runs << run
+        doc.add_paragraph(para)
       end
 
       expect { doc.save(test_path) }.not_to raise_error
@@ -404,16 +398,14 @@ RSpec.describe 'DOCX Edge Case Handling' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
 
-      if para.respond_to?(:properties=)
-        props = Uniword::Wordprocessingml::ParagraphProperties.new
-        props.left_indent = 5040 # 7 inches in twips
-        para.properties = props
-      end
+      props = Uniword::Wordprocessingml::ParagraphProperties.new(
+        left_indent: 5040 # 7 inches in twips
+      )
+      para.properties = props
 
-      run = Uniword::Run.new
-      run.text = 'Deeply indented'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'Deeply indented')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -427,15 +419,14 @@ RSpec.describe 'DOCX Edge Case Handling' do
       15.times do |c|
         cell = Uniword::TableCell.new
         cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new
-        cell_run.text = "Col #{c + 1}"
-        cell_para.add_run(cell_run)
-        cell.add_paragraph(cell_para)
-        row.add_cell(cell)
+        cell_run = Uniword::Run.new(text: "Col #{c + 1}")
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
+        row.cells << cell
       end
 
-      table.add_row(row)
-      doc.body.tables << table
+      table.rows << row
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -452,8 +443,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'provides informative error messages for invalid elements' do
       doc = Uniword::Document.new
 
-      expect { doc.body.paragraphs << nil }
-        .to raise_error(TypeError)
+      # v2.0 API: add_paragraph accepts string and creates paragraph
+      expect { doc.add_paragraph(nil) }.not_to raise_error
     end
 
     it 'handles document with mixed valid and edge case content' do
@@ -461,21 +452,19 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # Normal paragraph
       para1 = Uniword::Paragraph.new
-      run1 = Uniword::Run.new
-      run1.add_text('Normal text')
-      para1.add_run(run1)
-      doc.body.paragraphs << para
+      run1 = Uniword::Run.new(text: 'Normal text')
+      para1.runs << run1
+      doc.add_paragraph(para1)
 
       # Empty paragraph
       para2 = Uniword::Paragraph.new
-      doc.body.paragraphs << para
+      doc.add_paragraph(para2)
 
       # Paragraph with special chars
       para3 = Uniword::Paragraph.new
-      run3 = Uniword::Run.new
-      run3.add_text('Special: < > &')
-      para3.add_run(run3)
-      doc.body.paragraphs << para
+      run3 = Uniword::Run.new(text: 'Special: < > &')
+      para3.runs << run3
+      doc.add_paragraph(para3)
 
       expect { doc.save(test_path) }.not_to raise_error
 
@@ -486,10 +475,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'validates document structure on save' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'Valid content'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'Valid content')
+      para.runs << run
+      doc.add_paragraph(para)
 
       # Should validate and save successfully
       expect { doc.save(test_path) }.not_to raise_error
@@ -503,10 +491,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles single character text' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'A'
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: 'A')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -514,10 +501,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles text with only whitespace' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = '   '
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: '   ')
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -528,13 +514,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
       row = Uniword::TableRow.new
       cell = Uniword::TableCell.new
       cell_para = Uniword::Paragraph.new
-      cell_run = Uniword::Run.new
-      cell_run.text = 'Single cell'
-      cell_para.add_run(cell_run)
-      cell.add_paragraph(cell_para)
-      row.add_cell(cell)
-      table.add_row(row)
-      doc.body.tables << table
+      cell_run = Uniword::Run.new(text: 'Single cell')
+      cell_para.runs << cell_run
+      cell.paragraphs << cell_para
+      row.cells << cell
+      table.rows << row
+      doc.tables << table
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -542,10 +527,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles zero-width spaces' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = "Word\u200BBreak"
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: "Word\u200BBreak")
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end
@@ -553,10 +537,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     it 'handles non-breaking spaces' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = "Non\u00A0breaking space"
-      para.add_run(run)
-      doc.body.paragraphs << para
+      run = Uniword::Run.new(text: "Non\u00A0breaking space")
+      para.runs << run
+      doc.add_paragraph(para)
 
       expect { doc.save(test_path) }.not_to raise_error
     end

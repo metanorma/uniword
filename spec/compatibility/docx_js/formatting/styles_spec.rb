@@ -248,9 +248,9 @@ RSpec.describe 'Docx.js Compatibility: Styles', :compatibility do
           s.style_id == 'CustomPara'
         end
         expect(added_style).not_to be_nil
-        expect(added_style.run_properties.bold).to be true
-        expect(added_style.run_properties.size).to eq(24)
-        expect(added_style.run_properties.color).to eq('FF0000')
+        expect(added_style.run_properties).to be_bold
+        expect(added_style.run_properties.size&.value).to eq(24)
+        expect(added_style.run_properties.color&.value).to eq('FF0000')
       end
 
       it 'should set paragraph style with paragraph formatting' do

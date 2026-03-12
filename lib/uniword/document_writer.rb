@@ -49,16 +49,11 @@ module Uniword
 
       case format
       when :docx
-        require_relative 'ooxml/docx_package'
         Ooxml::DocxPackage.to_file(document, path)
       when :dotx, :dotm
-        require_relative 'ooxml/dotx_package'
         Ooxml::DotxPackage.to_file(document, path)
       when :mhtml
-        require_relative 'ooxml/mhtml_package'
         Ooxml::MhtmlPackage.to_file(document, path)
-      else
-        raise ArgumentError, "Unsupported format for save: #{format}"
       end
     end
 

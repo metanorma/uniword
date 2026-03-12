@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require_relative 'processing_stage'
-require_relative 'batch_result'
-require_relative '../configuration/configuration_loader'
-require_relative '../document_factory'
+# All classes autoloaded via lib/uniword.rb and lib/uniword/batch.rb
+# ProcessingStage, BatchResult, Configuration::ConfigurationLoader, DocumentFactory
 
 module Uniword
   module Batch
@@ -136,7 +134,8 @@ module Uniword
       # @return [self]
       def add_stage(stage)
         unless stage.is_a?(ProcessingStage)
-          raise ArgumentError, 'Stage must inherit from ProcessingStage'
+          raise ArgumentError,
+                'Stage must inherit from ProcessingStage'
         end
 
         @custom_stages << stage
@@ -224,17 +223,11 @@ module Uniword
       # @param options [Hash] Stage options
       # @return [ProcessingStage, nil] Stage instance or nil if class not found
       def instantiate_stage(class_name, options)
-        require_relative "stages/#{class_name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-                                             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-                                             .downcase}"
-
+        # Stage classes are autoloaded via lib/uniword/batch.rb
         stage_class = Batch.const_get(class_name)
         stage_class.new(options)
       rescue NameError => e
         warn "Warning: Stage class not found: #{class_name} (#{e.message})"
-        nil
-      rescue LoadError => e
-        warn "Warning: Stage file not found for: #{class_name} (#{e.message})"
         nil
       end
 

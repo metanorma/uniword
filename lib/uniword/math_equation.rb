@@ -59,7 +59,6 @@ module Uniword
     #   xml = '<m:oMath>...</m:oMath>'
     #   equation = MathEquation.from_omml(xml)
     def self.from_omml(omml_xml)
-      require_relative 'math/plurimath_adapter'
       Math::PlurimathAdapter.from_omml(omml_xml)
     end
 
@@ -72,7 +71,6 @@ module Uniword
     #   equation.to_omml
     #   # => "<m:oMath>...</m:oMath>"
     def to_omml(options = {})
-      require_relative 'math/plurimath_adapter'
       Math::PlurimathAdapter.to_omml(self, options)
     end
 
