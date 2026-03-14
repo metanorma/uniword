@@ -48,7 +48,7 @@ module Uniword
         styles_xml = extracted['word/styles.xml']
         raise Uniword::CorruptedFileError.new(path, 'styles.xml missing') unless styles_xml
 
-        styles_config = StylesConfiguration.from_xml(styles_xml)
+        styles_config = Uniword::Wordprocessingml::StylesConfiguration.from_xml(styles_xml)
 
         # Create Package instance
         new(
