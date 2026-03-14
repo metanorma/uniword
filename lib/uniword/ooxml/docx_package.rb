@@ -30,10 +30,10 @@ module Uniword
       attribute :theme, Theme
 
       # Document styles configuration
-      attribute :styles_configuration, StylesConfiguration
+      attribute :styles_configuration, Uniword::Wordprocessingml::StylesConfiguration
 
       # Document numbering configuration
-      attribute :numbering_configuration, NumberingConfiguration
+      attribute :numbering_configuration, Uniword::Wordprocessingml::NumberingConfiguration
 
       # TODO: v2.0: Add proper lutaml-model attributes for:
       # - Document (word/document.xml)
@@ -102,11 +102,11 @@ module Uniword
 
         # Parse styles and numbering as models
         if zip_content['word/styles.xml']
-          package.styles_configuration = StylesConfiguration.from_xml(zip_content['word/styles.xml'])
+          package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content['word/styles.xml'])
         end
 
         if zip_content['word/numbering.xml']
-          package.numbering_configuration = NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
+          package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
         end
 
         # Store raw document XML (will be parsed by DocxHandler)

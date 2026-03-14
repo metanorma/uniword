@@ -145,7 +145,6 @@ module Uniword
   autoload :ContentTypes, 'uniword/content_types'
   autoload :DocumentProperties, 'uniword/document_properties'
   autoload :Glossary, 'uniword/glossary'
-  autoload :Relationships, 'uniword/relationships' # Alias for Ooxml::Relationships
 
   # CLI
   autoload :CLI, 'uniword/cli'
