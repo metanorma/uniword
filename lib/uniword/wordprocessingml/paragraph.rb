@@ -286,22 +286,29 @@ module Uniword
 
       # Set borders on paragraph
       #
-      # @param options [Hash] Border options (:top, :bottom, :left, :right, :style, :color, :size)
+      # @param options [Hash] Border options (:top, :bottom, :left, :right, :between, :bar)
       # @return [self] For method chaining
       def set_borders(options = {})
         self.properties ||= ParagraphProperties.new
-        # ParagraphProperties handles borders through pBdr element
-        properties.borders ||= ParagraphBorder.new
+        # Use Properties::Borders for paragraph borders
+        properties.borders ||= Properties::Borders.new
+
         options.each do |key, value|
           case key
-          when :top
-            properties.borders.top = Border.new(val: value)
-          when :bottom
-            properties.borders.bottom = Border.new(val: value)
-          when :left
-            properties.borders.left = Border.new(val: value)
-          when :right
-            properties.borders.right = Border.new(val: value)
+          when :top, :bottom, :left, :right, :between, :bar
+            border = if value.is_a?(Hash)
+                       # Hash specification: { style: 'single', size: 4, color: 'auto' }
+                       Properties::Border.new(
+                         style: value[:style] || value[:val],
+                         size: value[:size] || value[:sz],
+                         color: value[:color],
+                         space: value[:space]
+                       )
+                     else
+                       # String color: '000000'
+                       Properties::Border.new(color: value, style: 'single', size: 4)
+                     end
+            properties.borders.send("#{key}=", border)
           end
         end
         self
@@ -313,7 +320,7 @@ module Uniword
       # @return [self] For method chaining
       def set_shading(options = {})
         self.properties ||= ParagraphProperties.new
-        properties.shading = Shading.new(
+        properties.shading = Properties::Shading.new(
           fill: options[:fill],
           color: options[:color],
           pattern: options[:pattern] || 'clear'
@@ -325,11 +332,17 @@ module Uniword
       #
       # @param position [Integer] Tab position in twips
       # @param alignment [Symbol, String] Tab alignment (:left, :center, :right, :decimal)
+      # @param leader [String, nil] Tab leader character style
       # @return [self] For method chaining
-      def add_tab_stop(position, alignment = :left)
+      def add_tab_stop(position: nil, alignment: :left, leader: nil)
         self.properties ||= ParagraphProperties.new
-        properties.tab_stops ||= []
-        properties.tab_stops << TabStop.new(position: position, alignment: alignment.to_s)
+        properties.tabs ||= Properties::Tabs.new
+        tab_stop = Properties::TabStop.new(
+          position: position,
+          alignment: alignment.to_s,
+          leader: leader
+        )
+        properties.tabs << tab_stop
         self
       end
 
@@ -485,16 +498,37 @@ module Uniword
       #
       # @return [Hash] Current properties as a hash
       def extract_current_properties
-        {
-          alignment: extract_value(properties&.alignment),
-          style: extract_value(properties&.style),
-          spacing_before: properties&.spacing&.before,
-          spacing_after: properties&.spacing&.after,
-          line_spacing: properties&.spacing&.line,
-          indent_left: properties&.indentation&.left,
-          indent_right: properties&.indentation&.right,
-          indent_first_line: properties&.indentation&.first_line
-        }.compact
+        return {} unless properties
+
+        result = {
+          alignment: extract_value(properties.alignment),
+          style: extract_value(properties.style),
+          # Use flat attributes first, then nested objects
+          spacing_before: properties.spacing_before || properties.spacing&.before,
+          spacing_after: properties.spacing_after || properties.spacing&.after,
+          line_spacing: properties.line_spacing || properties.spacing&.line,
+          line_rule: properties.line_rule || properties.spacing&.line_rule,
+          indent_left: properties.indent_left || properties.indentation&.left,
+          indent_right: properties.indent_right || properties.indentation&.right,
+          indent_first_line: properties.indent_first_line || properties.indentation&.first_line,
+          # Include other flat attributes that exist
+          keep_next: properties.keep_next,
+          keep_lines: properties.keep_lines,
+          page_break_before: properties.page_break_before,
+          widow_control: properties.widow_control,
+          contextual_spacing: properties.contextual_spacing,
+          bidirectional: properties.bidirectional,
+          # Include complex objects
+          borders: properties.borders,
+          shading: properties.shading,
+          tab_stops: properties.tabs
+        }
+
+        # Add outline_level if available
+        outline = extract_value(properties.outline_level)
+        result[:outline_level] = outline if outline
+
+        result.compact
       end
 
       # Helper method to extract value from wrapper or return primitive directly

@@ -55,8 +55,6 @@ module Uniword
     autoload :Style, 'uniword/wordprocessingml/style'
     autoload :StructuredDocumentTag, 'uniword/wordprocessingml/structured_document_tag'
     autoload :StructuredDocumentTagProperties, 'uniword/wordprocessingml/structured_document_tag_properties'
-    autoload :SdtContent, 'uniword/wordprocessingml/sdt_content'
-    autoload :SdtEndProperties, 'uniword/wordprocessingml/sdt_end_properties'
     autoload :SectionProperties, 'uniword/wordprocessingml/section_properties'
     autoload :PageSize, 'uniword/wordprocessingml/page_size'
     autoload :PageMargins, 'uniword/wordprocessingml/page_margins'
@@ -86,6 +84,11 @@ module Uniword
     autoload :NumFmt, 'uniword/wordprocessingml/num_fmt'
     autoload :LvlText, 'uniword/wordprocessingml/lvl_text'
     autoload :LvlJc, 'uniword/wordprocessingml/lvl_jc'
+    autoload :NumberingConfiguration, 'uniword/wordprocessingml/numbering_configuration'
+    autoload :NumberingDefinition, 'uniword/wordprocessingml/numbering_definition'
+    autoload :NumberingInstance, 'uniword/wordprocessingml/numbering_instance'
+    autoload :NumberingLevel, 'uniword/wordprocessingml/numbering_level'
+    autoload :StylesConfiguration, 'uniword/wordprocessingml/styles_configuration'
 
     # Footnotes and endnotes
     autoload :Footnote, 'uniword/wordprocessingml/footnote'

@@ -109,32 +109,25 @@ module Uniword
       # @param document [Document] The document
       # @param metadata [Metadata] Metadata to apply
       def update_core_properties(document, metadata)
-        # Initialize core_properties hash if not present
-        unless document.respond_to?(:core_properties)
-          # Add core_properties accessor if document doesn't have it
-          document.instance_variable_set(:@core_properties, {})
-          document.define_singleton_method(:core_properties) do
-            @core_properties
-          end
-          document.define_singleton_method(:core_properties=) do |props|
-            @core_properties = props
-          end
+        core_props = document.core_properties
+
+        # Update each core property using method access
+        core_props.title = metadata[:title] if metadata[:title]
+        core_props.subject = metadata[:subject] if metadata[:subject]
+        core_props.keywords = metadata[:keywords] if metadata[:keywords]
+        core_props.description = metadata[:description] if metadata[:description]
+        core_props.creator = metadata[:creator] if metadata[:creator]
+        core_props.last_modified_by = metadata[:last_modified_by] if metadata[:last_modified_by]
+
+        # Handle created_at and modified_at which map to created/modified
+        if metadata[:created_at]
+          core_props.created ||= Uniword::Ooxml::Types::DctermsCreatedType.new
+          core_props.created.value = metadata[:created_at]
         end
-
-        core_props = document.core_properties || {}
-
-        # Update each core property
-        update_if_present(core_props, metadata, :title)
-        update_if_present(core_props, metadata, :author)
-        update_if_present(core_props, metadata, :subject)
-        update_if_present(core_props, metadata, :keywords)
-        update_if_present(core_props, metadata, :description)
-        update_if_present(core_props, metadata, :creator)
-        update_if_present(core_props, metadata, :created_at)
-        update_if_present(core_props, metadata, :modified_at)
-        update_if_present(core_props, metadata, :last_modified_by)
-
-        document.core_properties = core_props
+        if metadata[:modified_at]
+          core_props.modified ||= Uniword::Ooxml::Types::DctermsModifiedType.new
+          core_props.modified.value = metadata[:modified_at]
+        end
       end
 
       # Update extended properties.

@@ -13,15 +13,14 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
 
     it 'creates properties with provided attributes' do
       props = described_class.new(
-        style: 'Heading1',
-        alignment: 'center',
-        spacing_before: 240,
-        spacing_after: 120
+        style: Uniword::Properties::StyleReference.new(value: 'Heading1'),
+        alignment_wrapper: Uniword::Properties::Alignment.new(value: 'center'),
+        spacing: Uniword::Properties::Spacing.new(before: 240, after: 120)
       )
-      expect(props.style).to eq('Heading1')
+      expect(props.style&.value).to eq('Heading1')
       expect(props.alignment).to eq('center')
-      expect(props.spacing_before).to eq(240)
-      expect(props.spacing_after).to eq(120)
+      expect(props.spacing&.before).to eq(240)
+      expect(props.spacing&.after).to eq(120)
     end
 
     it 'allows mutation for test compatibility' do
@@ -119,8 +118,8 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
 
     it 'allows setting boolean attributes' do
       props = described_class.new(
-        keep_next: true,
-        keep_lines: true,
+        keep_next_wrapper: Uniword::Properties::KeepNext.new(value: true),
+        keep_lines_wrapper: Uniword::Properties::KeepLines.new(value: true),
         page_break_before: true
       )
       expect(props.keep_next).to be true

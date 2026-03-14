@@ -162,8 +162,20 @@ RSpec.describe Uniword::Transformation::Transformer do
 
   describe '#register_rule' do
     it 'allows registering custom transformation rules' do
-      custom_rule = double('CustomRule')
-      allow(custom_rule).to receive(:is_a?).with(Uniword::Transformation::TransformationRule).and_return(true)
+      custom_rule_class = Class.new(Uniword::Transformation::TransformationRule) do
+        def initialize
+          super(source_format: :docx, target_format: :mhtml)
+        end
+
+        def matches?(element_type:, source_format:, target_format:)
+          false
+        end
+
+        def transform(element)
+          element
+        end
+      end
+      custom_rule = custom_rule_class.new
 
       expect { transformer.register_rule(custom_rule) }.not_to raise_error
     end

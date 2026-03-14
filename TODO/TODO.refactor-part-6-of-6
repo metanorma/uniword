@@ -1,0 +1,139 @@
+# TODO.refactor-part-6-of-6: Execution Order and Summary
+
+## Overview
+This document provides the recommended execution order for all refactoring tasks
+and summarizes the complete scope of work.
+
+## Recommended Execution Order
+
+### Phase 1: File Moves (Do First)
+Order: Part 1 → Part 5
+
+1. Move `numbering_*.rb` files to `wordprocessingml/`
+2. Move `styles_configuration.rb` to `wordprocessingml/`
+3. Move `styles/*.rb` to `wordprocessingml/styles/`
+4. Move `color_scheme.rb`, `font_scheme.rb`, `format_scheme.rb` to `drawingml/`
+5. Update module declarations in moved files
+6. Update autoload statements in `lib/uniword.rb`
+7. Add backwards compatibility aliases
+8. Run tests to verify moves don't break anything
+
+### Phase 2: Spec Reorganization (Do Second)
+Order: Part 2 → Part 3
+
+1. Create `spec/uniword/wordprocessingml/` directory
+2. Create `spec/uniword/drawingml/` directory
+3. Move WordprocessingML-related specs
+4. Move DrawingML-related specs
+5. Move integration tests to `spec/integration/`
+6. Run tests to verify all pass
+
+### Phase 3: Spec Fixes (Do Third)
+Order: Part 4
+
+1. Fix `Uniword::Style` references → `Uniword::Wordprocessingml::Style`
+2. Fix boolean default expectations
+3. Remove/fix visitor pattern tests
+4. Fix remaining test failures
+5. Run full test suite
+
+## Complete File Move List
+
+### lib/ Files to Move
+
+| From | To |
+|------|-----|
+| `lib/uniword/numbering_configuration.rb` | `lib/uniword/wordprocessingml/numbering_configuration.rb` |
+| `lib/uniword/numbering_definition.rb` | `lib/uniword/wordprocessingml/numbering_definition.rb` |
+| `lib/uniword/numbering_instance.rb` | `lib/uniword/wordprocessingml/numbering_instance.rb` |
+| `lib/uniword/numbering_level.rb` | `lib/uniword/wordprocessingml/numbering_level.rb` |
+| `lib/uniword/styles_configuration.rb` | `lib/uniword/wordprocessingml/styles_configuration.rb` |
+| `lib/uniword/styles/*.rb` | `lib/uniword/wordprocessingml/styles/*.rb` |
+| `lib/uniword/color_scheme.rb` | `lib/uniword/drawingml/color_scheme.rb` |
+| `lib/uniword/font_scheme.rb` | `lib/uniword/drawingml/font_scheme.rb` |
+| `lib/uniword/format_scheme.rb` | `lib/uniword/drawingml/format_scheme.rb` |
+
+### spec/ Files to Move
+
+| From | To |
+|------|-----|
+| `spec/uniword/paragraph_spec.rb` | `spec/uniword/wordprocessingml/paragraph_spec.rb` |
+| `spec/uniword/paragraph_enhanced_properties_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/run_spec.rb` | `spec/uniword/wordprocessingml/run_spec.rb` |
+| `spec/uniword/run_enhanced_properties_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/run_properties_inheritance_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/style_roundtrip_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/styles_spec.rb` | `spec/uniword/wordprocessingml/styles_spec.rb` |
+| `spec/uniword/styleset_*.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/table_*.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/numbering_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/bookmark_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/comment*.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/footnote_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/endnote_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/line_spacing_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/image_spec.rb` | `spec/uniword/wordprocessingml/` |
+| `spec/uniword/chart_spec.rb` | `spec/uniword/drawingml/chart_spec.rb` |
+| `spec/uniword/theme_extraction_spec.rb` | `spec/uniword/drawingml/` |
+| `spec/uniword/theme_roundtrip_spec.rb` | `spec/uniword/drawingml/` |
+| `spec/uniword/docx_roundtrip_spec.rb` | `spec/integration/` |
+| `spec/uniword/roundtrip_demo_spec.rb` | `spec/integration/` |
+| `spec/uniword/document_elements_roundtrip_spec.rb` | `spec/integration/` |
+| `spec/uniword/v1_1_features_smoke_spec.rb` | `spec/integration/` |
+| `spec/uniword/v2_integration_spec.rb` | `spec/integration/` |
+
+## Summary Statistics
+
+| Category | Count |
+|----------|-------|
+| lib/ files to move | ~12 |
+| spec/ files to move to wordprocessingml/ | ~20 |
+| spec/ files to move to drawingml/ | ~3 |
+| spec/ files to move to integration/ | ~5 |
+| Spec fixes needed | ~100 (across ~20 files) |
+| Autoload updates | ~10 |
+| Backwards compatibility aliases | ~10 |
+
+## Verification Checklist
+
+After completing all phases:
+
+```bash
+# 1. Verify autoloads work
+bundle exec ruby -e "require 'uniword'; puts Uniword::Wordprocessingml::Paragraph"
+bundle exec ruby -e "require 'uniword'; puts Uniword::Drawingml::Theme"
+
+# 2. Run full test suite
+bundle exec rspec spec/
+
+# 3. Run specific test categories
+bundle exec rspec spec/uniword/wordprocessingml/
+bundle exec rspec spec/uniword/drawingml/
+bundle exec rspec spec/integration/
+
+# 4. Check for any remaining issues
+bundle exec rspec --format documentation spec/ 2>&1 | grep -i "failed\|error"
+```
+
+## Risk Assessment
+
+| Risk | Mitigation |
+|------|------------|
+| Breaking existing code | Add backwards compatibility aliases |
+| Missing file references | Use grep to find all references before moving |
+| Module nesting issues | Test autoload after each move |
+| Test failures | Fix incrementally, commit after each fix |
+
+## Rollback Plan
+
+If issues arise:
+1. Git provides full history - can revert individual commits
+2. Work on feature branch to isolate changes
+3. Tag current state before starting: `git tag pre-namespace-refactor`
+
+## Notes
+
+- All features are implemented - this is purely structural refactoring
+- Maintain backwards compatibility with aliases
+- Commit after each major phase
+- Run tests after each file move

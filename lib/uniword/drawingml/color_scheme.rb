@@ -11,11 +11,6 @@ module Uniword
           namespace Ooxml::Namespaces::DrawingML
           map_attribute 'val', to: :val
         end
-
-        def initialize(attributes = {})
-          super
-          @val ||= '000000'
-        end
       end
 
       # Represents a system color in DrawingML
@@ -29,26 +24,12 @@ module Uniword
           map_attribute 'val', to: :val
           map_attribute 'lastClr', to: :last_clr
         end
-
-        def initialize(attributes = {})
-          super
-          @val ||= 'windowText'
-          @last_clr ||= '000000'
-        end
       end
 
       # Base class for theme color elements
       class ThemeColorBase < Lutaml::Model::Serializable
         attribute :srgb_clr, SrgbColor
         attribute :sys_clr, SysColor
-
-        def initialize(attributes = {})
-          super
-          # Only set default if BOTH are nil
-          return unless @srgb_clr.nil? && @sys_clr.nil?
-
-          @srgb_clr = SrgbColor.new
-        end
 
         # Get the effective color value
         def value

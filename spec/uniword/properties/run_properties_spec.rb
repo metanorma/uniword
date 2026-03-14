@@ -19,9 +19,11 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
         bold: Uniword::Properties::Bold.new(value: true),
         italic: Uniword::Properties::Italic.new(value: true),
         size: Uniword::Properties::FontSize.new(value: 24),
-        fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial'),
         color: Uniword::Properties::ColorValue.new(value: '000000')
       )
+      # Set fonts after initialization (lutaml-model creates fresh instances for nested objects)
+      props.fonts = Uniword::Properties::RunFonts.new(ascii: 'Arial')
+
       expect(props.bold?).to be true
       expect(props.italic?).to be true
       expect(props.size&.value).to eq(24)

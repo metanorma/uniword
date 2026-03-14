@@ -20,6 +20,8 @@ module Uniword
       attribute :bottom, Border
       attribute :left, Border
       attribute :right, Border
+      attribute :between, Border
+      attribute :bar, Border
 
       xml do
         element 'pBdr'
@@ -29,6 +31,8 @@ module Uniword
         map_element 'bottom', to: :bottom, render_nil: false
         map_element 'left', to: :left, render_nil: false
         map_element 'right', to: :right, render_nil: false
+        map_element 'between', to: :between, render_nil: false
+        map_element 'bar', to: :bar, render_nil: false
       end
     end
   end

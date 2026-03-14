@@ -11,48 +11,48 @@ module Uniword
     class RunProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
-      # Simple element wrapper objects
-      attribute :style, Properties::StyleReference
-      attribute :size, Properties::FontSize
-      attribute :size_cs, Properties::FontSize
-      attribute :color, Properties::ColorValue
-      attribute :underline, Properties::Underline
-      attribute :highlight, Properties::Highlight
-      attribute :vertical_align, Properties::VerticalAlign
-      attribute :position, Properties::Position
-      attribute :character_spacing, Properties::CharacterSpacing
-      attribute :kerning, Properties::Kerning
-      attribute :width_scale, Properties::WidthScale
-      attribute :emphasis_mark, Properties::EmphasisMark
+      # Simple element wrapper objects (default: nil so unset properties are nil)
+      attribute :style, Properties::StyleReference, default: nil
+      attribute :size, Properties::FontSize, default: nil
+      attribute :size_cs, Properties::FontSize, default: nil
+      attribute :color, Properties::ColorValue, default: nil
+      attribute :underline, Properties::Underline, default: nil
+      attribute :highlight, Properties::Highlight, default: nil
+      attribute :vertical_align, Properties::VerticalAlign, default: nil
+      attribute :position, Properties::Position, default: nil
+      attribute :character_spacing, Properties::CharacterSpacing, default: nil
+      attribute :kerning, Properties::Kerning, default: nil
+      attribute :width_scale, Properties::WidthScale, default: nil
+      attribute :emphasis_mark, Properties::EmphasisMark, default: nil
 
       # Complex fonts object
-      attribute :fonts, Properties::RunFonts
+      attribute :fonts, Properties::RunFonts, default: nil
 
       # Complex shading object
-      attribute :shading, Properties::Shading
+      attribute :shading, Properties::Shading, default: nil
 
       # Complex language object
-      attribute :language, Properties::Language
+      attribute :language, Properties::Language, default: nil
 
       # Complex text effects objects
-      attribute :text_fill, Properties::TextFill
-      attribute :text_outline, Properties::TextOutline
+      attribute :text_fill, Properties::TextFill, default: nil
+      attribute :text_outline, Properties::TextOutline, default: nil
 
-      # Boolean formatting wrapper objects
-      attribute :bold, Properties::Bold
-      attribute :bold_cs, Properties::BoldCs
-      attribute :italic, Properties::Italic
-      attribute :italic_cs, Properties::ItalicCs
-      attribute :strike, Properties::Strike
-      attribute :double_strike, Properties::DoubleStrike
-      attribute :small_caps, Properties::SmallCaps
-      attribute :caps, Properties::Caps
-      attribute :hidden, Properties::Vanish
-      attribute :no_proof, Properties::NoProof
-      attribute :shadow, Properties::Shadow
-      attribute :emboss, Properties::Emboss
-      attribute :imprint, Properties::Imprint
-      attribute :outline_level, Properties::OutlineLevel
+      # Boolean formatting wrapper objects (default: nil so unset properties are nil)
+      attribute :bold, Properties::Bold, default: nil
+      attribute :bold_cs, Properties::BoldCs, default: nil
+      attribute :italic, Properties::Italic, default: nil
+      attribute :italic_cs, Properties::ItalicCs, default: nil
+      attribute :strike, Properties::Strike, default: nil
+      attribute :double_strike, Properties::DoubleStrike, default: nil
+      attribute :small_caps, Properties::SmallCaps, default: nil
+      attribute :caps, Properties::Caps, default: nil
+      attribute :hidden, Properties::Vanish, default: nil
+      attribute :no_proof, Properties::NoProof, default: nil
+      attribute :shadow, Properties::Shadow, default: nil
+      attribute :emboss, Properties::Emboss, default: nil
+      attribute :imprint, Properties::Imprint, default: nil
+      attribute :outline_level, Properties::OutlineLevel, default: nil
 
       # Flat attributes (kept as aliases for compatibility)
       attribute :spacing, :integer          # Flat attribute (deprecated)
@@ -75,9 +75,6 @@ module Uniword
       attribute :font_east_asia, :string # East Asian font
       attribute :font_h_ansi, :string    # High ANSI font
       attribute :font_cs, :string        # Complex script font
-
-      # Flat boolean attributes (convenience for API access)
-      attribute :all_caps, :boolean # Alias for caps
 
       # XML mappings come AFTER attributes
       xml do

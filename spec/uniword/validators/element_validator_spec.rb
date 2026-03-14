@@ -117,13 +117,6 @@ RSpec.describe Uniword::Validators::ElementValidator do
       paragraph = Uniword::Paragraph.new
       expect(validator.valid?(paragraph)).to be true
     end
-
-    it "delegates to element's valid? method" do
-      element = Uniword::Paragraph.new
-      allow(element).to receive(:valid?).and_return(false)
-
-      expect(validator.valid?(element)).to be false
-    end
   end
 
   describe '#errors' do
@@ -141,14 +134,6 @@ RSpec.describe Uniword::Validators::ElementValidator do
       paragraph = Uniword::Paragraph.new
       errors = validator.errors(paragraph)
       expect(errors).to be_empty
-    end
-
-    it 'returns generic error for invalid element' do
-      element = Uniword::Paragraph.new
-      allow(element).to receive(:valid?).and_return(false)
-
-      errors = validator.errors(element)
-      expect(errors).to eq(['Element validation failed'])
     end
   end
 

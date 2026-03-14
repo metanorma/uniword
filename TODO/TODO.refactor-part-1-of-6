@@ -1,0 +1,92 @@
+# TODO.refactor-part-1-of-6: File Namespace Audit
+
+## Overview
+This document lists all files that are in the wrong namespace and need to be moved
+to match the OOXML namespace hierarchy.
+
+## Namespace Mapping Rules
+
+OOXML namespaces map to Ruby module namespaces:
+- `w:` (WordprocessingML) → `Uniword::Wordprocessingml`
+- `a:` (DrawingML) → `Uniword::Drawingml`
+- `v:` (VML) → `Uniword::Vml`
+- `m:` (Math/OMML) → `Uniword::Math`
+- `r:` (Relationships) → `Uniword::Relationships`
+
+## Files to Move to Wordprocessingml Namespace
+
+These files define WordprocessingML (w:) elements but are in root `lib/uniword/`:
+
+| Current Location | New Location |
+|-----------------|--------------|
+| `lib/uniword/numbering_configuration.rb` | `lib/uniword/wordprocessingml/numbering_configuration.rb` |
+| `lib/uniword/numbering_definition.rb` | `lib/uniword/wordprocessingml/numbering_definition.rb` |
+| `lib/uniword/numbering_instance.rb` | `lib/uniword/wordprocessingml/numbering_instance.rb` |
+| `lib/uniword/numbering_level.rb` | `lib/uniword/wordprocessingml/numbering_level.rb` |
+| `lib/uniword/styles_configuration.rb` | `lib/uniword/wordprocessingml/styles_configuration.rb` |
+| `lib/uniword/styles/` (directory) | `lib/uniword/wordprocessingml/styles/` |
+
+## Files to Move to Drawingml Namespace
+
+These files define DrawingML (a:) elements but are in root `lib/uniword/`:
+
+| Current Location | New Location |
+|-----------------|--------------|
+| `lib/uniword/color_scheme.rb` | `lib/uniword/drawingml/color_scheme.rb` |
+| `lib/uniword/font_scheme.rb` | `lib/uniword/drawingml/font_scheme.rb` |
+| `lib/uniword/format_scheme.rb` | `lib/uniword/drawingml/format_scheme.rb` |
+
+## Files Already in Correct Namespace (No Move Needed)
+
+These are correctly placed:
+- `lib/uniword/wordprocessingml/*.rb` - Correct
+- `lib/uniword/drawingml/*.rb` - Correct
+- `lib/uniword/vml/*.rb` - Correct
+- `lib/uniword/math/*.rb` - Correct
+
+## Files That Stay in Root Namespace
+
+These are utility classes or high-level abstractions (not OOXML elements):
+- `lib/uniword/document.rb` - High-level Document API
+- `lib/uniword/document_factory.rb` - Factory for creating documents
+- `lib/uniword/document_writer.rb` - Writing documents
+- `lib/uniword/builder.rb` - Document builder DSL
+- `lib/uniword/configuration.rb` - Configuration system
+- `lib/uniword/errors.rb` - Exception classes
+- `lib/uniword/version.rb` - Version info
+- `lib/uniword/cli.rb` - CLI interface
+
+## Action Items
+
+1. [ ] Create `lib/uniword/wordprocessingml/styles/` directory
+2. [ ] Move `lib/uniword/numbering_*.rb` to `lib/uniword/wordprocessingml/`
+3. [ ] Move `lib/uniword/styles_configuration.rb` to `lib/uniword/wordprocessingml/`
+4. [ ] Move `lib/uniword/styles/*.rb` to `lib/uniword/wordprocessingml/styles/`
+5. [ ] Move `lib/uniword/color_scheme.rb` to `lib/uniword/drawingml/`
+6. [ ] Move `lib/uniword/font_scheme.rb` to `lib/uniword/drawingml/`
+7. [ ] Move `lib/uniword/format_scheme.rb` to `lib/uniword/drawingml/`
+8. [ ] Update all `require` and `autoload` statements
+9. [ ] Update module namespace declarations in moved files
+10. [ ] Update all class references in specs
+
+## Module Changes Required
+
+When moving files, update module declarations:
+
+```ruby
+# Before (in lib/uniword/numbering_level.rb)
+module Uniword
+  class NumberingLevel < Lutaml::Model::Serializable
+    # ...
+  end
+end
+
+# After (in lib/uniword/wordprocessingml/numbering_level.rb)
+module Uniword
+  module Wordprocessingml
+    class NumberingLevel < Lutaml::Model::Serializable
+      # ...
+    end
+  end
+end
+```

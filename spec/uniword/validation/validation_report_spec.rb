@@ -3,22 +3,23 @@
 require 'spec_helper'
 require 'uniword/validation/validation_report'
 require 'uniword/validation/validation_result'
+require 'uniword/wordprocessingml/hyperlink'
 
 RSpec.describe Uniword::Validation::ValidationReport do
-  let(:mock_link1) { double('Link1', url: 'https://example.com') }
-  let(:mock_link2) { double('Link2', anchor: 'section1') }
-  let(:mock_link3) { double('Link3', url: 'https://broken.com') }
+  let(:external_link) { Uniword::Hyperlink.new(id: 'https://example.com') }
+  let(:anchor_link) { Uniword::Hyperlink.new(anchor: 'section1') }
+  let(:broken_link) { Uniword::Hyperlink.new(id: 'https://broken.com') }
 
   let(:success_result) do
-    Uniword::Validation::ValidationResult.success(mock_link1)
+    Uniword::Validation::ValidationResult.success(external_link)
   end
 
   let(:failure_result) do
-    Uniword::Validation::ValidationResult.failure(mock_link3, 'Not found')
+    Uniword::Validation::ValidationResult.failure(broken_link, 'Not found')
   end
 
   let(:warning_result) do
-    Uniword::Validation::ValidationResult.warning(mock_link2, 'Redirect')
+    Uniword::Validation::ValidationResult.warning(anchor_link, 'Redirect')
   end
 
   describe '#add_result' do

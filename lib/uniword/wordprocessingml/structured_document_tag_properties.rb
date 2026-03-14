@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-# NOTE: Sdt namespace MUST be eager-loaded because we use bare Sdt:: constants
-# in attribute definitions. Ruby's autoload doesn't trigger for nested constant
-# access like Uniword::Sdt::Id - only for direct access like Uniword::Sdt.
-require_relative '../sdt'
 
 module Uniword
   module Wordprocessingml
@@ -12,27 +8,26 @@ module Uniword
     # Integrates all SDT-related properties in a single model
     # XML Namespace: w: (WordProcessingML)
     #
-    # NOTE: Uses Uniword::Sdt::* references to trigger autoload correctly.
-    # Bare Sdt::* references don't trigger autoload for nested constants.
+    # NOTE: Uses StructuredDocumentTag::* references to access nested property classes.
     class StructuredDocumentTagProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST (CRITICAL!)
-      attribute :id, Uniword::Sdt::Id
-      attribute :alias_name, Uniword::Sdt::Alias
-      attribute :tag, Uniword::Sdt::Tag
-      attribute :text, Uniword::Sdt::Text
-      attribute :showing_placeholder_header, Uniword::Sdt::ShowingPlaceholderHeader
-      attribute :appearance, Uniword::Sdt::Appearance
-      attribute :placeholder, Uniword::Sdt::Placeholder
-      attribute :data_binding, Uniword::Sdt::DataBinding
-      attribute :bibliography, Uniword::Sdt::Bibliography
-      attribute :temporary, Uniword::Sdt::Temporary
-      attribute :doc_part_obj, Uniword::Sdt::DocPartObj
-      attribute :date, Uniword::Sdt::Date
-      attribute :run_properties, Uniword::Sdt::RunProperties
+      attribute :id, StructuredDocumentTag::Id
+      attribute :alias_name, StructuredDocumentTag::Alias
+      attribute :tag, StructuredDocumentTag::Tag
+      attribute :text, StructuredDocumentTag::Text
+      attribute :showing_placeholder_header, StructuredDocumentTag::ShowingPlaceholderHeader
+      attribute :appearance, StructuredDocumentTag::Appearance
+      attribute :placeholder, StructuredDocumentTag::Placeholder
+      attribute :data_binding, StructuredDocumentTag::DataBinding
+      attribute :bibliography, StructuredDocumentTag::Bibliography
+      attribute :temporary, StructuredDocumentTag::Temporary
+      attribute :doc_part_obj, StructuredDocumentTag::DocPartObj
+      attribute :date, StructuredDocumentTag::Date
+      attribute :run_properties, StructuredDocumentTag::RunProperties
 
       xml do
         element 'sdtPr'
-        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         map_element 'id', to: :id, render_nil: false

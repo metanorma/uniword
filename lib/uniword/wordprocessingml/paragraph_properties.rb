@@ -13,7 +13,7 @@ module Uniword
 
       # Simple element wrapper objects
       attribute :style, Properties::StyleReference
-      attribute :alignment, Properties::Alignment
+      attribute :alignment_wrapper, Properties::Alignment  # Internal wrapper object
       attribute :outline_level, Properties::OutlineLevel
       attribute :numbering_id, Properties::NumberingId
       attribute :numbering_level, Properties::NumberingLevel
@@ -48,9 +48,9 @@ module Uniword
       attribute :num_id, :integer
       attribute :ilvl, :integer # Numbering level (0-8)
 
-      # Keep together options
-      attribute :keep_next, :boolean, default: -> { false }
-      attribute :keep_lines, :boolean, default: -> { false }
+      # Keep together options (wrapper objects - use _wrapper suffix for internal storage)
+      attribute :keep_next_wrapper, Properties::KeepNext
+      attribute :keep_lines_wrapper, Properties::KeepLines
       attribute :page_break_before, :boolean, default: -> { false }
       attribute :widow_control, :boolean, default: -> { true }
 
@@ -76,7 +76,7 @@ module Uniword
         map_element 'pStyle', to: :style, render_nil: false
 
         # Alignment (wrapper object)
-        map_element 'jc', to: :alignment, render_nil: false
+        map_element 'jc', to: :alignment_wrapper, render_nil: false
 
         # Spacing (complex object - WORKS)
         map_element 'spacing', to: :spacing, render_nil: false
@@ -92,8 +92,8 @@ module Uniword
         map_element 'ilvl', to: :numbering_level, render_nil: false
 
         # Keep options (only render if true)
-        map_element 'keepNext', to: :keep_next, render_nil: false, render_default: false
-        map_element 'keepLines', to: :keep_lines, render_nil: false, render_default: false
+        map_element 'keepNext', to: :keep_next_wrapper, render_nil: false, render_default: false
+        map_element 'keepLines', to: :keep_lines_wrapper, render_nil: false, render_default: false
         map_element 'pageBreakBefore', to: :page_break_before, render_nil: false,
                                        render_default: false
         map_element 'widowControl', to: :widow_control, render_nil: false, render_default: false
@@ -119,14 +119,9 @@ module Uniword
 
       # Initialize with defaults
       def initialize(attrs = {})
-        super
-        @keep_next ||= false
-        @keep_lines ||= false
-        @page_break_before ||= false
+        super(attrs)
+        # Set boolean defaults
         @widow_control = true if @widow_control.nil?
-        @contextual_spacing ||= false
-        @suppress_line_numbers ||= false
-        @bidirectional ||= false
       end
 
       # Alias for tabs (API compatibility)
@@ -172,14 +167,13 @@ module Uniword
       end
 
       # Get alignment value (returns string directly for API compatibility)
-      # Overrides lutaml-model accessor to return string value
       #
       # @return [String, nil] Alignment value (left, center, right, both)
       def alignment
-        val = @alignment
+        val = alignment_wrapper
         return nil if val.nil?
 
-        # Handle both wrapper object and primitive value
+        # Handle wrapper object
         val = val.value if val.respond_to?(:value)
         val.to_s
       end
@@ -191,27 +185,79 @@ module Uniword
       def alignment=(value)
         case value
         when Properties::Alignment
-          @alignment = value
+          self.alignment_wrapper = value
         when String
-          @alignment ||= Properties::Alignment.new
-          @alignment.value = value
+          self.alignment_wrapper ||= Properties::Alignment.new
+          alignment_wrapper.value = value
         when nil
-          @alignment = nil
+          self.alignment_wrapper = nil
         else
-          @alignment = value
+          self.alignment_wrapper = value
         end
         self
+      end
+
+      # Boolean getters for keep_next (override attribute accessor)
+      #
+      # @return [Boolean] True if keep_next is set
+      def keep_next?
+        val = @keep_next_wrapper
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+      alias keep_next keep_next?
+
+      # Boolean setter for keep_next
+      #
+      # @param value [Boolean] True to enable keep_next
+      def keep_next=(value)
+        case value
+        when Properties::KeepNext
+          @keep_next_wrapper = value
+        when true, false
+          @keep_next_wrapper = value ? Properties::KeepNext.new(value: true) : nil
+        when nil
+          @keep_next_wrapper = nil
+        else
+          @keep_next_wrapper = value
+        end
+      end
+
+      # Boolean getters for keep_lines (override attribute accessor)
+      #
+      # @return [Boolean] True if keep_lines is set
+      def keep_lines?
+        val = @keep_lines_wrapper
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val == true
+      end
+      alias keep_lines keep_lines?
+
+      # Boolean setter for keep_lines
+      #
+      # @param value [Boolean] True to enable keep_lines
+      def keep_lines=(value)
+        case value
+        when Properties::KeepLines
+          @keep_lines_wrapper = value
+        when true, false
+          @keep_lines_wrapper = value ? Properties::KeepLines.new(value: true) : nil
+        when nil
+          @keep_lines_wrapper = nil
+        else
+          @keep_lines_wrapper = value
+        end
       end
 
       # Get alignment value (alias for backward compatibility)
       #
       # @return [String, nil] Alignment value (left, center, right, both)
       def alignment_value
-        val = @alignment
-        return nil if val.nil?
-
-        val = val.value if val.respond_to?(:value)
-        val.to_s
+        alignment
       end
 
       # Set alignment value (alias for backward compatibility)

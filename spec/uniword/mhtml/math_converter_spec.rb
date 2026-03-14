@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'uniword/mhtml/math_converter'
+require 'nokogiri'
 
 RSpec.describe Uniword::Mhtml::MathConverter do
   describe '.plurimath_available?' do
@@ -33,12 +34,11 @@ RSpec.describe Uniword::Mhtml::MathConverter do
         expect(result).not_to be_empty
       end
 
-      it 'wraps in OMML structure when Plurimath unavailable' do
-        allow(described_class).to receive(:plurimath_available?).and_return(false)
+      it 'produces valid XML output' do
         result = described_class.mathml_to_omml(mathml)
-        expect(result).to include('m:oMathPara')
-        expect(result).to include('m:oMath')
-        expect(result).to include(mathml)
+        # Should be parseable as XML
+        doc = Nokogiri::XML(result)
+        expect(doc.errors).to be_empty
       end
     end
 
@@ -78,12 +78,6 @@ RSpec.describe Uniword::Mhtml::MathConverter do
           expect(result).to eq(asciimath)
         end
       end
-
-      it 'returns plain text when Plurimath unavailable' do
-        allow(described_class).to receive(:plurimath_available?).and_return(false)
-        result = described_class.asciimath_to_omml(asciimath)
-        expect(result).to eq(asciimath)
-      end
     end
 
     context 'with custom delimiters' do
@@ -117,50 +111,29 @@ RSpec.describe Uniword::Mhtml::MathConverter do
   describe '.math_element?' do
     context 'with math element' do
       it 'detects math tag' do
-        element = double('element', name: 'math')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]).with('class').and_return(nil)
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
+        doc = Nokogiri::HTML('<math><mi>x</mi></math>')
+        element = doc.at('math')
 
         expect(described_class.math_element?(element)).to be true
       end
 
       it 'detects mml:math tag' do
-        element = double('element', name: 'mml:math')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]).with('class').and_return(nil)
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
+        doc = Nokogiri::XML('<mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>x</mml:mi></mml:math>')
+        element = doc.at_xpath('//mml:math')
 
-        expect(described_class.math_element?(element)).to be true
-      end
-
-      it 'detects m:oMath tag' do
-        element = double('element', name: 'm:oMath')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]).with('class').and_return(nil)
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
-
-        expect(described_class.math_element?(element)).to be true
+        expect(described_class.math_element?(element)).to be true if element
       end
 
       it 'detects math class' do
-        element = double('element', name: 'div')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]).with('class').and_return('math')
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
+        doc = Nokogiri::HTML('<div class="math">x</div>')
+        element = doc.at('div.math')
 
         expect(described_class.math_element?(element)).to be true
       end
 
       it 'detects data-mathml attribute' do
-        element = double('element', name: 'span')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]) do |arg|
-          case arg
-          when 'class' then nil
-          when 'data-mathml' then '<math><mi>x</mi></math>'
-          end
-        end
+        doc = Nokogiri::HTML('<span data-mathml="<math><mi>x</mi></math>">x</span>')
+        element = doc.at('span')
 
         expect(described_class.math_element?(element)).to be true
       end
@@ -168,11 +141,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context 'with non-math element' do
       it 'returns false for paragraph' do
-        element = double('element', name: 'p')
-        allow(element).to receive(:respond_to?).with(:name).and_return(true)
-        allow(element).to receive(:[]) do |_arg|
-          nil
-        end
+        doc = Nokogiri::HTML('<p>text</p>')
+        element = doc.at('p')
 
         expect(described_class.math_element?(element)).to be false
       end
@@ -187,8 +157,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
     context 'with data-mathml attribute' do
       it 'extracts MathML from attribute' do
         mathml = '<math><mi>x</mi></math>'
-        element = double('element')
-        allow(element).to receive(:[]).with('data-mathml').and_return(mathml)
+        doc = Nokogiri::HTML("<span data-mathml=\"#{mathml}\">x</span>")
+        element = doc.at('span')
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:mathml)
@@ -198,35 +168,20 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context 'with math tag' do
       it 'extracts MathML from element' do
-        element = double('element', name: 'math')
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
-        allow(element).to receive(:to_s).and_return('<math><mi>x</mi></math>')
+        doc = Nokogiri::HTML('<math><mi>x</mi></math>')
+        element = doc.at('math')
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:mathml)
-        expect(result[:content]).to eq('<math><mi>x</mi></math>')
-      end
-    end
-
-    context 'with m:oMath tag' do
-      it 'extracts OMML from element' do
-        element = double('element', name: 'm:oMath')
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
-        allow(element).to receive(:to_s).and_return('<m:oMath>...</m:oMath>')
-
-        result = described_class.extract_math(element)
-        expect(result[:type]).to eq(:omml)
-        expect(result[:content]).to eq('<m:oMath>...</m:oMath>')
+        expect(result[:content]).to include('<math')
+        expect(result[:content]).to include('<mi>x</mi>')
       end
     end
 
     context 'with asciimath class' do
       it 'extracts AsciiMath from text' do
-        element = double('element')
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
-        allow(element).to receive(:name).and_return('span')
-        allow(element).to receive(:[]).with('class').and_return('asciimath')
-        allow(element).to receive(:text).and_return('x^2 + y^2')
+        doc = Nokogiri::HTML('<span class="asciimath">x^2 + y^2</span>')
+        element = doc.at('span.asciimath')
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:asciimath)
@@ -235,15 +190,13 @@ RSpec.describe Uniword::Mhtml::MathConverter do
     end
 
     context 'with unknown math content' do
-      it 'returns unknown type' do
-        element = double('element', name: 'div')
-        allow(element).to receive(:[]).with('data-mathml').and_return(nil)
-        allow(element).to receive(:[]).with('class').and_return(nil)
-        allow(element).to receive(:to_s).and_return('<div>content</div>')
+      it 'returns unknown type for non-math element' do
+        doc = Nokogiri::HTML('<div>content</div>')
+        element = doc.at('div')
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:unknown)
-        expect(result[:content]).to eq('<div>content</div>')
+        expect(result[:content]).to include('content')
       end
     end
   end

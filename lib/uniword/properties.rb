@@ -31,6 +31,9 @@ module Uniword
     autoload :Shadow, 'uniword/properties/boolean_formatting'
     autoload :Emboss, 'uniword/properties/boolean_formatting'
     autoload :Imprint, 'uniword/properties/boolean_formatting'
+    autoload :QuickFormat, 'uniword/properties/boolean_formatting'
+    autoload :KeepNext, 'uniword/properties/boolean_formatting'
+    autoload :KeepLines, 'uniword/properties/boolean_formatting'
 
     # Bold and Italic (from bold.rb and italic.rb)
     autoload :Bold, 'uniword/properties/bold'

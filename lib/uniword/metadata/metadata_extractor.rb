@@ -132,21 +132,19 @@ module Uniword
       # @param document [Document] The document
       # @param metadata [Metadata] Metadata to populate
       def extract_core_properties(document, metadata)
-        # Extract from document if it has core properties
-        if document.respond_to?(:core_properties)
-          props = document.core_properties
-          return unless props
+        # Extract from document's core_properties
+        props = document.core_properties
+        return unless props
 
-          metadata[:title] = props[:title] if props[:title]
-          metadata[:author] = props[:author] if props[:author]
-          metadata[:subject] = props[:subject] if props[:subject]
-          metadata[:keywords] = props[:keywords] if props[:keywords]
-          metadata[:description] = props[:description] if props[:description]
-          metadata[:creator] = props[:creator] if props[:creator]
-          metadata[:created_at] = props[:created_at] if props[:created_at]
-          metadata[:modified_at] = props[:modified_at] if props[:modified_at]
-          metadata[:last_modified_by] = props[:last_modified_by] if props[:last_modified_by]
-        end
+        # Use method access for CoreProperties object
+        metadata[:title] = props.title if props.title
+        metadata[:subject] = props.subject if props.subject
+        metadata[:keywords] = props.keywords if props.keywords
+        metadata[:description] = props.description if props.description
+        metadata[:creator] = props.creator if props.creator
+        metadata[:created_at] = props.created&.value if props.created&.value
+        metadata[:modified_at] = props.modified&.value if props.modified&.value
+        metadata[:last_modified_by] = props.last_modified_by if props.last_modified_by
 
         # If title not found, try to extract from first heading
         metadata[:title] ||= extract_title_from_content(document)

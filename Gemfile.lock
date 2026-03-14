@@ -23,14 +23,9 @@ PATH
 PATH
   remote: /Users/mulgogi/src/plurimath/plurimath
   specs:
-    plurimath (0.9.10)
-      bigdecimal
-      lutaml-model
-      mml
+    plurimath (0.5.0)
       ox
       parslet
-      thor
-      unitsml
 
 GEM
   remote: https://rubygems.org/
@@ -52,7 +47,6 @@ GEM
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     base64 (0.3.0)
-    bcp47_spec (0.2.1)
     benchmark-ips (2.14.0)
     benchmark-memory (0.2.0)
       memory_profiler (~> 1)
@@ -73,18 +67,10 @@ GEM
     date (3.5.1)
     diff-lcs (1.6.2)
     drb (2.2.3)
-    ebnf (2.6.0)
-      base64 (~> 0.2)
-      htmlentities (~> 4.3)
-      rdf (~> 3.3)
-      scanf (~> 1.0)
-      sxp (~> 2.0)
-      unicode-types (~> 1.8)
     ffi (1.17.3-arm64-darwin)
     get_process_mem (1.0.0)
       bigdecimal (>= 2.0)
       ffi (~> 1.0)
-    htmlentities (4.4.2)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
     json (2.18.1)
@@ -92,7 +78,6 @@ GEM
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
     language_server-protocol (3.17.0.5)
-    link_header (0.0.8)
     lint_roller (1.1.0)
     liquid (5.11.0)
       bigdecimal
@@ -104,7 +89,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    matrix (0.4.3)
     mcp (0.8.0)
       json-schema (>= 4.1)
     memo_wise (1.13.0)
@@ -113,9 +97,6 @@ GEM
     minitest (6.0.2)
       drb (~> 2.0)
       prism (~> 1.5)
-    mml (2.0.3)
-      lutaml-model
-      moxml
     moxml (0.1.10)
     net-imap (0.6.3)
       date
@@ -143,12 +124,6 @@ GEM
     racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.1)
-    rdf (3.3.1)
-      bcp47_spec (~> 0.2)
-      link_header (~> 0.0, >= 0.0.8)
-    rdf-turtle (3.3.0)
-      ebnf (~> 2.4)
-      rdf (~> 3.3)
     regexp_parser (2.11.3)
     rspec (3.13.2)
       rspec-core (~> 3.13.0)
@@ -186,20 +161,14 @@ GEM
       ostruct
     ruby-progressbar (1.13.0)
     rubyzip (2.4.1)
-    scanf (1.0.0)
     securerandom (0.4.1)
     strscan (3.1.7)
-    sxp (2.0.0)
-      matrix (~> 0.4)
-      rdf (~> 3.3)
     table_tennis (0.0.7)
       csv (~> 3.3)
       ffi (~> 1.17)
       memo_wise (~> 1.11)
       paint (~> 2.3)
       unicode-display_width (~> 3.1)
-    terminal-table (4.0.0)
-      unicode-display_width (>= 1.1.1, < 4)
     thor (1.5.0)
     timeout (0.6.0)
     toml-rb (4.1.0)
@@ -215,19 +184,6 @@ GEM
     unicode-name (1.14.0)
       unicode-types (~> 1.11)
     unicode-types (1.11.0)
-    unitsdb (2.1.1)
-      lutaml-model (~> 0.7)
-      rdf (~> 3.1)
-      rdf-turtle (~> 3.1)
-      rubyzip (~> 2.3)
-      terminal-table
-      thor (~> 1.0)
-    unitsml (0.5.1)
-      htmlentities
-      lutaml-model (~> 0.7.6)
-      mml
-      parslet
-      unitsdb (~> 2.0)
     uri (1.1.1)
     yard (0.9.38)
 

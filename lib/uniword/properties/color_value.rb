@@ -11,12 +11,15 @@ module Uniword
 
     # Color value element
     #
-    # Represents <w:color w:val="..." w:themeColor="..."/>
+    # Represents <w:color w:val="..." w:themeColor="..." w:themeShade="..."/>
     # where value is RGB hex (e.g., "FF0000") and themeColor references theme (e.g., "background1")
+    # themeShade is a hex tint value (e.g., "BF")
     class ColorValue < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :value, ColorValueType
       attribute :theme_color, :string
+      attribute :theme_shade, :string
+      attribute :theme_tint, :string
 
       xml do
         element 'color'
@@ -24,6 +27,8 @@ module Uniword
 
         map_attribute 'val', to: :value
         map_attribute 'themeColor', to: :theme_color, render_nil: false
+        map_attribute 'themeShade', to: :theme_shade, render_nil: false
+        map_attribute 'themeTint', to: :theme_tint, render_nil: false
       end
     end
   end

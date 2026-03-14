@@ -36,8 +36,8 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         title: 'Test Document',
         creator: 'John Doe',
         subject: 'Test Subject',
-        created: '2024-01-01T00:00:00Z',
-        modified: '2024-01-02T00:00:00Z'
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-02T00:00:00Z', type: 'dcterms:W3CDTF')
       )
 
       xml = props.to_xml
@@ -66,8 +66,8 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         description: 'Testing all available fields',
         last_modified_by: 'Test Editor',
         revision: '5',
-        created: '2024-01-01T00:00:00Z',
-        modified: '2024-01-15T12:30:00Z'
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:30:00Z', type: 'dcterms:W3CDTF')
       )
 
       xml = props.to_xml
@@ -118,7 +118,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
           <dc:creator>Test Author</dc:creator>
           <dc:subject>Test Subject</dc:subject>
           <cp:keywords>test, round-trip</cp:keywords>
-          <cp:description>Testing deserialization</cp:description>
+          <dc:description>Testing deserialization</dc:description>
           <cp:lastModifiedBy>Test Editor</cp:lastModifiedBy>
           <cp:revision>1</cp:revision>
           <dcterms:created xsi:type="dcterms:W3CDTF">2024-01-01T00:00:00Z</dcterms:created>
@@ -135,8 +135,8 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       expect(props.description).to eq('Testing deserialization')
       expect(props.last_modified_by).to eq('Test Editor')
       expect(props.revision).to eq('1')
-      expect(props.created).to eq('2024-01-01T00:00:00Z')
-      expect(props.modified).to eq('2024-01-01T00:00:00Z')
+      expect(props.created&.value).to eq('2024-01-01T00:00:00Z')
+      expect(props.modified&.value).to eq('2024-01-01T00:00:00Z')
     end
 
     it 'handles minimal XML correctly' do
@@ -170,8 +170,8 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         description: 'Testing perfect round-trip preservation',
         last_modified_by: 'Test Editor',
         revision: '3',
-        created: '2024-01-01T00:00:00Z',
-        modified: '2024-01-15T12:00:00Z'
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:00:00Z', type: 'dcterms:W3CDTF')
       )
 
       xml = original.to_xml
@@ -184,8 +184,8 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       expect(restored.description).to eq(original.description)
       expect(restored.last_modified_by).to eq(original.last_modified_by)
       expect(restored.revision).to eq(original.revision)
-      expect(restored.created).to eq(original.created)
-      expect(restored.modified).to eq(original.modified)
+      expect(restored.created&.value).to eq(original.created&.value)
+      expect(restored.modified&.value).to eq(original.modified&.value)
     end
 
     it 'handles empty strings consistently' do

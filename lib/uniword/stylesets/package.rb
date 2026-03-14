@@ -15,7 +15,7 @@ module Uniword
       # Pattern 0: ATTRIBUTES FIRST
 
       # word/styles.xml content (lutaml-model deserialization)
-      attribute :styles_configuration, StylesConfiguration
+      attribute :styles_configuration, Uniword::Wordprocessingml::StylesConfiguration
 
       # Source .dotx file path (for reference)
       attribute :source_path, :string
@@ -25,7 +25,7 @@ module Uniword
       # @param attributes [Hash] Package attributes
       def initialize(attributes = {})
         super
-        @styles_configuration ||= StylesConfiguration.new
+        @styles_configuration ||= Uniword::Wordprocessingml::StylesConfiguration.new
       end
 
       # Load Package from .dotx file

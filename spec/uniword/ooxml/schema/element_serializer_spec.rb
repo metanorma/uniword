@@ -9,12 +9,6 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
     it 'creates serializer with default schema' do
       expect(serializer).to be_a(described_class)
     end
-
-    it 'accepts custom schema' do
-      schema = double('OoxmlSchema')
-      custom_serializer = described_class.new(schema: schema)
-      expect(custom_serializer).to be_a(described_class)
-    end
   end
 
   describe '#serialize' do

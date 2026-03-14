@@ -6,7 +6,7 @@ module Uniword
   module Properties
     # Italic formatting element
     class Italic < Lutaml::Model::Serializable
-      attribute :value, :boolean, default: -> { true }
+      attribute :value, :boolean
 
       xml do
         element 'i'
@@ -17,7 +17,7 @@ module Uniword
 
     # Complex script italic
     class ItalicCs < Lutaml::Model::Serializable
-      attribute :value, :boolean, default: -> { true }
+      attribute :value, :boolean
 
       xml do
         element 'iCs'

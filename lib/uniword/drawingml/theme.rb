@@ -131,8 +131,8 @@ module Uniword
       # @return [Theme] A deep copy of this theme
       def dup
         new_theme = Theme.new(name: name)
-        new_theme.color_scheme = @color_scheme.dup if @color_scheme
-        new_theme.font_scheme = @font_scheme.dup if @font_scheme
+        new_theme.color_scheme = color_scheme.dup if color_scheme
+        new_theme.font_scheme = font_scheme.dup if font_scheme
         new_theme.variants = @variants.dup if @variants
         new_theme.source_file = @source_file
         new_theme
@@ -150,21 +150,21 @@ module Uniword
       # @param color_name [String, Symbol] The color name
       # @return [String, nil] The RGB hex color value
       def color(color_name)
-        @color_scheme&.[](color_name)
+        color_scheme&.[](color_name)
       end
 
       # Get the major font (for headings)
       #
       # @return [String, nil] The major font name
       def major_font
-        @font_scheme&.major_font
+        font_scheme&.major_font
       end
 
       # Get the minor font (for body text)
       #
       # @return [String, nil] The minor font name
       def minor_font
-        @font_scheme&.minor_font
+        font_scheme&.minor_font
       end
 
       # Provide detailed inspection for debugging

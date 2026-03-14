@@ -114,12 +114,10 @@ module Uniword
   autoload :UnsupportedOperationError, 'uniword/errors'
   autoload :ConversionError, 'uniword/errors'
 
-  # Styles
-  autoload :StylesConfiguration, 'uniword/styles_configuration'
-  autoload :Style, 'uniword/style'
+  # Styles (moved to wordprocessingml/styles/)
+  autoload :Styles, 'uniword/wordprocessingml/styles'
 
   # Namespace autoloads (autoloads done in immediate parent namespace files)
-  autoload :Styles, 'uniword/styles'
   autoload :Template, 'uniword/template'
   autoload :Visitor, 'uniword/visitor'
   autoload :Validators, 'uniword/validators'
@@ -139,11 +137,9 @@ module Uniword
   autoload :Warnings, 'uniword/warnings'
   autoload :Mhtml, 'uniword/mhtml'
   autoload :Themes, 'uniword/themes'
-  autoload :Sdt, 'uniword/sdt'
 
-  # Stylesets and numbering
+  # Stylesets and numbering (moved to wordprocessingml/)
   autoload :StyleSet, 'uniword/styleset'
-  autoload :NumberingConfiguration, 'uniword/numbering_configuration'
 
   # Content types and document properties
   autoload :ContentTypes, 'uniword/content_types'
@@ -192,9 +188,6 @@ module Uniword
   autoload :ExtensionList, 'uniword/extension_list'
   autoload :ExtraColorSchemeList, 'uniword/extra_color_scheme_list'
   autoload :LineNumbering, 'uniword/line_numbering'
-  autoload :NumberingDefinition, 'uniword/numbering_definition'
-  autoload :NumberingInstance, 'uniword/numbering_instance'
-  autoload :NumberingLevel, 'uniword/numbering_level'
   autoload :PageBorders, 'uniword/page_borders'
   autoload :ParagraphBorder, 'uniword/paragraph_border'
   autoload :Shading, 'uniword/shading'
@@ -233,7 +226,7 @@ module Uniword
     # @param path [String] File path
     # @return [Document] Loaded document
     def load(path)
-      DocumentFactory.load(path)
+      DocumentFactory.from_file(path)
     end
 
     # Read document from file (alias for load)
@@ -249,7 +242,7 @@ module Uniword
     # @param data [String] DOCX binary data
     # @return [Document] Parsed document
     def parse(data)
-      DocumentFactory.parse(data)
+      DocumentFactory.from_file_data(data)
     end
 
     # Detect format of file

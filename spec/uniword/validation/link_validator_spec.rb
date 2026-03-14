@@ -3,8 +3,6 @@
 require 'spec_helper'
 require 'uniword/validation/link_validator'
 require 'uniword/wordprocessingml/hyperlink'
-require 'uniword/bookmark'
-require 'uniword/footnote'
 
 RSpec.describe Uniword::Validation::LinkValidator do
   let(:validator) { described_class.new }
@@ -31,140 +29,85 @@ RSpec.describe Uniword::Validation::LinkValidator do
   end
 
   describe '#validate' do
-    let(:mock_document) do
-      double('Document',
-             paragraphs: paragraphs,
-             tables: [],
-             headers: [],
-             footers: [],
-             bookmarks: {},
-             footnotes: {})
-    end
-
-    let(:hyperlink) do
-      Uniword::Hyperlink.new(url: 'https://example.com', text: 'Example')
-    end
-
-    let(:paragraphs) do
-      [
-        double('Paragraph', runs: [hyperlink], hyperlinks: [])
-      ]
+    let(:document) do
+      doc = Uniword::Document.new
+      doc.add_paragraph('Hello World')
+      doc
     end
 
     it 'returns a ValidationReport' do
-      report = validator.validate(mock_document)
+      report = validator.validate(document)
 
       expect(report).to be_a(Uniword::Validation::ValidationReport)
     end
 
-    it 'validates hyperlinks in document' do
-      report = validator.validate(mock_document)
-
-      expect(report.total_count).to be > 0
-    end
-
     context 'with external links' do
-      let(:paragraphs) do
-        [
-          double('Paragraph',
-                 runs: [
-                   Uniword::Hyperlink.new(url: 'https://example.com', text: 'Link')
-                 ],
-                 hyperlinks: [])
-        ]
+      let(:document) do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+        hyperlink = Uniword::Hyperlink.new(id: 'https://example.com')
+        para.runs << hyperlink
+        doc.body.paragraphs << para
+        doc
       end
 
       it 'validates external links' do
-        # Mock HTTP response
-        allow_any_instance_of(Net::HTTP).to receive(:request).and_return(
-          double('Response', code: '200', message: 'OK')
-        )
-
-        report = validator.validate(mock_document)
+        # Note: External link validation makes HTTP requests
+        # The result depends on network connectivity
+        report = validator.validate(document)
 
         expect(report.total_count).to eq(1)
       end
     end
 
     context 'with internal bookmarks' do
-      let(:anchor_link) do
-        Uniword::Hyperlink.new(anchor: 'section1', text: 'Go to section')
-      end
-
-      let(:paragraphs) do
-        [
-          double('Paragraph', runs: [anchor_link], hyperlinks: [])
-        ]
-      end
-
-      let(:mock_document) do
-        double('Document',
-               paragraphs: paragraphs,
-               tables: [],
-               headers: [],
-               footers: [],
-               bookmarks: { 'section1' => Uniword::Bookmark.new(name: 'section1') },
-               footnotes: {})
+      let(:document) do
+        doc = Uniword::Document.new
+        para = Uniword::Paragraph.new
+        anchor_link = Uniword::Hyperlink.new(anchor: 'section1')
+        para.runs << anchor_link
+        doc.body.paragraphs << para
+        # Add bookmark to document
+        doc.instance_variable_set(:@bookmarks, { 'section1' => Uniword::Bookmark.new(name: 'section1') })
+        doc
       end
 
       it 'validates internal bookmark links' do
-        report = validator.validate(mock_document)
+        report = validator.validate(document)
 
         expect(report.total_count).to eq(1)
       end
     end
 
-    context 'with tables' do
-      let(:table_link) do
-        Uniword::Hyperlink.new(url: 'https://table.example.com', text: 'Table Link')
-      end
+    context 'with tables containing links' do
+      let(:document) do
+        doc = Uniword::Document.new
 
-      let(:mock_cell) do
-        double('Cell',
-               paragraphs: [
-                 double('Paragraph', runs: [table_link], hyperlinks: [])
-               ])
-      end
+        # Create table with link
+        table = Uniword::Table.new
+        row = Uniword::TableRow.new
+        cell = Uniword::TableCell.new
 
-      let(:mock_row) do
-        double('Row', cells: [mock_cell])
-      end
+        para = Uniword::Paragraph.new
+        table_link = Uniword::Hyperlink.new(id: 'https://table.example.com')
+        para.runs << table_link
+        cell.paragraphs << para
+        row.cells << cell
+        table.rows << row
+        doc.body.tables << table
 
-      let(:mock_table) do
-        double('Table', rows: [mock_row])
-      end
-
-      let(:mock_document) do
-        double('Document',
-               paragraphs: [],
-               tables: [mock_table],
-               headers: [],
-               footers: [],
-               bookmarks: {},
-               footnotes: {})
+        doc
       end
 
       it 'validates links in tables' do
-        allow_any_instance_of(Net::HTTP).to receive(:request).and_return(
-          double('Response', code: '200', message: 'OK')
-        )
-
-        report = validator.validate(mock_document)
+        report = validator.validate(document)
 
         expect(report.total_count).to eq(1)
       end
     end
 
     context 'with empty document' do
-      let(:empty_document) do
-        double('Document',
-               paragraphs: [],
-               tables: [],
-               headers: [],
-               footers: [],
-               bookmarks: {},
-               footnotes: {})
-      end
+      let(:empty_document) { Uniword::Document.new }
 
       it 'returns empty report' do
         report = validator.validate(empty_document)

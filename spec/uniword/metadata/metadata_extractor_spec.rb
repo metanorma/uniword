@@ -60,8 +60,8 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
         doc = Uniword::Document.new
         heading = Uniword::Paragraph.new
         heading.add_text('Heading 1')
-        # Mock the style method
-        allow(heading).to receive(:style).and_return('Heading 1')
+        heading.properties = Uniword::ParagraphProperties.new
+        heading.properties.style = 'Heading 1'
         doc.body.paragraphs << heading
         doc
       end

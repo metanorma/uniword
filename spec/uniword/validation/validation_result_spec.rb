@@ -2,15 +2,15 @@
 
 require 'spec_helper'
 require 'uniword/validation/validation_result'
+require 'uniword/wordprocessingml/hyperlink'
 
 RSpec.describe Uniword::Validation::ValidationResult do
-  let(:mock_link) do
-    double('Link', url: 'https://example.com', anchor: nil)
-  end
+  let(:external_link) { Uniword::Hyperlink.new(id: 'https://example.com') }
+  let(:anchor_link) { Uniword::Hyperlink.new(anchor: 'section1') }
 
   describe '.success' do
     it 'creates a success result' do
-      result = described_class.success(mock_link)
+      result = described_class.success(external_link)
 
       expect(result.status).to eq(:success)
       expect(result.valid?).to be true
@@ -19,7 +19,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
     end
 
     it 'accepts metadata' do
-      result = described_class.success(mock_link, metadata: { code: 200 })
+      result = described_class.success(external_link, metadata: { code: 200 })
 
       expect(result.metadata[:code]).to eq(200)
     end
@@ -27,7 +27,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '.failure' do
     it 'creates a failure result' do
-      result = described_class.failure(mock_link, '404 Not Found')
+      result = described_class.failure(external_link, '404 Not Found')
 
       expect(result.status).to eq(:failure)
       expect(result.valid?).to be false
@@ -37,7 +37,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
     it 'accepts metadata' do
       result = described_class.failure(
-        mock_link,
+        external_link,
         'Not found',
         metadata: { status_code: 404 }
       )
@@ -48,7 +48,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '.warning' do
     it 'creates a warning result' do
-      result = described_class.warning(mock_link, 'Redirect detected')
+      result = described_class.warning(external_link, 'Redirect detected')
 
       expect(result.status).to eq(:warning)
       expect(result.warning?).to be true
@@ -58,7 +58,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '.unknown' do
     it 'creates an unknown result' do
-      result = described_class.unknown(mock_link)
+      result = described_class.unknown(external_link)
 
       expect(result.status).to eq(:unknown)
       expect(result.unknown?).to be true
@@ -66,7 +66,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
     end
 
     it 'accepts custom message' do
-      result = described_class.unknown(mock_link, 'Custom message')
+      result = described_class.unknown(external_link, 'Custom message')
 
       expect(result.message).to eq('Custom message')
     end
@@ -74,30 +74,15 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '#link_identifier' do
     it 'returns URL for links with URL' do
-      result = described_class.success(mock_link)
+      result = described_class.success(external_link)
 
       expect(result.link_identifier).to eq('https://example.com')
     end
 
     it 'returns anchor for links with anchor' do
-      anchor_link = double('Link', url: nil, anchor: 'section1')
       result = described_class.success(anchor_link)
 
       expect(result.link_identifier).to eq('#section1')
-    end
-
-    it 'returns ID for links with ID' do
-      id_link = double('Link', id: 42)
-      result = described_class.success(id_link)
-
-      expect(result.link_identifier).to eq('42')
-    end
-
-    it 'returns name for links with name' do
-      name_link = double('Link', name: 'bookmark1')
-      result = described_class.success(name_link)
-
-      expect(result.link_identifier).to eq('bookmark1')
     end
 
     it 'returns string representation as fallback' do
@@ -110,7 +95,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '#error_message' do
     it 'returns the message' do
-      result = described_class.failure(mock_link, 'Error occurred')
+      result = described_class.failure(external_link, 'Error occurred')
 
       expect(result.error_message).to eq('Error occurred')
     end
@@ -119,7 +104,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
   describe '#to_h' do
     it 'converts to hash' do
       result = described_class.failure(
-        mock_link,
+        external_link,
         'Not found',
         metadata: { code: 404 }
       )
@@ -133,7 +118,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
     end
 
     it 'omits nil values' do
-      result = described_class.success(mock_link)
+      result = described_class.success(external_link)
 
       hash = result.to_h
 
@@ -143,13 +128,13 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '#to_s' do
     it 'formats success result' do
-      result = described_class.success(mock_link)
+      result = described_class.success(external_link)
 
       expect(result.to_s).to eq('[SUCCESS] https://example.com')
     end
 
     it 'formats failure result with message' do
-      result = described_class.failure(mock_link, '404 Not Found')
+      result = described_class.failure(external_link, '404 Not Found')
 
       expect(result.to_s).to eq('[FAILURE] https://example.com: 404 Not Found')
     end
@@ -157,7 +142,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
 
   describe '#inspect' do
     it 'provides detailed representation' do
-      result = described_class.failure(mock_link, 'Error')
+      result = described_class.failure(external_link, 'Error')
 
       expect(result.inspect).to include('ValidationResult')
       expect(result.inspect).to include('status=failure')

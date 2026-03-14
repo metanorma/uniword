@@ -1,0 +1,111 @@
+# TODO.refactor-part-2-of-6: Spec File Reorganization
+
+## Overview
+This document lists all spec files that need to be reorganized to match the Ruby
+class/module hierarchy.
+
+## Current Issue
+Specs are flat in `spec/uniword/` but classes are nested in namespaces like
+`Uniword::Wordprocessingml::Paragraph`. Specs should mirror the namespace structure.
+
+## Specs to Move to Wordprocessingml Namespace
+
+| Current Location | New Location | Class Being Tested |
+|-----------------|--------------|-------------------|
+| `spec/uniword/paragraph_spec.rb` | `spec/uniword/wordprocessingml/paragraph_spec.rb` | `Uniword::Wordprocessingml::Paragraph` |
+| `spec/uniword/paragraph_enhanced_properties_spec.rb` | `spec/uniword/wordprocessingml/paragraph_enhanced_properties_spec.rb` | Paragraph properties |
+| `spec/uniword/run_spec.rb` | `spec/uniword/wordprocessingml/run_spec.rb` | `Uniword::Wordprocessingml::Run` |
+| `spec/uniword/run_enhanced_properties_spec.rb` | `spec/uniword/wordprocessingml/run_enhanced_properties_spec.rb` | Run properties |
+| `spec/uniword/run_properties_inheritance_spec.rb` | `spec/uniword/wordprocessingml/run_properties_inheritance_spec.rb` | Run properties |
+| `spec/uniword/style_roundtrip_spec.rb` | `spec/uniword/wordprocessingml/style_roundtrip_spec.rb` | `Uniword::Wordprocessingml::Style` |
+| `spec/uniword/styles_spec.rb` | `spec/uniword/wordprocessingml/styles_spec.rb` | Styles |
+| `spec/uniword/styleset_roundtrip_spec.rb` | `spec/uniword/wordprocessingml/styleset_roundtrip_spec.rb` | Style sets |
+| `spec/uniword/styleset_integration_spec.rb` | `spec/uniword/wordprocessingml/styleset_integration_spec.rb` | Style sets |
+| `spec/uniword/table_spec.rb` | `spec/uniword/wordprocessingml/table_spec.rb` | `Uniword::Wordprocessingml::Table` |
+| `spec/uniword/table_row_spec.rb` | `spec/uniword/wordprocessingml/table_row_spec.rb` | `Uniword::Wordprocessingml::TableRow` |
+| `spec/uniword/table_cell_spec.rb` | `spec/uniword/wordprocessingml/table_cell_spec.rb` | `Uniword::Wordprocessingml::TableCell` |
+| `spec/uniword/table_border_spec.rb` | `spec/uniword/wordprocessingml/table_border_spec.rb` | Table borders |
+| `spec/uniword/numbering_spec.rb` | `spec/uniword/wordprocessingml/numbering_spec.rb` | Numbering |
+| `spec/uniword/bookmark_spec.rb` | `spec/uniword/wordprocessingml/bookmark_spec.rb` | `Uniword::Wordprocessingml::BookmarkStart` |
+| `spec/uniword/comment_spec.rb` | `spec/uniword/wordprocessingml/comment_spec.rb` | Comments |
+| `spec/uniword/comment_range_spec.rb` | `spec/uniword/wordprocessingml/comment_range_spec.rb` | Comment ranges |
+| `spec/uniword/comments_part_spec.rb` | `spec/uniword/wordprocessingml/comments_part_spec.rb` | Comments part |
+| `spec/uniword/footnote_spec.rb` | `spec/uniword/wordprocessingml/footnote_spec.rb` | Footnotes |
+| `spec/uniword/endnote_spec.rb` | `spec/uniword/wordprocessingml/endnote_spec.rb` | Endnotes |
+| `spec/uniword/hyperlink_spec.rb` | `spec/uniword/wordprocessingml/hyperlink_spec.rb` | Hyperlinks |
+| `spec/uniword/revisions_spec.rb` | `spec/uniword/wordprocessingml/revisions_spec.rb` | Revisions |
+| `spec/uniword/tracked_changes_spec.rb` | `spec/uniword/wordprocessingml/tracked_changes_spec.rb` | Tracked changes |
+| `spec/uniword/line_spacing_spec.rb` | `spec/uniword/wordprocessingml/line_spacing_spec.rb` | Line spacing |
+| `spec/uniword/image_spec.rb` | `spec/uniword/wordprocessingml/image_spec.rb` | Images |
+
+## Specs to Move to Drawingml Namespace
+
+| Current Location | New Location | Class Being Tested |
+|-----------------|--------------|-------------------|
+| `spec/uniword/chart_spec.rb` | `spec/uniword/drawingml/chart_spec.rb` | Charts |
+| `spec/uniword/theme_extraction_spec.rb` | `spec/uniword/drawingml/theme_extraction_spec.rb` | `Uniword::Drawingml::Theme` |
+| `spec/uniword/theme_roundtrip_spec.rb` | `spec/uniword/drawingml/theme_roundtrip_spec.rb` | Theme round-trip |
+
+## Specs That Stay in Root (Testing High-Level APIs)
+
+| Location | Reason |
+|----------|--------|
+| `spec/uniword/document_spec.rb` | Tests `Uniword::Document` (high-level API) |
+| `spec/uniword/document_factory_spec.rb` | Tests `Uniword::DocumentFactory` |
+| `spec/uniword/document_writer_spec.rb` | Tests `Uniword::DocumentWriter` |
+| `spec/uniword/builder_spec.rb` | Tests `Uniword::Builder` DSL |
+| `spec/uniword/cli_spec.rb` | Tests CLI |
+| `spec/uniword/format_converter_spec.rb` | Tests format conversion |
+| `spec/uniword/format_detector_spec.rb` | Tests format detection |
+| `spec/uniword/errors_spec.rb` | Tests exception classes |
+| `spec/uniword/logger_spec.rb` | Tests logging |
+
+## Directory Structure After Reorganization
+
+```
+spec/
+├── integration/           # All integration tests (see part-3)
+├── uniword/
+│   ├── accessibility/    # Accessibility features
+│   ├── assembly/         # Document assembly
+│   ├── batch/            # Batch processing
+│   ├── drawingml/        # DrawingML tests
+│   │   ├── chart_spec.rb
+│   │   ├── theme_extraction_spec.rb
+│   │   └── theme_roundtrip_spec.rb
+│   ├── infrastructure/   # ZIP/MIME handling
+│   ├── math/             # Math/OMML tests
+│   ├── metadata/         # Metadata tests
+│   ├── mhtml/            # MHTML conversion
+│   ├── ooxml/            # OOXML infrastructure
+│   ├── properties/       # Property wrapper tests
+│   ├── quality/          # Quality checking
+│   ├── styles/           # Style builder tests (move to wordprocessingml?)
+│   ├── template/         # Template tests
+│   ├── transformation/   # Document transformations
+│   ├── validation/       # Validation tests
+│   ├── validators/       # Validator tests
+│   ├── visitor/          # Visitor pattern tests
+│   ├── vml/              # VML tests
+│   ├── wordprocessingml/ # WordprocessingML tests
+│   │   ├── paragraph_spec.rb
+│   │   ├── run_spec.rb
+│   │   ├── style_roundtrip_spec.rb
+│   │   ├── table_spec.rb
+│   │   └── ... (all moved specs)
+│   ├── builder_spec.rb
+│   ├── cli_spec.rb
+│   ├── document_spec.rb
+│   ├── document_factory_spec.rb
+│   └── ... (root-level API tests)
+└── spec_helper.rb
+```
+
+## Action Items
+
+1. [ ] Create `spec/uniword/wordprocessingml/` directory
+2. [ ] Create `spec/uniword/drawingml/` directory
+3. [ ] Move all WordprocessingML-related specs
+4. [ ] Move all DrawingML-related specs
+5. [ ] Update describe blocks to use full class names
+6. [ ] Run tests to verify all pass after moves

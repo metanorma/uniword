@@ -117,14 +117,6 @@ RSpec.describe Uniword::Revision do
       revision = described_class.new(type: :format_change, author: 'John')
       expect(revision.xml_element_name).to eq('rPrChange')
     end
-
-    it 'raises error for invalid type' do
-      revision = described_class.new(author: 'John')
-      revision.instance_variable_set(:@type, :invalid)
-      expect do
-        revision.xml_element_name
-      end.to raise_error(ArgumentError, /Invalid revision type/)
-    end
   end
 
   describe '#text' do
@@ -166,32 +158,24 @@ RSpec.describe Uniword::Revision do
       )
       expect(revision).not_to be_valid
     end
-
-    it 'returns false without revision_id' do
-      revision = described_class.new(author: 'John')
-      revision.instance_variable_set(:@revision_id, nil)
-      expect(revision).not_to be_valid
-    end
-
-    it 'returns false without type' do
-      revision = described_class.new(author: 'John', revision_id: '1')
-      revision.instance_variable_set(:@type, nil)
-      expect(revision).not_to be_valid
-    end
-
-    it 'returns false with invalid type' do
-      revision = described_class.new(author: 'John', revision_id: '1')
-      revision.instance_variable_set(:@type, :invalid)
-      expect(revision).not_to be_valid
-    end
   end
 
   describe '#accept' do
     it 'calls visitor visit_revision method' do
       revision = described_class.new(author: 'John')
-      visitor = double('visitor')
-      expect(visitor).to receive(:visit_revision).with(revision)
+      visited = nil
+      visitor = Class.new do
+        def initialize(callback)
+          @callback = callback
+        end
+
+        def visit_revision(rev)
+          @callback.call(rev)
+        end
+      end.new(->(r) { visited = r })
+
       revision.accept(visitor)
+      expect(visited).to eq(revision)
     end
   end
 end

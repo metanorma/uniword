@@ -21,7 +21,7 @@ module Uniword
 
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
-      attr_accessor :core_properties # docProps/core.xml
+      attr_accessor :core_properties # docProps/core.xml - Uniword::Ooxml::CoreProperties
       attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks # docProps/app.xml                # word/theme/theme1.xml # word/numbering.xml # Raw HTML content for MHTML format support # API compatibility
 
       # Lazy initialization for numbering_configuration
@@ -32,21 +32,25 @@ module Uniword
       # Setter for numbering_configuration
       attr_writer :numbering_configuration
 
-      # Set document title (convenience method for core_properties)
+      # Get core_properties (lazy initialization)
       #
-      # @param value [String] The document title
-      # @return [self] For method chaining
-      def title=(value)
-        self.core_properties ||= {}
-        core_properties[:title] = value
-        self
+      # @return [Uniword::Ooxml::CoreProperties] The core properties object
+      def core_properties
+        @core_properties ||= Uniword::Ooxml::CoreProperties.new
       end
 
-      # Get document title
+      # Get document title (delegates to core_properties)
       #
       # @return [String, nil] The document title
       def title
-        core_properties&.dig(:title)
+        core_properties.title
+      end
+
+      # Set document title (delegates to core_properties)
+      #
+      # @param value [String] The document title
+      def title=(value)
+        core_properties.title = value
       end
 
       # Lazy initialization for styles_configuration

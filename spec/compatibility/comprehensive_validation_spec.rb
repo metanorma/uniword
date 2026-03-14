@@ -430,7 +430,7 @@ RSpec.describe 'Comprehensive Library Supersession Validation' do
       doc = Uniword::Document.new
 
       # Create custom style
-      style = Uniword::Style.new(
+      style = Uniword::Wordprocessingml::Style.new(
         name: 'Custom Style',
         base_style: 'Normal',
         style_type: 'paragraph'

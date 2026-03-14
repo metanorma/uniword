@@ -1,0 +1,165 @@
+# TODO.refactor-part-4-of-6: Specific Spec Fixes Required
+
+## Overview
+This document lists the specific test failures and the fixes needed to resolve them.
+All features are implemented - these are structural/namespace issues.
+
+## Failure Categories
+
+### Category 1: Wrong Class References (Uniword::Style → Uniword::Wordprocessingml::Style)
+
+**Files to fix:**
+- `spec/uniword/style_roundtrip_spec.rb`
+- `spec/uniword/styles_spec.rb`
+- `spec/uniword/styleset_roundtrip_spec.rb`
+- `spec/uniword/styleset_integration_spec.rb`
+
+**Fix pattern:**
+```ruby
+# Before:
+Uniword::Style.from_xml(xml)
+Uniword::Style.new(...)
+
+# After:
+Uniword::Wordprocessingml::Style.from_xml(xml)
+Uniword::Wordprocessingml::Style.new(...)
+```
+
+### Category 2: Boolean Property Defaults
+
+Tests expect `nil` but properties return `false` due to `default: -> { false }`.
+
+**Files to fix:**
+- `spec/uniword/properties/paragraph_properties_spec.rb`
+- `spec/uniword/properties/run_properties_spec.rb`
+
+**Fix pattern:**
+Either:
+1. Remove `default: -> { false }` from property classes, OR
+2. Update tests to expect `false` instead of `nil`
+
+**Affected property classes:**
+- `lib/uniword/properties/boolean_formatting.rb` (OnOff, Bold, Italic, etc.)
+- `lib/uniword/properties/bold.rb`
+
+### Category 3: Missing API Methods
+
+Tests call methods that don't exist or have different names:
+
+| Spec File | Line | Issue | Fix |
+|-----------|------|-------|-----|
+| `paragraph_spec.rb` | 34 | `#accept` method missing | Remove visitor pattern tests (not in v2.0) |
+| `paragraph_spec.rb` | 164 | `#alignment` access | Already fixed - uses properties object |
+| `theme_extraction_spec.rb` | multiple | `Uniword::Theme` references | Already aliased, check specs |
+
+### Category 4: Document API Changes
+
+**Files to fix:**
+- `spec/uniword/document_writer_spec.rb`
+- `spec/uniword/document_factory_spec.rb`
+- `spec/uniword/document_spec.rb`
+
+**API changes:**
+- `DocumentFactory.load` → `DocumentFactory.from_file`
+- `Uniword.load(path)` → Calls `DocumentFactory.from_file(path)`
+- `Uniword.parse(data)` → Calls `DocumentFactory.from_file_data(data)`
+
+### Category 5: Logger/Configuration Tests
+
+**Files to fix:**
+- `spec/uniword/logger_spec.rb`
+
+These tests expect specific logger behavior. Check if logger module is properly loaded.
+
+### Category 6: Validator Tests
+
+**Files to fix:**
+- `spec/uniword/validators/element_validator_spec.rb`
+- `spec/uniword/validators/paragraph_validator_spec.rb`
+- `spec/uniword/validators/table_validator_spec.rb`
+
+These test the validator pattern. Ensure validators are properly registered.
+
+### Category 7: OOXML Schema Tests
+
+**Files to fix:**
+- `spec/uniword/ooxml/schema/element_serializer_spec.rb`
+- `spec/uniword/ooxml/app_properties_spec.rb`
+- `spec/uniword/ooxml/docprops_roundtrip_spec.rb`
+
+Check namespace mappings and serializer usage.
+
+### Category 8: Format Converter Tests
+
+**Files to fix:**
+- `spec/uniword/format_converter_spec.rb`
+
+Ensure format conversion API is properly exposed.
+
+### Category 9: Quality/Accessibility Tests
+
+**Files to fix:**
+- `spec/uniword/quality/rules/quality_rules_spec.rb`
+- `spec/uniword/accessibility/*.rb`
+
+Ensure quality rules are properly registered.
+
+### Category 10: Batch Processing Tests
+
+**Files to fix:**
+- `spec/uniword/batch/document_processor_spec.rb`
+- `spec/uniword/batch/stages_spec.rb`
+
+Ensure batch processor API is correct.
+
+### Category 11: Assembly Tests
+
+**Files to fix:**
+- `spec/uniword/assembly/toc_generator_spec.rb`
+- `spec/uniword/assembly/document_assembler_spec.rb`
+
+Ensure assembly API is correct.
+
+## Detailed Fix List
+
+### spec/uniword/paragraph_spec.rb
+
+```ruby
+# Line 34 - Remove visitor pattern test (v2.0 doesn't use visitors)
+xit 'does not have accept method (visitor pattern not in v2.0)' do
+  # This is expected behavior in v2.0
+end
+```
+
+### spec/uniword/properties/paragraph_properties_spec.rb
+
+```ruby
+# Line 7-14: Update to expect false instead of nil for boolean defaults
+it 'creates properties with default values' do
+  props = Uniword::Wordprocessingml::ParagraphProperties.new
+  expect(props.keep_next).to be false  # Changed from be_nil
+  expect(props.keep_lines).to be false  # Changed from be_nil
+end
+```
+
+### spec/uniword/style_roundtrip_spec.rb
+
+```ruby
+# Change all Uniword::Style to Uniword::Wordprocessingml::Style
+# Line 46:
+Uniword::Wordprocessingml::Style.from_xml(style_xml)
+
+# Line 63:
+Uniword::Wordprocessingml::Style.from_xml(style_xml)
+```
+
+## Action Items
+
+1. [ ] Fix all `Uniword::Style` references → `Uniword::Wordprocessingml::Style`
+2. [ ] Decide: Remove boolean defaults OR update test expectations
+3. [ ] Remove/fix visitor pattern tests in paragraph_spec.rb
+4. [ ] Verify document factory API is correct
+5. [ ] Fix logger spec expectations
+6. [ ] Fix validator registration tests
+7. [ ] Fix OOXML schema serializer tests
+8. [ ] Run full test suite and verify all pass
