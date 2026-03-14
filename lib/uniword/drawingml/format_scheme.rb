@@ -31,7 +31,6 @@ module Uniword
         xml do
           element 'fillStyleLst'
           namespace Ooxml::Namespaces::DrawingML
-          mixed_content
           map_element 'solidFill', to: :solid_fills
           map_element 'gradFill', to: :gradient_fills
           map_element 'blipFill', to: :blip_fills
@@ -86,7 +85,6 @@ module Uniword
         xml do
           element 'bgFillStyleLst'
           namespace Ooxml::Namespaces::DrawingML
-          mixed_content
           map_element 'solidFill', to: :solid_fills
           map_element 'gradFill', to: :gradient_fills
           map_element 'blipFill', to: :blip_fills
