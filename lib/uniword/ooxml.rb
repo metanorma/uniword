@@ -28,7 +28,8 @@ module Uniword
     # OOXML namespaces - autoload for runtime access
     autoload :Namespaces, "#{__dir__}/ooxml/namespaces"
 
-    # OOXML relationships and autoload :Relationships, "#{__dir__}/ooxml/relationships"
+    # OOXML relationships
+    autoload :Relationships, "#{__dir__}/ooxml/relationships"
     autoload :Schema, "#{__dir__}/ooxml/schema"
   end
 end
