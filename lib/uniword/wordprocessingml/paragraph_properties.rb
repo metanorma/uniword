@@ -268,6 +268,20 @@ module Uniword
         self.alignment = value
         self
       end
+
+      # Get line spacing value from spacing object
+      #
+      # @return [Integer, nil] Line spacing value
+      def line_spacing
+        spacing&.line
+      end
+
+      # Get line rule value from spacing object
+      #
+      # @return [String, nil] Line rule value
+      def line_rule
+        spacing&.line_rule
+      end
     end
   end
 end
