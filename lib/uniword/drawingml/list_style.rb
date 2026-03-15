@@ -17,7 +17,6 @@ module Uniword
       xml do
         element 'lstStyle'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'defPPr', to: :def_p_pr, render_nil: false
         map_element 'lvl1pPr', to: :lvl1_p_pr, render_nil: false

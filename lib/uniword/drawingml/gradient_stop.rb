@@ -16,7 +16,6 @@ module Uniword
       xml do
         element 'gs'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'pos', to: :pos
         map_element 'srgbClr', to: :srgb_clr, render_nil: false

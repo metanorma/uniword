@@ -172,22 +172,25 @@ module Uniword
       # @return [self] For method chaining
       def kerning=(value)
         self.properties ||= RunProperties.new
-        properties.kerning = value
+        properties.kerning = if value.is_a?(Properties::Kerning)
+                               value
+                             else
+                               Properties::Kerning.new(value: value)
+                             end
         self
       end
 
       # Set character spacing
       #
-      # @param value [Integer, Properties::CharacterSpacing, Character spacing value
+      # @param value [Integer, Properties::CharacterSpacing] Character spacing value
       # @return [self] For method chaining
       def character_spacing=(value)
         self.properties ||= RunProperties.new
-        self.character_spacing = case value
-                                 when Properties::CharacterSpacing
-                                   Properties::CharacterSpacing.new
-                                 else
-                                   value
-                                 end
+        properties.character_spacing = if value.is_a?(Properties::CharacterSpacing)
+                                         value
+                                       else
+                                         Properties::CharacterSpacing.new(value: value)
+                                       end
         self
       end
 
@@ -221,7 +224,11 @@ module Uniword
       # @return [self] For method chaining
       def position=(value)
         self.properties ||= RunProperties.new
-        properties.position = value
+        properties.position = if value.is_a?(Properties::Position)
+                                value
+                              else
+                                Properties::Position.new(value: value)
+                              end
         self
       end
 
@@ -255,7 +262,11 @@ module Uniword
       # @return [self] For method chaining
       def language=(value)
         self.properties ||= RunProperties.new
-        properties.language_val = value
+        properties.language = if value.is_a?(Properties::Language)
+                               value
+                             else
+                               Properties::Language.new(val: value)
+                             end
         self
       end
 
@@ -285,7 +296,11 @@ module Uniword
       # @return [self] For method chaining
       def outline=(value)
         self.properties ||= RunProperties.new
-        properties.outline_level = value
+        properties.outline_level = if value.is_a?(Properties::OutlineLevel)
+                                     value
+                                   else
+                                     Properties::OutlineLevel.new(value: value)
+                                   end
         self
       end
 
@@ -295,9 +310,11 @@ module Uniword
       # @return [self] For method chaining
       def set_shading(options = {})
         self.properties ||= RunProperties.new
-        properties.shading_fill = options[:fill]
-        properties.shading_color = options[:color]
-        properties.shading_type = options[:pattern] || 'clear'
+        properties.shading = Properties::Shading.new(
+          fill: options[:fill],
+          color: options[:color],
+          pattern: options[:pattern] || 'clear'
+        )
         self
       end
 
@@ -331,7 +348,11 @@ module Uniword
       # @return [self] For method chaining
       def text_expansion=(value)
         self.properties ||= RunProperties.new
-        properties.spacing = value
+        properties.width_scale = if value.is_a?(Properties::WidthScale)
+                                   value
+                                 else
+                                   Properties::WidthScale.new(value: value)
+                                 end
         self
       end
 
@@ -339,7 +360,7 @@ module Uniword
       #
       # @return [Integer, nil] Text expansion value
       def text_expansion
-        properties&.spacing
+        properties&.width_scale&.value
       end
 
       # Check if run has strikethrough
@@ -355,7 +376,11 @@ module Uniword
       # @return [self] For method chaining
       def shadow=(value)
         self.properties ||= RunProperties.new
-        properties.shadow = value
+        properties.shadow = if value.is_a?(Properties::Shadow)
+                              value
+                            else
+                              Properties::Shadow.new(value: value)
+                            end
         self
       end
 
@@ -437,7 +462,11 @@ module Uniword
       # @return [self] For method chaining
       def emboss=(value)
         self.properties ||= RunProperties.new
-        self.properties.emboss = value
+        properties.emboss = if value.is_a?(Properties::Emboss)
+                              value
+                            else
+                              Properties::Emboss.new(value: value)
+                            end
         self
       end
 
@@ -447,7 +476,11 @@ module Uniword
       # @return [self] For method chaining
       def imprint=(value)
         self.properties ||= RunProperties.new
-        properties.imprint = value
+        properties.imprint = if value.is_a?(Properties::Imprint)
+                               value
+                             else
+                               Properties::Imprint.new(value: value)
+                             end
         self
       end
 
@@ -501,6 +534,24 @@ module Uniword
       # @return [Boolean] True if run has strikethrough
       def striked?
         strike?
+      end
+
+      # Custom inspect for readable output
+      #
+      # @return [String] Human-readable representation
+      def inspect
+        text_preview = text.to_s
+        if text_preview.length > 40
+          text_preview = "#{text_preview[0, 37]}..."
+        end
+
+        flags = []
+        flags << 'bold' if bold?
+        flags << 'italic' if italic?
+        flags << 'underline' if underline?
+
+        flags_str = flags.empty? ? '' : " #{flags.join(' ')}"
+        "#<Uniword::Run#{flags_str} text=\"#{text_preview}\">"
       end
     end
   end

@@ -9,9 +9,10 @@ RSpec.describe Uniword::Document do
       expect(document).to be_a(Uniword::Document)
     end
 
-    it 'initializes with nil body' do
+    it 'initializes with a default body' do
       document = described_class.new
-      expect(document.body).to be_nil
+      expect(document.body).to be_a(Uniword::Body)
+      expect(document.body.paragraphs).to be_empty
     end
 
     it 'has empty paragraphs when body is nil' do
@@ -23,10 +24,10 @@ RSpec.describe Uniword::Document do
   describe '#add_paragraph' do
     let(:document) { described_class.new }
 
-    it 'creates a body if not present' do
-      expect(document.body).to be_nil
-      document.add_paragraph('Hello')
+    it 'adds paragraph to existing body' do
       expect(document.body).to be_a(Uniword::Body)
+      document.add_paragraph('Hello')
+      expect(document.body.paragraphs.count).to eq(1)
     end
 
     it 'adds a paragraph with text' do
@@ -64,10 +65,10 @@ RSpec.describe Uniword::Document do
   describe '#add_table' do
     let(:document) { described_class.new }
 
-    it 'creates a body if not present' do
-      expect(document.body).to be_nil
-      document.add_table(2, 2)
+    it 'adds table to existing body' do
       expect(document.body).to be_a(Uniword::Body)
+      document.add_table(2, 2)
+      expect(document.body.tables.count).to eq(1)
     end
 
     it 'creates table with dimensions' do

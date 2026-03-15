@@ -17,7 +17,6 @@ module Uniword
       xml do
         element 'blipFill'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'rotWithShape', to: :rot_with_shape, render_nil: false
         map_element 'blip', to: :blip, render_nil: false

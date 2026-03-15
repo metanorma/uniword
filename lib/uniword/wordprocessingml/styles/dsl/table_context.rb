@@ -45,7 +45,13 @@ module Uniword
         #     cell "Header 2"
         #   end
         def row(header: false, &block)
-          @current_row = TableRow.new(header: header)
+          @current_row = TableRow.new
+
+          # Set header property on row properties, not as direct attribute
+          if header
+            @current_row.properties ||= Wordprocessingml::TableRowProperties.new
+            @current_row.properties.header = true
+          end
 
           instance_eval(&block) if block_given?
 

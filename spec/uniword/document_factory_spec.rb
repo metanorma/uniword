@@ -76,13 +76,13 @@ RSpec.describe Uniword::DocumentFactory do
       it 'loads MHTML file with auto format detection' do
         document = described_class.from_file(mhtml_file.path)
 
-        expect(document).to be_a(Uniword::Document)
+        expect(document).to be_a(Uniword::Mhtml::Document)
       end
 
       it 'loads MHTML file with explicit format' do
         document = described_class.from_file(mhtml_file.path, format: :mhtml)
 
-        expect(document).to be_a(Uniword::Document)
+        expect(document).to be_a(Uniword::Mhtml::Document)
       end
     end
 
@@ -113,7 +113,7 @@ RSpec.describe Uniword::DocumentFactory do
         begin
           expect do
             described_class.from_file(temp_file.path, format: :invalid)
-          end.to raise_error(ArgumentError, /No handler registered/)
+          end.to raise_error(ArgumentError, /Unsupported format/)
         ensure
           temp_file.unlink
         end

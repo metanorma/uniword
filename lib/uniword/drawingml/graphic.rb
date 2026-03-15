@@ -13,7 +13,6 @@ module Uniword
       xml do
         root 'graphic'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'graphicData', to: :graphic_data, render_nil: false
       end

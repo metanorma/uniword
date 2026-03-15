@@ -51,10 +51,7 @@ RSpec.describe Uniword::Styles::StyleBuilder do
       expect(default_props[:bold]).to be true
     end
 
-    # PENDING: Implementation bug - DSL::ParagraphContext uses Properties::RunProperties
-    # instead of Wordprocessingml::RunProperties
     it 'creates paragraph with block' do
-      pending 'Implementation needs to use Wordprocessingml::RunProperties'
       para = builder.paragraph(:normal) do |p|
         p.text 'Hello '
         p.text 'World', :bold

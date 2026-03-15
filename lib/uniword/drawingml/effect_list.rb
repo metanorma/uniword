@@ -18,7 +18,6 @@ module Uniword
       xml do
         element 'effectLst'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'glow', to: :glow, render_nil: false
         map_element 'innerShdw', to: :inner_shdw, render_nil: false

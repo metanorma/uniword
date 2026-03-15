@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'moveTo'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'pt', to: :pt
       end

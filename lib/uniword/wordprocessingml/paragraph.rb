@@ -194,10 +194,11 @@ module Uniword
           return get_line_spacing
         end
 
-        # Setter behavior
+        # Setter behavior - set on spacing object for proper XML serialization
         self.properties ||= ParagraphProperties.new
-        properties.line_spacing = value
-        properties.line_rule = rule
+        properties.spacing ||= Properties::Spacing.new
+        properties.spacing.line = value
+        properties.spacing.line_rule = rule
         self
       end
 
@@ -606,6 +607,17 @@ module Uniword
         run.add_image(image_path, options)
         runs << run
         run
+      end
+
+      # Custom inspect for readable output
+      #
+      # @return [String] Human-readable representation
+      def inspect
+        text_preview = text.to_s
+        if text_preview.length > 50
+          text_preview = "#{text_preview[0, 47]}..."
+        end
+        "#<Uniword::Paragraph runs=#{runs&.size || 0} text=\"#{text_preview}\">"
       end
     end
   end

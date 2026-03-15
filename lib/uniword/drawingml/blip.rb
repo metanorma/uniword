@@ -16,7 +16,6 @@ module Uniword
       xml do
         element 'blip'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         # r:embed and r:link attributes from Relationships namespace
         # Note: namespace handled by attribute name prefix in new lutaml-model

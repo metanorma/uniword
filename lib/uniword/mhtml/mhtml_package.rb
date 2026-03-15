@@ -1,20 +1,18 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-# Document is defined as an alias in lib/uniword.rb
-# Document = Wordprocessingml::DocumentRoot
 
 module Uniword
-  module Ooxml
-    # MHTML Package - Legacy Word format
+  module Mhtml
+    # MHTML Package - MIME-based Word format
     #
     # Represents .mht, .mhtml, and .doc files (HTML-based).
     # Uses MIME multipart format instead of ZIP packaging.
     #
-    # This is the CORRECT OOP approach:
-    # - ONE model class for the container
-    # - Each part is a proper model attribute
-    # - No serializer/deserializer anti-pattern
+    # IMPORTANT: This is COMPLETELY SEPARATE from OOXML DocxPackage.
+    # - OOXML uses ZIP + XML parts
+    # - MHTML uses MIME + HTML content
+    # - They share NO classes!
     #
     # @example Load MHTML file
     #   document = MhtmlPackage.from_file('document.mhtml')
@@ -22,19 +20,19 @@ module Uniword
     # @example Save MHTML file
     #   MhtmlPackage.to_file(document, 'output.doc')
     class MhtmlPackage < Lutaml::Model::Serializable
-      # Core document metadata
-      attribute :core_properties, CoreProperties
+      # Core document metadata (MHTML-specific)
+      attribute :core_properties, :hash, default: -> { {} }
 
-      # Extended application properties
-      attribute :app_properties, AppProperties
+      # Extended application properties (MHTML-specific)
+      attribute :app_properties, :hash, default: -> { {} }
 
-      # Document theme
+      # Document theme (MHTML-specific, NOT Drawingml::Theme)
       attribute :theme, Theme
 
-      # Document styles configuration
+      # Document styles configuration (MHTML-specific, NOT Wordprocessingml::StylesConfiguration)
       attribute :styles_configuration, StylesConfiguration
 
-      # Document numbering configuration
+      # Document numbering configuration (MHTML-specific, NOT Wordprocessingml::NumberingConfiguration)
       attribute :numbering_configuration, NumberingConfiguration
 
       # Load MHTML package from file
@@ -42,7 +40,6 @@ module Uniword
       # @param path [String] Path to .mht, .mhtml, or .doc file
       # @return [Document] Loaded document
       def self.from_file(path)
-
         # Parse MIME content (DIFFERENT from ZIP!)
         parser = Infrastructure::MimeParser.new
         mime_parts = parser.parse(path)
@@ -50,26 +47,13 @@ module Uniword
         # Parse package from MIME parts
         package = from_mime_parts(mime_parts)
 
-        # Parse main document from HTML
-        # For MHTML, we convert HTML to Document structure
-        document = if package.raw_html_content
-                     # TODO: Implement HTML to Document conversion
-                     # For now, create empty document with HTML preserved
-                     doc = Document.new
-                     doc.raw_html = package.raw_html_content
-                     doc
-                   else
-                     Document.new
-                   end
+        # Create MHTML document (NOT OOXML Document!)
+        document = Document.new
+        document.raw_html = package.raw_html_content if package.raw_html_content
 
         # Transfer properties from package to document
         document.core_properties = package.core_properties if package.core_properties
         document.app_properties = package.app_properties if package.app_properties
-        document.theme = package.theme if package.theme
-        document.styles_configuration = package.styles_configuration if package.styles_configuration
-        if package.numbering_configuration
-          document.numbering_configuration = package.numbering_configuration
-        end
 
         document
       end
@@ -117,31 +101,25 @@ module Uniword
       # @param document [Document] The document to save
       # @param path [String] Output path
       def self.to_file(document, path)
-
         # Create package
         package = new
 
         # Transfer properties to package
-        package.core_properties = document.core_properties || CoreProperties.new
-        package.app_properties = document.app_properties || AppProperties.new
-        package.theme = document.theme
-        package.styles_configuration = document.styles_configuration
-        package.numbering_configuration = document.numbering_configuration
+        package.core_properties = document.core_properties || {}
+        package.app_properties = document.app_properties || {}
+        package.theme = document.theme if document.respond_to?(:theme)
+        package.styles_configuration = document.styles_configuration if document.respond_to?(:styles_configuration)
+        package.numbering_configuration = document.numbering_configuration if document.respond_to?(:numbering_configuration)
 
         # Convert document to HTML
-        # For now, use raw HTML if available, otherwise serialize document to HTML
         package.raw_html_content = if document.respond_to?(:raw_html) && document.raw_html
                                      document.raw_html
                                    else
-                                     # TODO: Implement Document to HTML conversion
                                      document_to_html(document)
                                    end
 
         # Get images from document
         package.images = extract_images(document)
-
-        # Generate MIME parts and package
-        package.to_mime_parts
 
         # Package and save
         packager = Infrastructure::MimePackager.new(
@@ -168,70 +146,7 @@ module Uniword
       # @param document [Document] The document
       # @return [String] HTML content
       def self.document_to_html(document)
-        # Basic HTML structure
-        # TODO: Implement full Document to HTML serialization
-        html = +'<html xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">'
-        html << '<head><meta charset="utf-8"></head>'
-        html << '<body>'
-
-        # Serialize document body if present
-        document.body&.elements&.each do |element|
-          html << element_to_html(element)
-        end
-
-        html << '</body></html>'
-        html
-      end
-
-      # Convert element to HTML
-      #
-      # @param element [Object] Document element
-      # @return [String] HTML fragment
-      def self.element_to_html(element)
-        case element
-        when Uniword::Paragraph
-          paragraph_to_html(element)
-        when Uniword::Table
-          # TODO: Implement table to HTML
-          '<table></table>'
-        else
-          ''
-        end
-      end
-
-      # Convert paragraph to HTML
-      #
-      # @param paragraph [Paragraph] The paragraph
-      # @return [String] HTML fragment
-      def self.paragraph_to_html(paragraph)
-        html = +'<p>'
-        paragraph.runs&.each do |run|
-          html << run_to_html(run)
-        end
-        html << '</p>'
-        html
-      end
-
-      # Convert run to HTML
-      #
-      # @param run [Run] The run
-      # @return [String] HTML fragment
-      def self.run_to_html(run)
-        html = +''
-        text = run.text || ''
-
-        # Apply formatting
-        html << '<b>' if run.bold
-        html << '<i>' if run.italic
-        html << '<u>' if run.underline
-
-        html << text
-
-        html << '</u>' if run.underline
-        html << '</i>' if run.italic
-        html << '</b>' if run.bold
-
-        html
+        document.respond_to?(:to_html_document) ? document.to_html_document : document.to_html
       end
 
       # Extract images from document
@@ -243,8 +158,7 @@ module Uniword
         {}
       end
 
-      private_class_method :document_to_html, :element_to_html,
-                           :paragraph_to_html, :run_to_html, :extract_images
+      private_class_method :document_to_html, :extract_images
     end
   end
 end

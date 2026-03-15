@@ -16,7 +16,6 @@ module Uniword
       xml do
         element 'style'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'lnRef', to: :ln_ref, render_nil: false
         map_element 'fillRef', to: :fill_ref, render_nil: false

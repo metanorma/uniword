@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'spPr'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'xfrm', to: :xfrm, render_nil: false
         map_element 'ln', to: :ln, render_nil: false

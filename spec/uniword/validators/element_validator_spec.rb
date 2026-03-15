@@ -37,13 +37,13 @@ RSpec.describe Uniword::Validators::ElementValidator do
     it 'raises ArgumentError for non-Element class' do
       expect do
         described_class.for(String)
-      end.to raise_error(ArgumentError, /must be a subclass of Uniword::Element/)
+      end.to raise_error(ArgumentError, /must be a lutaml-model serializable class/)
     end
 
     it 'raises ArgumentError for non-class argument' do
       expect do
         described_class.for('not a class')
-      end.to raise_error(ArgumentError, /must be a subclass of Uniword::Element/)
+      end.to raise_error(ArgumentError, /must be a lutaml-model serializable class/)
     end
 
     it 'returns base validator for unregistered element types' do

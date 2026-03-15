@@ -16,7 +16,6 @@ module Uniword
       xml do
         element 'glow'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'rad', to: :rad
         map_element 'srgbClr', to: :srgb_clr, render_nil: false

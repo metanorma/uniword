@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'path'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'path', to: :path
         map_element 'fillToRect', to: :fill_to_rect, render_nil: false

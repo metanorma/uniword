@@ -257,6 +257,34 @@ module Uniword
       end
       alias custom custom?
 
+      # Check if this is a paragraph style
+      #
+      # @return [Boolean] True if paragraph style
+      def paragraph_style?
+        type == 'paragraph'
+      end
+
+      # Check if this is a character style
+      #
+      # @return [Boolean] True if character style
+      def character_style?
+        type == 'character'
+      end
+
+      # Check if this is a table style
+      #
+      # @return [Boolean] True if table style
+      def table_style?
+        type == 'table'
+      end
+
+      # Check if this is a numbering style
+      #
+      # @return [Boolean] True if numbering style
+      def numbering_style?
+        type == 'numbering'
+      end
+
       # Alias for pPr (paragraph properties)
       #
       # @return [ParagraphProperties, nil] Paragraph properties

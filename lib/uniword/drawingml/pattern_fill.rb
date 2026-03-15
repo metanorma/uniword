@@ -16,7 +16,6 @@ module Uniword
       xml do
         element 'pattFill'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'prst', to: :prst
         map_element 'fgClr', to: :fg_clr, render_nil: false

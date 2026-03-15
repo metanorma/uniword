@@ -12,7 +12,6 @@ module Uniword
         xml do
           element 'objectDefaults'
           namespace Ooxml::Namespaces::DrawingML
-          mixed_content
 
           map_element 'lnDef', to: :ln_def, render_nil: false
         end

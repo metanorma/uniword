@@ -48,10 +48,10 @@ RSpec.describe Uniword::Run do
   end
 
   describe '#accept' do
-    # v2.0 API: Run does not have accept method (visitor pattern removed)
-    it 'does not have accept method (visitor pattern not in v2.0)' do
+    # v2.0 API: Run has accept method for visitor pattern
+    it 'has accept method for visitor pattern' do
       run = described_class.new(text: 'Test')
-      expect(run).not_to respond_to(:accept)
+      expect(run).to respond_to(:accept)
     end
   end
 
@@ -128,11 +128,10 @@ RSpec.describe Uniword::Run do
   end
 
   describe '#font_size' do
-    # v2.0 API: font_size method is not available on Run
-    # Access via properties.size.value (size is in half-points)
-    it 'does not have font_size method (access via properties.size.value)' do
+    # v2.0 API: font_size method IS available on Run as convenience method
+    it 'has font_size method for convenience' do
       run = described_class.new(text: 'Test')
-      expect(run).not_to respond_to(:font_size)
+      expect(run).to respond_to(:font_size)
     end
 
     it 'can access size via properties.size.value (in half-points)' do

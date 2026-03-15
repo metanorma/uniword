@@ -135,11 +135,15 @@ module Uniword
         # Resolve inherited properties
         resolved = style_def.resolve_inheritance(@library)
 
-        # Apply paragraph properties
+        # Apply paragraph properties using setters (handles wrapper objects)
         if resolved[:properties]&.any?
-          para.properties = Wordprocessingml::ParagraphProperties.new(
-            **resolved[:properties]
-          )
+          para.properties ||= Wordprocessingml::ParagraphProperties.new
+          resolved[:properties].each do |key, value|
+            setter = "#{key}="
+            if para.properties.respond_to?(setter)
+              para.properties.public_send(setter, value)
+            end
+          end
         end
 
         # Store default run properties for text runs to inherit

@@ -136,16 +136,12 @@ RSpec.describe Uniword::Validators::TableValidator do
   end
 
   describe 'integration with ElementValidator.for' do
-    # NOTE: These tests are pending because the validator registry expects
-    # Uniword::Element but v2.0 classes inherit from Lutaml::Model::Serializable
     it 'is returned when requesting validator for Table class' do
-      pending 'Validator registry needs to be updated for v2.0 API'
       validator = Uniword::Validators::ElementValidator.for(Uniword::Table)
       expect(validator).to be_a(described_class)
     end
 
     it 'validates tables through the registry' do
-      pending 'Validator registry needs to be updated for v2.0 API'
       table = Uniword::Table.new
       table.rows << create_validator_text_row('Cell 1', 'Cell 2')
 

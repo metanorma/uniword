@@ -53,7 +53,7 @@ module Uniword
       when :dotx, :dotm
         Ooxml::DotxPackage.to_file(document, path)
       when :mhtml
-        Ooxml::MhtmlPackage.to_file(document, path)
+        Mhtml::MhtmlPackage.to_file(document, path)
       end
     end
 

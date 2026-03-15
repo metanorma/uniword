@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'bgClr'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'srgbClr', to: :srgb_clr, render_nil: false
         map_element 'schemeClr', to: :scheme_clr, render_nil: false

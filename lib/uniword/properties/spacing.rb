@@ -11,7 +11,7 @@ module Uniword
       # Pattern 0: ATTRIBUTES FIRST
       attribute :before, :integer
       attribute :after, :integer
-      attribute :line, :float
+      attribute :line, :integer
       attribute :line_rule, :string
 
       xml do

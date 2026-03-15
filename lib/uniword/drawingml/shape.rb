@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'sp'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'nvSpPr', to: :nv_sp_pr
         map_element 'spPr', to: :sp_pr

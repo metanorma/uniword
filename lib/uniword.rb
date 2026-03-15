@@ -251,5 +251,41 @@ module Uniword
     def detect_format(path)
       FormatDetector.detect(path)
     end
+
+    # Get the logger instance
+    #
+    # @return [::Logger] The logger instance
+    def logger
+      Logger.logger
+    end
+
+    # Set a custom logger
+    #
+    # @param custom_logger [::Logger] Custom logger instance
+    # @return [::Logger] The logger that was set
+    def logger=(custom_logger)
+      Logger.logger = custom_logger
+    end
+
+    # Check if debug logging is enabled
+    #
+    # @return [Boolean] true if debug level is set
+    def debug?
+      logger.level == ::Logger::DEBUG
+    end
+
+    # Enable debug level logging
+    #
+    # @return [void]
+    def enable_debug_logging
+      logger.level = ::Logger::DEBUG
+    end
+
+    # Disable debug level logging (set to WARN)
+    #
+    # @return [void]
+    def disable_debug_logging
+      logger.level = ::Logger::WARN
+    end
   end
 end

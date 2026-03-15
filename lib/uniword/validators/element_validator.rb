@@ -23,9 +23,9 @@ module Uniword
         # @raise [ArgumentError] if element_class is not a valid Element class
         def for(element_class)
           unless element_class.is_a?(Class) &&
-                 element_class.ancestors.include?(Uniword::Element)
+                 element_class.ancestors.any? { |a| a.to_s.include?('Serializable') }
             raise ArgumentError,
-                  'element_class must be a subclass of Uniword::Element'
+                  'element_class must be a lutaml-model serializable class'
           end
 
           validator_class = validator_registry[element_class] || self
@@ -67,10 +67,16 @@ module Uniword
       # @return [Boolean] true if valid, false otherwise
       def valid?(element)
         return false if element.nil?
-        return false unless element.is_a?(Uniword::Element)
+        # v2.0: Check if element is a serializable object (has lutaml-model ancestry)
+        return false unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
 
-        # Delegate to element's built-in validation
-        element.valid?
+        # v2.0: All lutaml-model objects are valid by default
+        # v1.x: Elements have a valid? method
+        if element.respond_to?(:valid?)
+          element.valid?
+        else
+          true
+        end
       end
 
       # Get validation errors for an element
@@ -79,7 +85,7 @@ module Uniword
       # @return [Array<String>] Array of error messages
       def errors(element)
         return ['Element is nil'] if element.nil?
-        return ['Element must be a Uniword::Element'] unless element.is_a?(Uniword::Element)
+        return ['Element must be a Uniword::Element'] unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
         return [] if valid?(element)
 
         ['Element validation failed']

@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'effectDag'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'effect', to: :effects, render_nil: false
       end

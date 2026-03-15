@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'custGeom'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'avLst', to: :av_lst, render_nil: false
         map_element 'pathLst', to: :path_lst

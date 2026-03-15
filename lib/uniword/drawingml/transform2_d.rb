@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'xfrm'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'off', to: :off, render_nil: false
         map_element 'ext', to: :ext, render_nil: false

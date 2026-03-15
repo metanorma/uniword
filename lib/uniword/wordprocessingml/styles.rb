@@ -11,6 +11,6 @@ module Uniword
     autoload :ListStyleDefinition, 'uniword/wordprocessingml/styles/list_style_definition'
     autoload :TableStyleDefinition, 'uniword/wordprocessingml/styles/table_style_definition'
     autoload :SemanticStyle, 'uniword/wordprocessingml/styles/semantic_style'
-    autoload :Dsl, 'uniword/wordprocessingml/styles/dsl'
+    autoload :DSL, 'uniword/wordprocessingml/styles/dsl'
   end
 end

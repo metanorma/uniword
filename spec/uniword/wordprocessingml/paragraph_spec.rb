@@ -30,10 +30,10 @@ RSpec.describe Uniword::Paragraph do
   end
 
   describe '#accept' do
-    # v2.0 API: Paragraph does not have accept method (visitor pattern removed)
-    it 'does not have accept method (visitor pattern not in v2.0)' do
+    # v2.0 API: Paragraph has accept method for visitor pattern
+    it 'has accept method for visitor pattern' do
       paragraph = described_class.new
-      expect(paragraph).not_to respond_to(:accept)
+      expect(paragraph).to respond_to(:accept)
     end
   end
 
@@ -163,8 +163,8 @@ RSpec.describe Uniword::Paragraph do
 
     it 'accesses alignment via properties object' do
       paragraph = described_class.new(properties: properties)
-      # Access alignment via properties.alignment
-      expect(paragraph.properties.alignment).to eq('left')
+      # Access alignment via paragraph.alignment which handles wrapper extraction
+      expect(paragraph.alignment).to eq('left')
     end
   end
 

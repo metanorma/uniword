@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'avLst'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'gd', to: :guides, render_nil: false
       end

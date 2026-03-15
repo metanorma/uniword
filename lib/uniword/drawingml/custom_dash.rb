@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'custDash'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'ds', to: :dash_stops, render_nil: false
       end

@@ -14,9 +14,8 @@ module Uniword
       xml do
         element 'document'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        mixed_content
 
-        map_element 'body', to: :body
+        map_element 'body', to: :body, render_default: true
       end
 
       # Additional attributes for DOCX metadata (not part of document.xml)
@@ -118,6 +117,15 @@ module Uniword
       # @param options [Hash] Formatting options (bold, italic, style, etc.)
       # @return [Paragraph] The created paragraph
       def add_paragraph(text = nil, **options)
+        # Handle case where a Paragraph object is passed instead of text
+        case text
+        when Paragraph
+          para = text
+          self.body ||= Body.new
+          body.paragraphs << para
+          return para
+        end
+
         para = Paragraph.new
 
         # Add text if provided
@@ -271,6 +279,13 @@ module Uniword
       # @param value [Array<Style>] Styles to set
       # @return [Array<Style>] The styles
       attr_writer :styles
+
+      # Custom inspect for readable output
+      #
+      # @return [String] Human-readable representation
+      def inspect
+        "#<Uniword::Document @body=...>"
+      end
     end
   end
 end

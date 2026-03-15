@@ -14,7 +14,6 @@ module Uniword
       xml do
         root 'graphicData'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'uri', to: :uri, render_nil: false
         map_element 'pic', to: :picture, render_nil: false

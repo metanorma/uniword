@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'pathLst'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'path', to: :paths, render_nil: false
       end

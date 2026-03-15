@@ -60,7 +60,7 @@ module Uniword
         when :dotx, :dotm
           Ooxml::DotxPackage.from_file(path)
         when :mhtml
-          Ooxml::MhtmlPackage.from_file(path)
+          Mhtml::MhtmlPackage.from_file(path)
         else
           raise ArgumentError, "Unsupported format: #{format}"
         end

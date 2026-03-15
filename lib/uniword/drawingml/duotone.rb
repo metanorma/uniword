@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'duotone'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'schemeClr', to: :scheme_colors
       end

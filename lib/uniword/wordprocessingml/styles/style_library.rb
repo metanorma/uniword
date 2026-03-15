@@ -24,7 +24,7 @@ module Uniword
       attr_reader :name, :version, :description
 
       # Default styles directory
-      STYLES_DIR = File.expand_path('../../../config/styles', __dir__)
+      STYLES_DIR = File.expand_path('../../../../config/styles', __dir__)
 
       # Load style library from config/styles directory
       #

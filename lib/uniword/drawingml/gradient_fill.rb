@@ -17,7 +17,6 @@ module Uniword
       xml do
         element 'gradFill'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
         ordered
 
         map_attribute 'rotWithShape', to: :rot_with_shape, render_nil: false

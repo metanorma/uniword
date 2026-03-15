@@ -15,7 +15,6 @@ module Uniword
       xml do
         element 'prstGeom'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_attribute 'prst', to: :prst
         map_element 'avLst', to: :av_lst, render_nil: false

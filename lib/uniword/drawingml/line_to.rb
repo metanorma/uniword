@@ -14,7 +14,6 @@ module Uniword
       xml do
         element 'lnTo'
         namespace Uniword::Ooxml::Namespaces::DrawingML
-        mixed_content
 
         map_element 'pt', to: :pt
       end
