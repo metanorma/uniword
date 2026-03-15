@@ -57,9 +57,7 @@ module Uniword
     attribute :initials, :string
 
     # Comment content as paragraphs
-    # Declared as string collection to avoid circular dependency during class loading
-    # Actual Paragraph objects are added via add_paragraph/add_text methods
-    attribute :paragraphs, :string, collection: true, default: -> { [] }
+    attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
 
     # Initialize a new comment
     #
