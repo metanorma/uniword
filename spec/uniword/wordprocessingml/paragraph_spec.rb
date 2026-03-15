@@ -6,10 +6,10 @@ RSpec.describe Uniword::Paragraph do
   let(:run1) { Uniword::Run.new(text: 'Hello ') }
   let(:run2) { Uniword::Run.new(text: 'World') }
   let(:properties) do
-    Uniword::Wordprocessingml::ParagraphProperties.new(
-      style: 'Normal',
-      alignment: 'left'
-    )
+    Uniword::Wordprocessingml::ParagraphProperties.new.tap do |p|
+      p.style = 'Normal'
+      p.alignment = 'left'
+    end
   end
 
   describe '#initialize' do

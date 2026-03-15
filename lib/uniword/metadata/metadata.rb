@@ -159,6 +159,16 @@ module Uniword
         @properties.reject(&block)
       end
 
+      # Compact properties (remove nil values).
+      #
+      # @return [Hash] Properties without nil values
+      #
+      # @example Remove nil values
+      #   compacted = metadata.compact
+      def compact
+        @properties.compact
+      end
+
       # Convert to hash.
       #
       # @param include_nil [Boolean] Include nil values
