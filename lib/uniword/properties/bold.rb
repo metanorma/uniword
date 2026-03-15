@@ -8,7 +8,7 @@ module Uniword
     #
     # Represents <w:b w:val="..."/> or <w:b/> (empty = true)
     class Bold < Lutaml::Model::Serializable
-      attribute :value, :boolean
+      attribute :value, :boolean, default: -> { true }
 
       xml do
         element 'b'
@@ -20,7 +20,7 @@ module Uniword
 
     # Complex script bold
     class BoldCs < Lutaml::Model::Serializable
-      attribute :value, :boolean
+      attribute :value, :boolean, default: -> { true }
 
       xml do
         element 'bCs'
