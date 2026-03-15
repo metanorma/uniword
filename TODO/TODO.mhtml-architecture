@@ -75,16 +75,16 @@ end
 
 ## Action Items
 
-1. [ ] Move `lib/uniword/ooxml/mhtml_package.rb` to `lib/uniword/mhtml/mhtml_package.rb`
-2. [ ] Update module from `Uniword::Ooxml::MhtmlPackage` to `Uniword::Mhtml::MhtmlPackage`
-3. [ ] Create `lib/uniword/mhtml/theme.rb` - MHTML-specific theme class
-4. [ ] Create `lib/uniword/mhtml/styles_configuration.rb` - MHTML-specific styles
-5. [ ] Create `lib/uniword/mhtml/numbering_configuration.rb` - MHTML-specific numbering
-6. [ ] Create `lib/uniword/mhtml/document.rb` - MHTML-specific document class
-7. [ ] Update autoloads in `lib/uniword/mhtml.rb`
-8. [ ] Update `lib/uniword.rb` to reference `Mhtml::MhtmlPackage` instead of `Ooxml::MhtmlPackage`
-9. [ ] Update all specs to use correct namespace
-10. [ ] Verify MHTML tests pass independently
+1. [x] Move `lib/uniword/ooxml/mhtml_package.rb` to `lib/uniword/mhtml/mhtml_package.rb`
+2. [x] Update module from `Uniword::Ooxml::MhtmlPackage` to `Uniword::Mhtml::MhtmlPackage`
+3. [x] Create `lib/uniword/mhtml/theme.rb` - MHTML-specific theme class
+4. [x] Create `lib/uniword/mhtml/styles_configuration.rb` - MHTML-specific styles
+5. [x] Create `lib/uniword/mhtml/numbering_configuration.rb` - MHTML-specific numbering
+6. [x] Create `lib/uniword/mhtml/document.rb` - MHTML-specific document class
+7. [x] Update autoloads in `lib/uniword/mhtml.rb`
+8. [x] Update `lib/uniword.rb` to reference `Mhtml::MhtmlPackage` instead of `Ooxml::MhtmlPackage`
+9. [x] Update all specs to use correct namespace (Mhtml::Document)
+10. [x] Verify MHTML tests pass independently
 
 ## Why This Matters
 

@@ -57,7 +57,7 @@ module Uniword
                       rounded.to_i.to_s
                     else
                       # Format with precision, then remove trailing zeros
-                      format("%.#{precision}f", rounded).sub(/\.?0+$/, '')
+                      Kernel.format("%.#{precision}f", rounded).sub(/\.?0+$/, '')
                     end
 
         "#{formatted}#{unit}"
