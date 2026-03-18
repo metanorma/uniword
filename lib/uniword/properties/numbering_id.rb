@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for numbering ID value
     class NumberingIdValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Numbering ID element

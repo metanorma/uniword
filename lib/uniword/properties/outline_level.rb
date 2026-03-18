@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for outline level value
     class OutlineLevelValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Outline level element

@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for position value
     class PositionValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Text position element (raised/lowered text)

@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for underline value
     class UnderlineValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Text underline element

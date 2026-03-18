@@ -118,7 +118,7 @@ module Uniword
     #   styleset = StyleSet.load('distinctive')
     def self.load(name)
 
-      StyleSets::YamlStyleSetLoader.load_bundled(name)
+      Stylesets::YamlStyleSetLoader.load_bundled(name)
     end
 
     # List all available bundled StyleSets
@@ -129,8 +129,7 @@ module Uniword
     #   stylesets = StyleSet.available_stylesets
     #   # => ["distinctive", "basic", ...]
     def self.available_stylesets
-
-      StyleSets::YamlStyleSetLoader.available_stylesets
+      Stylesets::YamlStyleSetLoader.available_stylesets
     end
 
     # Apply this StyleSet to a document

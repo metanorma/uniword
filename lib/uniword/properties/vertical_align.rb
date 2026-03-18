@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for vertical alignment value
     class VerticalAlignValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Text vertical alignment element

@@ -8,7 +8,6 @@ module Uniword
       # Core Properties keywords element type
       # Declares cp: namespace for automatic propagation to XML serialization
       class CpKeywordsType < Lutaml::Model::Type::String
-        xml_namespace Namespaces::CoreProperties
       end
     end
   end

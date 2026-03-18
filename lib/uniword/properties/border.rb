@@ -8,7 +8,6 @@ module Uniword
     #
     # Represents border line styles from OOXML specification
     class BorderStyleValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Individual border definition

@@ -8,7 +8,6 @@ module Uniword
     #
     # Represents language codes (e.g., "en-US", "zh-CN", "ar-SA")
     class LanguageValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Language settings for run text

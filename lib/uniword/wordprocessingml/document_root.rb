@@ -251,8 +251,8 @@ module Uniword
       # @param name [String, Symbol] Theme name (e.g., 'celestial', 'atlas')
       # @return [self] For method chaining
       def apply_theme(name)
-        theme = Uniword::Themes::YamlThemeLoader.load_bundled(name.to_s)
-        self.theme = theme
+        friendly = Themes::Theme.load(name.to_s)
+        self.theme = Themes::ThemeTransformation.new.to_word(friendly)
         self
       end
 

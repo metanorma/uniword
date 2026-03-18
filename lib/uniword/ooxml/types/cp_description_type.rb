@@ -8,7 +8,6 @@ module Uniword
       # Dublin Core description element type
       # Declares dc: namespace for automatic propagation to XML serialization
       class DcDescriptionType < Lutaml::Model::Type::String
-        xml_namespace Namespaces::DublinCore
       end
     end
   end

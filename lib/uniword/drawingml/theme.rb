@@ -206,44 +206,6 @@ module Uniword
         applicator = Uniword::Themes::ThemeApplicator.new
         applicator.apply(self, document)
       end
-
-      # Load theme from YAML file
-      #
-      # @param path [String] Path to YAML file
-      # @param variant [String, Integer, nil] Optional variant
-      # @return [Theme] Loaded theme
-      #
-      # @example Load from YAML
-      #   theme = Theme.from_yaml('custom_theme.yml')
-      #   theme = Theme.from_yaml('custom_theme.yml', variant: 2)
-      def self.from_yaml(path, variant: nil)
-        loader = Uniword::Themes::YamlThemeLoader.new
-        loader.load(path, variant: variant)
-      end
-
-      # Load bundled theme by name
-      #
-      # @param name [String] Theme name (e.g., 'atlas', 'office_theme')
-      # @param variant [String, Integer, nil] Optional variant
-      # @return [Theme] Loaded theme
-      #
-      # @example Load bundled theme
-      #   theme = Theme.load('atlas')
-      #   theme = Theme.load('atlas', variant: 2)
-      def self.load(name, variant: nil)
-        Uniword::Themes::YamlThemeLoader.load_bundled(name, variant: variant)
-      end
-
-      # List all available bundled themes
-      #
-      # @return [Array<String>] Theme names
-      #
-      # @example List themes
-      #   themes = Theme.available_themes
-      #   # => ["atlas", "badge", "berlin", ...]
-      def self.available_themes
-        Uniword::Themes::YamlThemeLoader.available_themes
-      end
     end
   end
 end

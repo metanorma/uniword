@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for highlight value
     class HighlightValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Text highlight element

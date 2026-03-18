@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for emphasis mark value
     class EmphasisMarkValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Emphasis mark element (accent marks above/below text)

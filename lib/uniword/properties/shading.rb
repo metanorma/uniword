@@ -8,7 +8,6 @@ module Uniword
     #
     # Represents fill pattern types from OOXML specification
     class ShadingPatternValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Paragraph or run shading (background fill)

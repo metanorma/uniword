@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for color value
     class ColorValueType < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Color value element

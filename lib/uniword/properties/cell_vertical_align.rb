@@ -8,7 +8,6 @@ module Uniword
     #
     # Represents vertical alignment types from OOXML specification
     class CellVerticalAlignValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Table cell vertical alignment

@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for kerning value
     class KerningValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Kerning threshold element

@@ -8,7 +8,6 @@ module Uniword
       # Core Properties lastModifiedBy element type
       # Declares cp: namespace for automatic propagation to XML serialization
       class CpLastModifiedByType < Lutaml::Model::Type::String
-        xml_namespace Namespaces::CoreProperties
       end
     end
   end

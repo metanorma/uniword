@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for numbering level value
     class NumberingLevelValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Numbering level element

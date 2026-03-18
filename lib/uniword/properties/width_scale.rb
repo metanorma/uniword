@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for width scale value
     class WidthScaleValue < Lutaml::Model::Type::Integer
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Width scaling element (horizontal text scaling)

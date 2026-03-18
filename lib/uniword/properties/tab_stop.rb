@@ -8,14 +8,12 @@ module Uniword
     #
     # Represents alignment types for tab stops
     class TabAlignmentValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Tab leader enumeration
     #
     # Represents leader character styles for tab stops
     class TabLeaderValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Individual tab stop definition

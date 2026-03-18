@@ -6,7 +6,6 @@ module Uniword
   module Properties
     # Namespaced custom type for alignment value
     class AlignmentValue < Lutaml::Model::Type::String
-      xml_namespace Ooxml::Namespaces::WordProcessingML
     end
 
     # Paragraph alignment element

@@ -191,7 +191,8 @@ module Uniword
     long_desc <<~DESC
       Display all themes that are bundled with uniword.
 
-      These themes can be loaded using Theme.load(name) or doc.apply_theme(name).
+      These themes can be loaded using Themes::Theme.load(name) and
+      converted using Themes::ThemeTransformation.
 
       Examples:
         $ uniword theme list
@@ -200,7 +201,7 @@ module Uniword
     option :verbose, aliases: '-v', desc: 'Show detailed information', type: :boolean,
                      default: false
     def list
-      themes = Theme.available_themes
+      themes = Themes::Theme.available_themes
 
       if themes.empty?
         say 'No bundled themes found.', :yellow
@@ -213,11 +214,11 @@ module Uniword
         if options[:verbose]
           # Load theme to show details
           begin
-            theme = Theme.load(theme_name)
+            friendly = Themes::Theme.load(theme_name)
             say "  #{theme_name}:", :cyan
-            say "    Name: #{theme.name}"
-            say "    Colors: #{theme.color_scheme.colors.count}"
-            say "    Variants: #{theme.variants.count}"
+            say "    Name: #{friendly.name}"
+            say "    Colors: #{friendly.color_scheme&.colors&.count || 0}"
+            say "    Variants: #{friendly.variants&.count || 0}"
           rescue StandardError => e
             say "  #{theme_name}: Error loading - #{e.message}", :red
           end
