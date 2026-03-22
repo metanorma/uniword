@@ -56,11 +56,16 @@ module Uniword
 
         case format
         when :docx
-          Ooxml::DocxPackage.from_file(path)
+          package = Ooxml::DocxPackage.from_file(path)
+          # Return the document part for convenience
+          package.respond_to?(:document) ? package.document : package
         when :dotx, :dotm
-          Ooxml::DotxPackage.from_file(path)
+          package = Ooxml::DotxPackage.from_file(path)
+          package.respond_to?(:document) ? package.document : package
         when :mhtml
-          Mhtml::MhtmlPackage.from_file(path)
+          package = Mhtml::MhtmlPackage.from_file(path)
+          # MhtmlPackage returns a Document, return it directly
+          package.respond_to?(:document) ? package.document : package
         else
           raise ArgumentError, "Unsupported format: #{format}"
         end

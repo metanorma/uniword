@@ -191,7 +191,7 @@ module Uniword
       cell_obj = TableCell.new
 
       if text
-        para = Paragraph.new
+        para = Wordprocessingml::Paragraph.new
         para.add_text(text, bold: bold, italic: italic)
         para.align(alignment) if alignment
         cell_obj.add_paragraph(para)

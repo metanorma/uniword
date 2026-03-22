@@ -105,8 +105,19 @@ module Uniword
         package = new
 
         # Transfer properties to package
-        package.core_properties = document.core_properties || {}
-        package.app_properties = document.app_properties || {}
+        # Handle both Hash and JSON string formats for core_properties
+        core_props = document.core_properties
+        if core_props.is_a?(String)
+          core_props = JSON.parse(core_props) rescue {}
+        end
+        package.core_properties = core_props || {}
+
+        # Handle both Hash and JSON string formats for app_properties
+        app_props = document.app_properties
+        if app_props.is_a?(String)
+          app_props = JSON.parse(app_props) rescue {}
+        end
+        package.app_properties = app_props || {}
         package.theme = document.theme if document.respond_to?(:theme)
         package.styles_configuration = document.styles_configuration if document.respond_to?(:styles_configuration)
         package.numbering_configuration = document.numbering_configuration if document.respond_to?(:numbering_configuration)

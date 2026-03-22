@@ -142,16 +142,17 @@ module Uniword
         # Create MHTML document
         mhtml_doc = Uniword::Mhtml::Document.new
         mhtml_doc.html_content = html_content
-        mhtml_doc.title = source.title
+        mhtml_doc.title = source.title.to_s if source.title
 
-        # Transfer metadata
+        # Transfer metadata - ensure values are plain strings
         if source.core_properties
-          mhtml_doc.core_properties = {
-            title: source.core_properties.title,
-            creator: source.core_properties.creator,
-            subject: source.core_properties.subject,
-            keywords: source.core_properties.keywords
-          }.compact
+          props = {}
+          cp = source.core_properties
+          props[:title] = cp.title.to_s if cp.respond_to?(:title) && cp.title
+          props[:creator] = cp.creator.to_s if cp.respond_to?(:creator) && cp.creator
+          props[:subject] = cp.subject.to_s if cp.respond_to?(:subject) && cp.subject
+          props[:keywords] = cp.keywords.to_s if cp.respond_to?(:keywords) && cp.keywords
+          mhtml_doc.core_properties = props.to_json if props.any?
         end
 
         mhtml_doc
@@ -165,9 +166,10 @@ module Uniword
         # Create OOXML document
         ooxml_doc = Wordprocessingml::DocumentRoot.new
 
-        # Get HTML content
-        html_content = source.html_content || source.raw_html || ''
-        return ooxml_doc if html_content.empty?
+        # Get HTML content - ensure it's a plain string
+        html_content = source.html_content.to_s if source.html_content
+        html_content ||= source.raw_html.to_s if source.respond_to?(:raw_html) && source.raw_html
+        return ooxml_doc if html_content.nil? || html_content.empty?
 
         # Convert HTML to OOXML paragraphs
         paragraphs = HtmlToOoxmlConverter.html_to_paragraphs(html_content)
@@ -177,11 +179,17 @@ module Uniword
           ooxml_doc.add_paragraph(p)
         end
 
-        # Transfer metadata
-        if source.core_properties && !source.core_properties.empty?
-          # Handle both hash and string formats
-          if source.core_properties.is_a?(Hash)
-            ooxml_doc.title = source.core_properties['title'] if source.core_properties['title']
+        # Transfer metadata - handle both string and hash formats
+        core_props = source.core_properties
+        if core_props
+          props_str = core_props.to_s
+          if !props_str.empty? && props_str != '{}'
+            begin
+              props_hash = JSON.parse(props_str)
+              ooxml_doc.title = props_hash['title'] if props_hash['title']
+            rescue JSON::ParserError
+              # Not valid JSON, ignore
+            end
           end
         end
 

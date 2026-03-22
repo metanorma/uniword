@@ -48,6 +48,19 @@ module Uniword
         super
       end
 
+      # Set text content (converts String to Text object)
+      #
+      # @param value [String, Text] Text value
+      def text=(value)
+        @text = if value.is_a?(Text)
+                  value
+                elsif value.nil?
+                  nil
+                else
+                  Text.new(content: value.to_s)
+                end
+      end
+
       # Get bold property object
       #
       # @return [Properties::Bold, nil] The bold property object

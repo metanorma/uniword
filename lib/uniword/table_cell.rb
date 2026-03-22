@@ -14,8 +14,9 @@ module Uniword
 
     # OOXML namespace configuration
     xml do
-      element 'tc', mixed: true
+      element 'tc'
       namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
       map_element 'tcPr', to: :cell_properties
       map_element 'p', to: :paragraphs

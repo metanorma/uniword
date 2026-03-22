@@ -9,8 +9,9 @@ module Uniword
   class TableRow < Element
     # OOXML namespace configuration
     xml do
-      element 'tr', mixed: true
+      element 'tr'
       namespace Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
       map_element 'trPr', to: :row_properties
       map_element 'tc', to: :cells

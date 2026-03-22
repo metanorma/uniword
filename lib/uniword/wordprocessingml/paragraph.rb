@@ -250,6 +250,14 @@ module Uniword
         self
       end
 
+      # Set left indent (setter syntax)
+      #
+      # @param value [Integer] Indent in twips (1/1440 inch)
+      def indent_left=(value)
+        self.properties ||= ParagraphProperties.new
+        properties.indent_left = value
+      end
+
       # Set right indent
       #
       # @param value [Integer] Indent in twips (1/1440 inch)
@@ -260,6 +268,14 @@ module Uniword
         self
       end
 
+      # Set right indent (setter syntax)
+      #
+      # @param value [Integer] Indent in twips (1/1440 inch)
+      def indent_right=(value)
+        self.properties ||= ParagraphProperties.new
+        properties.indent_right = value
+      end
+
       # Set first line indent
       #
       # @param value [Integer] Indent in twips (1/1440 inch)
@@ -268,6 +284,14 @@ module Uniword
         self.properties ||= ParagraphProperties.new
         properties.indent_first_line = value
         self
+      end
+
+      # Set first line indent (setter syntax)
+      #
+      # @param value [Integer] Indent in twips (1/1440 inch)
+      def indent_first_line=(value)
+        self.properties ||= ParagraphProperties.new
+        properties.indent_first_line = value
       end
 
       # Set paragraph style (setter method)
