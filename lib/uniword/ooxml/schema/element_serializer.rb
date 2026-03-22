@@ -45,6 +45,22 @@ module Uniword
         def serialize(element, options = {})
           validate_element(element)
 
+          # If element has its own to_xml method, use it directly
+          # This ensures proper serialization with all attributes and content
+          if element.respond_to?(:to_xml) && !options[:use_schema]
+            xml_str = element.to_xml(pretty: options[:pretty])
+
+            # Remove XML declaration unless standalone
+            xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, '') unless options.fetch(:standalone, false)
+
+            # Add XML declaration if standalone
+            if options.fetch(:standalone, false)
+              xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}"
+            end
+
+            return xml_str.strip
+          end
+
           # Get schema definition
           schema_def = @schema.definition_for(element.class)
 
@@ -292,10 +308,10 @@ module Uniword
         # @param element [Object] Object to validate
         # @raise [ArgumentError] if not a valid element
         def validate_element(element)
-          return if element.respond_to?(:is_a?) && element.is_a?(Element)
+          return if element.respond_to?(:to_xml)
 
           raise ArgumentError,
-                "Element must be a Uniword::Element, got #{element.class}"
+                "Element must respond to #to_xml, got #{element.class}"
         end
       end
     end

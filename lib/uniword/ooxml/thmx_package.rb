@@ -22,7 +22,7 @@ module Uniword
     #   ThmxPackage.to_file(theme, 'output.thmx')
     class ThmxPackage < Lutaml::Model::Serializable
       # Theme (the only content in a .thmx file)
-      attribute :theme, Theme
+      attribute :theme, Drawingml::Theme
 
       # Load THMX package from file
       #

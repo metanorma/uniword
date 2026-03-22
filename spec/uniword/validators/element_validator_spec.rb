@@ -8,12 +8,12 @@ RSpec.describe Uniword::Validators::ElementValidator do
   # Ensure validators are registered before each test
   before do
     # Register validators if not already registered
-    unless described_class.validator_registry[Uniword::Paragraph]
-      described_class.register(Uniword::Paragraph,
+    unless described_class.validator_registry[Uniword::Wordprocessingml::Paragraph]
+      described_class.register(Uniword::Wordprocessingml::Paragraph,
                                Uniword::Validators::ParagraphValidator)
     end
-    unless described_class.validator_registry[Uniword::Table]
-      described_class.register(Uniword::Table,
+    unless described_class.validator_registry[Uniword::Wordprocessingml::Table]
+      described_class.register(Uniword::Wordprocessingml::Table,
                                Uniword::Validators::TableValidator)
     end
   end
@@ -25,12 +25,12 @@ RSpec.describe Uniword::Validators::ElementValidator do
     end
 
     it 'returns a ParagraphValidator for Paragraph class' do
-      result = described_class.for(Uniword::Paragraph)
+      result = described_class.for(Uniword::Wordprocessingml::Paragraph)
       expect(result).to be_a(Uniword::Validators::ParagraphValidator)
     end
 
     it 'returns a TableValidator for Table class' do
-      result = described_class.for(Uniword::Table)
+      result = described_class.for(Uniword::Wordprocessingml::Table)
       expect(result).to be_a(Uniword::Validators::TableValidator)
     end
 
@@ -47,7 +47,7 @@ RSpec.describe Uniword::Validators::ElementValidator do
     end
 
     it 'returns base validator for unregistered element types' do
-      result = described_class.for(Uniword::Run)
+      result = described_class.for(Uniword::Wordprocessingml::Run)
       expect(result).to be_a(described_class)
       expect(result).not_to be_a(Uniword::Validators::ParagraphValidator)
     end
@@ -58,29 +58,29 @@ RSpec.describe Uniword::Validators::ElementValidator do
       # Reset registry after each test
       described_class.reset_registry
       # Re-register default validators manually since require won't reload
-      described_class.register(Uniword::Paragraph, Uniword::Validators::ParagraphValidator)
-      described_class.register(Uniword::Table, Uniword::Validators::TableValidator)
+      described_class.register(Uniword::Wordprocessingml::Paragraph, Uniword::Validators::ParagraphValidator)
+      described_class.register(Uniword::Wordprocessingml::Table, Uniword::Validators::TableValidator)
     end
 
     it 'registers a custom validator for an element class' do
       custom_validator = Class.new(described_class)
-      described_class.register(Uniword::Run, custom_validator)
+      described_class.register(Uniword::Wordprocessingml::Run, custom_validator)
 
-      result = described_class.for(Uniword::Run)
+      result = described_class.for(Uniword::Wordprocessingml::Run)
       expect(result).to be_a(custom_validator)
     end
 
     it "raises ArgumentError if validator doesn't inherit from ElementValidator" do
       expect do
-        described_class.register(Uniword::Run, String)
+        described_class.register(Uniword::Wordprocessingml::Run, String)
       end.to raise_error(ArgumentError, /must inherit from ElementValidator/)
     end
 
     it 'allows overriding existing validator registrations' do
       custom_validator = Class.new(described_class)
-      described_class.register(Uniword::Paragraph, custom_validator)
+      described_class.register(Uniword::Wordprocessingml::Paragraph, custom_validator)
 
-      result = described_class.for(Uniword::Paragraph)
+      result = described_class.for(Uniword::Wordprocessingml::Paragraph)
       expect(result).to be_a(custom_validator)
     end
   end
@@ -92,8 +92,8 @@ RSpec.describe Uniword::Validators::ElementValidator do
 
     it 'includes registered validators' do
       registry = described_class.validator_registry
-      expect(registry[Uniword::Paragraph]).to eq(Uniword::Validators::ParagraphValidator)
-      expect(registry[Uniword::Table]).to eq(Uniword::Validators::TableValidator)
+      expect(registry[Uniword::Wordprocessingml::Paragraph]).to eq(Uniword::Validators::ParagraphValidator)
+      expect(registry[Uniword::Wordprocessingml::Table]).to eq(Uniword::Validators::TableValidator)
     end
   end
 
@@ -114,7 +114,7 @@ RSpec.describe Uniword::Validators::ElementValidator do
     end
 
     it 'returns true for valid element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       expect(validator.valid?(paragraph)).to be true
     end
   end
@@ -131,7 +131,7 @@ RSpec.describe Uniword::Validators::ElementValidator do
     end
 
     it 'returns empty array for valid element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       errors = validator.errors(paragraph)
       expect(errors).to be_empty
     end
@@ -139,20 +139,20 @@ RSpec.describe Uniword::Validators::ElementValidator do
 
   describe 'integration with element classes' do
     it 'validates paragraphs correctly' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       paragraph.add_text('Hello')
 
       expect(validator.valid?(paragraph)).to be true
     end
 
     it 'validates tables correctly' do
-      table = Uniword::Table.new
-      table.rows << Uniword::TableRow.new.tap do |row|
-        row.cells << Uniword::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+      table = Uniword::Wordprocessingml::Table.new
+      table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
+        row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
         end
-        row.cells << Uniword::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
         end
       end
 
@@ -160,7 +160,7 @@ RSpec.describe Uniword::Validators::ElementValidator do
     end
 
     it 'validates runs correctly' do
-      run = Uniword::Run.new(text: 'Hello')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello')
       expect(validator.valid?(run)).to be true
     end
 

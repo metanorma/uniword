@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:rowBreaks>
     class RowBreaks < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :breaks, :string, collection: true, default: -> { [] }
+      attribute :breaks, :string, collection: true, initialize_empty: true
 
       xml do
         element 'rowBreaks'

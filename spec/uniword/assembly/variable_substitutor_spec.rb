@@ -92,16 +92,16 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
     end
 
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
-      para1 = Uniword::Paragraph.new
-      run1 = Uniword::Run.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new
       run1.text = 'Title: {title}'
       para1.add_run(run1)
       doc.add_paragraph(para1)
 
-      para2 = Uniword::Paragraph.new
-      run2 = Uniword::Run.new
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new
       run2.text = 'Version: {version}'
       para2.add_run(run2)
       doc.add_paragraph(para2)
@@ -122,9 +122,9 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
     end
 
     it 'handles document without variables' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       run.text = 'No variables'
       para.add_run(run)
       doc.add_paragraph(para)

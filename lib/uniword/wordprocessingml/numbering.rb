@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:numbering>
     class Numbering < Lutaml::Model::Serializable
-      attribute :abstractNums, AbstractNum, collection: true, default: -> { [] }
-      attribute :nums, Num, collection: true, default: -> { [] }
+      attribute :abstractNums, AbstractNum, collection: true, initialize_empty: true
+      attribute :nums, Num, collection: true, initialize_empty: true
 
       xml do
         element 'numbering'

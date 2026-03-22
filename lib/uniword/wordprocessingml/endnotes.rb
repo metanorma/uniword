@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:endnotes>
     class Endnotes < Lutaml::Model::Serializable
-      attribute :endnote_entries, Endnote, collection: true, default: -> { [] }
+      attribute :endnote_entries, Endnote, collection: true, initialize_empty: true
 
       xml do
         element 'endnotes'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2016.yml
     # Element: <w16:extLst>
     class ExtensionList < Lutaml::Model::Serializable
-      attribute :extensions, Extension, collection: true, default: -> { [] }
+      attribute :extensions, Extension, collection: true, initialize_empty: true
 
       xml do
         element 'extLst'

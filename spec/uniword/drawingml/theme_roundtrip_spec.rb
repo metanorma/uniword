@@ -41,7 +41,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
       it 'loads theme successfully' do
         theme = original_package.load_content
 
-        expect(theme).to be_a(Uniword::Theme)
+        expect(theme).to be_a(Uniword::Drawingml::Theme)
         expect(theme.name).to_not be_nil
         expect(theme.color_scheme).to_not be_nil
         expect(theme.font_scheme).to_not be_nil
@@ -109,7 +109,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         roundtrip_theme = verify_package.load_content
 
         # Compare all 12 theme colors
-        Uniword::ColorScheme::THEME_COLORS.each do |color_name|
+        Uniword::Drawingml::ColorScheme::THEME_COLORS.each do |color_name|
           original_color = original_theme.color_scheme[color_name]
           roundtrip_color = roundtrip_theme.color_scheme[color_name]
 

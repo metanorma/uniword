@@ -15,11 +15,10 @@ module Uniword
       attribute :html_content, :string
       attribute :title, :string
       attribute :styles, :string
-      attribute :elements, :array, default: -> { [] }
 
       # MHTML-specific metadata
-      attribute :core_properties, :hash, default: -> { {} }
-      attribute :app_properties, :hash, default: -> { {} }
+      attribute :core_properties, :string, default: -> { '' }
+      attribute :app_properties, :string, default: -> { '' }
 
       # MHTML-specific: Get raw HTML
       #
@@ -54,6 +53,25 @@ module Uniword
           </body>
           </html>
         HTML
+      end
+
+      # Get text content from HTML
+      #
+      # @return [String] Text extracted from HTML content
+      def text
+        return '' unless html_content
+
+        # Strip HTML tags and decode entities
+        html_content
+          .gsub(/<[^>]+>/, ' ')
+          .gsub(/&lt;/, '<')
+          .gsub(/&gt;/, '>')
+          .gsub(/&amp;/, '&')
+          .gsub(/&quot;/, '"')
+          .gsub(/&#39;/, "'")
+          .gsub(/&nbsp;/, ' ')
+          .gsub(/\s+/, ' ')
+          .strip
       end
     end
   end

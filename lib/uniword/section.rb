@@ -7,8 +7,8 @@ module Uniword
   # Each section can have its own page setup, headers, and footers
   class Section < Lutaml::Model::Serializable
     attribute :properties, SectionProperties
-    attribute :headers, Header, collection: true, default: -> { [] }
-    attribute :footers, Footer, collection: true, default: -> { [] }
+    attribute :headers, Header, collection: true, initialize_empty: true
+    attribute :footers, Footer, collection: true, initialize_empty: true
 
     def initialize(**attributes)
       super

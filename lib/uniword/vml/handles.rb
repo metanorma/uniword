@@ -10,7 +10,7 @@ module Uniword
     # Element: <v:handles>
     class Handles < Lutaml::Model::Serializable
       # Pattern 0: Attributes BEFORE xml mappings
-      attribute :handles, Handle, collection: true, default: -> { [] }
+      attribute :handles, Handle, collection: true, initialize_empty: true
 
       xml do
         element 'handles'

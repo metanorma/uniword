@@ -39,7 +39,7 @@ module Uniword
         #   text "Bold text", :strong
         #   text "Code text", :code
         def text(content, style_name = nil)
-          run = Run.new(text: content)
+          run = Wordprocessingml::Run.new(text: content)
 
           if style_name
             style_def = @library.character_style(style_name)
@@ -62,7 +62,7 @@ module Uniword
 
           return unless resolved&.any?
 
-          run.properties = RunProperties.new(**resolved)
+          run.properties = Wordprocessingml::RunProperties.new(**resolved)
         end
       end
     end

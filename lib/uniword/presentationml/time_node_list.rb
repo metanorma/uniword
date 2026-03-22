@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: presentationml.yml
     # Element: <p:tn_lst>
     class TimeNodeList < Lutaml::Model::Serializable
-      attribute :par, ParallelTimeNode, collection: true, default: -> { [] }
-      attribute :seq, SequenceTimeNode, collection: true, default: -> { [] }
+      attribute :par, ParallelTimeNode, collection: true, initialize_empty: true
+      attribute :seq, SequenceTimeNode, collection: true, initialize_empty: true
 
       xml do
         element 'tn_lst'

@@ -10,11 +10,11 @@ module Uniword
     # Element: <c:plotArea>
     class PlotArea < Lutaml::Model::Serializable
       attribute :layout, Layout
-      attribute :chart_types, :string, collection: true, default: -> { [] }
-      attribute :cat_ax, CatAx, collection: true, default: -> { [] }
-      attribute :val_ax, ValAx, collection: true, default: -> { [] }
-      attribute :date_ax, DateAx, collection: true, default: -> { [] }
-      attribute :ser_ax, SerAx, collection: true, default: -> { [] }
+      attribute :chart_types, :string, collection: true, initialize_empty: true
+      attribute :cat_ax, CatAx, collection: true, initialize_empty: true
+      attribute :val_ax, ValAx, collection: true, initialize_empty: true
+      attribute :date_ax, DateAx, collection: true, initialize_empty: true
+      attribute :ser_ax, SerAx, collection: true, initialize_empty: true
       attribute :sp_pr, :string
 
       xml do

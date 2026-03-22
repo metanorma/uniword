@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sparklineGroups>
     class SparklineGroups < Lutaml::Model::Serializable
-      attribute :groups, SparklineGroup, collection: true, default: -> { [] }
+      attribute :groups, SparklineGroup, collection: true, initialize_empty: true
 
       xml do
         element 'sparklineGroups'

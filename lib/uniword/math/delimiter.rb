@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:d>
     class Delimiter < Lutaml::Model::Serializable
       attribute :properties, DelimiterProperties
-      attribute :elements, Element, collection: true, default: -> { [] }
+      attribute :elements, Element, collection: true, initialize_empty: true
 
       xml do
         element 'd'

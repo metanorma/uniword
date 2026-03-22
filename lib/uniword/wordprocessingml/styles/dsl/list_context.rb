@@ -41,7 +41,7 @@ module Uniword
           item_level = level || @current_level
           level_def = @style_def.level(item_level)
 
-          para = Paragraph.new
+          para = Wordprocessingml::Paragraph.new
           para.add_text(text)
 
           # Set numbering from style definition

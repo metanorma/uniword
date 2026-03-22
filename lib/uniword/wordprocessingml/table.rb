@@ -11,7 +11,7 @@ module Uniword
     class Table < Lutaml::Model::Serializable
       attribute :properties, TableProperties
       attribute :grid, TableGrid
-      attribute :rows, TableRow, collection: true, default: -> { [] }
+      attribute :rows, TableRow, collection: true, initialize_empty: true
       attribute :alternate_content, AlternateContent, default: nil
 
       xml do

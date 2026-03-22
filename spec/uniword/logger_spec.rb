@@ -109,22 +109,22 @@ RSpec.describe Uniword::Loggable do
 end
 
 RSpec.describe 'Inspection helpers' do
-  describe Uniword::Document do
-    let(:doc) { Uniword::Document.new }
+  describe Uniword::Wordprocessingml::DocumentRoot do
+    let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'provides readable inspect output' do
       doc.add_paragraph('Test')
-      expect(doc.inspect).to include('Uniword::Document')
+      expect(doc.inspect).to include('Uniword::Wordprocessingml::DocumentRoot')
       expect(doc.inspect).to include('@body=...')
     end
   end
 
-  describe Uniword::Paragraph do
-    let(:para) { Uniword::Paragraph.new }
+  describe Uniword::Wordprocessingml::Paragraph do
+    let(:para) { Uniword::Wordprocessingml::Paragraph.new }
 
     it 'provides readable inspect output' do
       para.add_text('Hello World')
-      expect(para.inspect).to include('Uniword::Paragraph')
+      expect(para.inspect).to include('Uniword::Wordprocessingml::Paragraph')
       expect(para.inspect).to include('runs=1')
       expect(para.inspect).to include('Hello World')
     end
@@ -136,11 +136,11 @@ RSpec.describe 'Inspection helpers' do
     end
   end
 
-  describe Uniword::Run do
-    let(:run) { Uniword::Run.new(text: 'Test text') }
+  describe Uniword::Wordprocessingml::Run do
+    let(:run) { Uniword::Wordprocessingml::Run.new(text: 'Test text') }
 
     it 'provides readable inspect output' do
-      expect(run.inspect).to include('Uniword::Run')
+      expect(run.inspect).to include('Uniword::Wordprocessingml::Run')
       expect(run.inspect).to include('Test text')
     end
 

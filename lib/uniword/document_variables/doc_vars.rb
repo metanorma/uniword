@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: document_variables.yml
     # Element: <dv:doc_vars>
     class DocVars < Lutaml::Model::Serializable
-      attribute :doc_var, DocVar, collection: true, default: -> { [] }
+      attribute :doc_var, DocVar, collection: true, initialize_empty: true
 
       xml do
         element 'doc_vars'

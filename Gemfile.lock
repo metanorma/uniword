@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     uniword (1.0.0)
-      lutaml-model (~> 0.7)
+      lutaml-model (~> 0.8)
       mail (~> 2.8)
       nokogiri (~> 1.15)
       rubyzip (~> 2.3)
@@ -11,21 +11,15 @@ PATH
 PATH
   remote: /Users/mulgogi/src/lutaml/lutaml-model
   specs:
-    lutaml-model (0.7.7)
+    lutaml-model (0.8.0)
       activesupport
       base64
       liquid (~> 5.0)
       moxml (>= 0.1.2)
       openssl (~> 3.0)
+      ostruct
       rubyzip (~> 2.3)
       thor
-
-PATH
-  remote: /Users/mulgogi/src/plurimath/plurimath
-  specs:
-    plurimath (0.5.0)
-      ox
-      parslet
 
 GEM
   remote: https://rubygems.org/
@@ -51,7 +45,7 @@ GEM
     benchmark-memory (0.2.0)
       memory_profiler (~> 1)
     bigdecimal (4.0.1)
-    canon (0.1.14)
+    canon (0.1.16)
       diff-lcs
       json
       moxml
@@ -73,13 +67,13 @@ GEM
       ffi (~> 1.0)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
-    json (2.18.1)
-    json-schema (6.1.0)
+    json (2.19.2)
+    json-schema (6.2.0)
       addressable (~> 2.8)
       bigdecimal (>= 3.1, < 5)
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
-    liquid (5.11.0)
+    liquid (5.12.0)
       bigdecimal
       strscan (>= 3.1.1)
     logger (1.7.0)
@@ -89,7 +83,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mcp (0.8.0)
+    mcp (0.9.0)
       json-schema (>= 4.1)
     memo_wise (1.13.0)
     memory_profiler (1.1.0)
@@ -107,18 +101,15 @@ GEM
       timeout
     net-smtp (0.5.1)
       net-protocol
-    nokogiri (1.19.1-arm64-darwin)
+    nokogiri (1.19.2-arm64-darwin)
       racc (~> 1.4)
     openssl (3.3.2)
     ostruct (0.6.3)
-    ox (2.14.23)
-      bigdecimal (>= 3.0)
     paint (2.3.0)
     parallel (1.27.0)
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
-    parslet (2.0.0)
     prism (1.9.0)
     public_suffix (7.0.5)
     racc (1.8.1)
@@ -138,7 +129,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-support (3.13.7)
-    rubocop (1.85.0)
+    rubocop (1.85.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -150,13 +141,13 @@ GEM
       rubocop-ast (>= 1.49.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 4.0)
-    rubocop-ast (1.49.0)
+    rubocop-ast (1.49.1)
       parser (>= 3.3.7.2)
       prism (~> 1.7)
     rubocop-rspec (3.9.0)
       lint_roller (~> 1.1)
       rubocop (~> 1.81)
-    ruby-prof (2.0.3)
+    ruby-prof (2.0.4)
       base64
       ostruct
     ruby-progressbar (1.13.0)
@@ -170,7 +161,7 @@ GEM
       paint (~> 2.3)
       unicode-display_width (~> 3.1)
     thor (1.5.0)
-    timeout (0.6.0)
+    timeout (0.6.1)
     toml-rb (4.1.0)
       citrus (~> 3.0, > 3.0)
       racc (~> 1.7)
@@ -196,7 +187,6 @@ DEPENDENCIES
   canon
   get_process_mem
   lutaml-model!
-  plurimath!
   rake
   rspec
   rubocop

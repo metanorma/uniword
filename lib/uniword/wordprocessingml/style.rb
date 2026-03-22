@@ -20,10 +20,78 @@ module Uniword
       attribute :link, Link
       attribute :uiPriority, UiPriority
       attribute :qFormat, Properties::QuickFormat
+      attribute :semiHidden, SemiHidden
+      attribute :unhideWhenUsed, UnhideWhenUsed
+      attribute :rsid, Rsid, collection: true
       attribute :pPr, ParagraphProperties
       attribute :rPr, RunProperties
       attribute :tblPr, TableProperties
       attribute :tcPr, TableCellProperties
+
+      # YAML mapping for flat YAML structure
+      yaml do
+        map 'id', to: :styleId
+        map 'type', to: :type
+        map 'name', with: { from: :yaml_name_from, to: :yaml_name_to }
+        map 'default', to: :default
+        map 'custom', to: :customStyle
+        map 'quick_format', with: { from: :yaml_quick_format_from, to: :yaml_quick_format_to }
+        map 'based_on', with: { from: :yaml_based_on_from, to: :yaml_based_on_to }
+        map 'next_style', with: { from: :yaml_next_style_from, to: :yaml_next_style_to }
+        map 'linked_style', with: { from: :yaml_linked_style_from, to: :yaml_linked_style_to }
+        map 'ui_priority', with: { from: :yaml_ui_priority_from, to: :yaml_ui_priority_to }
+        map 'paragraph_properties', to: :pPr
+        map 'run_properties', to: :rPr
+      end
+
+      # YAML transform methods (instance methods - called via send on an instance)
+      def yaml_name_from(instance, value)
+        instance.name = StyleName.new(val: value) if value
+      end
+
+      def yaml_name_to(instance, doc)
+        instance.name&.val
+      end
+
+      def yaml_quick_format_from(instance, value)
+        instance.qFormat = Properties::QuickFormat.new(value: value) unless value.nil?
+      end
+
+      def yaml_quick_format_to(instance, doc)
+        instance.qFormat&.value
+      end
+
+      def yaml_based_on_from(instance, value)
+        instance.basedOn = BasedOn.new(val: value) if value
+      end
+
+      def yaml_based_on_to(instance, doc)
+        instance.basedOn&.val
+      end
+
+      def yaml_next_style_from(instance, value)
+        instance.nextStyle = Next.new(val: value) if value
+      end
+
+      def yaml_next_style_to(instance, doc)
+        instance.nextStyle&.val
+      end
+
+      def yaml_linked_style_from(instance, value)
+        instance.link = Link.new(val: value) if value
+      end
+
+      def yaml_linked_style_to(instance, doc)
+        instance.link&.val
+      end
+
+      def yaml_ui_priority_from(instance, value)
+        instance.uiPriority = UiPriority.new(val: value.to_s) if value
+      end
+
+      def yaml_ui_priority_to(instance, doc)
+        instance.uiPriority&.val&.to_i
+      end
 
       xml do
         element 'style'
@@ -40,6 +108,9 @@ module Uniword
         map_element 'link', to: :link, render_nil: false
         map_element 'uiPriority', to: :uiPriority, render_nil: false
         map_element 'qFormat', to: :qFormat, render_nil: false
+        map_element 'semiHidden', to: :semiHidden, render_nil: false
+        map_element 'unhideWhenUsed', to: :unhideWhenUsed, render_nil: false
+        map_element 'rsid', to: :rsid, render_nil: false
         map_element 'pPr', to: :pPr, render_nil: false
         map_element 'rPr', to: :rPr, render_nil: false
         map_element 'tblPr', to: :tblPr, render_nil: false

@@ -2,108 +2,96 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Line Spacing Fine Control' do
+RSpec.describe 'Line Spacing (RAW OOXML Values)' do
   describe 'Paragraph#line_spacing=' do
-    let(:doc) { Uniword::Document.new }
+    let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
     let(:para) { doc.add_paragraph('Test paragraph') }
 
-    context 'with numeric value (simple API)' do
-      it 'sets line spacing as multiple (1.5x)' do
-        para.line_spacing = 1.5
-        expect(para.properties.line_spacing).to eq(1.5)
-        expect(para.properties.line_rule).to eq('auto')
+    context 'with numeric value (RAW OOXML twips)' do
+      it 'sets line spacing as raw twips value' do
+        para.line_spacing = 360
+        expect(para.line_spacing).to eq(360)
       end
 
-      it 'sets line spacing as single (1.0x)' do
-        para.line_spacing = 1.0
-        expect(para.properties.line_spacing).to eq(1.0)
-        expect(para.properties.line_rule).to eq('auto')
+      it 'sets line spacing with rule via two-arg method' do
+        para.line_spacing(240, 'exact')
+        expect(para.properties.spacing.line).to eq(240)
+        expect(para.properties.spacing.line_rule).to eq('exact')
       end
 
-      it 'sets line spacing as double (2.0x)' do
-        para.line_spacing = 2.0
-        expect(para.properties.line_spacing).to eq(2.0)
-        expect(para.properties.line_rule).to eq('auto')
+      it 'sets line spacing with auto rule' do
+        para.line_spacing(360, 'auto')
+        expect(para.properties.spacing.line).to eq(360)
+        expect(para.properties.spacing.line_rule).to eq('auto')
       end
     end
 
-    context 'with hash format (fine-grained API)' do
+    context 'with hash format' do
       it 'sets exact line spacing' do
         para.line_spacing = { rule: 'exact', value: 240 }
-        expect(para.properties.line_spacing).to eq(240.0)
-        expect(para.properties.line_rule).to eq('exact')
+        expect(para.properties.spacing.line).to eq(240)
+        expect(para.properties.spacing.line_rule).to eq('exact')
       end
 
       it 'sets "at least" line spacing' do
         para.line_spacing = { rule: 'atLeast', value: 280 }
-        expect(para.properties.line_spacing).to eq(280.0)
-        expect(para.properties.line_rule).to eq('atLeast')
-      end
-
-      it 'sets multiple line spacing via hash' do
-        para.line_spacing = { rule: 'multiple', value: 1.5 }
-        expect(para.properties.line_spacing).to eq(1.5)
-        expect(para.properties.line_rule).to eq('auto')
+        expect(para.properties.spacing.line).to eq(280)
+        expect(para.properties.spacing.line_rule).to eq('atLeast')
       end
 
       it 'normalizes "at_least" to "atLeast"' do
         para.line_spacing = { rule: 'at_least', value: 300 }
-        expect(para.properties.line_rule).to eq('atLeast')
+        expect(para.properties.spacing.line_rule).to eq('atLeast')
       end
 
       it 'handles string keys' do
         para.line_spacing = { 'rule' => 'exact', 'value' => 240 }
-        expect(para.properties.line_spacing).to eq(240.0)
-        expect(para.properties.line_rule).to eq('exact')
+        expect(para.properties.spacing.line).to eq(240)
+        expect(para.properties.spacing.line_rule).to eq('exact')
       end
     end
   end
 
   describe 'Paragraph#line_spacing getter' do
-    let(:doc) { Uniword::Document.new }
+    let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
     let(:para) { doc.add_paragraph('Test paragraph') }
 
-    it 'returns hash with rule and value when rule is set' do
-      para.line_spacing = { rule: 'exact', value: 240 }
-      result = para.line_spacing
-      expect(result).to be_a(Hash)
-      expect(result[:rule]).to eq('exact')
-      expect(result[:value]).to eq(240.0)
+    it 'returns raw integer value (twips)' do
+      para.line_spacing = 360
+      expect(para.line_spacing).to eq(360)
     end
 
-    it 'returns numeric value for auto/multiple spacing' do
-      para.line_spacing = 1.5
-      result = para.line_spacing
-      expect(result).to eq(1.5)
+    it 'returns nil when not set' do
+      expect(para.line_spacing).to be_nil
     end
   end
 
   describe 'OOXML serialization' do
-    let(:doc) { Uniword::Document.new }
+    let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'serializes exact line spacing correctly' do
       para = doc.add_paragraph('Test')
       para.line_spacing = { rule: 'exact', value: 240 }
 
-      xml = doc.to_xml
+      xml = doc.to_xml(prefix: true)
       expect(xml).to include('w:lineRule="exact"')
       expect(xml).to include('w:line="240"')
     end
 
-    it 'serializes multiple line spacing correctly' do
+    it 'serializes auto line spacing correctly' do
       para = doc.add_paragraph('Test')
-      para.line_spacing = 1.5
+      para.line_spacing = { rule: 'auto', value: 360 }
 
-      xml = doc.to_xml
+      xml = doc.to_xml(prefix: true)
       expect(xml).to include('w:lineRule="auto"')
-      expect(xml).to include('w:line="360"') # 1.5 * 240 = 360
+      expect(xml).to include('w:line="360"')
     end
 
     it 'serializes "at least" line spacing correctly' do
       para = doc.add_paragraph('Test')
       para.line_spacing = { rule: 'atLeast', value: 280 }
 
-      xml = doc.to_xml
+      xml = doc.to_xml(prefix: true)
       expect(xml).to include('w:lineRule="atLeast"')
       expect(xml).to include('w:line="280"')
     end
@@ -125,13 +113,13 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = Uniword::Document.from_xml(xml)
+      doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para = doc.body.paragraphs.first
-      expect(para.properties.line_spacing).to eq(240)
-      expect(para.properties.line_rule).to eq('exact')
+      expect(para.properties.spacing.line).to eq(240)
+      expect(para.properties.spacing.line_rule).to eq('exact')
     end
 
-    it 'deserializes multiple line spacing' do
+    it 'deserializes auto line spacing' do
       xml = <<~XML
         <?xml version="1.0" encoding="UTF-8"?>
         <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
@@ -146,10 +134,10 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = Uniword::Document.from_xml(xml)
+      doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para = doc.body.paragraphs.first
-      expect(para.properties.line_spacing).to eq(360)
-      expect(para.properties.line_rule).to eq('auto')
+      expect(para.properties.spacing.line).to eq(360)
+      expect(para.properties.spacing.line_rule).to eq('auto')
     end
 
     it 'deserializes "at least" line spacing' do
@@ -167,51 +155,51 @@ RSpec.describe 'Line Spacing Fine Control' do
         </w:document>
       XML
 
-      doc = Uniword::Document.from_xml(xml)
+      doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para = doc.body.paragraphs.first
-      expect(para.properties.line_spacing).to eq(280)
-      expect(para.properties.line_rule).to eq('atLeast')
+      expect(para.properties.spacing.line).to eq(280)
+      expect(para.properties.spacing.line_rule).to eq('atLeast')
     end
   end
 
   describe 'Round-trip serialization' do
     it 'preserves exact line spacing through round-trip' do
-      doc1 = Uniword::Document.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
       para1 = doc1.add_paragraph('Test')
       para1.line_spacing = { rule: 'exact', value: 240 }
 
-      xml = doc1.to_xml
-      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      xml = doc1.to_xml(prefix: true)
+      doc2 = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(240)
-      expect(para2.properties.line_rule).to eq('exact')
+      expect(para2.properties.spacing.line).to eq(240)
+      expect(para2.properties.spacing.line_rule).to eq('exact')
     end
 
-    it 'preserves multiple line spacing through round-trip' do
-      doc1 = Uniword::Document.new
+    it 'preserves auto line spacing through round-trip' do
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
       para1 = doc1.add_paragraph('Test')
-      para1.line_spacing = 1.5
+      para1.line_spacing = { rule: 'auto', value: 360 }
 
-      xml = doc1.to_xml
-      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      xml = doc1.to_xml(prefix: true)
+      doc2 = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(360)
-      expect(para2.properties.line_rule).to eq('auto')
+      expect(para2.properties.spacing.line).to eq(360)
+      expect(para2.properties.spacing.line_rule).to eq('auto')
     end
 
     it 'preserves "at least" line spacing through round-trip' do
-      doc1 = Uniword::Document.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
       para1 = doc1.add_paragraph('Test')
       para1.line_spacing = { rule: 'atLeast', value: 280 }
 
-      xml = doc1.to_xml
-      doc2 = Uniword::Wordprocessingml::Document.from_xml(xml)
+      xml = doc1.to_xml(prefix: true)
+      doc2 = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
       para2 = doc2.body.paragraphs.first
 
-      expect(para2.properties.line_spacing).to eq(280)
-      expect(para2.properties.line_rule).to eq('atLeast')
+      expect(para2.properties.spacing.line).to eq(280)
+      expect(para2.properties.spacing.line_rule).to eq('atLeast')
     end
   end
 end

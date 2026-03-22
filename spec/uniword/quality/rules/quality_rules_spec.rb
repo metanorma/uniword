@@ -3,17 +3,17 @@
 require 'spec_helper'
 
 RSpec.describe 'Quality Rules' do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
   describe Uniword::Quality::HeadingHierarchyRule do
     let(:rule) { described_class.new(max_level: 6, require_sequential: true) }
 
     it 'passes for sequential headings' do
-      para1 = Uniword::Paragraph.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
       para1.set_style('Heading 1')
       para1.add_text('Heading 1')
 
-      para2 = Uniword::Paragraph.new
+      para2 = Uniword::Wordprocessingml::Paragraph.new
       para2.set_style('Heading 2')
       para2.add_text('Heading 2')
 
@@ -25,11 +25,11 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects skipped heading levels' do
-      para1 = Uniword::Paragraph.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
       para1.set_style('Heading 1')
       para1.add_text('Heading 1')
 
-      para2 = Uniword::Paragraph.new
+      para2 = Uniword::Wordprocessingml::Paragraph.new
       para2.set_style('Heading 3')
       para2.add_text('Heading 3')
 
@@ -43,7 +43,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects headings exceeding max level' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_style('Heading 7')
       para.add_text('Heading 7')
       document.body.paragraphs << para
@@ -59,9 +59,9 @@ RSpec.describe 'Quality Rules' do
     let(:rule) { described_class.new(require_headers: true) }
 
     it 'passes for tables with rows' do
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
       row.add_cell(cell)
       table.add_row(row)
       document.body.tables << table
@@ -71,7 +71,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects tables without headers' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       document.body.tables << table
 
       violations = rule.check(document)
@@ -85,7 +85,7 @@ RSpec.describe 'Quality Rules' do
     let(:rule) { described_class.new(max_words: 500, warning_words: 400) }
 
     it 'passes for short paragraphs' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_text('Short paragraph with few words.')
       document.body.paragraphs << para
 
@@ -94,7 +94,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'warns for long paragraphs' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_text('word ' * 450) # 450 words
       document.body.paragraphs << para
 
@@ -105,7 +105,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'errors for very long paragraphs' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_text('word ' * 600) # 600 words
       document.body.paragraphs << para
 
@@ -116,7 +116,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'skips empty paragraphs' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -128,7 +128,7 @@ RSpec.describe 'Quality Rules' do
     let(:rule) { described_class.new(require_alt_text: true, min_length: 10) }
 
     it 'passes for images with sufficient alt text' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       image = Uniword::Image.new(
         relationship_id: 'rId1',
         alt_text: 'Detailed description of the image content'
@@ -141,7 +141,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects images without alt text' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       image = Uniword::Image.new(relationship_id: 'rId1')
       para.add_run(image)
       document.body.paragraphs << para
@@ -153,7 +153,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'warns for short alt text' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       image = Uniword::Image.new(
         relationship_id: 'rId1',
         alt_text: 'Short'
@@ -172,7 +172,7 @@ RSpec.describe 'Quality Rules' do
     let(:rule) { described_class.new(check_internal: true, check_external: true) }
 
     it 'passes for valid external links' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_hyperlink('Click here', url: 'https://example.com')
       document.body.paragraphs << para
 
@@ -181,7 +181,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects invalid URL format' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_hyperlink('Click here', url: 'not-a-valid-url')
       document.body.paragraphs << para
 
@@ -192,10 +192,9 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects broken internal links' do
-      para = Uniword::Paragraph.new
-      hyperlink = Uniword::Hyperlink.new(
-        anchor: 'nonexistent_bookmark',
-        text: 'Link'
+      para = Uniword::Wordprocessingml::Paragraph.new
+      hyperlink = Uniword::Wordprocessingml::Hyperlink.new(
+        anchor: 'nonexistent_bookmark'
       )
       para.add_run(hyperlink)
       document.body.paragraphs << para
@@ -216,7 +215,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'passes for paragraphs with styles' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_style('Normal')
       para.add_text('Styled paragraph')
       document.body.paragraphs << para
@@ -226,7 +225,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'warns for direct formatting without styles' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         alignment: 'center'
       )
@@ -240,7 +239,7 @@ RSpec.describe 'Quality Rules' do
     end
 
     it 'detects direct text formatting' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_style('Normal')
       para.add_text('Bold text', bold: true)
       document.body.paragraphs << para

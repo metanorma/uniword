@@ -10,7 +10,7 @@ module Uniword
     # Element: <c:pieChart>
     class PieChart < Lutaml::Model::Serializable
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :first_slice_ang, :string
 

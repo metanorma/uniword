@@ -30,7 +30,6 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 #   doc.apply_styleset('distinctive')
 #   doc.save('output.docx')
 #
-# @see Document Main document class (alias for Wordprocessingml::DocumentRoot)
 # @see DocumentFactory Factory for reading documents
 module Uniword
   # Version constant
@@ -52,50 +51,6 @@ module Uniword
   autoload :Vml, 'uniword/vml'
   autoload :Math, 'uniword/math'
   autoload :SharedTypes, 'uniword/shared_types'
-
-  # === API Aliases (WordProcessingML namespace) ===
-  # Re-export generated classes as primary API
-  Document = Wordprocessingml::DocumentRoot
-  Body = Wordprocessingml::Body
-  Paragraph = Wordprocessingml::Paragraph
-  Run = Wordprocessingml::Run
-  Table = Wordprocessingml::Table
-  TableRow = Wordprocessingml::TableRow
-  TableCell = Wordprocessingml::TableCell
-
-  # Properties classes
-  ParagraphProperties = Wordprocessingml::ParagraphProperties
-  RunProperties = Wordprocessingml::RunProperties
-  TableProperties = Wordprocessingml::TableProperties
-  SectionProperties = Wordprocessingml::SectionProperties
-
-  # Additional element classes
-  Hyperlink = Wordprocessingml::Hyperlink
-  BookmarkStart = Wordprocessingml::BookmarkStart
-  BookmarkEnd = Wordprocessingml::BookmarkEnd
-
-  # SDT properties (WordProcessingML namespace, aliased for convenience)
-  StructuredDocumentTagProperties = Wordprocessingml::StructuredDocumentTagProperties
-
-  # Math support
-  MathElement = Math::OMath
-
-  # === DrawingML Convenience Aliases ===
-  # Classes are in Drawingml namespace, These must be constant assignments,
-  # not autoload, because the files define Uniword::Drawingml::ClassName
-  Theme = Drawingml::Theme
-  ThemeModel = Drawingml::Theme
-  ColorScheme = Drawingml::ColorScheme
-  FontScheme = Drawingml::FontScheme
-  FormatScheme = Drawingml::FormatScheme
-  ObjectDefaults = Drawingml::ObjectDefaults
-  ExtensionList = Drawingml::ExtensionList
-  Extension = Drawingml::Extension
-  ExtraColorSchemeList = Drawingml::ExtraColorSchemeList
-  FillStyleList = Drawingml::FillStyleList
-  LineStyleList = Drawingml::LineStyleList
-  EffectStyleList = Drawingml::EffectStyleList
-  BackgroundFillStyleList = Drawingml::BackgroundFillStyleList
 
   # === Infrastructure Classes (autoload) ===
   autoload :DocumentFactory, 'uniword/document_factory'
@@ -137,6 +92,7 @@ module Uniword
   autoload :Warnings, 'uniword/warnings'
   autoload :Mhtml, 'uniword/mhtml'
   autoload :Themes, 'uniword/themes'
+  autoload :Resource, 'uniword/resource'
 
   # Stylesets and numbering (moved to wordprocessingml/)
   autoload :StyleSet, 'uniword/styleset'
@@ -148,6 +104,14 @@ module Uniword
 
   # CLI
   autoload :CLI, 'uniword/cli'
+
+  # Word implementation detection
+  autoload :WordImplementation, 'uniword/word_implementation'
+  autoload :WordImplementationFactory, 'uniword/word_implementation_factory'
+  autoload :WordImplementationMacos, 'uniword/word_implementation_macos'
+  autoload :WordImplementationWindows, 'uniword/word_implementation_windows'
+  autoload :WordImplementationLinux, 'uniword/word_implementation_linux'
+  autoload :WordImplementationNull, 'uniword/word_implementation_null'
 
   # === Top-Level Classes (autoload) ===
   autoload :Element, 'uniword/element'
@@ -183,12 +147,10 @@ module Uniword
 
   # Formatting and styling
   autoload :ColumnConfiguration, 'uniword/column_configuration'
-  autoload :Extension, 'uniword/extension'
-  autoload :ExtensionList, 'uniword/extension_list'
-  autoload :ExtraColorSchemeList, 'uniword/extra_color_scheme_list'
   autoload :LineNumbering, 'uniword/line_numbering'
   autoload :PageBorders, 'uniword/page_borders'
   autoload :ParagraphBorder, 'uniword/paragraph_border'
+  autoload :ParagraphBorderSide, 'uniword/paragraph_border'
   autoload :Shading, 'uniword/shading'
   autoload :TabStop, 'uniword/tab_stop'
 

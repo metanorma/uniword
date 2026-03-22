@@ -10,9 +10,9 @@ module Uniword
     # Element: <p:p>
     class Paragraph < Lutaml::Model::Serializable
       attribute :p_pr, ParagraphProperties
-      attribute :r, Run, collection: true, default: -> { [] }
-      attribute :br, Break, collection: true, default: -> { [] }
-      attribute :fld, Field, collection: true, default: -> { [] }
+      attribute :r, Run, collection: true, initialize_empty: true
+      attribute :br, Break, collection: true, initialize_empty: true
+      attribute :fld, Field, collection: true, initialize_empty: true
       attribute :end_para_r_pr, RunProperties
 
       xml do

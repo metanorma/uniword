@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::TableCell do
-  let(:paragraph1) { Uniword::Paragraph.new.tap { |p| p.add_text('First paragraph') } }
-  let(:paragraph2) { Uniword::Paragraph.new.tap { |p| p.add_text('Second paragraph') } }
+RSpec.describe Uniword::Wordprocessingml::TableCell do
+  let(:paragraph1) { Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('First paragraph') } }
+  let(:paragraph2) { Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Second paragraph') } }
 
   describe '#initialize' do
     it 'creates a cell with no paragraphs' do
@@ -36,7 +36,7 @@ RSpec.describe Uniword::TableCell do
     it 'returns the paragraphs collection' do
       cell.paragraphs << paragraph1
       expect(cell.paragraphs.count).to eq(1)
-      expect(cell.paragraphs.first).to be_a(Uniword::Paragraph)
+      expect(cell.paragraphs.first).to be_a(Uniword::Wordprocessingml::Paragraph)
     end
   end
 
@@ -64,7 +64,7 @@ RSpec.describe Uniword::TableCell do
     end
 
     it 'returns true for cell with empty paragraphs' do
-      empty_para = Uniword::Paragraph.new
+      empty_para = Uniword::Wordprocessingml::Paragraph.new
       cell = described_class.new(paragraphs: [empty_para])
       expect(cell.paragraphs.first.empty?).to be true
     end

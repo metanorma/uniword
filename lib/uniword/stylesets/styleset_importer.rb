@@ -3,7 +3,7 @@
 require 'fileutils'
 
 module Uniword
-  module StyleSets
+  module Stylesets
     # Imports .dotx StyleSet files and converts them to YAML format
     #
     # Leverages lutaml-model's from_xml and to_yaml serialization for

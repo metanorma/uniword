@@ -11,9 +11,9 @@ module Uniword
     class ScatterChart < Lutaml::Model::Serializable
       attribute :scatter_style, :string
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'scatterChart'

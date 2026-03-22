@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:p>
     class TextParagraph < Lutaml::Model::Serializable
-      attribute :runs, TextRun, collection: true, default: -> { [] }
+      attribute :runs, TextRun, collection: true, initialize_empty: true
 
       xml do
         element 'p'

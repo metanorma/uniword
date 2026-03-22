@@ -7,8 +7,8 @@ module Uniword
   # Footers can contain paragraphs, tables, and fields (like page numbers)
   class Footer < Lutaml::Model::Serializable
     attribute :type, :string, default: -> { 'default' }
-    attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
-    attribute :tables, Table, collection: true, default: -> { [] }
+    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
+    attribute :tables, Wordprocessingml::Table, collection: true, initialize_empty: true
 
     # Valid footer types
     TYPES = %w[default first even].freeze
@@ -22,7 +22,7 @@ module Uniword
 
     # Add a paragraph to this footer
     def add_paragraph(paragraph)
-      unless paragraph.is_a?(Paragraph)
+      unless paragraph.is_a?(Wordprocessingml::Paragraph)
         raise ArgumentError,
               'paragraph must be a Paragraph instance'
       end
@@ -32,14 +32,14 @@ module Uniword
 
     # Add a table to this footer
     def add_table(table)
-      raise ArgumentError, 'table must be a Table instance' unless table.is_a?(Table)
+      raise ArgumentError, 'table must be a Wordprocessingml::Table instance' unless table.is_a?(Wordprocessingml::Table)
 
       tables << table
     end
 
     # Create and add a text paragraph
     def add_text(text, properties: nil)
-      para = Paragraph.new(properties: properties)
+      para = Wordprocessingml::Paragraph.new(properties: properties)
       para.add_text(text)
       add_paragraph(para)
       para
@@ -49,9 +49,9 @@ module Uniword
     # Compatible with docx-js API
     def add_element(element)
       case element
-      when Paragraph
+      when Wordprocessingml::Paragraph
         add_paragraph(element)
-      when Table
+      when Wordprocessingml::Table
         add_table(element)
       else
         raise ArgumentError, "Unsupported element type: #{element.class}"

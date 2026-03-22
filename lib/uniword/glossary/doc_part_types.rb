@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: glossary.yml
     # Element: <g:doc_part_types>
     class DocPartTypes < Lutaml::Model::Serializable
-      attribute :type, DocPartType, collection: true, default: -> { [] }
+      attribute :type, DocPartType, collection: true, initialize_empty: true
       attribute :all, :boolean
 
       xml do

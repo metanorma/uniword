@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:eqArr>
     class EquationArray < Lutaml::Model::Serializable
       attribute :properties, EquationArrayProperties
-      attribute :elements, Element, collection: true, default: -> { [] }
+      attribute :elements, Element, collection: true, initialize_empty: true
 
       xml do
         element 'eqArr'

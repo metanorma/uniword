@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:borders>
     class Borders < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :border_entries, Border, collection: true, default: -> { [] }
+      attribute :border_entries, Border, collection: true, initialize_empty: true
 
       xml do
         element 'borders'

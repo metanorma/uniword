@@ -204,14 +204,14 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
 
   describe 'integration with Document' do
     it 'can be used as Document core_properties' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       expect(doc.core_properties).to be_a(described_class)
       expect(doc.core_properties.created).not_to be_nil
     end
 
     it 'updates when document title is set' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.title = 'Integration Test'
 
       expect(doc.core_properties.title).to eq('Integration Test')

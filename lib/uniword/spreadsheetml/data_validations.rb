@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:dataValidations>
     class DataValidations < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :validations, DataValidation, collection: true, default: -> { [] }
+      attribute :validations, DataValidation, collection: true, initialize_empty: true
 
       xml do
         element 'dataValidations'

@@ -95,7 +95,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'resolves single component' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       components = registry.resolve('cover_page')
       expect(components.size).to eq(1)
@@ -104,7 +104,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'resolves wildcard pattern' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       components = registry.resolve('clauses/*')
       expect(components.size).to be >= 2
@@ -114,7 +114,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'sorts alphabetically when requested' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       components = registry.resolve('clauses/*', order: 'alphabetical')
       names = components.map { |c| c[:name] }
@@ -123,7 +123,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'sorts numerically when requested' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       components = registry.resolve('clauses/*', order: 'numeric')
       names = components.map { |c| c[:name] }
@@ -139,7 +139,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'clears cached components' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       # Load component to cache it
       registry.get('cover_page')
@@ -163,7 +163,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
     it 'tracks cached components' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       registry.get('cover_page')
       stats = registry.cache_stats
@@ -181,7 +181,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
       call_count = 0
       allow(Uniword::DocumentFactory).to receive(:from_file) do
         call_count += 1
-        Uniword::Document.new
+        Uniword::Wordprocessingml::DocumentRoot.new
       end
 
       # Get component twice
@@ -199,7 +199,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
       call_count = 0
       allow(Uniword::DocumentFactory).to receive(:from_file) do
         call_count += 1
-        Uniword::Document.new
+        Uniword::Wordprocessingml::DocumentRoot.new
       end
 
       # Get component twice

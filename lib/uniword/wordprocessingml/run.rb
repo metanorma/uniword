@@ -12,16 +12,23 @@ module Uniword
     # Element: <w:r>
     class Run < Lutaml::Model::Serializable
       attribute :properties, RunProperties
-      attribute :text, :string
+      attribute :text, Text
       attribute :tab, Tab
       attribute :break, Break
-      attribute :drawings, Drawing, collection: true, default: -> { [] }
+      attribute :drawings, Drawing, collection: true, initialize_empty: true
       attribute :alternate_content, AlternateContent, default: nil
+
+      # Revision tracking attributes
+      attribute :rsid_r, :string          # Revision ID for run
+      attribute :rsid_r_pr, :string       # Revision ID for run properties
 
       xml do
         element 'r'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
+
+        map_attribute 'rsidR', to: :rsid_r, render_nil: false
+        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
 
         map_element 'rPr', to: :properties, render_nil: false
         map_element 't', to: :text, render_nil: false
@@ -29,6 +36,16 @@ module Uniword
         map_element 'br', to: :break, render_nil: false
         map_element 'drawing', to: :drawings, render_nil: false
         map_element 'AlternateContent', to: :alternate_content, render_nil: false
+      end
+
+      # Initialize with text normalization
+      # Converts string text to Text object for proper OOXML serialization
+      def initialize(attrs = {})
+        # Normalize text: convert String to Text object
+        if attrs[:text].is_a?(String)
+          attrs[:text] = Text.new(content: attrs[:text])
+        end
+        super
       end
 
       # Get bold property object
@@ -237,8 +254,17 @@ module Uniword
       # @param value [String] Text to add
       # @return [self] For method chaining
       def add_text(value)
-        self.text = (text || '') + value.to_s
+        existing = text.is_a?(Text) ? text.content : text.to_s
+        self.text = existing + value.to_s
         self
+      end
+
+      # Get text content as string (convenience method)
+      # Use this when you need the string value, or use text.content directly
+      #
+      # @return [String, nil] Text content
+      def text_content
+        @text&.content
       end
 
       # Get drawings from this run
@@ -551,7 +577,7 @@ module Uniword
         flags << 'underline' if underline?
 
         flags_str = flags.empty? ? '' : " #{flags.join(' ')}"
-        "#<Uniword::Run#{flags_str} text=\"#{text_preview}\">"
+        "#<#{self.class}#{flags_str} text=\"#{text_preview}\">"
       end
     end
   end

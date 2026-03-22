@@ -25,7 +25,7 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
 
     it 'adds paragraphs' do
       header = Uniword::Header.new
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       header.add_paragraph(para)
       expect(header.paragraphs).to include(para)
     end
@@ -220,28 +220,28 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
   # Integration tests
   describe 'Document Integration' do
     it 'initializes with default section' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       expect(doc.sections).not_to be_empty
       expect(doc.current_section).to be_a(Uniword::Section)
     end
 
     it 'adds sections' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       section = doc.add_section
       expect(doc.sections).to include(section)
     end
 
     it 'adds header to section' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       header = doc.current_section.header('default')
       header.add_text('My Header')
       expect(header.paragraphs.first.text).to eq('My Header')
     end
 
     it 'creates document with page numbers in footer' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       footer = doc.current_section.footer('default')
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       # This would be where we'd add field support to paragraphs
       # For now just verify footer exists

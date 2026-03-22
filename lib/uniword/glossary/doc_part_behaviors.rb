@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: glossary.yml
     # Element: <g:doc_part_behaviors>
     class DocPartBehaviors < Lutaml::Model::Serializable
-      attribute :behavior, DocPartBehavior, collection: true, default: -> { [] }
+      attribute :behavior, DocPartBehavior, collection: true, initialize_empty: true
 
       xml do
         root 'behaviors'

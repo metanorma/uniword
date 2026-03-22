@@ -91,9 +91,9 @@ module Uniword
           target: target,
           target_format: target_format,
           success: true,
-          paragraphs_count: target_document.paragraphs.count,
-          tables_count: target_document.tables.count,
-          images_count: target_document.images.count
+          paragraphs_count: document_stats(target_document)[:paragraphs],
+          tables_count: document_stats(target_document)[:tables],
+          images_count: document_stats(target_document)[:images]
         )
       rescue StandardError => e
         # Create failure result
@@ -270,6 +270,33 @@ module Uniword
     def write_document(document, target, format)
       writer = DocumentWriter.new(document)
       writer.save(target, format: format)
+    end
+
+    # Get document statistics (paragraphs, tables, images)
+    #
+    # @param document [Object] Document (OOXML or MHTML)
+    # @return [Hash] Statistics hash
+    def document_stats(document)
+      # Handle OOXML document
+      if document.respond_to?(:paragraphs)
+        return {
+          paragraphs: document.paragraphs.count,
+          tables: document.respond_to?(:tables) ? document.tables.count : 0,
+          images: document.respond_to?(:images) ? document.images.count : 0
+        }
+      end
+
+      # Handle MHTML document - estimate from HTML content
+      if document.respond_to?(:html_content) && document.html_content
+        html = document.html_content
+        {
+          paragraphs: html.scan(/<p[\s>]/i).count,
+          tables: html.scan(/<table/i).count,
+          images: html.scan(/<img/i).count
+        }
+      else
+        { paragraphs: 0, tables: 0, images: 0 }
+      end
     end
 
     # Validate conversion parameters

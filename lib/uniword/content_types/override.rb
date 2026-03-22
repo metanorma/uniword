@@ -16,8 +16,8 @@ module Uniword
         element 'Override'
         namespace Uniword::Ooxml::Namespaces::ContentTypes
 
-        map_attribute 'part-name', to: :part_name
-        map_attribute 'content-type', to: :content_type
+        map_attribute 'PartName', to: :part_name
+        map_attribute 'ContentType', to: :content_type
       end
     end
   end

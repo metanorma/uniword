@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:protectedRanges>
     class ProtectedRanges < Lutaml::Model::Serializable
-      attribute :ranges, :string, collection: true, default: -> { [] }
+      attribute :ranges, :string, collection: true, initialize_empty: true
 
       xml do
         element 'protectedRanges'

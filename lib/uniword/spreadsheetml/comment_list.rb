@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:commentList>
     class CommentList < Lutaml::Model::Serializable
-      attribute :comment_entries, Comment, collection: true, default: -> { [] }
+      attribute :comment_entries, Comment, collection: true, initialize_empty: true
 
       xml do
         element 'commentList'

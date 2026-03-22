@@ -10,7 +10,7 @@ module Uniword
     # Element: <o:rules>
     class VmlRules < Lutaml::Model::Serializable
       attribute :ext, :string
-      attribute :rule, :string, collection: true, default: -> { [] }
+      attribute :rule, :string, collection: true, initialize_empty: true
 
       xml do
         element 'rules'

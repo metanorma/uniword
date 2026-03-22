@@ -11,11 +11,11 @@ module Uniword
     class Line3DChart < Lutaml::Model::Serializable
       attribute :grouping, :string
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :drop_lines, DropLines
       attribute :gap_depth, :string
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'line3DChart'

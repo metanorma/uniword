@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:conditionalFormatting>
     class ConditionalFormatting < Lutaml::Model::Serializable
       attribute :sqref, :string
-      attribute :rules, ConditionalFormattingRule, collection: true, default: -> { [] }
+      attribute :rules, ConditionalFormattingRule, collection: true, initialize_empty: true
 
       xml do
         element 'conditionalFormatting'

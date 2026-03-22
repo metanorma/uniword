@@ -26,7 +26,7 @@ module Uniword
       # @return [Boolean] true if valid, false otherwise
       def valid?(element)
         return false unless super
-        return false unless element.is_a?(Uniword::Table)
+        return false unless element.is_a?(Uniword::Wordprocessingml::Table)
 
         validate_rows(element) &&
           validate_properties(element)
@@ -43,7 +43,7 @@ module Uniword
         return ['Element is nil'] if element.nil?
 
         # Check table type first (more specific than base check)
-        return ['Element must be a Table'] unless element.is_a?(Uniword::Table)
+        return ['Element must be a Table'] unless element.is_a?(Uniword::Wordprocessingml::Table)
 
         # Validate rows - collect all specific errors
         errors.concat(row_errors(element))
@@ -61,7 +61,7 @@ module Uniword
       def warnings(element)
         warnings = []
 
-        return warnings unless element.is_a?(Uniword::Table)
+        return warnings unless element.is_a?(Uniword::Wordprocessingml::Table)
         return warnings if element.rows.empty?
 
         # Check for inconsistent column counts
@@ -82,7 +82,7 @@ module Uniword
       def validate_rows(table)
         return true if table.rows.nil? || table.rows.empty?
 
-        table.rows.all?(Uniword::TableRow)
+        table.rows.all?(Uniword::Wordprocessingml::TableRow)
       end
 
       # Get errors related to rows
@@ -95,7 +95,7 @@ module Uniword
         return errors if table.rows.nil? || table.rows.empty?
 
         table.rows.each_with_index do |row, index|
-          unless row.is_a?(Uniword::TableRow)
+          unless row.is_a?(Uniword::Wordprocessingml::TableRow)
             errors << "Row at index #{index} must be a TableRow instance"
           end
         end
@@ -134,7 +134,7 @@ end
 # This ensures the validator is available regardless of load order
 if defined?(Uniword::Validators::ElementValidator)
   Uniword::Validators::ElementValidator.register(
-    Uniword::Table,
+    Uniword::Wordprocessingml::Table,
     Uniword::Validators::TableValidator
   )
 end

@@ -11,9 +11,9 @@ module Uniword
     class RadarChart < Lutaml::Model::Serializable
       attribute :radar_style, :string
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'radarChart'

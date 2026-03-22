@@ -22,7 +22,7 @@ RSpec.describe Uniword::Metadata::MetadataManager do
 
   describe '#extract' do
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('First paragraph content')
       doc.add_paragraph('Second paragraph content')
       doc
@@ -52,7 +52,7 @@ RSpec.describe Uniword::Metadata::MetadataManager do
   end
 
   describe '#extract_and_validate' do
-    let(:document) { Uniword::Document.new }
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'extracts and validates metadata' do
       result = manager.extract_and_validate(document)
@@ -72,7 +72,7 @@ RSpec.describe Uniword::Metadata::MetadataManager do
   end
 
   describe '#update' do
-    let(:document) { Uniword::Document.new }
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'updates document metadata' do
       result = manager.update(document, {
@@ -257,7 +257,7 @@ RSpec.describe Uniword::Metadata::MetadataManager do
 
   describe 'integration' do
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Integration test content')
       doc
     end

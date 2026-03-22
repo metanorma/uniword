@@ -25,11 +25,11 @@ module Uniword
           text = value.to_s
 
           case element
-          when Uniword::Paragraph
+          when Uniword::Wordprocessingml::Paragraph
             replace_paragraph(element, text)
-          when Uniword::Run
+          when Uniword::Wordprocessingml::Run
             replace_run(element, text)
-          when Uniword::TableCell
+          when Uniword::Wordprocessingml::TableCell
             replace_cell(element, text)
           else
             # Try to treat as paragraph-like
@@ -72,7 +72,7 @@ module Uniword
             replace_paragraph(cell.paragraphs.first, text)
           else
             # Create new paragraph with text
-            para = Uniword::Paragraph.new
+            para = Uniword::Wordprocessingml::Paragraph.new
             para.add_text(text)
             cell.paragraphs << para
           end

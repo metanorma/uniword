@@ -19,6 +19,7 @@ module Uniword
     autoload :EmphasisMark, 'uniword/properties/emphasis_mark'
     autoload :NumberingId, 'uniword/properties/numbering_id'
     autoload :NumberingLevel, 'uniword/properties/numbering_level'
+    autoload :NumberingProperties, 'uniword/properties/numbering_properties'
     autoload :Tabs, 'uniword/properties/tabs'
 
     # Boolean formatting classes (from boolean_formatting.rb)
@@ -34,6 +35,7 @@ module Uniword
     autoload :QuickFormat, 'uniword/properties/boolean_formatting'
     autoload :KeepNext, 'uniword/properties/boolean_formatting'
     autoload :KeepLines, 'uniword/properties/boolean_formatting'
+    autoload :ContextualSpacing, 'uniword/properties/contextual_spacing'
 
     # Bold and Italic (from bold.rb and italic.rb)
     autoload :Bold, 'uniword/properties/bold'
@@ -56,6 +58,7 @@ module Uniword
     autoload :TableWidth, 'uniword/properties/table_width'
     autoload :TableCellMargin, 'uniword/properties/table_cell_margin'
     autoload :TableLook, 'uniword/properties/table_look'
+    autoload :TableIndent, 'uniword/properties/table_indent'
     autoload :CellWidth, 'uniword/properties/cell_width'
     autoload :CellVerticalAlign, 'uniword/properties/cell_vertical_align'
   end

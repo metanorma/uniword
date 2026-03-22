@@ -20,7 +20,7 @@ module Uniword
     attribute :row_properties, :string
 
     # Array of cells in this row
-    attribute :cells, TableCell, collection: true, default: -> { [] }
+    attribute :cells, TableCell, collection: true, initialize_empty: true
 
     # Row height (optional)
     attribute :height, :string

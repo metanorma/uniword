@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:tblGrid>
     class TableGrid < Lutaml::Model::Serializable
-      attribute :columns, GridCol, collection: true, default: -> { [] }
+      attribute :columns, GridCol, collection: true, initialize_empty: true
 
       xml do
         element 'tblGrid'

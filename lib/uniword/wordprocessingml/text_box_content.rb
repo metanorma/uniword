@@ -9,9 +9,9 @@ module Uniword
     # Contains paragraphs, tables, and structured document tags
     class TextBoxContent < Lutaml::Model::Serializable
       # PATTERN 0: Attributes FIRST
-      attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
-      attribute :tables, Table, collection: true, default: -> { [] }
-      attribute :sdts, StructuredDocumentTag, collection: true, default: -> { [] }
+      attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
+      attribute :tables, Table, collection: true, initialize_empty: true
+      attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
 
       xml do
         root 'txbxContent'

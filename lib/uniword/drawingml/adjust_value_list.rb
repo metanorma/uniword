@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:avLst>
     class AdjustValueList < Lutaml::Model::Serializable
-      attribute :guides, GeometryGuide, collection: true, default: -> { [] }
+      attribute :guides, GeometryGuide, collection: true, initialize_empty: true
 
       xml do
         element 'avLst'

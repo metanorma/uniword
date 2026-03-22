@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:autoFilter>
     class AutoFilter < Lutaml::Model::Serializable
       attribute :ref, :string
-      attribute :filter_columns, :string, collection: true, default: -> { [] }
+      attribute :filter_columns, :string, collection: true, initialize_empty: true
 
       xml do
         element 'autoFilter'

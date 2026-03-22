@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:customWorkbookViews>
     class CustomWorkbookViews < Lutaml::Model::Serializable
-      attribute :views, :string, collection: true, default: -> { [] }
+      attribute :views, :string, collection: true, initialize_empty: true
 
       xml do
         element 'customWorkbookViews'

@@ -11,73 +11,70 @@ module Uniword
     # Each XML file within the ZIP is a separate lutaml-model class.
     #
     # This is the CORRECT OOP approach:
-    # - ONE model class for the container
-    # - Each XML part is a proper model attribute
+    # - ONE model class for the container (DocxPackage)
+    # - Each XML part is a proper model attribute (content_types, document, styles, etc.)
     # - No serializer/deserializer anti-pattern
     #
     # @example Load DOCX
     #   package = DocxPackage.from_file('document.docx')
     #   package.core_properties.title = 'New Title'
     #   package.to_file('output.docx')
+    #
+    # @example Access document content
+    #   package = DocxPackage.from_file('document.docx')
+    #   package.document.body.paragraphs.each { |p| puts p.text }
     class DocxPackage < Lutaml::Model::Serializable
-      # Core document metadata
+      # === Package Structure (OOXML Part 2: OPC) ===
+      # Content Types ([Content_Types].xml)
+      attribute :content_types, Uniword::ContentTypes::Types
+
+      # Package-level relationships (_rels/.rels)
+      attribute :package_rels, Relationships::PackageRelationships
+
+      # === Document Properties (docProps/) ===
+      # Core document metadata (docProps/core.xml)
       attribute :core_properties, CoreProperties
 
-      # Extended application properties
+      # Extended application properties (docProps/app.xml)
       attribute :app_properties, AppProperties
 
-      # Document theme
-      attribute :theme, Theme
+      # === Document Parts (word/) ===
+      # Main document content (word/document.xml)
+      attribute :document, Uniword::Wordprocessingml::DocumentRoot
 
-      # Document styles configuration
-      attribute :styles_configuration, Uniword::Wordprocessingml::StylesConfiguration
+      # Document styles (word/styles.xml)
+      attribute :styles, Uniword::Wordprocessingml::StylesConfiguration
 
-      # Document numbering configuration
-      attribute :numbering_configuration, Uniword::Wordprocessingml::NumberingConfiguration
+      # Document numbering (word/numbering.xml)
+      attribute :numbering, Uniword::Wordprocessingml::NumberingConfiguration
 
-      # TODO: v2.0: Add proper lutaml-model attributes for:
-      # - Document (word/document.xml)
-      # - FontTable (word/fontTable.xml)
-      # - Settings (word/settings.xml)
-      # - WebSettings (word/webSettings.xml)
-      # - Relationships (.rels files)
-      # - ContentTypes ([Content_Types].xml)
-      #
-      # NO RAW XML STORAGE ALLOWED
+      # Document settings (word/settings.xml)
+      attribute :settings, Uniword::Wordprocessingml::Settings
+
+      # Document font table (word/fontTable.xml)
+      attribute :font_table, Uniword::Wordprocessingml::FontTable
+
+      # Document web settings (word/webSettings.xml)
+      attribute :web_settings, Uniword::Wordprocessingml::WebSettings
+
+      # Document-level relationships (word/_rels/document.xml.rels)
+      attribute :document_rels, Relationships::PackageRelationships
+
+      # === Theme (word/theme/) ===
+      # Document theme (word/theme/theme1.xml)
+      attribute :theme, Drawingml::Theme
+
+      # Theme-level relationships (word/theme/_rels/theme1.xml.rels)
+      attribute :theme_rels, Relationships::PackageRelationships
 
       # Load DOCX package from file
       #
       # @param path [String] Path to .docx file
-      # @return [Document] Loaded document (Generated::Wordprocessingml::DocumentRoot)
+      # @return [DocxPackage] Package with all parts loaded
       def self.from_file(path)
-
-        # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
-
-        # Parse package with properties and theme
-        package = from_zip_content(zip_content)
-
-        # Parse main document XML using generated classes
-        # Document is Uniword::Wordprocessingml::DocumentRoot
-        document = if package.raw_document_xml
-                     Uniword::Wordprocessingml::DocumentRoot.from_xml(package.raw_document_xml)
-                   else
-                     Uniword::Wordprocessingml::DocumentRoot.new
-                   end
-
-        # Transfer properties from package to document
-        document.core_properties = package.core_properties if package.core_properties
-        document.app_properties = package.app_properties if package.app_properties
-        document.theme = package.theme if package.theme
-
-        # Transfer model-based configurations
-        document.styles_configuration = package.styles_configuration if package.styles_configuration
-        if package.numbering_configuration
-          document.numbering_configuration = package.numbering_configuration
-        end
-
-        document
+        from_zip_content(zip_content)
       end
 
       # Create package from extracted ZIP content
@@ -87,88 +84,107 @@ module Uniword
       def self.from_zip_content(zip_content)
         package = new
 
-        # Parse lutaml-model files
+        # Parse Content Types
+        if zip_content['[Content_Types].xml']
+          package.content_types = Uniword::ContentTypes::Types.from_xml(
+            zip_content['[Content_Types].xml']
+          )
+        end
+
+        # Parse Package Relationships
+        if zip_content['_rels/.rels']
+          package.package_rels = Relationships::PackageRelationships.from_xml(
+            zip_content['_rels/.rels']
+          )
+        end
+
+        # Parse Document Properties
         if zip_content['docProps/core.xml']
-          package.core_properties = CoreProperties.from_xml(zip_content['docProps/core.xml'])
+          package.core_properties = CoreProperties.from_xml(
+            zip_content['docProps/core.xml']
+          )
         end
 
         if zip_content['docProps/app.xml']
-          package.app_properties = AppProperties.from_xml(zip_content['docProps/app.xml'])
+          package.app_properties = AppProperties.from_xml(
+            zip_content['docProps/app.xml']
+          )
         end
 
-        if zip_content['word/theme/theme1.xml']
-          package.theme = Theme.from_xml(zip_content['word/theme/theme1.xml'])
+        # Parse Document Parts
+        if zip_content['word/document.xml']
+          package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
+            zip_content['word/document.xml']
+          )
         end
 
-        # Parse styles and numbering as models
         if zip_content['word/styles.xml']
-          package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content['word/styles.xml'])
+          package.styles = Uniword::Wordprocessingml::StylesConfiguration.from_xml(
+            zip_content['word/styles.xml']
+          )
         end
 
         if zip_content['word/numbering.xml']
-          package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
+          package.numbering = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(
+            zip_content['word/numbering.xml']
+          )
         end
 
-        # Store raw document XML (will be parsed by DocxHandler)
-        if zip_content['word/document.xml']
-          package.raw_document_xml = zip_content['word/document.xml']
+        if zip_content['word/settings.xml']
+          package.settings = Uniword::Wordprocessingml::Settings.from_xml(
+            zip_content['word/settings.xml']
+          )
         end
 
-        # TODO: v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
-        # TODO v2.0: Parse relationships and content types
+        if zip_content['word/fontTable.xml']
+          package.font_table = Uniword::Wordprocessingml::FontTable.from_xml(
+            zip_content['word/fontTable.xml']
+          )
+        end
+
+        if zip_content['word/webSettings.xml']
+          package.web_settings = Uniword::Wordprocessingml::WebSettings.from_xml(
+            zip_content['word/webSettings.xml']
+          )
+        end
+
+        if zip_content['word/_rels/document.xml.rels']
+          package.document_rels = Relationships::PackageRelationships.from_xml(
+            zip_content['word/_rels/document.xml.rels']
+          )
+        end
+
+        # Parse Theme
+        if zip_content['word/theme/theme1.xml']
+          package.theme = Drawingml::Theme.from_xml(
+            zip_content['word/theme/theme1.xml']
+          )
+        end
+
+        if zip_content['word/theme/_rels/theme1.xml.rels']
+          package.theme_rels = Relationships::PackageRelationships.from_xml(
+            zip_content['word/theme/_rels/theme1.xml.rels']
+          )
+        end
 
         package
       end
 
-      # Access raw document XML (for compatibility)
-      attr_accessor :raw_document_xml
-
-      # Get supported file extensions
+      # Save document to file (class method for DocumentWriter compatibility)
       #
-      # @return [Array<String>] Array of supported extensions
-      def self.supported_extensions
-        ['.docx']
-      end
-
-      # Save document to file
-      #
-      # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
+      # @param document [DocumentRoot] The document to save
       # @param path [String] Output path
       def self.to_file(document, path)
-
-        # Create package
         package = new
-
-        # Transfer properties to package
-        package.core_properties = document.core_properties || CoreProperties.new
-        package.app_properties = document.app_properties || AppProperties.new
-        package.theme = document.theme
-
-        # Transfer model-based configurations
-        package.styles_configuration = document.styles_configuration
-        package.numbering_configuration = document.numbering_configuration
-
-        # Serialize main document
-        package.raw_document_xml = document.to_xml(encoding: 'UTF-8')
-
-        # Generate ZIP content
-        zip_content = package.to_zip_content
-
-        # Add required OOXML infrastructure files
-        add_required_files(zip_content)
-
-        # Package and save
-        packager = Infrastructure::ZipPackager.new
-        packager.package(zip_content, path)
+        package.document = document
+        package.to_file(path)
       end
 
       # Save package to file
       #
       # @param path [String] Output path
       def to_file(path)
-
         zip_content = to_zip_content
-
         packager = Infrastructure::ZipPackager.new
         packager.package(zip_content, path)
       end
@@ -179,71 +195,125 @@ module Uniword
       def to_zip_content
         content = {}
 
-        # Serialize lutaml-model files with prefix: false
-        if core_properties
-          content['docProps/core.xml'] =
-            core_properties.to_xml(encoding: 'UTF-8', prefix: false)
-        end
-        if app_properties
-          content['docProps/app.xml'] =
-            app_properties.to_xml(encoding: 'UTF-8', prefix: false)
-        end
+        # Serialize Content Types
+        content['[Content_Types].xml'] = content_types.to_xml(
+          encoding: 'UTF-8', declaration: true
+        ) if content_types
 
-        # Theme serialization (no raw XML fallback)
-        content['word/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8') if theme
+        # Serialize Package Relationships
+        content['_rels/.rels'] = package_rels.to_xml(
+          encoding: 'UTF-8', declaration: true
+        ) if package_rels
 
-        # Serialize model-based configurations
-        if styles_configuration
-          content['word/styles.xml'] =
-            styles_configuration.to_xml(encoding: 'UTF-8')
-        end
+        # Serialize Document Properties
+        content['docProps/core.xml'] = core_properties.to_xml(
+          encoding: 'UTF-8', prefix: false
+        ) if core_properties
 
-        if numbering_configuration
-          content['word/numbering.xml'] =
-            numbering_configuration.to_xml(encoding: 'UTF-8')
-        end
+        content['docProps/app.xml'] = app_properties.to_xml(
+          encoding: 'UTF-8', prefix: false
+        ) if app_properties
 
-        # Serialize main document (word/document.xml)
-        if @document
-          content['word/document.xml'] = @document.to_xml(encoding: 'UTF-8')
-        elsif @raw_document_xml
-          # Fallback to raw XML if document wasn't parsed yet
-          content['word/document.xml'] = @raw_document_xml
-        end
+        # Serialize Document Parts
+        content['word/document.xml'] = document.to_xml(
+          encoding: 'UTF-8', prefix: true
+        ) if document
 
-        # TODO: v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
-        # TODO v2.0: Serialize relationships and content types
+        content['word/styles.xml'] = styles.to_xml(
+          encoding: 'UTF-8'
+        ) if styles
+
+        content['word/numbering.xml'] = numbering.to_xml(
+          encoding: 'UTF-8'
+        ) if numbering
+
+        content['word/settings.xml'] = settings.to_xml(
+          encoding: 'UTF-8'
+        ) if settings
+
+        content['word/fontTable.xml'] = font_table.to_xml(
+          encoding: 'UTF-8'
+        ) if font_table
+
+        content['word/webSettings.xml'] = web_settings.to_xml(
+          encoding: 'UTF-8'
+        ) if web_settings
+
+        content['word/_rels/document.xml.rels'] = document_rels.to_xml(
+          encoding: 'UTF-8', declaration: true
+        ) if document_rels
+
+        # Serialize Theme
+        content['word/theme/theme1.xml'] = theme.to_xml(
+          encoding: 'UTF-8'
+        ) if theme
+
+        content['word/theme/_rels/theme1.xml.rels'] = theme_rels.to_xml(
+          encoding: 'UTF-8', declaration: true
+        ) if theme_rels
 
         content
       end
 
-      # Add required OOXML files for a valid DOCX package
+      # Delegate common DocumentRoot methods for API compatibility
+      # This allows code using Uniword.load() to work with DocxPackage seamlessly
+
+      # Get all paragraphs from the document body
       #
-      # @param zip_content [Hash] The ZIP content hash
-      # @return [void]
-      def self.add_required_files(zip_content)
-        # Add [Content_Types].xml if not present
-        unless zip_content['[Content_Types].xml']
-          zip_content['[Content_Types].xml'] =
-            Uniword::ContentTypes.generate.to_xml(declaration: true)
-        end
-
-        # Add _rels/.rels if not present
-        unless zip_content['_rels/.rels']
-          zip_content['_rels/.rels'] =
-            Uniword::Ooxml::Relationships::Relationships.generate_package_rels.to_xml(declaration: true)
-        end
-
-        # Add word/_rels/document.xml.rels if not present
-        return if zip_content['word/_rels/document.xml.rels']
-
-        zip_content['word/_rels/document.xml.rels'] =
-          Uniword::Ooxml::Relationships::Relationships.generate_document_rels.to_xml(
-            declaration: true
-          )
+      # @return [Array<Paragraph>] All paragraphs
+      def paragraphs
+        document&.paragraphs || []
       end
 
-      private_class_method :add_required_files
+      # Get all tables from the document body
+      #
+      # @return [Array<Table>] All tables
+      def tables
+        document&.tables || []
+      end
+
+      # Get the document body
+      #
+      # @return [Body, nil] The document body
+      def body
+        document&.body
+      end
+
+      # Get document text content
+      #
+      # @return [String] Combined text from all paragraphs
+      def text
+        document&.text || ''
+      end
+
+      # Get document body paragraphs as enumerable
+      #
+      # @return [Enumerator, Array<Paragraph>] Paragraph enumerator
+      def each_paragraph(&block)
+        paragraphs.each(&block)
+      end
+
+      # Save document to file (instance method)
+      #
+      # @param path [String] Output path
+      def to_file(path)
+        zip_content = to_zip_content
+        packager = Infrastructure::ZipPackager.new
+        packager.package(zip_content, path)
+      end
+
+      # Alias for to_file (API compatibility)
+      alias save to_file
+
+      # Get charts from document
+      def charts
+        document&.charts || []
+      end
+
+      # Get styles configuration from document
+      def styles_configuration
+        document&.styles_configuration
+      end
     end
   end
 end

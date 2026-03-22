@@ -66,8 +66,14 @@ module Uniword
       # Table cell margins (wrapper class)
       attribute :table_cell_margin, Uniword::Properties::TableCellMargin
 
+      # Table indent (wrapper class)
+      attribute :table_indent, Uniword::Properties::TableIndent
+
       # Table look - conditional formatting flags (wrapper class)
       attribute :table_look, Uniword::Properties::TableLook
+
+      # Table borders
+      attribute :table_borders, TableBorders
 
       # XML mappings come AFTER attributes
       xml do
@@ -81,13 +87,19 @@ module Uniword
         map_element 'tblCellMar', to: :table_cell_margin, render_nil: false
         map_element 'tblLook', to: :table_look, render_nil: false
 
-        # TODO: Remaining mappings for Phase 4 Session 3+
-        # map_element 'tblStyle', to: :style, render_nil: false
-        # map_element 'jc', to: :alignment, render_nil: false
-        # map_element 'tblInd', render_nil: false
-        # map_element 'tblCellSpacing', render_nil: false
-        # map_element 'tblLayout', to: :layout, render_nil: false
-        # map_element 'tblBorders', render_nil: false
+        # Table indentation - critical for table styles
+        map_element 'tblInd', to: :table_indent, render_nil: false
+        # Table cell spacing
+        map_element 'tblCellSpacing', to: :cell_spacing, render_nil: false
+        # Table alignment
+        map_element 'jc', to: :alignment, render_nil: false
+        # Table layout
+        map_element 'tblLayout', to: :layout, render_nil: false
+        # Table style reference
+        map_element 'tblStyle', to: :style, render_nil: false
+
+        # Table borders
+        map_element 'tblBorders', to: :table_borders, render_nil: false
       end
 
       # Initialize with defaults and handle convenience attributes

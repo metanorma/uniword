@@ -11,7 +11,7 @@ module Uniword
     class TextBody < Lutaml::Model::Serializable
       attribute :body_pr, BodyProperties
       attribute :lst_style, ListStyle
-      attribute :p, Paragraph, collection: true, default: -> { [] }
+      attribute :p, Paragraph, collection: true, initialize_empty: true
 
       xml do
         element 'tx_body'

@@ -8,11 +8,11 @@ RSpec.describe Uniword::Builder do
 
     it 'creates a new document by default' do
       builder = described_class.new
-      expect(builder.document).to be_a(Uniword::Document)
+      expect(builder.document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'accepts an existing document' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       builder = described_class.new(doc)
       expect(builder.document).to eq(doc)
     end
@@ -158,7 +158,7 @@ RSpec.describe Uniword::Builder do
             .add_paragraph('Test')
             .build
 
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(doc.paragraphs.count).to eq(1)
     end
   end

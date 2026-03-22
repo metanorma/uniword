@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:oleObjects>
     class OleObjects < Lutaml::Model::Serializable
-      attribute :objects, OleObject, collection: true, default: -> { [] }
+      attribute :objects, OleObject, collection: true, initialize_empty: true
 
       xml do
         element 'oleObjects'

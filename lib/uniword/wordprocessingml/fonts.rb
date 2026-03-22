@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:fonts>
     class Fonts < Lutaml::Model::Serializable
-      attribute :font_entries, Font, collection: true, default: -> { [] }
+      attribute :font_entries, Font, collection: true, initialize_empty: true
 
       xml do
         element 'fonts'

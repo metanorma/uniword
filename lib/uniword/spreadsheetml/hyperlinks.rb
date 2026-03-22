@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:hyperlinks>
     class Hyperlinks < Lutaml::Model::Serializable
-      attribute :links, Hyperlink, collection: true, default: -> { [] }
+      attribute :links, Hyperlink, collection: true, initialize_empty: true
 
       xml do
         element 'hyperlinks'

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Ooxml
     # Specialized package handler for Theme (.thmx) files
@@ -86,7 +85,7 @@ module Uniword
         theme_xml = read_theme
 
         # Parse into Theme using lutaml-model
-        @theme = Theme.from_xml(theme_xml)
+        @theme = Drawingml::Theme.from_xml(theme_xml)
 
         # Store source file reference
         @theme.source_file = path if @theme

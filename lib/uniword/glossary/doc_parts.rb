@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: glossary.yml
     # Element: <g:doc_parts>
     class DocParts < Lutaml::Model::Serializable
-      attribute :doc_part, DocPart, collection: true, default: -> { [] }
+      attribute :doc_part, DocPart, collection: true, initialize_empty: true
 
       xml do
         root 'docParts'

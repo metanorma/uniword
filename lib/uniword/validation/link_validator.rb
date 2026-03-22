@@ -232,7 +232,7 @@ module Uniword
         # Check paragraph runs for hyperlinks
         if para.respond_to?(:runs)
           para.runs.each do |run|
-            links << run if run.is_a?(Uniword::Hyperlink)
+            links << run if run.is_a?(Wordprocessingml::Hyperlink)
           end
         end
 

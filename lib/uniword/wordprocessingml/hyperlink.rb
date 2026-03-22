@@ -12,7 +12,7 @@ module Uniword
       attribute :id, :string
       attribute :anchor, :string
       attribute :tooltip, :string
-      attribute :runs, Run, collection: true, default: -> { [] }
+      attribute :runs, Run, collection: true, initialize_empty: true
 
       xml do
         element 'hyperlink'
@@ -60,6 +60,13 @@ module Uniword
       # @return [Boolean] true if anchor is set (internal link)
       def internal?
         !anchor.nil?
+      end
+
+      # Check if hyperlink is external
+      #
+      # @return [Boolean] true if id is set (external link)
+      def external?
+        !id.nil? && anchor.nil?
       end
     end
   end

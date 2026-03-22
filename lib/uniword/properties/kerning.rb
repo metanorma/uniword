@@ -18,6 +18,11 @@ module Uniword
     class Kerning < Lutaml::Model::Serializable
       attribute :value, KerningValue
 
+      # Alias for XML attribute compatibility
+      def val
+        value
+      end
+
       xml do
         element 'kern'
         namespace Ooxml::Namespaces::WordProcessingML

@@ -45,7 +45,7 @@ module Uniword
         #     cell "Header 2"
         #   end
         def row(header: false, &block)
-          @current_row = TableRow.new
+          @current_row = Wordprocessingml::TableRow.new
 
           # Set header property on row properties, not as direct attribute
           if header
@@ -74,12 +74,12 @@ module Uniword
         def cell(text, style: nil, colspan: 1, rowspan: 1)
           raise "No active row. Use 'row' first." unless @current_row
 
-          cell = TableCell.new
+          cell = Wordprocessingml::TableCell.new
           cell.colspan = colspan if colspan > 1
           cell.rowspan = rowspan if rowspan > 1
 
           # Add text as paragraph
-          para = Paragraph.new
+          para = Wordprocessingml::Paragraph.new
           para.add_text(text)
 
           # Apply style if specified

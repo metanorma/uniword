@@ -18,6 +18,11 @@ module Uniword
     class CharacterSpacing < Lutaml::Model::Serializable
       attribute :value, CharacterSpacingValue
 
+      # Alias for XML attribute compatibility
+      def val
+        value
+      end
+
       xml do
         element 'spacing'
         namespace Ooxml::Namespaces::WordProcessingML

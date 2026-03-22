@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'base64'
+require 'securerandom'
 
 module Uniword
   # Represents an image (inline element)

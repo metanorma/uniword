@@ -16,8 +16,8 @@ module Uniword
         element 'Default'
         namespace Uniword::Ooxml::Namespaces::ContentTypes
 
-        map_attribute 'extension', to: :extension
-        map_attribute 'content_type', to: :content_type
+        map_attribute 'Extension', to: :extension
+        map_attribute 'ContentType', to: :content_type
       end
     end
   end

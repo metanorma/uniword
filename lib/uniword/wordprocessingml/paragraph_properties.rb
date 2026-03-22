@@ -11,12 +11,14 @@ module Uniword
     class ParagraphProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
+      # Flat alignment attribute (for constructor compatibility with alignment: keyword)
+      attribute :alignment, :string
+
       # Simple element wrapper objects
       attribute :style, Properties::StyleReference
       attribute :alignment_wrapper, Properties::Alignment  # Internal wrapper object
       attribute :outline_level, Properties::OutlineLevel
-      attribute :numbering_id, Properties::NumberingId
-      attribute :numbering_level, Properties::NumberingLevel
+      attribute :numbering_properties, Properties::NumberingProperties
 
       # Complex spacing object
       attribute :spacing, Properties::Spacing
@@ -33,11 +35,15 @@ module Uniword
       # Complex shading object
       attribute :shading, Properties::Shading
 
-      # Flat spacing attributes (for parser compatibility)
+      # Run properties (for pPr/rPr)
+      attribute :run_properties, RunProperties
+
+      # Flat spacing attributes - use spacing object for XML, these for flat API
+      # Note: These shadow the convenience methods below - use spacing.line/line_rule for XML
       attribute :spacing_before, :integer
       attribute :spacing_after, :integer
-      attribute :line_spacing, :float
-      attribute :line_rule, :string
+      attribute :line_spacing, :float  # Flat attribute for simple API (supports 1.5, 2.0, etc.)
+      attribute :line_rule, :string       # Flat attribute for simple API
 
       # Flat indentation attributes (for parser compatibility)
       attribute :indent_left, :integer
@@ -55,7 +61,7 @@ module Uniword
       attribute :widow_control, :boolean, default: -> { true }
 
       # Spacing options
-      attribute :contextual_spacing, :boolean, default: -> { false }
+      attribute :contextual_spacing, Properties::ContextualSpacing
       attribute :suppress_line_numbers, :boolean, default: -> { false }
 
       # Bidirectional text
@@ -65,6 +71,61 @@ module Uniword
       attribute :shading_fill, :string      # RGB hex color
       attribute :shading_color, :string     # Pattern color
       attribute :shading_type, :string      # clear, solid, etc.
+
+      # YAML mappings for flat YAML structure (StyleSet compatibility)
+      # The YAML uses flat attributes like spacing_before, spacing_after, alignment, etc.
+      # which match the flat attributes defined in this class.
+      yaml do
+        map 'alignment', with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
+        map 'spacing_before', to: :spacing_before
+        map 'spacing_after', to: :spacing_after
+        map 'line_spacing', to: :line_spacing
+        map 'line_rule', to: :line_rule
+        map 'keep_next', with: { from: :yaml_keep_next_from, to: :yaml_keep_next_to }
+        map 'keep_lines', with: { from: :yaml_keep_lines_from, to: :yaml_keep_lines_to }
+        map 'page_break_before', to: :page_break_before
+        map 'outline_level', with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
+        map 'suppress_line_numbers', to: :suppress_line_numbers
+        map 'contextual_spacing', to: :contextual_spacing
+        map 'bidirectional', to: :bidirectional
+        map 'indent_left', to: :indent_left
+        map 'indent_right', to: :indent_right
+        map 'indent_first_line', to: :indent_first_line
+        map 'widow_control', to: :widow_control
+      end
+
+      # YAML transform methods (instance methods - called via send on an instance)
+      def yaml_alignment_from(instance, value)
+        instance.alignment_wrapper = Properties::Alignment.new(value: value) if value
+      end
+
+      def yaml_alignment_to(instance, doc)
+        instance.instance_variable_get(:@alignment) || instance.alignment_wrapper&.value
+      end
+
+      def yaml_keep_next_from(instance, value)
+        instance.keep_next_wrapper = Properties::KeepNext.new(value: value) unless value.nil?
+      end
+
+      def yaml_keep_next_to(instance, doc)
+        instance.keep_next_wrapper&.value
+      end
+
+      def yaml_keep_lines_from(instance, value)
+        instance.keep_lines_wrapper = Properties::KeepLines.new(value: value) unless value.nil?
+      end
+
+      def yaml_keep_lines_to(instance, doc)
+        instance.keep_lines_wrapper&.value
+      end
+
+      def yaml_outline_level_from(instance, value)
+        instance.outline_level = Properties::OutlineLevel.new(value: value.to_i) if value
+      end
+
+      def yaml_outline_level_to(instance, doc)
+        instance.outline_level&.value
+      end
 
       # XML mappings come AFTER attributes
       xml do
@@ -87,9 +148,8 @@ module Uniword
         # Outline level (wrapper object)
         map_element 'outlineLvl', to: :outline_level, render_nil: false
 
-        # Numbering (wrapper objects - inside w:numPr parent element)
-        map_element 'numId', to: :numbering_id, render_nil: false
-        map_element 'ilvl', to: :numbering_level, render_nil: false
+        # Numbering properties (wrapped in w:numPr)
+        map_element 'numPr', to: :numbering_properties, render_nil: false
 
         # Keep options (only render if true)
         map_element 'keepNext', to: :keep_next_wrapper, render_nil: false, render_default: false
@@ -115,11 +175,23 @@ module Uniword
 
         # Shading (complex object)
         map_element 'shd', to: :shading, render_nil: false
+
+        # Run properties (for pPr/rPr - style overrides)
+        map_element 'rPr', to: :run_properties, render_nil: false
       end
 
       # Initialize with defaults
       def initialize(attrs = {})
+        # Save wrapper attribute values before super clears them
+        keep_next_val = attrs.key?(:keep_next) ? attrs.delete(:keep_next) : nil
+        keep_lines_val = attrs.key?(:keep_lines) ? attrs.delete(:keep_lines) : nil
+
         super(attrs)
+
+        # Set wrapper attributes after super (super clears them)
+        self.keep_next = keep_next_val if keep_next_val
+        self.keep_lines = keep_lines_val if keep_lines_val
+
         # Set boolean defaults
         @widow_control = true if @widow_control.nil?
       end
@@ -170,6 +242,10 @@ module Uniword
       #
       # @return [String, nil] Alignment value (left, center, right, both)
       def alignment
+        # Check flat alignment attribute first (from constructor/YAML)
+        return @alignment if @alignment
+
+        # Then check wrapper object (from XML/Setter)
         val = alignment_wrapper
         return nil if val.nil?
 
@@ -187,11 +263,14 @@ module Uniword
         when Properties::Alignment
           self.alignment_wrapper = value
         when String
+          @alignment = value
           self.alignment_wrapper ||= Properties::Alignment.new
           alignment_wrapper.value = value
         when nil
+          @alignment = nil
           self.alignment_wrapper = nil
         else
+          @alignment = nil
           self.alignment_wrapper = value
         end
         self
@@ -267,20 +346,6 @@ module Uniword
       def alignment_value=(value)
         self.alignment = value
         self
-      end
-
-      # Get line spacing value from spacing object
-      #
-      # @return [Integer, nil] Line spacing value
-      def line_spacing
-        spacing&.line
-      end
-
-      # Get line rule value from spacing object
-      #
-      # @return [String, nil] Line rule value
-      def line_rule
-        spacing&.line_rule
       end
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Uniword
-  module StyleSets
+  module Stylesets
     # Loads StyleSets from YAML files
     #
     # Leverages lutaml-model's from_yaml deserialization for simple,

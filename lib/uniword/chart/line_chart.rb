@@ -11,14 +11,14 @@ module Uniword
     class LineChart < Lutaml::Model::Serializable
       attribute :grouping, :string
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :drop_lines, DropLines
       attribute :hi_low_lines, HiLowLines
       attribute :up_down_bars, UpDownBars
       attribute :marker, :string
       attribute :smooth, Smooth
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'lineChart'

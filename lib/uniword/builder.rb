@@ -27,12 +27,12 @@ module Uniword
   #   end
   #   doc.save("output.docx")
   class Builder
-    # @return [Document] The document being built
+    # @return [Wordprocessingml::DocumentRoot] The document being built
     attr_reader :document
 
     # Initialize a new builder with optional DSL block
     #
-    # @param document [Document, nil] Optional existing document to build upon
+    # @param document [Wordprocessingml::DocumentRoot, nil] Optional existing document to build upon
     # @yield [self] Yields the builder for DSL-style document construction
     #
     # @example With DSL block
@@ -44,7 +44,7 @@ module Uniword
     #   builder = Uniword::Builder.new
     #   builder.add_paragraph("Hello World")
     def initialize(document = nil)
-      @document = document || Document.new
+      @document = document || Wordprocessingml::DocumentRoot.new
       yield(self) if block_given?
     end
 
@@ -88,7 +88,7 @@ module Uniword
     #     end
     #   end
     def add_table(&block)
-      table = Table.new
+      table = Wordprocessingml::Table.new
       table_builder = TableBuilder.new(table)
       table_builder.instance_eval(&block) if block
       @document.add_table(table)

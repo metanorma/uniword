@@ -90,24 +90,27 @@ RSpec.describe 'Numbering Feature' do
     describe '#add_level' do
       it 'adds a level to the definition' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.new(abstract_num_id: 0)
-        level = defn.add_level(format: 'decimal', start: 1)
+        level = defn.add_level(
+          start: Uniword::Wordprocessingml::Start.new(val: 1),
+          numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'decimal')
+        )
         expect(defn.levels.size).to eq(1)
-        expect(level.level).to eq(0)
+        expect(level.ilvl).to eq(0)
       end
 
       it 'auto-assigns level index' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.new(abstract_num_id: 0)
-        defn.add_level(format: 'decimal')
-        defn.add_level(format: 'lowerLetter')
-        expect(defn.levels[0].level).to eq(0)
-        expect(defn.levels[1].level).to eq(1)
+        defn.add_level(numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'decimal'))
+        defn.add_level(numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'lowerLetter'))
+        expect(defn.levels[0].ilvl).to eq(0)
+        expect(defn.levels[1].ilvl).to eq(1)
       end
 
       it 'raises error when exceeding max levels' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.new(abstract_num_id: 0)
-        9.times { defn.add_level(format: 'decimal') }
+        9.times { defn.add_level(numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'decimal')) }
         expect do
-          defn.add_level(format: 'decimal')
+          defn.add_level(numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'decimal'))
         end.to raise_error(ArgumentError, /Cannot add more than 9 levels/)
       end
     end
@@ -129,8 +132,8 @@ RSpec.describe 'Numbering Feature' do
         expect(defn.name).to eq('Decimal')
         expect(defn.levels.size).to eq(9)
         defn.levels.each do |level|
-          expect(level.format).to eq('decimal')
-          expect(level.start).to eq(1)
+          expect(level.format_value).to eq('decimal')
+          expect(level.start_value).to eq(1)
         end
       end
     end
@@ -141,34 +144,34 @@ RSpec.describe 'Numbering Feature' do
         expect(defn.abstract_num_id).to eq(2)
         expect(defn.name).to eq('Bullet')
         expect(defn.levels.size).to eq(9)
-        expect(defn.levels[0].format).to eq('bullet')
-        expect(defn.levels[0].text).to eq("\u2022")
-        expect(defn.levels[1].text).to eq("\u25CB")
-        expect(defn.levels[2].text).to eq("\u25A0")
+        expect(defn.levels[0].format_value).to eq('bullet')
+        expect(defn.levels[0].text_value).to eq("\u2022")
+        expect(defn.levels[1].text_value).to eq("\u25CB")
+        expect(defn.levels[2].text_value).to eq("\u25A0")
       end
     end
 
     describe '.roman' do
       it 'creates upper roman numbering' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.roman(abstract_num_id: 3, upper: true)
-        expect(defn.levels[0].format).to eq('upperRoman')
+        expect(defn.levels[0].format_value).to eq('upperRoman')
       end
 
       it 'creates lower roman numbering' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.roman(abstract_num_id: 4, upper: false)
-        expect(defn.levels[0].format).to eq('lowerRoman')
+        expect(defn.levels[0].format_value).to eq('lowerRoman')
       end
     end
 
     describe '.letter' do
       it 'creates upper letter numbering' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 5, upper: true)
-        expect(defn.levels[0].format).to eq('upperLetter')
+        expect(defn.levels[0].format_value).to eq('upperLetter')
       end
 
       it 'creates lower letter numbering' do
         defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 6, upper: false)
-        expect(defn.levels[0].format).to eq('lowerLetter')
+        expect(defn.levels[0].format_value).to eq('lowerLetter')
       end
     end
   end
@@ -178,7 +181,7 @@ RSpec.describe 'Numbering Feature' do
       it 'creates instance with valid IDs' do
         instance = Uniword::Wordprocessingml::NumberingInstance.new(num_id: 1, abstract_num_id: 0)
         expect(instance.num_id).to eq(1)
-        expect(instance.abstract_num_id).to eq(0)
+        expect(instance.abstract_num_id_value).to eq(0)
       end
 
       it 'raises error for invalid num_id' do
@@ -257,25 +260,25 @@ RSpec.describe 'Numbering Feature' do
         expect(num_id).to eq(1)
         expect(config.definitions.size).to eq(1)
         expect(config.instances.size).to eq(1)
-        expect(config.definitions.first.levels.first.format).to eq('decimal')
+        expect(config.definitions.first.levels.first.format_value).to eq('decimal')
       end
 
       it 'creates bullet numbering' do
         config = Uniword::Wordprocessingml::NumberingConfiguration.new
         config.create_numbering(:bullet)
-        expect(config.definitions.first.levels.first.format).to eq('bullet')
+        expect(config.definitions.first.levels.first.format_value).to eq('bullet')
       end
 
       it 'creates roman numbering' do
         config = Uniword::Wordprocessingml::NumberingConfiguration.new
         config.create_numbering(:roman, upper: true)
-        expect(config.definitions.first.levels.first.format).to eq('upperRoman')
+        expect(config.definitions.first.levels.first.format_value).to eq('upperRoman')
       end
 
       it 'creates letter numbering' do
         config = Uniword::Wordprocessingml::NumberingConfiguration.new
         config.create_numbering(:letter, upper: false)
-        expect(config.definitions.first.levels.first.format).to eq('lowerLetter')
+        expect(config.definitions.first.levels.first.format_value).to eq('lowerLetter')
       end
 
       it 'raises error for unknown type' do
@@ -308,7 +311,7 @@ RSpec.describe 'Numbering Feature' do
         num_id = config.create_numbering(:decimal)
         definition = config.get_definition_for_num_id(num_id)
         expect(definition).not_to be_nil
-        expect(definition.levels.first.format).to eq('decimal')
+        expect(definition.levels.first.format_value).to eq('decimal')
       end
     end
 
@@ -334,7 +337,7 @@ RSpec.describe 'Numbering Feature' do
   describe 'Paragraph Integration' do
     describe '#set_numbering' do
       it 'sets numbering on paragraph' do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         para.set_numbering(1, 0)
         expect(para.num_id).to eq(1)
         expect(para.ilvl).to eq(0)
@@ -345,7 +348,7 @@ RSpec.describe 'Numbering Feature' do
           style: 'Normal',
           alignment: 'left'
         )
-        para = Uniword::Paragraph.new(properties: props)
+        para = Uniword::Wordprocessingml::Paragraph.new(properties: props)
         para.set_numbering(2, 1)
         expect(para.num_id).to eq(2)
         expect(para.ilvl).to eq(1)
@@ -356,13 +359,13 @@ RSpec.describe 'Numbering Feature' do
 
     describe '#numbered?' do
       it 'returns true for numbered paragraph' do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         para.set_numbering(1, 0)
         expect(para.numbered?).to be true
       end
 
       it 'returns false for non-numbered paragraph' do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         expect(para.numbered?).to be false
       end
     end
@@ -370,19 +373,19 @@ RSpec.describe 'Numbering Feature' do
 
   describe 'Document Integration' do
     it 'initializes with numbering configuration' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       expect(doc.numbering_configuration).to be_a(Uniword::Wordprocessingml::NumberingConfiguration)
     end
 
     it 'creates numbered list in document' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       num_id = doc.numbering_configuration.create_numbering(:decimal)
 
-      para1 = Uniword::Paragraph.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
       para1.add_text('First item')
       para1.set_numbering(num_id, 0)
 
-      para2 = Uniword::Paragraph.new
+      para2 = Uniword::Wordprocessingml::Paragraph.new
       para2.add_text('Second item')
       para2.set_numbering(num_id, 0)
 

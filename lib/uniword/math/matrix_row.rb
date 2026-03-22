@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:mr>
     class MatrixRow < Lutaml::Model::Serializable
-      attribute :elements, Element, collection: true, default: -> { [] }
+      attribute :elements, Element, collection: true, initialize_empty: true
 
       xml do
         element 'mr'

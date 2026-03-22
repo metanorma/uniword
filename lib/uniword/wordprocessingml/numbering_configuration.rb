@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+# NumberingDefinition and NumberingInstance are autoloaded via lib/uniword/wordprocessingml.rb
 
 module Uniword
   module Wordprocessingml
@@ -10,8 +11,8 @@ module Uniword
     # Represents <w:numbering> element containing abstractNum and num children
     class NumberingConfiguration < Lutaml::Model::Serializable
     # Pattern 0: ATTRIBUTES FIRST
-    attribute :definitions, NumberingDefinition, collection: true, default: -> { [] }
-    attribute :instances, NumberingInstance, collection: true, default: -> { [] }
+    attribute :definitions, NumberingDefinition, collection: true, initialize_empty: true
+    attribute :instances, NumberingInstance, collection: true, initialize_empty: true
 
     # XML mappings come AFTER attributes
     xml do
@@ -44,9 +45,18 @@ module Uniword
     def add_instance(abstract_num_id:, num_id: nil)
       instance_num_id = num_id || next_num_id
 
+      # abstract_num_id may be passed as integer; wrap in AbstractNumId if needed
+      abstract_num = if abstract_num_id.is_a?(AbstractNumId)
+                       abstract_num_id
+                     elsif abstract_num_id.is_a?(Integer)
+                       AbstractNumId.new(val: abstract_num_id)
+                     else
+                       abstract_num_id
+                     end
+
       instance = NumberingInstance.new(
         num_id: instance_num_id,
-        abstract_num_id: abstract_num_id
+        abstract_num_id: abstract_num
       )
 
       instances << instance
@@ -89,9 +99,10 @@ module Uniword
       instance.num_id
     end
 
-    # Get a definition by abstract_num_id
+    # Get a definition by abstract_num_id (accepts Integer or AbstractNumId)
     def get_definition(abstract_num_id)
-      definitions.find { |d| d.abstract_num_id == abstract_num_id }
+      target_id = abstract_num_id.respond_to?(:val) ? abstract_num_id.val : abstract_num_id
+      definitions.find { |d| d.abstract_num_id == target_id }
     end
 
     # Get an instance by num_id

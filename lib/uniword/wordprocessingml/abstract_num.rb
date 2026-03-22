@@ -11,7 +11,7 @@ module Uniword
     class AbstractNum < Lutaml::Model::Serializable
       attribute :abstractNumId, :integer
       attribute :multiLevelType, MultiLevelType
-      attribute :levels, Level, collection: true, default: -> { [] }
+      attribute :levels, Level, collection: true, initialize_empty: true
 
       xml do
         element 'abstractNum'

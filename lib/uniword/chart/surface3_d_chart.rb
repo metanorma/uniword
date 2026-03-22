@@ -10,9 +10,9 @@ module Uniword
     # Element: <c:surface3DChart>
     class Surface3DChart < Lutaml::Model::Serializable
       attribute :wireframe, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :band_fmts, :string
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'surface3DChart'

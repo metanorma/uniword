@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml_2013.yml
     # Element: <w15:commentsIds>
     class CommentsIds < Lutaml::Model::Serializable
-      attribute :comment_id, :string, collection: true, default: -> { [] }
+      attribute :comment_id, :string, collection: true, initialize_empty: true
 
       xml do
         element 'commentsIds'

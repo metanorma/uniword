@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:fills>
     class Fills < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :fill_entries, Fill, collection: true, default: -> { [] }
+      attribute :fill_entries, Fill, collection: true, initialize_empty: true
 
       xml do
         element 'fills'

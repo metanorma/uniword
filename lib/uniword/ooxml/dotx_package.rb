@@ -28,7 +28,7 @@ module Uniword
       attribute :app_properties, AppProperties
 
       # Document theme
-      attribute :theme, Theme
+      attribute :theme, Drawingml::Theme
 
       # Document styles configuration
       attribute :styles_configuration, StylesConfiguration

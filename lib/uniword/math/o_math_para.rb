@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:oMathPara>
     class OMathPara < Lutaml::Model::Serializable
       attribute :para_properties, OMathParaProperties
-      attribute :math_objects, OMath, collection: true, default: -> { [] }
+      attribute :math_objects, OMath, collection: true, initialize_empty: true
 
       xml do
         element 'oMathPara'

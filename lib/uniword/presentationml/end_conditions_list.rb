@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: presentationml.yml
     # Element: <p:end_cond_lst>
     class EndConditionsList < Lutaml::Model::Serializable
-      attribute :cond, :string, collection: true, default: -> { [] }
+      attribute :cond, :string, collection: true, initialize_empty: true
 
       xml do
         element 'end_cond_lst'

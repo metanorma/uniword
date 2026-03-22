@@ -114,7 +114,7 @@ module Uniword
                      end
           attr_code = "          attribute :#{attr['name']}, #{type_str}"
           attr_code += ', collection: true' if attr['collection']
-          attr_code += ', default: -> { [] }' if attr['collection']
+          attr_code += ', initialize_empty: true' if attr['collection']
           attr_code
         end
 

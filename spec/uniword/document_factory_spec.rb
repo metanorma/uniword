@@ -8,7 +8,7 @@ RSpec.describe Uniword::DocumentFactory do
     it 'creates a new empty document' do
       document = described_class.create
 
-      expect(document).to be_a(Uniword::Document)
+      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(document.paragraphs).to be_empty
     end
 
@@ -41,13 +41,13 @@ RSpec.describe Uniword::DocumentFactory do
       it 'loads DOCX file with auto format detection' do
         document = described_class.from_file(docx_file.path)
 
-        expect(document).to be_a(Uniword::Document)
+        expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
 
       it 'loads DOCX file with explicit format' do
         document = described_class.from_file(docx_file.path, format: :docx)
 
-        expect(document).to be_a(Uniword::Document)
+        expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
     end
 

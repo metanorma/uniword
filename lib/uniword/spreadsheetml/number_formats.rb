@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:numFmts>
     class NumberFormats < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :formats, NumberFormat, collection: true, default: -> { [] }
+      attribute :formats, NumberFormat, collection: true, initialize_empty: true
 
       xml do
         element 'numFmts'

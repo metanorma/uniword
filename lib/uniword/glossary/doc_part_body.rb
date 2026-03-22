@@ -10,9 +10,9 @@ module Uniword
     # Generated from OOXML schema: glossary.yml
     # Element: <w:docPartBody>
     class DocPartBody < Lutaml::Model::Serializable
-      attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true, default: -> { [] }
-      attribute :tables, Uniword::Wordprocessingml::Table, collection: true, default: -> { [] }
-      attribute :sdts, Uniword::Wordprocessingml::StructuredDocumentTag, collection: true, default: -> { [] }
+      attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true, initialize_empty: true
+      attribute :tables, Uniword::Wordprocessingml::Table, collection: true, initialize_empty: true
+      attribute :sdts, Uniword::Wordprocessingml::StructuredDocumentTag, collection: true, initialize_empty: true
 
       xml do
         root 'docPartBody'

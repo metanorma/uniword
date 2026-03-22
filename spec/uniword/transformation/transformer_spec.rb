@@ -13,7 +13,7 @@ RSpec.describe Uniword::Transformation::Transformer do
 
   describe '#transform' do
     let(:source_doc) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Hello World', bold: true)
       doc
     end
@@ -26,22 +26,24 @@ RSpec.describe Uniword::Transformation::Transformer do
           target_format: :mhtml
         )
 
-        expect(result).to be_a(Uniword::Document)
-        expect(result.paragraphs.count).to eq(1)
-        expect(result.paragraphs.first.text).to eq('Hello World')
-        expect(result.paragraphs.first.runs.first.bold?).to be true
+        expect(result).to be_a(Uniword::Mhtml::Document)
+        expect(result.text).to include('Hello World')
       end
 
       it 'transforms MHTML model to DOCX model' do
+        # First create an MHTML document
+        mhtml_doc = Uniword::Mhtml::Document.new
+        mhtml_doc.html_content = '<p>Hello World</p>'
+
         result = transformer.transform(
-          source: source_doc,
+          source: mhtml_doc,
           source_format: :mhtml,
           target_format: :docx
         )
 
-        expect(result).to be_a(Uniword::Document)
+        expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
         expect(result.paragraphs.count).to eq(1)
-        expect(result.paragraphs.first.text).to eq('Hello World')
+        expect(result.text).to include('Hello World')
       end
 
       it 'requires source parameter' do
@@ -77,20 +79,20 @@ RSpec.describe Uniword::Transformation::Transformer do
 
     context 'with complex document' do
       let(:complex_doc) do
-        doc = Uniword::Document.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
 
         # Add paragraph with formatting
-        para1 = Uniword::Paragraph.new
+        para1 = Uniword::Wordprocessingml::Paragraph.new
         para1.add_text('Bold text', bold: true)
         para1.add_text(' and italic text', italic: true)
-        para1.properties = Uniword::ParagraphProperties.new(alignment: 'center')
+        para1.properties = Uniword::Wordprocessingml::ParagraphProperties.new(alignment: 'center')
         doc.body.paragraphs << para1
 
         # Add table
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
         row.cells << cell
         table.rows << row
         doc.body.tables << table
@@ -105,10 +107,9 @@ RSpec.describe Uniword::Transformation::Transformer do
           target_format: :mhtml
         )
 
-        expect(result.paragraphs.count).to eq(1)
-        expect(result.tables.count).to eq(1)
-        expect(result.paragraphs.first.text).to include('Bold text')
-        expect(result.tables.first.rows.count).to eq(1)
+        expect(result).to be_a(Uniword::Mhtml::Document)
+        expect(result.text).to include('Bold text')
+        expect(result.text).to include('Cell content')
       end
 
       it 'preserves text content' do
@@ -118,44 +119,46 @@ RSpec.describe Uniword::Transformation::Transformer do
           target_format: :mhtml
         )
 
-        expect(result.text).to eq(complex_doc.text)
+        # Text extraction from HTML preserves content
+        expect(result.text).to include('Bold text')
+        expect(result.text).to include('italic text')
+        expect(result.text).to include('Cell content')
       end
 
-      it 'preserves formatting' do
+      it 'preserves formatting in HTML' do
         result = transformer.transform(
           source: complex_doc,
           source_format: :docx,
           target_format: :mhtml
         )
 
-        para = result.paragraphs.first
-        expect(para.alignment).to eq('center')
-        expect(para.runs.first.bold?).to be true
-        expect(para.runs.last.italic?).to be true
+        # HTML should contain formatting tags
+        expect(result.html_content).to include('<strong>')
+        expect(result.html_content).to include('<em>')
       end
     end
   end
 
   describe '#docx_to_mhtml' do
     it 'explicitly names the transformation direction' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Test')
 
       result = transformer.docx_to_mhtml(doc)
 
-      expect(result).to be_a(Uniword::Document)
-      expect(result.paragraphs.first.text).to eq('Test')
+      expect(result).to be_a(Uniword::Mhtml::Document)
+      expect(result.text).to include('Test')
     end
   end
 
   describe '#mhtml_to_docx' do
     it 'explicitly names the transformation direction' do
-      doc = Uniword::Document.new
-      doc.add_paragraph('Test')
+      mhtml_doc = Uniword::Mhtml::Document.new
+      mhtml_doc.html_content = '<p>Test</p>'
 
-      result = transformer.mhtml_to_docx(doc)
+      result = transformer.mhtml_to_docx(mhtml_doc)
 
-      expect(result).to be_a(Uniword::Document)
+      expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(result.paragraphs.first.text).to eq('Test')
     end
   end

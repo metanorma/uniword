@@ -88,7 +88,7 @@ module Uniword
         # Scan paragraphs for hyperlinks
         document.paragraphs.each do |paragraph|
           paragraph.runs.each do |run|
-            next unless run.is_a?(Uniword::Hyperlink)
+            next unless run.is_a?(Wordprocessingml::Hyperlink)
 
             links << {
               type: determine_link_type(run),

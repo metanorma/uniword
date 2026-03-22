@@ -6,7 +6,7 @@ module Uniword
   # Represents a text box (floating text container)
   # Can be positioned absolutely or relatively
   class TextBox < Lutaml::Model::Serializable
-    attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
+    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
 
     # Position (in twips from page origin)
     attribute :x, :integer
@@ -41,9 +41,9 @@ module Uniword
 
     # Add a paragraph to this text box
     def add_paragraph(paragraph)
-      unless paragraph.is_a?(Paragraph)
+      unless paragraph.is_a?(Wordprocessingml::Paragraph)
         raise ArgumentError,
-              'paragraph must be a Paragraph instance'
+              'paragraph must be a Wordprocessingml::Paragraph instance'
       end
 
       paragraphs << paragraph
@@ -51,7 +51,7 @@ module Uniword
 
     # Create and add a text paragraph
     def add_text(text, properties: nil)
-      para = Paragraph.new(properties: properties)
+      para = Wordprocessingml::Paragraph.new(properties: properties)
       para.add_text(text)
       add_paragraph(para)
       para

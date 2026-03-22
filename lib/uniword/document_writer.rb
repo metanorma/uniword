@@ -14,12 +14,12 @@ module Uniword
   # @example Save with specific format
   #   writer.save("output.mhtml", format: :mhtml)
   class DocumentWriter
-    # @return [Document] The document to write
+    # @return [Wordprocessingml::DocumentRoot] The document to write
     attr_reader :document
 
     # Initialize a new DocumentWriter.
     #
-    # @param document [Document] The document to write
+    # @param document [Wordprocessingml::DocumentRoot] The document to write
     # @raise [ArgumentError] if document is invalid
     #
     # @example Create writer
@@ -54,6 +54,8 @@ module Uniword
         Ooxml::DotxPackage.to_file(document, path)
       when :mhtml
         Mhtml::MhtmlPackage.to_file(document, path)
+      else
+        raise ArgumentError, "No handler registered for format: #{format.inspect}"
       end
     end
 
@@ -128,11 +130,12 @@ module Uniword
     def validate_document(doc)
       raise ArgumentError, 'Document cannot be nil' if doc.nil?
 
-      # Accept both the alias (Uniword::Document) and the full generated class
-      return if doc.is_a?(Document)
-      return if doc.is_a?(Generated::Wordprocessingml::DocumentRoot)
+      # Accept OOXML Document
+      return if doc.is_a?(Uniword::Wordprocessingml::DocumentRoot)
+      # Accept MHTML Document
+      return if doc.is_a?(Uniword::Mhtml::Document)
 
-      raise ArgumentError, "Must be a Document instance, got #{doc.class}"
+      raise ArgumentError, 'Must be a Document instance'
     end
 
     # Validate the output path.

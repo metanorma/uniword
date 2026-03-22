@@ -17,9 +17,9 @@ module Uniword
         element 'pgSz'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'width', to: :width
-        map_attribute 'height', to: :height
-        map_attribute 'orientation', to: :orientation
+        map_attribute 'w', to: :width
+        map_attribute 'h', to: :height
+        map_attribute 'orient', to: :orientation
       end
     end
   end

@@ -10,7 +10,7 @@ module Uniword
     # Element: <v:formulas>
     class Formulas < Lutaml::Model::Serializable
       # Pattern 0: Attributes BEFORE xml mappings
-      attribute :formulas, Formula, collection: true, default: -> { [] }
+      attribute :formulas, Formula, collection: true, initialize_empty: true
 
       xml do
         element 'formulas'

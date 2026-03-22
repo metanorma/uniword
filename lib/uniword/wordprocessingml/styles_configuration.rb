@@ -15,13 +15,19 @@ module Uniword
     class StylesConfiguration < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       # Collection of all styles
-      attribute :styles, Style, collection: true, default: -> { [] }
+      attribute :doc_defaults, DocDefaults
+      attribute :latent_styles, LatentStyles
+      attribute :styles, Style, collection: true, initialize_empty: true
 
       # OOXML namespace configuration
       xml do
         root 'styles'
         namespace Ooxml::Namespaces::WordProcessingML
+        mixed_content
 
+        # Map docDefaults and latentStyles
+        map_element 'docDefaults', to: :doc_defaults, render_nil: false
+        map_element 'latentStyles', to: :latent_styles, render_nil: false
         # Map style elements
         map_element 'style', to: :styles
       end
@@ -182,12 +188,13 @@ module Uniword
       # @param id [String] Style ID
       # @param name [String] Style name
       # @param attributes [Hash] Style attributes
-      # @return [ParagraphStyle] The created style
+      # @return [Style] The created style
       def create_paragraph_style(id, name, **attributes)
-        style = ParagraphStyle.new(
-          id: id,
-          name: name,
-          custom: true,
+        style = Style.new(
+          styleId: id,
+          name: StyleName.new(val: name),
+          customStyle: true,
+          type: 'paragraph',
           **attributes
         )
         add_style(style)
@@ -199,12 +206,13 @@ module Uniword
       # @param id [String] Style ID
       # @param name [String] Style name
       # @param attributes [Hash] Style attributes
-      # @return [CharacterStyle] The created style
+      # @return [Style] The created style
       def create_character_style(id, name, **attributes)
-        style = CharacterStyle.new(
-          id: id,
-          name: name,
-          custom: true,
+        style = Style.new(
+          styleId: id,
+          name: StyleName.new(val: name),
+          customStyle: true,
+          type: 'character',
           **attributes
         )
         add_style(style)

@@ -157,7 +157,7 @@ RSpec.describe Uniword::Wordprocessingml::Run, 'Enhanced Properties' do
       vanish = Uniword::Properties::Vanish.new(value: true)
       run.properties = run_properties_class.new(hidden: vanish)
 
-      expect(run.properties&.hidden).to be true
+      expect(run.properties&.hidden&.value).to be true
     end
 
     it 'defaults to nil when not set' do

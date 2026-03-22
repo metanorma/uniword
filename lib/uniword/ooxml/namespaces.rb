@@ -20,6 +20,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/math'
         prefix_default 'm'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # DrawingML WordProcessing Drawing namespace
@@ -28,6 +29,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing'
         prefix_default 'wp'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # DrawingML Chart namespace
@@ -35,6 +37,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/drawingml/2006/chart'
         prefix_default 'c'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # DrawingML Picture namespace
@@ -42,6 +45,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/drawingml/2006/picture'
         prefix_default 'pic'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # DrawingML WordProcessing Drawing namespace
@@ -49,14 +53,17 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing'
         prefix_default 'wp'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # DrawingML Main namespace
       # Used for graphics and shapes
+      # NOTE: DrawingML attributes are UNQUALIFIED (no prefix)
       class DrawingML < Lutaml::Xml::Namespace
         uri 'http://schemas.openxmlformats.org/drawingml/2006/main'
         prefix_default 'a'
         element_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # Relationships namespace
@@ -65,6 +72,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
         prefix_default 'r'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # VML namespace (legacy)
@@ -73,6 +81,7 @@ module Uniword
         uri 'urn:schemas-microsoft-com:vml'
         prefix_default 'v'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # XML namespace for xml:space attribute
@@ -87,6 +96,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/package/2006/metadata/core-properties'
         prefix_default 'cp'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Content Types namespace ([Content_Types].xml)
@@ -94,6 +104,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/package/2006/content-types'
         prefix_default 'ct'
         element_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # Dublin Core Elements namespace
@@ -101,6 +112,7 @@ module Uniword
         uri 'http://purl.org/dc/elements/1.1/'
         prefix_default 'dc'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Dublin Core Terms namespace
@@ -108,6 +120,7 @@ module Uniword
         uri 'http://purl.org/dc/terms/'
         prefix_default 'dcterms'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # XML Schema Instance namespace
@@ -122,6 +135,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/extended-properties'
         prefix_default 'app'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Document Variables namespace (docProps/docVars.xml)
@@ -129,6 +143,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/docVars'
         prefix_default 'dv'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Glossary namespace (docProps/glossary.xml)
@@ -136,13 +151,23 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/glossary'
         prefix_default 'g'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
-      # Relationships namespace
+      # Package-level Relationships namespace (_rels/.rels)
+      class PackageRelationships < Lutaml::Xml::Namespace
+        uri 'http://schemas.openxmlformats.org/package/2006/relationships'
+        prefix_default 'rel'
+        element_form_default :qualified
+        attribute_form_default :unqualified
+      end
+
+      # Document-level Relationships namespace
       class Relationships < Lutaml::Xml::Namespace
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
         prefix_default 'r'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Shared Types namespace
@@ -150,6 +175,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes'
         prefix_default 'st'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Variant Types namespace
@@ -157,6 +183,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes'
         prefix_default 'vt'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Bibliography namespace
@@ -164,6 +191,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/bibliography'
         prefix_default 'b'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # SpreadsheetML namespace
@@ -171,6 +199,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'
         prefix_default 'xls'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # PresentationalML namespace
@@ -178,6 +207,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/presentationalml/2006/main'
         prefix_default 'p'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Word 2010 namespace
@@ -185,6 +215,7 @@ module Uniword
         uri 'http://schemas.microsoft.com/office/word/2010/wordml'
         prefix_default 'w14'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Word 2012 namespace
@@ -192,6 +223,7 @@ module Uniword
         uri 'http://schemas.microsoft.com/office/word/2012/wordml'
         prefix_default 'w15'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Word 2015 namespace
@@ -199,6 +231,23 @@ module Uniword
         uri 'http://schemas.microsoft.com/office/word/2015/wordml'
         prefix_default 'w16'
         element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2016 namespace
+      class Word2016 < Lutaml::Xml::Namespace
+        uri 'http://schemas.microsoft.com/office/word/2016/wordml'
+        prefix_default 'w16'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2016 CID namespace (citation identifiers)
+      class Word2016Cid < Lutaml::Xml::Namespace
+        uri 'http://schemas.microsoft.com/office/word/2016/wordml/cid'
+        prefix_default 'w16cid'
+        element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Custom XML namespace
@@ -206,6 +255,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/customXml'
         prefix_default 'cxml'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Custom XML namespace
@@ -213,6 +263,7 @@ module Uniword
         uri 'http://schemas.openxmlformats.org/officeDocument/2006/customXml'
         prefix_default 'cxml'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Office namespace
@@ -220,6 +271,7 @@ module Uniword
         uri 'urn:schemas-microsoft-com:office:office'
         prefix_default 'o'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # VML namespace
@@ -227,6 +279,7 @@ module Uniword
         uri 'urn:schemas-microsoft-com:vml'
         prefix_default 'v'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
 
       # Markup Compatibility namespace
@@ -244,6 +297,7 @@ module Uniword
         uri 'http://schemas.microsoft.com/office/thememl/2012/main'
         prefix_default 'thm15'
         element_form_default :qualified
+        attribute_form_default :qualified
       end
     end
   end

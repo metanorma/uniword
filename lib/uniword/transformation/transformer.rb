@@ -41,10 +41,10 @@ module Uniword
       #
       # Explicitly declares source and target formats - no automatic detection.
       #
-      # @param source [Document] Source document model
+      # @param source [Wordprocessingml::DocumentRoot] Source document model
       # @param source_format [Symbol] Source format (:docx or :mhtml)
       # @param target_format [Symbol] Target format (:docx or :mhtml)
-      # @return [Document] Transformed document model
+      # @return [Wordprocessingml::DocumentRoot] Transformed document model
       # @raise [ArgumentError] if parameters are invalid
       #
       # @example Explicit transformation
@@ -56,8 +56,18 @@ module Uniword
       def transform(source:, source_format:, target_format:)
         validate_transformation(source, source_format, target_format)
 
+        # When targeting MHTML, produce an Mhtml::Document with HTML content
+        if target_format == :mhtml
+          return transform_to_mhtml(source)
+        end
+
+        # When source is MHTML, transform to OOXML document
+        if source_format == :mhtml
+          return transform_from_mhtml(source)
+        end
+
         # Create new target document
-        target = Document.new
+        target = Wordprocessingml::DocumentRoot.new
 
         # Transform document-level metadata
         transform_metadata(source, target, source_format, target_format)
@@ -120,6 +130,63 @@ module Uniword
       end
 
       private
+
+      # Transform OOXML document to MHTML document
+      #
+      # @param source [Uniword::Wordprocessingml::DocumentRoot] OOXML source document
+      # @return [Uniword::Mhtml::Document] MHTML document with HTML content
+      def transform_to_mhtml(source)
+        # Convert OOXML body to HTML content using the converter service
+        html_content = OoxmlToHtmlConverter.document_to_html(source)
+
+        # Create MHTML document
+        mhtml_doc = Uniword::Mhtml::Document.new
+        mhtml_doc.html_content = html_content
+        mhtml_doc.title = source.title
+
+        # Transfer metadata
+        if source.core_properties
+          mhtml_doc.core_properties = {
+            title: source.core_properties.title,
+            creator: source.core_properties.creator,
+            subject: source.core_properties.subject,
+            keywords: source.core_properties.keywords
+          }.compact
+        end
+
+        mhtml_doc
+      end
+
+      # Transform MHTML document to OOXML document
+      #
+      # @param source [Uniword::Mhtml::Document] MHTML source document
+      # @return [Uniword::Wordprocessingml::DocumentRoot] OOXML document
+      def transform_from_mhtml(source)
+        # Create OOXML document
+        ooxml_doc = Wordprocessingml::DocumentRoot.new
+
+        # Get HTML content
+        html_content = source.html_content || source.raw_html || ''
+        return ooxml_doc if html_content.empty?
+
+        # Convert HTML to OOXML paragraphs
+        paragraphs = HtmlToOoxmlConverter.html_to_paragraphs(html_content)
+
+        # Add paragraphs to document
+        paragraphs.each do |p|
+          ooxml_doc.add_paragraph(p)
+        end
+
+        # Transfer metadata
+        if source.core_properties && !source.core_properties.empty?
+          # Handle both hash and string formats
+          if source.core_properties.is_a?(Hash)
+            ooxml_doc.title = source.core_properties['title'] if source.core_properties['title']
+          end
+        end
+
+        ooxml_doc
+      end
 
       # Transform body elements (paragraphs and tables)
       #
@@ -273,7 +340,10 @@ module Uniword
       # @param target_format [Symbol] Target format
       # @raise [ArgumentError] if parameters are invalid
       def validate_transformation(source, source_format, target_format)
-        raise ArgumentError, 'Source must be a Document' unless source.is_a?(Document)
+        # Accept OOXML Document or MHTML Document
+        unless source.is_a?(Wordprocessingml::DocumentRoot) || source.is_a?(Uniword::Mhtml::Document)
+          raise ArgumentError, 'Source must be a Document or Mhtml::Document'
+        end
 
         unless %i[docx mhtml].include?(source_format)
           raise ArgumentError,

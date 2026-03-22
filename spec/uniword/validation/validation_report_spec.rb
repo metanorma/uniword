@@ -6,9 +6,9 @@ require 'uniword/validation/validation_result'
 require 'uniword/wordprocessingml/hyperlink'
 
 RSpec.describe Uniword::Validation::ValidationReport do
-  let(:external_link) { Uniword::Hyperlink.new(id: 'https://example.com') }
-  let(:anchor_link) { Uniword::Hyperlink.new(anchor: 'section1') }
-  let(:broken_link) { Uniword::Hyperlink.new(id: 'https://broken.com') }
+  let(:external_link) { Uniword::Wordprocessingml::Hyperlink.new(id: 'https://example.com') }
+  let(:anchor_link) { Uniword::Wordprocessingml::Hyperlink.new(anchor: 'section1') }
+  let(:broken_link) { Uniword::Wordprocessingml::Hyperlink.new(id: 'https://broken.com') }
 
   let(:success_result) do
     Uniword::Validation::ValidationResult.success(external_link)

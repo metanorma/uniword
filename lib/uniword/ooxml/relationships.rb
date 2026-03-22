@@ -16,6 +16,9 @@ module Uniword
       autoload :HyperlinkRelationship, "#{__dir__}/relationships/hyperlink_relationship"
       autoload :OfficeDocumentRelationship,
                "#{__dir__}/relationships/office_document_relationship"
+      # Package-level relationships (for _rels/.rels files)
+      autoload :PackageRelationships, "#{__dir__}/relationships/package_relationships"
+      autoload :PackageRelationship, "#{__dir__}/relationships/package_relationship"
     end
   end
 end

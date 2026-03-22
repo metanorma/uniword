@@ -84,7 +84,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
 
     before do
       # Create a minimal DOCX structure for testing
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Document.new)
+      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Wordprocessingml::DocumentRoot.new)
     end
 
     after do
@@ -147,7 +147,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
       FileUtils.touch(File.join(input_dir, 'test1.docx'))
       FileUtils.touch(File.join(input_dir, 'test2.docx'))
 
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Document.new)
+      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Wordprocessingml::DocumentRoot.new)
     end
 
     after do

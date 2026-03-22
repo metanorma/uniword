@@ -9,8 +9,8 @@ RSpec.describe 'DocProps Round-Trip Fidelity' do
 
   before(:all) do
     # Load and save document once for all tests
-    doc = Uniword.load('examples/demo_formal_integral_proper.docx')
-    doc.save('test_output/docprops_roundtrip.docx')
+    package = Uniword::Ooxml::DocxPackage.from_file('examples/demo_formal_integral_proper.docx')
+    package.to_file('test_output/docprops_roundtrip.docx')
   end
 
   def extract_file(docx_path, file_path)

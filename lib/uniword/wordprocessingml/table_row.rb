@@ -10,7 +10,16 @@ module Uniword
     # Element: <w:tr>
     class TableRow < Lutaml::Model::Serializable
       attribute :properties, TableRowProperties
-      attribute :cells, TableCell, collection: true, default: -> { [] }
+      attribute :cells, TableCell, collection: true, initialize_empty: true
+
+      # Revision tracking attributes
+      attribute :rsid_r, :string
+      attribute :rsid_r_pr, :string
+      attribute :rsid_tr, :string
+
+      # W14 namespace attributes
+      attribute :para_id, W14ParaId
+      attribute :text_id, W14TextId
 
       # API compatibility - header flag for table rows
       attr_accessor :header
@@ -19,6 +28,12 @@ module Uniword
         element 'tr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
+
+        map_attribute 'rsidR', to: :rsid_r, render_nil: false
+        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
+        map_attribute 'rsidTr', to: :rsid_tr, render_nil: false
+        map_attribute 'paraId', to: :para_id, render_nil: false
+        map_attribute 'textId', to: :text_id, render_nil: false
 
         map_element 'trPr', to: :properties, render_nil: false
         map_element 'tc', to: :cells, render_nil: false

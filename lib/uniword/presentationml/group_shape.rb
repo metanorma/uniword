@@ -11,8 +11,8 @@ module Uniword
     class GroupShape < Lutaml::Model::Serializable
       attribute :nv_grp_sp_pr, :string
       attribute :grp_sp_pr, :string
-      attribute :sp, Shape, collection: true, default: -> { [] }
-      attribute :grp_sp, GroupShape, collection: true, default: -> { [] }
+      attribute :sp, Shape, collection: true, initialize_empty: true
+      attribute :grp_sp, GroupShape, collection: true, initialize_empty: true
 
       xml do
         element 'grp_sp'

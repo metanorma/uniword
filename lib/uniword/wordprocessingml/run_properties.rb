@@ -49,9 +49,9 @@ module Uniword
       attribute :caps, Properties::Caps, default: nil
       attribute :hidden, Properties::Vanish, default: nil
       attribute :no_proof, Properties::NoProof, default: nil
-      attribute :shadow, Properties::Shadow, default: nil
-      attribute :emboss, Properties::Emboss, default: nil
-      attribute :imprint, Properties::Imprint, default: nil
+      attribute :_shadow_val, Properties::Shadow, default: nil
+      attribute :_emboss_val, Properties::Emboss, default: nil
+      attribute :_imprint_val, Properties::Imprint, default: nil
       attribute :outline_level, Properties::OutlineLevel, default: nil
 
       # Flat attributes (kept as aliases for compatibility)
@@ -75,6 +75,171 @@ module Uniword
       attribute :font_east_asia, :string # East Asian font
       attribute :font_h_ansi, :string    # High ANSI font
       attribute :font_cs, :string        # Complex script font
+
+      # YAML mappings for flat YAML structure (StyleSet compatibility)
+      yaml do
+        map 'bold', with: { from: :yaml_bold_from, to: :yaml_bold_to }
+        map 'italic', with: { from: :yaml_italic_from, to: :yaml_italic_to }
+        map 'strike', with: { from: :yaml_strike_from, to: :yaml_strike_to }
+        map 'double_strike', with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
+        map 'small_caps', with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
+        map 'caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }
+        map 'all_caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }  # Alias
+        map 'hidden', with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
+        map 'size', with: { from: :yaml_size_from, to: :yaml_size_to }
+        map 'spacing', to: :spacing
+        map 'character_spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
+        map 'underline', with: { from: :yaml_underline_from, to: :yaml_underline_to }
+        map 'color', with: { from: :yaml_color_from, to: :yaml_color_to }
+        map 'highlight', with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
+        map 'font', to: :font
+        map 'font_ascii', to: :font_ascii
+        map 'font_east_asia', to: :font_east_asia
+        map 'font_h_ansi', to: :font_h_ansi
+        map 'font_cs', to: :font_cs
+        map 'emboss', with: { from: :yaml_emboss_from, to: :yaml_emboss_to }
+        map 'imprint', with: { from: :yaml_imprint_from, to: :yaml_imprint_to }
+        map 'shadow', with: { from: :yaml_shadow_from, to: :yaml_shadow_to }
+        map 'outline', with: { from: :yaml_outline_from, to: :yaml_outline_to }
+        map 'vertical_align', with: { from: :yaml_vertical_align_from, to: :yaml_vertical_align_to }
+      end
+
+      # YAML transform methods
+      def yaml_bold_from(instance, value)
+        instance.bold = Properties::Bold.new(value: value) unless value.nil?
+      end
+
+      def yaml_bold_to(instance, doc)
+        bold&.value
+      end
+
+      def yaml_italic_from(instance, value)
+        instance.italic = Properties::Italic.new(value: value) unless value.nil?
+      end
+
+      def yaml_italic_to(instance, doc)
+        italic&.value
+      end
+
+      def yaml_strike_from(instance, value)
+        instance.strike = Properties::Strike.new(value: value) unless value.nil?
+      end
+
+      def yaml_strike_to(instance, doc)
+        strike&.value
+      end
+
+      def yaml_double_strike_from(instance, value)
+        instance.double_strike = Properties::DoubleStrike.new(value: value) unless value.nil?
+      end
+
+      def yaml_double_strike_to(instance, doc)
+        double_strike&.value
+      end
+
+      def yaml_small_caps_from(instance, value)
+        instance.small_caps = Properties::SmallCaps.new(value: value) unless value.nil?
+      end
+
+      def yaml_small_caps_to(instance, doc)
+        small_caps&.value
+      end
+
+      def yaml_caps_from(instance, value)
+        instance.caps = Properties::Caps.new(value: value) unless value.nil?
+      end
+
+      def yaml_caps_to(instance, doc)
+        caps&.value
+      end
+
+      def yaml_hidden_from(instance, value)
+        instance.hidden = Properties::Vanish.new(value: value) unless value.nil?
+      end
+
+      def yaml_hidden_to(instance, doc)
+        hidden&.value
+      end
+
+      def yaml_size_from(instance, value)
+        instance.size = Properties::FontSize.new(value: value.to_i) if value
+      end
+
+      def yaml_size_to(instance, doc)
+        size&.value
+      end
+
+      def yaml_character_spacing_from(instance, value)
+        instance.character_spacing = Properties::CharacterSpacing.new(value: value.to_i) if value
+      end
+
+      def yaml_character_spacing_to(instance, doc)
+        character_spacing&.value
+      end
+
+      def yaml_underline_from(instance, value)
+        instance.underline = Properties::Underline.new(value: value) if value
+      end
+
+      def yaml_underline_to(instance, doc)
+        underline&.value
+      end
+
+      def yaml_color_from(instance, value)
+        instance.color = Properties::ColorValue.new(value: value) if value
+      end
+
+      def yaml_color_to(instance, doc)
+        color&.value
+      end
+
+      def yaml_highlight_from(instance, value)
+        instance.highlight = Properties::Highlight.new(value: value) if value
+      end
+
+      def yaml_highlight_to(instance, doc)
+        highlight&.value
+      end
+
+      def yaml_emboss_from(instance, value)
+        instance.emboss = Properties::Emboss.new(value: value) unless value.nil?
+      end
+
+      def yaml_emboss_to(instance, doc)
+        emboss&.value
+      end
+
+      def yaml_imprint_from(instance, value)
+        instance.imprint = Properties::Imprint.new(value: value) unless value.nil?
+      end
+
+      def yaml_imprint_to(instance, doc)
+        imprint&.value
+      end
+
+      def yaml_shadow_from(instance, value)
+        instance.shadow = Properties::Shadow.new(value: value) unless value.nil?
+      end
+
+      def yaml_shadow_to(instance, doc)
+        shadow&.value
+      end
+
+      def yaml_outline_from(instance, value)
+        instance.outline_level = Properties::OutlineLevel.new(value: value) unless value.nil?
+      end
+
+      def yaml_outline_to(instance, doc)
+        outline_level&.value
+      end
+
+      def yaml_vertical_align_from(instance, value)
+        instance.vertical_align = Properties::VerticalAlign.new(value: value) if value
+      end
+
+      def yaml_vertical_align_to(instance, doc)
+        vertical_align&.value
+      end
 
       # XML mappings come AFTER attributes
       xml do
@@ -142,9 +307,9 @@ module Uniword
         map_element 'textOutline', to: :text_outline, render_nil: false
 
         # Additional boolean formatting
-        map_element 'shadow', to: :shadow, render_nil: false
-        map_element 'emboss', to: :emboss, render_nil: false
-        map_element 'imprint', to: :imprint, render_nil: false
+        map_element 'shadow', to: :_shadow_val, render_nil: false
+        map_element 'emboss', to: :_emboss_val, render_nil: false
+        map_element 'imprint', to: :_imprint_val, render_nil: false
         map_element 'outline', to: :outline_level, render_nil: false
       end
 
@@ -185,7 +350,7 @@ module Uniword
       # Set all_caps
       def all_caps=(value)
         @all_caps = value
-        self.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
+        instance.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
         value
       end
 
@@ -279,27 +444,75 @@ module Uniword
       end
 
       def shadow?
-        val = shadow
+        val = _shadow_val
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
+      end
+
+      # Get shadow value (boolean)
+      def shadow
+        shadow?
+      end
+
+      # Set shadow value
+      def shadow=(value)
+        @_shadow_val = if value.is_a?(Properties::Shadow)
+                             value
+                           else
+                             Properties::Shadow.new(value: value)
+                           end
+        @using_default ||= {}
+        @using_default[:_shadow_val] = false
       end
 
       def imprint?
-        val = imprint
+        val = _imprint_val
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
       end
 
+      # Get imprint value (boolean)
+      def imprint
+        imprint?
+      end
+
+      # Set imprint value
+      def imprint=(value)
+        @_imprint_val = if value.is_a?(Properties::Imprint)
+                               value
+                             else
+                               Properties::Imprint.new(value: value)
+                             end
+        @using_default ||= {}
+        @using_default[:_imprint_val] = false
+      end
+
       def emboss?
-        val = emboss
+        val = _emboss_val
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
+      end
+
+      # Get emboss value (boolean)
+      def emboss
+        emboss?
+      end
+
+      # Set emboss value
+      def emboss=(value)
+        @_emboss_val = if value.is_a?(Properties::Emboss)
+                              value
+                            else
+                              Properties::Emboss.new(value: value)
+                            end
+        @using_default ||= {}
+        @using_default[:_emboss_val] = false
       end
 
       def hidden?
@@ -321,6 +534,47 @@ module Uniword
       end
 
       def page_break=(_value)
+        self
+      end
+
+      # Get outline (character outline effect) - returns boolean for spec compatibility
+      def outline
+        outline?
+      end
+
+      # Check if outline effect is enabled
+      def outline?
+        val = outline_level
+        return false if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        # Handle both boolean and integer values
+        val == true || val == 1 || val.to_i == 1
+      end
+
+      # Set outline effect
+      def outline=(value)
+        self.outline_level = value.is_a?(Properties::OutlineLevel) ? value : Properties::OutlineLevel.new(value: value)
+        self
+      end
+
+      # Get text expansion (alias for width_scale)
+      #
+      # @return [Properties::WidthScale, nil] Width scale wrapper object
+      def text_expansion
+        width_scale
+      end
+
+      # Set text expansion
+      #
+      # @param value [Integer, Properties::WidthScale] Width scale value
+      # @return [self] For method chaining
+      def text_expansion=(value)
+        self.width_scale = if value.is_a?(Properties::WidthScale)
+                             value
+                           else
+                             Properties::WidthScale.new(value: value)
+                           end
         self
       end
 

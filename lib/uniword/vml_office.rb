@@ -23,6 +23,7 @@ module Uniword
     autoload :VmlDiagram, 'uniword/vml_office/vml_diagram'
     autoload :VmlEntry, 'uniword/vml_office/vml_entry'
     autoload :VmlIdMap, 'uniword/vml_office/vml_id_map'
+    autoload :VmlIdmap, 'uniword/vml_office/vml_shape_layout'
     autoload :VmlInk, 'uniword/vml_office/vml_ink'
     autoload :VmlLeft, 'uniword/vml_office/vml_left'
     autoload :VmlOfficeFill, 'uniword/vml_office/vml_office_fill'

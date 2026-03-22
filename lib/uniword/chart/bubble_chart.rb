@@ -10,13 +10,13 @@ module Uniword
     # Element: <c:bubbleChart>
     class BubbleChart < Lutaml::Model::Serializable
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :bubble3d, :string
       attribute :bubble_scale, :string
       attribute :show_neg_bubbles, :string
       attribute :size_represents, :string
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'bubbleChart'

@@ -11,7 +11,7 @@ module Uniword
     class Footnote < Lutaml::Model::Serializable
       attribute :id, :string
       attribute :type, :string
-      attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
+      attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
 
       xml do
         element 'footnote'

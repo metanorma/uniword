@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Paragraph, 'Enhanced Properties' do
+RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
   let(:paragraph) { described_class.new }
 
   describe '#set_borders' do

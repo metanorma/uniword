@@ -17,6 +17,11 @@ module Uniword
     class Position < Lutaml::Model::Serializable
       attribute :value, PositionValue
 
+      # Alias for XML attribute compatibility
+      def val
+        value
+      end
+
       xml do
         element 'position'
         namespace Ooxml::Namespaces::WordProcessingML

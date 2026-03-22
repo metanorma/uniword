@@ -90,7 +90,7 @@ module Uniword
         )
 
         # Create new document
-        document = Document.new
+        document = Wordprocessingml::DocumentRoot.new
 
         # Initialize processors
         substitutor = VariableSubstitutor.new(manifest.variables)

@@ -11,8 +11,8 @@ module Uniword
     class TableCell < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, before xml block
       attribute :properties, TableCellProperties
-      attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
-      attribute :tables, Table, collection: true, default: -> { [] }
+      attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
+      attribute :tables, Table, collection: true, initialize_empty: true
 
       # Convenience flat attributes for API access
       attribute :column_span, :integer

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Uniword::Quality::DocumentChecker do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
   describe '#initialize' do
     it 'loads default configuration' do

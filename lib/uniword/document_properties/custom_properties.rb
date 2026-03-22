@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: document_properties.yml
     # Element: <ep:CustomProperties>
     class CustomProperties < Lutaml::Model::Serializable
-      attribute :properties, CustomProperty, collection: true, default: -> { [] }
+      attribute :properties, CustomProperty, collection: true, initialize_empty: true
 
       xml do
         element 'CustomProperties'

@@ -11,7 +11,7 @@ module Uniword
     class Vector < Lutaml::Model::Serializable
       attribute :size, :string
       attribute :baseType, :string
-      attribute :variant, :string, collection: true, default: -> { [] }
+      attribute :variant, :string, collection: true, initialize_empty: true
 
       xml do
         element 'vector'

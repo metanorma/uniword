@@ -11,7 +11,7 @@ module Uniword
     class Scenarios < Lutaml::Model::Serializable
       attribute :current, :integer
       attribute :show, :integer
-      attribute :entries, :string, collection: true, default: -> { [] }
+      attribute :entries, :string, collection: true, initialize_empty: true
 
       xml do
         element 'scenarios'

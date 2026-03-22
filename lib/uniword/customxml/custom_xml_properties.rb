@@ -11,7 +11,7 @@ module Uniword
     class CustomXmlProperties < Lutaml::Model::Serializable
       attribute :placeholder, :string
       attribute :showing_plc_hdr, :string
-      attribute :attr, CustomXmlAttribute, collection: true, default: -> { [] }
+      attribute :attr, CustomXmlAttribute, collection: true, initialize_empty: true
 
       xml do
         element 'custom_xml_properties'

@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:si>
     class StringItem < Lutaml::Model::Serializable
       attribute :t, Text
-      attribute :r, RichTextRun, collection: true, default: -> { [] }
+      attribute :r, RichTextRun, collection: true, initialize_empty: true
       attribute :phonetic_pr, PhoneticProperties
 
       xml do

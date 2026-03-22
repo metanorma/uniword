@@ -13,7 +13,7 @@ RSpec.describe Uniword::Bookmark do
     end
 
     it 'creates a bookmark with name and target element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       bookmark = described_class.new(name: 'intro', target_element: paragraph)
 
       expect(bookmark.name).to eq('intro')
@@ -23,7 +23,7 @@ RSpec.describe Uniword::Bookmark do
 
   describe '#target?' do
     it 'returns true when bookmark has target element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       bookmark = described_class.new(name: 'test', target_element: paragraph)
 
       expect(bookmark.target?).to be true
@@ -70,7 +70,7 @@ RSpec.describe Uniword::Bookmark do
 
   describe '#to_h' do
     it 'returns hash representation' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       bookmark = described_class.new(name: 'test', target_element: paragraph)
 
       hash = bookmark.to_h
@@ -111,8 +111,8 @@ RSpec.describe Uniword::Bookmark do
     end
 
     it 'ignores target element in comparison' do
-      p1 = Uniword::Paragraph.new
-      p2 = Uniword::Paragraph.new
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p2 = Uniword::Wordprocessingml::Paragraph.new
       bookmark1 = described_class.new(name: 'test', target_element: p1)
       bookmark2 = described_class.new(name: 'test', target_element: p2)
 
@@ -163,7 +163,7 @@ RSpec.describe Uniword::Bookmark do
 
     it 'allows modification of target element' do
       bookmark = described_class.new(name: 'test')
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       bookmark.target_element = paragraph
 
       expect(bookmark.target_element).to eq(paragraph)

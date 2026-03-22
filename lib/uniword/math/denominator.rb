@@ -11,7 +11,7 @@ module Uniword
     class Denominator < Lutaml::Model::Serializable
       # Pattern 0: Attributes BEFORE xml mappings
       attribute :arg_properties, ArgumentProperties
-      attribute :runs, MathRun, collection: true, default: -> { [] }
+      attribute :runs, MathRun, collection: true, initialize_empty: true
 
       xml do
         element 'den'

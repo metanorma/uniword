@@ -27,7 +27,7 @@ RSpec.describe Uniword::Assembly::CrossReferenceResolver do
   end
 
   describe '#resolve' do
-    let(:document) { Uniword::Document.new }
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'returns the document' do
       result = resolver.resolve(document)
@@ -35,8 +35,8 @@ RSpec.describe Uniword::Assembly::CrossReferenceResolver do
     end
 
     it 'processes document paragraphs' do
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       run.text = 'Test'
       para.add_run(run)
       document.add_paragraph(para)
@@ -91,7 +91,7 @@ RSpec.describe Uniword::Assembly::CrossReferenceResolver do
 
     it 'handles unmapped bookmark IDs' do
       # Should not raise error for unmapped IDs
-      expect { resolver.resolve(Uniword::Document.new) }.not_to raise_error
+      expect { resolver.resolve(Uniword::Wordprocessingml::DocumentRoot.new) }.not_to raise_error
     end
   end
 end

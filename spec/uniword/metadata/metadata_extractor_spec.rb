@@ -19,7 +19,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
   describe '#extract' do
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('First paragraph with some words')
       doc.add_paragraph('Second paragraph content')
       doc
@@ -57,10 +57,10 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
     context 'with headings' do
       let(:document) do
-        doc = Uniword::Document.new
-        heading = Uniword::Paragraph.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        heading = Uniword::Wordprocessingml::Paragraph.new
         heading.add_text('Heading 1')
-        heading.properties = Uniword::ParagraphProperties.new
+        heading.properties = Uniword::Wordprocessingml::ParagraphProperties.new
         heading.properties.style = 'Heading 1'
         doc.body.paragraphs << heading
         doc
@@ -90,7 +90,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
       end
 
       it 'limits first paragraph length' do
-        long_doc = Uniword::Document.new
+        long_doc = Uniword::Wordprocessingml::DocumentRoot.new
         long_doc.add_paragraph('x' * 1000)
 
         metadata = extractor.extract(long_doc)
@@ -108,7 +108,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
   describe 'statistical metadata extraction' do
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       5.times do |i|
         doc.add_paragraph("Paragraph #{i} content")
       end
@@ -136,7 +136,7 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
   describe 'content metadata extraction' do
     it 'extracts from empty document' do
-      empty_doc = Uniword::Document.new
+      empty_doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       metadata = extractor.extract(empty_doc)
 

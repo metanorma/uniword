@@ -18,7 +18,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
   describe 'paragraph enhanced properties' do
     it 'preserves paragraph borders through round-trip' do
       # Create document with borders
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Text with borders')
       para.set_borders(
         top: { style: 'single', color: 'FF0000', size: 4 },
@@ -44,7 +44,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves paragraph shading through round-trip' do
       # Create document with shading
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Shaded text')
       para.set_shading(fill: 'FFFF00', pattern: 'solid')
 
@@ -61,7 +61,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves tab stops through round-trip' do
       # Create document with tab stops
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph("Text\twith\ttabs")
       para.add_tab_stop(position: 1440, alignment: 'center', leader: 'dot')
       para.add_tab_stop(position: 2880, alignment: 'right')
@@ -89,7 +89,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
   describe 'run enhanced properties' do
     it 'preserves character spacing through round-trip' do
       # Create document with character spacing
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Spaced text')
       run = para.runs.first
       run.character_spacing = 20
@@ -107,7 +107,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves kerning through round-trip' do
       # Create document with kerning
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Kerned text')
       run = para.runs.first
       run.kerning = 24
@@ -125,7 +125,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves position through round-trip' do
       # Create document with raised text
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Raised text')
       run = para.runs.first
       run.position = 5
@@ -143,7 +143,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves text expansion through round-trip' do
       # Create document with expanded text
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Expanded text')
       run = para.runs.first
       run.text_expansion = 120
@@ -161,7 +161,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves emphasis mark through round-trip' do
       # Create document with emphasis mark
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Emphasized text')
       run = para.runs.first
       run.emphasis_mark = 'dot'
@@ -179,7 +179,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves language through round-trip' do
       # Create document with language setting
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('English text')
       run = para.runs.first
       run.language = 'en-US'
@@ -197,7 +197,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves text effects through round-trip' do
       # Create document with text effects
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Text with effects')
       run = para.runs.first
       run.outline = true
@@ -220,7 +220,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
   describe 'complex combinations' do
     it 'preserves multiple paragraph properties through round-trip' do
       # Create document with multiple properties
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Complex paragraph')
       para.set_borders(top: '000000', bottom: 'FF0000')
       para.set_shading(fill: 'FFFF00', pattern: 'solid')
@@ -239,7 +239,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves multiple run properties through round-trip' do
       # Create document with multiple run properties
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Complex run')
       run = para.runs.first
       run.character_spacing = 20
@@ -264,7 +264,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves properties across multiple paragraphs' do
       # Create document with multiple paragraphs
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       para1 = doc.add_paragraph('Paragraph 1')
       para1.set_borders(top: 'FF0000')
@@ -290,7 +290,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
   describe 'edge cases' do
     it 'preserves empty properties containers' do
       # Create document with paragraph but no enhanced properties
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Plain text')
 
       # Save and reload
@@ -304,7 +304,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
     it 'preserves negative values (character spacing, position)' do
       # Create document with negative values
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = doc.add_paragraph('Condensed and lowered')
       run = para.runs.first
       run.character_spacing = -10 # Condensed

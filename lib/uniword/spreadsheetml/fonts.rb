@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:fonts>
     class Fonts < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :font_entries, Font, collection: true, default: -> { [] }
+      attribute :font_entries, Font, collection: true, initialize_empty: true
 
       xml do
         element 'fonts'

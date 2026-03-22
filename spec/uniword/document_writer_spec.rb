@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'tempfile'
 
 RSpec.describe Uniword::DocumentWriter do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
   let(:writer) { described_class.new(document) }
 
   describe '#initialize' do
@@ -155,10 +155,11 @@ RSpec.describe Uniword::DocumentWriter do
         # Write document
         writer.save(temp_file.path)
 
-        # Read it back
+        # Read it back - returns DocxPackage with document accessor
         loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
 
-        expect(loaded_doc).to be_a(Uniword::Document)
+        expect(loaded_doc).to be_a(Uniword::Ooxml::DocxPackage)
+        expect(loaded_doc.document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
         temp_file.unlink
       end
@@ -173,7 +174,8 @@ RSpec.describe Uniword::DocumentWriter do
         # Read it back
         loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
 
-        expect(loaded_doc).to be_a(Uniword::Document)
+        # MHTML files return Mhtml::Document
+        expect(loaded_doc).to be_a(Uniword::Mhtml::Document)
       ensure
         temp_file.unlink
       end

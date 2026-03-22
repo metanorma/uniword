@@ -34,7 +34,7 @@ RSpec.describe Uniword do
 
     describe Uniword::ValidationError do
       it 'has a message with element name and errors' do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         errors = ['ID is required', 'Text cannot be empty']
         error = described_class.new(para, errors)
 

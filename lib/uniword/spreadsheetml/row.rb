@@ -14,7 +14,7 @@ module Uniword
       attribute :ht, :string
       attribute :custom_height, :string
       attribute :hidden, :string
-      attribute :cells, Cell, collection: true, default: -> { [] }
+      attribute :cells, Cell, collection: true, initialize_empty: true
 
       xml do
         element 'row'

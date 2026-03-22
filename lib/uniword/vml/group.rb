@@ -13,7 +13,7 @@ module Uniword
       attribute :style, :string
       attribute :coordsize, :string
       attribute :coordorigin, :string
-      attribute :shapes, Shape, collection: true, default: -> { [] }
+      attribute :shapes, Shape, collection: true, initialize_empty: true
 
       xml do
         element 'group'

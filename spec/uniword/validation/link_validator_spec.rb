@@ -30,7 +30,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
   describe '#validate' do
     let(:document) do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Hello World')
       doc
     end
@@ -43,9 +43,9 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
     context 'with external links' do
       let(:document) do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        hyperlink = Uniword::Hyperlink.new(id: 'https://example.com')
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        hyperlink = Uniword::Wordprocessingml::Hyperlink.new(id: 'https://example.com')
         para.runs << hyperlink
         doc.body.paragraphs << para
         doc
@@ -62,9 +62,9 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
     context 'with internal bookmarks' do
       let(:document) do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        anchor_link = Uniword::Hyperlink.new(anchor: 'section1')
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        anchor_link = Uniword::Wordprocessingml::Hyperlink.new(anchor: 'section1')
         para.runs << anchor_link
         doc.body.paragraphs << para
         # Add bookmark to document
@@ -81,15 +81,15 @@ RSpec.describe Uniword::Validation::LinkValidator do
 
     context 'with tables containing links' do
       let(:document) do
-        doc = Uniword::Document.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
 
         # Create table with link
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
 
-        para = Uniword::Paragraph.new
-        table_link = Uniword::Hyperlink.new(id: 'https://table.example.com')
+        para = Uniword::Wordprocessingml::Paragraph.new
+        table_link = Uniword::Wordprocessingml::Hyperlink.new(id: 'https://table.example.com')
         para.runs << table_link
         cell.paragraphs << para
         row.cells << cell
@@ -107,7 +107,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
     end
 
     context 'with empty document' do
-      let(:empty_document) { Uniword::Document.new }
+      let(:empty_document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
       it 'returns empty report' do
         report = validator.validate(empty_document)

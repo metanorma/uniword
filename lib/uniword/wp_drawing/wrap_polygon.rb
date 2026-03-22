@@ -11,7 +11,7 @@ module Uniword
     class WrapPolygon < Lutaml::Model::Serializable
       attribute :edited, :string
       attribute :start, :string
-      attribute :line_to, :string, collection: true, default: -> { [] }
+      attribute :line_to, :string, collection: true, initialize_empty: true
 
       xml do
         element 'wrapPolygon'

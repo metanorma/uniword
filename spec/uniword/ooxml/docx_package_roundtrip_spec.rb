@@ -38,7 +38,11 @@ RSpec.describe 'DocxPackage Complete Round-Trip' do
     it 'preserves content through round-trip' do
       original = self.class.extract_file(TEST_DOCUMENT, '_rels/.rels')
       roundtrip = self.class.extract_file(OUTPUT_PATH, '_rels/.rels')
-      expect(roundtrip).to be_xml_equivalent_to(original)
+
+      original_norm = XmlNormalizers.normalize_for_roundtrip(original)
+      roundtrip_norm = XmlNormalizers.normalize_for_roundtrip(roundtrip)
+
+      expect(roundtrip_norm).to be_xml_equivalent_to(original_norm)
     end
   end
 

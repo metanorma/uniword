@@ -67,7 +67,7 @@ module Uniword
       def paragraph(style_name, text = nil, &block)
         style_def = @library.paragraph_style(style_name)
 
-        para = Paragraph.new
+        para = Wordprocessingml::Paragraph.new
         apply_paragraph_style(para, style_def)
 
         if text
@@ -117,7 +117,7 @@ module Uniword
       #     end
       #   end
       def table(&block)
-        tbl = Table.new
+        tbl = Wordprocessingml::Table.new
         table_context = DSL::TableContext.new(tbl, @library)
         table_context.instance_eval(&block) if block_given?
         @document.add_table(tbl)

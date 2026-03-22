@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: bibliography.yml
     # Element: <b:name_list>
     class NameList < Lutaml::Model::Serializable
-      attribute :person, Person, collection: true, default: -> { [] }
+      attribute :person, Person, collection: true, initialize_empty: true
 
       xml do
         element 'name_list'

@@ -9,12 +9,12 @@ module Uniword
     # Generated from OOXML schema: chart.yml
     # Element: <c:stockChart>
     class StockChart < Lutaml::Model::Serializable
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :drop_lines, DropLines
       attribute :hi_low_lines, HiLowLines
       attribute :up_down_bars, UpDownBars
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'stockChart'

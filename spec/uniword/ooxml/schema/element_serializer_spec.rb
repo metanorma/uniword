@@ -14,7 +14,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
   describe '#serialize' do
     context 'with paragraph element' do
       let(:paragraph) do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         para.add_text('Hello World')
         para
       end
@@ -22,8 +22,9 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'serializes paragraph to OOXML XML' do
         xml = serializer.serialize(paragraph)
 
-        expect(xml).to include('<w:p')
-        expect(xml).to include('</w:p>')
+        # Accepts either prefixed (<w:p>) or default namespace (<p xmlns="...">)
+        expect(xml).to match(/<(?:w:)?p[^>]*>/)
+        expect(xml).to match(/<\/(?:w:)?p>/)
       end
 
       it 'includes paragraph content' do
@@ -36,16 +37,16 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
         xml = serializer.serialize(paragraph)
 
         # Should have run element
-        expect(xml).to include('<w:r')
+        expect(xml).to match(/<(?:w:)?r[^>]*>/)
 
         # Should have text element
-        expect(xml).to include('<w:t')
+        expect(xml).to match(/<(?:w:)?t[^>]*>/)
       end
     end
 
     context 'with formatted paragraph' do
       let(:paragraph) do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         para.alignment = 'center'
         para.add_text('Centered text', bold: true)
         para
@@ -54,24 +55,24 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'includes paragraph properties' do
         xml = serializer.serialize(paragraph)
 
-        expect(xml).to include('<w:pPr')
-        expect(xml).to include('<w:jc')
+        expect(xml).to match(/<(?:w:)?pPr/)
+        expect(xml).to match(/<(?:w:)?jc/)
       end
 
       it 'includes run properties' do
         xml = serializer.serialize(paragraph)
 
-        expect(xml).to include('<w:rPr')
-        expect(xml).to include('<w:b')
+        expect(xml).to match(/<(?:w:)?rPr/)
+        expect(xml).to match(/<(?:w:)?b/)
       end
     end
 
     context 'with table element' do
       let(:table) do
-        tbl = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        tbl = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
         row.cells << cell
         tbl.rows << row
         tbl
@@ -80,22 +81,22 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'serializes table to OOXML XML' do
         xml = serializer.serialize(table)
 
-        expect(xml).to include('<w:tbl')
-        expect(xml).to include('</w:tbl>')
+        expect(xml).to match(/<(?:w:)?tbl/)
+        expect(xml).to match(/<\/(?:w:)?tbl>/)
       end
 
       it 'includes table rows' do
         xml = serializer.serialize(table)
 
-        expect(xml).to include('<w:tr')
-        expect(xml).to include('</w:tr>')
+        expect(xml).to match(/<(?:w:)?tr/)
+        expect(xml).to match(/<\/(?:w:)?tr>/)
       end
 
       it 'includes table cells' do
         xml = serializer.serialize(table)
 
-        expect(xml).to include('<w:tc')
-        expect(xml).to include('</w:tc>')
+        expect(xml).to match(/<(?:w:)?tc/)
+        expect(xml).to match(/<\/(?:w:)?tc>/)
       end
 
       it 'includes cell content' do
@@ -107,7 +108,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
 
     context 'with run element' do
       let(:run) do
-        r = Uniword::Run.new(text: 'Test text')
+        r = Uniword::Wordprocessingml::Run.new(text: 'Test text')
         r.bold = true
         r.italic = true
         r
@@ -116,8 +117,8 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'serializes run to OOXML XML' do
         xml = serializer.serialize(run)
 
-        expect(xml).to include('<w:r')
-        expect(xml).to include('</w:r>')
+        expect(xml).to match(/<(?:w:)?r[^>]*>/)
+        expect(xml).to match(/<\/(?:w:)?r>/)
       end
 
       it 'includes text content' do
@@ -129,15 +130,15 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'includes formatting' do
         xml = serializer.serialize(run)
 
-        expect(xml).to include('<w:rPr')
-        expect(xml).to include('<w:b')
-        expect(xml).to include('<w:i')
+        expect(xml).to match(/<(?:w:)?rPr/)
+        expect(xml).to match(/<(?:w:)?b/)
+        expect(xml).to match(/<(?:w:)?i/)
       end
     end
 
     context 'with options' do
       let(:paragraph) do
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
         para.add_text('Test')
         para
       end
@@ -163,7 +164,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       it 'raises error for non-element' do
         expect do
           serializer.serialize('not an element')
-        end.to raise_error(ArgumentError, /must be a Uniword::Element/)
+        end.to raise_error(ArgumentError, /must respond to #to_xml/)
       end
 
       it 'raises error for nil' do

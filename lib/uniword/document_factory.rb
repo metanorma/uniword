@@ -22,12 +22,12 @@ module Uniword
     class << self
       # Create a new empty document.
       #
-      # @return [Document] A new empty document
+      # @return [Wordprocessingml::DocumentRoot] A new empty document
       #
       # @example Create empty document
       #   document = DocumentFactory.create
       def create
-        Document.new
+        Wordprocessingml::DocumentRoot.new
       end
 
       # Create a document from a file.

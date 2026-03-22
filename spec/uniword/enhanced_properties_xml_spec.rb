@@ -9,7 +9,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Paragraph borders' do
     it 'serializes borders to correct XML' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_borders(top: '000000', bottom: 'FF0000')
 
       xml = para.to_xml
@@ -31,7 +31,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes all border positions' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_borders(
         top: '000000',
         bottom: '111111',
@@ -59,7 +59,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Paragraph shading' do
     it 'serializes shading to correct XML' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_shading(fill: 'FFFF00', pattern: 'solid')
 
       xml = para.to_xml
@@ -72,7 +72,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes shading with foreground color' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_shading(fill: 'FFFF00', color: '000000', pattern: 'diagCross')
 
       xml = para.to_xml
@@ -87,7 +87,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Tab stops' do
     it 'serializes tab stops to correct XML' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_tab_stop(position: 1440, alignment: 'center', leader: 'dot')
 
       xml = para.to_xml
@@ -104,7 +104,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes multiple tab stops' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_tab_stop(position: 1440, alignment: 'left')
       para.add_tab_stop(position: 2880, alignment: 'center')
       para.add_tab_stop(position: 4320, alignment: 'right', leader: 'dot')
@@ -129,7 +129,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run character spacing' do
     it 'serializes character spacing to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.character_spacing = 20
 
       xml = run.to_xml
@@ -141,7 +141,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes negative character spacing (condensing)' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.character_spacing = -10
 
       xml = run.to_xml
@@ -154,7 +154,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run kerning' do
     it 'serializes kerning to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.kerning = 24
 
       xml = run.to_xml
@@ -168,7 +168,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run position (subscript/superscript)' do
     it 'serializes position to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.position = 5
 
       xml = run.to_xml
@@ -180,7 +180,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes negative position (subscript)' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.position = -5
 
       xml = run.to_xml
@@ -193,7 +193,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run text effects' do
     it 'serializes outline to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.outline = true
 
       xml = run.to_xml
@@ -204,7 +204,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes shadow to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.shadow = true
 
       xml = run.to_xml
@@ -215,7 +215,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes emboss to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.emboss = true
 
       xml = run.to_xml
@@ -226,7 +226,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes imprint to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.imprint = true
 
       xml = run.to_xml
@@ -239,7 +239,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run shading' do
     it 'serializes run shading to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.set_shading(fill: 'FFFF00', pattern: 'solid')
 
       xml = run.to_xml
@@ -252,7 +252,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes run shading with foreground' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.set_shading(fill: 'FFFF00', color: '000000', pattern: 'pct10')
 
       xml = run.to_xml
@@ -267,7 +267,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run emphasis mark' do
     it 'serializes emphasis mark to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.emphasis_mark = 'dot'
 
       xml = run.to_xml
@@ -281,7 +281,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run text expansion' do
     it 'serializes text expansion to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.text_expansion = 120
 
       xml = run.to_xml
@@ -295,7 +295,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Run language' do
     it 'serializes language to correct XML' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.language = 'en-US'
 
       xml = run.to_xml
@@ -309,7 +309,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
   describe 'Complex combinations' do
     it 'serializes paragraph with multiple properties' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.set_borders(top: '000000', bottom: 'FF0000')
       para.set_shading(fill: 'FFFF00')
       para.add_tab_stop(position: 1440, alignment: 'center')
@@ -328,7 +328,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
     end
 
     it 'serializes run with multiple effects' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       run.character_spacing = 20
       run.kerning = 24
       run.position = 5

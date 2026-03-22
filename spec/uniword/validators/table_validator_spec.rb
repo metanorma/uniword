@@ -4,14 +4,14 @@ require 'spec_helper'
 
 # Helper method to create a table cell with text
 def create_validator_text_cell(text)
-  Uniword::TableCell.new.tap do |cell|
-    cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text(text) }
+  Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+    cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text(text) }
   end
 end
 
 # Helper method to create a table row with text cells
 def create_validator_text_row(*texts)
-  Uniword::TableRow.new.tap do |row|
+  Uniword::Wordprocessingml::TableRow.new.tap do |row|
     texts.each do |text|
       row.cells << create_validator_text_cell(text)
     end
@@ -33,18 +33,18 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns false for non-Table element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       expect(validator.valid?(paragraph)).to be false
     end
 
     it 'returns true for empty table' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       # Empty tables are valid in v2.0
       expect(validator.errors(table)).to be_empty
     end
 
     it 'returns true for table with valid rows' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('Cell 1', 'Cell 2')
       table.rows << create_validator_text_row('Cell 3', 'Cell 4')
 
@@ -52,7 +52,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns false for table with invalid row' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << 'not a row' # Invalid: should be TableRow instance
 
       expect(validator.valid?(table)).to be false
@@ -66,13 +66,13 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns type error for non-Table element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       errors = validator.errors(paragraph)
       expect(errors).to include('Element must be a Table')
     end
 
     it 'returns empty array for valid table' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('Cell 1', 'Cell 2')
 
       errors = validator.errors(table)
@@ -80,9 +80,9 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns row errors for invalid rows' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << 'not a row'
-      table.rows << Uniword::TableRow.new
+      table.rows << Uniword::Wordprocessingml::TableRow.new
       table.rows << 123
 
       errors = validator.errors(table)
@@ -92,7 +92,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns multiple errors for multiple issues' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << 'invalid row'
 
       errors = validator.errors(table)
@@ -102,13 +102,13 @@ RSpec.describe Uniword::Validators::TableValidator do
 
   describe '#warnings' do
     it 'returns empty array for empty table' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       warnings = validator.warnings(table)
       expect(warnings).to be_empty
     end
 
     it 'returns empty array for table with consistent column counts' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('A', 'B', 'C')
       table.rows << create_validator_text_row('D', 'E', 'F')
       table.rows << create_validator_text_row('G', 'H', 'I')
@@ -118,7 +118,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns warning for inconsistent column counts' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('A', 'B')
       table.rows << create_validator_text_row('C', 'D', 'E')
       table.rows << create_validator_text_row('F')
@@ -129,7 +129,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'returns empty array for non-Table element' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       warnings = validator.warnings(paragraph)
       expect(warnings).to be_empty
     end
@@ -137,34 +137,34 @@ RSpec.describe Uniword::Validators::TableValidator do
 
   describe 'integration with ElementValidator.for' do
     it 'is returned when requesting validator for Table class' do
-      validator = Uniword::Validators::ElementValidator.for(Uniword::Table)
+      validator = Uniword::Validators::ElementValidator.for(Uniword::Wordprocessingml::Table)
       expect(validator).to be_a(described_class)
     end
 
     it 'validates tables through the registry' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('Cell 1', 'Cell 2')
 
-      validator = Uniword::Validators::ElementValidator.for(Uniword::Table)
+      validator = Uniword::Validators::ElementValidator.for(Uniword::Wordprocessingml::Table)
       expect(validator.errors(table)).to be_empty
     end
   end
 
   describe 'edge cases' do
     it 'handles table with nil rows array' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.instance_variable_set(:@rows, nil)
 
       expect(validator.errors(table)).to be_empty
     end
 
     it 'handles table with empty rows array' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       expect(validator.errors(table)).to be_empty
     end
 
     it 'handles table with nil properties' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('Cell')
 
       expect(validator.errors(table)).to be_empty
@@ -173,8 +173,8 @@ RSpec.describe Uniword::Validators::TableValidator do
 
   describe 'realistic scenarios' do
     it 'validates a complex table with header and data rows' do
-      properties = Uniword::TableProperties.new
-      table = Uniword::Table.new
+      properties = Uniword::Wordprocessingml::TableProperties.new
+      table = Uniword::Wordprocessingml::Table.new
       table.properties = properties
       # Add header row
       table.rows << create_validator_text_row('Name', 'Age', 'City')
@@ -186,7 +186,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'detects mixed valid and invalid rows' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('Valid', 'Row')
       table.rows << 'Invalid row'
       table.rows << create_validator_text_row('Another', 'Valid')
@@ -197,7 +197,7 @@ RSpec.describe Uniword::Validators::TableValidator do
     end
 
     it 'warns about inconsistent columns while still being valid' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       table.rows << create_validator_text_row('A', 'B', 'C')
       table.rows << create_validator_text_row('D', 'E') # Missing one column
 

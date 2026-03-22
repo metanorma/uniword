@@ -19,6 +19,11 @@ module Uniword
     class EmphasisMark < Lutaml::Model::Serializable
       attribute :value, EmphasisMarkValue
 
+      # Alias for XML attribute compatibility
+      def val
+        value
+      end
+
       xml do
         element 'em'
         namespace Ooxml::Namespaces::WordProcessingML

@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Uniword::Template::Template do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
   let(:template) { described_class.new(document) }
 
   describe '#initialize' do
@@ -28,20 +28,20 @@ RSpec.describe Uniword::Template::Template do
     it 'renders template with hash data' do
       data = { title: 'Test Title' }
       result = template.render(data)
-      expect(result).to be_a(Uniword::Document)
+      expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'renders template with object data' do
       data_object = Struct.new(:title).new('Test Title')
       result = template.render(data_object)
-      expect(result).to be_a(Uniword::Document)
+      expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'accepts additional context' do
       data = { title: 'Test' }
       context = { author: 'John' }
       result = template.render(data, context: context)
-      expect(result).to be_a(Uniword::Document)
+      expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
   end
 

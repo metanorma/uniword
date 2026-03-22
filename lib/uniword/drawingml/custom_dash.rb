@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:custDash>
     class CustomDash < Lutaml::Model::Serializable
-      attribute :dash_stops, DashStop, collection: true, default: -> { [] }
+      attribute :dash_stops, DashStop, collection: true, initialize_empty: true
 
       xml do
         element 'custDash'

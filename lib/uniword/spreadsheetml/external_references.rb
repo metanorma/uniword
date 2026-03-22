@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:externalReferences>
     class ExternalReferences < Lutaml::Model::Serializable
-      attribute :refs, :string, collection: true, default: -> { [] }
+      attribute :refs, :string, collection: true, initialize_empty: true
 
       xml do
         element 'externalReferences'

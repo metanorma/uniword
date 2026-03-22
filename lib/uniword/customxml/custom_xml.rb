@@ -12,7 +12,7 @@ module Uniword
       attribute :uri, :string
       attribute :element, :string
       attribute :custom_xml_pr, CustomXmlProperties
-      attribute :content, :string, collection: true, default: -> { [] }
+      attribute :content, :string, collection: true, initialize_empty: true
 
       xml do
         element 'custom_xml'

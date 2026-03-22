@@ -2,16 +2,16 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Document do
+RSpec.describe Uniword::Wordprocessingml::DocumentRoot do
   describe '.new' do
     it 'creates a new document' do
       document = described_class.new
-      expect(document).to be_a(Uniword::Document)
+      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'initializes with a default body' do
       document = described_class.new
-      expect(document.body).to be_a(Uniword::Body)
+      expect(document.body).to be_a(Uniword::Wordprocessingml::Body)
       expect(document.body.paragraphs).to be_empty
     end
 
@@ -25,14 +25,14 @@ RSpec.describe Uniword::Document do
     let(:document) { described_class.new }
 
     it 'adds paragraph to existing body' do
-      expect(document.body).to be_a(Uniword::Body)
+      expect(document.body).to be_a(Uniword::Wordprocessingml::Body)
       document.add_paragraph('Hello')
       expect(document.body.paragraphs.count).to eq(1)
     end
 
     it 'adds a paragraph with text' do
       para = document.add_paragraph('Hello World')
-      expect(para).to be_a(Uniword::Paragraph)
+      expect(para).to be_a(Uniword::Wordprocessingml::Paragraph)
       expect(para.text).to eq('Hello World')
     end
 
@@ -66,14 +66,14 @@ RSpec.describe Uniword::Document do
     let(:document) { described_class.new }
 
     it 'adds table to existing body' do
-      expect(document.body).to be_a(Uniword::Body)
+      expect(document.body).to be_a(Uniword::Wordprocessingml::Body)
       document.add_table(2, 2)
       expect(document.body.tables.count).to eq(1)
     end
 
     it 'creates table with dimensions' do
       table = document.add_table(2, 3)
-      expect(table).to be_a(Uniword::Table)
+      expect(table).to be_a(Uniword::Wordprocessingml::Table)
       expect(table.rows.count).to eq(2)
       expect(table.rows.first.cells.count).to eq(3)
     end

@@ -123,6 +123,16 @@ module Uniword
       type == :format_change
     end
 
+    # Check if this revision is valid
+    #
+    # A revision is valid if it has a non-empty author, a revision_id,
+    # a type, and the type is one of the valid types.
+    #
+    # @return [Boolean] true if valid
+    def valid?
+      required_attributes_valid?
+    end
+
     # Get the XML element name based on revision type
     #
     # @return [String] The XML element name

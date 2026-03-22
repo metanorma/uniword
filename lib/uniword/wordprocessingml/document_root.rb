@@ -23,9 +23,16 @@ module Uniword
       attr_accessor :core_properties # docProps/core.xml - Uniword::Ooxml::CoreProperties
       attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks # docProps/app.xml                # word/theme/theme1.xml # word/numbering.xml # Raw HTML content for MHTML format support # API compatibility
 
+      # Get app_properties (lazy initialization)
+      #
+      # @return [Uniword::Ooxml::AppProperties] The app properties object
+      def app_properties
+        @app_properties ||= Uniword::Ooxml::AppProperties.new
+      end
+
       # Lazy initialization for numbering_configuration
       def numbering_configuration
-        @numbering_configuration ||= Uniword::NumberingConfiguration.new
+        @numbering_configuration ||= NumberingConfiguration.new
       end
 
       # Setter for numbering_configuration
@@ -90,7 +97,7 @@ module Uniword
       # @param type [Symbol] Chart type
       # @return [Chart] The created chart
       def add_chart(_type = nil)
-        Drawingml::Chart::Chart.new
+        Uniword::Chart::Chart.new
         # TODO: Implement chart addition to document
       end
 
@@ -128,20 +135,19 @@ module Uniword
 
         para = Paragraph.new
 
-        # Add text if provided
+        # Add text if provided - use constructor for proper Text object conversion
         if text
-          run = Run.new
-          run.text = text
+          run = Run.new(text: text)
 
           # Apply run formatting from options
           if options.any?
             run.properties ||= RunProperties.new
-            run.properties.bold = true if options[:bold]
-            run.properties.italic = true if options[:italic]
-            run.properties.underline = options[:underline] if options[:underline]
-            run.properties.color = options[:color] if options[:color]
-            run.properties.size = options[:size] * 2 if options[:size] # half-points
-            run.properties.font = options[:font] if options[:font]
+            run.properties.bold = Properties::Bold.new if options[:bold]
+            run.properties.italic = Properties::Italic.new if options[:italic]
+            run.properties.underline = Properties::Underline.new(value: options[:underline]) if options[:underline]
+            run.properties.color = Properties::ColorValue.new(value: options[:color]) if options[:color]
+            run.properties.size = Properties::FontSize.new(value: options[:size] * 2) if options[:size]
+            run.properties.font = Properties::RunFonts.new(ascii: options[:font]) if options[:font]
           end
 
           para.runs << run
@@ -223,6 +229,13 @@ module Uniword
         writer.save(path, format: format)
       end
 
+      # Save document to DOCX file using DocxPackage
+      #
+      # @param path [String] Output file path
+      def to_file(path)
+        Ooxml::DocxPackage.to_file(self, path)
+      end
+
       # Get all paragraph text
       #
       # @return [String] Combined text from all paragraphs
@@ -256,13 +269,28 @@ module Uniword
         self
       end
 
+      # Apply theme from .thmx file
+      #
+      # @param path [String] Path to .thmx file
+      # @param variant [String, Integer, nil] Optional variant
+      # @return [self] For method chaining
+      def apply_theme_file(path, variant: nil)
+        loader = Themes::ThemeLoader.new
+        if variant
+          self.theme = loader.load_with_variant(path, variant)
+        else
+          self.theme = loader.load(path)
+        end
+        self
+      end
+
       # Apply StyleSet to document
       #
       # @param name [String, Symbol] StyleSet name (e.g., 'distinctive', 'formal')
       # @param strategy [Symbol] Application strategy (:keep_existing, :replace, :rename)
       # @return [self] For method chaining
       def apply_styleset(name, strategy: :keep_existing)
-        styleset = Uniword::StyleSets::YamlStyleSetLoader.load_bundled(name.to_s)
+        styleset = Uniword::Stylesets::YamlStyleSetLoader.load_bundled(name.to_s)
         styleset.apply_to(self, strategy: strategy)
         self
       end
@@ -284,7 +312,14 @@ module Uniword
       #
       # @return [String] Human-readable representation
       def inspect
-        "#<Uniword::Document @body=...>"
+        "#<#{self.class} @body=...>"
+      end
+
+      # Convert OOXML document to HTML document
+      #
+      # @return [String] HTML document content
+      def to_html_document
+        Uniword::Transformation::OoxmlToHtmlConverter.document_to_html(self)
       end
     end
   end

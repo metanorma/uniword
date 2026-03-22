@@ -4,25 +4,25 @@ require 'spec_helper'
 
 # Helper method to create a table cell with text
 def create_text_cell(text)
-  Uniword::TableCell.new.tap do |cell|
-    cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text(text) }
+  Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+    cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text(text) }
   end
 end
 
 # Helper method to create a table row with text cells
 def create_text_row(*texts)
-  Uniword::TableRow.new.tap do |row|
+  Uniword::Wordprocessingml::TableRow.new.tap do |row|
     texts.each do |text|
       row.cells << create_text_cell(text)
     end
   end
 end
 
-RSpec.describe Uniword::Table do
+RSpec.describe Uniword::Wordprocessingml::Table do
   let(:row1) { create_text_row('A1', 'B1') }
   let(:row2) { create_text_row('A2', 'B2') }
   let(:properties) do
-    Uniword::TableProperties.new(
+    Uniword::Wordprocessingml::TableProperties.new(
       style: 'TableGrid',
       alignment: 'center'
     )
@@ -57,7 +57,7 @@ RSpec.describe Uniword::Table do
     it 'returns the rows collection' do
       table.rows << row1
       expect(table.rows.count).to eq(1)
-      expect(table.rows.first).to be_a(Uniword::TableRow)
+      expect(table.rows.first).to be_a(Uniword::Wordprocessingml::TableRow)
     end
   end
 
@@ -92,7 +92,7 @@ RSpec.describe Uniword::Table do
     end
 
     it 'returns true for table with empty rows' do
-      empty_row = Uniword::TableRow.new
+      empty_row = Uniword::Wordprocessingml::TableRow.new
       table = described_class.new(rows: [empty_row])
       expect(table.rows.first.cells.empty?).to be true
     end

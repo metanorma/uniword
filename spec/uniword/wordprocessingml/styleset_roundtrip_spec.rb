@@ -29,7 +29,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
             # Serialize each style and count what comes back
             reparsed_count = 0
             styleset.styles.each do |style|
-              xml = style.to_xml
+              xml = style.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
               reparsed_count += 1 if reparsed
             rescue StandardError => e
@@ -48,7 +48,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               skip 'No spacing' unless heading1.paragraph_properties.spacing
 
               original = heading1.paragraph_properties.spacing
-              xml = heading1.to_xml
+              xml = heading1.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
 
               expect(reparsed.paragraph_properties.spacing.before).to eq(original.before)
@@ -60,7 +60,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               skip 'No paragraph properties' unless heading1.paragraph_properties
 
               original = heading1.paragraph_properties.alignment
-              xml = heading1.to_xml
+              xml = heading1.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
 
               expect(reparsed.paragraph_properties.alignment).to eq(original)
@@ -76,7 +76,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               skip 'No size' unless heading1.run_properties.size
 
               original = heading1.run_properties.size
-              xml = heading1.to_xml
+              xml = heading1.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
 
               expect(reparsed.run_properties.size).to eq(original)
@@ -87,7 +87,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               skip 'No run properties' unless heading1.run_properties
 
               original = heading1.run_properties.small_caps
-              xml = heading1.to_xml
+              xml = heading1.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
 
               expect(reparsed.run_properties.small_caps).to eq(original)

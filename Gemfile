@@ -5,9 +5,8 @@ source 'https://rubygems.org'
 gemspec
 
 # Math equation support via Plurimath
-gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
+#gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 
-# Use local lutaml-model with namespace support
 gem 'lutaml-model', path: '/Users/mulgogi/src/lutaml/lutaml-model'
 
 gem 'canon'

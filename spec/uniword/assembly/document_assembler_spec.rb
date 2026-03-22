@@ -83,9 +83,9 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     before do
       # Mock DocumentFactory to avoid actual file loading
       allow(Uniword::DocumentFactory).to receive(:from_file) do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new
         run.text = 'Component content with {title}'
         para.add_run(run)
         doc.add_paragraph(para)
@@ -95,7 +95,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
     it 'assembles document from manifest' do
       doc = assembler.assemble(manifest_file)
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'applies variable substitution' do
@@ -130,19 +130,19 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
     before do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
     end
 
     it 'assembles and saves document' do
       # Mock save method
-      allow_any_instance_of(Uniword::Document).to receive(:save)
+      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
 
       path = assembler.assemble_and_save(manifest_file)
       expect(path).to eq('output.docx')
     end
 
     it 'uses custom output path if provided' do
-      allow_any_instance_of(Uniword::Document).to receive(:save)
+      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
 
       path = assembler.assemble_and_save(
         manifest_file,
@@ -152,7 +152,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     end
 
     it 'passes variables to assembly' do
-      allow_any_instance_of(Uniword::Document).to receive(:save)
+      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
 
       expect do
         assembler.assemble_and_save(
@@ -209,7 +209,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
     it 'clears component cache' do
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
 
       # Load a component to cache it
       assembler.registry.get('cover_page')
@@ -240,12 +240,12 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
                       ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Document.new)
+        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
     end
 
     it 'generates TOC for __toc__ component' do
       doc = assembler.assemble(manifest_file)
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
   end
 
@@ -262,9 +262,9 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
                       ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file) do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new
         run.text = 'Component content with {title}'
         para.add_run(run)
         doc.add_paragraph(para)

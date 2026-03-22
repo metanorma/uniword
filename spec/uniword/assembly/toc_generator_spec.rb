@@ -5,7 +5,7 @@ require 'uniword/assembly/toc_generator'
 
 RSpec.describe Uniword::Assembly::TocGenerator do
   let(:document) do
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Add headings
     add_heading(doc, 'Introduction', 1)
@@ -19,9 +19,9 @@ RSpec.describe Uniword::Assembly::TocGenerator do
   end
 
   def add_heading(doc, text, level)
-    para = Uniword::Paragraph.new
+    para = Uniword::Wordprocessingml::Paragraph.new
     para.style = "Heading #{level}"
-    run = Uniword::Run.new
+    run = Uniword::Wordprocessingml::Run.new
     run.text = text
     para.add_run(run)
     doc.add_paragraph(para)
@@ -96,7 +96,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
 
     it 'creates new document with TOC' do
       toc_doc = gen.generate_document(document)
-      expect(toc_doc).to be_a(Uniword::Document)
+      expect(toc_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(toc_doc.paragraphs).not_to be_empty
     end
 
@@ -108,12 +108,12 @@ RSpec.describe Uniword::Assembly::TocGenerator do
 
   describe '#insert_toc' do
     let(:gen) { described_class.new }
-    let(:target_doc) { Uniword::Document.new }
+    let(:target_doc) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     before do
       # Add some content to target document
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       run.text = 'Existing content'
       para.add_run(run)
       target_doc.add_paragraph(para)
@@ -146,9 +146,9 @@ RSpec.describe Uniword::Assembly::TocGenerator do
     end
 
     it 'handles documents without headings' do
-      empty_doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      empty_doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       run.text = 'Regular paragraph'
       para.add_run(run)
       empty_doc.add_paragraph(para)

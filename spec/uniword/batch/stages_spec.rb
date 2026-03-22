@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe 'Batch Processing Stages' do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
   let(:context) do
     { filename: 'test.docx', input_path: 'input/test.docx', output_path: 'output/test.docx' }
   end

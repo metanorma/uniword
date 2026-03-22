@@ -28,15 +28,20 @@ module Uniword
       attribute :size, :integer      # Size in eighths of a point (1-96)
       attribute :space, :integer     # Spacing offset in points (0-31)
       attribute :color, :string      # RGB hex or 'auto'
+      attribute :theme_color, :string
+      attribute :theme_shade, :string
 
       xml do
-        # Element name set dynamically by parent (top, bottom, left, right)
+        # Use 'border' as element name for standalone parsing
+        element 'border'
         namespace Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'val', to: :style
         map_attribute 'sz', to: :size
         map_attribute 'space', to: :space
         map_attribute 'color', to: :color
+        map_attribute 'themeColor', to: :theme_color
+        map_attribute 'themeShade', to: :theme_shade
       end
     end
   end

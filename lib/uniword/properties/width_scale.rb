@@ -18,6 +18,11 @@ module Uniword
     class WidthScale < Lutaml::Model::Serializable
       attribute :value, WidthScaleValue
 
+      # Alias for XML attribute compatibility
+      def val
+        value
+      end
+
       xml do
         element 'w'
         namespace Ooxml::Namespaces::WordProcessingML

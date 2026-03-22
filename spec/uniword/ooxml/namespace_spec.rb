@@ -3,25 +3,25 @@
 require 'spec_helper'
 
 RSpec.describe 'OOXML Namespace Configuration' do
-  describe Uniword::Document do
+  describe Uniword::Wordprocessingml::DocumentRoot do
     it 'has correct OOXML namespaces configured' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Verify the document can be serialized to XML
       expect { doc.to_xml }.not_to raise_error
     end
 
     it 'includes WordProcessingML main namespace' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       xml = doc.to_xml(prefix: true)
 
       expect(xml).to include('xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
     end
 
     it 'includes relationships namespace when used' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       # Add an element that uses relationships namespace (e.g., hyperlink)
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_hyperlink('Click here', url: 'https://example.com')
       doc.body.paragraphs << para
       xml = doc.to_xml(prefix: true)
@@ -31,34 +31,30 @@ RSpec.describe 'OOXML Namespace Configuration' do
       expect(xml).to include('xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:document as root element' do
-      pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      doc = Uniword::Document.new
-      xml = doc.to_xml
+    it 'uses w:document as root element' do
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      xml = doc.to_xml(prefix: true)
 
       expect(xml).to match(/<w:document/)
     end
   end
 
-  describe Uniword::Paragraph do
+  describe Uniword::Wordprocessingml::Paragraph do
     it 'has correct OOXML namespaces configured' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       expect { para.to_xml }.not_to raise_error
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:p as root element' do
-      pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      para = Uniword::Paragraph.new
+    it 'uses w:p as root element' do
+      para = Uniword::Wordprocessingml::Paragraph.new
       xml = para.to_xml(prefix: true)
 
       expect(xml).to match(/<w:p/)
     end
 
     it 'serializes runs with w:r elements' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_text('Hello World')
       xml = para.to_xml(prefix: true)
 
@@ -66,23 +62,22 @@ RSpec.describe 'OOXML Namespace Configuration' do
     end
   end
 
-  describe Uniword::Run do
+  describe Uniword::Wordprocessingml::Run do
     it 'has correct OOXML namespaces configured' do
-      run = Uniword::Run.new(text: 'Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
 
       expect { run.to_xml }.not_to raise_error
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:r as root element' do
-      run = Uniword::Run.new(text: 'Test')
+    it 'uses w:r as root element' do
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       xml = run.to_xml(prefix: true)
 
       expect(xml).to match(/<w:r/)
     end
 
     it 'serializes text with w:t element' do
-      run = Uniword::Run.new(text: 'Hello')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello')
       xml = run.to_xml(prefix: true)
 
       expect(xml).to include('<w:t')
@@ -90,29 +85,28 @@ RSpec.describe 'OOXML Namespace Configuration' do
     end
   end
 
-  describe Uniword::Table do
+  describe Uniword::Wordprocessingml::Table do
     it 'has correct OOXML namespaces configured' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
 
       expect { table.to_xml }.not_to raise_error
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:tbl as root element' do
-      table = Uniword::Table.new
+    it 'uses w:tbl as root element' do
+      table = Uniword::Wordprocessingml::Table.new
       xml = table.to_xml(prefix: true)
 
       expect(xml).to match(/<w:tbl/)
     end
 
     it 'serializes rows with w:tr elements' do
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
       end
-      row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+      row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
       end
       table.rows << row
       xml = table.to_xml(prefix: true)
@@ -121,25 +115,24 @@ RSpec.describe 'OOXML Namespace Configuration' do
     end
   end
 
-  describe Uniword::TableRow do
+  describe Uniword::Wordprocessingml::TableRow do
     it 'has correct OOXML namespaces configured' do
-      row = Uniword::TableRow.new
+      row = Uniword::Wordprocessingml::TableRow.new
 
       expect { row.to_xml }.not_to raise_error
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:tr as root element' do
-      row = Uniword::TableRow.new
+    it 'uses w:tr as root element' do
+      row = Uniword::Wordprocessingml::TableRow.new
       xml = row.to_xml(prefix: true)
 
       expect(xml).to match(/<w:tr/)
     end
 
     it 'serializes cells with w:tc elements' do
-      row = Uniword::TableRow.new
-      row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Test Cell') }
+      row = Uniword::Wordprocessingml::TableRow.new
+      row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Test Cell') }
       end
       xml = row.to_xml(prefix: true)
 
@@ -147,24 +140,23 @@ RSpec.describe 'OOXML Namespace Configuration' do
     end
   end
 
-  describe Uniword::TableCell do
+  describe Uniword::Wordprocessingml::TableCell do
     it 'has correct OOXML namespaces configured' do
-      cell = Uniword::TableCell.new
+      cell = Uniword::Wordprocessingml::TableCell.new
 
       expect { cell.to_xml }.not_to raise_error
     end
 
-    pending 'Element-level XML serialization will be implemented via OoxmlSerializer integration'
-      it 'uses w:tc as root element' do
-      cell = Uniword::TableCell.new
+    it 'uses w:tc as root element' do
+      cell = Uniword::Wordprocessingml::TableCell.new
       xml = cell.to_xml(prefix: true)
 
       expect(xml).to match(/<w:tc/)
     end
 
     it 'serializes paragraphs with w:p elements' do
-      cell = Uniword::TableCell.new
-      cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell content') }
+      cell = Uniword::Wordprocessingml::TableCell.new
+      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
       xml = cell.to_xml(prefix: true)
 
       expect(xml).to include('<w:p')
@@ -178,52 +170,53 @@ RSpec.describe 'OOXML Namespace Configuration' do
       expect { image.to_xml }.not_to raise_error
     end
 
-    it 'includes drawing namespaces' do
+    it 'uses w:drawing as root element' do
       image = Uniword::Image.new(relationship_id: 'rId1', width: 100, height: 100)
-      xml = image.to_xml
+      xml = image.to_xml(prefix: true)
 
-      expect(xml).to include('xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"')
+      # Image uses WordProcessingML namespace for the drawing wrapper
+      expect(xml).to match(/<w:drawing/)
     end
   end
 
   describe 'Round-trip serialization' do
     it 'preserves document structure through XML round-trip' do
       # Create a document with content
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Test content')
 
       # Serialize to XML
       xml = doc.to_xml
 
       # Deserialize from XML
-      parsed_doc = Uniword::Document.from_xml(xml)
+      parsed_doc = Uniword::Wordprocessingml::DocumentRoot.from_xml(xml)
 
       # Verify structure is preserved
-      expect(parsed_doc).to be_a(Uniword::Document)
+      expect(parsed_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(parsed_doc.paragraphs).not_to be_empty
     end
 
     it 'preserves table structure through XML round-trip' do
       # Create a table
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
 
       # Header row
-      header_row = Uniword::TableRow.new
-      header_row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 1') }
+      header_row = Uniword::Wordprocessingml::TableRow.new
+      header_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 1') }
       end
-      header_row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 2') }
+      header_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 2') }
       end
       table.rows << header_row
 
       # Data row
-      data_row = Uniword::TableRow.new
-      data_row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 1') }
+      data_row = Uniword::Wordprocessingml::TableRow.new
+      data_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 1') }
       end
-      data_row.cells << Uniword::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 2') }
+      data_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 2') }
       end
       table.rows << data_row
 
@@ -231,22 +224,22 @@ RSpec.describe 'OOXML Namespace Configuration' do
       xml = table.to_xml
 
       # Deserialize from XML
-      parsed_table = Uniword::Table.from_xml(xml)
+      parsed_table = Uniword::Wordprocessingml::Table.from_xml(xml)
 
       # Verify structure is preserved
-      expect(parsed_table).to be_a(Uniword::Table)
+      expect(parsed_table).to be_a(Uniword::Wordprocessingml::Table)
       expect(parsed_table.rows.count).to eq(2)
     end
   end
 
   describe 'Namespace prefix consistency' do
-    it 'uses consistent w: prefix for WordProcessingML elements' do
-      doc = Uniword::Document.new
+    it 'uses consistent w: prefix for WordProcessingML elements when prefix option is true' do
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.add_paragraph('Test')
 
-      xml = doc.to_xml
+      xml = doc.to_xml(prefix: true)
 
-      # All WordProcessingML elements should use w: prefix
+      # All WordProcessingML elements should use w: prefix when prefix: true
       expect(xml).to match(/<w:document/)
       expect(xml).to match(/<w:body/)
       expect(xml).to match(/<w:p/)
@@ -254,15 +247,17 @@ RSpec.describe 'OOXML Namespace Configuration' do
       expect(xml).to match(/<w:t/)
     end
 
-    it 'uses correct namespaces for different element types' do
-      # Image should use drawing-related namespaces
-      image = Uniword::Image.new(relationship_id: 'rId1', width: 100, height: 100)
-      xml = image.to_xml
+    it 'uses default namespace without prefix option' do
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      doc.add_paragraph('Test')
 
-      # Should include drawing namespaces but not use w: prefix for root
-      expect(xml).not_to match(/<w:drawing/)
-      expect(xml).to include('xmlns:wp=')
-      expect(xml).to include('xmlns:a=')
+      xml = doc.to_xml
+
+      # Without prefix option, default namespace is used (no prefix)
+      expect(xml).to include('xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
+      expect(xml).to match(/<document/)
+      expect(xml).to match(/<body/)
+      expect(xml).to match(/<p>/).or match(/<p\s/)
     end
   end
 end

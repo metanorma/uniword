@@ -11,22 +11,22 @@ module Uniword
     class Element < Lutaml::Model::Serializable
       # Pattern 0: Attributes BEFORE xml mappings
       attribute :arg_properties, ArgumentProperties
-      attribute :runs, MathRun, collection: true, default: -> { [] }
-      attribute :functions, Function, collection: true, default: -> { [] }
-      attribute :fractions, Fraction, collection: true, default: -> { [] }
-      attribute :superscripts, Superscript, collection: true, default: -> { [] }
-      attribute :subscripts, Subscript, collection: true, default: -> { [] }
-      attribute :sub_superscripts, SubSuperscript, collection: true, default: -> { [] }
-      attribute :delimiters, Delimiter, collection: true, default: -> { [] }
-      attribute :radicals, Radical, collection: true, default: -> { [] }
-      attribute :narys, Nary, collection: true, default: -> { [] }
-      attribute :boxes, Box, collection: true, default: -> { [] }
-      attribute :accents, Accent, collection: true, default: -> { [] }
-      attribute :bars, Bar, collection: true, default: -> { [] }
-      attribute :group_chars, GroupChar, collection: true, default: -> { [] }
-      attribute :border_boxes, BorderBox, collection: true, default: -> { [] }
-      attribute :matrices, Matrix, collection: true, default: -> { [] }
-      attribute :equation_arrays, EquationArray, collection: true, default: -> { [] }
+      attribute :runs, MathRun, collection: true, initialize_empty: true
+      attribute :functions, Function, collection: true, initialize_empty: true
+      attribute :fractions, Fraction, collection: true, initialize_empty: true
+      attribute :superscripts, Superscript, collection: true, initialize_empty: true
+      attribute :subscripts, Subscript, collection: true, initialize_empty: true
+      attribute :sub_superscripts, SubSuperscript, collection: true, initialize_empty: true
+      attribute :delimiters, Delimiter, collection: true, initialize_empty: true
+      attribute :radicals, Radical, collection: true, initialize_empty: true
+      attribute :narys, Nary, collection: true, initialize_empty: true
+      attribute :boxes, Box, collection: true, initialize_empty: true
+      attribute :accents, Accent, collection: true, initialize_empty: true
+      attribute :bars, Bar, collection: true, initialize_empty: true
+      attribute :group_chars, GroupChar, collection: true, initialize_empty: true
+      attribute :border_boxes, BorderBox, collection: true, initialize_empty: true
+      attribute :matrices, Matrix, collection: true, initialize_empty: true
+      attribute :equation_arrays, EquationArray, collection: true, initialize_empty: true
 
       xml do
         element 'e'

@@ -32,11 +32,11 @@ module Uniword
         raise ArgumentError, 'Invalid theme XML: missing theme element' unless theme_node
 
 
-        theme = ::Uniword::Theme.new
+        theme = ::Uniword::Drawingml::Theme.new
         theme.name = theme_node['name'] || 'Untitled Theme'
 
         # Create theme_elements if not exists
-        theme.theme_elements ||= ::Uniword::ThemeElements.new
+        theme.theme_elements ||= ::Uniword::Drawingml::ThemeElements.new
 
         # Parse color scheme
         color_scheme_node = doc.at_xpath('//a:themeElements/a:clrScheme', THEME_NS)

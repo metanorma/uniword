@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: content_types.yml
     # Element: <ct:Types>
     class Types < Lutaml::Model::Serializable
-      attribute :defaults, Default, collection: true, default: -> { [] }
-      attribute :overrides, Override, collection: true, default: -> { [] }
+      attribute :defaults, Default, collection: true, initialize_empty: true
+      attribute :overrides, Override, collection: true, initialize_empty: true
 
       xml do
         element 'Types'

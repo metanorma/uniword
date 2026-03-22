@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Run do
+RSpec.describe Uniword::Wordprocessingml::Run do
   let(:properties) do
     Uniword::Wordprocessingml::RunProperties.new(
       bold: true,
@@ -14,7 +14,7 @@ RSpec.describe Uniword::Run do
   describe '#initialize' do
     it 'creates a run with text' do
       run = described_class.new(text: 'Hello')
-      expect(run.text).to eq('Hello')
+      expect(run.text.content).to eq('Hello')
     end
 
     it 'creates a run with properties' do
@@ -33,17 +33,19 @@ RSpec.describe Uniword::Run do
     it 'does not have text_element method (use text instead)' do
       run = described_class.new(text: 'Hello')
       expect(run).not_to respond_to(:text_element)
-      expect(run.text).to eq('Hello')
+      expect(run.text.content).to eq('Hello')
     end
   end
 
   describe '#text_element=' do
     # v2.0 API: text_element= is not available, use text= directly
-    it 'does not have text_element= method (use text= instead)' do
+    # Note: text= accepts Text objects for proper OOXML model
+    it 'does not have text_element= method (use text instead)' do
       run = described_class.new
       expect(run).not_to respond_to(:text_element=)
-      run.text = 'New text'
-      expect(run.text).to eq('New text')
+      # Proper OOXML: set text with Text object
+      run.text = Uniword::Wordprocessingml::Text.new(content: 'New text')
+      expect(run.text.content).to eq('New text')
     end
   end
 

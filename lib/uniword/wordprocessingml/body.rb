@@ -9,8 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:body>
     class Body < Lutaml::Model::Serializable
-      attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
-      attribute :tables, Table, collection: true, default: -> { [] }
+      attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
+      attribute :tables, Table, collection: true, initialize_empty: true
       attribute :section_properties, SectionProperties
 
       xml do

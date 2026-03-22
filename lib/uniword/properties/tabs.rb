@@ -18,7 +18,7 @@ module Uniword
     #   )
     class Tabs < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
-      attribute :tab_stops, TabStop, collection: true, default: -> { [] }
+      attribute :tab_stops, TabStop, collection: true, initialize_empty: true
 
       xml do
         element 'tabs'

@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:mergeCells>
     class MergeCells < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :cells, MergeCell, collection: true, default: -> { [] }
+      attribute :cells, MergeCell, collection: true, initialize_empty: true
 
       xml do
         element 'mergeCells'

@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: chart.yml
     # Element: <c:dLbls>
     class DataLabels < Lutaml::Model::Serializable
-      attribute :d_lbl, DataLabel, collection: true, default: -> { [] }
+      attribute :d_lbl, DataLabel, collection: true, initialize_empty: true
       attribute :show_legend_key, ShowLegendKey
       attribute :show_val, ShowValue
       attribute :show_cat_name, ShowCategoryName

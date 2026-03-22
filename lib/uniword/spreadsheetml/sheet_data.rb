@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:sheetData>
     class SheetData < Lutaml::Model::Serializable
-      attribute :rows, Row, collection: true, default: -> { [] }
+      attribute :rows, Row, collection: true, initialize_empty: true
 
       xml do
         element 'sheetData'

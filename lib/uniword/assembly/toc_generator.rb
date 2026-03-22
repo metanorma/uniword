@@ -63,8 +63,8 @@ module Uniword
 
       # Generate TOC as new document.
       #
-      # @param document [Document] Source document
-      # @return [Document] New document with TOC
+      # @param document [Wordprocessingml::DocumentRoot] Source document
+      # @return [Wordprocessingml::DocumentRoot] New document with TOC
       #
       # @example Generate TOC document
       #   toc_doc = gen.generate_document(document)
@@ -72,7 +72,7 @@ module Uniword
         toc_paragraphs = generate(document)
 
         # Create new document
-        toc_doc = Document.new
+        toc_doc = Wordprocessingml::DocumentRoot.new
 
         # Add TOC paragraphs
         toc_paragraphs.each do |para|
@@ -180,12 +180,12 @@ module Uniword
 
       # Create title paragraph.
       #
-      # @return [Paragraph] Title paragraph
+      # @return [Wordprocessingml::Paragraph] Title paragraph
       def create_title_paragraph
-        para = Paragraph.new
+        para = Wordprocessingml::Paragraph.new
         para.style = 'TOCHeading'
 
-        run = Run.new
+        run = Wordprocessingml::Run.new
         run.text = @title
 
         # Set run properties
@@ -203,28 +203,28 @@ module Uniword
       # Create entry paragraph for heading.
       #
       # @param heading [Hash] Heading information
-      # @return [Paragraph] Entry paragraph
+      # @return [Wordprocessingml::Paragraph] Entry paragraph
       def create_entry_paragraph(heading)
-        para = Paragraph.new
+        para = Wordprocessingml::Paragraph.new
         para.style = "TOC#{heading[:level]}"
 
         # Add indentation based on level
         para.indent_left = (heading[:level] - 1) * 360
 
         # Add heading text
-        text_run = Run.new
+        text_run = Wordprocessingml::Run.new
         text_run.text = heading[:text]
         para.add_run(text_run)
 
         # Add page number if enabled
         if @include_page_numbers
           # Add tab
-          tab_run = Run.new
+          tab_run = Wordprocessingml::Run.new
           tab_run.text = "\t"
           para.add_run(tab_run)
 
           # Add page number placeholder
-          page_run = Run.new
+          page_run = Wordprocessingml::Run.new
           page_run.text = '1' # Placeholder - would be updated by Word
           para.add_run(page_run)
         end

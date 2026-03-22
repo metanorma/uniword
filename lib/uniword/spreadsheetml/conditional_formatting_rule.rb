@@ -11,7 +11,7 @@ module Uniword
     class ConditionalFormattingRule < Lutaml::Model::Serializable
       attribute :type, :string
       attribute :priority, :integer
-      attribute :formula, :string, collection: true, default: -> { [] }
+      attribute :formula, :string, collection: true, initialize_empty: true
 
       xml do
         element 'cfRule'

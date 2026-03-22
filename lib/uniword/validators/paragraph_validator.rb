@@ -25,7 +25,7 @@ module Uniword
       # @return [Boolean] true if valid, false otherwise
       def valid?(element)
         return false unless super
-        return false unless element.is_a?(Uniword::Paragraph)
+        return false unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
 
         validate_runs(element) &&
           validate_properties(element)
@@ -42,7 +42,7 @@ module Uniword
         return ['Element is nil'] if element.nil?
 
         # Check paragraph type first (more specific than base check)
-        return ['Element must be a Paragraph'] unless element.is_a?(Uniword::Paragraph)
+        return ['Element must be a Paragraph'] unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
 
         # Validate runs - collect all specific errors
         errors.concat(run_errors(element))
@@ -62,7 +62,7 @@ module Uniword
       def validate_runs(paragraph)
         return true if paragraph.runs.nil? || paragraph.runs.empty?
 
-        paragraph.runs.all?(Uniword::Run)
+        paragraph.runs.all?(Uniword::Wordprocessingml::Run)
       end
 
       # Get errors related to runs
@@ -75,7 +75,7 @@ module Uniword
         return errors if paragraph.runs.nil? || paragraph.runs.empty?
 
         paragraph.runs.each_with_index do |run, index|
-          errors << "Run at index #{index} must be a Run instance" unless run.is_a?(Uniword::Run)
+          errors << "Run at index #{index} must be a Run instance" unless run.is_a?(Uniword::Wordprocessingml::Run)
         end
 
         errors
@@ -112,7 +112,7 @@ end
 # This ensures the validator is available regardless of load order
 if defined?(Uniword::Validators::ElementValidator)
   Uniword::Validators::ElementValidator.register(
-    Uniword::Paragraph,
+    Uniword::Wordprocessingml::Paragraph,
     Uniword::Validators::ParagraphValidator
   )
 end

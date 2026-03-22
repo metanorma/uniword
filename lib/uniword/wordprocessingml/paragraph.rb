@@ -10,23 +10,28 @@ module Uniword
     # Element: <w:p>
     class Paragraph < Lutaml::Model::Serializable
       attribute :properties, ParagraphProperties
-      attribute :runs, Run, collection: true, default: -> { [] }
-      attribute :hyperlinks, Hyperlink, collection: true, default: -> { [] }
-      attribute :bookmark_starts, BookmarkStart, collection: true, default: -> { [] }
-      attribute :bookmark_ends, BookmarkEnd, collection: true, default: -> { [] }
-      attribute :field_chars, FieldChar, collection: true, default: -> { [] }
-      attribute :instr_text, InstrText, collection: true, default: -> { [] }
-      attribute :comment_range_starts, CommentRangeStart, collection: true, default: -> { [] }
-      attribute :comment_range_ends, CommentRangeEnd, collection: true, default: -> { [] }
-      attribute :comment_references, CommentReference, collection: true, default: -> { [] }
+      attribute :runs, Run, collection: true, initialize_empty: true
+      attribute :hyperlinks, Hyperlink, collection: true, initialize_empty: true
+      attribute :bookmark_starts, BookmarkStart, collection: true, initialize_empty: true
+      attribute :bookmark_ends, BookmarkEnd, collection: true, initialize_empty: true
+      attribute :field_chars, FieldChar, collection: true, initialize_empty: true
+      attribute :instr_text, InstrText, collection: true, initialize_empty: true
+      attribute :comment_range_starts, CommentRangeStart, collection: true, initialize_empty: true
+      attribute :comment_range_ends, CommentRangeEnd, collection: true, initialize_empty: true
+      attribute :comment_references, CommentReference, collection: true, initialize_empty: true
       attribute :alternate_content, AlternateContent, default: nil
-      attribute :sdts, StructuredDocumentTag, collection: true, default: -> { [] }
-      attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, default: -> { [] }
+      attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
+      attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, initialize_empty: true
+      attribute :proof_errors, ProofErr, collection: true, initialize_empty: true
 
       # Pattern 0: Revision tracking attributes (rsid)
       attribute :rsid_r, :string          # Revision ID for paragraph creation
       attribute :rsid_r_default, :string  # Default revision ID
       attribute :rsid_p, :string          # Revision ID for properties
+      attribute :rsid_r_pr, :string      # Revision ID for run properties
+      # Pattern 0: W14 namespace typed attributes
+      attribute :para_id, W14ParaId          # Paragraph ID (w14:paraId)
+      attribute :text_id, W14TextId          # Text ID (w14:textId)
 
       xml do
         element 'p'
@@ -37,6 +42,10 @@ module Uniword
         map_attribute 'rsidR', to: :rsid_r, render_nil: false
         map_attribute 'rsidRDefault', to: :rsid_r_default, render_nil: false
         map_attribute 'rsidP', to: :rsid_p, render_nil: false
+        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
+        # W14 namespace typed attributes - namespace declared on the type class
+        map_attribute 'paraId', to: :para_id, render_nil: false
+        map_attribute 'textId', to: :text_id, render_nil: false
 
         map_element 'pPr', to: :properties, render_nil: false
         map_element 'r', to: :runs, render_nil: false
@@ -53,6 +62,8 @@ module Uniword
         # oMathPara from MathML namespace - the target class declares its namespace
         map_element 'oMathPara', to: :o_math_paras,
                                  render_nil: false
+        # Proofing errors
+        map_element 'proofErr', to: :proof_errors, render_nil: false
       end
 
       # Add text run to paragraph
@@ -61,8 +72,8 @@ module Uniword
       # @param options [Hash] Formatting options
       # @return [Run] The created run
       def add_text(text, **options)
-        run = Run.new
-        run.text = text
+        # Use constructor for proper Text object conversion
+        run = Run.new(text: text)
 
         if options.any?
           run.properties ||= RunProperties.new
@@ -182,57 +193,50 @@ module Uniword
         self
       end
 
-      # Get or set line spacing
+      # Get or set line spacing (RAW OOXML value in twips)
       #
-      # @param value [Float, nil] Line spacing multiplier (nil to get current value)
+      # @param value [Integer, nil] Line spacing in twips (nil to get current value)
       # @param rule [String] Line rule (auto, exact, atLeast)
-      # @return [Float, Hash, self] Returns current value when called without args,
+      # @return [Integer, self] Returns current value when called without args,
       #   or self for method chaining when setting
-      def line_spacing(value = nil, rule = 'auto')
+      def line_spacing(value = nil, rule = nil)
         if value.nil? && !block_given?
-          # Getter behavior - return current line spacing
-          return get_line_spacing
+          # Getter behavior - return line spacing from spacing object
+          return properties&.spacing&.line
         end
 
         # Setter behavior - set on spacing object for proper XML serialization
         self.properties ||= ParagraphProperties.new
         properties.spacing ||= Properties::Spacing.new
-        properties.spacing.line = value
-        properties.spacing.line_rule = rule
+        properties.spacing.line = value.to_i
+        properties.spacing.line_rule = rule if rule
         self
       end
 
       # Set line spacing (setter method for simple API)
       #
-      # @param value [Float, Hash] Line spacing value or hash with :value and :rule keys
+      # @param value [Integer, Hash] Line spacing value (twips) or hash with :value and :rule keys
       # @return [self] For method chaining
       def line_spacing=(value)
         case value
         when Hash
           spacing_value = value[:value] || value['value']
           spacing_rule = value[:rule] || value['rule']
-          # Normalize 'multiple' to 'auto' and 'at_least' to 'atLeast'
-          spacing_rule = 'auto' if spacing_rule == 'multiple'
+          # Normalize 'at_least' to 'atLeast'
           spacing_rule = 'atLeast' if spacing_rule == 'at_least'
-          line_spacing(spacing_value, spacing_rule || 'auto')
+          line_spacing(spacing_value, spacing_rule)
         when Numeric
-          line_spacing(value, 'auto')
+          line_spacing(value.to_i, nil)
         else
-          line_spacing(value.to_f, 'auto')
+          line_spacing(value.to_i, nil)
         end
       end
 
-      # Get line spacing
+      # Get line spacing (RAW OOXML value)
       #
-      # @return [Float, Hash] Numeric value for auto spacing, or hash with rule and value for other rules
+      # @return [Integer, nil] Line spacing in twips
       def get_line_spacing
-        return nil unless properties&.line_spacing
-
-        if properties.line_rule == 'auto'
-          properties.line_spacing
-        else
-          { rule: properties.line_rule, value: properties.line_spacing }
-        end
+        properties&.spacing&.line
       end
       alias line_spacing_value get_line_spacing
 
@@ -513,8 +517,8 @@ module Uniword
           indent_right: properties.indent_right || properties.indentation&.right,
           indent_first_line: properties.indent_first_line || properties.indentation&.first_line,
           # Include other flat attributes that exist
-          keep_next: properties.keep_next,
-          keep_lines: properties.keep_lines,
+          keep_next: properties.keep_next?,
+          keep_lines: properties.keep_lines?,
           page_break_before: properties.page_break_before,
           widow_control: properties.widow_control,
           contextual_spacing: properties.contextual_spacing,
@@ -617,7 +621,7 @@ module Uniword
         if text_preview.length > 50
           text_preview = "#{text_preview[0, 47]}..."
         end
-        "#<Uniword::Paragraph runs=#{runs&.size || 0} text=\"#{text_preview}\">"
+        "#<#{self.class} runs=#{runs&.size || 0} text=\"#{text_preview}\">"
       end
     end
   end

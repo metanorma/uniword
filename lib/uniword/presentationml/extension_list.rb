@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: presentationml.yml
     # Element: <p:ext_lst>
     class ExtensionList < Lutaml::Model::Serializable
-      attribute :ext, Extension, collection: true, default: -> { [] }
+      attribute :ext, Extension, collection: true, initialize_empty: true
 
       xml do
         element 'ext_lst'

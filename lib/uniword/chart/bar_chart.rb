@@ -12,11 +12,11 @@ module Uniword
       attribute :bar_dir, :string
       attribute :grouping, :string
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
       attribute :gap_width, GapWidth
       attribute :overlap, :string
-      attribute :ax_id, AxisId, collection: true, default: -> { [] }
+      attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
         element 'barChart'

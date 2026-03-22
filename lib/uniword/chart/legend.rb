@@ -10,7 +10,7 @@ module Uniword
     # Element: <c:legend>
     class Legend < Lutaml::Model::Serializable
       attribute :legend_pos, LegendPosition
-      attribute :legend_entry, LegendEntry, collection: true, default: -> { [] }
+      attribute :legend_entry, LegendEntry, collection: true, initialize_empty: true
       attribute :layout, Layout
       attribute :overlay, :string
       attribute :sp_pr, :string

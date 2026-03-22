@@ -2,9 +2,9 @@
 
 require 'spec_helper'
 
-RSpec.describe Uniword::Paragraph do
-  let(:run1) { Uniword::Run.new(text: 'Hello ') }
-  let(:run2) { Uniword::Run.new(text: 'World') }
+RSpec.describe Uniword::Wordprocessingml::Paragraph do
+  let(:run1) { Uniword::Wordprocessingml::Run.new(text: 'Hello ') }
+  let(:run2) { Uniword::Wordprocessingml::Run.new(text: 'World') }
   let(:properties) do
     Uniword::Wordprocessingml::ParagraphProperties.new.tap do |p|
       p.style = 'Normal'
@@ -54,7 +54,7 @@ RSpec.describe Uniword::Paragraph do
     end
 
     it 'handles runs with nil text' do
-      run_with_nil = Uniword::Run.new
+      run_with_nil = Uniword::Wordprocessingml::Run.new
       paragraph = described_class.new(runs: [run1, run_with_nil, run2])
       expect(paragraph.text).to eq('Hello World')
     end
@@ -65,8 +65,8 @@ RSpec.describe Uniword::Paragraph do
 
     it 'adds a run to the paragraph with text' do
       run = paragraph.add_run('Hello')
-      expect(run).to be_a(Uniword::Run)
-      expect(run.text).to eq('Hello')
+      expect(run).to be_a(Uniword::Wordprocessingml::Run)
+      expect(run.text_content).to eq('Hello')
       expect(paragraph.runs).to include(run)
     end
 
@@ -79,8 +79,8 @@ RSpec.describe Uniword::Paragraph do
 
     it 'returns the created run' do
       run = paragraph.add_run('Test')
-      expect(run).to be_a(Uniword::Run)
-      expect(run.text).to eq('Test')
+      expect(run).to be_a(Uniword::Wordprocessingml::Run)
+      expect(run.text_content).to eq('Test')
     end
 
     it 'accepts options for formatting' do
@@ -95,7 +95,7 @@ RSpec.describe Uniword::Paragraph do
     it 'creates and adds a run with text' do
       paragraph.add_text('Hello')
       expect(paragraph.runs.size).to eq(1)
-      expect(paragraph.runs.first.text).to eq('Hello')
+      expect(paragraph.runs.first.text_content).to eq('Hello')
     end
 
     it 'creates and adds a run with formatting options' do
@@ -105,8 +105,8 @@ RSpec.describe Uniword::Paragraph do
 
     it 'returns the created run' do
       run = paragraph.add_text('Test')
-      expect(run).to be_a(Uniword::Run)
-      expect(run.text).to eq('Test')
+      expect(run).to be_a(Uniword::Wordprocessingml::Run)
+      expect(run.text_content).to eq('Test')
     end
 
     it 'adds multiple text runs' do
@@ -123,13 +123,13 @@ RSpec.describe Uniword::Paragraph do
     end
 
     it 'returns true for paragraph with empty runs' do
-      empty_run = Uniword::Run.new(text: '')
+      empty_run = Uniword::Wordprocessingml::Run.new(text: '')
       paragraph = described_class.new(runs: [empty_run])
       expect(paragraph.empty?).to be true
     end
 
     it 'returns true for paragraph with nil text runs' do
-      nil_run = Uniword::Run.new
+      nil_run = Uniword::Wordprocessingml::Run.new
       paragraph = described_class.new(runs: [nil_run])
       expect(paragraph.empty?).to be true
     end

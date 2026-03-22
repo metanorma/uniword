@@ -26,6 +26,12 @@ module Uniword
       autoload :DctermsW3cdtfType, "#{__dir__}/types/dcterms_w3cdtf_type"
       autoload :DctermsCreatedType, "#{__dir__}/types/dcterms_created_type"
       autoload :DctermsModifiedType, "#{__dir__}/types/dcterms_modified_type"
+
+      # XML namespace types (xml: namespace)
+      autoload :XmlSpaceType, "#{__dir__}/types/xml_space_type"
+
+      # VML namespace types (v: namespace)
+      autoload :VmlExtType, "#{__dir__}/types/vml_ext_type"
     end
   end
 end

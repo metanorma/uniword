@@ -37,7 +37,7 @@ module Uniword
     attribute :equal_width, :boolean, default: -> { true }
     attribute :space, :integer, default: -> { 720 } # 0.5 inch
     attribute :separator, :boolean, default: -> { false }
-    attribute :columns, Column, collection: true, default: -> { [] }
+    attribute :columns, Column, collection: true, initialize_empty: true
 
     def initialize(**attributes)
       super

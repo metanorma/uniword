@@ -11,7 +11,7 @@ module Uniword
     class Sources < Lutaml::Model::Serializable
       attribute :selected_style, :string
       attribute :style_name, :string
-      attribute :source, Source, collection: true, default: -> { [] }
+      attribute :source, Source, collection: true, initialize_empty: true
 
       xml do
         element 'sources'

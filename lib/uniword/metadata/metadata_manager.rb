@@ -68,7 +68,7 @@ module Uniword
 
       # Extract metadata from a document.
       #
-      # @param document [Document, String] Document or file path
+      # @param document [Wordprocessingml::DocumentRoot, String] Document or file path
       # @return [Metadata] Extracted metadata
       #
       # @example Extract from document
@@ -84,7 +84,7 @@ module Uniword
 
       # Extract and validate metadata.
       #
-      # @param document [Document, String] Document or file path
+      # @param document [Wordprocessingml::DocumentRoot, String] Document or file path
       # @param scenario [Symbol, nil] Validation scenario
       # @return [Hash] Result with :metadata and :validation keys
       #
@@ -105,7 +105,7 @@ module Uniword
 
       # Update document metadata.
       #
-      # @param document [Document, String] Document or file path
+      # @param document [Wordprocessingml::DocumentRoot, String] Document or file path
       # @param metadata [Metadata, Hash] Metadata to apply
       # @param validate [Boolean] Validate before updating
       # @param scenario [Symbol, nil] Validation scenario
@@ -315,18 +315,18 @@ module Uniword
 
       # Load document from path or return document.
       #
-      # @param document [Document, String] Document or file path
-      # @return [Document] Loaded document
+      # @param document [Wordprocessingml::DocumentRoot, String] Document or file path
+      # @return [Wordprocessingml::DocumentRoot] Loaded document
       def load_document(document)
         case document
         when String
           # Load from file
           DocumentFactory.from_file(document)
-        when Document
+        when Wordprocessingml::DocumentRoot
           document
         else
           raise ArgumentError,
-                "Expected Document or file path, got #{document.class}"
+                "Expected Wordprocessingml::DocumentRoot or file path, got #{document.class}"
         end
       end
     end

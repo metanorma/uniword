@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Uniword::Styles::StyleBuilder do
-  let(:document) { Uniword::Document.new }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
   let(:builder) { described_class.new(document, style_library: 'minimal') }
 
   describe '#initialize' do

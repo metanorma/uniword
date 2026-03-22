@@ -10,7 +10,7 @@ module Uniword
     # Element: <a:txBody>
     class TextBody < Lutaml::Model::Serializable
       attribute :body_pr, BodyProperties
-      attribute :paragraphs, TextParagraph, collection: true, default: -> { [] }
+      attribute :paragraphs, TextParagraph, collection: true, initialize_empty: true
 
       xml do
         element 'txBody'

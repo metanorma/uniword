@@ -10,7 +10,7 @@ module Uniword
     # Element: <xls:tableColumns>
     class TableColumns < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :columns, TableColumn, collection: true, default: -> { [] }
+      attribute :columns, TableColumn, collection: true, initialize_empty: true
 
       xml do
         element 'tableColumns'

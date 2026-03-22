@@ -57,7 +57,7 @@ module Uniword
     attribute :initials, :string
 
     # Comment content as paragraphs
-    attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
+    attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true, initialize_empty: true
 
     # Initialize a new comment
     #
@@ -102,7 +102,7 @@ module Uniword
     # @return [self] Returns self for method chaining
     def add_text(text)
       # Lazy load Paragraph class when needed
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       para.add_text(text)
       paragraphs << para
       self
@@ -114,7 +114,7 @@ module Uniword
     # @return [self] Returns self for method chaining
     def add_paragraph(paragraph)
       # Lazy load Paragraph class when needed
-      unless paragraph.is_a?(Uniword::Paragraph)
+      unless paragraph.is_a?(Uniword::Wordprocessingml::Paragraph)
         raise ArgumentError, 'paragraph must be a Paragraph instance'
       end
 
@@ -144,6 +144,13 @@ module Uniword
       text_preview = text[0..50]
       text_preview += '...' if text.length > 50
       "#<Uniword::Comment id=#{comment_id.inspect} author=#{author.inspect} text=#{text_preview.inspect}>"
+    end
+
+    # Check if comment is valid (has required attributes)
+    #
+    # @return [Boolean] true if valid
+    def valid?
+      required_attributes_valid?
     end
 
     protected

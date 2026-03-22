@@ -7,7 +7,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_document' do
     it 'provides a no-op default implementation' do
-      document = Uniword::Document.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
       expect { visitor.visit_document(document) }.not_to raise_error
     end
 
@@ -18,7 +18,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_paragraph' do
     it 'provides a no-op default implementation' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       expect { visitor.visit_paragraph(paragraph) }.not_to raise_error
     end
 
@@ -29,7 +29,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_table' do
     it 'provides a no-op default implementation' do
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       expect { visitor.visit_table(table) }.not_to raise_error
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_table_row' do
     it 'provides a no-op default implementation' do
-      row = Uniword::TableRow.new
+      row = Uniword::Wordprocessingml::TableRow.new
       expect { visitor.visit_table_row(row) }.not_to raise_error
     end
 
@@ -51,7 +51,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_table_cell' do
     it 'provides a no-op default implementation' do
-      cell = Uniword::TableCell.new
+      cell = Uniword::Wordprocessingml::TableCell.new
       expect { visitor.visit_table_cell(cell) }.not_to raise_error
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe '#visit_run' do
     it 'provides a no-op default implementation' do
-      run = Uniword::Run.new(text: 'test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'test')
       expect { visitor.visit_run(run) }.not_to raise_error
     end
 
@@ -102,8 +102,8 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
       end
 
       visitor_instance = custom_visitor.new
-      visitor_instance.visit_paragraph(Uniword::Paragraph.new)
-      visitor_instance.visit_run(Uniword::Run.new(text: 'test'))
+      visitor_instance.visit_paragraph(Uniword::Wordprocessingml::Paragraph.new)
+      visitor_instance.visit_run(Uniword::Wordprocessingml::Run.new(text: 'test'))
 
       expect(visitor_instance.visited_elements).to eq(%i[paragraph run])
     end
@@ -111,7 +111,7 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
 
   describe 'visitor pattern support' do
     it 'works with element accept methods' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       expect { paragraph.accept(visitor) }.not_to raise_error
     end
 
@@ -129,8 +129,8 @@ RSpec.describe Uniword::Visitor::BaseVisitor do
       end
 
       visitor_instance = custom_visitor.new
-      paragraph = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'test')
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'test')
 
       paragraph.accept(visitor_instance)
       expect(visitor_instance.last_visited).to eq(:paragraph)

@@ -71,7 +71,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       expect { styleset.apply_to(doc) }.not_to raise_error
       expect(doc.styles.count).to eq(styleset.styles.count)
@@ -81,7 +81,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Document already has default Normal style
       initial_count = doc.styles.count
@@ -96,7 +96,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add a custom Normal style
       custom_normal = Uniword::Wordprocessingml::Style.new(id: 'Normal', name: 'Custom Normal', type: 'paragraph')
@@ -115,7 +115,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       styleset.apply_to(doc)
 
       serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -132,7 +132,7 @@ RSpec.describe 'StyleSet Integration' do
       skip 'StyleSet file not available' unless File.exist?(dotx_file)
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       styleset.apply_to(doc)
 
       serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -149,7 +149,7 @@ RSpec.describe 'StyleSet Integration' do
     it 'allows shorthand StyleSet application' do
       skip 'Bundled StyleSets not available' unless Dir.exist?('data/stylesets')
 
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # This would use bundled YAML StyleSets
       expect { doc.apply_styleset('distinctive') }.not_to raise_error
@@ -163,7 +163,7 @@ RSpec.describe 'StyleSet Integration' do
       start_time = Time.now
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       styleset.apply_to(doc)
 
       elapsed = Time.now - start_time

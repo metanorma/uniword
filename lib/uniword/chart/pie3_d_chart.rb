@@ -10,7 +10,7 @@ module Uniword
     # Element: <c:pie3DChart>
     class Pie3DChart < Lutaml::Model::Serializable
       attribute :vary_colors, :string
-      attribute :series, :string, collection: true, default: -> { [] }
+      attribute :series, :string, collection: true, initialize_empty: true
       attribute :d_lbls, DataLabels
 
       xml do

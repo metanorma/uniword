@@ -28,7 +28,7 @@ module Uniword
     attribute :name, :string, default: -> { 'Custom StyleSet' }
 
     # Collection of Style objects
-    attribute :styles, Uniword::Wordprocessingml::Style, collection: true, default: -> { [] }
+    attribute :styles, Uniword::Wordprocessingml::Style, collection: true, initialize_empty: true
 
     # Source .dotx file path (for reference)
     attribute :source_file, :string

@@ -6,7 +6,7 @@ require 'uniword/endnote'
 RSpec.describe Uniword::Endnote do
   describe '#initialize' do
     it 'creates an endnote with id and content' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
       expect(endnote.id).to eq(1)
@@ -29,7 +29,7 @@ RSpec.describe Uniword::Endnote do
 
   describe '#content?' do
     it 'returns true when endnote has content' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
       expect(endnote.content?).to be true
@@ -51,7 +51,7 @@ RSpec.describe Uniword::Endnote do
   describe '#add_paragraph' do
     it 'adds a paragraph to the endnote content' do
       endnote = described_class.new(id: 1)
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
 
       endnote.add_paragraph(paragraph)
 
@@ -61,8 +61,8 @@ RSpec.describe Uniword::Endnote do
 
     it 'adds multiple paragraphs' do
       endnote = described_class.new(id: 1)
-      p1 = Uniword::Paragraph.new
-      p2 = Uniword::Paragraph.new
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p2 = Uniword::Wordprocessingml::Paragraph.new
 
       endnote.add_paragraph(p1)
       endnote.add_paragraph(p2)
@@ -74,11 +74,11 @@ RSpec.describe Uniword::Endnote do
 
   describe '#text' do
     it 'returns combined text from all paragraphs' do
-      p1 = Uniword::Paragraph.new
-      p1.runs << Uniword::Run.new(text: 'First paragraph')
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
 
-      p2 = Uniword::Paragraph.new
-      p2.runs << Uniword::Run.new(text: 'Second paragraph')
+      p2 = Uniword::Wordprocessingml::Paragraph.new
+      p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
 
       endnote = described_class.new(id: 1, content: [p1, p2])
 
@@ -94,7 +94,7 @@ RSpec.describe Uniword::Endnote do
 
   describe '#to_h' do
     it 'returns hash representation' do
-      paragraph = Uniword::Paragraph.new
+      paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
       hash = endnote.to_h
@@ -115,7 +115,7 @@ RSpec.describe Uniword::Endnote do
 
     it 'allows modification of content' do
       endnote = described_class.new(id: 1)
-      new_content = [Uniword::Paragraph.new]
+      new_content = [Uniword::Wordprocessingml::Paragraph.new]
       endnote.content = new_content
 
       expect(endnote.content).to eq(new_content)

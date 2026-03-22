@@ -25,7 +25,7 @@ module Uniword
     attribute :cell_properties, Wordprocessingml::TableProperties
 
     # Array of paragraphs in this cell
-    attribute :paragraphs, Paragraph, collection: true, default: -> { [] }
+    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
 
     # Cell width (optional)
     attribute :width, :string
@@ -93,9 +93,9 @@ module Uniword
     # @param paragraph [Paragraph] The paragraph to add
     # @return [Array<Paragraph>] The updated paragraphs array
     def add_paragraph(paragraph)
-      unless paragraph.is_a?(Paragraph)
+      unless paragraph.is_a?(Wordprocessingml::Paragraph)
         raise ArgumentError,
-              'paragraph must be a Paragraph instance'
+              'paragraph must be a Wordprocessingml::Paragraph instance'
       end
 
       clear_text_cache # Invalidate cache when content changes
@@ -108,7 +108,7 @@ module Uniword
     # @param properties [Wordprocessingml::ParagraphProperties, nil] Optional properties
     # @return [TableCell] Returns self for method chaining
     def add_text(text, properties: nil)
-      paragraph = Paragraph.new(properties: properties)
+      paragraph = Wordprocessingml::Paragraph.new(properties: properties)
       paragraph.add_text(text)
       add_paragraph(paragraph)
       self

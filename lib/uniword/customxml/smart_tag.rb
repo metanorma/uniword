@@ -12,7 +12,7 @@ module Uniword
       attribute :uri, :string
       attribute :element, :string
       attribute :smart_tag_pr, SmartTagProperties
-      attribute :content, :string, collection: true, default: -> { [] }
+      attribute :content, :string, collection: true, initialize_empty: true
 
       xml do
         element 'smart_tag'

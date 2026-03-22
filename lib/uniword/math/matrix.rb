@@ -10,7 +10,7 @@ module Uniword
     # Element: <m:m>
     class Matrix < Lutaml::Model::Serializable
       attribute :properties, MatrixProperties
-      attribute :rows, MatrixRow, collection: true, default: -> { [] }
+      attribute :rows, MatrixRow, collection: true, initialize_empty: true
 
       xml do
         element 'm'

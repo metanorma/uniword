@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:gsLst>
     class GradientStopList < Lutaml::Model::Serializable
-      attribute :gradient_stops, GradientStop, collection: true, default: -> { [] }
+      attribute :gradient_stops, GradientStop, collection: true, initialize_empty: true
 
       xml do
         element 'gsLst'

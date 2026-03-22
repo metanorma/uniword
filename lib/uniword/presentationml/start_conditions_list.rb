@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: presentationml.yml
     # Element: <p:st_cond_lst>
     class StartConditionsList < Lutaml::Model::Serializable
-      attribute :cond, :string, collection: true, default: -> { [] }
+      attribute :cond, :string, collection: true, initialize_empty: true
 
       xml do
         element 'st_cond_lst'

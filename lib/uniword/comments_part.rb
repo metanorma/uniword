@@ -32,7 +32,7 @@ module Uniword
     end
 
     # Collection of all comments
-    attribute :comments, Comment, collection: true, default: -> { [] }
+    attribute :comments, Comment, collection: true, initialize_empty: true
 
     # Initialize a new comments part
     #

@@ -9,7 +9,7 @@ module Uniword
     # Contains VML shapes for backward compatibility with older Word versions
     class Pict < Lutaml::Model::Serializable
       # PATTERN 0: Attributes FIRST
-      attribute :shapes, Vml::Shape, collection: true, default: -> { [] }
+      attribute :shapes, Vml::Shape, collection: true, initialize_empty: true
 
       xml do
         root 'pict'
