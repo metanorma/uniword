@@ -745,7 +745,7 @@ styles:
     spacing_before: 320
     spacing_after: 320
     line_spacing: 300.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 1440
     indent_right: 1440
     keep_next: false
@@ -754,7 +754,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: 4F81BD
   run_properties:
     bold: false
@@ -835,7 +835,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: auto
+    color: 'auto'
     small_caps: false
     caps: false
     hidden: false
@@ -872,7 +872,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: auto
+    color: 'auto'
     small_caps: false
     caps: false
     hidden: false

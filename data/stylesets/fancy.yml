@@ -32,7 +32,7 @@ styles:
     spacing_before: 480
     spacing_after: 100
     line_spacing: 269.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -40,7 +40,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: true
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: F2DBDB
   run_properties:
     bold: true
@@ -67,7 +67,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 269.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 144
     keep_next: false
     keep_lines: false
@@ -101,7 +101,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 144
     keep_next: false
     keep_lines: false
@@ -135,7 +135,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 86
     keep_next: false
     keep_lines: false
@@ -169,7 +169,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 86
     keep_next: false
     keep_lines: false
@@ -203,7 +203,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -236,7 +236,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -269,7 +269,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -302,7 +302,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -550,14 +550,14 @@ styles:
     alignment: center
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: C0504D
   run_properties:
     bold: false
@@ -610,7 +610,7 @@ styles:
     spacing_before: 200
     spacing_after: 900
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -695,7 +695,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -771,7 +771,7 @@ styles:
   paragraph_properties:
     alignment: center
     line_spacing: 300.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 2160
     indent_right: 2160
     keep_next: false

@@ -540,7 +540,7 @@ styles:
   paragraph_properties:
     alignment: right
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -590,7 +590,7 @@ styles:
     alignment: right
     spacing_after: 720
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -673,7 +673,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -763,7 +763,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: C0504D
   run_properties:
     bold: true

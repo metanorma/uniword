@@ -32,7 +32,7 @@ styles:
     spacing_before: 400
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -67,7 +67,7 @@ styles:
     spacing_before: 120
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -102,7 +102,7 @@ styles:
     spacing_before: 120
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -137,7 +137,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -171,7 +171,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -237,7 +237,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -272,7 +272,7 @@ styles:
     spacing_before: 200
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -307,7 +307,7 @@ styles:
     spacing_before: 200
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -580,7 +580,7 @@ styles:
   paragraph_properties:
     spacing_after: 160
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 0
     keep_next: false
     keep_lines: false
@@ -635,7 +635,7 @@ styles:
   paragraph_properties:
     spacing_after: 600
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 0
     keep_next: false
     keep_lines: false
@@ -728,7 +728,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -802,7 +802,7 @@ styles:
   quick_format: true
   paragraph_properties:
     line_spacing: 300.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 2506
     indent_right: 432
     keep_next: false

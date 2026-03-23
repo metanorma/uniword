@@ -37,7 +37,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: 4F81BD
   run_properties:
     bold: true
@@ -71,7 +71,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: DBE5F1
   run_properties:
     bold: false
@@ -615,7 +615,7 @@ styles:
   paragraph_properties:
     spacing_after: 1000
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false

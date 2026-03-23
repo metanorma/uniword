@@ -547,7 +547,7 @@ styles:
     spacing_before: 500
     spacing_after: 300
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -603,7 +603,7 @@ styles:
     alignment: center
     spacing_after: 560
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -693,7 +693,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -775,7 +775,7 @@ styles:
   paragraph_properties:
     spacing_before: 160
     line_spacing: 300.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 1440
     indent_right: 1440
     keep_next: false

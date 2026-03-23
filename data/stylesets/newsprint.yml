@@ -11,7 +11,7 @@ styles:
   paragraph_properties:
     spacing_after: 180
     line_spacing: 274.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -42,7 +42,7 @@ styles:
     spacing_before: 360
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: true
     keep_lines: true
     page_break_before: false
@@ -77,7 +77,7 @@ styles:
     spacing_before: 120
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: true
     keep_lines: true
     page_break_before: false
@@ -110,7 +110,7 @@ styles:
     spacing_before: 20
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: true
     keep_lines: true
     page_break_before: false
@@ -352,7 +352,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -380,7 +380,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -407,7 +407,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -419,22 +419,22 @@ styles:
     indent: 0
     border_top_style: single
     border_top_size: 4
-    border_top_color: auto
+    border_top_color: 'auto'
     border_bottom_style: single
     border_bottom_size: 4
-    border_bottom_color: auto
+    border_bottom_color: 'auto'
     border_left_style: single
     border_left_size: 4
-    border_left_color: auto
+    border_left_color: 'auto'
     border_right_style: single
     border_right_size: 4
-    border_right_color: auto
+    border_right_color: 'auto'
     border_inside_h_style: single
     border_inside_h_size: 4
-    border_inside_h_color: auto
+    border_inside_h_color: 'auto'
     border_inside_v_style: single
     border_inside_v_size: 4
-    border_inside_v_color: auto
+    border_inside_v_color: 'auto'
 - id: Title
   type: paragraph
   name: Title
@@ -448,7 +448,7 @@ styles:
   paragraph_properties:
     spacing_after: 120
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -552,7 +552,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -580,7 +580,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -832,7 +832,7 @@ styles:
   quick_format: true
   paragraph_properties:
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 720
     indent_first_line: -288
     keep_next: false
@@ -865,7 +865,7 @@ styles:
     alignment: center
     spacing_after: 0
     line_spacing: 360.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -918,7 +918,7 @@ styles:
     spacing_before: 200
     spacing_after: 200
     line_spacing: 360.0
-    line_rule: auto
+    line_rule: 'auto'
     indent_left: 259
     indent_right: 259
     keep_next: false
@@ -927,7 +927,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: auto
+    shading_color: 'auto'
     shading_fill: AD0101
   run_properties:
     bold: false
@@ -1084,7 +1084,7 @@ styles:
   quick_format: true
   paragraph_properties:
     line_spacing: 240.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -1432,7 +1432,7 @@ styles:
   paragraph_properties:
     spacing_before: 480
     line_spacing: 264.0
-    line_rule: auto
+    line_rule: 'auto'
     keep_next: false
     keep_lines: false
     page_break_before: false

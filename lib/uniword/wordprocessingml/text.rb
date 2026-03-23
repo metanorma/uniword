@@ -30,6 +30,15 @@ module Uniword
         content.to_s
       end
 
+      # Allow comparison with strings for test compatibility
+      def ==(other)
+        return super unless other.is_a?(String)
+
+        content == other
+      end
+
+      alias eql? ==
+
       # Set text value
       def text=(value)
         self.content = value

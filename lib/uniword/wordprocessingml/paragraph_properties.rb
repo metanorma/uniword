@@ -86,7 +86,7 @@ module Uniword
         map 'page_break_before', to: :page_break_before
         map 'outline_level', with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
         map 'suppress_line_numbers', to: :suppress_line_numbers
-        map 'contextual_spacing', to: :contextual_spacing
+        map 'contextual_spacing', with: { from: :yaml_contextual_spacing_from, to: :yaml_contextual_spacing_to }
         map 'bidirectional', to: :bidirectional
         map 'indent_left', to: :indent_left
         map 'indent_right', to: :indent_right
@@ -125,6 +125,14 @@ module Uniword
 
       def yaml_outline_level_to(instance, doc)
         instance.outline_level&.value
+      end
+
+      def yaml_contextual_spacing_from(instance, value)
+        instance.contextual_spacing = Properties::ContextualSpacing.new(value: value) unless value.nil?
+      end
+
+      def yaml_contextual_spacing_to(instance, doc)
+        instance.contextual_spacing&.value
       end
 
       # XML mappings come AFTER attributes

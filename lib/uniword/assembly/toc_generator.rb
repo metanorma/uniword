@@ -150,7 +150,7 @@ module Uniword
         text = ''
 
         paragraph.runs.each do |run|
-          text += run.text if run.text
+          text += run.text.to_s if run.text
         end
 
         text.strip
