@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.7.0'
 
   # Core dependencies
-  spec.add_dependency 'lutaml-model', '~> 0.7'
+  spec.add_dependency 'lutaml-model', '~> 0.8'
   spec.add_dependency 'mail', '~> 2.8'
   spec.add_dependency 'nokogiri', '~> 1.15'
   spec.add_dependency 'rubyzip', '~> 2.3'
