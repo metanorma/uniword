@@ -280,7 +280,7 @@ RSpec.describe 'DOCX Generation Integration' do
         row = Uniword::TableRow.new
 
         cell = Uniword::TableCell.new
-        cell.properties = Uniword::TableCellProperties.new(shading: Uniword::Shading.new(fill: 'FFFF00'))
+        cell.properties = Uniword::TableCellProperties.new(shading: Uniword::Properties::Shading.new(fill: 'FFFF00'))
         cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Highlighted') }
         row.cells << cell
 
@@ -302,7 +302,7 @@ RSpec.describe 'DOCX Generation Integration' do
         # Add a paragraph
         para1 = Uniword::Paragraph.new
         para1.add_text('Introduction text')
-        doc.body.paragraphs << para
+        doc.body.paragraphs << para1
 
         # Add a table
         table = Uniword::Table.new
@@ -314,7 +314,7 @@ RSpec.describe 'DOCX Generation Integration' do
         # Add another paragraph
         para2 = Uniword::Paragraph.new
         para2.add_text('Conclusion text')
-        doc.body.paragraphs << para
+        doc.body.paragraphs << para2
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)

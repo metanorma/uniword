@@ -250,4 +250,9 @@ module Uniword
       logger.level = ::Logger::WARN
     end
   end
+
+  # Load top-level class aliases for API compatibility
+  # This must be required after all autoloads are set up so that
+  # Wordprocessingml::DocumentRoot, ::Paragraph, and ::Table are available
+  require_relative 'uniword/compatibility'
 end

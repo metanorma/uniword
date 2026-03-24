@@ -32,6 +32,16 @@ module Uniword
 
       # VML namespace types (v: namespace)
       autoload :VmlExtType, "#{__dir__}/types/vml_ext_type"
+
+      # Markup Compatibility types (mc: namespace)
+      autoload :McIgnorable, "#{__dir__}/types/mc_ignorable_type"
+
+      # OOXML boolean type (for 1/0 boolean encoding)
+      autoload :OoxmlBoolean, "#{__dir__}/types/ooxml_boolean"
+
+      # OOXML boolean type for optional attributes (nil-omitting)
+      # Serializes true -> "1", false/nil -> omitted
+      autoload :OoxmlBooleanOptional, "#{__dir__}/types/ooxml_boolean_optional"
     end
   end
 end

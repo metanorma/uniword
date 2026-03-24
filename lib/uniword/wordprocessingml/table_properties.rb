@@ -17,8 +17,8 @@ module Uniword
       # Table width (wrapper class)
       attribute :table_width, Uniword::Properties::TableWidth
 
-      # Table alignment
-      attribute :alignment, :string # left, center, right
+      # Table alignment (wrapper class for w:jc element)
+      attribute :alignment, Uniword::Properties::TableJustification
 
       # Table indentation
       attribute :indent, :integer # In twips
@@ -117,7 +117,12 @@ module Uniword
         cell_padding_value = attrs.delete(:cell_padding) || attrs.delete('cell_padding')
         cell_spacing_value = attrs.delete(:cell_spacing) || attrs.delete('cell_spacing')
 
-        super
+        # Handle width: parameter (creates table_width wrapper)
+        width_value = attrs.delete(:width) || attrs.delete('width')
+        # Handle alignment: parameter (creates jc element wrapper)
+        alignment_value = attrs.delete(:alignment) || attrs.delete('alignment')
+
+        super(attrs)
 
         @borders ||= false
         @allow_break = true if @allow_break.nil?
@@ -132,6 +137,19 @@ module Uniword
 
         # Set cell spacing if provided
         self.cell_spacing = cell_spacing_value if cell_spacing_value
+
+        # Set width if provided (creates TableWidth wrapper)
+        if width_value
+          self.table_width = Properties::TableWidth.new
+          table_width.w = width_value.to_i
+          table_width.type ||= 'dxa'
+        end
+
+        # Set alignment if provided (creates TableJustification wrapper)
+        if alignment_value
+          self.alignment = Properties::TableJustification.new
+          alignment.value = alignment_value
+        end
       end
 
       # Get table width

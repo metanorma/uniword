@@ -48,15 +48,6 @@ module Uniword
       def space_preserve?
         xml_space == 'preserve'
       end
-
-      # Override to_xml to fix the xml:space attribute prefix
-      # The serializer outputs w:xml:space but it should be xml:space
-      def to_xml(options = {})
-        xml = super
-
-        # Fix the attribute name: w:xml:space -> xml:space
-        xml.gsub(/w:xml:space=/, 'xml:space=')
-      end
     end
   end
 end

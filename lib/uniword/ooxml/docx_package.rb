@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+# Note: ContentTypes and Relationships classes are autoloaded via lib/uniword.rb
+# No require_relative needed - the spec uses require 'uniword' which sets up autoloads
 # Theme, StylesConfiguration, NumberingConfiguration, Document are autoloaded via lib/uniword.rb
 
 module Uniword
@@ -177,7 +179,115 @@ module Uniword
       def self.to_file(document, path)
         package = new
         package.document = document
+        # Initialize minimal required parts for a valid DOCX
+        package.content_types ||= minimal_content_types
+        package.package_rels ||= minimal_package_rels
+        package.document_rels ||= minimal_document_rels
         package.to_file(path)
+      end
+
+      # Create minimal content types for a valid DOCX
+      def self.minimal_content_types
+        ct = Uniword::ContentTypes::Types.new
+        # Add default entries
+        ct.defaults ||= []
+        ct.defaults << Uniword::ContentTypes::Default.new(
+          extension: 'rels',
+          content_type: 'application/vnd.openxmlformats-package.relationships+xml'
+        )
+        ct.defaults << Uniword::ContentTypes::Default.new(
+          extension: 'xml',
+          content_type: 'application/xml'
+        )
+        # Add required overrides
+        ct.overrides ||= []
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/document.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/styles.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/fontTable.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/settings.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/webSettings.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/word/numbering.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/docProps/app.xml',
+          content_type: 'application/vnd.openxmlformats-officedocument.extended-properties+xml'
+        )
+        ct.overrides << Uniword::ContentTypes::Override.new(
+          part_name: '/docProps/core.xml',
+          content_type: 'application/vnd.openxmlformats-package.core-properties+xml'
+        )
+        ct
+      end
+
+      # Create minimal package relationships for a valid DOCX
+      def self.minimal_package_rels
+        rels = Relationships::PackageRelationships.new
+        rels.relationships ||= []
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId1',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument',
+          target: 'word/document.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId2',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties',
+          target: 'docProps/app.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId3',
+          type: 'http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties',
+          target: 'docProps/core.xml'
+        )
+        rels
+      end
+
+      # Create minimal document relationships for a valid DOCX
+      def self.minimal_document_rels
+        rels = Relationships::PackageRelationships.new
+        rels.relationships ||= []
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId1',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles',
+          target: 'styles.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId2',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable',
+          target: 'fontTable.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId3',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings',
+          target: 'settings.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId4',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings',
+          target: 'webSettings.xml'
+        )
+        rels.relationships << Relationships::Relationship.new(
+          id: 'rId5',
+          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering',
+          target: 'numbering.xml'
+        )
+        rels
       end
 
       # Save package to file
@@ -216,15 +326,15 @@ module Uniword
 
         # Serialize Document Parts
         content['word/document.xml'] = document.to_xml(
-          encoding: 'UTF-8', prefix: true
+          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
         ) if document
 
         content['word/styles.xml'] = styles.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', fix_boolean_elements: true
         ) if styles
 
         content['word/numbering.xml'] = numbering.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', fix_boolean_elements: true
         ) if numbering
 
         content['word/settings.xml'] = settings.to_xml(
@@ -291,15 +401,6 @@ module Uniword
       # @return [Enumerator, Array<Paragraph>] Paragraph enumerator
       def each_paragraph(&block)
         paragraphs.each(&block)
-      end
-
-      # Save document to file (instance method)
-      #
-      # @param path [String] Output path
-      def to_file(path)
-        zip_content = to_zip_content
-        packager = Infrastructure::ZipPackager.new
-        packager.package(zip_content, path)
       end
 
       # Alias for to_file (API compatibility)

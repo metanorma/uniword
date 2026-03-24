@@ -188,20 +188,79 @@ module Uniword
         map_element 'rPr', to: :run_properties, render_nil: false
       end
 
-      # Initialize with defaults
+      # Initialize with defaults and handle convenience attributes
       def initialize(attrs = {})
         # Save wrapper attribute values before super clears them
         keep_next_val = attrs.key?(:keep_next) ? attrs.delete(:keep_next) : nil
         keep_lines_val = attrs.key?(:keep_lines) ? attrs.delete(:keep_lines) : nil
+        style_val = attrs.key?(:style) ? attrs.delete(:style) : nil
 
         super(attrs)
 
         # Set wrapper attributes after super (super clears them)
         self.keep_next = keep_next_val if keep_next_val
         self.keep_lines = keep_lines_val if keep_lines_val
+        self.style = style_val if style_val
 
         # Set boolean defaults
         @widow_control = true if @widow_control.nil?
+
+        # Convert flat attributes to wrapper objects (Pattern 0: after super)
+        convert_flat_attributes!
+      end
+
+      # Style setter - converts string style IDs to StyleReference objects
+      def style=(value)
+        @style = case value
+                 when Properties::StyleReference
+                   value
+                 when String
+                   Properties::StyleReference.new(value: value)
+                 when nil
+                   nil
+                 else
+                   value
+                 end
+      end
+
+      # Convert flat convenience attributes to proper wrapper objects
+      # This handles cases like ParagraphProperties.new(alignment: 'center')
+      # where the flat attribute is set but the wrapper object is not
+      def convert_flat_attributes!
+        # Alignment - create alignment_wrapper from flat alignment attribute
+        if @alignment && !alignment_wrapper
+          self.alignment_wrapper = Properties::Alignment.new
+          alignment_wrapper.value = @alignment
+        end
+
+        # Spacing - create spacing object from flat spacing attributes
+        if (@spacing_before || @spacing_after || @line_spacing || @line_rule) && !@spacing
+          self.spacing = Properties::Spacing.new
+          spacing.before = @spacing_before if @spacing_before
+          spacing.after = @spacing_after if @spacing_after
+          spacing.line = @line_spacing.to_i if @line_spacing
+          spacing.line_rule = @line_rule if @line_rule
+        end
+
+        # Indentation - create indentation object from flat indent attributes
+        if (@indent_left || @indent_right || @indent_first_line) && !@indentation
+          self.indentation = Properties::Indentation.new
+          indentation.left = @indent_left if @indent_left
+          indentation.right = @indent_right if @indent_right
+          indentation.first_line = @indent_first_line if @indent_first_line
+        end
+
+        # Run properties from flat attributes
+        if @run_properties && !@run_properties.is_a?(RunProperties)
+          rp = RunProperties.new
+          rp.bold = @run_properties[:bold] if @run_properties[:bold]
+          rp.italic = @run_properties[:italic] if @run_properties[:italic]
+          rp.underline = @run_properties[:underline] if @run_properties[:underline]
+          rp.color = @run_properties[:color] if @run_properties[:color]
+          rp.font = @run_properties[:font] if @run_properties[:font]
+          rp.size = @run_properties[:size] if @run_properties[:size]
+          @run_properties = rp
+        end
       end
 
       # Alias for tabs (API compatibility)

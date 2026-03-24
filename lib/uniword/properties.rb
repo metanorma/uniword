@@ -23,6 +23,9 @@ module Uniword
     autoload :Tabs, 'uniword/properties/tabs'
 
     # Boolean formatting classes (from boolean_formatting.rb)
+    # Note: BooleanElement and BooleanValSetter are also in boolean_formatting.rb
+    autoload :BooleanElement, 'uniword/properties/boolean_formatting'
+    autoload :BooleanValSetter, 'uniword/properties/boolean_formatting'
     autoload :Strike, 'uniword/properties/boolean_formatting'
     autoload :DoubleStrike, 'uniword/properties/boolean_formatting'
     autoload :SmallCaps, 'uniword/properties/boolean_formatting'
@@ -56,6 +59,7 @@ module Uniword
 
     # Table-specific
     autoload :TableWidth, 'uniword/properties/table_width'
+    autoload :TableJustification, 'uniword/properties/table_justification'
     autoload :TableCellMargin, 'uniword/properties/table_cell_margin'
     autoload :TableLook, 'uniword/properties/table_look'
     autoload :TableIndent, 'uniword/properties/table_indent'

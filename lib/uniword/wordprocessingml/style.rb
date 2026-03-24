@@ -12,8 +12,8 @@ module Uniword
       # Pattern 0: ATTRIBUTES FIRST
       attribute :type, :string
       attribute :styleId, :string
-      attribute :default, :boolean
-      attribute :customStyle, :boolean
+      attribute :default, Uniword::Ooxml::Types::OoxmlBoolean
+      attribute :customStyle, Uniword::Ooxml::Types::OoxmlBoolean
       attribute :name, StyleName
       attribute :basedOn, BasedOn
       attribute :nextStyle, Next  # Renamed from 'next' to avoid Ruby keyword conflict
@@ -100,8 +100,10 @@ module Uniword
 
         map_attribute 'type', to: :type
         map_attribute 'styleId', to: :styleId
-        map_attribute 'default', to: :default
-        map_attribute 'customStyle', to: :customStyle
+        map_attribute 'default', to: :default, render_default: false,
+          value_map: { to: { true => true, false => :omitted } }
+        map_attribute 'customStyle', to: :customStyle, render_default: false,
+          value_map: { to: { true => true, false => :omitted } }
         map_element 'name', to: :name, render_nil: false
         map_element 'basedOn', to: :basedOn, render_nil: false
         map_element 'next', to: :nextStyle, render_nil: false  # Maps XML 'next' to nextStyle attribute
@@ -368,6 +370,12 @@ module Uniword
       # @return [RunProperties, nil] Run properties
       def run_properties
         rPr
+      end
+
+      # Serialize to XML with canonical OOXML format
+      # Always applies fix_boolean_elements to produce self-closing boolean elements
+      def to_xml(options = {})
+        super(options.merge(fix_boolean_elements: true))
       end
     end
   end

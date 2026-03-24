@@ -9,13 +9,14 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:outline>
     class Outline < Lutaml::Model::Serializable
-      attribute :val, :boolean
+      include Uniword::Properties::BooleanElement
+      attribute :val, :string, default: nil
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element 'outline'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-
-        map_attribute 'val', to: :val
+        map_attribute 'val', to: :val, render_nil: false, render_default: false
       end
     end
   end

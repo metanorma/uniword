@@ -15,6 +15,7 @@ module Uniword
     class StylesConfiguration < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       # Collection of all styles
+      attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
       attribute :doc_defaults, DocDefaults
       attribute :latent_styles, LatentStyles
       attribute :styles, Style, collection: true, initialize_empty: true
@@ -24,6 +25,14 @@ module Uniword
         root 'styles'
         namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
+
+        # Force mc: namespace declaration on root element
+        namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+        ]
+
+        # Map mc:Ignorable attribute
+        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
 
         # Map docDefaults and latentStyles
         map_element 'docDefaults', to: :doc_defaults, render_nil: false

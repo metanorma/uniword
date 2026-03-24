@@ -1,12 +1,23 @@
 MIME-Version: 1.0
-Content-Type: multipart/related; boundary="----=_NextPart_861a7fe5.deca.4cac"
-------=_NextPart_861a7fe5.deca.4cac
+Content-Type: multipart/related; boundary="----=_NextPart_db891f10.5aad.4e3c"
+------=_NextPart_db891f10.5aad.4e3c
 Content-Type: text/html; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 Content-Location: document.html
 
-<html xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><head><meta charset="utf-8"></head><body><p>Test content</p></body></html>
-------=_NextPart_861a7fe5.deca.4cac
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Document</title>
+  
+</head>
+<body>
+<p>Test content</p>
+</body>
+</html>
+
+------=_NextPart_db891f10.5aad.4e3c
 Content-Type: text/xml; charset="utf-8"
 Content-Location: filelist.xml
 
@@ -14,4 +25,4 @@ Content-Location: filelist.xml
   <o:MainFile HRef="document.html"/>
 
 </xml>
-------=_NextPart_861a7fe5.deca.4cac--
+------=_NextPart_db891f10.5aad.4e3c--

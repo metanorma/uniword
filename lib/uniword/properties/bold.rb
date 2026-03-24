@@ -6,27 +6,32 @@ module Uniword
   module Properties
     # Bold formatting element
     #
-    # Represents <w:b w:val="..."/> or <w:b/> (empty = true)
+    # OOXML: <w:b/> means bold=true (absence of val= means true)
+    # <w:b w:val="false"/> means bold=false
+    #
+    # Model: nil = true (no val attribute), 'false' = explicit false
     class Bold < Lutaml::Model::Serializable
-      attribute :value, :boolean, default: -> { true }
+      include Uniword::Properties::BooleanElement
+      attribute :val, :string, default: nil
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element 'b'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-
-        map_attribute 'val', to: :value, render_nil: false, render_default: false
+        map_attribute 'val', to: :val, render_nil: false, render_default: false
       end
     end
 
     # Complex script bold
     class BoldCs < Lutaml::Model::Serializable
-      attribute :value, :boolean, default: -> { true }
+      include Uniword::Properties::BooleanElement
+      attribute :val, :string, default: nil
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element 'bCs'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-
-        map_attribute 'val', to: :value, render_nil: false, render_default: false
+        map_attribute 'val', to: :val, render_nil: false, render_default: false
       end
     end
   end

@@ -11,6 +11,7 @@ module Uniword
     # Represents <w:numbering> element containing abstractNum and num children
     class NumberingConfiguration < Lutaml::Model::Serializable
     # Pattern 0: ATTRIBUTES FIRST
+    attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
     attribute :definitions, NumberingDefinition, collection: true, initialize_empty: true
     attribute :instances, NumberingInstance, collection: true, initialize_empty: true
 
@@ -18,7 +19,14 @@ module Uniword
     xml do
       element 'numbering'
       namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      mixed_content
 
+      # Force mc: namespace declaration on root element
+      namespace_scope [
+        { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+      ]
+
+      map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
       map_element 'abstractNum', to: :definitions, render_nil: false
       map_element 'num', to: :instances, render_nil: false
     end

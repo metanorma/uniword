@@ -75,6 +75,12 @@ module Uniword
         # Use constructor for proper Text object conversion
         run = Run.new(text: text)
 
+        # Set xml:space="preserve" when text has leading/trailing whitespace
+        # to ensure whitespace is preserved in the output
+        if text.is_a?(String) && (text.start_with?(' ') || text.end_with?(' ') || text.include?("\t"))
+          run.text.xml_space = 'preserve' if run.text.respond_to?(:xml_space=)
+        end
+
         if options.any?
           run.properties ||= RunProperties.new
           run.properties.bold = Properties::Bold.new(value: true) if options[:bold]
@@ -307,7 +313,14 @@ module Uniword
       #
       # @return [String, nil] Style name or nil if not set
       def style
-        properties&.style
+        style_prop = properties&.style
+        return nil if style_prop.nil?
+        # Unwrap StyleReference to get style ID string
+        if style_prop.respond_to?(:value)
+          style_prop.value
+        else
+          style_prop
+        end
       end
 
       # Alias for style (for compatibility)

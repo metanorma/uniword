@@ -578,11 +578,120 @@ module Uniword
         self
       end
 
-      # Initialize with defaults
+      # Initialize with defaults and handle primitive-to-wrapper conversion
       def initialize(attrs = {})
         super
-        # Use ||= to not override parsed values (Pattern 0)
+        # Convert primitive values to wrapper objects (Pattern 0: run after super)
+        # This handles cases like RunProperties.new(bold: true) where primitives
+        # are passed instead of wrapper objects
+        convert_primitive_attributes!
+        # Use ||= to not override parsed values
         @character_spacing = @spacing if @spacing
+      end
+
+      # Convert primitive attribute values to proper wrapper objects
+      # Called after super() to handle cases where primitives were passed
+      # instead of the expected Serializable wrapper types
+      def convert_primitive_attributes!
+        # Boolean formatting properties
+        if @bold && !@bold.is_a?(Properties::Bold)
+          @bold = Properties::Bold.new(value: @bold)
+        end
+        if @bold_cs && !@bold_cs.is_a?(Properties::BoldCs)
+          @bold_cs = Properties::BoldCs.new(value: @bold_cs)
+        end
+        if @italic && !@italic.is_a?(Properties::Italic)
+          @italic = Properties::Italic.new(value: @italic)
+        end
+        if @italic_cs && !@italic_cs.is_a?(Properties::ItalicCs)
+          @italic_cs = Properties::ItalicCs.new(value: @italic_cs)
+        end
+        if @strike && !@strike.is_a?(Properties::Strike)
+          @strike = Properties::Strike.new(value: @strike)
+        end
+        if @double_strike && !@double_strike.is_a?(Properties::DoubleStrike)
+          @double_strike = Properties::DoubleStrike.new(value: @double_strike)
+        end
+        if @small_caps && !@small_caps.is_a?(Properties::SmallCaps)
+          @small_caps = Properties::SmallCaps.new(value: @small_caps)
+        end
+        if @caps && !@caps.is_a?(Properties::Caps)
+          @caps = Properties::Caps.new(value: @caps)
+        end
+        if @hidden && !@hidden.is_a?(Properties::Vanish)
+          @hidden = Properties::Vanish.new(value: @hidden)
+        end
+
+        # Font size (half-points)
+        if @size && !@size.is_a?(Properties::FontSize)
+          val = @size.is_a?(Numeric) ? @size : @size.to_i
+          @size = Properties::FontSize.new(value: val)
+        end
+        if @size_cs && !@size_cs.is_a?(Properties::FontSize)
+          val = @size_cs.is_a?(Numeric) ? @size_cs : @size_cs.to_i
+          @size_cs = Properties::FontSize.new(value: val)
+        end
+
+        # Color
+        if @color && !@color.is_a?(Properties::ColorValue)
+          @color = Properties::ColorValue.new(value: @color.to_s)
+        end
+
+        # Underline
+        if @underline && !@underline.is_a?(Properties::Underline)
+          @underline = if @underline == true || @underline == 'single'
+                         Properties::Underline.new(value: 'single')
+                       elsif @underline.is_a?(String)
+                         Properties::Underline.new(value: @underline)
+                       else
+                         Properties::Underline.new(value: @underline.to_s)
+                       end
+        end
+
+        # Highlight
+        if @highlight && !@highlight.is_a?(Properties::Highlight)
+          @highlight = Properties::Highlight.new(value: @highlight.to_s)
+        end
+
+        # Vertical alignment
+        if @vertical_align && !@vertical_align.is_a?(Properties::VerticalAlign)
+          @vertical_align = Properties::VerticalAlign.new(value: @vertical_align.to_s)
+        end
+
+        # Position
+        if @position && !@position.is_a?(Properties::Position)
+          @position = Properties::Position.new(value: @position)
+        end
+
+        # Character spacing
+        if @character_spacing && !@character_spacing.is_a?(Properties::CharacterSpacing)
+          @character_spacing = Properties::CharacterSpacing.new(value: @character_spacing)
+        end
+
+        # Kerning
+        if @kerning && !@kerning.is_a?(Properties::Kerning)
+          @kerning = Properties::Kerning.new(value: @kerning)
+        end
+
+        # Width scale
+        if @width_scale && !@width_scale.is_a?(Properties::WidthScale)
+          @width_scale = Properties::WidthScale.new(value: @width_scale)
+        end
+
+        # Emphasis mark
+        if @emphasis_mark && !@emphasis_mark.is_a?(Properties::EmphasisMark)
+          @emphasis_mark = Properties::EmphasisMark.new(value: @emphasis_mark.to_s)
+        end
+
+        # Text fill
+        if @text_fill && !@text_fill.is_a?(Properties::TextFill)
+          @text_fill = Properties::TextFill.new
+        end
+
+        # Text outline
+        if @text_outline && !@text_outline.is_a?(Properties::TextOutline)
+          @text_outline = Properties::TextOutline.new
+        end
       end
     end
   end
