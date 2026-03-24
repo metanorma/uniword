@@ -8,6 +8,7 @@ module Uniword
     autoload :Color, 'uniword/properties/color'
     autoload :ColorValue, 'uniword/properties/color_value'
     autoload :StyleReference, 'uniword/properties/style_reference'
+    autoload :RunStyleReference, 'uniword/properties/style_reference'
     autoload :OutlineLevel, 'uniword/properties/outline_level'
     autoload :Underline, 'uniword/properties/underline'
     autoload :Highlight, 'uniword/properties/highlight'

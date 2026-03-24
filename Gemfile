@@ -9,7 +9,7 @@ gemspec
 
 gem 'lutaml-model', path: '/Users/mulgogi/src/lutaml/lutaml-model'
 
-gem 'canon'
+gem 'canon', "~> 0.1.8"
 
 # TOML adapter (required by lutaml-model for TOML format support)
 gem 'tomlib'

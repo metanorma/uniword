@@ -177,8 +177,9 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
 
     it 'accesses style via properties object' do
       paragraph = described_class.new(properties: properties)
-      # Access style via properties.style
-      expect(paragraph.properties.style).to eq('Normal')
+      # Access style via properties.style - returns StyleReference object
+      expect(paragraph.properties.style).to be_a(Uniword::Properties::StyleReference)
+      expect(paragraph.properties.style.value).to eq('Normal')
     end
   end
 

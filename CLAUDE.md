@@ -78,6 +78,31 @@ end
 
 Violating this pattern causes silent serialization failures where XML output is empty. This applies to ALL classes using lutaml-model.
 
+## No Custom Getters/Setters
+
+**We do NOT use custom getters or setters.** All attribute access uses lutaml-model's default mechanisms:
+
+- Do NOT define custom `def attribute=(value)` methods for type conversion
+- Do NOT define custom `def attribute` getters for string coercion
+- Use lutaml-model's `attribute` declarations with proper types
+
+If type conversion is needed, use `convert_primitive_attributes!` in `initialize` after `super`, NOT custom setters.
+
+**Exception**: The `value_set_for(:attribute_name)` call in setters IS allowed when needed to notify lutaml-model that an attribute was explicitly set (to bypass `using_default?` checks during serialization).
+
+## No Wrapper Objects in API
+
+**We do NOT expose wrapper objects in the public API.** The API uses plain Ruby types and lutaml-model's default attribute mechanisms ONLY:
+
+- Do NOT use `Properties::*` wrapper classes in public API methods
+- Do NOT return `StyleReference`, `RunStyleReference`, `ColorValue`, etc. from public methods
+- Do NOT use custom getter/setter methods - use lutaml-model's default attribute access only
+- All attribute access uses lutaml-model's `attribute` declarations with proper types
+
+For building documents with rich formatting, use the **Builder pattern** instead of wrapper objects:
+- `paragraph_builder.bold = true` (not `paragraph_builder.properties.bold = Bold.new`)
+- `paragraph_builder.font_size = 24` (not `paragraph_builder.properties.size = FontSize.new`)
+
 ## Local Development Dependencies
 
 This project uses local paths for bleeding-edge development of related gems:

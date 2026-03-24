@@ -14,7 +14,6 @@ RSpec.describe 'Style Round-Trip Fidelity' do
         <w:style xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
                  w:type="paragraph"
                  w:styleId="Heading1"
-                 w:default="0"
                  w:customStyle="1">
           <w:name w:val="Heading 1"/>
           <w:basedOn w:val="Normal"/>

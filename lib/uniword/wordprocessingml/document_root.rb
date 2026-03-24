@@ -21,7 +21,9 @@ module Uniword
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
       attr_accessor :core_properties # docProps/core.xml - Uniword::Ooxml::CoreProperties
-      attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks # docProps/app.xml                # word/theme/theme1.xml # word/numbering.xml # Raw HTML content for MHTML format support # API compatibility
+      attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks
+      # Round-trip parts (copied from DocxPackage during load)
+      attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels
 
       # Get app_properties (lazy initialization)
       #

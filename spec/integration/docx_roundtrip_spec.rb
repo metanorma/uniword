@@ -30,23 +30,6 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     files
   end
 
-  # Helper to normalize XML for comparison (remove whitespace differences)
-  def normalize_xml(xml_content)
-    # Use Canon for proper XML canonicalization
-    doc = Nokogiri::XML(xml_content)
-    doc.canonicalize
-  rescue StandardError
-    # If not XML, return as-is
-    xml_content
-  end
-
-  # Helper to compare XML semantically
-  def xml_equivalent?(xml1, xml2)
-    canon1 = normalize_xml(xml1)
-    canon2 = normalize_xml(xml2)
-    canon1 == canon2
-  end
-
   describe 'blank.docx round-trip' do
     let(:original_path) { File.join(fixtures_dir, 'blank.docx') }
     let(:roundtrip_path) { File.join(temp_dir, 'blank_roundtrip.docx') }
@@ -80,7 +63,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
           next
         end
 
-        if xml_equivalent?(original_content, saved_content)
+        if Canon::Comparison.equivalent?(original_content, saved_content)
           puts "    ✓ #{filename}: Preserved"
         else
           puts "    ⚠ #{filename}: Modified (may be acceptable)"
@@ -90,10 +73,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
 
       # At minimum, document.xml must be preserved
       expect(saved_files['word/document.xml']).not_to be_nil
-      expect(xml_equivalent?(
-               original_files['word/document.xml'],
-               saved_files['word/document.xml']
-             )).to be true
+      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
     end
 
     it 'preserves document structure and content' do
@@ -169,10 +149,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       end
 
       # Document.xml should be semantically equivalent
-      expect(xml_equivalent?(
-               original_files['word/document.xml'],
-               saved_files['word/document.xml']
-             )).to be true
+      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
     end
   end
 
@@ -230,10 +207,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       files1 = extract_docx_files(path1)
       files3 = extract_docx_files(path3)
 
-      expect(xml_equivalent?(
-               files1['word/document.xml'],
-               files3['word/document.xml']
-             )).to be true
+      expect(files3['word/document.xml']).to be_xml_equivalent_to(files1['word/document.xml'])
     end
   end
 
@@ -270,7 +244,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
           puts "  ✗ #{filename}: REMOVED"
         elsif !orig && saved
           puts "  + #{filename}: ADDED"
-        elsif xml_equivalent?(orig, saved)
+        elsif Canon::Comparison.equivalent?(orig, saved)
           puts "  ✓ #{filename}: PRESERVED"
         else
           puts "  ~ #{filename}: MODIFIED"
@@ -299,10 +273,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       puts
 
       # Test passes if document.xml is preserved
-      expect(xml_equivalent?(
-               original_files['word/document.xml'],
-               saved_files['word/document.xml']
-             )).to be true
+      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
     end
   end
 end

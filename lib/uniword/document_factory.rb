@@ -57,8 +57,10 @@ module Uniword
         case format
         when :docx
           package = Ooxml::DocxPackage.from_file(path)
-          # Return the document part for convenience
-          package.respond_to?(:document) ? package.document : package
+          # Return the document part for convenience, but copy all parts for round-trip
+          doc = package.respond_to?(:document) ? package.document : package
+          copy_package_parts_to_document(package, doc)
+          doc
         when :dotx, :dotm
           package = Ooxml::DotxPackage.from_file(path)
           package.respond_to?(:document) ? package.document : package
@@ -159,6 +161,26 @@ module Uniword
       def detect_format(path)
         detector = FormatDetector.new
         detector.detect(path)
+      end
+
+      # Copy package parts to document for round-trip preservation
+      #
+      # @param package [Ooxml::DocxPackage] The source package
+      # @param document [Wordprocessingml::DocumentRoot] The target document
+      # @return [void]
+      def copy_package_parts_to_document(package, document)
+        return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
+
+        document.styles_configuration = package.styles if package.styles
+        document.numbering_configuration = package.numbering if package.numbering
+        document.settings = package.settings if package.settings
+        document.font_table = package.font_table if package.font_table
+        document.web_settings = package.web_settings if package.web_settings
+        document.theme = package.theme if package.theme
+        document.core_properties = package.core_properties if package.core_properties
+        document.app_properties = package.app_properties if package.app_properties
+        document.document_rels = package.document_rels if package.document_rels
+        document.theme_rels = package.theme_rels if package.theme_rels
       end
 
       private

@@ -45,10 +45,9 @@ module Uniword
       #
       # @param attributes [Hash] Configuration attributes
       def initialize(attributes = {})
-        # TEMPORARY: Disable default styles (requires v1.x classes)
-        # include_defaults = attributes.delete(:include_defaults) != false
+        include_defaults = attributes.delete(:include_defaults) != false
         super
-        # add_default_styles if include_defaults && styles.empty?
+        add_default_styles if include_defaults && styles.empty?
       end
 
       # Add a style to the configuration
@@ -199,6 +198,29 @@ module Uniword
       # @param attributes [Hash] Style attributes
       # @return [Style] The created style
       def create_paragraph_style(id, name, **attributes)
+        # Convert underscore naming to camelCase for lutaml-model attributes
+        # and wrap string values in proper type objects
+        if attributes.key?(:based_on)
+          val = attributes.delete(:based_on)
+          attributes[:basedOn] = BasedOn.new(val: val) if val
+        end
+        if attributes.key?(:next_style)
+          val = attributes.delete(:next_style)
+          attributes[:nextStyle] = Next.new(val: val) if val
+        end
+        if attributes.key?(:link)
+          val = attributes.delete(:link)
+          attributes[:link] = Link.new(val: val) if val
+        end
+        if attributes.key?(:ui_priority)
+          val = attributes.delete(:ui_priority)
+          attributes[:uiPriority] = UiPriority.new(val: val) if val
+        end
+        if attributes.key?(:quick_format)
+          val = attributes.delete(:quick_format)
+          attributes[:qFormat] = Properties::QuickFormat.new(val: val) if val
+        end
+
         style = Style.new(
           styleId: id,
           name: StyleName.new(val: name),
@@ -217,6 +239,29 @@ module Uniword
       # @param attributes [Hash] Style attributes
       # @return [Style] The created style
       def create_character_style(id, name, **attributes)
+        # Convert underscore naming to camelCase for lutaml-model attributes
+        # and wrap string values in proper type objects
+        if attributes.key?(:based_on)
+          val = attributes.delete(:based_on)
+          attributes[:basedOn] = BasedOn.new(val: val) if val
+        end
+        if attributes.key?(:next_style)
+          val = attributes.delete(:next_style)
+          attributes[:nextStyle] = Next.new(val: val) if val
+        end
+        if attributes.key?(:link)
+          val = attributes.delete(:link)
+          attributes[:link] = Link.new(val: val) if val
+        end
+        if attributes.key?(:ui_priority)
+          val = attributes.delete(:ui_priority)
+          attributes[:uiPriority] = UiPriority.new(val: val) if val
+        end
+        if attributes.key?(:quick_format)
+          val = attributes.delete(:quick_format)
+          attributes[:qFormat] = Properties::QuickFormat.new(val: val) if val
+        end
+
         style = Style.new(
           styleId: id,
           name: StyleName.new(val: name),

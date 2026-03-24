@@ -50,7 +50,7 @@ end
 RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
   describe 'initialization' do
     it 'creates empty configuration' do
-      config = described_class.new
+      config = described_class.new(include_defaults: false)
       expect(config.styles).to eq([])
     end
 
@@ -62,7 +62,7 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
   end
 
   describe '#add_style' do
-    let(:config) { described_class.new }
+    let(:config) { described_class.new(include_defaults: false) }
 
     it 'adds a style' do
       style = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
@@ -92,7 +92,7 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
   end
 
   describe '#remove_style' do
-    let(:config) { described_class.new }
+    let(:config) { described_class.new(include_defaults: false) }
     let(:style) { Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph') }
 
     before { config.add_style(style) }
@@ -137,7 +137,7 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
   end
 
   describe 'style filtering' do
-    let(:config) { described_class.new }
+    let(:config) { described_class.new(include_defaults: false) }
     let(:para_style) { Uniword::Wordprocessingml::Style.new(styleId: 'Para', name: Uniword::Wordprocessingml::StyleName.new(val: 'Para'), type: 'paragraph') }
     let(:char_style) { Uniword::Wordprocessingml::Style.new(styleId: 'Char', name: Uniword::Wordprocessingml::StyleName.new(val: 'Char'), type: 'character') }
 
@@ -148,14 +148,14 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
 
     it 'filters paragraph styles' do
       para_styles = config.paragraph_styles
+      expect(para_styles).to include(para_style)
       expect(para_styles.size).to eq(1)
-      expect(para_styles.first).to eq(para_style)
     end
 
     it 'filters character styles' do
       char_styles = config.character_styles
+      expect(char_styles).to include(char_style)
       expect(char_styles.size).to eq(1)
-      expect(char_styles.first).to eq(char_style)
     end
   end
 end

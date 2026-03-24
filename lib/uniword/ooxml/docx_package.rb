@@ -179,11 +179,33 @@ module Uniword
       def self.to_file(document, path)
         package = new
         package.document = document
+        # Copy parts from document for round-trip preservation
+        copy_document_parts_to_package(document, package)
         # Initialize minimal required parts for a valid DOCX
         package.content_types ||= minimal_content_types
         package.package_rels ||= minimal_package_rels
         package.document_rels ||= minimal_document_rels
         package.to_file(path)
+      end
+
+      # Copy parts from document to package for round-trip preservation
+      #
+      # @param document [DocumentRoot] The source document
+      # @param package [DocxPackage] The target package
+      # @return [void]
+      def self.copy_document_parts_to_package(document, package)
+        return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
+
+        package.styles = document.styles_configuration if document.styles_configuration
+        package.numbering = document.numbering_configuration if document.numbering_configuration
+        package.settings = document.settings if document.settings
+        package.font_table = document.font_table if document.font_table
+        package.web_settings = document.web_settings if document.web_settings
+        package.theme = document.theme if document.theme
+        package.core_properties = document.core_properties if document.core_properties
+        package.app_properties = document.app_properties if document.app_properties
+        package.document_rels = document.document_rels if document.document_rels
+        package.theme_rels = document.theme_rels if document.theme_rels
       end
 
       # Create minimal content types for a valid DOCX

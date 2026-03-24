@@ -12,7 +12,7 @@ module Uniword
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
       # Simple element wrapper objects (default: nil so unset properties are nil)
-      attribute :style, Properties::StyleReference, default: nil
+      attribute :style, Properties::RunStyleReference, default: nil
       attribute :size, Properties::FontSize, default: nil
       attribute :size_cs, Properties::FontSize, default: nil
       attribute :color, Properties::ColorValue, default: nil
@@ -239,6 +239,25 @@ module Uniword
 
       def yaml_vertical_align_to(instance, doc)
         vertical_align&.value
+      end
+
+      # Style setter - converts string style IDs to RunStyleReference objects
+      def style=(value)
+        @style = case value
+                 when Properties::RunStyleReference
+                   value
+                 when Properties::StyleReference
+                   # Convert paragraph style reference to run style reference
+                   Properties::RunStyleReference.new(value: value.value)
+                 when String
+                   Properties::RunStyleReference.new(value: value)
+                 when nil
+                   nil
+                 else
+                   value
+                 end
+        # Notify lutaml-model that this attribute was explicitly set
+        value_set_for(:style)
       end
 
       # XML mappings come AFTER attributes

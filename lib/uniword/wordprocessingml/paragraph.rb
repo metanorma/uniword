@@ -81,7 +81,10 @@ module Uniword
           run.text.xml_space = 'preserve' if run.text.respond_to?(:xml_space=)
         end
 
-        if options.any?
+        if options[:properties]
+          # Use provided RunProperties object
+          run.properties = options[:properties]
+        elsif options.any?
           run.properties ||= RunProperties.new
           run.properties.bold = Properties::Bold.new(value: true) if options[:bold]
           run.properties.italic = Properties::Italic.new(value: true) if options[:italic]
