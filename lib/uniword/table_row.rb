@@ -47,12 +47,12 @@ module Uniword
           para.runs.each do |run|
             new_run = Run.new(text: run.text)
             new_run.properties = run.properties.dup if run.properties
-            new_para.add_run(new_run)
+            new_para.runs << new_run
           end
-          new_cell.add_paragraph(new_para)
+          new_cell.paragraphs << new_para
         end
 
-        new_row.add_cell(new_cell)
+        new_row.cells << new_cell
       end
       new_row
     end

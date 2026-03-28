@@ -290,8 +290,12 @@ module Uniword
       end
 
       # Handle MHTML document - estimate from HTML content
-      if document.respond_to?(:html_content) && document.html_content
-        html = document.html_content
+      html = if document.respond_to?(:raw_html) && document.raw_html
+               document.raw_html
+             elsif document.respond_to?(:html_content) && document.html_content
+               document.html_content
+             end
+      if html
         {
           paragraphs: html.scan(/<p[\s>]/i).count,
           tables: html.scan(/<table/i).count,

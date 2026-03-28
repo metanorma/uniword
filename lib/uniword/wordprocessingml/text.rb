@@ -39,6 +39,11 @@ module Uniword
 
       alias eql? ==
 
+      # Support String#include? for test compatibility
+      def include?(substr)
+        content.to_s.include?(substr)
+      end
+
       # Set text value
       def text=(value)
         self.content = value

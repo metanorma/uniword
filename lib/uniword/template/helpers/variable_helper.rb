@@ -49,7 +49,8 @@ module Uniword
           paragraph.runs.clear
 
           # Add new text
-          paragraph.add_text(text)
+          run = Uniword::Wordprocessingml::Run.new(text: text)
+          paragraph.runs << run
         end
 
         # Replace run content
@@ -73,7 +74,8 @@ module Uniword
           else
             # Create new paragraph with text
             para = Uniword::Wordprocessingml::Paragraph.new
-            para.add_text(text)
+            run = Uniword::Wordprocessingml::Run.new(text: text)
+            para.runs << run
             cell.paragraphs << para
           end
         end

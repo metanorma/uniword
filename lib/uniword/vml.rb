@@ -28,6 +28,7 @@ module Uniword
     autoload :Shapetype, 'uniword/vml/shapetype'
     autoload :Stroke, 'uniword/vml/stroke'
     autoload :Textbox, 'uniword/vml/textbox'
+    autoload :TextPath, 'uniword/vml/textpath'
     autoload :Wrap, 'uniword/vml/wrap'
   end
 end

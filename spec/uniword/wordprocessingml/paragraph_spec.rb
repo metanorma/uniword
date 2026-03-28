@@ -60,62 +60,6 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
     end
   end
 
-  describe '#add_run' do
-    let(:paragraph) { described_class.new }
-
-    it 'adds a run to the paragraph with text' do
-      run = paragraph.add_run('Hello')
-      expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.text_content).to eq('Hello')
-      expect(paragraph.runs).to include(run)
-    end
-
-    it 'adds multiple runs with text' do
-      paragraph.add_run('Hello ')
-      paragraph.add_run('World')
-      expect(paragraph.runs.size).to eq(2)
-      expect(paragraph.text).to eq('Hello World')
-    end
-
-    it 'returns the created run' do
-      run = paragraph.add_run('Test')
-      expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.text_content).to eq('Test')
-    end
-
-    it 'accepts options for formatting' do
-      run = paragraph.add_run('Bold', bold: true)
-      expect(run.properties&.bold).to be_truthy
-    end
-  end
-
-  describe '#add_text' do
-    let(:paragraph) { described_class.new }
-
-    it 'creates and adds a run with text' do
-      paragraph.add_text('Hello')
-      expect(paragraph.runs.size).to eq(1)
-      expect(paragraph.runs.first.text_content).to eq('Hello')
-    end
-
-    it 'creates and adds a run with formatting options' do
-      paragraph.add_text('Bold text', bold: true)
-      expect(paragraph.runs.first.properties&.bold).to be_truthy
-    end
-
-    it 'returns the created run' do
-      run = paragraph.add_text('Test')
-      expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.text_content).to eq('Test')
-    end
-
-    it 'adds multiple text runs' do
-      paragraph.add_text('First')
-      paragraph.add_text('Second')
-      expect(paragraph.text).to eq('FirstSecond')
-    end
-  end
-
   describe '#empty?' do
     it 'returns true for paragraph with no runs' do
       paragraph = described_class.new
@@ -163,8 +107,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
 
     it 'accesses alignment via properties object' do
       paragraph = described_class.new(properties: properties)
-      # Access alignment via paragraph.alignment which handles wrapper extraction
-      expect(paragraph.alignment).to eq('left')
+      expect(paragraph.properties.alignment).to eq('left')
     end
   end
 
@@ -177,9 +120,8 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
 
     it 'accesses style via properties object' do
       paragraph = described_class.new(properties: properties)
-      # Access style via properties.style - returns StyleReference object
-      expect(paragraph.properties.style).to be_a(Uniword::Properties::StyleReference)
-      expect(paragraph.properties.style.value).to eq('Normal')
+      # Access style via properties.style - returns string value
+      expect(paragraph.properties.style).to eq('Normal')
     end
   end
 

@@ -16,11 +16,11 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
             para = Uniword::Paragraph.new
             run = Uniword::Run.new
             run.text = 'hello'
-            para.add_run(run)
+            para.runs << run
             cell.paragraphs << para
-            row.add_cell(cell)
+            row.cells << cell
           end
-          table.add_row(row)
+          table.rows << row
         end
 
         expect(table.rows.count).to eq(3)
@@ -32,10 +32,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         table = Uniword::Table.new
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.rows.count).to eq(1)
         expect(table.rows.first.cells.count).to eq(1)
@@ -49,11 +51,13 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           row = Uniword::TableRow.new
           3.times do |j|
             cell = Uniword::TableCell.new
-            para = Uniword::Paragraph.new.tap { |p| p.add_text("Cell #{i},#{j}") }
+            para = Uniword::Paragraph.new
+            run = Uniword::Wordprocessingml::Run.new(text: "Cell #{i},#{j}")
+            para.runs << run
             cell.paragraphs << para
-            row.add_cell(cell)
+            row.cells << cell
           end
-          table.add_row(row)
+          table.rows << row
         end
 
         expect(table.rows.count).to eq(2)
@@ -69,21 +73,25 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         # First row with merged cell
         row1 = Uniword::TableRow.new
         cell1 = Uniword::TableCell.new
-        para1 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para1.runs << run1
         cell1.paragraphs << para1
         cell1.column_span = 2
-        row1.add_cell(cell1)
-        table.add_row(row1)
+        row1.cells << cell1
+        table.rows << row1
 
         # Second row with two cells
         row2 = Uniword::TableRow.new
         2.times do
           cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+          para = Uniword::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+          para.runs << run
           cell.paragraphs << para
-          row2.add_cell(cell)
+          row2.cells << cell
         end
-        table.add_row(row2)
+        table.rows << row2
 
         expect(table.rows.count).to eq(2)
         expect(table.rows[0].cells[0].column_span).to eq(2)
@@ -96,33 +104,41 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         row1 = Uniword::TableRow.new
         2.times do
           cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+          para = Uniword::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+          para.runs << run
           cell.paragraphs << para
-          row1.add_cell(cell)
+          row1.cells << cell
         end
-        table.add_row(row1)
+        table.rows << row1
 
         # Second row with row span
         row2 = Uniword::TableRow.new
         cell2_1 = Uniword::TableCell.new
-        para2_1 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para2_1 = Uniword::Paragraph.new
+        run2_1 = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para2_1.runs << run2_1
         cell2_1.paragraphs << para2_1
         cell2_1.row_span = 2
-        row2.add_cell(cell2_1)
+        row2.cells << cell2_1
 
         cell2_2 = Uniword::TableCell.new
-        para2_2 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para2_2 = Uniword::Paragraph.new
+        run2_2 = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para2_2.runs << run2_2
         cell2_2.paragraphs << para2_2
-        row2.add_cell(cell2_2)
-        table.add_row(row2)
+        row2.cells << cell2_2
+        table.rows << row2
 
         # Third row
         row3 = Uniword::TableRow.new
         cell3 = Uniword::TableCell.new
-        para3 = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para3 = Uniword::Paragraph.new
+        run3 = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para3.runs << run3
         cell3.paragraphs << para3
-        row3.add_cell(cell3)
-        table.add_row(row3)
+        row3.cells << cell3
+        table.rows << row3
 
         expect(table.rows.count).to eq(3)
         expect(table.rows[1].cells[0].row_span).to eq(2)
@@ -133,12 +149,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('Merged cell') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Merged cell')
+        para.runs << run
         cell.paragraphs << para
         cell.column_span = 2
         cell.row_span = 2
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.rows.first.cells.first.column_span).to eq(2)
         expect(table.rows.first.cells.first.row_span).to eq(2)
@@ -152,10 +170,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.layout).to eq('fixed')
       end
@@ -165,10 +185,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         # Auto layout is the default
         expect(table.properties).to be_nil.or(satisfy { |props|
@@ -184,12 +206,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
-        expect(table.properties.alignment).to eq('center')
+        expect(table.properties.alignment.value).to eq('center')
       end
 
       it 'should left align the table' do
@@ -198,12 +222,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
-        expect(table.properties.alignment).to eq('left')
+        expect(table.properties.alignment.value).to eq('left')
       end
 
       it 'should right align the table' do
@@ -212,12 +238,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
-        expect(table.properties.alignment).to eq('right')
+        expect(table.properties.alignment.value).to eq('right')
       end
     end
 
@@ -231,10 +259,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.table_width.w).to eq(100)
         expect(table.properties.table_width.type).to eq('pct')
@@ -250,10 +280,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.table_width.w).to eq(1000)
         expect(table.properties.table_width.type).to eq('dxa')
@@ -270,10 +302,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
         cell.properties = Uniword::Wordprocessingml::TableProperties.new(
           table_width: Uniword::Properties::TableWidth.new(w: 2500, type: 'dxa')
         )
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.table_width.w).to eq(5000)
         expect(table.rows.first.cells.first.properties.table_width.w).to eq(2500)
@@ -291,10 +325,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.border_top_style).to eq('single')
         expect(table.properties.border_top_size).to eq(4)
@@ -312,10 +348,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
         expect(table.properties.border_top_style).to eq('single')
         expect(table.properties.border_left_style).to eq('single')
@@ -330,10 +368,12 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           table = Uniword::Table.new
           row = Uniword::TableRow.new
           cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+          para = Uniword::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+          para.runs << run
           cell.paragraphs << para
-          row.add_cell(cell)
-          table.add_row(row)
+          row.cells << cell
+          table.rows << row
 
           expect(table.rows.first.cells.first.paragraphs.count).to be >= 1
           expect(table.rows.first.cells.first.paragraphs.first.runs.first.text).to eq('hello')
@@ -344,13 +384,17 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           row = Uniword::TableRow.new
           cell = Uniword::TableCell.new
 
-          para1 = Uniword::Paragraph.new.tap { |p| p.add_text('First') }
-          para2 = Uniword::Paragraph.new.tap { |p| p.add_text('Second') }
+          para1 = Uniword::Paragraph.new
+          run1 = Uniword::Wordprocessingml::Run.new(text: 'First')
+          para1.runs << run1
+          para2 = Uniword::Paragraph.new
+          run2 = Uniword::Wordprocessingml::Run.new(text: 'Second')
+          para2.runs << run2
           cell.paragraphs << para1
           cell.paragraphs << para2
 
-          row.add_cell(cell)
-          table.add_row(row)
+          row.cells << cell
+          table.rows << row
 
           expect(table.rows.first.cells.first.paragraphs.count).to eq(2)
         end
@@ -359,8 +403,8 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           table = Uniword::Table.new
           row = Uniword::TableRow.new
           cell = Uniword::TableCell.new
-          row.add_cell(cell)
-          table.add_row(row)
+          row.cells << cell
+          table.rows << row
 
           # Empty cells are valid
           expect(table.rows.first.cells.first).to be_a(Uniword::TableCell)
@@ -397,28 +441,30 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
           run.properties = Uniword::Wordprocessingml::RunProperties.new(
             bold: Uniword::Properties::Bold.new(value: true)
           )
-          para.add_run(run)
+          para.runs << run
           cell.paragraphs << para
-          header_row.add_cell(cell)
+          header_row.cells << cell
         end
-        table.add_row(header_row)
+        table.rows << header_row
 
         # Data rows
         2.times do |i|
           row = Uniword::TableRow.new
           3.times do |j|
             cell = Uniword::TableCell.new
-            para = Uniword::Paragraph.new.tap { |p| p.add_text("Data #{i},#{j}") }
+            para = Uniword::Paragraph.new
+            run = Uniword::Wordprocessingml::Run.new(text: "Data #{i},#{j}")
+            para.runs << run
             cell.paragraphs << para
-            row.add_cell(cell)
+            row.cells << cell
           end
-          table.add_row(row)
+          table.rows << row
         end
 
         expect(table.rows.count).to eq(3)
         expect(table.rows.first.cells.count).to eq(3)
-        expect(table.rows.first.cells.first.paragraphs.first.runs.first.properties).to be_bold
-        expect(table.properties.alignment).to eq('center')
+        expect(table.rows.first.cells.first.paragraphs.first.runs.first.properties.bold?).to be true
+        expect(table.properties.alignment.value).to eq('center')
       end
 
       it 'adds table to document' do
@@ -427,12 +473,14 @@ RSpec.describe 'Docx.js Compatibility: Table', :compatibility do
 
         row = Uniword::TableRow.new
         cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new.tap { |p| p.add_text('hello') }
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'hello')
+        para.runs << run
         cell.paragraphs << para
-        row.add_cell(cell)
-        table.add_row(row)
+        row.cells << cell
+        table.rows << row
 
-        doc.add_table(table)
+        doc.body.tables << table
 
         expect(doc.tables.count).to eq(1)
         expect(doc.tables.first.rows.count).to eq(1)

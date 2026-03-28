@@ -95,6 +95,26 @@ module Uniword
         )
       end
 
+      # Transform DOCX Package to MHTML model (preserves correct core_properties)
+      #
+      # Use this when you have a DocxPackage to ensure core_properties are preserved.
+      #
+      # @param docx_package [Uniword::Ooxml::DocxPackage] DOCX package with document and core_properties
+      # @param document_name [String] Optional document name for Content-Location
+      #   (e.g., 'blank' for blank.docx). If not provided, extracts from relationships.
+      # @return [Uniword::Mhtml::Document] MHTML document model
+      #
+      # @example Transform DOCX Package to MHTML
+      #   mhtml_doc = transformer.docx_package_to_mhtml(docx_pkg, 'blank')
+      def docx_package_to_mhtml(docx_package, document_name = nil)
+        OoxmlToMhtmlConverter.document_to_mht(
+          docx_package.document,
+          docx_package.core_properties,
+          docx_package.package_rels,
+          document_name
+        )
+      end
+
       # Transform MHTML model to DOCX model
       #
       # Explicitly named method - clear intent, no magic.
@@ -136,26 +156,8 @@ module Uniword
       # @param source [Uniword::Wordprocessingml::DocumentRoot] OOXML source document
       # @return [Uniword::Mhtml::Document] MHTML document with HTML content
       def transform_to_mhtml(source)
-        # Convert OOXML body to HTML content using the converter service
-        html_content = OoxmlToHtmlConverter.document_to_html(source)
-
-        # Create MHTML document
-        mhtml_doc = Uniword::Mhtml::Document.new
-        mhtml_doc.html_content = html_content
-        mhtml_doc.title = source.title.to_s if source.title
-
-        # Transfer metadata - ensure values are plain strings
-        if source.core_properties
-          props = {}
-          cp = source.core_properties
-          props[:title] = cp.title.to_s if cp.respond_to?(:title) && cp.title
-          props[:creator] = cp.creator.to_s if cp.respond_to?(:creator) && cp.creator
-          props[:subject] = cp.subject.to_s if cp.respond_to?(:subject) && cp.subject
-          props[:keywords] = cp.keywords.to_s if cp.respond_to?(:keywords) && cp.keywords
-          mhtml_doc.core_properties = props.to_json if props.any?
-        end
-
-        mhtml_doc
+        # Use the OoxmlToMhtmlConverter for full-fidelity MHT output
+        OoxmlToMhtmlConverter.document_to_mht(source)
       end
 
       # Transform MHTML document to OOXML document
@@ -166,30 +168,32 @@ module Uniword
         # Create OOXML document
         ooxml_doc = Wordprocessingml::DocumentRoot.new
 
-        # Get HTML content - ensure it's a plain string
-        html_content = source.html_content.to_s if source.html_content
-        html_content ||= source.raw_html.to_s if source.respond_to?(:raw_html) && source.raw_html
+        # Get HTML content - use raw_html which is the correct method on Mhtml::Document
+        html_content = source.raw_html if source.respond_to?(:raw_html) && source.raw_html
         return ooxml_doc if html_content.nil? || html_content.empty?
 
         # Convert HTML to OOXML paragraphs
         paragraphs = HtmlToOoxmlConverter.html_to_paragraphs(html_content)
 
         # Add paragraphs to document
-        paragraphs.each do |p|
-          ooxml_doc.add_paragraph(p)
-        end
+        ooxml_doc.body.paragraphs.concat(paragraphs)
 
-        # Transfer metadata - handle both string and hash formats
-        core_props = source.core_properties
-        if core_props
-          props_str = core_props.to_s
-          if !props_str.empty? && props_str != '{}'
-            begin
-              props_hash = JSON.parse(props_str)
-              ooxml_doc.title = props_hash['title'] if props_hash['title']
-            rescue JSON::ParserError
-              # Not valid JSON, ignore
-            end
+        # Transfer metadata from MHTML DocumentProperties to OOXML
+        doc_props = source.document_properties
+        if doc_props
+          ooxml_doc.core_properties ||= Uniword::Ooxml::CoreProperties.new
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
+          if doc_props.respond_to?(:created) && doc_props.created
+            ooxml_doc.core_properties.created = Uniword::Ooxml::Types::DctermsCreatedType.new(
+              value: doc_props.created, type: 'dcterms:W3CDTF'
+            )
+          end
+          ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.respond_to?(:last_author) && doc_props.last_author
+          if doc_props.respond_to?(:last_saved) && doc_props.last_saved
+            ooxml_doc.core_properties.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
+              value: doc_props.last_saved, type: 'dcterms:W3CDTF'
+            )
           end
         end
 
@@ -213,7 +217,14 @@ module Uniword
 
           # Add transformed element to target
           # Handle both single elements and arrays (for 1-to-many transformations)
-          Array(transformed).each { |e| target.add_element(e) }
+          Array(transformed).each do |e|
+            case e
+            when Wordprocessingml::Paragraph
+              target.body.paragraphs << e
+            when Wordprocessingml::Table
+              target.body.tables << e
+            end
+          end
         end
       end
 

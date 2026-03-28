@@ -31,19 +31,6 @@ module Uniword
         map_element 'tbl', to: :tables, render_nil: false
       end
 
-      # Add a paragraph to the cell
-      def add_paragraph(paragraph_or_text = nil, **_options)
-        case paragraph_or_text
-        when Paragraph
-          paragraphs << paragraph_or_text
-          paragraph_or_text
-        else
-          para = Paragraph.new
-          para.add_text(paragraph_or_text) if paragraph_or_text
-          paragraphs << para
-          para
-        end
-      end
 
       # Accept visitor
       def accept(visitor)
@@ -64,7 +51,8 @@ module Uniword
       def text=(value)
         paragraphs.clear
         para = Paragraph.new
-        para.add_text(value.to_s)
+        run = Run.new(text: value.to_s)
+        para.runs << run
         paragraphs << para
         value
       end

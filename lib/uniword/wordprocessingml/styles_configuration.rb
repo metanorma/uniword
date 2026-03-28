@@ -22,7 +22,7 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        root 'styles'
+        element "styles"
         namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -219,6 +219,10 @@ module Uniword
         if attributes.key?(:quick_format)
           val = attributes.delete(:quick_format)
           attributes[:qFormat] = Properties::QuickFormat.new(val: val) if val
+        end
+        if attributes.key?(:run_properties)
+          val = attributes.delete(:run_properties)
+          attributes[:rPr] = val if val
         end
 
         style = Style.new(

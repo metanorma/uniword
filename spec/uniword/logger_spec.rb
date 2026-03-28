@@ -113,7 +113,10 @@ RSpec.describe 'Inspection helpers' do
     let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it 'provides readable inspect output' do
-      doc.add_paragraph('Test')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      para.runs << run
+      doc.body.paragraphs << para
       expect(doc.inspect).to include('Uniword::Wordprocessingml::DocumentRoot')
       expect(doc.inspect).to include('@body=...')
     end
@@ -123,14 +126,16 @@ RSpec.describe 'Inspection helpers' do
     let(:para) { Uniword::Wordprocessingml::Paragraph.new }
 
     it 'provides readable inspect output' do
-      para.add_text('Hello World')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+      para.runs << run
       expect(para.inspect).to include('Uniword::Wordprocessingml::Paragraph')
       expect(para.inspect).to include('runs=1')
       expect(para.inspect).to include('Hello World')
     end
 
     it 'truncates long text' do
-      para.add_text('A' * 100)
+      run = Uniword::Wordprocessingml::Run.new(text: 'A' * 100)
+      para.runs << run
       expect(para.inspect).to include('...')
       expect(para.inspect.length).to be < 200
     end

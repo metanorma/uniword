@@ -23,8 +23,14 @@ RSpec.describe Uniword::Metadata::MetadataManager do
   describe '#extract' do
     let(:document) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('First paragraph content')
-      doc.add_paragraph('Second paragraph content')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph content')
+      para1.runs << run1
+      doc.body.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph content')
+      para2.runs << run2
+      doc.body.paragraphs << para2
       doc
     end
 
@@ -258,7 +264,10 @@ RSpec.describe Uniword::Metadata::MetadataManager do
   describe 'integration' do
     let(:document) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Integration test content')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Integration test content')
+      para.runs << run
+      doc.body.paragraphs << para
       doc
     end
 

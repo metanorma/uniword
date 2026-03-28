@@ -135,9 +135,7 @@ module Uniword
         toc_doc = Wordprocessingml::DocumentRoot.new
 
         # Add TOC paragraphs
-        toc_paragraphs.each do |para|
-          toc_doc.add_paragraph(para)
-        end
+        toc_doc.body.paragraphs.concat(toc_paragraphs)
 
         toc_doc
       end
@@ -170,7 +168,7 @@ module Uniword
       # @param paragraph [Wordprocessingml::Paragraph] Paragraph to check
       # @return [Integer, nil] Heading level or nil
       def heading_level(paragraph)
-        style_name = paragraph.style
+        style_name = paragraph.properties&.style
         return nil unless style_name
 
         # Check for heading styles (Heading 1, Heading 2, etc.)
@@ -209,7 +207,8 @@ module Uniword
       # @return [Wordprocessingml::Paragraph] Title paragraph
       def create_title_paragraph
         para = Wordprocessingml::Paragraph.new
-        para.style = 'TOCHeading'
+        para.properties ||= Wordprocessingml::ParagraphProperties.new
+        para.properties.style = 'TOCHeading'
 
         run = Wordprocessingml::Run.new
         run.text = @title
@@ -222,7 +221,7 @@ module Uniword
           )
         end
 
-        para.add_run(run)
+        para.runs << run
         para
       end
     end

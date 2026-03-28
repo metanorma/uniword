@@ -12,7 +12,7 @@ module Uniword
       attribute :drawing, Drawing
 
       xml do
-        root 'Choice'
+        element "Choice"
         namespace Uniword::Ooxml::Namespaces::MarkupCompatibility
         mixed_content
 

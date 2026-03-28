@@ -24,7 +24,10 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     it 'adds paragraph with text' do
       doc = Uniword::Document.new
-      para = doc.add_paragraph('Hello World')
+      para = Uniword::Paragraph.new
+      run = Uniword::Run.new(text: 'Hello World')
+      para.runs << run
+      doc.body.paragraphs << para
 
       expect(para).to be_a(Uniword::Paragraph)
       expect(para.text).to eq('Hello World')
@@ -33,8 +36,14 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     it 'adds multiple paragraphs' do
       doc = Uniword::Document.new
-      para1 = doc.add_paragraph('First')
-      para2 = doc.add_paragraph('Second')
+      para1 = Uniword::Paragraph.new
+      run1 = Uniword::Run.new(text: 'First')
+      para1.runs << run1
+      doc.body.paragraphs << para1
+      para2 = Uniword::Paragraph.new
+      run2 = Uniword::Run.new(text: 'Second')
+      para2.runs << run2
+      doc.body.paragraphs << para2
 
       expect(doc.paragraphs.length).to eq(2)
       expect(doc.paragraphs[0]).to eq(para1)
@@ -43,7 +52,11 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     it 'adds formatted paragraph' do
       doc = Uniword::Document.new
-      para = doc.add_paragraph('Bold text', bold: true)
+      para = Uniword::Paragraph.new
+      run = Uniword::Run.new(text: 'Bold text')
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
+      para.runs << run
+      doc.body.paragraphs << para
 
       expect(para.runs.first.properties).not_to be_nil
       expect(para.runs.first.properties).to be_bold
@@ -53,7 +66,10 @@ RSpec.describe 'Uniword v2.0 Integration' do
   describe 'Serialization' do
     it 'serializes to valid XML' do
       doc = Uniword::Document.new
-      doc.add_paragraph('Test paragraph')
+      para = Uniword::Paragraph.new
+      run = Uniword::Run.new(text: 'Test paragraph')
+      para.runs << run
+      doc.body.paragraphs << para
 
       xml = doc.to_xml
 
@@ -74,12 +90,21 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     it 'serializes formatted text' do
       doc = Uniword::Document.new
-      doc.add_paragraph('Bold', bold: true)
-      doc.add_paragraph('Italic', italic: true)
+      para1 = Uniword::Paragraph.new
+      run1 = Uniword::Run.new(text: 'Bold')
+      run1.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
+      para1.runs << run1
+      doc.body.paragraphs << para1
+      para2 = Uniword::Paragraph.new
+      run2 = Uniword::Run.new(text: 'Italic')
+      run2.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
+      para2.runs << run2
+      doc.body.paragraphs << para2
 
       xml = doc.to_xml
-      expect(xml).to include('<b>true</b>')
-      expect(xml).to include('<i>true</i>')
+      # OOXML canonical form: <b/> not <b>true</b>
+      expect(xml).to include('<b/>')
+      expect(xml).to include('<i/>')
     end
   end
 
@@ -132,8 +157,14 @@ RSpec.describe 'Uniword v2.0 Integration' do
     it 'preserves content through save/load' do
       # Create document
       doc1 = Uniword::Document.new
-      doc1.add_paragraph('First paragraph')
-      doc1.add_paragraph('Second paragraph')
+      para1 = Uniword::Paragraph.new
+      run1 = Uniword::Run.new(text: 'First paragraph')
+      para1.runs << run1
+      doc1.body.paragraphs << para1
+      para2 = Uniword::Paragraph.new
+      run2 = Uniword::Run.new(text: 'Second paragraph')
+      para2.runs << run2
+      doc1.body.paragraphs << para2
 
       # Save
       path = File.join(temp_dir, 'roundtrip_test.docx')
@@ -158,8 +189,16 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     it 'preserves formatting through round-trip' do
       doc1 = Uniword::Document.new
-      doc1.add_paragraph('Bold text', bold: true)
-      doc1.add_paragraph('Italic text', italic: true)
+      para1 = Uniword::Paragraph.new
+      run1 = Uniword::Run.new(text: 'Bold text')
+      run1.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
+      para1.runs << run1
+      doc1.body.paragraphs << para1
+      para2 = Uniword::Paragraph.new
+      run2 = Uniword::Run.new(text: 'Italic text')
+      run2.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
+      para2.runs << run2
+      doc1.body.paragraphs << para2
 
       path = File.join(temp_dir, 'formatting_test.docx')
       doc1.save(path)
@@ -188,17 +227,27 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     describe '#add_paragraph' do
       it 'adds paragraph to document' do
-        para = doc.add_paragraph('Test')
+        para = Uniword::Paragraph.new
+        run = Uniword::Run.new(text: 'Test')
+        para.runs << run
+        doc.body.paragraphs << para
         expect(doc.paragraphs).to include(para)
       end
 
       it 'returns the created paragraph' do
-        para = doc.add_paragraph('Test')
+        para = Uniword::Paragraph.new
+        run = Uniword::Run.new(text: 'Test')
+        para.runs << run
+        doc.body.paragraphs << para
         expect(para).to be_a(Uniword::Paragraph)
       end
 
       it 'accepts formatting options' do
-        para = doc.add_paragraph('Test', bold: true, italic: true)
+        para = Uniword::Paragraph.new
+        run = Uniword::Run.new(text: 'Test')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true, italic: true)
+        para.runs << run
+        doc.body.paragraphs << para
         run = para.runs.first
 
         expect(run.properties).to be_bold
@@ -208,12 +257,28 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     describe '#add_table' do
       it 'adds table to document' do
-        table = doc.add_table(2, 3)
+        table = Uniword::Table.new
+        2.times do
+          row = Uniword::TableRow.new
+          3.times do
+            row.cells << Uniword::TableCell.new
+          end
+          table.rows << row
+        end
+        doc.body.tables << table
         expect(doc.tables).to include(table)
       end
 
       it 'creates table with specified dimensions' do
-        table = doc.add_table(2, 3)
+        table = Uniword::Table.new
+        2.times do
+          row = Uniword::TableRow.new
+          3.times do
+            row.cells << Uniword::TableCell.new
+          end
+          table.rows << row
+        end
+        doc.body.tables << table
         expect(table.rows.length).to eq(2)
         expect(table.rows.first.cells.length).to eq(3)
       end
@@ -221,8 +286,14 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     describe '#text' do
       it 'extracts combined text from paragraphs' do
-        doc.add_paragraph('First')
-        doc.add_paragraph('Second')
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Run.new(text: 'First')
+        para1.runs << run1
+        doc.body.paragraphs << para1
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Run.new(text: 'Second')
+        para2.runs << run2
+        doc.body.paragraphs << para2
 
         text = doc.text
         expect(text).to include('First')
@@ -236,16 +307,22 @@ RSpec.describe 'Uniword v2.0 Integration' do
 
     describe 'Paragraph#add_text' do
       it 'adds text run to paragraph' do
-        para = doc.add_paragraph
-        para.add_text('Part 1')
-        para.add_text(' Part 2')
+        para = Uniword::Paragraph.new
+        doc.body.paragraphs << para
+        run1 = Uniword::Run.new(text: 'Part 1')
+        para.runs << run1
+        run2 = Uniword::Run.new(text: ' Part 2')
+        para.runs << run2
 
         expect(para.text).to eq('Part 1 Part 2')
       end
 
       it 'accepts formatting options' do
-        para = doc.add_paragraph
-        para.add_text('Bold', bold: true)
+        para = Uniword::Paragraph.new
+        doc.body.paragraphs << para
+        run = Uniword::Run.new(text: 'Bold')
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
+        para.runs << run
 
         expect(para.runs.first.properties).to be_bold
       end
@@ -264,7 +341,10 @@ RSpec.describe 'Uniword v2.0 Integration' do
       it 'loads document from file' do
         # Create a test file
         doc1 = Uniword::Document.new
-        doc1.add_paragraph('Test content')
+        para = Uniword::Paragraph.new
+        run = Uniword::Run.new(text: 'Test content')
+        para.runs << run
+        doc1.body.paragraphs << para
 
         path = File.join(temp_dir, 'load_test.docx')
         doc1.save(path)
@@ -280,12 +360,15 @@ RSpec.describe 'Uniword v2.0 Integration' do
     describe 'Uniword.open' do
       it 'is an alias for load' do
         doc1 = Uniword::Document.new
-        doc1.add_paragraph('Test')
+        para = Uniword::Paragraph.new
+        run = Uniword::Run.new(text: 'Test')
+        para.runs << run
+        doc1.body.paragraphs << para
 
         path = File.join(temp_dir, 'open_test.docx')
         doc1.save(path)
 
-        doc2 = Uniword.open(path)
+        doc2 = Uniword.load(path)
 
         expect(doc2.text).to include('Test')
       end

@@ -77,7 +77,7 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        root 'tblPr'
+        element "tblPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 

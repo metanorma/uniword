@@ -49,6 +49,8 @@ module Uniword
   autoload :WpDrawing, 'uniword/wp_drawing'
   autoload :Drawingml, 'uniword/drawingml'
   autoload :Vml, 'uniword/vml'
+  autoload :WordprocessingShape, 'uniword/wordprocessing_shape'
+  autoload :WordprocessingGroup, 'uniword/wordprocessing_group'
   autoload :Math, 'uniword/math'
   autoload :SharedTypes, 'uniword/shared_types'
 
@@ -101,6 +103,10 @@ module Uniword
   autoload :ContentTypes, 'uniword/content_types'
   autoload :DocumentProperties, 'uniword/document_properties'
   autoload :Glossary, 'uniword/glossary'
+  autoload :HtmlImporter, 'uniword/html_importer'
+
+  # Builder API (construction layer for OOXML models)
+  autoload :Builder, 'uniword/builder'
 
   # CLI
   autoload :CLI, 'uniword/cli'
@@ -129,6 +135,7 @@ module Uniword
   autoload :Footer, 'uniword/footer'
   autoload :Footnote, 'uniword/footnote'
   autoload :Header, 'uniword/header'
+  autoload :Hyperlink, 'uniword/hyperlink'
   autoload :Image, 'uniword/image'
   autoload :MathEquation, 'uniword/math_equation'
   autoload :Picture, 'uniword/picture'
@@ -150,12 +157,12 @@ module Uniword
   autoload :LineNumbering, 'uniword/line_numbering'
   autoload :PageBorders, 'uniword/page_borders'
   autoload :ParagraphBorder, 'uniword/paragraph_border'
+  autoload :ParagraphBorders, 'uniword/paragraph_border'
   autoload :ParagraphBorderSide, 'uniword/paragraph_border'
   autoload :Shading, 'uniword/shading'
   autoload :TabStop, 'uniword/tab_stop'
 
   # Infrastructure and utilities
-  autoload :Builder, 'uniword/builder'
   autoload :Customxml, 'uniword/customxml'
   autoload :ElementRegistry, 'uniword/element_registry'
   autoload :FormatConverter, 'uniword/format_converter'
@@ -248,6 +255,42 @@ module Uniword
     # @return [void]
     def disable_debug_logging
       logger.level = ::Logger::WARN
+    end
+
+    # Convert HTML to a document with paragraphs
+    #
+    # @param html [String] HTML content
+    # @return [Uniword::Wordprocessingml::DocumentRoot] Document with paragraphs
+    def from_html(html)
+      doc = Wordprocessingml::DocumentRoot.new
+      paragraphs = HtmlImporter.import(html)
+      paragraphs.each do |para|
+        doc.body.paragraphs << para
+      end
+      doc
+    end
+
+    # Convert HTML to a document with paragraphs
+    #
+    # @param html [String] HTML content
+    # @return [Uniword::Wordprocessingml::DocumentRoot] Document with paragraphs
+    def html_to_doc(html)
+      doc = Wordprocessingml::DocumentRoot.new
+      paragraphs = HtmlImporter.import(html)
+      paragraphs.each do |para|
+        doc.body.paragraphs << para
+      end
+      doc
+    end
+
+    # Convert HTML directly to a DOCX file
+    #
+    # @param html [String] HTML content
+    # @param path [String] Output path for DOCX file
+    # @return [void]
+    def html_to_docx(html, path)
+      doc = html_to_doc(html)
+      doc.to_file(path)
     end
   end
 

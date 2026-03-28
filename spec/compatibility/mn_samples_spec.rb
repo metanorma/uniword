@@ -3,8 +3,18 @@
 require 'spec_helper'
 
 RSpec.describe 'Metanorma ISO Sample Compatibility', :slow do
-  let(:samples_dir) { '/Users/mulgogi/src/mn/mn-samples-iso/_site' }
+  SAMPLES_DIR = '/Users/mulgogi/src/mn/mn-samples-iso/_site'.freeze
+
+  before(:all) do
+    @samples_exist = Dir.exist?(SAMPLES_DIR) && !Dir.glob(File.join(SAMPLES_DIR, '**/*.doc')).empty?
+  end
+
+  let(:samples_dir) { SAMPLES_DIR }
   let(:doc_files) { Dir.glob(File.join(samples_dir, '**/*.doc')).sort }
+
+  before(:each) do
+    skip 'Sample directory not found' unless @samples_exist
+  end
 
   # Helper to get relative path for better output
   def rel_path(full_path)

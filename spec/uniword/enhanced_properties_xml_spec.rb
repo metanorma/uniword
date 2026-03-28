@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 require 'nokogiri'
+require 'uniword/builder'
 
 RSpec.describe 'Enhanced Properties XML Serialization' do
   # Namespace URI for WordProcessingML
@@ -10,7 +11,9 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Paragraph borders' do
     it 'serializes borders to correct XML' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_borders(top: '000000', bottom: 'FF0000')
+      Uniword::Builder::ParagraphBuilder.new(para).borders(
+        top: '000000', bottom: 'FF0000'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -32,7 +35,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes all border positions' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_borders(
+      Uniword::Builder::ParagraphBuilder.new(para).borders(
         top: '000000',
         bottom: '111111',
         left: '222222',
@@ -60,7 +63,9 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Paragraph shading' do
     it 'serializes shading to correct XML' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_shading(fill: 'FFFF00', pattern: 'solid')
+      Uniword::Builder::ParagraphBuilder.new(para).shading(
+        fill: 'FFFF00', pattern: 'solid'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -73,7 +78,9 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes shading with foreground color' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_shading(fill: 'FFFF00', color: '000000', pattern: 'diagCross')
+      Uniword::Builder::ParagraphBuilder.new(para).shading(
+        fill: 'FFFF00', color: '000000', pattern: 'diagCross'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -88,7 +95,10 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Tab stops' do
     it 'serializes tab stops to correct XML' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_tab_stop(position: 1440, alignment: 'center', leader: 'dot')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.tab_stop(
+        position: 1440, alignment: 'center', leader: 'dot'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -105,9 +115,12 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes multiple tab stops' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_tab_stop(position: 1440, alignment: 'left')
-      para.add_tab_stop(position: 2880, alignment: 'center')
-      para.add_tab_stop(position: 4320, alignment: 'right', leader: 'dot')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.tab_stop(position: 1440, alignment: 'left')
+      builder << Uniword::Builder.tab_stop(position: 2880, alignment: 'center')
+      builder << Uniword::Builder.tab_stop(
+        position: 4320, alignment: 'right', leader: 'dot'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -130,7 +143,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run character spacing' do
     it 'serializes character spacing to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.character_spacing = 20
+      Uniword::Builder::RunBuilder.new(run).character_spacing(20)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -142,7 +155,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes negative character spacing (condensing)' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.character_spacing = -10
+      Uniword::Builder::RunBuilder.new(run).character_spacing(-10)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -155,7 +168,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run kerning' do
     it 'serializes kerning to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.kerning = 24
+      Uniword::Builder::RunBuilder.new(run).kerning(24)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -169,7 +182,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run position (subscript/superscript)' do
     it 'serializes position to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.position = 5
+      Uniword::Builder::RunBuilder.new(run).position(5)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -181,7 +194,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes negative position (subscript)' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.position = -5
+      Uniword::Builder::RunBuilder.new(run).position(-5)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -194,7 +207,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run text effects' do
     it 'serializes outline to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.outline = true
+      Uniword::Builder::RunBuilder.new(run).outline
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -205,7 +218,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes shadow to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.shadow = true
+      Uniword::Builder::RunBuilder.new(run).shadow
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -216,7 +229,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes emboss to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.emboss = true
+      Uniword::Builder::RunBuilder.new(run).emboss
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -227,7 +240,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes imprint to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.imprint = true
+      Uniword::Builder::RunBuilder.new(run).imprint
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -240,7 +253,9 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run shading' do
     it 'serializes run shading to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.set_shading(fill: 'FFFF00', pattern: 'solid')
+      Uniword::Builder::RunBuilder.new(run).shading(
+        fill: 'FFFF00', pattern: 'solid'
+      )
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -253,7 +268,9 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes run shading with foreground' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.set_shading(fill: 'FFFF00', color: '000000', pattern: 'pct10')
+      Uniword::Builder::RunBuilder.new(run).shading(
+        fill: 'FFFF00', color: '000000', pattern: 'pct10'
+      )
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -268,7 +285,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run emphasis mark' do
     it 'serializes emphasis mark to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.emphasis_mark = 'dot'
+      Uniword::Builder::RunBuilder.new(run).emphasis_mark('dot')
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -282,7 +299,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run text expansion' do
     it 'serializes text expansion to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.text_expansion = 120
+      Uniword::Builder::RunBuilder.new(run).text_expansion(120)
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -296,7 +313,7 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Run language' do
     it 'serializes language to correct XML' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.language = 'en-US'
+      Uniword::Builder::RunBuilder.new(run).language('en-US')
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)
@@ -310,9 +327,12 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
   describe 'Complex combinations' do
     it 'serializes paragraph with multiple properties' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_borders(top: '000000', bottom: 'FF0000')
-      para.set_shading(fill: 'FFFF00')
-      para.add_tab_stop(position: 1440, alignment: 'center')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.borders(top: '000000', bottom: 'FF0000')
+      builder.shading(fill: 'FFFF00')
+      builder << Uniword::Builder.tab_stop(
+        position: 1440, alignment: 'center'
+      )
 
       xml = para.to_xml
       doc = Nokogiri::XML(xml)
@@ -329,12 +349,13 @@ RSpec.describe 'Enhanced Properties XML Serialization' do
 
     it 'serializes run with multiple effects' do
       run = Uniword::Wordprocessingml::Run.new(text: 'Test')
-      run.character_spacing = 20
-      run.kerning = 24
-      run.position = 5
-      run.outline = true
-      run.shadow = true
-      run.set_shading(fill: 'FFFF00')
+      builder = Uniword::Builder::RunBuilder.new(run)
+      builder.character_spacing(20)
+      builder.kerning(24)
+      builder.position(5)
+      builder.outline
+      builder.shadow
+      builder.shading(fill: 'FFFF00')
 
       xml = run.to_xml
       doc = Nokogiri::XML(xml)

@@ -45,16 +45,6 @@ module Uniword
       !@content.nil? && !@content.empty?
     end
 
-    # Add a paragraph to the footnote content.
-    #
-    # @param paragraph [Paragraph] The paragraph to add
-    # @return [void]
-    #
-    # @example Add content to footnote
-    #   footnote.add_paragraph(paragraph)
-    def add_paragraph(paragraph)
-      @content << paragraph
-    end
 
     # Get text content of footnote.
     #

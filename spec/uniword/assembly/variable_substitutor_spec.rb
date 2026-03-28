@@ -97,14 +97,14 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
       para1 = Uniword::Wordprocessingml::Paragraph.new
       run1 = Uniword::Wordprocessingml::Run.new
       run1.text = 'Title: {title}'
-      para1.add_run(run1)
-      doc.add_paragraph(para1)
+      para1.runs << run1
+      doc.body.paragraphs << para1
 
       para2 = Uniword::Wordprocessingml::Paragraph.new
       run2 = Uniword::Wordprocessingml::Run.new
       run2.text = 'Version: {version}'
-      para2.add_run(run2)
-      doc.add_paragraph(para2)
+      para2.runs << run2
+      doc.body.paragraphs << para2
 
       doc
     end
@@ -112,8 +112,8 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
     it 'substitutes variables in document paragraphs' do
       sub.substitute_document(document)
 
-      expect(document.paragraphs[0].runs[0].text).to eq('Title: Test Document')
-      expect(document.paragraphs[1].runs[0].text).to eq('Version: 1.0')
+      expect(document.body.paragraphs[0].runs[0].text).to eq('Title: Test Document')
+      expect(document.body.paragraphs[1].runs[0].text).to eq('Version: 1.0')
     end
 
     it 'returns the document' do
@@ -126,11 +126,11 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       run.text = 'No variables'
-      para.add_run(run)
-      doc.add_paragraph(para)
+      para.runs << run
+      doc.body.paragraphs << para
 
       sub.substitute_document(doc)
-      expect(doc.paragraphs[0].runs[0].text).to eq('No variables')
+      expect(doc.body.paragraphs[0].runs[0].text).to eq('No variables')
     end
   end
 

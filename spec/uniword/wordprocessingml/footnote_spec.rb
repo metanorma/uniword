@@ -48,12 +48,12 @@ RSpec.describe Uniword::Footnote do
     end
   end
 
-  describe '#add_paragraph' do
+  describe '#content' do
     it 'adds a paragraph to the footnote content' do
       footnote = described_class.new(id: 1)
       paragraph = Uniword::Wordprocessingml::Paragraph.new
 
-      footnote.add_paragraph(paragraph)
+      footnote.content << paragraph
 
       expect(footnote.content).to include(paragraph)
       expect(footnote.content.size).to eq(1)
@@ -64,8 +64,8 @@ RSpec.describe Uniword::Footnote do
       p1 = Uniword::Wordprocessingml::Paragraph.new
       p2 = Uniword::Wordprocessingml::Paragraph.new
 
-      footnote.add_paragraph(p1)
-      footnote.add_paragraph(p2)
+      footnote.content << p1
+      footnote.content << p2
 
       expect(footnote.content.size).to eq(2)
       expect(footnote.content).to eq([p1, p2])

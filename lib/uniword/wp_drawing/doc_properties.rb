@@ -13,7 +13,7 @@ module Uniword
       attribute :hidden, :string
 
       xml do
-        root 'docPr'
+        element "docPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 

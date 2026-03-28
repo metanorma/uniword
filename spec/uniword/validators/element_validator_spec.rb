@@ -99,8 +99,10 @@ RSpec.describe Uniword::Validators::ElementValidator do
 
   describe '.reset_registry' do
     it 'clears the validator registry' do
+      saved = described_class.validator_registry.dup
       described_class.reset_registry
       expect(described_class.validator_registry).to be_empty
+      described_class.instance_variable_set(:@validator_registry, saved)
     end
   end
 
@@ -140,7 +142,8 @@ RSpec.describe Uniword::Validators::ElementValidator do
   describe 'integration with element classes' do
     it 'validates paragraphs correctly' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Hello')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+      paragraph.runs << run
 
       expect(validator.valid?(paragraph)).to be true
     end
@@ -149,10 +152,16 @@ RSpec.describe Uniword::Validators::ElementValidator do
       table = Uniword::Wordprocessingml::Table.new
       table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 1')
+          para.runs << run
+          cell.paragraphs << para
         end
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 2')
+          para.runs << run
+          cell.paragraphs << para
         end
       end
 

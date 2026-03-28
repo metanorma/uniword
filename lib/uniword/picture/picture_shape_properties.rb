@@ -9,8 +9,9 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:spPr>
     class PictureShapeProperties < Lutaml::Model::Serializable
-      attribute :xfrm, :string
-      attribute :ln, :string
+      attribute :xfrm, Drawingml::Transform2D
+      attribute :prst_geom, Drawingml::PresetGeometry
+      attribute :ln, Drawingml::LineProperties
 
       xml do
         element 'spPr'
@@ -18,6 +19,7 @@ module Uniword
         mixed_content
 
         map_element 'xfrm', to: :xfrm, render_nil: false
+        map_element 'prstGeom', to: :prst_geom, render_nil: false
         map_element 'ln', to: :ln, render_nil: false
       end
     end

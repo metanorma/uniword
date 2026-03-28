@@ -23,65 +23,7 @@ module Uniword
         map_element 'sectPr', to: :section_properties, render_nil: false
       end
 
-      # Add paragraph to body
-      #
-      # @param paragraph_or_text [Paragraph, String, nil] Paragraph object or text
-      # @param options [Hash] Options for creating paragraph with text
-      # @return [Paragraph] The added paragraph
-      def add_paragraph(paragraph_or_text = nil, **options)
-        case paragraph_or_text
-        when Paragraph
-          paragraphs << paragraph_or_text
-          paragraph_or_text
-        when String
-          para = Paragraph.new
-          para.add_text(paragraph_or_text, **options)
-          paragraphs << para
-          para
-        else
-          para = Paragraph.new(**options)
-          paragraphs << para
-          para
-        end
-      end
-
-      # Add table to body
-      #
-      # @param rows_or_table [Integer, Table, nil] Number of rows or pre-built Table object
-      # @param cols [Integer, nil] Number of columns
-      # @return [Table] The created or added table
-      def add_table(rows_or_table = nil, cols = nil)
-        # Handle case where first arg is a Table object
-        if rows_or_table.is_a?(Table)
-          table = rows_or_table
-          tables << table
-          return table
-        end
-
-        rows = rows_or_table
-        table = Table.new
-
-        # Create rows and cells if dimensions provided
-        if rows && cols
-          rows.times do
-            row = TableRow.new
-            row.cells = []
-
-            cols.times do
-              cell = TableCell.new
-              cell.paragraphs = [Paragraph.new]
-              row.cells << cell
-            end
-
-            table.rows << row
-          end
-        end
-
-        tables << table
-        table
-      end
-
-      # Get all elements in body (paragraphs, tables, section properties)
+      # Get all elements in body
       #
       # @return [Array<Paragraph, Table, SectionProperties>] All block-level content
       def elements
@@ -90,6 +32,53 @@ module Uniword
         result.concat(tables || [])
         result << section_properties if section_properties
         result
+      end
+
+      # Override to_xml to sync element_order with actual paragraphs/tables.
+      # When Body is deserialized from XML, lutaml-model stores original
+      # elements in element_order. Programmatically added paragraphs/tables
+      # are in the arrays but not in element_order, so they'd be dropped.
+      # This ensures all current paragraphs and tables are represented.
+      #
+      # NOTE: lutaml-model's compiled serializer may bypass this override
+      # when Body is serialized as a child of DocumentRoot. The
+      # sync_element_order method is also called from DocumentRoot#to_xml.
+      def to_xml(options = {})
+        sync_element_order
+        super
+      end
+
+      # Sync element_order with actual paragraphs/tables.
+      # Called before serialization to ensure programmatically added elements
+      # are included. Also called from DocumentRoot#to_xml since
+      # lutaml-model may bypass Body#to_xml when Body is a child element.
+      def sync_element_order_for_serialization
+        sync_element_order
+      end
+
+      private
+
+      def sync_element_order
+        return if element_order.nil? || element_order.empty?
+
+        # Count how many p/tbl entries exist in element_order
+        ordered_p_count = element_order.count { |e| e.name == 'p' }
+        ordered_tbl_count = element_order.count { |e| e.name == 'tbl' }
+
+        # Add missing paragraphs
+        (paragraphs.size - ordered_p_count).times do
+          element_order << Lutaml::Xml::Element.new("Element", "p")
+        end
+
+        # Add missing tables
+        (tables.size - ordered_tbl_count).times do
+          element_order << Lutaml::Xml::Element.new("Element", "tbl")
+        end
+
+        # Ensure section_properties is in element_order if present
+        if section_properties && !element_order.any? { |e| e.name == 'sectPr' }
+          element_order << Lutaml::Xml::Element.new("Element", "sectPr")
+        end
       end
     end
   end

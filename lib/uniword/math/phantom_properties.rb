@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -9,11 +10,11 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:phantPr>
     class PhantomProperties < Lutaml::Model::Serializable
-      attribute :show, :string
-      attribute :zero_wid, :string
-      attribute :zero_asc, :string
-      attribute :zero_desc, :string
-      attribute :transp, :string
+      attribute :show, MathSimpleVal
+      attribute :zero_wid, MathSimpleVal
+      attribute :zero_asc, MathSimpleVal
+      attribute :zero_desc, MathSimpleVal
+      attribute :transp, MathSimpleVal
       attribute :ctrl_pr, ControlProperties
 
       xml do
@@ -21,11 +22,11 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_attribute 'val', to: :show
-        map_attribute 'val', to: :zero_wid
-        map_attribute 'val', to: :zero_asc
-        map_attribute 'val', to: :zero_desc
-        map_attribute 'val', to: :transp
+        map_element 'show', to: :show, render_nil: false
+        map_element 'zeroWid', to: :zero_wid, render_nil: false
+        map_element 'zeroAsc', to: :zero_asc, render_nil: false
+        map_element 'zeroDesc', to: :zero_desc, render_nil: false
+        map_element 'transp', to: :transp, render_nil: false
         map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end

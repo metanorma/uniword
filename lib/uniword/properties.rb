@@ -10,6 +10,7 @@ module Uniword
     autoload :StyleReference, 'uniword/properties/style_reference'
     autoload :RunStyleReference, 'uniword/properties/style_reference'
     autoload :OutlineLevel, 'uniword/properties/outline_level'
+    autoload :Outline, 'uniword/properties/outline'
     autoload :Underline, 'uniword/properties/underline'
     autoload :Highlight, 'uniword/properties/highlight'
     autoload :VerticalAlign, 'uniword/properties/vertical_align'

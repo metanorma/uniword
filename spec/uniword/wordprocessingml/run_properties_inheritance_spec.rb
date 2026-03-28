@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 # v2.0 API: Style inheritance features are not yet implemented
 # This spec tests planned features for a future version
@@ -32,19 +33,19 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
   describe 'Run inherits properties from paragraph style' do
     it 'inherits bold property when not explicitly set' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('TestHeading1')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'TestHeading1'
       para.parent_document = doc
 
       run = Uniword::Wordprocessingml::Run.new(text: 'Heading text')
       para.runs << run
 
       # Run should inherit bold from Heading1 style
-      expect(run.bold?).to be true
+      expect(run.properties&.bold&.value == true).to be true
     end
 
     it 'inherits font size when not explicitly set' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('TestHeading1')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'TestHeading1'
       para.parent_document = doc
 
       run = Uniword::Wordprocessingml::Run.new(text: 'Heading text')
@@ -57,29 +58,29 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
 
     it 'inherits color when not explicitly set' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('TestHeading1')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'TestHeading1'
       para.parent_document = doc
 
       run = Uniword::Wordprocessingml::Run.new(text: 'Heading text')
       para.runs << run
 
       # Run should inherit color from Heading1 style
-      expect(run.color).to eq('FF0000')
+      expect(run.properties&.color&.value).to eq('FF0000')
     end
 
     it 'prefers explicit run properties over inherited' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('TestHeading1')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'TestHeading1'
       para.parent_document = doc
 
       run = Uniword::Wordprocessingml::Run.new(text: 'Custom text')
-      run.bold = false # Explicitly override
-      run.size = 20 # Explicitly override (in half-points)
+      # Explicitly override via RunBuilder
+      Uniword::Builder::RunBuilder.new(run).bold(false).size(10) # size in points; 10*2=20 half-points
       para.runs << run
 
       # Run should use explicit values, not inherited
-      expect(run.bold?).to be false
-      expect(run.properties.size).to eq(20)
+      expect(run.properties.bold&.value == true).to be false
+      expect(run.properties.size.value).to eq(20)
     end
 
     it 'returns nil when no style and no explicit property' do
@@ -90,7 +91,7 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
       para.runs << run
 
       # No style, no explicit property = nil/false
-      expect(run.bold?).to be false
+      expect(run.properties&.bold&.value == true).to be false
       expect(run.properties&.size).to be_nil
       expect(run.properties&.color).to be_nil
     end
@@ -99,7 +100,7 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
   describe 'Multiple runs with mixed inheritance' do
     it 'handles runs with different inheritance patterns' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('TestHeading1')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'TestHeading1'
       para.parent_document = doc
 
       # Run 1: Inherits all
@@ -108,25 +109,23 @@ RSpec.describe 'Run Properties Inheritance', pending: 'Style inheritance not imp
 
       # Run 2: Overrides bold
       run2 = Uniword::Wordprocessingml::Run.new(text: 'Mixed ')
-      run2.bold = false
+      Uniword::Builder::RunBuilder.new(run2).bold(false)
       para.runs << run2
 
       # Run 3: Overrides all
       run3 = Uniword::Wordprocessingml::Run.new(text: 'Custom')
-      run3.bold = false
-      run3.size = 16
-      run3.color = '0000FF'
+      Uniword::Builder::RunBuilder.new(run3).bold(false).size(8).color('0000FF') # 8pt = 16 half-points
       para.runs << run3
 
-      expect(run1.bold?).to be true
-      expect(run1.properties&.size).to eq(32)
+      expect(run1.properties&.bold&.value == true).to be true
+      expect(run1.properties&.size&.value).to eq(32)
 
-      expect(run2.bold?).to be false
-      expect(run2.properties&.size).to eq(32) # Still inherited
+      expect(run2.properties.bold&.value == true).to be false
+      expect(run2.properties&.size&.value).to eq(32) # Still inherited
 
-      expect(run3.bold?).to be false
-      expect(run3.properties.size).to eq(16)
-      expect(run3.properties.color).to eq('0000FF')
+      expect(run3.properties.bold&.value == true).to be false
+      expect(run3.properties.size.value).to eq(16)
+      expect(run3.properties.color.value).to eq('0000FF')
     end
   end
 end

@@ -139,7 +139,7 @@ module Uniword
       #
       # @return [String, nil] Style name
       def style_name
-        name&.val
+        @name&.val
       end
 
       # Set style name

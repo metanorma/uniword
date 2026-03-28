@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'Quality Rules' do
   let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
@@ -10,12 +11,14 @@ RSpec.describe 'Quality Rules' do
 
     it 'passes for sequential headings' do
       para1 = Uniword::Wordprocessingml::Paragraph.new
-      para1.set_style('Heading 1')
-      para1.add_text('Heading 1')
+      Uniword::Builder::ParagraphBuilder.new(para1).style = 'Heading 1'
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Heading 1')
+      para1.runs << run1
 
       para2 = Uniword::Wordprocessingml::Paragraph.new
-      para2.set_style('Heading 2')
-      para2.add_text('Heading 2')
+      Uniword::Builder::ParagraphBuilder.new(para2).style = 'Heading 2'
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Heading 2')
+      para2.runs << run2
 
       document.body.paragraphs << para1
       document.body.paragraphs << para2
@@ -26,12 +29,14 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects skipped heading levels' do
       para1 = Uniword::Wordprocessingml::Paragraph.new
-      para1.set_style('Heading 1')
-      para1.add_text('Heading 1')
+      Uniword::Builder::ParagraphBuilder.new(para1).style = 'Heading 1'
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Heading 1')
+      para1.runs << run1
 
       para2 = Uniword::Wordprocessingml::Paragraph.new
-      para2.set_style('Heading 3')
-      para2.add_text('Heading 3')
+      Uniword::Builder::ParagraphBuilder.new(para2).style = 'Heading 3'
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Heading 3')
+      para2.runs << run2
 
       document.body.paragraphs << para1
       document.body.paragraphs << para2
@@ -44,8 +49,9 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects headings exceeding max level' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('Heading 7')
-      para.add_text('Heading 7')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'Heading 7'
+      run = Uniword::Wordprocessingml::Run.new(text: 'Heading 7')
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -62,8 +68,8 @@ RSpec.describe 'Quality Rules' do
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
       cell = Uniword::Wordprocessingml::TableCell.new
-      row.add_cell(cell)
-      table.add_row(row)
+      row.cells << cell
+      table.rows << row
       document.body.tables << table
 
       violations = rule.check(document)
@@ -86,7 +92,8 @@ RSpec.describe 'Quality Rules' do
 
     it 'passes for short paragraphs' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text('Short paragraph with few words.')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Short paragraph with few words.')
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -95,7 +102,8 @@ RSpec.describe 'Quality Rules' do
 
     it 'warns for long paragraphs' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text('word ' * 450) # 450 words
+      run = Uniword::Wordprocessingml::Run.new(text: 'word ' * 450) # 450 words
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -106,7 +114,8 @@ RSpec.describe 'Quality Rules' do
 
     it 'errors for very long paragraphs' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text('word ' * 600) # 600 words
+      run = Uniword::Wordprocessingml::Run.new(text: 'word ' * 600) # 600 words
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -127,13 +136,25 @@ RSpec.describe 'Quality Rules' do
   describe Uniword::Quality::ImageAltTextRule do
     let(:rule) { described_class.new(require_alt_text: true, min_length: 10) }
 
+    # Helper to create a proper OOXML image model
+    def create_image_with_alt_text(alt_text)
+      drawing = Uniword::Wordprocessingml::Drawing.new
+      inline = Uniword::WpDrawing::Inline.new
+      inline.doc_properties = Uniword::WpDrawing::DocProperties.new(
+        id: '1',
+        name: 'image1',
+        descr: alt_text
+      )
+      drawing.inline = inline
+      drawing
+    end
+
     it 'passes for images with sufficient alt text' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      image = Uniword::Image.new(
-        relationship_id: 'rId1',
-        alt_text: 'Detailed description of the image content'
-      )
-      para.add_run(image)
+      run = Uniword::Wordprocessingml::Run.new
+      drawing = create_image_with_alt_text('Detailed description of the image content')
+      run.drawings << drawing
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -142,8 +163,10 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects images without alt text' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      image = Uniword::Image.new(relationship_id: 'rId1')
-      para.add_run(image)
+      run = Uniword::Wordprocessingml::Run.new
+      drawing = create_image_with_alt_text(nil)  # nil = no alt text
+      run.drawings << drawing
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -154,11 +177,10 @@ RSpec.describe 'Quality Rules' do
 
     it 'warns for short alt text' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      image = Uniword::Image.new(
-        relationship_id: 'rId1',
-        alt_text: 'Short'
-      )
-      para.add_run(image)
+      run = Uniword::Wordprocessingml::Run.new
+      drawing = create_image_with_alt_text('Short')  # Less than 10 chars
+      run.drawings << drawing
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -173,7 +195,8 @@ RSpec.describe 'Quality Rules' do
 
     it 'passes for valid external links' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_hyperlink('Click here', url: 'https://example.com')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.hyperlink('https://example.com', 'Click here')
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -182,7 +205,8 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects invalid URL format' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_hyperlink('Click here', url: 'not-a-valid-url')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.hyperlink('not-a-valid-url', 'Click here')
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -196,7 +220,7 @@ RSpec.describe 'Quality Rules' do
       hyperlink = Uniword::Wordprocessingml::Hyperlink.new(
         anchor: 'nonexistent_bookmark'
       )
-      para.add_run(hyperlink)
+      para.hyperlinks << hyperlink
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -216,8 +240,9 @@ RSpec.describe 'Quality Rules' do
 
     it 'passes for paragraphs with styles' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('Normal')
-      para.add_text('Styled paragraph')
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'Normal'
+      run = Uniword::Wordprocessingml::Run.new(text: 'Styled paragraph')
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -229,7 +254,8 @@ RSpec.describe 'Quality Rules' do
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         alignment: 'center'
       )
-      para.add_text('Unst yled paragraph')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unst yled paragraph')
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)
@@ -240,8 +266,11 @@ RSpec.describe 'Quality Rules' do
 
     it 'detects direct text formatting' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.set_style('Normal')
-      para.add_text('Bold text', bold: true)
+      Uniword::Builder::ParagraphBuilder.new(para).style = 'Normal'
+      run = Uniword::Wordprocessingml::Run.new(text: 'Bold text')
+      run.properties = Uniword::Wordprocessingml::RunProperties.new
+      run.properties.bold = Uniword::Properties::Bold.new(value: true)
+      para.runs << run
       document.body.paragraphs << para
 
       violations = rule.check(document)

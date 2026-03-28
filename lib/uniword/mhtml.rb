@@ -7,6 +7,20 @@ module Uniword
     autoload :WordCss, "#{__dir__}/mhtml/word_css"
     autoload :MathConverter, "#{__dir__}/mhtml/math_converter"
 
+    # MHTML MIME part models
+    autoload :MimePart, "#{__dir__}/mhtml/mime_part"
+    autoload :HtmlPart, "#{__dir__}/mhtml/html_part"
+    autoload :XmlPart, "#{__dir__}/mhtml/xml_part"
+    autoload :ImagePart, "#{__dir__}/mhtml/image_part"
+    autoload :ThemePart, "#{__dir__}/mhtml/theme_part"
+    autoload :HeaderFooterPart, "#{__dir__}/mhtml/header_footer_part"
+
+    # MHTML namespaces
+    autoload :Namespaces, "#{__dir__}/mhtml/namespaces"
+
+    # MHTML metadata models
+    autoload :Metadata, "#{__dir__}/mhtml/metadata"
+
     # MHTML Package and data classes
     autoload :MhtmlPackage, "#{__dir__}/mhtml/mhtml_package"
     autoload :Document, "#{__dir__}/mhtml/document"

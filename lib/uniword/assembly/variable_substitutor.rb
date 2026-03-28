@@ -212,7 +212,8 @@ module Uniword
       def substitute_run(run)
         return unless run.text
 
-        run.text = substitute(run.text)
+        content = run.text.to_s
+        run.text = substitute(content)
       end
 
       # Collect all keys from nested hash.

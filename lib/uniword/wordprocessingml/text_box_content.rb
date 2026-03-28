@@ -14,7 +14,7 @@ module Uniword
       attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
 
       xml do
-        root 'txbxContent'
+        element "txbxContent"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 

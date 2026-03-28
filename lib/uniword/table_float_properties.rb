@@ -19,7 +19,7 @@ module Uniword
       attribute :shading, Shading
 
       xml do
-        root 'tableFloatProperties'
+        element "tableFloatProperties"
         namespace nil
 
         map_attribute 'alignment', to: :alignment

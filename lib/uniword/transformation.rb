@@ -13,5 +13,6 @@ module Uniword
     autoload :ImageTransformationRule, "#{__dir__}/transformation/image_transformation_rule"
     autoload :OoxmlToHtmlConverter, "#{__dir__}/transformation/ooxml_to_html_converter"
     autoload :HtmlToOoxmlConverter, "#{__dir__}/transformation/html_to_ooxml_converter"
+    autoload :OoxmlToMhtmlConverter, "#{__dir__}/transformation/ooxml_to_mhtml_converter"
   end
 end

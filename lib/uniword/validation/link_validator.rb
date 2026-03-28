@@ -207,13 +207,13 @@ module Uniword
         end
 
         # Extract from headers/footers
-        if document.respond_to?(:headers)
+        if document.respond_to?(:headers) && document.headers
           document.headers.each do |header|
             links.concat(extract_links_from_section(header))
           end
         end
 
-        if document.respond_to?(:footers)
+        if document.respond_to?(:footers) && document.footers
           document.footers.each do |footer|
             links.concat(extract_links_from_section(footer))
           end

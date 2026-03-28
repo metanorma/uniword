@@ -13,7 +13,7 @@ module Uniword
 
         xml do
           element 'appearance'
-          namespace Ooxml::Namespaces::WordProcessingML
+          namespace Ooxml::Namespaces::Word2012
           map_attribute 'val', to: :value
         end
       end

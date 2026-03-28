@@ -16,8 +16,8 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
 
     it 'creates properties with provided attributes' do
       props = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: true),
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new,
         size: Uniword::Properties::FontSize.new(value: 24),
         color: Uniword::Properties::ColorValue.new(value: '000000')
       )
@@ -32,7 +32,7 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
     end
 
     it 'allows mutation for test compatibility' do
-      props = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
+      props = described_class.new(bold: Uniword::Properties::Bold.new)
       # Properties are now mutable for easier testing
       expect(props).not_to be_frozen
     end
@@ -41,14 +41,14 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
   describe 'mutability (for test compatibility)' do
     let(:props) do
       described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
+        bold: Uniword::Properties::Bold.new,
         fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial')
       )
     end
 
     it 'allows modification of attributes' do
       # Properties are now mutable for easier testing
-      expect { props.bold = Uniword::Properties::Bold.new(value: false) }.not_to raise_error
+      expect { props.bold = Uniword::Properties::Bold.new(val: 'false') }.not_to raise_error
       expect(props.bold?).to be false
     end
 
@@ -60,41 +60,41 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
   describe '#==' do
     it 'returns true for identical properties' do
       props1 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: false),
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new(val: 'false'),
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       props2 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: false),
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new(val: 'false'),
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       expect(props1).to eq(props2)
     end
 
     it 'returns false for different properties' do
-      props1 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(value: false))
+      props1 = described_class.new(bold: Uniword::Properties::Bold.new)
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: 'false'))
       expect(props1).not_to eq(props2)
     end
 
     it 'returns false for different types' do
-      props = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
+      props = described_class.new(bold: Uniword::Properties::Bold.new)
       expect(props).not_to eq(true)
     end
 
     it 'compares all attributes' do
       props1 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: false),
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new(val: 'false'),
         underline: Uniword::Properties::Underline.new(value: 'single'),
         size: Uniword::Properties::FontSize.new(value: 24),
         fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial'),
         color: Uniword::Properties::ColorValue.new(value: '000000')
       )
       props2 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: false),
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new(val: 'false'),
         underline: Uniword::Properties::Underline.new(value: 'single'),
         size: Uniword::Properties::FontSize.new(value: 24),
         fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial'),
@@ -106,8 +106,8 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
 
   describe '#eql?' do
     it 'is an alias for ==' do
-      props1 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
+      props1 = described_class.new(bold: Uniword::Properties::Bold.new)
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new)
       expect(props1.eql?(props2)).to eq(props1 == props2)
     end
   end
@@ -115,25 +115,25 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
   describe '#hash' do
     it 'returns same hash for equal objects' do
       props1 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
+        bold: Uniword::Properties::Bold.new,
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       props2 = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
+        bold: Uniword::Properties::Bold.new,
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       expect(props1.hash).to eq(props2.hash)
     end
 
     it 'returns different hash for different objects' do
-      props1 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(value: false))
+      props1 = described_class.new(bold: Uniword::Properties::Bold.new)
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: 'false'))
       expect(props1.hash).not_to eq(props2.hash)
     end
 
     it 'allows use as hash keys' do
-      props1 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(value: true))
+      props1 = described_class.new(bold: Uniword::Properties::Bold.new)
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new)
       hash = { props1 => 'value1' }
       expect(hash[props2]).to eq('value1')
     end
@@ -152,12 +152,12 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
 
     it 'allows setting boolean wrapper objects' do
       props = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: true),
-        strike: Uniword::Properties::Strike.new(value: true),
-        small_caps: Uniword::Properties::SmallCaps.new(value: true),
-        caps: Uniword::Properties::Caps.new(value: true),
-        hidden: Uniword::Properties::Vanish.new(value: true)
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new,
+        strike: Uniword::Properties::Strike.new,
+        small_caps: Uniword::Properties::SmallCaps.new,
+        caps: Uniword::Properties::Caps.new,
+        hidden: Uniword::Properties::Vanish.new
       )
       expect(props.bold?).to be true
       expect(props.italic?).to be true
@@ -169,8 +169,8 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
 
     it 'provides predicate methods for boolean properties' do
       props = described_class.new(
-        bold: Uniword::Properties::Bold.new(value: true),
-        italic: Uniword::Properties::Italic.new(value: false)
+        bold: Uniword::Properties::Bold.new,
+        italic: Uniword::Properties::Italic.new(val: 'false')
       )
       expect(props.bold?).to be true
       expect(props.italic?).to be false

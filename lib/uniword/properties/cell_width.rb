@@ -17,7 +17,7 @@ module Uniword
       attribute :type, :string      # Width type: auto, dxa (twips), pct (percentage), nil
 
       xml do
-        root 'tcW'
+        element "tcW"
         namespace Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'w', to: :w

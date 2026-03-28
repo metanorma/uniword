@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -12,8 +13,8 @@ module Uniword
       attribute :begin_char, BeginChar
       attribute :end_char, EndChar
       attribute :separator_char, SeparatorChar
-      attribute :grow, :string
-      attribute :shape, :string
+      attribute :grow, MathSimpleVal
+      attribute :shape, MathSimpleVal
       attribute :ctrl_pr, ControlProperties
 
       xml do
@@ -24,8 +25,8 @@ module Uniword
         map_element 'begChr', to: :begin_char, render_nil: false
         map_element 'endChr', to: :end_char, render_nil: false
         map_element 'sepChr', to: :separator_char, render_nil: false
-        map_attribute 'val', to: :grow
-        map_attribute 'val', to: :shape
+        map_element 'grow', to: :grow, render_nil: false
+        map_element 'shape', to: :shape, render_nil: false
         map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end

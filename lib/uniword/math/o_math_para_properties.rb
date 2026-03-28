@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -9,13 +10,13 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:oMathParaPr>
     class OMathParaProperties < Lutaml::Model::Serializable
-      attribute :justification, :string
+      attribute :justification, MathSimpleVal
 
       xml do
         element 'oMathParaPr'
         namespace Uniword::Ooxml::Namespaces::MathML
 
-        map_attribute 'val', to: :justification
+        map_element 'jc', to: :justification, render_nil: false
       end
     end
   end

@@ -213,15 +213,42 @@ module Uniword
           map_element 'folHlink', to: :fol_hlink
         end
 
-        # Hash mapping color names to RGB hex values (compatibility layer)
-        attr_accessor :colors
+        # Hash-like proxy that delegates writes to the ColorScheme
+        # This allows both `scheme[:accent1] = '0066CC'` and `scheme.colors[:accent1] = '0066CC'`
+        # to work correctly
+        class ColorSchemeHash
+          def initialize(color_scheme)
+            @color_scheme = color_scheme
+          end
+
+          def [](key)
+            @color_scheme[key]
+          end
+
+          def []=(key, value)
+            @color_scheme[key] = value
+          end
+
+          def to_h
+            @color_scheme.all_colors
+          end
+
+          alias_method :keys, :to_h
+          alias_method :each, :to_h
+        end
+
+        # Getter for hash-like color access
+        # Returns a proxy that delegates writes to the ColorScheme
+        def colors
+          @colors_proxy ||= ColorSchemeHash.new(self)
+        end
 
         # Initialize color scheme
         #
         # @param attributes [Hash] Color scheme attributes
         def initialize(attributes = {})
           super
-          @colors = {}
+          @colors_hash = {}
           # Initialize color objects with default values
           @dk1 ||= Dk1Color.new
           @dk1.rgb = '000000' if @dk1.srgb_clr.nil? && @dk1.sys_clr.nil?
@@ -265,7 +292,7 @@ module Uniword
 
         # Sync the hash interface with attribute values
         def sync_colors_hash
-          @colors = {
+          @colors_hash = {
             dk1: @dk1&.value,
             lt1: @lt1&.value,
             dk2: @dk2&.value,
@@ -322,7 +349,7 @@ module Uniword
           color_obj = color_class.new
           color_obj.rgb = value
           instance_variable_set("@#{attr_name}", color_obj)
-          @colors[color_name] = value
+          @colors_hash[color_name] = value
         end
 
         # Get all defined colors
@@ -330,7 +357,7 @@ module Uniword
         # @return [Hash] All colors
         def all_colors
           sync_colors_hash
-          @colors
+          @colors_hash
         end
 
         # Check if color scheme has a specific color defined

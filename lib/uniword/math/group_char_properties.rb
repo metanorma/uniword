@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -10,8 +11,8 @@ module Uniword
     # Element: <m:groupChrPr>
     class GroupCharProperties < Lutaml::Model::Serializable
       attribute :chr, Char
-      attribute :pos, :string
-      attribute :vert_jc, :string
+      attribute :pos, MathSimpleVal
+      attribute :vert_jc, MathSimpleVal
       attribute :ctrl_pr, ControlProperties
 
       xml do
@@ -20,8 +21,8 @@ module Uniword
         mixed_content
 
         map_element 'chr', to: :chr, render_nil: false
-        map_attribute 'val', to: :pos
-        map_attribute 'val', to: :vert_jc
+        map_element 'pos', to: :pos, render_nil: false
+        map_element 'vertJc', to: :vert_jc, render_nil: false
         map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end

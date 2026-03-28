@@ -31,7 +31,10 @@ RSpec.describe Uniword::Validation::LinkValidator do
   describe '#validate' do
     let(:document) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Hello World')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+      para.runs << run
+      doc.body.paragraphs << para
       doc
     end
 

@@ -66,58 +66,14 @@ module Uniword
         map_element 'proofErr', to: :proof_errors, render_nil: false
       end
 
-      # Add text run to paragraph
+      # Set paragraph text (replaces all runs with a single run)
       #
-      # @param text [String] Text content
-      # @param options [Hash] Formatting options
-      # @return [Run] The created run
-      def add_text(text, **options)
-        # Use constructor for proper Text object conversion
-        run = Run.new(text: text)
+      # @param value [String] Text value
+      def text=(value)
+        runs.clear
+        return if value.nil? || value.to_s.empty?
 
-        # Set xml:space="preserve" when text has leading/trailing whitespace
-        # to ensure whitespace is preserved in the output
-        if text.is_a?(String) && (text.start_with?(' ') || text.end_with?(' ') || text.include?("\t"))
-          run.text.xml_space = 'preserve' if run.text.respond_to?(:xml_space=)
-        end
-
-        if options[:properties]
-          # Use provided RunProperties object
-          run.properties = options[:properties]
-        elsif options.any?
-          run.properties ||= RunProperties.new
-          run.properties.bold = Properties::Bold.new(value: true) if options[:bold]
-          run.properties.italic = Properties::Italic.new(value: true) if options[:italic]
-          if options[:underline]
-            run.properties.underline = Properties::Underline.new(value: options[:underline])
-          end
-          if options[:color]
-            run.properties.color = Properties::ColorValue.new(value: options[:color])
-          end
-          if options[:size]
-            run.properties.size = Properties::FontSize.new(value: options[:size] * 2)
-          end
-          run.properties.font = options[:font] if options[:font]
-        end
-
-        self.runs ||= []
-        runs << run
-        run
-      end
-
-      # Add run to paragraph
-      #
-      # @param text [String, nil] Optional text content
-      # @param options [Hash] Formatting options
-      # @return [Run] The created/added run
-      def add_run(run_or_text = nil, **options)
-        case run_or_text
-        when Run
-          runs << run_or_text
-          run_or_text
-        else
-          add_text(run_or_text, **options) if run_or_text
-        end
+        runs << Run.new(text: value.to_s)
       end
 
       # Get paragraph text
@@ -136,36 +92,30 @@ module Uniword
         !runs || runs.empty? || runs.all? { |r| r.text.to_s.empty? }
       end
 
-      # Set paragraph alignment (fluent interface)
+      # Get paragraph style (convenience accessor)
       #
-      # @param alignment [String, Symbol] Alignment value (left, center, right, justify)
-      # @return [self] For method chaining
-      def align(alignment)
-        self.properties ||= ParagraphProperties.new
-        properties.alignment = alignment.to_s
-        self
+      # @return [String, nil] Style name
+      def style
+        properties&.style
       end
 
-      # Set paragraph style
+      # Get paragraph alignment (convenience accessor)
       #
-      # @param style_name [String] Style name or ID
-      # @return [self] For method chaining
-      def set_style(style_name)
-        self.properties ||= ParagraphProperties.new
-        properties.style = style_name
-        self
+      # @return [String, nil] Alignment value (center, left, right, etc.)
+      def alignment
+        properties&.alignment
       end
 
-      # Set paragraph numbering
+      # Iterate over text runs (convenience alias)
       #
-      # @param num_id [Integer] Numbering ID
-      # @param level [Integer] Numbering level (0-based)
-      # @return [self] For method chaining
-      def set_numbering(num_id, level = 0)
-        self.properties ||= ParagraphProperties.new
-        properties.num_id = num_id
-        properties.ilvl = level
-        self
+      # @yield [Run] Each run in the paragraph
+      def each_text_run(&block)
+        runs.each(&block)
+      end
+
+      # Remove all content from this paragraph
+      def remove!
+        runs.clear
       end
 
       # Numbering ID
@@ -180,215 +130,6 @@ module Uniword
       # @return [Integer, nil] Numbering level (0-based)
       def ilvl
         properties&.ilvl
-      end
-
-      # Set spacing before paragraph
-      #
-      # @param value [Integer] Spacing in twips (1/1440 inch)
-      # @return [self] For method chaining
-      def spacing_before(value)
-        self.properties ||= ParagraphProperties.new
-        properties.spacing_before = value
-        self
-      end
-
-      # Set spacing after paragraph
-      #
-      # @param value [Integer] Spacing in twips (1/1440 inch)
-      # @return [self] For method chaining
-      def spacing_after(value)
-        self.properties ||= ParagraphProperties.new
-        properties.spacing_after = value
-        self
-      end
-
-      # Get or set line spacing (RAW OOXML value in twips)
-      #
-      # @param value [Integer, nil] Line spacing in twips (nil to get current value)
-      # @param rule [String] Line rule (auto, exact, atLeast)
-      # @return [Integer, self] Returns current value when called without args,
-      #   or self for method chaining when setting
-      def line_spacing(value = nil, rule = nil)
-        if value.nil? && !block_given?
-          # Getter behavior - return line spacing from spacing object
-          return properties&.spacing&.line
-        end
-
-        # Setter behavior - set on spacing object for proper XML serialization
-        self.properties ||= ParagraphProperties.new
-        properties.spacing ||= Properties::Spacing.new
-        properties.spacing.line = value.to_i
-        properties.spacing.line_rule = rule if rule
-        self
-      end
-
-      # Set line spacing (setter method for simple API)
-      #
-      # @param value [Integer, Hash] Line spacing value (twips) or hash with :value and :rule keys
-      # @return [self] For method chaining
-      def line_spacing=(value)
-        case value
-        when Hash
-          spacing_value = value[:value] || value['value']
-          spacing_rule = value[:rule] || value['rule']
-          # Normalize 'at_least' to 'atLeast'
-          spacing_rule = 'atLeast' if spacing_rule == 'at_least'
-          line_spacing(spacing_value, spacing_rule)
-        when Numeric
-          line_spacing(value.to_i, nil)
-        else
-          line_spacing(value.to_i, nil)
-        end
-      end
-
-      # Get line spacing (RAW OOXML value)
-      #
-      # @return [Integer, nil] Line spacing in twips
-      def get_line_spacing
-        properties&.spacing&.line
-      end
-      alias line_spacing_value get_line_spacing
-
-      # Set left indent
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      # @return [self] For method chaining
-      def indent_left(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_left = value
-        self
-      end
-
-      # Set left indent (setter syntax)
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      def indent_left=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_left = value
-      end
-
-      # Set right indent
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      # @return [self] For method chaining
-      def indent_right(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_right = value
-        self
-      end
-
-      # Set right indent (setter syntax)
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      def indent_right=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_right = value
-      end
-
-      # Set first line indent
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      # @return [self] For method chaining
-      def indent_first_line(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_first_line = value
-        self
-      end
-
-      # Set first line indent (setter syntax)
-      #
-      # @param value [Integer] Indent in twips (1/1440 inch)
-      def indent_first_line=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.indent_first_line = value
-      end
-
-      # Set paragraph style (setter method)
-      #
-      # @param value [String] Style name or ID
-      # @return [String] The style that was set
-      def style=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.style = value
-      end
-
-      # Get paragraph style
-      #
-      # @return [String, nil] Style name or nil if not set
-      def style
-        style_prop = properties&.style
-        return nil if style_prop.nil?
-        # Unwrap StyleReference to get style ID string
-        if style_prop.respond_to?(:value)
-          style_prop.value
-        else
-          style_prop
-        end
-      end
-
-      # Alias for style (for compatibility)
-      alias style_id style
-
-      # Set borders on paragraph
-      #
-      # @param options [Hash] Border options (:top, :bottom, :left, :right, :between, :bar)
-      # @return [self] For method chaining
-      def set_borders(options = {})
-        self.properties ||= ParagraphProperties.new
-        # Use Properties::Borders for paragraph borders
-        properties.borders ||= Properties::Borders.new
-
-        options.each do |key, value|
-          case key
-          when :top, :bottom, :left, :right, :between, :bar
-            border = if value.is_a?(Hash)
-                       # Hash specification: { style: 'single', size: 4, color: 'auto' }
-                       Properties::Border.new(
-                         style: value[:style] || value[:val],
-                         size: value[:size] || value[:sz],
-                         color: value[:color],
-                         space: value[:space]
-                       )
-                     else
-                       # String color: '000000'
-                       Properties::Border.new(color: value, style: 'single', size: 4)
-                     end
-            properties.borders.send("#{key}=", border)
-          end
-        end
-        self
-      end
-
-      # Set shading on paragraph
-      #
-      # @param options [Hash] Shading options (:fill, :color, :pattern)
-      # @return [self] For method chaining
-      def set_shading(options = {})
-        self.properties ||= ParagraphProperties.new
-        properties.shading = Properties::Shading.new(
-          fill: options[:fill],
-          color: options[:color],
-          pattern: options[:pattern] || 'clear'
-        )
-        self
-      end
-
-      # Add tab stop to paragraph
-      #
-      # @param position [Integer] Tab position in twips
-      # @param alignment [Symbol, String] Tab alignment (:left, :center, :right, :decimal)
-      # @param leader [String, nil] Tab leader character style
-      # @return [self] For method chaining
-      def add_tab_stop(position: nil, alignment: :left, leader: nil)
-        self.properties ||= ParagraphProperties.new
-        properties.tabs ||= Properties::Tabs.new
-        tab_stop = Properties::TabStop.new(
-          position: position,
-          alignment: alignment.to_s,
-          leader: leader
-        )
-        properties.tabs << tab_stop
-        self
       end
 
       # Get numbering properties
@@ -407,250 +148,12 @@ module Uniword
         properties&.num_id ? true : false
       end
 
-      # Add hyperlink to paragraph
-      #
-      # @param target [String] URL or bookmark target
-      # @param text [String] Link text
-      # @param options [Hash] Additional options
-      # @return [Hyperlink] The created hyperlink
-      def add_hyperlink(target, text = nil, **options)
-        hyperlink = Hyperlink.new
-        hyperlink.target = target
-
-        if text
-          run = Run.new
-          run.text = text
-          if options.any?
-            run.properties ||= RunProperties.new
-            run.properties.color = '0000FF' if options[:color].nil? || options[:color] == true
-            if options[:underline].nil? || options[:underline] == true
-              run.properties.underline = 'single'
-            end
-          end
-          hyperlink.runs << run
-        end
-
-        self.hyperlinks ||= []
-        hyperlinks << hyperlink
-        hyperlink
-      end
-
-      # Get first hyperlink (nil-safe accessor)
-      #
-      # @return [Hyperlink, nil] First hyperlink or nil if none
-      def hyperlink
-        hyperlinks&.first
-      end
-
-      # Get images in paragraph (from runs)
-      #
-      # @return [Array<Drawing>] Array of drawing elements
-      def images
-        runs.flat_map(&:drawings).compact
-      end
-
       # Accept a visitor (Visitor pattern)
       #
       # @param visitor [BaseVisitor] The visitor to accept
       # @return [void]
       def accept(visitor)
         visitor.visit_paragraph(self)
-      end
-
-      # Get num_id directly
-      #
-      # @return [String, nil] Numbering ID
-      def num_id
-        properties&.num_id
-      end
-
-      # Set alignment
-      #
-      # @param value [String, Symbol] Alignment value
-      # @return [self] For method chaining
-      def alignment=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.alignment = value
-        self
-      end
-
-      # Get contextual spacing
-      #
-      # @return [Boolean, nil] Contextual spacing value
-      def contextual_spacing
-        properties&.contextual_spacing
-      end
-
-      # Set contextual spacing
-      #
-      # @param value [Boolean] Contextual spacing value
-      # @return [self] For method chaining
-      def contextual_spacing=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.contextual_spacing = value
-        self
-      end
-
-      # Set paragraph text (replaces all existing content)
-      #
-      # @param value [String] The text content to set
-      # @return [String] The text that was set
-      def text=(value)
-        self.runs = []
-        if value
-          run = Run.new
-          run.text = value.to_s
-          runs << run
-        end
-        value
-      end
-
-      # Get all breaks from paragraph runs
-      #
-      # @return [Array<Break>] Array of break elements from all runs
-      def breaks
-        runs.flat_map do |run|
-          run.break ? [run.break] : []
-        end.compact
-      end
-
-      # Convert paragraph to HTML
-      #
-      # @return [String] HTML representation of the paragraph
-      def to_html
-        content = runs.map(&:to_html).join
-
-        # Apply paragraph-level styling
-        style_attrs = []
-        if properties&.alignment
-          text_align = case properties.alignment.to_s
-                       when 'center' then 'center'
-                       when 'right' then 'right'
-                       when 'justify', 'both' then 'justify'
-                       else 'left'
-                       end
-          style_attrs << "text-align:#{text_align}" unless text_align == 'left'
-        end
-
-        if style_attrs.any?
-          "<p style=\"#{style_attrs.join(';')}\">#{content}</p>"
-        else
-          "<p>#{content}</p>"
-        end
-      end
-
-      # Extract current properties (for testing/compatibility)
-      #
-      # @return [Hash] Current properties as a hash
-      def extract_current_properties
-        return {} unless properties
-
-        result = {
-          alignment: extract_value(properties.alignment),
-          style: extract_value(properties.style),
-          # Use flat attributes first, then nested objects
-          spacing_before: properties.spacing_before || properties.spacing&.before,
-          spacing_after: properties.spacing_after || properties.spacing&.after,
-          line_spacing: properties.line_spacing || properties.spacing&.line,
-          line_rule: properties.line_rule || properties.spacing&.line_rule,
-          indent_left: properties.indent_left || properties.indentation&.left,
-          indent_right: properties.indent_right || properties.indentation&.right,
-          indent_first_line: properties.indent_first_line || properties.indentation&.first_line,
-          # Include other flat attributes that exist
-          keep_next: properties.keep_next?,
-          keep_lines: properties.keep_lines?,
-          page_break_before: properties.page_break_before,
-          widow_control: properties.widow_control,
-          contextual_spacing: properties.contextual_spacing,
-          bidirectional: properties.bidirectional,
-          # Include complex objects
-          borders: properties.borders,
-          shading: properties.shading,
-          tab_stops: properties.tabs
-        }
-
-        # Add outline_level if available
-        outline = extract_value(properties.outline_level)
-        result[:outline_level] = outline if outline
-
-        result.compact
-      end
-
-      # Helper method to extract value from wrapper or return primitive directly
-      #
-      # @param value [Object] The value to extract from
-      # @return [Object, nil] The extracted value or nil
-      def extract_value(value)
-        return nil unless value
-
-        value.respond_to?(:value) ? value.value : value
-      end
-      private :extract_value
-
-      # Iterate over text runs
-      #
-      # @yield [Run] Each run in the paragraph
-      def each_text_run(&block)
-        return enum_for(:runs) unless block_given?
-
-        runs.each(&block)
-      end
-
-      # Get alignment (alias)
-      #
-      # @return [String, nil] Alignment value
-      def alignment
-        align_val = properties&.alignment
-        return nil unless align_val
-
-        # Handle both wrapper objects and primitive values
-        align_val.respond_to?(:value) ? align_val.value : align_val
-      end
-
-      # Get spacing before
-      #
-      # @return [Integer, nil] Spacing before value
-      def spacing_before
-        properties&.spacing&.before
-      end
-
-      # Set spacing before
-      #
-      # @param value [Integer] Spacing before value
-      # @return [self] For method chaining
-      def spacing_before=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.spacing_before = value
-        self
-      end
-
-      # Remove all runs
-      #
-      # @return [Array<Run>] Removed runs
-      def remove!
-        runs.clear
-      end
-
-      # Set spacing before (fluent API)
-      #
-      # @param value [Integer] Spacing before in twips
-      # @return [self] For method chaining
-      def spacing_before=(value)
-        self.properties ||= ParagraphProperties.new
-        properties.spacing_before = value
-        self
-      end
-
-      # Add image to paragraph
-      #
-      # @param image_path [String] Path to image file
-      # @param options [Hash] Image options
-      # @return [Drawing] The created drawing
-      def add_image(image_path, options = {})
-        run = Run.new
-        run.add_image(image_path, options)
-        runs << run
-        run
       end
 
       # Custom inspect for readable output

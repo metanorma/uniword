@@ -13,12 +13,13 @@ module Uniword
       attribute :dist_l, :integer  # Distance from text - left
       attribute :dist_r, :integer  # Distance from text - right
       attribute :extent, Extent
+      attribute :effect_extent, EffectExtent
       attribute :doc_properties, DocProperties
       attribute :non_visual_props, NonVisualDrawingProps
       attribute :graphic, Drawingml::Graphic
 
       xml do
-        root 'inline'
+        element "inline"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
@@ -27,6 +28,7 @@ module Uniword
         map_attribute 'distL', to: :dist_l, render_nil: false
         map_attribute 'distR', to: :dist_r, render_nil: false
         map_element 'extent', to: :extent, render_nil: false
+        map_element 'effectExtent', to: :effect_extent, render_nil: false
         map_element 'docPr', to: :doc_properties, render_nil: false
         map_element 'cNvGraphicFramePr', to: :non_visual_props, render_nil: false
         map_element 'graphic', to: :graphic, render_nil: false

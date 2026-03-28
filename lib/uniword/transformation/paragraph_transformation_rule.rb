@@ -160,7 +160,7 @@ module Uniword
                           run_rule.transform(source_run)
                         end
 
-          target.add_run(transformed)
+          target.runs << transformed
         end
       end
     end

@@ -3,8 +3,18 @@
 require 'spec_helper'
 
 RSpec.describe Uniword::Wordprocessingml::TableCell do
-  let(:paragraph1) { Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('First paragraph') } }
-  let(:paragraph2) { Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Second paragraph') } }
+  let(:paragraph1) do
+    Uniword::Wordprocessingml::Paragraph.new.tap do |p|
+      run = Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
+      p.runs << run
+    end
+  end
+  let(:paragraph2) do
+    Uniword::Wordprocessingml::Paragraph.new.tap do |p|
+      run = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
+      p.runs << run
+    end
+  end
 
   describe '#initialize' do
     it 'creates a cell with no paragraphs' do

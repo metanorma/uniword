@@ -40,17 +40,18 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
 
       it 'extracts HTML content' do
         result = parser.parse_content(mhtml_content)
-        expect(result['html']).to include('<html><body><p>Test content</p></body></html>')
+        expect(result).to be_a(Uniword::Mhtml::Document)
+        expect(result.raw_html).to include('<html><body><p>Test content</p></body></html>')
       end
 
       it 'extracts filelist content' do
         result = parser.parse_content(mhtml_content)
-        expect(result['filelist']).to include('<xml><o:File HRef="test.png"/></xml>')
+        expect(result.filelist_xml).to include('<o:File HRef="test.png"/>')
       end
 
       it 'returns images hash' do
         result = parser.parse_content(mhtml_content)
-        expect(result['images']).to be_a(Hash)
+        expect(result.images).to be_a(Hash)
       end
     end
 
@@ -78,9 +79,10 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
 
       it 'decodes base64 images' do
         result = parser.parse_content(mhtml_with_image)
-        expect(result['images']).to have_key('test.png')
-        expect(result['images']['test.png']).to be_a(String)
-        expect(result['images']['test.png'].encoding).to eq(Encoding::ASCII_8BIT)
+        images = result.images
+        expect(images).to have_key('test.png')
+        expect(images['test.png']).to be_a(String)
+        expect(images['test.png'].encoding).to eq(Encoding::ASCII_8BIT)
       end
     end
 
@@ -102,8 +104,8 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
 
       it 'decodes quoted-printable content' do
         result = parser.parse_content(mhtml_qp)
-        expect(result['html']).to include('<html>')
-        expect(result['html']).to include('<p>Test</p>')
+        expect(result.raw_html).to include('<html>')
+        expect(result.raw_html).to include('<p>Test</p>')
       end
     end
 
@@ -155,15 +157,16 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
 
       it 'extracts filenames from various location formats' do
         result = parser.parse_content(mhtml_filenames)
-        expect(result['images']).to have_key('image1.png')
-        expect(result['images']).to have_key('image2.jpg')
-        expect(result['images']).to have_key('image3.gif')
+        images = result.images
+        expect(images).to have_key('image1.png')
+        expect(images).to have_key('image2.jpg')
+        expect(images).to have_key('image3.gif')
       end
     end
   end
 
   describe '#parse_content' do
-    it 'returns hash with expected keys' do
+    it 'returns Mhtml::Document with expected parts' do
       content = <<~MHTML
         Content-Type: multipart/related; boundary="test"
 
@@ -175,9 +178,9 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
       MHTML
 
       result = parser.parse_content(content)
-      expect(result).to have_key('html')
-      expect(result).to have_key('filelist')
-      expect(result).to have_key('images')
+      expect(result).to be_a(Uniword::Mhtml::Document)
+      expect(result.html_part).to be_a(Uniword::Mhtml::HtmlPart)
+      expect(result.images).to be_a(Hash)
     end
 
     it 'handles empty parts gracefully' do
@@ -190,8 +193,9 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
       MHTML
 
       result = parser.parse_content(content)
-      expect(result['html']).to be_nil
-      expect(result['images']).to eq({})
+      expect(result).to be_a(Uniword::Mhtml::Document)
+      expect(result.html_part).to be_nil
+      expect(result.images).to eq({})
     end
   end
 end

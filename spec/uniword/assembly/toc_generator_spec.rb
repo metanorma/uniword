@@ -20,11 +20,12 @@ RSpec.describe Uniword::Assembly::TocGenerator do
 
   def add_heading(doc, text, level)
     para = Uniword::Wordprocessingml::Paragraph.new
-    para.style = "Heading #{level}"
+    para.properties ||= Uniword::Wordprocessingml::ParagraphProperties.new
+    para.properties.style = "Heading #{level}"
     run = Uniword::Wordprocessingml::Run.new
     run.text = text
-    para.add_run(run)
-    doc.add_paragraph(para)
+    para.runs << run
+    doc.body.paragraphs << para
   end
 
   describe '#initialize' do
@@ -59,7 +60,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       title_para = toc.first
 
       expect(title_para.runs.first.text).to eq('Table of Contents')
-      expect(title_para.runs.first.bold).to be true
+      expect(title_para.runs.first.properties&.bold&.value == true).to be_truthy
     end
 
     it 'includes heading entries' do
@@ -115,8 +116,8 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       run.text = 'Existing content'
-      para.add_run(run)
-      target_doc.add_paragraph(para)
+      para.runs << run
+      target_doc.body.paragraphs << para
     end
 
     it 'inserts TOC at specified position' do
@@ -150,8 +151,8 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       run.text = 'Regular paragraph'
-      para.add_run(run)
-      empty_doc.add_paragraph(para)
+      para.runs << run
+      empty_doc.body.paragraphs << para
 
       gen = described_class.new
       toc = gen.generate(empty_doc)
@@ -168,7 +169,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
       toc = gen.generate(document)
       title = toc[0]
 
-      expect(title.style).to eq('TOCHeading')
+      expect(title.properties&.style).to eq('TOCHeading')
     end
 
     it 'sets appropriate styles for different levels' do
@@ -177,7 +178,7 @@ RSpec.describe Uniword::Assembly::TocGenerator do
 
       # Each entry should have a TOC style
       entries.each do |entry|
-        expect(entry.style).to match(/^TOC\d+$/)
+        expect(entry.properties&.style).to match(/^TOC\d+$/)
       end
     end
   end

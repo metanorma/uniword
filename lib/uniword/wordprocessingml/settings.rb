@@ -396,6 +396,80 @@ module Uniword
       end
     end
 
+    # Attached template reference
+    #
+    # Element: <w:attachedTemplate>
+    class AttachedTemplate < Lutaml::Model::Serializable
+      attribute :r_id, :string
+
+      xml do
+        element 'attachedTemplate'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::Relationships,
+            declare: :auto },
+        ]
+        map_attribute 'r:id', to: :r_id
+      end
+    end
+
+    # Header/footer shape defaults container
+    #
+    # Element: <w:hdrShapeDefaults>
+    class HdrShapeDefaults < Lutaml::Model::Serializable
+      attribute :shape_defaults, Uniword::VmlOffice::VmlShapeDefaults
+
+      xml do
+        element 'hdrShapeDefaults'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        mixed_content
+        map_element 'shapedefaults', to: :shape_defaults, render_nil: false
+      end
+    end
+
+    # Footnote position
+    #
+    # Element: <w:pos>
+    class FootnotePos < Lutaml::Model::Serializable
+      attribute :val, :string
+
+      xml do
+        element 'pos'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute 'val', to: :val
+      end
+    end
+
+    # Footnote properties
+    #
+    # Element: <w:footnotePr>
+    class FootnotePr < Lutaml::Model::Serializable
+      attribute :pos, FootnotePos
+      attribute :footnotes, Footnote, collection: true
+
+      xml do
+        element 'footnotePr'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        mixed_content
+        map_element 'pos', to: :pos, render_nil: false
+        map_element 'footnote', to: :footnotes, render_nil: false
+      end
+    end
+
+    # Endnote properties
+    #
+    # Element: <w:endnotePr>
+    class EndnotePr < Lutaml::Model::Serializable
+      attribute :endnotes, Endnote, collection: true
+
+      xml do
+        element 'endnotePr'
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        mixed_content
+        map_element 'endnote', to: :endnotes, render_nil: false
+      end
+    end
+
     # Word 2010 document ID
     #
     # Element: <w14:docId>
@@ -451,6 +525,10 @@ module Uniword
       attribute :shape_defaults, ShapeDefaults
       attribute :decimal_symbol, DecimalSymbol
       attribute :list_separator, ListSeparator
+      attribute :attached_template, AttachedTemplate
+      attribute :footnote_pr, FootnotePr
+      attribute :endnote_pr, EndnotePr
+      attribute :hdr_shape_defaults, HdrShapeDefaults
       attribute :w14_doc_id, W14DocId
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
@@ -482,6 +560,10 @@ module Uniword
         map_element 'shapeDefaults', to: :shape_defaults, render_nil: false
         map_element 'decimalSymbol', to: :decimal_symbol, render_nil: false
         map_element 'listSeparator', to: :list_separator, render_nil: false
+        map_element 'attachedTemplate', to: :attached_template, render_nil: false
+        map_element 'footnotePr', to: :footnote_pr, render_nil: false
+        map_element 'endnotePr', to: :endnote_pr, render_nil: false
+        map_element 'hdrShapeDefaults', to: :hdr_shape_defaults, render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root

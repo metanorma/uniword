@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe Uniword::Comment do
   describe '#initialize' do
@@ -52,10 +53,13 @@ RSpec.describe Uniword::Comment do
     end
   end
 
-  describe '#add_text' do
+  describe 'adding text via Builder' do
     it 'adds text as a paragraph' do
       comment = described_class.new(author: 'Editor')
-      comment.add_text('First comment')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'First comment')
+      para.runs << run
+      comment.paragraphs << para
 
       expect(comment.paragraphs.count).to eq(1)
       expect(comment.paragraphs.first.text).to eq('First comment')
@@ -63,44 +67,38 @@ RSpec.describe Uniword::Comment do
 
     it 'supports multiple text additions' do
       comment = described_class.new(author: 'Editor')
-      comment.add_text('First line')
-      comment.add_text('Second line')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First line')
+      para1.runs << run1
+      comment.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second line')
+      para2.runs << run2
+      comment.paragraphs << para2
 
       expect(comment.paragraphs.count).to eq(2)
       expect(comment.text).to eq("First line\nSecond line")
     end
 
-    it 'returns self for chaining' do
+    it 'returns self for chaining via CommentBuilder' do
       comment = described_class.new(author: 'Editor')
-      result = comment.add_text('Text')
-      expect(result).to eq(comment)
+      builder = Uniword::Builder::CommentBuilder.from_model(comment)
+      result = builder << 'Text'
+      expect(result).to eq(builder)
     end
   end
 
-  describe '#add_paragraph' do
+  describe '#paragraphs' do
     it 'adds a paragraph to comment' do
       comment = described_class.new(author: 'Editor')
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text('Comment paragraph')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Comment paragraph')
+      para.runs << run
 
-      comment.add_paragraph(para)
+      comment.paragraphs << para
 
       expect(comment.paragraphs.count).to eq(1)
       expect(comment.paragraphs.first).to eq(para)
-    end
-
-    it 'raises error if not a Paragraph' do
-      comment = described_class.new(author: 'Editor')
-      expect do
-        comment.add_paragraph('not a paragraph')
-      end.to raise_error(ArgumentError, /must be a Paragraph instance/)
-    end
-
-    it 'returns self for chaining' do
-      comment = described_class.new(author: 'Editor')
-      para = Uniword::Wordprocessingml::Paragraph.new
-      result = comment.add_paragraph(para)
-      expect(result).to eq(comment)
     end
   end
 
@@ -117,8 +115,14 @@ RSpec.describe Uniword::Comment do
 
     it 'joins multiple paragraphs with newlines' do
       comment = described_class.new(author: 'Editor')
-      comment.add_text('First')
-      comment.add_text('Second')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First')
+      para1.runs << run1
+      comment.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second')
+      para2.runs << run2
+      comment.paragraphs << para2
       expect(comment.text).to eq("First\nSecond")
     end
   end

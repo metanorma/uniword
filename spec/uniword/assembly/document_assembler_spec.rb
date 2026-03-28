@@ -87,8 +87,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
         para = Uniword::Wordprocessingml::Paragraph.new
         run = Uniword::Wordprocessingml::Run.new
         run.text = 'Component content with {title}'
-        para.add_run(run)
-        doc.add_paragraph(para)
+        para.runs << run
+        doc.body.paragraphs << para
         doc
       end
     end
@@ -266,8 +266,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
         para = Uniword::Wordprocessingml::Paragraph.new
         run = Uniword::Wordprocessingml::Run.new
         run.text = 'Component content with {title}'
-        para.add_run(run)
-        doc.add_paragraph(para)
+        para.runs << run
+        doc.body.paragraphs << para
         doc
       end
     end

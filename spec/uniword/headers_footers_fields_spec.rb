@@ -26,13 +26,16 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
     it 'adds paragraphs' do
       header = Uniword::Header.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      header.add_paragraph(para)
+      header.paragraphs << para
       expect(header.paragraphs).to include(para)
     end
 
     it 'adds text' do
       header = Uniword::Header.new
-      para = header.add_text('Header text')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Header text')
+      para.runs << run
+      header.paragraphs << para
       expect(para.text).to eq('Header text')
       expect(header.paragraphs).to include(para)
     end
@@ -40,7 +43,10 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
     it 'checks if empty' do
       header = Uniword::Header.new
       expect(header.empty?).to be true
-      header.add_text('Text')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text')
+      para.runs << run
+      header.paragraphs << para
       expect(header.empty?).to be false
     end
   end
@@ -125,7 +131,10 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
 
     it 'adds text' do
       footer = Uniword::Footer.new
-      para = footer.add_text('Footer text')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Footer text')
+      para.runs << run
+      footer.paragraphs << para
       expect(para.text).to eq('Footer text')
     end
   end
@@ -198,7 +207,10 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
 
     it 'adds text to text box' do
       box = Uniword::TextBox.new
-      para = box.add_text('Box content')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Box content')
+      para.runs << run
+      box.paragraphs << para
       expect(para.text).to eq('Box content')
       expect(box.paragraphs).to include(para)
     end
@@ -212,41 +224,31 @@ RSpec.describe 'Headers, Footers, Fields, and Text Boxes' do
     it 'checks if empty' do
       box = Uniword::TextBox.new
       expect(box.empty?).to be true
-      box.add_text('Text')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text')
+      para.runs << run
+      box.paragraphs << para
       expect(box.empty?).to be false
     end
   end
 
   # Integration tests
   describe 'Document Integration' do
-    it 'initializes with default section' do
+    it 'creates document with empty body' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      expect(doc.sections).not_to be_empty
-      expect(doc.current_section).to be_a(Uniword::Section)
+      expect(doc.body).to be_a(Uniword::Wordprocessingml::Body)
+      expect(doc.body.paragraphs).to be_empty
     end
 
-    it 'adds sections' do
+    it 'adds paragraph with section properties' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      section = doc.add_section
-      expect(doc.sections).to include(section)
-    end
-
-    it 'adds header to section' do
-      doc = Uniword::Wordprocessingml::DocumentRoot.new
-      header = doc.current_section.header('default')
-      header.add_text('My Header')
-      expect(header.paragraphs.first.text).to eq('My Header')
-    end
-
-    it 'creates document with page numbers in footer' do
-      doc = Uniword::Wordprocessingml::DocumentRoot.new
-      footer = doc.current_section.footer('default')
       para = Uniword::Wordprocessingml::Paragraph.new
-
-      # This would be where we'd add field support to paragraphs
-      # For now just verify footer exists
-      footer.add_paragraph(para)
-      expect(footer.paragraphs).to include(para)
+      run = Uniword::Wordprocessingml::Run.new(text: 'Content')
+      para.runs << run
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
+      para.properties.section_properties = Uniword::Wordprocessingml::SectionProperties.new
+      doc.body.paragraphs << para
+      expect(para.properties.section_properties).to be_a(Uniword::Wordprocessingml::SectionProperties)
     end
   end
 end

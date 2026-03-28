@@ -10,7 +10,10 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         # Create a document with intentionally missing namespace
         doc = Uniword::Document.new
-        doc.add_paragraph('Test content')
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Test content')
+        para.runs << run
+        doc.body.paragraphs << para
 
         # Manually corrupt the XML by removing namespace
         # This tests our parser's resilience
@@ -20,7 +23,7 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
 
         # Should still be able to read it
         reloaded = Uniword.load(temp_path)
-        expect(reloaded.paragraphs.first.text).to eq('Test content')
+        expect(reloaded.body.paragraphs.first.text).to eq('Test content')
       end
 
       it 'should use default namespaces when missing' do
@@ -36,41 +39,46 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
         skip 'Graceful degradation not yet implemented'
 
         doc = Uniword::Document.new
-        doc.add_paragraph('No properties')
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'No properties')
+        para.runs << run
+        doc.body.paragraphs << para
 
         temp_path = '/tmp/no_props.docx'
         doc.save(temp_path)
         reloaded = Uniword.load(temp_path)
 
-        expect(reloaded.paragraphs.first.text).to eq('No properties')
+        expect(reloaded.body.paragraphs.first.text).to eq('No properties')
       end
 
       it 'should handle runs without text' do
         skip 'Empty run handling not yet implemented'
 
         doc = Uniword::Document.new
-        doc.add_paragraph do |para|
-          para.add_run('') # Empty run
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: '') # Empty run
+        para.runs << run
+        doc.body.paragraphs << para
 
         temp_path = '/tmp/empty_run.docx'
         doc.save(temp_path)
         reloaded = Uniword.load(temp_path)
 
-        expect(reloaded.paragraphs.first.runs.count).to eq(1)
+        expect(reloaded.body.paragraphs.first.runs.count).to eq(1)
       end
 
       it 'should handle tables without rows' do
         skip 'Empty table handling not yet implemented'
 
         doc = Uniword::Document.new
-        doc.add_table # No rows
+        table = Uniword::Table.new
+        doc.body.tables << table # No rows
 
         temp_path = '/tmp/empty_table.docx'
         doc.save(temp_path)
         reloaded = Uniword.load(temp_path)
 
-        expect(reloaded.tables.first.rows.count).to eq(0)
+        expect(reloaded.body.tables.first.rows.count).to eq(0)
       end
     end
 
@@ -81,25 +89,28 @@ RSpec.describe 'Docxjs Parser Compatibility: Edge Cases', :compatibility do
         doc = Uniword::Document.new
 
         # Create deeply nested table in table in table
-        doc.add_table do |t1|
-          t1.add_row do |r1|
-            r1.add_cell do |c1|
-              c1.add_table do |t2|
-                t2.add_row do |r2|
-                  r2.add_cell do |c2|
-                    c2.add_paragraph('Deep')
-                  end
-                end
-              end
-            end
-          end
-        end
+        t1 = Uniword::Table.new
+        r1 = Uniword::TableRow.new
+        c1 = Uniword::TableCell.new
+        t2 = Uniword::Table.new
+        r2 = Uniword::TableRow.new
+        c2 = Uniword::TableCell.new
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Deep')
+        para.runs << run
+        c2.paragraphs << para
+        r2.cells << c2
+        t2.rows << r2
+        c1.tables << t2
+        r1.cells << c1
+        t1.rows << r1
+        doc.body.tables << t1
 
         temp_path = '/tmp/deep_nesting.docx'
         doc.save(temp_path)
         reloaded = Uniword.load(temp_path)
 
-        nested_para = reloaded.tables.first.rows.first.cells.first
+        nested_para = reloaded.body.tables.first.rows.first.cells.first
                               .tables.first.rows.first.cells.first
                               .paragraphs.first
         expect(nested_para.text).to eq('Deep')

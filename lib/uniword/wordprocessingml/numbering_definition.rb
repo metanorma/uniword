@@ -99,7 +99,9 @@ module Uniword
               lvlText: Uniword::Wordprocessingml::LvlText.new(val: level_char),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: 'left'),
               ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: '360'),
-              rPr: Uniword::Wordprocessingml::RFonts.new(ascii: 'Symbol', h_ansi: 'Symbol', hint: 'default')
+              rPr: Uniword::Wordprocessingml::RunProperties.new(
+                fonts: Properties::RunFonts.new(ascii: 'Symbol', h_ansi: 'Symbol', hint: 'default')
+              )
             )
           end
         end

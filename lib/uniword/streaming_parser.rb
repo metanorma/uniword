@@ -163,10 +163,10 @@ module Uniword
 
         if @current_table
           # Paragraph inside table cell
-          @current_cell&.add_paragraph(@current_paragraph)
+          @current_cell&.paragraphs << @current_paragraph
         else
           # Top-level paragraph
-          @document.add_element(@current_paragraph)
+          @document.body.paragraphs << @current_paragraph
         end
 
         @current_paragraph = nil
@@ -183,7 +183,7 @@ module Uniword
       def end_run
         return unless @current_run && @current_paragraph
 
-        @current_paragraph.add_run(@current_run)
+        @current_paragraph.runs << @current_run
         @current_run = nil
       end
 
@@ -215,7 +215,7 @@ module Uniword
       def end_table
         return unless @current_table
 
-        @document.add_element(@current_table)
+        @document.body.tables << @current_table
         @current_table = nil
       end
 
@@ -230,7 +230,7 @@ module Uniword
       def end_table_row
         return unless @current_row && @current_table
 
-        @current_table.add_row(@current_row)
+        @current_table.rows << @current_row
         @current_row = nil
       end
 
@@ -245,7 +245,7 @@ module Uniword
       def end_table_cell
         return unless @current_cell && @current_row
 
-        @current_row.add_cell(@current_cell)
+        @current_row.cells << @current_cell
         @current_cell = nil
       end
     end

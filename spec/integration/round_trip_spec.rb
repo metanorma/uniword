@@ -5,7 +5,7 @@ require 'fileutils'
 
 RSpec.describe 'DOCX Round-trip Validation' do
   let(:tmp_dir) { 'tmp/roundtrip' }
-  let(:fixtures_dir) { '/Users/mulgogi/src/external/docx/spec/fixtures' }
+  let(:fixtures_dir) { 'spec/fixtures/docx_gem' }
 
   before(:all) do
     FileUtils.mkdir_p('tmp/roundtrip')
@@ -242,9 +242,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
       # Add multiple paragraphs with different content
       5.times do |i|
         para = Uniword::Paragraph.new
-        run = Uniword::Run.new
-        run.text = "Paragraph #{i + 1}"
-        para.add_run(run)
+        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para.runs << run
         doc1.body.paragraphs << para
       end
 
@@ -262,9 +261,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       # Add paragraph
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = 'Text before table'
-      para.add_run(run)
+      run = Uniword::Run.new(text: 'Text before table')
+      para.runs << run
       doc1.body.paragraphs << para
 
       # Add table
@@ -272,19 +270,17 @@ RSpec.describe 'DOCX Round-trip Validation' do
       row = Uniword::TableRow.new
       cell = Uniword::TableCell.new
       cell_para = Uniword::Paragraph.new
-      cell_run = Uniword::Run.new
-      cell_run.text = 'Cell content'
-      cell_para.add_run(cell_run)
-      cell.add_paragraph(cell_para)
-      row.add_cell(cell)
-      table.add_row(row)
+      cell_run = Uniword::Run.new(text: 'Cell content')
+      cell_para.runs << cell_run
+      cell.paragraphs << cell_para
+      row.cells << cell
+      table.rows << row
       doc1.body.tables << table
 
       # Add another paragraph
       para2 = Uniword::Paragraph.new
-      run2 = Uniword::Run.new
-      run2.text = 'Text after table'
-      para2.add_run(run2)
+      run2 = Uniword::Run.new(text: 'Text after table')
+      para2.runs << run2
       doc1.body.paragraphs << para2
 
       original_structure = {
@@ -319,7 +315,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       )
 
       run = Uniword::Run.new(text: 'Test paragraph')
-      para.add_run(run)
+      para.runs << run
       doc1.body.paragraphs << para
 
       doc1.save(temp_path)
@@ -344,7 +340,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
         )
       )
 
-      para.add_run(run)
+      para.runs << run
       doc1.body.paragraphs << para
 
       doc1.save(temp_path)
@@ -530,7 +526,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
               Uniword::Run.new(text: "Paragraph #{i + 1} with content")
             end
 
-      para.add_run(run)
+      para.runs << run
       doc.body.paragraphs << para
     end
 
@@ -541,22 +537,20 @@ RSpec.describe 'DOCX Round-trip Validation' do
       2.times do |c|
         cell = Uniword::TableCell.new
         cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new
-        cell_run.text = "Cell #{r},#{c}"
-        cell_para.add_run(cell_run)
-        cell.add_paragraph(cell_para)
-        row.add_cell(cell)
+        cell_run = Uniword::Run.new(text: "Cell #{r},#{c}")
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
+        row.cells << cell
       end
-      table.add_row(row)
+      table.rows << row
     end
     doc.body.tables << table
 
     # More paragraphs
     2.times do |i|
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = "After table paragraph #{i + 1}"
-      para.add_run(run)
+      run = Uniword::Run.new(text: "After table paragraph #{i + 1}")
+      para.runs << run
       doc.body.paragraphs << para
     end
 

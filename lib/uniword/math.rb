@@ -48,6 +48,8 @@ module Uniword
     autoload :BorderBoxProperties, 'uniword/math/border_box_properties'
     autoload :PhantomProperties, 'uniword/math/phantom_properties'
     autoload :MathProperties, 'uniword/math/math_properties'
+    autoload :MathSimpleVal, 'uniword/math/math_simple_val'
+    autoload :MathSimpleIntVal, 'uniword/math/math_simple_int_val'
 
     # Element content classes (9)
     autoload :Numerator, 'uniword/math/numerator'

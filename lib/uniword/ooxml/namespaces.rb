@@ -299,6 +299,24 @@ module Uniword
         element_form_default :qualified
         attribute_form_default :qualified
       end
+
+      # WordprocessingShape namespace
+      # Used for VML-compatible shapes in DrawingML
+      class WordprocessingShape < Lutaml::Xml::Namespace
+        uri 'http://schemas.microsoft.com/office/word/2010/wordprocessingShape'
+        prefix_default 'wps'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # WordprocessingGroup namespace
+      # Used for shape groups in DrawingML
+      class WordprocessingGroup < Lutaml::Xml::Namespace
+        uri 'http://schemas.microsoft.com/office/word/2010/wordprocessingGroup'
+        prefix_default 'wpg'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
     end
   end
 end

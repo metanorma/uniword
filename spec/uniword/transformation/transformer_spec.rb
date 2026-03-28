@@ -14,7 +14,12 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#transform' do
     let(:source_doc) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Hello World', bold: true)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+      run.properties = Uniword::Wordprocessingml::RunProperties.new
+      run.properties.bold = Uniword::Properties::Bold.new(value: true)
+      para.runs << run
+      doc.body.paragraphs << para
       doc
     end
 
@@ -33,7 +38,7 @@ RSpec.describe Uniword::Transformation::Transformer do
       it 'transforms MHTML model to DOCX model' do
         # First create an MHTML document
         mhtml_doc = Uniword::Mhtml::Document.new
-        mhtml_doc.html_content = '<p>Hello World</p>'
+        mhtml_doc.raw_html = '<p>Hello World</p>'
 
         result = transformer.transform(
           source: mhtml_doc,
@@ -83,8 +88,14 @@ RSpec.describe Uniword::Transformation::Transformer do
 
         # Add paragraph with formatting
         para1 = Uniword::Wordprocessingml::Paragraph.new
-        para1.add_text('Bold text', bold: true)
-        para1.add_text(' and italic text', italic: true)
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Bold text')
+        run1.properties = Uniword::Wordprocessingml::RunProperties.new
+        run1.properties.bold = Uniword::Properties::Bold.new(value: true)
+        para1.runs << run1
+        run2 = Uniword::Wordprocessingml::Run.new(text: ' and italic text')
+        run2.properties = Uniword::Wordprocessingml::RunProperties.new
+        run2.properties.italic = Uniword::Properties::Italic.new(value: true)
+        para1.runs << run2
         para1.properties = Uniword::Wordprocessingml::ParagraphProperties.new(alignment: 'center')
         doc.body.paragraphs << para1
 
@@ -92,7 +103,10 @@ RSpec.describe Uniword::Transformation::Transformer do
         table = Uniword::Wordprocessingml::Table.new
         row = Uniword::Wordprocessingml::TableRow.new
         cell = Uniword::Wordprocessingml::TableCell.new
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
         row.cells << cell
         table.rows << row
         doc.body.tables << table
@@ -133,8 +147,8 @@ RSpec.describe Uniword::Transformation::Transformer do
         )
 
         # HTML should contain formatting tags
-        expect(result.html_content).to include('<strong>')
-        expect(result.html_content).to include('<em>')
+        expect(result.raw_html).to include('<strong>')
+        expect(result.raw_html).to include('<em>')
       end
     end
   end
@@ -142,7 +156,10 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#docx_to_mhtml' do
     it 'explicitly names the transformation direction' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      para.runs << run
+      doc.body.paragraphs << para
 
       result = transformer.docx_to_mhtml(doc)
 
@@ -154,7 +171,7 @@ RSpec.describe Uniword::Transformation::Transformer do
   describe '#mhtml_to_docx' do
     it 'explicitly names the transformation direction' do
       mhtml_doc = Uniword::Mhtml::Document.new
-      mhtml_doc.html_content = '<p>Test</p>'
+      mhtml_doc.raw_html = '<p>Test</p>'
 
       result = transformer.mhtml_to_docx(mhtml_doc)
 

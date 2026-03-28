@@ -24,7 +24,12 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create a simple DOCX file for testing
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test content', bold: true)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test content')
+      run.properties = Uniword::Wordprocessingml::RunProperties.new
+      run.properties.bold = Uniword::Properties::Bold.new(value: true)
+      para.runs << run
+      doc.body.paragraphs << para
       doc.save(temp_docx.path)
     end
 
@@ -53,7 +58,10 @@ RSpec.describe Uniword::FormatConverter do
       it 'converts MHTML to DOCX with all parameters specified' do
         # First create an MHTML file
         doc = Uniword::Wordprocessingml::DocumentRoot.new
-        doc.add_paragraph('MHTML content')
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'MHTML content')
+        para.runs << run
+        doc.body.paragraphs << para
         doc.save(temp_mhtml.path, format: :mhtml)
 
         # Convert to DOCX
@@ -189,7 +197,10 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create MHTML file
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('MHTML content')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'MHTML content')
+      para.runs << run
+      doc.body.paragraphs << para
       doc.save(temp_mhtml.path, format: :mhtml)
     end
 
@@ -232,7 +243,12 @@ RSpec.describe Uniword::FormatConverter do
     before do
       # Create DOCX file
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('DOCX content', italic: true)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'DOCX content')
+      run.properties = Uniword::Wordprocessingml::RunProperties.new
+      run.properties.italic = Uniword::Properties::Italic.new(value: true)
+      para.runs << run
+      doc.body.paragraphs << para
       doc.save(temp_docx.path)
     end
 
@@ -263,7 +279,10 @@ RSpec.describe Uniword::FormatConverter do
       # Create 3 test DOCX files
       3.times do |i|
         doc = Uniword::Wordprocessingml::DocumentRoot.new
-        doc.add_paragraph("Document #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Document #{i + 1}")
+        para.runs << run
+        doc.body.paragraphs << para
         doc.save(File.join(temp_dir, "test#{i + 1}.docx"))
       end
     end
@@ -342,7 +361,7 @@ RSpec.describe Uniword::FormatConverter do
 
     context 'when conversion fails' do
       subject(:failed_result) do
-        described_class.new(
+        Uniword::FormatConverter::ConversionResult.new(
           source: 'input.docx',
           source_format: :docx,
           target: 'output.mhtml',

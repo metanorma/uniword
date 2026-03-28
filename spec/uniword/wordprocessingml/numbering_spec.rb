@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'Numbering Feature' do
   describe Uniword::Wordprocessingml::NumberingLevel do
@@ -335,12 +336,12 @@ RSpec.describe 'Numbering Feature' do
   end
 
   describe 'Paragraph Integration' do
-    describe '#set_numbering' do
+    describe '#numbering (via Builder)' do
       it 'sets numbering on paragraph' do
         para = Uniword::Wordprocessingml::Paragraph.new
-        para.set_numbering(1, 0)
-        expect(para.num_id).to eq(1)
-        expect(para.ilvl).to eq(0)
+        Uniword::Builder::ParagraphBuilder.new(para).numbering(1, 0)
+        expect(para.properties.num_id).to eq(1)
+        expect(para.properties.ilvl).to eq(0)
       end
 
       it 'preserves other properties' do
@@ -349,24 +350,24 @@ RSpec.describe 'Numbering Feature' do
           alignment: 'left'
         )
         para = Uniword::Wordprocessingml::Paragraph.new(properties: props)
-        para.set_numbering(2, 1)
-        expect(para.num_id).to eq(2)
-        expect(para.ilvl).to eq(1)
-        expect(para.style).to eq('Normal')
-        expect(para.alignment).to eq('left')
+        Uniword::Builder::ParagraphBuilder.new(para).numbering(2, 1)
+        expect(para.properties.num_id).to eq(2)
+        expect(para.properties.ilvl).to eq(1)
+        expect(para.properties.style).to eq('Normal')
+        expect(para.properties.alignment).to eq('left')
       end
     end
 
     describe '#numbered?' do
       it 'returns true for numbered paragraph' do
         para = Uniword::Wordprocessingml::Paragraph.new
-        para.set_numbering(1, 0)
-        expect(para.numbered?).to be true
+        Uniword::Builder::ParagraphBuilder.new(para).numbering(1, 0)
+        expect(para.properties.num_id ? true : false).to be true
       end
 
       it 'returns false for non-numbered paragraph' do
         para = Uniword::Wordprocessingml::Paragraph.new
-        expect(para.numbered?).to be false
+        expect(para.properties&.num_id ? true : false).to be false
       end
     end
   end
@@ -382,19 +383,21 @@ RSpec.describe 'Numbering Feature' do
       num_id = doc.numbering_configuration.create_numbering(:decimal)
 
       para1 = Uniword::Wordprocessingml::Paragraph.new
-      para1.add_text('First item')
-      para1.set_numbering(num_id, 0)
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First item')
+      para1.runs << run1
+      Uniword::Builder::ParagraphBuilder.new(para1).numbering(num_id, 0)
 
       para2 = Uniword::Wordprocessingml::Paragraph.new
-      para2.add_text('Second item')
-      para2.set_numbering(num_id, 0)
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second item')
+      para2.runs << run2
+      Uniword::Builder::ParagraphBuilder.new(para2).numbering(num_id, 0)
 
-      doc.body.add_paragraph(para1)
-      doc.body.add_paragraph(para2)
+      doc.body.paragraphs << para1
+      doc.body.paragraphs << para2
 
-      expect(para1.numbered?).to be true
-      expect(para2.numbered?).to be true
-      expect(para1.num_id).to eq(para2.num_id)
+      expect(para1.properties.num_id ? true : false).to be true
+      expect(para2.properties.num_id ? true : false).to be true
+      expect(para1.properties.num_id).to eq(para2.properties.num_id)
     end
   end
 end

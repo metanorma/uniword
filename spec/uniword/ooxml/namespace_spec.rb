@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'OOXML Namespace Configuration' do
   describe Uniword::Wordprocessingml::DocumentRoot do
@@ -22,7 +23,8 @@ RSpec.describe 'OOXML Namespace Configuration' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       # Add an element that uses relationships namespace (e.g., hyperlink)
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_hyperlink('Click here', url: 'https://example.com')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.hyperlink('https://example.com', 'Click here')
       doc.body.paragraphs << para
       xml = doc.to_xml(prefix: true)
 
@@ -55,7 +57,8 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'serializes runs with w:r elements' do
       para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text('Hello World')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+      para.runs << run
       xml = para.to_xml(prefix: true)
 
       expect(xml).to include('<w:r')
@@ -103,10 +106,16 @@ RSpec.describe 'OOXML Namespace Configuration' do
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Cell 1')
+        para.runs << run
+        cell.paragraphs << para
       end
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Cell 2')
+        para.runs << run
+        cell.paragraphs << para
       end
       table.rows << row
       xml = table.to_xml(prefix: true)
@@ -132,7 +141,10 @@ RSpec.describe 'OOXML Namespace Configuration' do
     it 'serializes cells with w:tc elements' do
       row = Uniword::Wordprocessingml::TableRow.new
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Test Cell') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Test Cell')
+        para.runs << run
+        cell.paragraphs << para
       end
       xml = row.to_xml(prefix: true)
 
@@ -156,7 +168,10 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'serializes paragraphs with w:p elements' do
       cell = Uniword::Wordprocessingml::TableCell.new
-      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
+      para.runs << run
+      cell.paragraphs << para
       xml = cell.to_xml(prefix: true)
 
       expect(xml).to include('<w:p')
@@ -183,7 +198,10 @@ RSpec.describe 'OOXML Namespace Configuration' do
     it 'preserves document structure through XML round-trip' do
       # Create a document with content
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test content')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test content')
+      para.runs << run
+      doc.body.paragraphs << para
 
       # Serialize to XML
       xml = doc.to_xml
@@ -203,20 +221,32 @@ RSpec.describe 'OOXML Namespace Configuration' do
       # Header row
       header_row = Uniword::Wordprocessingml::TableRow.new
       header_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 1') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Header 1')
+        para.runs << run
+        cell.paragraphs << para
       end
       header_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 2') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Header 2')
+        para.runs << run
+        cell.paragraphs << para
       end
       table.rows << header_row
 
       # Data row
       data_row = Uniword::Wordprocessingml::TableRow.new
       data_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 1') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Data 1')
+        para.runs << run
+        cell.paragraphs << para
       end
       data_row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 2') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Data 2')
+        para.runs << run
+        cell.paragraphs << para
       end
       table.rows << data_row
 
@@ -235,7 +265,10 @@ RSpec.describe 'OOXML Namespace Configuration' do
   describe 'Namespace prefix consistency' do
     it 'uses consistent w: prefix for WordProcessingML elements when prefix option is true' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      para.runs << run
+      doc.body.paragraphs << para
 
       xml = doc.to_xml(prefix: true)
 
@@ -249,7 +282,10 @@ RSpec.describe 'OOXML Namespace Configuration' do
 
     it 'uses default namespace without prefix option' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      para.runs << run
+      doc.body.paragraphs << para
 
       xml = doc.to_xml
 

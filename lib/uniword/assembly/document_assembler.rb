@@ -276,9 +276,7 @@ module Uniword
         toc_paragraphs = generator.generate(document)
 
         # Insert at current position
-        toc_paragraphs.each do |para|
-          document.add_paragraph(para)
-        end
+        document.body.paragraphs.concat(toc_paragraphs)
       end
 
       # Merge component into document.
@@ -288,14 +286,10 @@ module Uniword
       # @return [void]
       def merge_component(document, component)
         # Merge paragraphs
-        component.paragraphs.each do |para|
-          document.add_paragraph(para)
-        end
+        document.body.paragraphs.concat(component.paragraphs)
 
         # Merge tables
-        component.tables.each do |table|
-          document.add_table(table) if document.respond_to?(:add_table)
-        end
+        document.body.tables.concat(component.tables)
       end
     end
   end

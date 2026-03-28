@@ -65,7 +65,7 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        root 'theme'
+        element "theme"
         # Theme element is in DrawingML namespace
         namespace Ooxml::Namespaces::DrawingML
 

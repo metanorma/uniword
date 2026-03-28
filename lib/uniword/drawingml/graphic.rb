@@ -11,7 +11,7 @@ module Uniword
       attribute :graphic_data, GraphicData
 
       xml do
-        root 'graphic'
+        element "graphic"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
         map_element 'graphicData', to: :graphic_data, render_nil: false

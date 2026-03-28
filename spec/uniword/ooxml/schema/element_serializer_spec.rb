@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
   let(:serializer) { described_class.new }
@@ -15,7 +16,8 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
     context 'with paragraph element' do
       let(:paragraph) do
         para = Uniword::Wordprocessingml::Paragraph.new
-        para.add_text('Hello World')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+        para.runs << run
         para
       end
 
@@ -47,8 +49,11 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
     context 'with formatted paragraph' do
       let(:paragraph) do
         para = Uniword::Wordprocessingml::Paragraph.new
-        para.alignment = 'center'
-        para.add_text('Centered text', bold: true)
+        para.properties ||= Uniword::Wordprocessingml::ParagraphProperties.new
+        para.properties.alignment = 'center'
+        run = Uniword::Wordprocessingml::Run.new(text: 'Centered text')
+        Uniword::Builder::RunBuilder.new(run).bold
+        para.runs << run
         para
       end
 
@@ -72,7 +77,10 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
         tbl = Uniword::Wordprocessingml::Table.new
         row = Uniword::Wordprocessingml::TableRow.new
         cell = Uniword::Wordprocessingml::TableCell.new
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell content') }
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
         row.cells << cell
         tbl.rows << row
         tbl
@@ -109,8 +117,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
     context 'with run element' do
       let(:run) do
         r = Uniword::Wordprocessingml::Run.new(text: 'Test text')
-        r.bold = true
-        r.italic = true
+        Uniword::Builder::RunBuilder.new(r).bold.italic
         r
       end
 
@@ -139,7 +146,8 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
     context 'with options' do
       let(:paragraph) do
         para = Uniword::Wordprocessingml::Paragraph.new
-        para.add_text('Test')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+        para.runs << run
         para
       end
 

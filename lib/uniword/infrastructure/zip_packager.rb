@@ -38,9 +38,17 @@ module Uniword
         Zip::File.open(output_path, Zip::File::CREATE) do |zip_file|
           content.each do |entry_path, entry_content|
             zip_file.get_output_stream(entry_path) do |stream|
-              # Ensure content is UTF-8 encoded before writing
-              utf8_content = entry_content.encode('UTF-8', invalid: :replace, undef: :replace)
-              stream.write(utf8_content)
+              # Binary data (ASCII-8BIT) is written as-is;
+              # text content is ensured to be UTF-8
+              final_content =
+                if entry_content.encoding == Encoding::ASCII_8BIT
+                  entry_content
+                else
+                  entry_content.encode(
+                    'UTF-8', invalid: :replace, undef: :replace
+                  )
+                end
+              stream.write(final_content)
             end
           end
         end

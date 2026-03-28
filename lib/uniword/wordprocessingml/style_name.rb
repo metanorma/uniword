@@ -17,6 +17,29 @@ module Uniword
 
         map_attribute 'val', to: :val
       end
+
+      # Compare with another StyleName or a string
+      def ==(other)
+        if other.is_a?(StyleName)
+          val == other.val
+        elsif other.is_a?(String)
+          val == other
+        else
+          super
+        end
+      end
+
+      alias eql? ==
+
+      # For string interpolation and general string-like behavior
+      def to_s
+        val.to_s
+      end
+
+      # For hash key compatibility
+      def hash
+        val.hash
+      end
     end
   end
 end

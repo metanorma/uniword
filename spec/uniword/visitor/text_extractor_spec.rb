@@ -47,8 +47,14 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_document' do
     it 'extracts text from all document elements' do
       document = Uniword::Wordprocessingml::DocumentRoot.new
-      document.add_paragraph('First paragraph')
-      document.add_paragraph('Second paragraph')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
+      para1.runs << run1
+      document.body.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
+      para2.runs << run2
+      document.body.paragraphs << para2
 
       extractor.visit_document(document)
 
@@ -65,8 +71,10 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_paragraph' do
     it 'extracts text from all runs in paragraph' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Hello ')
-      paragraph.add_text('World')
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello ')
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'World')
+      paragraph.runs << run1
+      paragraph.runs << run2
 
       extractor.visit_paragraph(paragraph)
 
@@ -81,7 +89,8 @@ RSpec.describe Uniword::Visitor::TextExtractor do
 
     it 'handles paragraphs with empty runs' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('')
+      run = Uniword::Wordprocessingml::Run.new(text: '')
+      paragraph.runs << run
 
       extractor.visit_paragraph(paragraph)
 
@@ -94,18 +103,30 @@ RSpec.describe Uniword::Visitor::TextExtractor do
       table = Uniword::Wordprocessingml::Table.new
       table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 1')
+          para.runs << run
+          cell.paragraphs << para
         end
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 2')
+          para.runs << run
+          cell.paragraphs << para
         end
       end
       table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 3') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 3')
+          para.runs << run
+          cell.paragraphs << para
         end
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 4') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Cell 4')
+          para.runs << run
+          cell.paragraphs << para
         end
       end
 
@@ -125,13 +146,22 @@ RSpec.describe Uniword::Visitor::TextExtractor do
     it 'extracts text from all cells separated by pipes' do
       row = Uniword::Wordprocessingml::TableRow.new
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Cell 1')
+        para.runs << run
+        cell.paragraphs << para
       end
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Cell 2')
+        para.runs << run
+        cell.paragraphs << para
       end
       row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 3') }
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Cell 3')
+        para.runs << run
+        cell.paragraphs << para
       end
 
       extractor.visit_table_row(row)
@@ -149,8 +179,14 @@ RSpec.describe Uniword::Visitor::TextExtractor do
   describe '#visit_table_cell' do
     it 'extracts text from all paragraphs in cell' do
       cell = Uniword::Wordprocessingml::TableCell.new
-      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('First line') }
-      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Second line') }
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First line')
+      para1.runs << run1
+      cell.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second line')
+      para2.runs << run2
+      cell.paragraphs << para2
 
       extractor.visit_table_cell(cell)
 
@@ -196,38 +232,55 @@ RSpec.describe Uniword::Visitor::TextExtractor do
     it 'extracts text from mixed content document' do
       document = Uniword::Wordprocessingml::DocumentRoot.new
 
-      # Add paragraph
-      document.add_paragraph('This is a paragraph.')
+      # Add paragraphs
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'This is a paragraph.')
+      para1.runs << run1
+      document.body.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Final paragraph')
+      para2.runs << run2
+      document.body.paragraphs << para2
 
       # Add table
       table = Uniword::Wordprocessingml::Table.new
       table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 1') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Header 1')
+          para.runs << run
+          cell.paragraphs << para
         end
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Header 2') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Header 2')
+          para.runs << run
+          cell.paragraphs << para
         end
       end
       table.rows << Uniword::Wordprocessingml::TableRow.new.tap do |row|
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 1') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Data 1')
+          para.runs << run
+          cell.paragraphs << para
         end
         row.cells << Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-          cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Data 2') }
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'Data 2')
+          para.runs << run
+          cell.paragraphs << para
         end
       end
       document.body.tables << table
 
-      # Add another paragraph
-      document.add_paragraph('Final paragraph')
-
       extractor.visit_document(document)
 
+      # body.elements returns paragraphs first, then tables
       expected_text = "This is a paragraph.\n" \
+                      "Final paragraph\n" \
                       "Header 1 | Header 2\n" \
-                      "Data 1 | Data 2\n" \
-                      'Final paragraph'
+                      'Data 1 | Data 2'
 
       expect(extractor.text).to eq(expected_text)
     end
@@ -237,12 +290,21 @@ RSpec.describe Uniword::Visitor::TextExtractor do
       row = Uniword::Wordprocessingml::TableRow.new
 
       cell = Uniword::Wordprocessingml::TableCell.new
-      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Line 1') }
-      cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Line 2') }
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Line 1')
+      para1.runs << run1
+      cell.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Line 2')
+      para2.runs << run2
+      cell.paragraphs << para2
       row.cells << cell
 
       cell2 = Uniword::Wordprocessingml::TableCell.new
-      cell2.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+      para3 = Uniword::Wordprocessingml::Paragraph.new
+      run3 = Uniword::Wordprocessingml::Run.new(text: 'Cell 2')
+      para3.runs << run3
+      cell2.paragraphs << para3
       row.cells << cell2
 
       table.rows << row

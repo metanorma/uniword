@@ -22,7 +22,8 @@ RSpec.describe 'Styles Integration', :integration do
           style: 'Normal'
         )
       )
-      p1.add_text('This is a normal paragraph.')
+      p1_run = Uniword::Run.new(text: 'This is a normal paragraph.')
+      p1.runs << p1_run
       doc.body.paragraphs << p1
 
       # Add Heading 1
@@ -31,7 +32,8 @@ RSpec.describe 'Styles Integration', :integration do
           style: 'Heading1'
         )
       )
-      p2.add_text('This is Heading 1')
+      p2_run = Uniword::Run.new(text: 'This is Heading 1')
+      p2.runs << p2_run
       doc.body.paragraphs << p2
 
       # Add Heading 2
@@ -40,7 +42,8 @@ RSpec.describe 'Styles Integration', :integration do
           style: 'Heading2'
         )
       )
-      p3.add_text('This is Heading 2')
+      p3_run = Uniword::Run.new(text: 'This is Heading 2')
+      p3.runs << p3_run
       doc.body.paragraphs << p3
 
       # Save document
@@ -53,13 +56,13 @@ RSpec.describe 'Styles Integration', :integration do
       # Read document back
       loaded_doc = Uniword.load(temp_file.path)
 
-      # Verify paragraphs (style returns ID, not NAME)
+      # Verify paragraphs (style is on properties)
       expect(loaded_doc.paragraphs.size).to eq(3)
-      expect(loaded_doc.paragraphs[0].style).to eq('Normal')
+      expect(loaded_doc.paragraphs[0].properties&.style).to eq('Normal')
       expect(loaded_doc.paragraphs[0].text).to eq('This is a normal paragraph.')
-      expect(loaded_doc.paragraphs[1].style).to eq('Heading1')
+      expect(loaded_doc.paragraphs[1].properties&.style).to eq('Heading1')
       expect(loaded_doc.paragraphs[1].text).to eq('This is Heading 1')
-      expect(loaded_doc.paragraphs[2].style).to eq('Heading2')
+      expect(loaded_doc.paragraphs[2].properties&.style).to eq('Heading2')
       expect(loaded_doc.paragraphs[2].text).to eq('This is Heading 2')
     end
   end
@@ -102,7 +105,8 @@ RSpec.describe 'Styles Integration', :integration do
           style: 'MyCustomStyle'
         )
       )
-      p.add_text('Styled with custom style')
+      p_run = Uniword::Run.new(text: 'Styled with custom style')
+      p.runs << p_run
       doc.body.paragraphs << p
 
       # Save and reload
@@ -118,8 +122,8 @@ RSpec.describe 'Styles Integration', :integration do
       expect(loaded_style.run_properties).to be_bold
       expect(loaded_style.run_properties.color.value).to eq('FF0000')
 
-      # Verify paragraph uses the style (style returns ID, not NAME)
-      expect(loaded_doc.paragraphs.first.style).to eq('MyCustomStyle')
+      # Verify paragraph uses the style (style is on properties)
+      expect(loaded_doc.paragraphs.first.properties&.style).to eq('MyCustomStyle')
     end
   end
 
@@ -145,7 +149,8 @@ RSpec.describe 'Styles Integration', :integration do
           style: 'DerivedHeading'
         )
       )
-      p.add_text('Derived heading text')
+      p_run = Uniword::Run.new(text: 'Derived heading text')
+      p.runs << p_run
       doc.body.paragraphs << p
 
       doc.save(temp_file.path)
@@ -165,20 +170,22 @@ RSpec.describe 'Styles Integration', :integration do
       p = Uniword::Paragraph.new
 
       # Add run with Strong style
-      p.add_text(
-        'Bold text',
+      strong_run = Uniword::Run.new(
+        text: 'Bold text',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Strong'
         )
       )
+      p.runs << strong_run
 
       # Add run with Emphasis style
-      p.add_text(
-        ' and italic text',
+      emphasis_run = Uniword::Run.new(
+        text: ' and italic text',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Emphasis'
         )
       )
+      p.runs << emphasis_run
 
       doc.body.paragraphs << p
 
@@ -203,7 +210,8 @@ RSpec.describe 'Styles Integration', :integration do
             style: "Heading#{level}"
           )
         )
-        p.add_text("Heading level #{level}")
+        p_run = Uniword::Run.new(text: "Heading level #{level}")
+        p.runs << p_run
         doc.body.paragraphs << p
       end
 
@@ -211,10 +219,10 @@ RSpec.describe 'Styles Integration', :integration do
       doc.save(temp_file.path)
       loaded_doc = Uniword.load(temp_file.path)
 
-      # Verify all headings (style returns ID, not NAME)
+      # Verify all headings (style is on properties)
       expect(loaded_doc.paragraphs.size).to eq(9)
       (1..9).each do |level|
-        expect(loaded_doc.paragraphs[level - 1].style).to eq("Heading#{level}")
+        expect(loaded_doc.paragraphs[level - 1].properties&.style).to eq("Heading#{level}")
       end
     end
   end

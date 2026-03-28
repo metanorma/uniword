@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'tr_height'
+require_relative 'val_int'
+require_relative 'grid_before'
+require_relative 'grid_after'
+require_relative 'width_before'
+require_relative 'width_after'
 
 module Uniword
   module Wordprocessingml
@@ -10,29 +16,48 @@ module Uniword
     # Element: <w:trPr>
     class TableRowProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, then XML
-      attribute :height, :integer
-      attribute :height_rule, :string
-      attribute :header, :boolean
-      attribute :cant_split, :boolean
+      attribute :tr_height, TrHeight
+      attribute :tbl_header, ValInt
+      attribute :cant_split, ValInt
+      attribute :grid_before, GridBefore
+      attribute :grid_after, GridAfter
+      attribute :w_before, WidthBefore
+      attribute :w_after, WidthAfter
 
       xml do
         element 'trPr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'val', to: :height
-        map_attribute 'hRule', to: :height_rule
-        map_element 'tblHeader', to: :header, render_nil: false
+        map_element 'trHeight', to: :tr_height, render_nil: false
+        map_element 'tblHeader', to: :tbl_header, render_nil: false
         map_element 'cantSplit', to: :cant_split, render_nil: false
+        map_element 'gridBefore', to: :grid_before, render_nil: false
+        map_element 'gridAfter', to: :grid_after, render_nil: false
+        map_element 'wBefore', to: :w_before, render_nil: false
+        map_element 'wAfter', to: :w_after, render_nil: false
       end
 
-      # Accept table_header: keyword for docx-js API compatibility
       def initialize(attrs = {})
-        # Handle table_header: keyword (alias for header:)
+        # Handle table_header: keyword for docx-js API compatibility
         if attrs.key?(:table_header)
-          attrs[:header] = attrs.delete(:table_header)
+          val = attrs.delete(:table_header)
+          attrs[:tbl_header] = coerce_to_val_int(val)
         end
         super(attrs)
+      end
+
+      private
+
+      def coerce_to_val_int(val)
+        case val
+        when ValInt then val
+        when true, 1 then ValInt.new(value: 1)
+        when false, 0 then nil
+        when Integer then ValInt.new(value: val)
+        when nil then nil
+        else ValInt.new(value: val.to_i)
+        end
       end
     end
   end

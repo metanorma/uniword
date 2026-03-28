@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'val_int'
+require_relative 'table_cell_borders'
+require_relative 'table_cell_margin'
+require_relative 'cnf_style'
+require_relative 'no_wrap'
+require_relative 'text_direction'
 
 module Uniword
   module Wordprocessingml
@@ -15,11 +21,15 @@ module Uniword
       attribute :borders, TableCellBorders
       attribute :shading, Uniword::Properties::Shading
       attribute :vertical_align, Uniword::Properties::CellVerticalAlign
-      attribute :grid_span, :integer
-      attribute :v_merge, :string
+      attribute :grid_span, ValInt
+      attribute :v_merge, ValInt
+      attribute :tc_mar, TableCellMargin
+      attribute :cnf_style, CnfStyle
+      attribute :no_wrap, NoWrap
+      attribute :text_direction, TextDirection
 
       xml do
-        root 'tcPr'
+        element "tcPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -29,6 +39,11 @@ module Uniword
         map_element 'vAlign', to: :vertical_align, render_nil: false
         map_element 'gridSpan', to: :grid_span, render_nil: false
         map_element 'vMerge', to: :v_merge, render_nil: false
+        map_element 'tcMar', to: :tc_mar, render_nil: false
+        map_element 'cnfStyle', to: :cnf_style, render_nil: false
+        map_element 'noWrap', to: :no_wrap, render_nil: false
+        map_element 'textDirection', to: :text_direction,
+                  render_nil: false
       end
 
       # Set vertical merge
@@ -36,7 +51,7 @@ module Uniword
       # @param value [String, Integer] Vertical merge value
       # @return [self] For method chaining
       def vertical_merge=(value)
-        self.v_merge = value.to_s
+        self.v_merge = ValInt.new(value: value.to_i)
         self
       end
 
@@ -44,7 +59,7 @@ module Uniword
       #
       # @return [String, nil] Vertical merge value
       def vertical_merge
-        v_merge
+        v_merge&.value
       end
     end
   end

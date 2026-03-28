@@ -48,12 +48,12 @@ RSpec.describe Uniword::Endnote do
     end
   end
 
-  describe '#add_paragraph' do
+  describe '#content' do
     it 'adds a paragraph to the endnote content' do
       endnote = described_class.new(id: 1)
       paragraph = Uniword::Wordprocessingml::Paragraph.new
 
-      endnote.add_paragraph(paragraph)
+      endnote.content << paragraph
 
       expect(endnote.content).to include(paragraph)
       expect(endnote.content.size).to eq(1)
@@ -64,8 +64,8 @@ RSpec.describe Uniword::Endnote do
       p1 = Uniword::Wordprocessingml::Paragraph.new
       p2 = Uniword::Wordprocessingml::Paragraph.new
 
-      endnote.add_paragraph(p1)
-      endnote.add_paragraph(p2)
+      endnote.content << p1
+      endnote.content << p2
 
       expect(endnote.content.size).to eq(2)
       expect(endnote.content).to eq([p1, p2])

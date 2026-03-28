@@ -29,6 +29,29 @@ module Uniword
         map_attribute 'themeShade', to: :theme_shade, render_nil: false
         map_attribute 'themeTint', to: :theme_tint, render_nil: false
       end
+
+      # Compare with another ColorValue or a string
+      def ==(other)
+        if other.is_a?(ColorValue)
+          value == other.value
+        elsif other.is_a?(String)
+          value == other
+        else
+          super
+        end
+      end
+
+      alias eql? ==
+
+      # For string interpolation
+      def to_s
+        value.to_s
+      end
+
+      # For hash key compatibility
+      def hash
+        value.hash
+      end
     end
   end
 end

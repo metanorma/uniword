@@ -35,26 +35,7 @@ module Uniword
 
     def initialize(**attributes)
       super
-      @paragraphs ||= []
       validate_wrapping
-    end
-
-    # Add a paragraph to this text box
-    def add_paragraph(paragraph)
-      unless paragraph.is_a?(Wordprocessingml::Paragraph)
-        raise ArgumentError,
-              'paragraph must be a Wordprocessingml::Paragraph instance'
-      end
-
-      paragraphs << paragraph
-    end
-
-    # Create and add a text paragraph
-    def add_text(text, properties: nil)
-      para = Wordprocessingml::Paragraph.new(properties: properties)
-      para.add_text(text)
-      add_paragraph(para)
-      para
     end
 
     # Check if text box is empty

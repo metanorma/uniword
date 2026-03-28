@@ -181,6 +181,8 @@ module Uniword
         document.app_properties = package.app_properties if package.app_properties
         document.document_rels = package.document_rels if package.document_rels
         document.theme_rels = package.theme_rels if package.theme_rels
+        document.package_rels = package.package_rels if package.package_rels
+        document.content_types = package.content_types if package.content_types
       end
 
       private

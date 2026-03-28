@@ -38,8 +38,8 @@ RSpec.describe Uniword::Assembly::CrossReferenceResolver do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       run.text = 'Test'
-      para.add_run(run)
-      document.add_paragraph(para)
+      para.runs << run
+      document.body.paragraphs << para
 
       expect { resolver.resolve(document) }.not_to raise_error
     end

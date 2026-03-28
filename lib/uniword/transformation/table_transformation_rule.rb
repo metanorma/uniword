@@ -44,7 +44,7 @@ module Uniword
         # Transform each row
         source_table.rows.each do |source_row|
           target_row = transform_row(source_row)
-          target_table.add_row(target_row)
+          target_table.rows << target_row
         end
 
         target_table
@@ -80,7 +80,7 @@ module Uniword
         # Transform each cell
         source_row.cells.each do |source_cell|
           target_cell = transform_cell(source_cell)
-          target_row.add_cell(target_cell)
+          target_row.cells << target_cell
         end
 
         target_row

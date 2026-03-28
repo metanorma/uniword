@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'v1.1.0 Features Smoke Test' do
   describe 'Feature class loading' do
@@ -191,9 +192,10 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
   describe 'Integration with existing classes' do
     it 'adds hyperlink to paragraph' do
       para = Uniword::Paragraph.new
-      para.add_hyperlink('Click', url: 'https://example.com')
-      expect(para.runs.count).to eq(1)
-      expect(para.runs.first).to be_a(Uniword::Hyperlink)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder << Uniword::Builder.hyperlink('https://example.com', 'Click')
+      expect(para.hyperlinks.count).to eq(1)
+      expect(para.hyperlinks.first).to be_a(Uniword::Wordprocessingml::Hyperlink)
     end
 
     it 'adds page borders to section' do

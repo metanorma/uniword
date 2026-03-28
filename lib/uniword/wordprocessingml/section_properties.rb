@@ -12,8 +12,8 @@ module Uniword
       attribute :page_size, PageSize
       attribute :page_margins, PageMargins
       attribute :columns, Columns
-      attribute :header_reference, HeaderReference
-      attribute :footer_reference, FooterReference
+      attribute :header_references, HeaderReference, collection: true, initialize_empty: true
+      attribute :footer_references, FooterReference, collection: true, initialize_empty: true
       attribute :type, :string
       attribute :page_numbering, PageNumbering
       attribute :doc_grid, DocGrid
@@ -44,8 +44,8 @@ module Uniword
         map_element 'pgSz', to: :page_size, render_nil: false
         map_element 'pgMar', to: :page_margins, render_nil: false
         map_element 'cols', to: :columns, render_nil: false
-        map_element 'headerReference', to: :header_reference, render_nil: false
-        map_element 'footerReference', to: :footer_reference, render_nil: false
+        map_element 'headerReference', to: :header_references, render_nil: false
+        map_element 'footerReference', to: :footer_references, render_nil: false
         map_attribute 'val', to: :type
         map_element 'pgNumType', to: :page_numbering, render_nil: false
         map_element 'docGrid', to: :doc_grid, render_nil: false

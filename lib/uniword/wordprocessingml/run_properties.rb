@@ -49,9 +49,10 @@ module Uniword
       attribute :caps, Properties::Caps, default: nil
       attribute :hidden, Properties::Vanish, default: nil
       attribute :no_proof, Properties::NoProof, default: nil
-      attribute :_shadow_val, Properties::Shadow, default: nil
-      attribute :_emboss_val, Properties::Emboss, default: nil
-      attribute :_imprint_val, Properties::Imprint, default: nil
+      attribute :shadow, Properties::Shadow, default: nil
+      attribute :emboss, Properties::Emboss, default: nil
+      attribute :imprint, Properties::Imprint, default: nil
+      attribute :outline, Properties::Outline, default: nil
       attribute :outline_level, Properties::OutlineLevel, default: nil
 
       # Flat attributes (kept as aliases for compatibility)
@@ -326,10 +327,10 @@ module Uniword
         map_element 'textOutline', to: :text_outline, render_nil: false
 
         # Additional boolean formatting
-        map_element 'shadow', to: :_shadow_val, render_nil: false
-        map_element 'emboss', to: :_emboss_val, render_nil: false
-        map_element 'imprint', to: :_imprint_val, render_nil: false
-        map_element 'outline', to: :outline_level, render_nil: false
+        map_element 'shadow', to: :shadow, render_nil: false
+        map_element 'emboss', to: :emboss, render_nil: false
+        map_element 'imprint', to: :imprint, render_nil: false
+        map_element 'outline', to: :outline, render_nil: false
       end
 
       # Helper methods for boolean values (handle both wrapper and primitive)
@@ -463,75 +464,75 @@ module Uniword
       end
 
       def shadow?
-        val = _shadow_val
+        val = shadow
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
       end
 
-      # Get shadow value (boolean)
+      # Get shadow value (wrapper)
       def shadow
-        shadow?
+        @shadow
       end
 
       # Set shadow value
       def shadow=(value)
-        @_shadow_val = if value.is_a?(Properties::Shadow)
-                             value
-                           else
-                             Properties::Shadow.new(value: value)
-                           end
+        @shadow = if value.is_a?(Properties::Shadow)
+                      value
+                    else
+                      Properties::Shadow.new(value: value)
+                    end
         @using_default ||= {}
-        @using_default[:_shadow_val] = false
+        @using_default[:shadow] = false
       end
 
       def imprint?
-        val = _imprint_val
+        val = imprint
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
       end
 
-      # Get imprint value (boolean)
+      # Get imprint value (wrapper)
       def imprint
-        imprint?
+        @imprint
       end
 
       # Set imprint value
       def imprint=(value)
-        @_imprint_val = if value.is_a?(Properties::Imprint)
-                               value
-                             else
-                               Properties::Imprint.new(value: value)
-                             end
+        @imprint = if value.is_a?(Properties::Imprint)
+                        value
+                      else
+                        Properties::Imprint.new(value: value)
+                      end
         @using_default ||= {}
-        @using_default[:_imprint_val] = false
+        @using_default[:imprint] = false
       end
 
       def emboss?
-        val = _emboss_val
+        val = emboss
         return false if val.nil?
 
         val = val.value if val.respond_to?(:value)
         val == true
       end
 
-      # Get emboss value (boolean)
+      # Get emboss value (wrapper)
       def emboss
-        emboss?
+        @emboss
       end
 
       # Set emboss value
       def emboss=(value)
-        @_emboss_val = if value.is_a?(Properties::Emboss)
-                              value
-                            else
-                              Properties::Emboss.new(value: value)
-                            end
+        @emboss = if value.is_a?(Properties::Emboss)
+                       value
+                     else
+                       Properties::Emboss.new(value: value)
+                     end
         @using_default ||= {}
-        @using_default[:_emboss_val] = false
+        @using_default[:emboss] = false
       end
 
       def hidden?
@@ -556,25 +557,29 @@ module Uniword
         self
       end
 
-      # Get outline (character outline effect) - returns boolean for spec compatibility
+      # Get outline (character outline effect) - returns wrapper object
       def outline
-        outline?
+        @outline
       end
 
       # Check if outline effect is enabled
       def outline?
-        val = outline_level
+        val = @outline
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
-        # Handle both boolean and integer values
-        val == true || val == 1 || val.to_i == 1
+        val = val.val if val.respond_to?(:val)
+        val != 'false'
       end
 
       # Set outline effect
       def outline=(value)
-        self.outline_level = value.is_a?(Properties::OutlineLevel) ? value : Properties::OutlineLevel.new(value: value)
-        self
+        @outline = if value.is_a?(Properties::Outline)
+                      value
+                    else
+                      Properties::Outline.new(val: value)
+                    end
+        @using_default ||= {}
+        @using_default[:outline] = false
       end
 
       # Get text expansion (alias for width_scale)
@@ -710,6 +715,12 @@ module Uniword
         # Text outline
         if @text_outline && !@text_outline.is_a?(Properties::TextOutline)
           @text_outline = Properties::TextOutline.new
+        end
+
+        # Font - ensure fonts.ascii is set when @font is provided
+        if @font && !@font.is_a?(Properties::RunFonts)
+          @fonts ||= Properties::RunFonts.new
+          @fonts.ascii = @font
         end
       end
     end

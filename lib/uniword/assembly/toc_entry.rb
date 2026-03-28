@@ -49,10 +49,12 @@ module Uniword
       # @return [Wordprocessingml::Paragraph] The paragraph
       def to_paragraph(include_page_numbers: true)
         para = Wordprocessingml::Paragraph.new
-        para.style = "TOC#{@level}"
+        para.properties ||= Wordprocessingml::ParagraphProperties.new
+        para.properties.style = "TOC#{@level}"
 
         # Add indentation based on level (360 twips = 0.25 inch per level)
-        para.indent_left = (@level - 1) * 360
+        para.properties.indentation ||= Properties::Indentation.new
+        para.properties.indentation.left = (@level - 1) * 360
 
         # Add hyperlink if bookmark exists
         if @bookmark_name
@@ -74,7 +76,7 @@ module Uniword
         # Add heading text
         text_run = Wordprocessingml::Run.new
         text_run.text = @text
-        para.add_run(text_run)
+        para.runs << text_run
 
         if include_page_numbers
           add_page_number_run(para)
@@ -93,9 +95,10 @@ module Uniword
         # Add run with text to hyperlink
         text_run = Wordprocessingml::Run.new
         text_run.text = @text
-        hyperlink.add_run(text_run)
+        hyperlink.runs << text_run
 
-        para.add_hyperlink(hyperlink)
+        para.hyperlinks ||= []
+        para.hyperlinks << hyperlink
 
         if include_page_numbers
           add_page_number_run(para)
@@ -109,12 +112,12 @@ module Uniword
         # Add tab
         tab_run = Wordprocessingml::Run.new
         tab_run.text = "\t"
-        para.add_run(tab_run)
+        para.runs << tab_run
 
         # Add page number placeholder
         page_run = Wordprocessingml::Run.new
         page_run.text = @page_number.to_s
-        para.add_run(page_run)
+        para.runs << page_run
       end
     end
   end

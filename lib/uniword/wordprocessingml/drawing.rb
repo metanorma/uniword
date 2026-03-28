@@ -12,7 +12,7 @@ module Uniword
       attribute :anchor, WpDrawing::Anchor
 
       xml do
-        root 'drawing'
+        element "drawing"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 

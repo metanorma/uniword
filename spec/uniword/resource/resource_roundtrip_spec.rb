@@ -149,7 +149,10 @@ RSpec.describe 'Resource Roundtrip' do
     before do
       # Create a document with theme and styleset
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test paragraph', bold: true)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph')
+      para.runs << run
+      doc.body.paragraphs << para
       doc.apply_theme('atlas')
       doc.apply_styleset('distinctive')
       doc.save(docx_path)

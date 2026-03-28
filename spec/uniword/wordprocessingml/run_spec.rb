@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe Uniword::Wordprocessingml::Run do
   let(:properties) do
@@ -57,83 +58,85 @@ RSpec.describe Uniword::Wordprocessingml::Run do
     end
   end
 
-  describe '#bold?' do
+  describe 'bold property (via properties)' do
     it 'returns false when no properties' do
       run = described_class.new(text: 'Test')
-      expect(run.bold?).to be false
+      expect(run.properties&.bold&.value == true).to be false
     end
 
     it 'returns false when bold is false' do
       props = Uniword::Wordprocessingml::RunProperties.new(bold: false)
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.bold?).to be false
+      bold_prop = props.bold
+      bold_val = bold_prop.respond_to?(:value) ? bold_prop.value : bold_prop
+      expect(bold_val == true).to be false
     end
 
     it 'returns true when bold is true' do
       props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.bold?).to be true
+      expect(run.properties.bold&.value == true).to be true
     end
   end
 
-  describe '#italic?' do
+  describe 'italic property (via properties)' do
     it 'returns false when no properties' do
       run = described_class.new(text: 'Test')
-      expect(run.italic?).to be false
+      expect(run.properties&.italic&.value == true).to be false
     end
 
     it 'returns false when italic is false' do
       props = Uniword::Wordprocessingml::RunProperties.new(italic: false)
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.italic?).to be false
+      italic_prop = props.italic
+      italic_val = italic_prop.respond_to?(:value) ? italic_prop.value : italic_prop
+      expect(italic_val == true).to be false
     end
 
     it 'returns true when italic is true' do
       props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.italic?).to be true
+      expect(run.properties.italic&.value == true).to be true
     end
   end
 
-  describe '#underline?' do
-    # v2.0 API: underline? checks if underline property is set
-    # Note: The comparison with 'none' string is not correct for wrapper objects
-    # but this is the current implementation
+  describe 'underline property (via properties)' do
     it 'returns truthy when underline is set with single value' do
       props = Uniword::Wordprocessingml::RunProperties.new(
         underline: Uniword::Properties::Underline.new(value: 'single')
       )
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.underline?).to be_truthy
+      expect(run.properties.underline && run.properties.underline != 'none').to be_truthy
     end
 
     it 'returns truthy when underline is set (even with "none" value)' do
-      # NOTE: This is the current behavior - the comparison with 'none' string
-      # doesn't work correctly with wrapper objects
+      # NOTE: The 'none' check compares the underline value, not the wrapper
       props = Uniword::Wordprocessingml::RunProperties.new(
         underline: Uniword::Properties::Underline.new(value: 'none')
       )
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.underline?).to be_truthy
+      underline_val = run.properties.underline
+      # With wrapper object, the 'none' string comparison does not match
+      # the wrapper object, so this is truthy
+      expect(underline_val && underline_val != 'none').to be_truthy
     end
 
     it 'returns falsey when no properties' do
       run = described_class.new(text: 'Test')
-      expect(run.underline?).to be_falsey
+      expect(run.properties&.underline && run.properties.underline != 'none').to be_falsey
     end
 
     it 'returns falsey when properties has no underline set' do
       props = Uniword::Wordprocessingml::RunProperties.new
       run = described_class.new(text: 'Test', properties: props)
-      expect(run.underline?).to be_falsey
+      expect(run.properties.underline && run.properties.underline != 'none').to be_falsey
     end
   end
 
   describe '#font_size' do
-    # v2.0 API: font_size method IS available on Run as convenience method
-    it 'has font_size method for convenience' do
+    it 'does not have font_size convenience method (use properties.size.value)' do
       run = described_class.new(text: 'Test')
-      expect(run).to respond_to(:font_size)
+      expect(run).not_to respond_to(:font_size)
     end
 
     it 'can access size via properties.size.value (in half-points)' do

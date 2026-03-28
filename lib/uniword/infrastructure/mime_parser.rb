@@ -4,29 +4,20 @@ require 'base64'
 
 module Uniword
   module Infrastructure
-    # Parses MHTML (MIME HTML) files.
+    # Parses MHTML (MIME HTML) files into Mhtml::Document model.
     #
-    # Responsibility: Extract HTML and resources from MHTML MIME format.
-    # MHTML files are MIME multipart documents containing HTML and embedded
-    # resources (images, styles, etc.).
+    # Parses MIME multipart structure, decodes content transfer encodings,
+    # creates typed MimePart objects, and populates Mhtml::Document.
     #
     # @example Parse an MHTML file
     #   parser = Uniword::Infrastructure::MimeParser.new
-    #   parts = parser.parse("document.mhtml")
-    #   # => { "html" => "<html>...</html>", "filelist" => "...", "images" => {...} }
+    #   document = parser.parse("document.mhtml")
     class MimeParser
-      # Parse MHTML file and extract MIME parts.
+      # Parse MHTML file and return a populated Mhtml::Document.
       #
       # @param path [String] The file path to parse
-      # @return [Hash] Hash containing parsed MIME parts
-      #   - 'html': The main HTML content
-      #   - 'filelist': The filelist.xml content (if present)
-      #   - 'images': Hash of filename => binary data
-      # @raise [ArgumentError] if file cannot be read
-      #
-      # @example Parse a file
-      #   parser = MimeParser.new
-      #   parts = parser.parse("document.mhtml")
+      # @return [Mhtml::Document] The parsed document
+      # @raise [ArgumentError] if path is nil or file not found
       def parse(path)
         raise ArgumentError, 'Path cannot be nil' if path.nil?
         raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
@@ -38,28 +29,33 @@ module Uniword
       # Parse MHTML content string.
       #
       # @param content [String] The MHTML content to parse
-      # @return [Hash] Hash containing parsed MIME parts
+      # @return [Mhtml::Document] The parsed document
       def parse_content(content)
         @content = content
         @boundary = extract_boundary
-        @parts = {}
+        @raw_parts = split_parts
 
-        split_parts
-        extract_parts
+        document = Mhtml::Document.new
+        document.boundary = @boundary
 
-        {
-          'html' => @parts[:html],
-          'filelist' => @parts[:filelist],
-          'images' => @parts[:images] || {}
-        }
+        @raw_parts.each do |part|
+          mime_part = parse_mime_part(part)
+          next unless mime_part
+
+          if mime_part.is_a?(Mhtml::HtmlPart) && !document.html_part
+            document.html_part = mime_part
+          end
+
+          document.add_part(mime_part)
+        end
+
+        extract_metadata(document)
+        document
       end
 
       private
 
       # Extract MIME boundary from content.
-      #
-      # @return [String] The boundary string
-      # @raise [RuntimeError] if no boundary found
       def extract_boundary
         if (match = @content.match(/boundary="([^"]+)"/))
           match[1]
@@ -70,120 +66,126 @@ module Uniword
         end
       end
 
-      # Split content into MIME parts.
-      #
-      # @return [Array<String>] Array of MIME part strings
+      # Split content into raw MIME part strings.
       def split_parts
-        @raw_parts = @content.split(/--#{Regexp.escape(@boundary)}/)
-        @raw_parts.reject! { |part| part.strip.empty? || part.strip == '--' }
+        parts = @content.split(/--#{Regexp.escape(@boundary)}/)
+        parts.reject! { |p| p.strip.empty? || p.strip == '--' }
+        # Skip the global MIME header (Content-Type: multipart/related)
+        parts.reject! { |p| p.match?(/^Content-Type:\s*multipart/i) }
+        parts
       end
 
-      # Extract and parse all MIME parts.
-      #
-      # @return [void]
-      def extract_parts
-        @raw_parts.each do |part|
-          parse_part(part)
-        end
-      end
-
-      # Parse a single MIME part.
-      #
-      # @param part [String] The MIME part content
-      # @return [void]
-      def parse_part(part)
-        # Split headers from content
-        headers, content = part.split(/\r?\n\r?\n/, 2)
-        return unless content
+      # Parse a single raw MIME part into a typed MimePart.
+      def parse_mime_part(raw_part)
+        headers, body = raw_part.split(/\r?\n\r?\n/, 2)
+        return nil unless body
 
         content_type = extract_header(headers, 'Content-Type')
         content_location = extract_header(headers, 'Content-Location')
         encoding = extract_header(headers, 'Content-Transfer-Encoding')
+        content_id = extract_header(headers, 'Content-ID')
 
-        # Decode content if needed
-        decoded_content = decode_content(content, encoding)
+        mime_part = create_typed_part(content_type)
+        return nil unless mime_part
 
-        # Store by type
-        store_part(content_type, content_location, decoded_content)
+        mime_part.content_type = content_type
+        mime_part.content_location = content_location
+        mime_part.content_transfer_encoding = encoding
+        mime_part.content_id = content_id&.gsub(/[<>]/, '')
+        mime_part.raw_content = body.rstrip
+
+        mime_part
+      end
+
+      # Create a typed MimePart based on content type.
+      def create_typed_part(content_type)
+        return nil unless content_type
+
+        case content_type
+        when %r{text/html}i
+          Mhtml::HtmlPart.new
+        when %r{image/}i
+          Mhtml::ImagePart.new
+        when %r{application/vnd.ms-officetheme}i
+          Mhtml::ThemePart.new
+        when %r{text/xml|application/xml}i
+          Mhtml::XmlPart.new
+        else
+          Mhtml::MimePart.new
+        end
       end
 
       # Extract header value from headers string.
-      #
-      # @param headers [String] The headers string
-      # @param header_name [String] The header name to extract
-      # @return [String, nil] The header value or nil
       def extract_header(headers, header_name)
         if (match = headers.match(/^#{header_name}:\s*(.+?)$/i))
           match[1].strip
         end
       end
 
-      # Decode content based on encoding.
-      #
-      # @param content [String] The content to decode
-      # @param encoding [String, nil] The encoding type
-      # @return [String] The decoded content
-      def decode_content(content, encoding)
-        return content unless encoding
+      # Extract metadata from HTML part into document model.
+      def extract_metadata(document)
+        html = document.html_part
+        return unless html
 
-        case encoding.downcase
-        when 'base64'
-          Base64.decode64(content.gsub(/\s+/, ''))
-        when 'quoted-printable'
-          decode_quoted_printable(content)
-        else
-          content
+        # Parse DocumentProperties
+        props_xml = html.document_properties_xml
+        if props_xml
+          begin
+            document.document_properties =
+              Mhtml::Metadata::DocumentProperties.from_xml(props_xml)
+          rescue StandardError
+            # Store raw if parsing fails
+            document.document_properties =
+              Mhtml::Metadata::DocumentProperties.new
+          end
         end
-      end
 
-      # Decode quoted-printable encoded content.
-      #
-      # @param content [String] The quoted-printable content
-      # @return [String] The decoded content
-      def decode_quoted_printable(content)
-        content
-          .gsub(/=\r?\n/, '')
-          .gsub(/=([0-9A-F]{2})/i) { ::Regexp.last_match(1).hex.chr }
-      end
-
-      # Store parsed part in appropriate location.
-      #
-      # @param content_type [String] The content type
-      # @param content_location [String, nil] The content location
-      # @param content [String] The decoded content
-      # @return [void]
-      def store_part(content_type, content_location, content)
-        return unless content_type
-
-        case content_type
-        when %r{text/html}i
-          # Keep the largest HTML part (main document content)
-          # MHTML files may have multiple HTML parts, we want the biggest one
-          @parts[:html] = content if @parts[:html].nil? || content.length > @parts[:html].length
-        when %r{text/xml}i
-          @parts[:filelist] = content if content_location&.include?('filelist')
-        when %r{image/}i
-          @parts[:images] ||= {}
-          filename = extract_filename(content_location)
-          @parts[:images][filename] = content if filename
+        # Parse OfficeDocumentSettings
+        ods_xml = html.office_document_settings_xml
+        if ods_xml
+          begin
+            document.office_document_settings =
+              Mhtml::Metadata::OfficeDocumentSettings.from_xml(ods_xml)
+          rescue StandardError
+            document.office_document_settings =
+              Mhtml::Metadata::OfficeDocumentSettings.new
+          end
         end
-      end
 
-      # Extract filename from content location.
-      #
-      # @param content_location [String, nil] The content location
-      # @return [String, nil] The extracted filename
-      def extract_filename(content_location)
-        return nil unless content_location
+        # Parse WordDocument settings
+        wd_xml = html.word_document_xml
+        if wd_xml
+          begin
+            document.word_document_settings =
+              Mhtml::Metadata::WordDocumentSettings.from_xml(wd_xml)
+          rescue StandardError
+            document.word_document_settings =
+              Mhtml::Metadata::WordDocumentSettings.new
+          end
+        end
 
-        # Remove cid: prefix if present
-        location = content_location.sub(/^cid:/i, '')
+        # Store LatentStyles as raw XML (too many entries to model individually)
+        ls_xml = html.latent_styles_xml
+        document.latent_styles_raw = ls_xml if ls_xml
 
-        # Handle various formats:
-        # - file:///C:/path/to/file.png
-        # - filename.png
-        if (match = location.match(%r{([^/\\]+\.[a-z0-9]+)$}i))
-          match[1]
+        # Classify header/footer HTML parts
+        document.parts.each do |part|
+          next unless part.is_a?(Mhtml::HtmlPart)
+          next if part == document.html_part
+
+          fname = part.filename
+          if fname&.include?('header') || fname&.include?('footer') ||
+             fname&.include?('plchdr')
+            # Convert to HeaderFooterPart
+            idx = document.parts.index(part)
+            hf = Mhtml::HeaderFooterPart.new
+            hf.content_type = part.content_type
+            hf.content_location = part.content_location
+            hf.content_transfer_encoding = part.content_transfer_encoding
+            hf.content_id = part.content_id
+            hf.raw_content = part.raw_content
+            document.parts[idx] = hf
+          end
         end
       end
     end

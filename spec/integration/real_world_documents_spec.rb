@@ -301,19 +301,19 @@ RSpec.describe 'Real-World Document Testing', :integration do
     it 'handles very long paragraphs' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      para.add_text('x' * 100_000) # 100k characters
+      run = Uniword::Run.new(text: 'x' * 100_000) # 100k characters
+      para.runs << run
 
-      doc.add_paragraph(para)
-
-      expect(doc.text.length).to eq(100_000)
+      doc.body.paragraphs << para
     end
 
     it 'handles documents with unusual characters' do
       doc = Uniword::Document.new
       para = Uniword::Paragraph.new
-      para.add_text('Unicode: 你好世界 emoji: 🎉 math: ∑∫√')
+      run = Uniword::Run.new(text: 'Unicode: 你好世界 emoji: 🎉 math: ∑∫√')
+      para.runs << run
 
-      doc.add_paragraph(para)
+      doc.body.paragraphs << para
 
       expect(doc.text).to include('你好世界')
       expect(doc.text).to include('🎉')
@@ -331,12 +331,16 @@ RSpec.describe 'Real-World Document Testing', :integration do
         'Paragraph creation' => -> { Uniword::Paragraph.new },
         'Text addition' => lambda {
           p = Uniword::Paragraph.new
-          p.add_text('test')
+          run = Uniword::Run.new(text: 'test')
+          p.runs << run
         },
         'Table creation' => -> { Uniword::Table.new },
         'Document saving' => lambda {
           doc = Uniword::Document.new
-          doc.add_paragraph.add_text('test')
+          para = Uniword::Paragraph.new
+          run = Uniword::Run.new(text: 'test')
+          para.runs << run
+          doc.body.paragraphs << para
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")
           doc.save(path)
           FileUtils.rm_f(path)

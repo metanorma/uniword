@@ -15,15 +15,43 @@ module Uniword
         element 'document'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
+        namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordProcessingDrawing, declare: :auto },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto },
+        ]
+
         map_element 'body', to: :body, render_default: true
+      end
+
+      # Override to_xml to sync body element_order before serialization.
+      # lutaml-model's compiled serializer may bypass Body#to_xml when
+      # serializing Body as a child element, so we sync here at the
+      # DocumentRoot level to ensure programmatically added paragraphs
+      # and tables are included.
+      def to_xml(options = {})
+        body&.sync_element_order_for_serialization
+        super
       end
 
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
       attr_accessor :core_properties # docProps/core.xml - Uniword::Ooxml::CoreProperties
       attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks
+      # Headers and footers (stored as hash: type => Header/Footer)
+      attr_accessor :headers, :footers
+      # Footnotes and endnotes (separate XML parts in DOCX package)
+      attr_accessor :footnotes, :endnotes
+      # Image parts to embed in the DOCX package
+      # Hash: r_id => { path: String, data: String, content_type: String, target: String }
+      attr_accessor :image_parts
+      # Chart parts to embed in the DOCX package
+      # Hash: r_id => { xml: String, target: String }
+      attr_accessor :chart_parts
+      # Bibliography sources for sources.xml
+      attr_accessor :bibliography_sources
       # Round-trip parts (copied from DocxPackage during load)
-      attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels
+      attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels, :package_rels, :content_types
 
       # Get app_properties (lazy initialization)
       #
@@ -69,159 +97,6 @@ module Uniword
       # Setter for styles_configuration
       attr_writer :styles_configuration
 
-      # Get all sections (paragraphs with section properties)
-      #
-      # @return [Array<Paragraph>] Paragraphs that define sections
-      def sections
-        # In OOXML, sections are defined by sectPr elements within paragraphs
-        # Return paragraphs that have section_properties
-        body&.paragraphs&.select { |p| p.properties&.section_properties } || []
-      end
-
-      # Get current section (last section with section properties)
-      #
-      # @return [Paragraph, nil] The current section or nil
-      def current_section
-        sections.last
-      end
-
-      # Set sections (API compatibility - no-op)
-      #
-      # @param value [Array] Section data
-      # @return [Array]
-      def sections=(_value)
-        # Sections are determined by section_properties in paragraphs
-        # This is a no-op for API compatibility
-      end
-
-      # Add chart (API compatibility placeholder)
-      #
-      # @param type [Symbol] Chart type
-      # @return [Chart] The created chart
-      def add_chart(_type = nil)
-        Uniword::Chart::Chart.new
-        # TODO: Implement chart addition to document
-      end
-
-      # Add element to document (API compatibility)
-      #
-      # @param element [Paragraph, Table, etc.] The element to add
-      # @return [Object] The added element
-      def add_element(element)
-        case element
-        when Paragraph
-          body.paragraphs << element
-        when Table
-          body.tables << element
-        else
-          # Try to add as paragraph if it responds to runs
-          body.paragraphs << element if element.respond_to?(:runs)
-        end
-        element
-      end
-
-      # Add paragraph with optional text and formatting
-      #
-      # @param text [String, nil] Optional text content
-      # @param options [Hash] Formatting options (bold, italic, style, etc.)
-      # @return [Paragraph] The created paragraph
-      def add_paragraph(text = nil, **options)
-        # Handle case where a Paragraph object is passed instead of text
-        case text
-        when Paragraph
-          para = text
-          self.body ||= Body.new
-          body.paragraphs << para
-          return para
-        end
-
-        para = Paragraph.new
-
-        # Add text if provided - use constructor for proper Text object conversion
-        if text
-          run = Run.new(text: text)
-
-          # Apply run formatting from options
-          if options.any?
-            run.properties ||= RunProperties.new
-            run.properties.bold = Properties::Bold.new if options[:bold]
-            run.properties.italic = Properties::Italic.new if options[:italic]
-            run.properties.underline = Properties::Underline.new(value: options[:underline]) if options[:underline]
-            run.properties.color = Properties::ColorValue.new(value: options[:color]) if options[:color]
-            run.properties.size = Properties::FontSize.new(value: options[:size] * 2) if options[:size]
-            run.properties.font = Properties::RunFonts.new(ascii: options[:font]) if options[:font]
-          end
-
-          para.runs << run
-        end
-
-        # Apply paragraph formatting from options
-        if options[:style] || options[:alignment] || options[:heading]
-          para.properties ||= ParagraphProperties.new
-
-          # Handle heading option
-          if options[:heading]
-            heading_num = options[:heading].to_s.gsub(/[^\d]/, '')
-            para.properties.style = "Heading#{heading_num}"
-          elsif options[:style]
-            para.properties.style = options[:style]
-          end
-
-          para.properties.alignment = options[:alignment] if options[:alignment]
-        end
-
-        # Ensure body exists
-        self.body ||= Body.new
-
-        # Add paragraph to body
-        body.paragraphs << para
-        para
-      end
-
-      # Add table with optional dimensions
-      #
-      # Add a table to the document
-      #
-      # @param table_or_rows [Table, Integer, nil] Table object or number of rows
-      # @param cols [Integer, nil] Number of columns (if first arg is rows)
-      # @return [Table] The added/created table
-      def add_table(table_or_rows = nil, cols = nil)
-        # Handle different argument patterns
-        case table_or_rows
-        when Table
-          # Add the provided table directly
-          table = table_or_rows
-        when Integer
-          # Create a new table with specified dimensions
-          table = Table.new
-          rows = table_or_rows
-
-          rows.times do
-            row = TableRow.new
-            row.cells = []
-
-            cols.times do
-              cell = TableCell.new
-              cell.paragraphs = [Paragraph.new]
-              row.cells << cell
-            end
-
-            table.rows ||= []
-            table.rows << row
-          end
-        else
-          # Create empty table
-          table = Table.new
-        end
-
-        # Ensure body exists
-        self.body ||= Body.new
-
-        # Add table to body
-        body.tables << table
-        table
-      end
-
       # Save document to file
       #
       # @param path [String] Output file path
@@ -261,6 +136,21 @@ module Uniword
         body&.tables || []
       end
 
+      # Get bookmarks from document paragraphs
+      #
+      # @return [Hash{String => Object}] Map of bookmark names to bookmark data
+      def bookmarks
+        result = {}
+        return result unless body&.paragraphs
+
+        body.paragraphs.each do |para|
+          para.bookmark_starts&.each do |bs|
+            result[bs.name.to_s] = bs if bs.name
+          end
+        end
+        result
+      end
+
       # Apply theme to document
       #
       # @param name [String, Symbol] Theme name (e.g., 'celestial', 'atlas')
@@ -297,18 +187,38 @@ module Uniword
         self
       end
 
-      # Get styles from document
+      # Apply theme from another document
       #
-      # @return [Array<Style>] Array of styles
-      def styles
-        @styles ||= []
+      # @param source_path [String] Path to source .docx file
+      # @return [self] For method chaining
+      def apply_theme_from(source_path)
+        source_doc = Uniword.load(source_path)
+        self.theme = source_doc.theme.dup if source_doc.theme
+        self
       end
 
-      # Set styles on document
+      # Apply styles from another document
       #
-      # @param value [Array<Style>] Styles to set
-      # @return [Array<Style>] The styles
-      attr_writer :styles
+      # @param source_path [String] Path to source .docx file
+      # @param strategy [Symbol] Conflict resolution strategy
+      # @return [self] For method chaining
+      def apply_styles_from(source_path, strategy: :keep_existing)
+        source_doc = Uniword.load(source_path)
+        styles_configuration.merge(source_doc.styles_configuration, conflict_resolution: strategy)
+        self
+      end
+
+      # Apply both theme and styles from a template document
+      #
+      # @param template_path [String] Path to template .docx file
+      # @param strategy [Symbol] Conflict resolution strategy for styles
+      # @return [self] For method chaining
+      def apply_template(template_path, strategy: :keep_existing)
+        template_doc = Uniword.load(template_path)
+        self.theme = template_doc.theme.dup if template_doc.theme
+        styles_configuration.merge(template_doc.styles_configuration, conflict_resolution: strategy)
+        self
+      end
 
       # Custom inspect for readable output
       #

@@ -15,7 +15,8 @@ module Uniword
       attribute :alignment, :string
 
       # Simple element wrapper objects
-      attribute :style, Properties::StyleReference
+      attribute :style, :string
+      attribute :style_wrapper, Properties::StyleReference  # Internal wrapper for pStyle XML
       attribute :alignment_wrapper, Properties::Alignment  # Internal wrapper object
       attribute :outline_level, Properties::OutlineLevel
       attribute :numbering_properties, Properties::NumberingProperties
@@ -141,8 +142,8 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        # Style reference (wrapper object)
-        map_element 'pStyle', to: :style, render_nil: false
+        # Style reference (wrapper for <w:pStyle w:val="..."/>)
+        map_element 'pStyle', to: :style_wrapper, render_nil: false
 
         # Alignment (wrapper object)
         map_element 'jc', to: :alignment_wrapper, render_nil: false
@@ -209,20 +210,6 @@ module Uniword
         convert_flat_attributes!
       end
 
-      # Style setter - converts string style IDs to StyleReference objects
-      def style=(value)
-        @style = case value
-                 when Properties::StyleReference
-                   value
-                 when String
-                   Properties::StyleReference.new(value: value)
-                 when nil
-                   nil
-                 else
-                   value
-                 end
-      end
-
       # Convert flat convenience attributes to proper wrapper objects
       # This handles cases like ParagraphProperties.new(alignment: 'center')
       # where the flat attribute is set but the wrapper object is not
@@ -231,6 +218,12 @@ module Uniword
         if @alignment && !alignment_wrapper
           self.alignment_wrapper = Properties::Alignment.new
           alignment_wrapper.value = @alignment
+        end
+
+        # Style - create style_wrapper from flat style attribute
+        if @style && !style_wrapper
+          self.style_wrapper = Properties::StyleReference.new
+          style_wrapper.value = @style
         end
 
         # Spacing - create spacing object from flat spacing attributes
@@ -339,6 +332,41 @@ module Uniword
         else
           @alignment = nil
           self.alignment_wrapper = value
+        end
+        self
+      end
+
+      # Get style value (returns string directly for API compatibility)
+      #
+      # @return [String, nil] Style ID
+      def style
+        return @style if @style
+
+        val = style_wrapper
+        return nil if val.nil?
+
+        val = val.value if val.respond_to?(:value)
+        val.to_s
+      end
+
+      # Set style value (accepts string or StyleReference for API compatibility)
+      #
+      # @param value [String, Properties::StyleReference] Style value or object
+      # @return [self] For method chaining
+      def style=(value)
+        case value
+        when Properties::StyleReference
+          self.style_wrapper = value
+        when String
+          @style = value
+          self.style_wrapper ||= Properties::StyleReference.new
+          style_wrapper.value = value
+        when nil
+          @style = nil
+          self.style_wrapper = nil
+        else
+          @style = nil
+          self.style_wrapper = value
         end
         self
       end

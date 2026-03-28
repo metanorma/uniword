@@ -219,8 +219,14 @@ RSpec.describe Uniword::Ooxml::AppProperties do
 
     it 'auto-populates statistics during serialization' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('Test paragraph one')
-      doc.add_paragraph('Test paragraph two')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph one')
+      para1.runs << run1
+      doc.body.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph two')
+      para2.runs << run2
+      doc.body.paragraphs << para2
 
       # Serializer should auto-populate these
       expect(doc.app_properties).to be_a(described_class)

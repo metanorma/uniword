@@ -14,7 +14,6 @@ RSpec.describe 'docx-js compatibility: Document' do
 
       # Verify basic structure
       expect(doc.paragraphs).to be_an(Array)
-      expect(doc.sections).to be_an(Array)
     end
   end
 end

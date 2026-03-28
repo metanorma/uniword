@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
   describe 'Numbered Lists' do
@@ -9,54 +10,54 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # Add paragraphs with upper roman numbering
-        doc.add_paragraph('First item') do |para|
-          para.numbering = {
-            reference: 'roman-reference',
-            level: 0
-          }
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'First item')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(1, 0)
+        doc.body.paragraphs << para1
 
-        doc.add_paragraph('Second item') do |para|
-          para.numbering = {
-            reference: 'roman-reference',
-            level: 0
-          }
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Second item')
+        para2.runs << run2
+        builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+        builder2.numbering(1, 0)
+        doc.body.paragraphs << para2
 
         # Verify numbering configuration
         expect(doc.paragraphs.count).to eq(2)
-        expect(doc.paragraphs[0].numbering).to be_truthy
-        expect(doc.paragraphs[1].numbering).to be_truthy
+        expect(doc.paragraphs[0].properties&.num_id).to eq(1)
+        expect(doc.paragraphs[1].properties&.num_id).to eq(1)
       end
 
       it 'should support decimal numbering format' do
         doc = Uniword::Document.new
 
         # Add paragraphs with decimal numbering
-        doc.add_paragraph('Step 1 - Add sugar') do |para|
-          para.numbering = {
-            reference: 'decimal-reference',
-            level: 0
-          }
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Step 1 - Add sugar')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(2, 0)
+        doc.body.paragraphs << para1
 
-        doc.add_paragraph('Step 2 - Add wheat') do |para|
-          para.numbering = {
-            reference: 'decimal-reference',
-            level: 0
-          }
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Step 2 - Add wheat')
+        para2.runs << run2
+        builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+        builder2.numbering(2, 0)
+        doc.body.paragraphs << para2
 
-        doc.add_paragraph('Step 3 - Put in oven') do |para|
-          para.numbering = {
-            reference: 'decimal-reference',
-            level: 0
-          }
-        end
+        para3 = Uniword::Paragraph.new
+        run3 = Uniword::Wordprocessingml::Run.new(text: 'Step 3 - Put in oven')
+        para3.runs << run3
+        builder3 = Uniword::Builder::ParagraphBuilder.new(para3)
+        builder3.numbering(2, 0)
+        doc.body.paragraphs << para3
 
         expect(doc.paragraphs.count).to eq(3)
         doc.paragraphs.each do |para|
-          expect(para.numbering).to be_truthy
+          expect(para.properties&.num_id).to be_truthy
         end
       end
 
@@ -64,16 +65,14 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # Add paragraphs with padded decimal numbering
-        doc.add_paragraph('Item with brackets') do |para|
-          para.numbering = {
-            reference: 'padded-reference',
-            level: 0,
-            format: 'decimal_zero', # e.g., [01], [02], etc.
-            text: '[%1]'
-          }
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Item with brackets')
+        para.runs << run
+        builder = Uniword::Builder::ParagraphBuilder.new(para)
+        builder.numbering(3, 0)
+        doc.body.paragraphs << para
 
-        expect(doc.paragraphs.first.numbering).to be_truthy
+        expect(doc.paragraphs.first.properties&.num_id).to be_truthy
       end
     end
 
@@ -82,32 +81,41 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # Paragraphs with contextual spacing
-        doc.add_paragraph('Line with contextual spacing') do |para|
-          para.numbering = { reference: 'ref1', level: 0 }
-          para.contextual_spacing = true
-          para.spacing_before = 200
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Line with contextual spacing')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(1, 0)
+        builder1.contextual_spacing = true
+        builder1.spacing(before: 200)
+        doc.body.paragraphs << para1
 
-        doc.add_paragraph('Another line with contextual spacing') do |para|
-          para.numbering = { reference: 'ref1', level: 0 }
-          para.contextual_spacing = true
-          para.spacing_before = 200
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Another line with contextual spacing')
+        para2.runs << run2
+        builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+        builder2.numbering(1, 0)
+        builder2.contextual_spacing = true
+        builder2.spacing(before: 200)
+        doc.body.paragraphs << para2
 
-        expect(doc.paragraphs[0].contextual_spacing).to be true
-        expect(doc.paragraphs[1].contextual_spacing).to be true
+        expect(doc.paragraphs[0].properties&.contextual_spacing).to be true
+        expect(doc.paragraphs[1].properties&.contextual_spacing).to be true
       end
 
       it 'should support disabling contextual spacing' do
         doc = Uniword::Document.new
 
-        doc.add_paragraph('Line without contextual spacing') do |para|
-          para.numbering = { reference: 'ref1', level: 0 }
-          para.contextual_spacing = false
-          para.spacing_before = 200
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Line without contextual spacing')
+        para.runs << run
+        builder = Uniword::Builder::ParagraphBuilder.new(para)
+        builder.numbering(1, 0)
+        builder.contextual_spacing = false
+        builder.spacing(before: 200)
+        doc.body.paragraphs << para
 
-        expect(doc.paragraphs.first.contextual_spacing).to be false
+        expect(doc.paragraphs.first.properties&.contextual_spacing).to be false
       end
     end
 
@@ -116,43 +124,43 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # First instance
-        doc.add_paragraph('First list, item 1') do |para|
-          para.numbering = {
-            reference: 'padded-ref',
-            level: 0,
-            instance: 2
-          }
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'First list, item 1')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(1, 0)
+        doc.body.paragraphs << para1
 
-        doc.add_paragraph('First list, item 2') do |para|
-          para.numbering = {
-            reference: 'padded-ref',
-            level: 0,
-            instance: 2
-          }
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'First list, item 2')
+        para2.runs << run2
+        builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+        builder2.numbering(1, 0)
+        doc.body.paragraphs << para2
 
         # Separator
-        doc.add_paragraph('Next Section', heading: :heading_2)
+        sep = Uniword::Paragraph.new
+        run_sep = Uniword::Wordprocessingml::Run.new(text: 'Next Section')
+        sep.runs << run_sep
+        doc.body.paragraphs << sep
 
         # Second instance (should restart numbering)
-        doc.add_paragraph('Second list, item 1') do |para|
-          para.numbering = {
-            reference: 'padded-ref',
-            level: 0,
-            instance: 3
-          }
-        end
+        para3 = Uniword::Paragraph.new
+        run3 = Uniword::Wordprocessingml::Run.new(text: 'Second list, item 1')
+        para3.runs << run3
+        builder3 = Uniword::Builder::ParagraphBuilder.new(para3)
+        builder3.numbering(2, 0)
+        doc.body.paragraphs << para3
 
-        doc.add_paragraph('Second list, item 2') do |para|
-          para.numbering = {
-            reference: 'padded-ref',
-            level: 0,
-            instance: 3
-          }
-        end
+        para4 = Uniword::Paragraph.new
+        run4 = Uniword::Wordprocessingml::Run.new(text: 'Second list, item 2')
+        para4.runs << run4
+        builder4 = Uniword::Builder::ParagraphBuilder.new(para4)
+        builder4.numbering(2, 0)
+        doc.body.paragraphs << para4
 
-        expect(doc.paragraphs.select(&:numbering).count).to eq(4)
+        numbered = doc.paragraphs.select { |p| p.properties&.num_id }
+        expect(numbered.count).to eq(4)
       end
 
       it 'should support continuing numbering without instance' do
@@ -160,15 +168,15 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
 
         # Add multiple numbered items
         10.times do |i|
-          doc.add_paragraph("Item #{i + 1}") do |para|
-            para.numbering = {
-              reference: 'continuous-ref',
-              level: 0
-            }
-          end
+          para = Uniword::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: "Item #{i + 1}")
+          para.runs << run
+          builder = Uniword::Builder::ParagraphBuilder.new(para)
+          builder.numbering(1, 0)
+          doc.body.paragraphs << para
         end
 
-        numbered_paras = doc.paragraphs.select(&:numbering)
+        numbered_paras = doc.paragraphs.select { |p| p.properties&.num_id }
         expect(numbered_paras.count).to eq(10)
       end
     end
@@ -180,23 +188,32 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # Level 0
-        doc.add_paragraph('Level 0 item') do |para|
-          para.numbering = { reference: 'multi-ref', level: 0 }
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Level 0 item')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(1, 0)
+        doc.body.paragraphs << para1
 
         # Level 1 (indented)
-        doc.add_paragraph('Level 1 item') do |para|
-          para.numbering = { reference: 'multi-ref', level: 1 }
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Level 1 item')
+        para2.runs << run2
+        builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+        builder2.numbering(1, 1)
+        doc.body.paragraphs << para2
 
         # Back to Level 0
-        doc.add_paragraph('Back to level 0') do |para|
-          para.numbering = { reference: 'multi-ref', level: 0 }
-        end
+        para3 = Uniword::Paragraph.new
+        run3 = Uniword::Wordprocessingml::Run.new(text: 'Back to level 0')
+        para3.runs << run3
+        builder3 = Uniword::Builder::ParagraphBuilder.new(para3)
+        builder3.numbering(1, 0)
+        doc.body.paragraphs << para3
 
-        expect(doc.paragraphs[0].numbering[:level]).to eq(0)
-        expect(doc.paragraphs[1].numbering[:level]).to eq(1)
-        expect(doc.paragraphs[2].numbering[:level]).to eq(0)
+        expect(doc.paragraphs[0].properties&.ilvl).to eq(0)
+        expect(doc.paragraphs[1].properties&.ilvl).to eq(1)
+        expect(doc.paragraphs[2].properties&.ilvl).to eq(0)
       end
     end
 
@@ -206,15 +223,17 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_paragraph('Indented numbered item') do |para|
-          para.numbering = { reference: 'indent-ref', level: 0 }
-          para.indent_left = 720 # 0.5 inch in twips
-          para.indent_hanging = 259 # 0.18 inch in twips
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Indented numbered item')
+        para.runs << run
+        builder = Uniword::Builder::ParagraphBuilder.new(para)
+        builder.numbering(1, 0)
+        builder.indent(left: 720, hanging: 259)
+        doc.body.paragraphs << para
 
         para = doc.paragraphs.first
-        expect(para.indent_left).to eq(720)
-        expect(para.indent_hanging).to eq(259)
+        expect(para.properties&.indentation&.left).to eq(720)
+        expect(para.properties&.indentation&.hanging).to eq(259)
       end
     end
   end
@@ -226,13 +245,17 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_paragraph('First bullet') do |para|
-          para.bullet = true
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'First bullet')
+        para1.runs << run1
+        para1.bullet = true
+        doc.body.paragraphs << para1
 
-        doc.add_paragraph('Second bullet') do |para|
-          para.bullet = true
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Second bullet')
+        para2.runs << run2
+        para2.bullet = true
+        doc.body.paragraphs << para2
 
         expect(doc.paragraphs[0].bullet?).to be true
         expect(doc.paragraphs[1].bullet?).to be true
@@ -243,9 +266,11 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_paragraph('Custom bullet') do |para|
-          para.bullet = '•' # Custom character
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Custom bullet')
+        para.runs << run
+        para.bullet = '•' # Custom character
+        doc.body.paragraphs << para
 
         expect(doc.paragraphs.first.bullet).to eq('•')
       end
@@ -258,23 +283,31 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
         doc = Uniword::Document.new
 
         # Numbered item
-        doc.add_paragraph('Numbered item') do |para|
-          para.numbering = { reference: 'num-ref', level: 0 }
-        end
+        para1 = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Numbered item')
+        para1.runs << run1
+        builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+        builder1.numbering(1, 0)
+        doc.body.paragraphs << para1
 
         # Bullet item
-        doc.add_paragraph('Bullet item') do |para|
-          para.bullet = true
-        end
+        para2 = Uniword::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Bullet item')
+        para2.runs << run2
+        para2.bullet = true
+        doc.body.paragraphs << para2
 
         # Another numbered item (different reference)
-        doc.add_paragraph('Different numbered item') do |para|
-          para.numbering = { reference: 'other-ref', level: 0 }
-        end
+        para3 = Uniword::Paragraph.new
+        run3 = Uniword::Wordprocessingml::Run.new(text: 'Different numbered item')
+        para3.runs << run3
+        builder3 = Uniword::Builder::ParagraphBuilder.new(para3)
+        builder3.numbering(2, 0)
+        doc.body.paragraphs << para3
 
-        expect(doc.paragraphs[0].numbering).to be_truthy
+        expect(doc.paragraphs[0].properties&.num_id).to be_truthy
         expect(doc.paragraphs[1].bullet?).to be true
-        expect(doc.paragraphs[2].numbering).to be_truthy
+        expect(doc.paragraphs[2].properties&.num_id).to be_truthy
       end
     end
   end
@@ -285,8 +318,19 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
 
       # Create document with numbering
       original = Uniword::Document.new
-      original.add_paragraph('Step 1') { |p| p.numbering = { reference: 'steps', level: 0 } }
-      original.add_paragraph('Step 2') { |p| p.numbering = { reference: 'steps', level: 0 } }
+      para1 = Uniword::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Step 1')
+      para1.runs << run1
+      builder1 = Uniword::Builder::ParagraphBuilder.new(para1)
+      builder1.numbering(1, 0)
+      original.body.paragraphs << para1
+
+      para2 = Uniword::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Step 2')
+      para2.runs << run2
+      builder2 = Uniword::Builder::ParagraphBuilder.new(para2)
+      builder2.numbering(1, 0)
+      original.body.paragraphs << para2
 
       # Save and reload
       temp_path = '/tmp/numbering_test.docx'
@@ -294,8 +338,8 @@ RSpec.describe 'Docx.js Compatibility: Numbering and Lists', :compatibility do
       reloaded = Uniword.load(temp_path)
 
       # Verify numbering preserved
-      expect(reloaded.paragraphs[0].numbering).to be_truthy
-      expect(reloaded.paragraphs[1].numbering).to be_truthy
+      expect(reloaded.paragraphs[0].properties&.num_id).to be_truthy
+      expect(reloaded.paragraphs[1].properties&.num_id).to be_truthy
     end
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'docx-js compatibility: Paragraph' do
   describe '#constructor' do
@@ -23,49 +24,56 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'creates heading 1' do
       # TypeScript: new Paragraph({ heading: HeadingLevel.HEADING_1 })
       para = Uniword::Paragraph.new
-      para.set_style('Heading1')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading1'
 
       expect(para.properties&.style).to eq('Heading1')
     end
 
     it 'creates heading 2' do
       para = Uniword::Paragraph.new
-      para.set_style('Heading2')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading2'
 
       expect(para.properties&.style).to eq('Heading2')
     end
 
     it 'creates heading 3' do
       para = Uniword::Paragraph.new
-      para.set_style('Heading3')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading3'
 
       expect(para.properties&.style).to eq('Heading3')
     end
 
     it 'creates heading 4' do
       para = Uniword::Paragraph.new
-      para.set_style('Heading4')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading4'
 
       expect(para.properties&.style).to eq('Heading4')
     end
 
     it 'creates heading 5' do
       para = Uniword::Paragraph.new
-      para.set_style('Heading5')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading5'
 
       expect(para.properties&.style).to eq('Heading5')
     end
 
     it 'creates heading 6' do
       para = Uniword::Paragraph.new
-      para.set_style('Heading6')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Heading6'
 
       expect(para.properties&.style).to eq('Heading6')
     end
 
     it 'creates title style' do
       para = Uniword::Paragraph.new
-      para.set_style('Title')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'Title'
 
       expect(para.properties&.style).to eq('Title')
     end
@@ -75,49 +83,56 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets center alignment' do
       # TypeScript: new Paragraph({ alignment: AlignmentType.CENTER })
       para = Uniword::Paragraph.new
-      para.align('center')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'center'
 
       expect(para.properties&.alignment).to eq('center')
     end
 
     it 'sets left alignment' do
       para = Uniword::Paragraph.new
-      para.align('left')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'left'
 
       expect(para.properties&.alignment).to eq('left')
     end
 
     it 'sets right alignment' do
       para = Uniword::Paragraph.new
-      para.align('right')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'right'
 
       expect(para.properties&.alignment).to eq('right')
     end
 
     it 'sets start alignment' do
       para = Uniword::Paragraph.new
-      para.align('start')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'start'
 
       expect(para.properties&.alignment).to eq('start')
     end
 
     it 'sets end alignment' do
       para = Uniword::Paragraph.new
-      para.align('end')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'end'
 
       expect(para.properties&.alignment).to eq('end')
     end
 
     it 'sets distribute alignment' do
       para = Uniword::Paragraph.new
-      para.align('distribute')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'distribute'
 
       expect(para.properties&.alignment).to eq('distribute')
     end
 
     it 'sets justified alignment' do
       para = Uniword::Paragraph.new
-      para.align('both')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.align = 'both'
 
       expect(para.properties&.alignment).to eq('both')
     end
@@ -160,16 +175,16 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'enables contextual spacing' do
       # TypeScript: new Paragraph({ contextualSpacing: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
-      para.properties.contextual_spacing = true
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.contextual_spacing = true
 
       expect(para.properties&.contextual_spacing).to be true
     end
 
     it 'disables contextual spacing' do
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
-      para.properties.contextual_spacing = false
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.contextual_spacing = false
 
       expect(para.properties&.contextual_spacing).to be false
     end
@@ -200,10 +215,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'adds page break as run element' do
       # TypeScript: new Paragraph({ children: [new PageBreak()] })
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.break = Uniword::Wordprocessingml::Break.new
-      run.break.type = 'page'
-      para.runs << run
+      para.runs << Uniword::Builder.page_break
 
       expect(para.runs).not_to be_empty
       expect(para.runs.first.break&.type).to eq('page')
@@ -212,8 +224,8 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets page break before property' do
       # TypeScript: new Paragraph({ pageBreakBefore: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
-      para.properties.page_break_before = true
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.page_break_before(true)
 
       expect(para.properties&.page_break_before).to be true
     end
@@ -223,8 +235,9 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'creates bullet paragraph with default level 0' do
       # TypeScript: new Paragraph({ bullet: { level: 0 } })
       para = Uniword::Paragraph.new
-      para.set_style('ListParagraph')
-      para.set_numbering(1, 0)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'ListParagraph'
+      builder.numbering(1, 0)
 
       expect(para.properties&.style).to eq('ListParagraph')
       expect(para.properties&.ilvl).to eq(0)
@@ -232,8 +245,9 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
 
     it 'creates bullet paragraph with level 1' do
       para = Uniword::Paragraph.new
-      para.set_style('ListParagraph')
-      para.set_numbering(1, 1)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'ListParagraph'
+      builder.numbering(1, 1)
 
       expect(para.properties&.ilvl).to eq(1)
     end
@@ -243,16 +257,18 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'creates numbered paragraph with ListParagraph style' do
       # TypeScript: new Paragraph({ numbering: { reference: "test id", level: 0 } })
       para = Uniword::Paragraph.new
-      para.set_style('ListParagraph')
-      para.set_numbering('test id', 0)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'ListParagraph'
+      builder.numbering('test id', 0)
 
       expect(para.properties&.style).to eq('ListParagraph')
     end
 
     it 'allows custom style with numbering' do
       para = Uniword::Paragraph.new
-      para.set_style('myFancyStyle')
-      para.set_numbering('test id', 0)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'myFancyStyle'
+      builder.numbering('test id', 0)
 
       expect(para.properties&.style).to eq('myFancyStyle')
     end
@@ -260,7 +276,8 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'supports custom numbering without ListParagraph style' do
       # TypeScript: numbering: { reference: "test id", level: 0, custom: true }
       para = Uniword::Paragraph.new
-      para.set_numbering('test id', 0)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.numbering('test id', 0)
       # No style set for custom numbering
 
       expect(para.properties&.style).to be_nil
@@ -268,10 +285,11 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
 
     it 'supports numbering with instance' do
       para = Uniword::Paragraph.new
-      para.set_style('ListParagraph')
-      para.set_numbering('{test id-4}', 0)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'ListParagraph'
+      builder.numbering(4, 0)
 
-      expect(para.properties&.num_id).to eq('{test id-4}')
+      expect(para.properties&.num_id).to eq(4)
     end
   end
 
@@ -289,7 +307,8 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets paragraph style to given styleId' do
       # TypeScript: new Paragraph({ style: "myFancyStyle" })
       para = Uniword::Paragraph.new
-      para.set_style('myFancyStyle')
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.style = 'myFancyStyle'
 
       expect(para.properties&.style).to eq('myFancyStyle')
     end
@@ -299,9 +318,10 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets paragraph indent' do
       # TypeScript: new Paragraph({ indent: { left: 720 } })
       para = Uniword::Paragraph.new
-      para.indent_left(720)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.indent(left: 720)
 
-      expect(para.properties&.indent_left).to eq(720)
+      expect(para.properties&.indentation&.left).to eq(720)
     end
   end
 
@@ -309,11 +329,11 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets paragraph spacing' do
       # TypeScript: new Paragraph({ spacing: { before: 90, line: 50 } })
       para = Uniword::Paragraph.new
-      para.spacing_before(90)
-      para.line_spacing(50)
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.spacing(before: 90, line: 50)
 
-      expect(para.properties&.spacing_before).to eq(90)
-      expect(para.properties&.line_spacing).to eq(50)
+      expect(para.properties&.spacing&.before).to eq(90)
+      expect(para.properties&.spacing&.line).to eq(50)
     end
   end
 
@@ -321,7 +341,9 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets keep lines property' do
       # TypeScript: new Paragraph({ keepLines: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.keep_next(false) # not keep_next
+      para.properties ||= Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.keep_lines = true
 
       expect(para.properties&.keep_lines).to be true
@@ -332,8 +354,8 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets keep next property' do
       # TypeScript: new Paragraph({ keepNext: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
-      para.properties.keep_next = true
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.keep_next(true)
 
       expect(para.properties&.keep_next).to be true
     end
@@ -343,7 +365,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets right to left layout' do
       # TypeScript: new Paragraph({ bidirectional: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.bidirectional = true
 
       expect(para.properties&.bidirectional).to be true
@@ -354,7 +376,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'disables line numbers' do
       # TypeScript: new Paragraph({ suppressLineNumbers: true })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.suppress_line_numbers = true
 
       expect(para.properties&.suppress_line_numbers).to be true
@@ -365,11 +387,10 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets paragraph outline level' do
       # TypeScript: new Paragraph({ outlineLevel: 0 })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
-      para.properties.outline_level = Uniword::Properties::OutlineLevel.new
-      para.properties.outline_level.value = 0
+      builder = Uniword::Builder::ParagraphBuilder.new(para)
+      builder.outline_level = 0
 
-      expect(para.properties&.outline_level&.value).to eq(0)
+      expect(para.properties&.outline_level).to eq(0)
     end
   end
 
@@ -377,7 +398,7 @@ RSpec.describe 'docx-js compatibility: Paragraph' do
     it 'sets shading with type, color, and fill' do
       # TypeScript: new Paragraph({ shading: { type: ShadingType.REVERSE_DIAGONAL_STRIPE, color: "00FFFF", fill: "FF0000" } })
       para = Uniword::Paragraph.new
-      para.properties = Uniword::ParagraphProperties.new
+      para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.shading_type = 'reverseDiagonalStripe'
       para.properties.shading_color = '00FFFF'
       para.properties.shading_fill = 'FF0000'

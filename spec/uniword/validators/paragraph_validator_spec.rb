@@ -28,8 +28,10 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it 'returns true for paragraph with valid runs' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Hello')
-      paragraph.add_text('World')
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+      paragraph.runs << run1
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'World')
+      paragraph.runs << run2
 
       expect(validator.valid?(paragraph)).to be true
     end
@@ -39,7 +41,8 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
         alignment: 'center'
       )
       paragraph = Uniword::Wordprocessingml::Paragraph.new(properties: properties)
-      paragraph.add_text('Centered text')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Centered text')
+      paragraph.runs << run
 
       expect(validator.valid?(paragraph)).to be true
     end
@@ -74,7 +77,8 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it 'returns empty array for valid paragraph' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      paragraph.runs << run
 
       errors = validator.errors(paragraph)
       expect(errors).to be_empty
@@ -120,7 +124,8 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it 'validates paragraphs through the registry' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      paragraph.runs << run
 
       validator = Uniword::Validators::ElementValidator.for(Uniword::Wordprocessingml::Paragraph)
       expect(validator.valid?(paragraph)).to be true
@@ -142,7 +147,8 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it 'handles paragraph with nil properties' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Test')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
+      paragraph.runs << run
 
       expect(validator.valid?(paragraph)).to be true
       expect(validator.errors(paragraph)).to be_empty
@@ -157,9 +163,12 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
       )
       paragraph = Uniword::Wordprocessingml::Paragraph.new(properties: properties)
 
-      paragraph.add_text('This is ')
-      paragraph.add_text('a complex ')
-      paragraph.add_text('paragraph.')
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'This is ')
+      paragraph.runs << run1
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'a complex ')
+      paragraph.runs << run2
+      run3 = Uniword::Wordprocessingml::Run.new(text: 'paragraph.')
+      paragraph.runs << run3
 
       expect(validator.valid?(paragraph)).to be true
       expect(validator.errors(paragraph)).to be_empty
@@ -167,9 +176,11 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it 'detects mixed valid and invalid runs' do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.add_text('Valid run')
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Valid run')
+      paragraph.runs << run1
       paragraph.runs << 'Invalid run'
-      paragraph.add_text('Another valid run')
+      run3 = Uniword::Wordprocessingml::Run.new(text: 'Another valid run')
+      paragraph.runs << run3
 
       expect(validator.valid?(paragraph)).to be false
       errors = validator.errors(paragraph)

@@ -24,6 +24,12 @@ module Uniword
   # Run alias (see Wordprocessingml::Run)
   Run = Wordprocessingml::Run
 
+  # TableRow alias (see Wordprocessingml::TableRow)
+  TableRow = Wordprocessingml::TableRow
+
+  # TableCell alias (see Wordprocessingml::TableCell)
+  TableCell = Wordprocessingml::TableCell
+
   # TableRowProperties alias (see Wordprocessingml::TableRowProperties)
   TableRowProperties = Wordprocessingml::TableRowProperties
 

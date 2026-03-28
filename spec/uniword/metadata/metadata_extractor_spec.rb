@@ -20,8 +20,14 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
   describe '#extract' do
     let(:document) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.add_paragraph('First paragraph with some words')
-      doc.add_paragraph('Second paragraph content')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph with some words')
+      para1.runs << run1
+      doc.body.paragraphs << para1
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph content')
+      para2.runs << run2
+      doc.body.paragraphs << para2
       doc
     end
 
@@ -59,7 +65,8 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
       let(:document) do
         doc = Uniword::Wordprocessingml::DocumentRoot.new
         heading = Uniword::Wordprocessingml::Paragraph.new
-        heading.add_text('Heading 1')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Heading 1')
+        heading.runs << run
         heading.properties = Uniword::Wordprocessingml::ParagraphProperties.new
         heading.properties.style = 'Heading 1'
         doc.body.paragraphs << heading
@@ -91,7 +98,10 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
 
       it 'limits first paragraph length' do
         long_doc = Uniword::Wordprocessingml::DocumentRoot.new
-        long_doc.add_paragraph('x' * 1000)
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'x' * 1000)
+        para.runs << run
+        long_doc.body.paragraphs << para
 
         metadata = extractor.extract(long_doc)
 
@@ -110,7 +120,10 @@ RSpec.describe Uniword::Metadata::MetadataExtractor do
     let(:document) do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       5.times do |i|
-        doc.add_paragraph("Paragraph #{i} content")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i} content")
+        para.runs << run
+        doc.body.paragraphs << para
       end
       doc
     end

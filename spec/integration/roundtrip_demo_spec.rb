@@ -23,7 +23,7 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
     it 'loads the document successfully' do
       expect(@doc).to be_a(Uniword::Document)
       expect(@doc.paragraphs.count).to be > 0
-      expect(@doc.styles.count).to be > 0
+      expect(@doc.styles_configuration.styles.count).to be > 0
     end
 
     it 'loads theme with media files' do

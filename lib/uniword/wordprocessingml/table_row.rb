@@ -39,15 +39,6 @@ module Uniword
         map_element 'tc', to: :cells, render_nil: false
       end
 
-      # Add a cell to the row
-      #
-      # @param cell [TableCell, nil] Cell to add
-      # @return [TableCell] The added cell
-      def add_cell(cell = nil)
-        cell ||= TableCell.new
-        cells << cell
-        cell
-      end
 
       # Get cell count
       #

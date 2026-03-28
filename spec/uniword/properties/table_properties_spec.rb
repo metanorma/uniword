@@ -20,7 +20,7 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
       )
       expect(props.style).to eq('TableGrid')
       expect(props.table_width.w).to eq(100)
-      expect(props.alignment).to eq('center')
+      expect(props.alignment.value).to eq('center')
       expect(props.borders).to be true
     end
 

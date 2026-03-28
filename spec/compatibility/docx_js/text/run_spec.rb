@@ -43,7 +43,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Italic text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
 
-        expect(run.properties.italic).to be true
+        expect(run.properties).to be_italic
       end
 
       it 'should support underline text' do
@@ -51,7 +51,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Underlined text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(underline: 'single')
 
-        expect(run.properties.underline).to eq('single')
+        expect(run.properties.underline&.value).to eq('single')
       end
 
       it 'should support strike-through text' do
@@ -59,7 +59,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Strike text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(strike: true)
 
-        expect(run.properties.strike).to be true
+        expect(run.properties).to be_strike
       end
 
       it 'should support double-strike text' do
@@ -67,15 +67,15 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Double strike'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(double_strike: true)
 
-        expect(run.properties.double_strike).to be true
+        expect(run.properties.double_strike&.value).to eq(true)
       end
 
       it 'should support all caps text' do
         run = Uniword::Run.new
         run.text = 'all caps'
-        run.properties = Uniword::Wordprocessingml::RunProperties.new(all_caps: true)
+        run.properties = Uniword::Wordprocessingml::RunProperties.new(caps: true)
 
-        expect(run.properties.all_caps).to be true
+        expect(run.properties).to be_all_caps
       end
 
       it 'should support small caps text' do
@@ -83,7 +83,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'small caps'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(small_caps: true)
 
-        expect(run.properties.small_caps).to be true
+        expect(run.properties).to be_small_caps
       end
 
       it 'should support multiple formatting properties' do
@@ -97,7 +97,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
 
         expect(run.properties).to be_bold
         expect(run.properties).to be_italic
-        expect(run.properties.underline).to eq('single')
+        expect(run.properties.underline&.value).to eq('single')
       end
     end
 
@@ -107,7 +107,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Sized text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(size: 24)
 
-        expect(run.properties.size).to eq(24)
+        expect(run.properties.size&.value).to eq(24)
       end
 
       it 'should support text color' do
@@ -123,7 +123,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Highlighted'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(highlight: 'yellow')
 
-        expect(run.properties.highlight).to eq('yellow')
+        expect(run.properties.highlight&.value).to eq('yellow')
       end
     end
   end
@@ -170,7 +170,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Emphasized'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'dot')
 
-        expect(run.properties.emphasis_mark).to eq('dot')
+        expect(run.properties.emphasis_mark&.value).to eq('dot')
       end
 
       it 'should support dot emphasis mark' do
@@ -178,7 +178,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Dot emphasis'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'dot')
 
-        expect(run.properties.emphasis_mark).to eq('dot')
+        expect(run.properties.emphasis_mark&.value).to eq('dot')
       end
 
       it 'should support comma emphasis mark' do
@@ -186,7 +186,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Comma emphasis'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'comma')
 
-        expect(run.properties.emphasis_mark).to eq('comma')
+        expect(run.properties.emphasis_mark&.value).to eq('comma')
       end
 
       it 'should support circle emphasis mark' do
@@ -194,7 +194,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Circle emphasis'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'circle')
 
-        expect(run.properties.emphasis_mark).to eq('circle')
+        expect(run.properties.emphasis_mark&.value).to eq('circle')
       end
 
       it 'should support under-dot emphasis mark' do
@@ -202,7 +202,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Under-dot emphasis'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(emphasis_mark: 'underDot')
 
-        expect(run.properties.emphasis_mark).to eq('underDot')
+        expect(run.properties.emphasis_mark&.value).to eq('underDot')
       end
     end
   end
@@ -256,7 +256,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Spaced text'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: 32)
 
-        expect(run.properties.character_spacing).to eq(32)
+        expect(run.properties.character_spacing&.value).to eq(32)
       end
 
       it 'should support different spacing values' do
@@ -264,7 +264,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Wide spacing'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: 100)
 
-        expect(run.properties.character_spacing).to eq(100)
+        expect(run.properties.character_spacing&.value).to eq(100)
       end
 
       it 'should support negative spacing' do
@@ -272,7 +272,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
         run.text = 'Tight spacing'
         run.properties = Uniword::Wordprocessingml::RunProperties.new(character_spacing: -20)
 
-        expect(run.properties.character_spacing).to eq(-20)
+        expect(run.properties.character_spacing&.value).to eq(-20)
       end
     end
   end
@@ -326,8 +326,8 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       expect(run.text).to eq('Fully formatted text')
       expect(run.properties).to be_bold
       expect(run.properties).to be_italic
-      expect(run.properties.underline).to eq('single')
-      expect(run.properties.size).to eq(24)
+      expect(run.properties.underline&.value).to eq('single')
+      expect(run.properties.size&.value).to eq(24)
       expect(run.properties.color).to eq('FF0000')
       expect(run.properties.font).to eq('Arial')
       expect(run.properties.language).to eq('en-US')
@@ -339,7 +339,7 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       run.text = 'In paragraph'
       run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
 
-      para.add_run(run)
+      para.runs << run
 
       expect(para.runs.count).to eq(1)
       expect(para.runs.first.text).to eq('In paragraph')
@@ -360,10 +360,9 @@ RSpec.describe 'Docx.js Compatibility: Run (Text Formatting)', :compatibility do
       run3 = Uniword::Run.new
       run3.text = 'Normal'
 
-      para.add_run(run1)
-      para.add_run(run2)
-      para.add_run(run3)
-
+      para.runs << run1
+      para.runs << run2
+      para.runs << run3
       expect(para.runs.count).to eq(3)
       expect(para.runs[0].properties).to be_bold
       expect(para.runs[1].properties).to be_italic

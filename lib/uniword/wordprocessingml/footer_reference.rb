@@ -10,14 +10,17 @@ module Uniword
     # Element: <w:footerReference>
     class FooterReference < Lutaml::Model::Serializable
       attribute :type, :string
-      attribute :id, :string
+      attribute :r_id, :string
 
       xml do
         element 'footerReference'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :auto },
+        ]
 
         map_attribute 'type', to: :type
-        map_attribute 'id', to: :id
+        map_attribute 'r:id', to: :r_id
       end
     end
   end

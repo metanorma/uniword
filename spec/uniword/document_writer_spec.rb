@@ -155,11 +155,10 @@ RSpec.describe Uniword::DocumentWriter do
         # Write document
         writer.save(temp_file.path)
 
-        # Read it back - returns DocxPackage with document accessor
+        # Read it back - returns DocumentRoot for DOCX files
         loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
 
-        expect(loaded_doc).to be_a(Uniword::Ooxml::DocxPackage)
-        expect(loaded_doc.document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
+        expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
         temp_file.unlink
       end

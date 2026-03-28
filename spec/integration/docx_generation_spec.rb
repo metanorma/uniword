@@ -17,7 +17,8 @@ RSpec.describe 'DOCX Generation Integration' do
       # Create a document
       doc = Uniword::Document.new
       paragraph = Uniword::Paragraph.new
-      paragraph.add_text('Hello, World!')
+      run = Uniword::Run.new(text: 'Hello, World!')
+      paragraph.runs << run
       doc.body.paragraphs << paragraph
 
       # Serialize to XML
@@ -55,11 +56,13 @@ RSpec.describe 'DOCX Generation Integration' do
       doc = Uniword::Document.new
 
       paragraph1 = Uniword::Paragraph.new
-      paragraph1.add_text('First paragraph')
+      run1 = Uniword::Run.new(text: 'First paragraph')
+      paragraph1.runs << run1
       doc.body.paragraphs << paragraph1
 
       paragraph2 = Uniword::Paragraph.new
-      paragraph2.add_text('Second paragraph')
+      run2 = Uniword::Run.new(text: 'Second paragraph')
+      paragraph2.runs << run2
       doc.body.paragraphs << paragraph2
 
       # Serialize and package
@@ -81,7 +84,8 @@ RSpec.describe 'DOCX Generation Integration' do
     it 'handles text with whitespace preservation' do
       doc = Uniword::Document.new
       paragraph = Uniword::Paragraph.new
-      paragraph.add_text('  Text with spaces  ')
+      run = Uniword::Run.new(text: '  Text with spaces  ')
+      paragraph.runs << run
       doc.body.paragraphs << paragraph
 
       serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -105,12 +109,12 @@ RSpec.describe 'DOCX Generation Integration' do
         # Bold text
         run1 = Uniword::Run.new(text: 'Bold ')
         run1.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-        para.add_run(run1)
+        para.runs << run1
 
         # Italic text
         run2 = Uniword::Run.new(text: 'Italic')
         run2.properties = Uniword::Wordprocessingml::RunProperties.new(italic: true)
-        para.add_run(run2)
+        para.runs << run2
 
         doc.body.paragraphs << para
 
@@ -132,7 +136,7 @@ RSpec.describe 'DOCX Generation Integration' do
           size: 28, # 14pt in half-points
           color: 'FF0000' # Red
         )
-        para.add_run(run)
+        para.runs << run
         doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -151,7 +155,7 @@ RSpec.describe 'DOCX Generation Integration' do
           underline: 'single',
           strike: true
         )
-        para.add_run(run)
+        para.runs << run
         doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -169,7 +173,8 @@ RSpec.describe 'DOCX Generation Integration' do
         para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center'
         )
-        para.add_text('Centered Text')
+        run = Uniword::Run.new(text: 'Centered Text')
+        para.runs << run
         doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -185,7 +190,8 @@ RSpec.describe 'DOCX Generation Integration' do
           spacing_before: 240,
           spacing_after: 120
         )
-        para.add_text('Spaced Paragraph')
+        run = Uniword::Run.new(text: 'Spaced Paragraph')
+        para.runs << run
         doc.body.paragraphs << para
 
         serializer = Uniword::Serialization::OoxmlSerializer.new
@@ -203,11 +209,17 @@ RSpec.describe 'DOCX Generation Integration' do
         row = Uniword::TableRow.new
 
         cell1 = Uniword::TableCell.new
-        cell1.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 1') }
+        cell1_para = Uniword::Paragraph.new
+        cell1_run = Uniword::Run.new(text: 'Cell 1')
+        cell1_para.runs << cell1_run
+        cell1.paragraphs << cell1_para
         row.cells << cell1
 
         cell2 = Uniword::TableCell.new
-        cell2.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Cell 2') }
+        cell2_para = Uniword::Paragraph.new
+        cell2_run = Uniword::Run.new(text: 'Cell 2')
+        cell2_para.runs << cell2_run
+        cell2.paragraphs << cell2_para
         row.cells << cell2
 
         table.rows << row
@@ -231,14 +243,40 @@ RSpec.describe 'DOCX Generation Integration' do
         # Header row
         header_row = Uniword::TableRow.new
         header_row.properties = Uniword::TableRowProperties.new(table_header: true)
-        header_row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 1') } }
-        header_row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Header 2') } }
+
+        header_cell1 = Uniword::TableCell.new
+        header_cell1_para = Uniword::Paragraph.new
+        header_cell1_run = Uniword::Run.new(text: 'Header 1')
+        header_cell1_para.runs << header_cell1_run
+        header_cell1.paragraphs << header_cell1_para
+        header_row.cells << header_cell1
+
+        header_cell2 = Uniword::TableCell.new
+        header_cell2_para = Uniword::Paragraph.new
+        header_cell2_run = Uniword::Run.new(text: 'Header 2')
+        header_cell2_para.runs << header_cell2_run
+        header_cell2.paragraphs << header_cell2_para
+        header_row.cells << header_cell2
+
         table.rows << header_row
 
         # Data row
         data_row = Uniword::TableRow.new
-        data_row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 1') } }
-        data_row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Data 2') } }
+
+        data_cell1 = Uniword::TableCell.new
+        data_cell1_para = Uniword::Paragraph.new
+        data_cell1_run = Uniword::Run.new(text: 'Data 1')
+        data_cell1_para.runs << data_cell1_run
+        data_cell1.paragraphs << data_cell1_para
+        data_row.cells << data_cell1
+
+        data_cell2 = Uniword::TableCell.new
+        data_cell2_para = Uniword::Paragraph.new
+        data_cell2_run = Uniword::Run.new(text: 'Data 2')
+        data_cell2_para.runs << data_cell2_run
+        data_cell2.paragraphs << data_cell2_para
+        data_row.cells << data_cell2
+
         table.rows << data_row
 
         doc.body.tables << table
@@ -261,7 +299,12 @@ RSpec.describe 'DOCX Generation Integration' do
         )
 
         row = Uniword::TableRow.new
-        row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Content') } }
+        cell = Uniword::TableCell.new
+        cell_para = Uniword::Paragraph.new
+        cell_run = Uniword::Run.new(text: 'Content')
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
+        row.cells << cell
         table.rows << row
 
         doc.body.tables << table
@@ -281,7 +324,10 @@ RSpec.describe 'DOCX Generation Integration' do
 
         cell = Uniword::TableCell.new
         cell.properties = Uniword::TableCellProperties.new(shading: Uniword::Properties::Shading.new(fill: 'FFFF00'))
-        cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Highlighted') }
+        cell_para = Uniword::Paragraph.new
+        cell_run = Uniword::Run.new(text: 'Highlighted')
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
         row.cells << cell
 
         table.rows << row
@@ -301,19 +347,26 @@ RSpec.describe 'DOCX Generation Integration' do
 
         # Add a paragraph
         para1 = Uniword::Paragraph.new
-        para1.add_text('Introduction text')
+        para1_run = Uniword::Run.new(text: 'Introduction text')
+        para1.runs << para1_run
         doc.body.paragraphs << para1
 
         # Add a table
         table = Uniword::Table.new
         row = Uniword::TableRow.new
-        row.cells << Uniword::TableCell.new.tap { |cell| cell.paragraphs << Uniword::Paragraph.new.tap { |p| p.add_text('Table content') } }
+        cell = Uniword::TableCell.new
+        cell_para = Uniword::Paragraph.new
+        cell_run = Uniword::Run.new(text: 'Table content')
+        cell_para.runs << cell_run
+        cell.paragraphs << cell_para
+        row.cells << cell
         table.rows << row
         doc.body.tables << table
 
         # Add another paragraph
         para2 = Uniword::Paragraph.new
-        para2.add_text('Conclusion text')
+        para2_run = Uniword::Run.new(text: 'Conclusion text')
+        para2.runs << para2_run
         doc.body.paragraphs << para2
 
         serializer = Uniword::Serialization::OoxmlSerializer.new

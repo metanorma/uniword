@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'uniword/builder'
 
 RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
   describe 'Basic Footnotes' do
@@ -10,19 +11,27 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
         doc = Uniword::Document.new
 
-        # Add footnotes
-        doc.add_footnote(id: 1) do |footnote|
-          footnote.add_paragraph('Foo')
-          footnote.add_paragraph('Bar')
-        end
+        # Add footnotes directly to model
+        footnote1 = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Foo')
+        footnote1.paragraphs << p1
+        p2 = Uniword::Wordprocessingml::Paragraph.new
+        p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Bar')
+        footnote1.paragraphs << p2
+        doc.footnotes[1] = footnote1
 
-        doc.add_footnote(id: 2) do |footnote|
-          footnote.add_paragraph('Test')
-        end
+        footnote2 = Uniword::Wordprocessingml::Footnote.new(id: 2)
+        p3 = Uniword::Wordprocessingml::Paragraph.new
+        p3.runs << Uniword::Wordprocessingml::Run.new(text: 'Test')
+        footnote2.paragraphs << p3
+        doc.footnotes[2] = footnote2
 
-        doc.add_footnote(id: 3) do |footnote|
-          footnote.add_paragraph('My amazing reference')
-        end
+        footnote3 = Uniword::Wordprocessingml::Footnote.new(id: 3)
+        p4 = Uniword::Wordprocessingml::Paragraph.new
+        p4.runs << Uniword::Wordprocessingml::Run.new(text: 'My amazing reference')
+        footnote3.paragraphs << p4
+        doc.footnotes[3] = footnote3
 
         expect(doc.footnotes.count).to eq(3)
         expect(doc.footnotes[1]).not_to be_nil
@@ -35,15 +44,19 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_footnote(id: 1) do |footnote|
-          footnote.add_paragraph('First paragraph')
-          footnote.add_paragraph('Second paragraph')
-        end
+        footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
+        footnote.paragraphs << p1
+        p2 = Uniword::Wordprocessingml::Paragraph.new
+        p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
+        footnote.paragraphs << p2
+        doc.footnotes[1] = footnote
 
-        footnote = doc.footnotes[1]
-        expect(footnote.paragraphs.count).to eq(2)
-        expect(footnote.paragraphs[0].text).to eq('First paragraph')
-        expect(footnote.paragraphs[1].text).to eq('Second paragraph')
+        fn = doc.footnotes[1]
+        expect(fn.paragraphs.count).to eq(2)
+        expect(fn.paragraphs[0].text).to eq('First paragraph')
+        expect(fn.paragraphs[1].text).to eq('Second paragraph')
       end
 
       it 'should support single-paragraph footnotes' do
@@ -51,13 +64,15 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_footnote(id: 1) do |footnote|
-          footnote.add_paragraph('Simple footnote')
-        end
+        footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Simple footnote')
+        footnote.paragraphs << p1
+        doc.footnotes[1] = footnote
 
-        footnote = doc.footnotes[1]
-        expect(footnote.paragraphs.count).to eq(1)
-        expect(footnote.paragraphs.first.text).to eq('Simple footnote')
+        fn = doc.footnotes[1]
+        expect(fn.paragraphs.count).to eq(1)
+        expect(fn.paragraphs.first.text).to eq('Simple footnote')
       end
     end
 
@@ -68,16 +83,20 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
         doc = Uniword::Document.new
 
         # Create footnote
-        doc.add_footnote(id: 1) do |footnote|
-          footnote.add_paragraph('This is footnote 1')
-        end
+        footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'This is footnote 1')
+        footnote.paragraphs << p1
+        doc.footnotes[1] = footnote
 
         # Add paragraph with footnote reference
-        doc.add_paragraph do |para|
-          para.add_run('Hello')
-          para.add_footnote_reference(1)
-          para.add_run(' World!')
-        end
+        para = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+        para.runs << run1
+        para.add_footnote_reference(1)
+        run2 = Uniword::Wordprocessingml::Run.new(text: ' World!')
+        para.runs << run2
+        doc.body.paragraphs << para
 
         para = doc.paragraphs.first
         expect(para.footnote_references).to include(1)
@@ -89,17 +108,29 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
         doc = Uniword::Document.new
 
         # Create footnotes
-        doc.add_footnote(id: 1, text: 'Footnote 1')
-        doc.add_footnote(id: 2, text: 'Footnote 2')
+        fn1 = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Footnote 1')
+        fn1.paragraphs << p1
+        doc.footnotes[1] = fn1
+
+        fn2 = Uniword::Wordprocessingml::Footnote.new(id: 2)
+        p2 = Uniword::Wordprocessingml::Paragraph.new
+        p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Footnote 2')
+        fn2.paragraphs << p2
+        doc.footnotes[2] = fn2
 
         # Add paragraph with multiple references
-        doc.add_paragraph do |para|
-          para.add_run('Hello')
-          para.add_footnote_reference(1)
-          para.add_run(' World!')
-          para.add_footnote_reference(2)
-          para.add_run(' GitHub!')
-        end
+        para = Uniword::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+        para.runs << run1
+        para.add_footnote_reference(1)
+        run2 = Uniword::Wordprocessingml::Run.new(text: ' World!')
+        para.runs << run2
+        para.add_footnote_reference(2)
+        run3 = Uniword::Wordprocessingml::Run.new(text: ' GitHub!')
+        para.runs << run3
+        doc.body.paragraphs << para
 
         para = doc.paragraphs.first
         expect(para.footnote_references).to include(1, 2)
@@ -110,12 +141,17 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
         doc = Uniword::Document.new
 
-        doc.add_footnote(id: 1, text: 'Reference')
+        footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Reference')
+        footnote.paragraphs << p1
+        doc.footnotes[1] = footnote
 
-        doc.add_paragraph do |para|
-          para.add_run('Hello World')
-          para.add_footnote_reference(1)
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Hello World')
+        para.runs << run
+        para.add_footnote_reference(1)
+        doc.body.paragraphs << para
 
         para = doc.paragraphs.first
         expect(para.runs.count).to be >= 1
@@ -131,33 +167,45 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
       doc = Uniword::Document.new
 
       # First section footnotes
-      doc.add_footnote(id: 1, text: 'Foo1')
-      doc.add_footnote(id: 2, text: 'Test1')
-      doc.add_footnote(id: 3, text: 'My amazing reference1')
+      [1, 2, 3].each do |i|
+        fn = Uniword::Wordprocessingml::Footnote.new(id: i)
+        p = Uniword::Wordprocessingml::Paragraph.new
+        p.runs << Uniword::Wordprocessingml::Run.new(text: "Foo#{i}")
+        fn.paragraphs << p
+        doc.footnotes[i] = fn
+      end
 
       # First section content
-      doc.add_paragraph do |para|
-        para.add_run('Hello')
-        para.add_footnote_reference(1)
-        para.add_run(' World!')
-        para.add_footnote_reference(2)
-      end
+      para = Uniword::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+      para.runs << run1
+      para.add_footnote_reference(1)
+      run2 = Uniword::Wordprocessingml::Run.new(text: ' World!')
+      para.runs << run2
+      para.add_footnote_reference(2)
+      doc.body.paragraphs << para
 
       # Add new section
       doc.add_section
 
       # Second section footnotes
-      doc.add_footnote(id: 4, text: 'Foo2')
-      doc.add_footnote(id: 5, text: 'Test2')
-      doc.add_footnote(id: 6, text: 'My amazing reference2')
+      [4, 5, 6].each do |i|
+        fn = Uniword::Wordprocessingml::Footnote.new(id: i)
+        p = Uniword::Wordprocessingml::Paragraph.new
+        p.runs << Uniword::Wordprocessingml::Run.new(text: "Foo#{i}")
+        fn.paragraphs << p
+        doc.footnotes[i] = fn
+      end
 
       # Second section content
-      doc.add_paragraph do |para|
-        para.add_run('Hello')
-        para.add_footnote_reference(4)
-        para.add_run(' World!')
-        para.add_footnote_reference(5)
-      end
+      para = Uniword::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Hello')
+      para.runs << run1
+      para.add_footnote_reference(4)
+      run2 = Uniword::Wordprocessingml::Run.new(text: ' World!')
+      para.runs << run2
+      para.add_footnote_reference(5)
+      doc.body.paragraphs << para
 
       expect(doc.footnotes.count).to eq(6)
       expect(doc.sections.count).to eq(2)
@@ -172,13 +220,18 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       # Add footnotes in order
       (1..5).each do |i|
-        doc.add_footnote(id: i, text: "Footnote #{i}")
+        fn = Uniword::Wordprocessingml::Footnote.new(id: i)
+        p = Uniword::Wordprocessingml::Paragraph.new
+        p.runs << Uniword::Wordprocessingml::Run.new(text: "Footnote #{i}")
+        fn.paragraphs << p
+        doc.footnotes[i] = fn
 
         # Add references
-        doc.add_paragraph do |para|
-          para.add_run("Text #{i}")
-          para.add_footnote_reference(i)
-        end
+        para = Uniword::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Text #{i}")
+        para.runs << run
+        para.add_footnote_reference(i)
+        doc.body.paragraphs << para
       end
 
       expect(doc.footnotes.keys.sort).to eq([1, 2, 3, 4, 5])
@@ -190,27 +243,50 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
       doc = Uniword::Document.new
 
       # Add footnotes with gaps
-      doc.add_footnote(id: 1, text: 'First')
-      doc.add_footnote(id: 5, text: 'Fifth')
-      doc.add_footnote(id: 10, text: 'Tenth')
+      fn1 = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'First')
+      fn1.paragraphs << p1
+      doc.footnotes[1] = fn1
+
+      fn5 = Uniword::Wordprocessingml::Footnote.new(id: 5)
+      p5 = Uniword::Wordprocessingml::Paragraph.new
+      p5.runs << Uniword::Wordprocessingml::Run.new(text: 'Fifth')
+      fn5.paragraphs << p5
+      doc.footnotes[5] = fn5
+
+      fn10 = Uniword::Wordprocessingml::Footnote.new(id: 10)
+      p10 = Uniword::Wordprocessingml::Paragraph.new
+      p10.runs << Uniword::Wordprocessingml::Run.new(text: 'Tenth')
+      fn10.paragraphs << p10
+      doc.footnotes[10] = fn10
 
       expect(doc.footnotes.keys.sort).to eq([1, 5, 10])
     end
 
     it 'should support automatic footnote numbering' do
-      skip 'Auto-numbering footnotes not yet implemented'
+        skip 'Auto-numbering footnotes not yet implemented'
 
-      doc = Uniword::Document.new
+        doc = Uniword::Document.new
 
-      # Add footnotes without specifying ID
-      fn1 = doc.add_footnote(text: 'Auto 1')
-      fn2 = doc.add_footnote(text: 'Auto 2')
-      fn3 = doc.add_footnote(text: 'Auto 3')
+        # Add footnotes without specifying ID
+        fn1 = Uniword::Wordprocessingml::Footnote.new
+        p1 = Uniword::Wordprocessingml::Paragraph.new
+        p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Auto 1')
+        fn1.paragraphs << p1
+        fn2 = Uniword::Wordprocessingml::Footnote.new
+        p2 = Uniword::Wordprocessingml::Paragraph.new
+        p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Auto 2')
+        fn2.paragraphs << p2
+        fn3 = Uniword::Wordprocessingml::Footnote.new
+        p3 = Uniword::Wordprocessingml::Paragraph.new
+        p3.runs << Uniword::Wordprocessingml::Run.new(text: 'Auto 3')
+        fn3.paragraphs << p3
 
-      expect(fn1.id).to eq(1)
-      expect(fn2.id).to eq(2)
-      expect(fn3.id).to eq(3)
-    end
+        expect(fn1.id).to eq(1)
+        expect(fn2.id).to eq(2)
+        expect(fn3.id).to eq(3)
+      end
   end
 
   describe 'Footnote Formatting' do
@@ -219,18 +295,21 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_footnote(id: 1) do |footnote|
-        footnote.add_paragraph do |para|
-          para.add_run('Bold', bold: true)
-          para.add_run(' and ')
-          para.add_run('Italic', italic: true)
-        end
-      end
+      footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Builder::RunBuilder.new.text('Bold').bold.build
+      para.runs << run1
+      run2 = Uniword::Wordprocessingml::Run.new(text: ' and ')
+      para.runs << run2
+      run3 = Uniword::Builder::RunBuilder.new.text('Italic').italic.build
+      para.runs << run3
+      footnote.paragraphs << para
+      doc.footnotes[1] = footnote
 
-      footnote = doc.footnotes[1]
-      para = footnote.paragraphs.first
-      expect(para.runs[0].bold?).to be true
-      expect(para.runs[2].italic?).to be true
+      fn = doc.footnotes[1]
+      p = fn.paragraphs.first
+      expect(p.runs[0].properties&.bold&.value == true).to be true
+      expect(p.runs[2].properties&.italic&.value == true).to be true
     end
 
     it 'should support paragraph styles in footnotes' do
@@ -238,14 +317,18 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_footnote(id: 1) do |footnote|
-        footnote.add_paragraph('Heading', heading: :heading_3)
-        footnote.add_paragraph('Body text')
-      end
+      footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Heading')
+      footnote.paragraphs << p1
+      p2 = Uniword::Wordprocessingml::Paragraph.new
+      p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Body text')
+      footnote.paragraphs << p2
+      doc.footnotes[1] = footnote
 
-      footnote = doc.footnotes[1]
-      expect(footnote.paragraphs[0].heading_level).to eq(:heading_3)
-      expect(footnote.paragraphs[1].heading_level).to be_nil
+      fn = doc.footnotes[1]
+      expect(fn.paragraphs[0].heading_level).to eq(:heading_3)
+      expect(fn.paragraphs[1].heading_level).to be_nil
     end
 
     it 'should support hyperlinks in footnotes' do
@@ -253,18 +336,19 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_footnote(id: 1) do |footnote|
-        footnote.add_paragraph do |para|
-          para.add_run('See ')
-          para.add_run('example.com') do |run|
-            run.hyperlink = 'http://www.example.com'
-          end
-        end
-      end
+      footnote = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'See ')
+      para.runs << run1
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'example.com')
+      run2.hyperlink = 'http://www.example.com'
+      para.runs << run2
+      footnote.paragraphs << para
+      doc.footnotes[1] = footnote
 
-      footnote = doc.footnotes[1]
-      para = footnote.paragraphs.first
-      link_run = para.runs.find(&:hyperlink)
+      fn = doc.footnotes[1]
+      p = fn.paragraphs.first
+      link_run = p.runs.find(&:hyperlink)
       expect(link_run).not_to be_nil
     end
   end
@@ -277,7 +361,11 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc.footnote_position = :page_bottom
 
-      doc.add_footnote(id: 1, text: 'At bottom of page')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'At bottom of page')
+      fn.paragraphs << p
+      doc.footnotes[1] = fn
 
       expect(doc.footnote_position).to eq(:page_bottom)
     end
@@ -289,7 +377,11 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc.footnote_position = :section_end
 
-      doc.add_footnote(id: 1, text: 'At end of section')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'At end of section')
+      fn.paragraphs << p
+      doc.footnotes[1] = fn
 
       expect(doc.footnote_position).to eq(:section_end)
     end
@@ -301,7 +393,11 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc.footnote_position = :document_end
 
-      doc.add_footnote(id: 1, text: 'At end of document')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'At end of document')
+      fn.paragraphs << p
+      doc.footnotes[1] = fn
 
       expect(doc.footnote_position).to eq(:document_end)
     end
@@ -315,7 +411,11 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc.footnote_separator = :line
 
-      doc.add_footnote(id: 1, text: 'Footnote')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'Footnote')
+      fn.paragraphs << p
+      doc.footnotes[1] = fn
 
       expect(doc.footnote_separator).to eq(:line)
     end
@@ -337,13 +437,23 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_endnote(id: 1, text: 'Endnote 1')
-      doc.add_endnote(id: 2, text: 'Endnote 2')
+      en1 = Uniword::Wordprocessingml::Endnote.new(id: 1)
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Endnote 1')
+      en1.paragraphs << p1
+      doc.endnotes[1] = en1
 
-      doc.add_paragraph do |para|
-        para.add_run('Text')
-        para.add_endnote_reference(1)
-      end
+      en2 = Uniword::Wordprocessingml::Endnote.new(id: 2)
+      p2 = Uniword::Wordprocessingml::Paragraph.new
+      p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Endnote 2')
+      en2.paragraphs << p2
+      doc.endnotes[2] = en2
+
+      para = Uniword::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text')
+      para.runs << run
+      para.add_endnote_reference(1)
+      doc.body.paragraphs << para
 
       expect(doc.endnotes.count).to eq(2)
     end
@@ -353,8 +463,17 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_footnote(id: 1, text: 'Footnote')
-      doc.add_endnote(id: 1, text: 'Endnote')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p1 = Uniword::Wordprocessingml::Paragraph.new
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'Footnote')
+      fn.paragraphs << p1
+      doc.footnotes[1] = fn
+
+      en = Uniword::Wordprocessingml::Endnote.new(id: 1)
+      p2 = Uniword::Wordprocessingml::Paragraph.new
+      p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Endnote')
+      en.paragraphs << p2
+      doc.endnotes[1] = en
 
       expect(doc.footnotes.count).to eq(1)
       expect(doc.endnotes.count).to eq(1)
@@ -367,11 +486,17 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       # Create document with footnotes
       original = Uniword::Document.new
-      original.add_footnote(id: 1, text: 'Test footnote')
-      original.add_paragraph do |para|
-        para.add_run('Text')
-        para.add_footnote_reference(1)
-      end
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'Test footnote')
+      fn.paragraphs << p
+      original.footnotes[1] = fn
+
+      para = Uniword::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text')
+      para.runs << run
+      para.add_footnote_reference(1)
+      original.body.paragraphs << para
 
       # Save and reload
       temp_path = '/tmp/footnotes_test.docx'
@@ -390,10 +515,18 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_footnote(id: 1, text: 'First')
+      fn = Uniword::Wordprocessingml::Footnote.new(id: 1)
+      p = Uniword::Wordprocessingml::Paragraph.new
+      p.runs << Uniword::Wordprocessingml::Run.new(text: 'First')
+      fn.paragraphs << p
+      doc.footnotes[1] = fn
 
       expect do
-        doc.add_footnote(id: 1, text: 'Duplicate')
+        fn_dup = Uniword::Wordprocessingml::Footnote.new(id: 1)
+        p_dup = Uniword::Wordprocessingml::Paragraph.new
+        p_dup.runs << Uniword::Wordprocessingml::Run.new(text: 'Duplicate')
+        fn_dup.paragraphs << p_dup
+        doc.footnotes[1] = fn_dup
       end.to raise_error(/duplicate footnote id/i)
     end
 
@@ -402,12 +535,13 @@ RSpec.describe 'Docx.js Compatibility: Footnotes', :compatibility do
 
       doc = Uniword::Document.new
 
-      doc.add_paragraph do |para|
-        para.add_run('Text')
-        expect do
-          para.add_footnote_reference(99) # Non-existent
-        end.to raise_error(/footnote.*not found/i)
-      end
+      para = Uniword::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text')
+      para.runs << run
+      expect do
+        para.add_footnote_reference(99) # Non-existent
+      end.to raise_error(/footnote.*not found/i)
+      doc.body.paragraphs << para
     end
   end
 end

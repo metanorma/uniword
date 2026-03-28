@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -9,14 +10,14 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:borderBoxPr>
     class BorderBoxProperties < Lutaml::Model::Serializable
-      attribute :hide_top, :string
-      attribute :hide_bot, :string
-      attribute :hide_left, :string
-      attribute :hide_right, :string
-      attribute :strike_h, :string
-      attribute :strike_v, :string
-      attribute :strike_bltr, :string
-      attribute :strike_tlbr, :string
+      attribute :hide_top, MathSimpleVal
+      attribute :hide_bot, MathSimpleVal
+      attribute :hide_left, MathSimpleVal
+      attribute :hide_right, MathSimpleVal
+      attribute :strike_h, MathSimpleVal
+      attribute :strike_v, MathSimpleVal
+      attribute :strike_bltr, MathSimpleVal
+      attribute :strike_tlbr, MathSimpleVal
       attribute :ctrl_pr, ControlProperties
 
       xml do
@@ -24,14 +25,14 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_attribute 'val', to: :hide_top
-        map_attribute 'val', to: :hide_bot
-        map_attribute 'val', to: :hide_left
-        map_attribute 'val', to: :hide_right
-        map_attribute 'val', to: :strike_h
-        map_attribute 'val', to: :strike_v
-        map_attribute 'val', to: :strike_bltr
-        map_attribute 'val', to: :strike_tlbr
+        map_element 'hideTop', to: :hide_top, render_nil: false
+        map_element 'hideBot', to: :hide_bot, render_nil: false
+        map_element 'hideLeft', to: :hide_left, render_nil: false
+        map_element 'hideRight', to: :hide_right, render_nil: false
+        map_element 'strikeH', to: :strike_h, render_nil: false
+        map_element 'strikeV', to: :strike_v, render_nil: false
+        map_element 'strikeBLTR', to: :strike_bltr, render_nil: false
+        map_element 'strikeTLBR', to: :strike_tlbr, render_nil: false
         map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end

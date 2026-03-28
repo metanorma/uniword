@@ -25,21 +25,32 @@ module Uniword
         map_element 'AlternateContent', to: :alternate_content, render_nil: false
       end
 
-      # Add a row to the table
-      #
-      # @param row [TableRow, nil] Row to add
-      # @return [TableRow] The added row
-      def add_row(row = nil)
-        row ||= TableRow.new
-        rows << row
-        row
-      end
 
       # Get row count
       #
       # @return [Integer] Number of rows in table
       def row_count
         rows.count
+      end
+
+      # Get columns (transposed view of table cells)
+      #
+      # @return [Array<Array<TableCell>>] Array of column arrays, each containing cells
+      def columns
+        return [] if rows.empty?
+
+        max_cols = rows.map { |r| r.cells&.count || 0 }.max || 0
+        (0...max_cols).map do |col_idx|
+          rows.map { |r| r.cells&.[](col_idx) }.compact
+        end
+      end
+
+      # Accept a visitor (Visitor pattern)
+      #
+      # @param visitor [BaseVisitor] The visitor to accept
+      # @return [void]
+      def accept(visitor)
+        visitor.visit_table(self)
       end
     end
   end

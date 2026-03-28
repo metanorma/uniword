@@ -5,7 +5,10 @@ require 'spec_helper'
 # Helper method to create a table cell with text
 def create_row_text_cell(text)
   Uniword::Wordprocessingml::TableCell.new.tap do |cell|
-    cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new.tap { |p| p.add_text(text) }
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: text)
+    para.runs << run
+    cell.paragraphs << para
   end
 end
 

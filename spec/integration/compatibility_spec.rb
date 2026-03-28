@@ -417,9 +417,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
   def create_test_document
     doc = Uniword::Document.new
     para = Uniword::Paragraph.new
-    run = Uniword::Run.new
-    run.text = 'Test document content'
-    para.add_run(run)
+    run = Uniword::Run.new(text: 'Test document content')
+    para.runs << run
     doc.body.paragraphs << para
     doc
   end
@@ -429,9 +428,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
 
     # Add a paragraph with potential style
     para = Uniword::Paragraph.new
-    run = Uniword::Run.new
-    run.text = 'Styled content'
-    para.add_run(run)
+    run = Uniword::Run.new(text: 'Styled content')
+    para.runs << run
     doc.body.paragraphs << para
 
     doc
@@ -443,9 +441,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
     # Add paragraphs that might trigger numbering
     3.times do |i|
       para = Uniword::Paragraph.new
-      run = Uniword::Run.new
-      run.text = "List item #{i + 1}"
-      para.add_run(run)
+      run = Uniword::Run.new(text: "List item #{i + 1}")
+      para.runs << run
       doc.body.paragraphs << para
     end
 
@@ -455,9 +452,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
   def create_document_with_unicode
     doc = Uniword::Document.new
     para = Uniword::Paragraph.new
-    run = Uniword::Run.new
-    run.text = 'Unicode: 你好 مرحبا 🌍 café'
-    para.add_run(run)
+    run = Uniword::Run.new(text: 'Unicode: 你好 مرحبا 🌍 café')
+    para.runs << run
     doc.body.paragraphs << para
     doc
   end
@@ -465,9 +461,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
   def create_document_with_special_chars
     doc = Uniword::Document.new
     para = Uniword::Paragraph.new
-    run = Uniword::Run.new
-    run.text = 'Special: < > & " \' © ® ™'
-    para.add_run(run)
+    run = Uniword::Run.new(text: 'Special: < > & " \' © ® ™')
+    para.runs << run
     doc.body.paragraphs << para
     doc
   end
@@ -477,30 +472,27 @@ RSpec.describe 'DOCX Compatibility Testing' do
 
     # Paragraphs
     para1 = Uniword::Paragraph.new
-    run1 = Uniword::Run.new
-    run1.add_text('First paragraph')
-    para1.add_run(run1)
-    doc.body.paragraphs << para
+    run1 = Uniword::Run.new(text: 'First paragraph')
+    para1.runs << run1
+    doc.body.paragraphs << para1
 
     # Table
     table = Uniword::Table.new
     row = Uniword::TableRow.new
     cell = Uniword::TableCell.new
     cell_para = Uniword::Paragraph.new
-    cell_run = Uniword::Run.new
-    cell_run.text = 'Table cell'
-    cell_para.add_run(cell_run)
-    cell.add_paragraph(cell_para)
-    row.add_cell(cell)
-    table.add_row(row)
+    cell_run = Uniword::Run.new(text: 'Table cell')
+    cell_para.runs << cell_run
+    cell.paragraphs << cell_para
+    row.cells << cell
+    table.rows << row
     doc.body.tables << table
 
     # Another paragraph
     para2 = Uniword::Paragraph.new
-    run2 = Uniword::Run.new
-    run2.add_text('Second paragraph')
-    para2.add_run(run2)
-    doc.body.paragraphs << para
+    run2 = Uniword::Run.new(text: 'Second paragraph')
+    para2.runs << run2
+    doc.body.paragraphs << para2
 
     doc
   end

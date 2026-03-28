@@ -10,18 +10,6 @@ module Uniword
   # In OOXML, comments are stored in word/comments.xml and referenced
   # via commentRangeStart, commentRangeEnd, and commentReference elements.
   #
-  # @example Create a comment
-  #   comment = Uniword::Comment.new(
-  #     author: "John Doe",
-  #     text: "This needs revision",
-  #     date: Time.now
-  #   )
-  #
-  # @example Add comment to paragraph
-  #   para = Uniword::Paragraph.new.add_text("Text to comment")
-  #   comment = Uniword::Comment.new(author: "Editor", text: "Review this")
-  #   para.add_comment(comment)
-  #
   # @attr [String] author Comment author name
   # @attr [String] text Comment text content
   # @attr [Time] date Comment creation date/time
@@ -73,9 +61,6 @@ module Uniword
 
       super
 
-      # Ensure paragraphs is initialized as array (lutaml-model handles this via default)
-      @paragraphs ||= []
-
       # Auto-generate comment_id if not provided
       @comment_id ||= generate_comment_id
 
@@ -85,7 +70,10 @@ module Uniword
       # Add text as a paragraph if provided
       return unless text_content && !text_content.empty?
 
-      add_text(text_content)
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: text_content)
+      para.runs << run
+      paragraphs << para
     end
 
     # Accept a visitor for the visitor pattern
@@ -94,32 +82,6 @@ module Uniword
     # @return [Object] The result of the visit operation
     def accept(visitor)
       visitor.visit_comment(self)
-    end
-
-    # Add text to comment (creates a paragraph)
-    #
-    # @param text [String] The text content
-    # @return [self] Returns self for method chaining
-    def add_text(text)
-      # Lazy load Paragraph class when needed
-      para = Uniword::Wordprocessingml::Paragraph.new
-      para.add_text(text)
-      paragraphs << para
-      self
-    end
-
-    # Add a paragraph to the comment
-    #
-    # @param paragraph [Paragraph] The paragraph to add
-    # @return [self] Returns self for method chaining
-    def add_paragraph(paragraph)
-      # Lazy load Paragraph class when needed
-      unless paragraph.is_a?(Uniword::Wordprocessingml::Paragraph)
-        raise ArgumentError, 'paragraph must be a Paragraph instance'
-      end
-
-      paragraphs << paragraph
-      self
     end
 
     # Get the plain text content of this comment
@@ -168,7 +130,6 @@ module Uniword
     #
     # @return [String] A unique comment ID
     def generate_comment_id
-      # Use timestamp + random component for uniqueness
       "#{Time.now.to_i}_#{rand(10_000)}"
     end
 

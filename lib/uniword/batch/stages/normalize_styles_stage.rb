@@ -77,7 +77,7 @@ module Uniword
           detected_style = detect_paragraph_style(paragraph)
 
           if detected_style && @target_styles[detected_style]
-            paragraph.style = @target_styles[detected_style]
+            paragraph.properties.style = @target_styles[detected_style]
           end
         end
       end

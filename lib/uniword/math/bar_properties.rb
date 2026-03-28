@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative 'math_simple_val'
 
 module Uniword
   module Math
@@ -9,7 +10,7 @@ module Uniword
     # Generated from OOXML schema: math.yml
     # Element: <m:barPr>
     class BarProperties < Lutaml::Model::Serializable
-      attribute :pos, :string
+      attribute :pos, MathSimpleVal
       attribute :ctrl_pr, ControlProperties
 
       xml do
@@ -17,7 +18,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_attribute 'val', to: :pos
+        map_element 'pos', to: :pos, render_nil: false
         map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end

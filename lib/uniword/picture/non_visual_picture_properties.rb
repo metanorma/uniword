@@ -9,7 +9,7 @@ module Uniword
     # Generated from OOXML schema: picture.yml
     # Element: <pic:nvPicPr>
     class NonVisualPictureProperties < Lutaml::Model::Serializable
-      attribute :c_nv_pr, :string
+      attribute :c_nv_pr, Drawingml::NonVisualDrawingProperties
       attribute :c_nv_pic_pr, NonVisualPictureDrawingProperties
 
       xml do
