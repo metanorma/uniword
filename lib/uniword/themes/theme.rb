@@ -20,7 +20,6 @@ module Uniword
       attribute :colors, :hash
 
       yaml do
-        element "color_scheme"
         map 'name', to: :name
         map 'colors', to: :colors
       end
@@ -77,7 +76,6 @@ module Uniword
       attribute :minor_complex_script, :string
 
       yaml do
-        element "font_scheme"
         map 'name', to: :name
         map 'major_font', to: :major_font
         map 'minor_font', to: :minor_font
@@ -115,7 +113,6 @@ module Uniword
       attribute :variants, :hash
 
       yaml do
-        element "theme"
         map 'name', to: :name
         map 'source', to: :source
         map 'imported_at', to: :imported_at

@@ -22,6 +22,7 @@ module Uniword
       attribute :fill, Fill
       attribute :stroke, Stroke
       attribute :textbox, Textbox
+      attribute :textpath, TextPath
       attribute :wrap, Wrap
       attribute :imagedata, Imagedata
 
@@ -42,6 +43,7 @@ module Uniword
         map_element 'fill', to: :fill, render_nil: false
         map_element 'stroke', to: :stroke, render_nil: false
         map_element 'textbox', to: :textbox, render_nil: false
+        map_element 'textpath', to: :textpath, render_nil: false
         map_element 'wrap', to: :wrap, render_nil: false
         map_element 'imagedata', to: :imagedata, render_nil: false
       end

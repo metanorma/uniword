@@ -9,7 +9,8 @@ module Uniword
     class GraphicData < Lutaml::Model::Serializable
       # PATTERN 0: Attributes FIRST
       attribute :uri, :string
-      attribute :picture, :string # Will be enhanced to Picture class later
+      attribute :picture, Uniword::Picture::Picture
+      attribute :chart, Uniword::Chart::ChartReference
 
       xml do
         root 'graphicData'
@@ -17,6 +18,7 @@ module Uniword
 
         map_attribute 'uri', to: :uri, render_nil: false
         map_element 'pic', to: :picture, render_nil: false
+        map_element 'chart', to: :chart, render_nil: false
       end
     end
   end

@@ -12,7 +12,7 @@ module Uniword
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
       # Style reference
-      attribute :style, :string
+      attribute :style, TableStyle
 
       # Table width (wrapper class)
       attribute :table_width, Uniword::Properties::TableWidth

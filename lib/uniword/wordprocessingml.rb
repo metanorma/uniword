@@ -192,6 +192,7 @@ module Uniword
     autoload :Border, 'uniword/wordprocessingml/border'
     autoload :ParagraphBorders, 'uniword/wordprocessingml/paragraph_borders'
     autoload :TableBorders, 'uniword/wordprocessingml/table_borders'
+    autoload :TableStyle, 'uniword/wordprocessingml/table_style'
     autoload :RPrDefault, 'uniword/wordprocessingml/r_pr_default'
     autoload :PPrDefault, 'uniword/wordprocessingml/p_pr_default'
     autoload :Shading, 'uniword/wordprocessingml/shading'
