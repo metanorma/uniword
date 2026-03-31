@@ -532,6 +532,7 @@ module Uniword
       attribute :w14_doc_id, W14DocId
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
+      attribute :mc_ignorable, :string
 
       xml do
         element 'settings'
@@ -545,8 +546,10 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
         ]
 
+        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
         map_element 'zoom', to: :zoom, render_nil: false
         map_element 'compat', to: :compat, render_nil: false
         map_element 'proofState', to: :proof_state, render_nil: false

@@ -172,6 +172,10 @@ module Uniword
           package.theme = Drawingml::Theme.from_xml(
             zip_content['word/theme/theme1.xml']
           )
+
+          # Extract theme media files from word/theme/media/ directory
+          theme_media = extract_theme_media(zip_content)
+          package.theme.media_files = theme_media if theme_media.any?
         end
 
         if zip_content['word/theme/_rels/theme1.xml.rels']
@@ -215,7 +219,49 @@ module Uniword
           end
         end
 
+        # Extract image parts from word/media/ directory
+        extract_image_parts(zip_content, package)
+
         package
+      end
+
+      # Extract image files from word/media/ directory in DOCX
+      #
+      # @param zip_content [Hash] Extracted ZIP content
+      # @param package [DocxPackage] Package to populate
+      def self.extract_image_parts(zip_content, package)
+        return unless package.document
+
+        # Find all media files
+        media_files = zip_content.keys.select { |k| k.match?(%r{^word/media/.+$}) }
+        return if media_files.empty?
+
+        package.document.image_parts ||= {}
+
+        media_files.each do |media_path|
+          # Get filename for the key
+          filename = File.basename(media_path)
+          # Determine content type from extension
+          ext = File.extname(filename).delete('.').downcase
+          content_type = case ext
+                        when 'jpg', 'jpeg' then 'image/jpeg'
+                        when 'png' then 'image/png'
+                        when 'gif' then 'image/gif'
+                        when 'bmp' then 'image/bmp'
+                        when 'tiff', 'tif' then 'image/tiff'
+                        when 'svg' then 'image/svg+xml'
+                        else "image/#{ext}"
+                        end
+
+          # Generate a unique rId for this image
+          r_id = "rIdImg#{package.document.image_parts.size + 1}"
+
+          package.document.image_parts[r_id] = {
+            data: zip_content[media_path],
+            target: "media/#{filename}",
+            content_type: content_type
+          }
+        end
       end
 
       # Save document to file (class method for DocumentWriter compatibility)
@@ -264,6 +310,28 @@ module Uniword
         package.endnotes = document.endnotes if document.endnotes
         package.chart_parts = document.chart_parts if document.chart_parts
         package.bibliography_sources = document.bibliography_sources if document.bibliography_sources
+      end
+
+      # Extract media files from word/theme/media/ directory in DOCX
+      #
+      # @param zip_content [Hash] Extracted ZIP content
+      # @return [Hash] filename => MediaFile objects
+      def self.extract_theme_media(zip_content)
+        media = {}
+
+        zip_content.each_key do |file_path|
+          # Match pattern: word/theme/media/{filename}
+          next unless file_path =~ %r{^word/theme/media/(.+)$}
+
+          filename = Regexp.last_match(1)
+          media[filename] = Uniword::Themes::MediaFile.new(
+            filename: filename,
+            content: zip_content[file_path],
+            source_path: file_path
+          )
+        end
+
+        media
       end
 
       # Create minimal content types for a valid DOCX
@@ -598,23 +666,23 @@ module Uniword
         ) if document
 
         content['word/styles.xml'] = styles.to_xml(
-          encoding: 'UTF-8', fix_boolean_elements: true
+          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
         ) if styles
 
         content['word/numbering.xml'] = numbering.to_xml(
-          encoding: 'UTF-8', fix_boolean_elements: true
+          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
         ) if numbering
 
         content['word/settings.xml'] = settings.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', prefix: true
         ) if settings
 
         content['word/fontTable.xml'] = font_table.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', prefix: true
         ) if font_table
 
         content['word/webSettings.xml'] = web_settings.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', prefix: true
         ) if web_settings
 
         content['word/_rels/document.xml.rels'] = document_rels.to_xml(
@@ -623,7 +691,7 @@ module Uniword
 
         # Serialize Theme
         content['word/theme/theme1.xml'] = theme.to_xml(
-          encoding: 'UTF-8'
+          encoding: 'UTF-8', prefix: true
         ) if theme
 
         content['word/theme/_rels/theme1.xml.rels'] = theme_rels.to_xml(
@@ -632,12 +700,12 @@ module Uniword
 
         # Serialize Footnotes
         content['word/footnotes.xml'] = footnotes.to_xml(
-          encoding: 'UTF-8', fix_boolean_elements: true
+          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
         ) if footnotes
 
         # Serialize Endnotes
         content['word/endnotes.xml'] = endnotes.to_xml(
-          encoding: 'UTF-8', fix_boolean_elements: true
+          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
         ) if endnotes
 
         # Serialize Bibliography Sources

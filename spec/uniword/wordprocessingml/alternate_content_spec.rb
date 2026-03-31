@@ -100,7 +100,6 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
 
   describe 'round-trip' do
     it 'preserves structure through serialization with Choice only' do
-      skip 'Round-trip with mc: namespace prefix requires investigation'
       original = described_class.new
       original.choice = Uniword::Wordprocessingml::Choice.new(
         requires: 'wps',
@@ -111,13 +110,11 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       parsed = described_class.from_xml(xml)
 
       expect(parsed.choice).to be_a(Uniword::Wordprocessingml::Choice)
-      # Note: requires attribute parsing with mc: prefix needs namespace handling
-      # expect(parsed.choice.requires).to eq('wps')
+      expect(parsed.choice.requires).to eq('wps')
       expect(parsed.fallback).to be_nil
     end
 
     it 'preserves structure through serialization with Choice and Fallback' do
-      skip 'Round-trip with mc: namespace prefix requires investigation'
       original = described_class.new
       original.choice = Uniword::Wordprocessingml::Choice.new(
         requires: 'wps',
@@ -131,8 +128,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       parsed = described_class.from_xml(xml)
 
       expect(parsed.choice).to be_a(Uniword::Wordprocessingml::Choice)
-      # Note: requires attribute parsing with mc: prefix needs namespace handling
-      # expect(parsed.choice.requires).to eq('wps')
+      expect(parsed.choice.requires).to eq('wps')
       expect(parsed.fallback).to be_a(Uniword::Wordprocessingml::Fallback)
     end
   end

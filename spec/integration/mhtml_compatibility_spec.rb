@@ -211,8 +211,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
   describe 'Image Encoding' do
     let(:output_path) { File.join(tmp_dir, 'mhtml_image.doc') }
 
-    it 'properly encodes images when present', skip: 'MHTML writer does not embed images as separate MIME parts' do
-
+    it 'properly encodes images when present' do
       doc = create_document_with_image
       doc.save(output_path, format: :mhtml)
 
@@ -223,8 +222,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       expect(content).to include('Content-Type: image/')
     end
 
-    it 'uses proper Content-Location for images', skip: 'MHTML writer does not embed images as separate MIME parts' do
-
+    it 'uses proper Content-Location for images' do
       doc = create_document_with_image
       doc.save(output_path, format: :mhtml)
 
@@ -448,26 +446,19 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     para.runs << run
     doc.body.paragraphs << para
 
-    # Add image if supported
-    if defined?(Uniword::Image)
-      # Load test image data
-      image_path = 'spec/fixtures/docx_gem/replacement.png'
-      if File.exist?(image_path)
-        image_data = File.binread(image_path)
-        image = Uniword::Image.from_data(
-          image_data,
-          width: 100 * 9525, # 100 pixels in EMUs
-          height: 100 * 9525,
-          alt_text: 'Test Image',
-          title: 'Test Image'
-        )
-        image.filename = 'replacement.png'
+    # Add image using ImageBuilder (properly registers in image_parts)
+    image_path = 'spec/fixtures/docx_gem/replacement.png'
+    if File.exist?(image_path)
+      # Use ImageBuilder to create drawing and register image in image_parts
+      drawing = Uniword::Builder::ImageBuilder.create_drawing(doc, image_path)
 
-        # Add image to a new paragraph
-        img_para = Uniword::Paragraph.new
-        img_para.runs << image
-        doc.body&.paragraphs&.<<(img_para)
-      end
+      # Create a run containing the drawing and add to document
+      img_run = Uniword::Wordprocessingml::Run.new
+      img_run.drawings << drawing
+
+      img_para = Uniword::Paragraph.new
+      img_para.runs << img_run
+      doc.body.paragraphs << img_para
     end
 
     doc

@@ -75,6 +75,12 @@ module Uniword
         filelist_part = build_filelist_part
         mhtml_doc.parts << filelist_part if filelist_part
 
+        # Build image parts from document.image_parts
+        image_parts = build_image_parts
+        image_parts.each do |image_part|
+          mhtml_doc.parts << image_part
+        end
+
         # Generate deterministic boundary based on document name
         # Word uses format: ----=_NextPart_XXXX.XXXX
         hash = document_name.gsub(/[^a-zA-Z0-9]/, '').upcase[0..7] || 'DOC'
@@ -119,10 +125,20 @@ module Uniword
 
       # Build filelist.xml part
       def build_filelist_part
+        # Build file list entries for images
+        image_entries = if @document.image_parts && !@document.image_parts.empty?
+                          @document.image_parts.map do |_r_id, image_data|
+                            %{<o:File HRef="#{image_data[:target]}"/>}
+                          end.join("\n            ")
+                        else
+                          ''
+                        end
+
         filelist_xml = <<~XML
           <xml xmlns:o="urn:schemas-microsoft-com:office:office">
             <o:MainFile HRef="../#{document_name}.htm"/>
             <o:File HRef="filelist.xml"/>
+            #{image_entries}
           </xml>
         XML
 
@@ -133,6 +149,28 @@ module Uniword
         part.content_location = "file:///C:/D057922B/#{document_name}.fld/filelist.xml"
 
         part
+      end
+
+      # Build image parts from document.image_parts
+      #
+      # Each image in document.image_parts is a hash with:
+      #   - data: binary image content
+      #   - content_type: MIME type (e.g., 'image/png')
+      #   - target: filename (e.g., 'image1.png')
+      #
+      # @return [Array<Uniword::Mhtml::ImagePart>] Array of image MIME parts
+      def build_image_parts
+        return [] unless @document.image_parts && !@document.image_parts.empty?
+
+        @document.image_parts.map do |r_id, image_data|
+          part = Uniword::Mhtml::ImagePart.new
+          part.content_type = image_data[:content_type] || 'image/png'
+          part.content_transfer_encoding = 'base64'
+          part.raw_content = image_data[:data] # Binary data - MimePackager handles base64 encoding
+          # Use Content-Location matching the target filename in the MHT structure
+          part.content_location = "file:///C:/D057922B/#{document_name}.fld/#{image_data[:target]}"
+          part
+        end
       end
 
       # Wrap HTML content in full Word HTML document

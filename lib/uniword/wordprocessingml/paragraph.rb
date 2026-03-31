@@ -33,6 +33,10 @@ module Uniword
       attribute :para_id, W14ParaId          # Paragraph ID (w14:paraId)
       attribute :text_id, W14TextId          # Text ID (w14:textId)
 
+      # Non-serialized runtime reference to parent document for style inheritance
+      # This allows runs to access styles_configuration for style property resolution
+      attr_accessor :parent_document
+
       xml do
         element 'p'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML

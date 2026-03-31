@@ -14,7 +14,6 @@ module Uniword
       xml do
         root 'docParts'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        mixed_content
 
         map_element 'docPart', to: :doc_part, render_nil: false
       end

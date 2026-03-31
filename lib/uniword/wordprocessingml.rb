@@ -164,9 +164,11 @@ module Uniword
     # Footnotes and endnotes
     autoload :Footnote, 'uniword/wordprocessingml/footnote'
     autoload :FootnoteReference, 'uniword/wordprocessingml/footnote_reference'
+    autoload :FootnoteRef, 'uniword/wordprocessingml/footnote_ref'
     autoload :Footnotes, 'uniword/wordprocessingml/footnotes'
     autoload :Endnote, 'uniword/wordprocessingml/endnote'
     autoload :EndnoteReference, 'uniword/wordprocessingml/endnote_reference'
+    autoload :EndnoteRef, 'uniword/wordprocessingml/endnote_ref'
     autoload :Endnotes, 'uniword/wordprocessingml/endnotes'
 
     # Style elements

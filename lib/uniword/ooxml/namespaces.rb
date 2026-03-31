@@ -40,6 +40,14 @@ module Uniword
         attribute_form_default :qualified
       end
 
+      # DrawingML Diagram (SmartArt) namespace
+      class Diagram < Lutaml::Xml::Namespace
+        uri 'http://schemas.openxmlformats.org/drawingml/2006/diagram'
+        prefix_default 'dgm'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
       # DrawingML Picture namespace
       class Picture < Lutaml::Xml::Namespace
         uri 'http://schemas.openxmlformats.org/drawingml/2006/picture'

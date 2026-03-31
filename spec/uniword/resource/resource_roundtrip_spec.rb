@@ -109,13 +109,9 @@ RSpec.describe 'Resource Roundtrip' do
     end
 
     context 'bundled stylesets' do
-      # NOTE: These tests are pending due to lutaml-model YAML serialization bug
-      # Boolean attributes serialize as !ruby/object:Lutaml::Model::Type::Boolean
-      # instead of plain true/false, which safe_load cannot parse
       Uniword::StyleSet.available_stylesets.first(3).each do |styleset_name|
         describe styleset_name do
           it 'roundtrips through YAML' do
-            skip 'Pending lutaml-model fix for Boolean YAML serialization'
             # Load original
             original = Uniword::StyleSet.load(styleset_name)
 

@@ -11,6 +11,7 @@ module Uniword
       attribute :uri, :string
       attribute :picture, Uniword::Picture::Picture
       attribute :chart, Uniword::Chart::ChartReference
+      attribute :diagram, Uniword::Chart::DiagramReference
 
       xml do
         root 'graphicData'
@@ -19,6 +20,7 @@ module Uniword
         map_attribute 'uri', to: :uri, render_nil: false
         map_element 'pic', to: :picture, render_nil: false
         map_element 'chart', to: :chart, render_nil: false
+        map_element 'diagram', to: :diagram, render_nil: false
       end
     end
   end

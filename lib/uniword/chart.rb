@@ -12,6 +12,7 @@ module Uniword
     autoload :ChartSpace, "#{__dir__}/chart/chart_space"
     autoload :Chart, "#{__dir__}/chart/chart"
     autoload :ChartReference, "#{__dir__}/chart/chart_reference"
+    autoload :DiagramReference, "#{__dir__}/chart/diagram_reference"
     autoload :Title, "#{__dir__}/chart/title"
     autoload :AutoTitleDeleted, "#{__dir__}/chart/auto_title_deleted"
     autoload :PlotArea, "#{__dir__}/chart/plot_area"

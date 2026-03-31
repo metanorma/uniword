@@ -16,6 +16,7 @@ module Uniword
       attribute :sty, MathStyle
       attribute :brk, MathBreak
       attribute :aln, :string
+      attribute :ctrl_pr, ControlProperties
 
       xml do
         element 'rPr'
@@ -29,6 +30,7 @@ module Uniword
         map_element 'sty', to: :sty, render_nil: false
         map_element 'brk', to: :brk, render_nil: false
         map_element 'aln', to: :aln, render_nil: false
+        map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
       end
     end
   end

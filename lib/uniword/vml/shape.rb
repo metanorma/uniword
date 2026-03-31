@@ -26,10 +26,23 @@ module Uniword
       attribute :wrap, Wrap
       attribute :imagedata, Imagedata
 
+      # o: namespace attributes
+      attribute :o_spid, :string
+      attribute :o_allowincell, :string
+
+      # VML attributes
+      attribute :stroked, :string
+      attribute :filled, :string
+
       xml do
         root 'shape'
         namespace Uniword::Ooxml::Namespaces::Vml
         mixed_content
+
+        # Declare Office namespace at root level so o:spid, o:allowincell work
+        namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
+        ]
 
         map_attribute 'id', to: :id, render_nil: false
         map_attribute 'type', to: :type, render_nil: false
@@ -46,6 +59,14 @@ module Uniword
         map_element 'textpath', to: :textpath, render_nil: false
         map_element 'wrap', to: :wrap, render_nil: false
         map_element 'imagedata', to: :imagedata, render_nil: false
+
+        # o: namespace attributes
+        map_attribute 'spid', to: :o_spid, render_nil: false
+        map_attribute 'allowincell', to: :o_allowincell, render_nil: false
+
+        # VML attributes
+        map_attribute 'stroked', to: :stroked, render_nil: false
+        map_attribute 'filled', to: :filled, render_nil: false
       end
     end
   end

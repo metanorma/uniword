@@ -68,7 +68,7 @@ RSpec.describe 'Document Elements Round-Trip' do
           glossary_doc = Uniword::Glossary::GlossaryDocument.from_xml(original_xml)
 
           # Serialize back
-          roundtrip_xml = glossary_doc.to_xml
+          roundtrip_xml = glossary_doc.to_xml(pretty: false)
 
           # Write roundtrip for comparison
           FileUtils.mkdir_p(File.dirname(glossary_roundtrip_path))
