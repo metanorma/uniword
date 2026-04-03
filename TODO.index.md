@@ -1,16 +1,16 @@
 # TODO Index — Active Work Items
 
-## Test Suite Status (2026-04-02)
-**3755 examples, 0 failures, 330 pending**
+## Test Suite Status (2026-04-03)
+**3157 examples, 0 failures, 82 pending**
 
 ## Categories
 
 | # | Category | Priority | Status |
 |---|----------|----------|--------|
-| 1 | OOXML Model Gaps | HIGH | In Progress |
-| 2 | MHT/DOCX Transformation | MEDIUM | In Progress |
+| 1 | OOXML Model Gaps | HIGH | Mostly Complete |
+| 2 | MHT/DOCX Transformation | MEDIUM | Tests Pass (107 examples) |
 | 3 | Custom Getters/Setters Cleanup | HIGH | COMPLETE |
-| 4 | respond_to? Replacement | MEDIUM | Planned |
+| 4 | respond_to? Replacement | MEDIUM | BooleanElement Checks Done |
 | 5 | Namespace Refactoring | LOW | Partially Done |
 | 6 | Author Metadata | LOW | Not Started |
 
@@ -25,8 +25,8 @@ Missing OOXML element models that cause pending tests or data loss.
 | `attribute_form_default` fix | `TODO.oop-spec/01-attribute-form-default.md` | NOT STARTED |
 | SDT `multiLine` attribute | `TODO.oop-spec/05-sdt-multiLine-attribute.md` | NOT STARTED |
 | Anchor `anchorId`/`editId` | `TODO.oop-spec/07-anchor-id-edit-id.md` | DONE |
-| Blip `r:` namespace | `TODO.oop-spec/03-theme-blip-namespace.md` | VERIFY |
-| ThemeFamily `thm15:` namespace | `TODO.oop-spec/04-theme-thm15-namespace.md` | VERIFY |
+| Blip `r:` namespace | `TODO.oop-spec/03-theme-blip-namespace.md` | VERIFIED (tests pass) |
+| ThemeFamily `thm15:` namespace | `TODO.oop-spec/04-theme-thm15-namespace.md` | VERIFIED (tests pass) |
 
 ### Pending Tests Caused
 - 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues)
@@ -106,23 +106,17 @@ end
 
 ---
 
-## 4. respond_to? Replacement (MEDIUM)
+## 4. respond_to? Replacement (MEDIUM) — BooleanElement Checks DONE
 
-**~217 occurrences** across ~40 files in lib/. Replace with `is_a?` type checks.
+**~217 occurrences** across ~40 files in lib/. Most are valid duck-typing interface checks.
 
-### Priority Files (highest count)
-| File | Count |
-|------|-------|
-| `metadata/metadata_extractor.rb` | ~18 |
-| `validation/link_validator.rb` | ~10 |
-| `batch/stages/normalize_styles_stage.rb` | ~11 |
-| `mhtml/word_css.rb` | ~14 |
-| `transformation/ooxml_to_mhtml_converter.rb` | ~10 |
-| `assembly/cross_reference_resolver.rb` | ~10 |
-| `template/template_parser.rb` | ~7 |
-| `wordprocessingml/run_properties.rb` | ~10 (val.respond_to?(:value)) |
-| `wordprocessingml/paragraph_properties.rb` | ~4 |
-| `wordprocessingml/style.rb` | ~4 |
+### BooleanElement Checks (DONE 2026-04-03)
+Replaced `respond_to?(:value)` with `is_a?(BooleanElement)` in:
+- `wordprocessingml/run_properties.rb` ✓
+- `wordprocessingml/style.rb` ✓
+
+### Remaining respond_to? Uses
+These are valid duck-typing checks for interface availability (e.g., `respond_to?(:runs)`, `respond_to?(:paragraphs)`), not BooleanElement-specific.
 
 ---
 
