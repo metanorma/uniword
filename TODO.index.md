@@ -64,8 +64,8 @@ Missing OOXML element models that cause pending tests or data loss.
 ### MHT -> DOCX (remaining)
 - [ ] Parse conditional comments for field codes
 - [ ] Create OOXML Table of Contents
-- [ ] Complete metadata fields (Revision, TotalTime, Pages, Words)
-- [ ] Table cell paragraphs with proper styles
+- [ ] Complete metadata fields (Revision, TotalTime, Pages, Words) — low impact, Word auto-calculates
+- [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 - [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
 
 ### Round-Trip Tests
