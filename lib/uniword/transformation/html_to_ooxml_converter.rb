@@ -123,7 +123,15 @@ module Uniword
           end
         end
 
-        cell.paragraphs.empty? ? nil : cell
+        # Always return a cell, even if empty (preserves table structure)
+        cell.paragraphs.empty? ? create_empty_cell(cell) : cell
+      end
+
+      # Create a cell with an empty paragraph to preserve structure
+      def self.create_empty_cell(cell)
+        # Ensure at least one empty paragraph exists to represent the cell
+        cell.paragraphs << Uniword::Wordprocessingml::Paragraph.new
+        cell
       end
 
       # Convert a single HTML element to OOXML paragraph
