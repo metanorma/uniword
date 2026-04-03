@@ -24,7 +24,7 @@ Missing OOXML element models that cause pending tests or data loss.
 |------|------|--------|
 | `attribute_form_default` fix | `TODO.oop-spec/01-attribute-form-default.md` | NOT STARTED |
 | SDT `multiLine` attribute | `TODO.oop-spec/05-sdt-multiLine-attribute.md` | NOT STARTED |
-| Anchor `anchorId`/`editId` | `TODO.oop-spec/07-anchor-id-edit-id.md` | NOT STARTED |
+| Anchor `anchorId`/`editId` | `TODO.oop-spec/07-anchor-id-edit-id.md` | DONE |
 | Blip `r:` namespace | `TODO.oop-spec/03-theme-blip-namespace.md` | VERIFY |
 | ThemeFamily `thm15:` namespace | `TODO.oop-spec/04-theme-thm15-namespace.md` | VERIFY |
 
