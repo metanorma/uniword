@@ -178,6 +178,12 @@ module Uniword
         # Add paragraphs to document
         ooxml_doc.body.paragraphs.concat(paragraphs)
 
+        # Convert HTML tables to OOXML tables
+        tables = HtmlToOoxmlConverter.html_to_tables(html_content)
+        tables.each do |table|
+          ooxml_doc.body.tables << table
+        end
+
         # Transfer metadata from MHTML DocumentProperties to OOXML
         doc_props = source.document_properties
         if doc_props

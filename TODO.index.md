@@ -69,9 +69,9 @@ Missing OOXML element models that cause pending tests or data loss.
 - [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 
 ### Round-Trip Tests
-- [ ] Write MHT -> DOCX content matching spec
+- [x] Write MHT -> DOCX content matching spec — DONE 2026-04-03
 - [ ] Write round-trip content matching spec
-- 107 transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 39 content matching)
+- 136 transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 68 content matching)
 
 ---
 
