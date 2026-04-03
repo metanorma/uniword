@@ -36,8 +36,7 @@ module Uniword
 
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
-      attr_accessor :core_properties # docProps/core.xml - Uniword::Ooxml::CoreProperties
-      attr_accessor :app_properties, :theme, :raw_html, :revisions, :comments, :bookmarks
+      attr_accessor :theme, :raw_html, :revisions, :comments
       # Headers and footers (stored as hash: type => Header/Footer)
       attr_accessor :headers, :footers
       # Footnotes and endnotes (separate XML parts in DOCX package)
@@ -52,6 +51,10 @@ module Uniword
       attr_accessor :bibliography_sources
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels, :package_rels, :content_types
+
+      # Writers for properties that have lazy-initialized getters
+      # (removing from attr_accessor to avoid shadowing custom getters)
+      attr_writer :app_properties, :core_properties, :bookmarks
 
       # Get app_properties (lazy initialization)
       #

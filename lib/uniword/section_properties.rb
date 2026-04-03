@@ -21,10 +21,6 @@ module Uniword
     # Page orientation
     attribute :orientation, :string, default: -> { 'portrait' }
 
-    # Alias for docx-js compatibility
-    alias page_orientation orientation
-    alias page_orientation= orientation=
-
     # Title page (different first page header/footer)
     attribute :title_page, :boolean, default: -> { false }
 
@@ -72,12 +68,6 @@ module Uniword
     SECTION_TYPES = %w[continuous nextPage nextColumn evenPage oddPage].freeze
 
     def initialize(**attributes)
-      # Handle alias parameters
-      if attributes.key?(:page_orientation)
-        attributes[:orientation] =
-          attributes.delete(:page_orientation)
-      end
-
       super
       validate_orientation
       validate_section_type
@@ -170,17 +160,6 @@ module Uniword
 
     # Page size preset accessor
     attr_accessor :page_size
-
-    # Set page size by string name
-    def page_size=(name)
-      return unless name
-
-      size_key = name.to_s.downcase.to_sym
-      return unless PAGE_SIZES.key?(size_key)
-
-      @page_size = name
-      set_page_size(size_key, orientation: orientation&.to_sym || :portrait)
-    end
 
     private
 

@@ -34,11 +34,11 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
 
   # Helper to create test document
   def create_test_document(paragraphs: 100, tables: 0)
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     paragraphs.times do |i|
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(
         text: "Paragraph #{i + 1}: Test content for benchmarking."
       )
       para.runs << run
@@ -46,13 +46,13 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
     end
 
     tables.times do |t|
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       5.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         4.times do |c|
-          cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: "T#{t}R#{r}C#{c}")
+          cell = Uniword::Wordprocessingml::TableCell.new
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: "T#{t}R#{r}C#{c}")
           para.runs << run
           cell.paragraphs << para
           row.cells << cell
@@ -108,11 +108,9 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
       expect(time).to be < 0.5
     end
 
-    it 'benchmarks HTML serialization', skip: 'HtmlSerializer not yet implemented (HTML export is lossy)' do
-      serializer = Uniword::Serialization::HtmlSerializer.new
-
+    it 'benchmarks HTML serialization' do
       time = run_benchmark('HTML serialization (100p + 10t)') do
-        serializer.serialize(@test_doc)
+        Uniword::Transformation::OoxmlToHtmlConverter.document_to_html(@test_doc)
       end
 
       expect(time).to be < 0.5
@@ -238,14 +236,13 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
   end
 
   describe 'Optimization Effectiveness' do
-    it 'verifies string concatenation optimization', skip: 'HtmlSerializer not yet implemented (HTML export is lossy)' do
-      serializer = Uniword::Serialization::HtmlSerializer.new
+    it 'verifies string concatenation optimization' do
       doc = create_test_document(paragraphs: 100)
 
       GC.start
       before_strings = ObjectSpace.count_objects[:T_STRING]
 
-      serializer.serialize(doc)
+      Uniword::Transformation::OoxmlToHtmlConverter.document_to_html(doc)
 
       GC.start
       after_strings = ObjectSpace.count_objects[:T_STRING]

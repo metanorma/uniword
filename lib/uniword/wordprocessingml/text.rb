@@ -20,6 +20,29 @@ module Uniword
         map_attribute 'xml:space', to: :xml_space
       end
 
+      # Handle type conversion for lutaml-model's attribute system.
+      # When used as an attribute type, lutaml-model calls cast() to convert
+      # incoming values to the proper type.
+      #
+      # @param value [String, Text, nil] The value to cast
+      # @return [Text, nil] The properly typed Text object
+      def self.cast(value)
+        case value
+        when Text
+          value
+        when nil
+          nil
+        else
+          content_str = value.to_s
+          text_obj = new(content: content_str)
+          # Preserve whitespace for XML serialization
+          if content_str.start_with?(' ') || content_str.end_with?(' ') || content_str.include?("\t")
+            text_obj.xml_space = 'preserve'
+          end
+          text_obj
+        end
+      end
+
       # Get the actual text value
       def text
         content
