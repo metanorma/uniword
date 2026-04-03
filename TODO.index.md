@@ -32,7 +32,6 @@ Missing OOXML element models that cause pending tests or data loss.
 - 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues)
 - 5 pending: "Run hyperlink= setter removed in Builder API migration"
 - 5 pending: "Uniword.from_html not yet implemented"
-- 4 pending: "MHTML roundtrip does not preserve table structure"
 - 4 pending: "Image dimension control not yet fully implemented"
 - 4 pending: "Document#sections not yet available in Builder API migration"
 - 3 pending: "Page size configuration not yet implemented"
@@ -55,7 +54,7 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] SDT content from mixed_content
 - [ ] External hyperlink: relationship ID -> URL resolution
 - [ ] TOC field codes preservation
-- [ ] Table cell paragraphs with inline SDTs — partial, tables now convert
+- [ ] Table cell paragraphs with inline SDTs
 - [ ] Image parts in MIME structure (base64)
 - [ ] Theme/colorschememapping binary parts
 - [ ] Header/Footer MIME parts
@@ -67,6 +66,7 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] Complete metadata fields (Revision, TotalTime, Pages, Words) — low impact, Word auto-calculates
 - [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
 - [x] Table cell paragraphs with proper styles — DONE 2026-04-03
+- [x] Empty table cell structure preservation — DONE 2026-04-03
 
 ### Round-Trip Tests
 - [x] Write MHT -> DOCX content matching spec — DONE 2026-04-03
