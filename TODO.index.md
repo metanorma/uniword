@@ -8,7 +8,7 @@
 | # | Category | Priority | Status |
 |---|----------|----------|--------|
 | 1 | OOXML Model Gaps | HIGH | COMPLETE |
-| 2 | MHT/DOCX Transformation | MEDIUM | Tests Pass (107 examples) |
+| 2 | MHT/DOCX Transformation | MEDIUM | Mostly Complete (107 tests passing) |
 | 3 | Custom Getters/Setters Cleanup | HIGH | COMPLETE |
 | 4 | respond_to? Replacement | MEDIUM | BooleanElement Checks Done |
 | 5 | Namespace Refactoring | LOW | Partially Done |
@@ -65,13 +65,13 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] Parse conditional comments for field codes
 - [ ] Create OOXML Table of Contents
 - [ ] Complete metadata fields (Revision, TotalTime, Pages, Words) — low impact, Word auto-calculates
-- [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 - [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
+- [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 
 ### Round-Trip Tests
 - [ ] Write MHT -> DOCX content matching spec
 - [ ] Write round-trip content matching spec
-- 100 transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 34 content matching)
+- 107 transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 39 content matching)
 
 ---
 
