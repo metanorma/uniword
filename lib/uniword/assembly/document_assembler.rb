@@ -22,7 +22,7 @@ module Uniword
     # - AssemblyManifest (manifest parsing)
     # - ComponentRegistry (component management)
     # - VariableSubstitutor (variable replacement)
-    # - TocGenerator (TOC creation)
+    # - Toc (TOC creation)
     # - CrossReferenceResolver (reference resolution)
     #
     # @example Basic usage
@@ -267,13 +267,13 @@ module Uniword
         max_level = options['max_level'] || 9
         title = options['title'] || 'Table of Contents'
 
-        generator = TocGenerator.new(
+        toc = Toc.new(
           max_level: max_level,
           title: title
         )
 
         # Generate TOC paragraphs
-        toc_paragraphs = generator.generate(document)
+        toc_paragraphs = toc.generate_from_document(document)
 
         # Insert at current position
         document.body.paragraphs.concat(toc_paragraphs)

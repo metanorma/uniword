@@ -259,10 +259,7 @@ module Uniword
     # @param format [Symbol] Format to read
     # @return [Document] Loaded document
     def read_document(source, format)
-      document = DocumentFactory.from_file(source, format: format)
-      # Extract document from package if needed
-      document = document.document if document.respond_to?(:document)
-      document
+      DocumentFactory.from_file(source, format: format)
     end
 
     # Write document to file using format-specific handler

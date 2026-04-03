@@ -182,7 +182,7 @@ RSpec.describe 'Numbering Feature' do
       it 'creates instance with valid IDs' do
         instance = Uniword::Wordprocessingml::NumberingInstance.new(num_id: 1, abstract_num_id: 0)
         expect(instance.num_id).to eq(1)
-        expect(instance.abstract_num_id_value).to eq(0)
+        expect(instance.abstract_num_id.val).to eq(0)
       end
 
       it 'raises error for invalid num_id' do
@@ -353,8 +353,8 @@ RSpec.describe 'Numbering Feature' do
         Uniword::Builder::ParagraphBuilder.new(para).numbering(2, 1)
         expect(para.properties.num_id).to eq(2)
         expect(para.properties.ilvl).to eq(1)
-        expect(para.properties.style).to eq('Normal')
-        expect(para.properties.alignment).to eq('left')
+        expect(para.properties.style.value).to eq('Normal')
+        expect(para.properties.alignment.value).to eq('left')
       end
     end
 

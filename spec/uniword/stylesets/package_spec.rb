@@ -10,7 +10,7 @@ RSpec.describe Uniword::Stylesets::Package do
       it 'loads package from .dotx file' do
         pkg = described_class.from_file(dotx_path)
         expect(pkg).to be_a(described_class)
-        expect(pkg.styles_configuration).to be_a(Uniword::StylesConfiguration)
+        expect(pkg.styles_configuration).to be_a(Uniword::Wordprocessingml::StylesConfiguration)
         expect(pkg.source_path).to eq(dotx_path)
       end
 

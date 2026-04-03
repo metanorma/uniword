@@ -40,7 +40,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
 
       # Load document
       doc = Uniword.load(original_path)
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
 
       # Save document
       doc.save(roundtrip_path)
@@ -112,7 +112,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     it 'loads complex document without errors' do
       expect do
         doc = Uniword.load(original_path)
-        expect(doc).to be_a(Uniword::Document)
+        expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end.not_to raise_error
     end
 

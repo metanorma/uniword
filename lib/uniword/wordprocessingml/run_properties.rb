@@ -55,28 +55,6 @@ module Uniword
       attribute :outline, Properties::Outline, default: nil
       attribute :outline_level, Properties::OutlineLevel, default: nil
 
-      # Flat attributes (kept as aliases for compatibility)
-      attribute :spacing, :integer          # Flat attribute (deprecated)
-      attribute :kern, :integer             # Flat attribute (deprecated)
-      attribute :w_scale, :integer          # Flat attribute (deprecated)
-      attribute :em, :string                # Flat attribute (deprecated)
-
-      # Flat language attributes (deprecated, kept for compatibility)
-      attribute :language_val, :string      # Language code (e.g., "en-US")
-      attribute :language_bidi, :string     # BiDi language
-      attribute :language_east_asia, :string # East Asian language
-
-      # Flat shading (deprecated, kept for compatibility)
-      attribute :shading_fill, :string # Background fill color (flat)
-      attribute :shading_type, :string # Shading pattern (flat)
-
-      # Flat font attributes (convenience for API access)
-      attribute :font, :string           # Primary font (maps to ASCII)
-      attribute :font_ascii, :string     # ASCII font
-      attribute :font_east_asia, :string # East Asian font
-      attribute :font_h_ansi, :string    # High ANSI font
-      attribute :font_cs, :string        # Complex script font
-
       # YAML mappings for flat YAML structure (StyleSet compatibility)
       yaml do
         map 'bold', with: { from: :yaml_bold_from, to: :yaml_bold_to }
@@ -88,16 +66,16 @@ module Uniword
         map 'all_caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }  # Alias
         map 'hidden', with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
         map 'size', with: { from: :yaml_size_from, to: :yaml_size_to }
-        map 'spacing', to: :spacing
+        map 'spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
         map 'character_spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
         map 'underline', with: { from: :yaml_underline_from, to: :yaml_underline_to }
         map 'color', with: { from: :yaml_color_from, to: :yaml_color_to }
         map 'highlight', with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
-        map 'font', to: :font
-        map 'font_ascii', to: :font_ascii
-        map 'font_east_asia', to: :font_east_asia
-        map 'font_h_ansi', to: :font_h_ansi
-        map 'font_cs', to: :font_cs
+        map 'font', with: { from: :yaml_font_from, to: :yaml_font_to }
+        map 'font_ascii', with: { from: :yaml_font_ascii_from, to: :yaml_font_ascii_to }
+        map 'font_east_asia', with: { from: :yaml_font_east_asia_from, to: :yaml_font_east_asia_to }
+        map 'font_h_ansi', with: { from: :yaml_font_h_ansi_from, to: :yaml_font_h_ansi_to }
+        map 'font_cs', with: { from: :yaml_font_cs_from, to: :yaml_font_cs_to }
         map 'emboss', with: { from: :yaml_emboss_from, to: :yaml_emboss_to }
         map 'imprint', with: { from: :yaml_imprint_from, to: :yaml_imprint_to }
         map 'shadow', with: { from: :yaml_shadow_from, to: :yaml_shadow_to }
@@ -202,6 +180,51 @@ module Uniword
         highlight&.value
       end
 
+      def yaml_font_from(instance, value)
+        instance.fonts ||= Properties::RunFonts.new
+        instance.fonts.ascii = value if value
+      end
+
+      def yaml_font_to(instance, doc)
+        fonts&.ascii
+      end
+
+      def yaml_font_ascii_from(instance, value)
+        instance.fonts ||= Properties::RunFonts.new
+        instance.fonts.ascii = value if value
+      end
+
+      def yaml_font_ascii_to(instance, doc)
+        fonts&.ascii
+      end
+
+      def yaml_font_east_asia_from(instance, value)
+        instance.fonts ||= Properties::RunFonts.new
+        instance.fonts.east_asia = value if value
+      end
+
+      def yaml_font_east_asia_to(instance, doc)
+        fonts&.east_asia
+      end
+
+      def yaml_font_h_ansi_from(instance, value)
+        instance.fonts ||= Properties::RunFonts.new
+        instance.fonts.h_ansi = value if value
+      end
+
+      def yaml_font_h_ansi_to(instance, doc)
+        fonts&.h_ansi
+      end
+
+      def yaml_font_cs_from(instance, value)
+        instance.fonts ||= Properties::RunFonts.new
+        instance.fonts.cs = value if value
+      end
+
+      def yaml_font_cs_to(instance, doc)
+        fonts&.cs
+      end
+
       def yaml_emboss_from(instance, value)
         instance.emboss = Properties::Emboss.new(value: value) unless value.nil?
       end
@@ -240,25 +263,6 @@ module Uniword
 
       def yaml_vertical_align_to(instance, doc)
         vertical_align&.value
-      end
-
-      # Style setter - converts string style IDs to RunStyleReference objects
-      def style=(value)
-        @style = case value
-                 when Properties::RunStyleReference
-                   value
-                 when Properties::StyleReference
-                   # Convert paragraph style reference to run style reference
-                   Properties::RunStyleReference.new(value: value.value)
-                 when String
-                   Properties::RunStyleReference.new(value: value)
-                 when nil
-                   nil
-                 else
-                   value
-                 end
-        # Notify lutaml-model that this attribute was explicitly set
-        value_set_for(:style)
       end
 
       # XML mappings come AFTER attributes
@@ -338,7 +342,7 @@ module Uniword
         val = bold
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -346,7 +350,7 @@ module Uniword
         val = italic
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -354,7 +358,7 @@ module Uniword
         val = strike
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -363,14 +367,14 @@ module Uniword
         val = @all_caps || caps
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
       # Set all_caps
       def all_caps=(value)
         @all_caps = value
-        instance.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
+        self.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
         value
       end
 
@@ -384,82 +388,65 @@ module Uniword
         val = caps
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
-      # Font convenience method - get ASCII font name
-      # Returns flat attribute if set, otherwise falls back to fonts object
+      # Font convenience getters - delegate to fonts wrapper
       def font
-        @font || fonts&.ascii
+        fonts&.ascii
       end
 
-      # Set font name on all font types
+      # Set font name on ASCII slot
       def font=(value)
-        @font = value
         self.fonts ||= Properties::RunFonts.new
         fonts.ascii = value
-        value
       end
 
-      # Get East Asian font
-      def font_east_asia
-        @font_east_asia || fonts&.east_asia
-      end
-
-      # Set East Asian font
-      def font_east_asia=(value)
-        @font_east_asia = value
-        self.fonts ||= Properties::RunFonts.new
-        fonts.east_asia = value
-        value
-      end
-
-      # Get High ANSI font
-      def font_h_ansi
-        @font_h_ansi || fonts&.h_ansi
-      end
-
-      # Set High ANSI font
-      def font_h_ansi=(value)
-        @font_h_ansi = value
-        self.fonts ||= Properties::RunFonts.new
-        fonts.h_ansi = value
-        value
-      end
-
-      # Get Complex Script font
-      def font_cs
-        @font_cs || fonts&.cs
-      end
-
-      # Set Complex Script font
-      def font_cs=(value)
-        @font_cs = value
-        self.fonts ||= Properties::RunFonts.new
-        fonts.cs = value
-        value
-      end
-
-      # Get ASCII font (alias for font)
       def font_ascii
-        @font_ascii || fonts&.ascii
+        fonts&.ascii
       end
 
-      # Set ASCII font (alias for font)
-      def font_ascii=(value)
-        @font_ascii = value
-        self.fonts ||= Properties::RunFonts.new
-        fonts.ascii = value
-        value
+      def font_east_asia
+        fonts&.east_asia
       end
 
-      # Convenience methods for RunProperties
+      def font_h_ansi
+        fonts&.h_ansi
+      end
+
+      def font_cs
+        fonts&.cs
+      end
+
+      # Language convenience getters - delegate to language wrapper
+      def language_val
+        language&.val
+      end
+
+      def language_east_asia
+        language&.east_asia
+      end
+
+      def language_bidi
+        language&.bidi
+      end
+
+      # Shading convenience getters - delegate to shading wrapper
+      def shading_fill
+        shading&.fill
+      end
+
+      def shading_type
+        shading&.pattern
+      end
+
+      # Convenience predicate methods for RunProperties
       def small_caps?
         val = small_caps
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::SmallCaps)
         val == true
       end
 
@@ -467,80 +454,40 @@ module Uniword
         val = shadow
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::Shadow)
         val == true
-      end
-
-      # Get shadow value (wrapper)
-      def shadow
-        @shadow
-      end
-
-      # Set shadow value
-      def shadow=(value)
-        @shadow = if value.is_a?(Properties::Shadow)
-                      value
-                    else
-                      Properties::Shadow.new(value: value)
-                    end
-        @using_default ||= {}
-        @using_default[:shadow] = false
       end
 
       def imprint?
         val = imprint
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::Imprint)
         val == true
-      end
-
-      # Get imprint value (wrapper)
-      def imprint
-        @imprint
-      end
-
-      # Set imprint value
-      def imprint=(value)
-        @imprint = if value.is_a?(Properties::Imprint)
-                        value
-                      else
-                        Properties::Imprint.new(value: value)
-                      end
-        @using_default ||= {}
-        @using_default[:imprint] = false
       end
 
       def emboss?
         val = emboss
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::Emboss)
         val == true
-      end
-
-      # Get emboss value (wrapper)
-      def emboss
-        @emboss
-      end
-
-      # Set emboss value
-      def emboss=(value)
-        @emboss = if value.is_a?(Properties::Emboss)
-                       value
-                     else
-                       Properties::Emboss.new(value: value)
-                     end
-        @using_default ||= {}
-        @using_default[:emboss] = false
       end
 
       def hidden?
         val = hidden
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::Vanish)
         val == true
+      end
+
+      def outline?
+        val = outline
+        return false if val.nil?
+
+        val = val.val if val.is_a?(Properties::Outline)
+        val != 'false'
       end
 
       def shading_color
@@ -555,31 +502,6 @@ module Uniword
 
       def page_break=(_value)
         self
-      end
-
-      # Get outline (character outline effect) - returns wrapper object
-      def outline
-        @outline
-      end
-
-      # Check if outline effect is enabled
-      def outline?
-        val = @outline
-        return false if val.nil?
-
-        val = val.val if val.respond_to?(:val)
-        val != 'false'
-      end
-
-      # Set outline effect
-      def outline=(value)
-        @outline = if value.is_a?(Properties::Outline)
-                      value
-                    else
-                      Properties::Outline.new(val: value)
-                    end
-        @using_default ||= {}
-        @using_default[:outline] = false
       end
 
       # Get text expansion (alias for width_scale)
@@ -604,13 +526,70 @@ module Uniword
 
       # Initialize with defaults and handle primitive-to-wrapper conversion
       def initialize(attrs = {})
+        # Extract flat convenience keys before super (lutaml-model ignores
+        # unknown keys). These are converted to proper wrapper objects below.
+        font_val = attrs.delete(:font) || attrs.delete('font')
+        font_ascii_val = attrs.delete(:font_ascii) || attrs.delete('font_ascii')
+        font_ea_val = attrs.delete(:font_east_asia) || attrs.delete('font_east_asia')
+        font_ha_val = attrs.delete(:font_h_ansi) || attrs.delete('font_h_ansi')
+        font_cs_val = attrs.delete(:font_cs) || attrs.delete('font_cs')
+        lang_val = attrs.delete(:language_val) || attrs.delete('language_val')
+        lang_ea = attrs.delete(:language_east_asia) || attrs.delete('language_east_asia')
+        lang_bidi = attrs.delete(:language_bidi) || attrs.delete('language_bidi')
+        # Also intercept language: 'en-US' (lutaml-model stores raw string
+        # when a primitive is passed for a typed attribute via constructor).
+        # Only extract if it's a String; leave Properties::Language objects
+        # for lutaml-model to handle normally.
+        raw_language = attrs[:language] || attrs['language']
+        if raw_language.is_a?(String)
+          attrs.delete(:language)
+          attrs.delete('language')
+        else
+          raw_language = nil
+        end
+        shading_fill_val = attrs.delete(:shading_fill) || attrs.delete('shading_fill')
+        shading_type_val = attrs.delete(:shading_type) || attrs.delete('shading_type')
+
         super
+
         # Convert primitive values to wrapper objects (Pattern 0: run after super)
         # This handles cases like RunProperties.new(bold: true) where primitives
         # are passed instead of wrapper objects
         convert_primitive_attributes!
-        # Use ||= to not override parsed values
-        @character_spacing = @spacing if @spacing
+
+        # Map removed flat font attributes to fonts wrapper.
+        # font_ascii takes precedence over font for the ASCII slot.
+        if font_val || font_ascii_val
+          self.fonts ||= Properties::RunFonts.new
+          fonts.ascii = font_ascii_val || font_val
+        end
+        if font_ea_val
+          self.fonts ||= Properties::RunFonts.new
+          fonts.east_asia = font_ea_val
+        end
+        if font_ha_val
+          self.fonts ||= Properties::RunFonts.new
+          fonts.h_ansi = font_ha_val
+        end
+        if font_cs_val
+          self.fonts ||= Properties::RunFonts.new
+          fonts.cs = font_cs_val
+        end
+
+        # Map removed flat language attributes to language wrapper.
+        if lang_val || lang_ea || lang_bidi || raw_language
+          self.language = Properties::Language.new
+          language.val = lang_val || raw_language if lang_val || raw_language
+          language.east_asia = lang_ea if lang_ea
+          language.bidi = lang_bidi if lang_bidi
+        end
+
+        # Map removed flat shading attributes to shading wrapper
+        if shading_fill_val || shading_type_val
+          self.shading ||= Properties::Shading.new
+          shading.fill = shading_fill_val if shading_fill_val
+          shading.pattern = shading_type_val if shading_type_val
+        end
       end
 
       # Convert primitive attribute values to proper wrapper objects
@@ -644,6 +623,11 @@ module Uniword
         end
         if @hidden && !@hidden.is_a?(Properties::Vanish)
           @hidden = Properties::Vanish.new(value: @hidden)
+        end
+
+        # Style - convert string to RunStyleReference wrapper
+        if @style.is_a?(String)
+          @style = Properties::RunStyleReference.new(value: @style)
         end
 
         # Font size (half-points)
@@ -717,11 +701,6 @@ module Uniword
           @text_outline = Properties::TextOutline.new
         end
 
-        # Font - ensure fonts.ascii is set when @font is provided
-        if @font && !@font.is_a?(Properties::RunFonts)
-          @fonts ||= Properties::RunFonts.new
-          @fonts.ascii = @font
-        end
       end
     end
   end

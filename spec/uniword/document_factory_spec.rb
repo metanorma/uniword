@@ -76,13 +76,13 @@ RSpec.describe Uniword::DocumentFactory do
       it 'loads MHTML file with auto format detection' do
         document = described_class.from_file(mhtml_file.path)
 
-        expect(document).to be_a(Uniword::Mhtml::Document)
+        expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
 
       it 'loads MHTML file with explicit format' do
         document = described_class.from_file(mhtml_file.path, format: :mhtml)
 
-        expect(document).to be_a(Uniword::Mhtml::Document)
+        expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
     end
 

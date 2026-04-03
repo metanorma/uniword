@@ -532,7 +532,7 @@ module Uniword
       attribute :w14_doc_id, W14DocId
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
-      attribute :mc_ignorable, :string
+      attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
 
       xml do
         element 'settings'

@@ -12,6 +12,8 @@ module Uniword
         attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
         attribute :tables, Table, collection: true, initialize_empty: true
         attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
+        attribute :runs, Run, collection: true, initialize_empty: true
+        attribute :hyperlinks, Hyperlink, collection: true, initialize_empty: true
 
         xml do
           element 'sdtContent'
@@ -21,6 +23,8 @@ module Uniword
           map_element 'p', to: :paragraphs, render_nil: false
           map_element 'tbl', to: :tables, render_nil: false
           map_element 'sdt', to: :sdts, render_nil: false
+          map_element 'r', to: :runs, render_nil: false
+          map_element 'hyperlink', to: :hyperlinks, render_nil: false
         end
       end
     end

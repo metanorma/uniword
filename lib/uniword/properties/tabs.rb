@@ -59,9 +59,6 @@ module Uniword
       def empty?
         tab_stops.empty?
       end
-
-      # Alias tabs for compatibility
-      alias tabs tab_stops
     end
   end
 end

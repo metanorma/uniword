@@ -35,6 +35,7 @@ module Uniword
                    else
                      v
                    end
+            value_set_for(:val) if @val
           end
         end
       end

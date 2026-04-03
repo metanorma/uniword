@@ -134,9 +134,10 @@ RSpec.describe Uniword::Wordprocessingml::Run do
   end
 
   describe '#font_size' do
-    it 'does not have font_size convenience method (use properties.size.value)' do
+    it 'returns effective font size in points from style inheritance' do
       run = described_class.new(text: 'Test')
-      expect(run).not_to respond_to(:font_size)
+      expect(run).to respond_to(:font_size)
+      expect(run.font_size).to be_nil
     end
 
     it 'can access size via properties.size.value (in half-points)' do

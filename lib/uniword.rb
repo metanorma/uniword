@@ -14,17 +14,17 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 # across 22 OOXML namespaces with perfect round-trip fidelity.
 #
 # @example Create a simple document
-#   doc = Uniword::Document.new
+#   doc = Uniword::Wordprocessingml::DocumentRoot.new
 #   doc.add_paragraph("Hello World", bold: true)
 #   doc.save('output.docx')
 #
 # @example Read an existing document
-#   doc = Uniword.load('input.docx')
+#   doc = Uniword::DocumentFactory.from_file('input.docx')
 #   puts doc.text
 #   doc.paragraphs.each { |p| puts p.text }
 #
 # @example Apply theme and StyleSet
-#   doc = Uniword::Document.new
+#   doc = Uniword::Wordprocessingml::DocumentRoot.new
 #   doc.add_paragraph("Hello World")
 #   doc.apply_theme('celestial')
 #   doc.apply_styleset('distinctive')
@@ -148,9 +148,6 @@ module Uniword
 
   # Table components
   autoload :TableBorder, 'uniword/table_border'
-  autoload :TableCell, 'uniword/table_cell'
-  autoload :TableColumn, 'uniword/table_column'
-  autoload :TableRow, 'uniword/table_row'
 
   # Formatting and styling
   autoload :ColumnConfiguration, 'uniword/column_configuration'
@@ -167,6 +164,7 @@ module Uniword
   autoload :ElementRegistry, 'uniword/element_registry'
   autoload :FormatConverter, 'uniword/format_converter'
   autoload :LazyLoader, 'uniword/lazy_loader'
+  autoload :Serialization, 'uniword/serialization/ooxml_serializer'
   autoload :Logger, 'uniword/logger'
   autoload :Loggable, 'uniword/loggable'
   autoload :StreamingParser, 'uniword/streaming_parser'
@@ -184,9 +182,9 @@ module Uniword
   class << self
     # Create a new document
     #
-    # @return [Document] New document instance
+    # @return [Wordprocessingml::DocumentRoot] New document instance
     def new
-      Document.new
+      Wordprocessingml::DocumentRoot.new
     end
 
     # Load document from file
@@ -294,8 +292,4 @@ module Uniword
     end
   end
 
-  # Load top-level class aliases for API compatibility
-  # This must be required after all autoloads are set up so that
-  # Wordprocessingml::DocumentRoot, ::Paragraph, and ::Table are available
-  require_relative 'uniword/compatibility'
 end

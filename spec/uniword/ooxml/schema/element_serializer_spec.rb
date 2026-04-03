@@ -50,7 +50,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
       let(:paragraph) do
         para = Uniword::Wordprocessingml::Paragraph.new
         para.properties ||= Uniword::Wordprocessingml::ParagraphProperties.new
-        para.properties.alignment = 'center'
+        para.properties.alignment = Uniword::Properties::Alignment.new(value: 'center')
         run = Uniword::Wordprocessingml::Run.new(text: 'Centered text')
         Uniword::Builder::RunBuilder.new(run).bold
         para.runs << run

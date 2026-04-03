@@ -98,13 +98,13 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
     it 'sets style' do
       builder = described_class.new
       builder.style = 'Heading1'
-      expect(builder.model.properties.style).to eq('Heading1')
+      expect(builder.model.properties.style.value).to eq('Heading1')
     end
 
     it 'sets alignment' do
       builder = described_class.new
       builder.align = :center
-      expect(builder.model.properties.alignment).to eq('center')
+      expect(builder.model.properties.alignment.value).to eq('center')
     end
 
     it 'sets numbering' do

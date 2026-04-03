@@ -36,20 +36,6 @@ module Uniword
         map_attribute 'fill', to: :fill
         map_attribute 'themeFill', to: :theme_fill, render_nil: false
       end
-
-      # Alias for pattern (API compatibility)
-      #
-      # @return [String] The shading type
-      def shading_type
-        pattern
-      end
-
-      # Alias for pattern (API compatibility)
-      #
-      # @param value [String] The shading type
-      def shading_type=(value)
-        self.pattern = value
-      end
     end
   end
 end

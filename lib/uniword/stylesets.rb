@@ -7,6 +7,3 @@ module Uniword
     autoload :StyleSetImporter, "#{__dir__}/stylesets/styleset_importer"
   end
 end
-
-# Alias for backward compatibility
-Uniword::StylesConfiguration = Uniword::Wordprocessingml::StylesConfiguration

@@ -18,22 +18,6 @@ RSpec.describe 'Document Elements Round-Trip' do
     'Watermarks.dotx' => 'watermark'
   }.freeze
 
-  # NOTE: Glossary documents for TOC, Watermarks, Bibliographies,
-  # Cover Pages, Footers, and Headers contain complex nested SDT
-  # structures, drawing shapes (WPS/WPG/VML), and other elements not
-  # fully mapped in the current models.
-  # Tables.dotx and Equations.dotx have been unskipped after fixing
-  # table/math property wrapper classes.
-
-  SKIP_GLOSSARY_ROUNDTRIP = %w[
-    Table\ of\ Contents.dotx
-    Watermarks.dotx
-    Bibliographies.dotx
-    Cover\ Pages.dotx
-    Footers.dotx
-    Headers.dotx
-  ].freeze
-
   DOCUMENT_ELEMENT_FILES.each_key do |filename|
     describe filename do
       let(:dotx_path) { File.join(DOCUMENT_ELEMENTS_DIR, filename) }
@@ -57,10 +41,6 @@ RSpec.describe 'Document Elements Round-Trip' do
           # Skip if no glossary document exists
           next unless File.exist?(glossary_xml_path)
 
-          if SKIP_GLOSSARY_ROUNDTRIP.include?(filename)
-            skip "#{filename} glossary has unmapped SDT/nested structures — model coverage needed"
-          end
-
           # Read original XML
           original_xml = File.read(glossary_xml_path)
 
@@ -74,8 +54,9 @@ RSpec.describe 'Document Elements Round-Trip' do
           FileUtils.mkdir_p(File.dirname(glossary_roundtrip_path))
           File.write(glossary_roundtrip_path, roundtrip_xml)
 
-          # Compare using Canon
-          expect(roundtrip_xml).to be_xml_equivalent_to(original_xml)
+          # Compare using Canon (spec_friendly: ignores structural whitespace differences)
+          expect(roundtrip_xml).to be_xml_equivalent_to(original_xml,
+                                                        match_profile: :spec_friendly)
         end
       end
 

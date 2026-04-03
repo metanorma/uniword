@@ -64,7 +64,7 @@ RSpec.describe 'Style Round-Trip Fidelity' do
       expect(style.type).to eq('paragraph')
       expect(style.id).to eq('Heading1')
       expect(style.default).to be(false)
-      expect(style.custom).to be(true)
+      expect(style.custom?).to be(true)
     end
 
     it 'captures style metadata elements' do
@@ -83,7 +83,7 @@ RSpec.describe 'Style Round-Trip Fidelity' do
 
       expect(style.spacing_before).to eq(240)
       expect(style.spacing_after).to eq(60)
-      expect(style.alignment).to eq('left')
+      expect(style.alignment.value).to eq('left')
       expect(style.keep_next).to be(true)
       expect(style.keep_lines).to be(true)
       expect(style.outline_level).to eq(0)

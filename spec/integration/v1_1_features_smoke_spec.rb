@@ -15,7 +15,7 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
     end
 
     it 'loads ParagraphBorders classes' do
-      expect(Uniword::ParagraphBorders).to be_a(Class)
+      expect(Uniword::Wordprocessingml::ParagraphBorders).to be_a(Class)
       expect(Uniword::ParagraphBorderSide).to be_a(Class)
     end
 
@@ -70,7 +70,7 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
 
   describe 'ParagraphBorders' do
     it 'creates paragraph border box' do
-      borders = Uniword::ParagraphBorders.box(style: 'single', color: 'FF0000')
+      borders = Uniword::Wordprocessingml::ParagraphBorders.box(style: 'single', color: 'FF0000')
       expect(borders.box?).to be true
     end
   end
@@ -158,7 +158,7 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
     it 'imports simple HTML' do
       html = '<p>Hello <b>World</b></p>'
       doc = Uniword::HtmlImporter.new(html).to_document
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(doc.paragraphs.count).to be > 0
     end
 
@@ -185,13 +185,13 @@ RSpec.describe 'v1.1.0 Features Smoke Test' do
     it 'converts HTML to document' do
       html = '<p>Test</p>'
       doc = Uniword.from_html(html)
-      expect(doc).to be_a(Uniword::Document)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
   end
 
   describe 'Integration with existing classes' do
     it 'adds hyperlink to paragraph' do
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       builder = Uniword::Builder::ParagraphBuilder.new(para)
       builder << Uniword::Builder.hyperlink('https://example.com', 'Click')
       expect(para.hyperlinks.count).to eq(1)

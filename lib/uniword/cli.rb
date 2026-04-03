@@ -395,7 +395,7 @@ module Uniword
         say '  Loaded document:', :cyan
         say "    Paragraphs: #{doc.paragraphs.count}"
         say "    Tables: #{doc.tables.count}"
-        say "    Styles: #{doc.styles_configuration&.all_styles&.count || 0}"
+        say "    Styles: #{doc.styles_configuration&.styles&.count || 0}"
       end
 
       # Save document
@@ -444,8 +444,8 @@ module Uniword
       say "  Text length: #{doc.text.length} characters"
 
       # Styles information
-      if doc.styles_configuration&.all_styles&.any?
-        say "  Styles: #{doc.styles_configuration.all_styles.count}"
+      if doc.styles_configuration&.styles&.any?
+        say "  Styles: #{doc.styles_configuration.styles.count}"
       end
 
       # Detailed information

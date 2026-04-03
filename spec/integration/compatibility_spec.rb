@@ -415,20 +415,20 @@ RSpec.describe 'DOCX Compatibility Testing' do
   private
 
   def create_test_document
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Test document content')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Test document content')
     para.runs << run
     doc.body.paragraphs << para
     doc
   end
 
   def create_document_with_styles
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Add a paragraph with potential style
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Styled content')
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Styled content')
     para.runs << run
     doc.body.paragraphs << para
 
@@ -436,12 +436,12 @@ RSpec.describe 'DOCX Compatibility Testing' do
   end
 
   def create_document_with_numbering
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Add paragraphs that might trigger numbering
     3.times do |i|
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "List item #{i + 1}")
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "List item #{i + 1}")
       para.runs << run
       doc.body.paragraphs << para
     end
@@ -450,38 +450,38 @@ RSpec.describe 'DOCX Compatibility Testing' do
   end
 
   def create_document_with_unicode
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Unicode: 你好 مرحبا 🌍 café')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好 مرحبا 🌍 café')
     para.runs << run
     doc.body.paragraphs << para
     doc
   end
 
   def create_document_with_special_chars
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Special: < > & " \' © ® ™')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Special: < > & " \' © ® ™')
     para.runs << run
     doc.body.paragraphs << para
     doc
   end
 
   def create_full_featured_document
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Paragraphs
-    para1 = Uniword::Paragraph.new
-    run1 = Uniword::Run.new(text: 'First paragraph')
+    para1 = Uniword::Wordprocessingml::Paragraph.new
+    run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
     para1.runs << run1
     doc.body.paragraphs << para1
 
     # Table
-    table = Uniword::Table.new
-    row = Uniword::TableRow.new
-    cell = Uniword::TableCell.new
-    cell_para = Uniword::Paragraph.new
-    cell_run = Uniword::Run.new(text: 'Table cell')
+    table = Uniword::Wordprocessingml::Table.new
+    row = Uniword::Wordprocessingml::TableRow.new
+    cell = Uniword::Wordprocessingml::TableCell.new
+    cell_para = Uniword::Wordprocessingml::Paragraph.new
+    cell_run = Uniword::Wordprocessingml::Run.new(text: 'Table cell')
     cell_para.runs << cell_run
     cell.paragraphs << cell_para
     row.cells << cell
@@ -489,8 +489,8 @@ RSpec.describe 'DOCX Compatibility Testing' do
     doc.body.tables << table
 
     # Another paragraph
-    para2 = Uniword::Paragraph.new
-    run2 = Uniword::Run.new(text: 'Second paragraph')
+    para2 = Uniword::Wordprocessingml::Paragraph.new
+    run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
     para2.runs << run2
     doc.body.paragraphs << para2
 

@@ -169,17 +169,13 @@ module Uniword
       # @param color_ref [Object] OOXML color reference (Dk1Color, etc.)
       # @return [String, nil] Hex color value
       def extract_hex_color(color_ref)
-        # Try SRGB color first
-        if color_ref.respond_to?(:srgb_clr) && color_ref.srgb_clr
-          return color_ref.srgb_clr.val
-        end
+        return nil unless color_ref.is_a?(Drawingml::ThemeColorBase)
 
-        # Try system color
-        if color_ref.respond_to?(:sys_clr) && color_ref.sys_clr
-          return color_ref.sys_clr.val
+        if color_ref.srgb_clr
+          color_ref.srgb_clr.val
+        elsif color_ref.sys_clr
+          color_ref.sys_clr.val
         end
-
-        nil
       end
 
       # Extract friendly font scheme from Word theme

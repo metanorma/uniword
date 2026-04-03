@@ -37,16 +37,6 @@ module Uniword
         map_element 't', to: :text,
                          render_nil: false
       end
-
-      # Backwards compatibility getter
-      def properties
-        @math_properties
-      end
-
-      # Backwards compatibility setter
-      def properties=(value)
-        @math_properties = value
-      end
     end
   end
 end

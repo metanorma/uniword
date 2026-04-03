@@ -233,8 +233,6 @@ module Uniword
             @color_scheme.all_colors
           end
 
-          alias_method :keys, :to_h
-          alias_method :each, :to_h
         end
 
         # Getter for hash-like color access

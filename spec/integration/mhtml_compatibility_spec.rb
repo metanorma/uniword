@@ -36,9 +36,9 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     end
 
     it 'includes proper MIME version header' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -243,9 +243,9 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     end
 
     it 'handles Unicode characters correctly' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Unicode: ñ é ü 中文 日本語')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: ñ é ü 中文 日本語')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -257,9 +257,9 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     end
 
     it 'escapes HTML entities properly' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Entities: < > & "')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Entities: < > & "')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -273,13 +273,13 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     end
 
     it 'preserves newlines and whitespace' do
-      doc = Uniword::Document.new
-      para1 = Uniword::Paragraph.new
-      run1 = Uniword::Run.new(text: 'Line 1')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Line 1')
       para1.runs << run1
       doc.body.paragraphs << para1
-      para2 = Uniword::Paragraph.new
-      run2 = Uniword::Run.new(text: 'Line 2')
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Line 2')
       para2.runs << run2
       doc.body.paragraphs << para2
 
@@ -297,11 +297,11 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'mhtml_size.doc') }
 
     it 'creates reasonable file sizes' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       10.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -328,11 +328,11 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
     end
 
     it 'handles large documents efficiently' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       100.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1} with some content")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1} with some content")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -431,18 +431,18 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
   private
 
   def create_test_document
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Test content')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Test content')
     para.runs << run
     doc.body.paragraphs << para
     doc
   end
 
   def create_document_with_image
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Document with image')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Document with image')
     para.runs << run
     doc.body.paragraphs << para
 
@@ -456,7 +456,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       img_run = Uniword::Wordprocessingml::Run.new
       img_run.drawings << drawing
 
-      img_para = Uniword::Paragraph.new
+      img_para = Uniword::Wordprocessingml::Paragraph.new
       img_para.runs << img_run
       doc.body.paragraphs << img_para
     end

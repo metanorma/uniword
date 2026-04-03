@@ -63,7 +63,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       let(:temp_path) { "#{tmp_dir}/roundtrip_empty.docx" }
 
       it 'handles empty document' do
-        doc1 = Uniword::Document.new
+        doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
         doc1.save(temp_path)
         doc2 = Uniword::DocumentFactory.from_file(temp_path)
@@ -237,12 +237,12 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
 
     it 'handles multiple paragraphs with various styles' do
-      doc1 = Uniword::Document.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add multiple paragraphs with different content
       5.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc1.body.paragraphs << para
       end
@@ -257,20 +257,20 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
 
     it 'handles mixed content types' do
-      doc1 = Uniword::Document.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add paragraph
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Text before table')
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text before table')
       para.runs << run
       doc1.body.paragraphs << para
 
       # Add table
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
-      cell_para = Uniword::Paragraph.new
-      cell_run = Uniword::Run.new(text: 'Cell content')
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
+      cell_para = Uniword::Wordprocessingml::Paragraph.new
+      cell_run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
       cell_para.runs << cell_run
       cell.paragraphs << cell_para
       row.cells << cell
@@ -278,8 +278,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
       doc1.body.tables << table
 
       # Add another paragraph
-      para2 = Uniword::Paragraph.new
-      run2 = Uniword::Run.new(text: 'Text after table')
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: 'Text after table')
       para2.runs << run2
       doc1.body.paragraphs << para2
 
@@ -304,17 +304,17 @@ RSpec.describe 'DOCX Round-trip Validation' do
     let(:temp_path) { "#{tmp_dir}/roundtrip_properties.docx" }
 
     it 'preserves paragraph properties' do
-      doc1 = Uniword::Document.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create paragraph with properties
-      para = Uniword::Paragraph.new(
+      para = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: 'center',
           line_spacing: 240
         )
       )
 
-      run = Uniword::Run.new(text: 'Test paragraph')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph')
       para.runs << run
       doc1.body.paragraphs << para
 
@@ -327,11 +327,11 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
 
     it 'preserves run properties' do
-      doc1 = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      doc1 = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       # Create run with properties
-      run = Uniword::Run.new(
+      run = Uniword::Wordprocessingml::Run.new(
         text: 'Formatted text',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
@@ -505,25 +505,25 @@ RSpec.describe 'DOCX Round-trip Validation' do
   end
 
   def create_full_featured_document
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Multiple paragraphs with various styles
     3.times do |i|
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       # Create run with properties
       run = if i.even?
-              Uniword::Run.new(
+              Uniword::Wordprocessingml::Run.new(
                 text: "Paragraph #{i + 1} with content",
                 properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
               )
             elsif i.odd?
-              Uniword::Run.new(
+              Uniword::Wordprocessingml::Run.new(
                 text: "Paragraph #{i + 1} with content",
                 properties: Uniword::Wordprocessingml::RunProperties.new(italic: true)
               )
             else
-              Uniword::Run.new(text: "Paragraph #{i + 1} with content")
+              Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1} with content")
             end
 
       para.runs << run
@@ -531,13 +531,13 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
 
     # Table
-    table = Uniword::Table.new
+    table = Uniword::Wordprocessingml::Table.new
     2.times do |r|
-      row = Uniword::TableRow.new
+      row = Uniword::Wordprocessingml::TableRow.new
       2.times do |c|
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Cell #{r},#{c}")
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Cell #{r},#{c}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -548,8 +548,8 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
     # More paragraphs
     2.times do |i|
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "After table paragraph #{i + 1}")
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "After table paragraph #{i + 1}")
       para.runs << run
       doc.body.paragraphs << para
     end

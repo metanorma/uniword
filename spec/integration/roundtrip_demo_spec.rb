@@ -21,7 +21,7 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
 
   describe 'Document Loading' do
     it 'loads the document successfully' do
-      expect(@doc).to be_a(Uniword::Document)
+      expect(@doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(@doc.paragraphs.count).to be > 0
       expect(@doc.styles_configuration.styles.count).to be > 0
     end

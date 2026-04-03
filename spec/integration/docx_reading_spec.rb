@@ -10,7 +10,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
 
     it 'can open and parse the file' do
       document = Uniword.load(docx_path)
-      expect(document).to be_a(Uniword::Document)
+      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'extracts paragraphs' do
@@ -31,7 +31,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
 
     it 'can open and parse the file' do
       document = Uniword.load(docx_path)
-      expect(document).to be_a(Uniword::Document)
+      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'extracts paragraphs with runs' do
@@ -50,7 +50,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
 
     it 'can open and parse the file' do
       document = Uniword.load(docx_path)
-      expect(document).to be_a(Uniword::Document)
+      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
     it 'extracts tables from the document' do

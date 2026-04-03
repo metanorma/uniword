@@ -4,9 +4,9 @@ require 'spec_helper'
 require 'fileutils'
 
 RSpec.describe 'MHTML Edge Cases', type: :integration do
-  # NOTE: Mhtml::Document stores raw HTML and lacks paragraphs/tables/runs.
-  # Tests that verify round-trip content via doc2.paragraphs or doc2.tables
-  # are skipped until MHTML model architecture is implemented.
+  # NOTE: MHTML roundtrip is lossy. The DOCX→MHTML→DOCX conversion does not
+  # preserve exact paragraph/table counts or run-level formatting properties.
+  # Tests that verify exact structure after roundtrip are skipped.
 
   let(:tmp_dir) { 'spec/tmp' }
 
@@ -21,17 +21,19 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   describe 'Empty Content' do
     let(:output_path) { File.join(tmp_dir, 'empty.doc') }
 
-    it 'handles documents with no content', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
+    it 'handles documents with no content' do
+      skip 'MHTML roundtrip adds default paragraph'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.save(output_path, format: :mhtml)
 
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
       expect(doc2.paragraphs).to be_empty
     end
 
-    it 'handles empty paragraphs', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    it 'handles empty paragraphs' do
+      skip 'MHTML roundtrip does not preserve empty paragraphs'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       doc.body.paragraphs << para
 
       doc.save(output_path, format: :mhtml)
@@ -40,10 +42,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.paragraphs.count).to eq(1)
     end
 
-    it 'handles paragraphs with empty runs', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '')
+    it 'handles paragraphs with empty runs' do
+      skip 'MHTML roundtrip does not preserve empty runs'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -54,18 +57,19 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles empty tables' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
       doc.body.tables << table
 
       expect { doc.save(output_path, format: :mhtml) }.not_to raise_error
     end
 
-    it 'handles table with empty cells', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
+    it 'handles table with empty cells' do
+      skip 'MHTML roundtrip does not preserve table structure'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
       row.cells << cell
       table.rows << row
       doc.body.tables << table
@@ -81,9 +85,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'special_chars.doc') }
 
     it 'handles special HTML characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Text with <, >, &, ", \'')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Text with <, >, &, ", \'')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -94,9 +98,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles HTML tags as text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '<html><body>Not actual HTML</body></html>')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '<html><body>Not actual HTML</body></html>')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -108,9 +112,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles script tags as text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '<script>alert("XSS")</script>')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '<script>alert("XSS")</script>')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -123,9 +127,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles CDATA sections as text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '<![CDATA[Some data]]>')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '<![CDATA[Some data]]>')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -135,10 +139,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.text).to include('CDATA')
     end
 
-    it 'handles HTML entities', skip: 'MHTML does not decode HTML entities on read-back' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '&nbsp; &copy; &reg; &trade;')
+    it 'handles HTML entities' do
+      skip 'MHTML does not decode HTML entities on read-back'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '&nbsp; &copy; &reg; &trade;')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -155,9 +160,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'unicode.doc') }
 
     it 'handles Unicode characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Unicode: 你好世界 مرحبا בעולם Привет')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好世界 مرحبا בעולם Привет')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -170,9 +175,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles emoji and symbols' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Symbols: ™ © ® € ¥ 😀 ✓')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Symbols: ™ © ® € ¥ 😀 ✓')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -183,9 +188,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles mixed direction text (LTR and RTL)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'English مرحبا English again')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'English مرحبا English again')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -196,10 +201,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.text).to include('مرحبا')
     end
 
-    it 'handles zero-width spaces', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Word\u200BBreak")
+    it 'handles zero-width spaces' do
+      skip 'MHTML roundtrip may split paragraphs with special characters'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Word\u200BBreak")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -210,9 +216,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles non-breaking spaces' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Non\u00A0breaking space")
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Non\u00A0breaking space")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -227,11 +233,12 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   describe 'Large Documents' do
     let(:output_path) { File.join(tmp_dir, 'large.doc') }
 
-    it 'handles large documents', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
+    it 'handles large documents' do
+      skip 'MHTML roundtrip does not preserve exact paragraph count'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       100.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -243,11 +250,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles paragraphs with very long text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       long_text = 'Lorem ipsum dolor sit amet ' * 370
-      run = Uniword::Run.new(text: long_text[0, 10_000])
+      run = Uniword::Wordprocessingml::Run.new(text: long_text[0, 10_000])
       para.runs << run
       doc.body.paragraphs << para
 
@@ -257,15 +264,16 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.text.length).to be >= 9000
     end
 
-    it 'handles many tables', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
+    it 'handles many tables' do
+      skip 'MHTML roundtrip does not preserve table structure'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       50.times do |i|
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Table #{i + 1}")
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Table #{i + 1}")
         para.runs << run
         cell.paragraphs << para
         row.cells << cell
@@ -279,17 +287,18 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.tables.count).to eq(50)
     end
 
-    it 'handles large tables with many cells', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
+    it 'handles large tables with many cells' do
+      skip 'MHTML roundtrip does not preserve table structure'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
 
       # 20x20 table
       20.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         20.times do |c|
-          cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: "#{r},#{c}")
+          cell = Uniword::Wordprocessingml::TableCell.new
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: "#{r},#{c}")
           para.runs << run
           cell.paragraphs << para
           row.cells << cell
@@ -311,9 +320,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'whitespace.doc') }
 
     it 'preserves multiple spaces' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Multiple  spaces   here')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Multiple  spaces   here')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -325,9 +334,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles leading and trailing whitespace' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '  Text with spaces  ')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '  Text with spaces  ')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -337,10 +346,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.text).to include('Text with spaces')
     end
 
-    it 'handles tabs', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Text\twith\ttabs")
+    it 'handles tabs' do
+      skip 'MHTML roundtrip does not preserve tab characters'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Text\twith\ttabs")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -351,9 +361,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles newlines in text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Line 1\nLine 2")
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Line 1\nLine 2")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -368,10 +378,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   describe 'Boundary Conditions' do
     let(:output_path) { File.join(tmp_dir, 'boundary.doc') }
 
-    it 'handles single character text', skip: 'MHTML text includes wrapper elements on read-back' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'A')
+    it 'handles single character text' do
+      skip 'MHTML roundtrip may alter text content'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'A')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -381,13 +392,14 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.text).to eq('A')
     end
 
-    it 'handles minimum table (1x1)', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'X')
+    it 'handles minimum table (1x1)' do
+      skip 'MHTML roundtrip does not preserve table structure'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'X')
       para.runs << run
       cell.paragraphs << para
       row.cells << cell
@@ -402,10 +414,11 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.tables.first.rows.first.cells.count).to eq(1)
     end
 
-    it 'handles text with only whitespace', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '   ')
+    it 'handles text with only whitespace' do
+      skip 'MHTML roundtrip does not preserve whitespace-only paragraphs'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '   ')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -419,22 +432,23 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   describe 'Mixed Content Types' do
     let(:output_path) { File.join(tmp_dir, 'mixed.doc') }
 
-    it 'handles alternating paragraphs and tables', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
+    it 'handles alternating paragraphs and tables' do
+      skip 'MHTML roundtrip does not preserve interleaved paragraph/table structure'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       5.times do |i|
         # Paragraph
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc.body.paragraphs << para
 
         # Table
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Table #{i + 1}")
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Table #{i + 1}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -450,23 +464,24 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.tables.count).to be > 0
     end
 
-    it 'handles formatted and unformatted text mixed', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    it 'handles formatted and unformatted text mixed' do
+      skip 'MHTML roundtrip does not preserve run-level formatting'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       # Bold run
-      bold_run = Uniword::Run.new(
+      bold_run = Uniword::Wordprocessingml::Run.new(
         text: 'Bold',
         properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
       )
       para.runs << bold_run
 
       # Normal run
-      normal_run = Uniword::Run.new(text: ' normal ')
+      normal_run = Uniword::Wordprocessingml::Run.new(text: ' normal ')
       para.runs << normal_run
 
       # Italic run
-      italic_run = Uniword::Run.new(
+      italic_run = Uniword::Wordprocessingml::Run.new(
         text: 'italic',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           italic: true
@@ -515,14 +530,15 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   describe 'CSS and Style Edge Cases' do
     let(:output_path) { File.join(tmp_dir, 'styles.doc') }
 
-    it 'handles multiple heading levels', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
+    it 'handles multiple heading levels' do
+      skip 'MHTML roundtrip does not preserve heading style information'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       %w[Heading1 Heading2 Heading3 Heading4 Heading5 Heading6].each do |style|
-        para = Uniword::Paragraph.new(
+        para = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
         )
-        run = Uniword::Run.new(text: "#{style} text")
+        run = Uniword::Wordprocessingml::Run.new(text: "#{style} text")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -535,10 +551,10 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.paragraphs[5].properties.style).to eq('Heading6')
     end
 
-    it 'handles paragraphs without explicit styles', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Normal paragraph')
+    it 'handles paragraphs without explicit styles' do
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Normal paragraph')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -548,11 +564,12 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       expect(doc2.paragraphs.first.text).to eq('Normal paragraph')
     end
 
-    it 'handles runs with multiple formatting properties', skip: 'MHTML requires separate model tree (not OOXML)' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+    it 'handles runs with multiple formatting properties' do
+      skip 'MHTML roundtrip does not preserve run-level formatting'
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
-      run = Uniword::Run.new
+      run = Uniword::Wordprocessingml::Run.new
       run.text = 'Formatted'
       run.properties = Uniword::Wordprocessingml::RunProperties.new
       run.properties.bold = true

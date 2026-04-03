@@ -29,8 +29,13 @@ module Uniword
     # Run elements
     autoload :Tab, 'uniword/wordprocessingml/tab'
     autoload :Break, 'uniword/wordprocessingml/break'
+    autoload :PositionTab, 'uniword/wordprocessingml/position_tab'
     autoload :Pict, 'uniword/wordprocessingml/pict'
     autoload :Symbol, 'uniword/wordprocessingml/symbol'
+    autoload :DeletedText, 'uniword/wordprocessingml/deleted_text'
+    autoload :NoBreakHyphen, 'uniword/wordprocessingml/no_break_hyphen'
+    autoload :CarriageReturn, 'uniword/wordprocessingml/carriage_return'
+    autoload :SimpleField, 'uniword/wordprocessingml/simple_field'
     autoload :TextBoxContent, 'uniword/wordprocessingml/text_box_content'
     autoload :Object, 'uniword/wordprocessingml/object'
 

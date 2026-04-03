@@ -144,9 +144,6 @@ module Uniword
         styles.size
       end
 
-      alias size count
-      alias all_styles styles
-
       # Check if configuration has any styles
       #
       # @return [Boolean] true if empty
@@ -313,7 +310,7 @@ module Uniword
       # @param source_document [Document] The source document
       # @return [void]
       def import_from_document(source_document)
-        source_document.styles_configuration.all_styles.each do |style|
+        source_document.styles_configuration.styles.each do |style|
           add_style(style.dup) unless style_exists?(style.id)
         end
       end
@@ -322,7 +319,7 @@ module Uniword
       #
       # @return [Array<Style>] Array of duplicated styles
       def export_styles
-        all_styles.map(&:dup)
+        styles.map(&:dup)
       end
 
       # Merge styles from another configuration
@@ -334,7 +331,7 @@ module Uniword
       #   - :rename - Keep both, rename imported with "_imported" suffix
       # @return [void]
       def merge(other_config, conflict_resolution: :keep_existing)
-        other_config.all_styles.each do |style|
+        other_config.styles.each do |style|
           if style_exists?(style.id)
             case conflict_resolution
             when :keep_existing

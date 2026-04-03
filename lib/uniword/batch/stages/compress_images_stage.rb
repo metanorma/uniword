@@ -111,12 +111,12 @@ module Uniword
       # @param image [Image] Image to check
       # @return [Boolean] true if should compress
       def should_compress_image?(image)
-        return false unless image.respond_to?(:data)
-        return false if image.data.nil?
+        return false unless image.is_a?(Uniword::Image)
+        return false if image.image_data.nil?
 
         # Skip small images if configured
         if @skip_small_images
-          size_kb = image.data.bytesize / 1024.0
+          size_kb = image.image_data.bytesize / 1024.0
           return false if size_kb < @min_size_kb
         end
 
@@ -128,7 +128,7 @@ module Uniword
       # @param image [Image] Image to compress
       # @return [Integer] Bytes saved (0 if not compressed)
       def compress_image(image)
-        original_size = image.data.bytesize
+        original_size = image.image_data.bytesize
 
         # Get image dimensions
         width, height = get_image_dimensions(image)

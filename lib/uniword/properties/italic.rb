@@ -11,29 +11,9 @@ module Uniword
     #
     # Model: nil = true (no val attribute), 'false' = explicit false
     class Italic < Lutaml::Model::Serializable
+      include Uniword::Properties::BooleanElement
       attribute :val, :string, default: nil
-
-      # Ruby convenience
-      def value
-        @val != 'false'
-      end
-
-      def value=(v)
-        @val = v ? nil : 'false'
-      end
-
-      # Override the generated val= with proper conversion
-      def val=(v)
-        @val = if v.nil?
-                 nil
-               elsif v == false || v.to_s == 'false'
-                 'false'
-               elsif v == true || v.to_s == 'true'
-                 nil
-               else
-                 v
-               end
-      end
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element 'i'
@@ -44,27 +24,9 @@ module Uniword
 
     # Complex script italic
     class ItalicCs < Lutaml::Model::Serializable
+      include Uniword::Properties::BooleanElement
       attribute :val, :string, default: nil
-
-      def value
-        @val != 'false'
-      end
-
-      def value=(v)
-        @val = v ? nil : 'false'
-      end
-
-      def val=(v)
-        @val = if v.nil?
-                 nil
-               elsif v == false || v.to_s == 'false'
-                   'false'
-                 elsif v == true || v.to_s == 'true'
-                   nil
-                 else
-                   v
-                 end
-      end
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element 'iCs'

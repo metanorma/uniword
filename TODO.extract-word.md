@@ -1,1 +1,0 @@
-Also, keep note that we cannot commit the references/word-package, but we need a rake file to extract them to a coherent directory. We need to make a Rakefile for that.

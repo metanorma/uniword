@@ -6,12 +6,12 @@ require 'objspace'
 RSpec.describe 'Memory Performance' do
   # Helper to create a large document for testing
   def create_large_document(paragraphs: 100, runs_per_para: 5)
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     paragraphs.times do |i|
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       runs_per_para.times do |j|
-        run = Uniword::Run.new(
+        run = Uniword::Wordprocessingml::Run.new(
           text_element: Uniword::TextElement.new(
             content: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here."
           )
@@ -26,17 +26,17 @@ RSpec.describe 'Memory Performance' do
 
   # Helper to create document with tables
   def create_document_with_tables(table_count: 10, rows: 5, cols: 4)
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     table_count.times do |t|
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
 
       rows.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         cols.times do |c|
-          cell = Uniword::TableCell.new
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(
+          cell = Uniword::Wordprocessingml::TableCell.new
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(
             text_element: Uniword::TextElement.new(
               content: "Table #{t + 1}, Row #{r + 1}, Col #{c + 1}"
             )
@@ -164,10 +164,10 @@ RSpec.describe 'Memory Performance' do
 
       # Create multiple documents with similar content
       5.times do
-        doc = Uniword::Document.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
         10.times do
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(
             text_element: Uniword::TextElement.new(content: 'Same text')
           )
           para.runs << run

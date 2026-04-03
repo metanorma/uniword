@@ -50,13 +50,6 @@ module Uniword
         registry.values
       end
 
-      # Get all registered element classes (alias for test compatibility)
-      #
-      # @return [Array<Class>] Array of registered element classes
-      def registered_classes
-        all
-      end
-
       # Get all registered tag names
       #
       # @return [Array<String>] Array of registered tag names

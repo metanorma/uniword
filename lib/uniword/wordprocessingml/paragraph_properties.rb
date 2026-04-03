@@ -11,13 +11,11 @@ module Uniword
     class ParagraphProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
-      # Flat alignment attribute (for constructor compatibility with alignment: keyword)
-      attribute :alignment, :string
+      # Simple element attributes (OOXML w:val attributes stored in wrapper objects)
+      attribute :style, Properties::StyleReference    # w:pStyle w:val="..." (style ID reference)
+      attribute :alignment, Properties::Alignment     # w:jc w:val="..." (alignment value)
 
       # Simple element wrapper objects
-      attribute :style, :string
-      attribute :style_wrapper, Properties::StyleReference  # Internal wrapper for pStyle XML
-      attribute :alignment_wrapper, Properties::Alignment  # Internal wrapper object
       attribute :outline_level, Properties::OutlineLevel
       attribute :numbering_properties, Properties::NumberingProperties
 
@@ -77,6 +75,7 @@ module Uniword
       # The YAML uses flat attributes like spacing_before, spacing_after, alignment, etc.
       # which match the flat attributes defined in this class.
       yaml do
+        map 'style', with: { from: :yaml_style_from, to: :yaml_style_to }
         map 'alignment', with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
         map 'spacing_before', to: :spacing_before
         map 'spacing_after', to: :spacing_after
@@ -96,12 +95,20 @@ module Uniword
       end
 
       # YAML transform methods (instance methods - called via send on an instance)
+      def yaml_style_from(instance, value)
+        instance.style = Properties::StyleReference.new(value: value) if value
+      end
+
+      def yaml_style_to(instance, doc)
+        instance.style&.value
+      end
+
       def yaml_alignment_from(instance, value)
-        instance.alignment_wrapper = Properties::Alignment.new(value: value) if value
+        instance.alignment = Properties::Alignment.new(value: value) if value
       end
 
       def yaml_alignment_to(instance, doc)
-        instance.instance_variable_get(:@alignment) || instance.alignment_wrapper&.value
+        instance.alignment&.value
       end
 
       def yaml_keep_next_from(instance, value)
@@ -142,11 +149,11 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        # Style reference (wrapper for <w:pStyle w:val="..."/>)
-        map_element 'pStyle', to: :style_wrapper, render_nil: false
+      # Style reference - maps w:pStyle w:val="..." to style attribute
+        map_element 'pStyle', to: :style, render_nil: false
 
-        # Alignment (wrapper object)
-        map_element 'jc', to: :alignment_wrapper, render_nil: false
+        # Alignment - maps w:jc w:val="..." to alignment attribute
+        map_element 'jc', to: :alignment, render_nil: false
 
         # Spacing (complex object - WORKS)
         map_element 'spacing', to: :spacing, render_nil: false
@@ -211,19 +218,17 @@ module Uniword
       end
 
       # Convert flat convenience attributes to proper wrapper objects
-      # This handles cases like ParagraphProperties.new(alignment: 'center')
+      # This handles cases like ParagraphProperties.new(spacing_before: 120)
       # where the flat attribute is set but the wrapper object is not
       def convert_flat_attributes!
-        # Alignment - create alignment_wrapper from flat alignment attribute
-        if @alignment && !alignment_wrapper
-          self.alignment_wrapper = Properties::Alignment.new
-          alignment_wrapper.value = @alignment
+        # Style - convert string to StyleReference wrapper
+        if @style.is_a?(String)
+          self.style = Properties::StyleReference.new(value: @style)
         end
 
-        # Style - create style_wrapper from flat style attribute
-        if @style && !style_wrapper
-          self.style_wrapper = Properties::StyleReference.new
-          style_wrapper.value = @style
+        # Alignment - convert string to Alignment wrapper
+        if @alignment.is_a?(String)
+          self.alignment = Properties::Alignment.new(value: @alignment)
         end
 
         # Spacing - create spacing object from flat spacing attributes
@@ -256,29 +261,6 @@ module Uniword
         end
       end
 
-      # Alias for tabs (API compatibility)
-      #
-      # @return [Properties::Tabs, nil] The tab stops collection
-      def tab_stops
-        tabs
-      end
-
-      # Setter for tab_stops (API compatibility)
-      #
-      # @param value [Properties::Tabs, Array] Tab stops collection or array
-      # @return [Properties::Tabs] The tab stops collection
-      def tab_stops=(value)
-        case value
-        when Properties::Tabs
-          self.tabs = value
-        when Array
-          self.tabs ||= Properties::Tabs.new
-          tabs.tab_stops = value
-        else
-          self.tabs = value
-        end
-      end
-
       # Get section properties
       #
       # @return [SectionProperties, nil] Section properties if present
@@ -298,87 +280,14 @@ module Uniword
         self
       end
 
-      # Get alignment value (returns string directly for API compatibility)
-      #
-      # @return [String, nil] Alignment value (left, center, right, both)
-      def alignment
-        # Check flat alignment attribute first (from constructor/YAML)
-        return @alignment if @alignment
-
-        # Then check wrapper object (from XML/Setter)
-        val = alignment_wrapper
-        return nil if val.nil?
-
-        # Handle wrapper object
-        val = val.value if val.respond_to?(:value)
-        val.to_s
-      end
-
-      # Set alignment value (accepts string or Alignment object for API compatibility)
-      #
-      # @param value [String, Properties::Alignment] Alignment value or object
-      # @return [self] For method chaining
-      def alignment=(value)
-        case value
-        when Properties::Alignment
-          self.alignment_wrapper = value
-        when String
-          @alignment = value
-          self.alignment_wrapper ||= Properties::Alignment.new
-          alignment_wrapper.value = value
-        when nil
-          @alignment = nil
-          self.alignment_wrapper = nil
-        else
-          @alignment = nil
-          self.alignment_wrapper = value
-        end
-        self
-      end
-
-      # Get style value (returns string directly for API compatibility)
-      #
-      # @return [String, nil] Style ID
-      def style
-        return @style if @style
-
-        val = style_wrapper
-        return nil if val.nil?
-
-        val = val.value if val.respond_to?(:value)
-        val.to_s
-      end
-
-      # Set style value (accepts string or StyleReference for API compatibility)
-      #
-      # @param value [String, Properties::StyleReference] Style value or object
-      # @return [self] For method chaining
-      def style=(value)
-        case value
-        when Properties::StyleReference
-          self.style_wrapper = value
-        when String
-          @style = value
-          self.style_wrapper ||= Properties::StyleReference.new
-          style_wrapper.value = value
-        when nil
-          @style = nil
-          self.style_wrapper = nil
-        else
-          @style = nil
-          self.style_wrapper = value
-        end
-        self
-      end
-
-      # Boolean getters for keep_next (override attribute accessor)
+      # Boolean predicate for keep_next
       #
       # @return [Boolean] True if keep_next is set
       def keep_next?
-        val = @keep_next_wrapper
+        val = keep_next_wrapper
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::KeepNext)
         val == true
       end
       alias keep_next keep_next?
@@ -389,24 +298,24 @@ module Uniword
       def keep_next=(value)
         case value
         when Properties::KeepNext
-          @keep_next_wrapper = value
+          self.keep_next_wrapper = value
         when true, false
-          @keep_next_wrapper = value ? Properties::KeepNext.new(value: true) : nil
+          self.keep_next_wrapper = value ? Properties::KeepNext.new(value: true) : nil
         when nil
-          @keep_next_wrapper = nil
+          self.keep_next_wrapper = nil
         else
-          @keep_next_wrapper = value
+          self.keep_next_wrapper = value
         end
       end
 
-      # Boolean getters for keep_lines (override attribute accessor)
+      # Boolean predicate for keep_lines
       #
       # @return [Boolean] True if keep_lines is set
       def keep_lines?
-        val = @keep_lines_wrapper
+        val = keep_lines_wrapper
         return false if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Properties::KeepLines)
         val == true
       end
       alias keep_lines keep_lines?
@@ -417,30 +326,14 @@ module Uniword
       def keep_lines=(value)
         case value
         when Properties::KeepLines
-          @keep_lines_wrapper = value
+          self.keep_lines_wrapper = value
         when true, false
-          @keep_lines_wrapper = value ? Properties::KeepLines.new(value: true) : nil
+          self.keep_lines_wrapper = value ? Properties::KeepLines.new(value: true) : nil
         when nil
-          @keep_lines_wrapper = nil
+          self.keep_lines_wrapper = nil
         else
-          @keep_lines_wrapper = value
+          self.keep_lines_wrapper = value
         end
-      end
-
-      # Get alignment value (alias for backward compatibility)
-      #
-      # @return [String, nil] Alignment value (left, center, right, both)
-      def alignment_value
-        alignment
-      end
-
-      # Set alignment value (alias for backward compatibility)
-      #
-      # @param value [String] Alignment value
-      # @return [self] For method chaining
-      def alignment_value=(value)
-        self.alignment = value
-        self
       end
     end
   end

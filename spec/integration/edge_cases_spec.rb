@@ -19,8 +19,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
     let(:test_path) { "#{tmp_dir}/empty_test.docx" }
 
     it 'handles empty paragraphs' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       # No runs added
       doc.body.paragraphs << para
 
@@ -31,8 +31,8 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles empty tables' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
       # No rows added
       doc.tables << table
 
@@ -40,9 +40,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles empty runs' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       # No text added
       para.runs << run
       doc.body.paragraphs << para
@@ -51,7 +51,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles documents with no content' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
       # No elements added
 
       expect { doc.save(test_path) }.not_to raise_error
@@ -61,12 +61,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles table with empty cells' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
 
       # Add empty cell
-      cell = Uniword::TableCell.new
+      cell = Uniword::Wordprocessingml::TableCell.new
       row.cells << cell
       table.rows << row
       doc.tables << table
@@ -75,9 +75,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles table rows with no cells' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
       # No cells added
       table.rows << row
       doc.tables << table
@@ -90,9 +90,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     let(:test_path) { "#{tmp_dir}/special_chars_test.docx" }
 
     it 'handles XML special characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Special: < > & " \'')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Special: < > & " \'')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -106,9 +106,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles Unicode characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Unicode: 你好世界 مرحبا بالعالم Привет мир')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好世界 مرحبا بالعالم Привет мир')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -120,9 +120,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles emoji and symbols' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -133,9 +133,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles whitespace characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Multiple  spaces\tTab\nNewline\r\nCarriage return")
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Multiple  spaces\tTab\nNewline\r\nCarriage return")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -143,9 +143,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles null characters safely' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       # Remove null characters if present
       text = "Text with\u0000null".gsub("\u0000", '')
       run.text = text
@@ -156,9 +156,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles control characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
       # Filter out problematic control characters
       text = "Text\u0001\u0002\u0003".gsub(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, '')
       run.text = text
@@ -169,9 +169,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles RTL (right-to-left) text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'RTL: مرحبا بك في العالم العربي')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'RTL: مرحبا بك في العالم العربي')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -183,9 +183,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles mixed LTR and RTL text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'English مرحبا English again')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'English مرحبا English again')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -197,11 +197,11 @@ RSpec.describe 'DOCX Edge Case Handling' do
     let(:test_path) { "#{tmp_dir}/large_test.docx" }
 
     it 'handles 100+ paragraphs' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       150.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -213,14 +213,14 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles 50+ tables' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       50.times do |t|
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Table #{t + 1}")
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Table #{t + 1}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -235,16 +235,16 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles deep nesting' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create nested tables
-      outer_table = Uniword::Table.new
-      outer_row = Uniword::TableRow.new
-      outer_cell = Uniword::TableCell.new
+      outer_table = Uniword::Wordprocessingml::Table.new
+      outer_row = Uniword::Wordprocessingml::TableRow.new
+      outer_cell = Uniword::Wordprocessingml::TableCell.new
 
       # Add nested content
-      outer_cell_para = Uniword::Paragraph.new
-      outer_cell_run = Uniword::Run.new(text: 'Outer cell content')
+      outer_cell_para = Uniword::Wordprocessingml::Paragraph.new
+      outer_cell_run = Uniword::Wordprocessingml::Run.new(text: 'Outer cell content')
       outer_cell_para.runs << outer_cell_run
       outer_cell.paragraphs << outer_cell_para
 
@@ -256,11 +256,11 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles many runs per paragraph' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       100.times do |i|
-        run = Uniword::Run.new(text: "Run #{i + 1} ")
+        run = Uniword::Wordprocessingml::Run.new(text: "Run #{i + 1} ")
         para.runs << run
       end
 
@@ -270,16 +270,16 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles large table with many cells' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
 
       # 20x20 table
       20.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         20.times do |c|
-          cell = Uniword::TableCell.new
-          cell_para = Uniword::Paragraph.new
-          cell_run = Uniword::Run.new(text: "#{r},#{c}")
+          cell = Uniword::Wordprocessingml::TableCell.new
+          cell_para = Uniword::Wordprocessingml::Paragraph.new
+          cell_run = Uniword::Wordprocessingml::Run.new(text: "#{r},#{c}")
           cell_para.runs << cell_run
           cell.paragraphs << cell_para
           row.cells << cell
@@ -324,16 +324,16 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'validates document before saving' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Document should be valid even when empty
       expect { doc.save(test_path) }.not_to raise_error
     end
 
     it 'handles invalid element types gracefully' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'not an element')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'not an element')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -345,9 +345,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     let(:test_path) { "#{tmp_dir}/max_values_test.docx" }
 
     it 'handles very long text in paragraph' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
 
       # 10,000 character text
       long_text = 'Lorem ipsum dolor sit amet ' * 370
@@ -362,9 +362,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles maximum font size' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new
 
       # Use v2.0 API: set font size via properties
       run.properties = Uniword::Wordprocessingml::RunProperties.new(
@@ -378,11 +378,11 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles many list levels' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create paragraphs at different indentation levels
       5.times do |level|
-        para = Uniword::Paragraph.new
+        para = Uniword::Wordprocessingml::Paragraph.new
 
         # Use v2.0 API: set indentation via properties
         props = Uniword::Wordprocessingml::ParagraphProperties.new(
@@ -390,7 +390,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
         )
         para.properties = props
 
-        run = Uniword::Run.new(text: "Level #{level + 1} item")
+        run = Uniword::Wordprocessingml::Run.new(text: "Level #{level + 1} item")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -399,15 +399,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles extreme indentation values' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       props = Uniword::Wordprocessingml::ParagraphProperties.new(
         left_indent: 5040 # 7 inches in twips
       )
       para.properties = props
 
-      run = Uniword::Run.new(text: 'Deeply indented')
+      run = Uniword::Wordprocessingml::Run.new(text: 'Deeply indented')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -415,15 +415,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles wide tables' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
 
       # Create 15 columns
       15.times do |c|
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Col #{c + 1}")
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Col #{c + 1}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -445,30 +445,30 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'provides informative error messages for invalid elements' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # v2.0 API: add_paragraph accepts string and creates paragraph
-      para = Uniword::Paragraph.new
+      para = Uniword::Wordprocessingml::Paragraph.new
       doc.body.paragraphs << para
       expect { doc.save("#{tmp_dir}/nil_test.docx") }.not_to raise_error
     end
 
     it 'handles document with mixed valid and edge case content' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Normal paragraph
-      para1 = Uniword::Paragraph.new
-      run1 = Uniword::Run.new(text: 'Normal text')
+      para1 = Uniword::Wordprocessingml::Paragraph.new
+      run1 = Uniword::Wordprocessingml::Run.new(text: 'Normal text')
       para1.runs << run1
       doc.body.paragraphs << para1
 
       # Empty paragraph
-      para2 = Uniword::Paragraph.new
+      para2 = Uniword::Wordprocessingml::Paragraph.new
       doc.body.paragraphs << para2
 
       # Paragraph with special chars
-      para3 = Uniword::Paragraph.new
-      run3 = Uniword::Run.new(text: 'Special: < > &')
+      para3 = Uniword::Wordprocessingml::Paragraph.new
+      run3 = Uniword::Wordprocessingml::Run.new(text: 'Special: < > &')
       para3.runs << run3
       doc.body.paragraphs << para3
 
@@ -479,9 +479,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'validates document structure on save' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Valid content')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Valid content')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -495,9 +495,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     let(:test_path) { "#{tmp_dir}/boundary_test.docx" }
 
     it 'handles single character text' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'A')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'A')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -505,9 +505,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles text with only whitespace' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '   ')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '   ')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -515,12 +515,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles minimum table (1x1)' do
-      doc = Uniword::Document.new
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
-      cell_para = Uniword::Paragraph.new
-      cell_run = Uniword::Run.new(text: 'Single cell')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
+      cell_para = Uniword::Wordprocessingml::Paragraph.new
+      cell_run = Uniword::Wordprocessingml::Run.new(text: 'Single cell')
       cell_para.runs << cell_run
       cell.paragraphs << cell_para
       row.cells << cell
@@ -531,9 +531,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles zero-width spaces' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Word\u200BBreak")
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Word\u200BBreak")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -541,9 +541,9 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
 
     it 'handles non-breaking spaces' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "Non\u00A0breaking space")
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "Non\u00A0breaking space")
       para.runs << run
       doc.body.paragraphs << para
 

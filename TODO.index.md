@@ -7,7 +7,7 @@
 
 | # | Category | Priority | Status |
 |---|----------|----------|--------|
-| 1 | OOXML Model Gaps | HIGH | Mostly Complete |
+| 1 | OOXML Model Gaps | HIGH | COMPLETE |
 | 2 | MHT/DOCX Transformation | MEDIUM | Tests Pass (107 examples) |
 | 3 | Custom Getters/Setters Cleanup | HIGH | COMPLETE |
 | 4 | respond_to? Replacement | MEDIUM | BooleanElement Checks Done |
@@ -62,11 +62,11 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] filelist.xml generation
 
 ### MHT -> DOCX (remaining)
-- [ ] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.)
 - [ ] Parse conditional comments for field codes
 - [ ] Create OOXML Table of Contents
 - [ ] Complete metadata fields (Revision, TotalTime, Pages, Words)
 - [ ] Table cell paragraphs with proper styles
+- [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
 
 ### Round-Trip Tests
 - [ ] Write MHT -> DOCX content matching spec

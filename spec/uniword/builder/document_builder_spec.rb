@@ -29,8 +29,8 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       expect(builder.model.body.paragraphs.size).to eq(1)
       para = builder.model.body.paragraphs.first
       expect(para.text).to eq('Styled text')
-      expect(para.properties.style).to eq('Heading1')
-      expect(para.properties.alignment).to eq('center')
+      expect(para.properties.style.value).to eq('Heading1')
+      expect(para.properties.alignment.value).to eq('center')
     end
   end
 

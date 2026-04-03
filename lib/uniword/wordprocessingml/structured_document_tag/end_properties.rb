@@ -9,12 +9,14 @@ module Uniword
       # Contains run-level formatting for the SDT end marker
       # Reference XML: <w:sdtEndPr>...</w:sdtEndPr>
       class EndProperties < Lutaml::Model::Serializable
-        # End properties typically contains run properties (rPr)
-        # Uses mixed_content to preserve whatever formatting is inside
+        attribute :run_properties, Uniword::Wordprocessingml::RunProperties
+
         xml do
           element 'sdtEndPr'
           namespace Ooxml::Namespaces::WordProcessingML
           mixed_content
+
+          map_element 'rPr', to: :run_properties, render_nil: false
         end
       end
     end

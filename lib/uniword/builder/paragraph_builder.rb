@@ -74,7 +74,7 @@ module Uniword
       # @param name [String] Style name or ID
       # @return [self]
       def style=(name)
-        ensure_properties.style = name
+        ensure_properties.style = Properties::StyleReference.new(value: name)
         self
       end
 
@@ -83,7 +83,7 @@ module Uniword
       # @param value [String, Symbol] :left, :center, :right, :justify
       # @return [self]
       def align=(value)
-        ensure_properties.alignment = value.to_s
+        ensure_properties.alignment = Properties::Alignment.new(value: value.to_s)
         self
       end
 

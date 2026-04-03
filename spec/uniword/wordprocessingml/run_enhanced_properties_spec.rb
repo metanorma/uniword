@@ -126,28 +126,28 @@ RSpec.describe Uniword::Wordprocessingml::Run, 'Enhanced Properties' do
     end
 
     describe '#emboss' do
-      # NOTE: Emboss property is not currently mapped in RunProperties
-      # The class exists in Uniword::Wordprocessingml::Emboss but is not
-      # accessible via RunProperties yet.
       it 'sets and gets emboss effect' do
-        skip 'Emboss not yet mapped in RunProperties'
+        emboss = Uniword::Properties::Emboss.new(value: true)
+        run.properties = run_properties_class.new(emboss: emboss)
+
+        expect(run.properties&.emboss&.value).to be true
       end
 
       it 'defaults to nil when not set' do
-        skip 'Emboss not yet mapped in RunProperties'
+        expect(run.properties&.emboss).to be_nil
       end
     end
 
     describe '#imprint' do
-      # NOTE: Imprint property is not currently mapped in RunProperties
-      # The class exists in Uniword::Wordprocessingml::Imprint but is not
-      # accessible via RunProperties yet.
       it 'sets and gets imprint effect' do
-        skip 'Imprint not yet mapped in RunProperties'
+        imprint = Uniword::Properties::Imprint.new(value: true)
+        run.properties = run_properties_class.new(imprint: imprint)
+
+        expect(run.properties&.imprint&.value).to be true
       end
 
       it 'defaults to nil when not set' do
-        skip 'Imprint not yet mapped in RunProperties'
+        expect(run.properties&.imprint).to be_nil
       end
     end
   end

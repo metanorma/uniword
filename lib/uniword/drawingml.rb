@@ -152,6 +152,8 @@ module Uniword
     autoload :EffectStyle, 'uniword/drawingml/format_scheme'
     autoload :BackgroundFillStyleList, 'uniword/drawingml/format_scheme'
     autoload :ObjectDefaults, 'uniword/drawingml/object_defaults'
+    autoload :ShapeDefaults, 'uniword/drawingml/shape_defaults'
+    autoload :TextDefaults, 'uniword/drawingml/text_defaults'
     autoload :ExtensionList, 'uniword/drawingml/extension_list'
     autoload :Extension, 'uniword/drawingml/extension'
     autoload :ExtraColorSchemeList, 'uniword/drawingml/extra_color_scheme_list'

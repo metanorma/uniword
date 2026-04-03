@@ -14,7 +14,7 @@ module Uniword
   #   puts "Styles: #{styleset.styles.count}"
   #
   # @example Apply StyleSet to document
-  #   doc = Uniword::Document.new
+  #   doc = Uniword::Wordprocessingml::DocumentRoot.new
   #   styleset.apply_to(doc)
   class StyleSet < Lutaml::Model::Serializable
     # YAML serialization (for bundled stylesets)
@@ -48,8 +48,6 @@ module Uniword
     def count
       styles.size
     end
-
-    alias size count
 
     # Check if StyleSet is valid
     #

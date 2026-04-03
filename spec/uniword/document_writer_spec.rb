@@ -170,11 +170,11 @@ RSpec.describe Uniword::DocumentWriter do
         # Write document
         writer.save(temp_file.path)
 
-        # Read it back
+        # Read it back (auto-converts MHTML to DocumentRoot)
         loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
 
-        # MHTML files return Mhtml::Document
-        expect(loaded_doc).to be_a(Uniword::Mhtml::Document)
+        # MHTML files are auto-converted to DocumentRoot
+        expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
         temp_file.unlink
       end

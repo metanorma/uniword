@@ -99,35 +99,5 @@ module Uniword
     def hash
       @name.hash
     end
-
-    # Get the text content of this bookmark
-    # Returns empty string as bookmarks themselves don't contain text,
-    # but this method is needed for API compatibility with other text elements
-    #
-    # @return [String] Empty string (bookmarks don't contain direct text)
-    def text
-      ''
-    end
-
-    # Set the text content of this bookmark
-    # This is a no-op for bookmarks as they don't contain direct text,
-    # but this method is needed for API compatibility with other text elements
-    #
-    # @param value [String] The text to set (ignored for bookmarks)
-    # @return [String] The value that was passed in
-    def text=(value)
-      # Bookmarks don't contain text content directly
-      # This method exists for API compatibility only
-      value
-    end
-
-    # Get the properties of this bookmark
-    # Returns nil as bookmarks don't have formatting properties,
-    # but this method is needed for API compatibility with Run objects
-    #
-    # @return [nil] Always returns nil (bookmarks don't have properties)
-    def properties
-      nil
-    end
   end
 end

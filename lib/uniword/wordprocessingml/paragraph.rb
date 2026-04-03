@@ -23,6 +23,7 @@ module Uniword
       attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
       attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, initialize_empty: true
       attribute :proof_errors, ProofErr, collection: true, initialize_empty: true
+      attribute :simple_fields, SimpleField, collection: true, initialize_empty: true
 
       # Pattern 0: Revision tracking attributes (rsid)
       attribute :rsid_r, :string          # Revision ID for paragraph creation
@@ -68,6 +69,7 @@ module Uniword
                                  render_nil: false
         # Proofing errors
         map_element 'proofErr', to: :proof_errors, render_nil: false
+        map_element 'fldSimple', to: :simple_fields, render_nil: false
       end
 
       # Set paragraph text (replaces all runs with a single run)

@@ -23,7 +23,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
       it 'opens complex ISO document successfully' do
         doc = Uniword.load(iso_doc_path)
 
-        expect(doc).to be_a(Uniword::Document)
+        expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
         expect(doc.paragraphs.count).to be > 100
         expect(doc.tables.count).to be > 10
 
@@ -291,7 +291,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
 
   describe 'Edge Cases' do
     it 'handles empty documents' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       expect(doc.paragraphs).to be_empty
       expect(doc.tables).to be_empty
@@ -299,18 +299,18 @@ RSpec.describe 'Real-World Document Testing', :integration do
     end
 
     it 'handles very long paragraphs' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'x' * 100_000) # 100k characters
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'x' * 100_000) # 100k characters
       para.runs << run
 
       doc.body.paragraphs << para
     end
 
     it 'handles documents with unusual characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Unicode: 你好世界 emoji: 🎉 math: ∑∫√')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好世界 emoji: 🎉 math: ∑∫√')
       para.runs << run
 
       doc.body.paragraphs << para
@@ -326,19 +326,19 @@ RSpec.describe 'Real-World Document Testing', :integration do
                 'iso-8601-2-2026/iso-wd-8601-2-2026.docx'
 
       checklist = {
-        'Document creation' => -> { Uniword::Document.new },
+        'Document creation' => -> { Uniword::Wordprocessingml::DocumentRoot.new },
         'Document opening' => -> { Uniword.load(iso_doc) if File.exist?(iso_doc) },
-        'Paragraph creation' => -> { Uniword::Paragraph.new },
+        'Paragraph creation' => -> { Uniword::Wordprocessingml::Paragraph.new },
         'Text addition' => lambda {
-          p = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: 'test')
+          p = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'test')
           p.runs << run
         },
-        'Table creation' => -> { Uniword::Table.new },
+        'Table creation' => -> { Uniword::Wordprocessingml::Table.new },
         'Document saving' => lambda {
-          doc = Uniword::Document.new
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: 'test')
+          doc = Uniword::Wordprocessingml::DocumentRoot.new
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: 'test')
           para.runs << run
           doc.body.paragraphs << para
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")

@@ -14,35 +14,35 @@ RSpec.describe 'Styles Integration', :integration do
   describe 'document with styled paragraphs' do
     it 'creates and reads back styled paragraphs' do
       # Create document with styled paragraphs
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add Normal paragraph
-      p1 = Uniword::Paragraph.new(
+      p1 = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Normal'
         )
       )
-      p1_run = Uniword::Run.new(text: 'This is a normal paragraph.')
+      p1_run = Uniword::Wordprocessingml::Run.new(text: 'This is a normal paragraph.')
       p1.runs << p1_run
       doc.body.paragraphs << p1
 
       # Add Heading 1
-      p2 = Uniword::Paragraph.new(
+      p2 = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading1'
         )
       )
-      p2_run = Uniword::Run.new(text: 'This is Heading 1')
+      p2_run = Uniword::Wordprocessingml::Run.new(text: 'This is Heading 1')
       p2.runs << p2_run
       doc.body.paragraphs << p2
 
       # Add Heading 2
-      p3 = Uniword::Paragraph.new(
+      p3 = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'Heading2'
         )
       )
-      p3_run = Uniword::Run.new(text: 'This is Heading 2')
+      p3_run = Uniword::Wordprocessingml::Run.new(text: 'This is Heading 2')
       p3.runs << p3_run
       doc.body.paragraphs << p3
 
@@ -69,7 +69,7 @@ RSpec.describe 'Styles Integration', :integration do
 
   describe 'styles configuration' do
     it 'includes default styles in new document' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Verify default styles exist
       expect(doc.styles_configuration.style_by_id('Normal')).not_to be_nil
@@ -81,7 +81,7 @@ RSpec.describe 'Styles Integration', :integration do
     end
 
     it 'preserves custom styles' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create custom paragraph style
       doc.styles_configuration.create_paragraph_style(
@@ -100,12 +100,12 @@ RSpec.describe 'Styles Integration', :integration do
       )
 
       # Use the custom style
-      p = Uniword::Paragraph.new(
+      p = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'MyCustomStyle'
         )
       )
-      p_run = Uniword::Run.new(text: 'Styled with custom style')
+      p_run = Uniword::Wordprocessingml::Run.new(text: 'Styled with custom style')
       p.runs << p_run
       doc.body.paragraphs << p
 
@@ -117,19 +117,19 @@ RSpec.describe 'Styles Integration', :integration do
       loaded_style = loaded_doc.styles_configuration.style_by_id('MyCustomStyle')
       expect(loaded_style).not_to be_nil
       expect(loaded_style.name.val).to eq('My Custom Style')
-      expect(loaded_style.custom).to be true
-      expect(loaded_style.paragraph_properties.alignment).to eq('center')
+      expect(loaded_style.custom?).to be true
+      expect(loaded_style.paragraph_properties.alignment.value).to eq('center')
       expect(loaded_style.run_properties).to be_bold
       expect(loaded_style.run_properties.color.value).to eq('FF0000')
 
       # Verify paragraph uses the style (style is on properties)
-      expect(loaded_doc.paragraphs.first.properties&.style).to eq('MyCustomStyle')
+      expect(loaded_doc.paragraphs.first.properties&.style&.value).to eq('MyCustomStyle')
     end
   end
 
   describe 'style inheritance' do
     it 'creates styles with basedOn relationship' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create derived style based on Heading1
       derived_style = doc.styles_configuration.create_paragraph_style(
@@ -144,12 +144,12 @@ RSpec.describe 'Styles Integration', :integration do
       expect(derived_style.based_on).to eq('Heading1')
 
       # Save and reload
-      p = Uniword::Paragraph.new(
+      p = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           style: 'DerivedHeading'
         )
       )
-      p_run = Uniword::Run.new(text: 'Derived heading text')
+      p_run = Uniword::Wordprocessingml::Run.new(text: 'Derived heading text')
       p.runs << p_run
       doc.body.paragraphs << p
 
@@ -165,12 +165,12 @@ RSpec.describe 'Styles Integration', :integration do
 
   describe 'character styles' do
     it 'applies character styles to runs' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
-      p = Uniword::Paragraph.new
+      p = Uniword::Wordprocessingml::Paragraph.new
 
       # Add run with Strong style
-      strong_run = Uniword::Run.new(
+      strong_run = Uniword::Wordprocessingml::Run.new(
         text: 'Bold text',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Strong'
@@ -179,7 +179,7 @@ RSpec.describe 'Styles Integration', :integration do
       p.runs << strong_run
 
       # Add run with Emphasis style
-      emphasis_run = Uniword::Run.new(
+      emphasis_run = Uniword::Wordprocessingml::Run.new(
         text: ' and italic text',
         properties: Uniword::Wordprocessingml::RunProperties.new(
           style: 'Emphasis'
@@ -202,15 +202,15 @@ RSpec.describe 'Styles Integration', :integration do
 
   describe 'all heading levels' do
     it 'creates document with all 9 heading levels' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       (1..9).each do |level|
-        p = Uniword::Paragraph.new(
+        p = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
             style: "Heading#{level}"
           )
         )
-        p_run = Uniword::Run.new(text: "Heading level #{level}")
+        p_run = Uniword::Wordprocessingml::Run.new(text: "Heading level #{level}")
         p.runs << p_run
         doc.body.paragraphs << p
       end

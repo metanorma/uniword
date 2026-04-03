@@ -43,7 +43,7 @@ module Uniword
     #   theme.font_scheme.major_font = 'Helvetica'
     #
     # @example Apply theme to document
-    #   doc = Uniword::Document.new
+    #   doc = Uniword::Wordprocessingml::DocumentRoot.new
     #   doc.theme = theme
     #
     # NOTE: Convenience alias Uniword::Theme is available via lib/uniword.rb
@@ -145,12 +145,62 @@ module Uniword
         !name.nil? && !name.empty?
       end
 
-      # Get a theme color by name
+      # Mapping from OOXML themeColor attribute values to ColorScheme slots
+      # OOXML uses text1/background1 in styles, but dk1/lt1 in the theme definition
+      THEME_COLOR_MAP = {
+        'text1' => :dk1,
+        'text2' => :dk2,
+        'background1' => :lt1,
+        'background2' => :lt2,
+        'accent1' => :accent1,
+        'accent2' => :accent2,
+        'accent3' => :accent3,
+        'accent4' => :accent4,
+        'accent5' => :accent5,
+        'accent6' => :accent6,
+        'hyperlink' => :hlink,
+        'followedHyperlink' => :fol_hlink
+      }.freeze
+
+      # Get a theme color by name (accepts both scheme names and OOXML names)
       #
       # @param color_name [String, Symbol] The color name
       # @return [String, nil] The RGB hex color value
       def color(color_name)
-        color_scheme&.[](color_name)
+        key = color_name.to_s
+        scheme_key = THEME_COLOR_MAP[key] || key.to_sym
+        color_scheme&.[](scheme_key)
+      end
+
+      # Resolve an OOXML themeColor value to its RGB hex
+      #
+      # @param theme_color [String] OOXML themeColor value (e.g., "text1", "accent1")
+      # @return [String, nil] The RGB hex color value
+      def resolve_color(theme_color)
+        return nil unless theme_color
+        color(theme_color)
+      end
+
+      # Resolve an OOXML themeFont reference to its typeface name
+      #
+      # @param theme_font_ref [String] OOXML themeFont value (e.g., "majorAscii", "minorHAnsi")
+      # @return [String, nil] The typeface name
+      def resolve_font(theme_font_ref)
+        return nil unless theme_font_ref && font_scheme
+        case theme_font_ref
+        when 'majorAscii', 'majorHAnsi'
+          font_scheme.major_font
+        when 'majorEastAsia'
+          font_scheme.major_east_asian
+        when 'majorBidi'
+          font_scheme.major_complex_script
+        when 'minorAscii', 'minorHAnsi'
+          font_scheme.minor_font
+        when 'minorEastAsia'
+          font_scheme.minor_east_asian
+        when 'minorBidi'
+          font_scheme.minor_complex_script
+        end
       end
 
       # Get the major font (for headings)

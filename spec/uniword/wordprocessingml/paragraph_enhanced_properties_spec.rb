@@ -72,14 +72,14 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       builder.shading(fill: 'FF00FF', pattern: 'solid')
 
       expect(paragraph.properties.shading.fill).to eq('FF00FF')
-      expect(paragraph.properties.shading.shading_type).to eq('solid')
+      expect(paragraph.properties.shading.pattern).to eq('solid')
     end
 
     it 'defaults to clear pattern' do
       builder = Uniword::Builder::ParagraphBuilder.new(paragraph)
       builder.shading(fill: 'CCCCCC')
 
-      expect(paragraph.properties.shading.shading_type).to eq('clear')
+      expect(paragraph.properties.shading.pattern).to eq('clear')
     end
 
     it 'returns self for method chaining' do
@@ -102,10 +102,10 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       builder = Uniword::Builder::ParagraphBuilder.new(paragraph)
       builder << Uniword::Builder.tab_stop(position: 1440, alignment: 'center')
 
-      expect(paragraph.properties.tab_stops).not_to be_nil
-      expect(paragraph.properties.tab_stops.tabs.size).to eq(1)
+      expect(paragraph.properties.tabs).not_to be_nil
+      expect(paragraph.properties.tabs.tab_stops.size).to eq(1)
 
-      tab = paragraph.properties.tab_stops.tabs.first
+      tab = paragraph.properties.tabs.tab_stops.first
       expect(tab.position).to eq(1440)
       expect(tab.alignment).to eq('center')
     end
@@ -116,14 +116,14 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       builder << Uniword::Builder.tab_stop(position: 1440, alignment: 'center')
       builder << Uniword::Builder.tab_stop(position: 2160, alignment: 'right')
 
-      expect(paragraph.properties.tab_stops.tabs.size).to eq(3)
+      expect(paragraph.properties.tabs.tab_stops.size).to eq(3)
     end
 
     it 'defaults alignment to left' do
       builder = Uniword::Builder::ParagraphBuilder.new(paragraph)
       builder << Uniword::Builder.tab_stop(position: 1440)
 
-      tab = paragraph.properties.tab_stops.tabs.first
+      tab = paragraph.properties.tabs.tab_stops.first
       expect(tab.alignment).to eq('left')
     end
 
@@ -133,7 +133,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
         position: 1440, alignment: 'right', leader: 'dot'
       )
 
-      tab = paragraph.properties.tab_stops.tabs.first
+      tab = paragraph.properties.tabs.tab_stops.first
       expect(tab.leader).to eq('dot')
     end
 
@@ -154,12 +154,12 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       builder.shading(fill: 'FFFF00')
       builder << Uniword::Builder.tab_stop(position: 1440)
 
-      expect(paragraph.properties&.style).to eq('Heading1')
-      expect(paragraph.properties&.alignment).to eq('center')
+      expect(paragraph.properties&.style&.value).to eq('Heading1')
+      expect(paragraph.properties&.alignment&.value).to eq('center')
       expect(paragraph.properties&.spacing&.before).to eq(240)
       expect(paragraph.properties.borders).not_to be_nil
       expect(paragraph.properties.shading).not_to be_nil
-      expect(paragraph.properties.tab_stops).not_to be_nil
+      expect(paragraph.properties.tabs).not_to be_nil
     end
 
     it 'includes all 42+ property types' do
@@ -184,8 +184,8 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       )
 
       # Verify all properties are accessible
-      expect(paragraph.properties.style).to eq('Normal')
-      expect(paragraph.properties.alignment).to eq('left')
+      expect(paragraph.properties.style.value).to eq('Normal')
+      expect(paragraph.properties.alignment.value).to eq('left')
       expect(paragraph.properties.spacing_before).to eq(120)
       expect(paragraph.properties.spacing_after).to eq(120)
       expect(paragraph.properties.line_spacing).to eq(1.5)
@@ -213,11 +213,11 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, 'Enhanced Properties' do
       builder << Uniword::Builder.tab_stop(position: 1440)
 
       expect(builder.build).to eq(paragraph)
-      expect(paragraph.properties&.style).to eq('Heading1')
-      expect(paragraph.properties&.alignment).to eq('center')
+      expect(paragraph.properties&.style&.value).to eq('Heading1')
+      expect(paragraph.properties&.alignment&.value).to eq('center')
       expect(paragraph.properties.borders).not_to be_nil
       expect(paragraph.properties.shading).not_to be_nil
-      expect(paragraph.properties.tab_stops).not_to be_nil
+      expect(paragraph.properties.tabs).not_to be_nil
     end
   end
 end

@@ -31,9 +31,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'preserves basic text content for LibreOffice' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'LibreOffice compatibility test')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'LibreOffice compatibility test')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -46,11 +46,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles multiple paragraphs for LibreOffice' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       5.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -62,15 +62,15 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles tables for LibreOffice' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       2.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         2.times do |c|
-          cell = Uniword::TableCell.new
-          cell_para = Uniword::Paragraph.new
-          cell_run = Uniword::Run.new(text: "Cell #{r},#{c}")
+          cell = Uniword::Wordprocessingml::TableCell.new
+          cell_para = Uniword::Wordprocessingml::Paragraph.new
+          cell_run = Uniword::Wordprocessingml::Run.new(text: "Cell #{r},#{c}")
           cell_para.runs << cell_run
           cell.paragraphs << cell_para
           row.cells << cell
@@ -92,9 +92,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
     context 'text formatting' do
       it 'preserves bold text' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(
           text: 'Bold text',
           properties: Uniword::Wordprocessingml::RunProperties.new(
             bold: Uniword::Properties::Bold.new(value: true)
@@ -110,9 +110,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'preserves italic text' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(
           text: 'Italic text',
           properties: Uniword::Wordprocessingml::RunProperties.new(
             italic: Uniword::Properties::Italic.new(value: true)
@@ -127,9 +127,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'preserves underlined text' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(
           text: 'Underlined text',
           properties: Uniword::Wordprocessingml::RunProperties.new(
             underline: Uniword::Properties::Underline.new(value: 'single')
@@ -144,9 +144,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'preserves font sizes' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(
           text: 'Large text',
           properties: Uniword::Wordprocessingml::RunProperties.new(
             size: Uniword::Properties::FontSize.new(value: 48)
@@ -161,9 +161,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'preserves font families' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new
 
         if run.respond_to?(:properties=)
           props = Uniword::Wordprocessingml::RunProperties.new
@@ -183,16 +183,16 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
     context 'paragraph formatting' do
       it 'handles paragraph alignment' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
 
         if para.respond_to?(:properties=)
           props = Uniword::Wordprocessingml::ParagraphProperties.new
-          props.alignment = 'center'
+          props.alignment = Uniword::Properties::Alignment.new(value: 'center')
           para.properties = props
         end
 
-        run = Uniword::Run.new(text: 'Centered text')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Centered text')
         para.runs << run
         doc.body.paragraphs << para
 
@@ -202,8 +202,8 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'handles line spacing' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
 
         if para.respond_to?(:properties=)
           props = Uniword::Wordprocessingml::ParagraphProperties.new
@@ -211,7 +211,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
           para.properties = props
         end
 
-        run = Uniword::Run.new(text: 'Spaced text')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Spaced text')
         para.runs << run
         doc.body.paragraphs << para
 
@@ -221,8 +221,8 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'handles indentation' do
-        doc = Uniword::Document.new
-        para = Uniword::Paragraph.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        para = Uniword::Wordprocessingml::Paragraph.new
 
         if para.respond_to?(:properties=)
           props = Uniword::Wordprocessingml::ParagraphProperties.new
@@ -230,7 +230,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
           para.properties = props
         end
 
-        run = Uniword::Run.new(text: 'Indented text')
+        run = Uniword::Wordprocessingml::Run.new(text: 'Indented text')
         para.runs << run
         doc.body.paragraphs << para
 
@@ -242,11 +242,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
     context 'lists' do
       it 'handles bulleted lists' do
-        doc = Uniword::Document.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
 
         3.times do |i|
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: "Bullet point #{i + 1}")
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: "Bullet point #{i + 1}")
           para.runs << run
           doc.body.paragraphs << para
         end
@@ -257,11 +257,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'handles numbered lists' do
-        doc = Uniword::Document.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
 
         3.times do |i|
-          para = Uniword::Paragraph.new
-          run = Uniword::Run.new(text: "Numbered item #{i + 1}")
+          para = Uniword::Wordprocessingml::Paragraph.new
+          run = Uniword::Wordprocessingml::Run.new(text: "Numbered item #{i + 1}")
           para.runs << run
           doc.body.paragraphs << para
         end
@@ -282,14 +282,14 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       end
 
       it 'handles merged cells' do
-        doc = Uniword::Document.new
-        table = Uniword::Table.new
-        row = Uniword::TableRow.new
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        table = Uniword::Wordprocessingml::Table.new
+        row = Uniword::Wordprocessingml::TableRow.new
 
         # Create cells
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: 'Merged cell')
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: 'Merged cell')
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -345,9 +345,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'preserves content through LibreOffice conversion' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test content for PDF conversion')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test content for PDF conversion')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -367,9 +367,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     let(:test_path) { "#{tmp_dir}/unicode_test.docx" }
 
     it 'handles Unicode characters' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Unicode: 你好 مرحبا Здравствуй')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好 مرحبا Здравствуй')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -383,9 +383,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles emoji' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Emoji: 🌍 🎉 ❤️')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Emoji: 🌍 🎉 ❤️')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -398,9 +398,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles special symbols' do
-      doc = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Symbols: © ® ™ € £ ¥')
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Symbols: © ® ™ € £ ¥')
       para.runs << run
       doc.body.paragraphs << para
 
@@ -424,12 +424,12 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles large documents' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create 50 paragraphs
       50.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}: " + ('Lorem ipsum ' * 10))
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}: " + ('Lorem ipsum ' * 10))
         para.runs << run
         doc.body.paragraphs << para
       end
@@ -441,16 +441,16 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     end
 
     it 'handles documents with multiple tables' do
-      doc = Uniword::Document.new
+      doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       3.times do |t|
-        table = Uniword::Table.new
+        table = Uniword::Wordprocessingml::Table.new
         2.times do |r|
-          row = Uniword::TableRow.new
+          row = Uniword::Wordprocessingml::TableRow.new
           2.times do |c|
-            cell = Uniword::TableCell.new
-            cell_para = Uniword::Paragraph.new
-            cell_run = Uniword::Run.new(text: "Table #{t} Cell #{r},#{c}")
+            cell = Uniword::Wordprocessingml::TableCell.new
+            cell_para = Uniword::Wordprocessingml::Paragraph.new
+            cell_run = Uniword::Wordprocessingml::Run.new(text: "Table #{t} Cell #{r},#{c}")
             cell_para.runs << cell_run
             cell.paragraphs << cell_para
             row.cells << cell
@@ -475,24 +475,24 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
   end
 
   def create_test_document
-    doc = Uniword::Document.new
-    para = Uniword::Paragraph.new
-    run = Uniword::Run.new(text: 'Test document for LibreOffice')
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    para = Uniword::Wordprocessingml::Paragraph.new
+    run = Uniword::Wordprocessingml::Run.new(text: 'Test document for LibreOffice')
     para.runs << run
     doc.body.paragraphs << para
     doc
   end
 
   def create_document_with_table(rows:, cols:)
-    doc = Uniword::Document.new
-    table = Uniword::Table.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    table = Uniword::Wordprocessingml::Table.new
 
     rows.times do |r|
-      row = Uniword::TableRow.new
+      row = Uniword::Wordprocessingml::TableRow.new
       cols.times do |c|
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Cell #{r + 1},#{c + 1}")
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Cell #{r + 1},#{c + 1}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -505,11 +505,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
   end
 
   def create_full_featured_document
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Title
-    title = Uniword::Paragraph.new
-    title_run = Uniword::Run.new
+    title = Uniword::Wordprocessingml::Paragraph.new
+    title_run = Uniword::Wordprocessingml::Run.new
     if title_run.respond_to?(:properties)
       title_run.properties.bold = true
       title_run.properties.font_size = 28
@@ -520,20 +520,20 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
     # Regular paragraphs
     3.times do |i|
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: "This is paragraph #{i + 1} with some content.")
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: "This is paragraph #{i + 1} with some content.")
       para.runs << run
       doc.body.paragraphs << para
     end
 
     # Table
-    table = Uniword::Table.new
+    table = Uniword::Wordprocessingml::Table.new
     2.times do |r|
-      row = Uniword::TableRow.new
+      row = Uniword::Wordprocessingml::TableRow.new
       2.times do |c|
-        cell = Uniword::TableCell.new
-        cell_para = Uniword::Paragraph.new
-        cell_run = Uniword::Run.new(text: "Data #{r + 1},#{c + 1}")
+        cell = Uniword::Wordprocessingml::TableCell.new
+        cell_para = Uniword::Wordprocessingml::Paragraph.new
+        cell_run = Uniword::Wordprocessingml::Run.new(text: "Data #{r + 1},#{c + 1}")
         cell_para.runs << cell_run
         cell.paragraphs << cell_para
         row.cells << cell
@@ -546,11 +546,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
   end
 
   def create_complex_document
-    doc = Uniword::Document.new
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
 
     # Add paragraphs
-    para1 = Uniword::Paragraph.new
-    run1 = Uniword::Run.new(text: 'Introduction paragraph')
+    para1 = Uniword::Wordprocessingml::Paragraph.new
+    run1 = Uniword::Wordprocessingml::Run.new(text: 'Introduction paragraph')
     para1.runs << run1
     doc.body.paragraphs << para1
 
@@ -559,8 +559,8 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
     doc.body.tables << table
 
     # Add more paragraphs
-    para2 = Uniword::Paragraph.new
-    run2 = Uniword::Run.new(text: 'Conclusion paragraph')
+    para2 = Uniword::Wordprocessingml::Paragraph.new
+    run2 = Uniword::Wordprocessingml::Run.new(text: 'Conclusion paragraph')
     para2.runs << run2
     doc.body.paragraphs << para2
 

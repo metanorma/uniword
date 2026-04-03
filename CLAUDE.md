@@ -78,17 +78,40 @@ end
 
 Violating this pattern causes silent serialization failures where XML output is empty. This applies to ALL classes using lutaml-model.
 
-## No Custom Getters/Setters
+## No Custom Getters/Setters in Model Classes
 
-**We do NOT use custom getters or setters.** All attribute access uses lutaml-model's default mechanisms:
+**Model classes do NOT have custom getters or setters.** All attribute access uses lutaml-model's default mechanisms:
 
-- Do NOT define custom `def attribute=(value)` methods for type conversion
-- Do NOT define custom `def attribute` getters for string coercion
+- Do NOT define custom `def attribute=(value)` methods in model classes
+- Do NOT define custom `def attribute` getters for string coercion in model classes
 - Use lutaml-model's `attribute` declarations with proper types
 
-If type conversion is needed, use `convert_primitive_attributes!` in `initialize` after `super`, NOT custom setters.
+If type conversion is needed during initialization, use `convert_primitive_attributes!` in `initialize` after `super`, NOT custom setters.
 
-**Exception**: The `value_set_for(:attribute_name)` call in setters IS allowed when needed to notify lutaml-model that an attribute was explicitly set (to bypass `using_default?` checks during serialization).
+**Exception**: Only lightweight custom getters are allowed when they delegate to internal state.
+
+## Convenient APIs Belong in Builder Classes
+
+**Builder classes** (in `lib/uniword/builder/`) provide convenient APIs for constructing model objects:
+
+```ruby
+# ✅ CORRECT - Builder provides convenient API
+class ParagraphBuilder
+  def style=(name)
+    ensure_properties.style = name  # Delegates to model, converts if needed
+    self
+  end
+end
+
+# ❌ WRONG - Model class should not have convenience setters
+class ParagraphProperties
+  def style=(value)
+    @style = value.is_a?(String) ? StyleReference.new(value: value) : value
+  end
+end
+```
+
+Model classes represent OOXML structure. Builder classes provide user-friendly APIs for document construction. This separation of concerns keeps models clean and builders flexible.
 
 ## No Wrapper Objects in API
 

@@ -21,8 +21,13 @@ module Uniword
       attribute :para_id, W14ParaId
       attribute :text_id, W14TextId
 
-      # API compatibility - header flag for table rows
+      # Header flag for table rows (not serialized, runtime only)
       attr_accessor :header
+
+      # Predicate for header flag
+      def header?
+        !!@header
+      end
 
       xml do
         element 'tr'

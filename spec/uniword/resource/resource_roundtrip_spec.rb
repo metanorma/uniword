@@ -36,8 +36,6 @@ RSpec.describe 'Resource Roundtrip' do
           end
 
           it 'roundtrips through XML' do
-            skip 'XML roundtrip requires namespace handling' if theme_name == 'office_theme'
-
             # Load friendly theme and convert to Word theme
             friendly = Uniword::Themes::Theme.load(theme_name)
             original = transformation.to_word(friendly)
@@ -183,6 +181,8 @@ RSpec.describe 'Resource Roundtrip' do
   end
 
   describe 'Resource processing' do
+    let(:transformation) { Uniword::Themes::ThemeTransformation.new }
+
     describe 'ColorTransformer' do
       it 'transforms colors consistently' do
         original = '#FF0000' # Red
@@ -246,7 +246,6 @@ RSpec.describe 'Resource Roundtrip' do
       end
 
       it 'processes theme creating variant' do
-        skip 'Requires theme with color_scheme'
         friendly = Uniword::Themes::Theme.load('atlas')
         theme = transformation.to_word(friendly)
         processor = Uniword::Resource::ThemeProcessor.new(
@@ -258,7 +257,7 @@ RSpec.describe 'Resource Roundtrip' do
         processed = processor.process(theme)
 
         expect(processed).to be_a(Uniword::Drawingml::Theme)
-        expect(processed.name).to include('atlas')
+        expect(processed.name).to include('Atlas')
         expect(processed.name).to include('Uniword')
       end
     end

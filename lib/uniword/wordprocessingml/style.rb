@@ -213,10 +213,9 @@ module Uniword
         # Handle boolean primitive
         return true if val == true
         # Handle Bold wrapper object
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
-      alias quick_format? quick_format
 
       # Convenience accessors for paragraph properties
 
@@ -249,7 +248,7 @@ module Uniword
 
         val = pPr.keep_next
         return true if val == true
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -261,7 +260,7 @@ module Uniword
 
         val = pPr.keep_lines
         return true if val == true
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -290,7 +289,7 @@ module Uniword
         val = rPr.bold
         return nil if val.nil?
 
-        val = val.value if val.respond_to?(:value)
+        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
@@ -328,7 +327,6 @@ module Uniword
       def custom?
         customStyle == true
       end
-      alias custom custom?
 
       # Check if this is a paragraph style
       #

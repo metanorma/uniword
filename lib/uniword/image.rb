@@ -219,14 +219,6 @@ module Uniword
       image
     end
 
-    # Alias for image_data for API compatibility
-    # Get binary image data
-    #
-    # @return [String, nil] The binary image data
-    def data
-      image_data
-    end
-
     # Save image data to a file
     # Convenient method to save image data to disk
     #

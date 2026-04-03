@@ -29,7 +29,7 @@ module Uniword
         files = reader.extract(dotx_path)
 
         # Parse styles.xml using lutaml-model
-        styles_config = ::Uniword::StylesConfiguration.from_xml(
+        styles_config = ::Uniword::Wordprocessingml::StylesConfiguration.from_xml(
           files[:styles],
           encoding: 'UTF-8'
         )
@@ -37,7 +37,7 @@ module Uniword
         # Create StyleSet model
         styleset = ::Uniword::StyleSet.new(
           name: extract_name_from_path(dotx_path),
-          styles: styles_config.all_styles,
+          styles: styles_config.styles,
           source_file: File.basename(dotx_path)
         )
 

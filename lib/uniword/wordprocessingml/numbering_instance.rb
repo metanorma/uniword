@@ -34,12 +34,6 @@ module Uniword
         validate_ids
       end
 
-      # Get abstract_num_id value (convenience method that returns integer)
-      # Use this for API compatibility, or use abstract_num_id.val directly
-      def abstract_num_id_value
-        @abstract_num_id&.val
-      end
-
       # Check if this instance uses the given abstract definition
       def uses_definition?(definition)
         return false unless abstract_num_id

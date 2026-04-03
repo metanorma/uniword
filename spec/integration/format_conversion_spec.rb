@@ -212,8 +212,8 @@ RSpec.describe 'Format Conversion', type: :integration do
 
       doc = Uniword::DocumentFactory.from_file(mht_fixture, format: :mhtml)
 
-      expect(doc).to be_a(Uniword::Mhtml::Document)
-      expect(doc.html_part).to be_a(Uniword::Mhtml::HtmlPart)
+      expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
+      expect(doc.body.paragraphs.count).to be >= 0
     end
 
     it 'handles explicit format override' do

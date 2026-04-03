@@ -1237,7 +1237,10 @@ module Uniword
       def style_to_css_class(style)
         return ' class=MsoNormal' unless style
 
-        case style
+        # Handle StyleReference wrapper object or string
+        style_value = style.is_a?(String) ? style : style.to_s
+
+        case style_value
         when 'Title' then ' class=MsoTitle'
         when 'Title2' then ' class=MsoTitle2'
         when 'Subtitle' then ' class=MsoSubtitle'

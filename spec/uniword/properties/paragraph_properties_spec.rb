@@ -18,8 +18,8 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
         spacing_before: 240,
         spacing_after: 120
       )
-      expect(props.style).to eq('Heading1')
-      expect(props.alignment).to eq('center')
+      expect(props.style.value).to eq('Heading1')
+      expect(props.alignment.value).to eq('center')
       expect(props.spacing&.before).to eq(240)
       expect(props.spacing&.after).to eq(120)
     end

@@ -67,7 +67,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
       loaded_para = loaded_doc.body.paragraphs.first
       expect(loaded_para.properties.shading).not_to be_nil
       expect(loaded_para.properties.shading.fill).to eq('FFFF00')
-      expect(loaded_para.properties.shading.shading_type).to eq('solid')
+      expect(loaded_para.properties.shading.pattern).to eq('solid')
     end
 
     it 'preserves tab stops through round-trip' do
@@ -88,15 +88,15 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
 
       # Verify tab stops preserved
       loaded_para = loaded_doc.body.paragraphs.first
-      expect(loaded_para.properties.tab_stops).not_to be_nil
-      expect(loaded_para.properties.tab_stops.tabs.size).to eq(2)
+      expect(loaded_para.properties.tabs).not_to be_nil
+      expect(loaded_para.properties.tabs.tab_stops.size).to eq(2)
 
-      tab1 = loaded_para.properties.tab_stops.tabs[0]
+      tab1 = loaded_para.properties.tabs.tab_stops[0]
       expect(tab1.position).to eq(1440)
       expect(tab1.alignment).to eq('center')
       expect(tab1.leader).to eq('dot')
 
-      tab2 = loaded_para.properties.tab_stops.tabs[1]
+      tab2 = loaded_para.properties.tabs.tab_stops[1]
       expect(tab2.position).to eq(2880)
       expect(tab2.alignment).to eq('right')
     end
@@ -254,7 +254,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
       loaded_para = loaded_doc.body.paragraphs.first
       expect(loaded_para.properties.borders).not_to be_nil
       expect(loaded_para.properties.shading).not_to be_nil
-      expect(loaded_para.properties.tab_stops).not_to be_nil
+      expect(loaded_para.properties.tabs).not_to be_nil
     end
 
     it 'preserves multiple run properties through round-trip' do
@@ -306,7 +306,7 @@ RSpec.describe 'Enhanced Properties Round-Trip' do
       expect(loaded_doc.body.paragraphs.size).to eq(3)
       expect(loaded_doc.body.paragraphs[0].properties.borders).not_to be_nil
       expect(loaded_doc.body.paragraphs[1].properties.shading).not_to be_nil
-      expect(loaded_doc.body.paragraphs[2].properties.tab_stops).not_to be_nil
+      expect(loaded_doc.body.paragraphs[2].properties.tabs).not_to be_nil
     end
   end
 

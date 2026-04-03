@@ -17,9 +17,9 @@ RSpec.describe 'Scenario: Simple document' do
 
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(4)
-    expect(paragraphs[0].properties&.style).to include('Heading1')
+    expect(paragraphs[0].properties&.style&.value).to include('Heading1')
     expect(paragraphs[1].text).to include('Hello World')
-    expect(paragraphs[2].properties&.style).to include('Heading2')
+    expect(paragraphs[2].properties&.style&.value).to include('Heading2')
     expect(doc.model.core_properties.title).to eq('My Document')
 
     path = '/tmp/scenario_simple.docx'

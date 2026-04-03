@@ -14,5 +14,8 @@ module Uniword
     autoload :ThemeLoader, "#{__dir__}/theme/theme_loader"
     autoload :ThemeImporter, "#{__dir__}/themes/theme_importer"
     autoload :ThemeVariant, "#{__dir__}/theme/theme_variant"
+
+    # Theme application to documents
+    autoload :ThemeApplicator, "#{__dir__}/theme/theme_applicator"
   end
 end

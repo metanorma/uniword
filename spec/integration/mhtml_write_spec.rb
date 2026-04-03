@@ -23,9 +23,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'basic document generation' do
     it 'creates valid MHTML file with simple text' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Hello, World!')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello, World!')
       para.runs << run
       document.body.paragraphs << para
 
@@ -45,12 +45,12 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
     end
 
     it 'creates file with formatted text' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
 
       # Bold text
       props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-      run = Uniword::Run.new(text: 'Bold text', properties: props)
+      run = Uniword::Wordprocessingml::Run.new(text: 'Bold text', properties: props)
       para.runs << run
 
       document.body.paragraphs << para
@@ -63,12 +63,12 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
     end
 
     it 'creates file with headings' do
-      document = Uniword::Document.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add heading
       heading_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
-      heading = Uniword::Paragraph.new(properties: heading_props)
-      heading_run = Uniword::Run.new(text: 'Document Title')
+      heading = Uniword::Wordprocessingml::Paragraph.new(properties: heading_props)
+      heading_run = Uniword::Wordprocessingml::Run.new(text: 'Document Title')
       heading.runs << heading_run
       document.body.paragraphs << heading
 
@@ -83,13 +83,13 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'table generation' do
     it 'creates file with table' do
-      document = Uniword::Document.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
 
-      table = Uniword::Table.new
-      row = Uniword::TableRow.new
-      cell = Uniword::TableCell.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Cell content')
+      table = Uniword::Wordprocessingml::Table.new
+      row = Uniword::Wordprocessingml::TableRow.new
+      cell = Uniword::Wordprocessingml::TableCell.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
       para.runs << run
       cell.paragraphs << para
       row.cells << cell
@@ -108,9 +108,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'CSS integration' do
     it 'includes Word CSS stylesheet' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       para.runs << run
       document.body.paragraphs << para
 
@@ -128,12 +128,12 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'file size and structure' do
     it 'creates reasonably sized files' do
-      document = Uniword::Document.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add multiple paragraphs
       10.times do |i|
-        para = Uniword::Paragraph.new
-        run = Uniword::Run.new(text: "Paragraph #{i + 1}")
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1}")
         para.runs << run
         document.body.paragraphs << para
       end
@@ -152,9 +152,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'format detection' do
     it 'detects .doc extension for MHTML format' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       para.runs << run
       document.body.paragraphs << para
 
@@ -170,9 +170,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
     end
 
     it 'detects .mhtml extension for MHTML format' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Test')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Test')
       para.runs << run
       document.body.paragraphs << para
 
@@ -190,9 +190,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'character encoding' do
     it 'handles UTF-8 characters correctly' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: 'Hello 世界 مرحبا мир')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: 'Hello 世界 مرحبا мир')
       para.runs << run
       document.body.paragraphs << para
 
@@ -205,9 +205,9 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
     end
 
     it 'escapes HTML special characters' do
-      document = Uniword::Document.new
-      para = Uniword::Paragraph.new
-      run = Uniword::Run.new(text: '<script>alert("XSS")</script>')
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      run = Uniword::Wordprocessingml::Run.new(text: '<script>alert("XSS")</script>')
       para.runs << run
       document.body.paragraphs << para
 
@@ -221,33 +221,33 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
   describe 'complex documents' do
     it 'creates complex document with multiple elements' do
-      document = Uniword::Document.new
+      document = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Heading
       h1_props = Uniword::Wordprocessingml::ParagraphProperties.new(style: 'Heading1')
-      h1 = Uniword::Paragraph.new(properties: h1_props)
-      h1_run = Uniword::Run.new(text: 'Main Title')
+      h1 = Uniword::Wordprocessingml::Paragraph.new(properties: h1_props)
+      h1_run = Uniword::Wordprocessingml::Run.new(text: 'Main Title')
       h1.runs << h1_run
       document.body.paragraphs << h1
 
       # Normal paragraph with formatting
-      para1 = Uniword::Paragraph.new
+      para1 = Uniword::Wordprocessingml::Paragraph.new
       bold_props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-      bold_run = Uniword::Run.new(text: 'Bold text ', properties: bold_props)
+      bold_run = Uniword::Wordprocessingml::Run.new(text: 'Bold text ', properties: bold_props)
       para1.runs << bold_run
       italic_props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
-      italic_run = Uniword::Run.new(text: 'and italic text.', properties: italic_props)
+      italic_run = Uniword::Wordprocessingml::Run.new(text: 'and italic text.', properties: italic_props)
       para1.runs << italic_run
       document.body.paragraphs << para1
 
       # Table
-      table = Uniword::Table.new
+      table = Uniword::Wordprocessingml::Table.new
       2.times do |r|
-        row = Uniword::TableRow.new
+        row = Uniword::Wordprocessingml::TableRow.new
         3.times do |c|
-          cell = Uniword::TableCell.new
-          cell_para = Uniword::Paragraph.new
-          cell_run = Uniword::Run.new(text: "R#{r + 1}C#{c + 1}")
+          cell = Uniword::Wordprocessingml::TableCell.new
+          cell_para = Uniword::Wordprocessingml::Paragraph.new
+          cell_run = Uniword::Wordprocessingml::Run.new(text: "R#{r + 1}C#{c + 1}")
           cell_para.runs << cell_run
           cell.paragraphs << cell_para
           row.cells << cell
@@ -257,8 +257,8 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       document.body.tables << table
 
       # Another paragraph
-      para2 = Uniword::Paragraph.new
-      para2_run = Uniword::Run.new(text: 'Conclusion paragraph.')
+      para2 = Uniword::Wordprocessingml::Paragraph.new
+      para2_run = Uniword::Wordprocessingml::Run.new(text: 'Conclusion paragraph.')
       para2.runs << para2_run
       document.body.paragraphs << para2
 

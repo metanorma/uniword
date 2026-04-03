@@ -47,6 +47,16 @@ module Uniword
           paragraph.properties.style = "Heading#{heading_num}"
         end
 
+        # Map CSS class to OOXML style (MHT-specific classes)
+        css_class = element.attr('class')
+        if css_class && !css_class.empty?
+          mapped_style = map_css_class_to_style(css_class)
+          if mapped_style
+            paragraph.properties ||= Uniword::Wordprocessingml::ParagraphProperties.new
+            paragraph.properties.style = mapped_style
+          end
+        end
+
         # Convert child nodes to runs
         element.children.each do |child|
           case child.type
@@ -64,6 +74,52 @@ module Uniword
 
         # Only return paragraph if it has content
         paragraph.runs.any? ? paragraph : nil
+      end
+
+      # Map MHT CSS class to OOXML style name
+      #
+      # @param css_class [String] CSS class string (may contain multiple classes)
+      # @return [String, nil] OOXML style name or nil
+      def self.map_css_class_to_style(css_class)
+        # CSS class to OOXML style mapping for MHT documents
+        class_mapping = {
+          'MsoTitle' => 'Title',
+          'MsoTitle2' => 'Title2',
+          'MsoSubtitle' => 'Subtitle',
+          'MsoHeading1' => 'Heading1',
+          'MsoHeading2' => 'Heading2',
+          'MsoHeading3' => 'Heading3',
+          'MsoHeading4' => 'Heading4',
+          'MsoHeading5' => 'Heading5',
+          'MsoHeading6' => 'Heading6',
+          'MsoToc1' => 'TOC1',
+          'MsoToc2' => 'TOC2',
+          'MsoToc3' => 'TOC3',
+          'MsoToc4' => 'TOC4',
+          'MsoToc5' => 'TOC5',
+          'MsoToc6' => 'TOC6',
+          'MsoToc7' => 'TOC7',
+          'MsoToc8' => 'TOC8',
+          'MsoToc9' => 'TOC9',
+          'MsoTocHeading' => 'TOC Heading',
+          'MsoBibliography' => 'Bibliography',
+          'MsoNoSpacing' => 'No Spacing',
+          'SectionTitle' => 'SectionTitle',
+          'Heading4Char' => 'Heading4Char',
+          'Title' => 'Title',  # Direct class match
+          'Heading1' => 'Heading1',
+          'Heading2' => 'Heading2',
+          'Heading3' => 'Heading3',
+        }
+
+        # Check each class in the class string
+        css_class.split.each do |cls|
+          if class_mapping.key?(cls)
+            return class_mapping[cls]
+          end
+        end
+
+        nil
       end
 
       # Create OOXML run from HTML element with inline formatting
