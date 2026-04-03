@@ -21,6 +21,10 @@ module Uniword
       attribute :layout_in_cell, :string
       attribute :allow_overlap, :string
 
+      # Word 2010 namespace attributes for anchor tracking
+      attribute :anchor_id, :string
+      attribute :edit_id, :string
+
       # Child elements
       attribute :simple_pos, SimplePos
       attribute :position_h, PositionH
@@ -52,6 +56,10 @@ module Uniword
         map_attribute 'locked', to: :locked, render_nil: false
         map_attribute 'layoutInCell', to: :layout_in_cell, render_nil: false
         map_attribute 'allowOverlap', to: :allow_overlap, render_nil: false
+
+        # Word 2010 namespace attributes
+        map_attribute 'anchorId', to: :anchor_id, render_nil: false
+        map_attribute 'editId', to: :edit_id, render_nil: false
 
         # Child elements
         map_element 'simplePos', to: :simple_pos, render_nil: false
