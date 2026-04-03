@@ -1,14 +1,14 @@
 # TODO Index — Active Work Items
 
 ## Test Suite Status (2026-04-03)
-**3157 examples, 0 failures, 82 pending**
+**3186 examples, 0 failures, 82 pending**
 
 ## Categories
 
 | # | Category | Priority | Status |
 |---|----------|----------|--------|
 | 1 | OOXML Model Gaps | HIGH | COMPLETE |
-| 2 | MHT/DOCX Transformation | MEDIUM | Mostly Complete (107 tests passing) |
+| 2 | MHT/DOCX Transformation | MEDIUM | Mostly Complete (136 tests passing) |
 | 3 | Custom Getters/Setters Cleanup | HIGH | COMPLETE |
 | 4 | respond_to? Replacement | MEDIUM | BooleanElement Checks Done |
 | 5 | Namespace Refactoring | LOW | Partially Done |
@@ -55,7 +55,7 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] SDT content from mixed_content
 - [ ] External hyperlink: relationship ID -> URL resolution
 - [ ] TOC field codes preservation
-- [ ] Table cell paragraphs with inline SDTs
+- [ ] Table cell paragraphs with inline SDTs — partial, tables now convert
 - [ ] Image parts in MIME structure (base64)
 - [ ] Theme/colorschememapping binary parts
 - [ ] Header/Footer MIME parts
