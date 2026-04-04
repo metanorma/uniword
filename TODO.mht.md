@@ -75,13 +75,15 @@ w:Sdt ShowingPlcHdr="t" Temporary="t" DocPart="UUID" Text="t" ID="-1771543088"
 
 | Attribute | Description | Status |
 |----------|-------------|--------|
-| ShowingPlcHdr | Placeholder display | MISSING |
-| Temporary | Temporary SDT | MISSING |
-| DocPart | Document part UUID | MISSING |
-| Text | Text-only flag | MISSING |
-| ID | Numeric ID | MISSING |
+| ShowingPlcHdr | Placeholder display | DONE (parsing) |
+| Temporary | Temporary SDT | DONE (parsing) |
+| DocPart | Document part UUID | DONE (parsing) |
+| Text | Text-only flag | DONE (parsing) |
+| ID | Numeric ID | DONE (parsing) |
 
 **Implementation**: Parse `<w:Sdt ...>` wrapper elements from MHT HTML, extract attributes, and apply to OOXML SDT properties.
+
+**Known Issue**: SDT attributes are parsed and stored in OOXML model, but `build_sdt_attrs` in ooxml_to_mhtml_converter.rb does not serialize them back to MHT format. Round-trip loses SDT attributes.
 
 #### 2. Hyperlink URL Resolution
 External hyperlinks need relationship ID → URL resolution:

@@ -262,8 +262,13 @@ module Uniword
       # Create OOXML run from HTML element with inline formatting
       #
       # @param element [Nokogiri::XML::Element] HTML element
-      # @return [Uniword::Wordprocessingml::Run] OOXML run
+      # @return [Uniword::Wordprocessingml::Run, Uniword::Wordprocessingml::StructuredDocumentTag, nil]
       def self.create_run_from_element(element)
+        # Handle SDT elements (structured document tags)
+        if element.name.downcase == 'w:sdt' || element.name == 'sdt'
+          return create_sdt_from_element(element)
+        end
+
         text = element.text.strip
         return nil if text.empty?
 
@@ -277,6 +282,93 @@ module Uniword
         run.text = decoded_text
         run.properties = props if has_properties?(props)
         run
+      end
+
+      # Create OOXML SDT from HTML element
+      #
+      # @param element [Nokogiri::XML::Element] HTML w:sdt element
+      # @return [Uniword::Wordprocessingml::StructuredDocumentTag, nil] OOXML SDT or nil
+      def self.create_sdt_from_element(element)
+        text = element.text.strip
+        return nil if text.empty?
+
+        sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+
+        # Parse SDT attributes
+        sdt_props = parse_sdt_attributes(element)
+        sdt.properties = sdt_props if sdt_props
+
+        # Create SDT content with the text
+        content = Uniword::Wordprocessingml::StructuredDocumentTag::Content.new
+        run = Uniword::Wordprocessingml::Run.new
+        run.text = decode_html_entities(text)
+        content.runs = [run]
+        sdt.content = content
+
+        sdt
+      end
+
+      # Parse SDT attributes from HTML element
+      #
+      # @param element [Nokogiri::XML::Element] HTML w:sdt element
+      # @return [Uniword::Wordprocessingml::StructuredDocumentTagProperties, nil]
+      def self.parse_sdt_attributes(element)
+        attrs = element.attributes
+        return nil if attrs.empty?
+
+        sdt_props = Uniword::Wordprocessingml::StructuredDocumentTagProperties.new
+
+        # ShowingPlcHdr - placeholder display flag
+        if attrs['showingplchdr'] || attrs['ShowingPlcHdr']
+          sdt_props.showing_placeholder_header =
+            Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
+        end
+
+        # Temporary - temporary SDT flag
+        if attrs['temporary'] || attrs['Temporary']
+          sdt_props.temporary =
+            Uniword::Wordprocessingml::StructuredDocumentTag::Temporary.new
+        end
+
+        # DocPart - document part UUID
+        doc_part = attrs['docpart'] || attrs['DocPart']
+        if doc_part
+          placeholder = Uniword::Wordprocessingml::StructuredDocumentTag::Placeholder.new
+          doc_part_ref = Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(value: doc_part.value)
+          placeholder.doc_part = doc_part_ref
+          sdt_props.placeholder = placeholder
+        end
+
+        # Text - text-only flag
+        if attrs['text'] || attrs['Text']
+          sdt_props.text = Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(value: 'whole')
+        end
+
+        # ID - numeric ID
+        id_attr = attrs['id'] || attrs['ID']
+        if id_attr
+          sdt_props.id = Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(value: id_attr.value.to_i)
+        end
+
+        # SdtDocPart - SDT document part type
+        sdt_doc_part = attrs['sdtdocpart'] || attrs['SdtDocPart']
+        if sdt_doc_part
+          # This is a special attribute indicating the SDT is a document part
+        end
+
+        # DocPartType - document part type (e.g., "Table of Contents")
+        doc_part_type = attrs['docparttype'] || attrs['DocPartType']
+        if doc_part_type
+          # Store as tag or alias
+        end
+
+        # Bibliography - bibliography flag
+        if attrs['bibliography'] || attrs['Bibliography']
+          sdt_props.bibliography =
+            Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography.new
+        end
+
+        sdt_props
       end
 
       # Recursively collect formatting properties from element and its children

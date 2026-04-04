@@ -1074,7 +1074,12 @@ module Uniword
 
         # Process runs and hyperlinks in order
         paragraph.runs.each do |run|
-          parts << run_to_html(run)
+          # SDT elements can appear in runs collection when parsed from MHT
+          if run.is_a?(Uniword::Wordprocessingml::StructuredDocumentTag)
+            parts << sdt_to_inline_html(run)
+          else
+            parts << run_to_html(run)
+          end
         end
 
         paragraph.hyperlinks.each do |hyperlink|

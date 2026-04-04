@@ -88,14 +88,36 @@ module Uniword
       def text
         return '' unless runs
 
-        runs.map { |r| r.text.to_s }.join
+        runs.map { |r| run_text(r) }.join
+      end
+
+      # Extract text from a run or SDT element
+      #
+      # @param run_or_sdt [Run, StructuredDocumentTag] Run or SDT element
+      # @return [String] Text content
+      def run_text(run_or_sdt)
+        if run_or_sdt.is_a?(StructuredDocumentTag)
+          extract_sdt_text(run_or_sdt)
+        else
+          run_or_sdt.text.to_s
+        end
+      end
+
+      # Extract text from SDT content
+      #
+      # @param sdt [StructuredDocumentTag] SDT element
+      # @return [String] Text content
+      def extract_sdt_text(sdt)
+        return '' unless sdt.content
+
+        sdt.content.runs.map { |r| r.text.to_s }.join
       end
 
       # Check if paragraph is empty
       #
       # @return [Boolean] true if no runs or all runs empty
       def empty?
-        !runs || runs.empty? || runs.all? { |r| r.text.to_s.empty? }
+        !runs || runs.empty? || runs.all? { |r| run_text(r).empty? }
       end
 
       # Get paragraph style (convenience accessor)
