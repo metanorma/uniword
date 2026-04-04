@@ -194,6 +194,7 @@ module Uniword
       def self.map_css_class_to_style(css_class)
         # CSS class to OOXML style mapping for MHT documents
         class_mapping = {
+          # Microsoft Office Built-in Styles
           'MsoTitle' => 'Title',
           'MsoTitle2' => 'Title2',
           'MsoSubtitle' => 'Subtitle',
@@ -215,12 +216,37 @@ module Uniword
           'MsoTocHeading' => 'TOC Heading',
           'MsoBibliography' => 'Bibliography',
           'MsoNoSpacing' => 'No Spacing',
+          'MsoQuote' => 'Quote',
+          'MsoHeader' => 'Header',
+          'MsoFooter' => 'Footer',
+          'MsoListBullet' => 'List Bullet',
+          'MsoCaption' => 'Caption',
+          'MsoEndnoteText' => 'EndnoteText',
+          'MsoFootnoteText' => 'FootnoteText',
+          'MsoPageBreak' => 'PageBreak',
+
+          # Table-related styles
+          'TableNote' => 'TableNote',
+          'TableSource' => 'TableSource',
+          'TableTitle' => 'TableTitle',
+          'TableFigure' => 'TableFigure',
+
+          # Document part styles
           'SectionTitle' => 'SectionTitle',
           'Heading4Char' => 'Heading4Char',
-          'Title' => 'Title',  # Direct class match
+          'Author' => 'Author',
+
+          # Direct class matches (non-Mso prefixed)
+          'Title' => 'Title',
           'Heading1' => 'Heading1',
           'Heading2' => 'Heading2',
           'Heading3' => 'Heading3',
+          'Heading4' => 'Heading4',
+          'Heading5' => 'Heading5',
+          'Heading6' => 'Heading6',
+          'Quote' => 'Quote',
+          'Bibliography' => 'Bibliography',
+          'NoSpacing' => 'No Spacing',
         }
 
         # Check each class in the class string

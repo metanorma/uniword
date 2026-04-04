@@ -57,7 +57,7 @@ Missing OOXML element models that cause pending tests or data loss.
 
 ## 2. MHT/DOCX Transformation (MEDIUM)
 
-**Tracked in**: `TODO.mhtwork.md`
+**Tracked in**: `TODO.mht.md`
 
 ### DOCX -> MHT (remaining)
 - [ ] VML behavior styles in `<!--[if !mso]>` conditional
