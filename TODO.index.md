@@ -1,7 +1,7 @@
 # TODO Index — Active Work Items
 
 ## Test Suite Status (2026-04-04)
-**3186 examples, 0 failures, 65 pending**
+**3186 examples, 0 failures, 70 pending**
 
 ## Categories
 
@@ -59,33 +59,34 @@ Missing OOXML element models that cause pending tests or data loss.
 
 **Tracked in**: `TODO.mht.md`
 
-### DOCX -> MHT (remaining)
-- [ ] VML behavior styles in `<!--[if !mso]>` conditional
-- [ ] `o:CustomDocumentProperties` (AssetID, etc.)
-- [ ] SDT attribute preservation (ShowingPlcHdr, Temporary, DocPart, Text, ID)
-- [ ] SDT content from mixed_content
-- [ ] External hyperlink: relationship ID -> URL resolution
-- [ ] TOC field codes preservation
-- [ ] Table cell paragraphs with inline SDTs
-- [ ] Image parts in MIME structure (base64)
-- [ ] Theme/colorschememapping binary parts
-- [ ] Header/Footer MIME parts
-- [ ] filelist.xml generation
+### DOCX -> MHT (completed/improved)
+- [x] VML behavior styles in `<!--[if !mso]>` conditional — DONE 2026-04-04
+- [x] `o:CustomDocumentProperties` (AssetID, etc.) — infrastructure added 2026-04-04
+- [x] SDT attribute preservation (ShowingPlcHdr, Temporary, DocPart, Text, ID) — parsing DONE
+- [x] SDT in paragraph runs handling — DONE 2026-04-04
+- [x] Image parts in MIME structure (base64) — already working
+- [x] filelist.xml generation — partial implementation
 
-### MHT -> DOCX (remaining)
-- [ ] Parse conditional comments for field codes
-- [ ] Create OOXML Table of Contents
-- [ ] Complete metadata fields (Revision, TotalTime, Pages, Words) — low impact, Word auto-calculates
+### MHT -> DOCX (completed)
 - [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
 - [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 - [x] Empty table cell structure preservation — DONE 2026-04-03
 - [x] Nested run-level formatting (bold, italic, underline) — DONE 2026-04-04
 - [x] Heading style preservation — DONE 2026-04-04
+- [x] SDT text extraction — DONE 2026-04-04
+
+### Remaining Work (low priority)
+- [ ] External hyperlink: relationship ID -> URL resolution
+- [ ] TOC field codes preservation from conditional comments
+- [ ] Create OOXML Table of Contents from MHT
+- [ ] Theme/colorschememapping binary parts
+- [ ] Header/Footer MIME parts
+- [ ] Complete metadata fields (Revision, TotalTime, Pages, Words) — Word auto-calculates on open
 
 ### Round-Trip Tests
 - [x] Write MHT -> DOCX content matching spec — DONE 2026-04-03
 - [ ] Write round-trip content matching spec
-- 136 transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 68 content matching)
+- 136+ transformation examples passing (36 DOCX->MHT, 32 MHT->DOCX, 68 content matching)
 
 ---
 
