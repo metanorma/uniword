@@ -1,7 +1,7 @@
 # TODO Index — Active Work Items
 
 ## Test Suite Status (2026-04-04)
-**3186 examples, 0 failures, 78 pending**
+**3186 examples, 0 failures, 72 pending**
 
 ## Categories
 
@@ -28,10 +28,17 @@ Missing OOXML element models that cause pending tests or data loss.
 | Blip `r:` namespace | `TODO.oop-spec/03-theme-blip-namespace.md` | VERIFIED (tests pass) |
 | ThemeFamily `thm15:` namespace | `TODO.oop-spec/04-theme-thm15-namespace.md` | VERIFIED (tests pass) |
 
-### Pending Tests Caused
-- 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues)
-- 5 pending: "Run hyperlink= setter removed in Builder API migration"
-- 5 pending: "Uniword.from_html not yet implemented" — UNVERIFIED
+### Pending Tests Caused (78 total)
+**External/Dependency Issues (not code problems):**
+- 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues in canon gem)
+- 2 pending: LibreOffice not installed (external dependency)
+- 10+ pending: StyleSet fixture files not available
+- 20+ pending: Test fixtures not available
+
+**Performance Tests (require PROFILE=true env):**
+- 15+ pending: Memory/performance benchmarks only run with PROFILE=true
+
+**Unimplemented Features (would need new work):**
 - 4 pending: "Image dimension control not yet fully implemented"
 - 4 pending: "Document#sections not yet available in Builder API migration"
 - 3 pending: "Page size configuration not yet implemented"
@@ -40,7 +47,8 @@ Missing OOXML element models that cause pending tests or data loss.
 - 2 pending: "Partial borders not yet implemented"
 - 2 pending: "Page orientation not yet implemented"
 - 2 pending: "HtmlSerializer not yet implemented"
-- 0 pending: "MHTML roundtrip does not preserve table structure" — FIXED (4 tests enabled)
+- 0 pending: "MHTML roundtrip does not preserve table structure" — FIXED
+- 0 pending: "MHTML roundtrip formatting preservation" — FIXED (6 tests enabled)
 
 ---
 
@@ -68,6 +76,8 @@ Missing OOXML element models that cause pending tests or data loss.
 - [x] Map CSS classes to OOXML styles (MsoHeading1-6, MsoToc1-9, etc.) — DONE 2026-04-03
 - [x] Table cell paragraphs with proper styles — DONE 2026-04-03
 - [x] Empty table cell structure preservation — DONE 2026-04-03
+- [x] Nested run-level formatting (bold, italic, underline) — DONE 2026-04-04
+- [x] Heading style preservation — DONE 2026-04-04
 
 ### Round-Trip Tests
 - [x] Write MHT -> DOCX content matching spec — DONE 2026-04-03
