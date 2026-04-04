@@ -23,8 +23,11 @@ module Uniword
         paragraphs = []
 
         doc.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').each do |element|
-          next if element.ancestors('table').any? && (element.name == 'tr' || element.name == 'td')
-          next if element.ancestors('table').any? && element.name == 'td'
+          # Skip elements that are inside table cells (table content is handled separately)
+          next if element.ancestors('td, th').any?
+
+          # Skip table row/cell containers themselves
+          next if element.name == 'tr' || element.name == 'td'
 
           # Skip container elements (div, li) that have children matching the same selector.
           # This prevents duplicate processing when a div contains a p, since the p's
@@ -238,11 +241,14 @@ module Uniword
         text = element.text.strip
         return nil if text.empty?
 
+        # Decode HTML entities (e.g., &copy; -> ©)
+        decoded_text = decode_html_entities(text)
+
         # Recursively collect formatting from nested elements
         props = collect_formatting_from_element(element)
 
         run = Uniword::Wordprocessingml::Run.new
-        run.text = text
+        run.text = decoded_text
         run.properties = props if has_properties?(props)
         run
       end
@@ -330,13 +336,64 @@ module Uniword
         end
       end
 
+      # Decode standard HTML entities in text.
+      # Converts entity names like &copy; to their actual characters.
+      # Unknown entities are preserved as-is.
+      #
+      # @param text [String] Text that may contain HTML entities
+      # @return [String] Text with entities decoded
+      def self.decode_html_entities(text)
+        return text unless text.include?('&')
+
+        # Standard HTML entities that we decode
+        entities = {
+          'nbsp' => [160].pack('U'),
+          'copy' => [169].pack('U'),
+          'reg' => [174].pack('U'),
+          'trade' => [8482].pack('U'),
+          'amp' => '&', # &amp; -> & (already unescaped by Nokogiri, but handle just in case)
+          'lt' => '<',
+          'gt' => '>',
+          'quot' => '"',
+          'apos' => "'",
+          'ndash' => [8211].pack('U'),
+          'mdash' => [8212].pack('U'),
+          'lsquo' => [8216].pack('U'),
+          'rsquo' => [8217].pack('U'),
+          'ldquo' => [8220].pack('U'),
+          'rdquo' => [8221].pack('U'),
+          'hellip' => [8230].pack('U'),
+          'bull' => [8226].pack('U'),
+          'mu' => [181].pack('U'), # micro sign
+          'plusmn' => [177].pack('U'), # plus-minus
+          'times' => [215].pack('U'), # multiplication
+          'divide' => [247].pack('U'), # division
+          'euro' => [8364].pack('U'),
+          'pound' => [163].pack('U'),
+          'yen' => [165].pack('U'),
+          'cent' => [162].pack('U'),
+        }
+
+        text.gsub(/&(\w+);/) do
+          key = Regexp.last_match(1)
+          if entities.key?(key)
+            entities[key]
+          else
+            "&#{key};" # Preserve unknown entity
+          end
+        end
+      end
+
       # Create a simple run without properties
       #
       # @param text [String] Run text
       # @return [Uniword::Wordprocessingml::Run] OOXML run
       def self.create_run(text)
+        # Decode HTML entities in text (e.g., &copy; -> ©)
+        decoded_text = decode_html_entities(text)
+
         run = Uniword::Wordprocessingml::Run.new
-        run.text = text
+        run.text = decoded_text
         run
       end
 

@@ -136,7 +136,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles HTML entities' do
-      skip 'MHTML does not decode HTML entities on read-back'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: '&nbsp; &copy; &reg; &trade;')
@@ -421,7 +420,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'mixed.doc') }
 
     it 'handles alternating paragraphs and tables' do
-      skip 'MHTML roundtrip does not preserve interleaved paragraph/table structure'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       5.times do |i|
@@ -447,9 +445,9 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
       doc.save(output_path, format: :mhtml)
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
 
-      # Should have some paragraphs and tables
-      expect(doc2.paragraphs.count).to be > 0
-      expect(doc2.tables.count).to be > 0
+      # Paragraph and table counts should be preserved
+      expect(doc2.paragraphs.count).to eq(5)
+      expect(doc2.tables.count).to eq(5)
     end
 
     it 'handles formatted and unformatted text mixed' do
