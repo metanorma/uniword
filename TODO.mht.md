@@ -12,15 +12,13 @@ MHT (MHTML) ↔ DOCX transformation work. Full fidelity round-trip conversion.
 
 ### MHTML Edge Cases (DONE 2026-04-04)
 
-All previously-skipped MHTML edge case tests now pass:
-
 | Issue | Fix |
 |-------|-----|
 | Nested formatting (bold+italic+underline) | Recursive `collect_formatting_from_element` |
 | Container div/li duplicate processing | Skip container elements with matching child selectors |
 | Table cell p elements extracted as paragraphs | Skip p elements inside td/th ancestors |
 | HTML entity decoding | Added `decode_html_entities` for 20+ standard entities |
-| Empty paragraph preservation | Works correctly (was incorrectly marked as failing) |
+| Empty paragraph preservation | Works correctly |
 | Whitespace-only paragraphs | Works correctly |
 | Tab character preservation | Works correctly |
 | Zero-width space handling | Works correctly |
@@ -34,14 +32,7 @@ All previously-skipped MHTML edge case tests now pass:
 | CSS class → OOXML style mapping | Map MsoHeading1-6, MsoToc1-9, MsoTitle, etc. |
 | Table cell paragraph styles | Proper style mapping for cell content |
 
----
-
-## Remaining Work
-
-### MHT → DOCX (Priority Order)
-
-#### 1. Style Mapping Completeness
-Missing mappings in `HtmlToOoxmlConverter.map_css_class_to_style`:
+### Style Mappings (DONE 2026-04-04)
 
 | MHT Class | OOXML Style | Status |
 |------------|--------------|--------|
@@ -55,20 +46,32 @@ Missing mappings in `HtmlToOoxmlConverter.map_css_class_to_style`:
 | SectionTitle | SectionTitle | DONE |
 | MsoBibliography | Bibliography | DONE |
 | MsoNoSpacing | No Spacing | DONE |
-| MsoQuote | Quote | MISSING |
-| MsoHeader | Header | MISSING |
-| MsoFooter | Footer | MISSING |
-| MsoListBullet | List Bullet | MISSING |
-| MsoCaption | Caption | MISSING |
-| MsoEndnoteText | EndnoteText | MISSING |
-| MsoFootnoteText | FootnoteText | MISSING |
-| TableNote | TableNote | MISSING |
-| TableSource | TableSource | MISSING |
-| TableTitle | TableTitle | MISSING |
-| TableFigure | TableFigure | MISSING |
+| MsoQuote | Quote | DONE |
+| MsoHeader | Header | DONE |
+| MsoFooter | Footer | DONE |
+| MsoListBullet | List Bullet | DONE |
+| MsoCaption | Caption | DONE |
+| MsoEndnoteText | EndnoteText | DONE |
+| MsoFootnoteText | FootnoteText | DONE |
+| MsoPageBreak | PageBreak | DONE |
+| TableNote | TableNote | DONE |
+| TableSource | TableSource | DONE |
+| TableTitle | TableTitle | DONE |
+| TableFigure | TableFigure | DONE |
+| Author | Author | DONE |
 
-#### 2. SDT Attribute Preservation
-SDT attributes need to be preserved during MHT → DOCX conversion:
+---
+
+## Remaining Work
+
+### MHT → DOCX
+
+#### 1. SDT Attribute Preservation
+MHT contains `w:Sdt` elements with attributes that need preservation:
+
+```
+w:Sdt ShowingPlcHdr="t" Temporary="t" DocPart="UUID" Text="t" ID="-1771543088"
+```
 
 | Attribute | Description | Status |
 |----------|-------------|--------|
@@ -78,7 +81,9 @@ SDT attributes need to be preserved during MHT → DOCX conversion:
 | Text | Text-only flag | MISSING |
 | ID | Numeric ID | MISSING |
 
-#### 3. Hyperlink URL Resolution
+**Implementation**: Parse `<w:Sdt ...>` wrapper elements from MHT HTML, extract attributes, and apply to OOXML SDT properties.
+
+#### 2. Hyperlink URL Resolution
 External hyperlinks need relationship ID → URL resolution:
 
 | Issue | Status |
@@ -87,7 +92,7 @@ External hyperlinks need relationship ID → URL resolution:
 | Internal anchor links (#_Toc) | MISSING |
 | TOC field codes preservation | MISSING |
 
-#### 4. TOC Field Codes
+#### 3. TOC Field Codes
 Conditional comments contain TOC field codes that need parsing:
 
 ```
@@ -97,7 +102,7 @@ Conditional comments contain TOC field codes that need parsing:
 <![endif]-->
 ```
 
-#### 5. Metadata Fields
+#### 4. Metadata Fields
 Complete metadata fields extraction:
 
 | Field | Status |
@@ -110,7 +115,7 @@ Complete metadata fields extraction:
 
 ---
 
-### DOCX → MHT (Priority Order)
+### DOCX → MHT
 
 #### 1. VML Behavior Styles
 Conditional VML styles in `<!--[if !mso]>` tags.
@@ -137,11 +142,11 @@ Complete `filelist.xml` generation tracking all parts.
 ## Implementation Phases
 
 ### Phase 1: Style Mapping ✓
-- [x] MsoHeading1-6 ✓
-- [x] MsoToc1-9 ✓
-- [x] MsoTitle, MsoTitle2, MsoSubtitle ✓
-- [x] SectionTitle, MsoBibliography, MsoNoSpacing ✓
-- [ ] MsoQuote, MsoHeader, MsoFooter, MsoListBullet, etc.
+- [x] MsoHeading1-6
+- [x] MsoToc1-9
+- [x] MsoTitle, MsoTitle2, MsoSubtitle
+- [x] SectionTitle, MsoBibliography, MsoNoSpacing
+- [x] MsoQuote, MsoHeader, MsoFooter, MsoListBullet, etc.
 
 ### Phase 2: SDT Enhancement
 - [ ] Parse SDT attributes from MHT HTML
