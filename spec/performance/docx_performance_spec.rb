@@ -62,6 +62,8 @@ RSpec.describe 'DOCX Performance' do
 
   describe 'parsing performance' do
     it 'parses small documents quickly (10 paragraphs)' do
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+
       doc = create_large_document(paragraphs: 10)
       doc.save('tmp/perf_10para.docx')
 
@@ -73,6 +75,8 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses medium documents efficiently (100 paragraphs)' do
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+
       doc = create_large_document(paragraphs: 100)
       doc.save('tmp/perf_100para.docx')
 
