@@ -1,7 +1,7 @@
 # TODO Index — Active Work Items
 
-## Test Suite Status (2026-04-03)
-**3186 examples, 0 failures, 82 pending**
+## Test Suite Status (2026-04-04)
+**3186 examples, 0 failures, 78 pending**
 
 ## Categories
 
@@ -31,7 +31,7 @@ Missing OOXML element models that cause pending tests or data loss.
 ### Pending Tests Caused
 - 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues)
 - 5 pending: "Run hyperlink= setter removed in Builder API migration"
-- 5 pending: "Uniword.from_html not yet implemented"
+- 5 pending: "Uniword.from_html not yet implemented" — UNVERIFIED
 - 4 pending: "Image dimension control not yet fully implemented"
 - 4 pending: "Document#sections not yet available in Builder API migration"
 - 3 pending: "Page size configuration not yet implemented"
@@ -40,6 +40,7 @@ Missing OOXML element models that cause pending tests or data loss.
 - 2 pending: "Partial borders not yet implemented"
 - 2 pending: "Page orientation not yet implemented"
 - 2 pending: "HtmlSerializer not yet implemented"
+- 0 pending: "MHTML roundtrip does not preserve table structure" — FIXED (4 tests enabled)
 
 ---
 
