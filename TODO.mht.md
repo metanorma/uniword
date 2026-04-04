@@ -32,6 +32,15 @@ MHT (MHTML) ↔ DOCX transformation work. Full fidelity round-trip conversion.
 | CSS class → OOXML style mapping | Map MsoHeading1-6, MsoToc1-9, MsoTitle, etc. |
 | Table cell paragraph styles | Proper style mapping for cell content |
 
+### MHT Output Enhancements (DONE 2026-04-04)
+
+| Issue | Fix |
+|-------|-----|
+| VML behavior styles | Added `<!--[if !mso]>` conditional with VML behavior styles |
+| SDT in paragraph runs | Handle SDT elements in paragraph.runs during serialization |
+| SDT text extraction | Added `run_text` and `extract_sdt_text` to Paragraph |
+| SDT DocPart attribute | Fixed to use DocPartReference instead of DocPartObj |
+
 ### Style Mappings (DONE 2026-04-04)
 
 | MHT Class | OOXML Style | Status |

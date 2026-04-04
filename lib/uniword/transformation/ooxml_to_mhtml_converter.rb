@@ -192,6 +192,7 @@ module Uniword
            <o:DocumentProperties xmlns:o="urn:schemas-microsoft-com:office:office">
           #{metadata_comments}
            </o:DocumentProperties>
+          #{build_custom_document_properties}
            <o:OfficeDocumentSettings xmlns:o="urn:schemas-microsoft-com:office:office">
             <o:AllowPNG/>
            </o:OfficeDocumentSettings>
@@ -238,6 +239,14 @@ module Uniword
             </w:MathPr>
            </w:WordDocument>
           </xml><![endif]-->
+          <!--[if !mso]>
+          <style>
+          v\:* {behavior:url(#default#VML);}
+          o\:* {behavior:url(#default#VML);}
+          w\:* {behavior:url(#default#VML);}
+          .shape {behavior:url(#default#VML);}
+          </style>
+          <![endif]-->
           #{build_latent_styles}
           #{style_block}
           <!--[if gte mso 10]>
@@ -306,6 +315,36 @@ module Uniword
         doc_props << " <o:Version>16.00</o:Version>"
 
         doc_props.join("\n")
+      end
+
+      # Build o:CustomDocumentProperties for AssetID and other custom fields
+      #
+      # @return [String] CustomDocumentProperties XML or empty string
+      def build_custom_document_properties
+        # Check if document has custom properties with AssetID
+        asset_id = custom_property('AssetID')
+        return '' unless asset_id
+
+        <<~XML
+           <o:CustomDocumentProperties xmlns:o="urn:schemas-microsoft-com:office:office">
+            <o:AssetID dt:dt="string">#{escape_xml(asset_id)}</o:AssetID>
+           </o:CustomDocumentProperties>
+        XML
+      end
+
+      # Get a custom document property by name
+      #
+      # @param name [String] Property name
+      # @return [String, nil] Property value or nil
+      def custom_property(name)
+        # Try to get from core_properties via custom_properties hash
+        if @document.respond_to?(:core_properties) && @document.core_properties
+          cp = @document.core_properties
+          if cp.respond_to?(:custom_properties) && cp.custom_properties
+            return cp.custom_properties[name]
+          end
+        end
+        nil
       end
 
       # Build meta tags for the head
