@@ -1,7 +1,7 @@
 # TODO Index — Active Work Items
 
 ## Test Suite Status (2026-04-04)
-**3186 examples, 0 failures, 67 pending**
+**3186 examples, 0 failures, 65 pending**
 
 ## Categories
 
@@ -28,7 +28,7 @@ Missing OOXML element models that cause pending tests or data loss.
 | Blip `r:` namespace | `TODO.oop-spec/03-theme-blip-namespace.md` | VERIFIED (tests pass) |
 | ThemeFamily `thm15:` namespace | `TODO.oop-spec/04-theme-thm15-namespace.md` | VERIFIED (tests pass) |
 
-### Pending Tests Caused (67 total)
+### Pending Tests Caused (65 total)
 **External/Dependency Issues (not code problems):**
 - 8 pending: "canon gem be_xml_equivalent_to matcher has bug" (XML namespace issues in canon gem)
 - 2 pending: LibreOffice not installed (external dependency)
@@ -50,9 +50,8 @@ Missing OOXML element models that cause pending tests or data loss.
 - 0 pending: "MHTML roundtrip does not preserve table structure" — FIXED
 - 0 pending: "MHTML roundtrip formatting preservation" — FIXED (6 tests enabled)
 - 0 pending: "MHTML edge cases (whitespace, tabs, ZWSP, large docs)" — FIXED (5 tests enabled)
-
-**Format Limitations (cannot fix without changing MHTML format):**
-- 2 pending: Interleaved paragraph/table structure and HTML entity decoding
+- 0 pending: "MHTML interleaved paragraphs/tables" — FIXED
+- 0 pending: "MHTML HTML entity decoding" — FIXED
 
 ---
 
