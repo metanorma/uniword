@@ -22,7 +22,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'empty.doc') }
 
     it 'handles documents with no content' do
-      skip 'MHTML roundtrip adds default paragraph'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       doc.save(output_path, format: :mhtml)
 
@@ -31,7 +30,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles empty paragraphs' do
-      skip 'MHTML roundtrip does not preserve empty paragraphs'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       doc.body.paragraphs << para
@@ -43,7 +41,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles paragraphs with empty runs' do
-      skip 'MHTML roundtrip does not preserve empty runs'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: '')
@@ -461,7 +458,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles formatted and unformatted text mixed' do
-      skip 'MHTML roundtrip does not preserve run-level formatting'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
 
@@ -527,7 +523,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'styles.doc') }
 
     it 'handles multiple heading levels' do
-      skip 'MHTML roundtrip does not preserve heading style information'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       %w[Heading1 Heading2 Heading3 Heading4 Heading5 Heading6].each do |style|
@@ -561,18 +556,19 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles runs with multiple formatting properties' do
-      skip 'MHTML roundtrip does not preserve run-level formatting'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
 
-      run = Uniword::Wordprocessingml::Run.new
-      run.text = 'Formatted'
-      run.properties = Uniword::Wordprocessingml::RunProperties.new
-      run.properties.bold = true
-      run.properties.italic = true
-      run.properties.underline = true
-      run.properties.font = 'Arial'
-      run.properties.size = 48
+      run = Uniword::Wordprocessingml::Run.new(
+        text: 'Formatted',
+        properties: Uniword::Wordprocessingml::RunProperties.new(
+          bold: true,
+          italic: true,
+          underline: true,
+          font: 'Arial',
+          size: 48
+        )
+      )
       para.runs << run
 
       doc.body.paragraphs << para

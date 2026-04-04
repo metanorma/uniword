@@ -26,6 +26,13 @@ module Uniword
           next if element.ancestors('table').any? && (element.name == 'tr' || element.name == 'td')
           next if element.ancestors('table').any? && element.name == 'td'
 
+          # Skip container elements (div, li) that have children matching the same selector.
+          # This prevents duplicate processing when a div contains a p, since the p's
+          # content is more semantically meaningful and the div's text would duplicate it.
+          if %w[div li].include?(element.name) && element.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').any?
+            next
+          end
+
           paragraph = html_element_to_paragraph(element)
           paragraphs << paragraph if paragraph
         end
@@ -231,10 +238,20 @@ module Uniword
         text = element.text.strip
         return nil if text.empty?
 
+        # Recursively collect formatting from nested elements
+        props = collect_formatting_from_element(element)
+
         run = Uniword::Wordprocessingml::Run.new
         run.text = text
+        run.properties = props if has_properties?(props)
+        run
+      end
 
-        # Apply inline formatting
+      # Recursively collect formatting properties from element and its children
+      #
+      # @param element [Nokogiri::XML::Element] HTML element
+      # @return [Uniword::Wordprocessingml::RunProperties] Run properties with all formatting
+      def self.collect_formatting_from_element(element)
         props = Uniword::Wordprocessingml::RunProperties.new
 
         case element.name.downcase
@@ -246,19 +263,38 @@ module Uniword
           props.underline = Uniword::Properties::Underline.new
         when 's', 'strike'
           props.strike = Uniword::Properties::Strike.new
-        when 'span'
-          apply_span_formatting(element, props)
         when 'sup'
           props.vertical_align = Uniword::Properties::VerticalAlign.new(value: 'superscript')
         when 'sub'
           props.vertical_align = Uniword::Properties::VerticalAlign.new(value: 'subscript')
-        when 'br'
-          run.text = "\n"
-          return run
+        when 'span'
+          apply_span_formatting(element, props)
         end
 
-        run.properties = props if has_properties?(props)
-        run
+        # Recursively collect formatting from child elements
+        # This handles nested formatting like <u><em><strong>text</strong></em></u>
+        element.children.each do |child|
+          next unless child.element?
+          child_props = collect_formatting_from_element(child)
+          merge_run_properties(props, child_props)
+        end
+
+        props
+      end
+
+      # Merge formatting properties from child into parent
+      #
+      # @param parent [Uniword::Wordprocessingml::RunProperties] Parent properties
+      # @param child [Uniword::Wordprocessingml::RunProperties] Child properties to merge
+      def self.merge_run_properties(parent, child)
+        parent.bold = child.bold if child.bold
+        parent.italic = child.italic if child.italic
+        parent.underline = child.underline if child.underline
+        parent.strike = child.strike if child.strike
+        parent.vertical_align = child.vertical_align if child.vertical_align
+        parent.color = child.color if child.color
+        parent.size = child.size if child.size
+        parent.font = child.font if child.font
       end
 
       # Apply formatting from span element's style attribute
