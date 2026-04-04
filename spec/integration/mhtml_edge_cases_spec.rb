@@ -65,7 +65,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles table with empty cells' do
-      skip 'MHTML roundtrip does not preserve table structure'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
@@ -265,7 +264,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles many tables' do
-      skip 'MHTML roundtrip does not preserve table structure'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       50.times do |i|
@@ -288,7 +286,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles large tables with many cells' do
-      skip 'MHTML roundtrip does not preserve table structure'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
 
@@ -393,7 +390,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles minimum table (1x1)' do
-      skip 'MHTML roundtrip does not preserve table structure'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
