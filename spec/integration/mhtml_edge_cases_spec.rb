@@ -198,7 +198,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles zero-width spaces' do
-      skip 'MHTML roundtrip may split paragraphs with special characters'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Word\u200BBreak")
@@ -230,7 +229,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'large.doc') }
 
     it 'handles large documents' do
-      skip 'MHTML roundtrip does not preserve exact paragraph count'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       100.times do |i|
         para = Uniword::Wordprocessingml::Paragraph.new
@@ -341,7 +339,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles tabs' do
-      skip 'MHTML roundtrip does not preserve tab characters'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Text\twith\ttabs")
@@ -373,7 +370,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     let(:output_path) { File.join(tmp_dir, 'boundary.doc') }
 
     it 'handles single character text' do
-      skip 'MHTML roundtrip may alter text content'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: 'A')
@@ -408,7 +404,6 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
     end
 
     it 'handles text with only whitespace' do
-      skip 'MHTML roundtrip does not preserve whitespace-only paragraphs'
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: '   ')
