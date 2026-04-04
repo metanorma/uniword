@@ -97,6 +97,8 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses documents with tables quickly (10 tables)' do
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+
       doc = create_document_with_tables(count: 10, rows: 5, cols: 4)
       doc.save('tmp/perf_10table.docx')
 
@@ -108,6 +110,8 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses documents with many tables efficiently (50 tables)' do
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+
       doc = create_document_with_tables(count: 50, rows: 10, cols: 5)
       doc.save('tmp/perf_50table.docx')
 
