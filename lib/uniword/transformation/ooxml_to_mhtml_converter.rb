@@ -302,6 +302,9 @@ module Uniword
         created = props.respond_to?(:created) && props.created ? props.created.value : nil
         last_saved = props.respond_to?(:modified) && props.modified ? props.modified.value : nil
 
+        # Calculate document statistics
+        stats = calculate_document_stats
+
         doc_props = []
         doc_props << " <o:Author>#{escape_xml(author)}</o:Author>" if author
         doc_props << " <o:LastAuthor>#{escape_xml(last_author)}</o:LastAuthor>" if last_author
@@ -309,12 +312,61 @@ module Uniword
         doc_props << " <o:TotalTime>0</o:TotalTime>"
         doc_props << " <o:Created>#{escape_xml(created)}</o:Created>" if created
         doc_props << " <o:LastSaved>#{escape_xml(last_saved)}</o:LastSaved>" if last_saved
-        doc_props << " <o:Pages>1</o:Pages>"
-        doc_props << " <o:Words>0</o:Words>"
-        doc_props << " <o:Characters>0</o:Characters>"
+        doc_props << " <o:Pages>#{stats[:pages]}</o:Pages>"
+        doc_props << " <o:Words>#{stats[:words]}</o:Words>"
+        doc_props << " <o:Characters>#{stats[:characters]}</o:Characters>"
+        doc_props << " <o:Lines>#{stats[:lines]}</o:Lines>"
+        doc_props << " <o:Paragraphs>#{stats[:paragraphs]}</o:Paragraphs>"
+        doc_props << " <o:CharactersWithSpaces>#{stats[:characters_with_spaces]}</o:CharactersWithSpaces>"
         doc_props << " <o:Version>16.00</o:Version>"
 
         doc_props.join("\n")
+      end
+
+      # Calculate document statistics from content
+      #
+      # @return [Hash] Statistics hash with :words, :characters, :paragraphs, :lines, :pages
+      def calculate_document_stats
+        words = 0
+        characters = 0
+        paragraphs = 0
+        lines = 0
+
+        body = @document.body
+        return { words: 0, characters: 0, paragraphs: 0, lines: 0, pages: 1,
+                 characters_with_spaces: 0 } unless body
+
+        body.elements.each do |element|
+          next unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
+
+          paragraphs += 1
+          para_words = 0
+          para_chars = 0
+
+          element.runs.each do |run|
+            text = run.text.to_s
+            characters += text.length
+            para_chars += text.length
+            words += text.split.length
+            para_words += text.split.length
+          end
+
+          # Estimate lines from paragraph (rough: 12pt font, 6 lines per inch, 11 inch page)
+          para_lines = [1, (para_chars / 80.0).ceil].max
+          lines += para_lines
+        end
+
+        # Rough page estimate: ~500 words per page, 24 lines per page
+        pages = [1, (words / 500.0).ceil, (lines / 24.0).ceil].max
+
+        {
+          words: words,
+          characters: characters,
+          paragraphs: paragraphs,
+          lines: lines,
+          pages: pages,
+          characters_with_spaces: characters + paragraphs # rough estimate
+        }
       end
 
       # Build o:CustomDocumentProperties for AssetID and other custom fields
