@@ -56,6 +56,10 @@ module Uniword
         map_element 'SharedDoc', to: :shared_doc
         map_element 'HyperlinksChanged', to: :hyperlinks_changed
         map_element 'AppVersion', to: :app_version
+        map_element 'Manager', to: :manager
+        map_element 'Category', to: :category
+        map_element 'Comments', to: :comments
+        map_element 'HyperlinkBase', to: :hyperlink_base
       end
 
       # Template file name (e.g., 'Normal.dotm')
@@ -121,6 +125,26 @@ module Uniword
       # Hyperlinks changed flag
       # @return [String]
       attribute :hyperlinks_changed, :string, default: -> { 'false' }
+
+      # Manager name
+      # @return [String, nil]
+      attribute :manager, :string
+
+      # Category
+      # @return [String, nil]
+      attribute :category, :string
+
+      # Comments
+      # @return [String, nil]
+      attribute :comments, :string
+
+      # Hyperlink base
+      # @return [String, nil]
+      attribute :hyperlink_base, :string
+
+      # Preview picture (binary data - stored as base64)
+      # @return [String, nil]
+      attribute :preview_picture, :string
     end
   end
 end
