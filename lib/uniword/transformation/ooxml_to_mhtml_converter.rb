@@ -1237,11 +1237,50 @@ module Uniword
       end
 
       # Build SDT attribute string
-      def build_sdt_attrs(_props)
+      def build_sdt_attrs(props)
+        return '' unless props
+
         attrs = []
-        # TODO: Map SDT properties to attributes
-        # ShowingPlcHdr, Temporary, DocPart, ID, etc.
-        attrs.join(' ')
+
+        # ID attribute
+        if props.id && props.id.respond_to?(:value) && props.id.value
+          attrs << %(w:id="#{props.id.value}")
+        end
+
+        # ShowingPlcHdr attribute
+        if props.showing_placeholder_header
+          attrs << 'w:showingPlcHdr="t"'
+        end
+
+        # Temporary attribute
+        if props.temporary
+          attrs << 'w:temporary="t"'
+        end
+
+        # DocPart attribute (UUID from placeholder.doc_part)
+        if props.placeholder && props.placeholder.doc_part
+          doc_part = props.placeholder.doc_part
+          if doc_part.respond_to?(:value) && doc_part.value
+            attrs << %(w:docPart="#{doc_part.value}")
+          end
+        end
+
+        # Text attribute
+        if props.text && props.text.respond_to?(:value) && props.text.value
+          attrs << %(w:text="#{props.text.value}")
+        end
+
+        # Tag attribute
+        if props.tag && props.tag.respond_to?(:value) && props.tag.value
+          attrs << %(w:tag="#{escape_xml(props.tag.value)}")
+        end
+
+        # Alias attribute
+        if props.alias_name && props.alias_name.respond_to?(:value) && props.alias_name.value
+          attrs << %(w:alias="#{escape_xml(props.alias_name.value)}")
+        end
+
+        attrs.empty? ? '' : " #{attrs.join(' ')}"
       end
 
       # Convert OOXML Table to HTML
