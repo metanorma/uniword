@@ -81,7 +81,8 @@ These items are not implemented because Word regenerates them automatically when
 | TOC field codes | Word regenerates TOCs on open |
 | Theme binary parts | Word generates if missing (themedata.thmx, colorschememapping.xml) |
 | Header/footer MIME parts | Word generates if missing |
-| Metadata auto-calculation | Word calculates Pages, Words, Characters on open |
+
+**Implemented**: Metadata auto-calculation now computes actual Pages, Words, Characters, Lines, Paragraphs from document content.
 
 These are cosmetic issues that don't affect document functionality.
 

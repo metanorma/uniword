@@ -80,7 +80,7 @@ Missing OOXML element models that cause pending tests or data loss.
 - [ ] Theme/colorschememapping binary parts — Word generates if missing
 - [ ] Header/Footer MIME parts — Word generates if missing
 
-**Note**: External hyperlink resolution, metadata fields, and SDT handling are all COMPLETE.
+**Note**: External hyperlink resolution, metadata auto-calculation, and SDT handling are all COMPLETE.
 
 ### Round-Trip Tests
 - [x] Write MHT -> DOCX content matching spec — DONE 2026-04-03
