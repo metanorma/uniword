@@ -219,5 +219,9 @@ module Uniword
 
     # Grid
     autoload :GridCol, 'uniword/wordprocessingml/grid_col'
+
+    # Mail merge
+    autoload :Recipients, 'uniword/wordprocessingml/recipients'
+    autoload :RecipientData, 'uniword/wordprocessingml/recipient_data'
   end
 end

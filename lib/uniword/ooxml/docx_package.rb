@@ -87,14 +87,15 @@ module Uniword
       def self.from_file(path)
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
-        from_zip_content(zip_content)
+        from_zip_content(zip_content, path)
       end
 
       # Create package from extracted ZIP content
       #
       # @param zip_content [Hash] Extracted ZIP files
+      # @param zip_path [String, nil] Original ZIP path for binary re-extraction
       # @return [DocxPackage] Package object
-      def self.from_zip_content(zip_content)
+      def self.from_zip_content(zip_content, zip_path = nil)
         package = new
 
         # Parse Content Types
@@ -220,16 +221,18 @@ module Uniword
         end
 
         # Extract image parts from word/media/ directory
-        extract_image_parts(zip_content, package)
+        # Pass zip_path for binary re-extraction to avoid UTF-8 corruption
+        extract_image_parts(zip_content, package, zip_path)
 
         package
       end
 
       # Extract image files from word/media/ directory in DOCX
       #
-      # @param zip_content [Hash] Extracted ZIP content
+      # @param zip_content [Hash] Extracted ZIP content (may have corrupted binary)
       # @param package [DocxPackage] Package to populate
-      def self.extract_image_parts(zip_content, package)
+      # @param zip_path [String, nil] Original ZIP path for binary re-extraction
+      def self.extract_image_parts(zip_content, package, zip_path = nil)
         return unless package.document
 
         # Find all media files
@@ -256,11 +259,34 @@ module Uniword
           # Generate a unique rId for this image
           r_id = "rIdImg#{package.document.image_parts.size + 1}"
 
+          # Re-extract binary data directly from ZIP to avoid UTF-8 corruption
+          # Use zip_path if available, otherwise fall back to corrupted content
+          binary_data = if zip_path
+                         read_binary_from_zip(zip_path, media_path)
+                       else
+                         zip_content[media_path]
+                       end
+
           package.document.image_parts[r_id] = {
-            data: zip_content[media_path],
+            data: binary_data,
             target: "media/#{filename}",
             content_type: content_type
           }
+        end
+      end
+
+      # Read binary data directly from ZIP file without UTF-8 encoding
+      #
+      # @param zip_path [String] Path to ZIP file
+      # @param entry_path [String] Path within ZIP
+      # @return [String] Binary data
+      def self.read_binary_from_zip(zip_path, entry_path)
+        require 'zip'
+        Zip::File.open(zip_path) do |zip_file|
+          entry = zip_file.find_entry(entry_path)
+          return nil unless entry
+
+          entry.get_input_stream.read
         end
       end
 

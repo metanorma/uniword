@@ -49,6 +49,7 @@ module Uniword
   autoload :WpDrawing, 'uniword/wp_drawing'
   autoload :Drawingml, 'uniword/drawingml'
   autoload :Vml, 'uniword/vml'
+  autoload :VmlWord, 'uniword/vml_word'
   autoload :WordprocessingShape, 'uniword/wordprocessing_shape'
   autoload :WordprocessingGroup, 'uniword/wordprocessing_group'
   autoload :Math, 'uniword/math'

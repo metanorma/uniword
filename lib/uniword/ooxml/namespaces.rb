@@ -325,6 +325,15 @@ module Uniword
         element_form_default :qualified
         attribute_form_default :qualified
       end
+
+      # VML Word namespace
+      # Used for VML elements within Word documents (borders, etc.)
+      class VmlWord < Lutaml::Xml::Namespace
+        uri 'urn:schemas-microsoft-com:office:word'
+        prefix_default 'w'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
     end
   end
 end

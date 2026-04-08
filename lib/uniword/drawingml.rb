@@ -24,11 +24,14 @@ module Uniword
     autoload :NonVisualDrawingProperties, 'uniword/drawingml/non_visual_drawing_properties'
     autoload :ShapeProperties, 'uniword/drawingml/shape_properties'
 
-    # Style & References (4)
+    # Style & References (6)
     autoload :StyleMatrix, 'uniword/drawingml/style_matrix'
     autoload :StyleReference, 'uniword/drawingml/style_reference'
+    autoload :StyleMatrixReference, 'uniword/drawingml/style_matrix_reference'
+    autoload :ShapeStyle, 'uniword/drawingml/shape_style'
     autoload :FontReference, 'uniword/drawingml/font_reference'
     autoload :LineDefaults, 'uniword/drawingml/line_defaults'
+    autoload :RelativeRect, 'uniword/drawingml/relative_rect'
 
     # Transforms (3)
     autoload :Transform2D, 'uniword/drawingml/transform2_d'
@@ -140,7 +143,31 @@ module Uniword
     autoload :Shape3D, 'uniword/drawingml/shape_3d'
     autoload :BevelTop, 'uniword/drawingml/bevel_top'
 
-    # Theme Components (8) - XML namespace: DrawingML
+    # GVML classes (16)
+    autoload :Gvml, 'uniword/drawingml/gvml'
+    autoload :GvmlUseShapeRectangle, 'uniword/drawingml/gvml_use_shape_rectangle'
+    autoload :GvmlTextShape, 'uniword/drawingml/gvml_text_shape'
+    autoload :GvmlShapeNonVisual, 'uniword/drawingml/gvml_shape_non_visual'
+    autoload :GvmlShape, 'uniword/drawingml/gvml_shape'
+    autoload :GvmlConnectorNonVisual, 'uniword/drawingml/gvml_connector_non_visual'
+    autoload :GvmlConnector, 'uniword/drawingml/gvml_connector'
+    autoload :GvmlPictureNonVisual, 'uniword/drawingml/gvml_picture_non_visual'
+    autoload :GvmlPicture, 'uniword/drawingml/gvml_picture'
+    autoload :GvmlGraphicFrameNonVisual, 'uniword/drawingml/gvml_graphic_frame_non_visual'
+    autoload :GvmlGraphicalObjectFrame, 'uniword/drawingml/gvml_graphical_object_frame'
+    autoload :GvmlGroupShapeNonVisual, 'uniword/drawingml/gvml_group_shape_non_visual'
+    autoload :GvmlGroupShape, 'uniword/drawingml/gvml_group_shape'
+
+    # Supporting types (9)
+    autoload :NonVisualConnectorProperties, 'uniword/drawingml/non_visual_connector_properties'
+    autoload :NonVisualGraphicFrameProperties, 'uniword/drawingml/non_visual_graphic_frame_properties'
+    autoload :NonVisualGroupDrawingShapeProperties, 'uniword/drawingml/non_visual_group_drawing_shape_properties'
+    autoload :NonVisualPictureProperties, 'uniword/drawingml/non_visual_picture_properties'
+    autoload :GroupShapeProperties, 'uniword/drawingml/group_shape_properties'
+    autoload :OfficeArtExtension, 'uniword/drawingml/office_art_extension'
+    autoload :OfficeArtExtensionList, 'uniword/drawingml/office_art_extension_list'
+    autoload :PictureLocking, 'uniword/drawingml/picture_locking'
+    autoload :GroupLocking, 'uniword/drawingml/group_locking'
     autoload :Theme, 'uniword/drawingml/theme'
     autoload :ThemeElements, 'uniword/drawingml/theme'
     autoload :ColorScheme, 'uniword/drawingml/color_scheme'
