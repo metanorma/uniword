@@ -7,9 +7,8 @@ gemspec
 # Math equation support via Plurimath
 #gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 
-gem 'lutaml-model', path: '/Users/mulgogi/src/lutaml/lutaml-model-new'
-
-gem 'canon', path: '/Users/mulgogi/src/lutaml/canon'
+gem 'lutaml-model', github: 'lutaml/lutaml-model', branch: 'main'
+gem 'canon', '~> 0.1.8'
 
 # TOML adapter (required by lutaml-model for TOML format support)
 gem 'tomlib'

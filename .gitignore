@@ -22,6 +22,7 @@
 # Bundler
 /.bundle/
 /vendor/bundle
+Gemfile.lock
 
 # Environment
 .env
