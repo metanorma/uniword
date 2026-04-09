@@ -17,7 +17,6 @@
 
 # RuboCop
 .rubocop-https*
-.rubocop_todo.yml
 
 # Bundler
 /.bundle/
