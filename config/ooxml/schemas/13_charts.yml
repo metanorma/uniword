@@ -1,0 +1,920 @@
+# Chart Schema
+# ISO/IEC 29500-1:2016 - Section 21.2 (DrawingML - Charts)
+# Chart and diagram elements
+
+schema:
+  namespace: c
+  category: "Charts"
+  iso_section: "21.2"
+
+elements:
+  # Chart space (root element)
+  chart_space:
+    tag: 'c:chartSpace'
+    description: "Root element for chart part"
+    iso_reference: "21.2.2.27"
+    children:
+      - element: date1904
+        tag: 'c:date1904'
+        optional: true
+      - element: lang
+        tag: 'c:lang'
+        optional: true
+      - element: rounding_mode
+        tag: 'c:roundedCorners'
+        optional: true
+      - element: chart
+        tag: 'c:chart'
+        optional: false
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+      - element: external_data
+        tag: 'c:externalData'
+        optional: true
+      - element: print_settings
+        tag: 'c:printSettings'
+        optional: true
+    attributes: []
+
+  # Chart container
+  chart:
+    tag: 'c:chart'
+    description: "Main chart container"
+    iso_reference: "21.2.2.25"
+    children:
+      - element: title
+        tag: 'c:title'
+        optional: true
+      - element: auto_title_deleted
+        tag: 'c:autoTitleDeleted'
+        optional: true
+      - element: plot_area
+        tag: 'c:plotArea'
+        optional: false
+      - element: legend
+        tag: 'c:legend'
+        optional: true
+      - element: plot_vis_only
+        tag: 'c:plotVisOnly'
+        optional: true
+      - element: disp_blanks_as
+        tag: 'c:dispBlanksAs'
+        optional: true
+      - element: show_dlbls_over_max
+        tag: 'c:showDLblsOverMax'
+        optional: true
+    attributes: []
+
+  # Plot area
+  plot_area:
+    tag: 'c:plotArea'
+    description: "Chart plotting area"
+    iso_reference: "21.2.2.145"
+    children:
+      - element: layout
+        tag: 'c:layout'
+        optional: true
+      - element: bar_chart
+        tag: 'c:barChart'
+        optional: true
+      - element: bar3d_chart
+        tag: 'c:bar3DChart'
+        optional: true
+      - element: line_chart
+        tag: 'c:lineChart'
+        optional: true
+      - element: line3d_chart
+        tag: 'c:line3DChart'
+        optional: true
+      - element: pie_chart
+        tag: 'c:pieChart'
+        optional: true
+      - element: pie3d_chart
+        tag: 'c:pie3DChart'
+        optional: true
+      - element: area_chart
+        tag: 'c:areaChart'
+        optional: true
+      - element: area3d_chart
+        tag: 'c:area3DChart'
+        optional: true
+      - element: scatter_chart
+        tag: 'c:scatterChart'
+        optional: true
+      - element: radar_chart
+        tag: 'c:radarChart'
+        optional: true
+      - element: doughnut_chart
+        tag: 'c:doughnutChart'
+        optional: true
+      - element: bubble_chart
+        tag: 'c:bubbleChart'
+        optional: true
+      - element: stock_chart
+        tag: 'c:stockChart'
+        optional: true
+      - element: surface_chart
+        tag: 'c:surfaceChart'
+        optional: true
+      - element: surface3d_chart
+        tag: 'c:surface3DChart'
+        optional: true
+      - element: cat_ax
+        tag: 'c:catAx'
+        optional: true
+      - element: val_ax
+        tag: 'c:valAx'
+        optional: true
+      - element: date_ax
+        tag: 'c:dateAx'
+        optional: true
+      - element: ser_ax
+        tag: 'c:serAx'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+    attributes: []
+
+  # Bar chart
+  bar_chart:
+    tag: 'c:barChart'
+    description: "Bar chart definition"
+    iso_reference: "21.2.2.16"
+    children:
+      - element: bar_dir
+        tag: 'c:barDir'
+        optional: false
+      - element: grouping
+        tag: 'c:grouping'
+        optional: true
+      - element: vary_colors
+        tag: 'c:varyColors'
+        optional: true
+      - element: ser
+        tag: 'c:ser'
+        optional: false
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: gap_width
+        tag: 'c:gapWidth'
+        optional: true
+      - element: overlap
+        tag: 'c:overlap'
+        optional: true
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+    attributes: []
+
+  # Line chart
+  line_chart:
+    tag: 'c:lineChart'
+    description: "Line chart definition"
+    iso_reference: "21.2.2.97"
+    children:
+      - element: grouping
+        tag: 'c:grouping'
+        optional: true
+      - element: vary_colors
+        tag: 'c:varyColors'
+        optional: true
+      - element: ser
+        tag: 'c:ser'
+        optional: false
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: drop_lines
+        tag: 'c:dropLines'
+        optional: true
+      - element: hi_low_lines
+        tag: 'c:hiLowLines'
+        optional: true
+      - element: up_down_bars
+        tag: 'c:upDownBars'
+        optional: true
+      - element: marker
+        tag: 'c:marker'
+        optional: true
+      - element: smooth
+        tag: 'c:smooth'
+        optional: true
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+    attributes: []
+
+  # Pie chart
+  pie_chart:
+    tag: 'c:pieChart'
+    description: "Pie chart definition"
+    iso_reference: "21.2.2.126"
+    children:
+      - element: vary_colors
+        tag: 'c:varyColors'
+        optional: true
+      - element: ser
+        tag: 'c:ser'
+        optional: false
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: first_slice_ang
+        tag: 'c:firstSliceAng'
+        optional: true
+    attributes: []
+
+  # Scatter chart
+  scatter_chart:
+    tag: 'c:scatterChart'
+    description: "Scatter (XY) chart definition"
+    iso_reference: "21.2.2.166"
+    children:
+      - element: scatter_style
+        tag: 'c:scatterStyle'
+        optional: false
+      - element: vary_colors
+        tag: 'c:varyColors'
+        optional: true
+      - element: ser
+        tag: 'c:ser'
+        optional: false
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+    attributes: []
+
+  # Area chart
+  area_chart:
+    tag: 'c:areaChart'
+    description: "Area chart definition"
+    iso_reference: "21.2.2.6"
+    children:
+      - element: grouping
+        tag: 'c:grouping'
+        optional: true
+      - element: vary_colors
+        tag: 'c:varyColors'
+        optional: true
+      - element: ser
+        tag: 'c:ser'
+        optional: false
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: drop_lines
+        tag: 'c:dropLines'
+        optional: true
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+    attributes: []
+
+  # Series
+  ser:
+    tag: 'c:ser'
+    description: "Chart series (data series)"
+    iso_reference: "21.2.2.168"
+    children:
+      - element: idx
+        tag: 'c:idx'
+        optional: false
+      - element: order
+        tag: 'c:order'
+        optional: false
+      - element: tx
+        tag: 'c:tx'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: marker
+        tag: 'c:marker'
+        optional: true
+      - element: d_pt
+        tag: 'c:dPt'
+        optional: true
+      - element: d_lbls
+        tag: 'c:dLbls'
+        optional: true
+      - element: trendline
+        tag: 'c:trendline'
+        optional: true
+      - element: err_bars
+        tag: 'c:errBars'
+        optional: true
+      - element: cat
+        tag: 'c:cat'
+        optional: true
+      - element: val
+        tag: 'c:val'
+        optional: true
+      - element: smooth
+        tag: 'c:smooth'
+        optional: true
+    attributes: []
+
+  # Series index
+  idx:
+    tag: 'c:idx'
+    description: "Series index"
+    iso_reference: "21.2.2.85"
+    children: []
+    attributes:
+      - name: val
+        type: integer
+        required: true
+
+  # Series order
+  order:
+    tag: 'c:order'
+    description: "Series order"
+    iso_reference: "21.2.2.119"
+    children: []
+    attributes:
+      - name: val
+        type: integer
+        required: true
+
+  # Series text
+  tx:
+    tag: 'c:tx'
+    description: "Series text (name)"
+    iso_reference: "21.2.2.215"
+    children:
+      - element: str_ref
+        tag: 'c:strRef'
+        optional: true
+      - element: v
+        tag: 'c:v'
+        optional: true
+    attributes: []
+
+  # Categories
+  cat:
+    tag: 'c:cat'
+    description: "Category axis data"
+    iso_reference: "21.2.2.24"
+    children:
+      - element: num_ref
+        tag: 'c:numRef'
+        optional: true
+      - element: num_lit
+        tag: 'c:numLit'
+        optional: true
+      - element: str_ref
+        tag: 'c:strRef'
+        optional: true
+      - element: str_lit
+        tag: 'c:strLit'
+        optional: true
+      - element: multi_lvl_str_ref
+        tag: 'c:multiLvlStrRef'
+        optional: true
+    attributes: []
+
+  # Values
+  val:
+    tag: 'c:val'
+    description: "Values"
+    iso_reference: "21.2.2.225"
+    children:
+      - element: num_ref
+        tag: 'c:numRef'
+        optional: true
+      - element: num_lit
+        tag: 'c:numLit'
+        optional: true
+    attributes: []
+
+  # Number reference
+  num_ref:
+    tag: 'c:numRef'
+    description: "Number reference (references cells in worksheet)"
+    iso_reference: "21.2.2.115"
+    children:
+      - element: f
+        tag: 'c:f'
+        optional: false
+      - element: num_cache
+        tag: 'c:numCache'
+        optional: true
+    attributes: []
+
+  # Number literal
+  num_lit:
+    tag: 'c:numLit'
+    description: "Number literal (embedded data)"
+    iso_reference: "21.2.2.114"
+    children:
+      - element: format_code
+        tag: 'c:formatCode'
+        optional: true
+      - element: pt_count
+        tag: 'c:ptCount'
+        optional: true
+      - element: pt
+        tag: 'c:pt'
+        optional: true
+    attributes: []
+
+  # String reference
+  str_ref:
+    tag: 'c:strRef'
+    description: "String reference (references cells in worksheet)"
+    iso_reference: "21.2.2.187"
+    children:
+      - element: f
+        tag: 'c:f'
+        optional: false
+      - element: str_cache
+        tag: 'c:strCache'
+        optional: true
+    attributes: []
+
+  # String literal
+  str_lit:
+    tag: 'c:strLit'
+    description: "String literal (embedded data)"
+    iso_reference: "21.2.2.186"
+    children:
+      - element: pt_count
+        tag: 'c:ptCount'
+        optional: true
+      - element: pt
+        tag: 'c:pt'
+        optional: true
+    attributes: []
+
+  # Formula
+  f:
+    tag: 'c:f'
+    description: "Formula"
+    iso_reference: "21.2.2.61"
+    children: []
+    attributes: []
+    text_content: true
+
+  # Point
+  pt:
+    tag: 'c:pt'
+    description: "Data point"
+    iso_reference: "21.2.2.148"
+    children:
+      - element: v
+        tag: 'c:v'
+        optional: false
+    attributes:
+      - name: idx
+        type: integer
+        required: true
+
+  # Value
+  v:
+    tag: 'c:v'
+    description: "Cell value"
+    iso_reference: "21.2.2.224"
+    children: []
+    attributes: []
+    text_content: true
+
+  # Point count
+  pt_count:
+    tag: 'c:ptCount'
+    description: "Point count"
+    iso_reference: "21.2.2.147"
+    children: []
+    attributes:
+      - name: val
+        type: integer
+        required: true
+
+  # Category axis
+  cat_ax:
+    tag: 'c:catAx'
+    description: "Category axis"
+    iso_reference: "21.2.2.18"
+    children:
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+      - element: scaling
+        tag: 'c:scaling'
+        optional: false
+      - element: delete
+        tag: 'c:delete'
+        optional: true
+      - element: ax_pos
+        tag: 'c:axPos'
+        optional: false
+      - element: major_gridlines
+        tag: 'c:majorGridlines'
+        optional: true
+      - element: minor_gridlines
+        tag: 'c:minorGridlines'
+        optional: true
+      - element: title
+        tag: 'c:title'
+        optional: true
+      - element: num_fmt
+        tag: 'c:numFmt'
+        optional: true
+      - element: major_tick_mark
+        tag: 'c:majorTickMark'
+        optional: true
+      - element: minor_tick_mark
+        tag: 'c:minorTickMark'
+        optional: true
+      - element: tick_lbl_pos
+        tag: 'c:tickLblPos'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+      - element: crosses_at
+        tag: 'c:crossesAt'
+        optional: true
+      - element: crosses
+        tag: 'c:crosses'
+        optional: true
+      - element: auto
+        tag: 'c:auto'
+        optional: true
+      - element: lbl_algn
+        tag: 'c:lblAlgn'
+        optional: true
+      - element: lbl_offset
+        tag: 'c:lblOffset'
+        optional: true
+      - element: tick_lbl_skip
+        tag: 'c:tickLblSkip'
+        optional: true
+      - element: tick_mark_skip
+        tag: 'c:tickMarkSkip'
+        optional: true
+    attributes: []
+
+  # Value axis
+  val_ax:
+    tag: 'c:valAx'
+    description: "Value axis"
+    iso_reference: "21.2.2.226"
+    children:
+      - element: ax_id
+        tag: 'c:axId'
+        optional: false
+      - element: scaling
+        tag: 'c:scaling'
+        optional: false
+      - element: delete
+        tag: 'c:delete'
+        optional: true
+      - element: ax_pos
+        tag: 'c:axPos'
+        optional: false
+      - element: major_gridlines
+        tag: 'c:majorGridlines'
+        optional: true
+      - element: minor_gridlines
+        tag: 'c:minorGridlines'
+        optional: true
+      - element: title
+        tag: 'c:title'
+        optional: true
+      - element: num_fmt
+        tag: 'c:numFmt'
+        optional: true
+      - element: major_tick_mark
+        tag: 'c:majorTickMark'
+        optional: true
+      - element: minor_tick_mark
+        tag: 'c:minorTickMark'
+        optional: true
+      - element: tick_lbl_pos
+        tag: 'c:tickLblPos'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+      - element: crosses_at
+        tag: 'c:crossesAt'
+        optional: true
+      - element: crosses
+        tag: 'c:crosses'
+        optional: true
+      - element: cross_between
+        tag: 'c:crossBetween'
+        optional: true
+      - element: major_unit
+        tag: 'c:majorUnit'
+        optional: true
+      - element: minor_unit
+        tag: 'c:minorUnit'
+        optional: true
+      - element: disp_units
+        tag: 'c:dispUnits'
+        optional: true
+    attributes: []
+
+  # Axis ID
+  ax_id:
+    tag: 'c:axId'
+    description: "Axis ID"
+    iso_reference: "21.2.2.9"
+    children: []
+    attributes:
+      - name: val
+        type: integer
+        required: true
+
+  # Axis position
+  ax_pos:
+    tag: 'c:axPos'
+    description: "Axis position"
+    iso_reference: "21.2.2.10"
+    children: []
+    attributes:
+      - name: val
+        type: enum
+        values: [b, l, r, t]
+        required: true
+
+  # Scaling
+  scaling:
+    tag: 'c:scaling'
+    description: "Axis scaling"
+    iso_reference: "21.2.2.164"
+    children:
+      - element: log_base
+        tag: 'c:logBase'
+        optional: true
+      - element: orientation
+        tag: 'c:orientation'
+        optional: true
+      - element: max
+        tag: 'c:max'
+        optional: true
+      - element: min
+        tag: 'c:min'
+        optional: true
+    attributes: []
+
+  # Title
+  title:
+    tag: 'c:title'
+    description: "Chart or axis title"
+    iso_reference: "21.2.2.205"
+    children:
+      - element: tx
+        tag: 'c:tx'
+        optional: true
+      - element: layout
+        tag: 'c:layout'
+        optional: true
+      - element: overlay
+        tag: 'c:overlay'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+    attributes: []
+
+  # Legend
+  legend:
+    tag: 'c:legend'
+    description: "Chart legend"
+    iso_reference: "21.2.2.93"
+    children:
+      - element: legend_pos
+        tag: 'c:legendPos'
+        optional: true
+      - element: legend_entry
+        tag: 'c:legendEntry'
+        optional: true
+      - element: layout
+        tag: 'c:layout'
+        optional: true
+      - element: overlay
+        tag: 'c:overlay'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+    attributes: []
+
+  # Legend position
+  legend_pos:
+    tag: 'c:legendPos'
+    description: "Legend position"
+    iso_reference: "21.2.2.94"
+    children: []
+    attributes:
+      - name: val
+        type: enum
+        values: [b, l, r, t, tr]
+        required: true
+
+  # Data labels
+  d_lbls:
+    tag: 'c:dLbls'
+    description: "Data labels"
+    iso_reference: "21.2.2.49"
+    children:
+      - element: d_lbl
+        tag: 'c:dLbl'
+        optional: true
+      - element: num_fmt
+        tag: 'c:numFmt'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+      - element: tx_pr
+        tag: 'c:txPr'
+        optional: true
+      - element: d_lbl_pos
+        tag: 'c:dLblPos'
+        optional: true
+      - element: show_legend_key
+        tag: 'c:showLegenKey'
+        optional: true
+      - element: show_val
+        tag: 'c:showVal'
+        optional: true
+      - element: show_cat_name
+        tag: 'c:showCatName'
+        optional: true
+      - element: show_ser_name
+        tag: 'c:showSerName'
+        optional: true
+      - element: show_percent
+        tag: 'c:showPercent'
+        optional: true
+      - element: show_bubble_size
+        tag: 'c:showBubbleSize'
+        optional: true
+      - element: separator
+        tag: 'c:separator'
+        optional: true
+      - element: show_leader_lines
+        tag: 'c:showLeaderLines'
+        optional: true
+      - element: leader_lines
+        tag: 'c:leaderLines'
+        optional: true
+    attributes: []
+
+  # Shape properties
+  sp_pr:
+    tag: 'c:spPr'
+    description: "Shape properties"
+    iso_reference: "21.2.2.183"
+    children:
+      - element: xfrm
+        tag: 'a:xfrm'
+        optional: true
+      - element: prst_geom
+        tag: 'a:prstGeom'
+        optional: true
+      - element: no_fill
+        tag: 'a:noFill'
+        optional: true
+      - element: solid_fill
+        tag: 'a:solidFill'
+        optional: true
+      - element: grad_fill
+        tag: 'a:gradFill'
+        optional: true
+      - element: ln
+        tag: 'a:ln'
+        optional: true
+      - element: effect_lst
+        tag: 'a:effectLst'
+        optional: true
+    attributes: []
+
+  # Layout
+  layout:
+    tag: 'c:layout'
+    description: "Layout"
+    iso_reference: "21.2.2.88"
+    children:
+      - element: manual_layout
+        tag: 'c:manualLayout'
+        optional: true
+    attributes: []
+
+  # Manual layout
+  manual_layout:
+    tag: 'c:manualLayout'
+    description: "Manual layout"
+    iso_reference: "21.2.2.103"
+    children:
+      - element: layout_target
+        tag: 'c:layoutTarget'
+        optional: true
+      - element: x_mode
+        tag: 'c:xMode'
+        optional: true
+      - element: y_mode
+        tag: 'c:yMode'
+        optional: true
+      - element: w_mode
+        tag: 'c:wMode'
+        optional: true
+      - element: h_mode
+        tag: 'c:hMode'
+        optional: true
+      - element: x
+        tag: 'c:x'
+        optional: true
+      - element: y
+        tag: 'c:y'
+        optional: true
+      - element: w
+        tag: 'c:w'
+        optional: true
+      - element: h
+        tag: 'c:h'
+        optional: true
+    attributes: []
+
+  # Marker
+  marker:
+    tag: 'c:marker'
+    description: "Data point marker"
+    iso_reference: "21.2.2.104"
+    children:
+      - element: symbol
+        tag: 'c:symbol'
+        optional: true
+      - element: size
+        tag: 'c:size'
+        optional: true
+      - element: sp_pr
+        tag: 'c:spPr'
+        optional: true
+    attributes: []
+
+  # Vary colors
+  vary_colors:
+    tag: 'c:varyColors'
+    description: "Vary colors by point"
+    iso_reference: "21.2.2.227"
+    children: []
+    attributes:
+      - name: val
+        type: boolean
+        required: true
+
+  # Grouping
+  grouping:
+    tag: 'c:grouping'
+    description: "Grouping"
+    iso_reference: "21.2.2.76"
+    children: []
+    attributes:
+      - name: val
+        type: enum
+        values: [percentStacked, standard, stacked]
+        required: true
+
+  # Bar direction
+  bar_dir:
+    tag: 'c:barDir'
+    description: "Bar direction"
+    iso_reference: "21.2.2.17"
+    children: []
+    attributes:
+      - name: val
+        type: enum
+        values: [bar, col]
+        required: true
+
+metadata:
+  element_count: 50
+  priority: "HIGH"
+  status: "complete"
+  phase: "5"
+  notes: "Chart elements for Phase 5 Part 2 (v6.0) - complete chart support with ~50 elements"

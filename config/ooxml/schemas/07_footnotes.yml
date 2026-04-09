@@ -1,0 +1,92 @@
+# Footnotes and Endnotes Schema
+# ISO/IEC 29500-1:2016 - Section 17.11
+# Footnote and endnote elements
+
+schema:
+  namespace: w
+  category: "Footnotes and Endnotes"
+  iso_section: "17.11"
+
+elements:
+  # Footnote element
+  footnote:
+    tag: 'w:footnote'
+    description: "Footnote content container"
+    iso_reference: "17.11.10"
+    children:
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+    attributes:
+      - name: type
+        type: enum
+        values: [normal, separator, continuationSeparator, continuationNotice]
+      - name: id
+        type: integer
+        required: true
+
+  # Endnote element
+  endnote:
+    tag: 'w:endnote'
+    description: "Endnote content container"
+    iso_reference: "17.11.6"
+    children:
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+    attributes:
+      - name: type
+        type: enum
+        values: [normal, separator, continuationSeparator, continuationNotice]
+      - name: id
+        type: integer
+        required: true
+
+  # Footnote reference (in run)
+  footnote_reference:
+    tag: 'w:footnoteReference'
+    description: "Reference to footnote from main text"
+    iso_reference: "17.11.12"
+    children: []
+    attributes:
+      - name: customMarkFollows
+        type: boolean
+      - name: id
+        type: integer
+        required: true
+
+  # Endnote reference (in run)
+  endnote_reference:
+    tag: 'w:endnoteReference'
+    description: "Reference to endnote from main text"
+    iso_reference: "17.11.8"
+    children: []
+    attributes:
+      - name: customMarkFollows
+        type: boolean
+      - name: id
+        type: integer
+        required: true
+
+  # Footnote/endnote separator reference
+  footnote_ref:
+    tag: 'w:footnoteRef'
+    description: "Automatic footnote reference mark"
+    iso_reference: "17.11.11"
+    children: []
+    attributes: []
+
+  # Endnote reference mark
+  endnote_ref:
+    tag: 'w:endnoteRef'
+    description: "Automatic endnote reference mark"
+    iso_reference: "17.11.7"
+    children: []
+    attributes: []
+
+metadata:
+  element_count: 6
+  priority: "MEDIUM"
+  status: "new"
+  phase: "1"
+  notes: "Footnotes and endnotes for academic and technical documents"

@@ -1,0 +1,247 @@
+# Numbering Schema
+# ISO/IEC 29500-1:2016 - Section 17.9
+# Complete numbering system elements
+
+schema:
+  namespace: w
+  category: "Numbering"
+  iso_section: "17.9"
+
+elements:
+  # Root numbering container
+  numbering:
+    tag: 'w:numbering'
+    description: "Root container for numbering definitions"
+    iso_reference: "17.9.16"
+    children:
+      - element: abstract_num
+        tag: 'w:abstractNum'
+        multiple: true
+        optional: true
+      - element: num
+        tag: 'w:num'
+        multiple: true
+        optional: true
+      - element: num_id_mac_at_cleanup
+        tag: 'w:numIdMacAtCleanup'
+        optional: true
+    attributes: []
+
+  # Abstract numbering definition
+  abstract_num:
+    tag: 'w:abstractNum'
+    description: "Abstract numbering definition (template for numbering instances)"
+    iso_reference: "17.9.1"
+    children:
+      - element: nsid
+        tag: 'w:nsid'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: multi_level_type
+        tag: 'w:multiLevelType'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [singleLevel, multilevel, hybridMultilevel]
+            required: true
+      - element: tmpl
+        tag: 'w:tmpl'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: name
+        tag: 'w:name'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: style_link
+        tag: 'w:styleLink'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: num_style_link
+        tag: 'w:numStyleLink'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: lvl
+        tag: 'w:lvl'
+        multiple: true
+        optional: true
+    attributes:
+      - name: abstractNumId
+        type: integer
+        required: true
+
+  # Numbering instance
+  num:
+    tag: 'w:num'
+    description: "Numbering instance (reference to abstract numbering)"
+    iso_reference: "17.9.15"
+    children:
+      - element: abstract_num_id
+        tag: 'w:abstractNumId'
+        optional: false
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: lvl_override
+        tag: 'w:lvlOverride'
+        multiple: true
+        optional: true
+    attributes:
+      - name: numId
+        type: integer
+        required: true
+
+  # Numbering level
+  lvl:
+    tag: 'w:lvl'
+    description: "Numbering level definition"
+    iso_reference: "17.9.6"
+    children:
+      - element: start
+        tag: 'w:start'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: num_fmt
+        tag: 'w:numFmt'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [decimal, upperRoman, lowerRoman, upperLetter, lowerLetter, ordinal, cardinalText, ordinalText, hex, chicago, ideographDigital, japaneseCounting, aiueo, iroha, decimalFullWidth, decimalHalfWidth, japaneseLegal, japaneseDigitalTenThousand, decimalEnclosedCircle, decimalFullWidth2, aiueoFullWidth, irohaFullWidth, decimalZero, bullet, ganada, chosung, decimalEnclosedFullstop, decimalEnclosedParen, decimalEnclosedCircleChinese, ideographEnclosedCircle, ideographTraditional, ideographZodiac, ideographZodiacTraditional, taiwaneseCounting, ideographLegalTraditional, taiwaneseCountingThousand, taiwaneseDigital, chineseCounting, chineseLegalSimplified, chineseCountingThousand, koreanDigital, koreanCounting, koreanLegal, koreanDigital2, vietnameseCounting, russianLower, russianUpper, none, numberInDash, hebrew1, hebrew2, arabicAlpha, arabicAbjad, hindiVowels, hindiConsonants, hindiNumbers, hindiCounting, thaiLetters, thaiNumbers, thaiCounting, bahtText, dollarText, custom]
+            required: true
+      - element: lvl_restart
+        tag: 'w:lvlRestart'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: pstyle
+        tag: 'w:pStyle'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: is_lgl
+        tag: 'w:isLgl'
+        optional: true
+        presence_only: true
+      - element: suff
+        tag: 'w:suff'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [tab, space, nothing]
+            required: true
+      - element: lvl_text
+        tag: 'w:lvlText'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: lvl_jc
+        tag: 'w:lvlJc'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [left, right, center, both, distribute]
+            required: true
+      - element: ppr
+        tag: 'w:pPr'
+        optional: true
+      - element: rpr
+        tag: 'w:rPr'
+        optional: true
+      - element: lvl_pic_bullet_id
+        tag: 'w:lvlPicBulletId'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: legacy
+        tag: 'w:legacy'
+        optional: true
+        attributes:
+          - name: legacy
+            type: boolean
+          - name: legacySpace
+            type: integer
+          - name: legacyIndent
+            type: integer
+    attributes:
+      - name: ilvl
+        type: integer
+        required: true
+      - name: tplc
+        type: string
+      - name: tentative
+        type: boolean
+
+  # Level override
+  lvl_override:
+    tag: 'w:lvlOverride'
+    description: "Override for numbering level"
+    iso_reference: "17.9.8"
+    children:
+      - element: start_override
+        tag: 'w:startOverride'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: lvl
+        tag: 'w:lvl'
+        optional: true
+    attributes:
+      - name: ilvl
+        type: integer
+        required: true
+
+  # Numbering picture bullet
+  num_pic_bullet:
+    tag: 'w:numPicBullet'
+    description: "Picture bullet definition"
+    iso_reference: "17.9.21"
+    children:
+      - element: pict
+        tag: 'w:pict'
+        optional: false
+      - element: drawing
+        tag: 'w:drawing'
+        optional: true
+    attributes:
+      - name: numPicBulletId
+        type: integer
+        required: true
+
+metadata:
+  element_count: 6
+  priority: "HIGH"
+  status: "complete"
+  phase: "3"
+  notes: "Complete numbering system for Phase 3 (v3.0)"

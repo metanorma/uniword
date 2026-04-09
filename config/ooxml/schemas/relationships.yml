@@ -1,0 +1,91 @@
+# Relationships Namespace Schema
+# ISO 29500-2: Open Packaging Conventions
+# URI: http://schemas.openxmlformats.org/officeDocument/2006/relationships
+# Prefix: r
+# 
+# This schema defines relationship elements for OOXML document relationships.
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+  prefix: 'r'
+  description: 'Relationships namespace for document relationships'
+
+elements:
+  # Relationships root element
+  Relationships:
+    class_name: Relationships
+    description: 'Relationships root element'
+    attributes:
+      - name: relationships
+        type: Relationship
+        collection: true
+        xml_name: Relationship
+        description: 'Document relationships'
+  
+  # Single relationship
+  Relationship:
+    class_name: Relationship
+    description: 'Single relationship'
+    attributes:
+      - name: id
+        type: String
+        xml_name: Id
+        xml_attribute: true
+        required: true
+        description: 'Relationship ID (e.g., rId1, rId2)'
+      - name: type
+        type: String
+        xml_name: Type
+        xml_attribute: true
+        required: true
+        description: 'Relationship type URI'
+      - name: target
+        type: String
+        xml_name: Target
+        xml_attribute: true
+        required: true
+        description: 'Target path (relative or absolute)'
+      - name: target_mode
+        type: String
+        xml_name: TargetMode
+        xml_attribute: true
+        description: 'Target mode (Internal or External)'
+  
+  # Relationship types (commonly used constants)
+  # These are not XML elements but type URIs used in Type attribute
+  
+  # Image relationship
+  ImageRelationship:
+    class_name: ImageRelationship
+    description: 'Image relationship type'
+    attributes:
+      - name: constant_type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image'
+  
+  # Hyperlink relationship
+  HyperlinkRelationship:
+    class_name: HyperlinkRelationship
+    description: 'Hyperlink relationship type'
+    attributes:
+      - name: constant_type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink'
+  
+  # Office document relationship
+  OfficeDocumentRelationship:
+    class_name: OfficeDocumentRelationship
+    description: 'Office document relationship type'
+    attributes:
+      - name: constant_type
+        type: String
+        xml_name: type
+        xml_attribute: true
+        description: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument'
+
+# Total: 5 Relationship elements defined
+# This namespace handles document part relationships in OOXML packages

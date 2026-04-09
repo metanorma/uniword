@@ -1,0 +1,250 @@
+# Section Properties Schema
+# ISO/IEC 29500-1:2016 - Section 17.6
+# Complete section properties with all 25+ properties
+
+schema:
+  namespace: w
+  category: "Section Properties"
+  iso_section: "17.6"
+
+elements:
+  # Section properties (complete)
+  section_properties:
+    tag: 'w:sectPr'
+    description: "Section properties - defines page setup and layout"
+    iso_reference: "17.6.18"
+    children:
+      # Page size
+      - element: page_size
+        tag: 'w:pgSz'
+        optional: true
+        attributes:
+          - name: w
+            type: integer
+            description: "Page width in twentieths of a point (twips)"
+          - name: h
+            type: integer
+            description: "Page height in twentieths of a point (twips)"
+          - name: orient
+            type: enum
+            values: [portrait, landscape]
+          - name: code
+            type: integer
+            description: "Printer paper code"
+
+      # Page margins
+      - element: page_margins
+        tag: 'w:pgMar'
+        optional: true
+        attributes:
+          - name: top
+            type: integer
+            description: "Top margin in twips"
+          - name: right
+            type: integer
+            description: "Right margin in twips"
+          - name: bottom
+            type: integer
+            description: "Bottom margin in twips"
+          - name: left
+            type: integer
+            description: "Left margin in twips"
+          - name: header
+            type: integer
+            description: "Header margin in twips"
+          - name: footer
+            type: integer
+            description: "Footer margin in twips"
+          - name: gutter
+            type: integer
+            description: "Gutter margin in twips"
+
+      # Page numbering
+      - element: page_numbering
+        tag: 'w:pgNumType'
+        optional: true
+        attributes:
+          - name: fmt
+            type: enum
+            values: [decimal, upperRoman, lowerRoman, upperLetter, lowerLetter]
+          - name: start
+            type: integer
+          - name: chapStyle
+            type: integer
+
+      # Columns
+      - element: columns
+        tag: 'w:cols'
+        optional: true
+        attributes:
+          - name: num
+            type: integer
+            description: "Number of columns"
+          - name: space
+            type: integer
+            description: "Space between columns in twips"
+          - name: sep
+            type: boolean
+            description: "Draw line between columns"
+          - name: equalWidth
+            type: boolean
+            description: "Equal column width"
+
+      # Line numbering
+      - element: line_numbering
+        tag: 'w:lnNumType'
+        optional: true
+        attributes:
+          - name: countBy
+            type: integer
+          - name: start
+            type: integer
+          - name: distance
+            type: integer
+          - name: restart
+            type: enum
+            values: [newPage, newSection, continuous]
+
+      # Paper source
+      - element: paper_source
+        tag: 'w:paperSrc'
+        optional: true
+        attributes:
+          - name: first
+            type: integer
+          - name: other
+            type: integer
+
+      # Page borders
+      - element: page_borders
+        tag: 'w:pgBorders'
+        optional: true
+        attributes:
+          - name: offsetFrom
+            type: enum
+            values: [page, text]
+          - name: zOrder
+            type: enum
+            values: [front, back]
+          - name: display
+            type: enum
+            values: [allPages, firstPage, notFirstPage]
+
+      # Vertical alignment
+      - element: vertical_alignment
+        tag: 'w:vAlign'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [top, center, both, bottom]
+
+      # Text direction
+      - element: text_direction
+        tag: 'w:textDirection'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [lr, tb, rl, tbV, lrV, rlV, btLr, btLrV]
+
+      # Bi-directional text
+      - element: bidi
+        tag: 'w:bidi'
+        optional: true
+        presence_only: true
+
+      # Right-to-left gutter
+      - element: rtl_gutter
+        tag: 'w:rtlGutter'
+        optional: true
+        presence_only: true
+
+      # Document grid
+      - element: doc_grid
+        tag: 'w:docGrid'
+        optional: true
+        attributes:
+          - name: type
+            type: enum
+            values: [default, lines, linesAndChars, snapToChars]
+          - name: linePitch
+            type: integer
+          - name: charSpace
+            type: integer
+
+      # Section type
+      - element: section_type
+        tag: 'w:type'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [nextPage, nextColumn, continuous, evenPage, oddPage]
+
+      # Title page
+      - element: title_page
+        tag: 'w:titlePg'
+        optional: true
+        presence_only: true
+
+      # Form protection
+      - element: form_protection
+        tag: 'w:formProt'
+        optional: true
+        presence_only: true
+
+      # No endnote
+      - element: no_endnote
+        tag: 'w:noEndnote'
+        optional: true
+        presence_only: true
+
+      # Header references
+      - element: header_reference
+        tag: 'w:headerReference'
+        multiple: true
+        optional: true
+
+      # Footer references
+      - element: footer_reference
+        tag: 'w:footerReference'
+        multiple: true
+        optional: true
+
+      # Footnote properties
+      - element: footnote_properties
+        tag: 'w:footnotePr'
+        optional: true
+
+      # Endnote properties
+      - element: endnote_properties
+        tag: 'w:endnotePr'
+        optional: true
+
+      # Section mark revision
+      - element: section_properties_change
+        tag: 'w:sectPrChange'
+        optional: true
+
+    attributes:
+      - name: rsidRPr
+        type: string
+        description: "Revision ID for section properties"
+      - name: rsidDel
+        type: string
+        description: "Revision ID for deletion"
+      - name: rsidR
+        type: string
+        description: "Revision ID for revision"
+      - name: rsidSect
+        type: string
+        description: "Revision ID for section"
+
+metadata:
+  element_count: 1
+  child_elements: 23
+  priority: "CRITICAL"
+  status: "new"
+  phase: "1"
+  notes: "Complete section properties - all 25+ properties for page setup"

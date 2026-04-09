@@ -1,0 +1,235 @@
+# Glossary Namespace Schema
+# Namespace: http://schemas.openxmlformats.org/officeDocument/2006/glossary
+# Prefix: g:
+# Description: Glossary document and term definition management for building blocks
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/glossary'
+  prefix: 'g'
+  description: 'Glossary - Glossary document and term definition management'
+
+elements:
+  glossary_document:
+    class_name: GlossaryDocument
+    description: 'Root element for glossary documents containing term definitions and building blocks'
+    attributes:
+      - name: doc_parts
+        type: DocParts
+        xml_name: docParts
+        description: 'Container for all glossary document parts'
+
+  doc_parts:
+    class_name: DocParts
+    description: 'Container for glossary document part entries (building blocks)'
+    attributes:
+      - name: doc_part
+        type: DocPart
+        xml_name: docPart
+        collection: true
+        description: 'Individual glossary entries'
+
+  doc_part:
+    class_name: DocPart
+    description: 'Individual glossary entry with properties and content'
+    attributes:
+      - name: doc_part_pr
+        type: DocPartProperties
+        xml_name: docPartPr
+        description: 'Document part properties (name, category, behaviors)'
+      - name: doc_part_body
+        type: DocPartBody
+        xml_name: docPartBody
+        description: 'Document part body content'
+
+  doc_part_properties:
+    class_name: DocPartProperties
+    description: 'Properties for a document part including name, category, and type'
+    attributes:
+      - name: name
+        type: DocPartName
+        xml_name: name
+        description: 'Document part name'
+      - name: category
+        type: DocPartCategory
+        xml_name: category
+        description: 'Category classification'
+      - name: types
+        type: DocPartTypes
+        xml_name: types
+        description: 'Type definitions'
+      - name: behaviors
+        type: DocPartBehaviors
+        xml_name: behaviors
+        description: 'Behavior settings'
+      - name: description
+        type: DocPartDescription
+        xml_name: description
+        description: 'Part description text'
+      - name: guid
+        type: :string
+        xml_name: guid
+        description: 'Globally unique identifier'
+
+  doc_part_body:
+    class_name: DocPartBody
+    description: 'Body content of a document part (building block content)'
+    attributes:
+      - name: content
+        type: :string
+        xml_name: content
+        description: 'Body content (references WordprocessingML elements)'
+
+  doc_part_name:
+    class_name: DocPartName
+    description: 'Name of a document part'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Name value'
+
+  doc_part_category:
+    class_name: DocPartCategory
+    description: 'Category classification for a document part'
+    attributes:
+      - name: name
+        type: CategoryName
+        xml_name: name
+        description: 'Category name'
+      - name: gallery
+        type: DocPartGallery
+        xml_name: gallery
+        description: 'Gallery categorization'
+
+  category_name:
+    class_name: CategoryName
+    description: 'Name of a category'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Category name value'
+
+  doc_part_gallery:
+    class_name: DocPartGallery
+    description: 'Gallery categorization for document parts'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Gallery type (e.g., "autoText", "coverPages", "equations")'
+
+  doc_part_types:
+    class_name: DocPartTypes
+    description: 'Type definitions for a document part'
+    attributes:
+      - name: type
+        type: DocPartType
+        xml_name: type
+        collection: true
+        description: 'Individual type specifications'
+      - name: all
+        type: :boolean
+        xml_name: all
+        xml_attribute: true
+        description: 'Whether all types must match'
+
+  doc_part_type:
+    class_name: DocPartType
+    description: 'Type specification for a document part'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Type value (e.g., "autoText", "equation", "textBox")'
+
+  doc_part_behaviors:
+    class_name: DocPartBehaviors
+    description: 'Behavioral properties for a document part'
+    attributes:
+      - name: behavior
+        type: DocPartBehavior
+        xml_name: behavior
+        collection: true
+        description: 'Individual behavior specifications'
+
+  doc_part_behavior:
+    class_name: DocPartBehavior
+    description: 'Individual behavior specification'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Behavior type (e.g., "content", "paragraph", "page")'
+
+  doc_part_description:
+    class_name: DocPartDescription
+    description: 'Description text for a document part'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        description: 'Description text'
+
+  doc_part_id:
+    class_name: DocPartId
+    description: 'Unique identifier for a document part'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Unique ID value'
+
+  auto_text:
+    class_name: AutoText
+    description: 'Auto text flag for document parts'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Whether this is an auto text entry'
+
+  equation:
+    class_name: Equation
+    description: 'Equation flag for document parts'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Whether this contains an equation'
+
+  text_box:
+    class_name: TextBox
+    description: 'Text box flag for document parts'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Whether this is a text box'
+
+  style_id:
+    class_name: StyleId
+    description: 'Style identifier reference for document parts'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Style ID reference'

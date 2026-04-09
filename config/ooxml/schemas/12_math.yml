@@ -1,0 +1,349 @@
+# Math Schema (OMML - Office Math Markup Language)
+# ISO/IEC 29500-1:2016 - Section 22.1
+# Office Math Markup Language elements
+
+schema:
+  namespace: m
+  category: "Math"
+  iso_section: "22.1"
+  notes: "OMML elements are handled via Plurimath integration. Detailed parsing delegated to Plurimath library."
+
+elements:
+  # Office Math - inline equation
+  omath:
+    tag: 'm:oMath'
+    description: "Office Math - inline mathematical equation"
+    iso_reference: "22.1.2.77"
+    children:
+      - element: math_content
+        tag: '*'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Office Math Paragraph - block equation
+  omathpara:
+    tag: 'm:oMathPara'
+    description: "Office Math Paragraph - block/display mathematical equation"
+    iso_reference: "22.1.2.78"
+    children:
+      - element: omath_para_properties
+        tag: 'm:oMathParaPr'
+        optional: true
+      - element: omath
+        tag: 'm:oMath'
+        multiple: true
+    attributes: []
+
+  # Office Math Paragraph Properties
+  omathparaproperties:
+    tag: 'm:oMathParaPr'
+    description: "Office Math Paragraph Properties"
+    iso_reference: "22.1.2.79"
+    children:
+      - element: justification
+        tag: 'm:jc'
+        optional: true
+        attributes:
+          - name: val
+            property: m:val
+            type: enum
+            values: [left, center, right, centerGroup]
+    attributes: []
+
+  # Math Run
+  mathrun:
+    tag: 'm:r'
+    description: "Math run - text run within equation"
+    iso_reference: "22.1.2.87"
+    children:
+      - element: math_run_properties
+        tag: 'm:rPr'
+        optional: true
+      - element: math_text
+        tag: 'm:t'
+        optional: true
+    attributes: []
+
+  # Math Text
+  mathtext:
+    tag: 'm:t'
+    description: "Math text element"
+    iso_reference: "22.1.2.116"
+    children: []
+    attributes:
+      - name: space
+        namespace: 'http://www.w3.org/XML/1998/namespace'
+        prefix: 'xml'
+        type: enum
+        values: [preserve, default]
+
+  # Fraction
+  fraction:
+    tag: 'm:f'
+    description: "Fraction element"
+    iso_reference: "22.1.2.36"
+    children:
+      - element: fraction_properties
+        tag: 'm:fPr'
+        optional: true
+      - element: numerator
+        tag: 'm:num'
+      - element: denominator
+        tag: 'm:den'
+    attributes: []
+
+  # Radical (Square root, nth root)
+  radical:
+    tag: 'm:rad'
+    description: "Radical element (root)"
+    iso_reference: "22.1.2.88"
+    children:
+      - element: radical_properties
+        tag: 'm:radPr'
+        optional: true
+      - element: degree
+        tag: 'm:deg'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Superscript
+  superscript:
+    tag: 'm:sSup'
+    description: "Superscript element"
+    iso_reference: "22.1.2.101"
+    children:
+      - element: superscript_properties
+        tag: 'm:sSupPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+      - element: sup
+        tag: 'm:sup'
+    attributes: []
+
+  # Subscript
+  subscript:
+    tag: 'm:sSub'
+    description: "Subscript element"
+    iso_reference: "22.1.2.100"
+    children:
+      - element: subscript_properties
+        tag: 'm:sSubPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+      - element: sub
+        tag: 'm:sub'
+    attributes: []
+
+  # Subscript-Superscript
+  subsuper:
+    tag: 'm:sSubSup'
+    description: "Subscript-Superscript element"
+    iso_reference: "22.1.2.102"
+    children:
+      - element: subsuper_properties
+        tag: 'm:sSubSupPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+      - element: sub
+        tag: 'm:sub'
+      - element: sup
+        tag: 'm:sup'
+    attributes: []
+
+  # Delimiter
+  delimiter:
+    tag: 'm:d'
+    description: "Delimiter element (parentheses, brackets, etc.)"
+    iso_reference: "22.1.2.24"
+    children:
+      - element: delimiter_properties
+        tag: 'm:dPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+        multiple: true
+    attributes: []
+
+  # Function
+  function:
+    tag: 'm:func'
+    description: "Function element"
+    iso_reference: "22.1.2.42"
+    children:
+      - element: function_properties
+        tag: 'm:funcPr'
+        optional: true
+      - element: function_name
+        tag: 'm:fName'
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Matrix/Array
+  matrix:
+    tag: 'm:m'
+    description: "Matrix element"
+    iso_reference: "22.1.2.60"
+    children:
+      - element: matrix_properties
+        tag: 'm:mPr'
+        optional: true
+      - element: matrix_row
+        tag: 'm:mr'
+        multiple: true
+    attributes: []
+
+  # Matrix Row
+  matrixrow:
+    tag: 'm:mr'
+    description: "Matrix row"
+    iso_reference: "22.1.2.68"
+    children:
+      - element: base
+        tag: 'm:e'
+        multiple: true
+    attributes: []
+
+  # Accent
+  accent:
+    tag: 'm:acc'
+    description: "Accent element"
+    iso_reference: "22.1.2.1"
+    children:
+      - element: accent_properties
+        tag: 'm:accPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Bar (overbar/underbar)
+  bar:
+    tag: 'm:bar'
+    description: "Bar element (overbar/underbar)"
+    iso_reference: "22.1.2.9"
+    children:
+      - element: bar_properties
+        tag: 'm:barPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Box
+  box:
+    tag: 'm:box'
+    description: "Box element"
+    iso_reference: "22.1.2.13"
+    children:
+      - element: box_properties
+        tag: 'm:boxPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Group Character (overbar with character)
+  groupchar:
+    tag: 'm:groupChr'
+    description: "Group character element"
+    iso_reference: "22.1.2.44"
+    children:
+      - element: groupchar_properties
+        tag: 'm:groupChrPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Limit (lower/upper)
+  limit:
+    tag: 'm:limLow'
+    description: "Lower limit element"
+    iso_reference: "22.1.2.54"
+    children:
+      - element: limit_properties
+        tag: 'm:limLowPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+      - element: lim
+        tag: 'm:lim'
+    attributes: []
+
+  # N-ary (integral, sum, product, etc.)
+  nary:
+    tag: 'm:nary'
+    description: "N-ary operator (integral, sum, product, etc.)"
+    iso_reference: "22.1.2.72"
+    children:
+      - element: nary_properties
+        tag: 'm:naryPr'
+        optional: true
+      - element: sub
+        tag: 'm:sub'
+        optional: true
+      - element: sup
+        tag: 'm:sup'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Phantom
+  phantom:
+    tag: 'm:phant'
+    description: "Phantom element (spacing without display)"
+    iso_reference: "22.1.2.81"
+    children:
+      - element: phantom_properties
+        tag: 'm:phantPr'
+        optional: true
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Pre-subscript-superscript
+  presubsuper:
+    tag: 'm:sPre'
+    description: "Pre-subscript-superscript element"
+    iso_reference: "22.1.2.99"
+    children:
+      - element: presubsuper_properties
+        tag: 'm:sPrePr'
+        optional: true
+      - element: sub
+        tag: 'm:sub'
+      - element: sup
+        tag: 'm:sup'
+      - element: base
+        tag: 'm:e'
+    attributes: []
+
+  # Base element (generic container)
+  base:
+    tag: 'm:e'
+    description: "Base element - generic container for math content"
+    iso_reference: "22.1.2.31"
+    children:
+      - element: math_content
+        tag: '*'
+        multiple: true
+        optional: true
+    attributes: []
+
+metadata:
+  element_count: 25
+  priority: "HIGH"
+  status: "complete"
+  phase: "4"
+  notes: |
+    OMML schema for math equation support via Plurimath integration.
+    Detailed math parsing and serialization delegated to Plurimath library.
+    These schema definitions enable recognition and basic structure validation.

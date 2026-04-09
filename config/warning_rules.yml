@@ -1,0 +1,57 @@
+# Warning System Configuration
+#
+# Defines rules for tracking unsupported elements and features during
+# document processing. Helps users understand what may be lost in round-trip.
+
+warning_system:
+  enabled: true
+  log_warnings: false      # Set to true to log warnings during processing
+  log_level: :warn         # Log level (:info, :warn, :error)
+
+  # Critical elements (data-bearing) - severity: error
+  # These elements contain important data that will be lost
+  critical_elements:
+    - chart              # Charts - data visualization
+    - smartArt           # SmartArt diagrams
+    - sdt                # Content controls - user data
+    - customXml          # Custom XML - data binding
+    - contentPart        # Content parts
+    - control            # ActiveX controls
+
+  # Warning elements (important but not critical) - severity: warning
+  # These elements affect formatting/structure but not core data
+  warning_elements:
+    - drawingML          # Complex drawings
+    - vmlDrawing         # Legacy VML drawings
+    - fldSimple          # Simple fields
+    - altChunk           # Alternative content chunks
+    - subDoc             # Subdocuments
+
+  # Element-specific suggestions for users
+  element_suggestions:
+    chart: "Chart elements are not yet supported. The chart will be preserved as-is but cannot be edited. Consider using image exports for charts. Support planned for v6.1."
+
+    smartArt: "SmartArt diagrams are not yet supported. Diagram will be preserved but cannot be modified. Consider converting to regular shapes. Support planned for v6.2."
+
+    sdt: "Content controls are not yet supported. Controls will be preserved but values cannot be updated programmatically. Support planned for v6.1."
+
+    customXml: "Custom XML data binding is not yet supported. XML data will be preserved but cannot be accessed or modified. Support planned for v6.3."
+
+    drawingML: "Complex DrawingML graphics may not be fully supported. Basic shapes work, but advanced features may be lost."
+
+    vmlDrawing: "Legacy VML drawings have limited support. Consider updating to modern DrawingML format."
+
+    fldSimple: "Some field types are not yet supported. Field will be preserved but may not update correctly."
+
+    control: "ActiveX controls are not supported. Controls will be preserved but not functional."
+
+    altChunk: "Alternative content chunks are not supported. Content may be lost."
+
+    subDoc: "Subdocuments are not supported. Consider consolidating into single document."
+
+  # Reporting options
+  reporting:
+    group_by_element: true      # Group warnings by element type
+    include_counts: true        # Include occurrence counts
+    include_suggestions: true   # Include suggestions in report
+    max_warnings: 100           # Maximum warnings to collect (prevent memory issues)

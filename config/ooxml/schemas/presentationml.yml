@@ -1,0 +1,1003 @@
+namespace:
+  uri: 'http://schemas.openxmlformats.org/presentationml/2006/main'
+  prefix: 'p'
+  description: 'PresentationML - PowerPoint presentation structure and formatting for embedded slides'
+
+elements:
+  # Presentation Structure (10 elements)
+  presentation:
+    class_name: Presentation
+    description: 'Presentation root element defining the main presentation structure'
+    attributes:
+      - name: sld_master_id_lst
+        type: SlideMasterIdList
+        xml_name: sldMasterIdLst
+        description: 'List of slide master identifiers'
+      - name: sld_id_lst
+        type: SlideIdList
+        xml_name: sldIdLst
+        required: true
+        description: 'List of slide identifiers'
+      - name: notes_master_id_lst
+        type: NotesMasterIdList
+        xml_name: notesMasterIdLst
+        description: 'List of notes master identifiers'
+      - name: handout_master_id_lst
+        type: HandoutMasterIdList
+        xml_name: handoutMasterIdLst
+        description: 'List of handout master identifiers'
+      - name: sld_sz
+        type: SlideSize
+        xml_name: sldSz
+        required: true
+        description: 'Slide dimensions'
+      - name: notes_sz
+        type: NotesSize
+        xml_name: notesSz
+        required: true
+        description: 'Notes page dimensions'
+      - name: default_text_style
+        type: String
+        xml_name: defaultTextStyle
+        description: 'Default text styling for the presentation'
+      - name: color_map
+        type: String
+        xml_name: colorMap
+        description: 'Color scheme mapping'
+      - name: embedded_font_lst
+        type: String
+        xml_name: embeddedFontLst
+        description: 'List of embedded fonts'
+
+  sld_master_id_lst:
+    class_name: SlideMasterIdList
+    description: 'Container for slide master identifiers'
+    attributes:
+      - name: sld_master_id
+        type: SlideMasterId
+        xml_name: sldMasterId
+        collection: true
+        description: 'Individual slide master identifier'
+
+  sld_id_lst:
+    class_name: SlideIdList
+    description: 'Container for slide identifiers'
+    attributes:
+      - name: sld_id
+        type: SlideId
+        xml_name: sldId
+        collection: true
+        description: 'Individual slide identifier'
+
+  notes_master_id_lst:
+    class_name: NotesMasterIdList
+    description: 'Container for notes master identifiers'
+    attributes:
+      - name: notes_master_id
+        type: String
+        xml_name: notesMasterId
+        xml_attribute: true
+        description: 'Notes master identifier value'
+
+  handout_master_id_lst:
+    class_name: HandoutMasterIdList
+    description: 'Container for handout master identifiers'
+    attributes:
+      - name: handout_master_id
+        type: String
+        xml_name: handoutMasterId
+        xml_attribute: true
+        description: 'Handout master identifier value'
+
+  sld_sz:
+    class_name: SlideSize
+    description: 'Dimensions for slides in the presentation'
+    attributes:
+      - name: cx
+        type: :integer
+        xml_name: cx
+        xml_attribute: true
+        required: true
+        description: 'Width in EMUs (1/914400 of an inch)'
+      - name: cy
+        type: :integer
+        xml_name: cy
+        xml_attribute: true
+        required: true
+        description: 'Height in EMUs'
+      - name: type
+        type: :string
+        xml_name: type
+        xml_attribute: true
+        description: 'Slide size type (e.g., screen4x3, screen16x9, custom)'
+
+  notes_sz:
+    class_name: NotesSize
+    description: 'Dimensions for notes pages'
+    attributes:
+      - name: cx
+        type: :integer
+        xml_name: cx
+        xml_attribute: true
+        required: true
+        description: 'Width in EMUs'
+      - name: cy
+        type: :integer
+        xml_name: cy
+        xml_attribute: true
+        required: true
+        description: 'Height in EMUs'
+
+  color_map:
+    class_name: ColorMap
+    description: 'Color scheme mapping for theme colors'
+    attributes:
+      - name: bg1
+        type: :string
+        xml_name: bg1
+        xml_attribute: true
+        description: 'Background 1 color mapping'
+      - name: tx1
+        type: :string
+        xml_name: tx1
+        xml_attribute: true
+        description: 'Text 1 color mapping'
+      - name: bg2
+        type: :string
+        xml_name: bg2
+        xml_attribute: true
+        description: 'Background 2 color mapping'
+      - name: tx2
+        type: :string
+        xml_name: tx2
+        xml_attribute: true
+        description: 'Text 2 color mapping'
+
+  embedded_font:
+    class_name: EmbeddedFont
+    description: 'Embedded font reference'
+    attributes:
+      - name: typeface
+        type: :string
+        xml_name: typeface
+        xml_attribute: true
+        description: 'Font typeface name'
+      - name: charset
+        type: :string
+        xml_name: charset
+        xml_attribute: true
+        description: 'Character set identifier'
+
+  # Slide Elements (15 elements)
+  sld:
+    class_name: Slide
+    description: 'Individual presentation slide'
+    attributes:
+      - name: c_sld
+        type: CommonSlideData
+        xml_name: cSld
+        required: true
+        description: 'Common slide data shared across slide types'
+      - name: clr_map_ovr
+        type: String
+        xml_name: clrMapOvr
+        description: 'Color map override for this slide'
+      - name: transition
+        type: Transition
+        xml_name: transition
+        description: 'Slide transition effect'
+      - name: timing
+        type: Timing
+        xml_name: timing
+        description: 'Animation timing for the slide'
+      - name: show_master_sp
+        type: :string
+        xml_name: showMasterSp
+        xml_attribute: true
+        description: 'Boolean flag to show master shapes'
+      - name: show_master_phAnim
+        type: :string
+        xml_name: showMasterPhAnim
+        xml_attribute: true
+        description: 'Boolean flag to show master placeholder animations'
+
+  sld_layout:
+    class_name: SlideLayout
+    description: 'Slide layout template'
+    attributes:
+      - name: c_sld
+        type: CommonSlideData
+        xml_name: cSld
+        required: true
+        description: 'Common slide data'
+      - name: clr_map_ovr
+        type: String
+        xml_name: clrMapOvr
+        description: 'Color map override'
+      - name: transition
+        type: Transition
+        xml_name: transition
+        description: 'Transition effect'
+      - name: timing
+        type: Timing
+        xml_name: timing
+        description: 'Animation timing'
+      - name: type
+        type: :string
+        xml_name: type
+        xml_attribute: true
+        description: 'Layout type (e.g., title, twoContent, blank)'
+      - name: preserve
+        type: :string
+        xml_name: preserve
+        xml_attribute: true
+        description: 'Boolean flag to preserve layout'
+
+  sld_master:
+    class_name: SlideMaster
+    description: 'Slide master template defining common elements and styles'
+    attributes:
+      - name: c_sld
+        type: CommonSlideData
+        xml_name: cSld
+        required: true
+        description: 'Common slide data'
+      - name: clr_map
+        type: ColorMap
+        xml_name: clrMap
+        required: true
+        description: 'Color scheme mapping'
+      - name: sld_layout_id_lst
+        type: String
+        xml_name: sldLayoutIdLst
+        description: 'List of slide layout IDs'
+      - name: transition
+        type: Transition
+        xml_name: transition
+        description: 'Default transition effect'
+      - name: timing
+        type: Timing
+        xml_name: timing
+        description: 'Default animation timing'
+      - name: preserve
+        type: :string
+        xml_name: preserve
+        xml_attribute: true
+        description: 'Boolean flag to preserve master'
+
+  notes:
+    class_name: Notes
+    description: 'Notes slide for speaker notes'
+    attributes:
+      - name: c_sld
+        type: CommonSlideData
+        xml_name: cSld
+        required: true
+        description: 'Common slide data'
+      - name: clr_map_ovr
+        type: String
+        xml_name: clrMapOvr
+        description: 'Color map override'
+      - name: show_master_sp
+        type: :string
+        xml_name: showMasterSp
+        xml_attribute: true
+        description: 'Boolean flag to show master shapes'
+
+  handout_master:
+    class_name: HandoutMaster
+    description: 'Handout master template for printed handouts'
+    attributes:
+      - name: c_sld
+        type: CommonSlideData
+        xml_name: cSld
+        required: true
+        description: 'Common slide data'
+      - name: clr_map
+        type: ColorMap
+        xml_name: clrMap
+        required: true
+        description: 'Color scheme mapping'
+
+  c_sld:
+    class_name: CommonSlideData
+    description: 'Common data shared across all slide types'
+    attributes:
+      - name: bg
+        type: String
+        xml_name: bg
+        description: 'Background definition'
+      - name: sp_tree
+        type: ShapeTree
+        xml_name: spTree
+        required: true
+        description: 'Shape tree containing all shapes on the slide'
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        description: 'Slide name'
+
+  sp_tree:
+    class_name: ShapeTree
+    description: 'Container for all shapes and content on a slide'
+    attributes:
+      - name: nv_grp_sp_pr
+        type: String
+        xml_name: nvGrpSpPr
+        description: 'Non-visual group shape properties'
+      - name: grp_sp_pr
+        type: String
+        xml_name: grpSpPr
+        description: 'Group shape properties'
+      - name: sp
+        type: Shape
+        xml_name: sp
+        collection: true
+        description: 'Individual shapes'
+      - name: grp_sp
+        type: GroupShape
+        xml_name: grpSp
+        collection: true
+        description: 'Group of shapes'
+      - name: graphic_frame
+        type: GraphicFrame
+        xml_name: graphicFrame
+        collection: true
+        description: 'Graphic frames (tables, charts, etc.)'
+      - name: cxn_sp
+        type: ConnectionShape
+        xml_name: cxnSp
+        collection: true
+        description: 'Connection shapes (connectors)'
+      - name: pic
+        type: Picture
+        xml_name: pic
+        collection: true
+        description: 'Pictures'
+
+  sp:
+    class_name: Shape
+    description: 'Individual shape on a slide'
+    attributes:
+      - name: nv_sp_pr
+        type: NonVisualShapeProperties
+        xml_name: nvSpPr
+        required: true
+        description: 'Non-visual shape properties'
+      - name: sp_pr
+        type: ShapeProperties
+        xml_name: spPr
+        required: true
+        description: 'Shape visual properties'
+      - name: tx_body
+        type: TextBody
+        xml_name: txBody
+        description: 'Text body content'
+
+  pic:
+    class_name: Picture
+    description: 'Picture element on a slide'
+    attributes:
+      - name: nv_pic_pr
+        type: String
+        xml_name: nvPicPr
+        required: true
+        description: 'Non-visual picture properties'
+      - name: blip_fill
+        type: String
+        xml_name: blipFill
+        required: true
+        description: 'Picture fill from binary image data'
+      - name: sp_pr
+        type: ShapeProperties
+        xml_name: spPr
+        required: true
+        description: 'Shape visual properties'
+
+  graphic_frame:
+    class_name: GraphicFrame
+    description: 'Frame containing graphic objects like tables and charts'
+    attributes:
+      - name: nv_graphic_frame_pr
+        type: String
+        xml_name: nvGraphicFramePr
+        required: true
+        description: 'Non-visual graphic frame properties'
+      - name: xfrm
+        type: String
+        xml_name: xfrm
+        required: true
+        description: 'Transform properties (position, size)'
+      - name: graphic
+        type: String
+        xml_name: graphic
+        required: true
+        description: 'Graphic object reference'
+
+  grp_sp:
+    class_name: GroupShape
+    description: 'Group of shapes treated as a single unit'
+    attributes:
+      - name: nv_grp_sp_pr
+        type: String
+        xml_name: nvGrpSpPr
+        required: true
+        description: 'Non-visual group shape properties'
+      - name: grp_sp_pr
+        type: String
+        xml_name: grpSpPr
+        required: true
+        description: 'Group shape properties'
+      - name: sp
+        type: Shape
+        xml_name: sp
+        collection: true
+        description: 'Shapes within the group'
+      - name: grp_sp
+        type: GroupShape
+        xml_name: grpSp
+        collection: true
+        description: 'Nested groups within the group'
+
+  cxn_sp:
+    class_name: ConnectionShape
+    description: 'Connector shape linking two other shapes'
+    attributes:
+      - name: nv_cxn_sp_pr
+        type: String
+        xml_name: nvCxnSpPr
+        required: true
+        description: 'Non-visual connection shape properties'
+      - name: sp_pr
+        type: ShapeProperties
+        xml_name: spPr
+        required: true
+        description: 'Shape visual properties'
+
+  nv_sp_pr:
+    class_name: NonVisualShapeProperties
+    description: 'Non-visual properties for shapes (ID, name, etc.)'
+    attributes:
+      - name: c_nv_pr
+        type: String
+        xml_name: cNvPr
+        required: true
+        description: 'Common non-visual properties'
+      - name: c_nv_sp_pr
+        type: String
+        xml_name: cNvSpPr
+        required: true
+        description: 'Non-visual shape-specific properties'
+      - name: nv_pr
+        type: String
+        xml_name: nvPr
+        required: true
+        description: 'Application non-visual properties'
+
+  sp_pr:
+    class_name: ShapeProperties
+    description: 'Visual properties for shapes (fill, line, effects)'
+    attributes:
+      - name: xfrm
+        type: String
+        xml_name: xfrm
+        description: 'Transform properties (position, size, rotation)'
+      - name: custGeom
+        type: String
+        xml_name: custGeom
+        description: 'Custom geometry definition'
+      - name: prst_geom
+        type: String
+        xml_name: prstGeom
+        description: 'Preset geometry type'
+      - name: fill
+        type: String
+        xml_name: fill
+        description: 'Fill properties'
+      - name: ln
+        type: String
+        xml_name: ln
+        description: 'Line properties'
+
+  # Text & Formatting (10 elements)
+  tx_body:
+    class_name: TextBody
+    description: 'Text content and formatting within a shape'
+    attributes:
+      - name: body_pr
+        type: BodyProperties
+        xml_name: bodyPr
+        required: true
+        description: 'Text body properties'
+      - name: lst_style
+        type: ListStyle
+        xml_name: lstStyle
+        description: 'List styling'
+      - name: p
+        type: Paragraph
+        xml_name: p
+        collection: true
+        required: true
+        description: 'Paragraphs of text'
+
+  body_pr:
+    class_name: BodyProperties
+    description: 'Properties for text body container'
+    attributes:
+      - name: rot
+        type: :integer
+        xml_name: rot
+        xml_attribute: true
+        description: 'Rotation angle in 60,000ths of a degree'
+      - name: vert
+        type: :string
+        xml_name: vert
+        xml_attribute: true
+        description: 'Vertical text direction'
+      - name: anchor
+        type: :string
+        xml_name: anchor
+        xml_attribute: true
+        description: 'Text anchor point (t, ctr, b)'
+      - name: anchor_ctr
+        type: :string
+        xml_name: anchorCtr
+        xml_attribute: true
+        description: 'Boolean flag to center text vertically'
+      - name: wrap
+        type: :string
+        xml_name: wrap
+        xml_attribute: true
+        description: 'Text wrapping mode'
+
+  lst_style:
+    class_name: ListStyle
+    description: 'List styling properties'
+    attributes:
+      - name: def_ppr
+        type: String
+        xml_name: defPPr
+        description: 'Default paragraph properties'
+      - name: lvl1p_pr
+        type: String
+        xml_name: lvl1pPr
+        description: 'Level 1 paragraph properties'
+      - name: lvl2p_pr
+        type: String
+        xml_name: lvl2pPr
+        description: 'Level 2 paragraph properties'
+      - name: lvl3p_pr
+        type: String
+        xml_name: lvl3pPr
+        description: 'Level 3 paragraph properties'
+
+  p:
+    class_name: Paragraph
+    description: 'Paragraph of text within a text body'
+    attributes:
+      - name: p_pr
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph properties'
+      - name: r
+        type: Run
+        xml_name: r
+        collection: true
+        description: 'Text runs'
+      - name: br
+        type: Break
+        xml_name: br
+        collection: true
+        description: 'Line breaks'
+      - name: fld
+        type: Field
+        xml_name: fld
+        collection: true
+        description: 'Fields'
+      - name: end_para_r_pr
+        type: RunProperties
+        xml_name: endParaRPr
+        description: 'End paragraph run properties'
+
+  r:
+    class_name: Run
+    description: 'Run of text with consistent formatting'
+    attributes:
+      - name: r_pr
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run properties (font, color, size, etc.)'
+      - name: t
+        type: :string
+        xml_name: t
+        description: 'Text content'
+
+  br:
+    class_name: Break
+    description: 'Line break within text'
+    attributes:
+      - name: type
+        type: :string
+        xml_name: type
+        xml_attribute: true
+        description: 'Break type'
+
+  fld:
+    class_name: Field
+    description: 'Field element (date, slide number, etc.)'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        description: 'Field identifier'
+      - name: type
+        type: :string
+        xml_name: type
+        xml_attribute: true
+        description: 'Field type'
+      - name: r_pr
+        type: RunProperties
+        xml_name: rPr
+        description: 'Run properties'
+      - name: p_pr
+        type: ParagraphProperties
+        xml_name: pPr
+        description: 'Paragraph properties'
+      - name: t
+        type: :string
+        xml_name: t
+        description: 'Text content'
+
+  end_para_r_pr:
+    class_name: EndParagraphRunProperties
+    description: 'Run properties applied to the end of a paragraph'
+    attributes:
+      - name: lang
+        type: :string
+        xml_name: lang
+        xml_attribute: true
+        description: 'Language code'
+      - name: sz
+        type: :integer
+        xml_name: sz
+        xml_attribute: true
+        description: 'Font size in hundredths of a point'
+      - name: b
+        type: :string
+        xml_name: b
+        xml_attribute: true
+        description: 'Bold flag'
+
+  p_pr:
+    class_name: ParagraphProperties
+    description: 'Paragraph-level formatting properties'
+    attributes:
+      - name: algn
+        type: :string
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment (l, r, ctr, just)'
+      - name: lvl
+        type: :integer
+        xml_name: lvl
+        xml_attribute: true
+        description: 'Indentation level'
+      - name: marL
+        type: :integer
+        xml_name: marL
+        xml_attribute: true
+        description: 'Left margin in EMUs'
+      - name: marR
+        type: :integer
+        xml_name: marR
+        xml_attribute: true
+        description: 'Right margin in EMUs'
+      - name: indent
+        type: :integer
+        xml_name: indent
+        xml_attribute: true
+        description: 'First line indent in EMUs'
+
+  r_pr:
+    class_name: RunProperties
+    description: 'Character-level formatting properties'
+    attributes:
+      - name: lang
+        type: :string
+        xml_name: lang
+        xml_attribute: true
+        description: 'Language code'
+      - name: sz
+        type: :integer
+        xml_name: sz
+        xml_attribute: true
+        description: 'Font size in hundredths of a point'
+      - name: b
+        type: :string
+        xml_name: b
+        xml_attribute: true
+        description: 'Bold flag'
+      - name: i
+        type: :string
+        xml_name: i
+        xml_attribute: true
+        description: 'Italic flag'
+      - name: u
+        type: :string
+        xml_name: u
+        xml_attribute: true
+        description: 'Underline style'
+      - name: strike
+        type: :string
+        xml_name: strike
+        xml_attribute: true
+        description: 'Strikethrough flag'
+      - name: baseline
+        type: :integer
+        xml_name: baseline
+        xml_attribute: true
+        description: 'Baseline offset percentage'
+
+  # Animations & Transitions (8 elements)
+  timing:
+    class_name: Timing
+    description: 'Animation timing information for a slide'
+    attributes:
+      - name: tn_lst
+        type: TimeNodeList
+        xml_name: tnLst
+        description: 'List of time nodes'
+      - name: bld_lst
+        type: String
+        xml_name: bldLst
+        description: 'Build list for progressive reveals'
+
+  tn_lst:
+    class_name: TimeNodeList
+    description: 'Container for time nodes in animation timeline'
+    attributes:
+      - name: par
+        type: ParallelTimeNode
+        xml_name: par
+        collection: true
+        description: 'Parallel time nodes'
+      - name: seq
+        type: SequenceTimeNode
+        xml_name: seq
+        collection: true
+        description: 'Sequential time nodes'
+
+  par:
+    class_name: ParallelTimeNode
+    description: 'Time node for parallel animation execution'
+    attributes:
+      - name: c_tn
+        type: CommonTimeNode
+        xml_name: cTn
+        required: true
+        description: 'Common time node properties'
+
+  seq:
+    class_name: SequenceTimeNode
+    description: 'Time node for sequential animation execution'
+    attributes:
+      - name: c_tn
+        type: CommonTimeNode
+        xml_name: cTn
+        required: true
+        description: 'Common time node properties'
+      - name: prev_cond_lst
+        type: String
+        xml_name: prevCondLst
+        description: 'Previous conditions list'
+      - name: next_cond_lst
+        type: String
+        xml_name: nextCondLst
+        description: 'Next conditions list'
+
+  c_tn:
+    class_name: CommonTimeNode
+    description: 'Common properties for all time node types'
+    attributes:
+      - name: id
+        type: :integer
+        xml_name: id
+        xml_attribute: true
+        description: 'Time node identifier'
+      - name: dur
+        type: :string
+        xml_name: dur
+        xml_attribute: true
+        description: 'Duration in milliseconds or "indefinite"'
+      - name: restart
+        type: :string
+        xml_name: restart
+        xml_attribute: true
+        description: 'Restart behavior'
+      - name: fill
+        type: :string
+        xml_name: fill
+        xml_attribute: true
+        description: 'Fill behavior'
+      - name: st_cond_lst
+        type: StartConditionsList
+        xml_name: stCondLst
+        description: 'Start conditions'
+      - name: end_cond_lst
+        type: EndConditionsList
+        xml_name: endCondLst
+        description: 'End conditions'
+
+  st_cond_lst:
+    class_name: StartConditionsList
+    description: 'List of conditions that trigger animation start'
+    attributes:
+      - name: cond
+        type: String
+        xml_name: cond
+        collection: true
+        description: 'Individual start conditions'
+
+  end_cond_lst:
+    class_name: EndConditionsList
+    description: 'List of conditions that trigger animation end'
+    attributes:
+      - name: cond
+        type: String
+        xml_name: cond
+        collection: true
+        description: 'Individual end conditions'
+
+  transition:
+    class_name: Transition
+    description: 'Slide transition effect'
+    attributes:
+      - name: spd
+        type: :string
+        xml_name: spd
+        xml_attribute: true
+        description: 'Transition speed (slow, med, fast)'
+      - name: advTm
+        type: :integer
+        xml_name: advTm
+        xml_attribute: true
+        description: 'Advance time in milliseconds'
+      - name: fade
+        type: String
+        xml_name: fade
+        description: 'Fade transition'
+      - name: push
+        type: String
+        xml_name: push
+        description: 'Push transition'
+      - name: wipe
+        type: String
+        xml_name: wipe
+        description: 'Wipe transition'
+      - name: split
+        type: String
+        xml_name: split
+        description: 'Split transition'
+
+  # Media & Content (7 elements)
+  video:
+    class_name: Video
+    description: 'Video element embedded in presentation'
+    attributes:
+      - name: embed
+        type: :string
+        xml_name: embed
+        xml_attribute: true
+        description: 'Relationship ID for embedded video'
+      - name: link
+        type: :string
+        xml_name: link
+        xml_attribute: true
+        description: 'Relationship ID for linked video'
+
+  audio:
+    class_name: Audio
+    description: 'Audio element embedded in presentation'
+    attributes:
+      - name: embed
+        type: :string
+        xml_name: embed
+        xml_attribute: true
+        description: 'Relationship ID for embedded audio'
+      - name: link
+        type: :string
+        xml_name: link
+        xml_attribute: true
+        description: 'Relationship ID for linked audio'
+      - name: is_narration
+        type: :string
+        xml_name: isNarration
+        xml_attribute: true
+        description: 'Boolean flag indicating if audio is narration'
+
+  ole_obj:
+    class_name: OleObject
+    description: 'OLE (Object Linking and Embedding) object'
+    attributes:
+      - name: prog_id
+        type: :string
+        xml_name: progId
+        xml_attribute: true
+        description: 'Programmatic identifier for OLE object type'
+      - name: r_id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        description: 'Relationship ID'
+      - name: show_as_icon
+        type: :string
+        xml_name: showAsIcon
+        xml_attribute: true
+        description: 'Boolean flag to display as icon'
+
+  embed:
+    class_name: Embed
+    description: 'Embedded object reference'
+    attributes:
+      - name: r_id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        description: 'Relationship ID for embedded object'
+
+  ext_lst:
+    class_name: ExtensionList
+    description: 'List of extensions for future extensibility'
+    attributes:
+      - name: ext
+        type: Extension
+        xml_name: ext
+        collection: true
+        description: 'Individual extensions'
+
+  ext:
+    class_name: Extension
+    description: 'Extension element for custom or future features'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Extension namespace URI'
+
+  # Supporting Elements (for ID references)
+  sld_master_id:
+    class_name: SlideMasterId
+    description: 'Slide master identifier reference'
+    attributes:
+      - name: id
+        type: :integer
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Master ID value'
+      - name: r_id
+        type: :string
+        xml_name: 'r:id'
+        xml_attribute: true
+        required: true
+        description: 'Relationship ID'
+
+  sld_id:
+    class_name: SlideId
+    description: 'Slide identifier reference'
+    attributes:
+      - name: id
+        type: :integer
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Slide ID value'
+      - name: r_id
+        type: :string
+        xml_name: 'r:id'
+        xml_attribute: true
+        required: true
+        description: 'Relationship ID'

@@ -1,0 +1,135 @@
+# Document Variables Namespace Schema
+# Namespace: http://schemas.openxmlformats.org/officeDocument/2006/docVars
+# Prefix: dv:
+# Description: Variable substitution and document properties
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/docVars'
+  prefix: 'dv'
+  description: 'Document Variables - Variable substitution and document properties'
+
+elements:
+  doc_vars:
+    class_name: DocVars
+    description: 'Container for document variables used for substitution'
+    attributes:
+      - name: doc_var
+        type: DocVar
+        xml_name: docVar
+        collection: true
+        description: 'Individual document variable entries'
+
+  doc_var:
+    class_name: DocVar
+    description: 'Individual document variable with name and value'
+    attributes:
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Variable name'
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Variable value'
+
+  variable_binding:
+    class_name: VariableBinding
+    description: 'Variable binding configuration for data sources'
+    attributes:
+      - name: xpath
+        type: :string
+        xml_name: xpath
+        xml_attribute: true
+        description: 'XPath expression for binding'
+      - name: store_item_id
+        type: :string
+        xml_name: storeItemID
+        xml_attribute: true
+        description: 'Store item identifier'
+      - name: prefix_mappings
+        type: :string
+        xml_name: prefixMappings
+        xml_attribute: true
+        description: 'Namespace prefix mappings'
+
+  variable_scope:
+    class_name: VariableScope
+    description: 'Scope specification for variables'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Scope type (document, section, paragraph)'
+
+  default_value:
+    class_name: DefaultValue
+    description: 'Default value setting for variables'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        description: 'Default value text'
+
+  data_type:
+    class_name: DataType
+    description: 'Data type specification for variables'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Data type (string, integer, date, boolean, etc.)'
+
+  variable_collection:
+    class_name: VariableCollection
+    description: 'Collection of related variables'
+    attributes:
+      - name: variables
+        type: DocVar
+        xml_name: variable
+        collection: true
+        description: 'Variables in this collection'
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        description: 'Collection name'
+
+  variable_format:
+    class_name: VariableFormat
+    description: 'Format specification for variable display'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        description: 'Format string'
+
+  read_only:
+    class_name: ReadOnly
+    description: 'Read-only flag for variables'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Whether variable is read-only'
+
+  variable_expression:
+    class_name: VariableExpression
+    description: 'Expression for computed variables'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Expression text'

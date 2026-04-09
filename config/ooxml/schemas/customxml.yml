@@ -1,0 +1,493 @@
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/customXml'
+  prefix: 'cxml'
+  description: 'Custom XML - Structured data integration and custom XML parts'
+
+elements:
+  custom_xml:
+    class_name: CustomXml
+    description: 'Custom XML root element for structured data integration'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Root element name'
+      - name: custom_xml_pr
+        type: CustomXmlProperties
+        xml_name: customXmlPr
+        description: 'Custom XML properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Custom XML content elements'
+
+  custom_xml_properties:
+    class_name: CustomXmlProperties
+    description: 'Properties for custom XML elements'
+    attributes:
+      - name: placeholder
+        type: :string
+        xml_name: placeholder
+        xml_attribute: true
+        description: 'Placeholder text for empty custom XML'
+      - name: showing_plc_hdr
+        type: :string
+        xml_name: showingPlcHdr
+        xml_attribute: true
+        description: 'Show placeholder header flag'
+      - name: attr
+        type: CustomXmlAttribute
+        xml_name: attr
+        collection: true
+        description: 'Custom XML attributes'
+
+  custom_xml_attribute:
+    class_name: CustomXmlAttribute
+    description: 'Custom attribute definition for custom XML elements'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Attribute namespace URI'
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Attribute name'
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        description: 'Attribute value'
+
+  data_store_item:
+    class_name: DataStoreItem
+    description: 'Reference to a data store item containing custom XML data'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Data store item identifier'
+      - name: schema_ref
+        type: SchemaReference
+        xml_name: schemaRef
+        description: 'Reference to XML schema'
+
+  schema_reference:
+    class_name: SchemaReference
+    description: 'Reference to an XML schema for validation'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        required: true
+        description: 'Schema namespace URI'
+
+  xpath:
+    class_name: XPath
+    description: 'XPath expression for data selection'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'XPath query string'
+
+  placeholder:
+    class_name: Placeholder
+    description: 'Placeholder text for custom XML elements'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Placeholder text value'
+
+  showing_placeholder_header:
+    class_name: ShowingPlaceholderHeader
+    description: 'Flag indicating whether placeholder header is shown'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Show placeholder header (true/false)'
+
+  data_binding:
+    class_name: DataBinding
+    description: 'Data binding configuration for connecting custom XML to document content'
+    attributes:
+      - name: prefix_mappings
+        type: :string
+        xml_name: prefixMappings
+        xml_attribute: true
+        description: 'Namespace prefix mappings for XPath queries'
+      - name: xpath
+        type: :string
+        xml_name: xpath
+        xml_attribute: true
+        required: true
+        description: 'XPath query for data selection'
+      - name: store_item_id
+        type: :string
+        xml_name: storeItemID
+        xml_attribute: true
+        required: true
+        description: 'Data store item identifier'
+
+  prefix_mappings:
+    class_name: PrefixMappings
+    description: 'Namespace prefix mappings for XPath expressions'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Space-separated prefix:namespace pairs'
+
+  store_item_id:
+    class_name: StoreItemId
+    description: 'Identifier for a data store item'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Store item GUID'
+
+  custom_xml_move_from_range_start:
+    class_name: CustomXmlMoveFromRangeStart
+    description: 'Start marker for custom XML move-from range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier'
+      - name: author
+        type: :string
+        xml_name: author
+        xml_attribute: true
+        description: 'Author who moved the content'
+      - name: date
+        type: :string
+        xml_name: date
+        xml_attribute: true
+        description: 'Date of move operation'
+
+  custom_xml_move_from_range_end:
+    class_name: CustomXmlMoveFromRangeEnd
+    description: 'End marker for custom XML move-from range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier matching start marker'
+
+  custom_xml_move_to_range_start:
+    class_name: CustomXmlMoveToRangeStart
+    description: 'Start marker for custom XML move-to range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier'
+      - name: author
+        type: :string
+        xml_name: author
+        xml_attribute: true
+        description: 'Author who moved the content'
+      - name: date
+        type: :string
+        xml_name: date
+        xml_attribute: true
+        description: 'Date of move operation'
+
+  custom_xml_move_to_range_end:
+    class_name: CustomXmlMoveToRangeEnd
+    description: 'End marker for custom XML move-to range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier matching start marker'
+
+  custom_xml_block:
+    class_name: CustomXmlBlock
+    description: 'Block-level custom XML element containing structured data'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Element name'
+      - name: custom_xml_pr
+        type: CustomXmlProperties
+        xml_name: customXmlPr
+        description: 'Custom XML properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Block content elements'
+
+  custom_xml_run:
+    class_name: CustomXmlRun
+    description: 'Run-level custom XML element for inline structured data'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Element name'
+      - name: custom_xml_pr
+        type: CustomXmlProperties
+        xml_name: customXmlPr
+        description: 'Custom XML properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Run content elements'
+
+  custom_xml_cell:
+    class_name: CustomXmlCell
+    description: 'Cell-level custom XML element for table cells'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Element name'
+      - name: custom_xml_pr
+        type: CustomXmlProperties
+        xml_name: customXmlPr
+        description: 'Custom XML properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Cell content elements'
+
+  custom_xml_row:
+    class_name: CustomXmlRow
+    description: 'Row-level custom XML element for table rows'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Element name'
+      - name: custom_xml_pr
+        type: CustomXmlProperties
+        xml_name: customXmlPr
+        description: 'Custom XML properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Row content elements'
+
+  custom_xml_ins_range_start:
+    class_name: CustomXmlInsRangeStart
+    description: 'Start marker for custom XML insertion range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier'
+      - name: author
+        type: :string
+        xml_name: author
+        xml_attribute: true
+        description: 'Author who inserted the content'
+      - name: date
+        type: :string
+        xml_name: date
+        xml_attribute: true
+        description: 'Date of insertion'
+
+  custom_xml_ins_range_end:
+    class_name: CustomXmlInsRangeEnd
+    description: 'End marker for custom XML insertion range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier matching start marker'
+
+  custom_xml_del_range_start:
+    class_name: CustomXmlDelRangeStart
+    description: 'Start marker for custom XML deletion range in track changes'
+    attributes:
+      - name: id
+        type: :string
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Range identifier'
+      - name: author
+        type: :string
+        xml_name: author
+        xml_attribute: true
+        description: 'Author who deleted the content'
+      - name: date
+        type: :string
+        xml_name: date
+        xml_attribute: true
+        description: 'Date of deletion'
+
+  smart_tag:
+    class_name: SmartTag
+    description: 'Smart tag element for context-aware metadata'
+    attributes:
+      - name: uri
+        type: :string
+        xml_name: uri
+        xml_attribute: true
+        required: true
+        description: 'Smart tag namespace URI'
+      - name: element
+        type: :string
+        xml_name: element
+        xml_attribute: true
+        required: true
+        description: 'Smart tag element name'
+      - name: smart_tag_pr
+        type: SmartTagProperties
+        xml_name: smartTagPr
+        description: 'Smart tag properties'
+      - name: content
+        type: String
+        collection: true
+        description: 'Smart tag content'
+
+  smart_tag_properties:
+    class_name: SmartTagProperties
+    description: 'Properties for smart tag elements'
+    attributes:
+      - name: attr
+        type: SmartTagAttribute
+        xml_name: attr
+        collection: true
+        description: 'Smart tag attributes'
+
+  smart_tag_type:
+    class_name: SmartTagType
+    description: 'Smart tag type definition with namespace and element information'
+    attributes:
+      - name: namespace_uri
+        type: :string
+        xml_name: namespaceuri
+        xml_attribute: true
+        required: true
+        description: 'Smart tag type namespace URI'
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Smart tag type name'
+      - name: url
+        type: :string
+        xml_name: url
+        xml_attribute: true
+        description: 'Smart tag recognizer URL'
+
+  smart_tag_attribute:
+    class_name: SmartTagAttribute
+    description: 'Attribute for smart tag elements'
+    attributes:
+      - name: name
+        type: :string
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Attribute name'
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Attribute value'
+
+  smart_tag_element:
+    class_name: SmartTagElement
+    description: 'Element name for smart tag type'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Element name'
+
+  smart_tag_uri:
+    class_name: SmartTagUri
+    description: 'Namespace URI for smart tag'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Namespace URI'
+
+  smart_tag_name:
+    class_name: SmartTagName
+    description: 'Name for smart tag type'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Smart tag name'

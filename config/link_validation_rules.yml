@@ -1,0 +1,62 @@
+# Link Validation Rules Configuration
+#
+# External configuration for link validation behavior.
+# Follows "Configuration over Convention" principle.
+
+link_validation:
+  # External link validation (HTTP/HTTPS URLs)
+  external_links:
+    enabled: true
+    timeout: 10  # seconds per request
+    retry_count: 3
+    retry_delay: 1  # seconds between retries
+    check_ssl: true
+    allowed_status_codes: [200, 201, 301, 302, 303, 307, 308]
+    user_agent: 'Uniword Link Validator/1.0'
+    follow_redirects: true
+    max_redirects: 5
+
+  # Internal bookmark validation
+  internal_bookmarks:
+    enabled: true
+    case_sensitive: false
+    check_heading_links: true  # Links to heading bookmarks
+
+  # File reference validation
+  file_references:
+    enabled: true
+    base_path: '.'
+    check_relative_paths: true
+    check_absolute_paths: true
+
+  # Footnote/endnote reference validation
+  footnote_references:
+    enabled: true
+    check_targets_exist: true
+
+  # Cross-reference validation
+  cross_references:
+    enabled: true
+    check_bookmark_targets: true
+    check_heading_targets: true
+
+  # Auto-fix options
+  auto_fix:
+    enabled: false
+    update_redirects: true     # Update 301/302 to final URL
+    remove_broken: false       # Remove broken links
+    update_bookmark_case: true # Fix bookmark name casing
+
+  # Reporting options
+  reporting:
+    group_by_type: true
+    include_line_numbers: true
+    include_context: true
+    max_context_length: 100
+
+  # Performance options
+  performance:
+    parallel_checks: false
+    max_parallel: 10
+    cache_results: true
+    cache_duration: 3600  # seconds (1 hour)

@@ -1,0 +1,276 @@
+# Run Schema
+# ISO/IEC 29500-1:2016 - Section 17.3.2
+# Run (text) elements and properties
+
+schema:
+  namespace: w
+  category: "Run"
+  iso_section: "17.3.2"
+
+elements:
+  # Run element
+  run:
+    tag: 'w:r'
+    description: "Text run - inline text with formatting"
+    iso_reference: "17.3.2.25"
+    children:
+      - element: run_properties
+        tag: 'w:rPr'
+        optional: true
+      - element: text_element
+        tag: 'w:t'
+        optional: true
+        attributes:
+          - name: space
+            namespace: 'http://www.w3.org/XML/1998/namespace'
+            prefix: 'xml'
+            type: enum
+            values: [preserve, default]
+      - element: tab
+        tag: 'w:tab'
+        optional: true
+      - element: break
+        tag: 'w:br'
+        optional: true
+        attributes:
+          - name: type
+            type: enum
+            values: [page, column, textWrapping]
+      - element: drawing
+        tag: 'w:drawing'
+        optional: true
+      - element: pict
+        tag: 'w:pict'
+        optional: true
+      - element: field_char
+        tag: 'w:fldChar'
+        optional: true
+      - element: instr_text
+        tag: 'w:instrText'
+        optional: true
+    attributes: []
+
+  # Run properties
+  runproperties:
+    tag: 'w:rPr'
+    description: "Run (character) formatting properties"
+    iso_reference: "17.3.2.28"
+    children:
+      - element: style
+        tag: 'w:rStyle'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: bold
+        tag: 'w:b'
+        optional: true
+        presence_only: true
+      - element: italic
+        tag: 'w:i'
+        optional: true
+        presence_only: true
+      - element: underline
+        tag: 'w:u'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [single, double, thick, dotted, dashed, dotDash, dotDotDash, wave, wavyDouble, wavyHeavy, words, none]
+      - element: strike
+        tag: 'w:strike'
+        optional: true
+        presence_only: true
+      - element: double_strike
+        tag: 'w:dstrike'
+        optional: true
+        presence_only: true
+      - element: small_caps
+        tag: 'w:smallCaps'
+        optional: true
+        presence_only: true
+      - element: all_caps
+        tag: 'w:caps'
+        optional: true
+        presence_only: true
+      - element: size
+        tag: 'w:sz'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: font
+        tag: 'w:rFonts'
+        optional: true
+        attributes:
+          - name: ascii
+            type: string
+          - name: hAnsi
+            type: string
+          - name: cs
+            type: string
+          - name: eastAsia
+            type: string
+      - element: color
+        tag: 'w:color'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+            required: true
+      - element: highlight
+        tag: 'w:highlight'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [black, blue, cyan, green, magenta, red, yellow, white, darkBlue, darkCyan, darkGreen, darkMagenta, darkRed, darkYellow, darkGray, lightGray, none]
+      - element: vertical_align
+        tag: 'w:vertAlign'
+        optional: true
+        attributes:
+          - name: val
+            type: enum
+            values: [baseline, superscript, subscript]
+      - element: lang
+        tag: 'w:lang'
+        optional: true
+        attributes:
+          - name: val
+            type: string
+          - name: eastAsia
+            type: string
+          - name: bidi
+            type: string
+      - element: east_asian_layout
+        tag: 'w:eastAsianLayout'
+        optional: true
+        attributes:
+          - name: id
+            type: integer
+          - name: combine
+            type: boolean
+          - name: combineBrackets
+            type: enum
+            values: [none, round, square, angle, curly]
+          - name: vert
+            type: boolean
+          - name: vertCompress
+            type: boolean
+      - element: emboss
+        tag: 'w:emboss'
+        optional: true
+        presence_only: true
+      - element: imprint
+        tag: 'w:imprint'
+        optional: true
+        presence_only: true
+      - element: outline
+        tag: 'w:outline'
+        optional: true
+        presence_only: true
+      - element: shadow
+        tag: 'w:shadow'
+        optional: true
+        presence_only: true
+      - element: vanish
+        tag: 'w:vanish'
+        optional: true
+        presence_only: true
+      - element: web_hidden
+        tag: 'w:webHidden'
+        optional: true
+        presence_only: true
+      - element: fit_text
+        tag: 'w:fitText'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+          - name: id
+            type: integer
+      - element: kern
+        tag: 'w:kern'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: position
+        tag: 'w:position'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+      - element: spacing
+        tag: 'w:spacing'
+        optional: true
+        attributes:
+          - name: val
+            type: integer
+            required: true
+    attributes: []
+
+  # Text element
+  textelement:
+    tag: 'w:t'
+    description: "Text content element"
+    iso_reference: "17.3.2.36"
+    children: []
+    attributes:
+      - name: space
+        namespace: 'http://www.w3.org/XML/1998/namespace'
+        prefix: 'xml'
+        type: enum
+        values: [preserve, default]
+
+  # Image/Drawing element (simplified DrawingML)
+  image:
+    tag: 'w:drawing'
+    description: "Image/Drawing element (inline or floating)"
+    iso_reference: "17.3.3.9"
+    children: []
+    attributes:
+      - name: relationship_id
+        type: string
+      - name: width
+        type: integer
+      - name: height
+        type: integer
+      - name: alt_text
+        type: string
+      - name: title
+        type: string
+
+  # Comment element
+  comment:
+    tag: 'w:comment'
+    description: "Comment element"
+    iso_reference: "17.13.4.2"
+    children:
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+    attributes:
+      - name: id
+        property: comment_id
+        type: string
+        required: true
+      - name: author
+        type: string
+      - name: date
+        type: string
+      - name: initials
+        type: string
+
+metadata:
+  element_count: 5
+  priority: "HIGH"
+  status: "complete"
+  phase: "2"
+  phase_2_additions: 13
+  notes: "Added complete run properties in Phase 2"

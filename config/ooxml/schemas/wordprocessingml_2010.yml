@@ -1,0 +1,428 @@
+# WordProcessingML 2010 Extended Namespace Schema
+# Word 2010 Enhanced Features
+# URI: http://schemas.microsoft.com/office/word/2010/wordml
+# Prefix: w14
+
+namespace:
+  uri: 'http://schemas.microsoft.com/office/word/2010/wordml'
+  prefix: 'w14'
+  description: 'Word 2010 Extended - Enhanced features and content controls'
+
+# Element definitions
+# Word 2010 introduces enhanced content controls, text effects, and collaborative features
+
+elements:
+  # Content Controls Enhanced (8 elements)
+  
+  sdt:
+    class_name: StructuredDocumentTag
+    description: 'Enhanced structured document tag for Word 2010+'
+    attributes:
+      - name: properties
+        type: SdtProperties
+        xml_name: sdtPr
+        description: 'SDT properties'
+      - name: content
+        type: SdtContent
+        xml_name: sdtContent
+        description: 'SDT content'
+  
+  sdtPr:
+    class_name: SdtProperties
+    description: 'Structured document tag properties'
+    attributes:
+      - name: checkbox
+        type: Checkbox
+        xml_name: checkbox
+        description: 'Checkbox content control'
+      - name: doc_part_obj
+        type: DocPartObj
+        xml_name: docPartObj
+        description: 'Document part object'
+      - name: data_binding
+        type: String
+        xml_name: dataBinding
+        description: 'Data binding settings'
+  
+  checkbox:
+    class_name: Checkbox
+    description: 'Checkbox content control for Word 2010+'
+    attributes:
+      - name: checked
+        type: String
+        xml_name: checked
+        description: 'Checked state'
+      - name: checked_state
+        type: CheckedState
+        xml_name: checkedState
+        description: 'Checked state symbol'
+      - name: unchecked_state
+        type: UncheckedState
+        xml_name: uncheckedState
+        description: 'Unchecked state symbol'
+  
+  checkedState:
+    class_name: CheckedState
+    description: 'Checked state symbol definition'
+    attributes:
+      - name: font
+        type: String
+        xml_name: font
+        xml_attribute: true
+        description: 'Font name for symbol'
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Character code (hex)'
+  
+  uncheckedState:
+    class_name: UncheckedState
+    description: 'Unchecked state symbol definition'
+    attributes:
+      - name: font
+        type: String
+        xml_name: font
+        xml_attribute: true
+        description: 'Font name for symbol'
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Character code (hex)'
+  
+  docPartObj:
+    class_name: DocPartObj
+    description: 'Document part object for building blocks'
+    attributes:
+      - name: doc_part_gallery
+        type: DocPartGallery
+        xml_name: docPartGallery
+        description: 'Document part gallery'
+      - name: doc_part_category
+        type: String
+        xml_name: docPartCategory
+        description: 'Document part category'
+      - name: doc_part_unique
+        type: String
+        xml_name: docPartUnique
+        description: 'Unique document part'
+  
+  docPartGallery:
+    class_name: DocPartGallery
+    description: 'Document part gallery reference'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Gallery name'
+  
+  sdtContent:
+    class_name: SdtContent
+    description: 'Structured document tag content container'
+    attributes:
+      - name: content
+        type: String
+        xml_name: content
+        description: 'Content placeholder'
+  
+  # Text Effects (6 elements)
+  
+  textOutline:
+    class_name: TextOutline
+    description: 'Text outline effect for enhanced typography'
+    attributes:
+      - name: width
+        type: Integer
+        xml_name: w
+        xml_attribute: true
+        description: 'Outline width in EMUs'
+      - name: cap
+        type: String
+        xml_name: cap
+        xml_attribute: true
+        description: 'Line cap style'
+      - name: compound
+        type: String
+        xml_name: cmpd
+        xml_attribute: true
+        description: 'Compound line style'
+      - name: align
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Stroke alignment'
+  
+  textFill:
+    class_name: TextFill
+    description: 'Text fill effect with gradients'
+    attributes:
+      - name: solid_fill
+        type: String
+        xml_name: solidFill
+        description: 'Solid color fill'
+      - name: gradient_fill
+        type: String
+        xml_name: gradFill
+        description: 'Gradient fill'
+      - name: no_fill
+        type: String
+        xml_name: noFill
+        description: 'No fill'
+  
+  shadow:
+    class_name: TextShadow
+    description: 'Text shadow effect'
+    attributes:
+      - name: blur_radius
+        type: Integer
+        xml_name: blurRad
+        xml_attribute: true
+        description: 'Blur radius in EMUs'
+      - name: distance
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Shadow distance'
+      - name: direction
+        type: Integer
+        xml_name: dir
+        xml_attribute: true
+        description: 'Shadow direction angle'
+      - name: alignment
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Shadow alignment'
+  
+  reflection:
+    class_name: TextReflection
+    description: 'Text reflection effect'
+    attributes:
+      - name: blur_radius
+        type: Integer
+        xml_name: blurRad
+        xml_attribute: true
+        description: 'Blur radius'
+      - name: start_opacity
+        type: Integer
+        xml_name: stA
+        xml_attribute: true
+        description: 'Start opacity percentage'
+      - name: end_opacity
+        type: Integer
+        xml_name: endA
+        xml_attribute: true
+        description: 'End opacity percentage'
+      - name: distance
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Reflection distance'
+  
+  glow:
+    class_name: TextGlow
+    description: 'Text glow effect'
+    attributes:
+      - name: radius
+        type: Integer
+        xml_name: rad
+        xml_attribute: true
+        description: 'Glow radius in EMUs'
+      - name: color
+        type: String
+        xml_name: color
+        description: 'Glow color'
+  
+  props3d:
+    class_name: Props3d
+    description: '3D text properties'
+    attributes:
+      - name: extrusion_height
+        type: Integer
+        xml_name: extrusionH
+        xml_attribute: true
+        description: 'Extrusion height'
+      - name: contour_width
+        type: Integer
+        xml_name: contourW
+        xml_attribute: true
+        description: 'Contour width'
+      - name: material
+        type: String
+        xml_name: prstMaterial
+        xml_attribute: true
+        description: 'Preset material'
+  
+  # Paragraph Properties (5 elements)
+  
+  paraId:
+    class_name: ParaId
+    description: 'Paragraph ID for change tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Paragraph ID (hex)'
+  
+  textId:
+    class_name: TextId
+    description: 'Text range ID for change tracking'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Text range ID (hex)'
+  
+  cnfStyle:
+    class_name: ConditionalFormatStyle
+    description: 'Conditional formatting style reference'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Conditional style flags'
+      - name: first_row
+        type: String
+        xml_name: firstRow
+        xml_attribute: true
+        description: 'First row formatting'
+      - name: last_row
+        type: String
+        xml_name: lastRow
+        xml_attribute: true
+        description: 'Last row formatting'
+      - name: first_column
+        type: String
+        xml_name: firstColumn
+        xml_attribute: true
+        description: 'First column formatting'
+      - name: last_column
+        type: String
+        xml_name: lastColumn
+        xml_attribute: true
+        description: 'Last column formatting'
+  
+  conflictMode:
+    class_name: ConflictMode
+    description: 'Conflict resolution mode'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Conflict mode value'
+  
+  entityPicker:
+    class_name: EntityPicker
+    description: 'Entity picker content control'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Entity picker value'
+  
+  # Document Properties (4 elements)
+  
+  docId:
+    class_name: DocId
+    description: 'Document unique identifier'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Document ID (GUID)'
+  
+  conflictIns:
+    class_name: ConflictInsertion
+    description: 'Conflict insertion marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Conflict ID'
+      - name: author
+        type: String
+        xml_name: author
+        xml_attribute: true
+        description: 'Author name'
+      - name: date
+        type: String
+        xml_name: date
+        xml_attribute: true
+        description: 'Modification date'
+  
+  conflictDel:
+    class_name: ConflictDeletion
+    description: 'Conflict deletion marker'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Conflict ID'
+      - name: author
+        type: String
+        xml_name: author
+        xml_attribute: true
+        description: 'Author name'
+      - name: date
+        type: String
+        xml_name: date
+        xml_attribute: true
+        description: 'Modification date'
+  
+  customXmlConflictIns:
+    class_name: CustomXmlConflictInsertion
+    description: 'Custom XML conflict insertion'
+    attributes:
+      - name: id
+        type: String
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Conflict ID'
+      - name: uri
+        type: String
+        xml_name: uri
+        xml_attribute: true
+        description: 'Custom XML URI'
+  
+  # Enhanced Features (2 elements)
+  
+  ligatures:
+    class_name: Ligatures
+    description: 'Ligature settings for advanced typography'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Ligature type (none, standard, contextual, all)'
+  
+  numForm:
+    class_name: NumberForm
+    description: 'Number form for advanced typography'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        description: 'Number form (default, lining, oldStyle)'
+
+# Total elements: 25
+# Coverage: Enhanced content controls (checkbox), text effects (outline, fill, shadow, 
+# reflection, glow, 3D), paragraph tracking (paraId, textId), conditional formatting,
+# conflict resolution, document identification, and advanced typography (ligatures, numForm)

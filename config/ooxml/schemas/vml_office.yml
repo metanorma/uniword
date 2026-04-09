@@ -1,0 +1,415 @@
+# VML Office Namespace Schema
+# URI: urn:schemas-microsoft-com:vml
+# Prefix: v:o or o (within VML context)
+# 
+# This schema defines Office-specific extensions to VML (Vector Markup Language).
+# These elements extend basic VML with Office-specific features and properties.
+
+namespace:
+  uri: 'urn:schemas-microsoft-com:vml'
+  prefix: 'o'
+  description: 'VML Office - Office-specific VML extensions'
+
+elements:
+  # Enhanced VML Properties (10 elements)
+  complex:
+    class_name: VmlComplex
+    description: 'Complex VML property for advanced features'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension type'
+  
+  complexExtension:
+    class_name: VmlComplexExtension
+    description: 'Extension for complex VML properties'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Extension type'
+      - name: data
+        type: String
+        xml_attribute: true
+        description: 'Extension data'
+  
+  left:
+    class_name: VmlLeft
+    description: 'Left offset for VML elements'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Left offset value'
+      - name: units
+        type: String
+        xml_attribute: true
+        description: 'Measurement units'
+  
+  top:
+    class_name: VmlTop
+    description: 'Top offset for VML elements'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Top offset value'
+      - name: units
+        type: String
+        xml_attribute: true
+        description: 'Measurement units'
+  
+  right:
+    class_name: VmlRight
+    description: 'Right offset for VML elements'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Right offset value'
+      - name: units
+        type: String
+        xml_attribute: true
+        description: 'Measurement units'
+  
+  bottom:
+    class_name: VmlBottom
+    description: 'Bottom offset for VML elements'
+    attributes:
+      - name: value
+        type: String
+        xml_attribute: true
+        description: 'Bottom offset value'
+      - name: units
+        type: String
+        xml_attribute: true
+        description: 'Measurement units'
+  
+  column:
+    class_name: VmlColumn
+    description: 'Column settings for VML text layout'
+    attributes:
+      - name: count
+        type: String
+        xml_attribute: true
+        description: 'Number of columns'
+      - name: spacing
+        type: String
+        xml_attribute: true
+        description: 'Column spacing'
+  
+  entry:
+    class_name: VmlEntry
+    description: 'Entry point for VML diagram'
+    attributes:
+      - name: new
+        type: String
+        xml_attribute: true
+        description: 'New entry flag'
+      - name: old
+        type: String
+        xml_attribute: true
+        description: 'Old entry reference'
+  
+  clippath:
+    class_name: VmlClipPath
+    description: 'Clip path for VML shapes'
+    attributes:
+      - name: coords
+        type: String
+        xml_attribute: true
+        description: 'Clip path coordinates'
+      - name: path
+        type: String
+        xml_attribute: true
+        description: 'Clip path definition'
+  
+  fill:
+    class_name: VmlOfficeFill
+    description: 'Enhanced fill properties for VML Office'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Fill type'
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable fill'
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Fill color'
+      - name: opacity
+        type: String
+        xml_attribute: true
+        description: 'Fill opacity'
+      - name: detectmouseclick
+        type: String
+        xml_attribute: true
+        description: 'Detect mouse click flag'
+      - name: relid
+        type: String
+        xml_attribute: true
+        description: 'Relationship ID for image fills'
+
+  # Diagram Support (8 elements)
+  diagram:
+    class_name: VmlDiagram
+    description: 'VML diagram container'
+    attributes:
+      - name: dgmstyle
+        type: String
+        xml_attribute: true
+        description: 'Diagram style'
+      - name: autoformat
+        type: String
+        xml_attribute: true
+        description: 'Auto format flag'
+      - name: reverse
+        type: String
+        xml_attribute: true
+        description: 'Reverse direction flag'
+      - name: autolayout
+        type: String
+        xml_attribute: true
+        description: 'Auto layout flag'
+      - name: dgmscalex
+        type: String
+        xml_attribute: true
+        description: 'X scale factor'
+      - name: dgmscaley
+        type: String
+        xml_attribute: true
+        description: 'Y scale factor'
+  
+  relationtable:
+    class_name: VmlRelationTable
+    description: 'Relationship data table for diagrams'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: data
+        type: String
+        xml_content: true
+        description: 'Relationship data'
+  
+  rules:
+    class_name: VmlRules
+    description: 'Layout rules for VML diagrams'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: rule
+        type: String
+        collection: true
+        description: 'Individual rule elements'
+  
+  rule:
+    class_name: VmlRule
+    description: 'Single layout rule'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Rule ID'
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Rule type'
+      - name: data
+        type: String
+        xml_attribute: true
+        description: 'Rule data'
+  
+  proxy:
+    class_name: VmlProxy
+    description: 'Proxy element for referencing'
+    attributes:
+      - name: start
+        type: String
+        xml_attribute: true
+        description: 'Start reference'
+      - name: end
+        type: String
+        xml_attribute: true
+        description: 'End reference'
+      - name: idref
+        type: String
+        xml_attribute: true
+        description: 'ID reference'
+      - name: connectloc
+        type: String
+        xml_attribute: true
+        description: 'Connection location'
+  
+  wrapcoords:
+    class_name: VmlWrapCoords
+    description: 'Text wrap coordinates'
+    attributes:
+      - name: coords
+        type: String
+        xml_attribute: true
+        description: 'Coordinate string'
+  
+  wrapblock:
+    class_name: VmlWrapBlock
+    description: 'Text wrap block settings'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Wrap type'
+      - name: side
+        type: String
+        xml_attribute: true
+        description: 'Wrap side'
+  
+  anchorlock:
+    class_name: VmlAnchorLock
+    description: 'Anchor lock to prevent movement'
+    attributes:
+      - name: locked
+        type: String
+        xml_attribute: true
+        description: 'Lock state'
+
+  # Shape Defaults and Settings (7 elements)
+  shapedefaults:
+    class_name: VmlShapeDefaults
+    description: 'Default shape properties for VML'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: spidmax
+        type: String
+        xml_attribute: true
+        description: 'Maximum shape ID'
+      - name: fill
+        type: String
+        xml_name: fill
+        description: 'Default fill element'
+      - name: stroke
+        type: String
+        xml_name: stroke
+        description: 'Default stroke element'
+      - name: textbox
+        type: String
+        xml_name: textbox
+        description: 'Default textbox element'
+  
+  shapelayout:
+    class_name: VmlShapeLayout
+    description: 'Shape layout settings'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: idmap
+        type: String
+        xml_name: idmap
+        description: 'ID map element'
+  
+  idmap:
+    class_name: VmlIdMap
+    description: 'ID mapping for shapes'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: data
+        type: String
+        xml_attribute: true
+        description: 'Mapping data'
+  
+  regroup:
+    class_name: VmlRegroup
+    description: 'Regrouping settings'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Regroup ID'
+  
+  signatureline:
+    class_name: VmlSignatureLine
+    description: 'Signature line in VML'
+    attributes:
+      - name: issignatureline
+        type: String
+        xml_attribute: true
+        description: 'Is signature line flag'
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Signature line ID'
+      - name: provid
+        type: String
+        xml_attribute: true
+        description: 'Provider ID'
+      - name: signinginstructionsset
+        type: String
+        xml_attribute: true
+        description: 'Signing instructions set'
+      - name: allowcomments
+        type: String
+        xml_attribute: true
+        description: 'Allow comments flag'
+      - name: showsigndate
+        type: String
+        xml_attribute: true
+        description: 'Show sign date flag'
+      - name: suggestedsigner
+        type: String
+        xml_attribute: true
+        description: 'Suggested signer name'
+      - name: suggestedsigneremail
+        type: String
+        xml_attribute: true
+        description: 'Suggested signer email'
+      - name: signinginstructions
+        type: String
+        xml_attribute: true
+        description: 'Signing instructions text'
+  
+  ink:
+    class_name: VmlInk
+    description: 'Ink annotation properties for VML'
+    attributes:
+      - name: i
+        type: String
+        xml_attribute: true
+        description: 'Ink data'
+      - name: annotation
+        type: String
+        xml_attribute: true
+        description: 'Annotation flag'
+      - name: contentType
+        type: String
+        xml_attribute: true
+        description: 'Content type'
+  
+  colormru:
+    class_name: VmlColorMru
+    description: 'Most Recently Used color list'
+    attributes:
+      - name: ext
+        type: String
+        xml_attribute: true
+        description: 'Extension'
+      - name: colors
+        type: String
+        xml_attribute: true
+        description: 'MRU color values'
+
+# Total: 25 VML Office elements defined
+# These elements extend VML with Office-specific features and properties

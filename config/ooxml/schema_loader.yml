@@ -1,0 +1,95 @@
+# OOXML Schema Loader Configuration
+# Master index for multi-file schema organization
+# ISO/IEC 29500-1:2016 WordProcessingML
+
+version: "2.0.0"
+iso_reference: "ISO/IEC 29500-1:2016"
+
+# Schema files to load (in order)
+# Each file contains MECE (Mutually Exclusive, Collectively Exhaustive) element definitions
+schema_files:
+  # Phase 1 - Core document structure and critical elements (31 total elements)
+  - schemas/01_document_structure.yml  # Document, body
+  - schemas/02_paragraph.yml           # Paragraph and properties (complete Phase 2)
+  - schemas/03_run.yml                 # Run and properties (complete Phase 2)
+  - schemas/04_table.yml               # Tables (complete)
+  - schemas/05_headers_footers.yml     # Headers and footers (Phase 1)
+  - schemas/06_fields.yml              # Fields and complex fields (Phase 1)
+  - schemas/07_footnotes.yml           # Footnotes and endnotes (Phase 1)
+  - schemas/08_styles.yml              # Style elements (Phase 3 - complete)
+  - schemas/09_numbering.yml           # Numbering elements (Phase 3 - complete)
+  - schemas/10_sections.yml            # Section properties (Phase 1 - complete)
+  # Phase 2 - Complete paragraph/run properties and drawings (33 new elements)
+  - schemas/11_drawing.yml             # Drawing and image elements (Phase 2 + Phase 3 enhancements)
+  # Phase 5 Part 2 - Chart support (50 new elements)
+  - schemas/13_charts.yml              # Chart elements (Phase 5 Part 2)
+
+# Namespace definitions
+namespaces:
+  w:
+    uri: "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    description: "Main WordProcessingML namespace"
+
+  wp:
+    uri: "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+    description: "WordProcessingML Drawing namespace"
+
+  a:
+    uri: "http://schemas.openxmlformats.org/drawingml/2006/main"
+    description: "DrawingML main namespace"
+
+  pic:
+    uri: "http://schemas.openxmlformats.org/drawingml/2006/picture"
+    description: "Picture namespace"
+
+  r:
+    uri: "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+    description: "Relationships namespace"
+
+  m:
+    uri: "http://schemas.openxmlformats.org/officeDocument/2006/math"
+    description: "Office Math Markup Language (OMML) namespace"
+
+  c:
+    uri: "http://schemas.openxmlformats.org/drawingml/2006/chart"
+    description: "Chart namespace"
+
+# Schema metadata
+metadata:
+  phase: "5"
+  total_files: 12
+  total_elements: 149  # 31 Phase 1 + 33 Phase 2 + 35 Phase 3 + 50 Phase 5 Part 2
+  phase_1_elements: 31
+  phase_2_additions: 33  # 15 paragraph + 13 run + 5 drawing
+  phase_3_additions: 35  # 10 styles + 6 numbering + 14 drawing enhancements + 5 drawing base
+  phase_5_part2_additions: 50  # Chart elements
+  coverage: "Core structure + paragraph/run properties + drawing + styles + numbering + charts"
+  status: "active"
+  version: "6.0.0"
+
+# Migration notes
+migration:
+  from: "config/ooxml/schema_main.yml"
+  backward_compatible: true
+  fallback_enabled: true
+  deprecation_version: "v2.6.0"
+
+# Phase history
+phases:
+  phase_1:
+    elements: 31
+    description: "Core document structure and critical elements"
+  phase_2:
+    elements: 33
+    description: "Complete paragraph/run properties and base drawing"
+  phase_3:
+    elements: 35
+    description: "Complete styles, numbering, and advanced drawing (positioning/wrapping)"
+    breakdown:
+      styles: 10
+      numbering: 6
+      drawing_enhancements: 14
+      drawing_base_moved: 5
+  phase_5_part2:
+    elements: 50
+    description: "Chart support with comprehensive chart elements"

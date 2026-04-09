@@ -1,0 +1,82 @@
+# Headers and Footers Schema
+# ISO/IEC 29500-1:2016 - Section 17.10
+# Header and footer elements and references
+
+schema:
+  namespace: w
+  category: "Headers and Footers"
+  iso_section: "17.10"
+
+elements:
+  # Header element
+  header:
+    tag: 'w:hdr'
+    description: "Header content container"
+    iso_reference: "17.10.4"
+    children:
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+        optional: true
+      - element: table
+        tag: 'w:tbl'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Footer element
+  footer:
+    tag: 'w:ftr'
+    description: "Footer content container"
+    iso_reference: "17.10.3"
+    children:
+      - element: paragraph
+        tag: 'w:p'
+        multiple: true
+        optional: true
+      - element: table
+        tag: 'w:tbl'
+        multiple: true
+        optional: true
+    attributes: []
+
+  # Header reference (in section properties)
+  header_reference:
+    tag: 'w:headerReference'
+    description: "Reference to header part"
+    iso_reference: "17.10.5"
+    children: []
+    attributes:
+      - name: type
+        type: enum
+        values: [default, even, first]
+        required: true
+      - name: id
+        namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+        prefix: 'r'
+        type: string
+        required: true
+
+  # Footer reference (in section properties)
+  footer_reference:
+    tag: 'w:footerReference'
+    description: "Reference to footer part"
+    iso_reference: "17.10.2"
+    children: []
+    attributes:
+      - name: type
+        type: enum
+        values: [default, even, first]
+        required: true
+      - name: id
+        namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+        prefix: 'r'
+        type: string
+        required: true
+
+metadata:
+  element_count: 4
+  priority: "HIGH"
+  status: "new"
+  phase: "1"
+  notes: "Headers and footers are critical for document structure"

@@ -1,0 +1,388 @@
+---
+name: Integral
+source: Integral.thmx
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Integral
+  colors:
+    accent1: 1CADE4
+    accent2: 2683C6
+    accent3: 27CED7
+    accent4: 42BA97
+    accent5: 3E8853
+    accent6: 62A39F
+    dk1: '000000'
+    dk2: 335B74
+    folHlink: B26B02
+    hlink: 6B9F25
+    lt1: FFFFFF
+    lt2: DFE3E5
+font_scheme:
+  name: Integral
+  major_font: Tw Cen MT Condensed
+  minor_font: Tw Cen MT
+  major_east_asian: ''
+  major_complex_script: ''
+  minor_east_asian: ''
+  minor_complex_script: ''
+variants:
+  variant1:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 99CB38
+        accent2: 63A537
+        accent3: E6D024
+        accent4: CC9700
+        accent5: 4EB3CF
+        accent6: 378DA6
+        dk1: '000000'
+        dk2: 455F51
+        folHlink: B26B02
+        hlink: 6B9F25
+        lt1: FFFFFF
+        lt2: E3DED1
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant2:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: A9A57C
+        accent2: 9CBEBD
+        accent3: D2CB6C
+        accent4: 95A39D
+        accent5: C89F5D
+        accent6: B1A089
+        dk1: 2E2B21
+        dk2: 605B4F
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BE
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant3:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: A9A57C
+        accent2: 9CBEBD
+        accent3: D2CB6C
+        accent4: 95A39D
+        accent5: C89F5D
+        accent6: B1A089
+        dk1: 2E2B21
+        dk2: 605B4F
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BE
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant4:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: C66951
+        accent2: BF974D
+        accent3: 928B70
+        accent4: 87706B
+        accent5: 94734E
+        accent6: 6F777D
+        dk1: '000000'
+        dk2: '534949'
+        folHlink: C0C0C0
+        hlink: CC9900
+        lt1: FFFFFF
+        lt2: CCD1B9
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant5:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 9DBFBE
+        accent2: DB8631
+        accent3: E3CC5A
+        accent4: ACADA8
+        accent5: 927C61
+        accent6: B3B435
+        dk1: '000000'
+        dk2: '514949'
+        folHlink: '800080'
+        hlink: 0000FF
+        lt1: FFFFFF
+        lt2: E1E1DB
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant6:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 3494BA
+        accent2: 58B6C0
+        accent3: 75BDA7
+        accent4: 7A8C8E
+        accent5: 84ACB6
+        accent6: 2683C6
+        dk1: '000000'
+        dk2: '373545'
+        folHlink: B26B02
+        hlink: 6B9F25
+        lt1: FFFFFF
+        lt2: CEDBE6
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant7:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 93A299
+        accent2: CF543F
+        accent3: B5AE53
+        accent4: '848058'
+        accent5: E8B54D
+        accent6: 786C71
+        dk1: '000000'
+        dk2: 564B3C
+        folHlink: B2B2B2
+        hlink: CCCC00
+        lt1: FFFFFF
+        lt2: ECEDD1
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant8:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 1CADE4
+        accent2: 2683C6
+        accent3: 27CED7
+        accent4: 42BA97
+        accent5: 3E8853
+        accent6: 62A39F
+        dk1: '000000'
+        dk2: 335B74
+        folHlink: B26B02
+        hlink: 6B9F25
+        lt1: FFFFFF
+        lt2: DFE3E5
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant9:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 99CB38
+        accent2: 63A537
+        accent3: E6D024
+        accent4: CC9700
+        accent5: 4EB3CF
+        accent6: 378DA6
+        dk1: '000000'
+        dk2: 455F51
+        folHlink: B26B02
+        hlink: 6B9F25
+        lt1: FFFFFF
+        lt2: E3DED1
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant10:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: A9A57C
+        accent2: 9CBEBD
+        accent3: D2CB6C
+        accent4: 95A39D
+        accent5: C89F5D
+        accent6: B1A089
+        dk1: 2E2B21
+        dk2: 605B4F
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BE
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant11:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: A9A57C
+        accent2: 9CBEBD
+        accent3: D2CB6C
+        accent4: 95A39D
+        accent5: C89F5D
+        accent6: B1A089
+        dk1: 2E2B21
+        dk2: 605B4F
+        folHlink: 849A0A
+        hlink: D25814
+        lt1: FFFFFF
+        lt2: D8D6BE
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant12:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: C66951
+        accent2: BF974D
+        accent3: 928B70
+        accent4: 87706B
+        accent5: 94734E
+        accent6: 6F777D
+        dk1: '000000'
+        dk2: '534949'
+        folHlink: C0C0C0
+        hlink: CC9900
+        lt1: FFFFFF
+        lt2: CCD1B9
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant13:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 9DBFBE
+        accent2: DB8631
+        accent3: E3CC5A
+        accent4: ACADA8
+        accent5: 927C61
+        accent6: B3B435
+        dk1: '000000'
+        dk2: '514949'
+        folHlink: '800080'
+        hlink: 0000FF
+        lt1: FFFFFF
+        lt2: E1E1DB
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant14:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 3494BA
+        accent2: 58B6C0
+        accent3: 75BDA7
+        accent4: 7A8C8E
+        accent5: 84ACB6
+        accent6: 2683C6
+        dk1: '000000'
+        dk2: '373545'
+        folHlink: B26B02
+        hlink: 6B9F25
+        lt1: FFFFFF
+        lt2: CEDBE6
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''
+  variant15:
+    color_scheme:
+      name: Integral
+      colors:
+        accent1: 93A299
+        accent2: CF543F
+        accent3: B5AE53
+        accent4: '848058'
+        accent5: E8B54D
+        accent6: 786C71
+        dk1: '000000'
+        dk2: 564B3C
+        folHlink: B2B2B2
+        hlink: CCCC00
+        lt1: FFFFFF
+        lt2: ECEDD1
+    font_scheme:
+      name: Integral
+      major_font: Tw Cen MT Condensed
+      minor_font: Tw Cen MT
+      major_east_asian: ''
+      major_complex_script: ''
+      minor_east_asian: ''
+      minor_complex_script: ''

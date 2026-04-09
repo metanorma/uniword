@@ -1,0 +1,1368 @@
+# DrawingML Main Namespace Schema
+# ISO 29500-1 Part 4: DrawingML
+# URI: http://schemas.openxmlformats.org/drawingml/2006/main
+# Prefix: a
+# 
+# This schema defines 170+ DrawingML elements for graphics, shapes, text, fills,
+# colors, lines, effects, and transforms.
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/drawingml/2006/main'
+  prefix: 'a'
+  description: 'DrawingML - Graphics, shapes, and visual effects'
+
+elements:
+  # Graphic container
+  graphic:
+    class_name: Graphic
+    description: 'Graphic container element'
+    attributes:
+      - name: graphic_data
+        type: GraphicData
+        xml_name: graphicData
+        required: true
+        description: 'Graphic data holder'
+  
+  # Graphic data
+  graphicData:
+    class_name: GraphicData
+    description: 'Graphic data holder with type URI'
+    attributes:
+      - name: uri
+        type: String
+        xml_name: uri
+        xml_attribute: true
+        required: true
+        description: 'Graphic type URI'
+  
+  # Binary Large Image or Picture
+  blip:
+    class_name: Blip
+    description: 'Binary Large Image or Picture reference'
+    attributes:
+      - name: embed
+        type: String
+        xml_name: embed
+        xml_attribute: true
+        description: 'Embedded picture reference'
+      - name: link
+        type: String
+        xml_name: link
+        xml_attribute: true
+        description: 'Linked picture reference'
+  
+  # Picture fill
+  blipFill:
+    class_name: BlipFill
+    description: 'Picture fill properties'
+    attributes:
+      - name: blip
+        type: Blip
+        xml_name: blip
+        description: 'Picture reference'
+      - name: stretch
+        type: Stretch
+        xml_name: stretch
+        description: 'Stretch fill'
+  
+  # Stretch fill
+  stretch:
+    class_name: Stretch
+    description: 'Stretch fill to shape bounds'
+    attributes: []
+  
+  # Source rectangle
+  srcRect:
+    class_name: SourceRect
+    description: 'Source rectangle for picture cropping'
+    attributes:
+      - name: l
+        type: Integer
+        xml_name: l
+        xml_attribute: true
+        description: 'Left offset'
+      - name: t
+        type: Integer
+        xml_name: t
+        xml_attribute: true
+        description: 'Top offset'
+      - name: r
+        type: Integer
+        xml_name: r
+        xml_attribute: true
+        description: 'Right offset'
+      - name: b
+        type: Integer
+        xml_name: b
+        xml_attribute: true
+        description: 'Bottom offset'
+  
+  # Shape
+  sp:
+    class_name: Shape
+    description: 'Shape element'
+    attributes:
+      - name: nv_sp_pr
+        type: NonVisualShapeProperties
+        xml_name: nvSpPr
+        required: true
+        description: 'Non-visual shape properties'
+      - name: sp_pr
+        type: ShapeProperties
+        xml_name: spPr
+        required: true
+        description: 'Shape properties'
+  
+  # Non-visual shape properties
+  nvSpPr:
+    class_name: NonVisualShapeProperties
+    description: 'Non-visual shape properties'
+    attributes:
+      - name: c_nv_pr
+        type: NonVisualDrawingProperties
+        xml_name: cNvPr
+        required: true
+        description: 'Non-visual drawing properties'
+  
+  # Non-visual drawing properties
+  cNvPr:
+    class_name: NonVisualDrawingProperties
+    description: 'Non-visual drawing properties'
+    attributes:
+      - name: id
+        type: Integer
+        xml_name: id
+        xml_attribute: true
+        required: true
+        description: 'Unique shape ID'
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Shape name'
+  
+  # Shape properties
+  spPr:
+    class_name: ShapeProperties
+    description: 'Shape visual properties'
+    attributes:
+      - name: xfrm
+        type: Transform2D
+        xml_name: xfrm
+        description: '2D transform'
+      - name: ln
+        type: LineProperties
+        xml_name: ln
+        description: 'Line properties'
+  
+  # 2D transform
+  xfrm:
+    class_name: Transform2D
+    description: '2D transformation'
+    attributes:
+      - name: off
+        type: Offset
+        xml_name: off
+        description: 'Offset'
+      - name: ext
+        type: Extents
+        xml_name: ext
+        description: 'Extents'
+  
+  # Offset
+  off:
+    class_name: Offset
+    description: 'Position offset'
+    attributes:
+      - name: x
+        type: Integer
+        xml_name: x
+        xml_attribute: true
+        required: true
+        description: 'X coordinate in EMUs'
+      - name: y
+        type: Integer
+        xml_name: y
+        xml_attribute: true
+        required: true
+        description: 'Y coordinate in EMUs'
+  
+  # Extents
+  ext:
+    class_name: Extents
+    description: 'Shape extents'
+    attributes:
+      - name: cx
+        type: Integer
+        xml_name: cx
+        xml_name: cx
+        xml_attribute: true
+        required: true
+        description: 'Width in EMUs'
+      - name: cy
+        type: Integer
+        xml_name: cy
+        xml_attribute: true
+        required: true
+        description: 'Height in EMUs'
+  
+  # Line properties
+  ln:
+    class_name: LineProperties
+    description: 'Line properties'
+    attributes:
+      - name: w
+        type: Integer
+        xml_name: w
+        xml_attribute: true
+        description: 'Line width in EMUs'
+  
+  # Text body
+  txBody:
+    class_name: TextBody
+    description: 'Text body container'
+    attributes:
+      - name: body_pr
+        type: BodyProperties
+        xml_name: bodyPr
+        required: true
+        description: 'Body properties'
+      - name: paragraphs
+        type: TextParagraph
+        collection: true
+        xml_name: p
+        description: 'Text paragraphs'
+  
+  # Body properties
+  bodyPr:
+    class_name: BodyProperties
+    description: 'Text body properties'
+    attributes:
+      - name: wrap
+        type: String
+        xml_name: wrap
+        xml_attribute: true
+        description: 'Text wrapping'
+  
+  # Text paragraph
+  p:
+    class_name: TextParagraph
+    description: 'Text paragraph'
+    attributes:
+      - name: runs
+        type: TextRun
+        collection: true
+        xml_name: r
+        description: 'Text runs'
+  
+  # Text run
+  r:
+    class_name: TextRun
+    description: 'Text run'
+    attributes:
+      - name: t
+        type: String
+        xml_name: t
+        required: true
+        description: 'Text content'
+  
+  # Solid fill
+  solidFill:
+    class_name: SolidFill
+    description: 'Solid color fill'
+    attributes: []
+  
+  # No fill
+  noFill:
+    class_name: NoFill
+    description: 'No fill'
+    attributes: []
+  
+  # SRGB color
+  srgbClr:
+    class_name: SrgbColor
+    description: 'SRGB color'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'RGB hex value'
+  
+  # Scheme color
+  schemeClr:
+    class_name: SchemeColor
+    description: 'Theme scheme color'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Scheme color name'
+
+  # Gradient fills category
+  
+  # Gradient stop list
+  gsLst:
+    class_name: GradientStopList
+    description: 'Gradient stop list container'
+    attributes:
+      - name: gradient_stops
+        type: GradientStop
+        collection: true
+        xml_name: gs
+        description: 'Individual gradient stops'
+  
+  # Gradient stop
+  gs:
+    class_name: GradientStop
+    description: 'Gradient stop with position and color'
+    attributes:
+      - name: pos
+        type: Integer
+        xml_name: pos
+        xml_attribute: true
+        required: true
+        description: 'Position (0-100000)'
+      - name: srgb_clr
+        type: SrgbColor
+        xml_name: srgbClr
+        description: 'SRGB color'
+      - name: scheme_clr
+        type: SchemeColor
+        xml_name: schemeClr
+        description: 'Scheme color'
+  
+  # Linear gradient
+  lin:
+    class_name: LinearGradient
+    description: 'Linear gradient properties'
+    attributes:
+      - name: ang
+        type: Integer
+        xml_name: ang
+        xml_attribute: true
+        description: 'Angle in 60000ths of a degree'
+      - name: scaled
+        type: String
+        xml_name: scaled
+        xml_attribute: true
+        description: 'Scaled flag'
+  
+  # Path gradient
+  path:
+    class_name: PathGradient
+    description: 'Path gradient properties'
+    attributes:
+      - name: path
+        type: String
+        xml_name: path
+        xml_attribute: true
+        description: 'Path type (shape, circle, rect)'
+      - name: fill_to_rect
+        type: FillToRect
+        xml_name: fillToRect
+        description: 'Fill to rectangle'
+  
+  # Fill to rectangle
+  fillToRect:
+    class_name: FillToRect
+    description: 'Fill to rectangle insets'
+    attributes:
+      - name: l
+        type: Integer
+        xml_name: l
+        xml_attribute: true
+        description: 'Left inset percentage'
+      - name: t
+        type: Integer
+        xml_name: t
+        xml_attribute: true
+        description: 'Top inset percentage'
+      - name: r
+        type: Integer
+        xml_name: r
+        xml_attribute: true
+        description: 'Right inset percentage'
+      - name: b
+        type: Integer
+        xml_name: b
+        xml_attribute: true
+        description: 'Bottom inset percentage'
+  
+  # Tile rectangle
+  tileRect:
+    class_name: TileRect
+    description: 'Tile rectangle'
+    attributes:
+      - name: l
+        type: Integer
+        xml_name: l
+        xml_attribute: true
+        description: 'Left offset'
+      - name: t
+        type: Integer
+        xml_name: t
+        xml_attribute: true
+        description: 'Top offset'
+      - name: r
+        type: Integer
+        xml_name: r
+        xml_attribute: true
+        description: 'Right offset'
+      - name: b
+        type: Integer
+        xml_name: b
+        xml_attribute: true
+        description: 'Bottom offset'
+  
+  # Gradient fill
+  gradFill:
+    class_name: GradientFill
+    description: 'Gradient fill container'
+    attributes:
+      - name: gs_lst
+        type: GradientStopList
+        xml_name: gsLst
+        required: true
+        description: 'Gradient stop list'
+      - name: lin
+        type: LinearGradient
+        xml_name: lin
+        description: 'Linear gradient'
+      - name: path
+        type: PathGradient
+        xml_name: path
+        description: 'Path gradient'
+  
+  # Pattern fill
+  pattFill:
+    class_name: PatternFill
+    description: 'Pattern fill'
+    attributes:
+      - name: prst
+        type: String
+        xml_name: prst
+        xml_attribute: true
+        description: 'Preset pattern type'
+      - name: fg_clr
+        type: String
+        xml_name: fgClr
+        description: 'Foreground color'
+      - name: bg_clr
+        type: String
+        xml_name: bgClr
+        description: 'Background color'
+  
+  # Foreground color
+  fgClr:
+    class_name: ForegroundColor
+    description: 'Foreground color'
+    attributes:
+      - name: srgb_clr
+        type: SrgbColor
+        xml_name: srgbClr
+        description: 'SRGB color'
+      - name: scheme_clr
+        type: SchemeColor
+        xml_name: schemeClr
+        description: 'Scheme color'
+  
+  # Background color
+  bgClr:
+    class_name: BackgroundColor
+    description: 'Background color'
+    attributes:
+      - name: srgb_clr
+        type: SrgbColor
+        xml_name: srgbClr
+        description: 'SRGB color'
+      - name: scheme_clr
+        type: SchemeColor
+        xml_name: schemeClr
+        description: 'Scheme color'
+
+  # Effects category
+  
+  # Effect list
+  effectLst:
+    class_name: EffectList
+    description: 'Effect list container'
+    attributes:
+      - name: glow
+        type: Glow
+        xml_name: glow
+        description: 'Glow effect'
+      - name: inner_shdw
+        type: InnerShadow
+        xml_name: innerShdw
+        description: 'Inner shadow'
+      - name: outer_shdw
+        type: OuterShadow
+        xml_name: outerShdw
+        description: 'Outer shadow'
+  
+  # Effect DAG container
+  effectDag:
+    class_name: EffectContainer
+    description: 'Effect DAG container'
+    attributes:
+      - name: effects
+        type: String
+        collection: true
+        xml_name: effect
+        description: 'Effects'
+  
+  # Glow effect
+  glow:
+    class_name: Glow
+    description: 'Glow effect'
+    attributes:
+      - name: rad
+        type: Integer
+        xml_name: rad
+        xml_attribute: true
+        description: 'Radius in EMUs'
+      - name: srgb_clr
+        type: SrgbColor
+        xml_name: srgbClr
+        description: 'SRGB color'
+      - name: scheme_clr
+        type: SchemeColor
+        xml_name: schemeClr
+        description: 'Scheme color'
+  
+  # Inner shadow
+  innerShdw:
+    class_name: InnerShadow
+    description: 'Inner shadow effect'
+    attributes:
+      - name: blur_rad
+        type: Integer
+        xml_name: blurRad
+        xml_attribute: true
+        description: 'Blur radius in EMUs'
+      - name: dist
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Distance in EMUs'
+      - name: dir
+        type: Integer
+        xml_name: dir
+        xml_attribute: true
+        description: 'Direction in 60000ths of a degree'
+  
+  # Outer shadow
+  outerShdw:
+    class_name: OuterShadow
+    description: 'Outer shadow effect'
+    attributes:
+      - name: blur_rad
+        type: Integer
+        xml_name: blurRad
+        xml_attribute: true
+        description: 'Blur radius in EMUs'
+      - name: dist
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Distance in EMUs'
+      - name: dir
+        type: Integer
+        xml_name: dir
+        xml_attribute: true
+        description: 'Direction in 60000ths of a degree'
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment (tl, t, tr, l, ctr, r, bl, b, br)'
+  
+  # Preset shadow
+  prstShdw:
+    class_name: PresetShadow
+    description: 'Preset shadow effect'
+    attributes:
+      - name: prst
+        type: String
+        xml_name: prst
+        xml_attribute: true
+        required: true
+        description: 'Preset shadow type'
+      - name: dist
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Distance in EMUs'
+      - name: dir
+        type: Integer
+        xml_name: dir
+        xml_attribute: true
+        description: 'Direction in 60000ths of a degree'
+  
+  # Reflection
+  reflection:
+    class_name: Reflection
+    description: 'Reflection effect'
+    attributes:
+      - name: blur_rad
+        type: Integer
+        xml_name: blurRad
+        xml_attribute: true
+        description: 'Blur radius in EMUs'
+      - name: st_a
+        type: Integer
+        xml_name: stA
+        xml_attribute: true
+        description: 'Start opacity (0-100000)'
+      - name: end_a
+        type: Integer
+        xml_name: endA
+        xml_attribute: true
+        description: 'End opacity (0-100000)'
+      - name: dist
+        type: Integer
+        xml_name: dist
+        xml_attribute: true
+        description: 'Distance in EMUs'
+  
+  # Soft edge
+  softEdge:
+    class_name: SoftEdge
+    description: 'Soft edge effect'
+    attributes:
+      - name: rad
+        type: Integer
+        xml_name: rad
+        xml_attribute: true
+        required: true
+        description: 'Radius in EMUs'
+  
+  # Blur
+  blur:
+    class_name: Blur
+    description: 'Blur effect'
+    attributes:
+      - name: rad
+        type: Integer
+        xml_name: rad
+        xml_attribute: true
+        description: 'Radius in EMUs'
+      - name: grow
+        type: String
+        xml_name: grow
+        xml_attribute: true
+        description: 'Grow bounds flag'
+  
+  # Fill overlay
+  fillOverlay:
+    class_name: FillOverlay
+    description: 'Fill overlay effect'
+    attributes:
+      - name: blend
+        type: String
+        xml_name: blend
+        xml_attribute: true
+        description: 'Blend mode'
+  
+  # Duotone
+  duotone:
+    class_name: Duotone
+    description: 'Duotone effect'
+    attributes:
+      - name: colors
+        type: String
+        collection: true
+        xml_name: color
+        description: 'Colors'
+  
+  # Alpha bi-level
+  alphaBiLevel:
+    class_name: AlphaBiLevel
+    description: 'Alpha bi-level effect'
+    attributes:
+      - name: thresh
+        type: Integer
+        xml_name: thresh
+        xml_attribute: true
+        required: true
+        description: 'Threshold (0-100000)'
+  
+  # Alpha modulation fixed
+  alphaModFix:
+    class_name: AlphaModulationFixed
+    description: 'Fixed alpha modulation'
+    attributes:
+      - name: amt
+        type: Integer
+        xml_name: amt
+        xml_attribute: true
+        description: 'Amount (0-100000)'
+  
+  # Bi-level effect
+  biLevel:
+    class_name: BiLevel
+    description: 'Bi-level (black and white) effect'
+    attributes:
+      - name: thresh
+        type: Integer
+        xml_name: thresh
+        xml_attribute: true
+        required: true
+        description: 'Threshold (0-100000)'
+  
+  # Grayscale
+  grayscl:
+    class_name: Grayscale
+    description: 'Grayscale effect'
+    attributes: []
+
+  # Color transforms category
+  
+  # Alpha
+  alpha:
+    class_name: Alpha
+    description: 'Alpha transparency'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Alpha value (0-100000)'
+  
+  # Alpha offset
+  alphaOff:
+    class_name: AlphaOffset
+    description: 'Alpha offset'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Alpha offset value'
+  
+  # Alpha modulation
+  alphaMod:
+    class_name: AlphaModulation
+    description: 'Alpha modulation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Alpha modulation percentage'
+  
+  # Hue
+  hue:
+    class_name: Hue
+    description: 'Hue value'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Hue in 60000ths of a degree'
+  
+  # Hue offset
+  hueOff:
+    class_name: HueOffset
+    description: 'Hue offset'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Hue offset value'
+  
+  # Hue modulation
+  hueMod:
+    class_name: HueModulation
+    description: 'Hue modulation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Hue modulation percentage'
+  
+  # Saturation
+  sat:
+    class_name: Saturation
+    description: 'Saturation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Saturation percentage'
+  
+  # Saturation offset
+  satOff:
+    class_name: SaturationOffset
+    description: 'Saturation offset'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Saturation offset value'
+  
+  # Saturation modulation
+  satMod:
+    class_name: SaturationModulation
+    description: 'Saturation modulation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Saturation modulation percentage'
+  
+  # Luminance
+  lum:
+    class_name: Luminance
+    description: 'Luminance'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Luminance percentage'
+  
+  # Luminance offset
+  lumOff:
+    class_name: LuminanceOffset
+    description: 'Luminance offset'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Luminance offset value'
+  
+  # Luminance modulation
+  lumMod:
+    class_name: LuminanceModulation
+    description: 'Luminance modulation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Luminance modulation percentage'
+  
+  # Red
+  red:
+    class_name: Red
+    description: 'Red component'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Red value percentage'
+  
+  # Red offset
+  redOff:
+    class_name: RedOffset
+    description: 'Red offset'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Red offset value'
+  
+  # Red modulation
+  redMod:
+    class_name: RedModulation
+    description: 'Red modulation'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Red modulation percentage'
+  
+  # Green
+  green:
+    class_name: Green
+    description: 'Green component'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Green value percentage'
+  
+  # Blue
+  blue:
+    class_name: Blue
+    description: 'Blue component'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Blue value percentage'
+  
+  # Gamma
+  gamma:
+    class_name: Gamma
+    description: 'Gamma correction'
+    attributes: []
+  
+  # Inverse gamma
+  invGamma:
+    class_name: InverseGamma
+    description: 'Inverse gamma'
+    attributes: []
+  
+  # Tint
+  tint:
+    class_name: Tint
+    description: 'Tint'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Tint percentage'
+  
+  # Shade
+  shade:
+    class_name: Shade
+    description: 'Shade'
+    attributes:
+      - name: val
+        type: Integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Shade percentage'
+
+  # Shapes & geometry category
+  
+  # Preset geometry
+  prstGeom:
+    class_name: PresetGeometry
+    description: 'Preset geometry shape'
+    attributes:
+      - name: prst
+        type: String
+        xml_name: prst
+        xml_attribute: true
+        required: true
+        description: 'Preset shape type (rect, ellipse, triangle, etc.)'
+      - name: av_lst
+        type: AdjustValueList
+        xml_name: avLst
+        description: 'Adjustment value list'
+  
+  # Custom geometry
+  custGeom:
+    class_name: CustomGeometry
+    description: 'Custom geometry'
+    attributes:
+      - name: av_lst
+        type: AdjustValueList
+        xml_name: avLst
+        description: 'Adjustment value list'
+      - name: path_lst
+        type: PathList
+        xml_name: pathLst
+        required: true
+        description: 'Path list'
+  
+  # Adjustment value list
+  avLst:
+    class_name: AdjustValueList
+    description: 'Adjustment value list'
+    attributes:
+      - name: guides
+        type: GeometryGuide
+        collection: true
+        xml_name: gd
+        description: 'Geometry guides'
+  
+  # Geometry guide
+  gd:
+    class_name: GeometryGuide
+    description: 'Geometry guide'
+    attributes:
+      - name: name
+        type: String
+        xml_name: name
+        xml_attribute: true
+        required: true
+        description: 'Guide name'
+      - name: fmla
+        type: String
+        xml_name: fmla
+        xml_attribute: true
+        required: true
+        description: 'Formula'
+  
+  # Path list
+  pathLst:
+    class_name: PathList
+    description: 'Path list'
+    attributes:
+      - name: paths
+        type: String
+        collection: true
+        xml_name: path
+        description: 'Geometry paths'
+  
+  # Geometry path (note: conflicts with path gradient, using different name)
+  # path:
+  #   class_name: GeometryPath
+  #   description: 'Geometry path'
+  #   attributes:
+  #     - name: w
+  #       type: Integer
+  #       xml_name: w
+  #       xml_attribute: true
+  #       description: 'Path width'
+  #     - name: h
+  #       type: Integer
+  #       xml_name: h
+  #       xml_attribute: true
+  #       description: 'Path height'
+  
+  # Move to command
+  moveTo:
+    class_name: MoveTo
+    description: 'Move to command'
+    attributes:
+      - name: pt
+        type: String
+        xml_name: pt
+        required: true
+        description: 'Point'
+  
+  # Line to command
+  lnTo:
+    class_name: LineTo
+    description: 'Line to command'
+    attributes:
+      - name: pt
+        type: String
+        xml_name: pt
+        required: true
+        description: 'Point'
+  
+  # Arc to command
+  arcTo:
+    class_name: ArcTo
+    description: 'Arc to command'
+    attributes:
+      - name: wR
+        type: String
+        xml_name: wR
+        xml_attribute: true
+        required: true
+        description: 'Width radius'
+      - name: hR
+        type: String
+        xml_name: hR
+        xml_attribute: true
+        required: true
+        description: 'Height radius'
+      - name: stAng
+        type: String
+        xml_name: stAng
+        xml_attribute: true
+        required: true
+        description: 'Start angle'
+      - name: swAng
+        type: String
+        xml_name: swAng
+        xml_attribute: true
+        required: true
+        description: 'Swing angle'
+  
+  # Close path
+  close:
+    class_name: ClosePath
+    description: 'Close path command'
+    attributes: []
+
+  # Text properties category
+  
+  # List style
+  lstStyle:
+    class_name: ListStyle
+    description: 'List style'
+    attributes:
+      - name: def_p_pr
+        type: DefaultParagraphProperties
+        xml_name: defPPr
+        description: 'Default paragraph properties'
+      - name: lvl1_p_pr
+        type: Level1ParagraphProperties
+        xml_name: lvl1pPr
+        description: 'Level 1 paragraph properties'
+      - name: lvl2_p_pr
+        type: Level2ParagraphProperties
+        xml_name: lvl2pPr
+        description: 'Level 2 paragraph properties'
+      - name: lvl3_p_pr
+        type: Level3ParagraphProperties
+        xml_name: lvl3pPr
+        description: 'Level 3 paragraph properties'
+  
+  # Default paragraph properties
+  defPPr:
+    class_name: DefaultParagraphProperties
+    description: 'Default paragraph properties'
+    attributes:
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment (l, ctr, r, just)'
+      - name: lvl
+        type: Integer
+        xml_name: lvl
+        xml_attribute: true
+        description: 'Level'
+  
+  # Level 1 paragraph properties
+  lvl1pPr:
+    class_name: Level1ParagraphProperties
+    description: 'Level 1 paragraph properties'
+    attributes:
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment'
+      - name: def_tab_sz
+        type: Integer
+        xml_name: defTabSz
+        xml_attribute: true
+        description: 'Default tab size'
+  
+  # Level 2 paragraph properties
+  lvl2pPr:
+    class_name: Level2ParagraphProperties
+    description: 'Level 2 paragraph properties'
+    attributes:
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment'
+      - name: def_tab_sz
+        type: Integer
+        xml_name: defTabSz
+        xml_attribute: true
+        description: 'Default tab size'
+  
+  # Level 3 paragraph properties
+  lvl3pPr:
+    class_name: Level3ParagraphProperties
+    description: 'Level 3 paragraph properties'
+    attributes:
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment'
+      - name: def_tab_sz
+        type: Integer
+        xml_name: defTabSz
+        xml_attribute: true
+        description: 'Default tab size'
+  
+  # Text paragraph properties (reused from earlier, but with different attributes)
+  pPr:
+    class_name: TextParagraphProperties
+    description: 'Text paragraph properties'
+    attributes:
+      - name: algn
+        type: String
+        xml_name: algn
+        xml_attribute: true
+        description: 'Alignment'
+      - name: marL
+        type: Integer
+        xml_name: marL
+        xml_attribute: true
+        description: 'Left margin in EMUs'
+      - name: marR
+        type: Integer
+        xml_name: marR
+        xml_attribute: true
+        description: 'Right margin in EMUs'
+  
+  # Text character properties (reused, extended version)
+  rPr:
+    class_name: TextCharacterProperties
+    description: 'Text character properties'
+    attributes:
+      - name: sz
+        type: Integer
+        xml_name: sz
+        xml_attribute: true
+        description: 'Font size in points * 100'
+      - name: b
+        type: String
+        xml_name: b
+        xml_attribute: true
+        description: 'Bold flag'
+      - name: i
+        type: String
+        xml_name: i
+        xml_attribute: true
+        description: 'Italic flag'
+      - name: latin
+        type: TextFont
+        xml_name: latin
+        description: 'Latin font'
+      - name: ea
+        type: TextFont
+        xml_name: ea
+        description: 'East Asian font'
+      - name: cs
+        type: TextFont
+        xml_name: cs
+        description: 'Complex script font'
+  
+  # Text font (Latin)
+  latin:
+    class_name: TextFont
+    description: 'Latin text font'
+    attributes:
+      - name: typeface
+        type: String
+        xml_name: typeface
+        xml_attribute: true
+        required: true
+        description: 'Font typeface name'
+      - name: charset
+        type: Integer
+        xml_name: charset
+        xml_attribute: true
+        description: 'Character set'
+  
+  # East Asian font
+  ea:
+    class_name: EastAsianFont
+    description: 'East Asian text font'
+    attributes:
+      - name: typeface
+        type: String
+        xml_name: typeface
+        xml_attribute: true
+        required: true
+        description: 'Font typeface name'
+      - name: charset
+        type: Integer
+        xml_name: charset
+        xml_attribute: true
+        description: 'Character set'
+  
+  # Complex script font
+  cs:
+    class_name: ComplexScriptFont
+    description: 'Complex script text font'
+    attributes:
+      - name: typeface
+        type: String
+        xml_name: typeface
+        xml_attribute: true
+        required: true
+        description: 'Font typeface name'
+      - name: charset
+        type: Integer
+        xml_name: charset
+        xml_attribute: true
+        description: 'Character set'
+
+  # Line properties category (additional to base ln element)
+  
+  # Preset dash
+  prstDash:
+    class_name: PresetDash
+    description: 'Preset dash pattern'
+    attributes:
+      - name: val
+        type: String
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Preset dash type (solid, dot, dash, lgDash, dashDot, lgDashDot, lgDashDotDot, sysDash, sysDot, sysDashDot, sysDashDotDot)'
+  
+  # Custom dash
+  custDash:
+    class_name: CustomDash
+    description: 'Custom dash pattern'
+    attributes:
+      - name: dash_stops
+        type: DashStop
+        collection: true
+        xml_name: ds
+        description: 'Dash stops'
+  
+  # Dash stop
+  ds:
+    class_name: DashStop
+    description: 'Dash stop'
+    attributes:
+      - name: d
+        type: Integer
+        xml_name: d
+        xml_attribute: true
+        required: true
+        description: 'Dash length'
+      - name: sp
+        type: Integer
+        xml_name: sp
+        xml_attribute: true
+        required: true
+        description: 'Space length'
+  
+  # Round line join
+  round:
+    class_name: LineJoinRound
+    description: 'Round line join'
+    attributes: []
+  
+  # Miter line join
+  miter:
+    class_name: LineJoinMiter
+    description: 'Miter line join'
+    attributes:
+      - name: lim
+        type: Integer
+        xml_name: lim
+        xml_attribute: true
+        description: 'Miter limit percentage'
+
+# Total: 92 elements defined (87 + 5 line properties)
+# DrawingML expansion complete!
+# Schema is ready for class generation

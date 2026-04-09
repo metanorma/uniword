@@ -1,0 +1,174 @@
+# Shared Types Namespace Schema
+# Namespace: http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes
+# Prefix: st:
+# Description: Common type definitions used across multiple OOXML namespaces
+
+namespace:
+  uri: 'http://schemas.openxmlformats.org/officeDocument/2006/sharedTypes'
+  prefix: 'st'
+  description: 'Shared Types - Common type definitions for OOXML'
+
+elements:
+  on_off:
+    class_name: OnOff
+    description: 'Boolean on/off type used throughout OOXML'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        description: 'Boolean value (true/false, on/off, 1/0)'
+
+  string:
+    class_name: StringType
+    description: 'String value type'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'String value'
+
+  decimal_number:
+    class_name: DecimalNumber
+    description: 'Decimal number type'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Decimal number value'
+
+  hex_color:
+    class_name: HexColor
+    description: 'Hexadecimal color value (RGB)'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Hex color value (e.g., "FF0000" for red)'
+
+  twips_measure:
+    class_name: TwipsMeasure
+    description: 'Measurement in twips (1/20th of a point)'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Twips value'
+
+  percent_value:
+    class_name: PercentValue
+    description: 'Percentage value'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Percentage value (e.g., 100 for 100%)'
+
+  point_measure:
+    class_name: PointMeasure
+    description: 'Measurement in points'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Point value'
+
+  pixel_measure:
+    class_name: PixelMeasure
+    description: 'Measurement in pixels'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Pixel value'
+
+  emu_measure:
+    class_name: EmuMeasure
+    description: 'Measurement in EMUs (English Metric Units, 1/914400 of an inch)'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'EMU value'
+
+  angle:
+    class_name: Angle
+    description: 'Angle measurement in 60,000ths of a degree'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Angle value'
+
+  positive_percentage:
+    class_name: PositivePercentage
+    description: 'Positive percentage value'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Positive percentage (>= 0)'
+
+  text_alignment:
+    class_name: TextAlignment
+    description: 'Text alignment enumeration'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Alignment type (left, center, right, justify, etc.)'
+
+  vertical_alignment:
+    class_name: VerticalAlignment
+    description: 'Vertical alignment enumeration'
+    attributes:
+      - name: val
+        type: :string
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Vertical alignment (top, center, bottom, etc.)'
+
+  boolean_value:
+    class_name: BooleanValue
+    description: 'Boolean value type'
+    attributes:
+      - name: val
+        type: :boolean
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Boolean value'
+
+  fixed_percentage:
+    class_name: FixedPercentage
+    description: 'Fixed percentage type (constrained range)'
+    attributes:
+      - name: val
+        type: :integer
+        xml_name: val
+        xml_attribute: true
+        required: true
+        description: 'Fixed percentage value'

@@ -1,0 +1,1472 @@
+---
+namespace:
+  uri: http://schemas.openxmlformats.org/drawingml/2006/chart
+  prefix: c
+  description: Chart - Chart and graph definitions for data visualization
+elements:
+  chartSpace:
+    class_name: ChartSpace
+    description: Chart space root element
+    attributes:
+    - name: date1904
+      type: String
+      xml_name: date1904
+      xml_attribute: true
+      description: 1904 date system flag
+    - name: lang
+      type: String
+      xml_name: lang
+      xml_attribute: true
+      description: Language code
+    - name: chart
+      type: Chart
+      xml_name: chart
+      required: true
+      description: Chart container
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+    - name: external_data
+      type: String
+      xml_name: externalData
+      description: External data reference
+    - name: print_settings
+      type: String
+      xml_name: printSettings
+      description: Print settings
+  chart:
+    class_name: Chart
+    description: Chart container
+    attributes:
+    - name: title
+      type: Title
+      xml_name: title
+      description: Chart title
+    - name: auto_title_deleted
+      type: AutoTitleDeleted
+      xml_name: autoTitleDeleted
+      description: Auto title deleted flag
+    - name: plot_area
+      type: PlotArea
+      xml_name: plotArea
+      required: true
+      description: Plot area container
+    - name: legend
+      type: Legend
+      xml_name: legend
+      description: Legend
+    - name: plot_vis_only
+      type: PlotVisOnly
+      xml_name: plotVisOnly
+      description: Plot visible data only
+    - name: disp_blanks_as
+      type: String
+      xml_name: dispBlanksAs
+      description: Display blanks as (gap, zero, span)
+  title:
+    class_name: Title
+    description: Chart title
+    attributes:
+    - name: tx
+      type: String
+      xml_name: tx
+      description: Title text
+    - name: layout
+      type: Layout
+      xml_name: layout
+      description: Title layout
+    - name: overlay
+      type: String
+      xml_name: overlay
+      description: Overlay flag
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+  autoTitleDeleted:
+    class_name: AutoTitleDeleted
+    description: Auto title deleted flag
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value
+  plotArea:
+    class_name: PlotArea
+    description: Plot area container
+    attributes:
+    - name: layout
+      type: Layout
+      xml_name: layout
+      description: Plot area layout
+    - name: chart_types
+      type: String
+      collection: true
+      xml_name: "*Chart"
+      description: Chart type elements (barChart, lineChart, etc.)
+    - name: cat_ax
+      type: CatAx
+      collection: true
+      xml_name: catAx
+      description: Category axes
+    - name: val_ax
+      type: ValAx
+      collection: true
+      xml_name: valAx
+      description: Value axes
+    - name: date_ax
+      type: DateAx
+      collection: true
+      xml_name: dateAx
+      description: Date axes
+    - name: ser_ax
+      type: SerAx
+      collection: true
+      xml_name: serAx
+      description: Series axes
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  barChart:
+    class_name: BarChart
+    description: Bar chart definition
+    attributes:
+    - name: bar_dir
+      type: String
+      xml_name: barDir
+      required: true
+      description: Bar direction (bar, col)
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping (clustered, stacked, percentStacked, standard)
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors by point
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: gap_width
+      type: GapWidth
+      xml_name: gapWidth
+      description: Gap width between bars
+    - name: overlap
+      type: String
+      xml_name: overlap
+      description: Overlap percentage
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  bar3DChart:
+    class_name: Bar3DChart
+    description: 3D bar chart definition
+    attributes:
+    - name: bar_dir
+      type: String
+      xml_name: barDir
+      required: true
+      description: Bar direction
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping type
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: gap_width
+      type: GapWidth
+      xml_name: gapWidth
+      description: Gap width
+    - name: gap_depth
+      type: String
+      xml_name: gapDepth
+      description: Gap depth
+    - name: shape
+      type: String
+      xml_name: shape
+      description: Bar shape
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  lineChart:
+    class_name: LineChart
+    description: Line chart definition
+    attributes:
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping type
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: drop_lines
+      type: DropLines
+      xml_name: dropLines
+      description: Drop lines
+    - name: hi_low_lines
+      type: HiLowLines
+      xml_name: hiLowLines
+      description: High-low lines
+    - name: up_down_bars
+      type: UpDownBars
+      xml_name: upDownBars
+      description: Up/down bars
+    - name: marker
+      type: String
+      xml_name: marker
+      description: Show markers
+    - name: smooth
+      type: Smooth
+      xml_name: smooth
+      description: Smooth lines
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  line3DChart:
+    class_name: Line3DChart
+    description: 3D line chart definition
+    attributes:
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping type
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: drop_lines
+      type: DropLines
+      xml_name: dropLines
+      description: Drop lines
+    - name: gap_depth
+      type: String
+      xml_name: gapDepth
+      description: Gap depth
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  pieChart:
+    class_name: PieChart
+    description: Pie chart definition
+    attributes:
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: first_slice_ang
+      type: String
+      xml_name: firstSliceAng
+      description: First slice angle
+  pie3DChart:
+    class_name: Pie3DChart
+    description: 3D pie chart definition
+    attributes:
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+  areaChart:
+    class_name: AreaChart
+    description: Area chart definition
+    attributes:
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping type
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: drop_lines
+      type: DropLines
+      xml_name: dropLines
+      description: Drop lines
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  area3DChart:
+    class_name: Area3DChart
+    description: 3D area chart definition
+    attributes:
+    - name: grouping
+      type: String
+      xml_name: grouping
+      description: Grouping type
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: drop_lines
+      type: DropLines
+      xml_name: dropLines
+      description: Drop lines
+    - name: gap_depth
+      type: String
+      xml_name: gapDepth
+      description: Gap depth
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  scatterChart:
+    class_name: ScatterChart
+    description: Scatter chart definition
+    attributes:
+    - name: scatter_style
+      type: String
+      xml_name: scatterStyle
+      required: true
+      description: Scatter style (none, line, lineMarker, marker, smooth, smoothMarker)
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  radarChart:
+    class_name: RadarChart
+    description: Radar chart definition
+    attributes:
+    - name: radar_style
+      type: String
+      xml_name: radarStyle
+      required: true
+      description: Radar style (standard, marker, filled)
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  surfaceChart:
+    class_name: SurfaceChart
+    description: Surface chart definition
+    attributes:
+    - name: wireframe
+      type: String
+      xml_name: wireframe
+      description: Wireframe flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: band_fmts
+      type: String
+      xml_name: bandFmts
+      description: Band formats
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  surface3DChart:
+    class_name: Surface3DChart
+    description: 3D surface chart definition
+    attributes:
+    - name: wireframe
+      type: String
+      xml_name: wireframe
+      description: Wireframe flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: band_fmts
+      type: String
+      xml_name: bandFmts
+      description: Band formats
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  doughnutChart:
+    class_name: DoughnutChart
+    description: Doughnut chart definition
+    attributes:
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: first_slice_ang
+      type: String
+      xml_name: firstSliceAng
+      description: First slice angle
+    - name: hole_size
+      type: String
+      xml_name: holeSize
+      description: Hole size percentage
+  bubbleChart:
+    class_name: BubbleChart
+    description: Bubble chart definition
+    attributes:
+    - name: vary_colors
+      type: String
+      xml_name: varyColors
+      description: Vary colors flag
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: bubble3d
+      type: String
+      xml_name: bubble3D
+      description: 3D bubbles flag
+    - name: bubble_scale
+      type: String
+      xml_name: bubbleScale
+      description: Bubble scale
+    - name: show_neg_bubbles
+      type: String
+      xml_name: showNegBubbles
+      description: Show negative bubbles
+    - name: size_represents
+      type: String
+      xml_name: sizeRepresents
+      description: Size represents (area, width)
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  stockChart:
+    class_name: StockChart
+    description: Stock chart definition
+    attributes:
+    - name: series
+      type: String
+      collection: true
+      xml_name: ser
+      description: Chart series
+    - name: d_lbls
+      type: DataLabels
+      xml_name: dLbls
+      description: Data labels
+    - name: drop_lines
+      type: DropLines
+      xml_name: dropLines
+      description: Drop lines
+    - name: hi_low_lines
+      type: HiLowLines
+      xml_name: hiLowLines
+      description: High-low lines
+    - name: up_down_bars
+      type: UpDownBars
+      xml_name: upDownBars
+      description: Up/down bars
+    - name: ax_id
+      type: AxisId
+      collection: true
+      xml_name: axId
+      required: true
+      description: Axis IDs
+  ser:
+    class_name: Series
+    description: Chart series base
+    attributes:
+    - name: idx
+      type: Index
+      xml_name: idx
+      required: true
+      description: Series index
+    - name: order
+      type: Order
+      xml_name: order
+      required: true
+      description: Series order
+    - name: tx
+      type: SeriesText
+      xml_name: tx
+      description: Series text
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  idx:
+    class_name: Index
+    description: Series index
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Index value
+  order:
+    class_name: Order
+    description: Series order
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Order value
+  tx:
+    class_name: SeriesText
+    description: Series text
+    attributes:
+    - name: str_ref
+      type: String
+      xml_name: strRef
+      description: String reference
+    - name: v
+      type: String
+      xml_name: v
+      description: String value
+  cat:
+    class_name: CategoryAxisData
+    description: Category axis data
+    attributes:
+    - name: str_ref
+      type: String
+      xml_name: strRef
+      description: String reference
+    - name: num_ref
+      type: NumberReference
+      xml_name: numRef
+      description: Number reference
+    - name: str_lit
+      type: String
+      xml_name: strLit
+      description: String literal
+    - name: num_lit
+      type: String
+      xml_name: numLit
+      description: Number literal
+  val:
+    class_name: Values
+    description: Value axis data
+    attributes:
+    - name: num_ref
+      type: NumberReference
+      xml_name: numRef
+      description: Number reference
+    - name: num_lit
+      type: String
+      xml_name: numLit
+      description: Number literal
+  xVal:
+    class_name: XValues
+    description: X values for scatter/bubble charts
+    attributes:
+    - name: num_ref
+      type: NumberReference
+      xml_name: numRef
+      description: Number reference
+    - name: num_lit
+      type: String
+      xml_name: numLit
+      description: Number literal
+  yVal:
+    class_name: YValues
+    description: Y values for scatter/bubble charts
+    attributes:
+    - name: num_ref
+      type: NumberReference
+      xml_name: numRef
+      description: Number reference
+    - name: num_lit
+      type: String
+      xml_name: numLit
+      description: Number literal
+  bubbleSize:
+    class_name: BubbleSize
+    description: Bubble size data
+    attributes:
+    - name: num_ref
+      type: NumberReference
+      xml_name: numRef
+      description: Number reference
+    - name: num_lit
+      type: String
+      xml_name: numLit
+      description: Number literal
+  numRef:
+    class_name: NumberReference
+    description: Number reference to spreadsheet
+    attributes:
+    - name: f
+      type: String
+      xml_name: f
+      required: true
+      description: Formula reference
+    - name: num_cache
+      type: String
+      xml_name: numCache
+      description: Number cache
+  catAx:
+    class_name: CatAx
+    description: Category axis
+    attributes:
+    - name: ax_id
+      type: AxisId
+      xml_name: axId
+      required: true
+      description: Axis ID
+    - name: scaling
+      type: Scaling
+      xml_name: scaling
+      required: true
+      description: Scaling properties
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete axis
+    - name: ax_pos
+      type: AxisPosition
+      xml_name: axPos
+      required: true
+      description: Axis position
+    - name: major_gridlines
+      type: MajorGridlines
+      xml_name: majorGridlines
+      description: Major gridlines
+    - name: minor_gridlines
+      type: MinorGridlines
+      xml_name: minorGridlines
+      description: Minor gridlines
+    - name: title
+      type: Title
+      xml_name: title
+      description: Axis title
+    - name: num_fmt
+      type: NumberingFormat
+      xml_name: numFmt
+      description: Number format
+    - name: tick_lbl_pos
+      type: TickLabelPosition
+      xml_name: tickLblPos
+      description: Tick label position
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+    - name: cross_ax
+      type: String
+      xml_name: crossAx
+      required: true
+      description: Crossing axis ID
+  valAx:
+    class_name: ValAx
+    description: Value axis
+    attributes:
+    - name: ax_id
+      type: AxisId
+      xml_name: axId
+      required: true
+      description: Axis ID
+    - name: scaling
+      type: Scaling
+      xml_name: scaling
+      required: true
+      description: Scaling properties
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete axis
+    - name: ax_pos
+      type: AxisPosition
+      xml_name: axPos
+      required: true
+      description: Axis position
+    - name: major_gridlines
+      type: MajorGridlines
+      xml_name: majorGridlines
+      description: Major gridlines
+    - name: minor_gridlines
+      type: MinorGridlines
+      xml_name: minorGridlines
+      description: Minor gridlines
+    - name: title
+      type: Title
+      xml_name: title
+      description: Axis title
+    - name: num_fmt
+      type: NumberingFormat
+      xml_name: numFmt
+      description: Number format
+    - name: tick_lbl_pos
+      type: TickLabelPosition
+      xml_name: tickLblPos
+      description: Tick label position
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+    - name: cross_ax
+      type: String
+      xml_name: crossAx
+      required: true
+      description: Crossing axis ID
+    - name: crosses
+      type: String
+      xml_name: crosses
+      description: Crossing point
+    - name: crosses_at
+      type: String
+      xml_name: crossesAt
+      description: Specific crossing point
+  dateAx:
+    class_name: DateAx
+    description: Date axis
+    attributes:
+    - name: ax_id
+      type: AxisId
+      xml_name: axId
+      required: true
+      description: Axis ID
+    - name: scaling
+      type: Scaling
+      xml_name: scaling
+      required: true
+      description: Scaling properties
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete axis
+    - name: ax_pos
+      type: AxisPosition
+      xml_name: axPos
+      required: true
+      description: Axis position
+    - name: major_gridlines
+      type: MajorGridlines
+      xml_name: majorGridlines
+      description: Major gridlines
+    - name: minor_gridlines
+      type: MinorGridlines
+      xml_name: minorGridlines
+      description: Minor gridlines
+    - name: title
+      type: Title
+      xml_name: title
+      description: Axis title
+    - name: num_fmt
+      type: NumberingFormat
+      xml_name: numFmt
+      description: Number format
+    - name: tick_lbl_pos
+      type: TickLabelPosition
+      xml_name: tickLblPos
+      description: Tick label position
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+    - name: cross_ax
+      type: String
+      xml_name: crossAx
+      required: true
+      description: Crossing axis ID
+  serAx:
+    class_name: SerAx
+    description: Series axis
+    attributes:
+    - name: ax_id
+      type: AxisId
+      xml_name: axId
+      required: true
+      description: Axis ID
+    - name: scaling
+      type: Scaling
+      xml_name: scaling
+      required: true
+      description: Scaling properties
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete axis
+    - name: ax_pos
+      type: AxisPosition
+      xml_name: axPos
+      required: true
+      description: Axis position
+    - name: major_gridlines
+      type: MajorGridlines
+      xml_name: majorGridlines
+      description: Major gridlines
+    - name: minor_gridlines
+      type: MinorGridlines
+      xml_name: minorGridlines
+      description: Minor gridlines
+    - name: title
+      type: Title
+      xml_name: title
+      description: Axis title
+    - name: tick_lbl_pos
+      type: TickLabelPosition
+      xml_name: tickLblPos
+      description: Tick label position
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+    - name: cross_ax
+      type: String
+      xml_name: crossAx
+      required: true
+      description: Crossing axis ID
+  axId:
+    class_name: AxisId
+    description: Axis ID
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: ID value
+  scaling:
+    class_name: Scaling
+    description: Scaling properties
+    attributes:
+    - name: log_base
+      type: String
+      xml_name: logBase
+      description: Logarithmic base
+    - name: orientation
+      type: Orientation
+      xml_name: orientation
+      description: Axis orientation (minMax, maxMin)
+    - name: max
+      type: String
+      xml_name: max
+      description: Maximum value
+    - name: min
+      type: String
+      xml_name: min
+      description: Minimum value
+  orientation:
+    class_name: Orientation
+    description: Axis orientation
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Orientation value (minMax, maxMin)
+  axPos:
+    class_name: AxisPosition
+    description: Axis position
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Position value (b, l, r, t)
+  majorGridlines:
+    class_name: MajorGridlines
+    description: Major gridlines
+    attributes:
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  minorGridlines:
+    class_name: MinorGridlines
+    description: Minor gridlines
+    attributes:
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  numFmt:
+    class_name: NumberingFormat
+    description: Number format
+    attributes:
+    - name: format_code
+      type: String
+      xml_name: formatCode
+      xml_attribute: true
+      required: true
+      description: Format code
+    - name: source_linked
+      type: String
+      xml_name: sourceLinked
+      xml_attribute: true
+      description: Source linked flag
+  tickLblPos:
+    class_name: TickLabelPosition
+    description: Tick label position
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Position value (high, low, nextTo, none)
+  legend:
+    class_name: Legend
+    description: Chart legend
+    attributes:
+    - name: legend_pos
+      type: LegendPosition
+      xml_name: legendPos
+      description: Legend position
+    - name: legend_entry
+      type: LegendEntry
+      collection: true
+      xml_name: legendEntry
+      description: Legend entries
+    - name: layout
+      type: Layout
+      xml_name: layout
+      description: Legend layout
+    - name: overlay
+      type: String
+      xml_name: overlay
+      description: Overlay flag
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+  legendPos:
+    class_name: LegendPosition
+    description: Legend position
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Position value (b, l, r, t, tr)
+  legendEntry:
+    class_name: LegendEntry
+    description: Legend entry
+    attributes:
+    - name: idx
+      type: Index
+      xml_name: idx
+      required: true
+      description: Entry index
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete entry
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+  dLbls:
+    class_name: DataLabels
+    description: Data labels collection
+    attributes:
+    - name: d_lbl
+      type: DataLabel
+      collection: true
+      xml_name: dLbl
+      description: Individual data labels
+    - name: show_legend_key
+      type: ShowLegendKey
+      xml_name: showLegendKey
+      description: Show legend key
+    - name: show_val
+      type: ShowValue
+      xml_name: showVal
+      description: Show value
+    - name: show_cat_name
+      type: ShowCategoryName
+      xml_name: showCatName
+      description: Show category name
+    - name: show_ser_name
+      type: String
+      xml_name: showSerName
+      description: Show series name
+    - name: show_percent
+      type: String
+      xml_name: showPercent
+      description: Show percent
+    - name: show_bubble_size
+      type: String
+      xml_name: showBubbleSize
+      description: Show bubble size
+    - name: separator
+      type: String
+      xml_name: separator
+      description: Label separator
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+  dLbl:
+    class_name: DataLabel
+    description: Individual data label
+    attributes:
+    - name: idx
+      type: Index
+      xml_name: idx
+      required: true
+      description: Label index
+    - name: delete
+      type: String
+      xml_name: delete
+      description: Delete label
+    - name: layout
+      type: Layout
+      xml_name: layout
+      description: Label layout
+    - name: tx
+      type: String
+      xml_name: tx
+      description: Label text
+    - name: num_fmt
+      type: NumberingFormat
+      xml_name: numFmt
+      description: Number format
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: tx_pr
+      type: String
+      xml_name: txPr
+      description: Text properties
+  showLegendKey:
+    class_name: ShowLegendKey
+    description: Show legend key flag
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value
+  showVal:
+    class_name: ShowValue
+    description: Show value flag
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value
+  showCatName:
+    class_name: ShowCategoryName
+    description: Show category name flag
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value
+  spPr:
+    class_name: ShapeProperties
+    description: Shape properties reference (DrawingML)
+    attributes:
+    - name: content
+      type: String
+      xml_content: true
+      description: DrawingML shape properties content
+  txPr:
+    class_name: TextProperties
+    description: Text properties reference (DrawingML)
+    attributes:
+    - name: content
+      type: String
+      xml_content: true
+      description: DrawingML text properties content
+  style:
+    class_name: Style
+    description: Chart style
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Style ID
+  clrMapOvr:
+    class_name: ColorMapOverride
+    description: Color map override
+    attributes:
+    - name: content
+      type: String
+      xml_content: true
+      description: Color mapping content
+  marker:
+    class_name: Marker
+    description: Data marker
+    attributes:
+    - name: symbol
+      type: MarkerStyle
+      xml_name: symbol
+      description: Marker symbol
+    - name: size
+      type: MarkerSize
+      xml_name: size
+      description: Marker size
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  markerStyle:
+    class_name: MarkerStyle
+    description: Marker style
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Style value (circle, dash, diamond, dot, none, picture, plus, square,
+        star, triangle, x)
+  markerSize:
+    class_name: MarkerSize
+    description: Marker size
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Size value (2-72)
+  smooth:
+    class_name: Smooth
+    description: Smooth lines flag
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value
+  explosion:
+    class_name: Explosion
+    description: Pie slice explosion
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Explosion percentage
+  gapWidth:
+    class_name: GapWidth
+    description: Gap width between bars/columns
+    attributes:
+    - name: val
+      type: Integer
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Gap percentage (0-500)
+  trendline:
+    class_name: Trendline
+    description: Trendline
+    attributes:
+    - name: name
+      type: String
+      xml_name: name
+      description: Trendline name
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+    - name: trendline_type
+      type: TrendlineType
+      xml_name: trendlineType
+      required: true
+      description: Trendline type
+    - name: order
+      type: Order
+      xml_name: order
+      description: Polynomial order
+    - name: period
+      type: String
+      xml_name: period
+      description: Moving average period
+    - name: forward
+      type: String
+      xml_name: forward
+      description: Forward periods
+    - name: backward
+      type: String
+      xml_name: backward
+      description: Backward periods
+  trendlineType:
+    class_name: TrendlineType
+    description: Trendline type
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Type value (exp, linear, log, movingAvg, poly, power)
+  errBars:
+    class_name: ErrorBars
+    description: Error bars
+    attributes:
+    - name: err_dir
+      type: ErrorDirection
+      xml_name: errDir
+      description: Error direction
+    - name: err_bar_type
+      type: ErrorBarType
+      xml_name: errBarType
+      required: true
+      description: Error bar type
+    - name: err_val_type
+      type: String
+      xml_name: errValType
+      required: true
+      description: Error value type
+    - name: no_end_cap
+      type: String
+      xml_name: noEndCap
+      description: No end cap flag
+    - name: plus
+      type: String
+      xml_name: plus
+      description: Plus error value
+    - name: minus
+      type: String
+      xml_name: minus
+      description: Minus error value
+    - name: val
+      type: String
+      xml_name: val
+      description: Error value
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  errDir:
+    class_name: ErrorDirection
+    description: Error direction
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Direction value (x, y)
+  errBarType:
+    class_name: ErrorBarType
+    description: Error bar type
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      required: true
+      description: Type value (both, minus, plus)
+  upDownBars:
+    class_name: UpDownBars
+    description: Up/down bars
+    attributes:
+    - name: gap_width
+      type: GapWidth
+      xml_name: gapWidth
+      description: Gap width
+    - name: up_bars
+      type: String
+      xml_name: upBars
+      description: Up bars
+    - name: down_bars
+      type: String
+      xml_name: downBars
+      description: Down bars
+  hiLowLines:
+    class_name: HiLowLines
+    description: High-low lines
+    attributes:
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  dropLines:
+    class_name: DropLines
+    description: Drop lines
+    attributes:
+    - name: sp_pr
+      type: String
+      xml_name: spPr
+      description: Shape properties
+  layout:
+    class_name: Layout
+    description: Chart element layout
+    attributes:
+    - name: manual_layout
+      type: String
+      xml_name: manualLayout
+      description: Manual layout settings
+  plotVisOnly:
+    class_name: PlotVisOnly
+    description: Plot visible data only
+    attributes:
+    - name: val
+      type: String
+      xml_name: val
+      xml_attribute: true
+      description: Boolean value

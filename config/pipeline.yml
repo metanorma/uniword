@@ -1,0 +1,108 @@
+# Uniword Batch Document Processing Pipeline Configuration
+#
+# This file defines the processing pipeline for batch document operations.
+# Stages are executed in the order defined here.
+#
+# Each stage can be enabled/disabled and configured with stage-specific options.
+
+pipeline:
+  # Default pipeline configuration
+  default:
+    stages:
+      # Stage 1: Normalize Styles
+      # Removes direct formatting and applies standard styles
+      - name: normalize_styles
+        enabled: true
+        options:
+          remove_direct_formatting: true
+          apply_standard_styles: true
+          preserve_semantic_styles: true
+          # Target styles to normalize to
+          target_styles:
+            heading1: 'Heading 1'
+            heading2: 'Heading 2'
+            heading3: 'Heading 3'
+            normal: 'Normal'
+
+      # Stage 2: Update Metadata
+      # Updates document properties and metadata
+      - name: update_metadata
+        enabled: true
+        options:
+          update_author: true
+          update_modified_date: true
+          update_revision_number: true
+          # Specific metadata values (optional)
+          author: null
+          company: null
+          title: null
+
+      # Stage 3: Validate Links
+      # Checks for broken internal and external links
+      - name: validate_links
+        enabled: true
+        options:
+          check_internal: true
+          check_external: false
+          check_bookmarks: true
+          report_broken: true
+          # Action for broken links: 'report', 'remove', 'disable'
+          broken_link_action: 'report'
+
+      # Stage 4: Quality Check
+      # Runs quality checker with configured rules
+      - name: quality_check
+        enabled: true
+        options:
+          rules_file: 'config/quality_rules.yml'
+          fail_on_errors: false
+          fail_on_warnings: false
+          generate_report: true
+
+      # Stage 5: Convert Format
+      # Converts documents between DOCX and MHTML formats
+      - name: convert_format
+        enabled: false
+        options:
+          target_format: :docx  # :docx or :mhtml
+          preserve_original: true
+
+      # Stage 6: Compress Images
+      # Reduces image file sizes while maintaining quality
+      - name: compress_images
+        enabled: false
+        options:
+          max_width: 1920
+          max_height: 1080
+          quality: 85
+          preserve_aspect_ratio: true
+          skip_small_images: true
+          min_size_kb: 100
+
+  # Parallel processing configuration
+  parallel:
+    enabled: false
+    max_workers: 4
+    batch_size: 10
+
+  # Error handling configuration
+  error_handling:
+    continue_on_error: true
+    log_errors: true
+    error_output: 'errors/'
+    retry_count: 0
+    retry_delay: 1.0
+
+  # Output configuration
+  output:
+    preserve_structure: true
+    overwrite_existing: false
+    create_subdirectories: true
+    file_naming: 'original'  # 'original', 'timestamp', 'sequential'
+
+  # Logging configuration
+  logging:
+    level: 'info'  # 'debug', 'info', 'warn', 'error'
+    log_file: 'batch_processing.log'
+    console_output: true
+    verbose: false

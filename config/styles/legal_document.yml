@@ -1,0 +1,198 @@
+# Legal Document Style Library
+# External configuration for legal document styles
+# Version: 1.0
+
+style_library:
+  name: "Legal Document Styles"
+  version: "1.0"
+  description: "Styles for legal documents, contracts, and agreements"
+
+  # Paragraph styles
+  paragraph_styles:
+    document_title:
+      name: "Document Title"
+      properties:
+        alignment: center
+        spacing_before: 240
+        spacing_after: 240
+        keep_next: true
+      run_properties:
+        font: "Times New Roman"
+        size: 28
+        bold: true
+        all_caps: true
+
+    party_name:
+      name: "Party Name"
+      properties:
+        alignment: center
+        spacing_before: 120
+        spacing_after: 120
+      run_properties:
+        font: "Times New Roman"
+        size: 24
+        bold: true
+
+    recitals:
+      name: "Recitals"
+      properties:
+        alignment: justify
+        spacing_after: 120
+        indent_first_line: 720
+      run_properties:
+        font: "Times New Roman"
+        size: 24
+
+    clause_heading:
+      name: "Clause Heading"
+      properties:
+        alignment: left
+        spacing_before: 240
+        spacing_after: 120
+        keep_next: true
+      run_properties:
+        font: "Times New Roman"
+        size: 24
+        bold: true
+
+    subclause_heading:
+      name: "Subclause Heading"
+      base_style: clause_heading
+      properties:
+        spacing_before: 120
+        indent_left: 360
+      run_properties:
+        size: 24
+        bold: false
+        underline: "single"
+
+    body_text:
+      name: "Body Text"
+      properties:
+        alignment: justify
+        spacing_after: 120
+        indent_first_line: 720
+        line_spacing: 2.0
+        line_rule: "auto"
+      run_properties:
+        font: "Times New Roman"
+        size: 24  # 12pt
+
+    definition:
+      name: "Definition"
+      properties:
+        alignment: justify
+        spacing_after: 120
+        indent_left: 720
+      run_properties:
+        font: "Times New Roman"
+        size: 24
+
+    signature_block:
+      name: "Signature Block"
+      properties:
+        alignment: left
+        spacing_before: 480
+        spacing_after: 60
+      run_properties:
+        font: "Times New Roman"
+        size: 24
+
+    witness_block:
+      name: "Witness Block"
+      base_style: signature_block
+      properties:
+        indent_left: 360
+
+  # Character styles
+  character_styles:
+    defined_term:
+      name: "Defined Term"
+      run_properties:
+        bold: true
+
+    cross_reference:
+      name: "Cross Reference"
+      run_properties:
+        italic: true
+        color: "0563C1"
+
+    citation:
+      name: "Citation"
+      run_properties:
+        font: "Times New Roman"
+        italic: true
+
+    party_reference:
+      name: "Party Reference"
+      run_properties:
+        bold: true
+        all_caps: true
+
+  # List styles
+  list_styles:
+    numbered_clauses:
+      name: "Numbered Clauses"
+      numbering_definition: 5
+      levels:
+        - level: 0
+          format: decimal
+          text: "%1."
+          alignment: left
+          properties:
+            indent_left: 720
+        - level: 1
+          format: lowerLetter
+          text: "(%2)"
+          properties:
+            indent_left: 1080
+        - level: 2
+          format: lowerRoman
+          text: "(%3)"
+          properties:
+            indent_left: 1440
+
+    obligations_list:
+      name: "Obligations List"
+      numbering_definition: 6
+      levels:
+        - level: 0
+          format: lowerLetter
+          text: "(%1)"
+          properties:
+            indent_left: 720
+        - level: 1
+          format: lowerRoman
+          text: "(%2)"
+          properties:
+            indent_left: 1080
+
+  # Table styles
+  table_styles:
+    schedule_table:
+      name: "Schedule Table"
+      table_properties:
+        width: 5000
+        layout: auto
+      cell_properties:
+        vertical_alignment: top
+      conditional_formatting:
+        first_row:
+          cell_properties:
+            background_color: "E7E6E6"
+
+  # Semantic styles
+  semantic_styles:
+    term:
+      name: "Legal Term"
+      semantic: term
+      run_properties:
+        bold: true
+        italic: true
+
+    reference:
+      name: "Legal Reference"
+      semantic: reference
+      run_properties:
+        italic: true
+        color: "0563C1"

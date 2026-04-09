@@ -1,0 +1,426 @@
+namespace:
+  uri: 'urn:schemas-microsoft-com:vml'
+  prefix: 'v'
+  description: 'Vector Markup Language - Legacy drawing format for backward compatibility'
+
+elements:
+  # Basic Shape Elements
+  shape:
+    class_name: Shape
+    description: 'VML shape element'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique shape identifier'
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Shape type reference'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning and sizing'
+      - name: fillcolor
+        type: String
+        xml_attribute: true
+        description: 'Fill color'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: strokeweight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: coordsize
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space size'
+      - name: coordorigin
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space origin'
+      - name: path
+        type: String
+        xml_attribute: true
+        description: 'Path definition'
+      - name: fill
+        type: String
+        description: 'Fill properties element'
+      - name: stroke
+        type: String
+        description: 'Stroke properties element'
+      - name: textbox
+        type: String
+        description: 'Text box element'
+      - name: imagedata
+        type: String
+        description: 'Image data element'
+
+  rect:
+    class_name: Rect
+    description: 'VML rectangle shape'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning'
+      - name: fillcolor
+        type: String
+        xml_attribute: true
+        description: 'Fill color'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: strokeweight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: fill
+        type: String
+        description: 'Fill properties'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+
+  oval:
+    class_name: Oval
+    description: 'VML oval/ellipse shape'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning'
+      - name: fillcolor
+        type: String
+        xml_attribute: true
+        description: 'Fill color'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: strokeweight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: fill
+        type: String
+        description: 'Fill properties'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+
+  line:
+    class_name: Line
+    description: 'VML line shape'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning'
+      - name: from
+        type: String
+        xml_attribute: true
+        description: 'Start point coordinates'
+      - name: to
+        type: String
+        xml_attribute: true
+        description: 'End point coordinates'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: strokeweight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+
+  polyline:
+    class_name: Polyline
+    description: 'VML polyline shape'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning'
+      - name: points
+        type: String
+        xml_attribute: true
+        description: 'Polyline points'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: strokeweight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+
+  curve:
+    class_name: Curve
+    description: 'VML curve shape'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Unique identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'CSS-style positioning'
+      - name: from
+        type: String
+        xml_attribute: true
+        description: 'Start point'
+      - name: to
+        type: String
+        xml_attribute: true
+        description: 'End point'
+      - name: control1
+        type: String
+        xml_attribute: true
+        description: 'First control point'
+      - name: control2
+        type: String
+        xml_attribute: true
+        description: 'Second control point'
+      - name: strokecolor
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+
+  # Property Elements
+  fill:
+    class_name: Fill
+    description: 'VML fill properties'
+    attributes:
+      - name: type
+        type: String
+        xml_attribute: true
+        description: 'Fill type (solid, gradient, pattern, tile, frame)'
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Fill color'
+      - name: color2
+        type: String
+        xml_attribute: true
+        description: 'Second color for gradients'
+      - name: opacity
+        type: String
+        xml_attribute: true
+        description: 'Fill opacity'
+      - name: angle
+        type: String
+        xml_attribute: true
+        description: 'Gradient angle'
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable/disable fill'
+
+  stroke:
+    class_name: Stroke
+    description: 'VML stroke properties'
+    attributes:
+      - name: color
+        type: String
+        xml_attribute: true
+        description: 'Stroke color'
+      - name: weight
+        type: String
+        xml_attribute: true
+        description: 'Stroke weight'
+      - name: opacity
+        type: String
+        xml_attribute: true
+        description: 'Stroke opacity'
+      - name: linestyle
+        type: String
+        xml_attribute: true
+        description: 'Line style (solid, dash, dot, etc.)'
+      - name: joinstyle
+        type: String
+        xml_attribute: true
+        description: 'Join style (round, bevel, miter)'
+      - name: endcap
+        type: String
+        xml_attribute: true
+        description: 'End cap style (flat, square, round)'
+      - name: on
+        type: String
+        xml_attribute: true
+        description: 'Enable/disable stroke'
+
+  path:
+    class_name: Path
+    description: 'VML path definition'
+    attributes:
+      - name: v
+        type: String
+        xml_attribute: true
+        description: 'Path commands string'
+      - name: textpathok
+        type: String
+        xml_attribute: true
+        description: 'Allow text on path'
+      - name: fillok
+        type: String
+        xml_attribute: true
+        description: 'Allow path fill'
+      - name: strokeok
+        type: String
+        xml_attribute: true
+        description: 'Allow path stroke'
+
+  textbox:
+    class_name: Textbox
+    description: 'VML text box container'
+    attributes:
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'Text box CSS style'
+      - name: inset
+        type: String
+        xml_attribute: true
+        description: 'Text inset margins'
+      - name: content
+        type: String
+        xml_content: true
+        description: 'Text content (may contain HTML)'
+
+  imagedata:
+    class_name: Imagedata
+    description: 'VML image data reference'
+    attributes:
+      - name: src
+        type: String
+        xml_attribute: true
+        description: 'Image source URL'
+      - name: relid
+        type: String
+        xml_attribute: true
+        description: 'Relationship ID'
+      - name: title
+        type: String
+        xml_attribute: true
+        description: 'Image title'
+      - name: croptop
+        type: String
+        xml_attribute: true
+        description: 'Crop from top'
+      - name: cropbottom
+        type: String
+        xml_attribute: true
+        description: 'Crop from bottom'
+      - name: cropleft
+        type: String
+        xml_attribute: true
+        description: 'Crop from left'
+      - name: cropright
+        type: String
+        xml_attribute: true
+        description: 'Crop from right'
+
+  # Structure Elements
+  group:
+    class_name: Group
+    description: 'VML shape group container'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        description: 'Group identifier'
+      - name: style
+        type: String
+        xml_attribute: true
+        description: 'Group CSS style'
+      - name: coordsize
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space size'
+      - name: coordorigin
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space origin'
+      - name: shapes
+        type: String
+        collection: true
+        description: 'Child shapes'
+
+  shapetype:
+    class_name: Shapetype
+    description: 'VML shape type definition (template)'
+    attributes:
+      - name: id
+        type: String
+        xml_attribute: true
+        required: true
+        description: 'Shape type identifier'
+      - name: coordsize
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space size'
+      - name: coordorigin
+        type: String
+        xml_attribute: true
+        description: 'Coordinate space origin'
+      - name: path
+        type: String
+        xml_attribute: true
+        description: 'Path definition'
+      - name: stroke
+        type: String
+        description: 'Stroke properties'
+      - name: fill
+        type: String
+        description: 'Fill properties'
+
+  # Advanced Elements
+  formulas:
+    class_name: Formulas
+    description: 'VML formula definitions for shape geometry'
+    attributes:
+      - name: formulas
+        type: String
+        collection: true
+        xml_name: f
+        description: 'Individual formula elements'
+
+  handles:
+    class_name: Handles
+    description: 'VML adjustment handles for shape manipulation'
+    attributes:
+      - name: handles
+        type: String
+        collection: true
+        xml_name: h
+        description: 'Individual handle elements'

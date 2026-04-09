@@ -1,0 +1,145 @@
+# Accessibility Profile Configurations
+# External configuration for all accessibility rules and profiles
+
+profiles:
+  # WCAG 2.1 Level AA (most common standard)
+  wcag_2_1_aa:
+    name: "WCAG 2.1"
+    level: "Level AA"
+
+    rules:
+      # 1.1.1 Non-text Content (Level A)
+      image_alt_text:
+        enabled: true
+        wcag_criterion: "1.1.1 Non-text Content"
+        level: "A"
+        severity: :error
+        require_alt_text: true
+        min_length: 10
+        max_length: 150
+        check_quality: true
+        suggestion: "Add descriptive alternative text for images"
+
+      # 1.3.1 Info and Relationships (Level A)
+      heading_structure:
+        enabled: true
+        wcag_criterion: "1.3.1 Info and Relationships"
+        level: "A"
+        severity: :error
+        check_hierarchy: true
+        require_h1: true
+        no_level_skipping: true
+        min_paragraphs_for_heading: 5
+        suggestion: "Maintain proper heading hierarchy (H1 → H2 → H3, no skipping)"
+
+      table_headers:
+        enabled: true
+        wcag_criterion: "1.3.1 Info and Relationships"
+        level: "A"
+        severity: :error
+        require_headers: true
+        require_caption: false  # AA requirement, not A
+        suggestion: "Mark first row as header for data tables"
+
+      list_structure:
+        enabled: true
+        wcag_criterion: "1.3.1 Info and Relationships"
+        level: "A"
+        severity: :warning
+        check_proper_nesting: true
+        max_nesting_depth: 5
+        suggestion: "Use proper list structure with appropriate nesting"
+
+      # 1.3.2 Meaningful Sequence (Level A)
+      reading_order:
+        enabled: true
+        wcag_criterion: "1.3.2 Meaningful Sequence"
+        level: "A"
+        severity: :warning
+        check_logical_flow: true
+        suggestion: "Ensure content follows a logical reading order"
+
+      # 1.4.1 Use of Color (Level A)
+      color_usage:
+        enabled: true
+        wcag_criterion: "1.4.1 Use of Color"
+        level: "A"
+        severity: :warning
+        check_color_alone: true
+        require_text_indicators: true
+        suggestion: "Do not use color alone to convey information"
+
+      # 1.4.3 Contrast (Minimum) (Level AA)
+      contrast_ratio:
+        enabled: true
+        wcag_criterion: "1.4.3 Contrast (Minimum)"
+        level: "AA"
+        severity: :error
+        min_contrast_ratio: 4.5  # 4.5:1 for normal text
+        min_large_text_ratio: 3   # 3:1 for large text (18pt+)
+        check_background_foreground: true
+        suggestion: "Ensure sufficient contrast ratio between text and background"
+
+      # 2.4.2 Page Titled (Level A)
+      document_title:
+        enabled: true
+        wcag_criterion: "2.4.2 Page Titled"
+        level: "A"
+        severity: :error
+        require_title: true
+        min_title_length: 5
+        suggestion: "Document must have a descriptive title"
+
+      # 2.4.6 Headings and Labels (Level AA)
+      descriptive_headings:
+        enabled: true
+        wcag_criterion: "2.4.6 Headings and Labels"
+        level: "AA"
+        severity: :warning
+        check_descriptiveness: true
+        min_heading_length: 3
+        suggestion: "Use descriptive headings that clearly describe content"
+
+      # 3.1.1 Language of Page (Level A)
+      language_specification:
+        enabled: true
+        wcag_criterion: "3.1.1 Language of Page"
+        level: "A"
+        severity: :error
+        require_language: true
+        suggestion: "Specify document language for screen readers"
+
+  # WCAG 2.1 Level A (minimum compliance)
+  wcag_2_1_a:
+    name: "WCAG 2.1"
+    level: "Level A"
+    # Inherit AA rules but disable AA-specific ones
+    inherits: :wcag_2_1_aa
+    overrides:
+      contrast_ratio:
+        enabled: false  # AA requirement
+      descriptive_headings:
+        enabled: false  # AA requirement
+
+  # WCAG 2.1 Level AAA (enhanced compliance)
+  wcag_2_1_aaa:
+    name: "WCAG 2.1"
+    level: "Level AAA"
+    inherits: :wcag_2_1_aa
+    overrides:
+      contrast_ratio:
+        min_contrast_ratio: 7    # Higher for AAA
+        min_large_text_ratio: 4.5
+      image_alt_text:
+        min_length: 15  # More descriptive
+        check_quality: true
+
+  # Section 508 (US Government standard)
+  section_508:
+    name: "Section 508"
+    level: "Standard"
+    # Similar to WCAG 2.0 Level AA with some differences
+    inherits: :wcag_2_1_aa
+    overrides:
+      # Section 508 aligns closely with WCAG 2.0 AA
+      # Additional Section 508 specific requirements can be added here

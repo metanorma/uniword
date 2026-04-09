@@ -1,0 +1,381 @@
+# Drawing Schema
+# ISO/IEC 29500-1:2016 - Section 20.4 (DrawingML - WordprocessingDrawing)
+# Drawing and image elements
+
+schema:
+  namespace: wp
+  category: "Drawing"
+  iso_section: "20.4"
+
+elements:
+  # Drawing properties (Non-visual drawing properties)
+  docpr:
+    tag: 'wp:docPr'
+    description: "Drawing object non-visual properties"
+    iso_reference: "20.4.2.5"
+    children: []
+    attributes:
+      - name: id
+        type: integer
+        required: true
+      - name: name
+        type: string
+        required: true
+      - name: descr
+        type: string
+      - name: hidden
+        type: boolean
+      - name: title
+        type: string
+
+  # Drawing extent (size)
+  extent:
+    tag: 'wp:extent'
+    description: "Drawing object extent (size in EMUs)"
+    iso_reference: "20.4.2.7"
+    children: []
+    attributes:
+      - name: cx
+        type: integer
+        required: true
+      - name: cy
+        type: integer
+        required: true
+
+  # Graphic data container
+  graphic:
+    tag: 'a:graphic'
+    description: "Graphic object data container"
+    iso_reference: "20.1.2.2.16"
+    children:
+      - element: graphic_data
+        tag: 'a:graphicData'
+        optional: false
+        attributes:
+          - name: uri
+            type: string
+            required: true
+    attributes: []
+
+  # Picture element
+  picture:
+    tag: 'pic:pic'
+    description: "Picture element"
+    iso_reference: "20.1.2.2.30"
+    children:
+      - element: nv_pic_pr
+        tag: 'pic:nvPicPr'
+        optional: false
+        children:
+          - element: c_nv_pr
+            tag: 'pic:cNvPr'
+            attributes:
+              - name: id
+                type: integer
+                required: true
+              - name: name
+                type: string
+                required: true
+              - name: descr
+                type: string
+          - element: c_nv_pic_pr
+            tag: 'pic:cNvPicPr'
+      - element: blip_fill
+        tag: 'pic:blipFill'
+        optional: false
+        children:
+          - element: blip
+            tag: 'a:blip'
+            attributes:
+              - name: embed
+                namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+                prefix: 'r'
+                type: string
+                required: true
+              - name: cstate
+                type: enum
+                values: [email, print, hqprint, none]
+          - element: stretch
+            tag: 'a:stretch'
+            children:
+              - element: fill_rect
+                tag: 'a:fillRect'
+      - element: sp_pr
+        tag: 'pic:spPr'
+        optional: false
+        children:
+          - element: xfrm
+            tag: 'a:xfrm'
+            children:
+              - element: off
+                tag: 'a:off'
+                attributes:
+                  - name: x
+                    type: integer
+                  - name: y
+                    type: integer
+              - element: ext
+                tag: 'a:ext'
+                attributes:
+                  - name: cx
+                    type: integer
+                  - name: cy
+                    type: integer
+          - element: prst_geom
+            tag: 'a:prstGeom'
+            attributes:
+              - name: prst
+                type: string
+    attributes: []
+
+  # BLIP (Binary Large Image or Picture)
+  blip:
+    tag: 'a:blip'
+    description: "Image reference (BLIP)"
+    iso_reference: "20.1.8.13"
+    children: []
+    attributes:
+      - name: embed
+        namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+        prefix: 'r'
+        type: string
+        required: true
+      - name: link
+        namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships'
+        prefix: 'r'
+        type: string
+      - name: cstate
+        type: enum
+        values: [email, print, hqprint, none]
+
+  # Simple positioning (absolute position)
+  simple_pos:
+    tag: 'wp:simplePos'
+    description: "Simple absolute positioning"
+    iso_reference: "20.4.2.13"
+    children: []
+    attributes:
+      - name: x
+        type: integer
+        required: true
+      - name: y
+        type: integer
+        required: true
+
+  # Horizontal positioning
+  position_h:
+    tag: 'wp:positionH'
+    description: "Horizontal positioning relative to anchor"
+    iso_reference: "20.4.2.10"
+    children:
+      - element: align
+        tag: 'wp:align'
+        optional: true
+      - element: pos_offset
+        tag: 'wp:posOffset'
+        optional: true
+    attributes:
+      - name: relativeFrom
+        type: enum
+        values: [character, column, insideMargin, leftMargin, margin, outsideMargin, page, rightMargin]
+        required: true
+
+  # Vertical positioning
+  position_v:
+    tag: 'wp:positionV'
+    description: "Vertical positioning relative to anchor"
+    iso_reference: "20.4.2.11"
+    children:
+      - element: align
+        tag: 'wp:align'
+        optional: true
+      - element: pos_offset
+        tag: 'wp:posOffset'
+        optional: true
+    attributes:
+      - name: relativeFrom
+        type: enum
+        values: [bottomMargin, insideMargin, line, margin, outsideMargin, page, paragraph, topMargin]
+        required: true
+
+  # Position alignment
+  align:
+    tag: 'wp:align'
+    description: "Alignment for relative positioning"
+    iso_reference: "20.4.2.1"
+    children: []
+    attributes: []
+    text_content: true
+    text_values: [left, right, center, top, bottom, inside, outside]
+
+  # Position offset
+  pos_offset:
+    tag: 'wp:posOffset'
+    description: "Position offset in EMUs"
+    iso_reference: "20.4.2.12"
+    children: []
+    attributes: []
+    text_content: true
+
+  # Square text wrapping
+  wrap_square:
+    tag: 'wp:wrapSquare'
+    description: "Square text wrapping around object"
+    iso_reference: "20.4.2.17"
+    children:
+      - element: effect_extent
+        tag: 'wp:effectExtent'
+        optional: true
+    attributes:
+      - name: wrapText
+        type: enum
+        values: [bothSides, left, right, largest]
+        required: true
+      - name: distT
+        type: integer
+      - name: distB
+        type: integer
+      - name: distL
+        type: integer
+      - name: distR
+        type: integer
+
+  # Tight text wrapping
+  wrap_tight:
+    tag: 'wp:wrapTight'
+    description: "Tight text wrapping following object contour"
+    iso_reference: "20.4.2.18"
+    children:
+      - element: wrap_polygon
+        tag: 'wp:wrapPolygon'
+        optional: false
+    attributes:
+      - name: wrapText
+        type: enum
+        values: [bothSides, left, right, largest]
+        required: true
+      - name: distL
+        type: integer
+      - name: distR
+        type: integer
+
+  # Through text wrapping
+  wrap_through:
+    tag: 'wp:wrapThrough'
+    description: "Text wrapping through object"
+    iso_reference: "20.4.2.19"
+    children:
+      - element: wrap_polygon
+        tag: 'wp:wrapPolygon'
+        optional: false
+    attributes:
+      - name: wrapText
+        type: enum
+        values: [bothSides, left, right, largest]
+        required: true
+      - name: distL
+        type: integer
+      - name: distR
+        type: integer
+
+  # Top and bottom text wrapping
+  wrap_top_and_bottom:
+    tag: 'wp:wrapTopAndBottom'
+    description: "Text wrapping above and below object only"
+    iso_reference: "20.4.2.20"
+    children:
+      - element: effect_extent
+        tag: 'wp:effectExtent'
+        optional: true
+    attributes:
+      - name: distT
+        type: integer
+      - name: distB
+        type: integer
+
+  # Effect extent
+  effect_extent:
+    tag: 'wp:effectExtent'
+    description: "Additional extent for effects (shadows, glows, etc.)"
+    iso_reference: "20.4.2.6"
+    children: []
+    attributes:
+      - name: l
+        type: integer
+      - name: t
+        type: integer
+      - name: r
+        type: integer
+      - name: b
+        type: integer
+
+  # Graphic data
+  graphic_data:
+    tag: 'a:graphicData'
+    description: "Container for graphic object data"
+    iso_reference: "20.1.2.2.16"
+    children:
+      - element: picture
+        tag: 'pic:pic'
+        optional: true
+    attributes:
+      - name: uri
+        type: string
+        required: true
+
+  # BLIP fill (picture fill)
+  blip_fill:
+    tag: 'pic:blipFill'
+    description: "Picture fill properties"
+    iso_reference: "20.1.8.14"
+    children:
+      - element: blip
+        tag: 'a:blip'
+        optional: false
+      - element: src_rect
+        tag: 'a:srcRect'
+        optional: true
+      - element: stretch
+        tag: 'a:stretch'
+        optional: true
+      - element: tile
+        tag: 'a:tile'
+        optional: true
+    attributes:
+      - name: dpi
+        type: integer
+      - name: rotWithShape
+        type: boolean
+
+  # Shape properties
+  sp_pr:
+    tag: 'pic:spPr'
+    description: "Shape properties for picture"
+    iso_reference: "20.1.2.2.35"
+    children:
+      - element: xfrm
+        tag: 'a:xfrm'
+        optional: true
+      - element: prst_geom
+        tag: 'a:prstGeom'
+        optional: true
+      - element: no_fill
+        tag: 'a:noFill'
+        optional: true
+      - element: solid_fill
+        tag: 'a:solidFill'
+        optional: true
+      - element: ln
+        tag: 'a:ln'
+        optional: true
+    attributes:
+      - name: bwMode
+        type: enum
+        values: [auto, gray, ltGray, invGray, grayWhite, blackGray, blackWhite, black, white, hidden]
+
+metadata:
+  element_count: 19
+  priority: "HIGH"
+  status: "complete"
+  phase: "3"
+  notes: "Complete drawing elements with positioning and wrapping for Phase 3 (v3.0)"
