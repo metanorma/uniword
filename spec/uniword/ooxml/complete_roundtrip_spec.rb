@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'Complete DOCX Round-Trip Fidelity' do
-  TEST_DOCUMENT = 'examples/demo_formal_integral_proper.docx'
+  TEST_DOCUMENT = 'spec/fixtures/uniword-demo/demo_formal_integral_proper.docx'
   OUTPUT_PATH = 'test_output/complete_roundtrip.docx'
 
   # List of all XML files to test (13 files total for Week 1 goal)

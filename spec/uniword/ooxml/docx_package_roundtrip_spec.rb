@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'DocxPackage Complete Round-Trip' do
-  TEST_DOCUMENT = 'examples/demo_formal_integral_proper.docx'
+  TEST_DOCUMENT = 'spec/fixtures/uniword-demo/demo_formal_integral_proper.docx'
   OUTPUT_PATH = 'test_output/docx_package_complete.docx'
 
   before(:all) do

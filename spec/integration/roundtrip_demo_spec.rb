@@ -4,19 +4,20 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
-  let(:input_file) { 'examples/demo_formal_integral_proper.docx' }
-  let(:output_file) { 'examples/demo_formal_integral_roundtrip_spec.docx' }
-  let(:original_dir) { 'examples/roundtrip_spec_original' }
-  let(:saved_dir) { 'examples/roundtrip_spec_saved' }
+  let(:input_file) { 'spec/fixtures/uniword-demo/demo_formal_integral_proper.docx' }
+  let(:output_file) { 'test_output/demo_formal_integral_roundtrip_spec.docx' }
+  let(:original_dir) { 'test_output/roundtrip_spec_original' }
+  let(:saved_dir) { 'test_output/roundtrip_spec_saved' }
 
   before(:all) do
     # Load and save document once for all tests
-    @doc = Uniword.load('examples/demo_formal_integral_proper.docx')
-    @doc.save('examples/demo_formal_integral_roundtrip_spec.docx')
+    @doc = Uniword.load('spec/fixtures/uniword-demo/demo_formal_integral_proper.docx')
+    @doc.save('test_output/demo_formal_integral_roundtrip_spec.docx')
 
     # Extract both packages
-    system('cd examples && unzip -qo demo_formal_integral_proper.docx -d roundtrip_spec_original')
-    system('cd examples && unzip -qo demo_formal_integral_roundtrip_spec.docx -d roundtrip_spec_saved')
+    FileUtils.mkdir_p('test_output')
+    system("cd test_output && unzip -qo ../spec/fixtures/uniword-demo/demo_formal_integral_proper.docx -d roundtrip_spec_original")
+    system('cd test_output && unzip -qo demo_formal_integral_roundtrip_spec.docx -d roundtrip_spec_saved')
   end
 
   describe 'Document Loading' do

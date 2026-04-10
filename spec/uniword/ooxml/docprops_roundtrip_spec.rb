@@ -4,12 +4,12 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'DocProps Round-Trip Fidelity' do
-  let(:test_document) { 'examples/demo_formal_integral_proper.docx' }
+  let(:test_document) { 'spec/fixtures/uniword-demo/demo_formal_integral_proper.docx' }
   let(:output_path) { 'test_output/docprops_roundtrip.docx' }
 
   before(:all) do
     # Load and save document once for all tests
-    package = Uniword::Ooxml::DocxPackage.from_file('examples/demo_formal_integral_proper.docx')
+    package = Uniword::Ooxml::DocxPackage.from_file('spec/fixtures/uniword-demo/demo_formal_integral_proper.docx')
     package.to_file('test_output/docprops_roundtrip.docx')
   end
 
