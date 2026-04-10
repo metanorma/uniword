@@ -61,16 +61,30 @@ module Uniword
       # @param entry_content [String] The content to add
       # @return [void]
       # @raise [ArgumentError] if arguments are invalid
+      #
+      # @note On Windows, Tempfile creates read-only files, so we extract
+      # all entries and recreate the ZIP rather than modifying in-place.
       def add_file(zip_path, entry_path, entry_content)
         validate_zip_path(zip_path)
         raise ArgumentError, 'Entry path cannot be nil' if entry_path.nil?
         raise ArgumentError, 'Entry path cannot be empty' if entry_path.empty?
 
-        Zip::File.open(zip_path, Zip::File::CREATE) do |zip_file|
-          zip_file.get_output_stream(entry_path) do |stream|
-            stream.write(entry_content)
+        # Extract existing content
+        content = {}
+        Zip::File.open(zip_path) do |zip_file|
+          zip_file.each do |entry|
+            next if entry.directory?
+            content[entry.name] = entry.get_input_stream.read
           end
         end
+
+        # Add new entry
+        content[entry_path] = entry_content
+
+        # Recreate ZIP with new content (Windows-safe: no in-place modification)
+        temp_path = "#{zip_path}.tmp"
+        package(content, temp_path)
+        FileUtils.mv(temp_path, zip_path)
       end
 
       # Remove a file from a ZIP archive.
@@ -79,16 +93,32 @@ module Uniword
       # @param entry_path [String] The path of the file to remove
       # @return [Boolean] true if file was removed, false if not found
       # @raise [ArgumentError] if arguments are invalid
+      #
+      # @note On Windows, Tempfile creates read-only files, so we extract
+      # all entries and recreate the ZIP rather than modifying in-place.
       def remove_file(zip_path, entry_path)
         validate_zip_path(zip_path)
 
+        # Extract existing content
+        content = {}
+        found = false
         Zip::File.open(zip_path) do |zip_file|
-          entry = zip_file.find_entry(entry_path)
-          return false unless entry
-
-          zip_file.remove(entry_path)
-          true
+          zip_file.each do |entry|
+            next if entry.directory?
+            if entry.name == entry_path
+              found = true
+            else
+              content[entry.name] = entry.get_input_stream.read
+            end
+          end
         end
+        return false unless found
+
+        # Recreate ZIP without the entry (Windows-safe: no in-place modification)
+        temp_path = "#{zip_path}.tmp"
+        package(content, temp_path)
+        FileUtils.mv(temp_path, zip_path)
+        true
       end
 
       private
