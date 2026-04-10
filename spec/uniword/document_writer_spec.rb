@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'tempfile'
+require 'securerandom'
 
 RSpec.describe Uniword::DocumentWriter do
   let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
@@ -32,50 +32,50 @@ RSpec.describe Uniword::DocumentWriter do
   describe '#save' do
     context 'with DOCX format' do
       it 'saves document as DOCX with auto format' do
-        temp_file = Tempfile.new(['output', '.docx'])
+        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
         begin
-          writer.save(temp_file.path)
+          writer.save(temp_path)
 
-          expect(File.exist?(temp_file.path)).to be true
+          expect(File.exist?(temp_path)).to be true
         ensure
-          temp_file.unlink
+          File.delete(temp_path) if File.exist?(temp_path)
         end
       end
 
       it 'saves document with explicit DOCX format' do
-        temp_file = Tempfile.new(['output', '.docx'])
+        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
         begin
-          writer.save(temp_file.path, format: :docx)
+          writer.save(temp_path, format: :docx)
 
-          expect(File.exist?(temp_file.path)).to be true
+          expect(File.exist?(temp_path)).to be true
         ensure
-          temp_file.unlink
+          File.delete(temp_path) if File.exist?(temp_path)
         end
       end
     end
 
     context 'with MHTML format' do
       it 'saves document as MHTML with auto format' do
-        temp_file = Tempfile.new(['output', '.mhtml'])
+        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
-          writer.save(temp_file.path)
+          writer.save(temp_path)
 
-          expect(File.exist?(temp_file.path)).to be true
-          content = File.read(temp_file.path)
+          expect(File.exist?(temp_path)).to be true
+          content = File.read(temp_path)
           expect(content).to include('MIME-Version: 1.0')
         ensure
-          temp_file.unlink
+          File.delete(temp_path) if File.exist?(temp_path)
         end
       end
 
       it 'saves document with explicit MHTML format' do
-        temp_file = Tempfile.new(['output', '.mht'])
+        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mht")
         begin
-          writer.save(temp_file.path, format: :mhtml)
+          writer.save(temp_path, format: :mhtml)
 
-          expect(File.exist?(temp_file.path)).to be true
+          expect(File.exist?(temp_path)).to be true
         ensure
-          temp_file.unlink
+          File.delete(temp_path) if File.exist?(temp_path)
         end
       end
     end
@@ -150,33 +150,33 @@ RSpec.describe Uniword::DocumentWriter do
 
   describe 'integration' do
     it 'performs full write-read cycle for DOCX' do
-      temp_file = Tempfile.new(['test', '.docx'])
+      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Write document
-        writer.save(temp_file.path)
+        writer.save(temp_path)
 
         # Read it back - returns DocumentRoot for DOCX files
-        loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
+        loaded_doc = Uniword::DocumentFactory.from_file(temp_path)
 
         expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
-        temp_file.unlink
+        File.delete(temp_path) if File.exist?(temp_path)
       end
     end
 
     it 'performs full write-read cycle for MHTML' do
-      temp_file = Tempfile.new(['test', '.mhtml'])
+      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
       begin
         # Write document
-        writer.save(temp_file.path)
+        writer.save(temp_path)
 
         # Read it back (auto-converts MHTML to DocumentRoot)
-        loaded_doc = Uniword::DocumentFactory.from_file(temp_file.path)
+        loaded_doc = Uniword::DocumentFactory.from_file(temp_path)
 
         # MHTML files are auto-converted to DocumentRoot
         expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
-        temp_file.unlink
+        File.delete(temp_path) if File.exist?(temp_path)
       end
     end
   end

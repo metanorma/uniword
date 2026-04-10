@@ -1,103 +1,111 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'tempfile'
+require 'securerandom'
 require 'zip'
 
 RSpec.describe 'DOCX Generation Integration' do
-  let(:output_file) { Tempfile.new(['test_output', '.docx']) }
-
-  after do
-    output_file.close
-    output_file.unlink
-  end
-
   describe 'generating a minimal DOCX file' do
     it 'creates a valid DOCX file structure' do
-      # Create a document
-      doc = Uniword::Wordprocessingml::DocumentRoot.new
-      paragraph = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Hello, World!')
-      paragraph.runs << run
-      doc.body.paragraphs << paragraph
+      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      begin
+        # Create a document
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        paragraph = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: 'Hello, World!')
+        paragraph.runs << run
+        doc.body.paragraphs << paragraph
 
-      # Serialize to XML
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      serializer.serialize(doc)
+        # Serialize to XML
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        serializer.serialize(doc)
 
-      # Package into DOCX
-      Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
+        # Package into DOCX
+        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
 
-      # Verify file exists and is a valid ZIP
-      expect(File.exist?(output_file.path)).to be true
-      expect(File.size(output_file.path)).to be > 0
+        # Verify file exists and is a valid ZIP
+        expect(File.exist?(output_path)).to be true
+        expect(File.size(output_path)).to be > 0
 
-      # Verify ZIP structure
-      Zip::File.open(output_file.path) do |zip_file|
-        # Check required files exist
-        expect(zip_file.find_entry('[Content_Types].xml')).not_to be_nil
-        expect(zip_file.find_entry('_rels/.rels')).not_to be_nil
-        expect(zip_file.find_entry('word/document.xml')).not_to be_nil
-        expect(zip_file.find_entry('word/_rels/document.xml.rels')).not_to be_nil
+        # Verify ZIP structure
+        Zip::File.open(output_path) do |zip_file|
+          # Check required files exist
+          expect(zip_file.find_entry('[Content_Types].xml')).not_to be_nil
+          expect(zip_file.find_entry('_rels/.rels')).not_to be_nil
+          expect(zip_file.find_entry('word/document.xml')).not_to be_nil
+          expect(zip_file.find_entry('word/_rels/document.xml.rels')).not_to be_nil
 
-        # Verify document.xml contains our text
-        doc_xml = zip_file.read('word/document.xml')
-        expect(doc_xml).to include('Hello, World!')
-        expect(doc_xml).to include('<w:document')
-        expect(doc_xml).to include('<w:body>')
-        expect(doc_xml).to include('<w:p>')
-        expect(doc_xml).to include('<w:r>')
-        expect(doc_xml).to include('<w:t>')
+          # Verify document.xml contains our text
+          doc_xml = zip_file.read('word/document.xml')
+          expect(doc_xml).to include('Hello, World!')
+          expect(doc_xml).to include('<w:document')
+          expect(doc_xml).to include('<w:body>')
+          expect(doc_xml).to include('<w:p>')
+          expect(doc_xml).to include('<w:r>')
+          expect(doc_xml).to include('<w:t>')
+        end
+      ensure
+        File.delete(output_path) if File.exist?(output_path)
       end
     end
 
     it 'handles multiple paragraphs' do
-      # Create a document with multiple paragraphs
-      doc = Uniword::Wordprocessingml::DocumentRoot.new
+      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      begin
+        # Create a document with multiple paragraphs
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
 
-      paragraph1 = Uniword::Wordprocessingml::Paragraph.new
-      run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
-      paragraph1.runs << run1
-      doc.body.paragraphs << paragraph1
+        paragraph1 = Uniword::Wordprocessingml::Paragraph.new
+        run1 = Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
+        paragraph1.runs << run1
+        doc.body.paragraphs << paragraph1
 
-      paragraph2 = Uniword::Wordprocessingml::Paragraph.new
-      run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
-      paragraph2.runs << run2
-      doc.body.paragraphs << paragraph2
+        paragraph2 = Uniword::Wordprocessingml::Paragraph.new
+        run2 = Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
+        paragraph2.runs << run2
+        doc.body.paragraphs << paragraph2
 
-      # Serialize and package
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      serializer.serialize(doc)
+        # Serialize and package
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        serializer.serialize(doc)
 
-      Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
+        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
 
-      # Verify content
-      Zip::File.open(output_file.path) do |zip_file|
-        doc_xml = zip_file.read('word/document.xml')
-        expect(doc_xml).to include('First paragraph')
-        expect(doc_xml).to include('Second paragraph')
-        # Should have two <w:p> tags
-        expect(doc_xml.scan('<w:p>').count).to eq(2)
+        # Verify content
+        Zip::File.open(output_path) do |zip_file|
+          doc_xml = zip_file.read('word/document.xml')
+          expect(doc_xml).to include('First paragraph')
+          expect(doc_xml).to include('Second paragraph')
+          # Should have two <w:p> tags
+          expect(doc_xml.scan('<w:p>').count).to eq(2)
+        end
+      ensure
+        File.delete(output_path) if File.exist?(output_path)
       end
     end
 
     it 'handles text with whitespace preservation' do
-      doc = Uniword::Wordprocessingml::DocumentRoot.new
-      paragraph = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: '  Text with spaces  ')
-      paragraph.runs << run
-      doc.body.paragraphs << paragraph
+      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      begin
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        paragraph = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: '  Text with spaces  ')
+        paragraph.runs << run
+        doc.body.paragraphs << paragraph
 
-      serializer = Uniword::Serialization::OoxmlSerializer.new
-      serializer.serialize(doc)
+        serializer = Uniword::Serialization::OoxmlSerializer.new
+        serializer.serialize(doc)
 
-      Uniword::Ooxml::DocxPackage.to_file(doc, output_file.path)
+        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
 
-      Zip::File.open(output_file.path) do |zip_file|
-        doc_xml = zip_file.read('word/document.xml')
-        # Should include xml:space="preserve" for whitespace preservation
-        expect(doc_xml).to include('xml:space="preserve"')
-        expect(doc_xml).to include('  Text with spaces  ')
+        Zip::File.open(output_path) do |zip_file|
+          doc_xml = zip_file.read('word/document.xml')
+          # Should include xml:space="preserve" for whitespace preservation
+          expect(doc_xml).to include('xml:space="preserve"')
+          expect(doc_xml).to include('  Text with spaces  ')
+        end
+      ensure
+        File.delete(output_path) if File.exist?(output_path)
       end
     end
 

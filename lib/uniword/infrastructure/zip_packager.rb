@@ -27,6 +27,10 @@ module Uniword
       # @param output_path [String] The path for the output ZIP file
       # @return [void]
       # @raise [ArgumentError] if arguments are invalid
+      #
+      # @note On Windows, Zip::File::CREATE mode fails when target exists
+      # because Rubyzip tries to atomically rename a temp file over it.
+      # We use a temp file approach to avoid this issue.
       def package(content, output_path)
         validate_content(content)
         validate_output_path(output_path)
@@ -34,23 +38,39 @@ module Uniword
         # Ensure output directory exists
         FileUtils.mkdir_p(File.dirname(output_path))
 
-        # Create ZIP file
-        Zip::File.open(output_path, Zip::File::CREATE) do |zip_file|
-          content.each do |entry_path, entry_content|
-            zip_file.get_output_stream(entry_path) do |stream|
-              # Binary data (ASCII-8BIT) is written as-is;
-              # text content is ensured to be UTF-8
-              final_content =
-                if entry_content.encoding == Encoding::ASCII_8BIT
-                  entry_content
-                else
-                  entry_content.encode(
-                    'UTF-8', invalid: :replace, undef: :replace
-                  )
-                end
-              stream.write(final_content)
+        # Use temp file to avoid Windows atomic rename issues
+        # Rubyzip's CREATE mode fails when output_path exists
+        temp_path = "#{output_path}.#{Process.pid}.tmp"
+
+        begin
+          Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
+            content.each do |entry_path, entry_content|
+              zip_file.get_output_stream(entry_path) do |stream|
+                # Binary data (ASCII-8BIT) is written as-is;
+                # text content is ensured to be UTF-8
+                final_content =
+                  if entry_content.encoding == Encoding::ASCII_8BIT
+                    entry_content
+                  else
+                    entry_content.encode(
+                      'UTF-8', invalid: :replace, undef: :replace
+                    )
+                  end
+                stream.write(final_content)
+              end
             end
           end
+
+          # On Windows, File.rename to existing file fails, so remove first
+          FileUtils.rm_f(output_path)
+          FileUtils.mv(temp_path, output_path)
+        rescue Errno::EACCES
+          # If move fails, try removing target and moving again
+          FileUtils.rm_f(output_path)
+          FileUtils.mv(temp_path, output_path)
+        ensure
+          # Clean up temp file if it still exists
+          FileUtils.rm_f(temp_path) if File.exist?(temp_path)
         end
       end
 
@@ -78,13 +98,9 @@ module Uniword
           end
         end
 
-        # Add new entry
+        # Add new entry and package (package now handles Windows-safe write)
         content[entry_path] = entry_content
-
-        # Recreate ZIP with new content (Windows-safe: no in-place modification)
-        temp_path = "#{zip_path}.tmp"
-        package(content, temp_path)
-        FileUtils.mv(temp_path, zip_path)
+        package(content, zip_path)
       end
 
       # Remove a file from a ZIP archive.
@@ -114,10 +130,8 @@ module Uniword
         end
         return false unless found
 
-        # Recreate ZIP without the entry (Windows-safe: no in-place modification)
-        temp_path = "#{zip_path}.tmp"
-        package(content, temp_path)
-        FileUtils.mv(temp_path, zip_path)
+        # Recreate ZIP without the entry (package handles Windows-safe write)
+        package(content, zip_path)
         true
       end
 

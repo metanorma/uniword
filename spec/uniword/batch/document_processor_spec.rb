@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require 'tempfile'
 require 'fileutils'
+require 'securerandom'
 
 RSpec.describe Uniword::Batch::DocumentProcessor do
   let(:processor) { described_class.new }
@@ -79,23 +79,24 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
   end
 
   describe '#process_file' do
-    let(:input_file) { Tempfile.new(['input', '.docx']) }
-    let(:output_file) { Tempfile.new(['output', '.docx']) }
+    let(:input_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_input.docx") }
+    let(:output_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_output.docx") }
 
     before do
       # Create a minimal DOCX structure for testing
       allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Wordprocessingml::DocumentRoot.new)
+      # Create empty placeholder files
+      FileUtils.touch(input_path)
+      FileUtils.touch(output_path)
     end
 
     after do
-      input_file.close
-      input_file.unlink
-      output_file.close
-      output_file.unlink
+      File.delete(input_path) if File.exist?(input_path)
+      File.delete(output_path) if File.exist?(output_path)
     end
 
     it 'processes a single file' do
-      result = processor.process_file(input_file.path, output_file.path)
+      result = processor.process_file(input_path, output_path)
 
       expect(result).to be_a(Uniword::Batch::BatchResult)
       expect(result.total_count).to eq(1)
@@ -105,7 +106,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
       stage = TestProcessingStage.new
       processor.add_stage(stage)
 
-      processor.process_file(input_file.path, output_file.path)
+      processor.process_file(input_path, output_path)
 
       expect(stage.processed_documents.size).to eq(1)
     end
@@ -114,13 +115,13 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
       stage = TestProcessingStage.new(enabled: false)
       processor.add_stage(stage)
 
-      processor.process_file(input_file.path, output_file.path)
+      processor.process_file(input_path, output_path)
 
       expect(stage.processed_documents).to be_empty
     end
 
     it 'records success when processing completes' do
-      result = processor.process_file(input_file.path, output_file.path)
+      result = processor.process_file(input_path, output_path)
 
       expect(result.success_count).to eq(1)
       expect(result.failure_count).to eq(0)
@@ -129,7 +130,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     it 'records failure when error occurs' do
       allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(StandardError, 'Test error')
 
-      result = processor.process_file(input_file.path, output_file.path)
+      result = processor.process_file(input_path, output_path)
 
       expect(result.success_count).to eq(0)
       expect(result.failure_count).to eq(1)
