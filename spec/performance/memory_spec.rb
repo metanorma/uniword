@@ -12,9 +12,7 @@ RSpec.describe 'Memory Performance' do
       para = Uniword::Wordprocessingml::Paragraph.new
       runs_per_para.times do |j|
         run = Uniword::Wordprocessingml::Run.new(
-          text_element: Uniword::TextElement.new(
-            content: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here."
-          )
+          text: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here."
         )
         para.runs << run
       end
@@ -168,7 +166,7 @@ RSpec.describe 'Memory Performance' do
         10.times do
           para = Uniword::Wordprocessingml::Paragraph.new
           run = Uniword::Wordprocessingml::Run.new(
-            text_element: Uniword::TextElement.new(content: 'Same text')
+            text: 'Same text'
           )
           para.runs << run
           doc.body.paragraphs << para
