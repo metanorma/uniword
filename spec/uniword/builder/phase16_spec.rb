@@ -84,7 +84,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         expect(media_entries.size).to be >= 1
       end
 
-      FileUtils.rm_f(path)
+      safe_rm_f(path)
     end
   end
 
@@ -360,7 +360,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(sources_xml).to include('The Book')
         end
 
-        FileUtils.rm_f(path)
+        safe_rm_f(path)
       end
     end
   end
@@ -630,7 +630,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(chart_xml).to include('barChart')
         end
 
-        FileUtils.rm_f(path)
+        safe_rm_f(path)
       end
 
       it 'includes chart relationship in document rels' do
@@ -649,7 +649,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(rels).to include('chart')
         end
 
-        FileUtils.rm_f(path)
+        safe_rm_f(path)
       end
     end
   end
@@ -790,7 +790,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         expect(ct).to include('drawingml.chart')
       end
 
-      FileUtils.rm_f(path)
+      safe_rm_f(path)
     end
   end
 end

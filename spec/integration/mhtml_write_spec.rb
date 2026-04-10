@@ -11,7 +11,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
   end
 
   after do
-    FileUtils.rm_f(output_path)
+    safe_rm_f(output_path)
   end
 
   # Parse MHTML file and return the decoded body HTML
@@ -166,7 +166,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       content = File.read(doc_path, encoding: 'UTF-8')
       expect(content).to include('MIME-Version')
 
-      FileUtils.rm_f(doc_path)
+      safe_rm_f(doc_path)
     end
 
     it 'detects .mhtml extension for MHTML format' do
@@ -184,7 +184,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       content = File.read(mhtml_path, encoding: 'UTF-8')
       expect(content).to include('MIME-Version')
 
-      FileUtils.rm_f(mhtml_path)
+      safe_rm_f(mhtml_path)
     end
   end
 

@@ -45,7 +45,7 @@ RSpec.describe 'DOCX Generation Integration' do
           expect(doc_xml).to include('<w:t>')
         end
       ensure
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe 'DOCX Generation Integration' do
           expect(doc_xml.scan('<w:p>').count).to eq(2)
         end
       ensure
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe 'DOCX Generation Integration' do
           expect(doc_xml).to include('  Text with spaces  ')
         end
       ensure
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
     end
 

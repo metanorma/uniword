@@ -35,7 +35,7 @@ RSpec.describe Uniword::DocumentFactory do
       end
 
       after do
-        File.delete(docx_path) if File.exist?(docx_path)
+        safe_delete(docx_path)
       end
 
       it 'loads DOCX file with auto format detection' do
@@ -70,7 +70,7 @@ RSpec.describe Uniword::DocumentFactory do
       end
 
       after do
-        File.delete(mhtml_path) if File.exist?(mhtml_path)
+        safe_delete(mhtml_path)
       end
 
       it 'loads MHTML file with auto format detection' do
@@ -118,7 +118,7 @@ RSpec.describe Uniword::DocumentFactory do
             described_class.from_file(temp_path, format: :invalid)
           end.to raise_error(ArgumentError, /Unsupported format/)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -136,7 +136,7 @@ RSpec.describe Uniword::DocumentFactory do
 
           expect(format).to eq(:docx)
         ensure
-          File.delete(docx_path) if File.exist?(docx_path)
+          safe_delete(docx_path)
         end
       end
     end
@@ -151,7 +151,7 @@ RSpec.describe Uniword::DocumentFactory do
 
           expect(format).to eq(:mhtml)
         ensure
-          File.delete(mhtml_path) if File.exist?(mhtml_path)
+          safe_delete(mhtml_path)
         end
       end
 
@@ -164,7 +164,7 @@ RSpec.describe Uniword::DocumentFactory do
 
           expect(format).to eq(:mhtml)
         ensure
-          File.delete(mht_path) if File.exist?(mht_path)
+          safe_delete(mht_path)
         end
       end
     end
@@ -179,7 +179,7 @@ RSpec.describe Uniword::DocumentFactory do
             described_class.detect_format(txt_path)
           end.to raise_error(ArgumentError, /Unsupported file extension/)
         ensure
-          File.delete(txt_path) if File.exist?(txt_path)
+          safe_delete(txt_path)
         end
       end
     end

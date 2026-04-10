@@ -13,7 +13,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
   after(:each) do
     # Clean up temporary files after each test
-    Dir.glob("#{tmp_dir}/*.docx").each { |f| File.delete(f) }
+    Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
 
   describe 'Basic Round-trip' do

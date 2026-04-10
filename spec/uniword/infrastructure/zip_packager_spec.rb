@@ -7,6 +7,21 @@ require 'securerandom'
 RSpec.describe Uniword::Infrastructure::ZipPackager do
   let(:packager) { described_class.new }
 
+  # Helper to safely delete files on Windows (handles file locking)
+  def safe_delete(path)
+    return unless path && File.exist?(path)
+    retries = 5
+    begin
+      File.delete(path)
+    rescue Errno::EACCES
+      if retries > 0
+        sleep(0.2)
+        retries -= 1
+        retry
+      end
+    end
+  end
+
   describe '#package' do
     let(:content) do
       {
@@ -31,7 +46,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
             expect(zip_file.read('dir/file2.txt')).to eq('Content 2')
           end
         ensure
-          File.delete(temp_zip) if File.exist?(temp_zip)
+          safe_delete(temp_zip)
         end
       end
 
@@ -44,7 +59,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
           expect(File.exist?(output_path)).to be true
           expect(File.directory?(File.dirname(output_path))).to be true
         ensure
-          FileUtils.rm_f(output_path)
+          safe_rm_f(output_path)
         end
       end
 
@@ -56,7 +71,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
           packager.package({ 'old.txt' => 'Old content' }, output_path)
 
           # Explicitly delete before overwriting (Windows file locking)
-          File.delete(output_path) if File.exist?(output_path)
+          safe_delete(output_path)
 
           # Overwrite with new content
           packager.package(content, output_path)
@@ -142,7 +157,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
     end
 
     after do
-      File.delete(temp_zip) if File.exist?(temp_zip)
+      safe_delete(temp_zip)
     end
 
     context 'with valid arguments' do
@@ -198,7 +213,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
     end
 
     after do
-      File.delete(temp_zip) if File.exist?(temp_zip)
+      safe_delete(temp_zip)
     end
 
     context 'when file exists' do

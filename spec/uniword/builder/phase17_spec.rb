@@ -28,7 +28,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
     %w[
       /tmp/test_phase17_*.docx
     ].each do |pattern|
-      Dir[pattern].each { |f| File.delete(f) }
+      Dir[pattern].each { |f| safe_delete(f) }
     end
   end
 

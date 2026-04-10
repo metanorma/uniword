@@ -12,7 +12,7 @@ RSpec.describe 'Format Conversion', type: :integration do
   end
 
   after(:each) do
-    Dir.glob("#{tmp_dir}/*.{docx,doc,mhtml,mht}").each { |f| File.delete(f) }
+    Dir.glob("#{tmp_dir}/*.{docx,doc,mhtml,mht}").each { |f| safe_delete(f) }
   end
 
   # Check for a CSS class in HTML, handling both quoted and unquoted forms

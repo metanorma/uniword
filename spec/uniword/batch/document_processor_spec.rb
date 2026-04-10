@@ -91,8 +91,8 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     after do
-      File.delete(input_path) if File.exist?(input_path)
-      File.delete(output_path) if File.exist?(output_path)
+      safe_delete(input_path)
+      safe_delete(output_path)
     end
 
     it 'processes a single file' do

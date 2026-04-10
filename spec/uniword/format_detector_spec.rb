@@ -19,7 +19,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:docx)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -33,7 +33,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:docx)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:mhtml)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -67,7 +67,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:mhtml)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -80,7 +80,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:mhtml)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -96,7 +96,7 @@ RSpec.describe Uniword::FormatDetector do
             /Unsupported file extension/
           )
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -110,7 +110,7 @@ RSpec.describe Uniword::FormatDetector do
             /Unsupported file extension/
           )
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -158,7 +158,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:docx)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -176,7 +176,7 @@ RSpec.describe Uniword::FormatDetector do
 
           expect(format).to eq(:docx)
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end

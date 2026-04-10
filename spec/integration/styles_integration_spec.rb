@@ -4,6 +4,21 @@ require 'spec_helper'
 require 'securerandom'
 
 RSpec.describe 'Styles Integration', :integration do
+  # Helper to safely delete files on Windows (handles file locking)
+  def safe_delete(path)
+    return unless path && File.exist?(path)
+    retries = 5
+    begin
+      File.delete(path)
+    rescue Errno::EACCES
+      if retries > 0
+        sleep(0.2)
+        retries -= 1
+        retry
+      end
+    end
+  end
+
   describe 'document with styled paragraphs' do
     it 'creates and reads back styled paragraphs' do
       temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
@@ -60,7 +75,7 @@ RSpec.describe 'Styles Integration', :integration do
         expect(loaded_doc.paragraphs[2].properties&.style).to eq('Heading2')
         expect(loaded_doc.paragraphs[2].text).to eq('This is Heading 2')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end
@@ -125,7 +140,7 @@ RSpec.describe 'Styles Integration', :integration do
         # Verify paragraph uses the style (style is on properties)
         expect(loaded_doc.paragraphs.first.properties&.style&.value).to eq('MyCustomStyle')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end
@@ -166,7 +181,7 @@ RSpec.describe 'Styles Integration', :integration do
         expect(loaded_style).not_to be_nil
         expect(loaded_style.based_on).to eq('Heading1')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end
@@ -208,7 +223,7 @@ RSpec.describe 'Styles Integration', :integration do
         expect(para.runs[0].properties.style.value).to eq('Strong')
         expect(para.runs[1].properties.style.value).to eq('Emphasis')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end
@@ -240,7 +255,7 @@ RSpec.describe 'Styles Integration', :integration do
           expect(loaded_doc.paragraphs[level - 1].properties&.style).to eq("Heading#{level}")
         end
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end

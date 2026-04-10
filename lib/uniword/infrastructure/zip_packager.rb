@@ -42,36 +42,47 @@ module Uniword
         # Rubyzip's CREATE mode fails when output_path exists
         temp_path = "#{output_path}.#{Process.pid}.tmp"
 
-        begin
-          Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
-            content.each do |entry_path, entry_content|
-              zip_file.get_output_stream(entry_path) do |stream|
-                # Binary data (ASCII-8BIT) is written as-is;
-                # text content is ensured to be UTF-8
-                final_content =
-                  if entry_content.encoding == Encoding::ASCII_8BIT
-                    entry_content
-                  else
-                    entry_content.encode(
-                      'UTF-8', invalid: :replace, undef: :replace
-                    )
-                  end
-                stream.write(final_content)
-              end
+        Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
+          content.each do |entry_path, entry_content|
+            zip_file.get_output_stream(entry_path) do |stream|
+              # Binary data (ASCII-8BIT) is written as-is;
+              # text content is ensured to be UTF-8
+              final_content =
+                if entry_content.encoding == Encoding::ASCII_8BIT
+                  entry_content
+                else
+                  entry_content.encode(
+                    'UTF-8', invalid: :replace, undef: :replace
+                  )
+                end
+              stream.write(final_content)
             end
           end
-
-          # On Windows, File.rename to existing file fails, so remove first
-          FileUtils.rm_f(output_path)
-          FileUtils.mv(temp_path, output_path)
-        rescue Errno::EACCES
-          # If move fails, try removing target and moving again
-          FileUtils.rm_f(output_path)
-          FileUtils.mv(temp_path, output_path)
-        ensure
-          # Clean up temp file if it still exists
-          FileUtils.rm_f(temp_path) if File.exist?(temp_path)
         end
+
+        # On Windows, the handle may still be held briefly after block ends
+        # and FileUtils.mv (rename) can fail with EACCES on locked files.
+        # Use File.binwrite + unlink instead, which is more Windows-friendly.
+        retries = 10
+        begin
+          FileUtils.rm_f(output_path)
+          # Wait for Windows to release the lock
+          sleep(0.5)
+          # Copy content instead of renaming to avoid rename locks
+          File.binwrite(output_path, File.binread(temp_path))
+          FileUtils.rm_f(temp_path)
+        rescue Errno::EACCES
+          retries -= 1
+          if retries > 0
+            sleep(0.5)
+            retry
+          else
+            raise
+          end
+        end
+      ensure
+        # Clean up temp file if it still exists
+        FileUtils.rm_f(temp_path) if defined?(temp_path) && temp_path && File.exist?(temp_path)
       end
 
       # Add a file to an existing ZIP archive.
@@ -82,14 +93,15 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if arguments are invalid
       #
-      # @note On Windows, Tempfile creates read-only files, so we extract
-      # all entries and recreate the ZIP rather than modifying in-place.
+      # @note On Windows, we must close the original ZIP handle before
+      # attempting to overwrite it. We extract content first, then close
+      # the handle, then package to a temp file and move.
       def add_file(zip_path, entry_path, entry_content)
         validate_zip_path(zip_path)
         raise ArgumentError, 'Entry path cannot be nil' if entry_path.nil?
         raise ArgumentError, 'Entry path cannot be empty' if entry_path.empty?
 
-        # Extract existing content
+        # Extract existing content into a local variable
         content = {}
         Zip::File.open(zip_path) do |zip_file|
           zip_file.each do |entry|
@@ -97,10 +109,11 @@ module Uniword
             content[entry.name] = entry.get_input_stream.read
           end
         end
+        # Handle is now fully closed before we modify the file
 
-        # Add new entry and package (package now handles Windows-safe write)
+        # Add new entry and write to a temp file first, then move
         content[entry_path] = entry_content
-        package(content, zip_path)
+        write_to_zip_file(content, zip_path)
       end
 
       # Remove a file from a ZIP archive.
@@ -110,12 +123,13 @@ module Uniword
       # @return [Boolean] true if file was removed, false if not found
       # @raise [ArgumentError] if arguments are invalid
       #
-      # @note On Windows, Tempfile creates read-only files, so we extract
-      # all entries and recreate the ZIP rather than modifying in-place.
+      # @note On Windows, we must close the original ZIP handle before
+      # attempting to overwrite it. We extract content first, then close
+      # the handle, then write to a temp file and move.
       def remove_file(zip_path, entry_path)
         validate_zip_path(zip_path)
 
-        # Extract existing content
+        # Extract existing content into a local variable
         content = {}
         found = false
         Zip::File.open(zip_path) do |zip_file|
@@ -128,14 +142,65 @@ module Uniword
             end
           end
         end
+        # Handle is now fully closed before we modify the file
+
         return false unless found
 
-        # Recreate ZIP without the entry (package handles Windows-safe write)
-        package(content, zip_path)
+        write_to_zip_file(content, zip_path)
         true
       end
 
       private
+
+      # Write content to a ZIP file using a temp file and atomic move.
+      # This avoids Windows file locking issues by ensuring we never
+      # write directly to the target file while it might be open.
+      #
+      # @param content [Hash<String, String>] Hash mapping file paths to contents
+      # @param output_path [String] The path for the output ZIP file
+      # @return [void]
+      def write_to_zip_file(content, output_path)
+        temp_path = "#{output_path}.#{Process.pid}.#{rand(1000)}.tmp"
+
+        Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
+          content.each do |entry_path, entry_content|
+            zip_file.get_output_stream(entry_path) do |stream|
+              final_content =
+                if entry_content.encoding == Encoding::ASCII_8BIT
+                  entry_content
+                else
+                  entry_content.encode(
+                    'UTF-8', invalid: :replace, undef: :replace
+                  )
+                end
+              stream.write(final_content)
+            end
+          end
+        end
+
+        # On Windows, the handle may still be held briefly after block ends
+        # and FileUtils.mv (rename) can fail with EACCES on locked files.
+        # Use File.binwrite + unlink instead, which is more Windows-friendly.
+        retries = 10
+        begin
+          FileUtils.rm_f(output_path)
+          # Wait for Windows to release the lock
+          sleep(0.5)
+          # Copy content instead of renaming to avoid rename locks
+          File.binwrite(output_path, File.binread(temp_path))
+          FileUtils.rm_f(temp_path)
+        rescue Errno::EACCES
+          retries -= 1
+          if retries > 0
+            sleep(0.5)
+            retry
+          else
+            raise
+          end
+        end
+      ensure
+        FileUtils.rm_f(temp_path) if File.exist?(temp_path)
+      end
 
       # Validate the content hash.
       #

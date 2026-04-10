@@ -15,7 +15,7 @@ RSpec.describe 'MHTML Edge Cases', type: :integration do
   end
 
   after(:each) do
-    Dir.glob("#{tmp_dir}/*.{doc,mhtml}").each { |f| File.delete(f) }
+    Dir.glob("#{tmp_dir}/*.{doc,mhtml}").each { |f| safe_delete(f) }
   end
 
   describe 'Empty Content' do

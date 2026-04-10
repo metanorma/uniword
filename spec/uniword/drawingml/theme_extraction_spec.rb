@@ -130,7 +130,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.theme.color(:accent1)).to eq('FF0000')
 
         # Cleanup
-        FileUtils.rm_f(source_path)
+        safe_rm_f(source_path)
       end
     end
 
@@ -152,7 +152,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.styles_configuration.style_by_id('CustomStyle')).not_to be_nil
 
         # Cleanup
-        FileUtils.rm_f(source_path)
+        safe_rm_f(source_path)
       end
     end
 
@@ -176,7 +176,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
         expect(doc.styles_configuration.style_by_id('TemplateStyle')).not_to be_nil
 
         # Cleanup
-        FileUtils.rm_f(template_path)
+        safe_rm_f(template_path)
       end
     end
   end
@@ -319,7 +319,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(reloaded.theme.major_font).to eq('Helvetica')
 
       # Cleanup
-      FileUtils.rm_f(path)
+      safe_rm_f(path)
     end
 
     it 'preserves theme when document has no explicit theme' do
@@ -337,7 +337,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(reloaded.theme).to be_nil
 
       # Cleanup
-      FileUtils.rm_f(path)
+      safe_rm_f(path)
     end
   end
 
@@ -380,7 +380,7 @@ RSpec.describe 'Theme Extraction and Reuse' do
       expect(style.run_properties.font).to eq('Helvetica')
 
       # Cleanup
-      FileUtils.rm_f(path)
+      safe_rm_f(path)
     end
   end
 end

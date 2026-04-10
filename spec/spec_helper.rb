@@ -57,3 +57,35 @@ RSpec.configure do |config|
     FileUtils.mkdir_p('test_output')
   end
 end
+
+# Global helper to safely delete files on Windows (handles file locking)
+# Use this instead of File.delete when cleaning up temp files in specs
+def safe_delete(path)
+  return unless path && File.exist?(path)
+  retries = 5
+  begin
+    File.delete(path)
+  rescue Errno::EACCES
+    if retries > 0
+      sleep(0.2)
+      retries -= 1
+      retry
+    end
+  end
+end
+
+# Global helper to safely remove files using FileUtils.rm_f on Windows
+# FileUtils.rm_f suppresses errors but can still fail with EACCES on locked files
+def safe_rm_f(path)
+  return unless path
+  retries = 5
+  begin
+    FileUtils.rm_f(path)
+  rescue Errno::EACCES
+    if retries > 0
+      sleep(0.2)
+      retries -= 1
+      retry
+    end
+  end
+end

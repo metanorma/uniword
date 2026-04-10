@@ -113,7 +113,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Round-trip text length: #{roundtrip.text.length}"
           puts "    Text preserved: #{roundtrip.text == original_text}"
         ensure
-          FileUtils.rm_f(temp_path)
+          safe_rm_f(temp_path)
         end
       end
 
@@ -133,7 +133,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Tables preserved: #{roundtrip.tables.count == original.tables.count}"
           puts "    Sections preserved: #{roundtrip.sections.count == original.sections.count}"
         ensure
-          FileUtils.rm_f(temp_path)
+          safe_rm_f(temp_path)
         end
       end
 
@@ -154,7 +154,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           puts "    Original styles: #{original_style_count}"
           puts "    Round-trip styles: #{roundtrip.styles_configuration.styles.count}"
         ensure
-          FileUtils.rm_f(temp_path)
+          safe_rm_f(temp_path)
         end
       end
     end
@@ -188,7 +188,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         puts '    Target: < 10.0s'
         puts "    Status: #{write_time < 10.0 ? 'PASS' : 'FAIL'}"
 
-        FileUtils.rm_f(temp_path)
+        safe_rm_f(temp_path)
       end
 
       it 'handles document without memory issues' do
@@ -343,7 +343,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
           doc.body.paragraphs << para
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")
           doc.save(path)
-          FileUtils.rm_f(path)
+          safe_rm_f(path)
         }
       }
 

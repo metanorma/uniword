@@ -31,7 +31,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         expect(chart_data[:xml]).to include('Sales Report')
         expect(chart_data[:target]).to match(%r{charts/chart\d+\.xml})
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -58,7 +58,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         chart_targets = package.document.chart_parts.values.map { |c| c[:target] }
         expect(chart_targets).to include('charts/chart1.xml', 'charts/chart2.xml')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -73,7 +73,7 @@ RSpec.describe 'Chart Round-trip Integration' do
 
         expect(package.document.chart_parts.nil? || package.document.chart_parts.empty?).to be(true)
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -95,7 +95,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         expect(chart_data[:xml]).to include('Pie Chart')
         expect(chart_data[:xml]).to include('<c:pieChart')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         expect(chart_data[:xml]).to include('Series 1')
         expect(chart_data[:xml]).to include('Series 2')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end
@@ -142,7 +142,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include('<c:barChart')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -163,7 +163,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include('<c:lineChart')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -184,7 +184,7 @@ RSpec.describe 'Chart Round-trip Integration' do
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include('<c:pieChart')
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end

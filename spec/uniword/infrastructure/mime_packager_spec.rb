@@ -69,7 +69,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path)
+      safe_rm_f(output_path)
     end
 
     it 'creates MHTML file' do
@@ -133,7 +133,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path)
+      safe_rm_f(output_path)
     end
 
     it 'includes image in MIME structure' do
@@ -214,7 +214,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path)
+      safe_rm_f(output_path)
     end
 
     {
@@ -260,7 +260,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path)
+      safe_rm_f(output_path)
     end
 
     it 'preserves VML imagedata in output' do
@@ -289,7 +289,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     after do
-      FileUtils.rm_f(output_path)
+      safe_rm_f(output_path)
     end
 
     it 'wraps base64 at 76 characters' do
@@ -338,7 +338,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       # Boundary appears in: Content-Type header + start/end of each part (3 parts = 3 boundary markers minimum)
       expect(content.scan(/#{Regexp.escape(boundary)}/).count).to be >= 3
 
-      FileUtils.rm_f('spec/tmp/test_boundary.doc')
+      safe_rm_f('spec/tmp/test_boundary.doc')
     end
   end
 end

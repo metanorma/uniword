@@ -7,11 +7,25 @@ require 'tempfile'
 RSpec.describe Uniword::Infrastructure::ZipExtractor do
   let(:extractor) { described_class.new }
 
+  # Helper to create a temporary ZIP file on disk, properly handling Windows file locking.
+  # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
+  # atomic rename. This helper closes and deletes the tempfile first.
+  def create_temp_zip
+    temp_zip = Tempfile.new(['test', '.zip'])
+    temp_zip.close
+    safe_delete(temp_zip.path)
+    temp_zip.path
+  end
+
   describe '#extract' do
     context 'with valid ZIP file' do
       it 'extracts all files from ZIP archive' do
         # Create a temporary ZIP file
+        # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
+        # atomic rename. Close and delete the file first.
         temp_zip = Tempfile.new(['test', '.zip'])
+        temp_zip.close
+        safe_delete(temp_zip.path)
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.get_output_stream('file1.txt') { |f| f.write('Content 1') }
@@ -32,6 +46,8 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
 
       it 'skips directories' do
         temp_zip = Tempfile.new(['test', '.zip'])
+        temp_zip.close
+        safe_delete(temp_zip.path)
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.mkdir('empty_dir')
@@ -49,6 +65,8 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
 
       it 'returns empty hash for empty ZIP' do
         temp_zip = Tempfile.new(['test', '.zip'])
+        temp_zip.close
+        safe_delete(temp_zip.path)
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) { |_zip_file| }
 
@@ -98,6 +116,10 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
     let(:temp_zip) { Tempfile.new(['test', '.zip']) }
 
     before do
+      # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
+      # atomic rename. Close and delete the file first.
+      temp_zip.close
+      safe_delete(temp_zip.path)
       Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
         zip_file.get_output_stream('document.xml') { |f| f.write('<doc>Test</doc>') }
         zip_file.get_output_stream('styles.xml') { |f| f.write('<styles/>') }
@@ -144,6 +166,10 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
     let(:temp_zip) { Tempfile.new(['test', '.zip']) }
 
     before do
+      # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
+      # atomic rename. Close and delete the file first.
+      temp_zip.close
+      safe_delete(temp_zip.path)
       Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
         zip_file.get_output_stream('file1.txt') { |f| f.write('Content 1') }
         zip_file.get_output_stream('dir/file2.txt') { |f| f.write('Content 2') }
@@ -172,6 +198,10 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
     it 'returns empty array for empty ZIP' do
       temp_empty = Tempfile.new(['empty', '.zip'])
       begin
+        # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
+        # atomic rename. Close and delete the file first.
+        temp_empty.close
+        safe_delete(temp_empty.path)
         Zip::File.open(temp_empty.path, Zip::File::CREATE) { |_zip_file| }
 
         result = extractor.list_files(temp_empty.path)

@@ -35,8 +35,8 @@ RSpec.describe Uniword::FormatConverter do
     end
 
     after do
-      File.delete(docx_path) if File.exist?(docx_path)
-      File.delete(mhtml_path) if File.exist?(mhtml_path)
+      safe_delete(docx_path)
+      safe_delete(mhtml_path)
     end
 
     context 'with explicit parameters' do
@@ -78,8 +78,8 @@ RSpec.describe Uniword::FormatConverter do
           expect(result.source_format).to eq(:mhtml)
           expect(result.target_format).to eq(:docx)
         ensure
-          File.delete(output_docx) if File.exist?(output_docx)
-          File.delete(mhtml_src) if File.exist?(mhtml_src)
+          safe_delete(output_docx)
+          safe_delete(mhtml_src)
         end
       end
 
@@ -205,8 +205,8 @@ RSpec.describe Uniword::FormatConverter do
     end
 
     after do
-      File.delete(mhtml_path) if File.exist?(mhtml_path)
-      File.delete(docx_path) if File.exist?(docx_path)
+      safe_delete(mhtml_path)
+      safe_delete(docx_path)
     end
 
     it 'explicitly declares MHTML to DOCX conversion' do
@@ -253,8 +253,8 @@ RSpec.describe Uniword::FormatConverter do
     end
 
     after do
-      File.delete(docx_path) if File.exist?(docx_path)
-      File.delete(mhtml_path) if File.exist?(mhtml_path)
+      safe_delete(docx_path)
+      safe_delete(mhtml_path)
     end
 
     it 'explicitly declares DOCX to MHTML conversion' do

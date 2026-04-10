@@ -12,7 +12,20 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
   after(:each) do
     # Clean up temporary files after each test
-    Dir.glob("#{tmp_dir}/*").each { |f| File.delete(f) if File.file?(f) }
+    # On Windows, files may be locked briefly after writing
+    Dir.glob("#{tmp_dir}/*").each do |f|
+      next unless File.file?(f)
+      retries = 5
+      begin
+        File.delete(f)
+      rescue Errno::EACCES
+        if retries > 0
+          sleep(0.2)
+          retries -= 1
+          retry
+        end
+      end
+    end
   end
 
   describe 'LibreOffice Openability' do

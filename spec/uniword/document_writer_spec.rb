@@ -38,7 +38,7 @@ RSpec.describe Uniword::DocumentWriter do
 
           expect(File.exist?(temp_path)).to be true
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -49,7 +49,7 @@ RSpec.describe Uniword::DocumentWriter do
 
           expect(File.exist?(temp_path)).to be true
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe Uniword::DocumentWriter do
           content = File.read(temp_path)
           expect(content).to include('MIME-Version: 1.0')
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
 
@@ -75,7 +75,7 @@ RSpec.describe Uniword::DocumentWriter do
 
           expect(File.exist?(temp_path)).to be true
         ensure
-          File.delete(temp_path) if File.exist?(temp_path)
+          safe_delete(temp_path)
         end
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe Uniword::DocumentWriter do
 
         expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
 
@@ -176,7 +176,7 @@ RSpec.describe Uniword::DocumentWriter do
         # MHTML files are auto-converted to DocumentRoot
         expect(loaded_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       ensure
-        File.delete(temp_path) if File.exist?(temp_path)
+        safe_delete(temp_path)
       end
     end
   end

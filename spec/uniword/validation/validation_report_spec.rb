@@ -200,7 +200,7 @@ RSpec.describe Uniword::Validation::ValidationReport do
         content = JSON.parse(File.read(file_path))
         expect(content['summary']).to be_a(Hash)
 
-        FileUtils.rm_f(file_path)
+        safe_rm_f(file_path)
       end
     end
 
@@ -215,7 +215,7 @@ RSpec.describe Uniword::Validation::ValidationReport do
         content = YAML.load_file(file_path, aliases: true)
         expect(content[:summary]).to be_a(Hash)
 
-        FileUtils.rm_f(file_path)
+        safe_rm_f(file_path)
       end
     end
 
@@ -231,7 +231,7 @@ RSpec.describe Uniword::Validation::ValidationReport do
         expect(content).to include('<!DOCTYPE html>')
         expect(content).to include('Link Validation Report')
 
-        FileUtils.rm_f(file_path)
+        safe_rm_f(file_path)
       end
     end
   end
