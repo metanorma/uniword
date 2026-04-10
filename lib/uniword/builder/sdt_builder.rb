@@ -73,7 +73,7 @@ module Uniword
       #
       # @param value [Boolean] Lock content (default true)
       # @return [self]
-      def lock(value = true)
+      def lock(_value = true)
         properties.temporary = Wordprocessingml::StructuredDocumentTag::Temporary.new
         self
       end
@@ -82,7 +82,7 @@ module Uniword
       #
       # @param value [Boolean] Show placeholder (default true)
       # @return [self]
-      def showing_placeholder(value = true)
+      def showing_placeholder(_value = true)
         properties.showing_placeholder_header = Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
         self
       end
@@ -126,9 +126,7 @@ module Uniword
         # Text control flag
         sdt.properties.text = Wordprocessingml::StructuredDocumentTag::Text.new
 
-        if placeholder_text
-          sdt.showing_placeholder
-        end
+        sdt.showing_placeholder if placeholder_text
         sdt
       end
 

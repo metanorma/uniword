@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Styles
     # Paragraph style definition

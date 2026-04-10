@@ -22,8 +22,8 @@ RSpec.describe 'MHT → DOCX Content Matching' do
   # Helper: Parse MHT body HTML
   def parse_mht_body(mht_path)
     content = File.read(mht_path)
-    if content =~ /<body[^>]*>(.*?)<\/body>/im
-      $1
+    if content =~ %r{<body[^>]*>(.*?)</body>}im
+      Regexp.last_match(1)
     else
       ''
     end
@@ -72,7 +72,7 @@ RSpec.describe 'MHT → DOCX Content Matching' do
     it 'has paragraphs' do
       para_count = docx_doc.body.paragraphs.count
       expect(para_count).to be >= expected[:paragraphs],
-        "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
+                            "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
     end
 
     it 'has expected table count' do
@@ -100,7 +100,7 @@ RSpec.describe 'MHT → DOCX Content Matching' do
     it 'has paragraphs' do
       para_count = docx_doc.body.paragraphs.count
       expect(para_count).to be >= expected[:paragraphs],
-        "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
+                            "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
     end
 
     it 'has tables' do
@@ -132,7 +132,7 @@ RSpec.describe 'MHT → DOCX Content Matching' do
     it 'has paragraphs' do
       para_count = docx_doc.body.paragraphs.count
       expect(para_count).to be >= expected[:paragraphs],
-        "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
+                            "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
     end
 
     it 'has tables' do
@@ -160,7 +160,7 @@ RSpec.describe 'MHT → DOCX Content Matching' do
     it 'has paragraphs' do
       para_count = docx_doc.body.paragraphs.count
       expect(para_count).to be >= expected[:paragraphs],
-        "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
+                            "Expected at least #{expected[:paragraphs]} paragraphs, got #{para_count}"
     end
 
     it 'has tables' do

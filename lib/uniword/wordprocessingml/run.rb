@@ -103,17 +103,11 @@ module Uniword
       # @return [String] Human-readable representation
       def inspect
         text_preview = text.to_s
-        if text_preview.length > 40
-          text_preview = "#{text_preview[0, 37]}..."
-        end
+        text_preview = "#{text_preview[0, 37]}..." if text_preview.length > 40
 
         flags = []
-        if properties&.bold&.value == true
-          flags << 'bold'
-        end
-        if properties&.italic&.value == true
-          flags << 'italic'
-        end
+        flags << 'bold' if properties&.bold&.value == true
+        flags << 'italic' if properties&.italic&.value == true
         if flags.any?
           "#<#{self.class} text=\"#{text_preview}\", #{flags.join(', ')}>"
         else
@@ -162,7 +156,7 @@ module Uniword
         return nil unless raw
 
         half_pts = raw.to_i
-        half_pts > 0 ? half_pts / 2 : nil
+        half_pts.positive? ? half_pts / 2 : nil
       end
 
       private

@@ -34,13 +34,13 @@ RSpec.describe 'DOCX → MHT Full Fidelity' do
   }.freeze
 
   def decode_qp(str)
-    str.gsub(/=([0-9A-Fa-f]{2})/) { $1.to_i(16).chr }
+    str.gsub(/=([0-9A-Fa-f]{2})/) { Regexp.last_match(1).to_i(16).chr }
   end
 
   def parse_mht_body(mht_path)
     content = File.read(mht_path)
-    if content =~ /<body[^>]*>(.*)<\/body>/im
-      decode_qp($1)
+    if content =~ %r{<body[^>]*>(.*)</body>}im
+      decode_qp(Regexp.last_match(1))
     else
       ''
     end

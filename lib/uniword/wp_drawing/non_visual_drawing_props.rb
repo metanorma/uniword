@@ -11,7 +11,7 @@ module Uniword
       # Currently minimal - locks will be added when needed
 
       xml do
-        element "cNvGraphicFramePr"
+        element 'cNvGraphicFramePr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
       end

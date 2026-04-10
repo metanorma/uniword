@@ -49,8 +49,6 @@ module Uniword
             '1'
           when false
             '0'
-          else
-            nil
           end
         end
       end

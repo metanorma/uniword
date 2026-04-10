@@ -22,7 +22,7 @@ module Uniword
       attribute :value, CellVerticalAlignValue # Alignment: top, center, bottom
 
       xml do
-        element "vAlign"
+        element 'vAlign'
         namespace Ooxml::Namespaces::WordProcessingML
 
         map_attribute 'val', to: :value

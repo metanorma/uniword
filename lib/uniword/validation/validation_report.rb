@@ -221,8 +221,8 @@ module Uniword
       #
       # @example
       #   json = report.to_json
-      def to_json(*args)
-        JSON.pretty_generate(to_h, *args)
+      def to_json(*)
+        JSON.pretty_generate(to_h, *)
       end
 
       # Convert to YAML string.

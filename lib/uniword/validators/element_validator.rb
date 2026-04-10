@@ -85,7 +85,9 @@ module Uniword
       # @return [Array<String>] Array of error messages
       def errors(element)
         return ['Element is nil'] if element.nil?
-        return ['Element must be a Uniword::Element'] unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
+        unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
+          return ['Element must be a Uniword::Element']
+        end
         return [] if valid?(element)
 
         ['Element validation failed']

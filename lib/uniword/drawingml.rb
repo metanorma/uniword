@@ -160,8 +160,10 @@ module Uniword
 
     # Supporting types (9)
     autoload :NonVisualConnectorProperties, 'uniword/drawingml/non_visual_connector_properties'
-    autoload :NonVisualGraphicFrameProperties, 'uniword/drawingml/non_visual_graphic_frame_properties'
-    autoload :NonVisualGroupDrawingShapeProperties, 'uniword/drawingml/non_visual_group_drawing_shape_properties'
+    autoload :NonVisualGraphicFrameProperties,
+             'uniword/drawingml/non_visual_graphic_frame_properties'
+    autoload :NonVisualGroupDrawingShapeProperties,
+             'uniword/drawingml/non_visual_group_drawing_shape_properties'
     autoload :NonVisualPictureProperties, 'uniword/drawingml/non_visual_picture_properties'
     autoload :GroupShapeProperties, 'uniword/drawingml/group_shape_properties'
     autoload :OfficeArtExtension, 'uniword/drawingml/office_art_extension'

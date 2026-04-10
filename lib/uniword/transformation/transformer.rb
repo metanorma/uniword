@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Transformation
     # Transformer for converting between format-specific model representations.
@@ -57,14 +56,10 @@ module Uniword
         validate_transformation(source, source_format, target_format)
 
         # When targeting MHTML, produce an Mhtml::Document with HTML content
-        if target_format == :mhtml
-          return transform_to_mhtml(source)
-        end
+        return transform_to_mhtml(source) if target_format == :mhtml
 
         # When source is MHTML, transform to OOXML document
-        if source_format == :mhtml
-          return transform_from_mhtml(source)
-        end
+        return transform_from_mhtml(source) if source_format == :mhtml
 
         # Create new target document
         target = Wordprocessingml::DocumentRoot.new
@@ -188,14 +183,20 @@ module Uniword
         doc_props = source.document_properties
         if doc_props
           ooxml_doc.core_properties ||= Uniword::Ooxml::CoreProperties.new
-          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
-          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
+          if doc_props.respond_to?(:author) && doc_props.author
+            ooxml_doc.core_properties.creator = doc_props.author
+          end
+          if doc_props.respond_to?(:author) && doc_props.author
+            ooxml_doc.core_properties.creator = doc_props.author
+          end
           if doc_props.respond_to?(:created) && doc_props.created
             ooxml_doc.core_properties.created = Uniword::Ooxml::Types::DctermsCreatedType.new(
               value: doc_props.created, type: 'dcterms:W3CDTF'
             )
           end
-          ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.respond_to?(:last_author) && doc_props.last_author
+          if doc_props.respond_to?(:last_author) && doc_props.last_author
+            ooxml_doc.core_properties.last_modified_by = doc_props.last_author
+          end
           if doc_props.respond_to?(:last_saved) && doc_props.last_saved
             ooxml_doc.core_properties.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
               value: doc_props.last_saved, type: 'dcterms:W3CDTF'

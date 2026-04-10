@@ -12,7 +12,7 @@ module Uniword
       attribute :fallback, Fallback, default: nil
 
       xml do
-        element "AlternateContent"
+        element 'AlternateContent'
         namespace Uniword::Ooxml::Namespaces::MarkupCompatibility
         mixed_content
 

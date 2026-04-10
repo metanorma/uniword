@@ -66,7 +66,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
 
     it 'returns false when bold is false' do
       props = Uniword::Wordprocessingml::RunProperties.new(bold: false)
-      run = described_class.new(text: 'Test', properties: props)
+      described_class.new(text: 'Test', properties: props)
       bold_prop = props.bold
       bold_val = bold_prop.respond_to?(:value) ? bold_prop.value : bold_prop
       expect(bold_val == true).to be false
@@ -87,7 +87,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
 
     it 'returns false when italic is false' do
       props = Uniword::Wordprocessingml::RunProperties.new(italic: false)
-      run = described_class.new(text: 'Test', properties: props)
+      described_class.new(text: 'Test', properties: props)
       italic_prop = props.italic
       italic_val = italic_prop.respond_to?(:value) ? italic_prop.value : italic_prop
       expect(italic_val == true).to be false

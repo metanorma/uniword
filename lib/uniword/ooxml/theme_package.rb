@@ -43,7 +43,6 @@ module Uniword
       #
       # @return [void]
       def extract
-
         extractor = Infrastructure::ZipExtractor.new
         @extracted_content = extractor.extract(@path)
       end
@@ -122,7 +121,6 @@ module Uniword
       def package(output_path)
         raise 'Must extract before packaging' unless @extracted_content
 
-
         packager = Infrastructure::ZipPackager.new
         packager.package(@extracted_content, output_path)
       end
@@ -162,7 +160,6 @@ module Uniword
       #
       # @return [Hash] filename => MediaFile objects
       def load_media_files
-
         media = {}
 
         media_files.each do |file_path|
@@ -193,7 +190,6 @@ module Uniword
       #
       # @return [Hash] variant_id => ThemeVariant
       def load_variants
-
         variant_hash = {}
 
         variants.each do |variant_id|

@@ -68,12 +68,12 @@ module Uniword
 
         raw_html
           .gsub(/<[^>]+>/, ' ')
-          .gsub(/&lt;/, '<')
-          .gsub(/&gt;/, '>')
-          .gsub(/&amp;/, '&')
-          .gsub(/&quot;/, '"')
-          .gsub(/&#39;/, "'")
-          .gsub(/&nbsp;/, ' ')
+          .gsub('&lt;', '<')
+          .gsub('&gt;', '>')
+          .gsub('&amp;', '&')
+          .gsub('&quot;', '"')
+          .gsub('&#39;', "'")
+          .gsub('&nbsp;', ' ')
           .gsub(/\s+/, ' ')
           .strip
       end
@@ -82,12 +82,12 @@ module Uniword
 
       # @return [Array<XmlPart>] All XML parts
       def xml_parts
-        parts.select { |p| p.is_a?(XmlPart) }
+        parts.grep(XmlPart)
       end
 
       # @return [Array<ImagePart>] All image parts
       def image_parts
-        parts.select { |p| p.is_a?(ImagePart) }
+        parts.grep(ImagePart)
       end
 
       # @return [ThemePart, nil] Theme data part
@@ -119,7 +119,7 @@ module Uniword
 
       # @return [Array<HeaderFooterPart>] Header/footer HTML parts
       def header_footer_parts
-        parts.select { |p| p.is_a?(HeaderFooterPart) }
+        parts.grep(HeaderFooterPart)
       end
 
       # @return [String, nil] Header HTML

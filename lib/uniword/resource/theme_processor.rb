@@ -10,9 +10,9 @@ module Uniword
       attr_reader :hue_shift, :saturation_shift, :lightness_shift
 
       # Shift ranges for random generation
-      HUE_SHIFT_RANGE = (-10..10).freeze
-      SATURATION_SHIFT_RANGE = (-5..5).freeze
-      LIGHTNESS_SHIFT_RANGE = (-5..5).freeze
+      HUE_SHIFT_RANGE = (-10..10)
+      SATURATION_SHIFT_RANGE = (-5..5)
+      LIGHTNESS_SHIFT_RANGE = (-5..5)
 
       # Create processor with optional shift values
       #
@@ -33,7 +33,7 @@ module Uniword
         hash = Digest::SHA256.hexdigest(seed)
 
         # Use first 24 hex chars (6 bytes each) for shift values
-        hue_shift = (hash[0, 6].to_i(16) % 21) - 10  # -10..10
+        hue_shift = (hash[0, 6].to_i(16) % 21) - 10 # -10..10
         saturation_shift = (hash[6, 6].to_i(16) % 11) - 5  # -5..5
         lightness_shift = (hash[12, 6].to_i(16) % 11) - 5  # -5..5
 
@@ -86,7 +86,8 @@ module Uniword
       # @param color_scheme [Drawingml::ColorScheme] Color scheme to transform
       def transform_color_scheme(color_scheme)
         # Get all color attributes that respond to srgb_clr
-        color_attrs = %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink fol_hlink]
+        color_attrs = %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink
+                         fol_hlink]
 
         color_attrs.each do |attr|
           color_obj = color_scheme.send(attr)

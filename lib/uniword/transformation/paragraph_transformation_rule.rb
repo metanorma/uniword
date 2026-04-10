@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Transformation
     # Transformation rule for Paragraph elements.
@@ -136,7 +135,6 @@ module Uniword
       # @param source [Paragraph] Source paragraph
       # @param target [Paragraph] Target paragraph
       def transform_runs(source, target)
-
         run_rule = RunTransformationRule.new(
           source_format: @source_format,
           target_format: @target_format

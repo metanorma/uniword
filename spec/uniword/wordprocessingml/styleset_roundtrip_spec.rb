@@ -7,7 +7,7 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
   # Test both directories
   %w[quick-styles].each do |dir_name|
     describe "#{dir_name}/" do
-      Dir.glob("spec/fixtures/uniword-private/word-resources/#{dir_name}/*.dotx").sort.each do |styleset_file|
+      Dir.glob("spec/fixtures/uniword-private/word-resources/#{dir_name}/*.dotx").each do |styleset_file|
         styleset_name = File.basename(styleset_file, '.dotx')
 
         describe styleset_name do

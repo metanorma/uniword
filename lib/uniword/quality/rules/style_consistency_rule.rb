@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Quality
     # Checks for direct formatting instead of styles.
@@ -77,7 +76,7 @@ module Uniword
       # @return [Boolean] true if has style
       def has_style?(paragraph)
         style = paragraph.properties&.style
-        style && style.value && !style.value.empty?
+        style&.value && !style.value.empty?
       end
 
       # Check if paragraph has formatting properties

@@ -234,7 +234,7 @@ RSpec.describe Uniword::Builder::ImageBuilder, 'serialization' do
   it 'serializes inline drawing with picture chain' do
     doc = Uniword::Builder::DocumentBuilder.new
     drawing = described_class.create_drawing(doc, 'spec/fixtures/sample.png',
-                                            width: 500_000, height: 300_000)
+                                             width: 500_000, height: 300_000)
 
     xml = drawing.to_xml
     expect(xml).to include('inline')
@@ -249,8 +249,8 @@ RSpec.describe Uniword::Builder::ImageBuilder, 'serialization' do
   it 'serializes anchor drawing with positioning' do
     doc = Uniword::Builder::DocumentBuilder.new
     drawing = described_class.create_floating(doc, 'spec/fixtures/sample.png',
-                                             width: 500_000, height: 300_000,
-                                             align: :right)
+                                              width: 500_000, height: 300_000,
+                                              align: :right)
 
     xml = drawing.to_xml
     expect(xml).to include('anchor')
@@ -352,7 +352,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, '#watermark' do
   it 'accepts custom options' do
     doc = described_class.new
     doc.watermark('DRAFT', font: 'Arial', size: 80, color: 'FF0000',
-                  opacity: '0.5', angle: 90)
+                           opacity: '0.5', angle: 90)
 
     header = doc.model.headers['default']
     para = header.paragraphs.first
@@ -409,7 +409,7 @@ RSpec.describe Uniword::Builder::SdtBuilder do
 
     it 'sets placeholder text' do
       sdt = described_class.text(placeholder_text: 'Enter title here')
-      model = sdt.build
+      sdt.build
 
       expect(sdt.model.properties.showing_placeholder_header).not_to be_nil
     end
@@ -541,7 +541,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, '#floating_image' do
   it 'adds a floating image paragraph' do
     doc = described_class.new
     doc.floating_image('spec/fixtures/sample.png', width: 500_000, height: 300_000,
-                       align: :right)
+                                                   align: :right)
 
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to be >= 1
@@ -564,7 +564,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, '#floating_image' do
   it 'supports wrap none' do
     doc = described_class.new
     doc.floating_image('spec/fixtures/sample.png', width: 500_000, height: 300_000,
-                       wrap: :none)
+                                                   wrap: :none)
 
     run = doc.model.body.paragraphs.first.runs.first
     drawing = run.drawings.first
@@ -574,7 +574,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, '#floating_image' do
   it 'supports behind text' do
     doc = described_class.new
     doc.floating_image('spec/fixtures/sample.png', width: 500_000, height: 300_000,
-                       behind_text: true)
+                                                   behind_text: true)
 
     run = doc.model.body.paragraphs.first.runs.first
     drawing = run.drawings.first
@@ -621,7 +621,8 @@ RSpec.describe 'Scenario: Document with content controls' do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.paragraph do |p|
       p << 'Name: '
-      p << Uniword::Builder::SdtBuilder.text(tag: 'name', alias_name: 'Full Name', placeholder_text: 'Enter name').build
+      p << Uniword::Builder::SdtBuilder.text(tag: 'name', alias_name: 'Full Name',
+                                             placeholder_text: 'Enter name').build
     end
     doc.paragraph do |p|
       p << 'Date: '
@@ -629,7 +630,8 @@ RSpec.describe 'Scenario: Document with content controls' do
     end
     doc.paragraph do |p|
       p << 'Comments: '
-      p << Uniword::Builder::SdtBuilder.text(tag: 'comments', alias_name: 'Comments', placeholder_text: 'Enter comments').build
+      p << Uniword::Builder::SdtBuilder.text(tag: 'comments', alias_name: 'Comments',
+                                             placeholder_text: 'Enter comments').build
     end
 
     expect(doc.model.body.paragraphs.size).to eq(3)
@@ -655,7 +657,7 @@ RSpec.describe 'Scenario: Document with inline and floating images' do
 
     doc.paragraph { |p| p << 'Figure 2: Floating image' }
     doc.floating_image('spec/fixtures/sample.png', width: 300_000, height: 200_000,
-                       align: :right, wrap: :square)
+                                                   align: :right, wrap: :square)
 
     expect(doc.model.body.paragraphs.size).to be >= 4
     expect(doc.model.image_parts.size).to be >= 2
@@ -677,9 +679,17 @@ RSpec.describe 'Scenario: Complete document with Phase 15 features' do
 
     # Content with content controls
     doc.heading('Form Section', level: 1)
-    doc.paragraph { |p| p << 'Prepared by: '; p << Uniword::Builder::SdtBuilder.text(tag: 'author', placeholder_text: 'Enter name').build }
+    doc.paragraph do |p|
+      p << 'Prepared by: '
+      p << Uniword::Builder::SdtBuilder.text(tag: 'author',
+                                             placeholder_text: 'Enter name').build
+    end
 
-    doc.paragraph { |p| p << 'Date: '; p << Uniword::Builder::SdtBuilder.date(tag: 'date', format: 'MMMM d, yyyy').build }
+    doc.paragraph do |p|
+      p << 'Date: '
+      p << Uniword::Builder::SdtBuilder.date(tag: 'date',
+                                             format: 'MMMM d, yyyy').build
+    end
 
     # Images
     doc.heading('Figures', level: 1)
@@ -688,14 +698,17 @@ RSpec.describe 'Scenario: Complete document with Phase 15 features' do
     # Floating image
     doc.paragraph { |p| p << 'Text wrapping around image:' }
     doc.floating_image('spec/fixtures/sample.png', width: 200_000, height: 200_000,
-                       align: :right, wrap: :square)
+                                                   align: :right, wrap: :square)
 
     # Bibliography
     doc.heading('References', level: 1)
     doc.paragraph { |p| p << Uniword::Builder::SdtBuilder.bibliography.build }
 
     # Footer
-    doc.footer { |f| f << 'Page '; f << Uniword::Builder.page_number_field }
+    doc.footer do |f|
+      f << 'Page '
+      f << Uniword::Builder.page_number_field
+    end
 
     # Verify
     expect(doc.model.headers['default']).not_to be_nil

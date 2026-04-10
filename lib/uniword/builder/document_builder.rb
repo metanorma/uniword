@@ -178,16 +178,16 @@ module Uniword
       #
       # @yield [ListBuilder] Builder for list items
       # @return [ListBuilder] The list builder
-      def numbered_list(&block)
-        list(type: :decimal, &block)
+      def numbered_list(&)
+        list(type: :decimal, &)
       end
 
       # Shorthand: create a bullet list
       #
       # @yield [ListBuilder] Builder for list items
       # @return [ListBuilder] The list builder
-      def bullet_list(&block)
-        list(type: :bullet, &block)
+      def bullet_list(&)
+        list(type: :bullet, &)
       end
 
       # Create a bookmark wrapping the next content
@@ -216,8 +216,8 @@ module Uniword
       # @param text [String] Footnote text
       # @yield [ParagraphBuilder] Builder for rich footnote content
       # @return [Wordprocessingml::Run] Run with footnote reference
-      def footnote(text = nil, &block)
-        @footnote_builder.footnote(text, &block)
+      def footnote(text = nil, &)
+        @footnote_builder.footnote(text, &)
       end
 
       # Create an endnote and return a Run with an endnoteReference.
@@ -225,8 +225,8 @@ module Uniword
       # @param text [String] Endnote text
       # @yield [ParagraphBuilder] Builder for rich endnote content
       # @return [Wordprocessingml::Run] Run with endnote reference
-      def endnote(text = nil, &block)
-        @footnote_builder.endnote(text, &block)
+      def endnote(text = nil, &)
+        @footnote_builder.endnote(text, &)
       end
 
       # Apply or configure a document theme
@@ -376,7 +376,7 @@ module Uniword
         para = Wordprocessingml::Paragraph.new
         para.runs << ImageBuilder.create_floating_run(
           self, path, width: width, height: height, alt_text: alt_text,
-          align: align, wrap: wrap, behind_text: behind_text
+                      align: align, wrap: wrap, behind_text: behind_text
         )
         @model.body.paragraphs << para
         self
@@ -403,7 +403,7 @@ module Uniword
 
         para = WatermarkBuilder.build_paragraph(
           text, font: font, size: size, color: color,
-          opacity: opacity, angle: angle
+                opacity: opacity, angle: angle
         )
 
         header = Wordprocessingml::Header.new

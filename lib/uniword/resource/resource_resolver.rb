@@ -65,6 +65,7 @@ module Uniword
       def list_bundled(type)
         dir = bundled_directory_for_type(type)
         return [] unless File.directory?(dir)
+
         Dir.glob(File.join(dir, '*.yml')).map { |f| File.basename(f, '.yml') }
       end
 
@@ -90,9 +91,7 @@ module Uniword
 
       def bundled_path(subdir)
         # Use Gem.datadir if available, otherwise fall back to data/ directory
-        data_path = if defined?(Gem) && Gem.respond_to?(:datadir)
-                      Gem.datadir('uniword')
-                    end
+        data_path = (Gem.datadir('uniword') if defined?(Gem) && Gem.respond_to?(:datadir))
         data_path ||= File.expand_path('../../../data', __dir__)
         File.join(data_path, subdir)
       end

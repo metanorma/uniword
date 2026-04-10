@@ -62,16 +62,17 @@ RSpec.describe 'Resource Roundtrip' do
         loaded = Uniword::Drawingml::Theme.from_yaml(yaml)
 
         expect(loaded.color_scheme.name).to eq(theme.color_scheme.name)
-        %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink fol_hlink].each do |color|
+        %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink
+           fol_hlink].each do |color|
           original_color = theme.color_scheme.send(color)
           loaded_color = loaded.color_scheme.send(color)
 
           # Compare color values if present (colors have nested srgb_clr or sys_clr with val)
-          if original_color && loaded_color
-            original_val = original_color.srgb_clr&.val || original_color.sys_clr&.val
-            loaded_val = loaded_color.srgb_clr&.val || loaded_color.sys_clr&.val
-            expect(loaded_val).to eq(original_val) if original_val && loaded_val
-          end
+          next unless original_color && loaded_color
+
+          original_val = original_color.srgb_clr&.val || original_color.sys_clr&.val
+          loaded_val = loaded_color.srgb_clr&.val || loaded_color.sys_clr&.val
+          expect(loaded_val).to eq(original_val) if original_val && loaded_val
         end
       end
     end

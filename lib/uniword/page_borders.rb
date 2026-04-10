@@ -80,14 +80,14 @@ module Uniword
     # @param width [Integer] Border width
     # @param options [Hash] Additional options (display, offset_from)
     # @return [PageBorders] New instance
-    def self.all_sides(style: 'single', color: 'auto', width: 6, **options)
+    def self.all_sides(style: 'single', color: 'auto', width: 6, **)
       border_side = PageBorderSide.new(style: style, color: color, width: width)
       new(
         top: border_side,
         bottom: border_side,
         left: border_side,
         right: border_side,
-        **options
+        **
       )
     end
 

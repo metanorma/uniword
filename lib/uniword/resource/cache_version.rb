@@ -18,6 +18,7 @@ module Uniword
       # Get cached Word version
       def cached_version
         return nil unless File.exist?(cache.paths.version_file)
+
         JSON.parse(File.read(cache.paths.version_file))['word_version']
       rescue JSON::ParserError
         nil
@@ -41,7 +42,7 @@ module Uniword
 
       # Delete version file
       def delete
-        File.delete(cache.paths.version_file) if File.exist?(cache.paths.version_file)
+        FileUtils.rm_f(cache.paths.version_file)
       end
     end
   end

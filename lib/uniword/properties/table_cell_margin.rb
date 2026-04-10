@@ -21,7 +21,7 @@ module Uniword
       attribute :right, Margin
 
       xml do
-        element "tblCellMar"
+        element 'tblCellMar'
         namespace Ooxml::Namespaces::WordProcessingML
         map_element 'top', to: :top, render_nil: false
         map_element 'left', to: :left, render_nil: false

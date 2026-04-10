@@ -26,7 +26,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
 
         # Accepts either prefixed (<w:p>) or default namespace (<p xmlns="...">)
         expect(xml).to match(/<(?:w:)?p[^>]*>/)
-        expect(xml).to match(/<\/(?:w:)?p>/)
+        expect(xml).to match(%r{</(?:w:)?p>})
       end
 
       it 'includes paragraph content' do
@@ -90,21 +90,21 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
         xml = serializer.serialize(table)
 
         expect(xml).to match(/<(?:w:)?tbl/)
-        expect(xml).to match(/<\/(?:w:)?tbl>/)
+        expect(xml).to match(%r{</(?:w:)?tbl>})
       end
 
       it 'includes table rows' do
         xml = serializer.serialize(table)
 
         expect(xml).to match(/<(?:w:)?tr/)
-        expect(xml).to match(/<\/(?:w:)?tr>/)
+        expect(xml).to match(%r{</(?:w:)?tr>})
       end
 
       it 'includes table cells' do
         xml = serializer.serialize(table)
 
         expect(xml).to match(/<(?:w:)?tc/)
-        expect(xml).to match(/<\/(?:w:)?tc>/)
+        expect(xml).to match(%r{</(?:w:)?tc>})
       end
 
       it 'includes cell content' do
@@ -125,7 +125,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
         xml = serializer.serialize(run)
 
         expect(xml).to match(/<(?:w:)?r[^>]*>/)
-        expect(xml).to match(/<\/(?:w:)?r>/)
+        expect(xml).to match(%r{</(?:w:)?r>})
       end
 
       it 'includes text content' do

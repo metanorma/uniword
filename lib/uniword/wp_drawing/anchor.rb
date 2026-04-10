@@ -40,7 +40,7 @@ module Uniword
       attribute :graphic, Drawingml::Graphic
 
       xml do
-        element "anchor"
+        element 'anchor'
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 

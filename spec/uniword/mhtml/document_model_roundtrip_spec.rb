@@ -163,7 +163,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
   end
 
   describe 'MimePackager round-trip' do
-    MHTML_FIXTURES.each do |name, path|
+    MHTML_FIXTURES.each_key do |name|
       describe name do
         let(:doc) { parse_fixture(name) }
         let(:round_tripped) { round_trip(doc) }
@@ -202,7 +202,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
           output = packager.build_mime_content
 
           expect(output).to start_with("MIME-Version: 1.0\r\n")
-          expect(output).to include("Content-Type: multipart/related")
+          expect(output).to include('Content-Type: multipart/related')
           expect(output).to include("--#{packager.boundary}--")
         end
       end

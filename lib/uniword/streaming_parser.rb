@@ -163,7 +163,7 @@ module Uniword
 
         if @current_table
           # Paragraph inside table cell
-          @current_cell&.paragraphs << @current_paragraph
+          @current_cell&.paragraphs&.<< @current_paragraph
         else
           # Top-level paragraph
           @document.body.paragraphs << @current_paragraph

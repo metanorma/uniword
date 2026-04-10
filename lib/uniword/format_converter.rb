@@ -122,13 +122,13 @@ module Uniword
     #     source: "document.mhtml",
     #     target: "document.docx"
     #   )
-    def mhtml_to_docx(source:, target:, **options)
+    def mhtml_to_docx(source:, target:, **)
       convert(
         source: source,
         source_format: :mhtml,
         target: target,
         target_format: :docx,
-        **options
+        **
       )
     end
 
@@ -146,13 +146,13 @@ module Uniword
     #     source: "document.docx",
     #     target: "document.mhtml"
     #   )
-    def docx_to_mhtml(source:, target:, **options)
+    def docx_to_mhtml(source:, target:, **)
       convert(
         source: source,
         source_format: :docx,
         target: target,
         target_format: :mhtml,
-        **options
+        **
       )
     end
 

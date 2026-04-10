@@ -202,7 +202,7 @@ module Uniword
     DESC
     option :verbose, aliases: '-v', desc: 'Verbose output', type: :boolean, default: false
     option :word_app, aliases: '-w', desc: 'Path to Microsoft Word.app', type: :string,
-                  required: true, banner: 'PATH'
+                      required: true, banner: 'PATH'
     def export(output_dir)
       word_app_path = options[:word_app]
 
@@ -263,20 +263,21 @@ module Uniword
       elements_dir = File.join(output_base, 'document-elements')
       Dir.glob("#{resources_path}/*.lproj").each do |lproj|
         doc_elements_path = File.join(lproj, 'Document Elements')
-        if Dir.exist?(doc_elements_path)
-          lproj_name = File.basename(lproj, '.lproj')
-          lproj_elements_dir = File.join(elements_dir, lproj_name)
-          FileUtils.mkdir_p(lproj_elements_dir)
-          Dir.glob("#{doc_elements_path}/*.dotx").each do |dotx|
-            FileUtils.cp(dotx, lproj_elements_dir)
-            say "  #{lproj_name}: #{File.basename(dotx)}" if options[:verbose]
-            elements_count += 1
-          end
-          lproj_count += 1
+        next unless Dir.exist?(doc_elements_path)
+
+        lproj_name = File.basename(lproj, '.lproj')
+        lproj_elements_dir = File.join(elements_dir, lproj_name)
+        FileUtils.mkdir_p(lproj_elements_dir)
+        Dir.glob("#{doc_elements_path}/*.dotx").each do |dotx|
+          FileUtils.cp(dotx, lproj_elements_dir)
+          say "  #{lproj_name}: #{File.basename(dotx)}" if options[:verbose]
+          elements_count += 1
         end
+        lproj_count += 1
       end
-      if elements_count > 0
-        say "Exported #{elements_count} document elements from #{lproj_count} languages to #{elements_dir}", :green
+      if elements_count.positive?
+        say "Exported #{elements_count} document elements from #{lproj_count} languages to #{elements_dir}",
+            :green
       else
         say 'No Document Elements found in Word installation', :yellow
       end

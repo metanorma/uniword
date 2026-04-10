@@ -17,7 +17,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Document with chart' }
       doc.chart(type: :bar) do |c|
         c.title 'Sales Report'
-        c.categories ['Q1', 'Q2', 'Q3', 'Q4']
+        c.categories %w[Q1 Q2 Q3 Q4]
         c.series 'Revenue', data: [100, 200, 150, 300]
       end
 
@@ -41,12 +41,12 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Two charts here' }
       doc.chart(type: :bar) do |c|
         c.title 'Chart 1'
-        c.categories ['A', 'B']
+        c.categories %w[A B]
         c.series 'Series1', data: [1, 2]
       end
       doc.chart(type: :line) do |c|
         c.title 'Chart 2'
-        c.categories ['X', 'Y']
+        c.categories %w[X Y]
         c.series 'Series2', data: [10, 20]
       end
 
@@ -73,7 +73,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Chart test' }
       doc.chart(type: :pie) do |c|
         c.title 'Pie Chart'
-        c.categories ['Alpha', 'Beta', 'Gamma']
+        c.categories %w[Alpha Beta Gamma]
         c.series 'Share', data: [45, 30, 25]
       end
 
@@ -90,7 +90,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Data chart' }
       doc.chart(type: :bar) do |c|
         c.title 'Data Points'
-        c.categories ['Jan', 'Feb', 'Mar']
+        c.categories %w[Jan Feb Mar]
         c.series 'Series 1', data: [1, 2, 3]
         c.series 'Series 2', data: [4, 5, 6]
       end
@@ -111,7 +111,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Bar chart' }
       doc.chart(type: :bar) do |c|
         c.title 'Bar Test'
-        c.categories ['1', '2']
+        c.categories %w[1 2]
         c.series 'Data', data: [10, 20]
       end
 
@@ -127,7 +127,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Line chart' }
       doc.chart(type: :line) do |c|
         c.title 'Line Test'
-        c.categories ['1', '2']
+        c.categories %w[1 2]
         c.series 'Data', data: [10, 20]
       end
 
@@ -143,7 +143,7 @@ RSpec.describe 'Chart Round-trip Integration' do
       doc.paragraph { |p| p << 'Pie chart' }
       doc.chart(type: :pie) do |c|
         c.title 'Pie Test'
-        c.categories ['A', 'B']
+        c.categories %w[A B]
         c.series 'Data', data: [30, 70]
       end
 

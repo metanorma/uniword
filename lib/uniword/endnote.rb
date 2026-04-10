@@ -46,7 +46,6 @@ module Uniword
       !@content.nil? && !@content.empty?
     end
 
-
     # Get text content of endnote.
     #
     # @return [String] The combined text of all paragraphs

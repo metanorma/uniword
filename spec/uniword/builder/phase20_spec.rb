@@ -23,7 +23,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.heading('Executive Summary', level: 1)
       doc.paragraph do |p|
         p << 'The company experienced significant growth in Q4 2025.'
-        p << ::B.text('Revenue increased by 23%.', bold: true)
+        p << B.text('Revenue increased by 23%.', bold: true)
       end
 
       doc.comment(author: 'John Doe', initials: 'JD', text: 'Can we add the exact revenue figure?')
@@ -44,21 +44,21 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.comment(author: 'John Doe', initials: 'JD', text: 'Add the financial table here')
 
       doc.table do |t|
-        t.row { |r|
+        t.row do |r|
           r.cell(text: 'Metric') { |c| c.shading(fill: '4472C4') }
           r.cell(text: 'Q3 2025') { |c| c.shading(fill: '4472C4') }
           r.cell(text: 'Q4 2025') { |c| c.shading(fill: '4472C4') }
-        }
-        t.row { |r|
+        end
+        t.row do |r|
           r.cell(text: 'Revenue ($M)')
           r.cell(text: '12.4')
           r.cell(text: '15.3')
-        }
-        t.row { |r|
+        end
+        t.row do |r|
           r.cell(text: 'Profit ($M)')
           r.cell(text: '3.1')
           r.cell(text: '4.2')
-        }
+        end
       end
 
       doc.save(path)
@@ -99,29 +99,32 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # Name field
       doc.paragraph do |p|
-        p << ::B.text('Full Name: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'employee_name', alias_name: 'Employee Name', placeholder_text: 'Enter full name')
+        p << B.text('Full Name: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'employee_name', alias_name: 'Employee Name',
+                                 placeholder_text: 'Enter full name')
         p << sdt.build
       end
 
       # Email field
       doc.paragraph do |p|
-        p << ::B.text('Email: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'employee_email', alias_name: 'Email', placeholder_text: 'Enter email address')
+        p << B.text('Email: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'employee_email', alias_name: 'Email',
+                                 placeholder_text: 'Enter email address')
         p << sdt.build
       end
 
       # Date of birth
       doc.paragraph do |p|
-        p << ::B.text('Date of Birth: ', bold: true)
+        p << B.text('Date of Birth: ', bold: true)
         sdt = B::SdtBuilder.date(tag: 'dob', format: 'yyyy-MM-dd').tap { |s| s.alias('Date of Birth') }
         p << sdt.build
       end
 
       # Department dropdown (simulated as text control)
       doc.paragraph do |p|
-        p << ::B.text('Department: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'department', alias_name: 'Department', placeholder_text: 'Select department')
+        p << B.text('Department: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'department', alias_name: 'Department',
+                                 placeholder_text: 'Select department')
         p << sdt.build
       end
 
@@ -131,22 +134,24 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # Start date
       doc.paragraph do |p|
-        p << ::B.text('Start Date: ', bold: true)
+        p << B.text('Start Date: ', bold: true)
         sdt = B::SdtBuilder.date(tag: 'start_date', format: 'MMMM d, yyyy').tap { |s| s.alias('Start Date') }
         p << sdt.build
       end
 
       # Manager
       doc.paragraph do |p|
-        p << ::B.text('Reporting Manager: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'manager', alias_name: 'Manager', placeholder_text: "Manager's name")
+        p << B.text('Reporting Manager: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'manager', alias_name: 'Manager',
+                                 placeholder_text: "Manager's name")
         p << sdt.build
       end
 
       # Position
       doc.paragraph do |p|
-        p << ::B.text('Position: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'position', alias_name: 'Position', placeholder_text: 'Job title')
+        p << B.text('Position: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'position', alias_name: 'Position',
+                                 placeholder_text: 'Job title')
         p << sdt.build
       end
 
@@ -154,8 +159,9 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       doc.heading('Notes', level: 1)
       doc.paragraph do |p|
-        p << ::B.text('Additional Notes: ', bold: true)
-        sdt = B::SdtBuilder.text(tag: 'notes', alias_name: 'Notes', placeholder_text: 'Enter any additional information')
+        p << B.text('Additional Notes: ', bold: true)
+        sdt = B::SdtBuilder.text(tag: 'notes', alias_name: 'Notes',
+                                 placeholder_text: 'Enter any additional information')
         p << sdt.build
       end
 
@@ -167,7 +173,9 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # Verify specific controls
       all_sdts = paragraphs_with_sdts.flat_map(&:sdts)
-      tag_names = all_sdts.map { |s| s.properties&.alias_name&.value || s.properties&.tag&.value }.compact
+      tag_names = all_sdts.map do |s|
+        s.properties&.alias_name&.value || s.properties&.tag&.value
+      end.compact
       expect(tag_names).to include('Employee Name')
       expect(tag_names).to include('Email')
       expect(tag_names).to include('Date of Birth')
@@ -203,13 +211,13 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.table do |t|
         # Header row: one merged cell spanning 3 columns, then a separate cell
         t.row do |r|
-          r.cell(text: 'Q4 2025 Financial Summary') { |c|
+          r.cell(text: 'Q4 2025 Financial Summary') do |c|
             c.column_span(3)
             c.shading(fill: '1F4E79')
-          }
-          r.cell(text: 'Notes') { |c|
+          end
+          r.cell(text: 'Notes') do |c|
             c.shading(fill: '1F4E79')
-          }
+          end
         end
         # Sub-header
         t.row do |r|
@@ -219,9 +227,24 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           r.cell(text: '') { |c| c.shading(fill: 'D6E4F0') }
         end
         # Data rows
-        t.row { |r| r.cell(text: 'North America'); r.cell(text: '$5.2M'); r.cell(text: '+12%'); r.cell(text: 'Strong') }
-        t.row { |r| r.cell(text: 'Europe'); r.cell(text: '$3.8M'); r.cell(text: '+8%'); r.cell(text: 'Steady') }
-        t.row { |r| r.cell(text: 'Asia Pacific'); r.cell(text: '$4.1M'); r.cell(text: '+22%'); r.cell(text: 'Rapid growth') }
+        t.row do |r|
+          r.cell(text: 'North America')
+          r.cell(text: '$5.2M')
+          r.cell(text: '+12%')
+          r.cell(text: 'Strong')
+        end
+        t.row do |r|
+          r.cell(text: 'Europe')
+          r.cell(text: '$3.8M')
+          r.cell(text: '+8%')
+          r.cell(text: 'Steady')
+        end
+        t.row do |r|
+          r.cell(text: 'Asia Pacific')
+          r.cell(text: '$4.1M')
+          r.cell(text: '+22%')
+          r.cell(text: 'Rapid growth')
+        end
       end
 
       # --- 3b. Styled table with alternating row colors ---
@@ -252,20 +275,20 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       doc.table do |t|
         t.row do |r|
-          r.cell(text: 'Team Alpha') { |c|
+          r.cell(text: 'Team Alpha') do |c|
             c.shading(fill: 'E2EFDA')
             c.column_span(2)
-          }
+          end
         end
         t.row do |r|
-          r.cell(text: 'Members') { |c|
+          r.cell(text: 'Members') do |c|
             # Nested table inside this cell
             nested = B::TableBuilder.new
             nested.row { |nr| nr.cell(text: 'Alice') }
             nested.row { |nr| nr.cell(text: 'Bob') }
             nested.row { |nr| nr.cell(text: 'Carol') }
             c << nested.build
-          }
+          end
           r.cell(text: 'Budget: $500K')
         end
       end
@@ -312,7 +335,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       # Section 1: Cover page
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('Annual Report 2025', bold: true, size: 48)
+        p << B.text('Annual Report 2025', bold: true, size: 48)
       end
       doc.paragraph do |p|
         p.align = 'center'
@@ -327,9 +350,9 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         s.header(type: 'default') { |h| h << 'Annual Report 2025 — Acme Corporation' }
         s.footer(type: 'default') do |f|
           f << 'Page '
-          f << ::B.page_number_field
+          f << B.page_number_field
           f << ' of '
-          f << ::B.total_pages_field
+          f << B.total_pages_field
         end
       end
 
@@ -356,9 +379,21 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.paragraph { |p| p << 'Supplementary data tables and figures.' }
 
       doc.table do |t|
-        t.row { |r| r.cell(text: 'ID'); r.cell(text: 'Value'); r.cell(text: 'Status') }
-        t.row { |r| r.cell(text: '001'); r.cell(text: '42.5'); r.cell(text: 'Verified') }
-        t.row { |r| r.cell(text: '002'); r.cell(text: '38.1'); r.cell(text: 'Pending') }
+        t.row do |r|
+          r.cell(text: 'ID')
+          r.cell(text: 'Value')
+          r.cell(text: 'Status')
+        end
+        t.row do |r|
+          r.cell(text: '001')
+          r.cell(text: '42.5')
+          r.cell(text: 'Verified')
+        end
+        t.row do |r|
+          r.cell(text: '002')
+          r.cell(text: '38.1')
+          r.cell(text: 'Pending')
+        end
       end
 
       doc.save(path)
@@ -395,21 +430,21 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # Header with page numbers
       doc.header do |h|
-        h << ::B.text('Research Paper', italic: true)
+        h << B.text('Research Paper', italic: true)
       end
       doc.footer do |f|
         f << 'Page '
-        f << ::B.page_number_field
+        f << B.page_number_field
       end
 
       # Title page
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('The Impact of Builder Patterns\non Software Quality', bold: true, size: 28)
+        p << B.text('The Impact of Builder Patterns\non Software Quality', bold: true, size: 28)
       end
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('Dr. Jane Researcher', italic: true)
+        p << B.text('Dr. Jane Researcher', italic: true)
       end
       doc.paragraph do |p|
         p.align = 'center'
@@ -443,8 +478,8 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         p << 'Software design patterns have been a cornerstone of object-oriented '
         p << 'programming since the seminal work by Gamma et al.'
         p << doc.footnote('Gamma, E., et al. "Design Patterns: ' \
-                         'Elements of Reusable Object-Oriented ' \
-                         'Software." Addison-Wesley, 1994.')
+                          'Elements of Reusable Object-Oriented ' \
+                          'Software." Addison-Wesley, 1994.')
         p << ' Among these patterns, the Builder pattern has gained particular '
         p << 'prominence in modern software development.'
       end
@@ -453,7 +488,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         p << 'The Builder pattern separates the construction of a complex object '
         p << 'from its representation'
         p << doc.footnote('The Gang of Four originally described ' \
-                         'this pattern in the context of C++ development.')
+                          'this pattern in the context of C++ development.')
         p << ', allowing the same construction process to create different '
         p << 'representations.'
       end
@@ -466,7 +501,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         p << 'Recent studies have shown that proper use of design patterns '
         p << 'correlates with higher code quality scores.'
         p << doc.endnote('Smith, J. "Design Patterns and Code Quality." ' \
-                        'Journal of Software Engineering, vol. 15, no. 3, 2024.')
+                         'Journal of Software Engineering, vol. 15, no. 3, 2024.')
       end
 
       doc.heading('2.2 The Builder Pattern', level: 2)
@@ -496,10 +531,26 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           r.cell(text: 'Group A (Builder)') { |c| c.shading(fill: '4472C4') }
           r.cell(text: 'Group B (Traditional)') { |c| c.shading(fill: '4472C4') }
         end
-        t.row { |r| r.cell(text: 'Developers'); r.cell(text: '60'); r.cell(text: '60') }
-        t.row { |r| r.cell(text: 'Task Duration'); r.cell(text: '4 hours'); r.cell(text: '4 hours') }
-        t.row { |r| r.cell(text: 'Project Complexity'); r.cell(text: 'Medium'); r.cell(text: 'Medium') }
-        t.row { |r| r.cell(text: 'Avg. Bug Count'); r.cell(text: '2.3'); r.cell(text: '3.5') }
+        t.row do |r|
+          r.cell(text: 'Developers')
+          r.cell(text: '60')
+          r.cell(text: '60')
+        end
+        t.row do |r|
+          r.cell(text: 'Task Duration')
+          r.cell(text: '4 hours')
+          r.cell(text: '4 hours')
+        end
+        t.row do |r|
+          r.cell(text: 'Project Complexity')
+          r.cell(text: 'Medium')
+          r.cell(text: 'Medium')
+        end
+        t.row do |r|
+          r.cell(text: 'Avg. Bug Count')
+          r.cell(text: '2.3')
+          r.cell(text: '3.5')
+        end
       end
 
       # 4. Results
@@ -602,7 +653,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         p << 'To install Uniword, add the following to your Gemfile:'
       end
       doc.paragraph do |p|
-        p << ::B.text("gem 'uniword'", font: 'Courier New', size: 20)
+        p << B.text("gem 'uniword'", font: 'Courier New', size: 20)
       end
 
       doc.heading('2. Quick Start', level: 1)
@@ -649,14 +700,38 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           r.cell(text: 'Builder') { |c| c.shading(fill: '4472C4') }
           r.cell(text: 'Purpose') { |c| c.shading(fill: '4472C4') }
         end
-        t.row { |r| r.cell(text: 'DocumentBuilder'); r.cell(text: 'Top-level document construction') }
-        t.row { |r| r.cell(text: 'ParagraphBuilder'); r.cell(text: 'Paragraph with << operator') }
-        t.row { |r| r.cell(text: 'RunBuilder'); r.cell(text: 'Run formatting (bold, italic, etc.)') }
-        t.row { |r| r.cell(text: 'TableBuilder'); r.cell(text: 'Table with rows and cells') }
-        t.row { |r| r.cell(text: 'SectionBuilder'); r.cell(text: 'Page setup and numbering') }
-        t.row { |r| r.cell(text: 'StyleBuilder'); r.cell(text: 'Custom style definitions') }
-        t.row { |r| r.cell(text: 'ImageBuilder'); r.cell(text: 'Image embedding') }
-        t.row { |r| r.cell(text: 'ChartBuilder'); r.cell(text: 'Chart creation') }
+        t.row do |r|
+          r.cell(text: 'DocumentBuilder')
+          r.cell(text: 'Top-level document construction')
+        end
+        t.row do |r|
+          r.cell(text: 'ParagraphBuilder')
+          r.cell(text: 'Paragraph with << operator')
+        end
+        t.row do |r|
+          r.cell(text: 'RunBuilder')
+          r.cell(text: 'Run formatting (bold, italic, etc.)')
+        end
+        t.row do |r|
+          r.cell(text: 'TableBuilder')
+          r.cell(text: 'Table with rows and cells')
+        end
+        t.row do |r|
+          r.cell(text: 'SectionBuilder')
+          r.cell(text: 'Page setup and numbering')
+        end
+        t.row do |r|
+          r.cell(text: 'StyleBuilder')
+          r.cell(text: 'Custom style definitions')
+        end
+        t.row do |r|
+          r.cell(text: 'ImageBuilder')
+          r.cell(text: 'Image embedding')
+        end
+        t.row do |r|
+          r.cell(text: 'ChartBuilder')
+          r.cell(text: 'Chart creation')
+        end
       end
 
       doc.save(path)
@@ -664,7 +739,8 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       # Verify bookmarks
       bookmarks = doc.model.bookmarks
       expect(bookmarks).not_to be_empty
-      expect(bookmarks.keys).to include('installation', 'quickstart', 'builder_api', 'advanced', 'api_reference')
+      expect(bookmarks.keys).to include('installation', 'quickstart', 'builder_api', 'advanced',
+                                        'api_reference')
 
       # Verify DOCX
       expect(File.exist?(path)).to be true
@@ -715,7 +791,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       # Cover page
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('Project Status Report', bold: true, size: 48, color: '2E5090')
+        p << B.text('Project Status Report', bold: true, size: 48, color: '2E5090')
       end
 
       doc.paragraph do |p|
@@ -811,15 +887,15 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # --- Headers/Footers ---
       doc.header(type: 'default') do |h|
-        h << ::B.text('The Ultimate Document', bold: true)
+        h << B.text('The Ultimate Document', bold: true)
         h << ' — '
-        h << ::B.text('All Features Demo', italic: true)
+        h << B.text('All Features Demo', italic: true)
       end
       doc.footer(type: 'default') do |f|
         f << 'Page '
-        f << ::B.page_number_field
+        f << B.page_number_field
         f << ' of '
-        f << ::B.total_pages_field
+        f << B.total_pages_field
         f << ' | Generated by Uniword Builder'
       end
 
@@ -834,7 +910,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.paragraph do |p|
         p.align = 'center'
         p.spacing(before: 2400)
-        p << ::B.text('The Ultimate Document', bold: true, size: 56, color: '1F4E79')
+        p << B.text('The Ultimate Document', bold: true, size: 56, color: '1F4E79')
       end
       doc.paragraph do |p|
         p.align = 'center'
@@ -856,7 +932,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.heading('1. Introduction', level: 1)
       doc.paragraph do |p|
         p << 'This document demonstrates '
-        p << ::B.text('every feature', bold: true, underline: 'single')
+        p << B.text('every feature', bold: true, underline: 'single')
         p << ' of the Uniword Builder API in a single, coherent document.'
       end
 
@@ -885,46 +961,46 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       doc.heading('2.1 Run Formatting', level: 2)
       doc.paragraph do |p|
-        p << ::B.text('Bold text', bold: true)
+        p << B.text('Bold text', bold: true)
         p << ', '
-        p << ::B.text('italic text', italic: true)
+        p << B.text('italic text', italic: true)
         p << ', '
-        p << ::B.text('underlined text', underline: 'single')
+        p << B.text('underlined text', underline: 'single')
         p << ', '
-        p << ::B.text('colored text', color: 'FF0000')
+        p << B.text('colored text', color: 'FF0000')
         p << ', '
-        p << ::B.text('highlighted text', highlight: 'yellow')
+        p << B.text('highlighted text', highlight: 'yellow')
         p << ', and '
-        p << ::B.text('strike-through text', strike: true)
+        p << B.text('strike-through text', strike: true)
         p << '.'
       end
 
       doc.heading('2.2 Font Sizes', level: 2)
       doc.paragraph do |p|
-        p << ::B.text('8pt', size: 8)
+        p << B.text('8pt', size: 8)
         p << ' '
-        p << ::B.text('10pt', size: 10)
+        p << B.text('10pt', size: 10)
         p << ' '
-        p << ::B.text('12pt', size: 12)
+        p << B.text('12pt', size: 12)
         p << ' '
-        p << ::B.text('16pt', size: 16)
+        p << B.text('16pt', size: 16)
         p << ' '
-        p << ::B.text('24pt', size: 24)
+        p << B.text('24pt', size: 24)
         p << ' '
-        p << ::B.text('36pt', size: 36)
+        p << B.text('36pt', size: 36)
         p << ' '
-        p << ::B.text('48pt', size: 48)
+        p << B.text('48pt', size: 48)
       end
 
       doc.heading('2.3 Special Characters', level: 2)
       doc.paragraph do |p|
         p << 'Line break example:'
-        p << ::B.line_break
+        p << B.line_break
         p << 'This text is on a new line.'
       end
       doc.paragraph do |p|
         p << 'Tab stop example:'
-        p << ::B.tab
+        p << B.tab
         p << 'After tab'
       end
 
@@ -936,7 +1012,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         l.item('First bullet point')
         l.item('Second bullet point')
         l.item('Third bullet point') do |p|
-          p << ::B.text(' with bold emphasis', bold: true)
+          p << B.text(' with bold emphasis', bold: true)
         end
       end
 
@@ -967,26 +1043,41 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           r.cell(text: 'Column C') { |c| c.shading(fill: '4472C4') }
         end
         3.times do |i|
-          t.row { |r| r.cell(text: "Row #{i + 1}, Col A"); r.cell(text: "Row #{i + 1}, Col B"); r.cell(text: "Row #{i + 1}, Col C") }
+          t.row do |r|
+            r.cell(text: "Row #{i + 1}, Col A")
+            r.cell(text: "Row #{i + 1}, Col B")
+            r.cell(text: "Row #{i + 1}, Col C")
+          end
         end
       end
 
       doc.heading('4.2 Merged Cells', level: 2)
       doc.table do |t|
         t.row do |r|
-          r.cell(text: 'Merged Header (3 cols)') { |c| c.column_span(3); c.shading(fill: '1F4E79') }
+          r.cell(text: 'Merged Header (3 cols)') do |c|
+            c.column_span(3)
+            c.shading(fill: '1F4E79')
+          end
         end
-        t.row { |r| r.cell(text: 'A1'); r.cell(text: 'B1'); r.cell(text: 'C1') }
-        t.row { |r| r.cell(text: 'A2'); r.cell(text: 'B2'); r.cell(text: 'C2') }
+        t.row do |r|
+          r.cell(text: 'A1')
+          r.cell(text: 'B1')
+          r.cell(text: 'C1')
+        end
+        t.row do |r|
+          r.cell(text: 'A2')
+          r.cell(text: 'B2')
+          r.cell(text: 'C2')
+        end
       end
 
       # === SECTION 5: Hyperlinks ===
       doc.heading('5. Hyperlinks', level: 1)
       doc.paragraph do |p|
         p << 'Visit the '
-        p << ::B.hyperlink('https://example.com', 'project website')
+        p << B.hyperlink('https://example.com', 'project website')
         p << ' for more information, or check the '
-        p << ::B.hyperlink('https://example.com/docs', 'documentation', color: '2E5090')
+        p << B.hyperlink('https://example.com/docs', 'documentation', color: '2E5090')
         p << '.'
       end
 
@@ -1000,11 +1091,12 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       # === SECTION 7: Content Controls ===
       doc.heading('7. Content Controls', level: 1)
       doc.paragraph do |p|
-        p << ::B.text('Name: ', bold: true)
-        p << B::SdtBuilder.text(tag: 'user_name', alias_name: 'User Name', placeholder_text: 'Enter your name').build
+        p << B.text('Name: ', bold: true)
+        p << B::SdtBuilder.text(tag: 'user_name', alias_name: 'User Name',
+                                placeholder_text: 'Enter your name').build
       end
       doc.paragraph do |p|
-        p << ::B.text('Date: ', bold: true)
+        p << B.text('Date: ', bold: true)
         p << B::SdtBuilder.date(tag: 'form_date', format: 'yyyy-MM-dd').build
       end
 
@@ -1035,7 +1127,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
         s.margins(top: 720, bottom: 720)
         s.page_numbering(start: 1)
         s.header(type: 'default') { |h| h << 'Appendix — Page numbering restarts here' }
-        s.footer(type: 'default') { |f| f << 'Page ' << ::B.page_number_field }
+        s.footer(type: 'default') { |f| f << 'Page ' << B.page_number_field }
       end
 
       doc.heading('Appendix', level: 1)
@@ -1128,18 +1220,18 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
 
       # Header
       doc.header do |h|
-        h << ::B.text('ACME SERVICES INC.', bold: true, color: '2E5090')
+        h << B.text('ACME SERVICES INC.', bold: true, color: '2E5090')
         h << ' | Invoice INV-2025-0042'
       end
       doc.footer do |f|
         f << 'Thank you for your business!'
-        f << ::B.line_break
+        f << B.line_break
         f << 'Payment due within 30 days'
       end
 
       # Invoice header
       doc.paragraph do |p|
-        p << ::B.text('INVOICE', bold: true, size: 36, color: '1F4E79')
+        p << B.text('INVOICE', bold: true, size: 36, color: '1F4E79')
       end
 
       doc.horizontal_rule(color: '2E5090', size: 18)
@@ -1148,39 +1240,39 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.table do |t|
         t.row do |r|
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap { |pb|
+            c << B::ParagraphBuilder.new.tap do |pb|
               pb << 'From: '
-              pb << ::B.text('Acme Services Inc.', bold: true)
-              pb << ::B.line_break
+              pb << B.text('Acme Services Inc.', bold: true)
+              pb << B.line_break
               pb << '123 Business Ave'
-              pb << ::B.line_break
+              pb << B.line_break
               pb << 'San Francisco, CA 94102'
-              pb << ::B.line_break
+              pb << B.line_break
               pb << 'contact@acme.com'
-            }
+            end
           end
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap { |pb|
+            c << B::ParagraphBuilder.new.tap do |pb|
               pb << 'To: '
-              pb << ::B.text('Client Corporation', bold: true)
-              pb << ::B.line_break
+              pb << B.text('Client Corporation', bold: true)
+              pb << B.line_break
               pb << '456 Client Street'
-              pb << ::B.line_break
+              pb << B.line_break
               pb << 'New York, NY 10001'
-              pb << ::B.line_break
+              pb << B.line_break
               pb << 'billing@client.com'
-            }
+            end
           end
         end
       end
 
       doc.paragraph do |p|
         p << 'Invoice Number: '
-        p << ::B.text('INV-2025-0042', bold: true)
+        p << B.text('INV-2025-0042', bold: true)
         p << '    Date: '
-        p << ::B.text('March 26, 2026', bold: true)
+        p << B.text('March 26, 2026', bold: true)
         p << '    Due: '
-        p << ::B.text('April 25, 2026', bold: true)
+        p << B.text('April 25, 2026', bold: true)
       end
 
       doc.horizontal_rule
@@ -1200,15 +1292,20 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           ['Quality Assurance', '15', '$125.00', '$1,875.00']
         ]
         items.each do |desc, qty, price, amount|
-          t.row { |r| r.cell(text: desc); r.cell(text: qty); r.cell(text: price); r.cell(text: amount) }
+          t.row do |r|
+            r.cell(text: desc)
+            r.cell(text: qty)
+            r.cell(text: price)
+            r.cell(text: amount)
+          end
         end
         # Total row
         t.row do |r|
           r.cell(text: '') { |c| c.column_span(3) }
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap { |pb|
-              pb << ::B.text('Total: $27,375.00', bold: true, size: 22)
-            }
+            c << B::ParagraphBuilder.new.tap do |pb|
+              pb << B.text('Total: $27,375.00', bold: true, size: 22)
+            end
             c.shading(fill: 'E2EFDA')
           end
         end
@@ -1217,7 +1314,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.horizontal_rule
 
       doc.paragraph do |p|
-        p << ::B.text('Payment Terms: ', bold: true)
+        p << B.text('Payment Terms: ', bold: true)
         p << 'Net 30 days. Please reference invoice number INV-2025-0042 '
         p << 'on your payment.'
       end
@@ -1255,7 +1352,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       # Name and contact
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('Jane Developer', bold: true, size: 36, color: '1F4E79')
+        p << B.text('Jane Developer', bold: true, size: 36, color: '1F4E79')
       end
       doc.paragraph do |p|
         p.align = 'center'
@@ -1263,9 +1360,9 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       end
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('jane@example.com', color: '4472C4')
+        p << B.text('jane@example.com', color: '4472C4')
         p << ' | (555) 123-4567 | San Francisco, CA | '
-        p << ::B.hyperlink('https://github.com/janedev', 'github.com/janedev')
+        p << B.hyperlink('https://github.com/janedev', 'github.com/janedev')
       end
 
       doc.horizontal_rule(color: '4472C4', size: 12)
@@ -1282,7 +1379,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       doc.heading('Experience', level: 1)
 
       doc.paragraph do |p|
-        p << ::B.text('Senior Software Engineer', bold: true)
+        p << B.text('Senior Software Engineer', bold: true)
         p << ' — TechCorp Inc. (2021 - Present)'
       end
       doc.bullet_list do |l|
@@ -1293,7 +1390,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       end
 
       doc.paragraph do |p|
-        p << ::B.text('Software Engineer', bold: true)
+        p << B.text('Software Engineer', bold: true)
         p << ' — StartupXYZ (2018 - 2021)'
       end
       doc.bullet_list do |l|
@@ -1303,7 +1400,7 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
       end
 
       doc.paragraph do |p|
-        p << ::B.text('Junior Developer', bold: true)
+        p << B.text('Junior Developer', bold: true)
         p << ' — WebAgency Co. (2016 - 2018)'
       end
       doc.bullet_list do |l|
@@ -1318,17 +1415,32 @@ RSpec.describe 'Builder Phase 20: Ultra-Elaborate Scenarios' do
           r.cell(text: 'Category') { |c| c.shading(fill: '4472C4') }
           r.cell(text: 'Skills') { |c| c.shading(fill: '4472C4') }
         end
-        t.row { |r| r.cell(text: 'Languages'); r.cell(text: 'Ruby, Python, JavaScript, TypeScript, Go') }
-        t.row { |r| r.cell(text: 'Frameworks'); r.cell(text: 'Rails, Django, React, Next.js') }
-        t.row { |r| r.cell(text: 'Databases'); r.cell(text: 'PostgreSQL, Redis, MongoDB, Elasticsearch') }
-        t.row { |r| r.cell(text: 'DevOps'); r.cell(text: 'Docker, Kubernetes, AWS, Terraform') }
-        t.row { |r| r.cell(text: 'Testing'); r.cell(text: 'RSpec, pytest, Jest, Cypress') }
+        t.row do |r|
+          r.cell(text: 'Languages')
+          r.cell(text: 'Ruby, Python, JavaScript, TypeScript, Go')
+        end
+        t.row do |r|
+          r.cell(text: 'Frameworks')
+          r.cell(text: 'Rails, Django, React, Next.js')
+        end
+        t.row do |r|
+          r.cell(text: 'Databases')
+          r.cell(text: 'PostgreSQL, Redis, MongoDB, Elasticsearch')
+        end
+        t.row do |r|
+          r.cell(text: 'DevOps')
+          r.cell(text: 'Docker, Kubernetes, AWS, Terraform')
+        end
+        t.row do |r|
+          r.cell(text: 'Testing')
+          r.cell(text: 'RSpec, pytest, Jest, Cypress')
+        end
       end
 
       # Education
       doc.heading('Education', level: 1)
       doc.paragraph do |p|
-        p << ::B.text('B.S. Computer Science', bold: true)
+        p << B.text('B.S. Computer Science', bold: true)
         p << ' — University of California, Berkeley (2016)'
       end
 

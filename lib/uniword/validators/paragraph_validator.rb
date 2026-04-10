@@ -42,7 +42,9 @@ module Uniword
         return ['Element is nil'] if element.nil?
 
         # Check paragraph type first (more specific than base check)
-        return ['Element must be a Paragraph'] unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
+        unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
+          return ['Element must be a Paragraph']
+        end
 
         # Validate runs - collect all specific errors
         errors.concat(run_errors(element))
@@ -75,7 +77,9 @@ module Uniword
         return errors if paragraph.runs.nil? || paragraph.runs.empty?
 
         paragraph.runs.each_with_index do |run, index|
-          errors << "Run at index #{index} must be a Run instance" unless run.is_a?(Uniword::Wordprocessingml::Run)
+          unless run.is_a?(Uniword::Wordprocessingml::Run)
+            errors << "Run at index #{index} must be a Run instance"
+          end
         end
 
         errors

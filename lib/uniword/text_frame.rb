@@ -82,7 +82,7 @@ module Uniword
     # @param y [Integer] Vertical position
     # @param options [Hash] Additional options
     # @return [TextFrame] New instance
-    def self.absolute(width:, height:, x:, y:, **options)
+    def self.absolute(width:, height:, x:, y:, **)
       new(
         width: width,
         height: height,
@@ -90,7 +90,7 @@ module Uniword
         y: y,
         h_rule: 'exact',
         w_rule: 'exact',
-        **options
+        **
       )
     end
 
@@ -101,13 +101,13 @@ module Uniword
     # @param v_alignment [String] Vertical alignment
     # @param options [Hash] Additional options
     # @return [TextFrame] New instance
-    def self.aligned(width:, h_alignment:, v_alignment:, **options)
+    def self.aligned(width:, h_alignment:, v_alignment:, **)
       new(
         width: width,
         h_alignment: h_alignment,
         v_alignment: v_alignment,
         h_rule: 'exact',
-        **options
+        **
       )
     end
 

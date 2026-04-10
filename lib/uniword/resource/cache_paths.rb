@@ -4,7 +4,8 @@ module Uniword
   module Resource
     # Value object for cache directory paths
     # Immutable - create new instance if paths change
-    CachePaths = Struct.new(:base, :themes, :stylesets, :color_schemes, :font_schemes, :version_file) do
+    CachePaths = Struct.new(:base, :themes, :stylesets, :color_schemes, :font_schemes,
+                            :version_file) do
       # Factory method - creates from WordImplementation
       def self.from_word_implementation(word_impl)
         base = word_impl.cache_path

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Warnings
     # Collects warnings during document processing.

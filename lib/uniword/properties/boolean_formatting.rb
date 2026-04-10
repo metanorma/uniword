@@ -31,7 +31,7 @@ module Uniword
                    elsif v == false || v.to_s == 'false'
                      'false'
                    elsif v == true || v.to_s == 'true'
-                       nil
+                     nil
                    else
                      v
                    end
@@ -44,6 +44,7 @@ module Uniword
     # Strike-through formatting
     class Strike < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -57,6 +58,7 @@ module Uniword
     # Double strike-through formatting
     class DoubleStrike < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -70,6 +72,7 @@ module Uniword
     # Small caps formatting
     class SmallCaps < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -83,6 +86,7 @@ module Uniword
     # All caps formatting
     class Caps < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -96,6 +100,7 @@ module Uniword
     # Hidden text
     class Vanish < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -109,6 +114,7 @@ module Uniword
     # No proofing (disable spell/grammar check)
     class NoProof < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -122,6 +128,7 @@ module Uniword
     # Shadow formatting
     class Shadow < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -135,6 +142,7 @@ module Uniword
     # Emboss formatting
     class Emboss < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -148,6 +156,7 @@ module Uniword
     # Imprint formatting
     class Imprint < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -163,6 +172,7 @@ module Uniword
     # Quick format flag
     class QuickFormat < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -176,6 +186,7 @@ module Uniword
     # Keep with next paragraph
     class KeepNext < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -189,6 +200,7 @@ module Uniword
     # Keep lines together
     class KeepLines < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 

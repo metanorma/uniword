@@ -18,7 +18,7 @@ module Uniword
         attribute :latent_style_count, :string
 
         xml do
-          element "LatentStyles"
+          element 'LatentStyles'
           namespace Uniword::Mhtml::Namespaces::Word
           map_attribute 'DefLockedState', to: :def_locked_state
           map_attribute 'DefUnhideWhenUsed', to: :def_unhide_when_used

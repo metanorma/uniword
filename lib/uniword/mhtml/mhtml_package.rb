@@ -25,8 +25,7 @@ module Uniword
 
       # Legacy accessors for backward compatibility
       attr_accessor :raw_html_content
-      attr_accessor :filelist_xml
-      attr_accessor :images
+      attr_accessor :filelist_xml, :images
 
       # Load MHTML file and return a populated Document model.
       #

@@ -28,8 +28,8 @@ module Uniword
         @document = document
         @type = type
         @num_id = document.model
-                     .numbering_configuration
-                     .create_numbering(type)
+                          .numbering_configuration
+                          .create_numbering(type)
       end
 
       # Add an item to the list

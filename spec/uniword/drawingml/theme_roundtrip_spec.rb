@@ -20,7 +20,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
   end
 
   # Get all .thmx files from reference directory
-  theme_files = Dir.glob(File.join(THEME_DIR, '*.thmx')).sort
+  theme_files = Dir.glob(File.join(THEME_DIR, '*.thmx'))
 
   theme_files.each do |theme_path|
     theme_name = File.basename(theme_path, '.thmx')

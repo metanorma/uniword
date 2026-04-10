@@ -292,5 +292,4 @@ module Uniword
       doc.to_file(path)
     end
   end
-
 end

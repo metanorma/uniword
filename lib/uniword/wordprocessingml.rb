@@ -60,7 +60,8 @@ module Uniword
     autoload :Level, 'uniword/wordprocessingml/level'
     autoload :Style, 'uniword/wordprocessingml/style'
     autoload :StructuredDocumentTag, 'uniword/wordprocessingml/structured_document_tag'
-    autoload :StructuredDocumentTagProperties, 'uniword/wordprocessingml/structured_document_tag_properties'
+    autoload :StructuredDocumentTagProperties,
+             'uniword/wordprocessingml/structured_document_tag_properties'
     autoload :SectionProperties, 'uniword/wordprocessingml/section_properties'
     autoload :PageSize, 'uniword/wordprocessingml/page_size'
     autoload :PageMargins, 'uniword/wordprocessingml/page_margins'

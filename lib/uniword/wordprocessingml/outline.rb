@@ -10,6 +10,7 @@ module Uniword
     # Element: <w:outline>
     class Outline < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 

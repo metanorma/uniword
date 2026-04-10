@@ -18,7 +18,7 @@ module Uniword
         namespace_scope [
           { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::WordProcessingDrawing, declare: :auto },
-          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto }
         ]
 
         map_element 'body', to: :body, render_default: true
@@ -50,7 +50,8 @@ module Uniword
       # Bibliography sources for sources.xml
       attr_accessor :bibliography_sources
       # Round-trip parts (copied from DocxPackage during load)
-      attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels, :package_rels, :content_types
+      attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
+                    :package_rels, :content_types
 
       # Writers for properties that have lazy-initialized getters
       # (removing from attr_accessor to avoid shadowing custom getters)
@@ -171,11 +172,11 @@ module Uniword
       # @return [self] For method chaining
       def apply_theme_file(path, variant: nil)
         loader = Themes::ThemeLoader.new
-        if variant
-          self.theme = loader.load_with_variant(path, variant)
-        else
-          self.theme = loader.load(path)
-        end
+        self.theme = if variant
+                       loader.load_with_variant(path, variant)
+                     else
+                       loader.load(path)
+                     end
         self
       end
 

@@ -47,20 +47,20 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       doc.paragraph { |p| p << 'This is the introduction to our document.' }
       doc.paragraph do |p|
         p << 'It contains '
-        p << ::B.text('basic formatting', bold: true)
+        p << B.text('basic formatting', bold: true)
         p << ' such as bold, italic, and colored text.'
       end
       doc.paragraph do |p|
         p << 'Links are also supported: '
-        p << ::B.hyperlink('https://example.com', 'Visit Example')
+        p << B.hyperlink('https://example.com', 'Visit Example')
       end
 
       doc.heading('Chapter 2: Content', level: 1)
       doc.paragraph { |p| p << 'More content goes here.' }
       doc.paragraph do |p|
-        p << ::B.text('Colored text', color: 'FF0000')
+        p << B.text('Colored text', color: 'FF0000')
         p << ' and '
-        p << ::B.text('underlined text', underline: 'single')
+        p << B.text('underlined text', underline: 'single')
         p << ' demonstrate inline formatting.'
       end
 
@@ -200,14 +200,14 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       doc.heading('2.2 Revenue Chart', level: 2)
       doc.chart(type: :bar) do |c|
         c.title('Quarterly Revenue')
-        c.categories(['Q1', 'Q2', 'Q3', 'Q4'])
+        c.categories(%w[Q1 Q2 Q3 Q4])
         c.series('Revenue ($K)', data: [1200, 1450, 1380, 1620])
       end
 
       doc.heading('2.3 Trend Analysis', level: 2)
       doc.chart(type: :line) do |c|
         c.title('Growth Trend')
-        c.categories(['Q1', 'Q2', 'Q3', 'Q4'])
+        c.categories(%w[Q1 Q2 Q3 Q4])
         c.series('Growth %', data: [12, 20.8, -4.8, 17.4])
       end
 
@@ -257,16 +257,16 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
 
       # --- Header/Footer ---
       doc.header do |h|
-        h << ::B.text('Complete Document', bold: true, color: '808080')
-        h << ::B.tab
-        h << ::B.text('Confidential', color: 'FF0000')
+        h << B.text('Complete Document', bold: true, color: '808080')
+        h << B.tab
+        h << B.text('Confidential', color: 'FF0000')
       end
 
       doc.footer do |f|
         f << 'Page '
-        f << ::B.page_number_field
+        f << B.page_number_field
         f << ' of '
-        f << ::B.total_pages_field
+        f << B.total_pages_field
       end
 
       doc.save(path)
@@ -408,7 +408,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       # Colored heading
       doc.heading('Section with Custom Style', level: 2)
       doc.paragraph do |p|
-        p << ::B.text('Highlighted text', highlight: 'yellow')
+        p << B.text('Highlighted text', highlight: 'yellow')
         p << ' within a themed document.'
       end
 
@@ -432,9 +432,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       Zip::File.open(path) do |zip|
         # Theme may or may not be present depending on availability
         theme_entry = zip.find_entry('word/theme/theme1.xml')
-        if theme_entry
-          expect(true).to be(true)
-        end
+        expect(true).to be(true) if theme_entry
       end
     end
   end
@@ -453,25 +451,25 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
 
       # Header with paper title
       doc.header do |h|
-        h << ::B.text('Doe - Ruby Document Generation', font: 'Arial', size: 9)
+        h << B.text('Doe - Ruby Document Generation', font: 'Arial', size: 9)
       end
 
       # Footer with page numbers
       doc.footer do |f|
-        f << ::B.page_number_field
+        f << B.page_number_field
       end
 
       # --- Title ---
       doc.paragraph do |p|
         p.align = 'center'
-        p << ::B.text('A Study of Ruby Document Generation', bold: true, size: 24)
+        p << B.text('A Study of Ruby Document Generation', bold: true, size: 24)
       end
       doc.paragraph do |p|
         p.align = 'center'
         p << 'Dr. Jane Doe'
-        p << ::B.line_break
+        p << B.line_break
         p << 'Department of Computer Science, Example University'
-        p << ::B.line_break
+        p << B.line_break
         p << 'March 2026'
       end
       doc.page_break
@@ -486,7 +484,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
         p << 'including tables, charts, and bibliographies.'
       end
       doc.paragraph do |p|
-        p << ::B.text('Keywords: ', bold: true)
+        p << B.text('Keywords: ', bold: true)
         p << 'OOXML, Ruby, document generation, Builder API'
       end
       doc.page_break
@@ -548,7 +546,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       doc.heading('3.2 Feature Coverage', level: 2)
       doc.chart(type: :pie) do |c|
         c.title('OOXML Feature Coverage')
-        c.categories(['Complete', 'Partial', 'Planned'])
+        c.categories(%w[Complete Partial Planned])
         c.series('Features', data: [65, 25, 10])
       end
 
@@ -687,7 +685,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
 
       # Section break to landscape
       doc.section(type: 'nextPage') do |s|
-        s.page_size(width: 14_400, height: 10_800)  # 10" x 7.5" landscape
+        s.page_size(width: 14_400, height: 10_800) # 10" x 7.5" landscape
         s.margins(top: 720, bottom: 720)
       end
 
@@ -714,13 +712,13 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       end
 
       doc.paragraph do |p|
-        p << ::B.text('Total Annual Revenue: ', bold: true)
-        p << ::B.text('$2,040K', bold: true, color: '00B050', size: 14)
+        p << B.text('Total Annual Revenue: ', bold: true)
+        p << B.text('$2,040K', bold: true, color: '00B050', size: 14)
       end
 
       # Section break back to portrait
       doc.section(type: 'nextPage') do |s|
-        s.page_size(width: 12_240, height: 15_840)  # 8.5" x 11" portrait
+        s.page_size(width: 12_240, height: 15_840) # 8.5" x 11" portrait
       end
 
       # --- Section 3: Portrait (conclusion) ---
@@ -733,15 +731,15 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
 
       doc.paragraph do |p|
         p << 'For questions, contact '
-        p << ::B.hyperlink('mailto:info@example.com', 'info@example.com')
+        p << B.hyperlink('mailto:info@example.com', 'info@example.com')
         p << '.'
       end
 
       # Footer for all sections
       doc.footer do |f|
-        f << ::B.text('Confidential', color: 'FF0000', size: 8)
+        f << B.text('Confidential', color: 'FF0000', size: 8)
         f << ' | '
-        f << ::B.page_number_field
+        f << B.page_number_field
       end
 
       doc.save(path)
@@ -809,7 +807,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
 
       loaded.heading('New Section', level: 1)
       loaded.paragraph do |p|
-        p << ::B.text('New content', bold: true)
+        p << B.text('New content', bold: true)
         p << ' added after loading.'
       end
 
@@ -927,7 +925,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       doc.paragraph { |p| p << 'Clustered bar chart showing sales by region:' }
       doc.chart(type: :bar) do |c|
         c.title('Sales by Region')
-        c.categories(['North', 'South', 'East', 'West'])
+        c.categories(%w[North South East West])
         c.series('2024', data: [450, 320, 380, 410])
         c.series('2025', data: [480, 350, 420, 460])
       end
@@ -936,7 +934,7 @@ RSpec.describe 'Phase 17: End-to-end Document Generation' do
       doc.paragraph { |p| p << 'Line chart showing monthly trend:' }
       doc.chart(type: :line) do |c|
         c.title('Monthly Trend')
-        c.categories(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
+        c.categories(%w[Jan Feb Mar Apr May Jun])
         c.series('Revenue', data: [100, 120, 115, 140, 135, 160])
       end
 

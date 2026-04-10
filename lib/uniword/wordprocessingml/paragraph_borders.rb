@@ -47,7 +47,9 @@ module Uniword
       def box?
         return false unless top && bottom && left && right
         return false unless top.val == bottom.val && top.val == left.val && top.val == right.val
-        return false unless top.color == bottom.color && top.color == left.color && top.color == right.color
+        unless top.color == bottom.color && top.color == left.color && top.color == right.color
+          return false
+        end
 
         true
       end

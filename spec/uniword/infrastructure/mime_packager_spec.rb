@@ -307,6 +307,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       base64_lines = lines.drop(1).take_while { |l| !l.start_with?('--') }
       base64_lines.each do |line|
         next if line.strip.empty?
+
         expect(line.length).to be <= 76 if line.match?(%r{^[A-Za-z0-9+/=]+$})
       end
     end

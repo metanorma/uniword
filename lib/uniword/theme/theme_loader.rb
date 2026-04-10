@@ -23,7 +23,6 @@ module Uniword
       # @return [Theme] Loaded theme with variants and media
       # @raise [ArgumentError] if file is invalid
       def load(path)
-
         # Extract package
         reader = ThemePackageReader.new
         extracted = reader.extract(path)
@@ -77,7 +76,6 @@ module Uniword
       # @param variant_xmls [Hash] variant_id => theme XML content
       # @return [Hash] variant_id => ThemeVariant
       def load_variants(variant_xmls)
-
         variants = {}
 
         variant_xmls.each do |variant_id, theme_xml|

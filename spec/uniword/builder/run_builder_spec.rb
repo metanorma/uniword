@@ -100,11 +100,11 @@ RSpec.describe Uniword::Builder::RunBuilder do
 
     it 'chains multiple formatting calls' do
       builder = described_class.new
-        .text('Styled')
-        .bold
-        .italic
-        .color('0000FF')
-        .size(14)
+                               .text('Styled')
+                               .bold
+                               .italic
+                               .color('0000FF')
+                               .size(14)
 
       expect(builder.model.text.to_s).to eq('Styled')
       expect(builder.model.properties.bold).not_to be_nil

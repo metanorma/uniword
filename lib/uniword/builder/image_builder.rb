@@ -25,7 +25,7 @@ module Uniword
     #   run = RunBuilder.new.drawing(ImageBuilder.create_drawing('photo.png'))
     class ImageBuilder
       # Picture namespace URI for GraphicData
-      PIC_URI = 'http://schemas.openxmlformats.org/drawingml/2006/picture'.freeze
+      PIC_URI = 'http://schemas.openxmlformats.org/drawingml/2006/picture'
 
       # Register an image part on the document for DOCX packaging.
       #
@@ -48,7 +48,7 @@ module Uniword
                        when '.gif'  then 'image/gif'
                        when '.bmp'  then 'image/bmp'
                        when '.tiff', '.tif' then 'image/tiff'
-                       when '.svg'  then 'image/svg+xml'
+                       when '.svg' then 'image/svg+xml'
                        else 'application/octet-stream'
                        end
 
@@ -89,14 +89,14 @@ module Uniword
             payload = io.read(length - 2)
             byte1 = marker.bytes[1]
             # SOF0, SOF2, SOF3 markers contain dimensions
-            if (byte1 >= 0xC0 && byte1 <= 0xC3) ||
-               byte1 == 0xC5 || byte1 == 0xC6 ||
-               byte1 == 0xC7 || (byte1 >= 0xC9 && byte1 <= 0xCB) ||
-               byte1 == 0xCD || byte1 == 0xCE || byte1 == 0xCF
-              h = payload[0, 2].unpack1('n')
-              w = payload[2, 2].unpack1('n')
-              return [w, h]
-            end
+            next unless byte1.between?(0xC0, 0xC3) ||
+                        byte1 == 0xC5 || byte1 == 0xC6 ||
+                        byte1 == 0xC7 || byte1.between?(0xC9, 0xCB) ||
+                        byte1 == 0xCD || byte1 == 0xCE || byte1 == 0xCF
+
+            h = payload[0, 2].unpack1('n')
+            w = payload[2, 2].unpack1('n')
+            return [w, h]
           end
           [100, 100] # fallback
         else

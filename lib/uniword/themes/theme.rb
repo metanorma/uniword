@@ -144,9 +144,10 @@ module Uniword
         return [] unless Dir.exist?(theme_dir)
 
         Dir.glob(File.join(theme_dir, '*.yml'))
-          .map { |p| File.basename(p, '.yml') }
-          .sort
+           .map { |p| File.basename(p, '.yml') }
+           .sort
       end
+
       # Convert to Word Theme for document generation
       #
       # @return [Drawingml::Theme] Word/OOXML theme

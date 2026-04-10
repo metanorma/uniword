@@ -12,6 +12,7 @@ module Uniword
     # Model: nil = true (no val attribute), 'false' = explicit false
     class Italic < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 
@@ -25,6 +26,7 @@ module Uniword
     # Complex script italic
     class ItalicCs < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 

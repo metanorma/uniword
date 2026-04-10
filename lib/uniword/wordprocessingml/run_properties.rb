@@ -63,11 +63,12 @@ module Uniword
         map 'double_strike', with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
         map 'small_caps', with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
         map 'caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }
-        map 'all_caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }  # Alias
+        map 'all_caps', with: { from: :yaml_caps_from, to: :yaml_caps_to } # Alias
         map 'hidden', with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
         map 'size', with: { from: :yaml_size_from, to: :yaml_size_to }
         map 'spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
-        map 'character_spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
+        map 'character_spacing',
+            with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
         map 'underline', with: { from: :yaml_underline_from, to: :yaml_underline_to }
         map 'color', with: { from: :yaml_color_from, to: :yaml_color_to }
         map 'highlight', with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
@@ -88,7 +89,7 @@ module Uniword
         instance.bold = Properties::Bold.new(value: value) unless value.nil?
       end
 
-      def yaml_bold_to(instance, doc)
+      def yaml_bold_to(_instance, _doc)
         bold&.value
       end
 
@@ -96,7 +97,7 @@ module Uniword
         instance.italic = Properties::Italic.new(value: value) unless value.nil?
       end
 
-      def yaml_italic_to(instance, doc)
+      def yaml_italic_to(_instance, _doc)
         italic&.value
       end
 
@@ -104,7 +105,7 @@ module Uniword
         instance.strike = Properties::Strike.new(value: value) unless value.nil?
       end
 
-      def yaml_strike_to(instance, doc)
+      def yaml_strike_to(_instance, _doc)
         strike&.value
       end
 
@@ -112,7 +113,7 @@ module Uniword
         instance.double_strike = Properties::DoubleStrike.new(value: value) unless value.nil?
       end
 
-      def yaml_double_strike_to(instance, doc)
+      def yaml_double_strike_to(_instance, _doc)
         double_strike&.value
       end
 
@@ -120,7 +121,7 @@ module Uniword
         instance.small_caps = Properties::SmallCaps.new(value: value) unless value.nil?
       end
 
-      def yaml_small_caps_to(instance, doc)
+      def yaml_small_caps_to(_instance, _doc)
         small_caps&.value
       end
 
@@ -128,7 +129,7 @@ module Uniword
         instance.caps = Properties::Caps.new(value: value) unless value.nil?
       end
 
-      def yaml_caps_to(instance, doc)
+      def yaml_caps_to(_instance, _doc)
         caps&.value
       end
 
@@ -136,7 +137,7 @@ module Uniword
         instance.hidden = Properties::Vanish.new(value: value) unless value.nil?
       end
 
-      def yaml_hidden_to(instance, doc)
+      def yaml_hidden_to(_instance, _doc)
         hidden&.value
       end
 
@@ -144,7 +145,7 @@ module Uniword
         instance.size = Properties::FontSize.new(value: value.to_i) if value
       end
 
-      def yaml_size_to(instance, doc)
+      def yaml_size_to(_instance, _doc)
         size&.value
       end
 
@@ -152,7 +153,7 @@ module Uniword
         instance.character_spacing = Properties::CharacterSpacing.new(value: value.to_i) if value
       end
 
-      def yaml_character_spacing_to(instance, doc)
+      def yaml_character_spacing_to(_instance, _doc)
         character_spacing&.value
       end
 
@@ -160,7 +161,7 @@ module Uniword
         instance.underline = Properties::Underline.new(value: value) if value
       end
 
-      def yaml_underline_to(instance, doc)
+      def yaml_underline_to(_instance, _doc)
         underline&.value
       end
 
@@ -168,7 +169,7 @@ module Uniword
         instance.color = Properties::ColorValue.new(value: value) if value
       end
 
-      def yaml_color_to(instance, doc)
+      def yaml_color_to(_instance, _doc)
         color&.value
       end
 
@@ -176,7 +177,7 @@ module Uniword
         instance.highlight = Properties::Highlight.new(value: value) if value
       end
 
-      def yaml_highlight_to(instance, doc)
+      def yaml_highlight_to(_instance, _doc)
         highlight&.value
       end
 
@@ -185,7 +186,7 @@ module Uniword
         instance.fonts.ascii = value if value
       end
 
-      def yaml_font_to(instance, doc)
+      def yaml_font_to(_instance, _doc)
         fonts&.ascii
       end
 
@@ -194,7 +195,7 @@ module Uniword
         instance.fonts.ascii = value if value
       end
 
-      def yaml_font_ascii_to(instance, doc)
+      def yaml_font_ascii_to(_instance, _doc)
         fonts&.ascii
       end
 
@@ -203,7 +204,7 @@ module Uniword
         instance.fonts.east_asia = value if value
       end
 
-      def yaml_font_east_asia_to(instance, doc)
+      def yaml_font_east_asia_to(_instance, _doc)
         fonts&.east_asia
       end
 
@@ -212,7 +213,7 @@ module Uniword
         instance.fonts.h_ansi = value if value
       end
 
-      def yaml_font_h_ansi_to(instance, doc)
+      def yaml_font_h_ansi_to(_instance, _doc)
         fonts&.h_ansi
       end
 
@@ -221,7 +222,7 @@ module Uniword
         instance.fonts.cs = value if value
       end
 
-      def yaml_font_cs_to(instance, doc)
+      def yaml_font_cs_to(_instance, _doc)
         fonts&.cs
       end
 
@@ -229,7 +230,7 @@ module Uniword
         instance.emboss = Properties::Emboss.new(value: value) unless value.nil?
       end
 
-      def yaml_emboss_to(instance, doc)
+      def yaml_emboss_to(_instance, _doc)
         emboss&.value
       end
 
@@ -237,7 +238,7 @@ module Uniword
         instance.imprint = Properties::Imprint.new(value: value) unless value.nil?
       end
 
-      def yaml_imprint_to(instance, doc)
+      def yaml_imprint_to(_instance, _doc)
         imprint&.value
       end
 
@@ -245,7 +246,7 @@ module Uniword
         instance.shadow = Properties::Shadow.new(value: value) unless value.nil?
       end
 
-      def yaml_shadow_to(instance, doc)
+      def yaml_shadow_to(_instance, _doc)
         shadow&.value
       end
 
@@ -253,7 +254,7 @@ module Uniword
         instance.outline_level = Properties::OutlineLevel.new(value: value) unless value.nil?
       end
 
-      def yaml_outline_to(instance, doc)
+      def yaml_outline_to(_instance, _doc)
         outline_level&.value
       end
 
@@ -261,7 +262,7 @@ module Uniword
         instance.vertical_align = Properties::VerticalAlign.new(value: value) if value
       end
 
-      def yaml_vertical_align_to(instance, doc)
+      def yaml_vertical_align_to(_instance, _doc)
         vertical_align&.value
       end
 
@@ -585,11 +586,11 @@ module Uniword
         end
 
         # Map removed flat shading attributes to shading wrapper
-        if shading_fill_val || shading_type_val
-          self.shading ||= Properties::Shading.new
-          shading.fill = shading_fill_val if shading_fill_val
-          shading.pattern = shading_type_val if shading_type_val
-        end
+        return unless shading_fill_val || shading_type_val
+
+        self.shading ||= Properties::Shading.new
+        shading.fill = shading_fill_val if shading_fill_val
+        shading.pattern = shading_type_val if shading_type_val
       end
 
       # Convert primitive attribute values to proper wrapper objects
@@ -597,9 +598,7 @@ module Uniword
       # instead of the expected Serializable wrapper types
       def convert_primitive_attributes!
         # Boolean formatting properties
-        if @bold && !@bold.is_a?(Properties::Bold)
-          @bold = Properties::Bold.new(value: @bold)
-        end
+        @bold = Properties::Bold.new(value: @bold) if @bold && !@bold.is_a?(Properties::Bold)
         if @bold_cs && !@bold_cs.is_a?(Properties::BoldCs)
           @bold_cs = Properties::BoldCs.new(value: @bold_cs)
         end
@@ -618,17 +617,13 @@ module Uniword
         if @small_caps && !@small_caps.is_a?(Properties::SmallCaps)
           @small_caps = Properties::SmallCaps.new(value: @small_caps)
         end
-        if @caps && !@caps.is_a?(Properties::Caps)
-          @caps = Properties::Caps.new(value: @caps)
-        end
+        @caps = Properties::Caps.new(value: @caps) if @caps && !@caps.is_a?(Properties::Caps)
         if @hidden && !@hidden.is_a?(Properties::Vanish)
           @hidden = Properties::Vanish.new(value: @hidden)
         end
 
         # Style - convert string to RunStyleReference wrapper
-        if @style.is_a?(String)
-          @style = Properties::RunStyleReference.new(value: @style)
-        end
+        @style = Properties::RunStyleReference.new(value: @style) if @style.is_a?(String)
 
         # Font size (half-points)
         if @size && !@size.is_a?(Properties::FontSize)
@@ -697,10 +692,9 @@ module Uniword
         end
 
         # Text outline
-        if @text_outline && !@text_outline.is_a?(Properties::TextOutline)
-          @text_outline = Properties::TextOutline.new
-        end
+        return unless @text_outline && !@text_outline.is_a?(Properties::TextOutline)
 
+        @text_outline = Properties::TextOutline.new
       end
     end
   end

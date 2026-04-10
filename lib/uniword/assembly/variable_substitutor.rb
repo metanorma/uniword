@@ -27,7 +27,7 @@ module Uniword
       attr_reader :variables
 
       # Pattern to match variable placeholders
-      VARIABLE_PATTERN = /\{([a-zA-Z0-9_.]+)\}/.freeze
+      VARIABLE_PATTERN = /\{([a-zA-Z0-9_.]+)\}/
 
       # Initialize substitutor with variables.
       #

@@ -29,7 +29,7 @@ module Uniword
       attribute :rsid_r, :string          # Revision ID for paragraph creation
       attribute :rsid_r_default, :string  # Default revision ID
       attribute :rsid_p, :string          # Revision ID for properties
-      attribute :rsid_r_pr, :string      # Revision ID for run properties
+      attribute :rsid_r_pr, :string # Revision ID for run properties
       # Pattern 0: W14 namespace typed attributes
       attribute :para_id, W14ParaId          # Paragraph ID (w14:paraId)
       attribute :text_id, W14TextId          # Text ID (w14:textId)
@@ -137,8 +137,8 @@ module Uniword
       # Iterate over text runs (convenience alias)
       #
       # @yield [Run] Each run in the paragraph
-      def each_text_run(&block)
-        runs.each(&block)
+      def each_text_run(&)
+        runs.each(&)
       end
 
       # Remove all content from this paragraph
@@ -189,9 +189,7 @@ module Uniword
       # @return [String] Human-readable representation
       def inspect
         text_preview = text.to_s
-        if text_preview.length > 50
-          text_preview = "#{text_preview[0, 47]}..."
-        end
+        text_preview = "#{text_preview[0, 47]}..." if text_preview.length > 50
         "#<#{self.class} runs=#{runs&.size || 0} text=\"#{text_preview}\">"
       end
     end

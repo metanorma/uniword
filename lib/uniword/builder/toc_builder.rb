@@ -33,7 +33,7 @@ module Uniword
 
         # Instruction text
         instr = Wordprocessingml::InstrText.new
-        instr.text = " TOC \\o \"1-3\" \\h \\z \\u "
+        instr.text = ' TOC \\o "1-3" \\h \\z \\u '
         toc_para.instr_text << instr
 
         # Field separate

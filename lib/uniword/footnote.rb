@@ -45,7 +45,6 @@ module Uniword
       !@content.nil? && !@content.empty?
     end
 
-
     # Get text content of footnote.
     #
     # @return [String] The combined text of all paragraphs

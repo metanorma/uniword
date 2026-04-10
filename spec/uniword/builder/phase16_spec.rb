@@ -26,7 +26,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       doc.image(sample_png)
 
       content = zip_content_for(doc.model)
-      expect(content.keys).to include(match(/word\/media\//))
+      expect(content.keys).to include(match(%r{word/media/}))
     end
 
     it 'adds image content type for PNG' do
@@ -84,7 +84,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         expect(media_entries.size).to be >= 1
       end
 
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 
@@ -360,7 +360,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(sources_xml).to include('The Book')
         end
 
-        File.delete(path) if File.exist?(path)
+        FileUtils.rm_f(path)
       end
     end
   end
@@ -392,8 +392,8 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
 
     describe 'categories' do
       it 'sets category labels' do
-        builder.categories(['Q1', 'Q2', 'Q3', 'Q4'])
-        expect(builder.categories).to eq(['Q1', 'Q2', 'Q3', 'Q4'])
+        builder.categories(%w[Q1 Q2 Q3 Q4])
+        expect(builder.categories).to eq(%w[Q1 Q2 Q3 Q4])
       end
     end
 
@@ -430,7 +430,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
     describe 'build_xml' do
       it 'produces valid chart XML for bar chart' do
         builder.title('Test Chart')
-        builder.categories(['A', 'B', 'C'])
+        builder.categories(%w[A B C])
         builder.series('Series 1', data: [10, 20, 30])
 
         xml = builder.build_xml
@@ -443,7 +443,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       it 'produces valid chart XML for line chart' do
         cb = Uniword::Builder::ChartBuilder.new(chart_type: :line)
         cb.title('Line Test')
-        cb.categories(['X1', 'X2'])
+        cb.categories(%w[X1 X2])
         cb.series('Data', data: [1, 2])
 
         xml = cb.build_xml
@@ -454,7 +454,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       it 'produces valid chart XML for pie chart' do
         cb = Uniword::Builder::ChartBuilder.new(chart_type: :pie)
         cb.title('Pie Test')
-        cb.categories(['A', 'B', 'C'])
+        cb.categories(%w[A B C])
         cb.series('Share', data: [45, 30, 25])
 
         xml = cb.build_xml
@@ -463,7 +463,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       end
 
       it 'includes category labels in XML' do
-        builder.categories(['Jan', 'Feb', 'Mar'])
+        builder.categories(%w[Jan Feb Mar])
         builder.series('Test', data: [1, 2, 3])
 
         xml = builder.build_xml
@@ -517,7 +517,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       end
 
       it 'handles multiple series' do
-        builder.categories(['Q1', 'Q2'])
+        builder.categories(%w[Q1 Q2])
         builder.series('Series 1', data: [10, 20])
         builder.series('Series 2', data: [30, 40])
 
@@ -564,7 +564,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         doc = Uniword::Builder::DocumentBuilder.new
         doc.chart(type: :bar) do |c|
           c.title('Sales')
-          c.categories(['Q1', 'Q2', 'Q3'])
+          c.categories(%w[Q1 Q2 Q3])
           c.series('Revenue', data: [100, 200, 150])
         end
 
@@ -577,7 +577,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         doc = Uniword::Builder::DocumentBuilder.new
         doc.chart(type: :line) do |c|
           c.title('Trend')
-          c.categories(['Jan', 'Feb'])
+          c.categories(%w[Jan Feb])
           c.series('Value', data: [10, 20])
         end
 
@@ -588,7 +588,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         doc = Uniword::Builder::DocumentBuilder.new
         doc.chart(type: :pie) do |c|
           c.title('Distribution')
-          c.categories(['A', 'B', 'C'])
+          c.categories(%w[A B C])
           c.series('Share', data: [40, 35, 25])
         end
 
@@ -611,7 +611,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         doc = Uniword::Builder::DocumentBuilder.new
         doc.chart do |c|
           c.title('Test Chart')
-          c.categories(['Q1', 'Q2'])
+          c.categories(%w[Q1 Q2])
           c.series('Revenue', data: [100, 200])
         end
 
@@ -630,7 +630,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(chart_xml).to include('barChart')
         end
 
-        File.delete(path) if File.exist?(path)
+        FileUtils.rm_f(path)
       end
 
       it 'includes chart relationship in document rels' do
@@ -649,7 +649,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
           expect(rels).to include('chart')
         end
 
-        File.delete(path) if File.exist?(path)
+        FileUtils.rm_f(path)
       end
     end
   end
@@ -752,7 +752,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
       doc.heading('Data', level: 1)
       doc.chart(type: :bar) do |c|
         c.title('Data Overview')
-        c.categories(['A', 'B', 'C'])
+        c.categories(%w[A B C])
         c.series('Values', data: [10, 20, 30])
       end
 
@@ -790,7 +790,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         expect(ct).to include('drawingml.chart')
       end
 
-      File.delete(path) if File.exist?(path)
+      FileUtils.rm_f(path)
     end
   end
 end

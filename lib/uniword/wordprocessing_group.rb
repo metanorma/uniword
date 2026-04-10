@@ -12,7 +12,8 @@ module Uniword
     class Group < Lutaml::Model::Serializable
       attribute :c_nv_grp_sp_pr, Lutaml::Model::Serializable
       attribute :grp_sp_pr, Lutaml::Model::Serializable
-      attribute :shapes, Uniword::WordprocessingShape::WordprocessingShape, collection: true, initialize_empty: true
+      attribute :shapes, Uniword::WordprocessingShape::WordprocessingShape, collection: true,
+                                                                            initialize_empty: true
 
       xml do
         root 'wgp'

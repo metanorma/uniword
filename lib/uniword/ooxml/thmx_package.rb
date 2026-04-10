@@ -29,7 +29,6 @@ module Uniword
       # @param path [String] Path to .thmx file
       # @return [Theme] Loaded theme
       def self.from_file(path)
-
         # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
@@ -71,7 +70,6 @@ module Uniword
       # @param theme [Theme] The theme to save
       # @param path [String] Output path
       def self.to_file(theme, path)
-
         # Create package
         package = new
         package.theme = theme

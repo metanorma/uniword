@@ -65,7 +65,9 @@ module Uniword
       props.color = Properties::ColorValue.new(value: formatting[:color].to_s) if formatting[:color]
       props.size = Properties::FontSize.new(value: formatting[:size].to_i * 2) if formatting[:size]
       props.font = formatting[:font] if formatting[:font]
-      props.highlight = Properties::Highlight.new(value: formatting[:highlight].to_s) if formatting[:highlight]
+      if formatting[:highlight]
+        props.highlight = Properties::Highlight.new(value: formatting[:highlight].to_s)
+      end
       props.strike = Properties::Strike.new(value: true) if formatting[:strike]
       props.small_caps = Properties::SmallCaps.new(value: true) if formatting[:small_caps]
       props.caps = Properties::Caps.new(value: true) if formatting[:caps]
@@ -132,8 +134,8 @@ module Uniword
     def self.floating_image(path, width: nil, height: nil, align: nil,
                             wrap: :square, behind_text: false)
       ImageBuilder.create_floating(nil, path, width: width, height: height,
-                                   align: align, wrap: wrap,
-                                   behind_text: behind_text)
+                                              align: align, wrap: wrap,
+                                              behind_text: behind_text)
     end
 
     # Factory: creates a page break Run

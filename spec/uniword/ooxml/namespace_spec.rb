@@ -28,7 +28,7 @@ RSpec.describe 'OOXML Namespace Configuration' do
       doc.body.paragraphs << para
       xml = doc.to_xml(prefix: true)
 
-      # Note: relationships namespace is only included when elements use it
+      # NOTE: relationships namespace is only included when elements use it
       # For a document with hyperlinks, it should include the r: namespace
       expect(xml).to include('xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
     end

@@ -32,7 +32,7 @@ module Uniword
         'http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart'
       CHART_CONTENT_TYPE =
         'application/vnd.openxmlformats-officedocument.' \
-        'drawingml.chart+xml'.freeze
+        'drawingml.chart+xml'
 
       attr_reader :chart_type, :title_text, :series_list
 

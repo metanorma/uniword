@@ -14,7 +14,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
   describe '#paragraph' do
     it 'creates and adds a paragraph with text' do
       builder = described_class.new
-      para_builder = builder.paragraph('Hello World')
+      builder.paragraph('Hello World')
       expect(builder.model.body.paragraphs.size).to eq(1)
       expect(builder.model.body.paragraphs.first.text).to eq('Hello World')
     end

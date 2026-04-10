@@ -170,7 +170,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, '#theme' do
 
   it 'accepts a block for customization' do
     doc = described_class.new
-    result = doc.theme('atlas') { |t| t.available }
+    result = doc.theme('atlas', &:available)
 
     expect(result).to be_a(Uniword::Builder::ThemeBuilder)
   end

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Visitor
     # Concrete visitor that extracts all text content from a document.

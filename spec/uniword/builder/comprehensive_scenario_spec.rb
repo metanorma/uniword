@@ -177,7 +177,7 @@ RSpec.describe 'Scenario: Document with footnotes and endnotes' do
 
     # First paragraph has footnote reference run
     first_runs = doc.model.body.paragraphs[0].runs
-    fn_run = first_runs.find { |r| r.footnote_reference }
+    fn_run = first_runs.find(&:footnote_reference)
     expect(fn_run).not_to be_nil
     expect(fn_run.footnote_reference.id).to eq('1')
 

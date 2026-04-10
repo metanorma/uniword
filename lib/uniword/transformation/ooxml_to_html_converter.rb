@@ -65,8 +65,12 @@ module Uniword
         text = "<em>#{text}</em>" if props.italic
         text = "<u>#{text}</u>" if props.underline&.value
         text = "<span style=\"color:#{props.color&.value}\">#{text}</span>" if props.color&.value
-        text = "<span style=\"font-size:#{font_size_to_html(props.size&.value)}\">#{text}</span>" if props.size&.value
-        text = "<span style=\"font-family:'#{props.font&.ascii}'\">#{text}</span>" if props.font&.ascii
+        if props.size&.value
+          text = "<span style=\"font-size:#{font_size_to_html(props.size&.value)}\">#{text}</span>"
+        end
+        if props.font&.ascii
+          text = "<span style=\"font-family:'#{props.font&.ascii}'\">#{text}</span>"
+        end
 
         text
       end
@@ -157,11 +161,11 @@ module Uniword
       # @return [String] Escaped text
       def self.escape_html(text)
         text.to_s
-          .gsub('&', '&amp;')
-          .gsub('<', '&lt;')
-          .gsub('>', '&gt;')
-          .gsub('"', '&quot;')
-          .gsub("'", '&#39;')
+            .gsub('&', '&amp;')
+            .gsub('<', '&lt;')
+            .gsub('>', '&gt;')
+            .gsub('"', '&quot;')
+            .gsub("'", '&#39;')
       end
     end
   end

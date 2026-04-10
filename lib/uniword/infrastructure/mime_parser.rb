@@ -42,9 +42,7 @@ module Uniword
           mime_part = parse_mime_part(part)
           next unless mime_part
 
-          if mime_part.is_a?(Mhtml::HtmlPart) && !document.html_part
-            document.html_part = mime_part
-          end
+          document.html_part = mime_part if mime_part.is_a?(Mhtml::HtmlPart) && !document.html_part
 
           document.add_part(mime_part)
         end
@@ -174,18 +172,18 @@ module Uniword
           next if part == document.html_part
 
           fname = part.filename
-          if fname&.include?('header') || fname&.include?('footer') ||
-             fname&.include?('plchdr')
-            # Convert to HeaderFooterPart
-            idx = document.parts.index(part)
-            hf = Mhtml::HeaderFooterPart.new
-            hf.content_type = part.content_type
-            hf.content_location = part.content_location
-            hf.content_transfer_encoding = part.content_transfer_encoding
-            hf.content_id = part.content_id
-            hf.raw_content = part.raw_content
-            document.parts[idx] = hf
-          end
+          next unless fname&.include?('header') || fname&.include?('footer') ||
+                      fname&.include?('plchdr')
+
+          # Convert to HeaderFooterPart
+          idx = document.parts.index(part)
+          hf = Mhtml::HeaderFooterPart.new
+          hf.content_type = part.content_type
+          hf.content_location = part.content_location
+          hf.content_transfer_encoding = part.content_transfer_encoding
+          hf.content_id = part.content_id
+          hf.raw_content = part.raw_content
+          document.parts[idx] = hf
         end
       end
     end

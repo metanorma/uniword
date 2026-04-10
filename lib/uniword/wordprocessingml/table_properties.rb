@@ -77,7 +77,7 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element "tblPr"
+        element 'tblPr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -122,7 +122,7 @@ module Uniword
         # Handle alignment: parameter (creates jc element wrapper)
         alignment_value = attrs.delete(:alignment) || attrs.delete('alignment')
 
-        super(attrs)
+        super
 
         @borders ||= false
         @allow_break = true if @allow_break.nil?
@@ -146,10 +146,10 @@ module Uniword
         end
 
         # Set alignment if provided (creates TableJustification wrapper)
-        if alignment_value
-          self.alignment = Properties::TableJustification.new
-          alignment.value = alignment_value
-        end
+        return unless alignment_value
+
+        self.alignment = Properties::TableJustification.new
+        alignment.value = alignment_value
       end
 
       # Get table width
@@ -177,7 +177,7 @@ module Uniword
         return nil unless table_cell_margin
 
         margins = [table_cell_margin.top, table_cell_margin.left,
-                  table_cell_margin.bottom, table_cell_margin.right].compact
+                   table_cell_margin.bottom, table_cell_margin.right].compact
         margins.first if margins.uniq.size == 1
       end
 

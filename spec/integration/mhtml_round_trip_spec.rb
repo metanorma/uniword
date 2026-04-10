@@ -84,7 +84,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
   describe 'Table Round-trip' do
     it 'preserves tables with content' do
       mhtml_doc = docx_to_mhtml('spec/fixtures/docx_gem/tables.docx')
-      tables = mhtml_doc.body_html.scan(/<table/).length
+      tables = mhtml_doc.body_html.scan('<table').length
       expect(tables).to be >= 1
     end
 
@@ -117,7 +117,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
       mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
       html = mhtml_doc.body_html
       has_any_heading = has_css_class?(html, 'MsoHeading1') ||
-                       has_css_class?(html, 'MsoHeading2')
+                        has_css_class?(html, 'MsoHeading2')
       expect(has_any_heading).to be true
     end
   end

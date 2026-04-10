@@ -23,7 +23,6 @@ module Uniword
       # @param output_path [String] Output YAML path
       # @return [void]
       def import(dotx_path, output_path)
-
         # Extract .dotx package
         reader = StyleSetPackageReader.new
         files = reader.extract(dotx_path)

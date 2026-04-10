@@ -23,7 +23,7 @@ module Uniword
       attribute :text_direction, TextDirection
 
       xml do
-        element "tcPr"
+        element 'tcPr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -37,7 +37,7 @@ module Uniword
         map_element 'cnfStyle', to: :cnf_style, render_nil: false
         map_element 'noWrap', to: :no_wrap, render_nil: false
         map_element 'textDirection', to: :text_direction,
-                  render_nil: false
+                                     render_nil: false
       end
 
       # Set vertical merge

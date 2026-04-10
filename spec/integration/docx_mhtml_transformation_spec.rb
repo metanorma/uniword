@@ -44,14 +44,14 @@ RSpec.describe 'DOCX → MHT Transformation', type: :integration do
         end
 
         it 'has at least one paragraph' do
-          expect(reloaded_mht.body_html.scan(/<p /).count).to be >= 1
+          expect(reloaded_mht.body_html.scan('<p ').count).to be >= 1
         end
 
         it 'produces valid MIME structure' do
           expect(mime_string).to start_with("MIME-Version: 1.0\r\n")
-          expect(mime_string).to include("Content-Type: multipart/related")
-          expect(mime_string).to include("Content-Type: text/html")
-          expect(mime_string).to include("------=_NextPart_")
+          expect(mime_string).to include('Content-Type: multipart/related')
+          expect(mime_string).to include('Content-Type: text/html')
+          expect(mime_string).to include('------=_NextPart_')
         end
 
         it 'can be round-tripped (parse → serialize → parse)' do
@@ -107,7 +107,7 @@ RSpec.describe 'DOCX → MHT Transformation', type: :integration do
   describe 'Transformation pipeline' do
     it 'full pipeline: DOCX → MHT → parse back' do
       docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES['blank'])
-      original_docx = docx_pkg.document
+      docx_pkg.document
 
       # Transform to MHT
       mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, 'blank')

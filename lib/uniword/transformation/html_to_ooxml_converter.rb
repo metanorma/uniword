@@ -27,12 +27,13 @@ module Uniword
           next if element.ancestors('td, th').any?
 
           # Skip table row/cell containers themselves
-          next if element.name == 'tr' || element.name == 'td'
+          next if %w[tr td].include?(element.name)
 
           # Skip container elements (div, li) that have children matching the same selector.
           # This prevents duplicate processing when a div contains a p, since the p's
           # content is more semantically meaningful and the div's text would duplicate it.
-          if %w[div li].include?(element.name) && element.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').any?
+          if %w[div
+                li].include?(element.name) && element.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').any?
             next
           end
 
@@ -113,7 +114,7 @@ module Uniword
         # Map CSS class to cell style if present
         css_class = html_cell.attr('class')
         if css_class && !css_class.empty?
-          mapped_style = map_css_class_to_style(css_class)
+          map_css_class_to_style(css_class)
           # Style mapping available if needed for cell-level styling
         end
 
@@ -246,14 +247,12 @@ module Uniword
           'Heading6' => 'Heading6',
           'Quote' => 'Quote',
           'Bibliography' => 'Bibliography',
-          'NoSpacing' => 'No Spacing',
+          'NoSpacing' => 'No Spacing'
         }
 
         # Check each class in the class string
         css_class.split.each do |cls|
-          if class_mapping.key?(cls)
-            return class_mapping[cls]
-          end
+          return class_mapping[cls] if class_mapping.key?(cls)
         end
 
         nil
@@ -399,6 +398,7 @@ module Uniword
         # This handles nested formatting like <u><em><strong>text</strong></em></u>
         element.children.each do |child|
           next unless child.element?
+
           child_props = collect_formatting_from_element(child)
           merge_run_properties(props, child_props)
         end
@@ -448,10 +448,10 @@ module Uniword
         end
 
         # Font family
-        if style =~ /font-family:\s*['"]([^'"]+)['"]/i
-          font = Regexp.last_match(1).split(',').first.strip
-          props.font = Uniword::Properties::RunFonts.new(ascii: font)
-        end
+        return unless style =~ /font-family:\s*['"]([^'"]+)['"]/i
+
+        font = Regexp.last_match(1).split(',').first.strip
+        props.font = Uniword::Properties::RunFonts.new(ascii: font)
       end
 
       # Decode standard HTML entities in text.
@@ -489,7 +489,7 @@ module Uniword
           'euro' => [8364].pack('U'),
           'pound' => [163].pack('U'),
           'yen' => [165].pack('U'),
-          'cent' => [162].pack('U'),
+          'cent' => [162].pack('U')
         }
 
         text.gsub(/&(\w+);/) do
@@ -529,7 +529,7 @@ module Uniword
       # @param html [String] HTML content
       # @return [String] Body content or full content if no body tag
       def self.extract_body(html)
-        if html =~ /<body[^>]*>(.*?)<\/body>/im
+        if html =~ %r{<body[^>]*>(.*?)</body>}im
           Regexp.last_match(1)
         else
           html

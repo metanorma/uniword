@@ -46,18 +46,17 @@ module Uniword
         parts = []
 
         # MIME global header
-        parts << "MIME-Version: 1.0"
+        parts << 'MIME-Version: 1.0'
         parts << "Content-Type: multipart/related; boundary=\"#{boundary}\""
         parts << ''
 
         # HTML part (main document)
-        if document.html_part
-          parts << build_part(document.html_part)
-        end
+        parts << build_part(document.html_part) if document.html_part
 
         # All other parts (XML, images, theme, etc.)
         document.parts.each do |part|
           next if part == document.html_part
+
           parts << build_part(part)
         end
 
@@ -79,14 +78,14 @@ module Uniword
 
         # Headers
         lines << "Content-Location: #{part.content_location}" if part.content_location
-        lines << "Content-Transfer-Encoding: #{part.content_transfer_encoding}" if part.content_transfer_encoding
+        if part.content_transfer_encoding
+          lines << "Content-Transfer-Encoding: #{part.content_transfer_encoding}"
+        end
 
         if part.content_type
           ct = part.content_type
           # Add charset for text types
-          if ct.start_with?('text/') && !ct.include?('charset')
-            ct += '; charset="utf-8"'
-          end
+          ct += '; charset="utf-8"' if ct.start_with?('text/') && !ct.include?('charset')
           lines << "Content-Type: #{ct}"
         end
 
@@ -135,7 +134,7 @@ module Uniword
           char = byte.chr
           # Encode only '=' and control characters per RFC 2045
           if byte == 61 || byte < 33 || byte > 126
-            result << "=%02X" % byte
+            result << ('=%02X' % byte)
             line_length += 3
           else
             result << char

@@ -2,8 +2,8 @@
 
 module Uniword
   class MacOSWordImplementation < WordImplementation
-    WORD_APP_PATH = '/Applications/Microsoft Word.app'.freeze
-    RESOURCES_PATH = '/Applications/Microsoft Word.app/Contents/Resources'.freeze
+    WORD_APP_PATH = '/Applications/Microsoft Word.app'
+    RESOURCES_PATH = '/Applications/Microsoft Word.app/Contents/Resources'
 
     def installed?
       File.directory?(WORD_APP_PATH)
@@ -11,8 +11,10 @@ module Uniword
 
     def version
       return nil unless installed?
+
       plist = File.join(WORD_APP_PATH, 'Contents', 'Info.plist')
       return nil unless File.exist?(plist)
+
       `defaults read "#{WORD_APP_PATH}/Contents" CFBundleShortVersionString 2>/dev/null`.strip.presence
     end
 

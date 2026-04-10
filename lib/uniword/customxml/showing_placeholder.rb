@@ -10,6 +10,7 @@ module Uniword
     # Element: <cxml:showing_plc_hdr>
     class ShowingPlaceholder < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 

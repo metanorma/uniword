@@ -9,6 +9,7 @@ module Uniword
 
     def version
       return nil unless installed?
+
       # Read version from registry would require win32ole
       # For now, return a placeholder
       'Unknown'
@@ -16,34 +17,42 @@ module Uniword
 
     def themes_path
       return nil unless installed?
-      appdata = ENV['APPDATA']
+
+      appdata = ENV.fetch('APPDATA', nil)
       return nil unless appdata
+
       File.join(appdata, 'Microsoft', 'Templates', 'Document Themes')
     end
 
     def stylesets_path
       return nil unless installed?
-      appdata = ENV['APPDATA']
+
+      appdata = ENV.fetch('APPDATA', nil)
       return nil unless appdata
+
       File.join(appdata, 'Microsoft', 'QuickStyles')
     end
 
     def color_schemes_path
       return nil unless installed?
-      appdata = ENV['APPDATA']
+
+      appdata = ENV.fetch('APPDATA', nil)
       return nil unless appdata
+
       File.join(appdata, 'Microsoft', 'Templates', 'Document Themes', 'Theme Colors')
     end
 
     def font_schemes_path
       return nil unless installed?
-      appdata = ENV['APPDATA']
+
+      appdata = ENV.fetch('APPDATA', nil)
       return nil unless appdata
+
       File.join(appdata, 'Microsoft', 'Templates', 'Document Themes', 'Theme Fonts')
     end
 
     def cache_path
-      appdata = ENV['APPDATA'] || ENV['HOME'] || '.'
+      appdata = ENV['APPDATA'] || Dir.home || '.'
       File.join(appdata, '.uniword')
     end
 

@@ -38,7 +38,7 @@ module Uniword
           val = attrs.delete(:table_header)
           attrs[:tbl_header] = coerce_to_val_int(val)
         end
-        super(attrs)
+        super
       end
 
       private

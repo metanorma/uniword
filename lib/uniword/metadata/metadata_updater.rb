@@ -2,7 +2,6 @@
 
 # All classes autoloaded via lib/uniword/metadata.rb and lib/uniword/configuration.rb
 
-
 module Uniword
   module Metadata
     # Updates document properties with metadata values.
@@ -124,10 +123,10 @@ module Uniword
           core_props.created ||= Uniword::Ooxml::Types::DctermsCreatedType.new
           core_props.created.value = metadata[:created_at]
         end
-        if metadata[:modified_at]
-          core_props.modified ||= Uniword::Ooxml::Types::DctermsModifiedType.new
-          core_props.modified.value = metadata[:modified_at]
-        end
+        return unless metadata[:modified_at]
+
+        core_props.modified ||= Uniword::Ooxml::Types::DctermsModifiedType.new
+        core_props.modified.value = metadata[:modified_at]
       end
 
       # Update extended properties.

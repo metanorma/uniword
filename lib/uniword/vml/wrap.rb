@@ -12,7 +12,7 @@ module Uniword
       attribute :anchory, :string
 
       xml do
-        element "wrap"
+        element 'wrap'
         namespace Uniword::Ooxml::Namespaces::Vml
         mixed_content
 

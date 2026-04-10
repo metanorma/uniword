@@ -13,6 +13,7 @@ module Uniword
     # Element: <w:contextualSpacing/> or <w:contextualSpacing w:val="false"/>
     class ContextualSpacing < Lutaml::Model::Serializable
       include BooleanElement
+
       attribute :val, :string, default: nil
       include BooleanValSetter
 
@@ -24,7 +25,7 @@ module Uniword
 
       # For truthiness check
       def to_bool
-        value == true || value == 1 || value == '1' || value == 'true'
+        [true, 1, '1', 'true'].include?(value)
       end
     end
   end

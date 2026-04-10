@@ -21,7 +21,7 @@ module Uniword
       attribute :no_v_band, :integer    # No vertical banding (0/1)
 
       xml do
-        element "tblLook"
+        element 'tblLook'
         namespace Ooxml::Namespaces::WordProcessingML
         map_attribute 'val', to: :val, render_nil: false
         map_attribute 'firstRow', to: :first_row, render_nil: false

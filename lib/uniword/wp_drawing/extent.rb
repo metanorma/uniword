@@ -12,7 +12,7 @@ module Uniword
       attribute :cy, :integer  # Height
 
       xml do
-        element "extent"
+        element 'extent'
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 

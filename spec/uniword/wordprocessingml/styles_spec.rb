@@ -32,7 +32,8 @@ RSpec.describe Uniword::Wordprocessingml::Style do
 
   describe '#paragraph_style?' do
     it 'returns true for paragraph styles' do
-      style = described_class.new(styleId: 'P1', name: Uniword::Wordprocessingml::StyleName.new(val: 'P1'), type: 'paragraph')
+      style = described_class.new(styleId: 'P1',
+                                  name: Uniword::Wordprocessingml::StyleName.new(val: 'P1'), type: 'paragraph')
       expect(style.paragraph_style?).to be true
       expect(style.character_style?).to be false
     end
@@ -40,7 +41,8 @@ RSpec.describe Uniword::Wordprocessingml::Style do
 
   describe '#character_style?' do
     it 'returns true for character styles' do
-      style = described_class.new(styleId: 'C1', name: Uniword::Wordprocessingml::StyleName.new(val: 'C1'), type: 'character')
+      style = described_class.new(styleId: 'C1',
+                                  name: Uniword::Wordprocessingml::StyleName.new(val: 'C1'), type: 'character')
       expect(style.character_style?).to be true
       expect(style.paragraph_style?).to be false
     end
@@ -55,7 +57,8 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
     end
 
     it 'creates configuration with styles' do
-      style = Uniword::Wordprocessingml::Style.new(styleId: 'Test', name: Uniword::Wordprocessingml::StyleName.new(val: 'Test'), type: 'paragraph')
+      style = Uniword::Wordprocessingml::Style.new(styleId: 'Test',
+                                                   name: Uniword::Wordprocessingml::StyleName.new(val: 'Test'), type: 'paragraph')
       config = described_class.new(styles: [style])
       expect(config.styles.size).to eq(1)
     end
@@ -65,15 +68,18 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
     let(:config) { described_class.new(include_defaults: false) }
 
     it 'adds a style' do
-      style = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
+      style = Uniword::Wordprocessingml::Style.new(styleId: 'Custom',
+                                                   name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
       config.add_style(style)
       expect(config.styles.size).to eq(1)
       expect(config.style_by_id('Custom')).not_to be_nil
     end
 
     it 'raises error for duplicate style IDs' do
-      style1 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
-      style2 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom 2'), type: 'paragraph')
+      style1 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom',
+                                                    name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
+      style2 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom',
+                                                    name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom 2'), type: 'paragraph')
 
       config.add_style(style1)
       expect do
@@ -82,8 +88,10 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
     end
 
     it 'allows overwriting with allow_overwrite flag' do
-      style1 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
-      style2 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom', name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom 2'), type: 'paragraph')
+      style1 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom',
+                                                    name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom'), type: 'paragraph')
+      style2 = Uniword::Wordprocessingml::Style.new(styleId: 'Custom',
+                                                    name: Uniword::Wordprocessingml::StyleName.new(val: 'Custom 2'), type: 'paragraph')
 
       config.add_style(style1)
       config.add_style(style2, allow_overwrite: true)

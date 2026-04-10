@@ -78,9 +78,9 @@ module Uniword
         text_run.text = @text
         para.runs << text_run
 
-        if include_page_numbers
-          add_page_number_run(para)
-        end
+        return unless include_page_numbers
+
+        add_page_number_run(para)
       end
 
       # Add entry with hyperlink to bookmark.
@@ -100,9 +100,9 @@ module Uniword
         para.hyperlinks ||= []
         para.hyperlinks << hyperlink
 
-        if include_page_numbers
-          add_page_number_run(para)
-        end
+        return unless include_page_numbers
+
+        add_page_number_run(para)
       end
 
       # Add page number run.

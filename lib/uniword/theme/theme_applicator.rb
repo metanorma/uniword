@@ -61,6 +61,7 @@ module Uniword
 
         # Set theme font references on doc defaults (body text = minor font)
         rpr.fonts = build_minor_font_reference(theme)
+        rpr
       end
 
       # Update built-in heading and hyperlink styles to reference theme
@@ -86,12 +87,12 @@ module Uniword
           rpr.fonts = build_major_font_reference(theme)
 
           # Set theme color reference for heading text
-          if heading_color
-            rpr.color = Uniword::Properties::ColorValue.new(
-              value: heading_color,
-              theme_color: 'text1'
-            )
-          end
+          next unless heading_color
+
+          rpr.color = Uniword::Properties::ColorValue.new(
+            value: heading_color,
+            theme_color: 'text1'
+          )
         end
       end
 
@@ -104,12 +105,12 @@ module Uniword
         return unless rpr
 
         hlink_color = theme.color(:hlink)
-        if hlink_color
-          rpr.color = Uniword::Properties::ColorValue.new(
-            value: hlink_color,
-            theme_color: 'hyperlink'
-          )
-        end
+        return unless hlink_color
+
+        rpr.color = Uniword::Properties::ColorValue.new(
+          value: hlink_color,
+          theme_color: 'hyperlink'
+        )
       end
 
       # Build RunFonts referencing the theme's minor (body) font

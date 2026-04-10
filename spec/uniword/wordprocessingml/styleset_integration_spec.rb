@@ -85,7 +85,8 @@ RSpec.describe 'StyleSet Integration' do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add a custom Normal style (use styleId: not id: for lutaml-model)
-      custom_normal = Uniword::Wordprocessingml::Style.new(styleId: 'Normal', name: 'Custom Normal', type: 'paragraph')
+      custom_normal = Uniword::Wordprocessingml::Style.new(styleId: 'Normal',
+                                                           name: 'Custom Normal', type: 'paragraph')
       doc.styles_configuration.add_style(custom_normal, allow_overwrite: true)
 
       styleset.apply_to(doc, strategy: :replace)

@@ -20,7 +20,8 @@ module Uniword
       autoload :Alias, "#{__dir__}/structured_document_tag/alias"
       autoload :Tag, "#{__dir__}/structured_document_tag/tag"
       autoload :Text, "#{__dir__}/structured_document_tag/text"
-      autoload :ShowingPlaceholderHeader, "#{__dir__}/structured_document_tag/showing_placeholder_header"
+      autoload :ShowingPlaceholderHeader,
+               "#{__dir__}/structured_document_tag/showing_placeholder_header"
       autoload :Appearance, "#{__dir__}/structured_document_tag/appearance"
       autoload :Placeholder, "#{__dir__}/structured_document_tag/placeholder"
       autoload :DocPartReference, "#{__dir__}/structured_document_tag/placeholder"

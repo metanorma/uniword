@@ -61,8 +61,12 @@ RSpec.describe 'Format Conversion', type: :integration do
       skip 'Fixture not found' unless File.exist?(docx_fixture)
 
       docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
-      docx_text = docx_pkg.document.body.paragraphs
-                     .flat_map { |p| p.runs.map { |r| r.text&.text } }.compact.join(' ')
+      docx_pkg.document.body.paragraphs
+              .flat_map do |p|
+        p.runs.map do |r|
+          r.text&.text
+        end
+      end.compact.join(' ')
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
       mht_text = mhtml_doc.body_html.gsub(/<[^>]+>/, ' ').gsub(/\s+/, ' ').strip
@@ -133,7 +137,7 @@ RSpec.describe 'Format Conversion', type: :integration do
       docx_tables = docx_pkg.document.body.tables.length
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      mht_tables = mhtml_doc.body_html.scan(/<table/).length
+      mht_tables = mhtml_doc.body_html.scan('<table').length
 
       expect(mht_tables).to eq(docx_tables)
     end

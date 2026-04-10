@@ -25,7 +25,6 @@ module Uniword
         map_element 'AlternateContent', to: :alternate_content, render_nil: false
       end
 
-
       # Get row count
       #
       # @return [Integer] Number of rows in table

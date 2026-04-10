@@ -24,7 +24,8 @@ module Uniword
       # @param document_name [String] Optional document name (e.g., 'blank'). If not provided,
       #   extracts from relationships or defaults to 'document'
       # @return [Uniword::Mhtml::Document] MHT document model
-      def self.document_to_mht(document, core_properties = nil, relationships = nil, document_name = nil)
+      def self.document_to_mht(document, core_properties = nil, relationships = nil,
+                               document_name = nil)
         converter = new(document, core_properties, relationships, document_name)
         converter.build_mhtml_document
       end
@@ -112,7 +113,9 @@ module Uniword
           props.author = cp.creator.to_s if cp.respond_to?(:creator) && cp.creator
           # Use .value for date types, not .to_s (which returns object inspect)
           props.created = cp.created.value.to_s if cp.respond_to?(:created) && cp.created
-          props.last_author = cp.last_modified_by.to_s if cp.respond_to?(:last_modified_by) && cp.last_modified_by
+          if cp.respond_to?(:last_modified_by) && cp.last_modified_by
+            props.last_author = cp.last_modified_by.to_s
+          end
           props.last_saved = cp.modified.value.to_s if cp.respond_to?(:modified) && cp.modified
           props.pages = cp.pages.to_s if cp.respond_to?(:pages) && cp.pages
           props.words = cp.words.to_s if cp.respond_to?(:words) && cp.words
@@ -128,7 +131,7 @@ module Uniword
         # Build file list entries for images
         image_entries = if @document.image_parts && !@document.image_parts.empty?
                           @document.image_parts.map do |_r_id, image_data|
-                            %{<o:File HRef="#{image_data[:target]}"/>}
+                            %(<o:File HRef="#{image_data[:target]}"/>)
                           end.join("\n            ")
                         else
                           ''
@@ -162,7 +165,7 @@ module Uniword
       def build_image_parts
         return [] unless @document.image_parts && !@document.image_parts.empty?
 
-        @document.image_parts.map do |r_id, image_data|
+        @document.image_parts.map do |_r_id, image_data|
           part = Uniword::Mhtml::ImagePart.new
           part.content_type = image_data[:content_type] || 'image/png'
           part.content_transfer_encoding = 'base64'
@@ -241,9 +244,9 @@ module Uniword
           </xml><![endif]-->
           <!--[if !mso]>
           <style>
-          v\:* {behavior:url(#default#VML);}
-          o\:* {behavior:url(#default#VML);}
-          w\:* {behavior:url(#default#VML);}
+          v:* {behavior:url(#default#VML);}
+          o:* {behavior:url(#default#VML);}
+          w:* {behavior:url(#default#VML);}
           .shape {behavior:url(#default#VML);}
           </style>
           <![endif]-->
@@ -309,7 +312,7 @@ module Uniword
         doc_props << " <o:Author>#{escape_xml(author)}</o:Author>" if author
         doc_props << " <o:LastAuthor>#{escape_xml(last_author)}</o:LastAuthor>" if last_author
         doc_props << " <o:Revision>#{escape_xml(revision)}</o:Revision>" if revision
-        doc_props << " <o:TotalTime>0</o:TotalTime>"
+        doc_props << ' <o:TotalTime>0</o:TotalTime>'
         doc_props << " <o:Created>#{escape_xml(created)}</o:Created>" if created
         doc_props << " <o:LastSaved>#{escape_xml(last_saved)}</o:LastSaved>" if last_saved
         doc_props << " <o:Pages>#{stats[:pages]}</o:Pages>"
@@ -318,7 +321,7 @@ module Uniword
         doc_props << " <o:Lines>#{stats[:lines]}</o:Lines>"
         doc_props << " <o:Paragraphs>#{stats[:paragraphs]}</o:Paragraphs>"
         doc_props << " <o:CharactersWithSpaces>#{stats[:characters_with_spaces]}</o:CharactersWithSpaces>"
-        doc_props << " <o:Version>16.00</o:Version>"
+        doc_props << ' <o:Version>16.00</o:Version>'
 
         doc_props.join("\n")
       end
@@ -333,8 +336,10 @@ module Uniword
         lines = 0
 
         body = @document.body
-        return { words: 0, characters: 0, paragraphs: 0, lines: 0, pages: 1,
-                 characters_with_spaces: 0 } unless body
+        unless body
+          return { words: 0, characters: 0, paragraphs: 0, lines: 0, pages: 1,
+                   characters_with_spaces: 0 }
+        end
 
         body.elements.each do |element|
           next unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
@@ -378,9 +383,9 @@ module Uniword
         return '' unless asset_id
 
         <<~XML
-           <o:CustomDocumentProperties xmlns:o="urn:schemas-microsoft-com:office:office">
-            <o:AssetID dt:dt="string">#{escape_xml(asset_id)}</o:AssetID>
-           </o:CustomDocumentProperties>
+          <o:CustomDocumentProperties xmlns:o="urn:schemas-microsoft-com:office:office">
+           <o:AssetID dt:dt="string">#{escape_xml(asset_id)}</o:AssetID>
+          </o:CustomDocumentProperties>
         XML
       end
 
@@ -434,7 +439,7 @@ module Uniword
           # Fallback to document_rels from document itself
           location = @document.document_rels&.relationships&.first&.target || 'document'
           File.basename(location, '.*')
-        rescue
+        rescue StandardError
           'document'
         end
       end
@@ -1161,15 +1166,13 @@ module Uniword
 
       # Get paragraph content including runs, hyperlinks, SDTs
       def paragraph_content_to_html(paragraph)
-        parts = []
-
         # Process runs and hyperlinks in order
-        paragraph.runs.each do |run|
+        parts = paragraph.runs.map do |run|
           # SDT elements can appear in runs collection when parsed from MHT
           if run.is_a?(Uniword::Wordprocessingml::StructuredDocumentTag)
-            parts << sdt_to_inline_html(run)
+            sdt_to_inline_html(run)
           else
-            parts << run_to_html(run)
+            run_to_html(run)
           end
         end
 
@@ -1187,16 +1190,14 @@ module Uniword
 
       # Convert OOXML Run to HTML
       def run_to_html(run)
-        text = run.text&.to_s || ''
+        text = run.text.to_s
         return '' if text.empty?
 
         # Escape raw text first, then apply formatting around it
         escaped = escape_html(text)
 
         props = run.properties
-        if props
-          escaped = apply_run_formatting(escaped, props)
-        end
+        escaped = apply_run_formatting(escaped, props) if props
 
         escaped
       end
@@ -1210,16 +1211,14 @@ module Uniword
         result = "<em>#{result}</em>" if props.italic && props.italic.value != false
         result = "<u>#{result}</u>" if props.underline&.value
 
-        if props.color&.value
-          result = %(<span style="color:#{props.color.value}">#{result}</span>)
-        end
+        result = %(<span style="color:#{props.color.value}">#{result}</span>) if props.color&.value
 
         if props.size&.value
           size_pt = props.size.value.to_f / 2
           result = %(<span style="font-size:#{size_pt}pt">#{result}</span>)
         end
 
-        if props.font&.respond_to?(:ascii) && props.font.ascii
+        if props.font.respond_to?(:ascii) && props.font.ascii
           result = %(<span style="font-family:'#{props.font.ascii}'">#{result}</span>)
         elsif props.font.is_a?(String) && !props.font.empty?
           result = %(<span style="font-family:'#{props.font}'">#{result}</span>)
@@ -1242,16 +1241,12 @@ module Uniword
       # Resolve hyperlink URL from relationship or anchor
       def resolve_hyperlink_url(hyperlink)
         # Internal anchor link
-        if hyperlink.anchor
-          return "##{hyperlink.anchor}"
-        end
+        return "##{hyperlink.anchor}" if hyperlink.anchor
 
         # External link via relationship ID
         if hyperlink.id && @relationships
           rel = @relationships.relationships.find { |r| r.id == hyperlink.id }
-          if rel && rel.target_mode == 'External'
-            return rel.target
-          end
+          return rel.target if rel && rel.target_mode == 'External'
         end
 
         nil
@@ -1295,22 +1290,16 @@ module Uniword
         attrs = []
 
         # ID attribute
-        if props.id && props.id.respond_to?(:value) && props.id.value
-          attrs << %(w:id="#{props.id.value}")
-        end
+        attrs << %(w:id="#{props.id.value}") if props.id.respond_to?(:value) && props.id.value
 
         # ShowingPlcHdr attribute
-        if props.showing_placeholder_header
-          attrs << 'w:showingPlcHdr="t"'
-        end
+        attrs << 'w:showingPlcHdr="t"' if props.showing_placeholder_header
 
         # Temporary attribute
-        if props.temporary
-          attrs << 'w:temporary="t"'
-        end
+        attrs << 'w:temporary="t"' if props.temporary
 
         # DocPart attribute (UUID from placeholder.doc_part)
-        if props.placeholder && props.placeholder.doc_part
+        if props.placeholder&.doc_part
           doc_part = props.placeholder.doc_part
           if doc_part.respond_to?(:value) && doc_part.value
             attrs << %(w:docPart="#{doc_part.value}")
@@ -1318,17 +1307,17 @@ module Uniword
         end
 
         # Text attribute
-        if props.text && props.text.respond_to?(:value) && props.text.value
+        if props.text.respond_to?(:value) && props.text.value
           attrs << %(w:text="#{props.text.value}")
         end
 
         # Tag attribute
-        if props.tag && props.tag.respond_to?(:value) && props.tag.value
+        if props.tag.respond_to?(:value) && props.tag.value
           attrs << %(w:tag="#{escape_xml(props.tag.value)}")
         end
 
         # Alias attribute
-        if props.alias_name && props.alias_name.respond_to?(:value) && props.alias_name.value
+        if props.alias_name.respond_to?(:value) && props.alias_name.value
           attrs << %(w:alias="#{escape_xml(props.alias_name.value)}")
         end
 
@@ -1396,21 +1385,21 @@ module Uniword
       # Escape HTML special characters
       def escape_html(text)
         text.to_s
-          .gsub('&', '&amp;')
-          .gsub('<', '&lt;')
-          .gsub('>', '&gt;')
-          .gsub('"', '&quot;')
-          .gsub("'", '&#39;')
+            .gsub('&', '&amp;')
+            .gsub('<', '&lt;')
+            .gsub('>', '&gt;')
+            .gsub('"', '&quot;')
+            .gsub("'", '&#39;')
       end
 
       # Escape XML special characters
       def escape_xml(text)
         text.to_s
-          .gsub('&', '&amp;')
-          .gsub('<', '&lt;')
-          .gsub('>', '&gt;')
-          .gsub('"', '&quot;')
-          .gsub("'", '&apos;')
+            .gsub('&', '&amp;')
+            .gsub('<', '&lt;')
+            .gsub('>', '&gt;')
+            .gsub('"', '&quot;')
+            .gsub("'", '&apos;')
       end
     end
   end

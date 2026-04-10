@@ -10,6 +10,7 @@ module Uniword
     # Element: <g:text_box>
     class TextBox < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 

@@ -44,7 +44,6 @@ module Uniword
         map_element 'tc', to: :cells, render_nil: false
       end
 
-
       # Get cell count
       #
       # @return [Integer] Number of cells in row

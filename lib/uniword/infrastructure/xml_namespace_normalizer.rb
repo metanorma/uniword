@@ -12,7 +12,7 @@ module Uniword
       # Prefixed namespaces that should be declared at root level in OOXML documents
       PREFIXED_NAMESPACES = {
         'http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing' => 'wp',
-        'http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing' => 'wp14',
+        'http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing' => 'wp14'
       }.freeze
 
       # Normalize XML to ensure prefixed namespace declarations are at root level
@@ -25,7 +25,7 @@ module Uniword
 
         # Check if any prefixed namespaces are used but not declared at root
         root = doc.root
-        root_ns = root.namespace_definitions.map { |ns| [ns.prefix, ns.href] }.to_h
+        root_ns = root.namespace_definitions.to_h { |ns| [ns.prefix, ns.href] }
 
         PREFIXED_NAMESPACES.each do |uri, expected_prefix|
           # Check if this namespace URI is used in the document
@@ -33,9 +33,9 @@ module Uniword
           next if elements_with_ns.empty?
 
           # Check if the expected prefix is already declared at root
-          if root_ns.key?(expected_prefix)
+          if root_ns.key?(expected_prefix) && (root_ns[expected_prefix] == uri)
             # Check if the URI matches
-            next if root_ns[expected_prefix] == uri
+            next
           end
 
           # Check if default namespace with this URI exists
@@ -45,20 +45,20 @@ module Uniword
             # Replace default namespace with prefixed namespace
             # Find the default xmlns attribute and rename it
             root.attributes.each do |name, attr|
-              if name == 'xmlns' && attr.value == uri
-                # Remove the default namespace
-                root.remove_attribute('xmlns')
-                # Add the prefixed namespace
-                root['xmlns:' + expected_prefix] = uri
+              next unless name == 'xmlns' && attr.value == uri
 
-                # Update all elements that use this namespace to use the prefix
-                update_elements_namespace(elements_with_ns, expected_prefix)
-                break
-              end
+              # Remove the default namespace
+              root.remove_attribute('xmlns')
+              # Add the prefixed namespace
+              root["xmlns:#{expected_prefix}"] = uri
+
+              # Update all elements that use this namespace to use the prefix
+              update_elements_namespace(elements_with_ns, expected_prefix)
+              break
             end
           else
             # Namespace is used but not declared at root - add it
-            root['xmlns:' + expected_prefix] = uri
+            root["xmlns:#{expected_prefix}"] = uri
           end
         end
 
@@ -72,14 +72,14 @@ module Uniword
       def self.update_elements_namespace(elements, prefix)
         elements.each do |el|
           # Update the element's namespace
-          ns = el.document.root.namespaces.find do |k, v|
+          ns = el.document.root.namespaces.find do |_k, v|
             v == el.namespace.href
           end
           next unless ns
 
           # Change namespace key from default to prefixed
           el.document.root.namespaces.delete(ns[0])
-          el.document.root['xmlns:' + prefix] = ns[1]
+          el.document.root["xmlns:#{prefix}"] = ns[1]
         end
       end
 
@@ -94,6 +94,7 @@ module Uniword
 
         target_files.each do |path|
           next unless result[path]
+
           result[path] = normalize(result[path])
         end
 

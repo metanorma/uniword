@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Batch
     # Processing stage that converts document format.

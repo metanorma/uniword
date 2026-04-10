@@ -6,7 +6,7 @@ module Uniword
     # Linux users must manually copy theme files from another system
 
     def installed?
-      false  # No native Word on Linux
+      false # No native Word on Linux
     end
 
     def version

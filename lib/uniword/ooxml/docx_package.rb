@@ -2,7 +2,7 @@
 
 require 'securerandom'
 require 'lutaml/model'
-# Note: ContentTypes and Relationships classes are autoloaded via lib/uniword.rb
+# NOTE: ContentTypes and Relationships classes are autoloaded via lib/uniword.rb
 # No require_relative needed - the spec uses require 'uniword' which sets up autoloads
 # Theme, StylesConfiguration, NumberingConfiguration, Document are autoloaded via lib/uniword.rb
 
@@ -201,7 +201,7 @@ module Uniword
 
         # Parse Chart parts
         # Find all word/charts/chart*.xml files and match with relationships
-        chart_files = zip_content.keys.select { |k| k.match?(%r{^word/charts/chart\d+\.xml$}) }
+        chart_files = zip_content.keys.grep(%r{^word/charts/chart\d+\.xml$})
         if chart_files.any? && package.document_rels
           package.document.chart_parts ||= {}
           chart_files.each do |chart_path|
@@ -236,7 +236,7 @@ module Uniword
         return unless package.document
 
         # Find all media files
-        media_files = zip_content.keys.select { |k| k.match?(%r{^word/media/.+$}) }
+        media_files = zip_content.keys.grep(%r{^word/media/.+$})
         return if media_files.empty?
 
         package.document.image_parts ||= {}
@@ -247,14 +247,14 @@ module Uniword
           # Determine content type from extension
           ext = File.extname(filename).delete('.').downcase
           content_type = case ext
-                        when 'jpg', 'jpeg' then 'image/jpeg'
-                        when 'png' then 'image/png'
-                        when 'gif' then 'image/gif'
-                        when 'bmp' then 'image/bmp'
-                        when 'tiff', 'tif' then 'image/tiff'
-                        when 'svg' then 'image/svg+xml'
-                        else "image/#{ext}"
-                        end
+                         when 'jpg', 'jpeg' then 'image/jpeg'
+                         when 'png' then 'image/png'
+                         when 'gif' then 'image/gif'
+                         when 'bmp' then 'image/bmp'
+                         when 'tiff', 'tif' then 'image/tiff'
+                         when 'svg' then 'image/svg+xml'
+                         else "image/#{ext}"
+                         end
 
           # Generate a unique rId for this image
           r_id = "rIdImg#{package.document.image_parts.size + 1}"
@@ -262,10 +262,10 @@ module Uniword
           # Re-extract binary data directly from ZIP to avoid UTF-8 corruption
           # Use zip_path if available, otherwise fall back to corrupted content
           binary_data = if zip_path
-                         read_binary_from_zip(zip_path, media_path)
-                       else
-                         zip_content[media_path]
-                       end
+                          read_binary_from_zip(zip_path, media_path)
+                        else
+                          zip_content[media_path]
+                        end
 
           package.document.image_parts[r_id] = {
             data: binary_data,
@@ -335,7 +335,9 @@ module Uniword
         package.footnotes = document.footnotes if document.footnotes
         package.endnotes = document.endnotes if document.endnotes
         package.chart_parts = document.chart_parts if document.chart_parts
-        package.bibliography_sources = document.bibliography_sources if document.bibliography_sources
+        return unless document.bibliography_sources
+
+        package.bibliography_sources = document.bibliography_sources
       end
 
       # Extract media files from word/theme/media/ directory in DOCX
@@ -549,12 +551,12 @@ module Uniword
         if document&.image_parts && !document.image_parts.empty?
           document.image_parts.each_value do |image_data|
             ext = File.extname(image_data[:target]).delete('.')
-            unless content_types.defaults.any? { |d| d.extension == ext }
-              content_types.defaults << Uniword::ContentTypes::Default.new(
-                extension: ext,
-                content_type: image_data[:content_type]
-              )
-            end
+            next if content_types.defaults.any? { |d| d.extension == ext }
+
+            content_types.defaults << Uniword::ContentTypes::Default.new(
+              extension: ext,
+              content_type: image_data[:content_type]
+            )
           end
 
           # Image relationships are added after finding unique rIds
@@ -610,7 +612,7 @@ module Uniword
         footer_counter = 0
 
         if document&.headers && !document.headers.empty?
-          document.headers.each do |type, header_obj|
+          document.headers.each_key do |type|
             header_counter += 1
             r_id = "rIdHeader#{header_counter}"
 
@@ -639,7 +641,7 @@ module Uniword
         end
 
         if document&.footers && !document.footers.empty?
-          document.footers.each do |type, footer_obj|
+          document.footers.each_key do |type|
             footer_counter += 1
             r_id = "rIdFooter#{footer_counter}"
 
@@ -678,61 +680,87 @@ module Uniword
         )
 
         # Serialize Document Properties
-        content['docProps/core.xml'] = core_properties.to_xml(
-          encoding: 'UTF-8', prefix: false
-        ) if core_properties
+        if core_properties
+          content['docProps/core.xml'] = core_properties.to_xml(
+            encoding: 'UTF-8', prefix: false
+          )
+        end
 
-        content['docProps/app.xml'] = app_properties.to_xml(
-          encoding: 'UTF-8', prefix: false
-        ) if app_properties
+        if app_properties
+          content['docProps/app.xml'] = app_properties.to_xml(
+            encoding: 'UTF-8', prefix: false
+          )
+        end
 
         # Serialize Document Parts
-        content['word/document.xml'] = document.to_xml(
-          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
-        ) if document
+        if document
+          content['word/document.xml'] = document.to_xml(
+            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          )
+        end
 
-        content['word/styles.xml'] = styles.to_xml(
-          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
-        ) if styles
+        if styles
+          content['word/styles.xml'] = styles.to_xml(
+            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          )
+        end
 
-        content['word/numbering.xml'] = numbering.to_xml(
-          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
-        ) if numbering
+        if numbering
+          content['word/numbering.xml'] = numbering.to_xml(
+            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          )
+        end
 
-        content['word/settings.xml'] = settings.to_xml(
-          encoding: 'UTF-8', prefix: true
-        ) if settings
+        if settings
+          content['word/settings.xml'] = settings.to_xml(
+            encoding: 'UTF-8', prefix: true
+          )
+        end
 
-        content['word/fontTable.xml'] = font_table.to_xml(
-          encoding: 'UTF-8', prefix: true
-        ) if font_table
+        if font_table
+          content['word/fontTable.xml'] = font_table.to_xml(
+            encoding: 'UTF-8', prefix: true
+          )
+        end
 
-        content['word/webSettings.xml'] = web_settings.to_xml(
-          encoding: 'UTF-8', prefix: true
-        ) if web_settings
+        if web_settings
+          content['word/webSettings.xml'] = web_settings.to_xml(
+            encoding: 'UTF-8', prefix: true
+          )
+        end
 
-        content['word/_rels/document.xml.rels'] = document_rels.to_xml(
-          encoding: 'UTF-8', declaration: true
-        ) if document_rels
+        if document_rels
+          content['word/_rels/document.xml.rels'] = document_rels.to_xml(
+            encoding: 'UTF-8', declaration: true
+          )
+        end
 
         # Serialize Theme
-        content['word/theme/theme1.xml'] = theme.to_xml(
-          encoding: 'UTF-8', prefix: true
-        ) if theme
+        if theme
+          content['word/theme/theme1.xml'] = theme.to_xml(
+            encoding: 'UTF-8', prefix: true
+          )
+        end
 
-        content['word/theme/_rels/theme1.xml.rels'] = theme_rels.to_xml(
-          encoding: 'UTF-8', declaration: true
-        ) if theme_rels
+        if theme_rels
+          content['word/theme/_rels/theme1.xml.rels'] = theme_rels.to_xml(
+            encoding: 'UTF-8', declaration: true
+          )
+        end
 
         # Serialize Footnotes
-        content['word/footnotes.xml'] = footnotes.to_xml(
-          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
-        ) if footnotes
+        if footnotes
+          content['word/footnotes.xml'] = footnotes.to_xml(
+            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          )
+        end
 
         # Serialize Endnotes
-        content['word/endnotes.xml'] = endnotes.to_xml(
-          encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
-        ) if endnotes
+        if endnotes
+          content['word/endnotes.xml'] = endnotes.to_xml(
+            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          )
+        end
 
         # Serialize Bibliography Sources
         if document&.bibliography_sources
@@ -800,8 +828,8 @@ module Uniword
       # Get document body paragraphs as enumerable
       #
       # @return [Enumerator, Array<Paragraph>] Paragraph enumerator
-      def each_paragraph(&block)
-        paragraphs.each(&block)
+      def each_paragraph(&)
+        paragraphs.each(&)
       end
 
       # Alias for to_file (API compatibility)

@@ -51,7 +51,6 @@ module Uniword
       # @param path [String] Path to .dotx or .dotm file
       # @return [Document] Loaded document (Generated::Wordprocessingml::DocumentRoot)
       def self.from_file(path)
-
         # Extract ZIP content
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
@@ -136,7 +135,6 @@ module Uniword
       # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
       # @param path [String] Output path
       def self.to_file(document, path)
-
         # Create package
         package = new
 
@@ -167,7 +165,6 @@ module Uniword
       #
       # @param path [String] Output path
       def to_file(path)
-
         zip_content = to_zip_content
 
         packager = Infrastructure::ZipPackager.new

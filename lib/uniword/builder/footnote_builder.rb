@@ -27,12 +27,12 @@ module Uniword
       # @param text [String] Footnote text content
       # @yield [ParagraphBuilder] Builder for rich footnote content
       # @return [Wordprocessingml::Run] Run with footnote reference
-      def footnote(text = nil, &block)
+      def footnote(text = nil, &)
         id = next_footnote_id
         run = Wordprocessingml::Run.new(
           footnote_reference: Wordprocessingml::FootnoteReference.new(id: id.to_s)
         )
-        create_footnote_entry(id, text, &block)
+        create_footnote_entry(id, text, &)
         run
       end
 
@@ -41,12 +41,12 @@ module Uniword
       # @param text [String] Endnote text content
       # @yield [ParagraphBuilder] Builder for rich endnote content
       # @return [Wordprocessingml::Run] Run with endnote reference
-      def endnote(text = nil, &block)
+      def endnote(text = nil, &)
         id = next_endnote_id
         run = Wordprocessingml::Run.new(
           endnote_reference: Wordprocessingml::EndnoteReference.new(id: id.to_s)
         )
-        create_endnote_entry(id, text, &block)
+        create_endnote_entry(id, text, &)
         run
       end
 

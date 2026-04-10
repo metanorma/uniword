@@ -407,7 +407,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         namespace_scope [
           { namespace: Uniword::Ooxml::Namespaces::Relationships,
-            declare: :auto },
+            declare: :auto }
         ]
         map_attribute 'r:id', to: :r_id
       end
@@ -546,7 +546,7 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
 
         map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
@@ -580,7 +580,7 @@ module Uniword
       # Note: Both docId elements have their values captured via map_element (w14)
       # and from_xml (w15). The w15:docId's GUID is preserved in the model.
       def self.from_xml(xml_content)
-        settings = super(xml_content)
+        settings = super
 
         doc = Nokogiri::XML(xml_content)
         doc_ids = doc.xpath('//*[local-name()="docId"]')
@@ -589,9 +589,9 @@ module Uniword
           val = elem.attributes['val']&.value
           next unless val
 
-          if ns_uri == 'http://schemas.microsoft.com/office/word/2012/wordml'
+          if (ns_uri == 'http://schemas.microsoft.com/office/word/2012/wordml') && !settings.w15_doc_id&.val
             # w15:docId - manually deserialize since map_element captures w14:docId
-            settings.w15_doc_id = W15DocId.new(val: val) unless settings.w15_doc_id&.val
+            settings.w15_doc_id = W15DocId.new(val: val)
           end
           # w14:docId is captured by map_element 'docId', no action needed
         end

@@ -48,12 +48,12 @@ module Uniword
         tab_stops[index]
       end
 
-      def each(&block)
-        tab_stops.each(&block)
+      def each(&)
+        tab_stops.each(&)
       end
 
-      def map(&block)
-        tab_stops.map(&block)
+      def map(&)
+        tab_stops.map(&)
       end
 
       def empty?

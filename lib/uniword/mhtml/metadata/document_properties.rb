@@ -37,7 +37,7 @@ module Uniword
         attribute :version, :string
 
         xml do
-          element "DocumentProperties"
+          element 'DocumentProperties'
           namespace Uniword::Mhtml::Namespaces::Office
           map_element 'Author', to: :author
           map_element 'LastAuthor', to: :last_author

@@ -16,7 +16,7 @@ module Uniword
         element 'headerReference'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :auto },
+          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :auto }
         ]
 
         map_attribute 'type', to: :type

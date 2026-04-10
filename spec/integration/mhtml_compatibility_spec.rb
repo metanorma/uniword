@@ -131,7 +131,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs Word namespace declarations
       # expect(content).to include('xmlns:w="urn:schemas-microsoft-com:office:word"')
       # expect(content).to include('xmlns:o="urn:schemas-microsoft-com:office:office"')
@@ -177,7 +177,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
 
       # TODO: MHTML writer needs Word CSS class generation
       # expect(content).to include('class="WordSection1"')
@@ -198,7 +198,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
 
       # TODO: MHTML writer needs Word CSS stylesheet generation
       # expect(content).to include('<style>')
@@ -352,7 +352,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs Word XML namespace
       # expect(content).to include('xmlns:w=')
     end
@@ -361,7 +361,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs Office XML namespace
       # expect(content).to include('xmlns:o=')
     end
@@ -370,7 +370,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs Word section class generation
       # expect(content).to include('WordSection')
     end
@@ -379,7 +379,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs @page CSS rules
       # expect(content).to match(/@page/)
     end
@@ -388,7 +388,7 @@ RSpec.describe 'MHTML Compatibility', type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
       # TODO: MHTML writer needs mso-* CSS properties
       # expect(content).to match(/mso-/i)
     end

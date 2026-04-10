@@ -16,7 +16,7 @@ module Uniword
       attribute :customStyle, Uniword::Ooxml::Types::OoxmlBoolean
       attribute :name, StyleName
       attribute :basedOn, BasedOn
-      attribute :nextStyle, Next  # Renamed from 'next' to avoid Ruby keyword conflict
+      attribute :nextStyle, Next # Renamed from 'next' to avoid Ruby keyword conflict
       attribute :link, Link
       attribute :uiPriority, UiPriority
       attribute :qFormat, Properties::QuickFormat
@@ -49,7 +49,7 @@ module Uniword
         instance.name = StyleName.new(val: value) if value
       end
 
-      def yaml_name_to(instance, doc)
+      def yaml_name_to(instance, _doc)
         instance.name&.val
       end
 
@@ -57,7 +57,7 @@ module Uniword
         instance.qFormat = Properties::QuickFormat.new(value: value) unless value.nil?
       end
 
-      def yaml_quick_format_to(instance, doc)
+      def yaml_quick_format_to(instance, _doc)
         instance.qFormat&.value
       end
 
@@ -65,7 +65,7 @@ module Uniword
         instance.basedOn = BasedOn.new(val: value) if value
       end
 
-      def yaml_based_on_to(instance, doc)
+      def yaml_based_on_to(instance, _doc)
         instance.basedOn&.val
       end
 
@@ -73,7 +73,7 @@ module Uniword
         instance.nextStyle = Next.new(val: value) if value
       end
 
-      def yaml_next_style_to(instance, doc)
+      def yaml_next_style_to(instance, _doc)
         instance.nextStyle&.val
       end
 
@@ -81,7 +81,7 @@ module Uniword
         instance.link = Link.new(val: value) if value
       end
 
-      def yaml_linked_style_to(instance, doc)
+      def yaml_linked_style_to(instance, _doc)
         instance.link&.val
       end
 
@@ -89,7 +89,7 @@ module Uniword
         instance.uiPriority = UiPriority.new(val: value.to_s) if value
       end
 
-      def yaml_ui_priority_to(instance, doc)
+      def yaml_ui_priority_to(instance, _doc)
         instance.uiPriority&.val&.to_i
       end
 
@@ -101,12 +101,12 @@ module Uniword
         map_attribute 'type', to: :type
         map_attribute 'styleId', to: :styleId
         map_attribute 'default', to: :default, render_default: false,
-          value_map: { to: { true => true, false => :omitted } }
+                                 value_map: { to: { true => true, false => :omitted } }
         map_attribute 'customStyle', to: :customStyle, render_default: false,
-          value_map: { to: { true => true, false => :omitted } }
+                                     value_map: { to: { true => true, false => :omitted } }
         map_element 'name', to: :name, render_nil: false
         map_element 'basedOn', to: :basedOn, render_nil: false
-        map_element 'next', to: :nextStyle, render_nil: false  # Maps XML 'next' to nextStyle attribute
+        map_element 'next', to: :nextStyle, render_nil: false # Maps XML 'next' to nextStyle attribute
         map_element 'link', to: :link, render_nil: false
         map_element 'uiPriority', to: :uiPriority, render_nil: false
         map_element 'qFormat', to: :qFormat, render_nil: false
@@ -212,6 +212,7 @@ module Uniword
         val = qFormat
         # Handle boolean primitive
         return true if val == true
+
         # Handle Bold wrapper object
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
@@ -248,6 +249,7 @@ module Uniword
 
         val = pPr.keep_next
         return true if val == true
+
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
@@ -260,6 +262,7 @@ module Uniword
 
         val = pPr.keep_lines
         return true if val == true
+
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end

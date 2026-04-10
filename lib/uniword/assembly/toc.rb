@@ -103,9 +103,7 @@ module Uniword
         paragraphs = []
 
         # Add title paragraph
-        if @title && !@title.empty?
-          paragraphs << create_title_paragraph
-        end
+        paragraphs << create_title_paragraph if @title && !@title.empty?
 
         # Add entry paragraphs
         @entries.each do |entry|
@@ -176,7 +174,7 @@ module Uniword
         return match[1].to_i if match
 
         # Check for outline level in properties
-        if paragraph.properties&.respond_to?(:outline_level)
+        if paragraph.properties.respond_to?(:outline_level)
           outline = paragraph.properties.outline_level
           return outline if outline.is_a?(Integer)
         end

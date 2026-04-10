@@ -79,7 +79,7 @@ RSpec.describe 'MHT → DOCX Full Fidelity' do
 
     it 'has author from DocumentProperties' do
       props = mht_doc.document_properties
-      # Note: blank.mht was created with Ronald Tse as author
+      # NOTE: blank.mht was created with Ronald Tse as author
       expect(props.author).to include('Ronald')
     end
 

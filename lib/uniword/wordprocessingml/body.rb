@@ -12,7 +12,8 @@ module Uniword
       attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
       attribute :tables, Table, collection: true, initialize_empty: true
       attribute :section_properties, SectionProperties
-      attribute :structured_document_tags, StructuredDocumentTag, collection: true, initialize_empty: true
+      attribute :structured_document_tags, StructuredDocumentTag, collection: true,
+                                                                  initialize_empty: true
 
       xml do
         element 'body'
@@ -71,23 +72,23 @@ module Uniword
 
         # Add missing paragraphs
         (paragraphs.size - ordered_p_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "p")
+          element_order << Lutaml::Xml::Element.new('Element', 'p')
         end
 
         # Add missing tables
         (tables.size - ordered_tbl_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "tbl")
+          element_order << Lutaml::Xml::Element.new('Element', 'tbl')
         end
 
         # Add missing structured document tags
         (structured_document_tags.size - ordered_sdt_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "sdt")
+          element_order << Lutaml::Xml::Element.new('Element', 'sdt')
         end
 
         # Ensure section_properties is in element_order if present
-        if section_properties && !element_order.any? { |e| e.name == 'sectPr' }
-          element_order << Lutaml::Xml::Element.new("Element", "sectPr")
-        end
+        return unless section_properties && element_order.none? { |e| e.name == 'sectPr' }
+
+        element_order << Lutaml::Xml::Element.new('Element', 'sectPr')
       end
     end
   end

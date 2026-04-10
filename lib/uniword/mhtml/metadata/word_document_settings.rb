@@ -25,7 +25,7 @@ module Uniword
         attribute :math_properties_raw, :string
 
         xml do
-          element "WordDocument"
+          element 'WordDocument'
           namespace Uniword::Mhtml::Namespaces::Word
           map_element 'TrackMoves', to: :track_moves
           map_element 'TrackFormatting', to: :track_formatting

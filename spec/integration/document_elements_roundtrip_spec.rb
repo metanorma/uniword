@@ -4,7 +4,8 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'Document Elements Round-Trip' do
-  DOCUMENT_ELEMENTS_DIR = File.join(__dir__, '../../spec/fixtures/uniword-private/word-resources/document-elements/en')
+  DOCUMENT_ELEMENTS_DIR = File.join(__dir__,
+                                    '../../spec/fixtures/uniword-private/word-resources/document-elements/en')
 
   # All 8 document element reference files
   DOCUMENT_ELEMENT_FILES = {

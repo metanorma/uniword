@@ -17,13 +17,13 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element "styles"
+        element 'styles'
         namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # Force mc: namespace declaration on root element
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
 
         # Map mc:Ignorable attribute

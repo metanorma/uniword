@@ -65,7 +65,7 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element "theme"
+        element 'theme'
         # Theme element is in DrawingML namespace
         namespace Ooxml::Namespaces::DrawingML
 
@@ -178,6 +178,7 @@ module Uniword
       # @return [String, nil] The RGB hex color value
       def resolve_color(theme_color)
         return nil unless theme_color
+
         color(theme_color)
       end
 
@@ -187,6 +188,7 @@ module Uniword
       # @return [String, nil] The typeface name
       def resolve_font(theme_font_ref)
         return nil unless theme_font_ref && font_scheme
+
         case theme_font_ref
         when 'majorAscii', 'majorHAnsi'
           font_scheme.major_font

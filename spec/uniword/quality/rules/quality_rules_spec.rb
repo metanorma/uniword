@@ -164,7 +164,7 @@ RSpec.describe 'Quality Rules' do
     it 'detects images without alt text' do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
-      drawing = create_image_with_alt_text(nil)  # nil = no alt text
+      drawing = create_image_with_alt_text(nil) # nil = no alt text
       run.drawings << drawing
       para.runs << run
       document.body.paragraphs << para
@@ -178,7 +178,7 @@ RSpec.describe 'Quality Rules' do
     it 'warns for short alt text' do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
-      drawing = create_image_with_alt_text('Short')  # Less than 10 chars
+      drawing = create_image_with_alt_text('Short') # Less than 10 chars
       run.drawings << drawing
       para.runs << run
       document.body.paragraphs << para

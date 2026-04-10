@@ -43,7 +43,7 @@ module Uniword
       # @param height [Integer] Page height in twips (default US Letter: 15840)
       # @param orientation [String] 'portrait' or 'landscape'
       # @return [self]
-      def page_size(width: 12240, height: 15840, orientation: 'portrait')
+      def page_size(width: 12_240, height: 15_840, orientation: 'portrait')
         @model.page_size ||= Wordprocessingml::PageSize.new
         @model.page_size.width = width
         @model.page_size.height = height
@@ -90,7 +90,7 @@ module Uniword
       #
       # @param options [Hash] Border options
       # @return [self]
-      def page_borders(**options)
+      def page_borders(**_options)
         @model.page_borders ||= Wordprocessingml::PageBorders.new
         self
       end

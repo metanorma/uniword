@@ -41,8 +41,8 @@ module Uniword
       # Note: These shadow the convenience methods below - use spacing.line/line_rule for XML
       attribute :spacing_before, :integer
       attribute :spacing_after, :integer
-      attribute :line_spacing, :float  # Flat attribute for simple API (supports 1.5, 2.0, etc.)
-      attribute :line_rule, :string       # Flat attribute for simple API
+      attribute :line_spacing, :float # Flat attribute for simple API (supports 1.5, 2.0, etc.)
+      attribute :line_rule, :string # Flat attribute for simple API
 
       # Flat indentation attributes (for parser compatibility)
       attribute :indent_left, :integer
@@ -86,7 +86,8 @@ module Uniword
         map 'page_break_before', to: :page_break_before
         map 'outline_level', with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
         map 'suppress_line_numbers', to: :suppress_line_numbers
-        map 'contextual_spacing', with: { from: :yaml_contextual_spacing_from, to: :yaml_contextual_spacing_to }
+        map 'contextual_spacing',
+            with: { from: :yaml_contextual_spacing_from, to: :yaml_contextual_spacing_to }
         map 'bidirectional', to: :bidirectional
         map 'indent_left', to: :indent_left
         map 'indent_right', to: :indent_right
@@ -99,7 +100,7 @@ module Uniword
         instance.style = Properties::StyleReference.new(value: value) if value
       end
 
-      def yaml_style_to(instance, doc)
+      def yaml_style_to(instance, _doc)
         instance.style&.value
       end
 
@@ -107,7 +108,7 @@ module Uniword
         instance.alignment = Properties::Alignment.new(value: value) if value
       end
 
-      def yaml_alignment_to(instance, doc)
+      def yaml_alignment_to(instance, _doc)
         instance.alignment&.value
       end
 
@@ -115,7 +116,7 @@ module Uniword
         instance.keep_next_wrapper = Properties::KeepNext.new(value: value) unless value.nil?
       end
 
-      def yaml_keep_next_to(instance, doc)
+      def yaml_keep_next_to(instance, _doc)
         instance.keep_next_wrapper&.value
       end
 
@@ -123,7 +124,7 @@ module Uniword
         instance.keep_lines_wrapper = Properties::KeepLines.new(value: value) unless value.nil?
       end
 
-      def yaml_keep_lines_to(instance, doc)
+      def yaml_keep_lines_to(instance, _doc)
         instance.keep_lines_wrapper&.value
       end
 
@@ -131,15 +132,17 @@ module Uniword
         instance.outline_level = Properties::OutlineLevel.new(value: value.to_i) if value
       end
 
-      def yaml_outline_level_to(instance, doc)
+      def yaml_outline_level_to(instance, _doc)
         instance.outline_level&.value
       end
 
       def yaml_contextual_spacing_from(instance, value)
-        instance.contextual_spacing = Properties::ContextualSpacing.new(value: value) unless value.nil?
+        return if value.nil?
+
+        instance.contextual_spacing = Properties::ContextualSpacing.new(value: value)
       end
 
-      def yaml_contextual_spacing_to(instance, doc)
+      def yaml_contextual_spacing_to(instance, _doc)
         instance.contextual_spacing&.value
       end
 
@@ -149,7 +152,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-      # Style reference - maps w:pStyle w:val="..." to style attribute
+        # Style reference - maps w:pStyle w:val="..." to style attribute
         map_element 'pStyle', to: :style, render_nil: false
 
         # Alignment - maps w:jc w:val="..." to alignment attribute
@@ -203,7 +206,7 @@ module Uniword
         keep_lines_val = attrs.key?(:keep_lines) ? attrs.delete(:keep_lines) : nil
         style_val = attrs.key?(:style) ? attrs.delete(:style) : nil
 
-        super(attrs)
+        super
 
         # Set wrapper attributes after super (super clears them)
         self.keep_next = keep_next_val if keep_next_val
@@ -222,14 +225,10 @@ module Uniword
       # where the flat attribute is set but the wrapper object is not
       def convert_flat_attributes!
         # Style - convert string to StyleReference wrapper
-        if @style.is_a?(String)
-          self.style = Properties::StyleReference.new(value: @style)
-        end
+        self.style = Properties::StyleReference.new(value: @style) if @style.is_a?(String)
 
         # Alignment - convert string to Alignment wrapper
-        if @alignment.is_a?(String)
-          self.alignment = Properties::Alignment.new(value: @alignment)
-        end
+        self.alignment = Properties::Alignment.new(value: @alignment) if @alignment.is_a?(String)
 
         # Spacing - create spacing object from flat spacing attributes
         if (@spacing_before || @spacing_after || @line_spacing || @line_rule) && !@spacing
@@ -249,16 +248,16 @@ module Uniword
         end
 
         # Run properties from flat attributes
-        if @run_properties && !@run_properties.is_a?(RunProperties)
-          rp = RunProperties.new
-          rp.bold = @run_properties[:bold] if @run_properties[:bold]
-          rp.italic = @run_properties[:italic] if @run_properties[:italic]
-          rp.underline = @run_properties[:underline] if @run_properties[:underline]
-          rp.color = @run_properties[:color] if @run_properties[:color]
-          rp.font = @run_properties[:font] if @run_properties[:font]
-          rp.size = @run_properties[:size] if @run_properties[:size]
-          @run_properties = rp
-        end
+        return unless @run_properties && !@run_properties.is_a?(RunProperties)
+
+        rp = RunProperties.new
+        rp.bold = @run_properties[:bold] if @run_properties[:bold]
+        rp.italic = @run_properties[:italic] if @run_properties[:italic]
+        rp.underline = @run_properties[:underline] if @run_properties[:underline]
+        rp.color = @run_properties[:color] if @run_properties[:color]
+        rp.font = @run_properties[:font] if @run_properties[:font]
+        rp.size = @run_properties[:size] if @run_properties[:size]
+        @run_properties = rp
       end
 
       # Get section properties
@@ -296,16 +295,16 @@ module Uniword
       #
       # @param value [Boolean] True to enable keep_next
       def keep_next=(value)
-        case value
-        when Properties::KeepNext
-          self.keep_next_wrapper = value
-        when true, false
-          self.keep_next_wrapper = value ? Properties::KeepNext.new(value: true) : nil
-        when nil
-          self.keep_next_wrapper = nil
-        else
-          self.keep_next_wrapper = value
-        end
+        self.keep_next_wrapper = case value
+                                 when Properties::KeepNext
+                                   value
+                                 when true, false
+                                   value ? Properties::KeepNext.new(value: true) : nil
+                                 when nil
+                                   nil
+                                 else
+                                   value
+                                 end
       end
 
       # Boolean predicate for keep_lines
@@ -324,16 +323,16 @@ module Uniword
       #
       # @param value [Boolean] True to enable keep_lines
       def keep_lines=(value)
-        case value
-        when Properties::KeepLines
-          self.keep_lines_wrapper = value
-        when true, false
-          self.keep_lines_wrapper = value ? Properties::KeepLines.new(value: true) : nil
-        when nil
-          self.keep_lines_wrapper = nil
-        else
-          self.keep_lines_wrapper = value
-        end
+        self.keep_lines_wrapper = case value
+                                  when Properties::KeepLines
+                                    value
+                                  when true, false
+                                    value ? Properties::KeepLines.new(value: true) : nil
+                                  when nil
+                                    nil
+                                  else
+                                    value
+                                  end
       end
     end
   end

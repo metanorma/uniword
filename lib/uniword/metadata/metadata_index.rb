@@ -146,8 +146,8 @@ module Uniword
       #
       # @example Filter by author
       #   by_author = index.filter { |path, meta| meta[:author] == "John" }
-      def filter(&block)
-        @entries.select(&block)
+      def filter(&)
+        @entries.select(&)
       end
 
       # Find first entry matching condition.
@@ -157,8 +157,8 @@ module Uniword
       #
       # @example Find by title
       #   entry = index.find { |path, meta| meta[:title] =~ /Report/ }
-      def find(&block)
-        @entries.find(&block)
+      def find(&)
+        @entries.find(&)
       end
 
       # Query entries by metadata field.

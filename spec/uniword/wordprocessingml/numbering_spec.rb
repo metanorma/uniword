@@ -73,7 +73,8 @@ RSpec.describe 'Numbering Feature' do
       end
 
       it 'returns custom text if provided' do
-        level = Uniword::Wordprocessingml::NumberingLevel.new(level: 0, format: 'decimal', text: '%1)')
+        level = Uniword::Wordprocessingml::NumberingLevel.new(level: 0, format: 'decimal',
+                                                              text: '%1)')
         expect(level.numbering_text).to eq('%1)')
       end
     end
@@ -159,19 +160,22 @@ RSpec.describe 'Numbering Feature' do
       end
 
       it 'creates lower roman numbering' do
-        defn = Uniword::Wordprocessingml::NumberingDefinition.roman(abstract_num_id: 4, upper: false)
+        defn = Uniword::Wordprocessingml::NumberingDefinition.roman(abstract_num_id: 4,
+                                                                    upper: false)
         expect(defn.levels[0].format_value).to eq('lowerRoman')
       end
     end
 
     describe '.letter' do
       it 'creates upper letter numbering' do
-        defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 5, upper: true)
+        defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 5,
+                                                                     upper: true)
         expect(defn.levels[0].format_value).to eq('upperLetter')
       end
 
       it 'creates lower letter numbering' do
-        defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 6, upper: false)
+        defn = Uniword::Wordprocessingml::NumberingDefinition.letter(abstract_num_id: 6,
+                                                                     upper: false)
         expect(defn.levels[0].format_value).to eq('lowerLetter')
       end
     end

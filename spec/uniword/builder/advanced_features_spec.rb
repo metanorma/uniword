@@ -228,7 +228,10 @@ RSpec.describe 'Scenario: Document with section-specific headers' do
     doc.section do |s|
       s.header(type: 'default') { |h| h << 'Default Header' }
       s.header(type: 'first') { |h| h << 'First Page Header' }
-      s.footer(type: 'default') { |f| f << 'Page '; f << Uniword::Builder.page_number_field }
+      s.footer(type: 'default') do |f|
+        f << 'Page '
+        f << Uniword::Builder.page_number_field
+      end
     end
 
     doc.paragraph { |p| p << 'Page 1 content' }

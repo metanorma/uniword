@@ -19,7 +19,7 @@ module Uniword
       attribute :graphic, Drawingml::Graphic
 
       xml do
-        element "inline"
+        element 'inline'
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 

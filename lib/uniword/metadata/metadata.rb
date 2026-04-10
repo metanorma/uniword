@@ -144,8 +144,8 @@ module Uniword
       #
       # @example Select core properties
       #   core = metadata.select { |k, v| CORE_KEYS.include?(k) }
-      def select(&block)
-        @properties.select(&block)
+      def select(&)
+        @properties.select(&)
       end
 
       # Reject properties matching a condition.
@@ -155,8 +155,8 @@ module Uniword
       #
       # @example Reject nil values
       #   without_nils = metadata.reject { |k, v| v.nil? }
-      def reject(&block)
-        @properties.reject(&block)
+      def reject(&)
+        @properties.reject(&)
       end
 
       # Compact properties (remove nil values).

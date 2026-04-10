@@ -33,21 +33,25 @@ module Uniword
     # Resource enumeration - return empty array by default
     def available_themes
       return [] unless themes_path && File.directory?(themes_path)
+
       Dir.glob(File.join(themes_path, '*.thmx')).map { |f| File.basename(f, '.thmx') }
     end
 
     def available_stylesets
       return [] unless stylesets_path && File.directory?(stylesets_path)
+
       Dir.glob(File.join(stylesets_path, '*.dotx')).map { |f| File.basename(f, '.dotx') }
     end
 
     def available_color_schemes
       return [] unless color_schemes_path && File.directory?(color_schemes_path)
+
       Dir.glob(File.join(color_schemes_path, '*.xml')).map { |f| File.basename(f, '.xml') }
     end
 
     def available_font_schemes
       return [] unless font_schemes_path && File.directory?(font_schemes_path)
+
       Dir.glob(File.join(font_schemes_path, '*.xml')).map { |f| File.basename(f, '.xml') }
     end
   end

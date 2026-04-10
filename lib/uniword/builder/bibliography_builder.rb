@@ -20,7 +20,7 @@ module Uniword
     #   doc.paragraph { |p| p << SdtBuilder.bibliography.build }
     class BibliographyBuilder
       CHART_REL_TYPE =
-        'http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography'.freeze
+        'http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography'
 
       attr_reader :sources
 
@@ -51,11 +51,11 @@ module Uniword
       # @param edition [String, nil] Edition
       # @return [self]
       def book(tag:, author:, title:, year:, publisher:,
-                   city: nil, edition: nil)
+               city: nil, edition: nil)
         src = build_source('Book', tag: tag, author: author,
-                           title: title, year: year,
-                           publisher: publisher, city: city,
-                           edition: edition)
+                                   title: title, year: year,
+                                   publisher: publisher, city: city,
+                                   edition: edition)
         @sources.source << src
         self
       end
@@ -72,11 +72,11 @@ module Uniword
       # @param pages [String, nil] Page range
       # @return [self]
       def journal(tag:, author:, title:, year:, journal:,
-                      volume: nil, issue: nil, pages: nil)
+                  volume: nil, issue: nil, pages: nil)
         src = build_source('JournalArticle', tag: tag, author: author,
-                           title: title, year: year,
-                           publisher: journal, volume: volume,
-                           issue: issue, pages: pages)
+                                             title: title, year: year,
+                                             publisher: journal, volume: volume,
+                                             issue: issue, pages: pages)
         @sources.source << src
         self
       end
@@ -91,7 +91,7 @@ module Uniword
       # @return [self]
       def website(tag:, title:, url:, author: nil, year: nil)
         src = build_source('InternetSite', tag: tag, author: author,
-                           title: title, year: year, url: url)
+                                           title: title, year: year, url: url)
         @sources.source << src
         self
       end
@@ -106,10 +106,10 @@ module Uniword
       # @param city [String, nil] Conference location
       # @return [self]
       def conference(tag:, author:, title:, year:, publisher:,
-                         city: nil)
+                     city: nil)
         src = build_source('ConferenceProceedings', tag: tag,
-                           author: author, title: title, year: year,
-                           publisher: publisher, city: city)
+                                                    author: author, title: title, year: year,
+                                                    publisher: publisher, city: city)
         @sources.source << src
         self
       end
@@ -124,9 +124,9 @@ module Uniword
       # @param kwargs [Hash] Additional fields (publisher, url, pages, etc.)
       # @return [self]
       def source(tag:, source_type:, title:, author: nil,
-                     year: nil, **kwargs)
+                 year: nil, **)
         src = build_source(source_type, tag: tag, author: author,
-                           title: title, year: year, **kwargs)
+                                        title: title, year: year, **)
         @sources.source << src
         self
       end

@@ -27,7 +27,8 @@ module Uniword
 
         map_attribute 'abstractNumId', to: :abstract_num_id
         # w15:restartNumberingAfterBreak - typed attribute with namespace
-        map_attribute 'restartNumberingAfterBreak', to: :restart_numbering_after_break, render_nil: false
+        map_attribute 'restartNumberingAfterBreak', to: :restart_numbering_after_break,
+                                                    render_nil: false
         map_element 'nsid', to: :nsid, render_nil: false
         map_element 'multiLevelType', to: :multi_level_type, render_nil: false
         map_element 'tmpl', to: :tmpl, render_nil: false
@@ -45,7 +46,10 @@ module Uniword
 
       # Add a level to this definition
       def add_level(level_obj = nil, **level_attrs)
-        raise ArgumentError, "Cannot add more than #{MAX_LEVELS} levels" if levels.size >= MAX_LEVELS
+        if levels.size >= MAX_LEVELS
+          raise ArgumentError,
+                "Cannot add more than #{MAX_LEVELS} levels"
+        end
 
         # Auto-assign level index based on position in array
         level_index = levels.size

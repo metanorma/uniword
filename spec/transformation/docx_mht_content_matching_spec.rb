@@ -28,7 +28,7 @@ RSpec.describe 'DOCX → MHT Content Matching' do
 
     str = str.dup if str.frozen?
     str.force_encoding('BINARY') if str.encoding == Encoding::UTF_8
-    str.gsub(/=([0-9A-Fa-f]{2})/) { $1.to_i(16).chr }.force_encoding('UTF-8')
+    str.gsub(/=([0-9A-Fa-f]{2})/) { Regexp.last_match(1).to_i(16).chr }.force_encoding('UTF-8')
   end
 
   # Helper: Normalize HTML for comparison (strip whitespace variations)
@@ -94,8 +94,8 @@ RSpec.describe 'DOCX → MHT Content Matching' do
   # Parse fixture MHT and extract body HTML
   def fixture_mht_body(mht_path)
     content = File.read(mht_path)
-    if content =~ /<body[^>]*>(.*)<\/body>/im
-      decode_qp($1)
+    if content =~ %r{<body[^>]*>(.*)</body>}im
+      decode_qp(Regexp.last_match(1))
     else
       ''
     end
@@ -109,25 +109,25 @@ RSpec.describe 'DOCX → MHT Content Matching' do
     it 'matches paragraph count (1)' do
       generated_count = count_elements(generated_html, 'p')
       expect(generated_count).to eq(expected[:paragraphs]),
-        "Expected #{expected[:paragraphs]} paragraphs, got #{generated_count}"
+                                 "Expected #{expected[:paragraphs]} paragraphs, got #{generated_count}"
     end
 
     it 'matches SDT count (0)' do
       generated_count = count_sdts(generated_html)
       expect(generated_count).to eq(expected[:sdts]),
-        "Expected #{expected[:sdts]} SDTs, got #{generated_count}"
+                                 "Expected #{expected[:sdts]} SDTs, got #{generated_count}"
     end
 
     it 'matches hyperlink count (0)' do
       generated_count = count_hyperlinks(generated_html)
       expect(generated_count).to eq(expected[:hyperlinks]),
-        "Expected #{expected[:hyperlinks]} hyperlinks, got #{generated_count}"
+                                 "Expected #{expected[:hyperlinks]} hyperlinks, got #{generated_count}"
     end
 
     it 'matches table count (0)' do
       generated_count = count_elements(generated_html, 'table')
       expect(generated_count).to eq(expected[:tables]),
-        "Expected #{expected[:tables]} tables, got #{generated_count}"
+                                 "Expected #{expected[:tables]} tables, got #{generated_count}"
     end
 
     it 'body text content is non-empty' do
@@ -146,14 +146,14 @@ RSpec.describe 'DOCX → MHT Content Matching' do
     let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES['apa'][:mht]) }
     let(:expected) { EXPECTED_COUNTS['apa'] }
 
-    # Note: MHT fixtures have MORE paragraphs than DOCX because Word
+    # NOTE: MHT fixtures have MORE paragraphs than DOCX because Word
     # expands inline content when saving to MHT format.
     # DOCX: 21 paragraphs → MHT fixture: 84 paragraphs
     it 'generates paragraphs (DOCX has 21, fixture has 84)' do
       generated_count = count_elements(generated_html, 'p')
       # We should have at least the DOCX count
       expect(generated_count).to be >= 21,
-        "Expected at least 21 paragraphs (DOCX count), got #{generated_count}"
+                                 "Expected at least 21 paragraphs (DOCX count), got #{generated_count}"
       # The fixture has 84, we may not match that due to Word's expansion behavior
     end
 
@@ -162,14 +162,14 @@ RSpec.describe 'DOCX → MHT Content Matching' do
     it 'generates SDTs matching DOCX count (17)' do
       generated_count = count_sdts(generated_html)
       expect(generated_count).to eq(17),
-        "Expected 17 SDTs (DOCX count), got #{generated_count}"
+                                 "Expected 17 SDTs (DOCX count), got #{generated_count}"
     end
 
     it 'generates hyperlinks from DOCX relationships' do
       # DOCX has 0 hyperlinks exposed in relationships
       generated_count = count_hyperlinks(generated_html)
       expect(generated_count).to eq(0),
-        "Expected 0 hyperlinks (DOCX has none), got #{generated_count}"
+                                 "Expected 0 hyperlinks (DOCX has none), got #{generated_count}"
     end
 
     it 'generates 1 table' do
@@ -179,7 +179,7 @@ RSpec.describe 'DOCX → MHT Content Matching' do
 
     it 'has non-empty body text' do
       text = strip_tags(generated_html)
-      expect(text.length).to be > 100, "Expected substantial text content"
+      expect(text.length).to be > 100, 'Expected substantial text content'
     end
 
     it 'has MsoTitle class' do
@@ -207,14 +207,14 @@ RSpec.describe 'DOCX → MHT Content Matching' do
     it 'generates paragraphs (DOCX has 11, fixture has 51)' do
       generated_count = count_elements(generated_html, 'p')
       expect(generated_count).to be >= 11,
-        "Expected at least 11 paragraphs (DOCX count), got #{generated_count}"
+                                 "Expected at least 11 paragraphs (DOCX count), got #{generated_count}"
     end
 
     # SDT count: DOCX has 8, MHT fixture has 24
     it 'generates SDTs matching DOCX count (8)' do
       generated_count = count_sdts(generated_html)
       expect(generated_count).to eq(8),
-        "Expected 8 SDTs (DOCX count), got #{generated_count}"
+                                 "Expected 8 SDTs (DOCX count), got #{generated_count}"
     end
 
     it 'matches hyperlink count (0)' do
@@ -229,7 +229,7 @@ RSpec.describe 'DOCX → MHT Content Matching' do
 
     it 'has non-empty body text' do
       text = strip_tags(generated_html)
-      expect(text.length).to be > 100, "Expected substantial text content"
+      expect(text.length).to be > 100, 'Expected substantial text content'
     end
 
     it 'has MsoTitle class' do
@@ -239,7 +239,9 @@ RSpec.describe 'DOCX → MHT Content Matching' do
   end
 
   describe 'cover_toc fixture' do
-    let(:generated_html) { docx_to_mht_body(CONTENT_MATCHING_FIXTURES['cover_toc'][:docx], 'cover_toc') }
+    let(:generated_html) do
+      docx_to_mht_body(CONTENT_MATCHING_FIXTURES['cover_toc'][:docx], 'cover_toc')
+    end
     let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES['cover_toc'][:mht]) }
     let(:expected) { EXPECTED_COUNTS['cover_toc'] }
 
@@ -247,20 +249,20 @@ RSpec.describe 'DOCX → MHT Content Matching' do
     it 'generates paragraphs (DOCX has 7, fixture has 39)' do
       generated_count = count_elements(generated_html, 'p')
       expect(generated_count).to be >= 7,
-        "Expected at least 7 paragraphs (DOCX count), got #{generated_count}"
+                                 "Expected at least 7 paragraphs (DOCX count), got #{generated_count}"
     end
 
     # SDT count: DOCX has 4, MHT fixture has 22
     it 'generates SDTs matching DOCX count (4)' do
       generated_count = count_sdts(generated_html)
       expect(generated_count).to eq(4),
-        "Expected 4 SDTs (DOCX count), got #{generated_count}"
+                                 "Expected 4 SDTs (DOCX count), got #{generated_count}"
     end
 
     it 'generates hyperlinks (DOCX has 0, fixture has 3)' do
       generated_count = count_hyperlinks(generated_html)
       expect(generated_count).to eq(0),
-        "Expected 0 hyperlinks (DOCX has none), got #{generated_count}"
+                                 "Expected 0 hyperlinks (DOCX has none), got #{generated_count}"
     end
 
     it 'matches table count (1)' do
@@ -270,7 +272,7 @@ RSpec.describe 'DOCX → MHT Content Matching' do
 
     it 'has non-empty body text' do
       text = strip_tags(generated_html)
-      expect(text.length).to be > 50, "Expected substantial text content"
+      expect(text.length).to be > 50, 'Expected substantial text content'
     end
 
     # DOCX uses Title style, not MsoTitle directly
@@ -293,7 +295,7 @@ RSpec.describe 'DOCX → MHT Content Matching' do
         it 'generated text length is substantial (> 10 chars)' do
           text = strip_tags(generated_html)
           expect(text.length).to be > 10,
-            "Generated HTML for #{name} has very short text: #{text.length} chars"
+                                 "Generated HTML for #{name} has very short text: #{text.length} chars"
         end
       end
     end

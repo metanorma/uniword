@@ -71,9 +71,7 @@ module Uniword
         instr = new
 
         # Parse outline levels: \o "1-3"
-        if str =~ /\\o\s+"([^"]+)"/
-          instr.outline_levels = ::Regexp.last_match(1)
-        end
+        instr.outline_levels = ::Regexp.last_match(1) if str =~ /\\o\s+"([^"]+)"/
 
         # Parse switches
         instr.hyperlinks = str.include?('\\h')

@@ -21,9 +21,9 @@ module Uniword
       # nil = true (element present without val means true)
       # 'false' = false
       def initialize(attrs = {})
-        if attrs[:val] == true || attrs[:val] == 'true'
-          attrs[:val] = nil  # true = no val attribute
-        elsif attrs[:val] == false || attrs[:val] == 'false'
+        if [true, 'true'].include?(attrs[:val])
+          attrs[:val] = nil # true = no val attribute
+        elsif [false, 'false'].include?(attrs[:val])
           attrs[:val] = 'false'
         end
         super

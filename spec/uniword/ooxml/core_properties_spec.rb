@@ -36,8 +36,10 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         title: 'Test Document',
         creator: 'John Doe',
         subject: 'Test Subject',
-        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
-        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-02T00:00:00Z', type: 'dcterms:W3CDTF')
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z',
+                                                               type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-02T00:00:00Z',
+                                                                 type: 'dcterms:W3CDTF')
       )
 
       xml = props.to_xml
@@ -66,8 +68,10 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         description: 'Testing all available fields',
         last_modified_by: 'Test Editor',
         revision: '5',
-        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
-        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:30:00Z', type: 'dcterms:W3CDTF')
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z',
+                                                               type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:30:00Z',
+                                                                 type: 'dcterms:W3CDTF')
       )
 
       xml = props.to_xml
@@ -170,8 +174,10 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         description: 'Testing perfect round-trip preservation',
         last_modified_by: 'Test Editor',
         revision: '3',
-        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z', type: 'dcterms:W3CDTF'),
-        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:00:00Z', type: 'dcterms:W3CDTF')
+        created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: '2024-01-01T00:00:00Z',
+                                                               type: 'dcterms:W3CDTF'),
+        modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: '2024-01-15T12:00:00Z',
+                                                                 type: 'dcterms:W3CDTF')
       )
 
       xml = original.to_xml

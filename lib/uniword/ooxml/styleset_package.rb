@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Ooxml
     # Specialized package handler for StyleSet (.dotx) files
@@ -107,7 +106,6 @@ module Uniword
       # @param styleset [StyleSet] StyleSet to serialize
       # @return [String] Serialized XML
       def serialize_styleset(styleset)
-
         # Create StylesConfiguration from StyleSet
         config = StylesConfiguration.new
 

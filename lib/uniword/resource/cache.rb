@@ -37,6 +37,7 @@ module Uniword
       def list(type)
         dir = directory_for_type(type)
         return [] unless File.directory?(dir)
+
         Dir.glob(File.join(dir, '*.yml')).map { |f| File.basename(f, '.yml') }
       end
 
@@ -48,7 +49,7 @@ module Uniword
       # Delete resource from cache
       def delete(type, name)
         path = resource_path(type, name)
-        File.delete(path) if File.exist?(path)
+        FileUtils.rm_f(path)
       end
 
       # Clear all cache or specific type

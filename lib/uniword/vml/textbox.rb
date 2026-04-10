@@ -15,7 +15,7 @@ module Uniword
       attribute :content, Uniword::Wordprocessingml::TextBoxContent
 
       xml do
-        element "textbox"
+        element 'textbox'
         namespace Uniword::Ooxml::Namespaces::Vml
         mixed_content
 

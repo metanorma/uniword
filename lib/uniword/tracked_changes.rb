@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   # Manages track changes for a Word document.
   #

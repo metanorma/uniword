@@ -12,7 +12,7 @@ module Uniword
       attribute :drawing, Drawing
 
       xml do
-        element "Fallback"
+        element 'Fallback'
         namespace Uniword::Ooxml::Namespaces::MarkupCompatibility
         mixed_content
 

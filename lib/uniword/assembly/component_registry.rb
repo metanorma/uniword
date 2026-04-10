@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Assembly
     # Manages component library with caching and wildcard resolution.

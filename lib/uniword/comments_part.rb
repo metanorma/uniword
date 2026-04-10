@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   # Represents the comments part of a Word document (word/comments.xml).
   #

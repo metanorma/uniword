@@ -12,6 +12,7 @@ module Uniword
     # Model: nil = true (no val attribute), 'false' = explicit false
     class Bold < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 
@@ -25,6 +26,7 @@ module Uniword
     # Complex script bold
     class BoldCs < Lutaml::Model::Serializable
       include Uniword::Properties::BooleanElement
+
       attribute :val, :string, default: nil
       include Uniword::Properties::BooleanValSetter
 

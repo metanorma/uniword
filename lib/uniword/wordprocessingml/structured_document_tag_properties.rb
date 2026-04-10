@@ -31,7 +31,7 @@ module Uniword
         mixed_content
 
         namespace_scope [
-          { namespace: Ooxml::Namespaces::Word2012, declare: :auto },
+          { namespace: Ooxml::Namespaces::Word2012, declare: :auto }
         ]
 
         map_element 'id', to: :id, render_nil: false

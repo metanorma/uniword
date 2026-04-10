@@ -31,7 +31,6 @@ module Uniword
         map_element 'tbl', to: :tables, render_nil: false
       end
 
-
       # Accept visitor
       def accept(visitor)
         visitor.visit_table_cell(self)

@@ -55,7 +55,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
       end
 
       it 'validates external links' do
-        # Note: External link validation makes HTTP requests
+        # NOTE: External link validation makes HTTP requests
         # The result depends on network connectivity
         report = validator.validate(document)
 
@@ -71,7 +71,8 @@ RSpec.describe Uniword::Validation::LinkValidator do
         para.runs << anchor_link
         doc.body.paragraphs << para
         # Add bookmark to document
-        doc.instance_variable_set(:@bookmarks, { 'section1' => Uniword::Bookmark.new(name: 'section1') })
+        doc.instance_variable_set(:@bookmarks,
+                                  { 'section1' => Uniword::Bookmark.new(name: 'section1') })
         doc
       end
 

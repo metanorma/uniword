@@ -35,34 +35,32 @@ module Uniword
       # with namespace declarations for lutaml-model parsing.
       def document_properties_xml
         extract_office_xml('DocumentProperties',
-                          'urn:schemas-microsoft-com:office:office', 'o')
+                           'urn:schemas-microsoft-com:office:office', 'o')
       end
 
       # Extract OfficeDocumentSettings XML from HTML head comments.
       def office_document_settings_xml
         extract_office_xml('OfficeDocumentSettings',
-                          'urn:schemas-microsoft-com:office:office', 'o')
+                           'urn:schemas-microsoft-com:office:office', 'o')
       end
 
       # Extract WordDocument XML from HTML head comments.
       def word_document_xml
         extract_office_xml('WordDocument',
-                          'urn:schemas-microsoft-com:office:word', 'w')
+                           'urn:schemas-microsoft-com:office:word', 'w')
       end
 
       # Extract LatentStyles XML from HTML head comments.
       def latent_styles_xml
         extract_office_xml('LatentStyles',
-                          'urn:schemas-microsoft-com:office:word', 'w')
+                           'urn:schemas-microsoft-com:office:word', 'w')
       end
 
       # Extract all <xml> blocks from head
       def xml_blocks
         html_document.at_css('head')&.xpath('comment()')&.map do |comment|
           text = comment.text
-          if text =~ /<xml>(.*?)<\/xml>/m
-            ::Regexp.last_match(1).strip
-          end
+          ::Regexp.last_match(1).strip if text =~ %r{<xml>(.*?)</xml>}m
         end&.compact || []
       end
 
@@ -92,16 +90,16 @@ module Uniword
           next unless text.include?("<#{prefix}:#{element_name}")
 
           # Extract the specific element with its content
-          pattern = /(<#{prefix}:#{element_name}[^>]*>.*?<\/#{prefix}:#{element_name}>)/m
-          if text =~ pattern
-            xml = ::Regexp.last_match(1)
-            # Ensure namespace declaration is present
-            ns_decl = "xmlns:#{prefix}=\"#{namespace_uri}\""
-            unless xml.include?(ns_decl)
-              xml = xml.sub(/(<#{prefix}:#{element_name})/, "\\1 #{ns_decl}")
-            end
-            return xml
+          pattern = %r{(<#{prefix}:#{element_name}[^>]*>.*?</#{prefix}:#{element_name}>)}m
+          next unless text =~ pattern
+
+          xml = ::Regexp.last_match(1)
+          # Ensure namespace declaration is present
+          ns_decl = "xmlns:#{prefix}=\"#{namespace_uri}\""
+          unless xml.include?(ns_decl)
+            xml = xml.sub(/(<#{prefix}:#{element_name})/, "\\1 #{ns_decl}")
           end
+          return xml
         end
         nil
       end

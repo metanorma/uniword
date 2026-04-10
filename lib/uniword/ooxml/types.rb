@@ -14,7 +14,7 @@ module Uniword
       autoload :DcTitleType, "#{__dir__}/types/dc_title_type"
       autoload :DcSubjectType, "#{__dir__}/types/dc_subject_type"
       autoload :DcCreatorType, "#{__dir__}/types/dc_creator_type"
-      autoload :DcDescriptionType, "#{__dir__}/types/cp_description_type"  # File is cp_*, class is Dc*
+      autoload :DcDescriptionType, "#{__dir__}/types/cp_description_type" # File is cp_*, class is Dc*
 
       # Core Properties Types (cp: namespace)
       autoload :CpKeywordsType, "#{__dir__}/types/cp_keywords_type"

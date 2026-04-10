@@ -17,7 +17,7 @@ module Uniword
 
     # OOXML namespace configuration for images (drawing elements)
     xml do
-      element "drawing"
+      element 'drawing'
       namespace Ooxml::Namespaces::WordProcessingML
     end
 

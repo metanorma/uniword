@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Quality
     # Checks for broken or invalid links.
@@ -82,8 +81,8 @@ module Uniword
         return false unless link
 
         # Check for id attribute (relationship-based external link)
-        if link.respond_to?(:id) && !link.id.nil? && !link.id.empty?
-          return true unless internal_link?(link)
+        if link.respond_to?(:id) && !link.id.nil? && !link.id.empty? && !internal_link?(link)
+          return true
         end
 
         # Check for target that looks like a URL

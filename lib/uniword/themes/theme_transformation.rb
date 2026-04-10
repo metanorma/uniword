@@ -26,7 +26,8 @@ module Uniword
     #   friendly.to_yaml == extracted.to_yaml  # => true (semantically)
     class ThemeTransformation
       # Standard color keys in a theme
-      COLOR_KEYS = %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink fol_hlink].freeze
+      COLOR_KEYS = %i[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink
+                      fol_hlink].freeze
 
       # Transform friendly theme to Word theme
       #

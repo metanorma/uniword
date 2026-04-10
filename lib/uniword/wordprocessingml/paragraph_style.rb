@@ -25,7 +25,7 @@ module Uniword
       # @param level [Integer] Heading level (1-9)
       # @return [Style] Heading style instance
       def self.heading(level)
-        raise ArgumentError, "Heading level must be 1-9" unless (1..9).cover?(level)
+        raise ArgumentError, 'Heading level must be 1-9' unless (1..9).cover?(level)
 
         Style.new(
           type: 'paragraph',
@@ -117,8 +117,6 @@ module Uniword
           )
         )
       end
-
-      private
 
       # Create paragraph properties for heading styles
       #

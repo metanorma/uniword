@@ -25,30 +25,32 @@ module Uniword
         # Cast value to OnOffType instance (for attribute serialization).
         # nil remains nil (not present in source), preserving original structure.
         # Already-wrapped OnOffType instances are returned as-is.
-        def self.cast(value, options = {})
+        def self.cast(value, _options = {})
           return nil if value.nil?
           return value if value.is_a?(OnOffType)
 
           raw = case value
-          when true, 'true', '1', 1
-            true
-          when false, 'false', '0', 0
-            false
-          else
-            false
-          end
+                when true, 'true', '1', 1
+                  true
+                when false, 'false', '0', 0
+                  false
+                else
+                  false
+                end
           new(raw)
         end
 
         # Convert stored boolean to OOXML "1" or "0"
         def to_xml
           return nil if @value.nil?
+
           @value == true ? '1' : '0'
         end
 
         # Fallback to_s also returns "1"/"0" for compatibility
         def to_s
           return '' if @value.nil?
+
           to_xml
         end
 

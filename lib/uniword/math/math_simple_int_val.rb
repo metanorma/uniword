@@ -15,7 +15,7 @@ module Uniword
       attribute :value, :integer
 
       xml do
-        element "mathSimpleIntVal"
+        element 'mathSimpleIntVal'
         namespace Uniword::Ooxml::Namespaces::MathML
         map_attribute 'val', to: :value, render_nil: false
       end

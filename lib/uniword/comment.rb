@@ -45,7 +45,8 @@ module Uniword
     attribute :initials, :string
 
     # Comment content as paragraphs
-    attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true, initialize_empty: true
+    attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true,
+                                                                 initialize_empty: true
 
     # Initialize a new comment
     #

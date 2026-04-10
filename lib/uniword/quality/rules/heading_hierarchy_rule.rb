@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Quality
     # Checks that headings follow proper hierarchical structure.
@@ -19,7 +18,7 @@ module Uniword
     #     max_level: 6
     #     require_sequential: true
     class HeadingHierarchyRule < QualityRule
-      HEADING_PATTERN = /^heading\s*(\d+)$/i.freeze
+      HEADING_PATTERN = /^heading\s*(\d+)$/i
 
       def initialize(config = {})
         super

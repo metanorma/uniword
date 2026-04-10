@@ -62,12 +62,12 @@ module Uniword
       # @param angle [Integer] Rotation angle in degrees
       # @return [Wordprocessingml::Paragraph] Paragraph containing watermark
       def self.build_paragraph(text, font: 'Calibri', size: 60, color: nil,
-                              opacity: '0.3', angle: -45)
+                               opacity: '0.3', angle: -45)
         para = Wordprocessingml::Paragraph.new
         run = Wordprocessingml::Run.new
         run.pictures << Wordprocessingml::Picture.new(
           shape: build_shape(text, font: font, size: size,
-                             color: color, opacity: opacity, angle: angle)
+                                   color: color, opacity: opacity, angle: angle)
         )
         para.runs << run
         para
@@ -82,12 +82,12 @@ module Uniword
         # @return [String] CSS-style style attribute
         def watermark_style(angle)
           # Position centered on the page (in points/twips)
-          "position:absolute;margin-left:0;margin-top:0;width:527.85pt;" \
+          'position:absolute;margin-left:0;margin-top:0;width:527.85pt;' \
             "height:698.45pt;rotation:#{angle};z-index:-251657216;" \
-            "mso-position-horizontal:center;" \
-            "mso-position-horizontal-relative:margin;" \
-            "mso-position-vertical:center;" \
-            "mso-position-vertical-relative:margin"
+            'mso-position-horizontal:center;' \
+            'mso-position-horizontal-relative:margin;' \
+            'mso-position-vertical:center;' \
+            'mso-position-vertical-relative:margin'
         end
       end
     end

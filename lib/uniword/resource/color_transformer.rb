@@ -6,9 +6,9 @@ module Uniword
     # Pure functions - no state, no side effects
     class ColorTransformer
       # Shift ranges (in HSL)
-      HUE_SHIFT_RANGE = (-15..15).freeze
-      SATURATION_SHIFT_RANGE = (-10..10).freeze
-      LIGHTNESS_SHIFT_RANGE = (-10..10).freeze
+      HUE_SHIFT_RANGE = (-15..15)
+      SATURATION_SHIFT_RANGE = (-10..10)
+      LIGHTNESS_SHIFT_RANGE = (-10..10)
 
       # Transform a hex color by shifting HSL values
       #
@@ -41,7 +41,7 @@ module Uniword
       def self.transform_color_scheme(color_scheme, hue_shift:, saturation_shift:, lightness_shift:)
         color_scheme.dup.tap do |scheme|
           # Transform each color in the scheme
-          scheme.colors&.each do |color_name, color|
+          scheme.colors&.each_value do |color|
             next unless color.respond_to?(:val) && color.val&.match?(/^[0-9A-Fa-f]{6}$/)
 
             color.val = shift_color(
@@ -76,8 +76,11 @@ module Uniword
       # @param rgb [Hash] RGB hash with :r, :g, :b keys (0-255)
       # @return [Hash] HSL hash with :h (0-360), :s (0-100), :l (0-100)
       def self.rgb_to_hsl(rgb)
-        r, g, b = rgb[:r] / 255.0, rgb[:g] / 255.0, rgb[:b] / 255.0
-        max, min = [r, g, b].max, [r, g, b].min
+        r = rgb[:r] / 255.0
+        g = rgb[:g] / 255.0
+        b = rgb[:b] / 255.0
+        max = [r, g, b].max
+        min = [r, g, b].min
         l = (max + min) / 2.0
 
         if max == min
@@ -86,9 +89,9 @@ module Uniword
           d = max - min
           s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
           h = case max
-              when r then ((g - b) / d + (g < b ? 6 : 0)) * 60
-              when g then ((b - r) / d + 2) * 60
-              when b then ((r - g) / d + 4) * 60
+              when r then (((g - b) / d) + (g < b ? 6 : 0)) * 60
+              when g then (((b - r) / d) + 2) * 60
+              when b then (((r - g) / d) + 4) * 60
               end
         end
 
@@ -100,26 +103,28 @@ module Uniword
       # @param hsl [Hash] HSL hash with :h (0-360), :s (0-100), :l (0-100)
       # @return [Hash] RGB hash with :r, :g, :b keys (0-255)
       def self.hsl_to_rgb(hsl)
-        h, s, l = hsl[:h], hsl[:s] / 100.0, hsl[:l] / 100.0
+        h = hsl[:h]
+        s = hsl[:s] / 100.0
+        l = hsl[:l] / 100.0
 
-        if s == 0
+        if s.zero?
           r = g = b = l
         else
           hue_to_rgb = lambda do |p, q, t|
-            t += 1 if t < 0
+            t += 1 if t.negative?
             t -= 1 if t > 1
-            return p + (q - p) * 6 * t if t < 1 / 6.0
+            return p + ((q - p) * 6 * t) if t < 1 / 6.0
             return q if t < 1 / 2.0
-            return p + (q - p) * (2 / 3.0 - t) * 6 if t < 2 / 3.0
+            return p + ((q - p) * ((2 / 3.0) - t) * 6) if t < 2 / 3.0
 
             p
           end
 
-          q = l < 0.5 ? l * (1 + s) : l + s - l * s
-          p = 2 * l - q
-          r = hue_to_rgb.call(p, q, h / 360.0 + 1 / 3.0)
+          q = l < 0.5 ? l * (1 + s) : l + s - (l * s)
+          p = (2 * l) - q
+          r = hue_to_rgb.call(p, q, (h / 360.0) + (1 / 3.0))
           g = hue_to_rgb.call(p, q, h / 360.0)
-          b = hue_to_rgb.call(p, q, h / 360.0 - 1 / 3.0)
+          b = hue_to_rgb.call(p, q, (h / 360.0) - (1 / 3.0))
         end
 
         { r: (r * 255).round, g: (g * 255).round, b: (b * 255).round }

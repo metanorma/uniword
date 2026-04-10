@@ -116,7 +116,7 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
 
       document.save(output_path)
 
-      content = File.read(output_path, encoding: 'UTF-8')
+      File.read(output_path, encoding: 'UTF-8')
 
       # TODO: MHTML writer needs Word CSS stylesheet generation
       # expect(content).to include('MsoNormal')
@@ -236,7 +236,8 @@ RSpec.describe 'MHTML Write Integration', type: :integration do
       bold_run = Uniword::Wordprocessingml::Run.new(text: 'Bold text ', properties: bold_props)
       para1.runs << bold_run
       italic_props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
-      italic_run = Uniword::Wordprocessingml::Run.new(text: 'and italic text.', properties: italic_props)
+      italic_run = Uniword::Wordprocessingml::Run.new(text: 'and italic text.',
+                                                      properties: italic_props)
       para1.runs << italic_run
       document.body.paragraphs << para1
 

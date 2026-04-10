@@ -19,7 +19,7 @@ module Uniword
 
         # Force mc: namespace declaration on root element
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
 
         map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
