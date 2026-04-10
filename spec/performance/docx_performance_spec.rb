@@ -129,6 +129,8 @@ RSpec.describe 'DOCX Performance' do
 
   describe 'writing performance' do
     it 'writes small documents quickly' do
+      skip 'Performance test only with PROFILE=true' unless ENV['PROFILE']
+
       doc = create_large_document(paragraphs: 10)
 
       time = Benchmark.realtime do
@@ -139,6 +141,8 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'writes medium documents efficiently' do
+      skip 'Performance test only with PROFILE=true' unless ENV['PROFILE']
+
       doc = create_large_document(paragraphs: 100)
 
       time = Benchmark.realtime do
@@ -161,6 +165,8 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'writes documents with tables efficiently' do
+      skip 'Performance test only with PROFILE=true' unless ENV['PROFILE']
+
       doc = create_document_with_tables(count: 50, rows: 10, cols: 5)
 
       time = Benchmark.realtime do
