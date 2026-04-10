@@ -5,6 +5,11 @@ require 'canon/rspec_matchers'
 require 'uniword/ooxml/theme_package'
 
 RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
+  # Skip if submodule not available (e.g., in CI without SSH access)
+  before(:all) do
+    skip 'Submodule spec/fixtures/uniword-private not available' unless Dir.glob('spec/fixtures/uniword-private/word-resources/office-themes/*.thmx').any?
+  end
+
   # Directory containing reference theme files
   THEME_DIR = 'spec/fixtures/uniword-private/word-resources/office-themes'
 

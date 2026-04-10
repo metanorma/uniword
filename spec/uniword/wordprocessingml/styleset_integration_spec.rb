@@ -3,6 +3,11 @@
 require 'spec_helper'
 
 RSpec.describe 'StyleSet Integration' do
+  # Skip if submodule not available (e.g., in CI without SSH access)
+  before(:all) do
+    skip 'Submodule spec/fixtures/uniword-private not available' unless File.exist?('spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx')
+  end
+
   let(:dotx_file) { 'spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx' }
 
   describe 'Loading StyleSets from .dotx files' do

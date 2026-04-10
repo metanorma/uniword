@@ -4,6 +4,11 @@ require 'spec_helper'
 require 'canon/rspec_matchers'
 
 RSpec.describe 'Document Elements Round-Trip' do
+  # Skip if submodule not available (e.g., in CI without SSH access)
+  before(:all) do
+    skip 'Submodule spec/fixtures/uniword-private not available' unless File.exist?(File.join(__dir__, '../../spec/fixtures/uniword-private/word-resources/document-elements/en/Bibliographies.dotx'))
+  end
+
   DOCUMENT_ELEMENTS_DIR = File.join(__dir__,
                                     '../../spec/fixtures/uniword-private/word-resources/document-elements/en')
 
