@@ -15,26 +15,22 @@ jobs:
         ruby: [ '3.2', '3.3' ]
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: main
 
       - name: Checkout private fixtures
         uses: actions/checkout@v4
         with:
           repository: metanorma/uniword-private
-          token: ${{ secrets.GH_PAT }}
-          path: main/spec/fixtures/uniword-private
+          token: ${{ secrets.METANORMA_CI_PAT_TOKEN }}
+          path: spec/fixtures/uniword-private
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-          working-directory: main
 
       - name: Run tests
         run: bundle exec rake spec
-        working-directory: main
 
   rubocop:
     name: RuboCop
