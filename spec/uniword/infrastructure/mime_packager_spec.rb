@@ -324,6 +324,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     it 'uses boundary consistently within document' do
+      FileUtils.mkdir_p('spec/tmp')
       image_part = build_image_part('image1.png', 'data', 'image/png')
       doc = build_mhtml_document(
         '<html><body>Test</body></html>',
