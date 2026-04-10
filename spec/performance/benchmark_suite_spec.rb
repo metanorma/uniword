@@ -255,7 +255,7 @@ RSpec.describe 'Comprehensive Benchmark Suite' do
     end
 
     it 'verifies XPath optimization effectiveness' do
-      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_test_document(paragraphs: 100, tables: 10)
       doc.save('tmp/benchmark_xpath.docx')

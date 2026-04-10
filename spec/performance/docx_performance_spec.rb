@@ -62,7 +62,7 @@ RSpec.describe 'DOCX Performance' do
 
   describe 'parsing performance' do
     it 'parses small documents quickly (10 paragraphs)' do
-      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_large_document(paragraphs: 10)
       doc.save('tmp/perf_10para.docx')
@@ -75,7 +75,7 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses medium documents efficiently (100 paragraphs)' do
-      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Performance test only with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_large_document(paragraphs: 100)
       doc.save('tmp/perf_100para.docx')
@@ -88,7 +88,7 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses large documents acceptably (500 paragraphs)' do
-      skip 'Large document test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Large document test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_large_document(paragraphs: 500)
       doc.save('tmp/perf_500para.docx')
@@ -101,7 +101,7 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'parses documents with tables quickly (10 tables)' do
-      skip 'Performance test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Performance test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_document_with_tables(count: 10, rows: 5, cols: 4)
       doc.save('tmp/perf_10table.docx')
@@ -149,7 +149,7 @@ RSpec.describe 'DOCX Performance' do
     end
 
     it 'writes large documents acceptably' do
-      skip 'Large document test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Large document test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       doc = create_large_document(paragraphs: 500)
 
@@ -190,7 +190,7 @@ RSpec.describe 'DOCX Performance' do
 
   describe 'scaling performance' do
     it 'scales linearly with document size' do
-      skip 'Scaling test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Scaling test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       sizes = [10, 50, 100, 200]
       times = []

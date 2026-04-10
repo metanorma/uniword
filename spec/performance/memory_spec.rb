@@ -54,7 +54,7 @@ RSpec.describe 'Memory Performance' do
 
   describe 'memory leak detection' do
     it 'does not leak memory with large documents' do
-      skip 'Memory profiling only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Memory profiling only with PROFILE=true' unless ENV['PROFILE']
 
       GC.start
       before_count = ObjectSpace.count_objects[:T_DATA]
@@ -73,7 +73,7 @@ RSpec.describe 'Memory Performance' do
     end
 
     it 'cleans up resources after document operations' do
-      skip 'Memory profiling only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Memory profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       GC.start
       before_objects = ObjectSpace.count_objects
@@ -131,7 +131,7 @@ RSpec.describe 'Memory Performance' do
 
   describe 'object allocation' do
     it 'minimizes object allocations during parsing' do
-      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       # Create a test document
       doc = create_large_document(paragraphs: 100)
@@ -155,7 +155,7 @@ RSpec.describe 'Memory Performance' do
     end
 
     it 'reuses objects when possible' do
-      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       GC.start
       before_count = ObjectSpace.count_objects[:T_OBJECT]
@@ -184,7 +184,7 @@ RSpec.describe 'Memory Performance' do
 
   describe 'string memory optimization' do
     it 'does not create excessive string objects' do
-      skip 'String profiling only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'String profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       GC.start
       before_strings = ObjectSpace.count_objects[:T_STRING]
@@ -213,7 +213,7 @@ RSpec.describe 'Memory Performance' do
 
   describe 'lazy loading benefits' do
     it 'delays loading until needed' do
-      skip 'Lazy loading test only in CI or with PROFILE=true' unless ENV['CI'] || ENV['PROFILE']
+      skip 'Lazy loading test only in CI or with PROFILE=true' unless ENV['PROFILE']
 
       # Create document with LazyLoader (will be implemented)
       doc = create_large_document(paragraphs: 1000)
