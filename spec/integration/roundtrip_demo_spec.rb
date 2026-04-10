@@ -14,10 +14,28 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
     @doc = Uniword.load('spec/fixtures/uniword-demo/demo_formal_integral_proper.docx')
     @doc.save('test_output/demo_formal_integral_roundtrip_spec.docx')
 
-    # Extract both packages
+    # Extract both packages using Ruby zip (cross-platform)
     FileUtils.mkdir_p('test_output')
-    system("cd test_output && unzip -qo ../spec/fixtures/uniword-demo/demo_formal_integral_proper.docx -d roundtrip_spec_original")
-    system('cd test_output && unzip -qo demo_formal_integral_roundtrip_spec.docx -d roundtrip_spec_saved')
+    extract_zip('spec/fixtures/uniword-demo/demo_formal_integral_proper.docx', 'test_output/roundtrip_spec_original')
+    extract_zip('test_output/demo_formal_integral_roundtrip_spec.docx', 'test_output/roundtrip_spec_saved')
+  end
+
+  def extract_zip(zip_path, dest_dir)
+    require 'zip'
+    FileUtils.rm_rf(dest_dir)
+    Zip::File.open(zip_path) do |zip|
+      zip.each do |entry|
+        # Skip directories
+        next if entry.name_is_directory?
+
+        # Build full path for this entry
+        entry_path = File.join(dest_dir, entry.name)
+        # Create parent directory if needed
+        FileUtils.mkdir_p(File.dirname(entry_path))
+        # Extract file
+        entry.extract(entry_path)
+      end
+    end
   end
 
   describe 'Document Loading' do
