@@ -5,10 +5,12 @@ source 'https://rubygems.org'
 gemspec
 
 # Math equation support via Plurimath
-#gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
+# gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 
-gem 'lutaml-model', github: 'lutaml/lutaml-model', branch: 'main'
+
+gem 'benchmark'
 gem 'canon', '~> 0.1.8'
+gem 'lutaml-model', github: 'lutaml/lutaml-model', branch: 'main'
 
 # TOML adapter (required by lutaml-model for TOML format support)
 gem 'tomlib'
