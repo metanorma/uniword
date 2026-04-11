@@ -27,6 +27,7 @@ module Uniword
     autoload :LocaleId, 'uniword/bibliography/locale_id'
     autoload :Month, 'uniword/bibliography/month'
     autoload :NameList, 'uniword/bibliography/name_list'
+    autoload :NameType, 'uniword/bibliography/author'
     autoload :Pages, 'uniword/bibliography/pages'
     autoload :Person, 'uniword/bibliography/person'
     autoload :Publisher, 'uniword/bibliography/publisher'

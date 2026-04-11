@@ -46,9 +46,10 @@ RSpec.describe 'Ultimate Round-Trip: demo_formal_integral_proper.docx' do
     end
 
     it 'loads theme with media files' do
-      pending 'This document has no theme media in word/theme/media/'
-      expect(@doc.theme).not_to be_nil
-      expect(@doc.theme.media_files).not_to be_empty
+      doc = Uniword.load('spec/fixtures/uniword-demo/demo_theme_media.docx')
+      expect(doc.theme).not_to be_nil
+      expect(doc.theme.media_files).not_to be_empty
+      expect(doc.theme.media_files.values.first.content).not_to be_empty
     end
   end
 

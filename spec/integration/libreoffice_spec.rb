@@ -339,11 +339,11 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       doc.save(test_path)
 
       # Try conversion
-      result = system("soffice --headless --convert-to pdf --outdir #{tmp_dir} #{test_path} > /dev/null 2>&1")
+      result = system("#{soffice_cmd} --headless --convert-to pdf --outdir #{tmp_dir} #{test_path} > /dev/null 2>&1")
 
-      expect(result).to be true, 'LibreOffice conversion failed'
-      expect(File.exist?(pdf_path)).to be true, 'PDF was not created'
-      expect(File.size(pdf_path)).to be > 0, 'PDF is empty'
+      expect(result).to be(true)
+      expect(File.exist?(pdf_path)).to be(true)
+      expect(File.size(pdf_path)).to be > 0
     end
 
     it 'can be validated by LibreOffice' do
@@ -351,7 +351,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
       doc.save(test_path)
 
       # Try to open and immediately close (validates structure)
-      system("soffice --headless --invisible --view #{test_path} > /dev/null 2>&1")
+      system("#{soffice_cmd} --headless --invisible --view #{test_path} > /dev/null 2>&1")
 
       # NOTE: This may not work on all systems, so we just check the file is valid
       expect(File.exist?(test_path)).to be true
@@ -366,7 +366,7 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
       doc.save(test_path)
 
-      result = system("soffice --headless --convert-to pdf --outdir #{tmp_dir} #{test_path} > /dev/null 2>&1")
+      result = system("#{soffice_cmd} --headless --convert-to pdf --outdir #{tmp_dir} #{test_path} > /dev/null 2>&1")
 
       if result
         expect(File.exist?(pdf_path)).to be true
@@ -484,7 +484,16 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
   private
 
   def libreoffice_available?
-    system('which soffice > /dev/null 2>&1')
+    return true if system('which soffice > /dev/null 2>&1')
+
+    # macOS: check LibreOffice.app
+    File.exist?('/Applications/LibreOffice.app/Contents/MacOS/soffice')
+  end
+
+  def soffice_cmd
+    return 'soffice' if system('which soffice > /dev/null 2>&1')
+
+    '/Applications/LibreOffice.app/Contents/MacOS/soffice'
   end
 
   def create_test_document
@@ -522,12 +531,9 @@ RSpec.describe 'LibreOffice Compatibility Testing' do
 
     # Title
     title = Uniword::Wordprocessingml::Paragraph.new
-    title_run = Uniword::Wordprocessingml::Run.new
-    if title_run.respond_to?(:properties)
-      title_run.properties.bold = true
-      title_run.properties.font_size = 28
-    end
-    title_run.text = 'Document Title'
+    title_run = Uniword::Wordprocessingml::Run.new(text: 'Document Title')
+    title_run.properties = Uniword::Wordprocessingml::RunProperties.new
+    title_run.properties.bold = Uniword::Properties::Bold.new(value: true)
     title.runs << title_run
     doc.body.paragraphs << title
 

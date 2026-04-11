@@ -4,10 +4,10 @@ require 'spec_helper'
 
 RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
   MHTML_FIXTURES = {
-    'blank' => 'spec/fixtures/blank.mht',
-    'apa' => 'spec/fixtures/word-template-apa-style-paper.mht',
-    'mla' => 'spec/fixtures/word-template-mla-style-paper.mht',
-    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc.mht'
+    'blank' => 'spec/fixtures/blank/blank.mht',
+    'apa' => 'spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht',
+    'mla' => 'spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht',
+    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht'
   }.freeze
 
   # Shared helper to parse an MHTML fixture
@@ -26,7 +26,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
   end
 
   describe 'MimeParser' do
-    describe 'blank.mht' do
+    describe 'blank/blank.mht' do
       let(:doc) { parse_fixture('blank') }
 
       it 'parses without error' do
@@ -78,7 +78,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
       end
     end
 
-    describe 'word-template-apa-style-paper.mht' do
+    describe 'word-template-apa-style-paper/word-template-apa-style-paper.mht' do
       let(:doc) { parse_fixture('apa') }
 
       it 'parses without error' do
@@ -117,7 +117,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
       end
     end
 
-    describe 'word-template-mla-style-paper.mht' do
+    describe 'word-template-mla-style-paper/word-template-mla-style-paper.mht' do
       let(:doc) { parse_fixture('mla') }
 
       it 'parses without error' do
@@ -137,7 +137,7 @@ RSpec.describe 'MHTML Document Model Round-Trip', type: :integration do
       end
     end
 
-    describe 'word-template-paper-with-cover-and-toc.mht' do
+    describe 'word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht' do
       let(:doc) { parse_fixture('cover_toc') }
 
       it 'parses without error' do

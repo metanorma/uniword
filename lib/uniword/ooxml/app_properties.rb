@@ -4,24 +4,81 @@ require 'lutaml/model'
 
 module Uniword
   module Ooxml
+    # Wrapper for <HeadingPairs> element containing a <vt:vector>
+    class HeadingPairs < Lutaml::Model::Serializable
+      attribute :vector, Types::VariantTypes::VtVector
+
+      xml do
+        element 'HeadingPairs'
+        namespace Namespaces::ExtendedProperties
+
+        map_element 'vector', to: :vector
+      end
+    end
+
+    # Wrapper for <TitlesOfParts> element containing a <vt:vector>
+    class TitlesOfParts < Lutaml::Model::Serializable
+      attribute :vector, Types::VariantTypes::VtVector
+
+      xml do
+        element 'TitlesOfParts'
+        namespace Namespaces::ExtendedProperties
+
+        map_element 'vector', to: :vector
+      end
+    end
+
     # Represents docProps/app.xml - Extended application properties
     #
     # Uses lutaml-model with XmlNamespace classes for perfect round-trip fidelity.
     # Follows ISO 29500 OOXML specification for extended properties.
-    #
-    # @example Create app properties
-    #   props = AppProperties.new(
-    #     application: 'Uniword',
-    #     company: 'Acme Corp',
-    #     pages: '10'
-    #   )
-    #
-    # @example Serialize to XML
-    #   xml = props.to_xml
-    #
-    # @example Deserialize from XML
-    #   props = AppProperties.from_xml(xml_string)
     class AppProperties < Lutaml::Model::Serializable
+      # Template file name (e.g., 'Normal.dotm')
+      attribute :template, :string, default: -> { 'Normal.dotm' }
+
+      # Application that created the document
+      attribute :application, :string, default: -> { 'Uniword' }
+
+      # Company name
+      attribute :company, :string
+
+      # Application version (e.g., '16.0000' for Office 2016)
+      attribute :app_version, :string, default: -> { '16.0000' }
+
+      # Document statistics
+      attribute :pages, :string
+      attribute :words, :string
+      attribute :characters, :string
+      attribute :lines, :string
+      attribute :paragraphs, :string
+      attribute :characters_with_spaces, :string
+
+      # Editing metadata
+      attribute :total_time, :string, default: -> { '0' }
+      attribute :scale_crop, :string, default: -> { 'false' }
+      attribute :doc_security, :string, default: -> { '0' }
+      attribute :links_up_to_date, :string, default: -> { 'false' }
+      attribute :shared_doc, :string, default: -> { 'false' }
+      attribute :hyperlinks_changed, :string, default: -> { 'false' }
+
+      # Document metadata
+      attribute :manager, :string
+      attribute :category, :string
+      attribute :comments, :string
+      attribute :hyperlink_base, :string
+      attribute :preview_picture, :string
+
+      # Vector-valued properties (wrappers containing vt:vector)
+      attribute :heading_pairs, HeadingPairs
+      attribute :titles_of_parts, TitlesOfParts
+
+      # Presentation-specific properties
+      attribute :slides, :string
+      attribute :hidden_slides, :string
+      attribute :notes, :string
+      attribute :multimedia_clips, :string
+      attribute :presentation_format, :string
+
       xml do
         element 'Properties'
 
@@ -60,91 +117,14 @@ module Uniword
         map_element 'Category', to: :category
         map_element 'Comments', to: :comments
         map_element 'HyperlinkBase', to: :hyperlink_base
+        map_element 'HeadingPairs', to: :heading_pairs
+        map_element 'TitlesOfParts', to: :titles_of_parts
+        map_element 'Slides', to: :slides
+        map_element 'HiddenSlides', to: :hidden_slides
+        map_element 'Notes', to: :notes
+        map_element 'MultimediaClips', to: :multimedia_clips
+        map_element 'PresentationFormat', to: :presentation_format
       end
-
-      # Template file name (e.g., 'Normal.dotm')
-      # @return [String]
-      attribute :template, :string, default: -> { 'Normal.dotm' }
-
-      # Application that created the document
-      # @return [String]
-      attribute :application, :string, default: -> { 'Uniword' }
-
-      # Company name
-      # @return [String, nil]
-      attribute :company, :string
-
-      # Application version (e.g., '16.0000' for Office 2016)
-      # @return [String]
-      attribute :app_version, :string, default: -> { '16.0000' }
-
-      # Number of pages
-      # @return [String, nil]
-      attribute :pages, :string
-
-      # Word count
-      # @return [String, nil]
-      attribute :words, :string
-
-      # Character count (without spaces)
-      # @return [String, nil]
-      attribute :characters, :string
-
-      # Line count
-      # @return [String, nil]
-      attribute :lines, :string
-
-      # Paragraph count
-      # @return [String, nil]
-      attribute :paragraphs, :string
-
-      # Character count (with spaces)
-      # @return [String, nil]
-      attribute :characters_with_spaces, :string
-
-      # Total editing time in minutes
-      # @return [String]
-      attribute :total_time, :string, default: -> { '0' }
-
-      # Scale crop setting
-      # @return [String]
-      attribute :scale_crop, :string, default: -> { 'false' }
-
-      # Document security level (0 = none)
-      # @return [String]
-      attribute :doc_security, :string, default: -> { '0' }
-
-      # Links are up to date flag
-      # @return [String]
-      attribute :links_up_to_date, :string, default: -> { 'false' }
-
-      # Shared document flag
-      # @return [String]
-      attribute :shared_doc, :string, default: -> { 'false' }
-
-      # Hyperlinks changed flag
-      # @return [String]
-      attribute :hyperlinks_changed, :string, default: -> { 'false' }
-
-      # Manager name
-      # @return [String, nil]
-      attribute :manager, :string
-
-      # Category
-      # @return [String, nil]
-      attribute :category, :string
-
-      # Comments
-      # @return [String, nil]
-      attribute :comments, :string
-
-      # Hyperlink base
-      # @return [String, nil]
-      attribute :hyperlink_base, :string
-
-      # Preview picture (binary data - stored as base64)
-      # @return [String, nil]
-      attribute :preview_picture, :string
     end
   end
 end

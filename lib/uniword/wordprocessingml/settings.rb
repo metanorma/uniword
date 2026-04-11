@@ -533,6 +533,7 @@ module Uniword
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
       attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
+      attribute :schema_library, Uniword::Ooxml::SchemaLibrary
 
       xml do
         element 'settings'
@@ -540,13 +541,14 @@ module Uniword
         mixed_content
 
         # Force namespace declarations on root element for child elements from different namespaces
-        # This ensures w14:, w15:, m:, and o: prefixes are declared at the settings level
+        # This ensures w14:, w15:, m:, o:, and sl: prefixes are declared at the settings level
         namespace_scope [
           { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary, declare: :always }
         ]
 
         map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
@@ -573,6 +575,7 @@ module Uniword
         map_element 'chartTrackingRefBased', to: :w15_chart_tracking_ref_based, render_nil: false
         map_element 'docId', to: :w14_doc_id, render_nil: false
         map_element 'docId', to: :w15_doc_id, render_nil: false
+        map_element 'schemaLibrary', to: :schema_library, render_nil: false
       end
 
       # Override from_xml to manually deserialize w15:docId which has the same

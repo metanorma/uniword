@@ -51,7 +51,7 @@ module Uniword
       attr_accessor :bibliography_sources
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
-                    :package_rels, :content_types
+                    :package_rels, :content_types, :custom_properties, :custom_xml_items
 
       # Writers for properties that have lazy-initialized getters
       # (removing from attr_accessor to avoid shadowing custom getters)
@@ -138,6 +138,15 @@ module Uniword
       # @return [Array<Table>] All tables in document
       def tables
         body&.tables || []
+      end
+
+      # Check if document structure is valid
+      #
+      # @return [Boolean] true if document has valid structure
+      def valid?
+        return false unless body
+
+        true
       end
 
       # Get bookmarks from document paragraphs

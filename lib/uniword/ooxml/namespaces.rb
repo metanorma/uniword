@@ -334,6 +334,30 @@ module Uniword
         element_form_default :qualified
         attribute_form_default :qualified
       end
+
+      # Custom Properties namespace (docProps/custom.xml)
+      class CustomProperties < Lutaml::Xml::Namespace
+        uri 'http://schemas.openxmlformats.org/officeDocument/2006/custom-properties'
+        prefix_default 'custprops'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Additional Characteristics namespace
+      class Characteristics < Lutaml::Xml::Namespace
+        uri 'http://schemas.openxmlformats.org/officeDocument/2006/characteristics'
+        prefix_default 'ac'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Schema Library namespace
+      class SchemaLibrary < Lutaml::Xml::Namespace
+        uri 'http://schemas.openxmlformats.org/schemaLibrary/2006/main'
+        prefix_default 'sl'
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
     end
   end
 end

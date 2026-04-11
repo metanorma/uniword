@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
-require_relative '../ooxml/types/mc_ignorable_type'
 
 module Uniword
   module Wordprocessingml

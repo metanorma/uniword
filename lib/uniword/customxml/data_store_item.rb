@@ -4,21 +4,20 @@ require 'lutaml/model'
 
 module Uniword
   module Customxml
-    # Reference to a data store item containing custom XML data
+    # Data store item from customXml/itemProps{N}.xml
     #
-    # Generated from OOXML schema: customxml.yml
-    # Element: <cxml:data_store_item>
+    # Element: <ds:datastoreItem ds:itemID="{GUID}">
+    # Namespace: http://schemas.openxmlformats.org/officeDocument/2006/customXml
     class DataStoreItem < Lutaml::Model::Serializable
-      attribute :id, :string
-      attribute :schema_ref, SchemaReference
+      attribute :item_id, :string
+      attribute :schema_refs, SchemaRefs
 
       xml do
-        element 'data_store_item'
+        element 'datastoreItem'
         namespace Uniword::Ooxml::Namespaces::CustomXml
-        mixed_content
 
-        map_attribute 'id', to: :id
-        map_element 'schemaRef', to: :schema_ref, render_nil: false
+        map_attribute 'itemID', to: :item_id
+        map_element 'schemaRefs', to: :schema_refs, render_nil: false
       end
     end
   end

@@ -28,13 +28,13 @@ module Uniword
       attribute :app_properties, AppProperties
 
       # Document theme
-      attribute :theme, Drawingml::Theme
+      attribute :theme, Uniword::Drawingml::Theme
 
       # Document styles configuration
-      attribute :styles_configuration, StylesConfiguration
+      attribute :styles_configuration, Uniword::Wordprocessingml::StylesConfiguration
 
       # Document numbering configuration
-      attribute :numbering_configuration, NumberingConfiguration
+      attribute :numbering_configuration, Uniword::Wordprocessingml::NumberingConfiguration
 
       # TODO: v2.0: Add proper lutaml-model attributes for:
       # - Document (word/document.xml)
@@ -61,9 +61,9 @@ module Uniword
         # Parse main document XML using generated classes
         # Document is aliased in lib/uniword.rb to Generated::Wordprocessingml::DocumentRoot
         document = if package.raw_document_xml
-                     Document.from_xml(package.raw_document_xml)
+                     Uniword::Wordprocessingml::DocumentRoot.from_xml(package.raw_document_xml)
                    else
-                     Document.new
+                     Uniword::Wordprocessingml::DocumentRoot.new
                    end
 
         # Transfer properties from package to document
@@ -97,16 +97,16 @@ module Uniword
         end
 
         if zip_content['word/theme/theme1.xml']
-          package.theme = Theme.from_xml(zip_content['word/theme/theme1.xml'])
+          package.theme = Uniword::Drawingml::Theme.from_xml(zip_content['word/theme/theme1.xml'])
         end
 
         # Parse styles and numbering as models
         if zip_content['word/styles.xml']
-          package.styles_configuration = StylesConfiguration.from_xml(zip_content['word/styles.xml'])
+          package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content['word/styles.xml'])
         end
 
         if zip_content['word/numbering.xml']
-          package.numbering_configuration = NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
+          package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
         end
 
         # Store raw document XML (will be parsed by DotxHandler)
@@ -223,20 +223,20 @@ module Uniword
         # Add [Content_Types].xml if not present
         unless zip_content['[Content_Types].xml']
           zip_content['[Content_Types].xml'] =
-            ContentTypes.generate.to_xml(declaration: true)
+            Uniword::ContentTypes.generate.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
         unless zip_content['_rels/.rels']
           zip_content['_rels/.rels'] =
-            Relationships::Relationships.generate_package_rels.to_xml(declaration: true)
+            Uniword::Ooxml::Relationships::PackageRelationships.generate_package_rels.to_xml(declaration: true)
         end
 
         # Add word/_rels/document.xml.rels if not present
         return if zip_content['word/_rels/document.xml.rels']
 
         zip_content['word/_rels/document.xml.rels'] =
-          Relationships::Relationships.generate_document_rels.to_xml(
+          Uniword::Ooxml::Relationships::Relationships.generate_document_rels.to_xml(
             declaration: true
           )
       end

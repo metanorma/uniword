@@ -32,6 +32,22 @@ module Uniword
         rows.count
       end
 
+      # Get column count
+      #
+      # @return [Integer] Maximum number of columns across all rows
+      def column_count
+        return 0 if rows.empty?
+
+        rows.map { |r| r.cells&.count || 0 }.max || 0
+      end
+
+      # Check if table is empty (no rows)
+      #
+      # @return [Boolean] true if table has no rows
+      def empty?
+        rows.empty?
+      end
+
       # Get columns (transposed view of table cells)
       #
       # @return [Array<Array<TableCell>>] Array of column arrays, each containing cells

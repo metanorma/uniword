@@ -55,7 +55,7 @@ module Uniword
         format = detect_format(path) if format == :auto
 
         case format
-        when :docx
+        when :docx, :docm
           package = Ooxml::DocxPackage.from_file(path)
           doc = package.document
           copy_package_parts_to_document(package, doc)
@@ -185,6 +185,10 @@ module Uniword
         document.theme_rels = package.theme_rels if package.theme_rels
         document.package_rels = package.package_rels if package.package_rels
         document.content_types = package.content_types if package.content_types
+        document.custom_properties = package.custom_properties if package.custom_properties
+        document.custom_xml_items = package.custom_xml_items if package.custom_xml_items
+        document.footnotes = package.footnotes if package.footnotes
+        document.endnotes = package.endnotes if package.endnotes
       end
 
       private

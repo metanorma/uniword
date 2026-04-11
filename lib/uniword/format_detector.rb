@@ -118,18 +118,24 @@ module Uniword
       case extension
       when '.docx'
         :docx
+      when '.docm'
+        :docm
       when '.dotx'
         :dotx
       when '.dotm'
         :dotm
       when '.thmx'
         :thmx
-      when '.mhtml', '.mht', '.doc'
+      when '.mhtml', '.mht'
         :mhtml
+      when '.doc'
+        raise ArgumentError,
+              'Old Word format (.doc) is not supported. Please convert to .docx first. ' \
+              'Uniword supports: .docx, .docm, .dotx, .dotm, .mhtml, .mht'
       else
         raise ArgumentError,
               "Unsupported file extension: #{extension}. " \
-              'Supported extensions: .docx, .dotx, .dotm, .thmx, .mhtml, .mht, .doc'
+              'Supported extensions: .docx, .docm, .dotx, .dotm, .thmx, .mhtml, .mht'
       end
     end
   end

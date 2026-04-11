@@ -34,6 +34,8 @@ module Uniword
     autoload :Placeholder, 'uniword/customxml/placeholder'
     autoload :PlaceholderText, 'uniword/customxml/placeholder_text'
     autoload :PrefixMappings, 'uniword/customxml/prefix_mappings'
+    autoload :SchemaRef, 'uniword/customxml/schema_reference'
+    autoload :SchemaRefs, 'uniword/customxml/schema_reference'
     autoload :SchemaReference, 'uniword/customxml/schema_reference'
     autoload :ShowingPlaceholder, 'uniword/customxml/showing_placeholder'
     autoload :ShowingPlaceholderHeader, 'uniword/customxml/showing_placeholder_header'

@@ -11,15 +11,17 @@ module Uniword
     class Sources < Lutaml::Model::Serializable
       attribute :selected_style, :string
       attribute :style_name, :string
+      attribute :version, :string
       attribute :source, Source, collection: true, initialize_empty: true
 
       xml do
-        element 'sources'
+        element 'Sources'
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 
         map_attribute 'SelectedStyle', to: :selected_style
         map_attribute 'StyleName', to: :style_name
+        map_attribute 'Version', to: :version
         map_element 'Source', to: :source, render_nil: false
       end
     end

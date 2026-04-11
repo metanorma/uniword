@@ -30,8 +30,8 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     files
   end
 
-  describe 'blank.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'blank.docx') }
+  describe 'blank/blank.docx round-trip' do
+    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
     let(:roundtrip_path) { File.join(temp_dir, 'blank_roundtrip.docx') }
 
     it 'preserves all XML files through load/save cycle' do
@@ -105,8 +105,8 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     end
   end
 
-  describe 'word-template-apa-style-paper.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'word-template-apa-style-paper.docx') }
+  describe 'word-template-apa-style-paper/word-template-apa-style-paper.docx round-trip' do
+    let(:original_path) { File.join(fixtures_dir, 'word-template-apa-style-paper/word-template-apa-style-paper.docx') }
     let(:roundtrip_path) { File.join(temp_dir, 'apa_roundtrip.docx') }
 
     it 'loads complex document without errors' do
@@ -153,8 +153,8 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     end
   end
 
-  describe 'word-template-paper-with-cover-and-toc.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'word-template-paper-with-cover-and-toc.docx') }
+  describe 'word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx round-trip' do
+    let(:original_path) { File.join(fixtures_dir, 'word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx') }
     let(:roundtrip_path) { File.join(temp_dir, 'cover_toc_roundtrip.docx') }
 
     it 'handles document with complex structure' do
@@ -176,7 +176,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
   end
 
   describe 'Multiple round-trips' do
-    let(:original_path) { File.join(fixtures_dir, 'blank.docx') }
+    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
 
     it 'maintains fidelity through 3 round-trips' do
       # First load
@@ -212,7 +212,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
   end
 
   describe 'File-level comparison report' do
-    let(:original_path) { File.join(fixtures_dir, 'blank.docx') }
+    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
     let(:roundtrip_path) { File.join(temp_dir, 'report_test.docx') }
 
     it 'generates detailed comparison of all files' do

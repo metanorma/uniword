@@ -371,15 +371,15 @@ module Uniword
           raise ArgumentError, 'Source must be a Document or Mhtml::Document'
         end
 
-        unless %i[docx mhtml].include?(source_format)
+        unless %i[docx docm dotx dotm mhtml].include?(source_format)
           raise ArgumentError,
-                "Source format must be :docx or :mhtml, got #{source_format.inspect}"
+                "Source format must be :docx, :docm, :dotx, :dotm or :mhtml, got #{source_format.inspect}"
         end
 
-        return if %i[docx mhtml].include?(target_format)
-
-        raise ArgumentError,
-              "Target format must be :docx or :mhtml, got #{target_format.inspect}"
+        unless %i[docx docm dotx dotm mhtml].include?(target_format)
+          raise ArgumentError,
+                "Target format must be :docx, :docm, :dotx, :dotm or :mhtml, got #{target_format.inspect}"
+        end
       end
     end
   end

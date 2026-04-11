@@ -12,7 +12,7 @@ module Uniword
       attribute :person, Person, collection: true, initialize_empty: true
 
       xml do
-        element 'name_list'
+        element 'NameList'
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 

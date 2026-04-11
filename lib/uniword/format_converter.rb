@@ -317,7 +317,7 @@ module Uniword
       raise ArgumentError, 'Target format must be specified' if target_format.nil?
 
       # Validate formats are supported
-      supported = %i[docx mhtml]
+      supported = %i[docx docm dotx dotm mhtml]
       unless supported.include?(source_format)
         raise ArgumentError,
               "Unsupported source format: #{source_format}. " \

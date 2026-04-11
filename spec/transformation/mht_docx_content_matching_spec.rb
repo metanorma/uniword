@@ -5,10 +5,10 @@ require 'spec_helper'
 RSpec.describe 'MHT → DOCX Content Matching' do
   # These fixtures represent real Word documents saved as MHT
   MHT_FIXTURES = {
-    'blank' => 'spec/fixtures/blank.mht',
-    'apa' => 'spec/fixtures/word-template-apa-style-paper.mht',
-    'mla' => 'spec/fixtures/word-template-mla-style-paper.mht',
-    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc.mht'
+    'blank' => 'spec/fixtures/blank/blank.mht',
+    'apa' => 'spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht',
+    'mla' => 'spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht',
+    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht'
   }.freeze
 
   # Expected counts from DOCX source analysis

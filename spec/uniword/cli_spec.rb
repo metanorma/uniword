@@ -25,11 +25,19 @@ RSpec.describe Uniword::CLI do
     end
 
     context 'with verbose option' do
+      let(:fixture_path) { 'spec/fixtures/docx_gem/styles.docx' }
+
       it 'shows detailed output' do
-        skip 'Requires fixture files'
-        # This would test verbose output
-        # expect { cli.invoke(:convert, [input_path, output_path], verbose: true) }
-        #   .to output(/Converting/).to_stdout
+        skip 'fixture not available' unless File.exist?(fixture_path)
+
+        output_path = File.join(Dir.tmpdir, "cli_convert_#{Time.now.to_i}.docx")
+        begin
+          expect do
+            cli.invoke(:convert, [fixture_path, output_path], verbose: true)
+          end.to output(/Converting|Paragraphs|complete/).to_stdout
+        ensure
+          safe_delete(output_path)
+        end
       end
     end
   end
@@ -44,9 +52,12 @@ RSpec.describe Uniword::CLI do
     end
 
     context 'with verbose option' do
+      let(:fixture_path) { 'spec/fixtures/docx_gem/styles.docx' }
+
       it 'shows detailed information' do
-        skip 'Requires fixture files'
-        # This would test verbose info output
+        expect do
+          cli.invoke(:info, [fixture_path], verbose: true)
+        end.to output(/Statistics|Paragraphs|Analysis/).to_stdout
       end
     end
   end
@@ -61,9 +72,14 @@ RSpec.describe Uniword::CLI do
     end
 
     context 'with verbose option' do
+      let(:fixture_path) { 'spec/fixtures/docx_gem/styles.docx' }
+
       it 'shows detailed validation results' do
-        skip 'Requires fixture files'
-        # This would test verbose validation output
+        skip 'fixture not available' unless File.exist?(fixture_path)
+
+        expect do
+          cli.invoke(:validate, [fixture_path], verbose: true)
+        end.to output(/Validating|valid|complete/).to_stdout
       end
     end
   end

@@ -19,19 +19,19 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
   describe 'Basic Round-trip' do
     it 'preserves simple text through round-trip' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/blank.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/blank/blank.docx')
       text = mhtml_doc.body_html.gsub(/<[^>]+>/, ' ').gsub(/\s+/, ' ').strip
       expect(text.length).to be > 0
     end
 
     it 'preserves multiple paragraphs' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx')
       paras = mhtml_doc.body_html.scan(/<p[\s >]/).length
       expect(paras).to be >= 20
     end
 
     it 'preserves empty document' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/blank.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/blank/blank.docx')
       expect(mhtml_doc).to be_a(Uniword::Mhtml::Document)
       expect(has_css_class?(mhtml_doc.body_html, 'MsoNormal')).to be true
     end
@@ -104,17 +104,17 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
   describe 'Style Round-trip' do
     it 'preserves paragraph styles - Heading1' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-paper-with-cover-and-toc.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx')
       expect(has_css_class?(mhtml_doc.body_html, 'MsoHeading1')).to be true
     end
 
     it 'preserves paragraph styles - Heading2' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx')
       expect(has_css_class?(mhtml_doc.body_html, 'MsoHeading2')).to be true
     end
 
     it 'preserves multiple heading levels' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx')
       html = mhtml_doc.body_html
       has_any_heading = has_css_class?(html, 'MsoHeading1') ||
                         has_css_class?(html, 'MsoHeading2')
@@ -124,26 +124,26 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
 
   describe 'Complex Document Round-trip' do
     it 'preserves mixed content types' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx')
       html = mhtml_doc.body_html
       expect(html).to include('<p')
       expect(html.gsub(/<[^>]+>/, '').strip.length).to be > 0
     end
 
     it 'preserves formatting in complex document' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx')
       expect(has_css_class?(mhtml_doc.body_html, 'Mso')).to be true
     end
   end
 
   describe 'Character Encoding Round-trip' do
     it 'preserves UTF-8 characters' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/blank.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/blank/blank.docx')
       expect(mhtml_doc.body_html.valid_encoding?).to be true
     end
 
     it 'preserves special HTML characters' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/blank.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/blank/blank.docx')
       body = mhtml_doc.body_html
       # Nokogiri decodes &nbsp; to actual non-breaking space
       has_entities = body.include?("\u00a0") || body.include?('<o:p>')
@@ -151,7 +151,7 @@ RSpec.describe 'MHTML Round-trip Validation', type: :integration do
     end
 
     it 'preserves emoji and symbols' do
-      mhtml_doc = docx_to_mhtml('spec/fixtures/blank.docx')
+      mhtml_doc = docx_to_mhtml('spec/fixtures/blank/blank.docx')
       expect(mhtml_doc.body_html.valid_encoding?).to be true
     end
   end

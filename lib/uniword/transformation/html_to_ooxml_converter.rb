@@ -179,8 +179,14 @@ module Uniword
             run = create_run(text)
             paragraph.runs << run
           when Nokogiri::XML::Node::ELEMENT_NODE
-            run = create_run_from_element(child)
-            paragraph.runs << run if run
+            # Handle SDT elements separately from runs
+            if child.name.downcase == 'w:sdt' || child.name == 'sdt'
+              sdt = create_sdt_from_element(child)
+              paragraph.sdts << sdt if sdt
+            else
+              run = create_run_from_element(child)
+              paragraph.runs << run if run
+            end
           end
         end
 
@@ -261,13 +267,8 @@ module Uniword
       # Create OOXML run from HTML element with inline formatting
       #
       # @param element [Nokogiri::XML::Element] HTML element
-      # @return [Uniword::Wordprocessingml::Run, Uniword::Wordprocessingml::StructuredDocumentTag, nil]
+      # @return [Uniword::Wordprocessingml::Run, nil] OOXML Run or nil
       def self.create_run_from_element(element)
-        # Handle SDT elements (structured document tags)
-        if element.name.downcase == 'w:sdt' || element.name == 'sdt'
-          return create_sdt_from_element(element)
-        end
-
         text = element.text.strip
         return nil if text.empty?
 

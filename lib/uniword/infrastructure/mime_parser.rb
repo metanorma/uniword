@@ -69,7 +69,8 @@ module Uniword
         parts = @content.split(/--#{Regexp.escape(@boundary)}/)
         parts.reject! { |p| p.strip.empty? || p.strip == '--' }
         # Skip the global MIME header (Content-Type: multipart/related)
-        parts.reject! { |p| p.match?(/^Content-Type:\s*multipart/i) }
+        # Strip leading CRLF first since boundary lines end with \r\n
+        parts.reject! { |p| p.gsub(/^\r?\n/, '').match?(/^Content-Type:\s*multipart/i) }
         parts
       end
 
@@ -77,6 +78,9 @@ module Uniword
       def parse_mime_part(raw_part)
         headers, body = raw_part.split(/\r?\n\r?\n/, 2)
         return nil unless body
+
+        # Strip leading CRLF from headers (boundary lines end with \r\n)
+        headers = headers.gsub(/^\r?\n/, '')
 
         content_type = extract_header(headers, 'Content-Type')
         content_location = extract_header(headers, 'Content-Location')

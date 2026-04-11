@@ -19,6 +19,11 @@ module Uniword
     # OOXML properties
     autoload :AppProperties, "#{__dir__}/ooxml/app_properties"
     autoload :CoreProperties, "#{__dir__}/ooxml/core_properties"
+    autoload :CustomProperties, "#{__dir__}/ooxml/custom_properties"
+
+    # OOXML shared schemas
+    autoload :AdditionalCharacteristics, "#{__dir__}/ooxml/additional_characteristics"
+    autoload :SchemaLibrary, "#{__dir__}/ooxml/schema_library"
 
     # OOXML infrastructure
     autoload :Types, "#{__dir__}/ooxml/types"

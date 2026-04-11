@@ -9,12 +9,15 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
 
   # Helper to create a temporary ZIP file on disk, properly handling Windows file locking.
   # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
-  # atomic rename. This helper closes and deletes the tempfile first.
+  # atomic rename. This helper closes and deletes the tempfile first, and suppresses
+  # the Tempfile finalizer to prevent EACCES errors when rubyzip locks files.
   def create_temp_zip
     temp_zip = Tempfile.new(['test', '.zip'])
     temp_zip.close
     safe_delete(temp_zip.path)
-    temp_zip.path
+    # Suppress finalizer - we handle cleanup manually via safe_delete
+    Tempfile.send(:remove_instance_variable, :@finalizer) rescue nil
+    temp_zip
   end
 
   describe '#extract' do
@@ -26,6 +29,8 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(['test', '.zip'])
         temp_zip.close
         safe_delete(temp_zip.path)
+        # Suppress finalizer - we handle cleanup manually via ensure block
+        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.get_output_stream('file1.txt') { |f| f.write('Content 1') }
@@ -48,6 +53,8 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(['test', '.zip'])
         temp_zip.close
         safe_delete(temp_zip.path)
+        # Suppress finalizer - we handle cleanup manually via ensure block
+        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.mkdir('empty_dir')
@@ -67,6 +74,8 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(['test', '.zip'])
         temp_zip.close
         safe_delete(temp_zip.path)
+        # Suppress finalizer - we handle cleanup manually via ensure block
+        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) { |_zip_file| }
 
@@ -113,13 +122,16 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
   end
 
   describe '#extract_file' do
-    let(:temp_zip) { Tempfile.new(['test', '.zip']) }
+    let(:temp_zip) do
+      tf = Tempfile.new(['test', '.zip'])
+      tf.close
+      safe_delete(tf.path)
+      # Suppress finalizer - we handle cleanup manually via after block
+      tf.instance_variable_set(:@finalizer, proc {})
+      tf
+    end
 
     before do
-      # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
-      # atomic rename. Close and delete the file first.
-      temp_zip.close
-      safe_delete(temp_zip.path)
       Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
         zip_file.get_output_stream('document.xml') { |f| f.write('<doc>Test</doc>') }
         zip_file.get_output_stream('styles.xml') { |f| f.write('<styles/>') }
@@ -163,13 +175,16 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
   end
 
   describe '#list_files' do
-    let(:temp_zip) { Tempfile.new(['test', '.zip']) }
+    let(:temp_zip) do
+      tf = Tempfile.new(['test', '.zip'])
+      tf.close
+      safe_delete(tf.path)
+      # Suppress finalizer - we handle cleanup manually via after block
+      tf.instance_variable_set(:@finalizer, proc {})
+      tf
+    end
 
     before do
-      # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
-      # atomic rename. Close and delete the file first.
-      temp_zip.close
-      safe_delete(temp_zip.path)
       Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
         zip_file.get_output_stream('file1.txt') { |f| f.write('Content 1') }
         zip_file.get_output_stream('dir/file2.txt') { |f| f.write('Content 2') }
@@ -197,11 +212,11 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
 
     it 'returns empty array for empty ZIP' do
       temp_empty = Tempfile.new(['empty', '.zip'])
+      temp_empty.close
+      safe_delete(temp_empty.path)
+      # Suppress finalizer - we handle cleanup manually via ensure block
+      temp_empty.instance_variable_set(:@finalizer, proc {})
       begin
-        # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
-        # atomic rename. Close and delete the file first.
-        temp_empty.close
-        safe_delete(temp_empty.path)
         Zip::File.open(temp_empty.path, Zip::File::CREATE) { |_zip_file| }
 
         result = extractor.list_files(temp_empty.path)

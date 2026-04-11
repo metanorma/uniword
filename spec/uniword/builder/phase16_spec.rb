@@ -127,7 +127,7 @@ RSpec.describe 'Phase 16: Image Embedding, Bibliography, Charts' do
         expect(src.publisher).to eq('ACME Press')
         expect(src.city).to eq('New York')
         expect(src.edition).to eq('3rd')
-        expect(src.ref_order).to eq(1)
+        expect(src.ref_order).to eq('1')
       end
 
       it 'creates author with first and last name' do

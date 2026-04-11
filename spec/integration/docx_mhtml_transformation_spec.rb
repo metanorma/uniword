@@ -4,10 +4,10 @@ require 'spec_helper'
 
 RSpec.describe 'DOCX → MHT Transformation', type: :integration do
   INTEGRATION_FIXTURES = {
-    'blank' => 'spec/fixtures/blank.docx',
-    'apa' => 'spec/fixtures/word-template-apa-style-paper.docx',
-    'mla' => 'spec/fixtures/word-template-mla-style-paper.docx',
-    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc.docx'
+    'blank' => 'spec/fixtures/blank/blank.docx',
+    'apa' => 'spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx',
+    'mla' => 'spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.docx',
+    'cover_toc' => 'spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx'
   }.freeze
 
   def docx_to_mht(docx_path, doc_name = nil)

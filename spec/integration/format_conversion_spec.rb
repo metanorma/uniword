@@ -77,7 +77,7 @@ RSpec.describe 'Format Conversion', type: :integration do
 
   describe 'MHTML to DOCX Conversion' do
     it 'converts MHTML to DOCX' do
-      mht_fixture = 'spec/fixtures/blank.mht'
+      mht_fixture = 'spec/fixtures/blank/blank.mht'
       skip 'Fixture not found' unless File.exist?(mht_fixture)
 
       mhtml_doc = Uniword::Infrastructure::MimeParser.new.parse_content(File.read(mht_fixture))
@@ -87,7 +87,7 @@ RSpec.describe 'Format Conversion', type: :integration do
     end
 
     it 'preserves paragraph structure in conversion' do
-      mht_fixture = 'spec/fixtures/blank.mht'
+      mht_fixture = 'spec/fixtures/blank/blank.mht'
       skip 'Fixture not found' unless File.exist?(mht_fixture)
 
       mhtml_doc = Uniword::Infrastructure::MimeParser.new.parse_content(File.read(mht_fixture))
@@ -211,7 +211,7 @@ RSpec.describe 'Format Conversion', type: :integration do
     end
 
     it 'auto-detects MHTML format for reading' do
-      mht_fixture = 'spec/fixtures/blank.mht'
+      mht_fixture = 'spec/fixtures/blank/blank.mht'
       skip 'Fixture not found' unless File.exist?(mht_fixture)
 
       doc = Uniword::DocumentFactory.from_file(mht_fixture, format: :mhtml)

@@ -4,13 +4,13 @@ require 'spec_helper'
 
 RSpec.describe 'MHT → DOCX Full Fidelity' do
   MHT_DOCX_FIXTURES = {
-    'blank' => { docx: 'spec/fixtures/blank.docx', mht: 'spec/fixtures/blank.mht' },
-    'apa' => { docx: 'spec/fixtures/word-template-apa-style-paper.docx',
-               mht: 'spec/fixtures/word-template-apa-style-paper.mht' },
-    'mla' => { docx: 'spec/fixtures/word-template-mla-style-paper.docx',
-               mht: 'spec/fixtures/word-template-mla-style-paper.mht' },
-    'cover_toc' => { docx: 'spec/fixtures/word-template-paper-with-cover-and-toc.docx',
-                     mht: 'spec/fixtures/word-template-paper-with-cover-and-toc.mht' }
+    'blank' => { docx: 'spec/fixtures/blank/blank.docx', mht: 'spec/fixtures/blank/blank.mht' },
+    'apa' => { docx: 'spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx',
+               mht: 'spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht' },
+    'mla' => { docx: 'spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.docx',
+               mht: 'spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht' },
+    'cover_toc' => { docx: 'spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx',
+                     mht: 'spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht' }
   }.freeze
 
   def parse_mht(mht_path)

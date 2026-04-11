@@ -14,7 +14,7 @@ module Uniword
       attribute :last, :string
 
       xml do
-        element 'person'
+        element 'Person'
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 

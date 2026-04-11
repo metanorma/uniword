@@ -38,6 +38,39 @@ module Uniword
       # OOXML boolean type for optional attributes (nil-omitting)
       # Serializes true -> "1", false/nil -> omitted
       autoload :OoxmlBooleanOptional, "#{__dir__}/types/ooxml_boolean_optional"
+
+      # Variant Types (vt: namespace) for OLE property values
+      autoload :VariantTypes, "#{__dir__}/types/variant_types"
+
+      # Convenience aliases for commonly used variant types
+      def self.vt_class_for(element_name)
+        {
+          'lpwstr' => VariantTypes::VtLpwstr,
+          'lpstr' => VariantTypes::VtLpstr,
+          'bstr' => VariantTypes::VtBstr,
+          'i1' => VariantTypes::VtI1,
+          'i2' => VariantTypes::VtI2,
+          'i4' => VariantTypes::VtI4,
+          'i8' => VariantTypes::VtI8,
+          'int' => VariantTypes::VtInt,
+          'ui1' => VariantTypes::VtUi1,
+          'ui2' => VariantTypes::VtUi2,
+          'ui4' => VariantTypes::VtUi4,
+          'ui8' => VariantTypes::VtUi8,
+          'uint' => VariantTypes::VtUint,
+          'r4' => VariantTypes::VtR4,
+          'r8' => VariantTypes::VtR8,
+          'decimal' => VariantTypes::VtDecimal,
+          'bool' => VariantTypes::VtBool,
+          'date' => VariantTypes::VtDate,
+          'filetime' => VariantTypes::VtFiletime,
+          'cy' => VariantTypes::VtCy,
+          'error' => VariantTypes::VtError,
+          'clsid' => VariantTypes::VtClsid,
+          'empty' => VariantTypes::VtEmpty,
+          'null' => VariantTypes::VtNull
+        }[element_name]
+      end
     end
   end
 end

@@ -2,9 +2,6 @@
 
 require 'securerandom'
 require 'lutaml/model'
-# NOTE: ContentTypes and Relationships classes are autoloaded via lib/uniword.rb
-# No require_relative needed - the spec uses require 'uniword' which sets up autoloads
-# Theme, StylesConfiguration, NumberingConfiguration, Document are autoloaded via lib/uniword.rb
 
 module Uniword
   module Ooxml
@@ -40,6 +37,12 @@ module Uniword
 
       # Extended application properties (docProps/app.xml)
       attribute :app_properties, AppProperties
+
+      # Custom document properties (docProps/custom.xml)
+      attribute :custom_properties, CustomProperties
+
+      # Custom XML data items (customXml/item*.xml)
+      attr_accessor :custom_xml_items
 
       # === Document Parts (word/) ===
       # Main document content (word/document.xml)
@@ -112,6 +115,10 @@ module Uniword
           )
         end
 
+        # Find the main document path from officeDocument relationship
+        main_doc_path = find_main_document_path(package.package_rels)
+        main_doc_rels_path = find_document_rels_path(main_doc_path)
+
         # Parse Document Properties
         if zip_content['docProps/core.xml']
           package.core_properties = CoreProperties.from_xml(
@@ -125,8 +132,47 @@ module Uniword
           )
         end
 
-        # Parse Document Parts
-        if zip_content['word/document.xml']
+        # Parse Custom Properties
+        if zip_content['docProps/custom.xml']
+          package.custom_properties = CustomProperties.from_xml(
+            zip_content['docProps/custom.xml']
+          )
+        end
+
+        # Parse Custom XML Data items (customXml/item*.xml)
+        custom_xml_files = zip_content.keys.grep(%r{^customXml/item(\d+)\.xml$})
+        if custom_xml_files.any?
+          package.custom_xml_items = []
+          custom_xml_files.sort_by { |f| f[/item(\d+)/, 1].to_i }.each do |item_path|
+            index = item_path[/item(\d+)/, 1].to_i
+            item = {
+              index: index,
+              xml_content: zip_content[item_path]
+            }
+
+            # Parse itemProps
+            props_path = "customXml/itemProps#{index}.xml"
+            if zip_content[props_path]
+              item[:props_xml] = zip_content[props_path]
+            end
+
+            # Parse item relationships
+            rels_path = "customXml/_rels/item#{index}.xml.rels"
+            if zip_content[rels_path]
+              item[:rels_xml] = zip_content[rels_path]
+            end
+
+            package.custom_xml_items << item
+          end
+        end
+
+        # Parse Document Parts - use dynamic path from package relationships
+        if main_doc_path && zip_content[main_doc_path]
+          package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
+            zip_content[main_doc_path]
+          )
+        elsif zip_content['word/document.xml']
+          # Fallback to standard path
           package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
             zip_content['word/document.xml']
           )
@@ -162,7 +208,13 @@ module Uniword
           )
         end
 
-        if zip_content['word/_rels/document.xml.rels']
+        # Parse document relationships - use dynamic path based on main document
+        if main_doc_rels_path && zip_content[main_doc_rels_path]
+          package.document_rels = Relationships::PackageRelationships.from_xml(
+            zip_content[main_doc_rels_path]
+          )
+        elsif zip_content['word/_rels/document.xml.rels']
+          # Fallback to standard path
           package.document_rels = Relationships::PackageRelationships.from_xml(
             zip_content['word/_rels/document.xml.rels']
           )
@@ -328,6 +380,7 @@ module Uniword
         package.theme = document.theme if document.theme
         package.core_properties = document.core_properties if document.core_properties
         package.app_properties = document.app_properties if document.app_properties
+        package.custom_properties = document.custom_properties if document.custom_properties
         package.document_rels = document.document_rels if document.document_rels
         package.theme_rels = document.theme_rels if document.theme_rels
         package.package_rels = document.package_rels if document.package_rels
@@ -335,6 +388,7 @@ module Uniword
         package.footnotes = document.footnotes if document.footnotes
         package.endnotes = document.endnotes if document.endnotes
         package.chart_parts = document.chart_parts if document.chart_parts
+        package.custom_xml_items = document.custom_xml_items if document.custom_xml_items
         return unless document.bibliography_sources
 
         package.bibliography_sources = document.bibliography_sources
@@ -607,6 +661,39 @@ module Uniword
           end
         end
 
+        # Custom properties: add content type and relationship
+        if custom_properties && !custom_properties.properties.empty?
+          unless content_types.overrides.any? { |o| o.part_name == '/docProps/custom.xml' }
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: '/docProps/custom.xml',
+              content_type: 'application/vnd.openxmlformats-officedocument.custom-properties+xml'
+            )
+          end
+
+          unless package_rels.relationships.any? { |r|
+            r.type.to_s.include?('officeDocument/2006/relationships/custom-properties')
+          }
+            package_rels.relationships << Relationships::Relationship.new(
+              id: "rIdCustProps",
+              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties',
+              target: 'docProps/custom.xml'
+            )
+          end
+        end
+
+        # Custom XML data: add content types
+        if custom_xml_items && !custom_xml_items.empty?
+          custom_xml_items.each do |item|
+            idx = item[:index]
+            unless content_types.overrides.any? { |o| o.part_name == "/customXml/itemProps#{idx}.xml" }
+              content_types.overrides << Uniword::ContentTypes::Override.new(
+                part_name: "/customXml/itemProps#{idx}.xml",
+                content_type: 'application/vnd.openxmlformats-officedocument.customXmlProperties+xml'
+              )
+            end
+          end
+        end
+
         # Headers and footers: inject content types, relationships, section refs
         header_counter = 0
         footer_counter = 0
@@ -690,6 +777,22 @@ module Uniword
           content['docProps/app.xml'] = app_properties.to_xml(
             encoding: 'UTF-8', prefix: false
           )
+        end
+
+        if custom_properties
+          content['docProps/custom.xml'] = custom_properties.to_xml(
+            encoding: 'UTF-8', prefix: false
+          )
+        end
+
+        # Serialize Custom XML Data items
+        if custom_xml_items && !custom_xml_items.empty?
+          custom_xml_items.each do |item|
+            idx = item[:index]
+            content["customXml/item#{idx}.xml"] = item[:xml_content]
+            content["customXml/itemProps#{idx}.xml"] = item[:props_xml] if item[:props_xml]
+            content["customXml/_rels/item#{idx}.xml.rels"] = item[:rels_xml] if item[:rels_xml]
+          end
         end
 
         # Serialize Document Parts
@@ -843,6 +946,43 @@ module Uniword
       # Get styles configuration from document
       def styles_configuration
         document&.styles_configuration
+      end
+
+      # Find the main document path from package relationships
+      #
+      # The officeDocument relationship type is:
+      # http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument
+      #
+      # @param package_rels [PackageRelationships, nil] Parsed package relationships
+      # @return [String, nil] Normalized document path (e.g., 'word/document.xml')
+      def self.find_main_document_path(package_rels)
+        return nil unless package_rels&.relationships
+
+        rel = package_rels.relationships.find do |r|
+          r.type.to_s.include?('officeDocument/2006/relationships/officeDocument')
+        end
+        return nil unless rel&.target
+
+        # Normalize path - strip leading slash if present
+        path = rel.target.dup
+        path.sub!(%r{^/}, '')
+        path
+      end
+
+      # Find the document relationships path from the main document path
+      #
+      # For 'word/document.xml' returns 'word/_rels/document.xml.rels'
+      # For 'word/document2.xml' returns 'word/_rels/document2.xml.rels'
+      #
+      # @param doc_path [String, nil] Main document path
+      # @return [String, nil] Document relationships path
+      def self.find_document_rels_path(doc_path)
+        return nil unless doc_path
+
+        # Extract directory and filename
+        dir = File.dirname(doc_path)
+        basename = File.basename(doc_path)
+        File.join(dir, '_rels', "#{basename}.rels")
       end
     end
   end

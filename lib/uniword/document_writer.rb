@@ -48,7 +48,7 @@ module Uniword
       format = infer_format(path) if format == :auto
 
       case format
-      when :docx
+      when :docx, :docm
         Ooxml::DocxPackage.to_file(document, path)
       when :dotx, :dotm
         Ooxml::DotxPackage.to_file(document, path)
@@ -74,16 +74,22 @@ module Uniword
       case extension
       when '.docx'
         :docx
+      when '.docm'
+        :docm
       when '.dotx'
         :dotx
       when '.dotm'
         :dotm
-      when '.doc', '.mhtml', '.mht'
+      when '.mhtml', '.mht'
+        :mhtml
+      when '.doc'
+        # .doc can be MHTML saved with Word (not binary old Word format)
+        # We don't support binary .doc output, but MHTML .doc is valid
         :mhtml
       else
         raise ArgumentError,
               "Cannot infer format from extension: #{extension}. " \
-              'Supported extensions: .docx, .dotx, .dotm, .doc, .mhtml, .mht'
+              'Supported extensions: .docx, .docm, .dotx, .dotm, .mhtml, .mht'
       end
     end
 

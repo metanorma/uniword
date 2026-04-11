@@ -587,7 +587,7 @@ module Uniword
       say "Analyzing #{path}...", :green
 
       # Detect format
-      detector = FormatDetector.new
+      detector = ::Uniword::FormatDetector.new
       format = detector.detect(path)
       say "\nFormat: #{format.to_s.upcase}", :cyan
 
