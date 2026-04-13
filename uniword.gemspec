@@ -26,13 +26,13 @@ Gem::Specification.new do |spec|
   spec.files = Dir.glob(%w[
                           lib/**/*.rb
                           lib/**/*.css
-                          bin/*
+                          exe/*
                           README.adoc
                           CHANGELOG.md
                           CONTRIBUTING.md
                           LICENSE.txt
                         ])
-  spec.bindir = 'bin'
+  spec.bindir = 'exe'
   spec.executables = ['uniword']
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.7.0'
