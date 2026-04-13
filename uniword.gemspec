@@ -40,13 +40,7 @@ Gem::Specification.new do |spec|
   # Core dependencies
   spec.add_dependency 'lutaml-model', '~> 0.8'
   spec.add_dependency 'mail', '~> 2.8'
-  spec.add_dependency 'nokogiri', '~> 1.15'
+  spec.add_dependency 'nokogiri', '~> 1.18'
   spec.add_dependency 'rubyzip', '~> 2.3'
   spec.add_dependency 'thor', '~> 1.3'
-
-  # Development dependencies (no group, no version constraints)
-  spec.add_development_dependency 'rake'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rubocop'
-  spec.add_development_dependency 'rubocop-rspec'
 end

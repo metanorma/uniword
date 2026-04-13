@@ -20,6 +20,9 @@ gem 'toml-rb'
 gem 'rake'
 gem 'rspec'
 gem 'rubocop'
+gem 'rubocop-rake'
+gem 'rubocop-performance'
+gem 'rubocop-rspec'
 gem 'yard'
 
 # Performance profiling gems (optional, for development)
