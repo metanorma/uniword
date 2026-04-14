@@ -226,6 +226,7 @@ module Uniword
     autoload :W15RestartNumberingAfterBreak, 'uniword/wordprocessingml/w14_attributes'
     autoload :W16CidDurableId, 'uniword/wordprocessingml/w14_attributes'
     autoload :DocGrid, 'uniword/wordprocessingml/doc_grid'
+    autoload :TitlePg, 'uniword/wordprocessingml/title_pg'
     autoload :Text, 'uniword/wordprocessingml/text'
 
     # Grid
