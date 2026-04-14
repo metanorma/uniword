@@ -11,6 +11,9 @@ module Uniword
     class NonVisualDrawingProperties < Lutaml::Model::Serializable
       attribute :id, :integer
       attribute :name, :string
+      attribute :descr, :string
+      attribute :title, :string
+      attribute :hidden, :string
 
       xml do
         element 'cNvPr'
@@ -18,6 +21,9 @@ module Uniword
 
         map_attribute 'id', to: :id
         map_attribute 'name', to: :name
+        map_attribute 'descr', to: :descr
+        map_attribute 'title', to: :title
+        map_attribute 'hidden', to: :hidden
       end
     end
   end
