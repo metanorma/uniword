@@ -13,7 +13,7 @@ module Uniword
         xml do
           element 'tag'
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute 'val', to: :value, render_nil: true, render_empty: true
         end
       end
     end

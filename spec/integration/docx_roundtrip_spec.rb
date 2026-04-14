@@ -24,7 +24,13 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       zip_file.each do |entry|
         next if entry.directory?
 
-        files[entry.name] = entry.get_input_stream.read
+        content = entry.get_input_stream.read
+        # Force UTF-8 encoding for text-based XML/rels content
+        # This prevents Canon comparison errors with ASCII-8BIT vs UTF-8 mismatches
+        if content.encoding == Encoding::ASCII_8BIT
+          content = content.force_encoding('UTF-8')
+        end
+        files[entry.name] = content
       end
     end
     files

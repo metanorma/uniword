@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../properties/relationship_id'
 
 module Uniword
   module Wordprocessingml
@@ -10,17 +11,14 @@ module Uniword
     # Element: <w:footerReference>
     class FooterReference < Lutaml::Model::Serializable
       attribute :type, :string
-      attribute :r_id, :string
+      attribute :r_id, Properties::RelationshipIdValue
 
       xml do
         element 'footerReference'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :auto }
-        ]
 
         map_attribute 'type', to: :type
-        map_attribute 'r:id', to: :r_id
+        map_attribute 'id', to: :r_id
       end
     end
   end

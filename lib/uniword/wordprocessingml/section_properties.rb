@@ -30,7 +30,7 @@ module Uniword
       xml do
         element 'sectPr'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        mixed_content
+        ordered
 
         # Revision tracking attributes
         map_attribute 'rsidR', to: :rsid_r, render_nil: false

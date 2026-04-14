@@ -24,6 +24,7 @@ module Uniword
       attribute :del_text, DeletedText
       attribute :no_break_hyphen, NoBreakHyphen
       attribute :sym, Symbol
+      attribute :last_rendered_page_break, LastRenderedPageBreak
 
       # Revision tracking attributes
       attribute :rsid_r, :string          # Revision ID for run
@@ -55,6 +56,7 @@ module Uniword
         map_element 'delText', to: :del_text, render_nil: false
         map_element 'noBreakHyphen', to: :no_break_hyphen, render_nil: false
         map_element 'sym', to: :sym, render_nil: false
+        map_element 'lastRenderedPageBreak', to: :last_rendered_page_break, render_nil: false
       end
 
       # Initialize with text normalization

@@ -9,6 +9,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:document>
     class DocumentRoot < Lutaml::Model::Serializable
+      attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
       attribute :body, Body, default: -> { Body.new }
 
       xml do
@@ -18,8 +19,11 @@ module Uniword
         namespace_scope [
           { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::WordProcessingDrawing, declare: :auto },
-          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto }
+          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
+
+        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
 
         map_element 'body', to: :body, render_default: true
       end

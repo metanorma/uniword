@@ -31,6 +31,12 @@ module Canon
   end
 end
 
+# Use spec_friendly profile for attribute_order tolerant comparison
+Canon::Config.configure do |config|
+  config.xml.match.profile = :spec_friendly
+  config.xml.diff.show_diffs = :normative
+end
+
 # Load support files
 Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
 
@@ -56,6 +62,24 @@ RSpec.configure do |config|
   config.before(:suite) do
     FileUtils.mkdir_p('test_output')
   end
+
+  # Skip LibreOffice tests if soffice is not available
+  config.before(:each) do |example|
+    if example.metadata[:skip_if_no_libreoffice]
+      skip_理由 = if soffice_available?
+                   nil
+                 else
+                   'LibreOffice not installed. Install with: brew install --cask libreoffice (macOS) or apt-get install libreoffice (Linux)'
+                 end
+      skip(skip_理由) if skip_理由
+    end
+  end
+end
+
+# Helper to check if soffice is available
+def soffice_available?
+  return true if system('which soffice > /dev/null 2>&1')
+  File.exist?('/Applications/LibreOffice.app/Contents/MacOS/soffice')
 end
 
 # Global helper to safely delete files on Windows (handles file locking)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'lutaml/model'
+require_relative '../properties/relationship_id'
 
 module Uniword
   module Wordprocessingml
@@ -400,16 +401,12 @@ module Uniword
     #
     # Element: <w:attachedTemplate>
     class AttachedTemplate < Lutaml::Model::Serializable
-      attribute :r_id, :string
+      attribute :r_id, Properties::RelationshipIdValue
 
       xml do
         element 'attachedTemplate'
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::Relationships,
-            declare: :auto }
-        ]
-        map_attribute 'r:id', to: :r_id
+        map_attribute 'id', to: :r_id
       end
     end
 

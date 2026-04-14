@@ -12,6 +12,7 @@ module Uniword
       attribute :width, :integer
       attribute :height, :integer
       attribute :orientation, :string
+      attribute :code, :integer
 
       xml do
         element 'pgSz'
@@ -20,6 +21,7 @@ module Uniword
         map_attribute 'w', to: :width
         map_attribute 'h', to: :height
         map_attribute 'orient', to: :orientation
+        map_attribute 'code', to: :code, render_nil: false
       end
     end
   end

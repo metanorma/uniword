@@ -31,6 +31,7 @@ module Uniword
     autoload :Symbol, 'uniword/wordprocessingml/symbol'
     autoload :DeletedText, 'uniword/wordprocessingml/deleted_text'
     autoload :NoBreakHyphen, 'uniword/wordprocessingml/no_break_hyphen'
+    autoload :LastRenderedPageBreak, 'uniword/wordprocessingml/last_rendered_page_break'
     autoload :CarriageReturn, 'uniword/wordprocessingml/carriage_return'
     autoload :SimpleField, 'uniword/wordprocessingml/simple_field'
     autoload :TextBoxContent, 'uniword/wordprocessingml/text_box_content'
