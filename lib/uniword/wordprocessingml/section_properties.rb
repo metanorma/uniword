@@ -17,6 +17,9 @@ module Uniword
       attribute :type, :string
       attribute :page_numbering, PageNumbering
       attribute :doc_grid, DocGrid
+      attribute :footnote_pr, FootnotePr
+      attribute :title_pg, TitlePg
+      attribute :footnote_columns, Uniword::Wordprocessingml2013::FootnoteColumns
 
       # Revision tracking attributes
       attribute :rsid_r, :string
@@ -49,6 +52,9 @@ module Uniword
         map_attribute 'val', to: :type
         map_element 'pgNumType', to: :page_numbering, render_nil: false
         map_element 'docGrid', to: :doc_grid, render_nil: false
+        map_element 'footnotePr', to: :footnote_pr, render_nil: false
+        map_element 'titlePg', to: :title_pg, render_nil: false
+        map_element 'footnoteColumns', to: :footnote_columns, render_nil: false
       end
     end
   end

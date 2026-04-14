@@ -64,6 +64,7 @@ module Uniword
     autoload :TableJustification, 'uniword/properties/table_justification'
     autoload :TableCellMargin, 'uniword/properties/table_cell_margin'
     autoload :TableLook, 'uniword/properties/table_look'
+    autoload :TableCaption, 'uniword/properties/table_caption'
     autoload :TableIndent, 'uniword/properties/table_indent'
     autoload :CellWidth, 'uniword/properties/cell_width'
     autoload :CellVerticalAlign, 'uniword/properties/cell_vertical_align'

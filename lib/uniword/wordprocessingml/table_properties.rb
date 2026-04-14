@@ -72,6 +72,9 @@ module Uniword
       # Table look - conditional formatting flags (wrapper class)
       attribute :table_look, Uniword::Properties::TableLook
 
+      # Table caption
+      attribute :caption, Uniword::Properties::TableCaption
+
       # Table borders
       attribute :table_borders, TableBorders
 
@@ -86,6 +89,7 @@ module Uniword
         map_element 'shd', to: :shading, render_nil: false
         map_element 'tblCellMar', to: :table_cell_margin, render_nil: false
         map_element 'tblLook', to: :table_look, render_nil: false
+        map_element 'tblCaption', to: :caption, render_nil: false
 
         # Table indentation - critical for table styles
         map_element 'tblInd', to: :table_indent, render_nil: false

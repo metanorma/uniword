@@ -17,6 +17,7 @@ module Uniword
       attribute :grid_after, GridAfter
       attribute :w_before, WidthBefore
       attribute :w_after, WidthAfter
+      attribute :cnf_style, CnfStyle
 
       xml do
         element 'trPr'
@@ -30,6 +31,7 @@ module Uniword
         map_element 'gridAfter', to: :grid_after, render_nil: false
         map_element 'wBefore', to: :w_before, render_nil: false
         map_element 'wAfter', to: :w_after, render_nil: false
+        map_element 'cnfStyle', to: :cnf_style, render_nil: false
       end
 
       def initialize(attrs = {})

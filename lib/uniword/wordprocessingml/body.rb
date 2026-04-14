@@ -14,6 +14,8 @@ module Uniword
       attribute :section_properties, SectionProperties
       attribute :structured_document_tags, StructuredDocumentTag, collection: true,
                                                                   initialize_empty: true
+      attribute :bookmark_starts, BookmarkStart, collection: true, initialize_empty: true
+      attribute :bookmark_ends, BookmarkEnd, collection: true, initialize_empty: true
 
       xml do
         element 'body'
@@ -24,6 +26,8 @@ module Uniword
         map_element 'tbl', to: :tables, render_nil: false
         map_element 'sectPr', to: :section_properties, render_nil: false
         map_element 'sdt', to: :structured_document_tags, render_nil: false
+        map_element 'bookmarkStart', to: :bookmark_starts, render_nil: false
+        map_element 'bookmarkEnd', to: :bookmark_ends, render_nil: false
       end
 
       # Get all elements in body
@@ -69,6 +73,8 @@ module Uniword
         ordered_p_count = element_order.count { |e| e.name == 'p' }
         ordered_tbl_count = element_order.count { |e| e.name == 'tbl' }
         ordered_sdt_count = element_order.count { |e| e.name == 'sdt' }
+        ordered_bookmark_start_count = element_order.count { |e| e.name == 'bookmarkStart' }
+        ordered_bookmark_end_count = element_order.count { |e| e.name == 'bookmarkEnd' }
 
         # Add missing paragraphs
         (paragraphs.size - ordered_p_count).times do
@@ -83,6 +89,16 @@ module Uniword
         # Add missing structured document tags
         (structured_document_tags.size - ordered_sdt_count).times do
           element_order << Lutaml::Xml::Element.new('Element', 'sdt')
+        end
+
+        # Add missing bookmark starts
+        (bookmark_starts.size - ordered_bookmark_start_count).times do
+          element_order << Lutaml::Xml::Element.new('Element', 'bookmarkStart')
+        end
+
+        # Add missing bookmark ends
+        (bookmark_ends.size - ordered_bookmark_end_count).times do
+          element_order << Lutaml::Xml::Element.new('Element', 'bookmarkEnd')
         end
 
         # Ensure section_properties is in element_order if present
