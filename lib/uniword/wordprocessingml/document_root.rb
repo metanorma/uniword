@@ -68,13 +68,19 @@ module Uniword
         @app_properties ||= Uniword::Ooxml::AppProperties.new
       end
 
-      # Lazy initialization for numbering_configuration
+      # Accessor for numbering_configuration (lazy init for builder API)
       def numbering_configuration
         @numbering_configuration ||= NumberingConfiguration.new
       end
 
       # Setter for numbering_configuration
       attr_writer :numbering_configuration
+
+      # Whether numbering_configuration was explicitly loaded from source
+      # (vs lazily created for builder API)
+      def numbering_configuration_loaded?
+        !!@numbering_configuration
+      end
 
       # Get core_properties (lazy initialization)
       #

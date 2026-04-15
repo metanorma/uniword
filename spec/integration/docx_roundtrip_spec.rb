@@ -58,26 +58,19 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
 
       puts "\n  Checking #{xml_files.length} XML files for fidelity..."
 
+      # No files should be ADDED
+      added_files = saved_files.keys - original_files.keys
+      expect(added_files).to be_empty, "Unexpected files added: #{added_files.join(', ')}"
+
+      # No files should be REMOVED
+      removed_files = original_files.keys - saved_files.keys
+      expect(removed_files).to be_empty, "Files removed: #{removed_files.join(', ')}"
+
+      # ALL XML files must be semantically equivalent
       xml_files.each do |filename|
-        original_content = original_files[filename]
-        saved_content = saved_files[filename]
-
-        if saved_content.nil?
-          puts "    ⚠ #{filename}: MISSING in saved file"
-          next
-        end
-
-        if Canon::Comparison.equivalent?(original_content, saved_content)
-          puts "    ✓ #{filename}: Preserved"
-        else
-          puts "    ⚠ #{filename}: Modified (may be acceptable)"
-          # Don't fail immediately - some differences may be acceptable
-        end
+        expect(saved_files[filename]).to be_xml_equivalent_to(original_files[filename]),
+                                          "#{filename} was modified during round-trip"
       end
-
-      # At minimum, document.xml must be preserved
-      expect(saved_files["word/document.xml"]).not_to be_nil
-      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
     end
 
     it "preserves document structure and content" do
@@ -278,8 +271,13 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
       puts "=" * 60
       puts
 
-      # Test passes if document.xml is preserved
-      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+      # All XML files must be preserved
+      xml_files.each do |filename|
+        next unless original_files[filename] && saved_files[filename]
+
+        expect(saved_files[filename]).to be_xml_equivalent_to(original_files[filename]),
+                                          "#{filename} was modified during round-trip"
+      end
     end
   end
 

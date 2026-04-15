@@ -355,8 +355,6 @@ module Uniword
         package.settings ||= Uniword::Wordprocessingml::Settings.new
         package.font_table ||= Uniword::Wordprocessingml::FontTable.new
         package.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
-        package.footnotes ||= Uniword::Wordprocessingml::Footnotes.new
-        package.endnotes ||= Uniword::Wordprocessingml::Endnotes.new
         package.to_file(path)
       end
 
@@ -369,7 +367,8 @@ module Uniword
         return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
         package.styles = document.styles_configuration if document.styles_configuration
-        package.numbering = document.numbering_configuration if document.numbering_configuration
+        # Only copy numbering if it was explicitly loaded from the source DOCX
+        package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?
         package.settings = document.settings if document.settings
         package.font_table = document.font_table if document.font_table
         package.web_settings = document.web_settings if document.web_settings
@@ -481,24 +480,12 @@ module Uniword
           content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: "/word/numbering.xml",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"
-        )
-        ct.overrides << Uniword::ContentTypes::Override.new(
           part_name: "/docProps/app.xml",
           content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
           part_name: "/docProps/core.xml",
           content_type: "application/vnd.openxmlformats-package.core-properties+xml"
-        )
-        ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: "/word/footnotes.xml",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"
-        )
-        ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: "/word/endnotes.xml",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"
         )
         ct
       end
@@ -549,21 +536,6 @@ module Uniword
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
           target: "webSettings.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
-          id: "rId5",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
-          target: "numbering.xml"
-        )
-        rels.relationships << Relationships::Relationship.new(
-          id: "rId6",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
-          target: "footnotes.xml"
-        )
-        rels.relationships << Relationships::Relationship.new(
-          id: "rId7",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
-          target: "endnotes.xml"
-        )
         rels
       end
 
@@ -592,8 +564,6 @@ module Uniword
         self.settings ||= Uniword::Wordprocessingml::Settings.new
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
-        self.footnotes ||= Uniword::Wordprocessingml::Footnotes.new
-        self.endnotes ||= Uniword::Wordprocessingml::Endnotes.new
 
         # --- Pre-serialization: inject image/chart/bibliography into content_types and document_rels ---
 
@@ -749,6 +719,41 @@ module Uniword
                 type: type, r_id: r_id
               )
             end
+          end
+        end
+
+        # Footnotes and endnotes: add content types and relationships
+        if footnotes
+          unless content_types.overrides.any? { |o| o.part_name == "/word/footnotes.xml" }
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: "/word/footnotes.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"
+            )
+          end
+
+          unless document_rels.relationships.any? { |r| r.target == "footnotes.xml" }
+            document_rels.relationships << Relationships::Relationship.new(
+              id: "rIdFootnotes",
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+              target: "footnotes.xml"
+            )
+          end
+        end
+
+        if endnotes
+          unless content_types.overrides.any? { |o| o.part_name == "/word/endnotes.xml" }
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: "/word/endnotes.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"
+            )
+          end
+
+          unless document_rels.relationships.any? { |r| r.target == "endnotes.xml" }
+            document_rels.relationships << Relationships::Relationship.new(
+              id: "rIdEndnotes",
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+              target: "endnotes.xml"
+            )
           end
         end
 

@@ -27,8 +27,9 @@ module Uniword
       def initialize(document, type: :bullet)
         @document = document
         @type = type
-        @num_id = document.model
-                          .numbering_configuration
+        model = document.model
+        model.numbering_configuration ||= Uniword::Wordprocessingml::NumberingConfiguration.new
+        @num_id = model.numbering_configuration
                           .create_numbering(type)
       end
 
