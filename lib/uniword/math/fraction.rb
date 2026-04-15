@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -14,13 +14,13 @@ module Uniword
       attribute :denominator, Denominator
 
       xml do
-        element 'f'
+        element "f"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'fPr', to: :properties, render_nil: false
-        map_element 'num', to: :numerator
-        map_element 'den', to: :denominator
+        map_element "fPr", to: :properties, render_nil: false
+        map_element "num", to: :numerator
+        map_element "den", to: :denominator
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,12 +13,12 @@ module Uniword
       attribute :character_pitch, :integer
 
       xml do
-        element 'docGrid'
+        element "docGrid"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'linePitch', to: :line_pitch
-        map_attribute 'type', to: :type
-        map_attribute 'charPitch', to: :character_pitch
+        map_attribute "linePitch", to: :line_pitch
+        map_attribute "type", to: :type
+        map_attribute "charPitch", to: :character_pitch
       end
     end
   end

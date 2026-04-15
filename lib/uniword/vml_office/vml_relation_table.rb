@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :data, :string
 
       xml do
-        element 'relationtable'
+        element "relationtable"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'ext', to: :ext
-        map_element '', to: :data, render_nil: false
+        map_attribute "ext", to: :ext
+        map_element "", to: :data, render_nil: false
       end
     end
   end

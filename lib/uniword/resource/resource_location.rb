@@ -17,7 +17,7 @@ module Uniword
 
       # Factory from path
       def self.from_path(type, path)
-        name = File.basename(path, '.*')
+        name = File.basename(path, ".*")
         source = determine_source(path)
         new(type, name, source, path)
       end

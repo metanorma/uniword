@@ -30,16 +30,14 @@ module Uniword
     #     load_images_from_disk
     #   end
     def lazy_attr(name, &loader)
-      raise ArgumentError, 'Block required for lazy_attr' unless loader
+      raise ArgumentError, "Block required for lazy_attr" unless loader
 
       # Define getter method
       define_method(name) do
         instance_variable = "@#{name}"
 
         # Return cached value if already loaded
-        if instance_variable_defined?(instance_variable)
-          return instance_variable_get(instance_variable)
-        end
+        return instance_variable_get(instance_variable) if instance_variable_defined?(instance_variable)
 
         # Load and cache the value
         value = instance_exec(&loader)
@@ -72,16 +70,14 @@ module Uniword
     #     load_tables_from_xml
     #   end
     def lazy_collection(name, &loader)
-      raise ArgumentError, 'Block required for lazy_collection' unless loader
+      raise ArgumentError, "Block required for lazy_collection" unless loader
 
       # Define getter that returns array
       define_method(name) do
         instance_variable = "@#{name}"
 
         # Return cached collection if already loaded
-        if instance_variable_defined?(instance_variable)
-          return instance_variable_get(instance_variable)
-        end
+        return instance_variable_get(instance_variable) if instance_variable_defined?(instance_variable)
 
         # Load and cache the collection
         collection = instance_exec(&loader)
@@ -105,9 +101,7 @@ module Uniword
       # Define method to get collection size without loading all items
       define_method("#{name}_count") do
         instance_variable = "@#{name}"
-        if instance_variable_defined?(instance_variable)
-          return instance_variable_get(instance_variable).size
-        end
+        return instance_variable_get(instance_variable).size if instance_variable_defined?(instance_variable)
 
         # If not loaded, try to get count without loading
         # This is a hook for subclasses to override

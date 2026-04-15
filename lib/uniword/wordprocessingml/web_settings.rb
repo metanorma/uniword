@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -8,7 +8,7 @@ module Uniword
     # Presence = true, Absence = false
     class OptimizeForBrowser < Lutaml::Model::Serializable
       xml do
-        element 'optimizeForBrowser'
+        element "optimizeForBrowser"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end
@@ -17,7 +17,7 @@ module Uniword
     # Presence = true, Absence = false
     class AllowPng < Lutaml::Model::Serializable
       xml do
-        element 'allowPNG'
+        element "allowPNG"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end
@@ -31,12 +31,12 @@ module Uniword
       attribute :allow_png, AllowPng
 
       xml do
-        element 'webSettings'
+        element "webSettings"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
-        map_element 'optimizeForBrowser', to: :optimize_for_browser, render_nil: false
-        map_element 'allowPNG', to: :allow_png, render_nil: false
+        map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
+        map_element "optimizeForBrowser", to: :optimize_for_browser, render_nil: false
+        map_element "allowPNG", to: :allow_png, render_nil: false
       end
     end
   end

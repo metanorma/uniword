@@ -72,24 +72,24 @@ module Uniword
       extension = File.extname(path).downcase
 
       case extension
-      when '.docx'
+      when ".docx"
         :docx
-      when '.docm'
+      when ".docm"
         :docm
-      when '.dotx'
+      when ".dotx"
         :dotx
-      when '.dotm'
+      when ".dotm"
         :dotm
-      when '.mhtml', '.mht'
+      when ".mhtml", ".mht"
         :mhtml
-      when '.doc'
+      when ".doc"
         # .doc can be MHTML saved with Word (not binary old Word format)
         # We don't support binary .doc output, but MHTML .doc is valid
         :mhtml
       else
         raise ArgumentError,
               "Cannot infer format from extension: #{extension}. " \
-              'Supported extensions: .docx, .docm, .dotx, .dotm, .mhtml, .mht'
+              "Supported extensions: .docx, .docm, .dotx, .dotm, .mhtml, .mht"
       end
     end
 
@@ -106,10 +106,10 @@ module Uniword
     #   io.rewind
     #   content = io.read
     def write_to_stream(stream, format: :docx)
-      require 'tempfile'
+      require "tempfile"
 
       # Use a temporary file to generate the document
-      temp_file = Tempfile.new(['uniword_stream', ".#{format}"], binmode: true)
+      temp_file = Tempfile.new(["uniword_stream", ".#{format}"], binmode: true)
       begin
         # Save to temp file
         save(temp_file.path, format: format)
@@ -134,14 +134,14 @@ module Uniword
     # @return [void]
     # @raise [ArgumentError] if document is invalid
     def validate_document(doc)
-      raise ArgumentError, 'Document cannot be nil' if doc.nil?
+      raise ArgumentError, "Document cannot be nil" if doc.nil?
 
       # Accept OOXML Document
       return if doc.is_a?(Uniword::Wordprocessingml::DocumentRoot)
       # Accept MHTML Document
       return if doc.is_a?(Uniword::Mhtml::Document)
 
-      raise ArgumentError, 'Must be a Document instance'
+      raise ArgumentError, "Must be a Document instance"
     end
 
     # Validate the output path.
@@ -150,8 +150,8 @@ module Uniword
     # @return [void]
     # @raise [ArgumentError] if path is invalid
     def validate_path(path)
-      raise ArgumentError, 'Path cannot be nil' if path.nil?
-      raise ArgumentError, 'Path cannot be empty' if path.empty?
+      raise ArgumentError, "Path cannot be nil" if path.nil?
+      raise ArgumentError, "Path cannot be empty" if path.empty?
     end
   end
 end

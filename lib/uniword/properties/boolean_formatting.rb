@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -9,11 +9,11 @@ module Uniword
     # the generated setter.
     module BooleanElement
       def value
-        @val != 'false'
+        @val != "false"
       end
 
       def value=(v)
-        @val = v ? nil : 'false'
+        @val = v ? nil : "false"
       end
     end
 
@@ -28,9 +28,9 @@ module Uniword
           define_method(:val=) do |v|
             @val = if v.nil?
                      nil
-                   elsif v == false || v.to_s == 'false'
-                     'false'
-                   elsif v == true || v.to_s == 'true'
+                   elsif v == false || v.to_s == "false"
+                     "false"
+                   elsif v == true || v.to_s == "true"
                      nil
                    else
                      v
@@ -49,9 +49,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'strike'
+        element "strike"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -63,9 +63,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'dstrike'
+        element "dstrike"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -77,9 +77,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'smallCaps'
+        element "smallCaps"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -91,9 +91,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'caps'
+        element "caps"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -105,9 +105,23 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'vanish'
+        element "vanish"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
+      end
+    end
+
+    # Web hidden text (hidden from web view)
+    class WebHidden < Lutaml::Model::Serializable
+      include BooleanElement
+
+      attribute :val, :string, default: nil
+      include BooleanValSetter
+
+      xml do
+        element "webHidden"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -119,9 +133,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'noProof'
+        element "noProof"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -133,9 +147,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'shadow'
+        element "shadow"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -147,9 +161,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'emboss'
+        element "emboss"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -161,9 +175,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'imprint'
+        element "imprint"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -177,9 +191,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'qFormat'
+        element "qFormat"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -191,9 +205,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'keepNext'
+        element "keepNext"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
 
@@ -205,9 +219,9 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'keepLines'
+        element "keepLines"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
   end

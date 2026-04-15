@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -15,13 +15,13 @@ module Uniword
       attribute :hanging, :integer
 
       xml do
-        element 'ind'
+        element "ind"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'left', to: :left
-        map_attribute 'right', to: :right
-        map_attribute 'firstLine', to: :first_line
-        map_attribute 'hanging', to: :hanging
+        map_attribute "left", to: :left
+        map_attribute "right", to: :right
+        map_attribute "firstLine", to: :first_line
+        map_attribute "hanging", to: :hanging
       end
     end
   end

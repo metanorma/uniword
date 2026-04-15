@@ -22,11 +22,11 @@ module Uniword
           # Check if title exists
           if @config[:require_title] && (title.nil? || title.strip.empty?)
             violations << create_violation(
-              message: 'Document missing title',
+              message: "Document missing title",
               element: document,
               severity: @config[:severity] || :error,
               suggestion: @config[:suggestion] ||
-                'Document must have a descriptive title'
+                "Document must have a descriptive title"
             )
             return violations
           end

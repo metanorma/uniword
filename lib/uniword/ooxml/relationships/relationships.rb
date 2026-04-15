@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -13,11 +13,11 @@ module Uniword
         attribute :relationships, Relationship, collection: true, initialize_empty: true
 
         xml do
-          element 'Relationships'
+          element "Relationships"
           namespace Uniword::Ooxml::Namespaces::Relationships
           mixed_content
 
-          map_element 'Relationship', to: :relationships, render_nil: false
+          map_element "Relationship", to: :relationships, render_nil: false
         end
 
         # Generate document-level .rels file

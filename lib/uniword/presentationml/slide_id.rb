@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require_relative '../properties/relationship_id'
+require "lutaml/model"
+require_relative "../properties/relationship_id"
 
 module Uniword
   module Presentationml
@@ -14,11 +14,11 @@ module Uniword
       attribute :r_id, Properties::RelationshipIdValue
 
       xml do
-        element 'sld_id'
+        element "sld_id"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'id', to: :id
-        map_attribute 'id', to: :r_id
+        map_attribute "id", to: :id
+        map_attribute "id", to: :r_id
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -15,13 +15,13 @@ module Uniword
       attribute :matrix, :string
 
       xml do
-        element 'skew'
+        element "skew"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'true', to: true
-        map_attribute 'offset', to: :offset
-        map_attribute 'origin', to: :origin
-        map_attribute 'matrix', to: :matrix
+        map_attribute "true", to: true
+        map_attribute "offset", to: :offset
+        map_attribute "origin", to: :origin
+        map_attribute "matrix", to: :matrix
       end
     end
   end

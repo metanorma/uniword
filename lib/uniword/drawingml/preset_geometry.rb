@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :av_lst, AdjustValueList
 
       xml do
-        element 'prstGeom'
+        element "prstGeom"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'prst', to: :prst
-        map_element 'avLst', to: :av_lst, render_nil: false
+        map_attribute "prst", to: :prst
+        map_element "avLst", to: :av_lst, render_nil: false
       end
     end
   end

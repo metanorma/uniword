@@ -50,7 +50,7 @@ module Uniword
       # @param include_page_numbers [Boolean] Whether to include page numbers
       # @param create_hyperlinks [Boolean] Whether to create hyperlinks
       # @param instruction [TocInstruction, nil] Optional custom instruction
-      def initialize(title: 'Table of Contents',
+      def initialize(title: "Table of Contents",
                      max_level: 9,
                      include_page_numbers: true,
                      create_hyperlinks: true,
@@ -206,7 +206,7 @@ module Uniword
       def create_title_paragraph
         para = Wordprocessingml::Paragraph.new
         para.properties ||= Wordprocessingml::ParagraphProperties.new
-        para.properties.style = 'TOCHeading'
+        para.properties.style = "TOCHeading"
 
         run = Wordprocessingml::Run.new
         run.text = @title

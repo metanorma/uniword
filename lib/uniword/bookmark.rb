@@ -67,7 +67,7 @@ module Uniword
     #   bookmark = Bookmark.new(name: 'My Section!')
     #   bookmark.anchor_name # => "my_section"
     def anchor_name
-      @name.to_s.downcase.gsub(/[^a-z0-9_-]/, '_')
+      @name.to_s.downcase.gsub(/[^a-z0-9_-]/, "_")
     end
 
     # Convert to hash representation.

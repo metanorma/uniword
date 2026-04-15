@@ -29,10 +29,10 @@ module Uniword
   class CommentRange < Element
     # OOXML namespace configuration
     xml do
-      element 'commentRangeStart'
+      element "commentRangeStart"
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_attribute 'id', to: :comment_id
+      map_attribute "id", to: :comment_id
     end
 
     # Comment ID this range marker refers to
@@ -93,11 +93,11 @@ module Uniword
     def xml_element_name
       case marker_type
       when :start
-        'commentRangeStart'
+        "commentRangeStart"
       when :end
-        'commentRangeEnd'
+        "commentRangeEnd"
       when :reference
-        'commentReference'
+        "commentReference"
       else
         raise ArgumentError, "Invalid marker type: #{marker_type}"
       end

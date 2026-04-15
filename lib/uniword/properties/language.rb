@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -27,12 +27,12 @@ module Uniword
       attribute :bidi, LanguageValue         # Bidirectional script language
 
       xml do
-        element 'lang'
+        element "lang"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :val
-        map_attribute 'eastAsia', to: :east_asia
-        map_attribute 'bidi', to: :bidi
+        map_attribute "val", to: :val
+        map_attribute "eastAsia", to: :east_asia
+        map_attribute "bidi", to: :bidi
       end
     end
   end

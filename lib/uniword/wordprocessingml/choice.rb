@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,12 +12,12 @@ module Uniword
       attribute :drawing, Drawing
 
       xml do
-        element 'Choice'
+        element "Choice"
         namespace Uniword::Ooxml::Namespaces::MarkupCompatibility
         mixed_content
 
-        map_attribute 'Requires', to: :requires
-        map_element 'drawing', to: :drawing, render_nil: false
+        map_attribute "Requires", to: :requires
+        map_element "drawing", to: :drawing, render_nil: false
       end
     end
   end

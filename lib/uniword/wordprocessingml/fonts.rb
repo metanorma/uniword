@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,11 +12,11 @@ module Uniword
       attribute :font_entries, Font, collection: true, initialize_empty: true
 
       xml do
-        element 'fonts'
+        element "fonts"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'font', to: :font_entries, render_nil: false
+        map_element "font", to: :font_entries, render_nil: false
       end
     end
   end

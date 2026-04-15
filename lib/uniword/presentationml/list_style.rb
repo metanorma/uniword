@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -15,14 +15,14 @@ module Uniword
       attribute :lvl3p_pr, :string
 
       xml do
-        element 'lst_style'
+        element "lst_style"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'defPPr', to: :def_ppr, render_nil: false
-        map_element 'lvl1pPr', to: :lvl1p_pr, render_nil: false
-        map_element 'lvl2pPr', to: :lvl2p_pr, render_nil: false
-        map_element 'lvl3pPr', to: :lvl3p_pr, render_nil: false
+        map_element "defPPr", to: :def_ppr, render_nil: false
+        map_element "lvl1pPr", to: :lvl1p_pr, render_nil: false
+        map_element "lvl2pPr", to: :lvl2p_pr, render_nil: false
+        map_element "lvl3pPr", to: :lvl3p_pr, render_nil: false
       end
     end
   end

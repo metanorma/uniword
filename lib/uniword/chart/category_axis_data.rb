@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -15,14 +15,14 @@ module Uniword
       attribute :num_lit, :string
 
       xml do
-        element 'cat'
+        element "cat"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'strRef', to: :str_ref, render_nil: false
-        map_element 'numRef', to: :num_ref, render_nil: false
-        map_element 'strLit', to: :str_lit, render_nil: false
-        map_element 'numLit', to: :num_lit, render_nil: false
+        map_element "strRef", to: :str_ref, render_nil: false
+        map_element "numRef", to: :num_ref, render_nil: false
+        map_element "strLit", to: :str_lit, render_nil: false
+        map_element "numLit", to: :num_lit, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -12,10 +12,10 @@ module Uniword
       attribute :id, :string
 
       xml do
-        element 'custom_xml_ins_range_end'
+        element "custom_xml_ins_range_end"
         namespace Uniword::Ooxml::Namespaces::CustomXml
 
-        map_attribute 'id', to: :id
+        map_attribute "id", to: :id
       end
     end
   end

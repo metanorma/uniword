@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Bibliography
@@ -12,10 +12,10 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'first'
+        element "first"
         namespace Uniword::Ooxml::Namespaces::Bibliography
 
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

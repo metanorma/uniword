@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'uniword/endnote'
+require "spec_helper"
+require "uniword/endnote"
 
 RSpec.describe Uniword::Endnote do
-  describe '#initialize' do
-    it 'creates an endnote with id and content' do
+  describe "#initialize" do
+    it "creates an endnote with id and content" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
@@ -13,43 +13,43 @@ RSpec.describe Uniword::Endnote do
       expect(endnote.content).to eq([paragraph])
     end
 
-    it 'creates an endnote with default empty content' do
+    it "creates an endnote with default empty content" do
       endnote = described_class.new(id: 2)
 
       expect(endnote.id).to eq(2)
       expect(endnote.content).to eq([])
     end
 
-    it 'accepts string id' do
-      endnote = described_class.new(id: 'en1')
+    it "accepts string id" do
+      endnote = described_class.new(id: "en1")
 
-      expect(endnote.id).to eq('en1')
+      expect(endnote.id).to eq("en1")
     end
   end
 
-  describe '#content?' do
-    it 'returns true when endnote has content' do
+  describe "#content?" do
+    it "returns true when endnote has content" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
       expect(endnote.content?).to be true
     end
 
-    it 'returns false when endnote has no content' do
+    it "returns false when endnote has no content" do
       endnote = described_class.new(id: 1)
 
       expect(endnote.content?).to be false
     end
 
-    it 'returns false when content is nil' do
+    it "returns false when content is nil" do
       endnote = described_class.new(id: 1, content: nil)
 
       expect(endnote.content?).to be false
     end
   end
 
-  describe '#content' do
-    it 'adds a paragraph to the endnote content' do
+  describe "#content" do
+    it "adds a paragraph to the endnote content" do
       endnote = described_class.new(id: 1)
       paragraph = Uniword::Wordprocessingml::Paragraph.new
 
@@ -59,7 +59,7 @@ RSpec.describe Uniword::Endnote do
       expect(endnote.content.size).to eq(1)
     end
 
-    it 'adds multiple paragraphs' do
+    it "adds multiple paragraphs" do
       endnote = described_class.new(id: 1)
       p1 = Uniword::Wordprocessingml::Paragraph.new
       p2 = Uniword::Wordprocessingml::Paragraph.new
@@ -72,28 +72,28 @@ RSpec.describe Uniword::Endnote do
     end
   end
 
-  describe '#text' do
-    it 'returns combined text from all paragraphs' do
+  describe "#text" do
+    it "returns combined text from all paragraphs" do
       p1 = Uniword::Wordprocessingml::Paragraph.new
-      p1.runs << Uniword::Wordprocessingml::Run.new(text: 'First paragraph')
+      p1.runs << Uniword::Wordprocessingml::Run.new(text: "First paragraph")
 
       p2 = Uniword::Wordprocessingml::Paragraph.new
-      p2.runs << Uniword::Wordprocessingml::Run.new(text: 'Second paragraph')
+      p2.runs << Uniword::Wordprocessingml::Run.new(text: "Second paragraph")
 
       endnote = described_class.new(id: 1, content: [p1, p2])
 
       expect(endnote.text).to eq("First paragraph\nSecond paragraph")
     end
 
-    it 'returns empty string for endnote without content' do
+    it "returns empty string for endnote without content" do
       endnote = described_class.new(id: 1)
 
-      expect(endnote.text).to eq('')
+      expect(endnote.text).to eq("")
     end
   end
 
-  describe '#to_h' do
-    it 'returns hash representation' do
+  describe "#to_h" do
+    it "returns hash representation" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
       endnote = described_class.new(id: 1, content: [paragraph])
 
@@ -105,15 +105,15 @@ RSpec.describe Uniword::Endnote do
     end
   end
 
-  describe 'attribute accessors' do
-    it 'allows modification of id' do
+  describe "attribute accessors" do
+    it "allows modification of id" do
       endnote = described_class.new(id: 1)
       endnote.id = 2
 
       expect(endnote.id).to eq(2)
     end
 
-    it 'allows modification of content' do
+    it "allows modification of content" do
       endnote = described_class.new(id: 1)
       new_content = [Uniword::Wordprocessingml::Paragraph.new]
       endnote.content = new_content

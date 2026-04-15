@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,12 +14,12 @@ module Uniword
       attribute :data_on_rows, :string
 
       xml do
-        element 'pivotTableDefinition'
+        element "pivotTableDefinition"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'name', to: :name
-        map_attribute 'cache-id', to: :cache_id
-        map_attribute 'data-on-rows', to: :data_on_rows
+        map_attribute "name", to: :name
+        map_attribute "cache-id", to: :cache_id
+        map_attribute "data-on-rows", to: :data_on_rows
       end
     end
   end

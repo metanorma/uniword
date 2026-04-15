@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'zip'
+require "zip"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -25,23 +25,23 @@ module Uniword
       class OoxmlPartValidator < LayerValidator
         # Required parts per ISO/IEC 29500
         REQUIRED_PARTS = {
-          '[Content_Types].xml' => 'Content Types definition',
-          'word/document.xml' => 'Main document content',
-          '_rels/.rels' => 'Package relationships'
+          "[Content_Types].xml" => "Content Types definition",
+          "word/document.xml" => "Main document content",
+          "_rels/.rels" => "Package relationships"
         }.freeze
 
         # Optional but commonly used parts
         OPTIONAL_PARTS = {
-          'word/styles.xml' => 'Styles definition',
-          'word/numbering.xml' => 'Numbering definition',
-          'word/_rels/document.xml.rels' => 'Document relationships',
-          'word/settings.xml' => 'Document settings',
-          'word/fontTable.xml' => 'Font table',
-          'word/theme/theme1.xml' => 'Theme definition'
+          "word/styles.xml" => "Styles definition",
+          "word/numbering.xml" => "Numbering definition",
+          "word/_rels/document.xml.rels" => "Document relationships",
+          "word/settings.xml" => "Document settings",
+          "word/fontTable.xml" => "Font table",
+          "word/theme/theme1.xml" => "Theme definition"
         }.freeze
 
         def layer_name
-          'OOXML Parts'
+          "OOXML Parts"
         end
 
         def validate(path)
@@ -92,11 +92,11 @@ module Uniword
 
         def should_check_part?(part_name)
           case part_name
-          when '[Content_Types].xml'
+          when "[Content_Types].xml"
             require_content_types?
-          when 'word/document.xml'
+          when "word/document.xml"
             require_document?
-          when '_rels/.rels'
+          when "_rels/.rels"
             require_relationships?
           else
             true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :marR, :integer
 
       xml do
-        element 'pPr'
+        element "pPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'algn', to: :algn
-        map_attribute 'marL', to: :marL
-        map_attribute 'marR', to: :marR
+        map_attribute "algn", to: :algn
+        map_attribute "marL", to: :marL
+        map_attribute "marR", to: :marR
       end
     end
   end

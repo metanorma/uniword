@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,12 +13,12 @@ module Uniword
       attribute :sort_state, SortState
 
       xml do
-        element 'autoFilter'
+        element "autoFilter"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'ref', to: :ref
-        map_element 'filterColumn', to: :filter_columns, render_nil: false
-        map_element 'sortState', to: :sort_state, render_nil: false
+        map_attribute "ref", to: :ref
+        map_element "filterColumn", to: :filter_columns, render_nil: false
+        map_element "sortState", to: :sort_state, render_nil: false
       end
     end
   end

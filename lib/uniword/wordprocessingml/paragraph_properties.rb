@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -56,8 +56,8 @@ module Uniword
       # Keep together options (wrapper objects - use _wrapper suffix for internal storage)
       attribute :keep_next_wrapper, Properties::KeepNext
       attribute :keep_lines_wrapper, Properties::KeepLines
-      attribute :page_break_before, :boolean, default: -> { false }
-      attribute :widow_control, :boolean, default: -> { true }
+      attribute :page_break_before_wrapper, Properties::PageBreakBefore
+      attribute :widow_control_wrapper, Properties::WidowControl
 
       # Spacing options
       attribute :contextual_spacing, Properties::ContextualSpacing
@@ -65,6 +65,16 @@ module Uniword
 
       # Bidirectional text
       attribute :bidirectional, :boolean, default: -> { false }
+
+      # East Asian typography
+      attribute :auto_space_de, Properties::AutoSpaceDE
+      attribute :auto_space_dn, Properties::AutoSpaceDN
+
+      # Right indent adjustment
+      attribute :adjust_right_ind, Properties::AdjustRightInd
+
+      # Section properties (for paragraph-level section breaks)
+      attribute :section_properties, SectionProperties
 
       # Shading (background color)
       attribute :shading_fill, :string      # RGB hex color
@@ -75,24 +85,24 @@ module Uniword
       # The YAML uses flat attributes like spacing_before, spacing_after, alignment, etc.
       # which match the flat attributes defined in this class.
       yaml do
-        map 'style', with: { from: :yaml_style_from, to: :yaml_style_to }
-        map 'alignment', with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
-        map 'spacing_before', to: :spacing_before
-        map 'spacing_after', to: :spacing_after
-        map 'line_spacing', to: :line_spacing
-        map 'line_rule', to: :line_rule
-        map 'keep_next', with: { from: :yaml_keep_next_from, to: :yaml_keep_next_to }
-        map 'keep_lines', with: { from: :yaml_keep_lines_from, to: :yaml_keep_lines_to }
-        map 'page_break_before', to: :page_break_before
-        map 'outline_level', with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
-        map 'suppress_line_numbers', to: :suppress_line_numbers
-        map 'contextual_spacing',
+        map "style", with: { from: :yaml_style_from, to: :yaml_style_to }
+        map "alignment", with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
+        map "spacing_before", to: :spacing_before
+        map "spacing_after", to: :spacing_after
+        map "line_spacing", to: :line_spacing
+        map "line_rule", to: :line_rule
+        map "keep_next", with: { from: :yaml_keep_next_from, to: :yaml_keep_next_to }
+        map "keep_lines", with: { from: :yaml_keep_lines_from, to: :yaml_keep_lines_to }
+        map "page_break_before", with: { from: :yaml_page_break_before_from, to: :yaml_page_break_before_to }
+        map "outline_level", with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
+        map "suppress_line_numbers", to: :suppress_line_numbers
+        map "contextual_spacing",
             with: { from: :yaml_contextual_spacing_from, to: :yaml_contextual_spacing_to }
-        map 'bidirectional', to: :bidirectional
-        map 'indent_left', to: :indent_left
-        map 'indent_right', to: :indent_right
-        map 'indent_first_line', to: :indent_first_line
-        map 'widow_control', to: :widow_control
+        map "bidirectional", to: :bidirectional
+        map "indent_left", to: :indent_left
+        map "indent_right", to: :indent_right
+        map "indent_first_line", to: :indent_first_line
+        map "widow_control", with: { from: :yaml_widow_control_from, to: :yaml_widow_control_to }
       end
 
       # YAML transform methods (instance methods - called via send on an instance)
@@ -146,57 +156,89 @@ module Uniword
         instance.contextual_spacing&.value
       end
 
+      def yaml_page_break_before_from(instance, value)
+        return if value.nil?
+
+        instance.page_break_before_wrapper = Properties::PageBreakBefore.new(value: value)
+      end
+
+      def yaml_page_break_before_to(instance, _doc)
+        instance.page_break_before_wrapper&.value
+      end
+
+      def yaml_widow_control_from(instance, value)
+        return if value.nil?
+
+        instance.widow_control_wrapper = Properties::WidowControl.new(value: value)
+      end
+
+      def yaml_widow_control_to(instance, _doc)
+        instance.widow_control_wrapper&.value
+      end
+
       # XML mappings come AFTER attributes
       xml do
-        element 'pPr'
+        element "pPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # Style reference - maps w:pStyle w:val="..." to style attribute
-        map_element 'pStyle', to: :style, render_nil: false
+        map_element "pStyle", to: :style, render_nil: false
 
         # Alignment - maps w:jc w:val="..." to alignment attribute
-        map_element 'jc', to: :alignment, render_nil: false
+        map_element "jc", to: :alignment, render_nil: false
 
         # Spacing (complex object - WORKS)
-        map_element 'spacing', to: :spacing, render_nil: false
+        map_element "spacing", to: :spacing, render_nil: false
 
         # Indentation (complex object)
-        map_element 'ind', to: :indentation, render_nil: false
+        map_element "ind", to: :indentation, render_nil: false
 
         # Outline level (wrapper object)
-        map_element 'outlineLvl', to: :outline_level, render_nil: false
+        map_element "outlineLvl", to: :outline_level, render_nil: false
 
         # Numbering properties (wrapped in w:numPr)
-        map_element 'numPr', to: :numbering_properties, render_nil: false
+        map_element "numPr", to: :numbering_properties, render_nil: false
 
         # Keep options (only render if true)
-        map_element 'keepNext', to: :keep_next_wrapper, render_nil: false, render_default: false
-        map_element 'keepLines', to: :keep_lines_wrapper, render_nil: false, render_default: false
-        map_element 'pageBreakBefore', to: :page_break_before, render_nil: false,
+        map_element "keepNext", to: :keep_next_wrapper, render_nil: false, render_default: false
+        map_element "keepLines", to: :keep_lines_wrapper, render_nil: false, render_default: false
+        map_element "pageBreakBefore", to: :page_break_before_wrapper, render_nil: false,
                                        render_default: false
-        map_element 'widowControl', to: :widow_control, render_nil: false, render_default: false
+        map_element "widowControl", to: :widow_control_wrapper, render_nil: false,
+                                    render_default: false
 
         # Spacing options (only render if true)
-        map_element 'contextualSpacing', to: :contextual_spacing, render_nil: false,
+        map_element "contextualSpacing", to: :contextual_spacing, render_nil: false,
                                          render_default: false
-        map_element 'suppressLineNumbers', to: :suppress_line_numbers, render_nil: false,
+        map_element "suppressLineNumbers", to: :suppress_line_numbers, render_nil: false,
                                            render_default: false
 
         # Bidirectional (only render if true)
-        map_element 'bidi', to: :bidirectional, render_nil: false, render_default: false
+        map_element "bidi", to: :bidirectional, render_nil: false, render_default: false
+
+        # East Asian typography
+        map_element "autoSpaceDE", to: :auto_space_de, render_nil: false,
+                                   render_default: false
+        map_element "autoSpaceDN", to: :auto_space_dn, render_nil: false,
+                                   render_default: false
+        map_element "adjustRightInd", to: :adjust_right_ind, render_nil: false,
+                                      render_default: false
 
         # Borders (complex object)
-        map_element 'pBdr', to: :borders, render_nil: false
+        map_element "pBdr", to: :borders, render_nil: false
 
         # Tabs (complex object - collection)
-        map_element 'tabs', to: :tabs, render_nil: false
+        map_element "tabs", to: :tabs, render_nil: false
 
         # Shading (complex object)
-        map_element 'shd', to: :shading, render_nil: false
+        map_element "shd", to: :shading, render_nil: false
 
         # Run properties (for pPr/rPr - style overrides)
-        map_element 'rPr', to: :run_properties, render_nil: false
+        map_element "rPr", to: :run_properties, render_nil: false
+
+        # Section properties (paragraph-level section breaks)
+        map_element "sectPr", to: :section_properties, render_nil: false
       end
 
       # Initialize with defaults and handle convenience attributes
@@ -204,6 +246,8 @@ module Uniword
         # Save wrapper attribute values before super clears them
         keep_next_val = attrs.key?(:keep_next) ? attrs.delete(:keep_next) : nil
         keep_lines_val = attrs.key?(:keep_lines) ? attrs.delete(:keep_lines) : nil
+        page_break_before_val = attrs.key?(:page_break_before) ? attrs.delete(:page_break_before) : nil
+        widow_control_val = attrs.key?(:widow_control) ? attrs.delete(:widow_control) : nil
         style_val = attrs.key?(:style) ? attrs.delete(:style) : nil
 
         super
@@ -211,10 +255,9 @@ module Uniword
         # Set wrapper attributes after super (super clears them)
         self.keep_next = keep_next_val if keep_next_val
         self.keep_lines = keep_lines_val if keep_lines_val
+        self.page_break_before = page_break_before_val if page_break_before_val
+        self.widow_control = widow_control_val unless widow_control_val.nil?
         self.style = style_val if style_val
-
-        # Set boolean defaults
-        @widow_control = true if @widow_control.nil?
 
         # Convert flat attributes to wrapper objects (Pattern 0: after super)
         convert_flat_attributes!
@@ -259,15 +302,6 @@ module Uniword
         rp.size = @run_properties[:size] if @run_properties[:size]
         @run_properties = rp
       end
-
-      # Get section properties
-      #
-      # @return [SectionProperties, nil] Section properties if present
-      attr_accessor :section_properties
-
-      # Set section properties
-      #
-      # @param value [SectionProperties] Section properties
 
       # Set left indent (alias for indentation.left)
       #
@@ -333,6 +367,64 @@ module Uniword
                                   else
                                     value
                                   end
+      end
+
+      # Boolean predicate for page_break_before
+      #
+      # @return [Boolean] True if page_break_before is set
+      def page_break_before?
+        val = page_break_before_wrapper
+        return false if val.nil?
+
+        val = val.value if val.is_a?(Properties::PageBreakBefore)
+        val == true
+      end
+      alias page_break_before page_break_before?
+
+      # Boolean setter for page_break_before
+      #
+      # @param value [Boolean] True to enable page_break_before
+      def page_break_before=(value)
+        self.page_break_before_wrapper = case value
+                                         when Properties::PageBreakBefore
+                                           value
+                                         when true, false
+                                           value ? Properties::PageBreakBefore.new(value: true) : nil
+                                         when nil
+                                           nil
+                                         else
+                                           value
+                                         end
+      end
+
+      # Boolean predicate for widow_control
+      #
+      # @return [Boolean] True if widow_control is set
+      def widow_control?
+        val = widow_control_wrapper
+        return true if val.nil? # default is true
+
+        val = val.value if val.is_a?(Properties::WidowControl)
+        val == true
+      end
+      alias widow_control widow_control?
+
+      # Boolean setter for widow_control
+      #
+      # @param value [Boolean] True to enable widow_control
+      def widow_control=(value)
+        self.widow_control_wrapper = case value
+                                     when Properties::WidowControl
+                                       value
+                                     when true
+                                       Properties::WidowControl.new(value: true)
+                                     when false
+                                       Properties::WidowControl.new(value: false)
+                                     when nil
+                                       nil
+                                     else
+                                       value
+                                     end
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +9,7 @@ module Uniword
     # Element: <w:semiHidden>
     class SemiHidden < Lutaml::Model::Serializable
       xml do
-        element 'semiHidden'
+        element "semiHidden"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end
@@ -19,7 +19,7 @@ module Uniword
     # Element: <w:unhideWhenUsed>
     class UnhideWhenUsed < Lutaml::Model::Serializable
       xml do
-        element 'unhideWhenUsed'
+        element "unhideWhenUsed"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

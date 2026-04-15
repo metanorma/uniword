@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -14,13 +14,13 @@ module Uniword
       attribute :lim, Lim
 
       xml do
-        element 'limUpp'
+        element "limUpp"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'limUppPr', to: :properties, render_nil: false
-        map_element 'e', to: :element
-        map_element 'lim', to: :lim
+        map_element "limUppPr", to: :properties, render_nil: false
+        map_element "e", to: :element
+        map_element "lim", to: :lim
       end
     end
   end

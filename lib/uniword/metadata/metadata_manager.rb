@@ -59,7 +59,7 @@ module Uniword
       #   manager = MetadataManager.new(
       #     config_file: 'config/custom_schema.yml'
       #   )
-      def initialize(config_file: 'metadata_schema')
+      def initialize(config_file: "metadata_schema")
         @extractor = MetadataExtractor.new(config_file: config_file)
         @updater = MetadataUpdater.new
         @validator = MetadataValidator.new(config_file: config_file)
@@ -171,7 +171,7 @@ module Uniword
 
         paths.each do |path|
           # Expand glob patterns
-          expanded_paths = if path.include?('*')
+          expanded_paths = if path.include?("*")
                              Dir.glob(path)
                            else
                              [path]
@@ -214,9 +214,9 @@ module Uniword
       #
       # @example Recursive extraction
       #   index = manager.extract_from_directory('docs', recursive: true)
-      def extract_from_directory(directory, recursive: false, pattern: '*.docx')
+      def extract_from_directory(directory, recursive: false, pattern: "*.docx")
         glob_pattern = if recursive
-                         File.join(directory, '**', pattern)
+                         File.join(directory, "**", pattern)
                        else
                          File.join(directory, pattern)
                        end

@@ -80,7 +80,7 @@ module Uniword
         row_text = table_row.cells.map do |cell|
           cell.accept(self)
           @text_parts.pop # Get the last added text
-        end.compact.join(' | ')
+        end.compact.join(" | ")
 
         @text_parts << row_text unless row_text.empty?
       end

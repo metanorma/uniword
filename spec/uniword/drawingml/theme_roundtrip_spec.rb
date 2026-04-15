@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'canon/rspec_matchers'
-require 'uniword/ooxml/theme_package'
+require "spec_helper"
+require "canon/rspec_matchers"
+require "uniword/ooxml/theme_package"
 
-RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
+RSpec.describe "Theme Round-Trip", :theme_roundtrip do
   # Skip if submodule not available (e.g., in CI without SSH access)
   before(:all) do
-    skip 'Submodule spec/fixtures/uniword-private not available' unless Dir.glob('spec/fixtures/uniword-private/word-resources/office-themes/*.thmx').any?
+    skip "Submodule spec/fixtures/uniword-private not available" unless Dir.glob("spec/fixtures/uniword-private/word-resources/office-themes/*.thmx").any?
   end
 
   # Directory containing reference theme files
-  THEME_DIR = 'spec/fixtures/uniword-private/word-resources/office-themes'
+  THEME_DIR = "spec/fixtures/uniword-private/word-resources/office-themes"
 
   # Output directory for round-trip tests
-  OUTPUT_DIR = 'tmp/theme_roundtrip'
+  OUTPUT_DIR = "tmp/theme_roundtrip"
 
   before(:all) do
     FileUtils.mkdir_p(OUTPUT_DIR)
@@ -25,10 +25,10 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
   end
 
   # Get all .thmx files from reference directory
-  theme_files = Dir.glob(File.join(THEME_DIR, '*.thmx'))
+  theme_files = Dir.glob(File.join(THEME_DIR, "*.thmx"))
 
   theme_files.each do |theme_path|
-    theme_name = File.basename(theme_path, '.thmx')
+    theme_name = File.basename(theme_path, ".thmx")
 
     describe theme_name do
       let(:input_path) { theme_path }
@@ -43,7 +43,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         verify_package.cleanup if verify_package.extracted_dir
       end
 
-      it 'loads theme successfully' do
+      it "loads theme successfully" do
         theme = original_package.load_content
 
         expect(theme).to be_a(Uniword::Drawingml::Theme)
@@ -52,7 +52,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         expect(theme.font_scheme).to_not be_nil
       end
 
-      it 'serializes theme to valid XML' do
+      it "serializes theme to valid XML" do
         theme = original_package.load_content
 
         xml = theme.to_xml
@@ -60,11 +60,11 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         expect(xml).to_not be_nil
         expect(xml).to be_a(String)
         expect(xml.length).to be > 100
-        expect(xml).to include('xmlns')
-        expect(xml).to include('drawingml')
+        expect(xml).to include("xmlns")
+        expect(xml).to include("drawingml")
       end
 
-      it 'round-trips theme preserving structure' do
+      it "round-trips theme preserving structure" do
         # Load original
         original_theme = original_package.load_content
 
@@ -86,7 +86,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         expect(roundtrip_theme.font_scheme.name).to eq(original_theme.font_scheme.name)
       end
 
-      it 'round-trips theme XML semantically equivalent' do
+      it "round-trips theme XML semantically equivalent" do
         # Load original
         original_theme = original_package.load_content
         original_xml = original_package.read_theme
@@ -104,7 +104,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         expect(regenerated_xml).to be_xml_equivalent_to(original_xml)
       end
 
-      it 'preserves color scheme colors' do
+      it "preserves color scheme colors" do
         original_theme = original_package.load_content
 
         output_package.extract
@@ -123,7 +123,7 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
         end
       end
 
-      it 'preserves font scheme fonts' do
+      it "preserves font scheme fonts" do
         original_theme = original_package.load_content
 
         output_package.extract
@@ -141,13 +141,13 @@ RSpec.describe 'Theme Round-Trip', :theme_roundtrip do
 
   # Summary after all tests
   after(:all) do
-    total_themes = Dir.glob(File.join(THEME_DIR, '*.thmx')).count
+    total_themes = Dir.glob(File.join(THEME_DIR, "*.thmx")).count
     puts
-    puts '=' * 60
-    puts 'Theme Round-Trip Summary'
-    puts '=' * 60
+    puts "=" * 60
+    puts "Theme Round-Trip Summary"
+    puts "=" * 60
     puts "Total Themes tested: #{total_themes}"
-    puts '=' * 60
+    puts "=" * 60
     puts
   end
 end

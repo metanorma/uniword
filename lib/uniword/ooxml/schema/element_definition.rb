@@ -41,7 +41,7 @@ module Uniword
         def namespace_declarations
           return {} unless @namespace
 
-          prefix = tag.split(':').first
+          prefix = tag.split(":").first
           { "xmlns:#{prefix}" => @namespace }
         end
 
@@ -118,7 +118,7 @@ module Uniword
         # @example Get local name
         #   element_def.local_name  # 'w:p' => 'p'
         def local_name
-          @tag.split(':').last
+          @tag.split(":").last
         end
 
         # Get namespace prefix
@@ -128,7 +128,7 @@ module Uniword
         # @example Get prefix
         #   element_def.prefix  # 'w:p' => 'w'
         def prefix
-          parts = @tag.split(':')
+          parts = @tag.split(":")
           parts.length > 1 ? parts.first : nil
         end
 

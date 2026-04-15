@@ -311,23 +311,23 @@ module Uniword
     # @param target_format [Symbol] Target format
     # @raise [ArgumentError] if parameters are invalid
     def validate_conversion_params(source, source_format, target, target_format)
-      raise ArgumentError, 'Source cannot be nil' if source.nil?
-      raise ArgumentError, 'Source format must be specified' if source_format.nil?
-      raise ArgumentError, 'Target cannot be nil' if target.nil?
-      raise ArgumentError, 'Target format must be specified' if target_format.nil?
+      raise ArgumentError, "Source cannot be nil" if source.nil?
+      raise ArgumentError, "Source format must be specified" if source_format.nil?
+      raise ArgumentError, "Target cannot be nil" if target.nil?
+      raise ArgumentError, "Target format must be specified" if target_format.nil?
 
       # Validate formats are supported
       supported = %i[docx docm dotx dotm mhtml]
       unless supported.include?(source_format)
         raise ArgumentError,
               "Unsupported source format: #{source_format}. " \
-              "Supported: #{supported.join(', ')}"
+              "Supported: #{supported.join(", ")}"
       end
       return if supported.include?(target_format)
 
       raise ArgumentError,
             "Unsupported target format: #{target_format}. " \
-            "Supported: #{supported.join(', ')}"
+            "Supported: #{supported.join(", ")}"
     end
 
     # Log conversion start

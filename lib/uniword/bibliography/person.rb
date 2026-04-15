@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Bibliography
@@ -14,13 +14,13 @@ module Uniword
       attribute :last, :string
 
       xml do
-        element 'Person'
+        element "Person"
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 
-        map_element 'First', to: :first, render_nil: false
-        map_element 'Middle', to: :middle, render_nil: false
-        map_element 'Last', to: :last
+        map_element "First", to: :first, render_nil: false
+        map_element "Middle", to: :middle, render_nil: false
+        map_element "Last", to: :last
       end
     end
   end

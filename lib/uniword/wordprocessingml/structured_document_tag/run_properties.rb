@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -43,39 +43,39 @@ module Uniword
         attribute :outline, Properties::Outline, default: nil
 
         xml do
-          element 'rPr'
+          element "rPr"
           namespace Ooxml::Namespaces::WordProcessingML
           mixed_content
 
-          map_element 'rStyle', to: :style, render_nil: false
-          map_element 'rFonts', to: :fonts, render_nil: false
-          map_element 'sz', to: :size, render_nil: false
-          map_element 'szCs', to: :size_cs, render_nil: false
-          map_element 'color', to: :color, render_nil: false
-          map_element 'b', to: :bold, render_nil: false
-          map_element 'bCs', to: :bold_cs, render_nil: false
-          map_element 'i', to: :italic, render_nil: false
-          map_element 'iCs', to: :italic_cs, render_nil: false
-          map_element 'strike', to: :strike, render_nil: false
-          map_element 'dstrike', to: :double_strike, render_nil: false
-          map_element 'smallCaps', to: :small_caps, render_nil: false
-          map_element 'caps', to: :caps, render_nil: false
-          map_element 'vanish', to: :hidden, render_nil: false
-          map_element 'noProof', to: :no_proof, render_nil: false
-          map_element 'u', to: :underline, render_nil: false
-          map_element 'highlight', to: :highlight, render_nil: false
-          map_element 'vertAlign', to: :vertical_align, render_nil: false
-          map_element 'position', to: :position, render_nil: false
-          map_element 'spacing', to: :character_spacing, render_nil: false
-          map_element 'kern', to: :kerning, render_nil: false
-          map_element 'w', to: :width_scale, render_nil: false
-          map_element 'em', to: :emphasis_mark, render_nil: false
-          map_element 'shd', to: :shading, render_nil: false
-          map_element 'lang', to: :language, render_nil: false
-          map_element 'shadow', to: :shadow, render_nil: false
-          map_element 'emboss', to: :emboss, render_nil: false
-          map_element 'imprint', to: :imprint, render_nil: false
-          map_element 'outline', to: :outline, render_nil: false
+          map_element "rStyle", to: :style, render_nil: false
+          map_element "rFonts", to: :fonts, render_nil: false
+          map_element "sz", to: :size, render_nil: false
+          map_element "szCs", to: :size_cs, render_nil: false
+          map_element "color", to: :color, render_nil: false
+          map_element "b", to: :bold, render_nil: false
+          map_element "bCs", to: :bold_cs, render_nil: false
+          map_element "i", to: :italic, render_nil: false
+          map_element "iCs", to: :italic_cs, render_nil: false
+          map_element "strike", to: :strike, render_nil: false
+          map_element "dstrike", to: :double_strike, render_nil: false
+          map_element "smallCaps", to: :small_caps, render_nil: false
+          map_element "caps", to: :caps, render_nil: false
+          map_element "vanish", to: :hidden, render_nil: false
+          map_element "noProof", to: :no_proof, render_nil: false
+          map_element "u", to: :underline, render_nil: false
+          map_element "highlight", to: :highlight, render_nil: false
+          map_element "vertAlign", to: :vertical_align, render_nil: false
+          map_element "position", to: :position, render_nil: false
+          map_element "spacing", to: :character_spacing, render_nil: false
+          map_element "kern", to: :kerning, render_nil: false
+          map_element "w", to: :width_scale, render_nil: false
+          map_element "em", to: :emphasis_mark, render_nil: false
+          map_element "shd", to: :shading, render_nil: false
+          map_element "lang", to: :language, render_nil: false
+          map_element "shadow", to: :shadow, render_nil: false
+          map_element "emboss", to: :emboss, render_nil: false
+          map_element "imprint", to: :imprint, render_nil: false
+          map_element "outline", to: :outline, render_nil: false
         end
       end
     end

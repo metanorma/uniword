@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -15,13 +15,13 @@ module Uniword
       attribute :content, Uniword::Wordprocessingml::TextBoxContent
 
       xml do
-        element 'textbox'
+        element "textbox"
         namespace Uniword::Ooxml::Namespaces::Vml
         mixed_content
 
-        map_attribute 'style', to: :style, render_nil: false
-        map_attribute 'inset', to: :inset, render_nil: false
-        map_element 'txbxContent', to: :content, render_nil: false
+        map_attribute "style", to: :style, render_nil: false
+        map_attribute "inset", to: :inset, render_nil: false
+        map_element "txbxContent", to: :content, render_nil: false
       end
     end
   end

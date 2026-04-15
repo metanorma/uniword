@@ -52,7 +52,7 @@ module Uniword
           )
         end
 
-        log 'Format conversion complete'
+        log "Format conversion complete"
         document
       end
 
@@ -74,7 +74,7 @@ module Uniword
 
         raise ArgumentError,
               "Invalid target_format: #{@target_format}. " \
-              "Must be one of: #{valid_formats.join(', ')}"
+              "Must be one of: #{valid_formats.join(", ")}"
       end
 
       # Detect format from file path
@@ -86,9 +86,9 @@ module Uniword
 
         ext = File.extname(file_path).downcase
         case ext
-        when '.docx'
+        when ".docx"
           :docx
-        when '.doc', '.mht', '.mhtml'
+        when ".doc", ".mht", ".mhtml"
           :mhtml
         else
           :docx # Default
@@ -103,11 +103,11 @@ module Uniword
       def update_output_extension(output_path, format)
         ext = case format
               when :docx
-                '.docx'
+                ".docx"
               when :mhtml
-                '.doc'
+                ".doc"
               else
-                '.docx'
+                ".docx"
               end
 
         output_path.sub(/\.[^.]+$/, ext)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Assembly
@@ -45,7 +45,7 @@ module Uniword
       # @example
       #   instr.to_s # => "TOC \\o \"1-3\" \\h \\z \\u"
       def to_s
-        parts = ['TOC']
+        parts = ["TOC"]
 
         parts << "\\o \"#{outline_levels}\"" if outline_levels
         parts << '\\h' if hyperlinks
@@ -55,7 +55,7 @@ module Uniword
         parts << "\\s \"#{separator}\"" if separator
         parts << "\\l \"#{leader}\"" if leader
 
-        parts.join(' ')
+        parts.join(" ")
       end
 
       # Parse a TOC field instruction string.

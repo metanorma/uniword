@@ -10,19 +10,19 @@ module Uniword
       attribute :vid, :string
 
       xml do
-        element 'themeFamily'
+        element "themeFamily"
         # ThemeML namespace for theme metadata
         namespace Ooxml::Namespaces::ThemeML
-        map_attribute 'name', to: :name
-        map_attribute 'id', to: :id
-        map_attribute 'vid', to: :vid
+        map_attribute "name", to: :name
+        map_attribute "id", to: :id
+        map_attribute "vid", to: :vid
       end
 
       def initialize(attributes = {})
         super
-        @name ||= ''
-        @id ||= ''
-        @vid ||= ''
+        @name ||= ""
+        @id ||= ""
+        @vid ||= ""
       end
     end
 
@@ -38,15 +38,15 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'ext'
+        element "ext"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'uri', to: :uri
-        map_element 'themeFamily', to: :theme_family
+        map_attribute "uri", to: :uri
+        map_element "themeFamily", to: :theme_family
       end
 
       def initialize(attributes = {})
         super
-        @uri ||= ''
+        @uri ||= ""
       end
     end
   end

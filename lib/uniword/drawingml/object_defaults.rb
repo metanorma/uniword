@@ -11,12 +11,12 @@ module Uniword
       attribute :tx_def, Drawingml::TextDefaults
 
       xml do
-        element 'objectDefaults'
+        element "objectDefaults"
         namespace Ooxml::Namespaces::DrawingML
 
-        map_element 'lnDef', to: :ln_def, render_nil: false
-        map_element 'spDef', to: :sp_def, render_nil: false
-        map_element 'txDef', to: :tx_def, render_nil: false
+        map_element "lnDef", to: :ln_def, render_nil: false
+        map_element "spDef", to: :sp_def, render_nil: false
+        map_element "txDef", to: :tx_def, render_nil: false
       end
     end
   end

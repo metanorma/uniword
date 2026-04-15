@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 # NumberingDefinition and NumberingInstance are autoloaded via lib/uniword/wordprocessingml.rb
 
 module Uniword
@@ -17,7 +17,7 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element 'numbering'
+        element "numbering"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -26,9 +26,9 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
 
-        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
-        map_element 'abstractNum', to: :definitions, render_nil: false
-        map_element 'num', to: :instances, render_nil: false
+        map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
+        map_element "abstractNum", to: :definitions, render_nil: false
+        map_element "num", to: :instances, render_nil: false
       end
 
       def initialize(attributes = {})
@@ -133,17 +133,18 @@ module Uniword
 
       # Get default decimal numbering (create if not exists)
       def default_decimal_num_id
-        @default_decimal_num_id ||= create_numbering(:decimal, name: 'Default Decimal')
+        @default_decimal_num_id ||= create_numbering(:decimal, name: "Default Decimal")
       end
 
       # Get default bullet numbering (create if not exists)
       def default_bullet_num_id
-        @default_bullet_num_id ||= create_numbering(:bullet, name: 'Default Bullet')
+        @default_bullet_num_id ||= create_numbering(:bullet, name: "Default Bullet")
       end
 
       private
 
       def next_abstract_num_id
+        @next_abstract_num_id ||= 0
         id = @next_abstract_num_id
         @next_abstract_num_id += 1
 
@@ -157,6 +158,7 @@ module Uniword
       end
 
       def next_num_id
+        @next_num_id ||= 1
         id = @next_num_id
         @next_num_id += 1
 

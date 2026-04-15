@@ -143,13 +143,13 @@ module Uniword
       #
       # @return [String] String representation
       def to_s
-        status = valid? ? 'PASS' : 'FAIL'
+        status = valid? ? "PASS" : "FAIL"
         details = []
         details << "#{error_count} error(s)" if error_count.positive?
         details << "#{warning_count} warning(s)" if warning_count.positive?
         details << "#{info_count} info(s)" if info_count.positive?
 
-        detail_str = details.empty? ? '' : " (#{details.join(', ')})"
+        detail_str = details.empty? ? "" : " (#{details.join(", ")})"
         "[#{status}] #{@layer_name}#{detail_str}"
       end
     end

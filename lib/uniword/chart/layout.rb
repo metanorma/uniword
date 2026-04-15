@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -12,11 +12,11 @@ module Uniword
       attribute :manual_layout, :string
 
       xml do
-        element 'layout'
+        element "layout"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'manualLayout', to: :manual_layout, render_nil: false
+        map_element "manualLayout", to: :manual_layout, render_nil: false
       end
     end
   end

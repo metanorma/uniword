@@ -28,7 +28,7 @@ module Uniword
     end
 
     def cache_path
-      File.expand_path('~/.uniword')
+      File.expand_path("~/.uniword")
     end
   end
 end

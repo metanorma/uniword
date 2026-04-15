@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :scaled, :string
 
       xml do
-        element 'lin'
+        element "lin"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'ang', to: :ang
-        map_attribute 'scaled', to: :scaled
+        map_attribute "ang", to: :ang
+        map_attribute "scaled", to: :scaled
       end
     end
   end

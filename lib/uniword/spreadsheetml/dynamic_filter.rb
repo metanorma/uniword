@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,12 +13,12 @@ module Uniword
       attribute :max_val, :float
 
       xml do
-        element 'dynamicFilter'
+        element "dynamicFilter"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'type', to: :type
-        map_attribute 'val', to: :val, render_nil: false
-        map_attribute 'maxVal', to: :max_val, render_nil: false
+        map_attribute "type", to: :type
+        map_attribute "val", to: :val, render_nil: false
+        map_attribute "maxVal", to: :max_val, render_nil: false
       end
     end
   end

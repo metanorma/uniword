@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -20,7 +20,7 @@ module Uniword
       #
       # @return [String] CSS with theme variables
       def to_css
-        css = +''
+        css = +""
         colors.each do |name, value|
           css << "--#{name}: #{value};\n"
         end

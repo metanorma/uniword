@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Picture
@@ -12,11 +12,11 @@ module Uniword
       attribute :fill_rect, FillRect
 
       xml do
-        element 'stretch'
+        element "stretch"
         namespace Uniword::Ooxml::Namespaces::Picture
         mixed_content
 
-        map_element 'fillRect', to: :fill_rect, render_nil: false
+        map_element "fillRect", to: :fill_rect, render_nil: false
       end
     end
   end

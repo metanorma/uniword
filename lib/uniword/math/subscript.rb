@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -14,13 +14,13 @@ module Uniword
       attribute :sub, Sub
 
       xml do
-        element 'sSub'
+        element "sSub"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'sSubPr', to: :properties, render_nil: false
-        map_element 'e', to: :element
-        map_element 'sub', to: :sub
+        map_element "sSubPr", to: :properties, render_nil: false
+        map_element "e", to: :element
+        map_element "sub", to: :sub
       end
     end
   end

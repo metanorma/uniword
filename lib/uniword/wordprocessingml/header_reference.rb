@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require_relative '../properties/relationship_id'
+require "lutaml/model"
+require_relative "../properties/relationship_id"
 
 module Uniword
   module Wordprocessingml
@@ -14,11 +14,11 @@ module Uniword
       attribute :r_id, Properties::RelationshipIdValue
 
       xml do
-        element 'headerReference'
+        element "headerReference"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'type', to: :type
-        map_attribute 'id', to: :r_id
+        map_attribute "type", to: :type
+        map_attribute "id", to: :r_id
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -15,15 +15,15 @@ module Uniword
         attribute :type, XsiTypeType
 
         xml do
-          element 'created'
+          element "created"
           namespace Namespaces::DublinCoreTerms
-          map_attribute 'type', to: :type
+          map_attribute "type", to: :type
           map_content to: :value
         end
 
         def initialize(attributes = {})
           super
-          @type ||= 'dcterms:W3CDTF'
+          @type ||= "dcterms:W3CDTF"
         end
       end
 
@@ -33,15 +33,15 @@ module Uniword
         attribute :type, XsiTypeType
 
         xml do
-          element 'modified'
+          element "modified"
           namespace Namespaces::DublinCoreTerms
-          map_attribute 'type', to: :type
+          map_attribute "type", to: :type
           map_content to: :value
         end
 
         def initialize(attributes = {})
           super
-          @type ||= 'dcterms:W3CDTF'
+          @type ||= "dcterms:W3CDTF"
         end
       end
     end

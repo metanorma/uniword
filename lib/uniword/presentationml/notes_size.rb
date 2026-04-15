@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -13,11 +13,11 @@ module Uniword
       attribute :cy, :integer
 
       xml do
-        element 'notes_sz'
+        element "notes_sz"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'cx', to: :cx
-        map_attribute 'cy', to: :cy
+        map_attribute "cx", to: :cx
+        map_attribute "cy", to: :cy
       end
     end
   end

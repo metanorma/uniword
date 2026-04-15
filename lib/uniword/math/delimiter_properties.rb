@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -17,16 +17,16 @@ module Uniword
       attribute :ctrl_pr, ControlProperties
 
       xml do
-        element 'dPr'
+        element "dPr"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'begChr', to: :begin_char, render_nil: false
-        map_element 'endChr', to: :end_char, render_nil: false
-        map_element 'sepChr', to: :separator_char, render_nil: false
-        map_element 'grow', to: :grow, render_nil: false
-        map_element 'shape', to: :shape, render_nil: false
-        map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
+        map_element "begChr", to: :begin_char, render_nil: false
+        map_element "endChr", to: :end_char, render_nil: false
+        map_element "sepChr", to: :separator_char, render_nil: false
+        map_element "grow", to: :grow, render_nil: false
+        map_element "shape", to: :shape, render_nil: false
+        map_element "ctrlPr", to: :ctrl_pr, render_nil: false
       end
     end
   end

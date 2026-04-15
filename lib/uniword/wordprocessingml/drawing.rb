@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,12 +12,12 @@ module Uniword
       attribute :anchor, WpDrawing::Anchor
 
       xml do
-        element 'drawing'
+        element "drawing"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'inline', to: :inline, render_nil: false
-        map_element 'anchor', to: :anchor, render_nil: false
+        map_element "inline", to: :inline, render_nil: false
+        map_element "anchor", to: :anchor, render_nil: false
       end
     end
   end

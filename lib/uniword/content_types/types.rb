@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module ContentTypes
@@ -13,13 +13,13 @@ module Uniword
       attribute :overrides, Override, collection: true, initialize_empty: true
 
       xml do
-        element 'Types'
+        element "Types"
         namespace Uniword::Ooxml::Namespaces::ContentTypes
         mixed_content
         ordered
 
-        map_element 'Default', to: :defaults, render_nil: false
-        map_element 'Override', to: :overrides, render_nil: false
+        map_element "Default", to: :defaults, render_nil: false
+        map_element "Override", to: :overrides, render_nil: false
       end
     end
   end

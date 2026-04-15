@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -10,16 +10,16 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'docPartGallery'
+          element "docPartGallery"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
       # Document Part Unique flag for DocPartObj (empty element)
       class DocPartUnique < Lutaml::Model::Serializable
         xml do
-          element 'docPartUnique'
+          element "docPartUnique"
           namespace Ooxml::Namespaces::WordProcessingML
         end
       end
@@ -29,9 +29,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'docPartCategory'
+          element "docPartCategory"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
@@ -43,13 +43,13 @@ module Uniword
         attribute :doc_part_unique, DocPartUnique
 
         xml do
-          element 'docPartObj'
+          element "docPartObj"
           namespace Ooxml::Namespaces::WordProcessingML
           mixed_content
 
-          map_element 'docPartGallery', to: :doc_part_gallery, render_nil: false
-          map_element 'docPartCategory', to: :doc_part_category, render_nil: false
-          map_element 'docPartUnique', to: :doc_part_unique, render_nil: false
+          map_element "docPartGallery", to: :doc_part_gallery, render_nil: false
+          map_element "docPartCategory", to: :doc_part_category, render_nil: false
+          map_element "docPartUnique", to: :doc_part_unique, render_nil: false
         end
       end
     end

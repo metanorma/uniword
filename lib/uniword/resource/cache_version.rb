@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'json'
+require "json"
 
 module Uniword
   module Resource
@@ -19,7 +19,7 @@ module Uniword
       def cached_version
         return nil unless File.exist?(cache.paths.version_file)
 
-        JSON.parse(File.read(cache.paths.version_file))['word_version']
+        JSON.parse(File.read(cache.paths.version_file))["word_version"]
       rescue JSON::ParserError
         nil
       end

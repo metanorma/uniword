@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'yaml'
+require "json"
+require "yaml"
 # ValidationResult autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -44,7 +44,7 @@ module Uniword
       # @example Add a result
       #   report.add_result(ValidationResult.success(link))
       def add_result(result)
-        raise ArgumentError, 'Expected ValidationResult' unless
+        raise ArgumentError, "Expected ValidationResult" unless
           result.is_a?(ValidationResult)
 
         @results << result
@@ -294,27 +294,27 @@ module Uniword
       #   puts report.to_s
       def to_s
         lines = [
-          'Link Validation Report',
-          '=' * 50,
+          "Link Validation Report",
+          "=" * 50,
           "Total: #{total_count}",
           "Successes: #{success_count}",
           "Failures: #{failure_count}",
           "Warnings: #{warning_count}",
           "Unknowns: #{unknown_count}",
           "Valid: #{valid?}",
-          ''
+          ""
         ]
 
         if failures.any?
-          lines << 'Failed Links:'
+          lines << "Failed Links:"
           failures.each do |result|
             lines << "  - #{result}"
           end
         end
 
         if warnings.any?
-          lines << ''
-          lines << 'Warnings:'
+          lines << ""
+          lines << "Warnings:"
           warnings.each do |result|
             lines << "  - #{result}"
           end
@@ -347,14 +347,14 @@ module Uniword
       #
       # @return [String] HTML for summary
       def summary_html
-        status_class = valid? ? 'success' : 'failure'
+        status_class = valid? ? "success" : "failure"
         <<~HTML
           <div class="summary">
             <div class="summary-item"><strong>Total Links:</strong> #{total_count}</div>
             <div class="summary-item"><strong>Successes:</strong> <span class="success">#{success_count}</span></div>
             <div class="summary-item"><strong>Failures:</strong> <span class="failure">#{failure_count}</span></div>
             <div class="summary-item"><strong>Warnings:</strong> <span class="warning">#{warning_count}</span></div>
-            <div class="summary-item"><strong>Status:</strong> <span class="#{status_class}">#{valid? ? 'VALID' : 'INVALID'}</span></div>
+            <div class="summary-item"><strong>Status:</strong> <span class="#{status_class}">#{valid? ? "VALID" : "INVALID"}</span></div>
           </div>
         HTML
       end
@@ -363,7 +363,7 @@ module Uniword
       #
       # @return [String] HTML for results table
       def results_table_html
-        return '<p>No results to display.</p>' if @results.empty?
+        return "<p>No results to display.</p>" if @results.empty?
 
         rows = @results.map do |result|
           status_class = result.status.to_s
@@ -371,7 +371,7 @@ module Uniword
             <tr>
               <td class="#{status_class}">#{result.status.to_s.upcase}</td>
               <td>#{escape_html(result.link_identifier)}</td>
-              <td>#{escape_html(result.message || '-')}</td>
+              <td>#{escape_html(result.message || "-")}</td>
             </tr>
           HTML
         end
@@ -398,11 +398,11 @@ module Uniword
       # @return [String] Escaped text
       def escape_html(text)
         text.to_s
-            .gsub('&', '&amp;')
-            .gsub('<', '&lt;')
-            .gsub('>', '&gt;')
-            .gsub('"', '&quot;')
-            .gsub("'", '&#39;')
+            .gsub("&", "&amp;")
+            .gsub("<", "&lt;")
+            .gsub(">", "&gt;")
+            .gsub('"', "&quot;")
+            .gsub("'", "&#39;")
       end
     end
   end

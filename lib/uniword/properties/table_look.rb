@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -21,15 +21,15 @@ module Uniword
       attribute :no_v_band, :integer    # No vertical banding (0/1)
 
       xml do
-        element 'tblLook'
+        element "tblLook"
         namespace Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false
-        map_attribute 'firstRow', to: :first_row, render_nil: false
-        map_attribute 'lastRow', to: :last_row, render_nil: false
-        map_attribute 'firstColumn', to: :first_column, render_nil: false
-        map_attribute 'lastColumn', to: :last_column, render_nil: false
-        map_attribute 'noHBand', to: :no_h_band, render_nil: false
-        map_attribute 'noVBand', to: :no_v_band, render_nil: false
+        map_attribute "val", to: :val, render_nil: false
+        map_attribute "firstRow", to: :first_row, render_nil: false
+        map_attribute "lastRow", to: :last_row, render_nil: false
+        map_attribute "firstColumn", to: :first_column, render_nil: false
+        map_attribute "lastColumn", to: :last_column, render_nil: false
+        map_attribute "noHBand", to: :no_h_band, render_nil: false
+        map_attribute "noVBand", to: :no_v_band, render_nil: false
       end
     end
   end

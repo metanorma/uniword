@@ -38,7 +38,7 @@ module Uniword
         dir = directory_for_type(type)
         return [] unless File.directory?(dir)
 
-        Dir.glob(File.join(dir, '*.yml')).map { |f| File.basename(f, '.yml') }
+        Dir.glob(File.join(dir, "*.yml")).map { |f| File.basename(f, ".yml") }
       end
 
       # Count cached resources of a type

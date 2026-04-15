@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2016
@@ -12,11 +12,11 @@ module Uniword
       attribute :extensions, Extension, collection: true, initialize_empty: true
 
       xml do
-        element 'extLst'
+        element "extLst"
         namespace Uniword::Ooxml::Namespaces::Word2015
         mixed_content
 
-        map_element 'ext', to: :extensions, render_nil: false
+        map_element "ext", to: :extensions, render_nil: false
       end
     end
   end

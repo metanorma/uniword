@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -12,10 +12,10 @@ module Uniword
       attribute :doc_part, DocPart, collection: true, initialize_empty: true
 
       xml do
-        root 'docParts'
+        root "docParts"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_element 'docPart', to: :doc_part, render_nil: false
+        map_element "docPart", to: :doc_part, render_nil: false
       end
     end
   end

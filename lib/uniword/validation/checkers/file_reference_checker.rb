@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'pathname'
+require "pathname"
 # LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -29,7 +29,7 @@ module Uniword
       class FileReferenceChecker < LinkChecker
         # Default configuration values
         DEFAULTS = {
-          base_path: '.',
+          base_path: ".",
           check_relative_paths: true,
           check_absolute_paths: true
         }.freeze
@@ -66,10 +66,10 @@ module Uniword
         # @example
         #   result = checker.check(file_link)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
+          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
 
           file_path = extract_file_path(link)
-          return ValidationResult.failure(link, 'No file path specified') unless file_path
+          return ValidationResult.failure(link, "No file path specified") unless file_path
 
           # Resolve the file path
           resolved_path = resolve_path(file_path, document)
@@ -79,14 +79,14 @@ module Uniword
             unless config_value(:check_absolute_paths, DEFAULTS[:check_absolute_paths])
               return ValidationResult.warning(
                 link,
-                'Absolute path checking disabled'
+                "Absolute path checking disabled"
               )
             end
           else
             unless config_value(:check_relative_paths, DEFAULTS[:check_relative_paths])
               return ValidationResult.warning(
                 link,
-                'Relative path checking disabled'
+                "Relative path checking disabled"
               )
             end
           end
@@ -96,7 +96,7 @@ module Uniword
             metadata = {
               path: file_path,
               resolved_path: resolved_path.to_s,
-              type: File.directory?(resolved_path) ? 'directory' : 'file'
+              type: File.directory?(resolved_path) ? "directory" : "file"
             }
 
             ValidationResult.success(link, metadata: metadata)
@@ -132,8 +132,8 @@ module Uniword
           elsif link.respond_to?(:url)
             url = link.url
             # Extract file path from file:// URLs
-            if url&.start_with?('file://')
-              url.sub(%r{^file://}, '')
+            if url&.start_with?("file://")
+              url.sub(%r{^file://}, "")
             else
               url
             end
@@ -179,11 +179,11 @@ module Uniword
           return false if str.empty?
 
           # Check for file:// protocol
-          return true if str.start_with?('file://')
+          return true if str.start_with?("file://")
 
           # Check for common file extensions or path separators
           has_extension = str.match?(/\.\w{1,10}$/)
-          has_path_separator = str.include?('/') || str.include?('\\')
+          has_path_separator = str.include?("/") || str.include?("\\")
 
           # Avoid HTTP(S) URLs
           return false if str.match?(%r{^https?://})

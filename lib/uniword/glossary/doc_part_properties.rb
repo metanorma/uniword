@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -18,17 +18,17 @@ module Uniword
       attribute :guid, DocPartId
 
       xml do
-        root 'docPartPr'
+        root "docPartPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'name', to: :name, render_nil: false
-        map_element 'style', to: :style, render_nil: false
-        map_element 'category', to: :category, render_nil: false
-        map_element 'types', to: :types, render_nil: false
-        map_element 'behaviors', to: :behaviors, render_nil: false
-        map_element 'description', to: :description, render_nil: false
-        map_element 'guid', to: :guid, render_nil: false
+        map_element "name", to: :name, render_nil: false
+        map_element "style", to: :style, render_nil: false
+        map_element "category", to: :category, render_nil: false
+        map_element "types", to: :types, render_nil: false
+        map_element "behaviors", to: :behaviors, render_nil: false
+        map_element "description", to: :description, render_nil: false
+        map_element "guid", to: :guid, render_nil: false
       end
     end
   end

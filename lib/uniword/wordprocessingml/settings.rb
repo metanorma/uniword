@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require_relative '../properties/relationship_id'
+require "lutaml/model"
+require_relative "../properties/relationship_id"
 
 module Uniword
   module Wordprocessingml
@@ -13,10 +13,10 @@ module Uniword
       attribute :grammar, :string
 
       xml do
-        element 'proofState'
+        element "proofState"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'spelling', to: :spelling
-        map_attribute 'grammar', to: :grammar
+        map_attribute "spelling", to: :spelling
+        map_attribute "grammar", to: :grammar
       end
     end
 
@@ -42,24 +42,24 @@ module Uniword
       attribute :alternate_style_names, :string
 
       xml do
-        element 'stylePaneFormatFilter'
+        element "stylePaneFormatFilter"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
-        map_attribute 'allStyles', to: :all_styles
-        map_attribute 'customStyles', to: :custom_styles
-        map_attribute 'latentStyles', to: :latent_styles
-        map_attribute 'stylesInUse', to: :styles_in_use
-        map_attribute 'headingStyles', to: :heading_styles
-        map_attribute 'numberingStyles', to: :numbering_styles
-        map_attribute 'tableStyles', to: :table_styles
-        map_attribute 'directFormattingOnRuns', to: :direct_formatting_on_runs
-        map_attribute 'directFormattingOnParagraphs', to: :direct_formatting_on_paragraphs
-        map_attribute 'directFormattingOnNumbering', to: :direct_formatting_on_numbering
-        map_attribute 'directFormattingOnTables', to: :direct_formatting_on_tables
-        map_attribute 'clearFormatting', to: :clear_formatting
-        map_attribute 'top3HeadingStyles', to: :top3_heading_styles
-        map_attribute 'visibleStyles', to: :visible_styles
-        map_attribute 'alternateStyleNames', to: :alternate_style_names
+        map_attribute "val", to: :val
+        map_attribute "allStyles", to: :all_styles
+        map_attribute "customStyles", to: :custom_styles
+        map_attribute "latentStyles", to: :latent_styles
+        map_attribute "stylesInUse", to: :styles_in_use
+        map_attribute "headingStyles", to: :heading_styles
+        map_attribute "numberingStyles", to: :numbering_styles
+        map_attribute "tableStyles", to: :table_styles
+        map_attribute "directFormattingOnRuns", to: :direct_formatting_on_runs
+        map_attribute "directFormattingOnParagraphs", to: :direct_formatting_on_paragraphs
+        map_attribute "directFormattingOnNumbering", to: :direct_formatting_on_numbering
+        map_attribute "directFormattingOnTables", to: :direct_formatting_on_tables
+        map_attribute "clearFormatting", to: :clear_formatting
+        map_attribute "top3HeadingStyles", to: :top3_heading_styles
+        map_attribute "visibleStyles", to: :visible_styles
+        map_attribute "alternateStyleNames", to: :alternate_style_names
       end
     end
 
@@ -70,9 +70,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'defaultTabStop'
+        element "defaultTabStop"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -83,9 +83,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'characterSpacingControl'
+        element "characterSpacingControl"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -96,9 +96,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'rsidRoot'
+        element "rsidRoot"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -109,9 +109,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'rsid'
+        element "rsid"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -123,11 +123,11 @@ module Uniword
       attribute :rsid, Rsid, collection: true
 
       xml do
-        element 'rsids'
+        element "rsids"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'rsidRoot', to: :rsid_root, render_nil: false
-        map_element 'rsid', to: :rsid, render_nil: false
+        map_element "rsidRoot", to: :rsid_root, render_nil: false
+        map_element "rsid", to: :rsid, render_nil: false
       end
     end
 
@@ -138,9 +138,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'mathFont'
+        element "mathFont"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -151,9 +151,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'brkBin'
+        element "brkBin"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -164,9 +164,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'brkBinSub'
+        element "brkBinSub"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -177,9 +177,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'smallFrac'
+        element "smallFrac"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -188,7 +188,7 @@ module Uniword
     # Element: <m:dispDef>
     class DispDef < Lutaml::Model::Serializable
       xml do
-        element 'dispDef'
+        element "dispDef"
         namespace Uniword::Ooxml::Namespaces::MathML
       end
     end
@@ -200,9 +200,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'lMargin'
+        element "lMargin"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -213,9 +213,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'rMargin'
+        element "rMargin"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -226,9 +226,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'defJc'
+        element "defJc"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -239,9 +239,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'wrapIndent'
+        element "wrapIndent"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -252,9 +252,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'intLim'
+        element "intLim"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -265,9 +265,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'naryLim'
+        element "naryLim"
         namespace Uniword::Ooxml::Namespaces::MathML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -288,20 +288,20 @@ module Uniword
       attribute :nary_lim, NaryLim
 
       xml do
-        element 'mathPr'
+        element "mathPr"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
-        map_element 'mathFont', to: :math_font, render_nil: false
-        map_element 'brkBin', to: :brk_bin, render_nil: false
-        map_element 'brkBinSub', to: :brk_bin_sub, render_nil: false
-        map_element 'smallFrac', to: :small_frac, render_nil: false
-        map_element 'dispDef', to: :disp_def, render_nil: false
-        map_element 'lMargin', to: :l_margin, render_nil: false
-        map_element 'rMargin', to: :r_margin, render_nil: false
-        map_element 'defJc', to: :def_jc, render_nil: false
-        map_element 'wrapIndent', to: :wrap_indent, render_nil: false
-        map_element 'intLim', to: :int_lim, render_nil: false
-        map_element 'naryLim', to: :nary_lim, render_nil: false
+        map_element "mathFont", to: :math_font, render_nil: false
+        map_element "brkBin", to: :brk_bin, render_nil: false
+        map_element "brkBinSub", to: :brk_bin_sub, render_nil: false
+        map_element "smallFrac", to: :small_frac, render_nil: false
+        map_element "dispDef", to: :disp_def, render_nil: false
+        map_element "lMargin", to: :l_margin, render_nil: false
+        map_element "rMargin", to: :r_margin, render_nil: false
+        map_element "defJc", to: :def_jc, render_nil: false
+        map_element "wrapIndent", to: :wrap_indent, render_nil: false
+        map_element "intLim", to: :int_lim, render_nil: false
+        map_element "naryLim", to: :nary_lim, render_nil: false
       end
     end
 
@@ -313,10 +313,10 @@ module Uniword
       attribute :east_asia, :string
 
       xml do
-        element 'themeFontLang'
+        element "themeFontLang"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
-        map_attribute 'eastAsia', to: :east_asia
+        map_attribute "val", to: :val
+        map_attribute "eastAsia", to: :east_asia
       end
     end
 
@@ -338,20 +338,20 @@ module Uniword
       attribute :followed_hyperlink, :string
 
       xml do
-        element 'clrSchemeMapping'
+        element "clrSchemeMapping"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'bg1', to: :bg1
-        map_attribute 't1', to: :t1
-        map_attribute 'bg2', to: :bg2
-        map_attribute 't2', to: :t2
-        map_attribute 'accent1', to: :accent1
-        map_attribute 'accent2', to: :accent2
-        map_attribute 'accent3', to: :accent3
-        map_attribute 'accent4', to: :accent4
-        map_attribute 'accent5', to: :accent5
-        map_attribute 'accent6', to: :accent6
-        map_attribute 'hyperlink', to: :hyperlink
-        map_attribute 'followedHyperlink', to: :followed_hyperlink
+        map_attribute "bg1", to: :bg1
+        map_attribute "t1", to: :t1
+        map_attribute "bg2", to: :bg2
+        map_attribute "t2", to: :t2
+        map_attribute "accent1", to: :accent1
+        map_attribute "accent2", to: :accent2
+        map_attribute "accent3", to: :accent3
+        map_attribute "accent4", to: :accent4
+        map_attribute "accent5", to: :accent5
+        map_attribute "accent6", to: :accent6
+        map_attribute "hyperlink", to: :hyperlink
+        map_attribute "followedHyperlink", to: :followed_hyperlink
       end
     end
 
@@ -363,11 +363,11 @@ module Uniword
       attribute :shape_layout, Uniword::VmlOffice::VmlShapeLayout
 
       xml do
-        element 'shapeDefaults'
+        element "shapeDefaults"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'shapedefaults', to: :shape_defaults, render_nil: false
-        map_element 'shapelayout', to: :shape_layout, render_nil: false
+        map_element "shapedefaults", to: :shape_defaults, render_nil: false
+        map_element "shapelayout", to: :shape_layout, render_nil: false
       end
     end
 
@@ -378,9 +378,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'decimalSymbol'
+        element "decimalSymbol"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -391,9 +391,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'listSeparator'
+        element "listSeparator"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -404,9 +404,9 @@ module Uniword
       attribute :r_id, Properties::RelationshipIdValue
 
       xml do
-        element 'attachedTemplate'
+        element "attachedTemplate"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'id', to: :r_id
+        map_attribute "id", to: :r_id
       end
     end
 
@@ -417,10 +417,10 @@ module Uniword
       attribute :shape_defaults, Uniword::VmlOffice::VmlShapeDefaults
 
       xml do
-        element 'hdrShapeDefaults'
+        element "hdrShapeDefaults"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'shapedefaults', to: :shape_defaults, render_nil: false
+        map_element "shapedefaults", to: :shape_defaults, render_nil: false
       end
     end
 
@@ -431,9 +431,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'pos'
+        element "pos"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -445,11 +445,11 @@ module Uniword
       attribute :footnotes, Footnote, collection: true
 
       xml do
-        element 'footnotePr'
+        element "footnotePr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'pos', to: :pos, render_nil: false
-        map_element 'footnote', to: :footnotes, render_nil: false
+        map_element "pos", to: :pos, render_nil: false
+        map_element "footnote", to: :footnotes, render_nil: false
       end
     end
 
@@ -460,10 +460,10 @@ module Uniword
       attribute :endnotes, Endnote, collection: true
 
       xml do
-        element 'endnotePr'
+        element "endnotePr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'endnote', to: :endnotes, render_nil: false
+        map_element "endnote", to: :endnotes, render_nil: false
       end
     end
 
@@ -474,9 +474,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'docId'
+        element "docId"
         namespace Uniword::Ooxml::Namespaces::Word2010
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -485,7 +485,7 @@ module Uniword
     # Element: <w15:chartTrackingRefBased>
     class W15ChartTrackingRefBased < Lutaml::Model::Serializable
       xml do
-        element 'chartTrackingRefBased'
+        element "chartTrackingRefBased"
         namespace Uniword::Ooxml::Namespaces::Word2012
       end
     end
@@ -497,9 +497,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'docId'
+        element "docId"
         namespace Uniword::Ooxml::Namespaces::Word2012
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -533,7 +533,7 @@ module Uniword
       attribute :schema_library, Uniword::Ooxml::SchemaLibrary
 
       xml do
-        element 'settings'
+        element "settings"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -548,31 +548,31 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary, declare: :always }
         ]
 
-        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
-        map_element 'zoom', to: :zoom, render_nil: false
-        map_element 'compat', to: :compat, render_nil: false
-        map_element 'proofState', to: :proof_state, render_nil: false
-        map_element 'stylePaneFormatFilter', to: :style_pane_format_filter, render_nil: false
-        map_element 'defaultTabStop', to: :default_tab_stop, render_nil: false
-        map_element 'characterSpacingControl', to: :character_spacing_control, render_nil: false
-        map_element 'rsids', to: :rsids, render_nil: false
-        map_element 'mathPr', to: :math_pr, render_nil: false
-        map_element 'themeFontLang', to: :theme_font_lang, render_nil: false
-        map_element 'clrSchemeMapping', to: :clr_scheme_mapping, render_nil: false
-        map_element 'shapeDefaults', to: :shape_defaults, render_nil: false
-        map_element 'decimalSymbol', to: :decimal_symbol, render_nil: false
-        map_element 'listSeparator', to: :list_separator, render_nil: false
-        map_element 'attachedTemplate', to: :attached_template, render_nil: false
-        map_element 'footnotePr', to: :footnote_pr, render_nil: false
-        map_element 'endnotePr', to: :endnote_pr, render_nil: false
-        map_element 'hdrShapeDefaults', to: :hdr_shape_defaults, render_nil: false
+        map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
+        map_element "zoom", to: :zoom, render_nil: false
+        map_element "compat", to: :compat, render_nil: false
+        map_element "proofState", to: :proof_state, render_nil: false
+        map_element "stylePaneFormatFilter", to: :style_pane_format_filter, render_nil: false
+        map_element "defaultTabStop", to: :default_tab_stop, render_nil: false
+        map_element "characterSpacingControl", to: :character_spacing_control, render_nil: false
+        map_element "rsids", to: :rsids, render_nil: false
+        map_element "mathPr", to: :math_pr, render_nil: false
+        map_element "themeFontLang", to: :theme_font_lang, render_nil: false
+        map_element "clrSchemeMapping", to: :clr_scheme_mapping, render_nil: false
+        map_element "shapeDefaults", to: :shape_defaults, render_nil: false
+        map_element "decimalSymbol", to: :decimal_symbol, render_nil: false
+        map_element "listSeparator", to: :list_separator, render_nil: false
+        map_element "attachedTemplate", to: :attached_template, render_nil: false
+        map_element "footnotePr", to: :footnote_pr, render_nil: false
+        map_element "endnotePr", to: :endnote_pr, render_nil: false
+        map_element "hdrShapeDefaults", to: :hdr_shape_defaults, render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root
-        map_element 'chartTrackingRefBased', to: :w15_chart_tracking_ref_based, render_nil: false
-        map_element 'docId', to: :w14_doc_id, render_nil: false
-        map_element 'docId', to: :w15_doc_id, render_nil: false
-        map_element 'schemaLibrary', to: :schema_library, render_nil: false
+        map_element "chartTrackingRefBased", to: :w15_chart_tracking_ref_based, render_nil: false
+        map_element "docId", to: :w14_doc_id, render_nil: false
+        map_element "docId", to: :w15_doc_id, render_nil: false
+        map_element "schemaLibrary", to: :schema_library, render_nil: false
       end
 
       # Override from_xml to manually deserialize w15:docId which has the same
@@ -586,10 +586,10 @@ module Uniword
         doc_ids = doc.xpath('//*[local-name()="docId"]')
         doc_ids.each do |elem|
           ns_uri = elem.namespace&.href
-          val = elem.attributes['val']&.value
+          val = elem.attributes["val"]&.value
           next unless val
 
-          if (ns_uri == 'http://schemas.microsoft.com/office/word/2012/wordml') && !settings.w15_doc_id&.val
+          if (ns_uri == "http://schemas.microsoft.com/office/word/2012/wordml") && !settings.w15_doc_id&.val
             # w15:docId - manually deserialize since map_element captures w14:docId
             settings.w15_doc_id = W15DocId.new(val: val)
           end

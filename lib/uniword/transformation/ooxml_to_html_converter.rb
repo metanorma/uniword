@@ -18,7 +18,7 @@ module Uniword
       # @return [String] HTML content
       def self.document_to_html(document)
         body = document.body
-        return '' unless body
+        return "" unless body
 
         elements_html = body.elements.map { |e| element_to_html(e) }.join("\n")
         wrap_html(elements_html, document)
@@ -35,7 +35,7 @@ module Uniword
         when Uniword::Wordprocessingml::Table
           table_to_html(element)
         else
-          ''
+          ""
         end
       end
 
@@ -54,7 +54,7 @@ module Uniword
       # @param run [Uniword::Wordprocessingml::Run]
       # @return [String] HTML text content with inline formatting
       def self.run_to_html(run)
-        text = escape_html(run.text || '')
+        text = escape_html(run.text || "")
         return text if text.empty?
 
         props = run.properties
@@ -65,12 +65,8 @@ module Uniword
         text = "<em>#{text}</em>" if props.italic
         text = "<u>#{text}</u>" if props.underline&.value
         text = "<span style=\"color:#{props.color&.value}\">#{text}</span>" if props.color&.value
-        if props.size&.value
-          text = "<span style=\"font-size:#{font_size_to_html(props.size&.value)}\">#{text}</span>"
-        end
-        if props.font&.ascii
-          text = "<span style=\"font-family:'#{props.font&.ascii}'\">#{text}</span>"
-        end
+        text = "<span style=\"font-size:#{font_size_to_html(props.size&.value)}\">#{text}</span>" if props.size&.value
+        text = "<span style=\"font-family:'#{props.font&.ascii}'\">#{text}</span>" if props.font&.ascii
 
         text
       end
@@ -108,7 +104,7 @@ module Uniword
       # @param document [Uniword::Wordprocessingml::DocumentRoot]
       # @return [String] Full HTML document
       def self.wrap_html(body_html, document)
-        title = document.title ? escape_html(document.title) : 'Document'
+        title = document.title ? escape_html(document.title) : "Document"
         core_props = document.core_properties
         author = core_props.respond_to?(:creator) ? core_props.creator : nil
 
@@ -135,10 +131,10 @@ module Uniword
       # @param paragraph [Uniword::Wordprocessingml::Paragraph]
       # @return [String] HTML class/style attribute or empty string
       def self.paragraph_style(paragraph)
-        return '' unless paragraph.properties
+        return "" unless paragraph.properties
 
         style = paragraph.properties.style
-        return '' unless style
+        return "" unless style
 
         " class=\"#{escape_html(style)}\""
       end
@@ -161,11 +157,11 @@ module Uniword
       # @return [String] Escaped text
       def self.escape_html(text)
         text.to_s
-            .gsub('&', '&amp;')
-            .gsub('<', '&lt;')
-            .gsub('>', '&gt;')
-            .gsub('"', '&quot;')
-            .gsub("'", '&#39;')
+            .gsub("&", "&amp;")
+            .gsub("<", "&lt;")
+            .gsub(">", "&gt;")
+            .gsub('"', "&quot;")
+            .gsub("'", "&#39;")
       end
     end
   end

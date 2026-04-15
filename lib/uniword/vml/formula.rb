@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -13,10 +13,10 @@ module Uniword
       attribute :eqn, :string
 
       xml do
-        element 'f'
+        element "f"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'eqn', to: :eqn, render_nil: false
+        map_attribute "eqn", to: :eqn, render_nil: false
       end
     end
   end

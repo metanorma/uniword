@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -28,13 +28,13 @@ module Uniword
       attribute :theme_fill, :string # Theme color reference (e.g., 'accent1')
 
       xml do
-        element 'shd'
+        element "shd"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :pattern
-        map_attribute 'color', to: :color
-        map_attribute 'fill', to: :fill
-        map_attribute 'themeFill', to: :theme_fill, render_nil: false
+        map_attribute "val", to: :pattern
+        map_attribute "color", to: :color
+        map_attribute "fill", to: :fill
+        map_attribute "themeFill", to: :theme_fill, render_nil: false
       end
     end
   end

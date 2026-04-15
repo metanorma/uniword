@@ -81,14 +81,10 @@ module Uniword
         return false unless link
 
         # Check for id attribute (relationship-based external link)
-        if link.respond_to?(:id) && !link.id.nil? && !link.id.empty? && !internal_link?(link)
-          return true
-        end
+        return true if link.respond_to?(:id) && !link.id.nil? && !link.id.empty? && !internal_link?(link)
 
         # Check for target that looks like a URL
-        if link.respond_to?(:target) && !link.target.nil? && !link.target.empty?
-          return !link.target.start_with?('#')
-        end
+        return !link.target.start_with?("#") if link.respond_to?(:target) && !link.target.nil? && !link.target.empty?
 
         false
       end
@@ -129,7 +125,7 @@ module Uniword
         # Basic URL format validation
         # Accepts http://, https://, mailto:, ftp://, etc.
         uri_pattern = %r{\A(https?|ftp|mailto)://}i
-        url.match?(uri_pattern) || url.start_with?('mailto:')
+        url.match?(uri_pattern) || url.start_with?("mailto:")
       end
     end
   end

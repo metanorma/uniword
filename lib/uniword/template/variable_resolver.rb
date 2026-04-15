@@ -49,7 +49,7 @@ module Uniword
       def resolve(expression)
         return nil if expression.nil? || expression.empty?
 
-        parts = expression.to_s.split('.')
+        parts = expression.to_s.split(".")
 
         # Start with root data
         value = @data
@@ -127,11 +127,11 @@ module Uniword
           value.to_i
         elsif value.match?(/^\d+\.\d+$/)
           value.to_f
-        elsif value == 'true'
+        elsif value == "true"
           true
-        elsif value == 'false'
+        elsif value == "false"
           false
-        elsif value == 'nil'
+        elsif value == "nil"
           nil
         else
           # Try to resolve as variable
@@ -147,17 +147,17 @@ module Uniword
       # @return [Boolean] Comparison result
       def evaluate_comparison(left, operator, right)
         case operator
-        when '=='
+        when "=="
           left == right
-        when '!='
+        when "!="
           left != right
-        when '>'
+        when ">"
           compare_numerically(left, right, :>)
-        when '<'
+        when "<"
           compare_numerically(left, right, :<)
-        when '>='
+        when ">="
           compare_numerically(left, right, :>=)
-        when '<='
+        when "<="
           compare_numerically(left, right, :<=)
         else
           false

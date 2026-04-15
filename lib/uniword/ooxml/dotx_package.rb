@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 # Theme, StylesConfiguration, NumberingConfiguration, Document are autoloaded via lib/uniword.rb
 
 module Uniword
@@ -73,9 +73,7 @@ module Uniword
 
         # Transfer model-based configurations
         document.styles_configuration = package.styles_configuration if package.styles_configuration
-        if package.numbering_configuration
-          document.numbering_configuration = package.numbering_configuration
-        end
+        document.numbering_configuration = package.numbering_configuration if package.numbering_configuration
 
         document
       end
@@ -88,31 +86,19 @@ module Uniword
         package = new
 
         # Parse lutaml-model files
-        if zip_content['docProps/core.xml']
-          package.core_properties = CoreProperties.from_xml(zip_content['docProps/core.xml'])
-        end
+        package.core_properties = CoreProperties.from_xml(zip_content["docProps/core.xml"]) if zip_content["docProps/core.xml"]
 
-        if zip_content['docProps/app.xml']
-          package.app_properties = AppProperties.from_xml(zip_content['docProps/app.xml'])
-        end
+        package.app_properties = AppProperties.from_xml(zip_content["docProps/app.xml"]) if zip_content["docProps/app.xml"]
 
-        if zip_content['word/theme/theme1.xml']
-          package.theme = Uniword::Drawingml::Theme.from_xml(zip_content['word/theme/theme1.xml'])
-        end
+        package.theme = Uniword::Drawingml::Theme.from_xml(zip_content["word/theme/theme1.xml"]) if zip_content["word/theme/theme1.xml"]
 
         # Parse styles and numbering as models
-        if zip_content['word/styles.xml']
-          package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content['word/styles.xml'])
-        end
+        package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content["word/styles.xml"]) if zip_content["word/styles.xml"]
 
-        if zip_content['word/numbering.xml']
-          package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content['word/numbering.xml'])
-        end
+        package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content["word/numbering.xml"]) if zip_content["word/numbering.xml"]
 
         # Store raw document XML (will be parsed by DotxHandler)
-        if zip_content['word/document.xml']
-          package.raw_document_xml = zip_content['word/document.xml']
-        end
+        package.raw_document_xml = zip_content["word/document.xml"] if zip_content["word/document.xml"]
 
         # TODO: v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
         # TODO v2.0: Parse relationships and content types
@@ -127,7 +113,7 @@ module Uniword
       #
       # @return [Array<String>] Array of supported extensions
       def self.supported_extensions
-        ['.dotx', '.dotm']
+        [".dotx", ".dotm"]
       end
 
       # Save document to file
@@ -148,7 +134,7 @@ module Uniword
         package.numbering_configuration = document.numbering_configuration
 
         # Serialize main document
-        package.raw_document_xml = document.to_xml(encoding: 'UTF-8')
+        package.raw_document_xml = document.to_xml(encoding: "UTF-8")
 
         # Generate ZIP content
         zip_content = package.to_zip_content
@@ -179,34 +165,34 @@ module Uniword
 
         # Serialize lutaml-model files with prefix: false
         if core_properties
-          content['docProps/core.xml'] =
-            core_properties.to_xml(encoding: 'UTF-8', prefix: false)
+          content["docProps/core.xml"] =
+            core_properties.to_xml(encoding: "UTF-8", prefix: false)
         end
         if app_properties
-          content['docProps/app.xml'] =
-            app_properties.to_xml(encoding: 'UTF-8', prefix: false)
+          content["docProps/app.xml"] =
+            app_properties.to_xml(encoding: "UTF-8", prefix: false)
         end
 
         # Theme serialization (no raw XML fallback)
-        content['word/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8') if theme
+        content["word/theme/theme1.xml"] = theme.to_xml(encoding: "UTF-8") if theme
 
         # Serialize model-based configurations
         if styles_configuration
-          content['word/styles.xml'] =
-            styles_configuration.to_xml(encoding: 'UTF-8')
+          content["word/styles.xml"] =
+            styles_configuration.to_xml(encoding: "UTF-8")
         end
 
         if numbering_configuration
-          content['word/numbering.xml'] =
-            numbering_configuration.to_xml(encoding: 'UTF-8')
+          content["word/numbering.xml"] =
+            numbering_configuration.to_xml(encoding: "UTF-8")
         end
 
         # Serialize main document (word/document.xml)
         if @document
-          content['word/document.xml'] = @document.to_xml(encoding: 'UTF-8')
+          content["word/document.xml"] = @document.to_xml(encoding: "UTF-8")
         elsif @raw_document_xml
           # Fallback to raw XML if document wasn't parsed yet
-          content['word/document.xml'] = @raw_document_xml
+          content["word/document.xml"] = @raw_document_xml
         end
 
         # TODO: v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
@@ -221,21 +207,21 @@ module Uniword
       # @return [void]
       def self.add_required_files(zip_content)
         # Add [Content_Types].xml if not present
-        unless zip_content['[Content_Types].xml']
-          zip_content['[Content_Types].xml'] =
+        unless zip_content["[Content_Types].xml"]
+          zip_content["[Content_Types].xml"] =
             Uniword::ContentTypes.generate.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
-        unless zip_content['_rels/.rels']
-          zip_content['_rels/.rels'] =
+        unless zip_content["_rels/.rels"]
+          zip_content["_rels/.rels"] =
             Uniword::Ooxml::Relationships::PackageRelationships.generate_package_rels.to_xml(declaration: true)
         end
 
         # Add word/_rels/document.xml.rels if not present
-        return if zip_content['word/_rels/document.xml.rels']
+        return if zip_content["word/_rels/document.xml.rels"]
 
-        zip_content['word/_rels/document.xml.rels'] =
+        zip_content["word/_rels/document.xml.rels"] =
           Uniword::Ooxml::Relationships::Relationships.generate_document_rels.to_xml(
             declaration: true
           )

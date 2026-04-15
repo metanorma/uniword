@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,12 +14,12 @@ module Uniword
       attribute :window_height, :integer
 
       xml do
-        element 'workbookView'
+        element "workbookView"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'active-tab', to: :active_tab
-        map_attribute 'window-width', to: :window_width
-        map_attribute 'window-height', to: :window_height
+        map_attribute "active-tab", to: :active_tab
+        map_attribute "window-width", to: :window_width
+        map_attribute "window-height", to: :window_height
       end
     end
   end

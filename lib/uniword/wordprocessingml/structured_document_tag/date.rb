@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -10,9 +10,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'dateFormat'
+          element "dateFormat"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
@@ -21,9 +21,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'lid'
+          element "lid"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
@@ -32,9 +32,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'storeMappedDataAs'
+          element "storeMappedDataAs"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
@@ -43,9 +43,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'calendar'
+          element "calendar"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value, render_nil: false
+          map_attribute "val", to: :value, render_nil: false
         end
       end
 
@@ -59,15 +59,15 @@ module Uniword
         attribute :calendar, Calendar
 
         xml do
-          element 'date'
+          element "date"
           namespace Ooxml::Namespaces::WordProcessingML
           mixed_content
 
-          map_attribute 'fullDate', to: :full_date, render_nil: false
-          map_element 'dateFormat', to: :date_format, render_nil: false
-          map_element 'lid', to: :lid, render_nil: false
-          map_element 'storeMappedDataAs', to: :store_mapped_data_as, render_nil: false
-          map_element 'calendar', to: :calendar, render_nil: false
+          map_attribute "fullDate", to: :full_date, render_nil: false
+          map_element "dateFormat", to: :date_format, render_nil: false
+          map_element "lid", to: :lid, render_nil: false
+          map_element "storeMappedDataAs", to: :store_mapped_data_as, render_nil: false
+          map_element "calendar", to: :calendar, render_nil: false
         end
       end
     end

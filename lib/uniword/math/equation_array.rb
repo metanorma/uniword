@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -13,12 +13,12 @@ module Uniword
       attribute :elements, Element, collection: true, initialize_empty: true
 
       xml do
-        element 'eqArr'
+        element "eqArr"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'eqArrPr', to: :properties, render_nil: false
-        map_element 'e', to: :elements, render_nil: false
+        map_element "eqArrPr", to: :properties, render_nil: false
+        map_element "e", to: :elements, render_nil: false
       end
     end
   end

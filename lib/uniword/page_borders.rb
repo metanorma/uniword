@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a single page border side
@@ -17,8 +17,8 @@ module Uniword
       dashDotStroked threeDEmboss threeDEngrave
     ].freeze
 
-    attribute :style, :string, default: -> { 'single' }
-    attribute :color, :string, default: -> { 'auto' }
+    attribute :style, :string, default: -> { "single" }
+    attribute :color, :string, default: -> { "auto" }
     attribute :width, :integer, default: -> { 6 }
     attribute :space, :integer, default: -> { 0 }
 
@@ -32,7 +32,7 @@ module Uniword
     def validate_style
       return unless style && !STYLES.include?(style)
 
-      raise ArgumentError, "Invalid border style: #{style}. Must be one of: #{STYLES.join(', ')}"
+      raise ArgumentError, "Invalid border style: #{style}. Must be one of: #{STYLES.join(", ")}"
     end
   end
 
@@ -64,8 +64,8 @@ module Uniword
     attribute :bottom, PageBorderSide
     attribute :left, PageBorderSide
     attribute :right, PageBorderSide
-    attribute :display, :string, default: -> { 'allPages' }
-    attribute :offset_from, :string, default: -> { 'page' }
+    attribute :display, :string, default: -> { "allPages" }
+    attribute :offset_from, :string, default: -> { "page" }
 
     def initialize(**attributes)
       super
@@ -80,7 +80,7 @@ module Uniword
     # @param width [Integer] Border width
     # @param options [Hash] Additional options (display, offset_from)
     # @return [PageBorders] New instance
-    def self.all_sides(style: 'single', color: 'auto', width: 6, **)
+    def self.all_sides(style: "single", color: "auto", width: 6, **)
       border_side = PageBorderSide.new(style: style, color: color, width: width)
       new(
         top: border_side,
@@ -104,14 +104,14 @@ module Uniword
       return unless display && !DISPLAY_OPTIONS.include?(display)
 
       raise ArgumentError,
-            "Invalid display: #{display}. Must be one of: #{DISPLAY_OPTIONS.join(', ')}"
+            "Invalid display: #{display}. Must be one of: #{DISPLAY_OPTIONS.join(", ")}"
     end
 
     def validate_offset_from
       return unless offset_from && !OFFSET_OPTIONS.include?(offset_from)
 
       raise ArgumentError,
-            "Invalid offset_from: #{offset_from}. Must be one of: #{OFFSET_OPTIONS.join(', ')}"
+            "Invalid offset_from: #{offset_from}. Must be one of: #{OFFSET_OPTIONS.join(", ")}"
     end
   end
 end

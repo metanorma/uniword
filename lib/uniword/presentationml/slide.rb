@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -17,16 +17,16 @@ module Uniword
       attribute :show_master_phAnim, :string
 
       xml do
-        element 'sld'
+        element "sld"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'cSld', to: :c_sld
-        map_element 'clrMapOvr', to: :clr_map_ovr, render_nil: false
-        map_element 'transition', to: :transition, render_nil: false
-        map_element 'timing', to: :timing, render_nil: false
-        map_attribute 'showMasterSp', to: :show_master_sp
-        map_attribute 'showMasterPhAnim', to: :show_master_phAnim
+        map_element "cSld", to: :c_sld
+        map_element "clrMapOvr", to: :clr_map_ovr, render_nil: false
+        map_element "transition", to: :transition, render_nil: false
+        map_element "timing", to: :timing, render_nil: false
+        map_attribute "showMasterSp", to: :show_master_sp
+        map_attribute "showMasterPhAnim", to: :show_master_phAnim
       end
     end
   end

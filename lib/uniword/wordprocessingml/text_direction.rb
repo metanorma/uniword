@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -10,9 +10,9 @@ module Uniword
       attribute :value, :string
 
       xml do
-        element 'textDirection'
+        element "textDirection"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :value, render_nil: false
+        map_attribute "val", to: :value, render_nil: false
       end
     end
   end

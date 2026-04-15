@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,10 +13,10 @@ module Uniword
       attribute :pos, :string
 
       xml do
-        element 'tab'
+        element "tab"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
-        map_attribute 'pos', to: :pos
+        map_attribute "val", to: :val
+        map_attribute "pos", to: :pos
       end
     end
   end

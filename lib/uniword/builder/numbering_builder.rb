@@ -28,7 +28,7 @@ module Uniword
       # @param text [String] Level text template (e.g., '%1.', '%2)')
       # @param start [Integer] Starting number (default 1)
       # @return [self]
-      def level(level, format: 'decimal', text: '%1.', start: 1)
+      def level(level, format: "decimal", text: "%1.", start: 1)
         @model.create_numbering(level, format, text, start)
         self
       end

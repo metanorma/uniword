@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +9,7 @@ module Uniword
     # Element: <w:useFELayout>
     class UseFELayout < Lutaml::Model::Serializable
       xml do
-        element 'useFELayout'
+        element "useFELayout"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end
@@ -23,12 +23,12 @@ module Uniword
       attribute :compatSetting, CompatSetting, collection: true, initialize_empty: true
 
       xml do
-        element 'compat'
+        element "compat"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'useFELayout', to: :use_fe_layout, render_nil: false
-        map_element 'compatSetting', to: :compatSetting, render_nil: false
+        map_element "useFELayout", to: :use_fe_layout, render_nil: false
+        map_element "compatSetting", to: :compatSetting, render_nil: false
       end
     end
   end

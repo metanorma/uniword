@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -13,12 +13,12 @@ module Uniword
       attribute :content, SdtContent
 
       xml do
-        element 'sdt'
+        element "sdt"
         namespace Uniword::Ooxml::Namespaces::Word2010
         mixed_content
 
-        map_element 'sdtPr', to: :properties, render_nil: false
-        map_element 'sdtContent', to: :content, render_nil: false
+        map_element "sdtPr", to: :properties, render_nil: false
+        map_element "sdtContent", to: :content, render_nil: false
       end
     end
   end

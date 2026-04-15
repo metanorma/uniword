@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -15,14 +15,14 @@ module Uniword
       attribute :alternate_content, AlternateContent, default: nil
 
       xml do
-        element 'tbl'
+        element "tbl"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'tblPr', to: :properties, render_nil: false
-        map_element 'tblGrid', to: :grid, render_nil: false
-        map_element 'tr', to: :rows, render_nil: false
-        map_element 'AlternateContent', to: :alternate_content, render_nil: false
+        map_element "tblPr", to: :properties, render_nil: false
+        map_element "tblGrid", to: :grid, render_nil: false
+        map_element "tr", to: :rows, render_nil: false
+        map_element "AlternateContent", to: :alternate_content, render_nil: false
       end
 
       # Get row count

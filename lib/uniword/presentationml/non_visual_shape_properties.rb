@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,13 +14,13 @@ module Uniword
       attribute :nv_pr, :string
 
       xml do
-        element 'nv_sp_pr'
+        element "nv_sp_pr"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'cNvPr', to: :c_nv_pr
-        map_element 'cNvSpPr', to: :c_nv_sp_pr
-        map_element 'nvPr', to: :nv_pr
+        map_element "cNvPr", to: :c_nv_pr
+        map_element "cNvSpPr", to: :c_nv_sp_pr
+        map_element "nvPr", to: :nv_pr
       end
     end
   end

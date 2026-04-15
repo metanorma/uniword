@@ -119,7 +119,7 @@ module Uniword
       # @param type [String] Section break type ('nextPage', 'continuous', 'evenPage', 'oddPage')
       # @yield [SectionBuilder] Builder for section configuration
       # @return [SectionBuilder] The section builder
-      def section(type: 'nextPage', &block)
+      def section(type: "nextPage", &block)
         sec = SectionBuilder.new
         sec.type = type
         block.call(sec) if block_given?
@@ -132,7 +132,7 @@ module Uniword
       # @param type [String] Header type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for header content
       # @return [HeaderFooterBuilder] The header/footer builder
-      def header(type: 'default', &block)
+      def header(type: "default", &block)
         hf = HeaderFooterBuilder.new(:header, type: type)
         block.call(hf) if block_given?
         (@model.headers ||= {})[type] = hf.build
@@ -144,7 +144,7 @@ module Uniword
       # @param type [String] Footer type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for footer content
       # @return [HeaderFooterBuilder] The header/footer builder
-      def footer(type: 'default', &block)
+      def footer(type: "default", &block)
         hf = HeaderFooterBuilder.new(:footer, type: type)
         block.call(hf) if block_given?
         (@model.footers ||= {})[type] = hf.build
@@ -156,7 +156,7 @@ module Uniword
       # @param title [String] TOC title (default 'Table of Contents')
       # @param styles [Array<String>, nil] Heading styles to include
       # @return [self]
-      def toc(title: 'Table of Contents', styles: nil)
+      def toc(title: "Table of Contents", styles: nil)
         TocBuilder.build(title: title, styles: styles).each do |para|
           @model.body.paragraphs << para
         end
@@ -247,7 +247,7 @@ module Uniword
       # @param base_on [String] Base style (default 'Normal')
       # @yield [StyleBuilder] Builder for style configuration
       # @return [StyleBuilder] The style builder
-      def define_style(name, base_on: 'Normal', &block)
+      def define_style(name, base_on: "Normal", &block)
         style = StyleBuilder.new(name, base_on: base_on)
         block.call(style) if block_given?
         @model.styles_configuration.add_style(style.build)
@@ -333,7 +333,7 @@ module Uniword
       # @param color [String] Border color (default 'auto')
       # @param size [Integer] Border size in eighths of a point (default 6)
       # @return [self]
-      def horizontal_rule(style: 'single', color: 'auto', size: 6)
+      def horizontal_rule(style: "single", color: "auto", size: 6)
         para = ParagraphBuilder.new
         para.borders(
           bottom: { style: style, color: color, size: size }
@@ -394,10 +394,10 @@ module Uniword
       # @param opacity [String] Opacity '0.0' to '1.0' (default '0.3')
       # @param angle [Integer] Rotation angle in degrees (default -45)
       # @return [self]
-      def watermark(text, font: 'Calibri', size: 60, color: nil,
-                    opacity: '0.3', angle: -45)
+      def watermark(text, font: "Calibri", size: 60, color: nil,
+                    opacity: "0.3", angle: -45)
         if text.nil?
-          (@model.headers ||= {}).delete('default')
+          (@model.headers ||= {}).delete("default")
           return self
         end
 
@@ -408,7 +408,7 @@ module Uniword
 
         header = Wordprocessingml::Header.new
         header.paragraphs << para
-        (@model.headers ||= {})['default'] = header
+        (@model.headers ||= {})["default"] = header
         self
       end
 
@@ -457,7 +457,7 @@ module Uniword
       # @param style [String] Citation style (default 'APA')
       # @yield [BibliographyBuilder] Builder for source configuration
       # @return [BibliographyBuilder] The bibliography builder
-      def bibliography(style: 'APA', &block)
+      def bibliography(style: "APA", &block)
         bib = BibliographyBuilder.new(style: style)
         block.call(bib) if block_given?
         bib.attach(self)
@@ -516,7 +516,7 @@ module Uniword
       #
       # @param format [String] Date format (default 'M/d/yyyy')
       # @return [self]
-      def date_field(format: 'M/d/yyyy')
+      def date_field(format: "M/d/yyyy")
         @model.body.paragraphs << Builder.date_field(format: format)
         self
       end
@@ -525,7 +525,7 @@ module Uniword
       #
       # @param format [String] Time format (default 'h:mm:ss am/pm')
       # @return [self]
-      def time_field(format: 'h:mm:ss am/pm')
+      def time_field(format: "h:mm:ss am/pm")
         @model.body.paragraphs << Builder.time_field(format: format)
         self
       end

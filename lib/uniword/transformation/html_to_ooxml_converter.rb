@@ -22,9 +22,9 @@ module Uniword
         doc = Nokogiri::HTML(body)
         paragraphs = []
 
-        doc.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').each do |element|
+        doc.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").each do |element|
           # Skip elements that are inside table cells (table content is handled separately)
-          next if element.ancestors('td, th').any?
+          next if element.ancestors("td, th").any?
 
           # Skip table row/cell containers themselves
           next if %w[tr td].include?(element.name)
@@ -33,7 +33,7 @@ module Uniword
           # This prevents duplicate processing when a div contains a p, since the p's
           # content is more semantically meaningful and the div's text would duplicate it.
           if %w[div
-                li].include?(element.name) && element.css('p, h1, h2, h3, h4, h5, h6, li, div, tr').any?
+                li].include?(element.name) && element.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").any?
             next
           end
 
@@ -58,7 +58,7 @@ module Uniword
         doc = Nokogiri::HTML(body)
         tables = []
 
-        doc.css('table').each do |html_table|
+        doc.css("table").each do |html_table|
           table = html_table_to_table(html_table)
           tables << table if table
         end
@@ -74,7 +74,7 @@ module Uniword
         table = Uniword::Wordprocessingml::Table.new
         rows = []
 
-        html_table.css('tr').each do |html_row|
+        html_table.css("tr").each do |html_row|
           row = html_row_to_row(html_row)
           rows << row if row
         end
@@ -93,7 +93,7 @@ module Uniword
         row = Uniword::Wordprocessingml::TableRow.new
         cells = []
 
-        html_row.css('td, th').each do |html_cell|
+        html_row.css("td, th").each do |html_cell|
           cell = html_cell_to_cell(html_cell)
           cells << cell if cell
         end
@@ -112,14 +112,14 @@ module Uniword
         cell = Uniword::Wordprocessingml::TableCell.new
 
         # Map CSS class to cell style if present
-        css_class = html_cell.attr('class')
+        css_class = html_cell.attr("class")
         if css_class && !css_class.empty?
           map_css_class_to_style(css_class)
           # Style mapping available if needed for cell-level styling
         end
 
         # Convert cell content to paragraphs
-        html_cell.css('p, div, h1, h2, h3, h4, h5, h6').each do |para_element|
+        html_cell.css("p, div, h1, h2, h3, h4, h5, h6").each do |para_element|
           paragraph = html_element_to_paragraph(para_element)
           cell.paragraphs << paragraph if paragraph
         end
@@ -160,7 +160,7 @@ module Uniword
         end
 
         # Map CSS class to OOXML style (MHT-specific classes)
-        css_class = element.attr('class')
+        css_class = element.attr("class")
         if css_class && !css_class.empty?
           mapped_style = map_css_class_to_style(css_class)
           if mapped_style
@@ -180,7 +180,7 @@ module Uniword
             paragraph.runs << run
           when Nokogiri::XML::Node::ELEMENT_NODE
             # Handle SDT elements separately from runs
-            if child.name.downcase == 'w:sdt' || child.name == 'sdt'
+            if child.name.downcase == "w:sdt" || child.name == "sdt"
               sdt = create_sdt_from_element(child)
               paragraph.sdts << sdt if sdt
             else
@@ -202,58 +202,58 @@ module Uniword
         # CSS class to OOXML style mapping for MHT documents
         class_mapping = {
           # Microsoft Office Built-in Styles
-          'MsoTitle' => 'Title',
-          'MsoTitle2' => 'Title2',
-          'MsoSubtitle' => 'Subtitle',
-          'MsoHeading1' => 'Heading1',
-          'MsoHeading2' => 'Heading2',
-          'MsoHeading3' => 'Heading3',
-          'MsoHeading4' => 'Heading4',
-          'MsoHeading5' => 'Heading5',
-          'MsoHeading6' => 'Heading6',
-          'MsoToc1' => 'TOC1',
-          'MsoToc2' => 'TOC2',
-          'MsoToc3' => 'TOC3',
-          'MsoToc4' => 'TOC4',
-          'MsoToc5' => 'TOC5',
-          'MsoToc6' => 'TOC6',
-          'MsoToc7' => 'TOC7',
-          'MsoToc8' => 'TOC8',
-          'MsoToc9' => 'TOC9',
-          'MsoTocHeading' => 'TOC Heading',
-          'MsoBibliography' => 'Bibliography',
-          'MsoNoSpacing' => 'No Spacing',
-          'MsoQuote' => 'Quote',
-          'MsoHeader' => 'Header',
-          'MsoFooter' => 'Footer',
-          'MsoListBullet' => 'List Bullet',
-          'MsoCaption' => 'Caption',
-          'MsoEndnoteText' => 'EndnoteText',
-          'MsoFootnoteText' => 'FootnoteText',
-          'MsoPageBreak' => 'PageBreak',
+          "MsoTitle" => "Title",
+          "MsoTitle2" => "Title2",
+          "MsoSubtitle" => "Subtitle",
+          "MsoHeading1" => "Heading1",
+          "MsoHeading2" => "Heading2",
+          "MsoHeading3" => "Heading3",
+          "MsoHeading4" => "Heading4",
+          "MsoHeading5" => "Heading5",
+          "MsoHeading6" => "Heading6",
+          "MsoToc1" => "TOC1",
+          "MsoToc2" => "TOC2",
+          "MsoToc3" => "TOC3",
+          "MsoToc4" => "TOC4",
+          "MsoToc5" => "TOC5",
+          "MsoToc6" => "TOC6",
+          "MsoToc7" => "TOC7",
+          "MsoToc8" => "TOC8",
+          "MsoToc9" => "TOC9",
+          "MsoTocHeading" => "TOC Heading",
+          "MsoBibliography" => "Bibliography",
+          "MsoNoSpacing" => "No Spacing",
+          "MsoQuote" => "Quote",
+          "MsoHeader" => "Header",
+          "MsoFooter" => "Footer",
+          "MsoListBullet" => "List Bullet",
+          "MsoCaption" => "Caption",
+          "MsoEndnoteText" => "EndnoteText",
+          "MsoFootnoteText" => "FootnoteText",
+          "MsoPageBreak" => "PageBreak",
 
           # Table-related styles
-          'TableNote' => 'TableNote',
-          'TableSource' => 'TableSource',
-          'TableTitle' => 'TableTitle',
-          'TableFigure' => 'TableFigure',
+          "TableNote" => "TableNote",
+          "TableSource" => "TableSource",
+          "TableTitle" => "TableTitle",
+          "TableFigure" => "TableFigure",
 
           # Document part styles
-          'SectionTitle' => 'SectionTitle',
-          'Heading4Char' => 'Heading4Char',
-          'Author' => 'Author',
+          "SectionTitle" => "SectionTitle",
+          "Heading4Char" => "Heading4Char",
+          "Author" => "Author",
 
           # Direct class matches (non-Mso prefixed)
-          'Title' => 'Title',
-          'Heading1' => 'Heading1',
-          'Heading2' => 'Heading2',
-          'Heading3' => 'Heading3',
-          'Heading4' => 'Heading4',
-          'Heading5' => 'Heading5',
-          'Heading6' => 'Heading6',
-          'Quote' => 'Quote',
-          'Bibliography' => 'Bibliography',
-          'NoSpacing' => 'No Spacing'
+          "Title" => "Title",
+          "Heading1" => "Heading1",
+          "Heading2" => "Heading2",
+          "Heading3" => "Heading3",
+          "Heading4" => "Heading4",
+          "Heading5" => "Heading5",
+          "Heading6" => "Heading6",
+          "Quote" => "Quote",
+          "Bibliography" => "Bibliography",
+          "NoSpacing" => "No Spacing"
         }
 
         # Check each class in the class string
@@ -319,19 +319,19 @@ module Uniword
         sdt_props = Uniword::Wordprocessingml::StructuredDocumentTagProperties.new
 
         # ShowingPlcHdr - placeholder display flag
-        if attrs['showingplchdr'] || attrs['ShowingPlcHdr']
+        if attrs["showingplchdr"] || attrs["ShowingPlcHdr"]
           sdt_props.showing_placeholder_header =
             Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
         end
 
         # Temporary - temporary SDT flag
-        if attrs['temporary'] || attrs['Temporary']
+        if attrs["temporary"] || attrs["Temporary"]
           sdt_props.temporary =
             Uniword::Wordprocessingml::StructuredDocumentTag::Temporary.new
         end
 
         # DocPart - document part UUID
-        doc_part = attrs['docpart'] || attrs['DocPart']
+        doc_part = attrs["docpart"] || attrs["DocPart"]
         if doc_part
           placeholder = Uniword::Wordprocessingml::StructuredDocumentTag::Placeholder.new
           doc_part_ref = Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(value: doc_part.value)
@@ -340,30 +340,26 @@ module Uniword
         end
 
         # Text - text-only flag
-        if attrs['text'] || attrs['Text']
-          sdt_props.text = Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(value: 'whole')
-        end
+        sdt_props.text = Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(value: "whole") if attrs["text"] || attrs["Text"]
 
         # ID - numeric ID
-        id_attr = attrs['id'] || attrs['ID']
-        if id_attr
-          sdt_props.id = Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(value: id_attr.value.to_i)
-        end
+        id_attr = attrs["id"] || attrs["ID"]
+        sdt_props.id = Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(value: id_attr.value.to_i) if id_attr
 
         # SdtDocPart - SDT document part type
-        sdt_doc_part = attrs['sdtdocpart'] || attrs['SdtDocPart']
+        sdt_doc_part = attrs["sdtdocpart"] || attrs["SdtDocPart"]
         if sdt_doc_part
           # This is a special attribute indicating the SDT is a document part
         end
 
         # DocPartType - document part type (e.g., "Table of Contents")
-        doc_part_type = attrs['docparttype'] || attrs['DocPartType']
+        doc_part_type = attrs["docparttype"] || attrs["DocPartType"]
         if doc_part_type
           # Store as tag or alias
         end
 
         # Bibliography - bibliography flag
-        if attrs['bibliography'] || attrs['Bibliography']
+        if attrs["bibliography"] || attrs["Bibliography"]
           sdt_props.bibliography =
             Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography.new
         end
@@ -379,19 +375,19 @@ module Uniword
         props = Uniword::Wordprocessingml::RunProperties.new
 
         case element.name.downcase
-        when 'strong', 'b'
+        when "strong", "b"
           props.bold = Uniword::Properties::Bold.new
-        when 'em', 'i'
+        when "em", "i"
           props.italic = Uniword::Properties::Italic.new
-        when 'u'
+        when "u"
           props.underline = Uniword::Properties::Underline.new
-        when 's', 'strike'
+        when "s", "strike"
           props.strike = Uniword::Properties::Strike.new
-        when 'sup'
-          props.vertical_align = Uniword::Properties::VerticalAlign.new(value: 'superscript')
-        when 'sub'
-          props.vertical_align = Uniword::Properties::VerticalAlign.new(value: 'subscript')
-        when 'span'
+        when "sup"
+          props.vertical_align = Uniword::Properties::VerticalAlign.new(value: "superscript")
+        when "sub"
+          props.vertical_align = Uniword::Properties::VerticalAlign.new(value: "subscript")
+        when "span"
           apply_span_formatting(element, props)
         end
 
@@ -427,12 +423,10 @@ module Uniword
       # @param element [Nokogiri::XML::Element] span element
       # @param props [Uniword::Wordprocessingml::RunProperties] run properties
       def self.apply_span_formatting(element, props)
-        style = element.attr('style') || ''
+        style = element.attr("style") || ""
 
         # Color
-        if style =~ /color:\s*#?([0-9a-fA-F]{6})/i
-          props.color = Uniword::Properties::ColorValue.new(value: Regexp.last_match(1))
-        end
+        props.color = Uniword::Properties::ColorValue.new(value: Regexp.last_match(1)) if style =~ /color:\s*#?([0-9a-fA-F]{6})/i
 
         # Font size
         if style =~ /font-size:\s*([0-9.]+)(pt|px|em)/i
@@ -440,9 +434,9 @@ module Uniword
           unit = Regexp.last_match(2)
           # Convert to half-points (OOXML unit)
           half_pts = case unit
-                     when 'pt' then (size * 2).round
-                     when 'px' then (size * 2 * 72 / 96).round # 96 DPI assumption
-                     when 'em' then (size * 24).round # em relative to 12pt base
+                     when "pt" then (size * 2).round
+                     when "px" then (size * 2 * 72 / 96).round # 96 DPI assumption
+                     when "em" then (size * 24).round # em relative to 12pt base
                      else size.round
                      end
           props.size = Uniword::Properties::FontSize.new(value: half_pts.to_s)
@@ -451,7 +445,7 @@ module Uniword
         # Font family
         return unless style =~ /font-family:\s*['"]([^'"]+)['"]/i
 
-        font = Regexp.last_match(1).split(',').first.strip
+        font = Regexp.last_match(1).split(",").first.strip
         props.font = Uniword::Properties::RunFonts.new(ascii: font)
       end
 
@@ -462,35 +456,35 @@ module Uniword
       # @param text [String] Text that may contain HTML entities
       # @return [String] Text with entities decoded
       def self.decode_html_entities(text)
-        return text unless text.include?('&')
+        return text unless text.include?("&")
 
         # Standard HTML entities that we decode
         entities = {
-          'nbsp' => [160].pack('U'),
-          'copy' => [169].pack('U'),
-          'reg' => [174].pack('U'),
-          'trade' => [8482].pack('U'),
-          'amp' => '&', # &amp; -> & (already unescaped by Nokogiri, but handle just in case)
-          'lt' => '<',
-          'gt' => '>',
-          'quot' => '"',
-          'apos' => "'",
-          'ndash' => [8211].pack('U'),
-          'mdash' => [8212].pack('U'),
-          'lsquo' => [8216].pack('U'),
-          'rsquo' => [8217].pack('U'),
-          'ldquo' => [8220].pack('U'),
-          'rdquo' => [8221].pack('U'),
-          'hellip' => [8230].pack('U'),
-          'bull' => [8226].pack('U'),
-          'mu' => [181].pack('U'), # micro sign
-          'plusmn' => [177].pack('U'), # plus-minus
-          'times' => [215].pack('U'), # multiplication
-          'divide' => [247].pack('U'), # division
-          'euro' => [8364].pack('U'),
-          'pound' => [163].pack('U'),
-          'yen' => [165].pack('U'),
-          'cent' => [162].pack('U')
+          "nbsp" => [160].pack("U"),
+          "copy" => [169].pack("U"),
+          "reg" => [174].pack("U"),
+          "trade" => [8482].pack("U"),
+          "amp" => "&", # &amp; -> & (already unescaped by Nokogiri, but handle just in case)
+          "lt" => "<",
+          "gt" => ">",
+          "quot" => '"',
+          "apos" => "'",
+          "ndash" => [8211].pack("U"),
+          "mdash" => [8212].pack("U"),
+          "lsquo" => [8216].pack("U"),
+          "rsquo" => [8217].pack("U"),
+          "ldquo" => [8220].pack("U"),
+          "rdquo" => [8221].pack("U"),
+          "hellip" => [8230].pack("U"),
+          "bull" => [8226].pack("U"),
+          "mu" => [181].pack("U"), # micro sign
+          "plusmn" => [177].pack("U"), # plus-minus
+          "times" => [215].pack("U"), # multiplication
+          "divide" => [247].pack("U"), # division
+          "euro" => [8364].pack("U"),
+          "pound" => [163].pack("U"),
+          "yen" => [165].pack("U"),
+          "cent" => [162].pack("U")
         }
 
         text.gsub(/&(\w+);/) do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
         attribute :value, :string
 
         xml do
-          element 'docPart'
+          element "docPart"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'val', to: :value
+          map_attribute "val", to: :value
         end
       end
 
@@ -23,9 +23,9 @@ module Uniword
         attribute :doc_part, DocPartReference
 
         xml do
-          element 'placeholder'
+          element "placeholder"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_element 'docPart', to: :doc_part
+          map_element "docPart", to: :doc_part
         end
       end
     end

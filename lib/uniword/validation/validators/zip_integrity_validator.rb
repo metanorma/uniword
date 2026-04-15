@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'zip'
+require "zip"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -26,7 +26,7 @@ module Uniword
       #   puts result.valid? # => true
       class ZipIntegrityValidator < LayerValidator
         def layer_name
-          'ZIP Integrity'
+          "ZIP Integrity"
         end
 
         def validate(path)
@@ -50,7 +50,7 @@ module Uniword
           Zip::File.open(path) do |zip_file|
             # Check ZIP is not empty
             if zip_file.entries.empty?
-              result.add_error('ZIP archive is empty', critical: true)
+              result.add_error("ZIP archive is empty", critical: true)
               return
             end
 
@@ -64,8 +64,8 @@ module Uniword
 
         def validate_required_entries(zip_file, result)
           required_entries = [
-            '[Content_Types].xml',
-            'word/document.xml'
+            "[Content_Types].xml",
+            "word/document.xml"
           ]
 
           required_entries.each do |entry_name|

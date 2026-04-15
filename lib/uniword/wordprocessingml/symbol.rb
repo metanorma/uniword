@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :char, :string
 
       xml do
-        element 'sym'
+        element "sym"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'font', to: :font
-        map_attribute 'char', to: :char
+        map_attribute "font", to: :font
+        map_attribute "char", to: :char
       end
     end
   end

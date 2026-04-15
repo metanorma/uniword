@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module SharedTypes
@@ -15,9 +15,9 @@ module Uniword
       include Uniword::Properties::BooleanValSetter
 
       xml do
-        element 'boolean_value'
+        element "boolean_value"
         namespace Uniword::Ooxml::Namespaces::SharedTypes
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
   end

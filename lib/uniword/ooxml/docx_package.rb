@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-require 'lutaml/model'
+require "securerandom"
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -102,16 +102,16 @@ module Uniword
         package = new
 
         # Parse Content Types
-        if zip_content['[Content_Types].xml']
+        if zip_content["[Content_Types].xml"]
           package.content_types = Uniword::ContentTypes::Types.from_xml(
-            zip_content['[Content_Types].xml']
+            zip_content["[Content_Types].xml"]
           )
         end
 
         # Parse Package Relationships
-        if zip_content['_rels/.rels']
+        if zip_content["_rels/.rels"]
           package.package_rels = Relationships::PackageRelationships.from_xml(
-            zip_content['_rels/.rels']
+            zip_content["_rels/.rels"]
           )
         end
 
@@ -120,22 +120,22 @@ module Uniword
         main_doc_rels_path = find_document_rels_path(main_doc_path)
 
         # Parse Document Properties
-        if zip_content['docProps/core.xml']
+        if zip_content["docProps/core.xml"]
           package.core_properties = CoreProperties.from_xml(
-            zip_content['docProps/core.xml']
+            zip_content["docProps/core.xml"]
           )
         end
 
-        if zip_content['docProps/app.xml']
+        if zip_content["docProps/app.xml"]
           package.app_properties = AppProperties.from_xml(
-            zip_content['docProps/app.xml']
+            zip_content["docProps/app.xml"]
           )
         end
 
         # Parse Custom Properties
-        if zip_content['docProps/custom.xml']
+        if zip_content["docProps/custom.xml"]
           package.custom_properties = CustomProperties.from_xml(
-            zip_content['docProps/custom.xml']
+            zip_content["docProps/custom.xml"]
           )
         end
 
@@ -152,15 +152,11 @@ module Uniword
 
             # Parse itemProps
             props_path = "customXml/itemProps#{index}.xml"
-            if zip_content[props_path]
-              item[:props_xml] = zip_content[props_path]
-            end
+            item[:props_xml] = zip_content[props_path] if zip_content[props_path]
 
             # Parse item relationships
             rels_path = "customXml/_rels/item#{index}.xml.rels"
-            if zip_content[rels_path]
-              item[:rels_xml] = zip_content[rels_path]
-            end
+            item[:rels_xml] = zip_content[rels_path] if zip_content[rels_path]
 
             package.custom_xml_items << item
           end
@@ -171,40 +167,40 @@ module Uniword
           package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
             zip_content[main_doc_path]
           )
-        elsif zip_content['word/document.xml']
+        elsif zip_content["word/document.xml"]
           # Fallback to standard path
           package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
-            zip_content['word/document.xml']
+            zip_content["word/document.xml"]
           )
         end
 
-        if zip_content['word/styles.xml']
+        if zip_content["word/styles.xml"]
           package.styles = Uniword::Wordprocessingml::StylesConfiguration.from_xml(
-            zip_content['word/styles.xml']
+            zip_content["word/styles.xml"]
           )
         end
 
-        if zip_content['word/numbering.xml']
+        if zip_content["word/numbering.xml"]
           package.numbering = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(
-            zip_content['word/numbering.xml']
+            zip_content["word/numbering.xml"]
           )
         end
 
-        if zip_content['word/settings.xml']
+        if zip_content["word/settings.xml"]
           package.settings = Uniword::Wordprocessingml::Settings.from_xml(
-            zip_content['word/settings.xml']
+            zip_content["word/settings.xml"]
           )
         end
 
-        if zip_content['word/fontTable.xml']
+        if zip_content["word/fontTable.xml"]
           package.font_table = Uniword::Wordprocessingml::FontTable.from_xml(
-            zip_content['word/fontTable.xml']
+            zip_content["word/fontTable.xml"]
           )
         end
 
-        if zip_content['word/webSettings.xml']
+        if zip_content["word/webSettings.xml"]
           package.web_settings = Uniword::Wordprocessingml::WebSettings.from_xml(
-            zip_content['word/webSettings.xml']
+            zip_content["word/webSettings.xml"]
           )
         end
 
@@ -213,17 +209,17 @@ module Uniword
           package.document_rels = Relationships::PackageRelationships.from_xml(
             zip_content[main_doc_rels_path]
           )
-        elsif zip_content['word/_rels/document.xml.rels']
+        elsif zip_content["word/_rels/document.xml.rels"]
           # Fallback to standard path
           package.document_rels = Relationships::PackageRelationships.from_xml(
-            zip_content['word/_rels/document.xml.rels']
+            zip_content["word/_rels/document.xml.rels"]
           )
         end
 
         # Parse Theme
-        if zip_content['word/theme/theme1.xml']
+        if zip_content["word/theme/theme1.xml"]
           package.theme = Drawingml::Theme.from_xml(
-            zip_content['word/theme/theme1.xml']
+            zip_content["word/theme/theme1.xml"]
           )
 
           # Extract theme media files from word/theme/media/ directory
@@ -231,23 +227,23 @@ module Uniword
           package.theme.media_files = theme_media if theme_media.any?
         end
 
-        if zip_content['word/theme/_rels/theme1.xml.rels']
+        if zip_content["word/theme/_rels/theme1.xml.rels"]
           package.theme_rels = Relationships::PackageRelationships.from_xml(
-            zip_content['word/theme/_rels/theme1.xml.rels']
+            zip_content["word/theme/_rels/theme1.xml.rels"]
           )
         end
 
         # Parse Footnotes
-        if zip_content['word/footnotes.xml']
+        if zip_content["word/footnotes.xml"]
           package.footnotes = Uniword::Wordprocessingml::Footnotes.from_xml(
-            zip_content['word/footnotes.xml']
+            zip_content["word/footnotes.xml"]
           )
         end
 
         # Parse Endnotes
-        if zip_content['word/endnotes.xml']
+        if zip_content["word/endnotes.xml"]
           package.endnotes = Uniword::Wordprocessingml::Endnotes.from_xml(
-            zip_content['word/endnotes.xml']
+            zip_content["word/endnotes.xml"]
           )
         end
 
@@ -258,10 +254,10 @@ module Uniword
           package.document.chart_parts ||= {}
           chart_files.each do |chart_path|
             # Find the relationship that points to this chart
-            chart_target = chart_path.sub('word/', '')
+            chart_target = chart_path.sub("word/", "")
             rel = package.document_rels.relationships.find do |r|
               r.target == chart_target &&
-                r.type.to_s.include?('officeDocument/2006/relationships/chart')
+                r.type.to_s.include?("officeDocument/2006/relationships/chart")
             end
             next unless rel
 
@@ -297,14 +293,14 @@ module Uniword
           # Get filename for the key
           filename = File.basename(media_path)
           # Determine content type from extension
-          ext = File.extname(filename).delete('.').downcase
+          ext = File.extname(filename).delete(".").downcase
           content_type = case ext
-                         when 'jpg', 'jpeg' then 'image/jpeg'
-                         when 'png' then 'image/png'
-                         when 'gif' then 'image/gif'
-                         when 'bmp' then 'image/bmp'
-                         when 'tiff', 'tif' then 'image/tiff'
-                         when 'svg' then 'image/svg+xml'
+                         when "jpg", "jpeg" then "image/jpeg"
+                         when "png" then "image/png"
+                         when "gif" then "image/gif"
+                         when "bmp" then "image/bmp"
+                         when "tiff", "tif" then "image/tiff"
+                         when "svg" then "image/svg+xml"
                          else "image/#{ext}"
                          end
 
@@ -333,7 +329,7 @@ module Uniword
       # @param entry_path [String] Path within ZIP
       # @return [String] Binary data
       def self.read_binary_from_zip(zip_path, entry_path)
-        require 'zip'
+        require "zip"
         Zip::File.open(zip_path) do |zip_file|
           entry = zip_file.find_entry(entry_path)
           return nil unless entry
@@ -422,87 +418,87 @@ module Uniword
         # Add default entries
         ct.defaults ||= []
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'rels',
-          content_type: 'application/vnd.openxmlformats-package.relationships+xml'
+          extension: "rels",
+          content_type: "application/vnd.openxmlformats-package.relationships+xml"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'xml',
-          content_type: 'application/xml'
+          extension: "xml",
+          content_type: "application/xml"
         )
         # Image extension defaults
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'png',
-          content_type: 'image/png'
+          extension: "png",
+          content_type: "image/png"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'jpeg',
-          content_type: 'image/jpeg'
+          extension: "jpeg",
+          content_type: "image/jpeg"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'jpg',
-          content_type: 'image/jpeg'
+          extension: "jpg",
+          content_type: "image/jpeg"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'gif',
-          content_type: 'image/gif'
+          extension: "gif",
+          content_type: "image/gif"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'bmp',
-          content_type: 'image/bmp'
+          extension: "bmp",
+          content_type: "image/bmp"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'tif',
-          content_type: 'image/tiff'
+          extension: "tif",
+          content_type: "image/tiff"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'tiff',
-          content_type: 'image/tiff'
+          extension: "tiff",
+          content_type: "image/tiff"
         )
         ct.defaults << Uniword::ContentTypes::Default.new(
-          extension: 'svg',
-          content_type: 'image/svg+xml'
+          extension: "svg",
+          content_type: "image/svg+xml"
         )
         # Add required overrides
         ct.overrides ||= []
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/document.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml'
+          part_name: "/word/document.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/styles.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml'
+          part_name: "/word/styles.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/fontTable.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml'
+          part_name: "/word/fontTable.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/settings.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml'
+          part_name: "/word/settings.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/webSettings.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml'
+          part_name: "/word/webSettings.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/numbering.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml'
+          part_name: "/word/numbering.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/docProps/app.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.extended-properties+xml'
+          part_name: "/docProps/app.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/docProps/core.xml',
-          content_type: 'application/vnd.openxmlformats-package.core-properties+xml'
+          part_name: "/docProps/core.xml",
+          content_type: "application/vnd.openxmlformats-package.core-properties+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/footnotes.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml'
+          part_name: "/word/footnotes.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"
         )
         ct.overrides << Uniword::ContentTypes::Override.new(
-          part_name: '/word/endnotes.xml',
-          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml'
+          part_name: "/word/endnotes.xml",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"
         )
         ct
       end
@@ -512,19 +508,19 @@ module Uniword
         rels = Relationships::PackageRelationships.new
         rels.relationships ||= []
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId1',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument',
-          target: 'word/document.xml'
+          id: "rId1",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+          target: "word/document.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId2',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties',
-          target: 'docProps/app.xml'
+          id: "rId2",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+          target: "docProps/app.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId3',
-          type: 'http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties',
-          target: 'docProps/core.xml'
+          id: "rId3",
+          type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+          target: "docProps/core.xml"
         )
         rels
       end
@@ -534,39 +530,39 @@ module Uniword
         rels = Relationships::PackageRelationships.new
         rels.relationships ||= []
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId1',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles',
-          target: 'styles.xml'
+          id: "rId1",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
+          target: "styles.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId2',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable',
-          target: 'fontTable.xml'
+          id: "rId2",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
+          target: "fontTable.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId3',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings',
-          target: 'settings.xml'
+          id: "rId3",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
+          target: "settings.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId4',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings',
-          target: 'webSettings.xml'
+          id: "rId4",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
+          target: "webSettings.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId5',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering',
-          target: 'numbering.xml'
+          id: "rId5",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+          target: "numbering.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId6',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes',
-          target: 'footnotes.xml'
+          id: "rId6",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+          target: "footnotes.xml"
         )
         rels.relationships << Relationships::Relationship.new(
-          id: 'rId7',
-          type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes',
-          target: 'endnotes.xml'
+          id: "rId7",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+          target: "endnotes.xml"
         )
         rels
       end
@@ -604,7 +600,7 @@ module Uniword
         # Image parts: add content types and relationships
         if document&.image_parts && !document.image_parts.empty?
           document.image_parts.each_value do |image_data|
-            ext = File.extname(image_data[:target]).delete('.')
+            ext = File.extname(image_data[:target]).delete(".")
             next if content_types.defaults.any? { |d| d.extension == ext }
 
             content_types.defaults << Uniword::ContentTypes::Default.new(
@@ -618,7 +614,7 @@ module Uniword
             content["word/#{image_data[:target]}"] = image_data[:data]
             document_rels.relationships << Relationships::Relationship.new(
               id: r_id,
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image',
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
               target: image_data[:target]
             )
           end
@@ -626,10 +622,10 @@ module Uniword
 
         # Chart parts: add content type and relationships
         if document&.chart_parts && !document.chart_parts.empty?
-          unless content_types.overrides.any? { |o| o.part_name&.start_with?('/word/charts/') }
+          unless content_types.overrides.any? { |o| o.part_name&.start_with?("/word/charts/") }
             content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: '/word/charts/chart1.xml',
-              content_type: 'application/vnd.openxmlformats-officedocument.drawingml.chart+xml'
+              part_name: "/word/charts/chart1.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.drawingml.chart+xml"
             )
           end
 
@@ -637,7 +633,7 @@ module Uniword
             content["word/#{chart_data[:target]}"] = chart_data[:xml]
             document_rels.relationships << Relationships::Relationship.new(
               id: r_id,
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart',
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
               target: chart_data[:target]
             )
           end
@@ -645,38 +641,38 @@ module Uniword
 
         # Bibliography sources: add content type and relationship
         if document&.bibliography_sources
-          unless content_types.overrides.any? { |o| o.part_name == '/word/sources.xml' }
+          unless content_types.overrides.any? { |o| o.part_name == "/word/sources.xml" }
             content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: '/word/sources.xml',
-              content_type: 'application/vnd.openxmlformats-officedocument.bibliography+xml'
+              part_name: "/word/sources.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.bibliography+xml"
             )
           end
 
-          unless document_rels.relationships.any? { |r| r.target == 'sources.xml' }
+          unless document_rels.relationships.any? { |r| r.target == "sources.xml" }
             document_rels.relationships << Relationships::Relationship.new(
               id: "rIdSrc#{SecureRandom.hex(4)}",
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography',
-              target: 'sources.xml'
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
+              target: "sources.xml"
             )
           end
         end
 
         # Custom properties: add content type and relationship
         if custom_properties && !custom_properties.properties.empty?
-          unless content_types.overrides.any? { |o| o.part_name == '/docProps/custom.xml' }
+          unless content_types.overrides.any? { |o| o.part_name == "/docProps/custom.xml" }
             content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: '/docProps/custom.xml',
-              content_type: 'application/vnd.openxmlformats-officedocument.custom-properties+xml'
+              part_name: "/docProps/custom.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.custom-properties+xml"
             )
           end
 
-          unless package_rels.relationships.any? { |r|
-            r.type.to_s.include?('officeDocument/2006/relationships/custom-properties')
-          }
+          unless package_rels.relationships.any? do |r|
+            r.type.to_s.include?("officeDocument/2006/relationships/custom-properties")
+          end
             package_rels.relationships << Relationships::Relationship.new(
               id: "rIdCustProps",
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties',
-              target: 'docProps/custom.xml'
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
+              target: "docProps/custom.xml"
             )
           end
         end
@@ -685,12 +681,12 @@ module Uniword
         if custom_xml_items && !custom_xml_items.empty?
           custom_xml_items.each do |item|
             idx = item[:index]
-            unless content_types.overrides.any? { |o| o.part_name == "/customXml/itemProps#{idx}.xml" }
-              content_types.overrides << Uniword::ContentTypes::Override.new(
-                part_name: "/customXml/itemProps#{idx}.xml",
-                content_type: 'application/vnd.openxmlformats-officedocument.customXmlProperties+xml'
-              )
-            end
+            next if content_types.overrides.any? { |o| o.part_name == "/customXml/itemProps#{idx}.xml" }
+
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: "/customXml/itemProps#{idx}.xml",
+              content_type: "application/vnd.openxmlformats-officedocument.customXmlProperties+xml"
+            )
           end
         end
 
@@ -705,12 +701,12 @@ module Uniword
 
             content_types.overrides << Uniword::ContentTypes::Override.new(
               part_name: "/word/header#{header_counter}.xml",
-              content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml'
+              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"
             )
 
             document_rels.relationships << Relationships::Relationship.new(
               id: r_id,
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/header',
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
               target: "header#{header_counter}.xml"
             )
 
@@ -734,12 +730,12 @@ module Uniword
 
             content_types.overrides << Uniword::ContentTypes::Override.new(
               part_name: "/word/footer#{footer_counter}.xml",
-              content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml'
+              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"
             )
 
             document_rels.relationships << Relationships::Relationship.new(
               id: r_id,
-              type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer',
+              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
               target: "footer#{footer_counter}.xml"
             )
 
@@ -757,31 +753,31 @@ module Uniword
         end
 
         # Serialize Content Types
-        content['[Content_Types].xml'] = content_types.to_xml(
-          encoding: 'UTF-8', declaration: true
+        content["[Content_Types].xml"] = content_types.to_xml(
+          encoding: "UTF-8", declaration: true
         )
 
         # Serialize Package Relationships
-        content['_rels/.rels'] = package_rels.to_xml(
-          encoding: 'UTF-8', declaration: true
+        content["_rels/.rels"] = package_rels.to_xml(
+          encoding: "UTF-8", declaration: true
         )
 
         # Serialize Document Properties
         if core_properties
-          content['docProps/core.xml'] = core_properties.to_xml(
-            encoding: 'UTF-8', prefix: false
+          content["docProps/core.xml"] = core_properties.to_xml(
+            encoding: "UTF-8", prefix: false
           )
         end
 
         if app_properties
-          content['docProps/app.xml'] = app_properties.to_xml(
-            encoding: 'UTF-8', prefix: false
+          content["docProps/app.xml"] = app_properties.to_xml(
+            encoding: "UTF-8", prefix: false
           )
         end
 
         if custom_properties
-          content['docProps/custom.xml'] = custom_properties.to_xml(
-            encoding: 'UTF-8', prefix: false
+          content["docProps/custom.xml"] = custom_properties.to_xml(
+            encoding: "UTF-8", prefix: false
           )
         end
 
@@ -797,78 +793,78 @@ module Uniword
 
         # Serialize Document Parts
         if document
-          content['word/document.xml'] = document.to_xml(
-            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          content["word/document.xml"] = document.to_xml(
+            encoding: "UTF-8", prefix: true, fix_boolean_elements: true
           )
         end
 
         if styles
-          content['word/styles.xml'] = styles.to_xml(
-            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          content["word/styles.xml"] = styles.to_xml(
+            encoding: "UTF-8", prefix: true, fix_boolean_elements: true
           )
         end
 
         if numbering
-          content['word/numbering.xml'] = numbering.to_xml(
-            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          content["word/numbering.xml"] = numbering.to_xml(
+            encoding: "UTF-8", prefix: true, fix_boolean_elements: true
           )
         end
 
         if settings
-          content['word/settings.xml'] = settings.to_xml(
-            encoding: 'UTF-8', prefix: true
+          content["word/settings.xml"] = settings.to_xml(
+            encoding: "UTF-8", prefix: true
           )
         end
 
         if font_table
-          content['word/fontTable.xml'] = font_table.to_xml(
-            encoding: 'UTF-8', prefix: true
+          content["word/fontTable.xml"] = font_table.to_xml(
+            encoding: "UTF-8", prefix: true
           )
         end
 
         if web_settings
-          content['word/webSettings.xml'] = web_settings.to_xml(
-            encoding: 'UTF-8', prefix: true
+          content["word/webSettings.xml"] = web_settings.to_xml(
+            encoding: "UTF-8", prefix: true
           )
         end
 
         if document_rels
-          content['word/_rels/document.xml.rels'] = document_rels.to_xml(
-            encoding: 'UTF-8', declaration: true
+          content["word/_rels/document.xml.rels"] = document_rels.to_xml(
+            encoding: "UTF-8", declaration: true
           )
         end
 
         # Serialize Theme
         if theme
-          content['word/theme/theme1.xml'] = theme.to_xml(
-            encoding: 'UTF-8', prefix: true
+          content["word/theme/theme1.xml"] = theme.to_xml(
+            encoding: "UTF-8", prefix: true
           )
         end
 
         if theme_rels
-          content['word/theme/_rels/theme1.xml.rels'] = theme_rels.to_xml(
-            encoding: 'UTF-8', declaration: true
+          content["word/theme/_rels/theme1.xml.rels"] = theme_rels.to_xml(
+            encoding: "UTF-8", declaration: true
           )
         end
 
         # Serialize Footnotes
         if footnotes
-          content['word/footnotes.xml'] = footnotes.to_xml(
-            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          content["word/footnotes.xml"] = footnotes.to_xml(
+            encoding: "UTF-8", prefix: true, fix_boolean_elements: true
           )
         end
 
         # Serialize Endnotes
         if endnotes
-          content['word/endnotes.xml'] = endnotes.to_xml(
-            encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+          content["word/endnotes.xml"] = endnotes.to_xml(
+            encoding: "UTF-8", prefix: true, fix_boolean_elements: true
           )
         end
 
         # Serialize Bibliography Sources
         if document&.bibliography_sources
-          content['word/sources.xml'] = document.bibliography_sources.to_xml(
-            encoding: 'UTF-8', declaration: true
+          content["word/sources.xml"] = document.bibliography_sources.to_xml(
+            encoding: "UTF-8", declaration: true
           )
         end
 
@@ -878,7 +874,7 @@ module Uniword
           document.headers.each_value do |header_obj|
             h_idx += 1
             content["word/header#{h_idx}.xml"] = header_obj.to_xml(
-              encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+              encoding: "UTF-8", prefix: true, fix_boolean_elements: true
             )
           end
         end
@@ -889,7 +885,7 @@ module Uniword
           document.footers.each_value do |footer_obj|
             f_idx += 1
             content["word/footer#{f_idx}.xml"] = footer_obj.to_xml(
-              encoding: 'UTF-8', prefix: true, fix_boolean_elements: true
+              encoding: "UTF-8", prefix: true, fix_boolean_elements: true
             )
           end
         end
@@ -925,7 +921,7 @@ module Uniword
       #
       # @return [String] Combined text from all paragraphs
       def text
-        document&.text || ''
+        document&.text || ""
       end
 
       # Get document body paragraphs as enumerable
@@ -959,13 +955,13 @@ module Uniword
         return nil unless package_rels&.relationships
 
         rel = package_rels.relationships.find do |r|
-          r.type.to_s.include?('officeDocument/2006/relationships/officeDocument')
+          r.type.to_s.include?("officeDocument/2006/relationships/officeDocument")
         end
         return nil unless rel&.target
 
         # Normalize path - strip leading slash if present
         path = rel.target.dup
-        path.sub!(%r{^/}, '')
+        path.sub!(%r{^/}, "")
         path
       end
 
@@ -982,7 +978,7 @@ module Uniword
         # Extract directory and filename
         dir = File.dirname(doc_path)
         basename = File.basename(doc_path)
-        File.join(dir, '_rels', "#{basename}.rels")
+        File.join(dir, "_rels", "#{basename}.rels")
       end
     end
   end

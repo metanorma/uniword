@@ -2,9 +2,9 @@
 
 # All classes autoloaded via lib/uniword/metadata.rb and lib/uniword/configuration.rb
 
-require 'json'
-require 'yaml'
-require 'csv'
+require "json"
+require "yaml"
+require "csv"
 
 module Uniword
   module Metadata
@@ -48,7 +48,7 @@ module Uniword
       #   index = MetadataIndex.new(
       #     config_file: 'config/custom_schema.yml'
       #   )
-      def initialize(config_file: 'metadata_schema')
+      def initialize(config_file: "metadata_schema")
         @entries = {}
         @export_config = load_export_config(config_file)
       end
@@ -219,7 +219,7 @@ module Uniword
       #   index.export_csv('metadata.csv', columns: [:title, :author])
       def export_csv(output_path, columns: nil)
         config = @export_config[:csv] || {}
-        delimiter = config.fetch(:delimiter, ',')
+        delimiter = config.fetch(:delimiter, ",")
         quote_char = config.fetch(:quote_char, '"')
         include_headers = config.fetch(:include_headers, true)
         columns ||= config[:columns]&.map(&:to_sym)
@@ -230,9 +230,9 @@ module Uniword
           columns = first_meta.keys
         end
 
-        CSV.open(output_path, 'w', col_sep: delimiter, quote_char: quote_char) do |csv|
+        CSV.open(output_path, "w", col_sep: delimiter, quote_char: quote_char) do |csv|
           # Write headers
-          csv << (['path'] + columns.map(&:to_s)) if include_headers
+          csv << (["path"] + columns.map(&:to_s)) if include_headers
 
           # Write data rows
           @entries.each do |path, metadata|
@@ -251,7 +251,7 @@ module Uniword
       #   index.export_xml('metadata.xml')
       def export_xml(output_path)
         config = @export_config[:xml] || {}
-        root_element = config.fetch(:root_element, 'metadata')
+        root_element = config.fetch(:root_element, "metadata")
         include_null = config.fetch(:include_null_values, false)
 
         xml = build_xml(root_element: root_element, include_null: include_null)
@@ -342,8 +342,8 @@ module Uniword
         {
           json: { enabled: true, pretty_print: true },
           yaml: { enabled: true },
-          csv: { enabled: true, delimiter: ',' },
-          xml: { enabled: true, root_element: 'metadata' }
+          csv: { enabled: true, delimiter: "," },
+          xml: { enabled: true, root_element: "metadata" }
         }
       end
 
@@ -373,7 +373,7 @@ module Uniword
       def format_csv_value(value)
         case value
         when Array
-          value.join('; ')
+          value.join("; ")
         when Hash
           value.to_json
         when Time, DateTime
@@ -381,7 +381,7 @@ module Uniword
         when Date
           value.to_s
         when nil
-          ''
+          ""
         else
           value.to_s
         end
@@ -392,17 +392,17 @@ module Uniword
       # @param root_element [String] Root element name
       # @param include_null [Boolean] Include nil values
       # @return [String] XML string
-      def build_xml(root_element: 'metadata', include_null: false)
+      def build_xml(root_element: "metadata", include_null: false)
         xml = ['<?xml version="1.0" encoding="UTF-8"?>']
         xml << "<#{root_element}_index>"
         xml << "  <generated_at>#{Time.now.iso8601}</generated_at>"
         xml << "  <document_count>#{@entries.size}</document_count>"
-        xml << '  <documents>'
+        xml << "  <documents>"
 
         @entries.each do |path, metadata|
-          xml << '    <document>'
+          xml << "    <document>"
           xml << "      <path>#{escape_xml(path)}</path>"
-          xml << '      <metadata>'
+          xml << "      <metadata>"
 
           metadata.to_h(include_nil: include_null).each do |key, value|
             next if value.nil? && !include_null
@@ -410,11 +410,11 @@ module Uniword
             xml << "        <#{key}>#{escape_xml(format_xml_value(value))}</#{key}>"
           end
 
-          xml << '      </metadata>'
-          xml << '    </document>'
+          xml << "      </metadata>"
+          xml << "    </document>"
         end
 
-        xml << '  </documents>'
+        xml << "  </documents>"
         xml << "</#{root_element}_index>"
         xml.join("\n")
       end
@@ -444,11 +444,11 @@ module Uniword
       # @return [String] Escaped text
       def escape_xml(text)
         text.to_s
-            .gsub('&', '&amp;')
-            .gsub('<', '&lt;')
-            .gsub('>', '&gt;')
-            .gsub('"', '&quot;')
-            .gsub("'", '&apos;')
+            .gsub("&", "&amp;")
+            .gsub("<", "&lt;")
+            .gsub(">", "&gt;")
+            .gsub('"', "&quot;")
+            .gsub("'", "&apos;")
       end
     end
   end

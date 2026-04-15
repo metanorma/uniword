@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :rot, Rotation
 
       xml do
-        element 'lightRig'
+        element "lightRig"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'rig', to: :rig, render_nil: false
-        map_attribute 'dir', to: :dir, render_nil: false
-        map_element 'rot', to: :rot, render_nil: false
+        map_attribute "rig", to: :rig, render_nil: false
+        map_attribute "dir", to: :dir, render_nil: false
+        map_element "rot", to: :rot, render_nil: false
       end
     end
   end

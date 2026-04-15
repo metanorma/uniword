@@ -17,7 +17,7 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'styles'
+        element "styles"
         namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
@@ -27,13 +27,13 @@ module Uniword
         ]
 
         # Map mc:Ignorable attribute
-        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
+        map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
 
         # Map docDefaults and latentStyles
-        map_element 'docDefaults', to: :doc_defaults, render_nil: false
-        map_element 'latentStyles', to: :latent_styles, render_nil: false
+        map_element "docDefaults", to: :doc_defaults, render_nil: false
+        map_element "latentStyles", to: :latent_styles, render_nil: false
         # Map style elements
-        map_element 'style', to: :styles
+        map_element "style", to: :styles
       end
 
       # Initialize with optional default styles
@@ -51,10 +51,10 @@ module Uniword
       # @return [Style] The added style
       # @raise [ArgumentError] if style with same ID already exists
       def add_style(style, allow_overwrite: false)
-        raise ArgumentError, 'Style must be a Style instance' unless style.is_a?(Style)
+        raise ArgumentError, "Style must be a Style instance" unless style.is_a?(Style)
 
         # Skip if ID is empty
-        raise ArgumentError, 'Style must have a non-empty ID' if style.id.to_s.strip.empty?
+        raise ArgumentError, "Style must have a non-empty ID" if style.id.to_s.strip.empty?
 
         existing = style_by_id(style.id)
         if existing
@@ -167,10 +167,10 @@ module Uniword
       # @return [void]
       def add_default_styles
         # Add Normal paragraph style (required)
-        add_style(ParagraphStyle.normal) unless style_by_id('Normal')
+        add_style(ParagraphStyle.normal) unless style_by_id("Normal")
 
         # Add default character style
-        add_style(CharacterStyle.default_char) unless style_by_id('DefaultParagraphFont')
+        add_style(CharacterStyle.default_char) unless style_by_id("DefaultParagraphFont")
 
         # Add heading styles (1-9)
         (1..9).each do |level|
@@ -179,8 +179,8 @@ module Uniword
         end
 
         # Add common character styles
-        add_style(CharacterStyle.emphasis) unless style_by_id('Emphasis')
-        add_style(CharacterStyle.strong) unless style_by_id('Strong')
+        add_style(CharacterStyle.emphasis) unless style_by_id("Emphasis")
+        add_style(CharacterStyle.strong) unless style_by_id("Strong")
       end
 
       # Create a custom paragraph style
@@ -221,7 +221,7 @@ module Uniword
           styleId: id,
           name: StyleName.new(val: name),
           customStyle: true,
-          type: 'paragraph',
+          type: "paragraph",
           **attributes
         )
         add_style(style)
@@ -262,7 +262,7 @@ module Uniword
           styleId: id,
           name: StyleName.new(val: name),
           customStyle: true,
-          type: 'character',
+          type: "character",
           **attributes
         )
         add_style(style)

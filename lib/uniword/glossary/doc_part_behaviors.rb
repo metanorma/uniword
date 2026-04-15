@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -12,11 +12,11 @@ module Uniword
       attribute :behavior, DocPartBehavior, collection: true, initialize_empty: true
 
       xml do
-        root 'behaviors'
+        root "behaviors"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'behavior', to: :behavior, render_nil: false
+        map_element "behavior", to: :behavior, render_nil: false
       end
     end
   end

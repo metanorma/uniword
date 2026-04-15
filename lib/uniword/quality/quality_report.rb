@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'yaml'
+require "json"
+require "yaml"
 
 module Uniword
   module Quality
@@ -124,15 +124,15 @@ module Uniword
       # @return [String] YAML string
       def to_yaml(file_path = nil)
         yaml_data = {
-          'checked_at' => checked_at.iso8601,
-          'summary' => {
-            'total' => total_count,
-            'errors' => error_count,
-            'warnings' => warning_count,
-            'info' => info_count,
-            'valid' => valid?
+          "checked_at" => checked_at.iso8601,
+          "summary" => {
+            "total" => total_count,
+            "errors" => error_count,
+            "warnings" => warning_count,
+            "info" => info_count,
+            "valid" => valid?
           },
-          'violations' => violations.map(&:to_h)
+          "violations" => violations.map(&:to_h)
         }
 
         yaml_string = YAML.dump(yaml_data)
@@ -157,12 +157,12 @@ module Uniword
       # @return [String] Human-readable summary
       def summary
         [
-          'Document Quality Report',
-          '=' * 50,
+          "Document Quality Report",
+          "=" * 50,
           "Checked at: #{checked_at}",
-          "Status: #{valid? ? 'VALID' : 'INVALID'}",
-          '',
-          'Summary:',
+          "Status: #{valid? ? "VALID" : "INVALID"}",
+          "",
+          "Summary:",
           "  Total violations: #{total_count}",
           "  Errors: #{error_count}",
           "  Warnings: #{warning_count}",
@@ -256,8 +256,8 @@ module Uniword
 
             <div class="summary">
               <div>Checked at: #{checked_at}</div>
-              <div class="status #{valid? ? 'valid' : 'invalid'}">
-                Status: #{valid? ? 'VALID ✓' : 'INVALID ✗'}
+              <div class="status #{valid? ? "valid" : "invalid"}">
+                Status: #{valid? ? "VALID ✓" : "INVALID ✗"}
               </div>
 
               <div class="stats">
@@ -290,7 +290,7 @@ module Uniword
       #
       # @return [String] HTML content for violations
       def generate_violations_html
-        return '' if violations.empty?
+        return "" if violations.empty?
 
         violations_html = violations.map do |v|
           <<~HTML

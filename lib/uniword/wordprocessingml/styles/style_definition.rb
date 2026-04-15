@@ -54,7 +54,7 @@ module Uniword
       #
       # @return [Symbol] Style type (:paragraph_style, :character_style, etc.)
       def style_type
-        raise NotImplementedError, 'Subclasses must implement style_type'
+        raise NotImplementedError, "Subclasses must implement style_type"
       end
     end
   end

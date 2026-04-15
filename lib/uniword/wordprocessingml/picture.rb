@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,13 +14,13 @@ module Uniword
       attribute :shapetype, Uniword::Vml::Shapetype
 
       xml do
-        root 'pict'
+        root "pict"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # VML elements inside w:pict are in the VML namespace
-        map_element 'shape', to: :shape, render_nil: false
-        map_element 'shapetype', to: :shapetype, render_nil: false
+        map_element "shape", to: :shape, render_nil: false
+        map_element "shapetype", to: :shapetype, render_nil: false
       end
     end
   end

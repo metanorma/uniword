@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,11 +13,11 @@ module Uniword
       attribute :cache_id, :integer
 
       xml do
-        element 'pivotTable'
+        element "pivotTable"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'name', to: :name
-        map_attribute 'cache-id', to: :cache_id
+        map_attribute "name", to: :name
+        map_attribute "cache-id", to: :cache_id
       end
     end
   end

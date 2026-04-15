@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -17,15 +17,15 @@ module Uniword
       attribute :dgmscaley, :string
 
       xml do
-        element 'diagram'
+        element "diagram"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'dgmstyle', to: :dgmstyle
-        map_attribute 'autoformat', to: :autoformat
-        map_attribute 'reverse', to: :reverse
-        map_attribute 'autolayout', to: :autolayout
-        map_attribute 'dgmscalex', to: :dgmscalex
-        map_attribute 'dgmscaley', to: :dgmscaley
+        map_attribute "dgmstyle", to: :dgmstyle
+        map_attribute "autoformat", to: :autoformat
+        map_attribute "reverse", to: :reverse
+        map_attribute "autolayout", to: :autolayout
+        map_attribute "dgmscalex", to: :dgmscalex
+        map_attribute "dgmscaley", to: :dgmscaley
       end
     end
   end

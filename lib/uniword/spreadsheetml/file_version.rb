@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,11 +13,11 @@ module Uniword
       attribute :last_edited, :string
 
       xml do
-        element 'fileVersion'
+        element "fileVersion"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'app-name', to: :app_name
-        map_attribute 'last-edited', to: :last_edited
+        map_attribute "app-name", to: :app_name
+        map_attribute "last-edited", to: :last_edited
       end
     end
   end

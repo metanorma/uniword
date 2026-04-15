@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -12,10 +12,10 @@ module Uniword
       attribute :val, :integer
 
       xml do
-        element 'gapWidth'
+        element "gapWidth"
         namespace Uniword::Ooxml::Namespaces::Chart
 
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

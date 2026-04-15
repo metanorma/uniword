@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -16,14 +16,14 @@ module Uniword
       attribute :last_column, :string
 
       xml do
-        element 'cnfStyle'
+        element "cnfStyle"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'val', to: :val
-        map_attribute 'first-row', to: :first_row
-        map_attribute 'last-row', to: :last_row
-        map_attribute 'first-column', to: :first_column
-        map_attribute 'last-column', to: :last_column
+        map_attribute "val", to: :val
+        map_attribute "first-row", to: :first_row
+        map_attribute "last-row", to: :last_row
+        map_attribute "first-column", to: :first_column
+        map_attribute "last-column", to: :last_column
       end
     end
   end

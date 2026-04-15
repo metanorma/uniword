@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -13,11 +13,11 @@ module Uniword
       attribute :link, :string
 
       xml do
-        element 'video'
+        element "video"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'embed', to: :embed
-        map_attribute 'link', to: :link
+        map_attribute "embed", to: :embed
+        map_attribute "link", to: :link
       end
     end
   end

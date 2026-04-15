@@ -11,9 +11,9 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'extLst'
+        element "extLst"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'ext', to: :extensions
+        map_element "ext", to: :extensions
       end
 
       def initialize(attributes = {})

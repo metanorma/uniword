@@ -183,23 +183,17 @@ module Uniword
         doc_props = source.document_properties
         if doc_props
           ooxml_doc.core_properties ||= Uniword::Ooxml::CoreProperties.new
-          if doc_props.respond_to?(:author) && doc_props.author
-            ooxml_doc.core_properties.creator = doc_props.author
-          end
-          if doc_props.respond_to?(:author) && doc_props.author
-            ooxml_doc.core_properties.creator = doc_props.author
-          end
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
           if doc_props.respond_to?(:created) && doc_props.created
             ooxml_doc.core_properties.created = Uniword::Ooxml::Types::DctermsCreatedType.new(
-              value: doc_props.created, type: 'dcterms:W3CDTF'
+              value: doc_props.created, type: "dcterms:W3CDTF"
             )
           end
-          if doc_props.respond_to?(:last_author) && doc_props.last_author
-            ooxml_doc.core_properties.last_modified_by = doc_props.last_author
-          end
+          ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.respond_to?(:last_author) && doc_props.last_author
           if doc_props.respond_to?(:last_saved) && doc_props.last_saved
             ooxml_doc.core_properties.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
-              value: doc_props.last_saved, type: 'dcterms:W3CDTF'
+              value: doc_props.last_saved, type: "dcterms:W3CDTF"
             )
           end
         end
@@ -268,9 +262,7 @@ module Uniword
         target.styles_configuration = source.styles_configuration.dup if source.styles_configuration
 
         # Copy numbering configuration
-        if source.numbering_configuration
-          target.numbering_configuration = source.numbering_configuration.dup
-        end
+        target.numbering_configuration = source.numbering_configuration.dup if source.numbering_configuration
 
         # Theme is DOCX-specific, copy only if target is DOCX
         target.theme = source.theme.dup if source.theme && target_format == :docx
@@ -367,19 +359,17 @@ module Uniword
       # @raise [ArgumentError] if parameters are invalid
       def validate_transformation(source, source_format, target_format)
         # Accept OOXML Document or MHTML Document
-        unless source.is_a?(Wordprocessingml::DocumentRoot) || source.is_a?(Uniword::Mhtml::Document)
-          raise ArgumentError, 'Source must be a Document or Mhtml::Document'
-        end
+        raise ArgumentError, "Source must be a Document or Mhtml::Document" unless source.is_a?(Wordprocessingml::DocumentRoot) || source.is_a?(Uniword::Mhtml::Document)
 
         unless %i[docx docm dotx dotm mhtml].include?(source_format)
           raise ArgumentError,
                 "Source format must be :docx, :docm, :dotx, :dotm or :mhtml, got #{source_format.inspect}"
         end
 
-        unless %i[docx docm dotx dotm mhtml].include?(target_format)
-          raise ArgumentError,
-                "Target format must be :docx, :docm, :dotx, :dotm or :mhtml, got #{target_format.inspect}"
-        end
+        return if %i[docx docm dotx dotm mhtml].include?(target_format)
+
+        raise ArgumentError,
+              "Target format must be :docx, :docm, :dotx, :dotm or :mhtml, got #{target_format.inspect}"
       end
     end
   end

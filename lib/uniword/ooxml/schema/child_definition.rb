@@ -94,28 +94,28 @@ module Uniword
 
           # Handle special cases
           name = case name
-                 when 'paragraph_properties'
-                   'properties'
-                 when 'run_properties'
-                   'properties'
-                 when 'table_properties'
-                   'properties'
-                 when 'table_cell_properties'
-                   'properties'
-                 when 'table_row_properties'
-                   'properties'
-                 when 'text'
-                   'text_element'
-                 when 'table_row'
-                   'row'
-                 when 'table_cell'
-                   'cell'
+                 when "paragraph_properties"
+                   "properties"
+                 when "run_properties"
+                   "properties"
+                 when "table_properties"
+                   "properties"
+                 when "table_cell_properties"
+                   "properties"
+                 when "table_row_properties"
+                   "properties"
+                 when "text"
+                   "text_element"
+                 when "table_row"
+                   "row"
+                 when "table_cell"
+                   "cell"
                  else
                    name
                  end
 
           # Pluralize if multiple
-          name = "#{name}s" if @multiple && !name.end_with?('s')
+          name = "#{name}s" if @multiple && !name.end_with?("s")
 
           name.to_sym
         end

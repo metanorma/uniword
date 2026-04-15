@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :style, :string
 
       xml do
-        element 'shape'
+        element "shape"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'id', to: :id
-        map_attribute 'type', to: :type
-        map_attribute 'style', to: :style
+        map_attribute "id", to: :id
+        map_attribute "type", to: :type
+        map_attribute "style", to: :style
       end
     end
   end

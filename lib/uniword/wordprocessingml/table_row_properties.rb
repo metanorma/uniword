@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -18,20 +18,22 @@ module Uniword
       attribute :w_before, WidthBefore
       attribute :w_after, WidthAfter
       attribute :cnf_style, CnfStyle
+      attribute :div_id, ValInt
 
       xml do
-        element 'trPr'
+        element "trPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'trHeight', to: :tr_height, render_nil: false
-        map_element 'tblHeader', to: :tbl_header, render_nil: false
-        map_element 'cantSplit', to: :cant_split, render_nil: false
-        map_element 'gridBefore', to: :grid_before, render_nil: false
-        map_element 'gridAfter', to: :grid_after, render_nil: false
-        map_element 'wBefore', to: :w_before, render_nil: false
-        map_element 'wAfter', to: :w_after, render_nil: false
-        map_element 'cnfStyle', to: :cnf_style, render_nil: false
+        map_element "trHeight", to: :tr_height, render_nil: false
+        map_element "tblHeader", to: :tbl_header, render_nil: false
+        map_element "cantSplit", to: :cant_split, render_nil: false
+        map_element "gridBefore", to: :grid_before, render_nil: false
+        map_element "gridAfter", to: :grid_after, render_nil: false
+        map_element "wBefore", to: :w_before, render_nil: false
+        map_element "wAfter", to: :w_after, render_nil: false
+        map_element "cnfStyle", to: :cnf_style, render_nil: false
+        map_element "divId", to: :div_id, render_nil: false
       end
 
       def initialize(attrs = {})

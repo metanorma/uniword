@@ -17,9 +17,9 @@ module Uniword
       #
       # @return [String] The default CSS content
       def self.default_css
-        css_path = File.join(__dir__, 'wordstyle.css')
+        css_path = File.join(__dir__, "wordstyle.css")
         if File.exist?(css_path)
-          File.read(css_path, encoding: 'UTF-8')
+          File.read(css_path, encoding: "UTF-8")
         else
           # Fallback to basic CSS if file doesn't exist
           basic_css
@@ -31,7 +31,7 @@ module Uniword
       # @param styles_config [StylesConfiguration] The styles configuration
       # @return [String] The generated CSS
       def self.generate_style_css(styles_config)
-        return '' unless styles_config
+        return "" unless styles_config
 
         css_rules = styles_config.styles.map do |style|
           build_style_rule(style)
@@ -45,7 +45,7 @@ module Uniword
       # @param numbering_config [NumberingConfiguration] The numbering configuration
       # @return [String] The generated list CSS
       def self.generate_list_css(numbering_config)
-        return '' unless numbering_config
+        return "" unless numbering_config
 
         css_rules = numbering_config.instances.map do |instance|
           build_list_rule(instance)
@@ -59,7 +59,7 @@ module Uniword
       # @param sections [Array<Section>] The document sections
       # @return [String] The generated section CSS
       def self.generate_section_css(sections)
-        return '' unless sections && !sections.empty?
+        return "" unless sections && !sections.empty?
 
         css_rules = []
 
@@ -93,30 +93,18 @@ module Uniword
           rules << "size: #{w_in} #{h_in}"
         else
           # Default letter size
-          rules << 'size: 8.5in 11in'
+          rules << "size: 8.5in 11in"
         end
 
         # Margins
-        if properties.respond_to?(:margin_top) && properties.margin_top
-          rules << "margin-top: #{CssNumberFormatter.twips_to_in(properties.margin_top)}"
-        end
-        if properties.respond_to?(:margin_bottom) && properties.margin_bottom
-          rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}"
-        end
-        if properties.respond_to?(:margin_left) && properties.margin_left
-          rules << "margin-left: #{CssNumberFormatter.twips_to_in(properties.margin_left)}"
-        end
-        if properties.respond_to?(:margin_right) && properties.margin_right
-          rules << "margin-right: #{CssNumberFormatter.twips_to_in(properties.margin_right)}"
-        end
+        rules << "margin-top: #{CssNumberFormatter.twips_to_in(properties.margin_top)}" if properties.respond_to?(:margin_top) && properties.margin_top
+        rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}" if properties.respond_to?(:margin_bottom) && properties.margin_bottom
+        rules << "margin-left: #{CssNumberFormatter.twips_to_in(properties.margin_left)}" if properties.respond_to?(:margin_left) && properties.margin_left
+        rules << "margin-right: #{CssNumberFormatter.twips_to_in(properties.margin_right)}" if properties.respond_to?(:margin_right) && properties.margin_right
 
         # Header/Footer margins
-        if properties.respond_to?(:header_margin) && properties.header_margin
-          rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}"
-        end
-        if properties.respond_to?(:footer_margin) && properties.footer_margin
-          rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}"
-        end
+        rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}" if properties.respond_to?(:header_margin) && properties.header_margin
+        rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}" if properties.respond_to?(:footer_margin) && properties.footer_margin
 
         "@page #{section_name} {\n  #{rules.join(";\n  ")};\n}"
       end
@@ -141,16 +129,14 @@ module Uniword
         # Font properties
         properties << "font-family: '#{style.font}'" if style.respond_to?(:font) && style.font
         if style.respond_to?(:font_size) && style.font_size
-          properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt',
+          properties << "font-size: #{CssNumberFormatter.format(style.font_size, "pt",
                                                                 precision: 1)}"
         end
-        properties << 'font-weight: bold' if style.respond_to?(:bold) && style.bold
-        properties << 'font-style: italic' if style.respond_to?(:italic) && style.italic
+        properties << "font-weight: bold" if style.respond_to?(:bold) && style.bold
+        properties << "font-style: italic" if style.respond_to?(:italic) && style.italic
 
         # Paragraph properties
-        if style.respond_to?(:alignment) && style.alignment
-          properties << "text-align: #{style.alignment}"
-        end
+        properties << "text-align: #{style.alignment}" if style.respond_to?(:alignment) && style.alignment
 
         return nil if properties.empty?
 

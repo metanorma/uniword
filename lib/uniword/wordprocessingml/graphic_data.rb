@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :uri, :string
 
       xml do
-        element 'graphicData'
+        element "graphicData"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'uri', to: :uri
+        map_attribute "uri", to: :uri
       end
     end
   end

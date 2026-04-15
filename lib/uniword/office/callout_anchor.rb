@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :position, :string
 
       xml do
-        element 'calloutanchor'
+        element "calloutanchor"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'position', to: :position
+        map_attribute "position", to: :position
       end
     end
   end

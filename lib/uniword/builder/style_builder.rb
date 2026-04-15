@@ -13,16 +13,16 @@ module Uniword
     class StyleBuilder
       attr_reader :model
 
-      def initialize(name, base_on: 'Normal')
+      def initialize(name, base_on: "Normal")
         @model = Wordprocessingml::Style.new
-        @model.styleId = name.tr(' ', '')
+        @model.styleId = name.tr(" ", "")
         @model.name = Wordprocessingml::StyleName.new(val: name)
         @model.basedOn = Wordprocessingml::BasedOn.new(val: base_on)
       end
 
       # Wrap an existing Style model
       def self.from_model(model)
-        base = model.basedOn&.val || 'Normal'
+        base = model.basedOn&.val || "Normal"
         new(model.name&.val || model.name.to_s, base_on: base)
       end
 

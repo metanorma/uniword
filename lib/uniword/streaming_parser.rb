@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
+require "nokogiri"
 
 module Uniword
   # Streaming parser for large DOCX documents.
@@ -49,7 +49,7 @@ module Uniword
     # @return [Document] The parsed document
     def parse_streaming(zip_content)
       document = Document.new
-      document_xml = zip_content['word/document.xml']
+      document_xml = zip_content["word/document.xml"]
 
       return document unless document_xml
 
@@ -91,19 +91,19 @@ module Uniword
         @element_stack.push(name)
 
         case name
-        when 'p'
+        when "p"
           start_paragraph
-        when 'r'
+        when "r"
           start_run
-        when 't'
+        when "t"
           start_text(attrs)
-        when 'tbl'
+        when "tbl"
           start_table
-        when 'tr'
+        when "tr"
           start_table_row
-        when 'tc'
+        when "tc"
           start_table_cell
-        when 'pPr', 'rPr', 'tblPr', 'trPr', 'tcPr'
+        when "pPr", "rPr", "tblPr", "trPr", "tcPr"
           @in_properties = true
         end
       end
@@ -113,19 +113,19 @@ module Uniword
         @element_stack.pop
 
         case name
-        when 'p'
+        when "p"
           end_paragraph
-        when 'r'
+        when "r"
           end_run
-        when 't'
+        when "t"
           end_text
-        when 'tbl'
+        when "tbl"
           end_table
-        when 'tr'
+        when "tr"
           end_table_row
-        when 'tc'
+        when "tc"
           end_table_cell
-        when 'pPr', 'rPr', 'tblPr', 'trPr', 'tcPr'
+        when "pPr", "rPr", "tblPr", "trPr", "tcPr"
           @in_properties = false
         end
       end
@@ -257,7 +257,7 @@ module Uniword
     # @param zip_content [Hash] Extracted ZIP content
     # @return [Hash] Document metadata
     def parse_metadata_only(zip_content)
-      document_xml = zip_content['word/document.xml']
+      document_xml = zip_content["word/document.xml"]
       return {} unless document_xml
 
       metadata = {
@@ -269,7 +269,7 @@ module Uniword
       # Use simple regex for fast counting (not parsing full DOM)
       metadata[:paragraph_count] = document_xml.scan(/<w:p[ >]/).size
       metadata[:table_count] = document_xml.scan(/<w:tbl[ >]/).size
-      metadata[:has_images] = document_xml.include?('<w:drawing')
+      metadata[:has_images] = document_xml.include?("<w:drawing")
 
       metadata
     end

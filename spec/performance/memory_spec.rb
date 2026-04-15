@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'objspace'
+require "spec_helper"
+require "objspace"
 
-RSpec.describe 'Memory Performance' do
+RSpec.describe "Memory Performance" do
   # Helper to create a large document for testing
   def create_large_document(paragraphs: 100, runs_per_para: 5)
     doc = Uniword::Wordprocessingml::DocumentRoot.new
@@ -52,16 +52,16 @@ RSpec.describe 'Memory Performance' do
     doc
   end
 
-  describe 'memory leak detection' do
-    it 'does not leak memory with large documents' do
-      skip 'Memory profiling only with PROFILE=true' unless ENV['PROFILE']
+  describe "memory leak detection" do
+    it "does not leak memory with large documents" do
+      skip "Memory profiling only with PROFILE=true" unless ENV["PROFILE"]
 
       GC.start
       before_count = ObjectSpace.count_objects[:T_DATA]
 
       10.times do
         doc = create_large_document(paragraphs: 1000)
-        doc.save('tmp/mem_test.docx')
+        doc.save("tmp/mem_test.docx")
         nil
       end
 
@@ -72,8 +72,8 @@ RSpec.describe 'Memory Performance' do
       expect(after_count - before_count).to be < 100
     end
 
-    it 'cleans up resources after document operations' do
-      skip 'Memory profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
+    it "cleans up resources after document operations" do
+      skip "Memory profiling only in CI or with PROFILE=true" unless ENV["PROFILE"]
 
       GC.start
       before_objects = ObjectSpace.count_objects
@@ -93,16 +93,16 @@ RSpec.describe 'Memory Performance' do
     end
   end
 
-  describe 'memory efficiency' do
-    it 'uses acceptable memory for medium documents' do
-      skip 'Memory profiling requires get_process_mem gem' unless defined?(GetProcessMem)
+  describe "memory efficiency" do
+    it "uses acceptable memory for medium documents" do
+      skip "Memory profiling requires get_process_mem gem" unless defined?(GetProcessMem)
 
       mem = GetProcessMem.new
       GC.start
       before_mb = mem.mb
 
       doc = create_large_document(paragraphs: 500, runs_per_para: 10)
-      doc.save('tmp/mem_medium_test.docx')
+      doc.save("tmp/mem_medium_test.docx")
 
       after_mb = mem.mb
       increase = after_mb - before_mb
@@ -111,15 +111,15 @@ RSpec.describe 'Memory Performance' do
       expect(increase).to be < 50
     end
 
-    it 'uses acceptable memory for documents with tables' do
-      skip 'Memory profiling requires get_process_mem gem' unless defined?(GetProcessMem)
+    it "uses acceptable memory for documents with tables" do
+      skip "Memory profiling requires get_process_mem gem" unless defined?(GetProcessMem)
 
       mem = GetProcessMem.new
       GC.start
       before_mb = mem.mb
 
       doc = create_document_with_tables(table_count: 50, rows: 10, cols: 5)
-      doc.save('tmp/mem_table_test.docx')
+      doc.save("tmp/mem_table_test.docx")
 
       after_mb = mem.mb
       increase = after_mb - before_mb
@@ -129,19 +129,19 @@ RSpec.describe 'Memory Performance' do
     end
   end
 
-  describe 'object allocation' do
-    it 'minimizes object allocations during parsing' do
-      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
+  describe "object allocation" do
+    it "minimizes object allocations during parsing" do
+      skip "Allocation profiling only in CI or with PROFILE=true" unless ENV["PROFILE"]
 
       # Create a test document
       doc = create_large_document(paragraphs: 100)
-      doc.save('tmp/alloc_test.docx')
+      doc.save("tmp/alloc_test.docx")
 
       GC.start
       before_allocations = ObjectSpace.count_objects
 
       # Parse the document
-      Uniword::DocumentFactory.from_file('tmp/alloc_test.docx')
+      Uniword::DocumentFactory.from_file("tmp/alloc_test.docx")
 
       GC.start
       after_allocations = ObjectSpace.count_objects
@@ -154,8 +154,8 @@ RSpec.describe 'Memory Performance' do
       expect(new_objects).to be < 10_000
     end
 
-    it 'reuses objects when possible' do
-      skip 'Allocation profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
+    it "reuses objects when possible" do
+      skip "Allocation profiling only in CI or with PROFILE=true" unless ENV["PROFILE"]
 
       GC.start
       before_count = ObjectSpace.count_objects[:T_OBJECT]
@@ -166,7 +166,7 @@ RSpec.describe 'Memory Performance' do
         10.times do
           para = Uniword::Wordprocessingml::Paragraph.new
           run = Uniword::Wordprocessingml::Run.new(
-            text: 'Same text'
+            text: "Same text"
           )
           para.runs << run
           doc.body.paragraphs << para
@@ -182,9 +182,9 @@ RSpec.describe 'Memory Performance' do
     end
   end
 
-  describe 'string memory optimization' do
-    it 'does not create excessive string objects' do
-      skip 'String profiling only in CI or with PROFILE=true' unless ENV['PROFILE']
+  describe "string memory optimization" do
+    it "does not create excessive string objects" do
+      skip "String profiling only in CI or with PROFILE=true" unless ENV["PROFILE"]
 
       GC.start
       before_strings = ObjectSpace.count_objects[:T_STRING]
@@ -202,28 +202,28 @@ RSpec.describe 'Memory Performance' do
       expect(new_strings).to be < 1000
     end
 
-    it 'uses string freezing for constants' do
+    it "uses string freezing for constants" do
       # All string literals in serializers should be frozen
       Uniword::Serialization::OoxmlSerializer.new
 
       # This is a design check - frozen strings reduce allocations
-      expect('frozen_string_literal: true').to be_truthy
+      expect("frozen_string_literal: true").to be_truthy
     end
   end
 
-  describe 'lazy loading benefits' do
-    it 'delays loading until needed' do
-      skip 'Lazy loading test only in CI or with PROFILE=true' unless ENV['PROFILE']
+  describe "lazy loading benefits" do
+    it "delays loading until needed" do
+      skip "Lazy loading test only in CI or with PROFILE=true" unless ENV["PROFILE"]
 
       # Create document with LazyLoader (will be implemented)
       doc = create_large_document(paragraphs: 1000)
-      doc.save('tmp/lazy_test.docx')
+      doc.save("tmp/lazy_test.docx")
 
       GC.start
       before_objects = ObjectSpace.count_objects[:TOTAL]
 
       # Open document but don't access all elements
-      parsed = Uniword::DocumentFactory.from_file('tmp/lazy_test.docx')
+      parsed = Uniword::DocumentFactory.from_file("tmp/lazy_test.docx")
 
       GC.start
       after_objects = ObjectSpace.count_objects[:TOTAL]

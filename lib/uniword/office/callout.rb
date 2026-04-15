@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -19,17 +19,17 @@ module Uniword
       attribute :lengthspecified, :string
 
       xml do
-        element 'callout'
+        element "callout"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'true', to: true
-        map_attribute 'type', to: :type
-        map_attribute 'gap', to: :gap
-        map_attribute 'angle', to: :angle
-        map_attribute 'dropauto', to: :dropauto
-        map_attribute 'drop', to: :drop
-        map_attribute 'distance', to: :distance
-        map_attribute 'lengthspecified', to: :lengthspecified
+        map_attribute "true", to: true
+        map_attribute "type", to: :type
+        map_attribute "gap", to: :gap
+        map_attribute "angle", to: :angle
+        map_attribute "dropauto", to: :dropauto
+        map_attribute "drop", to: :drop
+        map_attribute "distance", to: :distance
+        map_attribute "lengthspecified", to: :lengthspecified
       end
     end
   end

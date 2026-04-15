@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :data, :string
 
       xml do
-        element 'complexExtension'
+        element "complexExtension"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'type', to: :type
-        map_attribute 'data', to: :data
+        map_attribute "type", to: :type
+        map_attribute "data", to: :data
       end
     end
   end

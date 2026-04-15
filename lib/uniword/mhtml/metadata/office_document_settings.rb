@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -11,10 +11,10 @@ module Uniword
         attribute :pixels_per_inch, :string
 
         xml do
-          element 'OfficeDocumentSettings'
+          element "OfficeDocumentSettings"
           namespace Uniword::Mhtml::Namespaces::Office
-          map_element 'AllowPNG', to: :allow_png
-          map_element 'PixelsPerInch', to: :pixels_per_inch
+          map_element "AllowPNG", to: :allow_png
+          map_element "PixelsPerInch", to: :pixels_per_inch
         end
       end
     end

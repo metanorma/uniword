@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,13 +14,13 @@ module Uniword
       attribute :text, :string
 
       xml do
-        element 'comment'
+        element "comment"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'ref', to: :ref
-        map_attribute 'author-id', to: :author_id
-        map_element 'text', to: :text, render_nil: false
+        map_attribute "ref", to: :ref
+        map_attribute "author-id", to: :author_id
+        map_element "text", to: :text, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -11,10 +11,10 @@ module Uniword
       attribute :graphic_data, GraphicData
 
       xml do
-        element 'graphic'
+        element "graphic"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'graphicData', to: :graphic_data, render_nil: false
+        map_element "graphicData", to: :graphic_data, render_nil: false
       end
     end
   end

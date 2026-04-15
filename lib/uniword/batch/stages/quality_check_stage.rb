@@ -60,7 +60,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        'Run quality checks'
+        "Run quality checks"
       end
 
       private
@@ -85,13 +85,13 @@ module Uniword
       # @param report [Quality::QualityReport] Quality report
       def log_report_summary(report)
         if report.valid?
-          log 'Quality check passed - no violations found'
+          log "Quality check passed - no violations found"
         else
           error_count = report.errors.size
           warning_count = report.warnings.size
           info_count = report.infos.size
 
-          log 'Quality check found violations:', level: :warn
+          log "Quality check found violations:", level: :warn
           log "  Errors: #{error_count}", level: :warn if error_count.positive?
           log "  Warnings: #{warning_count}", level: :warn if warning_count.positive?
           log "  Info: #{info_count}" if info_count.positive?
@@ -103,9 +103,7 @@ module Uniword
                 level: level
           end
 
-          if report.violations.size > 5
-            log "  ... and #{report.violations.size - 5} more violation(s)"
-          end
+          log "  ... and #{report.violations.size - 5} more violation(s)" if report.violations.size > 5
         end
       end
 
@@ -115,7 +113,7 @@ module Uniword
       # @param context [Hash] Processing context
       def generate_report_file(report, context)
         output_dir = File.dirname(context[:output_path])
-        filename = File.basename(context[:input_path], '.*')
+        filename = File.basename(context[:input_path], ".*")
         report_path = File.join(output_dir, "#{filename}_quality_report.json")
 
         begin

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -33,12 +33,12 @@ module Uniword
       attribute :leader, TabLeaderValue
 
       xml do
-        element 'tab'
+        element "tab"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :alignment
-        map_attribute 'pos', to: :position
-        map_attribute 'leader', to: :leader
+        map_attribute "val", to: :alignment
+        map_attribute "pos", to: :position
+        map_attribute "leader", to: :leader
       end
     end
   end

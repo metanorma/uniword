@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -33,15 +33,15 @@ module Uniword
 
       xml do
         # Use 'border' as element name for standalone parsing
-        element 'border'
+        element "border"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :style
-        map_attribute 'sz', to: :size
-        map_attribute 'space', to: :space
-        map_attribute 'color', to: :color
-        map_attribute 'themeColor', to: :theme_color
-        map_attribute 'themeShade', to: :theme_shade
+        map_attribute "val", to: :style
+        map_attribute "sz", to: :size
+        map_attribute "space", to: :space
+        map_attribute "color", to: :color
+        map_attribute "themeColor", to: :theme_color
+        map_attribute "themeShade", to: :theme_shade
       end
     end
   end

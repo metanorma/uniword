@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -13,11 +13,11 @@ module Uniword
       attribute :source_linked, :string
 
       xml do
-        element 'numFmt'
+        element "numFmt"
         namespace Uniword::Ooxml::Namespaces::Chart
 
-        map_attribute 'formatCode', to: :format_code
-        map_attribute 'sourceLinked', to: :source_linked
+        map_attribute "formatCode", to: :format_code
+        map_attribute "sourceLinked", to: :source_linked
       end
     end
   end

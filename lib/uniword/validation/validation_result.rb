@@ -101,7 +101,7 @@ module Uniword
       #
       # @example
       #   result = ValidationResult.unknown(hyperlink, "No checker available")
-      def self.unknown(link, message = 'No checker available', metadata: {})
+      def self.unknown(link, message = "No checker available", metadata: {})
         new(status: :unknown, link: link, message: message, metadata: metadata)
       end
 
@@ -199,7 +199,7 @@ module Uniword
       def to_s
         status_str = @status.to_s.upcase
         link_str = link_identifier
-        msg_str = @message ? ": #{@message}" : ''
+        msg_str = @message ? ": #{@message}" : ""
         "[#{status_str}] #{link_str}#{msg_str}"
       end
 

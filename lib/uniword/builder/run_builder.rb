@@ -56,8 +56,8 @@ module Uniword
       #
       # @param value [String, Boolean] Underline style or boolean
       # @return [self]
-      def underline(value = 'single')
-        val = value == true ? 'single' : value.to_s
+      def underline(value = "single")
+        val = value == true ? "single" : value.to_s
         ensure_props.underline = Properties::Underline.new(value: val)
         self
       end
@@ -138,7 +138,7 @@ module Uniword
       #
       # @return [self]
       def superscript
-        ensure_props.vertical_align = Properties::VerticalAlign.new(value: 'superscript')
+        ensure_props.vertical_align = Properties::VerticalAlign.new(value: "superscript")
         self
       end
 
@@ -146,7 +146,7 @@ module Uniword
       #
       # @return [self]
       def subscript
-        ensure_props.vertical_align = Properties::VerticalAlign.new(value: 'subscript')
+        ensure_props.vertical_align = Properties::VerticalAlign.new(value: "subscript")
         self
       end
 
@@ -156,7 +156,7 @@ module Uniword
       # @param color [String, nil] Shading color
       # @param pattern [String] Pattern (default 'clear')
       # @return [self]
-      def shading(fill:, color: nil, pattern: 'clear')
+      def shading(fill:, color: nil, pattern: "clear")
         ensure_props.shading = Properties::Shading.new(
           fill: fill, color: color, pattern: pattern
         )

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # WordprocessingShape namespace for VML-compatible shapes in DrawingML
@@ -13,11 +13,11 @@ module Uniword
       attribute :txbx_content, Uniword::Wordprocessingml::TextBoxContent
 
       xml do
-        root 'txbx'
+        root "txbx"
         namespace Uniword::Ooxml::Namespaces::WordprocessingShape
         mixed_content
 
-        map_element 'txbxContent', to: :txbx_content, render_nil: false
+        map_element "txbxContent", to: :txbx_content, render_nil: false
       end
     end
 
@@ -32,16 +32,16 @@ module Uniword
       attribute :style, Lutaml::Model::Serializable
 
       xml do
-        root 'wsp'
+        root "wsp"
         namespace Uniword::Ooxml::Namespaces::WordprocessingShape
         mixed_content
 
-        map_element 'txbx', to: :txbx, render_nil: false
-        map_element 'bodyPr', to: :body_pr, render_nil: false
-        map_element 'spPr', to: :sp_pr, render_nil: false
-        map_element 'cNvPr', to: :c_nv_pr, render_nil: false
-        map_element 'cNvSpPr', to: :c_nv_sp_pr, render_nil: false
-        map_element 'style', to: :style, render_nil: false
+        map_element "txbx", to: :txbx, render_nil: false
+        map_element "bodyPr", to: :body_pr, render_nil: false
+        map_element "spPr", to: :sp_pr, render_nil: false
+        map_element "cNvPr", to: :c_nv_pr, render_nil: false
+        map_element "cNvSpPr", to: :c_nv_sp_pr, render_nil: false
+        map_element "style", to: :style, render_nil: false
       end
     end
   end

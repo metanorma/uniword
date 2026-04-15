@@ -23,9 +23,9 @@ module Uniword
         # @raise [ArgumentError] if element_class is not a valid Element class
         def for(element_class)
           unless element_class.is_a?(Class) &&
-                 element_class.ancestors.any? { |a| a.to_s.include?('Serializable') }
+                 element_class.ancestors.any? { |a| a.to_s.include?("Serializable") }
             raise ArgumentError,
-                  'element_class must be a lutaml-model serializable class'
+                  "element_class must be a lutaml-model serializable class"
           end
 
           validator_class = validator_registry[element_class] || self
@@ -40,7 +40,7 @@ module Uniword
         def register(element_class, validator_class)
           unless validator_class.ancestors.include?(ElementValidator)
             raise ArgumentError,
-                  'validator_class must inherit from ElementValidator'
+                  "validator_class must inherit from ElementValidator"
           end
 
           validator_registry[element_class] = validator_class
@@ -68,7 +68,7 @@ module Uniword
       def valid?(element)
         return false if element.nil?
         # v2.0: Check if element is a serializable object (has lutaml-model ancestry)
-        return false unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
+        return false unless element.class.ancestors.any? { |a| a.to_s.include?("Serializable") }
 
         # v2.0: All lutaml-model objects are valid by default
         # v1.x: Elements have a valid? method
@@ -84,13 +84,11 @@ module Uniword
       # @param element [Element] The element to validate
       # @return [Array<String>] Array of error messages
       def errors(element)
-        return ['Element is nil'] if element.nil?
-        unless element.class.ancestors.any? { |a| a.to_s.include?('Serializable') }
-          return ['Element must be a Uniword::Element']
-        end
+        return ["Element is nil"] if element.nil?
+        return ["Element must be a Uniword::Element"] unless element.class.ancestors.any? { |a| a.to_s.include?("Serializable") }
         return [] if valid?(element)
 
-        ['Element validation failed']
+        ["Element validation failed"]
       end
     end
   end

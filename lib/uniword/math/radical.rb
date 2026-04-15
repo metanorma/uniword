@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -14,13 +14,13 @@ module Uniword
       attribute :element, Element
 
       xml do
-        element 'rad'
+        element "rad"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'radPr', to: :properties, render_nil: false
-        map_element 'deg', to: :degree, render_nil: false
-        map_element 'e', to: :element
+        map_element "radPr", to: :properties, render_nil: false
+        map_element "deg", to: :degree, render_nil: false
+        map_element "e", to: :element
       end
     end
   end

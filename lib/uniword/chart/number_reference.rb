@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -13,12 +13,12 @@ module Uniword
       attribute :num_cache, :string
 
       xml do
-        element 'numRef'
+        element "numRef"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'f', to: :f
-        map_element 'numCache', to: :num_cache, render_nil: false
+        map_element "f", to: :f
+        map_element "numCache", to: :num_cache, render_nil: false
       end
     end
   end

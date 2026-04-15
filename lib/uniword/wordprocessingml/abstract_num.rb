@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,13 +14,13 @@ module Uniword
       attribute :levels, Level, collection: true, initialize_empty: true
 
       xml do
-        element 'abstractNum'
+        element "abstractNum"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'abstractNumId', to: :abstractNumId
-        map_element 'multiLevelType', to: :multiLevelType, render_nil: false
-        map_element 'lvl', to: :levels, render_nil: false
+        map_attribute "abstractNumId", to: :abstractNumId
+        map_element "multiLevelType", to: :multiLevelType, render_nil: false
+        map_element "lvl", to: :levels, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -12,11 +12,11 @@ module Uniword
       attribute :c_tn, CommonTimeNode
 
       xml do
-        element 'par'
+        element "par"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'cTn', to: :c_tn
+        map_element "cTn", to: :c_tn
       end
     end
   end

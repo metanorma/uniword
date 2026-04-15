@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'tmpdir'
-require 'fileutils'
+require "zip"
+require "tmpdir"
+require "fileutils"
 
 module Uniword
   module Ooxml
@@ -56,7 +56,7 @@ module Uniword
       def extract
         raise ArgumentError, "File not found: #{@path}" unless File.exist?(@path)
 
-        @extracted_dir = Dir.mktmpdir('uniword-package-')
+        @extracted_dir = Dir.mktmpdir("uniword-package-")
 
         Zip::File.open(@path) do |zip_file|
           zip_file.each do |entry|
@@ -78,17 +78,17 @@ module Uniword
       # @return [String] Path to created package file
       # @raise [RuntimeError] if extracted_dir is nil (must extract first)
       def package(output_path)
-        raise 'Must extract before packaging' unless @extracted_dir
+        raise "Must extract before packaging" unless @extracted_dir
 
         # Ensure output directory exists
         FileUtils.mkdir_p(File.dirname(output_path))
 
         Zip::File.open(output_path, Zip::File::CREATE) do |zipfile|
-          Dir.glob(File.join(@extracted_dir, '**', '*')).each do |file_path|
+          Dir.glob(File.join(@extracted_dir, "**", "*")).each do |file_path|
             next if File.directory?(file_path)
 
             # Calculate relative path within package
-            relative_path = file_path.sub("#{@extracted_dir}/", '')
+            relative_path = file_path.sub("#{@extracted_dir}/", "")
 
             # Skip if entry already exists (prevents duplicates)
             next if zipfile.find_entry(relative_path)
@@ -120,7 +120,7 @@ module Uniword
       # @raise [RuntimeError] if extracted_dir is nil (must extract first)
       # @raise [Errno::ENOENT] if file doesn't exist
       def read_file(relative_path)
-        raise 'Must extract before reading files' unless @extracted_dir
+        raise "Must extract before reading files" unless @extracted_dir
 
         full_path = File.join(@extracted_dir, relative_path)
         File.read(full_path)
@@ -135,7 +135,7 @@ module Uniword
       # @return [void]
       # @raise [RuntimeError] if extracted_dir is nil (must extract first)
       def write_file(relative_path, content)
-        raise 'Must extract before writing files' unless @extracted_dir
+        raise "Must extract before writing files" unless @extracted_dir
 
         full_path = File.join(@extracted_dir, relative_path)
         FileUtils.mkdir_p(File.dirname(full_path))

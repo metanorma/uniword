@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 # StructuredDocumentTag namespace autoloads for nested property classes
 # These are SDT property elements that appear within <w:sdtPr>
 
@@ -49,13 +49,13 @@ module Uniword
       attribute :content, Content
 
       xml do
-        element 'sdt'
+        element "sdt"
         namespace Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'sdtPr', to: :properties, render_nil: false
-        map_element 'sdtEndPr', to: :end_properties, render_nil: false
-        map_element 'sdtContent', to: :content, render_nil: false
+        map_element "sdtPr", to: :properties, render_nil: false
+        map_element "sdtEndPr", to: :end_properties, render_nil: false
+        map_element "sdtContent", to: :content, render_nil: false
       end
     end
   end

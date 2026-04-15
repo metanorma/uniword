@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -16,14 +16,14 @@ module Uniword
       attribute :title, :string
 
       xml do
-        element 'docPr'
+        element "docPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
 
-        map_attribute 'id', to: :id
-        map_attribute 'name', to: :name
-        map_attribute 'descr', to: :descr
-        map_attribute 'hidden', to: :hidden
-        map_attribute 'title', to: :title
+        map_attribute "id", to: :id
+        map_attribute "name", to: :name
+        map_attribute "descr", to: :descr
+        map_attribute "hidden", to: :hidden
+        map_attribute "title", to: :title
       end
     end
   end

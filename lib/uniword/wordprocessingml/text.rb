@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require 'nokogiri'
+require "lutaml/model"
+require "nokogiri"
 
 module Uniword
   module Wordprocessingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :xml_space, :string
 
       xml do
-        element 't'
+        element "t"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         map_content to: :content
-        map_attribute 'xml:space', to: :xml_space
+        map_attribute "xml:space", to: :xml_space
       end
 
       # Handle type conversion for lutaml-model's attribute system.
@@ -36,9 +36,7 @@ module Uniword
           content_str = value.to_s
           text_obj = new(content: content_str)
           # Preserve whitespace for XML serialization
-          if content_str.start_with?(' ') || content_str.end_with?(' ') || content_str.include?("\t")
-            text_obj.xml_space = 'preserve'
-          end
+          text_obj.xml_space = "preserve" if content_str.start_with?(" ") || content_str.end_with?(" ") || content_str.include?("\t")
           text_obj
         end
       end
@@ -74,7 +72,7 @@ module Uniword
 
       # Check if space should be preserved
       def space_preserve?
-        xml_space == 'preserve'
+        xml_space == "preserve"
       end
     end
   end

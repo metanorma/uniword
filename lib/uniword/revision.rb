@@ -36,12 +36,12 @@ module Uniword
   class Revision < Lutaml::Model::Serializable
     # OOXML namespace configuration
     xml do
-      element 'ins'
+      element "ins"
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_attribute 'id', to: :revision_id
-      map_attribute 'author', to: :author
-      map_attribute 'date', to: :date
+      map_attribute "id", to: :revision_id
+      map_attribute "author", to: :author
+      map_attribute "date", to: :date
     end
 
     # Unique revision identifier
@@ -139,11 +139,11 @@ module Uniword
     def xml_element_name
       case type
       when :insert
-        'ins'
+        "ins"
       when :delete
-        'del'
+        "del"
       when :format_change
-        'rPrChange'
+        "rPrChange"
       else
         raise ArgumentError, "Invalid revision type: #{type}"
       end
@@ -154,7 +154,7 @@ module Uniword
     # @return [String] A readable representation of the revision
     def inspect
       text_preview = text[0..30]
-      text_preview += '...' if text.length > 30
+      text_preview += "..." if text.length > 30
       "#<Uniword::Revision type=#{type.inspect} author=#{author.inspect} text=#{text_preview.inspect}>"
     end
 

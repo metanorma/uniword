@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -14,12 +14,12 @@ module Uniword
       attribute :contentType, :string
 
       xml do
-        element 'ink'
+        element "ink"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'i', to: :i
-        map_attribute 'annotation', to: :annotation
-        map_attribute 'contentType', to: :contentType
+        map_attribute "i", to: :i
+        map_attribute "annotation", to: :annotation
+        map_attribute "contentType", to: :contentType
       end
     end
   end

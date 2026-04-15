@@ -49,7 +49,7 @@ module Uniword
       #   validator = LinkValidator.new(
       #     config_file: 'config/custom_rules.yml'
       #   )
-      def initialize(config_file: 'link_validation_rules')
+      def initialize(config_file: "link_validation_rules")
         @config = load_configuration(config_file)
         @checkers = initialize_checkers
       end
@@ -180,7 +180,7 @@ module Uniword
         else
           ValidationResult.unknown(
             link,
-            'No checker available for this link type'
+            "No checker available for this link type"
           )
         end
       end

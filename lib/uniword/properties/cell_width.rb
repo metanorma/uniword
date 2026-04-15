@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -17,11 +17,11 @@ module Uniword
       attribute :type, :string      # Width type: auto, dxa (twips), pct (percentage), nil
 
       xml do
-        element 'tcW'
+        element "tcW"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'w', to: :w
-        map_attribute 'type', to: :type, render_nil: false
+        map_attribute "w", to: :w
+        map_attribute "type", to: :type, render_nil: false
       end
     end
   end

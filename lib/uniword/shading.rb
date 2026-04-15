@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents shading/background pattern for text or paragraphs
@@ -35,8 +35,8 @@ module Uniword
       pct80 pct85 pct87 pct90 pct95
     ].freeze
 
-    attribute :type, :string, default: -> { 'clear' }
-    attribute :color, :string, default: -> { 'auto' }
+    attribute :type, :string, default: -> { "clear" }
+    attribute :color, :string, default: -> { "auto" }
     attribute :fill, :string
 
     def initialize(**attributes)
@@ -49,7 +49,7 @@ module Uniword
     # @param fill [String] Fill color (hex)
     # @return [Shading] New instance
     def self.solid(fill)
-      new(type: 'clear', fill: fill)
+      new(type: "clear", fill: fill)
     end
 
     # Create pattern shading
@@ -58,7 +58,7 @@ module Uniword
     # @param color [String] Foreground color
     # @param fill [String] Background color
     # @return [Shading] New instance
-    def self.pattern(type, color: 'auto', fill: nil)
+    def self.pattern(type, color: "auto", fill: nil)
       new(type: type, color: color, fill: fill)
     end
 
@@ -67,8 +67,8 @@ module Uniword
     # @param color [String] Stripe color
     # @param fill [String] Background color
     # @return [Shading] New instance
-    def self.horizontal_stripe(color: '000000', fill: 'FFFFFF')
-      new(type: 'horzStripe', color: color, fill: fill)
+    def self.horizontal_stripe(color: "000000", fill: "FFFFFF")
+      new(type: "horzStripe", color: color, fill: fill)
     end
 
     # Create vertical stripe pattern
@@ -76,8 +76,8 @@ module Uniword
     # @param color [String] Stripe color
     # @param fill [String] Background color
     # @return [Shading] New instance
-    def self.vertical_stripe(color: '000000', fill: 'FFFFFF')
-      new(type: 'vertStripe', color: color, fill: fill)
+    def self.vertical_stripe(color: "000000", fill: "FFFFFF")
+      new(type: "vertStripe", color: color, fill: fill)
     end
 
     # Create diagonal stripe pattern
@@ -85,8 +85,8 @@ module Uniword
     # @param color [String] Stripe color
     # @param fill [String] Background color
     # @return [Shading] New instance
-    def self.diagonal_stripe(color: '000000', fill: 'FFFFFF')
-      new(type: 'diagStripe', color: color, fill: fill)
+    def self.diagonal_stripe(color: "000000", fill: "FFFFFF")
+      new(type: "diagStripe", color: color, fill: fill)
     end
 
     # Create reverse diagonal stripe pattern
@@ -94,8 +94,8 @@ module Uniword
     # @param color [String] Stripe color
     # @param fill [String] Background color
     # @return [Shading] New instance
-    def self.reverse_diagonal_stripe(color: '000000', fill: 'FFFFFF')
-      new(type: 'reverseDiagStripe', color: color, fill: fill)
+    def self.reverse_diagonal_stripe(color: "000000", fill: "FFFFFF")
+      new(type: "reverseDiagStripe", color: color, fill: fill)
     end
 
     private
@@ -103,7 +103,7 @@ module Uniword
     def validate_type
       return unless type && !TYPES.include?(type)
 
-      raise ArgumentError, "Invalid shading type: #{type}. Must be one of: #{TYPES.join(', ')}"
+      raise ArgumentError, "Invalid shading type: #{type}. Must be one of: #{TYPES.join(", ")}"
     end
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :blend, :string
 
       xml do
-        element 'fillOverlay'
+        element "fillOverlay"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'blend', to: :blend
+        map_attribute "blend", to: :blend
       end
     end
   end

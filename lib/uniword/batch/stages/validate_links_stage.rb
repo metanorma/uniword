@@ -29,7 +29,7 @@ module Uniword
         @check_external = options.fetch(:check_external, false)
         @check_bookmarks = options.fetch(:check_bookmarks, true)
         @report_broken = options.fetch(:report_broken, true)
-        @broken_link_action = options.fetch(:broken_link_action, 'report')
+        @broken_link_action = options.fetch(:broken_link_action, "report")
       end
 
       # Process document to validate links
@@ -62,7 +62,7 @@ module Uniword
             log "  - #{link[:type]}: #{link[:target]}", level: :warn
           end
         else
-          log 'All links valid'
+          log "All links valid"
         end
 
         document
@@ -72,7 +72,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        'Validate document links'
+        "Validate document links"
       end
 
       private
@@ -108,9 +108,9 @@ module Uniword
       def determine_link_type(hyperlink)
         if hyperlink.anchor
           :bookmark
-        elsif hyperlink.target&.start_with?('#')
+        elsif hyperlink.target&.start_with?("#")
           :internal
-        elsif hyperlink.target && (hyperlink.target.start_with?('http://') || hyperlink.target.start_with?('https://'))
+        elsif hyperlink.target && (hyperlink.target.start_with?("http://") || hyperlink.target.start_with?("https://"))
           :external
         else
           :internal
@@ -172,11 +172,11 @@ module Uniword
       # @param document [Document] Document containing the link
       def handle_broken_link(link, _document)
         case @broken_link_action
-        when 'report'
+        when "report"
           # Just report - no action needed
-        when 'remove'
+        when "remove"
           remove_link(link)
-        when 'disable'
+        when "disable"
           disable_link(link)
         end
       end

@@ -1,40 +1,40 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
-RSpec.describe 'DOCX Reading Integration', :integration do
-  let(:fixtures_dir) { File.join(__dir__, '..', 'fixtures', 'docx_gem') }
+RSpec.describe "DOCX Reading Integration", :integration do
+  let(:fixtures_dir) { File.join(__dir__, "..", "fixtures", "docx_gem") }
 
-  describe 'reading basic.docx' do
-    let(:docx_path) { File.join(fixtures_dir, 'basic.docx') }
+  describe "reading basic.docx" do
+    let(:docx_path) { File.join(fixtures_dir, "basic.docx") }
 
-    it 'can open and parse the file' do
+    it "can open and parse the file" do
       document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
-    it 'extracts paragraphs' do
+    it "extracts paragraphs" do
       document = Uniword.load(docx_path)
       expect(document.paragraphs).not_to be_empty
     end
 
-    it 'extracts text content' do
+    it "extracts text content" do
       document = Uniword.load(docx_path)
       text = document.paragraphs.map(&:text).join("\n")
-      expect(text).to include('hello')
-      expect(text).to include('world')
+      expect(text).to include("hello")
+      expect(text).to include("world")
     end
   end
 
-  describe 'reading formatting.docx' do
-    let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
+  describe "reading formatting.docx" do
+    let(:docx_path) { File.join(fixtures_dir, "formatting.docx") }
 
-    it 'can open and parse the file' do
+    it "can open and parse the file" do
       document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
-    it 'extracts paragraphs with runs' do
+    it "extracts paragraphs with runs" do
       document = Uniword.load(docx_path)
       paragraphs = document.paragraphs
       expect(paragraphs).not_to be_empty
@@ -45,21 +45,21 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
   end
 
-  describe 'reading tables.docx' do
-    let(:docx_path) { File.join(fixtures_dir, 'tables.docx') }
+  describe "reading tables.docx" do
+    let(:docx_path) { File.join(fixtures_dir, "tables.docx") }
 
-    it 'can open and parse the file' do
+    it "can open and parse the file" do
       document = Uniword.load(docx_path)
       expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
-    it 'extracts tables from the document' do
+    it "extracts tables from the document" do
       document = Uniword.load(docx_path)
       tables = document.body.tables
       expect(tables).not_to be_empty
     end
 
-    it 'extracts table structure (rows and cells)' do
+    it "extracts table structure (rows and cells)" do
       document = Uniword.load(docx_path)
       tables = document.body.tables
 
@@ -74,7 +74,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(table.rows.first.cells).not_to be_empty
     end
 
-    it 'extracts cell content (paragraphs in cells)' do
+    it "extracts cell content (paragraphs in cells)" do
       document = Uniword.load(docx_path)
       table = document.body.tables.first
 
@@ -89,10 +89,10 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
   end
 
-  describe 'reading formatting.docx - text properties' do
-    let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
+  describe "reading formatting.docx - text properties" do
+    let(:docx_path) { File.join(fixtures_dir, "formatting.docx") }
 
-    it 'extracts text formatting (bold, italic, etc.)' do
+    it "extracts text formatting (bold, italic, etc.)" do
       document = Uniword.load(docx_path)
 
       # Collect all runs from all paragraphs
@@ -103,7 +103,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(runs_with_properties).not_to be_empty
     end
 
-    it 'detects bold formatting' do
+    it "detects bold formatting" do
       document = Uniword.load(docx_path)
 
       # Find runs with bold formatting
@@ -119,7 +119,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(bold_runs.size).to be >= 0
     end
 
-    it 'detects italic formatting' do
+    it "detects italic formatting" do
       document = Uniword.load(docx_path)
 
       # Find runs with italic formatting
@@ -133,7 +133,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(italic_runs.size).to be >= 0
     end
 
-    it 'extracts font properties' do
+    it "extracts font properties" do
       document = Uniword.load(docx_path)
 
       # Find runs with fonts specified
@@ -148,7 +148,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(runs_with_font.size).to be >= 0
     end
 
-    it 'extracts font size' do
+    it "extracts font size" do
       document = Uniword.load(docx_path)
 
       # Find runs with size specified
@@ -163,10 +163,10 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
   end
 
-  describe 'reading formatting.docx - paragraph properties' do
-    let(:docx_path) { File.join(fixtures_dir, 'formatting.docx') }
+  describe "reading formatting.docx - paragraph properties" do
+    let(:docx_path) { File.join(fixtures_dir, "formatting.docx") }
 
-    it 'extracts paragraph properties' do
+    it "extracts paragraph properties" do
       document = Uniword.load(docx_path)
 
       # At least some paragraphs should have properties
@@ -174,7 +174,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(paras_with_props.size).to be >= 0
     end
 
-    it 'detects paragraph alignment' do
+    it "detects paragraph alignment" do
       document = Uniword.load(docx_path)
 
       # Find paragraphs with alignment
@@ -185,7 +185,7 @@ RSpec.describe 'DOCX Reading Integration', :integration do
       expect(paras_with_alignment.size).to be >= 0
     end
 
-    it 'detects paragraph styles' do
+    it "detects paragraph styles" do
       document = Uniword.load(docx_path)
 
       # Find paragraphs with styles
@@ -197,15 +197,15 @@ RSpec.describe 'DOCX Reading Integration', :integration do
     end
   end
 
-  describe 'stress test with various fixtures' do
-    it 'can read all reference DOCX files without crashing' do
+  describe "stress test with various fixtures" do
+    it "can read all reference DOCX files without crashing" do
       reference_fixtures = [
-        'basic.docx',
-        'formatting.docx',
-        'tables.docx',
-        'internal-links.docx',
-        'replacement.docx',
-        'saving.docx'
+        "basic.docx",
+        "formatting.docx",
+        "tables.docx",
+        "internal-links.docx",
+        "replacement.docx",
+        "saving.docx"
       ]
 
       reference_fixtures.each do |fixture_file|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,12 +13,12 @@ module Uniword
       attribute :tables, Table, collection: true, initialize_empty: true
 
       xml do
-        element 'hdr'
+        element "hdr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'p', to: :paragraphs, render_nil: false
-        map_element 'tbl', to: :tables, render_nil: false
+        map_element "p", to: :paragraphs, render_nil: false
+        map_element "tbl", to: :tables, render_nil: false
       end
     end
   end

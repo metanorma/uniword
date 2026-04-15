@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -17,15 +17,15 @@ module Uniword
       attribute :locked, Uniword::Ooxml::Types::OoxmlBooleanOptional
 
       xml do
-        element 'lsdException'
+        element "lsdException"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'name', to: :name
-        map_attribute 'uiPriority', to: :ui_priority
+        map_attribute "name", to: :name
+        map_attribute "uiPriority", to: :ui_priority
         # OoxmlBooleanOptional: true -> "1", false/nil -> omitted
-        map_attribute 'qFormat', to: :q_format
-        map_attribute 'semiHidden', to: :semi_hidden
-        map_attribute 'unhideWhenUsed', to: :unhide_when_used
-        map_attribute 'locked', to: :locked
+        map_attribute "qFormat", to: :q_format
+        map_attribute "semiHidden", to: :semi_hidden
+        map_attribute "unhideWhenUsed", to: :unhide_when_used
+        map_attribute "locked", to: :locked
       end
     end
 
@@ -43,16 +43,16 @@ module Uniword
       attribute :lsd_exception, LatentStylesException, collection: true
 
       xml do
-        element 'latentStyles'
+        element "latentStyles"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'defLockedState', to: :def_locked_state
-        map_attribute 'defUIPriority', to: :def_ui_priority
-        map_attribute 'defSemiHidden', to: :def_semi_hidden
-        map_attribute 'defUnhideWhenUsed', to: :def_unhide_when_used
-        map_attribute 'defQFormat', to: :def_q_format
-        map_attribute 'count', to: :count
-        map_element 'lsdException', to: :lsd_exception, render_nil: false
+        map_attribute "defLockedState", to: :def_locked_state
+        map_attribute "defUIPriority", to: :def_ui_priority
+        map_attribute "defSemiHidden", to: :def_semi_hidden
+        map_attribute "defUnhideWhenUsed", to: :def_unhide_when_used
+        map_attribute "defQFormat", to: :def_q_format
+        map_attribute "count", to: :count
+        map_element "lsdException", to: :lsd_exception, render_nil: false
       end
     end
   end

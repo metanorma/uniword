@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a text box (floating text container)
@@ -17,7 +17,7 @@ module Uniword
     attribute :height, :integer
 
     # Wrapping style
-    attribute :wrapping, :string, default: -> { 'square' }
+    attribute :wrapping, :string, default: -> { "square" }
 
     # Border
     attribute :border_style, :string
@@ -28,7 +28,7 @@ module Uniword
     attribute :fill_color, :string
 
     # Anchor type (page or paragraph)
-    attribute :anchor_type, :string, default: -> { 'page' }
+    attribute :anchor_type, :string, default: -> { "page" }
 
     # Valid wrapping styles
     WRAPPING_STYLES = %w[none square tight through topAndBottom].freeze
@@ -49,7 +49,7 @@ module Uniword
       return unless wrapping && !WRAPPING_STYLES.include?(wrapping)
 
       raise ArgumentError,
-            "Invalid wrapping: #{wrapping}. Must be one of: #{WRAPPING_STYLES.join(', ')}"
+            "Invalid wrapping: #{wrapping}. Must be one of: #{WRAPPING_STYLES.join(", ")}"
     end
   end
 end

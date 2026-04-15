@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'pStyle'
+        element "pStyle"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -24,10 +24,10 @@ module Uniword
       attribute :tab, Tab, collection: true
 
       xml do
-        element 'tabs'
+        element "tabs"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
-        map_element 'tab', to: :tab, render_nil: false
+        map_element "tab", to: :tab, render_nil: false
       end
     end
 
@@ -48,20 +48,20 @@ module Uniword
       attribute :rPr, RunProperties
 
       xml do
-        element 'lvl'
+        element "lvl"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'ilvl', to: :ilvl
-        map_element 'start', to: :start, render_nil: false
-        map_element 'numFmt', to: :numFmt, render_nil: false
-        map_element 'pStyle', to: :pStyle, render_nil: false
-        map_element 'lvlText', to: :lvlText, render_nil: false
-        map_element 'lvlJc', to: :lvlJc, render_nil: false
-        map_element 'pPr', to: :pPr, render_nil: false
-        map_element 'tabs', to: :tabs, render_nil: false
-        map_element 'ind', to: :ind, render_nil: false
-        map_element 'rPr', to: :rPr, render_nil: false
+        map_attribute "ilvl", to: :ilvl
+        map_element "start", to: :start, render_nil: false
+        map_element "numFmt", to: :numFmt, render_nil: false
+        map_element "pStyle", to: :pStyle, render_nil: false
+        map_element "lvlText", to: :lvlText, render_nil: false
+        map_element "lvlJc", to: :lvlJc, render_nil: false
+        map_element "pPr", to: :pPr, render_nil: false
+        map_element "tabs", to: :tabs, render_nil: false
+        map_element "ind", to: :ind, render_nil: false
+        map_element "rPr", to: :rPr, render_nil: false
       end
 
       # Get level index (convenience method for numbering)

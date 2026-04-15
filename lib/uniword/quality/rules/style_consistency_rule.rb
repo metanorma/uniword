@@ -40,7 +40,7 @@ module Uniword
             violations << create_violation(
               severity: :warning,
               message: "Paragraph #{index + 1} uses direct formatting instead of a style. " \
-                       'Consider applying a standard paragraph style.',
+                       "Consider applying a standard paragraph style.",
               location: "Paragraph #{index + 1}",
               element: para
             )
@@ -58,7 +58,7 @@ module Uniword
             violations << create_violation(
               severity: :info,
               message: "Direct text formatting detected in paragraph #{index + 1}, run #{run_index + 1}. " \
-                       'Consider using character styles for consistency.',
+                       "Consider using character styles for consistency.",
               location: "Paragraph #{index + 1}, Run #{run_index + 1}",
               element: run
             )

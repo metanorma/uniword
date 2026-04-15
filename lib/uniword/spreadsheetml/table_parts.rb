@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,11 +12,11 @@ module Uniword
       attribute :table_part, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'tableParts'
+        element "tableParts"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'count', to: :count, render_nil: false
-        map_element 'tablePart', to: :table_part, render_nil: false
+        map_attribute "count", to: :count, render_nil: false
+        map_element "tablePart", to: :table_part, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -15,13 +15,13 @@ module Uniword
       attribute :tile, Tile
 
       xml do
-        element 'blipFill'
+        element "blipFill"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'rotWithShape', to: :rot_with_shape, render_nil: false
-        map_element 'blip', to: :blip, render_nil: false
-        map_element 'stretch', to: :stretch, render_nil: false
-        map_element 'tile', to: :tile, render_nil: false
+        map_attribute "rotWithShape", to: :rot_with_shape, render_nil: false
+        map_element "blip", to: :blip, render_nil: false
+        map_element "stretch", to: :stretch, render_nil: false
+        map_element "tile", to: :tile, render_nil: false
       end
     end
   end

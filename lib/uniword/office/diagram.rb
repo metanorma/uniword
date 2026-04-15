@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -19,17 +19,17 @@ module Uniword
       attribute :constrainbounds, :string
 
       xml do
-        element 'diagram'
+        element "diagram"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'dgmstyle', to: :dgmstyle
-        map_attribute 'autoformat', to: :autoformat
-        map_attribute 'reverse', to: :reverse
-        map_attribute 'autolayout', to: :autolayout
-        map_attribute 'dgmscalex', to: :dgmscalex
-        map_attribute 'dgmscaley', to: :dgmscaley
-        map_attribute 'dgmfontsize', to: :dgmfontsize
-        map_attribute 'constrainbounds', to: :constrainbounds
+        map_attribute "dgmstyle", to: :dgmstyle
+        map_attribute "autoformat", to: :autoformat
+        map_attribute "reverse", to: :reverse
+        map_attribute "autolayout", to: :autolayout
+        map_attribute "dgmscalex", to: :dgmscalex
+        map_attribute "dgmscaley", to: :dgmscaley
+        map_attribute "dgmfontsize", to: :dgmfontsize
+        map_attribute "constrainbounds", to: :constrainbounds
       end
     end
   end

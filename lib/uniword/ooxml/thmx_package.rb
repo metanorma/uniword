@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -48,9 +48,7 @@ module Uniword
         package = new
 
         # Parse theme (the only content)
-        if zip_content['theme/theme/theme1.xml']
-          package.theme = Theme.from_xml(zip_content['theme/theme/theme1.xml'])
-        end
+        package.theme = Theme.from_xml(zip_content["theme/theme/theme1.xml"]) if zip_content["theme/theme/theme1.xml"]
 
         package
       end
@@ -62,7 +60,7 @@ module Uniword
       #
       # @return [Array<String>] Array of supported extensions
       def self.supported_extensions
-        ['.thmx']
+        [".thmx"]
       end
 
       # Save theme to file
@@ -92,7 +90,7 @@ module Uniword
         content = {}
 
         # Serialize theme (the only content)
-        content['theme/theme/theme1.xml'] = theme.to_xml(encoding: 'UTF-8') if theme
+        content["theme/theme/theme1.xml"] = theme.to_xml(encoding: "UTF-8") if theme
 
         content
       end
@@ -103,21 +101,21 @@ module Uniword
       # @return [void]
       def self.add_required_files(zip_content)
         # Add [Content_Types].xml if not present
-        unless zip_content['[Content_Types].xml']
-          zip_content['[Content_Types].xml'] =
+        unless zip_content["[Content_Types].xml"]
+          zip_content["[Content_Types].xml"] =
             ContentTypes.generate_for_theme.to_xml(declaration: true)
         end
 
         # Add _rels/.rels if not present
-        unless zip_content['_rels/.rels']
-          zip_content['_rels/.rels'] =
+        unless zip_content["_rels/.rels"]
+          zip_content["_rels/.rels"] =
             Relationships::Relationships.generate_theme_package_rels.to_xml(declaration: true)
         end
 
         # Add theme/_rels/theme1.xml.rels if not present (optional but recommended)
-        return if zip_content['theme/_rels/theme1.xml.rels']
+        return if zip_content["theme/_rels/theme1.xml.rels"]
 
-        zip_content['theme/_rels/theme1.xml.rels'] =
+        zip_content["theme/_rels/theme1.xml.rels"] =
           Relationships::Relationships.generate_theme_rels.to_xml(declaration: true)
       end
 

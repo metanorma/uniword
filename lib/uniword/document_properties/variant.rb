@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentProperties
@@ -13,12 +13,12 @@ module Uniword
       attribute :i4, :string
 
       xml do
-        element 'variant'
+        element "variant"
         namespace Uniword::Ooxml::Namespaces::ExtendedProperties
         mixed_content
 
-        map_element 'lpstr', to: :lpstr, render_nil: false
-        map_element 'i4', to: :i4, render_nil: false
+        map_element "lpstr", to: :lpstr, render_nil: false
+        map_element "i4", to: :i4, render_nil: false
       end
     end
   end

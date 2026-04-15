@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -30,9 +30,9 @@ module Uniword
           return value if value.is_a?(OnOffType)
 
           raw = case value
-                when true, 'true', '1', 1
+                when true, "true", "1", 1
                   true
-                when false, 'false', '0', 0
+                when false, "false", "0", 0
                   false
                 else
                   false
@@ -44,12 +44,12 @@ module Uniword
         def to_xml
           return nil if @value.nil?
 
-          @value == true ? '1' : '0'
+          @value == true ? "1" : "0"
         end
 
         # Fallback to_s also returns "1"/"0" for compatibility
         def to_s
-          return '' if @value.nil?
+          return "" if @value.nil?
 
           to_xml
         end

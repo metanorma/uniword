@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :prst, :string
 
       xml do
-        element 'bevelT'
+        element "bevelT"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'w', to: :w, render_nil: false
-        map_attribute 'h', to: :h, render_nil: false
-        map_attribute 'prst', to: :prst, render_nil: false
+        map_attribute "w", to: :w, render_nil: false
+        map_attribute "h", to: :h, render_nil: false
+        map_attribute "prst", to: :prst, render_nil: false
       end
     end
   end

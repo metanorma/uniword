@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -60,40 +60,40 @@ module Uniword
       attribute :array, Types::VariantTypes::VtArray
 
       xml do
-        element 'property'
+        element "property"
         namespace Namespaces::CustomProperties
 
-        map_attribute 'fmtid', to: :fmtid
-        map_attribute 'pid', to: :pid
-        map_attribute 'name', to: :name
-        map_attribute 'linkTarget', to: :link_target
+        map_attribute "fmtid", to: :fmtid
+        map_attribute "pid", to: :pid
+        map_attribute "name", to: :name
+        map_attribute "linkTarget", to: :link_target
 
-        map_element 'lpwstr', to: :lpwstr, render_nil: false
-        map_element 'lpstr', to: :lpstr, render_nil: false
-        map_element 'bstr', to: :bstr, render_nil: false
-        map_element 'i1', to: :i1, render_nil: false
-        map_element 'i2', to: :i2, render_nil: false
-        map_element 'i4', to: :i4, render_nil: false
-        map_element 'i8', to: :i8, render_nil: false
-        map_element 'int', to: :int, render_nil: false
-        map_element 'ui1', to: :ui1, render_nil: false
-        map_element 'ui2', to: :ui2, render_nil: false
-        map_element 'ui4', to: :ui4, render_nil: false
-        map_element 'ui8', to: :ui8, render_nil: false
-        map_element 'uint', to: :uint, render_nil: false
-        map_element 'r4', to: :r4, render_nil: false
-        map_element 'r8', to: :r8, render_nil: false
-        map_element 'decimal', to: :decimal, render_nil: false
-        map_element 'bool', to: :bool, render_nil: false
-        map_element 'date', to: :date, render_nil: false
-        map_element 'filetime', to: :filetime, render_nil: false
-        map_element 'cy', to: :cy, render_nil: false
-        map_element 'error', to: :error, render_nil: false
-        map_element 'clsid', to: :clsid, render_nil: false
-        map_element 'empty', to: :empty, render_nil: false
-        map_element 'null', to: :null, render_nil: false
-        map_element 'vector', to: :vector, render_nil: false
-        map_element 'array', to: :array, render_nil: false
+        map_element "lpwstr", to: :lpwstr, render_nil: false
+        map_element "lpstr", to: :lpstr, render_nil: false
+        map_element "bstr", to: :bstr, render_nil: false
+        map_element "i1", to: :i1, render_nil: false
+        map_element "i2", to: :i2, render_nil: false
+        map_element "i4", to: :i4, render_nil: false
+        map_element "i8", to: :i8, render_nil: false
+        map_element "int", to: :int, render_nil: false
+        map_element "ui1", to: :ui1, render_nil: false
+        map_element "ui2", to: :ui2, render_nil: false
+        map_element "ui4", to: :ui4, render_nil: false
+        map_element "ui8", to: :ui8, render_nil: false
+        map_element "uint", to: :uint, render_nil: false
+        map_element "r4", to: :r4, render_nil: false
+        map_element "r8", to: :r8, render_nil: false
+        map_element "decimal", to: :decimal, render_nil: false
+        map_element "bool", to: :bool, render_nil: false
+        map_element "date", to: :date, render_nil: false
+        map_element "filetime", to: :filetime, render_nil: false
+        map_element "cy", to: :cy, render_nil: false
+        map_element "error", to: :error, render_nil: false
+        map_element "clsid", to: :clsid, render_nil: false
+        map_element "empty", to: :empty, render_nil: false
+        map_element "null", to: :null, render_nil: false
+        map_element "vector", to: :vector, render_nil: false
+        map_element "array", to: :array, render_nil: false
       end
 
       # Get the value from whichever variant type is set
@@ -118,14 +118,14 @@ module Uniword
                                              initialize_empty: true
 
       xml do
-        element 'Properties'
+        element "Properties"
         namespace Namespaces::CustomProperties
 
         namespace_scope [
           { namespace: Namespaces::VariantTypes, declare: :always }
         ]
 
-        map_element 'property', to: :properties, render_nil: false
+        map_element "property", to: :properties, render_nil: false
       end
     end
   end

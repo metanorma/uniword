@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'yaml'
-require 'singleton'
+require "yaml"
+require "singleton"
 
 module Uniword
   module Schema
@@ -19,7 +19,7 @@ module Uniword
 
       def initialize
         @schemas = {}
-        @schema_path = File.join(__dir__, '../../../config/ooxml/schemas')
+        @schema_path = File.join(__dir__, "../../../config/ooxml/schemas")
       end
 
       # Load a schema by name
@@ -46,7 +46,7 @@ module Uniword
       # @return [Hash, nil] Element definition or nil if not found
       def element_definition(schema_name, element_name)
         schema = load_schema(schema_name)
-        schema.dig('elements', element_name)
+        schema.dig("elements", element_name)
       end
 
       # Get namespace information for a schema
@@ -55,7 +55,7 @@ module Uniword
       # @return [Hash] Namespace definition with :uri, :prefix, :description
       def namespace(schema_name)
         schema = load_schema(schema_name)
-        schema['namespace']
+        schema["namespace"]
       end
 
       # Get all element names in a schema
@@ -64,7 +64,7 @@ module Uniword
       # @return [Array<String>] Element names
       def element_names(schema_name)
         schema = load_schema(schema_name)
-        schema['elements']&.keys || []
+        schema["elements"]&.keys || []
       end
 
       # Clear cached schemas (useful for testing)
@@ -78,8 +78,8 @@ module Uniword
       #
       # @return [Array<String>] Schema names
       def available_schemas
-        Dir.glob(File.join(@schema_path, '*.yml')).map do |file|
-          File.basename(file, '.yml')
+        Dir.glob(File.join(@schema_path, "*.yml")).map do |file|
+          File.basename(file, ".yml")
         end
       end
     end

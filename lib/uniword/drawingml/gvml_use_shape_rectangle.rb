@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -9,7 +9,7 @@ module Uniword
     # Element: <useShapeRectangle>
     class GvmlUseShapeRectangle < Lutaml::Model::Serializable
       xml do
-        element 'useShapeRectangle'
+        element "useShapeRectangle"
         namespace Uniword::Ooxml::Namespaces::DrawingML
       end
     end

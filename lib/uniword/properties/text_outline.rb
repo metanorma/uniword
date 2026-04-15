@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -20,14 +20,14 @@ module Uniword
       attribute :color, :string      # RGB hex color
 
       xml do
-        element 'textOutline'
+        element "textOutline"
         namespace Ooxml::Namespaces::WordProcessingML
 
         # NOTE: Simplified - actual OOXML has nested fill/compound/cap/join elements
         # For now, we store just width and color for basic support
         # Full structure will be added in v2.0
-        map_attribute 'width', to: :width
-        map_attribute 'color', to: :color
+        map_attribute "width", to: :width
+        map_attribute "color", to: :color
       end
     end
   end

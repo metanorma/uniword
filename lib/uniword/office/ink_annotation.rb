@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -13,11 +13,11 @@ module Uniword
       attribute :date, :string
 
       xml do
-        element 'inkannotation'
+        element "inkannotation"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'author', to: :author
-        map_attribute 'date', to: :date
+        map_attribute "author", to: :author
+        map_attribute "date", to: :date
       end
     end
   end

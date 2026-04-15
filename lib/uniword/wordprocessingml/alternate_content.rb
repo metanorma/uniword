@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,12 +12,12 @@ module Uniword
       attribute :fallback, Fallback, default: nil
 
       xml do
-        element 'AlternateContent'
+        element "AlternateContent"
         namespace Uniword::Ooxml::Namespaces::MarkupCompatibility
         mixed_content
 
-        map_element 'Choice', to: :choice
-        map_element 'Fallback', to: :fallback, render_nil: false
+        map_element "Choice", to: :choice
+        map_element "Fallback", to: :fallback, render_nil: false
       end
     end
   end

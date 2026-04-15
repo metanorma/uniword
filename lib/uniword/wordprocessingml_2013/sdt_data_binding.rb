@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2013
@@ -13,11 +13,11 @@ module Uniword
       attribute :store_item_id, :string
 
       xml do
-        element 'dataBinding'
+        element "dataBinding"
         namespace Uniword::Ooxml::Namespaces::Word2012
 
-        map_attribute 'xpath', to: :xpath
-        map_attribute 'store-item-id', to: :store_item_id
+        map_attribute "xpath", to: :xpath
+        map_attribute "store-item-id", to: :store_item_id
       end
     end
   end

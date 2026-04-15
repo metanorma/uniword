@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -15,14 +15,14 @@ module Uniword
       attribute :min, :string
 
       xml do
-        element 'scaling'
+        element "scaling"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'logBase', to: :log_base, render_nil: false
-        map_element 'orientation', to: :orientation, render_nil: false
-        map_element 'max', to: :max, render_nil: false
-        map_element 'min', to: :min, render_nil: false
+        map_element "logBase", to: :log_base, render_nil: false
+        map_element "orientation", to: :orientation, render_nil: false
+        map_element "max", to: :max, render_nil: false
+        map_element "min", to: :min, render_nil: false
       end
     end
   end

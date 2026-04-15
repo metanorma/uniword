@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :side, :string
 
       xml do
-        element 'wrapblock'
+        element "wrapblock"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'type', to: :type
-        map_attribute 'side', to: :side
+        map_attribute "type", to: :type
+        map_attribute "side", to: :side
       end
     end
   end

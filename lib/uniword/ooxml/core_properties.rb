@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -18,7 +18,7 @@ module Uniword
       attribute :modified, Types::DctermsModifiedType
 
       xml do
-        element 'coreProperties'
+        element "coreProperties"
         namespace Namespaces::CoreProperties
 
         # Declare all namespaces used by child elements (new lutaml-model syntax)
@@ -29,27 +29,27 @@ module Uniword
         ]
 
         # Type namespaces automatically applied - NO namespace params needed!
-        map_element 'title', to: :title,
+        map_element "title", to: :title,
                              render_nil: :as_blank,
                              render_empty: :as_blank
-        map_element 'subject', to: :subject,
+        map_element "subject", to: :subject,
                                render_nil: :as_blank,
                                render_empty: :as_blank
-        map_element 'creator', to: :creator,
+        map_element "creator", to: :creator,
                                render_nil: :as_blank,
                                render_empty: :as_blank
-        map_element 'keywords', to: :keywords,
+        map_element "keywords", to: :keywords,
                                 render_nil: :as_blank,
                                 render_empty: :as_blank
-        map_element 'description', to: :description,
+        map_element "description", to: :description,
                                    render_nil: :as_blank,
                                    render_empty: :as_blank
-        map_element 'lastModifiedBy', to: :last_modified_by
-        map_element 'revision', to: :revision
+        map_element "lastModifiedBy", to: :last_modified_by
+        map_element "revision", to: :revision
 
         # Nested Models also get namespace from Type declaration automatically
-        map_element 'created', to: :created
-        map_element 'modified', to: :modified
+        map_element "created", to: :created
+        map_element "modified", to: :modified
       end
 
       def initialize(attributes = {})
@@ -57,11 +57,11 @@ module Uniword
         now = DateTime.now
         @created ||= Types::DctermsCreatedType.new(
           value: now,
-          type: 'dcterms:W3CDTF'
+          type: "dcterms:W3CDTF"
         )
         @modified ||= Types::DctermsModifiedType.new(
           value: now,
-          type: 'dcterms:W3CDTF'
+          type: "dcterms:W3CDTF"
         )
       end
     end

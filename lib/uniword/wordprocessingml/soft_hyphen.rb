@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +9,7 @@ module Uniword
     # Element: <w:softHyphen>
     class SoftHyphen < Lutaml::Model::Serializable
       xml do
-        element 'softHyphen'
+        element "softHyphen"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

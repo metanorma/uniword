@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,11 +13,11 @@ module Uniword
       attribute :type, :string
 
       xml do
-        element 'phoneticPr'
+        element "phoneticPr"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'font-id', to: :font_id
-        map_attribute 'type', to: :type
+        map_attribute "font-id", to: :font_id
+        map_attribute "type", to: :type
       end
     end
   end

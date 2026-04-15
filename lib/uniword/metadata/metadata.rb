@@ -245,9 +245,9 @@ module Uniword
       # @return [Object] Property value or result
       def method_missing(method, *args)
         method_str = method.to_s
-        if method_str.end_with?('=')
+        if method_str.end_with?("=")
           # Setter: metadata.title = "New"
-          key = method_str.chomp('=').to_sym
+          key = method_str.chomp("=").to_sym
           self[key] = args.first
         elsif args.empty? && @properties.key?(method.to_sym)
           # Getter: metadata.title
@@ -264,7 +264,7 @@ module Uniword
       # @return [Boolean] true if method exists
       def respond_to_missing?(method, include_private = false)
         method_str = method.to_s
-        method_str.end_with?('=') || @properties.key?(method.to_sym) || super
+        method_str.end_with?("=") || @properties.key?(method.to_sym) || super
       end
 
       # Equality comparison.
@@ -314,7 +314,7 @@ module Uniword
       #
       # @return [String] Detailed representation
       def inspect
-        props_str = @properties.map { |k, v| "#{k}: #{v.inspect}" }.join(', ')
+        props_str = @properties.map { |k, v| "#{k}: #{v.inspect}" }.join(", ")
         "#<Uniword::Metadata::Metadata #{props_str}>"
       end
 

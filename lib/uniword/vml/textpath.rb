@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -13,12 +13,12 @@ module Uniword
       attribute :on, :string
 
       xml do
-        element 'textpath'
+        element "textpath"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'string', to: :string
-        map_attribute 'style', to: :style, render_nil: false
-        map_attribute 'on', to: :on, render_nil: false
+        map_attribute "string", to: :string
+        map_attribute "style", to: :style, render_nil: false
+        map_attribute "on", to: :on, render_nil: false
       end
     end
   end

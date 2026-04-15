@@ -7,15 +7,15 @@ module Uniword
     class FontSubstitutor
       # Font substitution map (MS fonts -> open-source alternatives)
       SUBSTITUTIONS = {
-        'Calibri' => 'Carlito',
-        'Calibri Light' => 'Carlito',
-        'Cambria' => 'Caladea',
-        'Cambria Math' => 'Caladea',
-        'Arial' => 'Liberation Sans',
-        'Times New Roman' => 'Liberation Serif',
-        'Courier New' => 'Liberation Mono',
-        'Segoe UI' => 'Source Sans Pro',
-        'Tahoma' => 'Liberation Sans'
+        "Calibri" => "Carlito",
+        "Calibri Light" => "Carlito",
+        "Cambria" => "Caladea",
+        "Cambria Math" => "Caladea",
+        "Arial" => "Liberation Sans",
+        "Times New Roman" => "Liberation Serif",
+        "Courier New" => "Liberation Mono",
+        "Segoe UI" => "Source Sans Pro",
+        "Tahoma" => "Liberation Sans"
       }.freeze
 
       # Get substitute font name
@@ -33,14 +33,10 @@ module Uniword
       def self.transform_font_scheme(font_scheme)
         font_scheme.dup.tap do |scheme|
           # Transform major font
-          if scheme.major_font_obj&.latin
-            scheme.major_font_obj.latin.typeface = substitute(scheme.major_font_obj.latin.typeface)
-          end
+          scheme.major_font_obj.latin.typeface = substitute(scheme.major_font_obj.latin.typeface) if scheme.major_font_obj&.latin
 
           # Transform minor font
-          if scheme.minor_font_obj&.latin
-            scheme.minor_font_obj.latin.typeface = substitute(scheme.minor_font_obj.latin.typeface)
-          end
+          scheme.minor_font_obj.latin.typeface = substitute(scheme.minor_font_obj.latin.typeface) if scheme.minor_font_obj&.latin
         end
       end
 

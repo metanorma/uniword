@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :fmla, :string
 
       xml do
-        element 'gd'
+        element "gd"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'name', to: :name
-        map_attribute 'fmla', to: :fmla
+        map_attribute "name", to: :name
+        map_attribute "fmla", to: :fmla
       end
     end
   end

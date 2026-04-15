@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +9,7 @@ module Uniword
     # Element: <w:cr>
     class CarriageReturn < Lutaml::Model::Serializable
       xml do
-        element 'cr'
+        element "cr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

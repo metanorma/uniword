@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -13,12 +13,12 @@ module Uniword
       attribute :math_objects, OMath, collection: true, initialize_empty: true
 
       xml do
-        element 'oMathPara'
+        element "oMathPara"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'oMathParaPr', to: :para_properties, render_nil: false
-        map_element 'oMath', to: :math_objects, render_nil: false
+        map_element "oMathParaPr", to: :para_properties, render_nil: false
+        map_element "oMath", to: :math_objects, render_nil: false
       end
     end
   end

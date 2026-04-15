@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,17 +12,19 @@ module Uniword
       attribute :id, :string
       attribute :anchor, :string
       attribute :tooltip, :string
+      attribute :history, Uniword::Properties::HistoryValue
       attribute :runs, Run, collection: true, initialize_empty: true
 
       xml do
-        element 'hyperlink'
+        element "hyperlink"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'id', to: :id
-        map_attribute 'anchor', to: :anchor
-        map_attribute 'tooltip', to: :tooltip
-        map_element 'r', to: :runs, render_nil: false
+        map_attribute "id", to: :id
+        map_attribute "anchor", to: :anchor
+        map_attribute "tooltip", to: :tooltip
+        map_attribute "history", to: :history
+        map_element "r", to: :runs, render_nil: false
       end
 
       # Set hyperlink target (convenience method)
@@ -31,9 +33,9 @@ module Uniword
       # @param value [String] URL or bookmark target
       # @return [self] For method chaining
       def target=(value)
-        if value.to_s.start_with?('#')
+        if value.to_s.start_with?("#")
           # Internal bookmark link
-          self.anchor = value.sub(/^#/, '')
+          self.anchor = value.sub(/^#/, "")
         else
           # External URL link (stored in r:id via relationships)
           self.id = value

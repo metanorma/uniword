@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -17,13 +17,13 @@ module Uniword
       attribute :vocabulary, :string
 
       xml do
-        element 'characteristic'
+        element "characteristic"
         namespace Namespaces::Characteristics
 
-        map_attribute 'name', to: :name
-        map_attribute 'relation', to: :relation
-        map_attribute 'val', to: :val
-        map_attribute 'vocabulary', to: :vocabulary
+        map_attribute "name", to: :name
+        map_attribute "relation", to: :relation
+        map_attribute "val", to: :val
+        map_attribute "vocabulary", to: :vocabulary
       end
     end
 
@@ -33,10 +33,10 @@ module Uniword
                                                   initialize_empty: true
 
       xml do
-        element 'additionalCharacteristics'
+        element "additionalCharacteristics"
         namespace Namespaces::Characteristics
 
-        map_element 'characteristic', to: :characteristics, render_nil: false
+        map_element "characteristic", to: :characteristics, render_nil: false
       end
     end
   end

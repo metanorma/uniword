@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -12,6 +12,8 @@ module Uniword
       attribute :dist_b, :integer  # Distance from text - bottom
       attribute :dist_l, :integer  # Distance from text - left
       attribute :dist_r, :integer  # Distance from text - right
+      attribute :anchor_id, Uniword::Properties::Word2010IdValue
+      attribute :edit_id, Uniword::Properties::Word2010IdValue
       attribute :extent, Extent
       attribute :effect_extent, EffectExtent
       attribute :doc_properties, DocProperties
@@ -19,19 +21,21 @@ module Uniword
       attribute :graphic, Drawingml::Graphic
 
       xml do
-        element 'inline'
+        element "inline"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'distT', to: :dist_t, render_nil: false
-        map_attribute 'distB', to: :dist_b, render_nil: false
-        map_attribute 'distL', to: :dist_l, render_nil: false
-        map_attribute 'distR', to: :dist_r, render_nil: false
-        map_element 'extent', to: :extent, render_nil: false
-        map_element 'effectExtent', to: :effect_extent, render_nil: false
-        map_element 'docPr', to: :doc_properties, render_nil: false
-        map_element 'cNvGraphicFramePr', to: :non_visual_props, render_nil: false
-        map_element 'graphic', to: :graphic, render_nil: false
+        map_attribute "distT", to: :dist_t, render_nil: false
+        map_attribute "distB", to: :dist_b, render_nil: false
+        map_attribute "distL", to: :dist_l, render_nil: false
+        map_attribute "distR", to: :dist_r, render_nil: false
+        map_attribute "anchorId", to: :anchor_id
+        map_attribute "editId", to: :edit_id
+        map_element "extent", to: :extent, render_nil: false
+        map_element "effectExtent", to: :effect_extent, render_nil: false
+        map_element "docPr", to: :doc_properties, render_nil: false
+        map_element "cNvGraphicFramePr", to: :non_visual_props, render_nil: false
+        map_element "graphic", to: :graphic, render_nil: false
       end
     end
   end

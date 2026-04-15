@@ -28,17 +28,17 @@ module Uniword
         content = extractor.extract(path)
 
         # Extract base theme from corrected path
-        base_theme_xml = content['theme/theme/theme1.xml']
+        base_theme_xml = content["theme/theme/theme1.xml"]
         unless base_theme_xml
           raise ArgumentError,
-                'Invalid theme package: missing theme/theme/theme1.xml'
+                "Invalid theme package: missing theme/theme/theme1.xml"
         end
 
         # Extract variants
         variants = extract_variants(content)
 
         # Extract variant manager if present
-        variant_manager_xml = content['themeVariants/themeVariantManager.xml']
+        variant_manager_xml = content["themeVariants/themeVariantManager.xml"]
 
         # Extract media files
         media = extract_media_files(content)

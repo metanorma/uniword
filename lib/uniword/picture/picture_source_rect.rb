@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Picture
@@ -15,13 +15,13 @@ module Uniword
       attribute :b, :integer
 
       xml do
-        element 'srcRect'
+        element "srcRect"
         namespace Uniword::Ooxml::Namespaces::Picture
 
-        map_attribute 'l', to: :l
-        map_attribute 't', to: :t
-        map_attribute 'r', to: :r
-        map_attribute 'b', to: :b
+        map_attribute "l", to: :l
+        map_attribute "t", to: :t
+        map_attribute "r", to: :r
+        map_attribute "b", to: :b
       end
     end
   end

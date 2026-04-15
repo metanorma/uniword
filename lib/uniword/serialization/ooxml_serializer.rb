@@ -15,7 +15,7 @@ module Uniword
       # @param document [DocumentRoot] The document to serialize
       # @return [String] The serialized XML
       def serialize(document)
-        document.to_xml(encoding: 'UTF-8', prefix: true, fix_boolean_elements: true)
+        document.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
       end
 
       # Serialize a document to XML and return as a Nokogiri document

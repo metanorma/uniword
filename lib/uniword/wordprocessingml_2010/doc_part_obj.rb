@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -14,13 +14,13 @@ module Uniword
       attribute :doc_part_unique, :string
 
       xml do
-        element 'docPartObj'
+        element "docPartObj"
         namespace Uniword::Ooxml::Namespaces::Word2010
         mixed_content
 
-        map_element 'docPartGallery', to: :doc_part_gallery, render_nil: false
-        map_element 'docPartCategory', to: :doc_part_category, render_nil: false
-        map_element 'docPartUnique', to: :doc_part_unique, render_nil: false
+        map_element "docPartGallery", to: :doc_part_gallery, render_nil: false
+        map_element "docPartCategory", to: :doc_part_category, render_nil: false
+        map_element "docPartUnique", to: :doc_part_unique, render_nil: false
       end
     end
   end

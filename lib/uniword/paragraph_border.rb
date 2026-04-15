@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a single paragraph border side
@@ -23,8 +23,8 @@ module Uniword
       threeDEngrave outset inset
     ].freeze
 
-    attribute :style, :string, default: -> { 'single' }
-    attribute :color, :string, default: -> { 'auto' }
+    attribute :style, :string, default: -> { "single" }
+    attribute :color, :string, default: -> { "auto" }
     attribute :size, :integer, default: -> { 6 }
     attribute :space, :integer, default: -> { 1 }
 
@@ -38,7 +38,7 @@ module Uniword
     def validate_style
       return unless style && !STYLES.include?(style)
 
-      raise ArgumentError, "Invalid border style: #{style}. Must be one of: #{STYLES.join(', ')}"
+      raise ArgumentError, "Invalid border style: #{style}. Must be one of: #{STYLES.join(", ")}"
     end
   end
 
@@ -70,7 +70,7 @@ module Uniword
     # @param size [Integer] Border size
     # @param space [Integer] Space from text
     # @return [ParagraphBorders] New instance
-    def self.all_sides(style: 'single', color: 'auto', size: 6, space: 1)
+    def self.all_sides(style: "single", color: "auto", size: 6, space: 1)
       border_side = ParagraphBorderSide.new(
         style: style,
         color: color,
@@ -92,7 +92,7 @@ module Uniword
     # @param size [Integer] Border size
     # @param space [Integer] Space from text
     # @return [ParagraphBorders] New instance
-    def self.box(style: 'single', color: 'auto', size: 6, space: 1)
+    def self.box(style: "single", color: "auto", size: 6, space: 1)
       all_sides(style: style, color: color, size: size, space: space)
     end
 

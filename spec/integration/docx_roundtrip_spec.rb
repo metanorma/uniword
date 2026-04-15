@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'fileutils'
-require 'zip'
-require 'canon'
+require "spec_helper"
+require "fileutils"
+require "zip"
+require "canon"
 
-RSpec.describe 'DOCX Round-Trip Fidelity' do
-  let(:fixtures_dir) { File.expand_path('../fixtures', __dir__) }
-  let(:temp_dir) { 'tmp/roundtrip_spec' }
+RSpec.describe "DOCX Round-Trip Fidelity" do
+  let(:fixtures_dir) { File.expand_path("../fixtures", __dir__) }
+  let(:temp_dir) { "tmp/roundtrip_spec" }
 
   before(:all) do
-    FileUtils.mkdir_p('tmp/roundtrip_spec')
+    FileUtils.mkdir_p("tmp/roundtrip_spec")
   end
 
   after(:all) do
-    FileUtils.rm_rf('tmp/roundtrip_spec')
+    FileUtils.rm_rf("tmp/roundtrip_spec")
   end
 
   # Helper to extract all files from a DOCX ZIP
@@ -27,20 +27,18 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
         content = entry.get_input_stream.read
         # Force UTF-8 encoding for text-based XML/rels content
         # This prevents Canon comparison errors with ASCII-8BIT vs UTF-8 mismatches
-        if content.encoding == Encoding::ASCII_8BIT
-          content = content.force_encoding('UTF-8')
-        end
+        content = content.force_encoding("UTF-8") if content.encoding == Encoding::ASCII_8BIT
         files[entry.name] = content
       end
     end
     files
   end
 
-  describe 'blank/blank.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
-    let(:roundtrip_path) { File.join(temp_dir, 'blank_roundtrip.docx') }
+  describe "blank/blank.docx round-trip" do
+    let(:original_path) { File.join(fixtures_dir, "blank/blank.docx") }
+    let(:roundtrip_path) { File.join(temp_dir, "blank_roundtrip.docx") }
 
-    it 'preserves all XML files through load/save cycle' do
+    it "preserves all XML files through load/save cycle" do
       # Extract original files
       original_files = extract_docx_files(original_path)
 
@@ -56,7 +54,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       saved_files = extract_docx_files(roundtrip_path)
 
       # Compare file lists
-      xml_files = original_files.keys.select { |f| f.end_with?('.xml', '.rels') }
+      xml_files = original_files.keys.select { |f| f.end_with?(".xml", ".rels") }
 
       puts "\n  Checking #{xml_files.length} XML files for fidelity..."
 
@@ -78,11 +76,11 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       end
 
       # At minimum, document.xml must be preserved
-      expect(saved_files['word/document.xml']).not_to be_nil
-      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
+      expect(saved_files["word/document.xml"]).not_to be_nil
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
     end
 
-    it 'preserves document structure and content' do
+    it "preserves document structure and content" do
       doc1 = Uniword.load(original_path)
       doc1.save(roundtrip_path)
       doc2 = Uniword.load(roundtrip_path)
@@ -94,7 +92,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       expect(doc2.text).to eq(doc1.text)
     end
 
-    it 'produces valid DOCX that Word can open' do
+    it "produces valid DOCX that Word can open" do
       doc = Uniword.load(original_path)
       doc.save(roundtrip_path)
 
@@ -105,24 +103,24 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
 
       # Verify required files exist
       saved_files = extract_docx_files(roundtrip_path)
-      expect(saved_files['word/document.xml']).not_to be_nil
-      expect(saved_files['[Content_Types].xml']).not_to be_nil
-      expect(saved_files['_rels/.rels']).not_to be_nil
+      expect(saved_files["word/document.xml"]).not_to be_nil
+      expect(saved_files["[Content_Types].xml"]).not_to be_nil
+      expect(saved_files["_rels/.rels"]).not_to be_nil
     end
   end
 
-  describe 'word-template-apa-style-paper/word-template-apa-style-paper.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'word-template-apa-style-paper/word-template-apa-style-paper.docx') }
-    let(:roundtrip_path) { File.join(temp_dir, 'apa_roundtrip.docx') }
+  describe "word-template-apa-style-paper/word-template-apa-style-paper.docx round-trip" do
+    let(:original_path) { File.join(fixtures_dir, "word-template-apa-style-paper/word-template-apa-style-paper.docx") }
+    let(:roundtrip_path) { File.join(temp_dir, "apa_roundtrip.docx") }
 
-    it 'loads complex document without errors' do
+    it "loads complex document without errors" do
       expect do
         doc = Uniword.load(original_path)
         expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end.not_to raise_error
     end
 
-    it 'preserves document content through round-trip' do
+    it "preserves document content through round-trip" do
       doc1 = Uniword.load(original_path)
       original_text = doc1.text
       original_para_count = doc1.paragraphs.length
@@ -135,7 +133,7 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       expect(doc2.paragraphs.length).to eq(original_para_count)
     end
 
-    it 'maintains XML file structure' do
+    it "maintains XML file structure" do
       original_files = extract_docx_files(original_path)
 
       doc = Uniword.load(original_path)
@@ -145,9 +143,9 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
 
       # Core files must be present
       core_files = [
-        'word/document.xml',
-        '[Content_Types].xml',
-        '_rels/.rels'
+        "word/document.xml",
+        "[Content_Types].xml",
+        "_rels/.rels"
       ]
 
       core_files.each do |filename|
@@ -155,22 +153,24 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       end
 
       # Document.xml should be semantically equivalent
-      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
     end
   end
 
-  describe 'word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx round-trip' do
-    let(:original_path) { File.join(fixtures_dir, 'word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx') }
-    let(:roundtrip_path) { File.join(temp_dir, 'cover_toc_roundtrip.docx') }
+  describe "word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx round-trip" do
+    let(:original_path) do
+      File.join(fixtures_dir, "word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx")
+    end
+    let(:roundtrip_path) { File.join(temp_dir, "cover_toc_roundtrip.docx") }
 
-    it 'handles document with complex structure' do
+    it "handles document with complex structure" do
       expect do
         doc = Uniword.load(original_path)
         doc.save(roundtrip_path)
       end.not_to raise_error
     end
 
-    it 'preserves text content' do
+    it "preserves text content" do
       doc1 = Uniword.load(original_path)
       doc1.save(roundtrip_path)
       doc2 = Uniword.load(roundtrip_path)
@@ -181,26 +181,26 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
     end
   end
 
-  describe 'Multiple round-trips' do
-    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
+  describe "Multiple round-trips" do
+    let(:original_path) { File.join(fixtures_dir, "blank/blank.docx") }
 
-    it 'maintains fidelity through 3 round-trips' do
+    it "maintains fidelity through 3 round-trips" do
       # First load
       doc1 = Uniword.load(original_path)
       original_text = doc1.text
 
       # Round-trip 1
-      path1 = File.join(temp_dir, 'multi_rt1.docx')
+      path1 = File.join(temp_dir, "multi_rt1.docx")
       doc1.save(path1)
       doc2 = Uniword.load(path1)
 
       # Round-trip 2
-      path2 = File.join(temp_dir, 'multi_rt2.docx')
+      path2 = File.join(temp_dir, "multi_rt2.docx")
       doc2.save(path2)
       doc3 = Uniword.load(path2)
 
       # Round-trip 3
-      path3 = File.join(temp_dir, 'multi_rt3.docx')
+      path3 = File.join(temp_dir, "multi_rt3.docx")
       doc3.save(path3)
       doc4 = Uniword.load(path3)
 
@@ -213,15 +213,15 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
       files1 = extract_docx_files(path1)
       files3 = extract_docx_files(path3)
 
-      expect(files3['word/document.xml']).to be_xml_equivalent_to(files1['word/document.xml'])
+      expect(files3["word/document.xml"]).to be_xml_equivalent_to(files1["word/document.xml"])
     end
   end
 
-  describe 'File-level comparison report' do
-    let(:original_path) { File.join(fixtures_dir, 'blank/blank.docx') }
-    let(:roundtrip_path) { File.join(temp_dir, 'report_test.docx') }
+  describe "File-level comparison report" do
+    let(:original_path) { File.join(fixtures_dir, "blank/blank.docx") }
+    let(:roundtrip_path) { File.join(temp_dir, "report_test.docx") }
 
-    it 'generates detailed comparison of all files' do
+    it "generates detailed comparison of all files" do
       original_files = extract_docx_files(original_path)
 
       doc = Uniword.load(original_path)
@@ -229,16 +229,16 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
 
       saved_files = extract_docx_files(roundtrip_path)
 
-      puts "\n#{'=' * 60}"
-      puts 'DOCX Round-Trip Fidelity Report'
-      puts '=' * 60
+      puts "\n#{"=" * 60}"
+      puts "DOCX Round-Trip Fidelity Report"
+      puts "=" * 60
       puts "Original: #{File.basename(original_path)}"
       puts "Saved: #{File.basename(roundtrip_path)}"
       puts
 
       all_files = (original_files.keys + saved_files.keys).uniq.sort
 
-      xml_files = all_files.select { |f| f.end_with?('.xml', '.rels') }
+      xml_files = all_files.select { |f| f.end_with?(".xml", ".rels") }
       other_files = all_files - xml_files
 
       puts "XML Files (#{xml_files.length}):"
@@ -275,11 +275,97 @@ RSpec.describe 'DOCX Round-Trip Fidelity' do
         end
       end
 
-      puts '=' * 60
+      puts "=" * 60
       puts
 
       # Test passes if document.xml is preserved
-      expect(saved_files['word/document.xml']).to be_xml_equivalent_to(original_files['word/document.xml'])
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+    end
+  end
+
+  ISO_FIXTURES_DIR = File.join(__dir__, "../../spec/fixtures/uniword-private/fixtures/iso")
+
+  describe "ISO 8601-1:2019/Amd1 round-trip" do
+    let(:original_path) do
+      File.join(ISO_FIXTURES_DIR, "ISO 8601-1;2019_Amd 1 ed.1 - id.81801 Publication Word (en).docx")
+    end
+    let(:roundtrip_path) { File.join(temp_dir, "iso_8601_roundtrip.docx") }
+
+    it "loads and saves without error" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      expect do
+        doc = Uniword.load(original_path)
+        doc.save(roundtrip_path)
+      end.not_to raise_error
+    end
+
+    it "preserves text content" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      original_files = extract_docx_files(original_path)
+
+      doc1 = Uniword.load(original_path)
+      doc1.save(roundtrip_path)
+
+      saved_files = extract_docx_files(roundtrip_path)
+
+      expect(doc1.text.length).to be > 0
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+    end
+
+    it "maintains XML structure" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      original_files = extract_docx_files(original_path)
+
+      doc = Uniword.load(original_path)
+      doc.save(roundtrip_path)
+
+      saved_files = extract_docx_files(roundtrip_path)
+
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+    end
+  end
+
+  describe "ISO 690:2021 round-trip" do
+    let(:original_path) { File.join(ISO_FIXTURES_DIR, "ISO_690_2021-Word_document(en).docx") }
+    let(:roundtrip_path) { File.join(temp_dir, "iso_690_roundtrip.docx") }
+
+    it "loads and saves without error" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      expect do
+        doc = Uniword.load(original_path)
+        doc.save(roundtrip_path)
+      end.not_to raise_error
+    end
+
+    it "preserves text content" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      original_files = extract_docx_files(original_path)
+
+      doc1 = Uniword.load(original_path)
+      doc1.save(roundtrip_path)
+
+      saved_files = extract_docx_files(roundtrip_path)
+
+      expect(doc1.text.length).to be > 0
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+    end
+
+    it "maintains XML structure" do
+      skip "ISO fixtures not available" unless File.exist?(original_path)
+
+      original_files = extract_docx_files(original_path)
+
+      doc = Uniword.load(original_path)
+      doc.save(roundtrip_path)
+
+      saved_files = extract_docx_files(roundtrip_path)
+
+      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
     end
   end
 end

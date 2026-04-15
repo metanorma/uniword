@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
       attribute :type, :string
 
       xml do
-        element 'proofErr'
+        element "proofErr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'type', to: :type
+        map_attribute "type", to: :type
       end
     end
   end

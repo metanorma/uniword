@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -16,15 +16,15 @@ module Uniword
       attribute :hole_size, :string
 
       xml do
-        element 'doughnutChart'
+        element "doughnutChart"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'varyColors', to: :vary_colors, render_nil: false
-        map_element 'ser', to: :series, render_nil: false
-        map_element 'dLbls', to: :d_lbls, render_nil: false
-        map_element 'firstSliceAng', to: :first_slice_ang, render_nil: false
-        map_element 'holeSize', to: :hole_size, render_nil: false
+        map_element "varyColors", to: :vary_colors, render_nil: false
+        map_element "ser", to: :series, render_nil: false
+        map_element "dLbls", to: :d_lbls, render_nil: false
+        map_element "firstSliceAng", to: :first_slice_ang, render_nil: false
+        map_element "holeSize", to: :hole_size, render_nil: false
       end
     end
   end

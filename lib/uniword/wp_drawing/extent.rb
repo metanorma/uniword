@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -12,12 +12,12 @@ module Uniword
       attribute :cy, :integer  # Height
 
       xml do
-        element 'extent'
+        element "extent"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'cx', to: :cx, render_nil: false
-        map_attribute 'cy', to: :cy, render_nil: false
+        map_attribute "cx", to: :cx, render_nil: false
+        map_attribute "cy", to: :cy, render_nil: false
       end
     end
   end

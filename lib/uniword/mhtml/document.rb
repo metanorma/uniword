@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -18,7 +18,7 @@ module Uniword
     #     └── filelist_xml (String)
     class Document < Lutaml::Model::Serializable
       # MIME headers
-      attribute :mime_version, :string, default: -> { '1.0' }
+      attribute :mime_version, :string, default: -> { "1.0" }
       attribute :boundary, :string
 
       # Main HTML part (first/largest text/html part)
@@ -47,8 +47,8 @@ module Uniword
 
       def raw_html=(value)
         self.html_part ||= HtmlPart.new
-        html_part.content_type = 'text/html'
-        html_part.content_transfer_encoding = 'quoted-printable'
+        html_part.content_type = "text/html"
+        html_part.content_transfer_encoding = "quoted-printable"
         html_part.raw_content = value
       end
 
@@ -64,17 +64,17 @@ module Uniword
 
       # Text content (stripped of HTML tags)
       def text
-        return '' unless raw_html
+        return "" unless raw_html
 
         raw_html
-          .gsub(/<[^>]+>/, ' ')
-          .gsub('&lt;', '<')
-          .gsub('&gt;', '>')
-          .gsub('&amp;', '&')
-          .gsub('&quot;', '"')
-          .gsub('&#39;', "'")
-          .gsub('&nbsp;', ' ')
-          .gsub(/\s+/, ' ')
+          .gsub(/<[^>]+>/, " ")
+          .gsub("&lt;", "<")
+          .gsub("&gt;", ">")
+          .gsub("&amp;", "&")
+          .gsub("&quot;", '"')
+          .gsub("&#39;", "'")
+          .gsub("&nbsp;", " ")
+          .gsub(/\s+/, " ")
           .strip
       end
 
@@ -97,7 +97,7 @@ module Uniword
 
       # @return [XmlPart, nil] Filelist XML part
       def filelist_part
-        parts.find { |p| p.is_a?(XmlPart) && p.filename == 'filelist.xml' }
+        parts.find { |p| p.is_a?(XmlPart) && p.filename == "filelist.xml" }
       end
 
       # @return [String, nil] Filelist XML content
@@ -108,7 +108,7 @@ module Uniword
       # @return [XmlPart, nil] Color scheme mapping part
       def color_scheme_mapping_part
         parts.find do |p|
-          p.is_a?(XmlPart) && p.filename&.include?('colorschememapping')
+          p.is_a?(XmlPart) && p.filename&.include?("colorschememapping")
         end
       end
 
@@ -124,17 +124,17 @@ module Uniword
 
       # @return [String, nil] Header HTML
       def header_html
-        header_footer_parts.find { |p| p.filename&.include?('header') }&.decoded_content
+        header_footer_parts.find { |p| p.filename&.include?("header") }&.decoded_content
       end
 
       # @return [String, nil] Footer HTML (placeholder)
       def footer_html
-        header_footer_parts.find { |p| p.filename&.include?('footer') }&.decoded_content
+        header_footer_parts.find { |p| p.filename&.include?("footer") }&.decoded_content
       end
 
       # @return [String, nil] Placeholder header HTML
       def placeholder_html
-        header_footer_parts.find { |p| p.filename&.include?('plchdr') }&.decoded_content
+        header_footer_parts.find { |p| p.filename&.include?("plchdr") }&.decoded_content
       end
 
       # @return [Hash] Images as filename => decoded data
@@ -153,7 +153,7 @@ module Uniword
       # Build a summary of the document structure
       def inspect
         "#<#{self.class} parts=#{parts.length} images=#{image_parts.length} " \
-          "xml=#{xml_parts.length} theme=#{theme_part ? 'yes' : 'no'}>"
+          "xml=#{xml_parts.length} theme=#{theme_part ? "yes" : "no"}>"
       end
     end
   end

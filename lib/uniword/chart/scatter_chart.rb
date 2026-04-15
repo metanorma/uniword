@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -16,15 +16,15 @@ module Uniword
       attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
-        element 'scatterChart'
+        element "scatterChart"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'scatterStyle', to: :scatter_style
-        map_element 'varyColors', to: :vary_colors, render_nil: false
-        map_element 'ser', to: :series, render_nil: false
-        map_element 'dLbls', to: :d_lbls, render_nil: false
-        map_element 'axId', to: :ax_id
+        map_element "scatterStyle", to: :scatter_style
+        map_element "varyColors", to: :vary_colors, render_nil: false
+        map_element "ser", to: :series, render_nil: false
+        map_element "dLbls", to: :d_lbls, render_nil: false
+        map_element "axId", to: :ax_id
       end
     end
   end

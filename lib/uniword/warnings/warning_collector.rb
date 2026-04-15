@@ -144,11 +144,11 @@ module Uniword
           # Try to load default config
           default_path = File.join(
             Configuration::ConfigurationLoader::CONFIG_DIR,
-            'warning_rules.yml'
+            "warning_rules.yml"
           )
 
           if File.exist?(default_path)
-            Configuration::ConfigurationLoader.load('warning_rules')
+            Configuration::ConfigurationLoader.load("warning_rules")
           else
             # Use empty config with defaults
             default_config
@@ -209,7 +209,7 @@ module Uniword
         suggestions = warning_config[:element_suggestions] || {}
         suggestions[element_tag] ||
           suggestions[element_tag.to_sym] ||
-          'This element is not yet supported. Data may be lost in round-trip.'
+          "This element is not yet supported. Data may be lost in round-trip."
       end
 
       def log_warning(warning)

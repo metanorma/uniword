@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -12,10 +12,10 @@ module Uniword
       attribute :r_id, :string
 
       xml do
-        element 'embed'
+        element "embed"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'id', to: :r_id
+        map_attribute "id", to: :r_id
       end
     end
   end

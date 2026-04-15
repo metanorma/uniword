@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -13,12 +13,12 @@ module Uniword
       attribute :seq, SequenceTimeNode, collection: true, initialize_empty: true
 
       xml do
-        element 'tn_lst'
+        element "tn_lst"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'par', to: :par, render_nil: false
-        map_element 'seq', to: :seq, render_nil: false
+        map_element "par", to: :par, render_nil: false
+        map_element "seq", to: :seq, render_nil: false
       end
     end
   end

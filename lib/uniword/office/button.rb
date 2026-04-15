@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -14,12 +14,12 @@ module Uniword
       attribute :caption, :string
 
       xml do
-        element 'button'
+        element "button"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'type', to: :type
-        map_attribute 'value', to: :value
-        map_attribute 'caption', to: :caption
+        map_attribute "type", to: :type
+        map_attribute "value", to: :value
+        map_attribute "caption", to: :caption
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentProperties
@@ -12,11 +12,11 @@ module Uniword
       attribute :properties, CustomProperty, collection: true, initialize_empty: true
 
       xml do
-        element 'CustomProperties'
+        element "CustomProperties"
         namespace Uniword::Ooxml::Namespaces::ExtendedProperties
         mixed_content
 
-        map_element 'property', to: :properties, render_nil: false
+        map_element "property", to: :properties, render_nil: false
       end
     end
   end

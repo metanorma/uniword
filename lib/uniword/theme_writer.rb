@@ -48,7 +48,7 @@ module Uniword
     def infer_format(path)
       extension = File.extname(path).downcase
       case extension
-      when '.thmx'
+      when ".thmx"
         :thmx
       else
         raise ArgumentError, "Cannot infer theme format from: #{extension}"

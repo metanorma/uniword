@@ -31,7 +31,7 @@ module Uniword
                 element: heading[:paragraph],
                 severity: @config[:severity] || :warning,
                 suggestion: @config[:suggestion] ||
-                  'Use descriptive headings that clearly describe content'
+                  "Use descriptive headings that clearly describe content"
               )
             end
 
@@ -43,7 +43,7 @@ module Uniword
               message: "Heading #{index + 1} is too generic: '#{text}'",
               element: heading[:paragraph],
               severity: :warning,
-              suggestion: 'Make headings specific to the content they describe'
+              suggestion: "Make headings specific to the content they describe"
             )
           end
 

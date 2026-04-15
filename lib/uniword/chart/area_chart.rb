@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -17,16 +17,16 @@ module Uniword
       attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
-        element 'areaChart'
+        element "areaChart"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'grouping', to: :grouping, render_nil: false
-        map_element 'varyColors', to: :vary_colors, render_nil: false
-        map_element 'ser', to: :series, render_nil: false
-        map_element 'dLbls', to: :d_lbls, render_nil: false
-        map_element 'dropLines', to: :drop_lines, render_nil: false
-        map_element 'axId', to: :ax_id
+        map_element "grouping", to: :grouping, render_nil: false
+        map_element "varyColors", to: :vary_colors, render_nil: false
+        map_element "ser", to: :series, render_nil: false
+        map_element "dLbls", to: :d_lbls, render_nil: false
+        map_element "dropLines", to: :drop_lines, render_nil: false
+        map_element "axId", to: :ax_id
       end
     end
   end

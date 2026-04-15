@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -17,16 +17,16 @@ module Uniword
       attribute :bar, Border
 
       xml do
-        element 'pBdr'
+        element "pBdr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'top', to: :top, render_nil: false
-        map_element 'bottom', to: :bottom, render_nil: false
-        map_element 'left', to: :left, render_nil: false
-        map_element 'right', to: :right, render_nil: false
-        map_element 'between', to: :between, render_nil: false
-        map_element 'bar', to: :bar, render_nil: false
+        map_element "top", to: :top, render_nil: false
+        map_element "bottom", to: :bottom, render_nil: false
+        map_element "left", to: :left, render_nil: false
+        map_element "right", to: :right, render_nil: false
+        map_element "between", to: :between, render_nil: false
+        map_element "bar", to: :bar, render_nil: false
       end
 
       # Create a box-style border (all four sides with same style)
@@ -47,9 +47,7 @@ module Uniword
       def box?
         return false unless top && bottom && left && right
         return false unless top.val == bottom.val && top.val == left.val && top.val == right.val
-        unless top.color == bottom.color && top.color == left.color && top.color == right.color
-          return false
-        end
+        return false unless top.color == bottom.color && top.color == left.color && top.color == right.color
 
         true
       end

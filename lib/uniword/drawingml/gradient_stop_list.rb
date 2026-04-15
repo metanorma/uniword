@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,11 +12,11 @@ module Uniword
       attribute :gradient_stops, GradientStop, collection: true, initialize_empty: true
 
       xml do
-        element 'gsLst'
+        element "gsLst"
         namespace Uniword::Ooxml::Namespaces::DrawingML
         ordered
 
-        map_element 'gs', to: :gradient_stops, render_nil: false
+        map_element "gs", to: :gradient_stops, render_nil: false
       end
     end
   end

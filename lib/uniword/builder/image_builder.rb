@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-require 'stringio'
+require "securerandom"
+require "stringio"
 
 module Uniword
   module Builder
@@ -25,7 +25,7 @@ module Uniword
     #   run = RunBuilder.new.drawing(ImageBuilder.create_drawing('photo.png'))
     class ImageBuilder
       # Picture namespace URI for GraphicData
-      PIC_URI = 'http://schemas.openxmlformats.org/drawingml/2006/picture'
+      PIC_URI = "http://schemas.openxmlformats.org/drawingml/2006/picture"
 
       # Register an image part on the document for DOCX packaging.
       #
@@ -43,13 +43,13 @@ module Uniword
         end
 
         content_type = case File.extname(path).downcase
-                       when '.png'  then 'image/png'
-                       when '.jpg', '.jpeg' then 'image/jpeg'
-                       when '.gif'  then 'image/gif'
-                       when '.bmp'  then 'image/bmp'
-                       when '.tiff', '.tif' then 'image/tiff'
-                       when '.svg' then 'image/svg+xml'
-                       else 'application/octet-stream'
+                       when ".png"  then "image/png"
+                       when ".jpg", ".jpeg" then "image/jpeg"
+                       when ".gif"  then "image/gif"
+                       when ".bmp"  then "image/bmp"
+                       when ".tiff", ".tif" then "image/tiff"
+                       when ".svg" then "image/svg+xml"
+                       else "application/octet-stream"
                        end
 
         if root
@@ -72,8 +72,8 @@ module Uniword
 
         if data&.start_with?("\x89PNG".b)
           # PNG: width at offset 16, height at offset 20 (big-endian uint32)
-          w = data[16, 4].unpack1('N')
-          h = data[20, 4].unpack1('N')
+          w = data[16, 4].unpack1("N")
+          h = data[20, 4].unpack1("N")
           [w, h]
         elsif data&.start_with?("\xFF\xD8".b)
           # JPEG: parse SOF marker
@@ -83,7 +83,7 @@ module Uniword
             marker = io.read(2)
             break unless marker&.start_with?("\xFF".b)
 
-            length = io.read(2)&.unpack1('n')
+            length = io.read(2)&.unpack1("n")
             break unless length
 
             payload = io.read(length - 2)
@@ -94,8 +94,8 @@ module Uniword
                         byte1 == 0xC7 || byte1.between?(0xC9, 0xCB) ||
                         byte1 == 0xCD || byte1 == 0xCE || byte1 == 0xCF
 
-            h = payload[0, 2].unpack1('n')
-            w = payload[2, 2].unpack1('n')
+            h = payload[0, 2].unpack1("n")
+            w = payload[2, 2].unpack1("n")
             return [w, h]
           end
           [100, 100] # fallback
@@ -134,7 +134,7 @@ module Uniword
         inline.effect_extent = WpDrawing::EffectExtent.new
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: SecureRandom.random_number(1_000_000_000),
-          name: File.basename(path, '.*')
+          name: File.basename(path, ".*")
         )
         inline.graphic = build_graphic(r_id, w, h)
 
@@ -170,33 +170,33 @@ module Uniword
         anchor = WpDrawing::Anchor.new
         anchor.simple_pos = WpDrawing::SimplePos.new(x: 0, y: 0)
         anchor.relative_height = 251_658_240
-        anchor.behind_doc = behind_text ? '1' : '0'
-        anchor.locked = '0'
-        anchor.layout_in_cell = '1'
-        anchor.allow_overlap = '1'
+        anchor.behind_doc = behind_text ? "1" : "0"
+        anchor.locked = "0"
+        anchor.layout_in_cell = "1"
+        anchor.allow_overlap = "1"
 
         # Horizontal positioning
         anchor.position_h = WpDrawing::PositionH.new(
-          relative_from: 'margin'
+          relative_from: "margin"
         )
         if align
           anchor.position_h.align = align.to_s
         elsif pos_x
           anchor.position_h.pos_offset = pos_x
         else
-          anchor.position_h.align = 'left'
+          anchor.position_h.align = "left"
         end
 
         # Vertical positioning
         anchor.position_v = WpDrawing::PositionV.new(
-          relative_from: 'margin'
+          relative_from: "margin"
         )
         if vertical_align
           anchor.position_v.align = vertical_align.to_s
         elsif pos_y
           anchor.position_v.pos_offset = pos_y
         else
-          anchor.position_v.align = 'top'
+          anchor.position_v.align = "top"
         end
 
         anchor.extent = WpDrawing::Extent.new(cx: w, cy: h)
@@ -207,14 +207,14 @@ module Uniword
         when :none
           anchor.wrap_none = WpDrawing::WrapNone.new
         when :square
-          anchor.wrap_square = WpDrawing::WrapSquare.new(wrap_text: 'bothSides')
+          anchor.wrap_square = WpDrawing::WrapSquare.new(wrap_text: "bothSides")
         when :top_and_bottom
           anchor.wrap_top_and_bottom = WpDrawing::WrapTopAndBottom.new
         end
 
         anchor.doc_properties = WpDrawing::DocProperties.new(
           id: SecureRandom.random_number(1_000_000_000),
-          name: File.basename(path, '.*')
+          name: File.basename(path, ".*")
         )
         anchor.graphic = build_graphic(r_id, w, h)
 
@@ -306,7 +306,7 @@ module Uniword
           pic.sp_pr.xfrm = Drawingml::Transform2D.new
           pic.sp_pr.xfrm.off = Drawingml::Offset.new(x: 0, y: 0)
           pic.sp_pr.xfrm.ext = Drawingml::Extents.new(cx: width, cy: height)
-          pic.sp_pr.prst_geom = Drawingml::PresetGeometry.new(prst: 'rect')
+          pic.sp_pr.prst_geom = Drawingml::PresetGeometry.new(prst: "rect")
 
           pic
         end

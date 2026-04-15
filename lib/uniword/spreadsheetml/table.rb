@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -18,17 +18,17 @@ module Uniword
       attribute :auto_filter, AutoFilter
 
       xml do
-        element 'table'
+        element "table"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'id', to: :id
-        map_attribute 'name', to: :name
-        map_attribute 'display-name', to: :display_name
-        map_attribute 'ref', to: :ref
-        map_element 'tableColumns', to: :table_columns
-        map_element 'tableStyleInfo', to: :table_style_info, render_nil: false
-        map_element 'autoFilter', to: :auto_filter, render_nil: false
+        map_attribute "id", to: :id
+        map_attribute "name", to: :name
+        map_attribute "display-name", to: :display_name
+        map_attribute "ref", to: :ref
+        map_element "tableColumns", to: :table_columns
+        map_element "tableStyleInfo", to: :table_style_info, render_nil: false
+        map_element "autoFilter", to: :auto_filter, render_nil: false
       end
     end
   end

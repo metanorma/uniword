@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,9 +9,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'altName'
+        element "altName"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -20,9 +20,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'panose1'
+        element "panose1"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -31,9 +31,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'charset'
+        element "charset"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -42,9 +42,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'family'
+        element "family"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -53,9 +53,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'pitch'
+        element "pitch"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -69,14 +69,14 @@ module Uniword
       attribute :csb1, :string
 
       xml do
-        element 'sig'
+        element "sig"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'usb0', to: :usb0
-        map_attribute 'usb1', to: :usb1
-        map_attribute 'usb2', to: :usb2
-        map_attribute 'usb3', to: :usb3
-        map_attribute 'csb0', to: :csb0
-        map_attribute 'csb1', to: :csb1
+        map_attribute "usb0", to: :usb0
+        map_attribute "usb1", to: :usb1
+        map_attribute "usb2", to: :usb2
+        map_attribute "usb3", to: :usb3
+        map_attribute "csb0", to: :csb0
+        map_attribute "csb1", to: :csb1
       end
     end
 
@@ -94,16 +94,16 @@ module Uniword
       attribute :sig, Sig
 
       xml do
-        element 'font'
+        element "font"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'name', to: :name
-        map_element 'altName', to: :alt_name
-        map_element 'panose1', to: :panose1
-        map_element 'charset', to: :charset
-        map_element 'family', to: :family
-        map_element 'pitch', to: :pitch
-        map_element 'sig', to: :sig
+        map_attribute "name", to: :name
+        map_element "altName", to: :alt_name
+        map_element "panose1", to: :panose1
+        map_element "charset", to: :charset
+        map_element "family", to: :family
+        map_element "pitch", to: :pitch
+        map_element "sig", to: :sig
       end
     end
   end

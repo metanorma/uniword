@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -16,14 +16,14 @@ module Uniword
       attribute :theme_color, :string
 
       xml do
-        element 'shd'
+        element "shd"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :val
-        map_attribute 'color', to: :color
-        map_attribute 'fill', to: :fill
-        map_attribute 'themeFill', to: :theme_fill
-        map_attribute 'themeColor', to: :theme_color
+        map_attribute "val", to: :val
+        map_attribute "color", to: :color
+        map_attribute "fill", to: :fill
+        map_attribute "themeFill", to: :theme_fill
+        map_attribute "themeColor", to: :theme_color
       end
     end
   end

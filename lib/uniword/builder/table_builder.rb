@@ -69,7 +69,7 @@ module Uniword
           border = if value.is_a?(Hash)
                      Properties::Border.new(**value)
                    else
-                     Properties::Border.new(color: value, style: 'single', size: 4)
+                     Properties::Border.new(color: value, style: "single", size: 4)
                    end
           @model.properties.borders.send("#{side}=", border)
         end

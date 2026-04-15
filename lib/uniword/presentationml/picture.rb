@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,13 +14,13 @@ module Uniword
       attribute :sp_pr, ShapeProperties
 
       xml do
-        element 'pic'
+        element "pic"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'nvPicPr', to: :nv_pic_pr
-        map_element 'blipFill', to: :blip_fill
-        map_element 'spPr', to: :sp_pr
+        map_element "nvPicPr", to: :nv_pic_pr
+        map_element "blipFill", to: :blip_fill
+        map_element "spPr", to: :sp_pr
       end
     end
   end

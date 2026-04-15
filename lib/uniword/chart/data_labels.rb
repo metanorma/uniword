@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -21,20 +21,20 @@ module Uniword
       attribute :tx_pr, :string
 
       xml do
-        element 'dLbls'
+        element "dLbls"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'dLbl', to: :d_lbl, render_nil: false
-        map_element 'showLegendKey', to: :show_legend_key, render_nil: false
-        map_element 'showVal', to: :show_val, render_nil: false
-        map_element 'showCatName', to: :show_cat_name, render_nil: false
-        map_element 'showSerName', to: :show_ser_name, render_nil: false
-        map_element 'showPercent', to: :show_percent, render_nil: false
-        map_element 'showBubbleSize', to: :show_bubble_size, render_nil: false
-        map_element 'separator', to: :separator, render_nil: false
-        map_element 'spPr', to: :sp_pr, render_nil: false
-        map_element 'txPr', to: :tx_pr, render_nil: false
+        map_element "dLbl", to: :d_lbl, render_nil: false
+        map_element "showLegendKey", to: :show_legend_key, render_nil: false
+        map_element "showVal", to: :show_val, render_nil: false
+        map_element "showCatName", to: :show_cat_name, render_nil: false
+        map_element "showSerName", to: :show_ser_name, render_nil: false
+        map_element "showPercent", to: :show_percent, render_nil: false
+        map_element "showBubbleSize", to: :show_bubble_size, render_nil: false
+        map_element "separator", to: :separator, render_nil: false
+        map_element "spPr", to: :sp_pr, render_nil: false
+        map_element "txPr", to: :tx_pr, render_nil: false
       end
     end
   end

@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'benchmark'
-require 'tmpdir'
+require "spec_helper"
+require "benchmark"
+require "tmpdir"
 
-RSpec.describe 'Real-World Document Testing', :integration do
+RSpec.describe "Real-World Document Testing", :integration do
   # Integration tests using actual production documents
   # These tests validate that uniword can handle real-world complexity
   # and meet performance requirements for production use
 
-  describe 'Complex Document' do
-    let(:doc_path) { 'spec/fixtures/docx_gem/styles.docx' }
+  describe "Complex Document" do
+    let(:doc_path) { "spec/fixtures/docx_gem/styles.docx" }
 
-    describe 'Document Reading' do
-      it 'opens complex document successfully' do
+    describe "Document Reading" do
+      it "opens complex document successfully" do
         doc = Uniword.load(doc_path)
 
         expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -21,7 +21,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         expect(doc.tables.count).to be >= 0
       end
 
-      it 'extracts all text content' do
+      it "extracts all text content" do
         doc = Uniword.load(doc_path)
         text = doc.text
 
@@ -29,7 +29,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         expect(text.length).to be > 0
       end
 
-      it 'preserves document structure' do
+      it "preserves document structure" do
         doc = Uniword.load(doc_path)
 
         expect(doc.styles_configuration).not_to be_nil
@@ -37,7 +37,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         expect(doc.styles_configuration.styles.count).to be > 0
       end
 
-      it 'handles tables correctly' do
+      it "handles tables correctly" do
         doc = Uniword.load(doc_path)
         tables = doc.tables
 
@@ -48,7 +48,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         end
       end
 
-      it 'preserves formatting properties' do
+      it "preserves formatting properties" do
         doc = Uniword.load(doc_path)
 
         formatted_paras = doc.paragraphs.select do |p|
@@ -59,8 +59,8 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    describe 'Round-Trip Preservation' do
-      it 'preserves content through write-read cycle' do
+    describe "Round-Trip Preservation" do
+      it "preserves content through write-read cycle" do
         original = Uniword.load(doc_path)
         original_text = original.text
         original_para_count = original.paragraphs.count
@@ -78,7 +78,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         end
       end
 
-      it 'preserves structure through round-trip' do
+      it "preserves structure through round-trip" do
         original = Uniword.load(doc_path)
 
         temp_path = File.join(Dir.tmpdir, "structure_#{Time.now.to_i}.docx")
@@ -93,7 +93,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         end
       end
 
-      it 'preserves styles through round-trip' do
+      it "preserves styles through round-trip" do
         original = Uniword.load(doc_path)
         original_style_count = original.styles_configuration.styles.count
 
@@ -111,8 +111,8 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    describe 'Performance Benchmarks' do
-      it 'reads document in under 6 seconds' do
+    describe "Performance Benchmarks" do
+      it "reads document in under 6 seconds" do
         read_time = Benchmark.realtime do
           Uniword.load(doc_path)
         end
@@ -120,7 +120,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         expect(read_time).to be < 6.0
       end
 
-      it 'writes document in under 10 seconds' do
+      it "writes document in under 10 seconds" do
         doc = Uniword.load(doc_path)
         temp_path = File.join(Dir.tmpdir, "perf_#{Time.now.to_i}.docx")
 
@@ -133,7 +133,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         safe_rm_f(temp_path)
       end
 
-      it 'handles document without memory issues' do
+      it "handles document without memory issues" do
         GC.start
         before_memory = `ps -o rss= -p #{Process.pid}`.to_i
 
@@ -147,7 +147,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         expect(memory_growth_mb).to be < 50
       end
 
-      it 'provides responsive text extraction' do
+      it "provides responsive text extraction" do
         doc = Uniword.load(doc_path)
 
         extraction_time = Benchmark.realtime do
@@ -159,27 +159,27 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    describe 'Error Resilience' do
-      it 'handles corrupted elements gracefully' do
+    describe "Error Resilience" do
+      it "handles corrupted elements gracefully" do
         doc = Uniword.load(doc_path)
 
         expect { doc.paragraphs.each(&:text) }.not_to raise_error
         expect { doc.tables.each(&:row_count) }.not_to raise_error
       end
 
-      it 'provides meaningful error messages' do
+      it "provides meaningful error messages" do
         expect do
-          Uniword.load('/nonexistent/file.docx')
+          Uniword.load("/nonexistent/file.docx")
         end.to raise_error(Uniword::FileNotFoundError, /not found/)
       end
     end
   end
 
-  describe 'Multiple Document Types' do
-    let(:blank_path) { 'spec/fixtures/blank/blank.docx' }
+  describe "Multiple Document Types" do
+    let(:blank_path) { "spec/fixtures/blank/blank.docx" }
 
-    it 'handles simple documents efficiently' do
-      skip 'blank.docx fixture not available' unless File.exist?(blank_path)
+    it "handles simple documents efficiently" do
+      skip "blank.docx fixture not available" unless File.exist?(blank_path)
 
       doc = Uniword.load(blank_path)
       expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -198,9 +198,9 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    it 'handles documents with heavy formatting' do
-      formatting_path = 'spec/fixtures/docx_gem/formatting.docx'
-      skip 'formatting.docx fixture not available' unless File.exist?(formatting_path)
+    it "handles documents with heavy formatting" do
+      formatting_path = "spec/fixtures/docx_gem/formatting.docx"
+      skip "formatting.docx fixture not available" unless File.exist?(formatting_path)
 
       doc = Uniword.load(formatting_path)
       expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -218,9 +218,9 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    it 'handles documents with many tables' do
-      tables_path = 'spec/fixtures/docx_gem/tables.docx'
-      skip 'tables.docx fixture not available' unless File.exist?(tables_path)
+    it "handles documents with many tables" do
+      tables_path = "spec/fixtures/docx_gem/tables.docx"
+      skip "tables.docx fixture not available" unless File.exist?(tables_path)
 
       doc = Uniword.load(tables_path)
       expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -238,9 +238,9 @@ RSpec.describe 'Real-World Document Testing', :integration do
       end
     end
 
-    it 'handles documents with embedded images' do
-      image_path = 'spec/fixtures/uniword-demo/demo_formal_integral_proper.docx'
-      skip 'demo fixture not available' unless File.exist?(image_path)
+    it "handles documents with embedded images" do
+      image_path = "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx"
+      skip "demo fixture not available" unless File.exist?(image_path)
 
       doc = Uniword.load(image_path)
       expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -250,26 +250,24 @@ RSpec.describe 'Real-World Document Testing', :integration do
       temp_path = File.join(Dir.tmpdir, "images_#{Time.now.to_i}.docx")
       begin
         doc.save(temp_path)
-        roundtrip = Uniword.load(temp_path)
+        Uniword.load(temp_path)
 
         # Image should be preserved in the package
-        require 'zip'
-        original_has_image = Zip::File.open(image_path) { |z| z.find_entry('word/media/image1.jpeg') }
-        roundtrip_has_image = Zip::File.open(temp_path) { |z| z.find_entry('word/media/image1.jpeg') }
-        if original_has_image
-          expect(roundtrip_has_image).not_to be_nil
-        end
+        require "zip"
+        original_has_image = Zip::File.open(image_path) { |z| z.find_entry("word/media/image1.jpeg") }
+        roundtrip_has_image = Zip::File.open(temp_path) { |z| z.find_entry("word/media/image1.jpeg") }
+        expect(roundtrip_has_image).not_to be_nil if original_has_image
       ensure
         safe_rm_f(temp_path)
       end
     end
   end
 
-  describe 'Concurrent Access' do
-    let(:fixture_path) { 'spec/fixtures/docx_gem/styles.docx' }
+  describe "Concurrent Access" do
+    let(:fixture_path) { "spec/fixtures/docx_gem/styles.docx" }
 
-    it 'supports thread-safe reading' do
-      skip 'styles.docx fixture not available' unless File.exist?(fixture_path)
+    it "supports thread-safe reading" do
+      skip "styles.docx fixture not available" unless File.exist?(fixture_path)
 
       doc = Uniword.load(fixture_path)
       results = []
@@ -293,8 +291,8 @@ RSpec.describe 'Real-World Document Testing', :integration do
       expect(para_counts.uniq).to eq([para_counts.first])
     end
 
-    it 'handles multiple documents simultaneously' do
-      skip 'styles.docx fixture not available' unless File.exist?(fixture_path)
+    it "handles multiple documents simultaneously" do
+      skip "styles.docx fixture not available" unless File.exist?(fixture_path)
 
       results = []
       mutex = Mutex.new
@@ -319,55 +317,55 @@ RSpec.describe 'Real-World Document Testing', :integration do
     end
   end
 
-  describe 'Edge Cases' do
-    it 'handles empty documents' do
+  describe "Edge Cases" do
+    it "handles empty documents" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       expect(doc.paragraphs).to be_empty
       expect(doc.tables).to be_empty
-      expect(doc.text).to eq('')
+      expect(doc.text).to eq("")
     end
 
-    it 'handles very long paragraphs' do
+    it "handles very long paragraphs" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'x' * 100_000) # 100k characters
+      run = Uniword::Wordprocessingml::Run.new(text: "x" * 100_000) # 100k characters
       para.runs << run
 
       doc.body.paragraphs << para
     end
 
-    it 'handles documents with unusual characters' do
+    it "handles documents with unusual characters" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好世界 emoji: 🎉 math: ∑∫√')
+      run = Uniword::Wordprocessingml::Run.new(text: "Unicode: 你好世界 emoji: 🎉 math: ∑∫√")
       para.runs << run
 
       doc.body.paragraphs << para
 
-      expect(doc.text).to include('你好世界')
-      expect(doc.text).to include('🎉')
+      expect(doc.text).to include("你好世界")
+      expect(doc.text).to include("🎉")
     end
   end
 
-  describe 'Production Readiness Checklist' do
-    it 'validates all critical functionality works' do
+  describe "Production Readiness Checklist" do
+    it "validates all critical functionality works" do
       checklist = {
-        'Document creation' => -> { Uniword::Wordprocessingml::DocumentRoot.new },
-        'Document opening' => lambda {
-          Uniword.load('spec/fixtures/docx_gem/styles.docx')
+        "Document creation" => -> { Uniword::Wordprocessingml::DocumentRoot.new },
+        "Document opening" => lambda {
+          Uniword.load("spec/fixtures/docx_gem/styles.docx")
         },
-        'Paragraph creation' => -> { Uniword::Wordprocessingml::Paragraph.new },
-        'Text addition' => lambda {
+        "Paragraph creation" => -> { Uniword::Wordprocessingml::Paragraph.new },
+        "Text addition" => lambda {
           p = Uniword::Wordprocessingml::Paragraph.new
-          run = Uniword::Wordprocessingml::Run.new(text: 'test')
+          run = Uniword::Wordprocessingml::Run.new(text: "test")
           p.runs << run
         },
-        'Table creation' => -> { Uniword::Wordprocessingml::Table.new },
-        'Document saving' => lambda {
+        "Table creation" => -> { Uniword::Wordprocessingml::Table.new },
+        "Document saving" => lambda {
           doc = Uniword::Wordprocessingml::DocumentRoot.new
           para = Uniword::Wordprocessingml::Paragraph.new
-          run = Uniword::Wordprocessingml::Run.new(text: 'test')
+          run = Uniword::Wordprocessingml::Run.new(text: "test")
           para.runs << run
           doc.body.paragraphs << para
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")
@@ -383,7 +381,7 @@ RSpec.describe 'Real-World Document Testing', :integration do
         failures << "#{name}: #{e.message}"
       end
 
-      expect(failures).to be_empty, "Failed checks: #{failures.join(', ')}"
+      expect(failures).to be_empty, "Failed checks: #{failures.join(", ")}"
     end
   end
 end

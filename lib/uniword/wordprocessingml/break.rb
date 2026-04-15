@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :clear, :string
 
       xml do
-        element 'br'
+        element "br"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'type', to: :type
-        map_attribute 'clear', to: :clear
+        map_attribute "type", to: :type
+        map_attribute "clear", to: :clear
       end
     end
   end

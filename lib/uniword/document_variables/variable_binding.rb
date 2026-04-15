@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentVariables
@@ -14,12 +14,12 @@ module Uniword
       attribute :prefix_mappings, :string
 
       xml do
-        element 'variable_binding'
+        element "variable_binding"
         namespace Uniword::Ooxml::Namespaces::DocumentVariables
 
-        map_attribute 'xpath', to: :xpath
-        map_attribute 'storeItemID', to: :store_item_id
-        map_attribute 'prefixMappings', to: :prefix_mappings
+        map_attribute "xpath", to: :xpath
+        map_attribute "storeItemID", to: :store_item_id
+        map_attribute "prefixMappings", to: :prefix_mappings
       end
     end
   end

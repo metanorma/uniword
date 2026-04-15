@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,12 +13,12 @@ module Uniword
       attribute :breaks, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'colBreaks'
+        element "colBreaks"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'count', to: :count
-        map_element 'brk', to: :breaks, render_nil: false
+        map_attribute "count", to: :count
+        map_element "brk", to: :breaks, render_nil: false
       end
     end
   end

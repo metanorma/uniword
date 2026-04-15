@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2013
@@ -14,12 +14,12 @@ module Uniword
       attribute :provider_id, :string
 
       xml do
-        element 'author'
+        element "author"
         namespace Uniword::Ooxml::Namespaces::Word2012
 
-        map_attribute 'name', to: :name
-        map_attribute 'initials', to: :initials
-        map_attribute 'provider-id', to: :provider_id
+        map_attribute "name", to: :name
+        map_attribute "initials", to: :initials
+        map_attribute "provider-id", to: :provider_id
       end
     end
   end

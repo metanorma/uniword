@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -11,10 +11,10 @@ module Uniword
       attribute :id, :string
 
       xml do
-        element 'cNvGraphicFramePr'
+        element "cNvGraphicFramePr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'id', to: :id
+        map_attribute "id", to: :id
       end
     end
   end

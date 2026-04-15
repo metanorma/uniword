@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'zip'
+require "zip"
 
 module Uniword
   module Infrastructure
@@ -35,14 +35,14 @@ module Uniword
           zip_file.each do |entry|
             next if entry.directory?
 
-            content[entry.name] = entry.get_input_stream.read.force_encoding('UTF-8')
+            content[entry.name] = entry.get_input_stream.read.force_encoding("UTF-8")
           end
 
           # Explicitly extract theme if present
-          theme_entry = zip_file.find_entry('word/theme/theme1.xml')
-          if theme_entry && !content.key?('word/theme/theme1.xml')
-            content['word/theme/theme1.xml'] =
-              theme_entry.get_input_stream.read.force_encoding('UTF-8')
+          theme_entry = zip_file.find_entry("word/theme/theme1.xml")
+          if theme_entry && !content.key?("word/theme/theme1.xml")
+            content["word/theme/theme1.xml"] =
+              theme_entry.get_input_stream.read.force_encoding("UTF-8")
           end
         end
 
@@ -60,14 +60,14 @@ module Uniword
           zip_file.each do |entry|
             next if entry.directory?
 
-            content[entry.name] = entry.get_input_stream.read.force_encoding('UTF-8')
+            content[entry.name] = entry.get_input_stream.read.force_encoding("UTF-8")
           end
 
           # Explicitly extract theme if present
-          theme_entry = zip_file.find_entry('word/theme/theme1.xml')
-          if theme_entry && !content.key?('word/theme/theme1.xml')
-            content['word/theme/theme1.xml'] =
-              theme_entry.get_input_stream.read.force_encoding('UTF-8')
+          theme_entry = zip_file.find_entry("word/theme/theme1.xml")
+          if theme_entry && !content.key?("word/theme/theme1.xml")
+            content["word/theme/theme1.xml"] =
+              theme_entry.get_input_stream.read.force_encoding("UTF-8")
           end
         end
 
@@ -87,7 +87,7 @@ module Uniword
           entry = zip_file.find_entry(entry_path)
           return nil unless entry
 
-          entry.get_input_stream.read.force_encoding('UTF-8')
+          entry.get_input_stream.read.force_encoding("UTF-8")
         end
       end
 
@@ -118,13 +118,13 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if path is invalid
       def validate_path(path)
-        raise ArgumentError, 'Path cannot be nil' if path.nil?
+        raise ArgumentError, "Path cannot be nil" if path.nil?
 
         # Allow IO and StringIO objects
         return if path.is_a?(IO) || path.is_a?(StringIO)
 
         # For strings, validate as file path
-        raise ArgumentError, 'Path cannot be empty' if path.respond_to?(:empty?) && path.empty?
+        raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
         raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
         raise ArgumentError, "Path is a directory: #{path}" if File.directory?(path)
       end

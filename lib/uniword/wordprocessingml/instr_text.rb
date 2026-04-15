@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,18 +13,16 @@ module Uniword
       attribute :xml_space, :string
 
       xml do
-        element 'instrText'
+        element "instrText"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'xml:space', to: :xml_space
-        map_element 'text', to: :text, render_nil: false
+        map_attribute "xml:space", to: :xml_space
+        map_element "text", to: :text, render_nil: false
       end
 
       def initialize(attrs = {})
-        if attrs[:text].is_a?(String) && (attrs[:text].start_with?(' ') || attrs[:text].end_with?(' ') || attrs[:text].include?("\t"))
-          attrs[:xml_space] = 'preserve'
-        end
+        attrs[:xml_space] = "preserve" if attrs[:text].is_a?(String) && (attrs[:text].start_with?(" ") || attrs[:text].end_with?(" ") || attrs[:text].include?("\t"))
         super
       end
     end

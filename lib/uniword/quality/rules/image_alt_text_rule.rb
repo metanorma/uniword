@@ -46,7 +46,7 @@ module Uniword
                 violations << create_violation(
                   severity: :error,
                   message: "Image #{image_count} is missing alt text. " \
-                           'Alt text is required for accessibility.',
+                           "Alt text is required for accessibility.",
                   location: "Paragraph #{para_index + 1}, Image #{image_count}",
                   element: drawing
                 )
@@ -55,7 +55,7 @@ module Uniword
                   severity: :warning,
                   message: "Image #{image_count} has alt text that is too short " \
                            "(#{alt_text.length} characters, minimum: #{@min_length}). " \
-                           'Provide more descriptive alt text.',
+                           "Provide more descriptive alt text.",
                   location: "Paragraph #{para_index + 1}, Image #{image_count}",
                   element: drawing
                 )

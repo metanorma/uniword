@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -24,15 +24,15 @@ module Uniword
       attribute :bar, Border
 
       xml do
-        element 'pBdr'
+        element "pBdr"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_element 'top', to: :top, render_nil: false
-        map_element 'bottom', to: :bottom, render_nil: false
-        map_element 'left', to: :left, render_nil: false
-        map_element 'right', to: :right, render_nil: false
-        map_element 'between', to: :between, render_nil: false
-        map_element 'bar', to: :bar, render_nil: false
+        map_element "top", to: :top, render_nil: false
+        map_element "bottom", to: :bottom, render_nil: false
+        map_element "left", to: :left, render_nil: false
+        map_element "right", to: :right, render_nil: false
+        map_element "between", to: :between, render_nil: false
+        map_element "bar", to: :bar, render_nil: false
       end
     end
   end

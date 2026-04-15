@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :c_nv_pr, NonVisualDrawingProperties
 
       xml do
-        element 'nvSpPr'
+        element "nvSpPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'cNvPr', to: :c_nv_pr
+        map_element "cNvPr", to: :c_nv_pr
       end
     end
   end

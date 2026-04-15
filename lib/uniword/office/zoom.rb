@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :percent, :string
 
       xml do
-        element 'zoom'
+        element "zoom"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'percent', to: :percent
+        map_attribute "percent", to: :percent
       end
     end
   end

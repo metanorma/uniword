@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,7 +12,7 @@ module Uniword
     # ISO/IEC 29500-1:2016 - Section 17.11.11
     class FootnoteRef < Lutaml::Model::Serializable
       xml do
-        element 'footnoteRef'
+        element "footnoteRef"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

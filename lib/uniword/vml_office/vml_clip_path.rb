@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :path, :string
 
       xml do
-        element 'clippath'
+        element "clippath"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'coords', to: :coords
-        map_attribute 'path', to: :path
+        map_attribute "coords", to: :coords
+        map_attribute "path", to: :path
       end
     end
   end

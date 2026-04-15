@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -11,10 +11,10 @@ module Uniword
       attribute :xfrm, Transform2D
 
       xml do
-        element 'grpSpPr'
+        element "grpSpPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'xfrm', to: :xfrm, render_nil: false
+        map_element "xfrm", to: :xfrm, render_nil: false
       end
     end
   end

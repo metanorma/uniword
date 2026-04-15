@@ -20,13 +20,13 @@ module Uniword
       attribute :colors, :hash
 
       yaml do
-        map 'name', to: :name
-        map 'colors', to: :colors
+        map "name", to: :name
+        map "colors", to: :colors
       end
 
       # Key name aliases (maps snake_case to camelCase)
       KEY_ALIASES = {
-        fol_hlink: 'folHlink'
+        fol_hlink: "folHlink"
       }.freeze
 
       # Convenience accessor for colors hash
@@ -76,13 +76,13 @@ module Uniword
       attribute :minor_complex_script, :string
 
       yaml do
-        map 'name', to: :name
-        map 'major_font', to: :major_font
-        map 'minor_font', to: :minor_font
-        map 'major_east_asian', to: :major_east_asian
-        map 'major_complex_script', to: :major_complex_script
-        map 'minor_east_asian', to: :minor_east_asian
-        map 'minor_complex_script', to: :minor_complex_script
+        map "name", to: :name
+        map "major_font", to: :major_font
+        map "minor_font", to: :minor_font
+        map "major_east_asian", to: :major_east_asian
+        map "major_complex_script", to: :major_complex_script
+        map "minor_east_asian", to: :minor_east_asian
+        map "minor_complex_script", to: :minor_complex_script
       end
     end
 
@@ -113,12 +113,12 @@ module Uniword
       attribute :variants, :hash
 
       yaml do
-        map 'name', to: :name
-        map 'source', to: :source
-        map 'imported_at', to: :imported_at
-        map 'color_scheme', to: :color_scheme
-        map 'font_scheme', to: :font_scheme
-        map 'variants', to: :variants
+        map "name", to: :name
+        map "source", to: :source
+        map "imported_at", to: :imported_at
+        map "color_scheme", to: :color_scheme
+        map "font_scheme", to: :font_scheme
+        map "variants", to: :variants
       end
 
       # Load a bundled theme by name
@@ -127,10 +127,10 @@ module Uniword
       # @return [Theme] Loaded theme
       # @raise [ArgumentError] if theme not found
       def self.load(name)
-        path = File.join(__dir__, '../../../data/themes', "#{name}.yml")
+        path = File.join(__dir__, "../../../data/themes", "#{name}.yml")
         unless File.exist?(path)
           raise ArgumentError,
-                "Theme '#{name}' not found. Available: #{available_themes.join(', ')}"
+                "Theme '#{name}' not found. Available: #{available_themes.join(", ")}"
         end
 
         from_yaml(File.read(path))
@@ -140,11 +140,11 @@ module Uniword
       #
       # @return [Array<String>] Theme names
       def self.available_themes
-        theme_dir = File.join(__dir__, '../../../data/themes')
+        theme_dir = File.join(__dir__, "../../../data/themes")
         return [] unless Dir.exist?(theme_dir)
 
-        Dir.glob(File.join(theme_dir, '*.yml'))
-           .map { |p| File.basename(p, '.yml') }
+        Dir.glob(File.join(theme_dir, "*.yml"))
+           .map { |p| File.basename(p, ".yml") }
            .sort
       end
 

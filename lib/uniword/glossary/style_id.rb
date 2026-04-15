@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -12,10 +12,10 @@ module Uniword
       attribute :val, :string
 
       xml do
-        root 'style'
+        root "style"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

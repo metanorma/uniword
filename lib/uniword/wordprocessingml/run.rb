@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -34,29 +34,29 @@ module Uniword
       attr_accessor :parent_paragraph
 
       xml do
-        element 'r'
+        element "r"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'rsidR', to: :rsid_r, render_nil: false
-        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
+        map_attribute "rsidR", to: :rsid_r, render_nil: false
+        map_attribute "rsidRPr", to: :rsid_r_pr, render_nil: false
 
-        map_element 'rPr', to: :properties, render_nil: false
-        map_element 't', to: :text, render_nil: false
-        map_element 'tab', to: :tab, render_nil: false
-        map_element 'br', to: :break, render_nil: false
-        map_element 'drawing', to: :drawings, render_nil: false
-        map_element 'pict', to: :pictures, render_nil: false
-        map_element 'AlternateContent', to: :alternate_content, render_nil: false
-        map_element 'footnoteReference', to: :footnote_reference, render_nil: false
-        map_element 'endnoteReference', to: :endnote_reference, render_nil: false
-        map_element 'fldChar', to: :field_char, render_nil: false
-        map_element 'instrText', to: :instr_text, render_nil: false
-        map_element 'ptab', to: :position_tab, render_nil: false
-        map_element 'delText', to: :del_text, render_nil: false
-        map_element 'noBreakHyphen', to: :no_break_hyphen, render_nil: false
-        map_element 'sym', to: :sym, render_nil: false
-        map_element 'lastRenderedPageBreak', to: :last_rendered_page_break, render_nil: false
+        map_element "rPr", to: :properties, render_nil: false
+        map_element "t", to: :text, render_nil: false
+        map_element "tab", to: :tab, render_nil: false
+        map_element "br", to: :break, render_nil: false
+        map_element "drawing", to: :drawings, render_nil: false
+        map_element "pict", to: :pictures, render_nil: false
+        map_element "AlternateContent", to: :alternate_content, render_nil: false
+        map_element "footnoteReference", to: :footnote_reference, render_nil: false
+        map_element "endnoteReference", to: :endnote_reference, render_nil: false
+        map_element "fldChar", to: :field_char, render_nil: false
+        map_element "instrText", to: :instr_text, render_nil: false
+        map_element "ptab", to: :position_tab, render_nil: false
+        map_element "delText", to: :del_text, render_nil: false
+        map_element "noBreakHyphen", to: :no_break_hyphen, render_nil: false
+        map_element "sym", to: :sym, render_nil: false
+        map_element "lastRenderedPageBreak", to: :last_rendered_page_break, render_nil: false
       end
 
       # Initialize with text normalization
@@ -108,10 +108,10 @@ module Uniword
         text_preview = "#{text_preview[0, 37]}..." if text_preview.length > 40
 
         flags = []
-        flags << 'bold' if properties&.bold&.value == true
-        flags << 'italic' if properties&.italic&.value == true
+        flags << "bold" if properties&.bold&.value == true
+        flags << "italic" if properties&.italic&.value == true
         if flags.any?
-          "#<#{self.class} text=\"#{text_preview}\", #{flags.join(', ')}>"
+          "#<#{self.class} text=\"#{text_preview}\", #{flags.join(", ")}>"
         else
           "#<#{self.class} text=\"#{text_preview}\">"
         end
@@ -246,9 +246,7 @@ module Uniword
       # Create Text object with xml:space="preserve" when needed
       def create_text_object(string)
         text_obj = Text.new(content: string)
-        if string.start_with?(' ') || string.end_with?(' ') || string.include?("\t")
-          text_obj.xml_space = 'preserve'
-        end
+        text_obj.xml_space = "preserve" if string.start_with?(" ") || string.end_with?(" ") || string.include?("\t")
         text_obj
       end
     end

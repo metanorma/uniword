@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2016
@@ -13,11 +13,11 @@ module Uniword
       attribute :done, :string
 
       xml do
-        element 'commentsExt'
+        element "commentsExt"
         namespace Uniword::Ooxml::Namespaces::Word2015
 
-        map_attribute 'para-id', to: :para_id
-        map_attribute 'done', to: :done
+        map_attribute "para-id", to: :para_id
+        map_attribute "done", to: :done
       end
     end
   end

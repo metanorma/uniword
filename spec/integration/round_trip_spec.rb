@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'fileutils'
+require "spec_helper"
+require "fileutils"
 
-RSpec.describe 'DOCX Round-trip Validation' do
-  let(:tmp_dir) { 'tmp/roundtrip' }
-  let(:fixtures_dir) { 'spec/fixtures/docx_gem' }
+RSpec.describe "DOCX Round-trip Validation" do
+  let(:tmp_dir) { "tmp/roundtrip" }
+  let(:fixtures_dir) { "spec/fixtures/docx_gem" }
 
   before(:all) do
-    FileUtils.mkdir_p('tmp/roundtrip')
+    FileUtils.mkdir_p("tmp/roundtrip")
   end
 
   after(:each) do
@@ -16,12 +16,12 @@ RSpec.describe 'DOCX Round-trip Validation' do
     Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
 
-  describe 'Basic Round-trip' do
-    context 'simple paragraph text' do
+  describe "Basic Round-trip" do
+    context "simple paragraph text" do
       let(:fixture_path) { "#{fixtures_dir}/basic.docx" }
       let(:temp_path) { "#{tmp_dir}/roundtrip_basic.docx" }
 
-      it 'preserves text content' do
+      it "preserves text content" do
         # Read fixture
         doc1 = Uniword::DocumentFactory.from_file(fixture_path)
         original_text = extract_text(doc1)
@@ -36,7 +36,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
         expect(extract_text(doc2)).to eq(original_text)
       end
 
-      it 'preserves paragraph count' do
+      it "preserves paragraph count" do
         doc1 = Uniword::DocumentFactory.from_file(fixture_path)
         original_count = doc1.paragraphs.count
 
@@ -46,7 +46,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
         expect(doc2.paragraphs.count).to eq(original_count)
       end
 
-      it 'preserves element structure' do
+      it "preserves element structure" do
         doc1 = Uniword::DocumentFactory.from_file(fixture_path)
         original_paragraphs = doc1.paragraphs.count
         original_tables = doc1.tables.count
@@ -59,10 +59,10 @@ RSpec.describe 'DOCX Round-trip Validation' do
       end
     end
 
-    context 'empty document' do
+    context "empty document" do
       let(:temp_path) { "#{tmp_dir}/roundtrip_empty.docx" }
 
-      it 'handles empty document' do
+      it "handles empty document" do
         doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
         doc1.save(temp_path)
@@ -73,11 +73,11 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
   end
 
-  describe 'Formatting Round-trip' do
+  describe "Formatting Round-trip" do
     let(:fixture_path) { "#{fixtures_dir}/formatting.docx" }
     let(:temp_path) { "#{tmp_dir}/roundtrip_formatting.docx" }
 
-    it 'preserves text formatting' do
+    it "preserves text formatting" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
 
       # Collect formatting info before save
@@ -92,7 +92,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(roundtrip_formatting).to match_array(original_formatting)
     end
 
-    it 'preserves bold text' do
+    it "preserves bold text" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       bold_runs_before = count_bold_runs(doc1)
 
@@ -103,7 +103,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(bold_runs_after).to eq(bold_runs_before)
     end
 
-    it 'preserves italic text' do
+    it "preserves italic text" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       italic_runs_before = count_italic_runs(doc1)
 
@@ -114,7 +114,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(italic_runs_after).to eq(italic_runs_before)
     end
 
-    it 'preserves font information' do
+    it "preserves font information" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       fonts_before = collect_fonts(doc1)
 
@@ -126,11 +126,11 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
   end
 
-  describe 'Table Round-trip' do
+  describe "Table Round-trip" do
     let(:fixture_path) { "#{fixtures_dir}/tables.docx" }
     let(:temp_path) { "#{tmp_dir}/roundtrip_tables.docx" }
 
-    it 'preserves table count' do
+    it "preserves table count" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       table_count_before = doc1.tables.count
 
@@ -140,7 +140,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(doc2.tables.count).to eq(table_count_before)
     end
 
-    it 'preserves table structure' do
+    it "preserves table structure" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       table_structures_before = collect_table_structures(doc1)
 
@@ -151,7 +151,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(table_structures_after).to eq(table_structures_before)
     end
 
-    it 'preserves table cell content' do
+    it "preserves table cell content" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       cell_texts_before = collect_table_cell_texts(doc1)
 
@@ -162,7 +162,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(cell_texts_after).to eq(cell_texts_before)
     end
 
-    it 'preserves table borders' do
+    it "preserves table borders" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       borders_before = collect_table_borders(doc1)
 
@@ -174,11 +174,11 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
   end
 
-  describe 'Styles Round-trip' do
+  describe "Styles Round-trip" do
     let(:fixture_path) { "#{fixtures_dir}/styles.docx" }
     let(:temp_path) { "#{tmp_dir}/roundtrip_styles.docx" }
 
-    it 'preserves style definitions' do
+    it "preserves style definitions" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       styles_before = collect_style_definitions(doc1)
 
@@ -189,7 +189,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(styles_after.keys).to match_array(styles_before.keys)
     end
 
-    it 'preserves style applications' do
+    it "preserves style applications" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       applied_styles_before = collect_applied_styles(doc1)
 
@@ -200,7 +200,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(applied_styles_after).to eq(applied_styles_before)
     end
 
-    it 'preserves paragraph styles' do
+    it "preserves paragraph styles" do
       doc1 = Uniword::DocumentFactory.from_file(fixture_path)
       para_styles_before = collect_paragraph_styles(doc1)
 
@@ -212,10 +212,10 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
   end
 
-  describe 'Complete Document Round-trip' do
+  describe "Complete Document Round-trip" do
     let(:temp_path) { "#{tmp_dir}/roundtrip_complete.docx" }
 
-    it 'preserves all features in complex document' do
+    it "preserves all features in complex document" do
       # Create document with ALL features
       doc1 = create_full_featured_document
 
@@ -236,7 +236,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(roundtrip_state[:formatting_count]).to eq(original_state[:formatting_count])
     end
 
-    it 'handles multiple paragraphs with various styles' do
+    it "handles multiple paragraphs with various styles" do
       doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add multiple paragraphs with different content
@@ -256,12 +256,12 @@ RSpec.describe 'DOCX Round-trip Validation' do
       expect(roundtrip_texts).to eq(original_texts)
     end
 
-    it 'handles mixed content types' do
+    it "handles mixed content types" do
       doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add paragraph
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Text before table')
+      run = Uniword::Wordprocessingml::Run.new(text: "Text before table")
       para.runs << run
       doc1.body.paragraphs << para
 
@@ -270,7 +270,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       row = Uniword::Wordprocessingml::TableRow.new
       cell = Uniword::Wordprocessingml::TableCell.new
       cell_para = Uniword::Wordprocessingml::Paragraph.new
-      cell_run = Uniword::Wordprocessingml::Run.new(text: 'Cell content')
+      cell_run = Uniword::Wordprocessingml::Run.new(text: "Cell content")
       cell_para.runs << cell_run
       cell.paragraphs << cell_para
       row.cells << cell
@@ -279,7 +279,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       # Add another paragraph
       para2 = Uniword::Wordprocessingml::Paragraph.new
-      run2 = Uniword::Wordprocessingml::Run.new(text: 'Text after table')
+      run2 = Uniword::Wordprocessingml::Run.new(text: "Text after table")
       para2.runs << run2
       doc1.body.paragraphs << para2
 
@@ -300,21 +300,21 @@ RSpec.describe 'DOCX Round-trip Validation' do
     end
   end
 
-  describe 'Property Preservation' do
+  describe "Property Preservation" do
     let(:temp_path) { "#{tmp_dir}/roundtrip_properties.docx" }
 
-    it 'preserves paragraph properties' do
+    it "preserves paragraph properties" do
       doc1 = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create paragraph with properties
       para = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-          alignment: 'center',
+          alignment: "center",
           line_spacing: 240
         )
       )
 
-      run = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph')
+      run = Uniword::Wordprocessingml::Run.new(text: "Test paragraph")
       para.runs << run
       doc1.body.paragraphs << para
 
@@ -323,16 +323,16 @@ RSpec.describe 'DOCX Round-trip Validation' do
 
       # Properties should be preserved
       expect(doc2.paragraphs.count).to eq(1)
-      expect(extract_text(doc2)).to include('Test paragraph')
+      expect(extract_text(doc2)).to include("Test paragraph")
     end
 
-    it 'preserves run properties' do
+    it "preserves run properties" do
       doc1 = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
 
       # Create run with properties
       run = Uniword::Wordprocessingml::Run.new(
-        text: 'Formatted text',
+        text: "Formatted text",
         properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           italic: true,
@@ -347,7 +347,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       doc2 = Uniword::DocumentFactory.from_file(temp_path)
 
       expect(doc2.paragraphs.count).to eq(1)
-      expect(extract_text(doc2)).to include('Formatted text')
+      expect(extract_text(doc2)).to include("Formatted text")
     end
   end
 
@@ -371,10 +371,10 @@ RSpec.describe 'DOCX Round-trip Validation' do
   end
 
   def extract_paragraph_text(paragraph)
-    return '' unless paragraph.respond_to?(:runs)
+    return "" unless paragraph.respond_to?(:runs)
 
     paragraph.runs.map do |run|
-      run.respond_to?(:text) ? run.text : ''
+      run.respond_to?(:text) ? run.text : ""
     end.join
   end
 
@@ -402,9 +402,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties.respond_to?(:bold) && run.properties.bold
-          count += 1
-        end
+        count += 1 if run.respond_to?(:properties) && run.properties.respond_to?(:bold) && run.properties.bold
       end
     end
     count
@@ -416,9 +414,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties.respond_to?(:italic) && run.properties.italic
-          count += 1
-        end
+        count += 1 if run.respond_to?(:properties) && run.properties.respond_to?(:italic) && run.properties.italic
       end
     end
     count
@@ -430,9 +426,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        if run.respond_to?(:properties) && run.properties.respond_to?(:font) && run.properties.font
-          fonts << run.properties.font
-        end
+        fonts << run.properties.font if run.respond_to?(:properties) && run.properties.respond_to?(:font) && run.properties.font
       end
     end
     fonts.uniq
@@ -463,9 +457,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
   def collect_table_borders(document)
     borders = []
     document.tables.each do |table|
-      if table.respond_to?(:properties) && table.properties.respond_to?(:borders)
-        borders << table.properties.borders
-      end
+      borders << table.properties.borders if table.respond_to?(:properties) && table.properties.respond_to?(:borders)
     end
     borders
   end
@@ -485,9 +477,7 @@ RSpec.describe 'DOCX Round-trip Validation' do
   def collect_applied_styles(document)
     styles = []
     document.paragraphs.each do |para|
-      if para.respond_to?(:properties) && para.properties.respond_to?(:style)
-        styles << para.properties.style
-      end
+      styles << para.properties.style if para.respond_to?(:properties) && para.properties.respond_to?(:style)
     end
     styles
   end

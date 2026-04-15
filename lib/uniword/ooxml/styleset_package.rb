@@ -56,7 +56,7 @@ module Uniword
       # @return [void]
       # @raise [RuntimeError] if package not extracted
       def save_content(styleset)
-        raise 'Must extract before saving' unless extracted_dir
+        raise "Must extract before saving" unless extracted_dir
 
         @styleset = styleset
 

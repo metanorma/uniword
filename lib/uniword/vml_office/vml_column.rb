@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :spacing, :string
 
       xml do
-        element 'column'
+        element "column"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'count', to: :count
-        map_attribute 'spacing', to: :spacing
+        map_attribute "count", to: :count
+        map_attribute "spacing", to: :spacing
       end
     end
   end

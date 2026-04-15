@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -14,10 +14,10 @@ module Uniword
       attribute :id, :string
 
       xml do
-        element 'diagram'
+        element "diagram"
         namespace Uniword::Ooxml::Namespaces::Diagram
 
-        map_attribute 'id', to: :id, render_nil: false
+        map_attribute "id", to: :id, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -16,14 +16,14 @@ module Uniword
       attribute :srgb_clr, SrgbColor
 
       xml do
-        element 'innerShdw'
+        element "innerShdw"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'blurRad', to: :blur_rad, render_nil: false
-        map_attribute 'dist', to: :dist, render_nil: false
-        map_attribute 'dir', to: :dir, render_nil: false
-        map_element 'schemeClr', to: :scheme_clr, render_nil: false
-        map_element 'srgbClr', to: :srgb_clr, render_nil: false
+        map_attribute "blurRad", to: :blur_rad, render_nil: false
+        map_attribute "dist", to: :dist, render_nil: false
+        map_attribute "dir", to: :dir, render_nil: false
+        map_element "schemeClr", to: :scheme_clr, render_nil: false
+        map_element "srgbClr", to: :srgb_clr, render_nil: false
       end
     end
   end

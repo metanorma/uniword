@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2013
@@ -12,11 +12,11 @@ module Uniword
       attribute :comment_id, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'commentsIds'
+        element "commentsIds"
         namespace Uniword::Ooxml::Namespaces::Word2012
         mixed_content
 
-        map_element 'commentId', to: :comment_id, render_nil: false
+        map_element "commentId", to: :comment_id, render_nil: false
       end
     end
   end

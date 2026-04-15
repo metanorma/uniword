@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'base64'
+require "base64"
 
 module Uniword
   module Infrastructure
@@ -19,10 +19,10 @@ module Uniword
       # @return [Mhtml::Document] The parsed document
       # @raise [ArgumentError] if path is nil or file not found
       def parse(path)
-        raise ArgumentError, 'Path cannot be nil' if path.nil?
+        raise ArgumentError, "Path cannot be nil" if path.nil?
         raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
 
-        content = File.read(path, encoding: 'UTF-8')
+        content = File.read(path, encoding: "UTF-8")
         parse_content(content)
       end
 
@@ -60,17 +60,17 @@ module Uniword
         elsif (match = @content.match(/boundary=([^\s;]+)/))
           match[1]
         else
-          raise 'No MIME boundary found in content'
+          raise "No MIME boundary found in content"
         end
       end
 
       # Split content into raw MIME part strings.
       def split_parts
         parts = @content.split(/--#{Regexp.escape(@boundary)}/)
-        parts.reject! { |p| p.strip.empty? || p.strip == '--' }
+        parts.reject! { |p| p.strip.empty? || p.strip == "--" }
         # Skip the global MIME header (Content-Type: multipart/related)
         # Strip leading CRLF first since boundary lines end with \r\n
-        parts.reject! { |p| p.gsub(/^\r?\n/, '').match?(/^Content-Type:\s*multipart/i) }
+        parts.reject! { |p| p.gsub(/^\r?\n/, "").match?(/^Content-Type:\s*multipart/i) }
         parts
       end
 
@@ -80,12 +80,12 @@ module Uniword
         return nil unless body
 
         # Strip leading CRLF from headers (boundary lines end with \r\n)
-        headers = headers.gsub(/^\r?\n/, '')
+        headers = headers.gsub(/^\r?\n/, "")
 
-        content_type = extract_header(headers, 'Content-Type')
-        content_location = extract_header(headers, 'Content-Location')
-        encoding = extract_header(headers, 'Content-Transfer-Encoding')
-        content_id = extract_header(headers, 'Content-ID')
+        content_type = extract_header(headers, "Content-Type")
+        content_location = extract_header(headers, "Content-Location")
+        encoding = extract_header(headers, "Content-Transfer-Encoding")
+        content_id = extract_header(headers, "Content-ID")
 
         mime_part = create_typed_part(content_type)
         return nil unless mime_part
@@ -93,7 +93,7 @@ module Uniword
         mime_part.content_type = content_type
         mime_part.content_location = content_location
         mime_part.content_transfer_encoding = encoding
-        mime_part.content_id = content_id&.gsub(/[<>]/, '')
+        mime_part.content_id = content_id&.gsub(/[<>]/, "")
         mime_part.raw_content = body.rstrip
 
         mime_part
@@ -176,8 +176,8 @@ module Uniword
           next if part == document.html_part
 
           fname = part.filename
-          next unless fname&.include?('header') || fname&.include?('footer') ||
-                      fname&.include?('plchdr')
+          next unless fname&.include?("header") || fname&.include?("footer") ||
+                      fname&.include?("plchdr")
 
           # Convert to HeaderFooterPart
           idx = document.parts.index(part)

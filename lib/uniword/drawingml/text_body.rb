@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,12 +13,12 @@ module Uniword
       attribute :paragraphs, TextParagraph, collection: true, initialize_empty: true
 
       xml do
-        element 'txBody'
+        element "txBody"
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
 
-        map_element 'bodyPr', to: :body_pr
-        map_element 'p', to: :paragraphs, render_nil: false
+        map_element "bodyPr", to: :body_pr
+        map_element "p", to: :paragraphs, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'fileutils'
+require "fileutils"
 
 module Uniword
   module Schema
@@ -19,7 +19,7 @@ module Uniword
         @schema_name = schema_name
         @loader = SchemaLoader.instance
         @namespace_info = @loader.namespace(schema_name)
-        @output_dir = output_dir || File.join(__dir__, '../../generated', schema_name)
+        @output_dir = output_dir || File.join(__dir__, "../../generated", schema_name)
       end
 
       # Generate all classes for this schema
@@ -51,7 +51,7 @@ module Uniword
         # Ensure output directory exists
         FileUtils.mkdir_p(@output_dir)
 
-        class_name = element_def['class_name']
+        class_name = element_def["class_name"]
         file_name = underscore(class_name)
         file_path = File.join(@output_dir, "#{file_name}.rb")
 
@@ -69,9 +69,9 @@ module Uniword
       # @param element_def [Hash] Element definition from schema
       # @return [String] Ruby class code
       def generate_class_code(element_name, element_def)
-        class_name = element_def['class_name']
-        description = element_def['description']
-        attributes = element_def['attributes'] || []
+        class_name = element_def["class_name"]
+        description = element_def["description"]
+        attributes = element_def["attributes"] || []
 
         <<~RUBY
           # frozen_string_literal: true
@@ -84,7 +84,7 @@ module Uniword
                 # #{description}
                 #
                 # Generated from OOXML schema: #{schema_name}.yml
-                # Element: <#{@namespace_info['prefix']}:#{element_name}>
+                # Element: <#{@namespace_info["prefix"]}:#{element_name}>
                 class #{class_name} < Lutaml::Model::Serializable
           #{generate_attributes(attributes)}
 
@@ -102,19 +102,19 @@ module Uniword
       # @param attributes [Array<Hash>] Attribute definitions
       # @return [String] Attribute declaration code
       def generate_attributes(attributes)
-        return '' if attributes.empty?
+        return "" if attributes.empty?
 
         lines = attributes.map do |attr|
           # Convert type to symbol for primitive types
           type_str = if %w[String
-                           Integer].include?(attr['type'])
-                       ":#{attr['type'].downcase}"
+                           Integer].include?(attr["type"])
+                       ":#{attr["type"].downcase}"
                      else
-                       attr['type']
+                       attr["type"]
                      end
-          attr_code = "          attribute :#{attr['name']}, #{type_str}"
-          attr_code += ', collection: true' if attr['collection']
-          attr_code += ', initialize_empty: true' if attr['collection']
+          attr_code = "          attribute :#{attr["name"]}, #{type_str}"
+          attr_code += ", collection: true" if attr["collection"]
+          attr_code += ", initialize_empty: true" if attr["collection"]
           attr_code
         end
 
@@ -129,26 +129,26 @@ module Uniword
       # @return [String] XML mapping code
       def generate_xml_mapping(element_name, attributes)
         lines = []
-        lines << '          xml do'
+        lines << "          xml do"
         lines << "            element '#{element_name}'"
-        lines << "            namespace '#{@namespace_info['uri']}', '#{@namespace_info['prefix']}'"
-        lines << '            mixed_content' if has_nested_content?(attributes)
-        lines << ''
+        lines << "            namespace '#{@namespace_info["uri"]}', '#{@namespace_info["prefix"]}'"
+        lines << "            mixed_content" if has_nested_content?(attributes)
+        lines << ""
 
         # Map each attribute
         attributes.each do |attr|
-          if attr['xml_attribute']
+          if attr["xml_attribute"]
             # Attribute value (e.g., <w:p w:val="value">)
-            lines << "            map_attribute '#{attr['xml_name']}', to: :#{attr['name']}"
+            lines << "            map_attribute '#{attr["xml_name"]}', to: :#{attr["name"]}"
           else
             # Element value (e.g., <w:p><w:pPr>...</w:pPr></w:p>)
-            map_line = "            map_element '#{attr['xml_name']}', to: :#{attr['name']}"
-            map_line += ', render_nil: false' unless attr['required']
+            map_line = "            map_element '#{attr["xml_name"]}', to: :#{attr["name"]}"
+            map_line += ", render_nil: false" unless attr["required"]
             lines << map_line
           end
         end
 
-        lines << '          end'
+        lines << "          end"
         lines.join("\n")
       end
 
@@ -157,7 +157,7 @@ module Uniword
       # @param attributes [Array<Hash>] Attribute definitions
       # @return [Boolean] true if has nested elements
       def has_nested_content?(attributes)
-        attributes.any? { |attr| attr['xml_name'] && !attr['xml_attribute'] }
+        attributes.any? { |attr| attr["xml_name"] && !attr["xml_attribute"] }
       end
 
       # Convert CamelCase to snake_case
@@ -175,7 +175,7 @@ module Uniword
       # @param str [String] snake_case string
       # @return [String] CamelCase string
       def camelize(str)
-        str.split('_').map(&:capitalize).join
+        str.split("_").map(&:capitalize).join
       end
     end
   end

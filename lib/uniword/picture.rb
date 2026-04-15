@@ -12,6 +12,8 @@ module Uniword
     autoload :Picture, "#{__dir__}/picture/picture"
     autoload :NonVisualPictureProperties,
              "#{__dir__}/picture/non_visual_picture_properties"
+    autoload :NonVisualDrawingProperties,
+             "#{__dir__}/picture/non_visual_drawing_properties"
     autoload :NonVisualPictureDrawingProperties,
              "#{__dir__}/picture/non_visual_picture_drawing_properties"
     autoload :PictureLocks, "#{__dir__}/picture/picture_locks"

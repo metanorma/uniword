@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -12,11 +12,11 @@ module Uniword
       attribute :attr, SmartTagAttribute, collection: true, initialize_empty: true
 
       xml do
-        element 'smart_tag_properties'
+        element "smart_tag_properties"
         namespace Uniword::Ooxml::Namespaces::CustomXml
         mixed_content
 
-        map_element 'attr', to: :attr, render_nil: false
+        map_element "attr", to: :attr, render_nil: false
       end
     end
   end

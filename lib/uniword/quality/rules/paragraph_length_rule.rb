@@ -41,7 +41,7 @@ module Uniword
             violations << create_violation(
               severity: :error,
               message: "Paragraph has #{word_count} words (maximum: #{@max_words}). " \
-                       'Consider breaking into smaller paragraphs for readability.',
+                       "Consider breaking into smaller paragraphs for readability.",
               location: "Paragraph #{index + 1}",
               element: para
             )
@@ -49,7 +49,7 @@ module Uniword
             violations << create_violation(
               severity: :warning,
               message: "Paragraph has #{word_count} words (warning threshold: #{@warning_words}). " \
-                       'Consider reviewing for clarity.',
+                       "Consider reviewing for clarity.",
               location: "Paragraph #{index + 1}",
               element: para
             )

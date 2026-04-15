@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -20,23 +20,25 @@ module Uniword
       attribute :tc_mar, TableCellMargin
       attribute :cnf_style, CnfStyle
       attribute :no_wrap, NoWrap
+      attribute :hide_mark, HideMark
       attribute :text_direction, TextDirection
 
       xml do
-        element 'tcPr'
+        element "tcPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'tcW', to: :cell_width, render_nil: false
-        map_element 'tcBorders', to: :borders, render_nil: false
-        map_element 'shd', to: :shading, render_nil: false
-        map_element 'vAlign', to: :vertical_align, render_nil: false
-        map_element 'gridSpan', to: :grid_span, render_nil: false
-        map_element 'vMerge', to: :v_merge, render_nil: false
-        map_element 'tcMar', to: :tc_mar, render_nil: false
-        map_element 'cnfStyle', to: :cnf_style, render_nil: false
-        map_element 'noWrap', to: :no_wrap, render_nil: false
-        map_element 'textDirection', to: :text_direction,
+        map_element "tcW", to: :cell_width, render_nil: false
+        map_element "tcBorders", to: :borders, render_nil: false
+        map_element "shd", to: :shading, render_nil: false
+        map_element "vAlign", to: :vertical_align, render_nil: false
+        map_element "gridSpan", to: :grid_span, render_nil: false
+        map_element "vMerge", to: :v_merge, render_nil: false
+        map_element "tcMar", to: :tc_mar, render_nil: false
+        map_element "cnfStyle", to: :cnf_style, render_nil: false
+        map_element "noWrap", to: :no_wrap, render_nil: false
+        map_element "hideMark", to: :hide_mark, render_nil: false
+        map_element "textDirection", to: :text_direction,
                                      render_nil: false
       end
 

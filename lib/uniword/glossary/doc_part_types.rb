@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -13,12 +13,12 @@ module Uniword
       attribute :all, :boolean
 
       xml do
-        root 'types'
+        root "types"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'type', to: :type, render_nil: false
-        map_attribute 'all', to: :all
+        map_element "type", to: :type, render_nil: false
+        map_attribute "all", to: :all
       end
     end
   end

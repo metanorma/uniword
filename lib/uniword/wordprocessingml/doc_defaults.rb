@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,12 +13,12 @@ module Uniword
       attribute :pPrDefault, PPrDefault
 
       xml do
-        element 'docDefaults'
+        element "docDefaults"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'rPrDefault', to: :rPrDefault, render_nil: false
-        map_element 'pPrDefault', to: :pPrDefault, render_nil: false
+        map_element "rPrDefault", to: :rPrDefault, render_nil: false
+        map_element "pPrDefault", to: :pPrDefault, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'compatSetting'
+        element "compatSetting"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'name', to: :name
-        map_attribute 'uri', to: :uri
-        map_attribute 'val', to: :val
+        map_attribute "name", to: :name
+        map_attribute "uri", to: :uri
+        map_attribute "val", to: :val
       end
     end
   end

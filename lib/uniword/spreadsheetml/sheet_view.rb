@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -16,14 +16,14 @@ module Uniword
       attribute :zoom_scale, :integer
 
       xml do
-        element 'sheetView'
+        element "sheetView"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'workbook-view-id', to: :workbook_view_id
-        map_attribute 'show-grid-lines', to: :show_grid_lines
-        map_attribute 'show-row-col-headers', to: :show_row_col_headers
-        map_attribute 'tab-selected', to: :tab_selected
-        map_attribute 'zoom-scale', to: :zoom_scale
+        map_attribute "workbook-view-id", to: :workbook_view_id
+        map_attribute "show-grid-lines", to: :show_grid_lines
+        map_attribute "show-row-col-headers", to: :show_row_col_headers
+        map_attribute "tab-selected", to: :tab_selected
+        map_attribute "zoom-scale", to: :zoom_scale
       end
     end
   end

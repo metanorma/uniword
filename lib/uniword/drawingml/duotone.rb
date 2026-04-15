@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :scheme_colors, SchemeColor, collection: true, initialize_empty: true
 
       xml do
-        element 'duotone'
+        element "duotone"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'schemeClr', to: :scheme_colors
+        map_element "schemeClr", to: :scheme_colors
       end
     end
   end

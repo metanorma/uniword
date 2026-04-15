@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Bibliography
@@ -15,14 +15,14 @@ module Uniword
       attribute :source, Source, collection: true, initialize_empty: true
 
       xml do
-        element 'Sources'
+        element "Sources"
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 
-        map_attribute 'SelectedStyle', to: :selected_style
-        map_attribute 'StyleName', to: :style_name
-        map_attribute 'Version', to: :version
-        map_element 'Source', to: :source, render_nil: false
+        map_attribute "SelectedStyle", to: :selected_style
+        map_attribute "StyleName", to: :style_name
+        map_attribute "Version", to: :version
+        map_element "Source", to: :source, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,11 +12,11 @@ module Uniword
       attribute :endnote_entries, Endnote, collection: true, initialize_empty: true
 
       xml do
-        element 'endnotes'
+        element "endnotes"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'endnote', to: :endnote_entries, render_nil: false
+        map_element "endnote", to: :endnote_entries, render_nil: false
       end
     end
   end

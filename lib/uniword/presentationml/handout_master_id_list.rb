@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -12,10 +12,10 @@ module Uniword
       attribute :handout_master_id, :string
 
       xml do
-        element 'handout_master_id_lst'
+        element "handout_master_id_lst"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'handoutMasterId', to: :handout_master_id
+        map_attribute "handoutMasterId", to: :handout_master_id
       end
     end
   end

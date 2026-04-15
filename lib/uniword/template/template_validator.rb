@@ -64,7 +64,7 @@ module Uniword
 
             if depth.negative?
               @errors << "Unmatched {{@end}} at position #{marker.position} " \
-                         'without corresponding {{@each}}'
+                         "without corresponding {{@each}}"
             end
           end
         end
@@ -155,7 +155,7 @@ module Uniword
         return if expr.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
 
         @errors << "Invalid variable expression '#{expr}' at position #{marker.position}. " \
-                   'Expected format: variable or object.property'
+                   "Expected format: variable or object.property"
       end
 
       # Validate loop collection
@@ -174,7 +174,7 @@ module Uniword
         return if collection.match?(/^[a-zA-Z_]\w*(\.[a-zA-Z_]\w*)*$/)
 
         @errors << "Invalid collection name '#{collection}' at position #{marker.position}. " \
-                   'Expected format: collection or object.collection'
+                   "Expected format: collection or object.collection"
       end
 
       # Validate conditional expression

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -13,11 +13,11 @@ module Uniword
       attribute :column_jc, :string
 
       xml do
-        element 'mcPr'
+        element "mcPr"
         namespace Uniword::Ooxml::Namespaces::MathML
 
-        map_attribute 'val', to: :count
-        map_attribute 'val', to: :column_jc
+        map_attribute "val", to: :count
+        map_attribute "val", to: :column_jc
       end
     end
   end

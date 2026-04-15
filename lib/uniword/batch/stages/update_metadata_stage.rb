@@ -45,7 +45,7 @@ module Uniword
         update_core_properties(document)
         update_extended_properties(document) if @company
 
-        log 'Metadata update complete'
+        log "Metadata update complete"
         document
       end
 
@@ -53,7 +53,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        'Update document metadata'
+        "Update document metadata"
       end
 
       private
@@ -65,13 +65,9 @@ module Uniword
         # NOTE: Actual implementation depends on Document API
         # This is a placeholder that shows the intended structure
 
-        if @update_author && document.respond_to?(:author=)
-          document.author = @author || current_user
-        end
+        document.author = @author || current_user if @update_author && document.respond_to?(:author=)
 
-        if @update_modified_date && document.respond_to?(:modified_date=)
-          document.modified_date = Time.now
-        end
+        document.modified_date = Time.now if @update_modified_date && document.respond_to?(:modified_date=)
 
         if @update_revision_number && document.respond_to?(:revision=)
           current_revision = document.respond_to?(:revision) ? document.revision : 0
@@ -96,7 +92,7 @@ module Uniword
       #
       # @return [String] Current user name
       def current_user
-        ENV['USER'] || ENV['USERNAME'] || 'Unknown'
+        ENV["USER"] || ENV["USERNAME"] || "Unknown"
       end
     end
   end

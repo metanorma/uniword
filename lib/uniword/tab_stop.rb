@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a tab stop in a paragraph
@@ -22,8 +22,8 @@ module Uniword
     LEADERS = %w[none dot hyphen underscore heavy middleDot].freeze
 
     attribute :position, :integer
-    attribute :alignment, :string, default: -> { 'left' }
-    attribute :leader, :string, default: -> { 'none' }
+    attribute :alignment, :string, default: -> { "left" }
+    attribute :leader, :string, default: -> { "none" }
 
     def initialize(**attributes)
       super
@@ -36,8 +36,8 @@ module Uniword
     # @param position [Integer] Position in twips
     # @param leader [String] Leader character
     # @return [TabStop] New instance
-    def self.left(position, leader: 'none')
-      new(position: position, alignment: 'left', leader: leader)
+    def self.left(position, leader: "none")
+      new(position: position, alignment: "left", leader: leader)
     end
 
     # Create a center-aligned tab stop
@@ -45,8 +45,8 @@ module Uniword
     # @param position [Integer] Position in twips
     # @param leader [String] Leader character
     # @return [TabStop] New instance
-    def self.center(position, leader: 'none')
-      new(position: position, alignment: 'center', leader: leader)
+    def self.center(position, leader: "none")
+      new(position: position, alignment: "center", leader: leader)
     end
 
     # Create a right-aligned tab stop
@@ -54,8 +54,8 @@ module Uniword
     # @param position [Integer] Position in twips
     # @param leader [String] Leader character
     # @return [TabStop] New instance
-    def self.right(position, leader: 'none')
-      new(position: position, alignment: 'right', leader: leader)
+    def self.right(position, leader: "none")
+      new(position: position, alignment: "right", leader: leader)
     end
 
     # Create a decimal-aligned tab stop (for numbers)
@@ -63,8 +63,8 @@ module Uniword
     # @param position [Integer] Position in twips
     # @param leader [String] Leader character
     # @return [TabStop] New instance
-    def self.decimal(position, leader: 'none')
-      new(position: position, alignment: 'decimal', leader: leader)
+    def self.decimal(position, leader: "none")
+      new(position: position, alignment: "decimal", leader: leader)
     end
 
     private
@@ -73,13 +73,13 @@ module Uniword
       return unless alignment && !ALIGNMENTS.include?(alignment)
 
       raise ArgumentError,
-            "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
+            "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(", ")}"
     end
 
     def validate_leader
       return unless leader && !LEADERS.include?(leader)
 
-      raise ArgumentError, "Invalid leader: #{leader}. Must be one of: #{LEADERS.join(', ')}"
+      raise ArgumentError, "Invalid leader: #{leader}. Must be one of: #{LEADERS.join(", ")}"
     end
   end
 end

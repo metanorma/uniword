@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :leader, :string
 
       xml do
-        element 'tabStop'
+        element "tabStop"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :val
-        map_attribute 'pos', to: :pos
-        map_attribute 'leader', to: :leader
+        map_attribute "val", to: :val
+        map_attribute "pos", to: :pos
+        map_attribute "leader", to: :leader
       end
 
       # Get tab alignment

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -15,13 +15,13 @@ module Uniword
       attribute :nlcheck, :string
 
       xml do
-        element 'writingstyle'
+        element "writingstyle"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'lang', to: :lang
-        map_attribute 'vendorID', to: :vendorID
-        map_attribute 'dllVersion', to: :dllVersion
-        map_attribute 'nlcheck', to: :nlcheck
+        map_attribute "lang", to: :lang
+        map_attribute "vendorID", to: :vendorID
+        map_attribute "dllVersion", to: :dllVersion
+        map_attribute "nlcheck", to: :nlcheck
       end
     end
   end

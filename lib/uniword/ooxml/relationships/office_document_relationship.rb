@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -13,10 +13,10 @@ module Uniword
         attribute :constant_type, :string
 
         xml do
-          element 'OfficeDocumentRelationship'
+          element "OfficeDocumentRelationship"
           namespace Uniword::Ooxml::Namespaces::Relationships
 
-          map_attribute 'constant-type', to: :constant_type
+          map_attribute "constant-type", to: :constant_type
         end
       end
     end

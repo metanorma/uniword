@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -16,14 +16,14 @@ module Uniword
       attribute :soft_edge, SoftEdge
 
       xml do
-        element 'effectLst'
+        element "effectLst"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'glow', to: :glow, render_nil: false
-        map_element 'innerShdw', to: :inner_shdw, render_nil: false
-        map_element 'outerShdw', to: :outer_shdw, render_nil: false
-        map_element 'reflection', to: :reflection, render_nil: false
-        map_element 'softEdge', to: :soft_edge, render_nil: false
+        map_element "glow", to: :glow, render_nil: false
+        map_element "innerShdw", to: :inner_shdw, render_nil: false
+        map_element "outerShdw", to: :outer_shdw, render_nil: false
+        map_element "reflection", to: :reflection, render_nil: false
+        map_element "softEdge", to: :soft_edge, render_nil: false
       end
     end
   end

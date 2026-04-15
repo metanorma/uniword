@@ -25,18 +25,18 @@ module Uniword
       #   puts result.valid? # => true
       class FileStructureValidator < LayerValidator
         def layer_name
-          'File Structure'
+          "File Structure"
         end
 
         def validate(path)
           result = LayerValidationResult.new(layer_name)
 
           # Check file exists
-          return result.add_error('File does not exist', critical: true) unless File.exist?(path)
+          return result.add_error("File does not exist", critical: true) unless File.exist?(path)
 
           # Check readable
           unless File.readable?(path)
-            return result.add_error('File is not readable',
+            return result.add_error("File is not readable",
                                     critical: true)
           end
 
@@ -64,12 +64,12 @@ module Uniword
         end
 
         def validate_extension(path, result)
-          allowed = layer_config[:allowed_extensions] || ['.docx', '.doc']
+          allowed = layer_config[:allowed_extensions] || [".docx", ".doc"]
 
           return if allowed.any? { |ext| path.end_with?(ext) }
 
           result.add_warning(
-            "Unusual file extension (expected #{allowed.join(' or ')})"
+            "Unusual file extension (expected #{allowed.join(" or ")})"
           )
         end
 
@@ -78,7 +78,7 @@ module Uniword
           max_size = @config[:max_file_size] || 104_857_600 # 100MB default
 
           if size.zero?
-            result.add_error('File is empty', critical: true)
+            result.add_error("File is empty", critical: true)
           elsif size > max_size
             result.add_warning(
               "File is very large (#{format_bytes(size)})"

@@ -7,9 +7,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'srgbClr'
+        element "srgbClr"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -19,10 +19,10 @@ module Uniword
       attribute :last_clr, :string
 
       xml do
-        element 'sysClr'
+        element "sysClr"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'val', to: :val
-        map_attribute 'lastClr', to: :last_clr
+        map_attribute "val", to: :val
+        map_attribute "lastClr", to: :last_clr
       end
     end
 
@@ -33,7 +33,7 @@ module Uniword
 
       # Get the effective color value
       def value
-        @srgb_clr&.val || @sys_clr&.last_clr || '000000'
+        @srgb_clr&.val || @sys_clr&.last_clr || "000000"
       end
 
       # Set RGB value
@@ -52,109 +52,109 @@ module Uniword
     # Individual color element classes for each of the 12 theme colors
     class Dk1Color < ThemeColorBase
       xml do
-        element 'dk1'
+        element "dk1"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Lt1Color < ThemeColorBase
       xml do
-        element 'lt1'
+        element "lt1"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Dk2Color < ThemeColorBase
       xml do
-        element 'dk2'
+        element "dk2"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Lt2Color < ThemeColorBase
       xml do
-        element 'lt2'
+        element "lt2"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent1Color < ThemeColorBase
       xml do
-        element 'accent1'
+        element "accent1"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent2Color < ThemeColorBase
       xml do
-        element 'accent2'
+        element "accent2"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent3Color < ThemeColorBase
       xml do
-        element 'accent3'
+        element "accent3"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent4Color < ThemeColorBase
       xml do
-        element 'accent4'
+        element "accent4"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent5Color < ThemeColorBase
       xml do
-        element 'accent5'
+        element "accent5"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class Accent6Color < ThemeColorBase
       xml do
-        element 'accent6'
+        element "accent6"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class HlinkColor < ThemeColorBase
       xml do
-        element 'hlink'
+        element "hlink"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
     class FolHlinkColor < ThemeColorBase
       xml do
-        element 'folHlink'
+        element "folHlink"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'srgbClr', to: :srgb_clr
-        map_element 'sysClr', to: :sys_clr
+        map_element "srgbClr", to: :srgb_clr
+        map_element "sysClr", to: :sys_clr
       end
     end
 
@@ -176,7 +176,7 @@ module Uniword
       ].freeze
 
       # Color scheme name
-      attribute :name, :string, default: -> { 'Office' }
+      attribute :name, :string, default: -> { "Office" }
 
       # Individual color attributes for lutaml-model serialization
       attribute :dk1, Dk1Color
@@ -194,23 +194,23 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'clrScheme'
+        element "clrScheme"
         namespace Ooxml::Namespaces::DrawingML
 
-        map_attribute 'name', to: :name
+        map_attribute "name", to: :name
 
-        map_element 'dk1', to: :dk1
-        map_element 'lt1', to: :lt1
-        map_element 'dk2', to: :dk2
-        map_element 'lt2', to: :lt2
-        map_element 'accent1', to: :accent1
-        map_element 'accent2', to: :accent2
-        map_element 'accent3', to: :accent3
-        map_element 'accent4', to: :accent4
-        map_element 'accent5', to: :accent5
-        map_element 'accent6', to: :accent6
-        map_element 'hlink', to: :hlink
-        map_element 'folHlink', to: :fol_hlink
+        map_element "dk1", to: :dk1
+        map_element "lt1", to: :lt1
+        map_element "dk2", to: :dk2
+        map_element "lt2", to: :lt2
+        map_element "accent1", to: :accent1
+        map_element "accent2", to: :accent2
+        map_element "accent3", to: :accent3
+        map_element "accent4", to: :accent4
+        map_element "accent5", to: :accent5
+        map_element "accent6", to: :accent6
+        map_element "hlink", to: :hlink
+        map_element "folHlink", to: :fol_hlink
       end
 
       # Hash-like proxy that delegates writes to the ColorScheme
@@ -248,40 +248,40 @@ module Uniword
         @colors_hash = {}
         # Initialize color objects with default values
         @dk1 ||= Dk1Color.new
-        @dk1.rgb = '000000' if @dk1.srgb_clr.nil? && @dk1.sys_clr.nil?
+        @dk1.rgb = "000000" if @dk1.srgb_clr.nil? && @dk1.sys_clr.nil?
 
         @lt1 ||= Lt1Color.new
-        @lt1.rgb = 'FFFFFF' if @lt1.srgb_clr.nil? && @lt1.sys_clr.nil?
+        @lt1.rgb = "FFFFFF" if @lt1.srgb_clr.nil? && @lt1.sys_clr.nil?
 
         @dk2 ||= Dk2Color.new
-        @dk2.rgb = '44546A' if @dk2.srgb_clr.nil? && @dk2.sys_clr.nil?
+        @dk2.rgb = "44546A" if @dk2.srgb_clr.nil? && @dk2.sys_clr.nil?
 
         @lt2 ||= Lt2Color.new
-        @lt2.rgb = 'E7E6E6' if @lt2.srgb_clr.nil? && @lt2.sys_clr.nil?
+        @lt2.rgb = "E7E6E6" if @lt2.srgb_clr.nil? && @lt2.sys_clr.nil?
 
         @accent1 ||= Accent1Color.new
-        @accent1.rgb = '4472C4' if @accent1.srgb_clr.nil? && @accent1.sys_clr.nil?
+        @accent1.rgb = "4472C4" if @accent1.srgb_clr.nil? && @accent1.sys_clr.nil?
 
         @accent2 ||= Accent2Color.new
-        @accent2.rgb = 'ED7D31' if @accent2.srgb_clr.nil? && @accent2.sys_clr.nil?
+        @accent2.rgb = "ED7D31" if @accent2.srgb_clr.nil? && @accent2.sys_clr.nil?
 
         @accent3 ||= Accent3Color.new
-        @accent3.rgb = 'A5A5A5' if @accent3.srgb_clr.nil? && @accent3.sys_clr.nil?
+        @accent3.rgb = "A5A5A5" if @accent3.srgb_clr.nil? && @accent3.sys_clr.nil?
 
         @accent4 ||= Accent4Color.new
-        @accent4.rgb = 'FFC000' if @accent4.srgb_clr.nil? && @accent4.sys_clr.nil?
+        @accent4.rgb = "FFC000" if @accent4.srgb_clr.nil? && @accent4.sys_clr.nil?
 
         @accent5 ||= Accent5Color.new
-        @accent5.rgb = '5B9BD5' if @accent5.srgb_clr.nil? && @accent5.sys_clr.nil?
+        @accent5.rgb = "5B9BD5" if @accent5.srgb_clr.nil? && @accent5.sys_clr.nil?
 
         @accent6 ||= Accent6Color.new
-        @accent6.rgb = '70AD47' if @accent6.srgb_clr.nil? && @accent6.sys_clr.nil?
+        @accent6.rgb = "70AD47" if @accent6.srgb_clr.nil? && @accent6.sys_clr.nil?
 
         @hlink ||= HlinkColor.new
-        @hlink.rgb = '0563C1' if @hlink.srgb_clr.nil? && @hlink.sys_clr.nil?
+        @hlink.rgb = "0563C1" if @hlink.srgb_clr.nil? && @hlink.sys_clr.nil?
 
         @fol_hlink ||= FolHlinkColor.new
-        @fol_hlink.rgb = '954F72' if @fol_hlink.srgb_clr.nil? && @fol_hlink.sys_clr.nil?
+        @fol_hlink.rgb = "954F72" if @fol_hlink.srgb_clr.nil? && @fol_hlink.sys_clr.nil?
 
         # Build hash interface
         sync_colors_hash

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -23,22 +23,22 @@ module Uniword
       attribute :cross_ax, :string
 
       xml do
-        element 'dateAx'
+        element "dateAx"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'axId', to: :ax_id
-        map_element 'scaling', to: :scaling
-        map_element 'delete', to: :delete, render_nil: false
-        map_element 'axPos', to: :ax_pos
-        map_element 'majorGridlines', to: :major_gridlines, render_nil: false
-        map_element 'minorGridlines', to: :minor_gridlines, render_nil: false
-        map_element 'title', to: :title, render_nil: false
-        map_element 'numFmt', to: :num_fmt, render_nil: false
-        map_element 'tickLblPos', to: :tick_lbl_pos, render_nil: false
-        map_element 'spPr', to: :sp_pr, render_nil: false
-        map_element 'txPr', to: :tx_pr, render_nil: false
-        map_element 'crossAx', to: :cross_ax
+        map_element "axId", to: :ax_id
+        map_element "scaling", to: :scaling
+        map_element "delete", to: :delete, render_nil: false
+        map_element "axPos", to: :ax_pos
+        map_element "majorGridlines", to: :major_gridlines, render_nil: false
+        map_element "minorGridlines", to: :minor_gridlines, render_nil: false
+        map_element "title", to: :title, render_nil: false
+        map_element "numFmt", to: :num_fmt, render_nil: false
+        map_element "tickLblPos", to: :tick_lbl_pos, render_nil: false
+        map_element "spPr", to: :sp_pr, render_nil: false
+        map_element "txPr", to: :tx_pr, render_nil: false
+        map_element "crossAx", to: :cross_ax
       end
     end
   end

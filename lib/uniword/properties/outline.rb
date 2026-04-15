@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -12,19 +12,19 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'outline'
+        element "outline"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
 
       # Handle boolean-like values for val attribute
       # nil = true (element present without val means true)
       # 'false' = false
       def initialize(attrs = {})
-        if [true, 'true'].include?(attrs[:val])
+        if [true, "true"].include?(attrs[:val])
           attrs[:val] = nil # true = no val attribute
-        elsif [false, 'false'].include?(attrs[:val])
-          attrs[:val] = 'false'
+        elsif [false, "false"].include?(attrs[:val])
+          attrs[:val] = "false"
         end
         super
       end
