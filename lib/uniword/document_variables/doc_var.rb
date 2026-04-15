@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentVariables
@@ -13,11 +13,11 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'doc_var'
+        element "doc_var"
         namespace Uniword::Ooxml::Namespaces::DocumentVariables
 
-        map_attribute 'name', to: :name
-        map_attribute 'val', to: :val
+        map_attribute "name", to: :name
+        map_attribute "val", to: :val
       end
     end
   end

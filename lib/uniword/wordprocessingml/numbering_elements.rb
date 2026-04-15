@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'nsid'
+        element "nsid"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -24,9 +24,9 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'tmpl'
+        element "tmpl"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
 
@@ -38,10 +38,10 @@ module Uniword
       attribute :hanging, :string
 
       xml do
-        element 'ind'
+        element "ind"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'left', to: :left
-        map_attribute 'hanging', to: :hanging
+        map_attribute "left", to: :left
+        map_attribute "hanging", to: :hanging
       end
     end
 
@@ -54,11 +54,11 @@ module Uniword
       attribute :hint, :string
 
       xml do
-        element 'rFonts'
+        element "rFonts"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'ascii', to: :ascii
-        map_attribute 'hAnsi', to: :h_ansi
-        map_attribute 'hint', to: :hint
+        map_attribute "ascii", to: :ascii
+        map_attribute "hAnsi", to: :h_ansi
+        map_attribute "hint", to: :hint
       end
     end
 
@@ -69,9 +69,9 @@ module Uniword
       attribute :val, :integer
 
       xml do
-        element 'abstractNumId'
+        element "abstractNumId"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

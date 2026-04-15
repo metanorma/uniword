@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -13,11 +13,11 @@ module Uniword
       attribute :formulas, Formula, collection: true, initialize_empty: true
 
       xml do
-        element 'formulas'
+        element "formulas"
         namespace Uniword::Ooxml::Namespaces::Vml
         mixed_content
 
-        map_element 'f', to: :formulas, render_nil: false
+        map_element "f", to: :formulas, render_nil: false
       end
     end
   end

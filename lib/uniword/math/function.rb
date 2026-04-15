@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -14,13 +14,13 @@ module Uniword
       attribute :element, Element
 
       xml do
-        element 'func'
+        element "func"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'funcPr', to: :properties, render_nil: false
-        map_element 'fName', to: :function_name
-        map_element 'e', to: :element
+        map_element "funcPr", to: :properties, render_nil: false
+        map_element "fName", to: :function_name
+        map_element "e", to: :element
       end
     end
   end

@@ -24,11 +24,11 @@ module Uniword
           # Check if language is specified
           if language.nil? || language.strip.empty?
             violations << create_violation(
-              message: 'Document language not specified',
+              message: "Document language not specified",
               element: document,
               severity: @config[:severity] || :error,
               suggestion: @config[:suggestion] ||
-                'Set document language property for screen readers'
+                "Set document language property for screen readers"
             )
           end
 

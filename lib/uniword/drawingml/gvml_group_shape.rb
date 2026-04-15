@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -18,18 +18,18 @@ module Uniword
       attribute :grp_sp, :self, collection: true
 
       xml do
-        element 'grpSp'
+        element "grpSp"
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
 
-        map_element 'nvGrpSpPr', to: :nv_grp_sp_pr, render_nil: false
-        map_element 'grpSpPr', to: :grp_sp_pr, render_nil: false
-        map_element 'txSp', to: :tx_sp, render_nil: false
-        map_element 'sp', to: :sp, render_nil: false
-        map_element 'cxnSp', to: :cxn_sp, render_nil: false
-        map_element 'pic', to: :pic, render_nil: false
-        map_element 'graphicFrame', to: :graphic_frame, render_nil: false
-        map_element 'grpSp', to: :grp_sp, render_nil: false
+        map_element "nvGrpSpPr", to: :nv_grp_sp_pr, render_nil: false
+        map_element "grpSpPr", to: :grp_sp_pr, render_nil: false
+        map_element "txSp", to: :tx_sp, render_nil: false
+        map_element "sp", to: :sp, render_nil: false
+        map_element "cxnSp", to: :cxn_sp, render_nil: false
+        map_element "pic", to: :pic, render_nil: false
+        map_element "graphicFrame", to: :graphic_frame, render_nil: false
+        map_element "grpSp", to: :grp_sp, render_nil: false
       end
     end
   end

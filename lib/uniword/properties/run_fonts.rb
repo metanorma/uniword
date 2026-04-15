@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -20,18 +20,18 @@ module Uniword
       attribute :cs_theme, :string
 
       xml do
-        element 'rFonts'
+        element "rFonts"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'ascii', to: :ascii
-        map_attribute 'hAnsi', to: :h_ansi
-        map_attribute 'eastAsia', to: :east_asia
-        map_attribute 'cs', to: :cs
-        map_attribute 'hint', to: :hint
-        map_attribute 'asciiTheme', to: :ascii_theme
-        map_attribute 'eastAsiaTheme', to: :east_asia_theme
-        map_attribute 'hAnsiTheme', to: :h_ansi_theme
-        map_attribute 'cstheme', to: :cs_theme
+        map_attribute "ascii", to: :ascii
+        map_attribute "hAnsi", to: :h_ansi
+        map_attribute "eastAsia", to: :east_asia
+        map_attribute "cs", to: :cs
+        map_attribute "hint", to: :hint
+        map_attribute "asciiTheme", to: :ascii_theme
+        map_attribute "eastAsiaTheme", to: :east_asia_theme
+        map_attribute "hAnsiTheme", to: :h_ansi_theme
+        map_attribute "cstheme", to: :cs_theme
       end
     end
   end

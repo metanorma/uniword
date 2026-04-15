@@ -133,7 +133,7 @@ module Uniword
           case element_class_or_name
           when Class
             # Convert Uniword::Paragraph → :paragraph
-            element_class_or_name.name.split('::').last.downcase.to_sym
+            element_class_or_name.name.split("::").last.downcase.to_sym
           when Symbol
             element_class_or_name
           when String
@@ -151,7 +151,7 @@ module Uniword
         def validate_schema_config(config)
           unless config.is_a?(Hash)
             raise Configuration::ConfigurationError,
-                  'Schema configuration must be a Hash'
+                  "Schema configuration must be a Hash"
           end
 
           unless config[:schema]
@@ -172,7 +172,7 @@ module Uniword
         def raise_element_not_found(name)
           raise ArgumentError,
                 "No schema definition for element: #{name}. " \
-                "Available elements: #{element_names.join(', ')}"
+                "Available elements: #{element_names.join(", ")}"
         end
 
         # Check if file is a loader configuration
@@ -180,7 +180,7 @@ module Uniword
         # @param file_path [String] Path to file
         # @return [Boolean] true if loader config
         def self.loader_config?(file_path)
-          file_path.end_with?('schema_loader.yml')
+          file_path.end_with?("schema_loader.yml")
         end
 
         # Aggregate multiple schema files into single schema
@@ -218,7 +218,7 @@ module Uniword
         #
         # @return [String] Path to default schema loader
         def self.default_loader_path
-          File.expand_path('../../../../config/ooxml/schema_loader.yml', __dir__)
+          File.expand_path("../../../../config/ooxml/schema_loader.yml", __dir__)
         end
       end
     end

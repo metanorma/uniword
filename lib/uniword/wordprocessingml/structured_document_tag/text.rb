@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
         attribute :multi_line, :string
 
         xml do
-          element 'text'
+          element "text"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'multiLine', to: :multi_line, render_nil: false
+          map_attribute "multiLine", to: :multi_line, render_nil: false
         end
       end
     end

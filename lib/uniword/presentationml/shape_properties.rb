@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -16,15 +16,15 @@ module Uniword
       attribute :ln, :string
 
       xml do
-        element 'sp_pr'
+        element "sp_pr"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'xfrm', to: :xfrm, render_nil: false
-        map_element 'custGeom', to: :custGeom, render_nil: false
-        map_element 'prstGeom', to: :prst_geom, render_nil: false
-        map_element 'fill', to: :fill, render_nil: false
-        map_element 'ln', to: :ln, render_nil: false
+        map_element "xfrm", to: :xfrm, render_nil: false
+        map_element "custGeom", to: :custGeom, render_nil: false
+        map_element "prstGeom", to: :prst_geom, render_nil: false
+        map_element "fill", to: :fill, render_nil: false
+        map_element "ln", to: :ln, render_nil: false
       end
     end
   end

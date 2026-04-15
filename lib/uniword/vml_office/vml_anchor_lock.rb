@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -12,10 +12,10 @@ module Uniword
       attribute :locked, :string
 
       xml do
-        element 'anchorlock'
+        element "anchorlock"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'locked', to: :locked
+        map_attribute "locked", to: :locked
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -12,10 +12,10 @@ module Uniword
       attribute :id, :string
 
       xml do
-        element 'regroup'
+        element "regroup"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'id', to: :id
+        map_attribute "id", to: :id
       end
     end
   end

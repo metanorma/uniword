@@ -81,7 +81,7 @@ module Uniword
       #     order: 'alphabetical'
       #   )
       def resolve(pattern, order: nil)
-        if pattern.include?('*')
+        if pattern.include?("*")
           resolve_wildcard(pattern, order: order)
         else
           # Single component
@@ -167,7 +167,7 @@ module Uniword
       # @return [String, nil] Full path or nil if not found
       def find_component_path(name)
         # Try common extensions
-        extensions = ['.docx', '.doc']
+        extensions = [".docx", ".doc"]
 
         extensions.each do |ext|
           # Try as direct path
@@ -212,7 +212,7 @@ module Uniword
         glob_pattern = File.join(@components_dir, pattern)
 
         # Add extension wildcards
-        glob_pattern = "#{glob_pattern}*.docx" unless glob_pattern.end_with?('.docx')
+        glob_pattern = "#{glob_pattern}*.docx" unless glob_pattern.end_with?(".docx")
 
         Dir.glob(glob_pattern)
       end
@@ -221,7 +221,7 @@ module Uniword
       #
       # @return [Array<String>] All component paths
       def find_all_components
-        Dir.glob(File.join(@components_dir, '**', '*.docx'))
+        Dir.glob(File.join(@components_dir, "**", "*.docx"))
       end
 
       # Extract component name from path.
@@ -230,10 +230,10 @@ module Uniword
       # @return [String] Component name
       def extract_component_name(path)
         # Get relative path from components directory
-        relative = path.sub("#{@components_dir}/", '')
+        relative = path.sub("#{@components_dir}/", "")
 
         # Remove extension
-        relative.sub(/\.(docx|doc)$/, '')
+        relative.sub(/\.(docx|doc)$/, "")
       end
 
       # Sort paths by specified order.
@@ -243,9 +243,9 @@ module Uniword
       # @return [Array<String>] Sorted paths
       def sort_paths(paths, order)
         case order
-        when 'alphabetical'
+        when "alphabetical"
           paths.sort
-        when 'numeric'
+        when "numeric"
           # Extract numbers and sort numerically
           paths.sort_by do |path|
             match = File.basename(path).match(/(\d+)/)

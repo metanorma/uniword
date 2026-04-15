@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -17,15 +17,15 @@ module Uniword
       attribute :custom_width, :string
 
       xml do
-        element 'col'
+        element "col"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'min', to: :min
-        map_attribute 'max', to: :max
-        map_attribute 'width', to: :width
-        map_attribute 'style', to: :style
-        map_attribute 'hidden', to: :hidden
-        map_attribute 'custom-width', to: :custom_width
+        map_attribute "min", to: :min
+        map_attribute "max", to: :max
+        map_attribute "width", to: :width
+        map_attribute "style", to: :style
+        map_attribute "hidden", to: :hidden
+        map_attribute "custom-width", to: :custom_width
       end
     end
   end

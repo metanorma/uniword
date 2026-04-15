@@ -25,7 +25,7 @@ module Uniword
       # @return [Object] The imported resource
       # @raise [ArgumentError] if Word not installed or resource not found
       def import_one(type, name)
-        raise ArgumentError, 'Microsoft Word is not installed' unless word.installed?
+        raise ArgumentError, "Microsoft Word is not installed" unless word.installed?
 
         resource = load_from_word(type, name)
         cache.write(type, name, resource.to_yaml)
@@ -38,7 +38,7 @@ module Uniword
       # @param force [Boolean] Overwrite existing cache entries
       # @return [Integer] Number of resources imported
       def import_all_of_type(type, force: false)
-        raise ArgumentError, 'Microsoft Word is not installed' unless word.installed?
+        raise ArgumentError, "Microsoft Word is not installed" unless word.installed?
 
         available = available_resources(type)
         count = 0

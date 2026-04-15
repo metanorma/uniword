@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Uniword::Wordprocessingml::RunProperties do
-  describe '#initialize' do
-    it 'creates properties with default values' do
+  describe "#initialize" do
+    it "creates properties with default values" do
       props = described_class.new
       expect(props.bold).to be_nil
       expect(props.italic).to be_nil
@@ -14,106 +14,106 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
       expect(props.hidden).to be_nil
     end
 
-    it 'creates properties with provided attributes' do
+    it "creates properties with provided attributes" do
       props = described_class.new(
         bold: Uniword::Properties::Bold.new,
         italic: Uniword::Properties::Italic.new,
         size: Uniword::Properties::FontSize.new(value: 24),
-        color: Uniword::Properties::ColorValue.new(value: '000000')
+        color: Uniword::Properties::ColorValue.new(value: "000000")
       )
       # Set fonts after initialization (lutaml-model creates fresh instances for nested objects)
-      props.fonts = Uniword::Properties::RunFonts.new(ascii: 'Arial')
+      props.fonts = Uniword::Properties::RunFonts.new(ascii: "Arial")
 
       expect(props.bold?).to be true
       expect(props.italic?).to be true
       expect(props.size&.value).to eq(24)
-      expect(props.fonts.ascii).to eq('Arial')
-      expect(props.color&.value).to eq('000000')
+      expect(props.fonts.ascii).to eq("Arial")
+      expect(props.color&.value).to eq("000000")
     end
 
-    it 'allows mutation for test compatibility' do
+    it "allows mutation for test compatibility" do
       props = described_class.new(bold: Uniword::Properties::Bold.new)
       # Properties are now mutable for easier testing
       expect(props).not_to be_frozen
     end
   end
 
-  describe 'mutability (for test compatibility)' do
+  describe "mutability (for test compatibility)" do
     let(:props) do
       described_class.new(
         bold: Uniword::Properties::Bold.new,
-        fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial')
+        fonts: Uniword::Properties::RunFonts.new(ascii: "Arial")
       )
     end
 
-    it 'allows modification of attributes' do
+    it "allows modification of attributes" do
       # Properties are now mutable for easier testing
-      expect { props.bold = Uniword::Properties::Bold.new(val: 'false') }.not_to raise_error
+      expect { props.bold = Uniword::Properties::Bold.new(val: "false") }.not_to raise_error
       expect(props.bold?).to be false
     end
 
-    it 'is not frozen' do
+    it "is not frozen" do
       expect(props.frozen?).to be false
     end
   end
 
-  describe '#==' do
-    it 'returns true for identical properties' do
+  describe "#==" do
+    it "returns true for identical properties" do
       props1 = described_class.new(
         bold: Uniword::Properties::Bold.new,
-        italic: Uniword::Properties::Italic.new(val: 'false'),
+        italic: Uniword::Properties::Italic.new(val: "false"),
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       props2 = described_class.new(
         bold: Uniword::Properties::Bold.new,
-        italic: Uniword::Properties::Italic.new(val: 'false'),
+        italic: Uniword::Properties::Italic.new(val: "false"),
         size: Uniword::Properties::FontSize.new(value: 24)
       )
       expect(props1).to eq(props2)
     end
 
-    it 'returns false for different properties' do
+    it "returns false for different properties" do
       props1 = described_class.new(bold: Uniword::Properties::Bold.new)
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: 'false'))
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: "false"))
       expect(props1).not_to eq(props2)
     end
 
-    it 'returns false for different types' do
+    it "returns false for different types" do
       props = described_class.new(bold: Uniword::Properties::Bold.new)
       expect(props).not_to eq(true)
     end
 
-    it 'compares all attributes' do
+    it "compares all attributes" do
       props1 = described_class.new(
         bold: Uniword::Properties::Bold.new,
-        italic: Uniword::Properties::Italic.new(val: 'false'),
-        underline: Uniword::Properties::Underline.new(value: 'single'),
+        italic: Uniword::Properties::Italic.new(val: "false"),
+        underline: Uniword::Properties::Underline.new(value: "single"),
         size: Uniword::Properties::FontSize.new(value: 24),
-        fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial'),
-        color: Uniword::Properties::ColorValue.new(value: '000000')
+        fonts: Uniword::Properties::RunFonts.new(ascii: "Arial"),
+        color: Uniword::Properties::ColorValue.new(value: "000000")
       )
       props2 = described_class.new(
         bold: Uniword::Properties::Bold.new,
-        italic: Uniword::Properties::Italic.new(val: 'false'),
-        underline: Uniword::Properties::Underline.new(value: 'single'),
+        italic: Uniword::Properties::Italic.new(val: "false"),
+        underline: Uniword::Properties::Underline.new(value: "single"),
         size: Uniword::Properties::FontSize.new(value: 24),
-        fonts: Uniword::Properties::RunFonts.new(ascii: 'Arial'),
-        color: Uniword::Properties::ColorValue.new(value: '000000')
+        fonts: Uniword::Properties::RunFonts.new(ascii: "Arial"),
+        color: Uniword::Properties::ColorValue.new(value: "000000")
       )
       expect(props1).to eq(props2)
     end
   end
 
-  describe '#eql?' do
-    it 'is an alias for ==' do
+  describe "#eql?" do
+    it "is an alias for ==" do
       props1 = described_class.new(bold: Uniword::Properties::Bold.new)
       props2 = described_class.new(bold: Uniword::Properties::Bold.new)
       expect(props1.eql?(props2)).to eq(props1 == props2)
     end
   end
 
-  describe '#hash' do
-    it 'returns same hash for equal objects' do
+  describe "#hash" do
+    it "returns same hash for equal objects" do
       props1 = described_class.new(
         bold: Uniword::Properties::Bold.new,
         size: Uniword::Properties::FontSize.new(value: 24)
@@ -125,22 +125,22 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
       expect(props1.hash).to eq(props2.hash)
     end
 
-    it 'returns different hash for different objects' do
+    it "returns different hash for different objects" do
       props1 = described_class.new(bold: Uniword::Properties::Bold.new)
-      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: 'false'))
+      props2 = described_class.new(bold: Uniword::Properties::Bold.new(val: "false"))
       expect(props1.hash).not_to eq(props2.hash)
     end
 
-    it 'allows use as hash keys' do
+    it "allows use as hash keys" do
       props1 = described_class.new(bold: Uniword::Properties::Bold.new)
       props2 = described_class.new(bold: Uniword::Properties::Bold.new)
-      hash = { props1 => 'value1' }
-      expect(hash[props2]).to eq('value1')
+      hash = { props1 => "value1" }
+      expect(hash[props2]).to eq("value1")
     end
   end
 
-  describe 'boolean attributes' do
-    it 'defaults boolean attributes to nil (wrapper objects)' do
+  describe "boolean attributes" do
+    it "defaults boolean attributes to nil (wrapper objects)" do
       props = described_class.new
       expect(props.bold).to be_nil
       expect(props.italic).to be_nil
@@ -150,7 +150,7 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
       expect(props.hidden).to be_nil
     end
 
-    it 'allows setting boolean wrapper objects' do
+    it "allows setting boolean wrapper objects" do
       props = described_class.new(
         bold: Uniword::Properties::Bold.new,
         italic: Uniword::Properties::Italic.new,
@@ -167,10 +167,10 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
       expect(props.hidden?).to be true
     end
 
-    it 'provides predicate methods for boolean properties' do
+    it "provides predicate methods for boolean properties" do
       props = described_class.new(
         bold: Uniword::Properties::Bold.new,
-        italic: Uniword::Properties::Italic.new(val: 'false')
+        italic: Uniword::Properties::Italic.new(val: "false")
       )
       expect(props.bold?).to be true
       expect(props.italic?).to be false
@@ -178,8 +178,8 @@ RSpec.describe Uniword::Wordprocessingml::RunProperties do
     end
   end
 
-  describe 'inheritance' do
-    it 'inherits from Lutaml::Model::Serializable' do
+  describe "inheritance" do
+    it "inherits from Lutaml::Model::Serializable" do
       expect(described_class.ancestors)
         .to include(Lutaml::Model::Serializable)
     end

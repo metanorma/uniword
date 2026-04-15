@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'digest'
+require "digest"
 
 module Uniword
   module Resource
@@ -65,14 +65,10 @@ module Uniword
       def process(theme)
         theme.dup.tap do |processed|
           # Transform color scheme
-          if processed.theme_elements&.clr_scheme
-            transform_color_scheme(processed.theme_elements.clr_scheme)
-          end
+          transform_color_scheme(processed.theme_elements.clr_scheme) if processed.theme_elements&.clr_scheme
 
           # Transform font scheme
-          if processed.theme_elements&.font_scheme
-            FontSubstitutor.transform_font_scheme(processed.theme_elements.font_scheme)
-          end
+          FontSubstitutor.transform_font_scheme(processed.theme_elements.font_scheme) if processed.theme_elements&.font_scheme
 
           # Update name to indicate it's a Uniword variant
           processed.name = "#{theme.name} (Uniword)"

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,9 +11,9 @@ module Uniword
       attribute :val, :string, default: nil
 
       xml do
-        element 'titlePg'
+        element "titlePg"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false
+        map_attribute "val", to: :val, render_nil: false
       end
     end
   end

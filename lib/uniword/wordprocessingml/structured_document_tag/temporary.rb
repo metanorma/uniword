@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -10,7 +10,7 @@ module Uniword
       # Reference XML: <w:temporary/>
       class Temporary < Lutaml::Model::Serializable
         xml do
-          element 'temporary'
+          element "temporary"
           namespace Ooxml::Namespaces::WordProcessingML
         end
       end

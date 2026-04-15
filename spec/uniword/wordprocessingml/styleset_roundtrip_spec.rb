@@ -1,29 +1,29 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'canon'
+require "spec_helper"
+require "canon"
 
-RSpec.describe 'StyleSet Round-Trip Fidelity' do
+RSpec.describe "StyleSet Round-Trip Fidelity" do
   # Test both directories
   %w[quick-styles].each do |dir_name|
     describe "#{dir_name}/" do
       Dir.glob("spec/fixtures/uniword-private/word-resources/#{dir_name}/*.dotx").each do |styleset_file|
-        styleset_name = File.basename(styleset_file, '.dotx')
+        styleset_name = File.basename(styleset_file, ".dotx")
 
         describe styleset_name do
           let(:styleset) { Uniword::StyleSet.from_dotx(styleset_file) }
 
-          it 'loads successfully' do
+          it "loads successfully" do
             expect(styleset).to be_a(Uniword::StyleSet)
             expect(styleset.name).not_to be_nil
           end
 
-          it 'loads styles' do
+          it "loads styles" do
             expect(styleset.styles).to be_an(Array)
             expect(styleset.styles.count).to be > 0
           end
 
-          it 'preserves style count in round-trip' do
+          it "preserves style count in round-trip" do
             original_count = styleset.styles.count
 
             # Serialize each style and count what comes back
@@ -39,13 +39,13 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
             expect(reparsed_count).to eq(original_count)
           end
 
-          context 'paragraph properties' do
-            let(:heading1) { styleset.styles.find { |s| s.id == 'Heading1' } }
+          context "paragraph properties" do
+            let(:heading1) { styleset.styles.find { |s| s.id == "Heading1" } }
 
-            it 'preserves spacing' do
-              skip 'Heading1 not found' unless heading1
-              skip 'No paragraph properties' unless heading1.paragraph_properties
-              skip 'No spacing' unless heading1.paragraph_properties.spacing
+            it "preserves spacing" do
+              skip "Heading1 not found" unless heading1
+              skip "No paragraph properties" unless heading1.paragraph_properties
+              skip "No spacing" unless heading1.paragraph_properties.spacing
 
               original = heading1.paragraph_properties.spacing
               xml = heading1.to_xml(prefix: true)
@@ -55,9 +55,9 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               expect(reparsed.paragraph_properties.spacing.after).to eq(original.after)
             end
 
-            it 'preserves alignment' do
-              skip 'Heading1 not found' unless heading1
-              skip 'No paragraph properties' unless heading1.paragraph_properties
+            it "preserves alignment" do
+              skip "Heading1 not found" unless heading1
+              skip "No paragraph properties" unless heading1.paragraph_properties
 
               original = heading1.paragraph_properties.alignment
               xml = heading1.to_xml(prefix: true)
@@ -67,13 +67,13 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
             end
           end
 
-          context 'run properties' do
-            let(:heading1) { styleset.styles.find { |s| s.id == 'Heading1' } }
+          context "run properties" do
+            let(:heading1) { styleset.styles.find { |s| s.id == "Heading1" } }
 
-            it 'preserves font size' do
-              skip 'Heading1 not found' unless heading1
-              skip 'No run properties' unless heading1.run_properties
-              skip 'No size' unless heading1.run_properties.size
+            it "preserves font size" do
+              skip "Heading1 not found" unless heading1
+              skip "No run properties" unless heading1.run_properties
+              skip "No size" unless heading1.run_properties.size
 
               original = heading1.run_properties.size
               xml = heading1.to_xml(prefix: true)
@@ -82,9 +82,9 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
               expect(reparsed.run_properties.size).to eq(original)
             end
 
-            it 'preserves small caps' do
-              skip 'Heading1 not found' unless heading1
-              skip 'No run properties' unless heading1.run_properties
+            it "preserves small caps" do
+              skip "Heading1 not found" unless heading1
+              skip "No run properties" unless heading1.run_properties
 
               original = heading1.run_properties.small_caps
               xml = heading1.to_xml(prefix: true)
@@ -100,12 +100,12 @@ RSpec.describe 'StyleSet Round-Trip Fidelity' do
 
   # Summary statistics
   after(:all) do
-    total_stylesets = Dir.glob('spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx').count
-    puts "\n#{'=' * 60}"
-    puts 'StyleSet Round-Trip Summary'
-    puts '=' * 60
+    total_stylesets = Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count
+    puts "\n#{"=" * 60}"
+    puts "StyleSet Round-Trip Summary"
+    puts "=" * 60
     puts "Total StyleSets tested: #{total_stylesets}"
-    puts "  - quick-styles: #{Dir.glob('spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx').count}"
-    puts '=' * 60
+    puts "  - quick-styles: #{Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count}"
+    puts "=" * 60
   end
 end

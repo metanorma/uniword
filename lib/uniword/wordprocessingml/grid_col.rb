@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :width, :integer
 
       xml do
-        element 'gridCol'
+        element "gridCol"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'w', to: :width
+        map_attribute "w", to: :width
       end
     end
   end

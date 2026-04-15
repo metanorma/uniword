@@ -1,24 +1,24 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'tempfile'
+require "spec_helper"
+require "tempfile"
 
-RSpec.describe 'Resource Roundtrip' do
-  describe 'Theme roundtrip' do
-    let(:temp_dir) { Dir.mktmpdir('uniword_theme_roundtrip') }
-    let(:original_yaml) { File.join(temp_dir, 'original.yml') }
-    let(:roundtrip_yaml) { File.join(temp_dir, 'roundtrip.yml') }
-    let(:xml_path) { File.join(temp_dir, 'theme.xml') }
+RSpec.describe "Resource Roundtrip" do
+  describe "Theme roundtrip" do
+    let(:temp_dir) { Dir.mktmpdir("uniword_theme_roundtrip") }
+    let(:original_yaml) { File.join(temp_dir, "original.yml") }
+    let(:roundtrip_yaml) { File.join(temp_dir, "roundtrip.yml") }
+    let(:xml_path) { File.join(temp_dir, "theme.xml") }
     let(:transformation) { Uniword::Themes::ThemeTransformation.new }
 
     after do
       FileUtils.rm_rf(temp_dir)
     end
 
-    context 'bundled themes' do
+    context "bundled themes" do
       Uniword::Themes::Theme.available_themes.each do |theme_name|
         describe theme_name do
-          it 'roundtrips through YAML' do
+          it "roundtrips through YAML" do
             # Load friendly theme
             friendly = Uniword::Themes::Theme.load(theme_name)
 
@@ -35,7 +35,7 @@ RSpec.describe 'Resource Roundtrip' do
             expect(File.read(roundtrip_yaml)).to be_yaml_equivalent_to(File.read(original_yaml))
           end
 
-          it 'roundtrips through XML' do
+          it "roundtrips through XML" do
             # Load friendly theme and convert to Word theme
             friendly = Uniword::Themes::Theme.load(theme_name)
             original = transformation.to_word(friendly)
@@ -53,9 +53,9 @@ RSpec.describe 'Resource Roundtrip' do
       end
     end
 
-    context 'theme with color scheme' do
-      it 'preserves color scheme colors' do
-        friendly = Uniword::Themes::Theme.load('atlas')
+    context "theme with color scheme" do
+      it "preserves color scheme colors" do
+        friendly = Uniword::Themes::Theme.load("atlas")
         theme = transformation.to_word(friendly)
 
         yaml = theme.to_yaml
@@ -77,9 +77,9 @@ RSpec.describe 'Resource Roundtrip' do
       end
     end
 
-    context 'theme with font scheme' do
-      it 'preserves font scheme fonts' do
-        friendly = Uniword::Themes::Theme.load('atlas')
+    context "theme with font scheme" do
+      it "preserves font scheme fonts" do
+        friendly = Uniword::Themes::Theme.load("atlas")
         theme = transformation.to_word(friendly)
 
         yaml = theme.to_yaml
@@ -98,19 +98,19 @@ RSpec.describe 'Resource Roundtrip' do
     end
   end
 
-  describe 'StyleSet roundtrip' do
-    let(:temp_dir) { Dir.mktmpdir('uniword_styleset_roundtrip') }
-    let(:original_yaml) { File.join(temp_dir, 'original.yml') }
-    let(:roundtrip_yaml) { File.join(temp_dir, 'roundtrip.yml') }
+  describe "StyleSet roundtrip" do
+    let(:temp_dir) { Dir.mktmpdir("uniword_styleset_roundtrip") }
+    let(:original_yaml) { File.join(temp_dir, "original.yml") }
+    let(:roundtrip_yaml) { File.join(temp_dir, "roundtrip.yml") }
 
     after do
       FileUtils.rm_rf(temp_dir)
     end
 
-    context 'bundled stylesets' do
+    context "bundled stylesets" do
       Uniword::StyleSet.available_stylesets.first(3).each do |styleset_name|
         describe styleset_name do
-          it 'roundtrips through YAML' do
+          it "roundtrips through YAML" do
             # Load original
             original = Uniword::StyleSet.load(styleset_name)
 
@@ -131,11 +131,11 @@ RSpec.describe 'Resource Roundtrip' do
     end
   end
 
-  describe 'DOCX extraction' do
-    let(:temp_dir) { Dir.mktmpdir('uniword_docx_extraction') }
-    let(:docx_path) { File.join(temp_dir, 'document.docx') }
-    let(:extracted_theme) { File.join(temp_dir, 'extracted_theme.yml') }
-    let(:extracted_styleset) { File.join(temp_dir, 'extracted_styleset.yml') }
+  describe "DOCX extraction" do
+    let(:temp_dir) { Dir.mktmpdir("uniword_docx_extraction") }
+    let(:docx_path) { File.join(temp_dir, "document.docx") }
+    let(:extracted_theme) { File.join(temp_dir, "extracted_theme.yml") }
+    let(:extracted_styleset) { File.join(temp_dir, "extracted_styleset.yml") }
 
     after do
       FileUtils.rm_rf(temp_dir)
@@ -145,29 +145,29 @@ RSpec.describe 'Resource Roundtrip' do
       # Create a document with theme and styleset
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph')
+      run = Uniword::Wordprocessingml::Run.new(text: "Test paragraph")
       para.runs << run
       doc.body.paragraphs << para
-      doc.apply_theme('atlas')
-      doc.apply_styleset('distinctive')
+      doc.apply_theme("atlas")
+      doc.apply_styleset("distinctive")
       doc.save(docx_path)
     end
 
-    it 'extracts theme from DOCX' do
+    it "extracts theme from DOCX" do
       doc = Uniword::DocumentFactory.from_file(docx_path)
 
       expect(doc.theme).not_to be_nil
-      expect(doc.theme.name).to include('Atlas')
+      expect(doc.theme.name).to include("Atlas")
 
       # Save extracted theme
       File.write(extracted_theme, doc.theme.to_yaml)
 
       # Verify it can be loaded
       loaded = Uniword::Drawingml::Theme.from_yaml(File.read(extracted_theme))
-      expect(loaded.name).to include('Atlas')
+      expect(loaded.name).to include("Atlas")
     end
 
-    it 'extracts styleset from DOCX' do
+    it "extracts styleset from DOCX" do
       doc = Uniword::DocumentFactory.from_file(docx_path)
 
       expect(doc.styles_configuration).not_to be_nil
@@ -181,12 +181,12 @@ RSpec.describe 'Resource Roundtrip' do
     end
   end
 
-  describe 'Resource processing' do
+  describe "Resource processing" do
     let(:transformation) { Uniword::Themes::ThemeTransformation.new }
 
-    describe 'ColorTransformer' do
-      it 'transforms colors consistently' do
-        original = '#FF0000' # Red
+    describe "ColorTransformer" do
+      it "transforms colors consistently" do
+        original = "#FF0000" # Red
 
         # Transform with known shifts
         result = Uniword::Resource::ColorTransformer.shift_color(
@@ -201,8 +201,8 @@ RSpec.describe 'Resource Roundtrip' do
         expect(result).not_to eq(original)
       end
 
-      it 'preserves color with zero shifts' do
-        original = '#FF0000'
+      it "preserves color with zero shifts" do
+        original = "#FF0000"
 
         result = Uniword::Resource::ColorTransformer.shift_color(
           original,
@@ -215,29 +215,29 @@ RSpec.describe 'Resource Roundtrip' do
       end
     end
 
-    describe 'FontSubstitutor' do
-      it 'substitutes MS fonts with open-source alternatives' do
-        expect(Uniword::Resource::FontSubstitutor.substitute('Calibri')).to eq('Carlito')
-        expect(Uniword::Resource::FontSubstitutor.substitute('Arial')).to eq('Liberation Sans')
-        expect(Uniword::Resource::FontSubstitutor.substitute('Times New Roman')).to eq('Liberation Serif')
+    describe "FontSubstitutor" do
+      it "substitutes MS fonts with open-source alternatives" do
+        expect(Uniword::Resource::FontSubstitutor.substitute("Calibri")).to eq("Carlito")
+        expect(Uniword::Resource::FontSubstitutor.substitute("Arial")).to eq("Liberation Sans")
+        expect(Uniword::Resource::FontSubstitutor.substitute("Times New Roman")).to eq("Liberation Serif")
       end
 
-      it 'returns original font when no substitution exists' do
-        expect(Uniword::Resource::FontSubstitutor.substitute('Unknown Font')).to eq('Unknown Font')
+      it "returns original font when no substitution exists" do
+        expect(Uniword::Resource::FontSubstitutor.substitute("Unknown Font")).to eq("Unknown Font")
       end
     end
 
-    describe 'ThemeProcessor' do
-      it 'creates deterministic processor from seed' do
-        processor1 = Uniword::Resource::ThemeProcessor.from_seed('test-seed')
-        processor2 = Uniword::Resource::ThemeProcessor.from_seed('test-seed')
+    describe "ThemeProcessor" do
+      it "creates deterministic processor from seed" do
+        processor1 = Uniword::Resource::ThemeProcessor.from_seed("test-seed")
+        processor2 = Uniword::Resource::ThemeProcessor.from_seed("test-seed")
 
         expect(processor1.hue_shift).to eq(processor2.hue_shift)
         expect(processor1.saturation_shift).to eq(processor2.saturation_shift)
         expect(processor1.lightness_shift).to eq(processor2.lightness_shift)
       end
 
-      it 'creates identity processor' do
+      it "creates identity processor" do
         processor = Uniword::Resource::ThemeProcessor.identity
 
         expect(processor.hue_shift).to eq(0)
@@ -246,8 +246,8 @@ RSpec.describe 'Resource Roundtrip' do
         expect(processor.identity?).to be true
       end
 
-      it 'processes theme creating variant' do
-        friendly = Uniword::Themes::Theme.load('atlas')
+      it "processes theme creating variant" do
+        friendly = Uniword::Themes::Theme.load("atlas")
         theme = transformation.to_word(friendly)
         processor = Uniword::Resource::ThemeProcessor.new(
           hue_shift: 10,
@@ -258,8 +258,8 @@ RSpec.describe 'Resource Roundtrip' do
         processed = processor.process(theme)
 
         expect(processed).to be_a(Uniword::Drawingml::Theme)
-        expect(processed.name).to include('Atlas')
-        expect(processed.name).to include('Uniword')
+        expect(processed.name).to include("Atlas")
+        expect(processed.name).to include("Uniword")
       end
     end
   end

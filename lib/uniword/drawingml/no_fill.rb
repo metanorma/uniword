@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -10,7 +10,7 @@ module Uniword
     # Element: <a:noFill>
     class NoFill < Lutaml::Model::Serializable
       xml do
-        element 'noFill'
+        element "noFill"
         namespace Uniword::Ooxml::Namespaces::DrawingML
       end
     end

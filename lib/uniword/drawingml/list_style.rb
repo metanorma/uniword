@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -15,13 +15,13 @@ module Uniword
       attribute :lvl3_p_pr, Level3ParagraphProperties
 
       xml do
-        element 'lstStyle'
+        element "lstStyle"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'defPPr', to: :def_p_pr, render_nil: false
-        map_element 'lvl1pPr', to: :lvl1_p_pr, render_nil: false
-        map_element 'lvl2pPr', to: :lvl2_p_pr, render_nil: false
-        map_element 'lvl3pPr', to: :lvl3_p_pr, render_nil: false
+        map_element "defPPr", to: :def_p_pr, render_nil: false
+        map_element "lvl1pPr", to: :lvl1_p_pr, render_nil: false
+        map_element "lvl2pPr", to: :lvl2_p_pr, render_nil: false
+        map_element "lvl3pPr", to: :lvl3_p_pr, render_nil: false
       end
     end
   end

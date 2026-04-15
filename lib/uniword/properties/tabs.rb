@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -21,10 +21,10 @@ module Uniword
       attribute :tab_stops, TabStop, collection: true, initialize_empty: true
 
       xml do
-        element 'tabs'
+        element "tabs"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_element 'tab', to: :tab_stops
+        map_element "tab", to: :tab_stops
       end
 
       # Delegate array operations to tab_stops

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -13,12 +13,12 @@ module Uniword
       attribute :pct_height, :integer
 
       xml do
-        element 'sizeRelV'
+        element "sizeRelV"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'relative-from', to: :relative_from
-        map_element 'pctHeight', to: :pct_height, render_nil: false
+        map_attribute "relative-from", to: :relative_from
+        map_element "pctHeight", to: :pct_height, render_nil: false
       end
     end
   end

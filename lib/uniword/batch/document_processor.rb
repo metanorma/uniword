@@ -31,12 +31,12 @@ module Uniword
       # Stage class registry
       # Maps stage names to their class implementations
       STAGE_CLASSES = {
-        normalize_styles: 'NormalizeStylesStage',
-        update_metadata: 'UpdateMetadataStage',
-        validate_links: 'ValidateLinksStage',
-        quality_check: 'QualityCheckStage',
-        convert_format: 'ConvertFormatStage',
-        compress_images: 'CompressImagesStage'
+        normalize_styles: "NormalizeStylesStage",
+        update_metadata: "UpdateMetadataStage",
+        validate_links: "ValidateLinksStage",
+        quality_check: "QualityCheckStage",
+        convert_format: "ConvertFormatStage",
+        compress_images: "CompressImagesStage"
       }.freeze
 
       # Initialize document processor
@@ -59,7 +59,7 @@ module Uniword
       # @param output_dir [String] Output directory path
       # @param pattern [String] File pattern to match (default: '*.{docx,doc}')
       # @return [BatchResult] Processing results
-      def process_batch(input_dir:, output_dir:, pattern: '*.{docx,doc}')
+      def process_batch(input_dir:, output_dir:, pattern: "*.{docx,doc}")
         validate_directories!(input_dir, output_dir)
 
         # Create output directory if it doesn't exist
@@ -135,7 +135,7 @@ module Uniword
       def add_stage(stage)
         unless stage.is_a?(ProcessingStage)
           raise ArgumentError,
-                'Stage must inherit from ProcessingStage'
+                "Stage must inherit from ProcessingStage"
         end
 
         @custom_stages << stage
@@ -171,12 +171,12 @@ module Uniword
         elsif pipeline_config
           Configuration::ConfigurationLoader.load_file(pipeline_config)
         else
-          Configuration::ConfigurationLoader.load('pipeline')
+          Configuration::ConfigurationLoader.load("pipeline")
         end
       rescue Configuration::ConfigurationError => e
         # Use default configuration if file not found
         warn "Warning: Could not load pipeline configuration: #{e.message}"
-        warn 'Using default configuration'
+        warn "Using default configuration"
         default_configuration
       end
 
@@ -239,7 +239,7 @@ module Uniword
       # @param result [BatchResult] Result tracker
       def process_sequential(files, input_dir, output_dir, result)
         files.each do |input_path|
-          relative_path = input_path.sub(input_dir, '').sub(%r{^/}, '')
+          relative_path = input_path.sub(input_dir, "").sub(%r{^/}, "")
           output_path = File.join(output_dir, relative_path)
 
           process_single_file(input_path, output_path, result)
@@ -255,7 +255,7 @@ module Uniword
       def process_parallel(files, input_dir, output_dir, result)
         # NOTE: Actual parallel implementation would require thread-safe operations
         # For now, fall back to sequential processing
-        warn 'Warning: Parallel processing not yet implemented, using sequential'
+        warn "Warning: Parallel processing not yet implemented, using sequential"
         process_sequential(files, input_dir, output_dir, result)
       end
 
@@ -318,7 +318,7 @@ module Uniword
 
         if log_errors
           warn "Error processing #{file_path}: #{error.message}"
-          warn error.backtrace.first(5).join("\n") if ENV['UNIWORD_VERBOSE']
+          warn error.backtrace.first(5).join("\n") if ENV["UNIWORD_VERBOSE"]
         end
 
         raise error unless continue_on_error

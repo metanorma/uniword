@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -14,13 +14,13 @@ module Uniword
       attribute :sp_pr, :string
 
       xml do
-        element 'marker'
+        element "marker"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'symbol', to: :symbol, render_nil: false
-        map_element 'size', to: :size, render_nil: false
-        map_element 'spPr', to: :sp_pr, render_nil: false
+        map_element "symbol", to: :symbol, render_nil: false
+        map_element "size", to: :size, render_nil: false
+        map_element "spPr", to: :sp_pr, render_nil: false
       end
     end
   end

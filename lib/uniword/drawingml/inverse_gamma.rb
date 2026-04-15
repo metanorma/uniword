@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -10,7 +10,7 @@ module Uniword
     # Element: <a:invGamma>
     class InverseGamma < Lutaml::Model::Serializable
       xml do
-        element 'invGamma'
+        element "invGamma"
         namespace Uniword::Ooxml::Namespaces::DrawingML
       end
     end

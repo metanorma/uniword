@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -13,12 +13,12 @@ module Uniword
       attribute :comment_list, CommentList
 
       xml do
-        element 'comments'
+        element "comments"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 'authors', to: :authors
-        map_element 'commentList', to: :comment_list
+        map_element "authors", to: :authors
+        map_element "commentList", to: :comment_list
       end
     end
   end

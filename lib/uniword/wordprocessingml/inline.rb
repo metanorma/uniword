@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,13 +14,13 @@ module Uniword
       attribute :graphic, Graphic
 
       xml do
-        element 'inline'
+        element "inline"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'extent', to: :extent, render_nil: false
-        map_element 'docPr', to: :docPr, render_nil: false
-        map_element 'graphic', to: :graphic, render_nil: false
+        map_element "extent", to: :extent, render_nil: false
+        map_element "docPr", to: :docPr, render_nil: false
+        map_element "graphic", to: :graphic, render_nil: false
       end
     end
   end

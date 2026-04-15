@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -12,10 +12,10 @@ module Uniword
       attribute :arg_size, :integer
 
       xml do
-        element 'argPr'
+        element "argPr"
         namespace Uniword::Ooxml::Namespaces::MathML
 
-        map_attribute 'val', to: :arg_size
+        map_attribute "val", to: :arg_size
       end
     end
   end

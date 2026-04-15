@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -12,10 +12,10 @@ module Uniword
       attribute :value, :string
 
       xml do
-        element 'locked'
+        element "locked"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
 
-        map_element '', to: :value, render_nil: false
+        map_element "", to: :value, render_nil: false
       end
     end
   end

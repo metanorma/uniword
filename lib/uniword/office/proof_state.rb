@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -13,11 +13,11 @@ module Uniword
       attribute :grammar, :string
 
       xml do
-        element 'proofstate'
+        element "proofstate"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'spelling', to: :spelling
-        map_attribute 'grammar', to: :grammar
+        map_attribute "spelling", to: :spelling
+        map_attribute "grammar", to: :grammar
       end
     end
   end

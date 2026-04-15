@@ -92,8 +92,8 @@ module Uniword
       #
       # @return [Symbol] Configuration key
       def config_key
-        name = self.class.name.split('::').last
-        name = name.gsub(/Validator$/, '')
+        name = self.class.name.split("::").last
+        name = name.gsub(/Validator$/, "")
         name.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
             .downcase

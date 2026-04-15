@@ -24,10 +24,10 @@ module Uniword
   class CommentsPart < Lutaml::Model::Serializable
     # OOXML namespace configuration for comments
     xml do
-      element 'comments'
+      element "comments"
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_element 'comment', to: :comments
+      map_element "comment", to: :comments
     end
 
     # Collection of all comments
@@ -46,7 +46,7 @@ module Uniword
     # @param comment [Comment] The comment to add
     # @return [Comment] The added comment with assigned ID
     def add_comment(comment)
-      raise ArgumentError, 'comment must be a Comment instance' unless comment.is_a?(Comment)
+      raise ArgumentError, "comment must be a Comment instance" unless comment.is_a?(Comment)
 
       # Assign sequential ID if not already set
       comment.comment_id = next_comment_id unless comment.comment_id && !comment.comment_id.empty?
@@ -123,6 +123,7 @@ module Uniword
     #
     # @return [String] The next comment ID
     def next_comment_id
+      @comment_counter ||= 0
       @comment_counter += 1
       @comment_counter.to_s
     end

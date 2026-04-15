@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :mode, :string
 
       xml do
-        element 'extrusioncolormode'
+        element "extrusioncolormode"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'mode', to: :mode
+        map_attribute "mode", to: :mode
       end
     end
   end

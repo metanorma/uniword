@@ -20,11 +20,11 @@ module Uniword
     #   doc.paragraph { |p| p << SdtBuilder.bibliography.build }
     class BibliographyBuilder
       CHART_REL_TYPE =
-        'http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography'
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography"
 
       attr_reader :sources
 
-      def initialize(style: 'APA')
+      def initialize(style: "APA")
         @sources = Bibliography::Sources.new
         @sources.selected_style = style
         @ref_order_counter = 0
@@ -52,7 +52,7 @@ module Uniword
       # @return [self]
       def book(tag:, author:, title:, year:, publisher:,
                city: nil, edition: nil)
-        src = build_source('Book', tag: tag, author: author,
+        src = build_source("Book", tag: tag, author: author,
                                    title: title, year: year,
                                    publisher: publisher, city: city,
                                    edition: edition)
@@ -73,7 +73,7 @@ module Uniword
       # @return [self]
       def journal(tag:, author:, title:, year:, journal:,
                   volume: nil, issue: nil, pages: nil)
-        src = build_source('JournalArticle', tag: tag, author: author,
+        src = build_source("JournalArticle", tag: tag, author: author,
                                              title: title, year: year,
                                              publisher: journal, volume: volume,
                                              issue: issue, pages: pages)
@@ -90,7 +90,7 @@ module Uniword
       # @param url [String] URL
       # @return [self]
       def website(tag:, title:, url:, author: nil, year: nil)
-        src = build_source('InternetSite', tag: tag, author: author,
+        src = build_source("InternetSite", tag: tag, author: author,
                                            title: title, year: year, url: url)
         @sources.source << src
         self
@@ -107,7 +107,7 @@ module Uniword
       # @return [self]
       def conference(tag:, author:, title:, year:, publisher:,
                      city: nil)
-        src = build_source('ConferenceProceedings', tag: tag,
+        src = build_source("ConferenceProceedings", tag: tag,
                                                     author: author, title: title, year: year,
                                                     publisher: publisher, city: city)
         @sources.source << src
@@ -173,7 +173,7 @@ module Uniword
           src.author = Bibliography::Author.new
           src.author.name_list = Bibliography::NameList.new
           author.each do |name|
-            parts = name.to_s.split(' ', 2)
+            parts = name.to_s.split(" ", 2)
             person = Bibliography::Person.new
             person.first = parts[0] if parts[0]
             person.last = parts[1] if parts[1]

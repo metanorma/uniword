@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -12,10 +12,10 @@ module Uniword
       attribute :type, :string
 
       xml do
-        element 'br'
+        element "br"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'type', to: :type
+        map_attribute "type", to: :type
       end
     end
   end

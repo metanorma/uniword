@@ -56,8 +56,8 @@ module Uniword
       #
       # @return [String] Stage name
       def name
-        self.class.name.split('::').last
-            .gsub(/Stage$/, '')
+        self.class.name.split("::").last
+            .gsub(/Stage$/, "")
             .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
             .downcase
@@ -84,7 +84,7 @@ module Uniword
         when :warn
           warn "WARN #{prefix} #{message}"
         else
-          puts "INFO #{prefix} #{message}" if ENV['UNIWORD_VERBOSE']
+          puts "INFO #{prefix} #{message}" if ENV["UNIWORD_VERBOSE"]
         end
       end
     end

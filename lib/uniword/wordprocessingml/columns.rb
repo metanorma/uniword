@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :separate, :boolean
 
       xml do
-        element 'cols'
+        element "cols"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'num', to: :num
-        map_attribute 'space', to: :space
-        map_attribute 'separate', to: :separate
+        map_attribute "num", to: :num
+        map_attribute "space", to: :space
+        map_attribute "separate", to: :separate
       end
     end
   end

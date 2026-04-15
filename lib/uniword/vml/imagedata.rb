@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -18,16 +18,16 @@ module Uniword
       attribute :cropright, :string
 
       xml do
-        element 'imagedata'
+        element "imagedata"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'src', to: :src
-        map_attribute 'relid', to: :relid
-        map_attribute 'title', to: :title
-        map_attribute 'croptop', to: :croptop
-        map_attribute 'cropbottom', to: :cropbottom
-        map_attribute 'cropleft', to: :cropleft
-        map_attribute 'cropright', to: :cropright
+        map_attribute "src", to: :src
+        map_attribute "relid", to: :relid
+        map_attribute "title", to: :title
+        map_attribute "croptop", to: :croptop
+        map_attribute "cropbottom", to: :cropbottom
+        map_attribute "cropleft", to: :cropleft
+        map_attribute "cropright", to: :cropright
       end
     end
   end

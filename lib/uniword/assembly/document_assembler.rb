@@ -44,7 +44,7 @@ module Uniword
       attr_reader :components_dir
 
       # Special component marker for TOC
-      TOC_COMPONENT = '__toc__'
+      TOC_COMPONENT = "__toc__"
 
       # Initialize document assembler.
       #
@@ -153,19 +153,19 @@ module Uniword
 
         components = []
         manifest.section_list.each do |section|
-          if section['component'] == TOC_COMPONENT
-            components << { type: :toc, options: section['options'] }
-          elsif section['component'].include?('*')
+          if section["component"] == TOC_COMPONENT
+            components << { type: :toc, options: section["options"] }
+          elsif section["component"].include?("*")
             # Resolve wildcard
             resolved = @registry.resolve(
-              section['component'],
-              order: section['order']
+              section["component"],
+              order: section["order"]
             )
             resolved.each do |comp|
               components << { type: :component, name: comp[:name] }
             end
           else
-            components << { type: :component, name: section['component'] }
+            components << { type: :component, name: section["component"] }
           end
         end
 
@@ -202,18 +202,18 @@ module Uniword
       # @param resolver [CrossReferenceResolver] Cross-reference resolver
       # @return [void]
       def process_section(document, section, substitutor, _resolver)
-        component_name = section['component']
-        options = section['options']
+        component_name = section["component"]
+        options = section["options"]
 
         if component_name == TOC_COMPONENT
           # Generate and insert TOC
           insert_toc(document, options)
-        elsif component_name.include?('*')
+        elsif component_name.include?("*")
           # Resolve and insert wildcard components
           insert_wildcard_components(
             document,
             component_name,
-            section['order'],
+            section["order"],
             substitutor
           )
         else
@@ -264,8 +264,8 @@ module Uniword
       # @param options [Hash] TOC options
       # @return [void]
       def insert_toc(document, options)
-        max_level = options['max_level'] || 9
-        title = options['title'] || 'Table of Contents'
+        max_level = options["max_level"] || 9
+        title = options["title"] || "Table of Contents"
 
         toc = Toc.new(
           max_level: max_level,

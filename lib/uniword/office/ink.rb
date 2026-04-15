@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -13,11 +13,11 @@ module Uniword
       attribute :contentType, :string
 
       xml do
-        element 'ink'
+        element "ink"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'i', to: :i
-        map_attribute 'contentType', to: :contentType
+        map_attribute "i", to: :i
+        map_attribute "contentType", to: :contentType
       end
     end
   end

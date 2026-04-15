@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'nokogiri'
+require "zip"
+require "nokogiri"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -25,15 +25,15 @@ module Uniword
       #   result = validator.validate('/path/to/document.docx')
       #   puts result.valid? # => true
       class ContentTypeValidator < LayerValidator
-        CONTENT_TYPES_NAMESPACE = 'http://schemas.openxmlformats.org/package/2006/content-types'
+        CONTENT_TYPES_NAMESPACE = "http://schemas.openxmlformats.org/package/2006/content-types"
 
         REQUIRED_CONTENT_TYPES = [
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml',
-          'application/vnd.openxmlformats-package.relationships+xml'
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+          "application/vnd.openxmlformats-package.relationships+xml"
         ].freeze
 
         def layer_name
-          'Content Types'
+          "Content Types"
         end
 
         def validate(path)
@@ -55,11 +55,11 @@ module Uniword
         private
 
         def validate_content_types(zip, result)
-          entry = zip.find_entry('[Content_Types].xml')
+          entry = zip.find_entry("[Content_Types].xml")
 
           unless entry
             result.add_error(
-              'Missing [Content_Types].xml',
+              "Missing [Content_Types].xml",
               critical: true
             )
             return
@@ -104,13 +104,13 @@ module Uniword
           types = []
 
           # From Default elements
-          doc.xpath('//xmlns:Default', 'xmlns' => CONTENT_TYPES_NAMESPACE).each do |default|
-            types << default['ContentType'] if default['ContentType']
+          doc.xpath("//xmlns:Default", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
+            types << default["ContentType"] if default["ContentType"]
           end
 
           # From Override elements
-          doc.xpath('//xmlns:Override', 'xmlns' => CONTENT_TYPES_NAMESPACE).each do |override|
-            types << override['ContentType'] if override['ContentType']
+          doc.xpath("//xmlns:Override", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |override|
+            types << override["ContentType"] if override["ContentType"]
           end
 
           types
@@ -119,9 +119,9 @@ module Uniword
         def validate_extension_consistency(zip, doc, result)
           # Get declared extensions
           extensions = {}
-          doc.xpath('//xmlns:Default', 'xmlns' => CONTENT_TYPES_NAMESPACE).each do |default|
-            ext = default['Extension']
-            content_type = default['ContentType']
+          doc.xpath("//xmlns:Default", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
+            ext = default["Extension"]
+            content_type = default["ContentType"]
             extensions[ext] = content_type if ext && content_type
           end
 

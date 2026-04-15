@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :path_lst, PathList
 
       xml do
-        element 'custGeom'
+        element "custGeom"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'avLst', to: :av_lst, render_nil: false
-        map_element 'pathLst', to: :path_lst
+        map_element "avLst", to: :av_lst, render_nil: false
+        map_element "pathLst", to: :path_lst
       end
     end
   end

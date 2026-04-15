@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,12 +14,12 @@ module Uniword
       attribute :full_calc_on_load, :string
 
       xml do
-        element 'calcPr'
+        element "calcPr"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'calc-mode', to: :calc_mode
-        map_attribute 'calc-id', to: :calc_id
-        map_attribute 'full-calc-on-load', to: :full_calc_on_load
+        map_attribute "calc-mode", to: :calc_mode
+        map_attribute "calc-id", to: :calc_id
+        map_attribute "full-calc-on-load", to: :full_calc_on_load
       end
     end
   end

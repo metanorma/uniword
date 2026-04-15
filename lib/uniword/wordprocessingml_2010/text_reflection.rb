@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -15,13 +15,13 @@ module Uniword
       attribute :distance, :integer
 
       xml do
-        element 'reflection'
+        element "reflection"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'blur-radius', to: :blur_radius
-        map_attribute 'start-opacity', to: :start_opacity
-        map_attribute 'end-opacity', to: :end_opacity
-        map_attribute 'distance', to: :distance
+        map_attribute "blur-radius", to: :blur_radius
+        map_attribute "start-opacity", to: :start_opacity
+        map_attribute "end-opacity", to: :end_opacity
+        map_attribute "distance", to: :distance
       end
     end
   end

@@ -15,27 +15,27 @@ module Uniword
 
     def themes_path
       # User-configured path for manually copied themes
-      ENV['UNIWORD_THEMES_PATH'] || File.expand_path('~/.local/share/uniword/themes/source')
+      ENV["UNIWORD_THEMES_PATH"] || File.expand_path("~/.local/share/uniword/themes/source")
     end
 
     def stylesets_path
-      ENV['UNIWORD_STYLESETS_PATH'] || File.expand_path('~/.local/share/uniword/stylesets/source')
+      ENV["UNIWORD_STYLESETS_PATH"] || File.expand_path("~/.local/share/uniword/stylesets/source")
     end
 
     def color_schemes_path
-      ENV['UNIWORD_COLOR_SCHEMES_PATH'] || File.expand_path('~/.local/share/uniword/color_schemes/source')
+      ENV["UNIWORD_COLOR_SCHEMES_PATH"] || File.expand_path("~/.local/share/uniword/color_schemes/source")
     end
 
     def font_schemes_path
-      ENV['UNIWORD_FONT_SCHEMES_PATH'] || File.expand_path('~/.local/share/uniword/font_schemes/source')
+      ENV["UNIWORD_FONT_SCHEMES_PATH"] || File.expand_path("~/.local/share/uniword/font_schemes/source")
     end
 
     def cache_path
       # XDG cache directory
-      if ENV['XDG_CACHE_HOME']
-        File.join(ENV['XDG_CACHE_HOME'], 'uniword')
+      if ENV["XDG_CACHE_HOME"]
+        File.join(ENV["XDG_CACHE_HOME"], "uniword")
       else
-        File.expand_path('~/.cache/uniword')
+        File.expand_path("~/.cache/uniword")
       end
     end
   end

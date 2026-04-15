@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -14,13 +14,13 @@ module Uniword
       attribute :data_binding, :string
 
       xml do
-        element 'sdtPr'
+        element "sdtPr"
         namespace Uniword::Ooxml::Namespaces::Word2010
         mixed_content
 
-        map_element 'checkbox', to: :checkbox, render_nil: false
-        map_element 'docPartObj', to: :doc_part_obj, render_nil: false
-        map_element 'dataBinding', to: :data_binding, render_nil: false
+        map_element "checkbox", to: :checkbox, render_nil: false
+        map_element "docPartObj", to: :doc_part_obj, render_nil: false
+        map_element "dataBinding", to: :data_binding, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :wrap, :string
 
       xml do
-        element 'bodyPr'
+        element "bodyPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'wrap', to: :wrap
+        map_attribute "wrap", to: :wrap
       end
     end
   end

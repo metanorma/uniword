@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -16,10 +16,10 @@ module Uniword
       attribute :value, OutlineLevelValue
 
       xml do
-        element 'outlineLvl'
+        element "outlineLvl"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :value
+        map_attribute "val", to: :value
       end
     end
   end

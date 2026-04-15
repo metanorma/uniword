@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -26,8 +26,8 @@ module Uniword
       # Cell spacing
       attribute :cell_spacing, :integer # In twips
 
-      # Table layout
-      attribute :layout, :string # autofit, fixed
+      # Table layout (wrapper class)
+      attribute :table_layout, Uniword::Properties::TableLayout
 
       # Borders flag
       attribute :borders, :boolean, default: -> { false }
@@ -80,30 +80,30 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element 'tblPr'
+        element "tblPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # High-priority mappings (Phase 4 Session 1-2)
-        map_element 'tblW', to: :table_width, render_nil: false
-        map_element 'shd', to: :shading, render_nil: false
-        map_element 'tblCellMar', to: :table_cell_margin, render_nil: false
-        map_element 'tblLook', to: :table_look, render_nil: false
-        map_element 'tblCaption', to: :caption, render_nil: false
+        map_element "tblW", to: :table_width, render_nil: false
+        map_element "shd", to: :shading, render_nil: false
+        map_element "tblCellMar", to: :table_cell_margin, render_nil: false
+        map_element "tblLook", to: :table_look, render_nil: false
+        map_element "tblCaption", to: :caption, render_nil: false
 
         # Table indentation - critical for table styles
-        map_element 'tblInd', to: :table_indent, render_nil: false
+        map_element "tblInd", to: :table_indent, render_nil: false
         # Table cell spacing
-        map_element 'tblCellSpacing', to: :cell_spacing, render_nil: false
+        map_element "tblCellSpacing", to: :cell_spacing, render_nil: false
         # Table alignment
-        map_element 'jc', to: :alignment, render_nil: false
+        map_element "jc", to: :alignment, render_nil: false
         # Table layout
-        map_element 'tblLayout', to: :layout, render_nil: false
+        map_element "tblLayout", to: :table_layout, render_nil: false
         # Table style reference
-        map_element 'tblStyle', to: :style, render_nil: false
+        map_element "tblStyle", to: :style, render_nil: false
 
         # Table borders
-        map_element 'tblBorders', to: :table_borders, render_nil: false
+        map_element "tblBorders", to: :table_borders, render_nil: false
       end
 
       # Initialize with defaults and handle convenience attributes
@@ -112,19 +112,17 @@ module Uniword
         border_attrs = {}
         %i[top bottom left right inside_h inside_v].each do |side|
           key = "#{side}_border"
-          if attrs.key?(key) || attrs.key?(key.to_sym)
-            border_attrs[side] = attrs.delete(key) || attrs.delete(key.to_sym)
-          end
+          border_attrs[side] = attrs.delete(key) || attrs.delete(key.to_sym) if attrs.key?(key) || attrs.key?(key.to_sym)
         end
 
         # Extract other convenience attributes
-        cell_padding_value = attrs.delete(:cell_padding) || attrs.delete('cell_padding')
-        cell_spacing_value = attrs.delete(:cell_spacing) || attrs.delete('cell_spacing')
+        cell_padding_value = attrs.delete(:cell_padding) || attrs.delete("cell_padding")
+        cell_spacing_value = attrs.delete(:cell_spacing) || attrs.delete("cell_spacing")
 
         # Handle width: parameter (creates table_width wrapper)
-        width_value = attrs.delete(:width) || attrs.delete('width')
+        width_value = attrs.delete(:width) || attrs.delete("width")
         # Handle alignment: parameter (creates jc element wrapper)
-        alignment_value = attrs.delete(:alignment) || attrs.delete('alignment')
+        alignment_value = attrs.delete(:alignment) || attrs.delete("alignment")
 
         super
 
@@ -146,7 +144,7 @@ module Uniword
         if width_value
           self.table_width = Properties::TableWidth.new
           table_width.w = width_value.to_i
-          table_width.type ||= 'dxa'
+          table_width.type ||= "dxa"
         end
 
         # Set alignment if provided (creates TableJustification wrapper)

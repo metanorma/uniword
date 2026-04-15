@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2013
@@ -13,12 +13,12 @@ module Uniword
       attribute :color_mapping, :string
 
       xml do
-        element 'chartProps'
+        element "chartProps"
         namespace Uniword::Ooxml::Namespaces::Word2012
         mixed_content
 
-        map_attribute 'style', to: :style
-        map_element 'colorMapping', to: :color_mapping, render_nil: false
+        map_attribute "style", to: :style
+        map_element "colorMapping", to: :color_mapping, render_nil: false
       end
     end
   end

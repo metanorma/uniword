@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -16,15 +16,15 @@ module Uniword
       attribute :f, CellFormula
 
       xml do
-        element 'c'
+        element "c"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'r', to: :r
-        map_attribute 's', to: :s
-        map_attribute 't', to: :t
-        map_element 'v', to: :v, render_nil: false
-        map_element 'f', to: :f, render_nil: false
+        map_attribute "r", to: :r
+        map_attribute "s", to: :s
+        map_attribute "t", to: :t
+        map_element "v", to: :v, render_nil: false
+        map_element "f", to: :f, render_nil: false
       end
     end
   end

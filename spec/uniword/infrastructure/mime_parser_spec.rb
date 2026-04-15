@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 RSpec.describe Uniword::Infrastructure::MimeParser do
   let(:parser) { described_class.new }
 
-  describe '#parse' do
-    context 'with invalid input' do
-      it 'raises error when path is nil' do
+  describe "#parse" do
+    context "with invalid input" do
+      it "raises error when path is nil" do
         expect { parser.parse(nil) }.to raise_error(ArgumentError, /Path cannot be nil/)
       end
 
-      it 'raises error when file does not exist' do
-        expect { parser.parse('nonexistent.mhtml') }.to raise_error(ArgumentError, /File not found/)
+      it "raises error when file does not exist" do
+        expect { parser.parse("nonexistent.mhtml") }.to raise_error(ArgumentError, /File not found/)
       end
     end
 
-    context 'with valid MHTML content' do
+    context "with valid MHTML content" do
       let(:mhtml_content) do
         <<~MHTML
           MIME-Version: 1.0
@@ -38,24 +38,24 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
         MHTML
       end
 
-      it 'extracts HTML content' do
+      it "extracts HTML content" do
         result = parser.parse_content(mhtml_content)
         expect(result).to be_a(Uniword::Mhtml::Document)
-        expect(result.raw_html).to include('<html><body><p>Test content</p></body></html>')
+        expect(result.raw_html).to include("<html><body><p>Test content</p></body></html>")
       end
 
-      it 'extracts filelist content' do
+      it "extracts filelist content" do
         result = parser.parse_content(mhtml_content)
         expect(result.filelist_xml).to include('<o:File HRef="test.png"/>')
       end
 
-      it 'returns images hash' do
+      it "returns images hash" do
         result = parser.parse_content(mhtml_content)
         expect(result.images).to be_a(Hash)
       end
     end
 
-    context 'with base64 encoded images' do
+    context "with base64 encoded images" do
       let(:mhtml_with_image) do
         <<~MHTML
           MIME-Version: 1.0
@@ -77,16 +77,16 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
         MHTML
       end
 
-      it 'decodes base64 images' do
+      it "decodes base64 images" do
         result = parser.parse_content(mhtml_with_image)
         images = result.images
-        expect(images).to have_key('test.png')
-        expect(images['test.png']).to be_a(String)
-        expect(images['test.png'].encoding).to eq(Encoding::ASCII_8BIT)
+        expect(images).to have_key("test.png")
+        expect(images["test.png"]).to be_a(String)
+        expect(images["test.png"].encoding).to eq(Encoding::ASCII_8BIT)
       end
     end
 
-    context 'with quoted-printable encoding' do
+    context "with quoted-printable encoding" do
       let(:mhtml_qp) do
         <<~MHTML
           MIME-Version: 1.0
@@ -102,32 +102,32 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
         MHTML
       end
 
-      it 'decodes quoted-printable content' do
+      it "decodes quoted-printable content" do
         result = parser.parse_content(mhtml_qp)
-        expect(result.raw_html).to include('<html>')
-        expect(result.raw_html).to include('<p>Test</p>')
+        expect(result.raw_html).to include("<html>")
+        expect(result.raw_html).to include("<p>Test</p>")
       end
     end
 
-    context 'boundary extraction' do
-      it 'extracts boundary with quotes' do
+    context "boundary extraction" do
+      it "extracts boundary with quotes" do
         content = 'Content-Type: multipart/related; boundary="----=_Test_123"'
         result = parser.parse_content("#{content}\n\n------=_Test_123\n\n------=_Test_123--")
         expect { result }.not_to raise_error
       end
 
-      it 'extracts boundary without quotes' do
-        content = 'Content-Type: multipart/related; boundary=----=_Test_456'
+      it "extracts boundary without quotes" do
+        content = "Content-Type: multipart/related; boundary=----=_Test_456"
         result = parser.parse_content("#{content}\n\n------=_Test_456\n\n------=_Test_456--")
         expect { result }.not_to raise_error
       end
 
-      it 'raises error when no boundary found' do
-        expect { parser.parse_content('No boundary here') }.to raise_error(/No MIME boundary found/)
+      it "raises error when no boundary found" do
+        expect { parser.parse_content("No boundary here") }.to raise_error(/No MIME boundary found/)
       end
     end
 
-    context 'filename extraction' do
+    context "filename extraction" do
       let(:mhtml_filenames) do
         <<~MHTML
           MIME-Version: 1.0
@@ -155,18 +155,18 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
         MHTML
       end
 
-      it 'extracts filenames from various location formats' do
+      it "extracts filenames from various location formats" do
         result = parser.parse_content(mhtml_filenames)
         images = result.images
-        expect(images).to have_key('image1.png')
-        expect(images).to have_key('image2.jpg')
-        expect(images).to have_key('image3.gif')
+        expect(images).to have_key("image1.png")
+        expect(images).to have_key("image2.jpg")
+        expect(images).to have_key("image3.gif")
       end
     end
   end
 
-  describe '#parse_content' do
-    it 'returns Mhtml::Document with expected parts' do
+  describe "#parse_content" do
+    it "returns Mhtml::Document with expected parts" do
       content = <<~MHTML
         Content-Type: multipart/related; boundary="test"
 
@@ -183,7 +183,7 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
       expect(result.images).to be_a(Hash)
     end
 
-    it 'handles empty parts gracefully' do
+    it "handles empty parts gracefully" do
       content = <<~MHTML
         Content-Type: multipart/related; boundary="empty"
 

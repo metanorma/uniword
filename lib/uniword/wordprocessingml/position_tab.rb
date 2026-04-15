@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :leader, :string
 
       xml do
-        element 'ptab'
+        element "ptab"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'relativeTo', to: :relative_to, render_nil: false
-        map_attribute 'alignment', to: :alignment, render_nil: false
-        map_attribute 'leader', to: :leader, render_nil: false
+        map_attribute "relativeTo", to: :relative_to, render_nil: false
+        map_attribute "alignment", to: :alignment, render_nil: false
+        map_attribute "leader", to: :leader, render_nil: false
       end
     end
   end

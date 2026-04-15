@@ -45,8 +45,8 @@ module Uniword
         extracted = extract_zip(path)
 
         # Deserialize styles.xml using lutaml-model (MODEL-DRIVEN!)
-        styles_xml = extracted['word/styles.xml']
-        raise Uniword::CorruptedFileError.new(path, 'styles.xml missing') unless styles_xml
+        styles_xml = extracted["word/styles.xml"]
+        raise Uniword::CorruptedFileError.new(path, "styles.xml missing") unless styles_xml
 
         styles_config = Uniword::Wordprocessingml::StylesConfiguration.from_xml(styles_xml)
 
@@ -75,7 +75,7 @@ module Uniword
       # @param path [String] ZIP file path
       # @return [Hash] Extracted files {path => content}
       def self.extract_zip(path)
-        require 'zip'
+        require "zip"
 
         contents = {}
         Zip::File.open(path) do |zip|
@@ -94,13 +94,13 @@ module Uniword
       #
       # @return [String] StyleSet name
       def extract_name
-        return 'Custom StyleSet' unless source_path
+        return "Custom StyleSet" unless source_path
 
         # Get filename without extension
-        filename = File.basename(source_path, '.*')
+        filename = File.basename(source_path, ".*")
 
         # Convert to title case (e.g., 'distinctive' -> 'Distinctive')
-        filename.split(/[-_]/).map(&:capitalize).join(' ')
+        filename.split(/[-_]/).map(&:capitalize).join(" ")
       end
     end
   end

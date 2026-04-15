@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -15,14 +15,14 @@ module Uniword
       attribute :wrap_polygon, :string
 
       xml do
-        element 'wrapThrough'
+        element "wrapThrough"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'wrap-text', to: :wrap_text
-        map_attribute 'dist-l', to: :dist_l
-        map_attribute 'dist-r', to: :dist_r
-        map_element 'wrapPolygon', to: :wrap_polygon, render_nil: false
+        map_attribute "wrap-text", to: :wrap_text
+        map_attribute "dist-l", to: :dist_l
+        map_attribute "dist-r", to: :dist_r
+        map_element "wrapPolygon", to: :wrap_polygon, render_nil: false
       end
     end
   end

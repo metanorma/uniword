@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'fileutils'
+require "zip"
+require "fileutils"
 
 module Uniword
   module Infrastructure
@@ -52,7 +52,7 @@ module Uniword
                   entry_content
                 else
                   entry_content.encode(
-                    'UTF-8', invalid: :replace, undef: :replace
+                    "UTF-8", invalid: :replace, undef: :replace
                   )
                 end
               stream.write(final_content)
@@ -73,12 +73,10 @@ module Uniword
           FileUtils.rm_f(temp_path)
         rescue Errno::EACCES
           retries -= 1
-          if retries > 0
-            sleep(0.5)
-            retry
-          else
-            raise
-          end
+          raise unless retries.positive?
+
+          sleep(0.5)
+          retry
         end
       ensure
         # Clean up temp file if it still exists
@@ -98,14 +96,15 @@ module Uniword
       # the handle, then package to a temp file and move.
       def add_file(zip_path, entry_path, entry_content)
         validate_zip_path(zip_path)
-        raise ArgumentError, 'Entry path cannot be nil' if entry_path.nil?
-        raise ArgumentError, 'Entry path cannot be empty' if entry_path.empty?
+        raise ArgumentError, "Entry path cannot be nil" if entry_path.nil?
+        raise ArgumentError, "Entry path cannot be empty" if entry_path.empty?
 
         # Extract existing content into a local variable
         content = {}
         Zip::File.open(zip_path) do |zip_file|
           zip_file.each do |entry|
             next if entry.directory?
+
             content[entry.name] = entry.get_input_stream.read
           end
         end
@@ -135,6 +134,7 @@ module Uniword
         Zip::File.open(zip_path) do |zip_file|
           zip_file.each do |entry|
             next if entry.directory?
+
             if entry.name == entry_path
               found = true
             else
@@ -170,7 +170,7 @@ module Uniword
                   entry_content
                 else
                   entry_content.encode(
-                    'UTF-8', invalid: :replace, undef: :replace
+                    "UTF-8", invalid: :replace, undef: :replace
                   )
                 end
               stream.write(final_content)
@@ -191,12 +191,10 @@ module Uniword
           FileUtils.rm_f(temp_path)
         rescue Errno::EACCES
           retries -= 1
-          if retries > 0
-            sleep(0.5)
-            retry
-          else
-            raise
-          end
+          raise unless retries.positive?
+
+          sleep(0.5)
+          retry
         end
       ensure
         FileUtils.rm_f(temp_path) if File.exist?(temp_path)
@@ -208,13 +206,13 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if content is invalid
       def validate_content(content)
-        raise ArgumentError, 'Content cannot be nil' if content.nil?
-        raise ArgumentError, 'Content must be a Hash' unless content.is_a?(Hash)
-        raise ArgumentError, 'Content cannot be empty' if content.empty?
+        raise ArgumentError, "Content cannot be nil" if content.nil?
+        raise ArgumentError, "Content must be a Hash" unless content.is_a?(Hash)
+        raise ArgumentError, "Content cannot be empty" if content.empty?
 
         content.each do |path, data|
-          raise ArgumentError, 'Entry path cannot be nil' if path.nil?
-          raise ArgumentError, 'Entry path cannot be empty' if path.empty?
+          raise ArgumentError, "Entry path cannot be nil" if path.nil?
+          raise ArgumentError, "Entry path cannot be empty" if path.empty?
           raise ArgumentError, "Entry content cannot be nil for #{path}" if data.nil?
         end
       end
@@ -225,8 +223,8 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if path is invalid
       def validate_output_path(path)
-        raise ArgumentError, 'Output path cannot be nil' if path.nil?
-        raise ArgumentError, 'Output path cannot be empty' if path.empty?
+        raise ArgumentError, "Output path cannot be nil" if path.nil?
+        raise ArgumentError, "Output path cannot be empty" if path.empty?
 
         dir = File.dirname(path)
         return unless File.exist?(dir)
@@ -241,8 +239,8 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if path is invalid
       def validate_zip_path(path)
-        raise ArgumentError, 'ZIP path cannot be nil' if path.nil?
-        raise ArgumentError, 'ZIP path cannot be empty' if path.empty?
+        raise ArgumentError, "ZIP path cannot be nil" if path.nil?
+        raise ArgumentError, "ZIP path cannot be empty" if path.empty?
       end
     end
   end

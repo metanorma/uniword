@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
-require 'securerandom'
+require "nokogiri"
+require "securerandom"
 
 module Uniword
   module Builder
@@ -27,12 +27,12 @@ module Uniword
     #     c.series 'Share', data: [45, 30, 25]
     #   end
     class ChartBuilder
-      CHART_NS = 'http://schemas.openxmlformats.org/drawingml/2006/chart'
+      CHART_NS = "http://schemas.openxmlformats.org/drawingml/2006/chart"
       CHART_REL_TYPE =
-        'http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart'
+        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"
       CHART_CONTENT_TYPE =
-        'application/vnd.openxmlformats-officedocument.' \
-        'drawingml.chart+xml'
+        "application/vnd.openxmlformats-officedocument." \
+        "drawingml.chart+xml"
 
       attr_reader :chart_type, :title_text, :series_list
 
@@ -42,7 +42,7 @@ module Uniword
         @categories = []
         @series_list = []
         @show_legend = true
-        @legend_position = 'b'
+        @legend_position = "b"
         @width = 5_486_400  # default 6 inches in EMU
         @height = 3_200_400 # default ~3.5 inches in EMU
       end
@@ -84,7 +84,7 @@ module Uniword
       # @param show [Boolean] Show legend (default true)
       # @param position [String] Position: 't', 'b', 'l', 'r', 'tr'
       # @return [self]
-      def legend(show: true, position: 'b')
+      def legend(show: true, position: "b")
         @show_legend = show
         @legend_position = position
         self
@@ -105,12 +105,12 @@ module Uniword
       #
       # @return [String] Chart XML
       def build_xml
-        builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
-          xml['c'].chartSpace('xmlns:c' => CHART_NS,
-                              'xmlns:a' =>
-                                'http://schemas.openxmlformats.org/drawingml/2006/main',
-                              'xmlns:r' =>
-                                'http://schemas.openxmlformats.org/officeDocument/2006/relationships') do
+        builder = Nokogiri::XML::Builder.new(encoding: "UTF-8") do |xml|
+          xml["c"].chartSpace("xmlns:c" => CHART_NS,
+                              "xmlns:a" =>
+                                "http://schemas.openxmlformats.org/drawingml/2006/main",
+                              "xmlns:r" =>
+                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships") do
             build_chart_xml(xml)
           end
         end
@@ -140,73 +140,73 @@ module Uniword
 
       # Build the inner chart XML
       def build_chart_xml(xml)
-        xml['c'].chart do
+        xml["c"].chart do
           # Title
           if @title_text
-            xml['c'].title do
-              xml['c'].tx do
-                xml['c'].rich do
-                  xml['a'].bodyPr
-                  xml['a'].lstStyle
-                  xml['a'].p do
-                    xml['a'].r do
-                      xml['a'].t(@title_text)
+            xml["c"].title do
+              xml["c"].tx do
+                xml["c"].rich do
+                  xml["a"].bodyPr
+                  xml["a"].lstStyle
+                  xml["a"].p do
+                    xml["a"].r do
+                      xml["a"].t(@title_text)
                     end
                   end
                 end
               end
-              xml['c'].overlay('val' => '0')
+              xml["c"].overlay("val" => "0")
             end
           end
 
-          xml['c'].autoTitleDeleted('val' => '0')
+          xml["c"].autoTitleDeleted("val" => "0")
 
           # Plot area
-          xml['c'].plotArea do
+          xml["c"].plotArea do
             build_chart_type(xml)
 
             # Category axis (for bar/line, not pie)
             unless @chart_type == :pie
-              xml['c'].catAx do
-                xml['c'].axId('val' => '10')
-                xml['c'].scaling do
-                  xml['c'].orientation('val' => 'minMax')
+              xml["c"].catAx do
+                xml["c"].axId("val" => "10")
+                xml["c"].scaling do
+                  xml["c"].orientation("val" => "minMax")
                 end
-                xml['c'].delete('val' => '0')
-                xml['c'].axPos('val' => 'b')
-                xml['c'].majorGridlines
-                xml['c'].numFmt('formatCode' => 'General',
-                                'sourceLinked' => '1')
-                xml['c'].tickLblPos('val' => 'nextTo')
-                xml['c'].crossAx('val' => '20')
+                xml["c"].delete("val" => "0")
+                xml["c"].axPos("val" => "b")
+                xml["c"].majorGridlines
+                xml["c"].numFmt("formatCode" => "General",
+                                "sourceLinked" => "1")
+                xml["c"].tickLblPos("val" => "nextTo")
+                xml["c"].crossAx("val" => "20")
               end
 
               # Value axis
-              xml['c'].valAx do
-                xml['c'].axId('val' => '20')
-                xml['c'].scaling do
-                  xml['c'].orientation('val' => 'minMax')
+              xml["c"].valAx do
+                xml["c"].axId("val" => "20")
+                xml["c"].scaling do
+                  xml["c"].orientation("val" => "minMax")
                 end
-                xml['c'].delete('val' => '0')
-                xml['c'].axPos('val' => 'l')
-                xml['c'].majorGridlines
-                xml['c'].numFmt('formatCode' => 'General',
-                                'sourceLinked' => '1')
-                xml['c'].tickLblPos('val' => 'nextTo')
-                xml['c'].crossAx('val' => '10')
+                xml["c"].delete("val" => "0")
+                xml["c"].axPos("val" => "l")
+                xml["c"].majorGridlines
+                xml["c"].numFmt("formatCode" => "General",
+                                "sourceLinked" => "1")
+                xml["c"].tickLblPos("val" => "nextTo")
+                xml["c"].crossAx("val" => "10")
               end
             end
           end
 
           # Legend
           if @show_legend
-            xml['c'].legend do
-              xml['c'].legendPos('val' => @legend_position)
-              xml['c'].overlay('val' => '0')
+            xml["c"].legend do
+              xml["c"].legendPos("val" => @legend_position)
+              xml["c"].overlay("val" => "0")
             end
           end
 
-          xml['c'].plotVisOnly('val' => '1')
+          xml["c"].plotVisOnly("val" => "1")
         end
       end
 
@@ -224,21 +224,21 @@ module Uniword
 
       # Build bar chart XML
       def build_bar_chart(xml)
-        xml['c'].barChart do
-          xml['c'].barDir('val' => 'col')
-          xml['c'].grouping('val' => 'clustered')
-          xml['c'].varyColors('val' => '0')
+        xml["c"].barChart do
+          xml["c"].barDir("val" => "col")
+          xml["c"].grouping("val" => "clustered")
+          xml["c"].varyColors("val" => "0")
 
           @series_list.each_with_index do |s, i|
-            xml['c'].ser do
-              xml['c'].idx('val' => i)
-              xml['c'].order('val' => i)
-              xml['c'].tx do
-                xml['c'].strRef do
-                  xml['c'].f("Sheet1!$B$#{i + 1}")
-                  xml['c'].strCache do
-                    xml['c'].ptCount('val' => 1)
-                    xml['c'].pt('idx' => 0) { xml['c'].v(s[:name]) }
+            xml["c"].ser do
+              xml["c"].idx("val" => i)
+              xml["c"].order("val" => i)
+              xml["c"].tx do
+                xml["c"].strRef do
+                  xml["c"].f("Sheet1!$B$#{i + 1}")
+                  xml["c"].strCache do
+                    xml["c"].ptCount("val" => 1)
+                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
                   end
                 end
               end
@@ -247,27 +247,27 @@ module Uniword
             end
           end
 
-          xml['c'].axId('val' => '10')
-          xml['c'].axId('val' => '20')
+          xml["c"].axId("val" => "10")
+          xml["c"].axId("val" => "20")
         end
       end
 
       # Build line chart XML
       def build_line_chart(xml)
-        xml['c'].lineChart do
-          xml['c'].grouping('val' => 'standard')
-          xml['c'].varyColors('val' => '0')
+        xml["c"].lineChart do
+          xml["c"].grouping("val" => "standard")
+          xml["c"].varyColors("val" => "0")
 
           @series_list.each_with_index do |s, i|
-            xml['c'].ser do
-              xml['c'].idx('val' => i)
-              xml['c'].order('val' => i)
-              xml['c'].tx do
-                xml['c'].strRef do
-                  xml['c'].f("Sheet1!$B$#{i + 1}")
-                  xml['c'].strCache do
-                    xml['c'].ptCount('val' => 1)
-                    xml['c'].pt('idx' => 0) { xml['c'].v(s[:name]) }
+            xml["c"].ser do
+              xml["c"].idx("val" => i)
+              xml["c"].order("val" => i)
+              xml["c"].tx do
+                xml["c"].strRef do
+                  xml["c"].f("Sheet1!$B$#{i + 1}")
+                  xml["c"].strCache do
+                    xml["c"].ptCount("val" => 1)
+                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
                   end
                 end
               end
@@ -276,26 +276,26 @@ module Uniword
             end
           end
 
-          xml['c'].axId('val' => '10')
-          xml['c'].axId('val' => '20')
+          xml["c"].axId("val" => "10")
+          xml["c"].axId("val" => "20")
         end
       end
 
       # Build pie chart XML
       def build_pie_chart(xml)
-        xml['c'].pieChart do
-          xml['c'].varyColors('val' => '1')
+        xml["c"].pieChart do
+          xml["c"].varyColors("val" => "1")
 
           @series_list.each_with_index do |s, i|
-            xml['c'].ser do
-              xml['c'].idx('val' => i)
-              xml['c'].order('val' => i)
-              xml['c'].tx do
-                xml['c'].strRef do
-                  xml['c'].f("Sheet1!$B$#{i + 1}")
-                  xml['c'].strCache do
-                    xml['c'].ptCount('val' => 1)
-                    xml['c'].pt('idx' => 0) { xml['c'].v(s[:name]) }
+            xml["c"].ser do
+              xml["c"].idx("val" => i)
+              xml["c"].order("val" => i)
+              xml["c"].tx do
+                xml["c"].strRef do
+                  xml["c"].f("Sheet1!$B$#{i + 1}")
+                  xml["c"].strCache do
+                    xml["c"].ptCount("val" => 1)
+                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
                   end
                 end
               end
@@ -310,13 +310,13 @@ module Uniword
       def build_categories(xml)
         return if @categories.empty?
 
-        xml['c'].cat do
-          xml['c'].strRef do
-            xml['c'].f('Sheet1!$A$2:$A$100')
-            xml['c'].strCache do
-              xml['c'].ptCount('val' => @categories.size)
+        xml["c"].cat do
+          xml["c"].strRef do
+            xml["c"].f("Sheet1!$A$2:$A$100")
+            xml["c"].strCache do
+              xml["c"].ptCount("val" => @categories.size)
               @categories.each_with_index do |cat, idx|
-                xml['c'].pt('idx' => idx) { xml['c'].v(cat) }
+                xml["c"].pt("idx" => idx) { xml["c"].v(cat) }
               end
             end
           end
@@ -325,14 +325,14 @@ module Uniword
 
       # Build values data XML
       def build_values(xml, data)
-        xml['c'].val do
-          xml['c'].numRef do
-            xml['c'].f('Sheet1!$C$2:$C$100')
-            xml['c'].numCache do
-              xml['c'].formatCode('General')
-              xml['c'].ptCount('val' => data.size)
+        xml["c"].val do
+          xml["c"].numRef do
+            xml["c"].f("Sheet1!$C$2:$C$100")
+            xml["c"].numCache do
+              xml["c"].formatCode("General")
+              xml["c"].ptCount("val" => data.size)
               data.each_with_index do |val, idx|
-                xml['c'].pt('idx' => idx) { xml['c'].v(val.to_s) }
+                xml["c"].pt("idx" => idx) { xml["c"].v(val.to_s) }
               end
             end
           end

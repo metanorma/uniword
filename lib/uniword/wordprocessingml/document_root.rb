@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,7 +13,7 @@ module Uniword
       attribute :body, Body, default: -> { Body.new }
 
       xml do
-        element 'document'
+        element "document"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         namespace_scope [
@@ -23,9 +23,9 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
         ]
 
-        map_attribute 'Ignorable', to: :mc_ignorable, render_nil: false
+        map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
 
-        map_element 'body', to: :body, render_default: true
+        map_element "body", to: :body, render_default: true
       end
 
       # Override to_xml to sync body element_order before serialization.
@@ -125,7 +125,7 @@ module Uniword
       #
       # @return [String] Combined text from all paragraphs
       def text
-        return '' unless body&.paragraphs
+        return "" unless body&.paragraphs
 
         body.paragraphs.map(&:text).join("\n")
       end

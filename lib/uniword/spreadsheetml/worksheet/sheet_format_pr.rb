@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -18,16 +18,16 @@ module Uniword
         attribute :cached_row_band, :integer
 
         xml do
-          element 'sheetFormatPr'
+          element "sheetFormatPr"
           namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-          map_attribute 'baseColWidth', to: :base_col_width, render_nil: false
-          map_attribute 'defaultRowHeight', to: :default_row_height, render_nil: false
-          map_attribute 'dyDesiner', to: :dy_designer, render_nil: false
-          map_attribute 'outLineLevelRow', to: :out_line_level_row, render_nil: false
-          map_attribute 'outLineLevelCol', to: :out_line_level_col, render_nil: false
-          map_attribute 'cachedColBand', to: :cached_col_band, render_nil: false
-          map_attribute 'cachedRowBand', to: :cached_row_band, render_nil: false
+          map_attribute "baseColWidth", to: :base_col_width, render_nil: false
+          map_attribute "defaultRowHeight", to: :default_row_height, render_nil: false
+          map_attribute "dyDesiner", to: :dy_designer, render_nil: false
+          map_attribute "outLineLevelRow", to: :out_line_level_row, render_nil: false
+          map_attribute "outLineLevelCol", to: :out_line_level_col, render_nil: false
+          map_attribute "cachedColBand", to: :cached_col_band, render_nil: false
+          map_attribute "cachedRowBand", to: :cached_row_band, render_nil: false
         end
       end
     end

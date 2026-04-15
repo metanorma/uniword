@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -19,13 +19,13 @@ module Uniword
       attribute :theme_shade, :string
 
       xml do
-        element 'u'
+        element "u"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :value
-        map_attribute 'color', to: :color
-        map_attribute 'themeColor', to: :theme_color
-        map_attribute 'themeShade', to: :theme_shade
+        map_attribute "val", to: :value
+        map_attribute "color", to: :color
+        map_attribute "themeColor", to: :theme_color
+        map_attribute "themeShade", to: :theme_shade
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -15,13 +15,13 @@ module Uniword
       attribute :indexed, :integer
 
       xml do
-        element 'color'
+        element "color"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'rgb', to: :rgb
-        map_attribute 'theme', to: :theme
-        map_attribute 'tint', to: :tint
-        map_attribute 'indexed', to: :indexed
+        map_attribute "rgb", to: :rgb
+        map_attribute "theme", to: :theme
+        map_attribute "tint", to: :tint
+        map_attribute "indexed", to: :indexed
       end
     end
   end

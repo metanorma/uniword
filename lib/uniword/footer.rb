@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a document footer
   # Footers can contain paragraphs, tables, and fields (like page numbers)
   class Footer < Lutaml::Model::Serializable
-    attribute :type, :string, default: -> { 'default' }
+    attribute :type, :string, default: -> { "default" }
     attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
     attribute :tables, Wordprocessingml::Table, collection: true, initialize_empty: true
 
@@ -35,7 +35,7 @@ module Uniword
     def validate_type
       return unless type && !TYPES.include?(type)
 
-      raise ArgumentError, "Invalid footer type: #{type}. Must be one of: #{TYPES.join(', ')}"
+      raise ArgumentError, "Invalid footer type: #{type}. Must be one of: #{TYPES.join(", ")}"
     end
   end
 end

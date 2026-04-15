@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :lvl, :integer
 
       xml do
-        element 'defPPr'
+        element "defPPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'algn', to: :algn
-        map_attribute 'lvl', to: :lvl
+        map_attribute "algn", to: :algn
+        map_attribute "lvl", to: :lvl
       end
     end
   end

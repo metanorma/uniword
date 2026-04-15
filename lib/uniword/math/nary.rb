@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -15,14 +15,14 @@ module Uniword
       attribute :element, Element
 
       xml do
-        element 'nary'
+        element "nary"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'naryPr', to: :properties, render_nil: false
-        map_element 'sub', to: :sub, render_nil: false
-        map_element 'sup', to: :sup, render_nil: false
-        map_element 'e', to: :element
+        map_element "naryPr", to: :properties, render_nil: false
+        map_element "sub", to: :sub, render_nil: false
+        map_element "sup", to: :sup, render_nil: false
+        map_element "e", to: :element
       end
     end
   end

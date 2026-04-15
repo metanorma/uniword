@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Bibliography
@@ -12,11 +12,11 @@ module Uniword
       attribute :person, Person, collection: true, initialize_empty: true
 
       xml do
-        element 'NameList'
+        element "NameList"
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 
-        map_element 'Person', to: :person, render_nil: false
+        map_element "Person", to: :person, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -13,12 +13,12 @@ module Uniword
       attribute :color, :string
 
       xml do
-        element 'glow'
+        element "glow"
         namespace Uniword::Ooxml::Namespaces::Word2010
         mixed_content
 
-        map_attribute 'radius', to: :radius
-        map_element 'color', to: :color, render_nil: false
+        map_attribute "radius", to: :radius
+        map_element "color", to: :color, render_nil: false
       end
     end
   end

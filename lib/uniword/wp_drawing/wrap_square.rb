@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -17,16 +17,16 @@ module Uniword
       attribute :effect_extent, :string
 
       xml do
-        element 'wrapSquare'
+        element "wrapSquare"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'wrap-text', to: :wrap_text
-        map_attribute 'dist-t', to: :dist_t
-        map_attribute 'dist-b', to: :dist_b
-        map_attribute 'dist-l', to: :dist_l
-        map_attribute 'dist-r', to: :dist_r
-        map_element 'effectExtent', to: :effect_extent, render_nil: false
+        map_attribute "wrap-text", to: :wrap_text
+        map_attribute "dist-t", to: :dist_t
+        map_attribute "dist-b", to: :dist_b
+        map_attribute "dist-l", to: :dist_l
+        map_attribute "dist-r", to: :dist_r
+        map_element "effectExtent", to: :effect_extent, render_nil: false
       end
     end
   end

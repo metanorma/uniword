@@ -91,14 +91,14 @@ module Uniword
 
           rpr.color = Uniword::Properties::ColorValue.new(
             value: heading_color,
-            theme_color: 'text1'
+            theme_color: "text1"
           )
         end
       end
 
       # Update hyperlink style with theme color reference
       def update_hyperlink_style(styles_config, theme)
-        style = styles_config.style_by_id('Hyperlink')
+        style = styles_config.style_by_id("Hyperlink")
         return unless style
 
         rpr = style.rPr
@@ -109,7 +109,7 @@ module Uniword
 
         rpr.color = Uniword::Properties::ColorValue.new(
           value: hlink_color,
-          theme_color: 'hyperlink'
+          theme_color: "hyperlink"
         )
       end
 
@@ -118,10 +118,10 @@ module Uniword
         return nil unless theme.font_scheme
 
         Uniword::Properties::RunFonts.new(
-          ascii_theme: 'minorAscii',
-          h_ansi_theme: 'minorHAnsi',
-          east_asia_theme: 'minorEastAsia',
-          cs_theme: 'minorBidi'
+          ascii_theme: "minorAscii",
+          h_ansi_theme: "minorHAnsi",
+          east_asia_theme: "minorEastAsia",
+          cs_theme: "minorBidi"
         )
       end
 
@@ -130,10 +130,10 @@ module Uniword
         return nil unless theme.font_scheme
 
         Uniword::Properties::RunFonts.new(
-          ascii_theme: 'majorAscii',
-          h_ansi_theme: 'majorHAnsi',
-          east_asia_theme: 'majorEastAsia',
-          cs_theme: 'majorBidi'
+          ascii_theme: "majorAscii",
+          h_ansi_theme: "majorHAnsi",
+          east_asia_theme: "majorEastAsia",
+          cs_theme: "majorBidi"
         )
       end
     end

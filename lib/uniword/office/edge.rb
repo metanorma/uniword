@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -13,11 +13,11 @@ module Uniword
       attribute :weight, :string
 
       xml do
-        element 'edge'
+        element "edge"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'color', to: :color
-        map_attribute 'weight', to: :weight
+        map_attribute "color", to: :color
+        map_attribute "weight", to: :weight
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,11 +12,11 @@ module Uniword
       attribute :author_entries, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'authors'
+        element "authors"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 'author', to: :author_entries, render_nil: false
+        map_element "author", to: :author_entries, render_nil: false
       end
     end
   end

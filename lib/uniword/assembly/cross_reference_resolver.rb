@@ -217,7 +217,7 @@ module Uniword
       # @param field [Field] Field to resolve
       # @return [void]
       def resolve_field(field)
-        return unless field.field_type == 'REF'
+        return unless field.field_type == "REF"
         return unless field.bookmark_name
 
         # Resolve bookmark reference

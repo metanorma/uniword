@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -19,18 +19,18 @@ module Uniword
       attribute :ctrl_pr, ControlProperties
 
       xml do
-        element 'mPr'
+        element "mPr"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_attribute 'val', to: :base_jc
-        map_attribute 'val', to: :plc_hide
-        map_attribute 'val', to: :row_spacing_rule
-        map_attribute 'val', to: :row_spacing
-        map_attribute 'val', to: :column_gap_rule
-        map_attribute 'val', to: :column_gap
-        map_element 'mcs', to: :matrix_columns, render_nil: false
-        map_element 'ctrlPr', to: :ctrl_pr, render_nil: false
+        map_attribute "val", to: :base_jc
+        map_attribute "val", to: :plc_hide
+        map_attribute "val", to: :row_spacing_rule
+        map_attribute "val", to: :row_spacing
+        map_attribute "val", to: :column_gap_rule
+        map_attribute "val", to: :column_gap
+        map_element "mcs", to: :matrix_columns, render_nil: false
+        map_element "ctrlPr", to: :ctrl_pr, render_nil: false
       end
     end
   end

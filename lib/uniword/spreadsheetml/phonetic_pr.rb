@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -18,17 +18,17 @@ module Uniword
       attribute :growing_editing, :string
 
       xml do
-        element 'phoneticPr'
+        element "phoneticPr"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'fontId', to: :font_id, render_nil: false
-        map_attribute 'typeface', to: :typeface, render_nil: false
-        map_attribute 'panose', to: :panose, render_nil: false
-        map_attribute 'pitchFamily', to: :pitch_family, render_nil: false
-        map_attribute 'charset', to: :charset, render_nil: false
-        map_attribute 'altText', to: :AltText, render_nil: false
-        map_attribute 'combinationId', to: :combination_id, render_nil: false
-        map_attribute 'growingEditing', to: :growing_editing, render_nil: false
+        map_attribute "fontId", to: :font_id, render_nil: false
+        map_attribute "typeface", to: :typeface, render_nil: false
+        map_attribute "panose", to: :panose, render_nil: false
+        map_attribute "pitchFamily", to: :pitch_family, render_nil: false
+        map_attribute "charset", to: :charset, render_nil: false
+        map_attribute "altText", to: :AltText, render_nil: false
+        map_attribute "combinationId", to: :combination_id, render_nil: false
+        map_attribute "growingEditing", to: :growing_editing, render_nil: false
       end
     end
   end

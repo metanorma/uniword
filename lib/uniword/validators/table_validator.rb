@@ -40,10 +40,10 @@ module Uniword
         errors = []
 
         # Check if element is nil
-        return ['Element is nil'] if element.nil?
+        return ["Element is nil"] if element.nil?
 
         # Check table type first (more specific than base check)
-        return ['Element must be a Table'] unless element.is_a?(Uniword::Wordprocessingml::Table)
+        return ["Element must be a Table"] unless element.is_a?(Uniword::Wordprocessingml::Table)
 
         # Validate rows - collect all specific errors
         errors.concat(row_errors(element))
@@ -66,9 +66,7 @@ module Uniword
 
         # Check for inconsistent column counts
         column_counts = element.rows.map { |row| row.cells.count }.uniq
-        if column_counts.size > 1
-          warnings << "Table has inconsistent column counts: #{column_counts.join(', ')}"
-        end
+        warnings << "Table has inconsistent column counts: #{column_counts.join(", ")}" if column_counts.size > 1
 
         warnings
       end
@@ -95,9 +93,7 @@ module Uniword
         return errors if table.rows.nil? || table.rows.empty?
 
         table.rows.each_with_index do |row, index|
-          unless row.is_a?(Uniword::Wordprocessingml::TableRow)
-            errors << "Row at index #{index} must be a TableRow instance"
-          end
+          errors << "Row at index #{index} must be a TableRow instance" unless row.is_a?(Uniword::Wordprocessingml::TableRow)
         end
 
         errors
@@ -120,9 +116,7 @@ module Uniword
       def property_errors(table)
         return [] if table.properties.nil?
 
-        unless table.properties.is_a?(Uniword::Wordprocessingml::TableProperties)
-          return ['Properties must be a TableProperties instance']
-        end
+        return ["Properties must be a TableProperties instance"] unless table.properties.is_a?(Uniword::Wordprocessingml::TableProperties)
 
         []
       end

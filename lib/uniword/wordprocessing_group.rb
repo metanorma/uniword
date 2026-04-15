@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # WordprocessingGroup namespace for shape groups in DrawingML
@@ -16,13 +16,13 @@ module Uniword
                                                                             initialize_empty: true
 
       xml do
-        root 'wgp'
+        root "wgp"
         namespace Uniword::Ooxml::Namespaces::WordprocessingGroup
         mixed_content
 
-        map_element 'cNvGrpSpPr', to: :c_nv_grp_sp_pr, render_nil: false
-        map_element 'grpSpPr', to: :grp_sp_pr, render_nil: false
-        map_element 'wsp', to: :shapes, render_nil: false
+        map_element "cNvGrpSpPr", to: :c_nv_grp_sp_pr, render_nil: false
+        map_element "grpSpPr", to: :grp_sp_pr, render_nil: false
+        map_element "wsp", to: :shapes, render_nil: false
       end
     end
   end

@@ -60,7 +60,7 @@ module Uniword
           saved_kb = (total_saved / 1024.0).round(2)
           log "Compressed #{compressed_count} image(s), saved #{saved_kb} KB"
         else
-          log 'No images needed compression'
+          log "No images needed compression"
         end
 
         document
@@ -70,7 +70,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        'Compress document images'
+        "Compress document images"
       end
 
       private

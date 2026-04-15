@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :ext, :string
 
       xml do
-        element 'complex'
+        element "complex"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'ext', to: :ext
+        map_attribute "ext", to: :ext
       end
     end
   end

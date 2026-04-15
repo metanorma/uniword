@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -21,18 +21,18 @@ module Uniword
       attribute :radiusrange, :string
 
       xml do
-        element 'h'
+        element "h"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'position', to: :position, render_nil: false
-        map_attribute 'polar', to: :polar, render_nil: false
-        map_attribute 'map', to: :map, render_nil: false
-        map_attribute 'invx', to: :invx, render_nil: false
-        map_attribute 'invy', to: :invy, render_nil: false
-        map_attribute 'switch', to: :switch, render_nil: false
-        map_attribute 'xrange', to: :xrange, render_nil: false
-        map_attribute 'yrange', to: :yrange, render_nil: false
-        map_attribute 'radiusrange', to: :radiusrange, render_nil: false
+        map_attribute "position", to: :position, render_nil: false
+        map_attribute "polar", to: :polar, render_nil: false
+        map_attribute "map", to: :map, render_nil: false
+        map_attribute "invx", to: :invx, render_nil: false
+        map_attribute "invy", to: :invy, render_nil: false
+        map_attribute "switch", to: :switch, render_nil: false
+        map_attribute "xrange", to: :xrange, render_nil: false
+        map_attribute "yrange", to: :yrange, render_nil: false
+        map_attribute "radiusrange", to: :radiusrange, render_nil: false
       end
     end
   end

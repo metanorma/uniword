@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -18,10 +18,10 @@ module Uniword
       attribute :value, HighlightValue
 
       xml do
-        element 'highlight'
+        element "highlight"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :value
+        map_attribute "val", to: :value
       end
     end
   end

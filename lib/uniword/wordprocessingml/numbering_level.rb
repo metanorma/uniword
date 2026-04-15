@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -8,10 +8,10 @@ module Uniword
     # Each level defines format, alignment, indentation, and start value
     class NumberingLevel < Lutaml::Model::Serializable
       attribute :level, :integer, default: -> { 0 }
-      attribute :format, :string, default: -> { 'decimal' }
+      attribute :format, :string, default: -> { "decimal" }
       attribute :text, :string
       attribute :start, :integer, default: -> { 1 }
-      attribute :alignment, :string, default: -> { 'left' }
+      attribute :alignment, :string, default: -> { "left" }
       attribute :left_indent, :integer, default: -> { 0 }
       attribute :hanging_indent, :integer, default: -> { 0 }
       attribute :font_name, :string
@@ -42,15 +42,15 @@ module Uniword
       end
 
       # Set this level as a bullet with the given character
-      def bullet!(character, font_name: 'Symbol')
-        self.format = 'bullet'
+      def bullet!(character, font_name: "Symbol")
+        self.format = "bullet"
         self.text = character
         self.font_name = font_name
       end
 
       # Check if this is a bullet level
       def bullet?
-        format == 'bullet'
+        format == "bullet"
       end
 
       # Get the numbering text template
@@ -66,7 +66,7 @@ module Uniword
       def default_numbering_text
         level_ref = "%#{level + 1}"
         case format
-        when 'decimal', 'upperRoman', 'lowerRoman', 'upperLetter', 'lowerLetter'
+        when "decimal", "upperRoman", "lowerRoman", "upperLetter", "lowerLetter"
           "#{level_ref}."
         else
           level_ref
@@ -76,14 +76,14 @@ module Uniword
       def validate_format
         return unless format && !FORMATS.include?(format)
 
-        raise ArgumentError, "Invalid format: #{format}. Must be one of: #{FORMATS.join(', ')}"
+        raise ArgumentError, "Invalid format: #{format}. Must be one of: #{FORMATS.join(", ")}"
       end
 
       def validate_alignment
         return unless alignment && !ALIGNMENTS.include?(alignment)
 
         raise ArgumentError,
-              "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
+              "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(", ")}"
       end
     end
   end

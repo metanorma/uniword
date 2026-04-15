@@ -27,11 +27,11 @@ module Uniword
       #
       # @return [Array<String>] StyleSet names
       def self.available_stylesets
-        styleset_dir = File.join(__dir__, '../../../data/stylesets')
+        styleset_dir = File.join(__dir__, "../../../data/stylesets")
         return [] unless Dir.exist?(styleset_dir)
 
-        Dir.glob(File.join(styleset_dir, '*.yml')).map do |path|
-          File.basename(path, '.yml')
+        Dir.glob(File.join(styleset_dir, "*.yml")).map do |path|
+          File.basename(path, ".yml")
         end.sort
       end
 
@@ -41,14 +41,14 @@ module Uniword
       # @return [StyleSet] Loaded StyleSet
       # @raise [ArgumentError] if StyleSet not found
       def self.load_bundled(name)
-        styleset_dir = File.join(__dir__, '../../../data/stylesets')
+        styleset_dir = File.join(__dir__, "../../../data/stylesets")
         path = File.join(styleset_dir, "#{name}.yml")
 
         unless File.exist?(path)
           available = available_stylesets
           raise ArgumentError,
                 "StyleSet '#{name}' not found. " \
-                "Available StyleSets: #{available.join(', ')}"
+                "Available StyleSets: #{available.join(", ")}"
         end
 
         new.load(path)

@@ -14,7 +14,7 @@ module Uniword
       # @param title [String] TOC title
       # @param styles [Array<String>] Heading styles to include
       # @return [Array<Wordprocessingml::Paragraph>] TOC paragraphs
-      def self.build(title: 'Table of Contents', styles: nil)
+      def self.build(title: "Table of Contents", styles: nil)
         paragraphs = []
 
         # Title paragraph
@@ -28,7 +28,7 @@ module Uniword
 
         # Field begin
         begin_char = Wordprocessingml::FieldChar.new
-        begin_char.fldCharType = 'begin'
+        begin_char.fldCharType = "begin"
         toc_para.field_chars << begin_char
 
         # Instruction text
@@ -38,12 +38,12 @@ module Uniword
 
         # Field separate
         sep_char = Wordprocessingml::FieldChar.new
-        sep_char.fldCharType = 'separate'
+        sep_char.fldCharType = "separate"
         toc_para.field_chars << sep_char
 
         # Field end
         end_char = Wordprocessingml::FieldChar.new
-        end_char.fldCharType = 'end'
+        end_char.fldCharType = "end"
         toc_para.field_chars << end_char
 
         paragraphs << toc_para

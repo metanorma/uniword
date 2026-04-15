@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,13 +14,13 @@ module Uniword
       attribute :diagram, Uniword::Chart::DiagramReference
 
       xml do
-        root 'graphicData'
+        root "graphicData"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'uri', to: :uri, render_nil: false
-        map_element 'pic', to: :picture, render_nil: false
-        map_element 'chart', to: :chart, render_nil: false
-        map_element 'diagram', to: :diagram, render_nil: false
+        map_attribute "uri", to: :uri, render_nil: false
+        map_element "pic", to: :picture, render_nil: false
+        map_element "chart", to: :chart, render_nil: false
+        map_element "diagram", to: :diagram, render_nil: false
       end
     end
   end

@@ -40,7 +40,7 @@ module Uniword
         normalize_paragraph_styles(document) if @apply_standard_styles
         remove_direct_formatting_from_runs(document) if @remove_direct_formatting
 
-        log 'Style normalization complete'
+        log "Style normalization complete"
         document
       end
 
@@ -48,7 +48,7 @@ module Uniword
       #
       # @return [String] Description
       def description
-        'Normalize document styles'
+        "Normalize document styles"
       end
 
       private
@@ -58,10 +58,10 @@ module Uniword
       # @return [Hash] Style mappings
       def default_target_styles
         {
-          heading1: 'Heading 1',
-          heading2: 'Heading 2',
-          heading3: 'Heading 3',
-          normal: 'Normal'
+          heading1: "Heading 1",
+          heading2: "Heading 2",
+          heading3: "Heading 3",
+          normal: "Normal"
         }
       end
 
@@ -75,9 +75,7 @@ module Uniword
           # Detect style based on properties
           detected_style = detect_paragraph_style(paragraph)
 
-          if detected_style && @target_styles[detected_style]
-            paragraph.properties.style = @target_styles[detected_style]
-          end
+          paragraph.properties.style = @target_styles[detected_style] if detected_style && @target_styles[detected_style]
         end
       end
 
@@ -103,9 +101,9 @@ module Uniword
         # Check style name
         if paragraph.style
           style_name = paragraph.style.downcase
-          return :heading1 if style_name.include?('heading 1')
-          return :heading2 if style_name.include?('heading 2')
-          return :heading3 if style_name.include?('heading 3')
+          return :heading1 if style_name.include?("heading 1")
+          return :heading2 if style_name.include?("heading 2")
+          return :heading3 if style_name.include?("heading 3")
         end
 
         # Default to normal

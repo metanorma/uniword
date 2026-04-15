@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,13 +14,13 @@ module Uniword
       attribute :phonetic_pr, PhoneticProperties
 
       xml do
-        element 'si'
+        element "si"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 't', to: :t, render_nil: false
-        map_element 'r', to: :r, render_nil: false
-        map_element 'phoneticPr', to: :phonetic_pr, render_nil: false
+        map_element "t", to: :t, render_nil: false
+        map_element "r", to: :r, render_nil: false
+        map_element "phoneticPr", to: :phonetic_pr, render_nil: false
       end
     end
   end

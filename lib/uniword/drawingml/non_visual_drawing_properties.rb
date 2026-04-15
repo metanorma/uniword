@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -16,14 +16,14 @@ module Uniword
       attribute :hidden, :string
 
       xml do
-        element 'cNvPr'
+        element "cNvPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'id', to: :id
-        map_attribute 'name', to: :name
-        map_attribute 'descr', to: :descr
-        map_attribute 'title', to: :title
-        map_attribute 'hidden', to: :hidden
+        map_attribute "id", to: :id
+        map_attribute "name", to: :name
+        map_attribute "descr", to: :descr
+        map_attribute "title", to: :title
+        map_attribute "hidden", to: :hidden
       end
     end
   end

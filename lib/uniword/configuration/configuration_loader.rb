@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'yaml'
+require "yaml"
 
 module Uniword
   module Configuration
@@ -20,7 +20,7 @@ module Uniword
     #   config = ConfigurationLoader.load_file('/custom/path/rules.yml')
     class ConfigurationLoader
       # Default configuration directory
-      CONFIG_DIR = File.expand_path('../../../config', __dir__)
+      CONFIG_DIR = File.expand_path("../../../config", __dir__)
 
       class << self
         # Load configuration from a named file in the config directory
@@ -72,7 +72,7 @@ module Uniword
         # @example Get nested value
         #   font = ConfigurationLoader.get(config, 'format_defaults.docx.default_font')
         def get(config, key_path, default = nil)
-          keys = key_path.split('.')
+          keys = key_path.split(".")
           value = keys.reduce(config) do |hash, key|
             return default unless hash.is_a?(Hash)
 

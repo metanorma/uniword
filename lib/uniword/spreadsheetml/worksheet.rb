@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -17,16 +17,16 @@ module Uniword
       attribute :hyperlinks, Hyperlinks
 
       xml do
-        element 'worksheet'
+        element "worksheet"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 'dimension', to: :dimension, render_nil: false
-        map_element 'sheetViews', to: :sheet_views, render_nil: false
-        map_element 'cols', to: :cols, render_nil: false
-        map_element 'sheetData', to: :sheet_data
-        map_element 'mergeCells', to: :merge_cells, render_nil: false
-        map_element 'hyperlinks', to: :hyperlinks, render_nil: false
+        map_element "dimension", to: :dimension, render_nil: false
+        map_element "sheetViews", to: :sheet_views, render_nil: false
+        map_element "cols", to: :cols, render_nil: false
+        map_element "sheetData", to: :sheet_data
+        map_element "mergeCells", to: :merge_cells, render_nil: false
+        map_element "hyperlinks", to: :hyperlinks, render_nil: false
       end
     end
   end

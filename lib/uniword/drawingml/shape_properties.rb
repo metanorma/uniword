@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :ln, LineProperties
 
       xml do
-        element 'spPr'
+        element "spPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'xfrm', to: :xfrm, render_nil: false
-        map_element 'ln', to: :ln, render_nil: false
+        map_element "xfrm", to: :xfrm, render_nil: false
+        map_element "ln", to: :ln, render_nil: false
       end
     end
   end

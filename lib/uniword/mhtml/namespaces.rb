@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -11,20 +11,20 @@ module Uniword
     module Namespaces
       # Legacy Office namespace (o:) — DocumentProperties, OfficeDocumentSettings
       class Office < Lutaml::Xml::Namespace
-        uri 'urn:schemas-microsoft-com:office:office'
-        prefix_default 'o'
+        uri "urn:schemas-microsoft-com:office:office"
+        prefix_default "o"
       end
 
       # Legacy Word namespace (w:) — WordDocument, LatentStyles
       class Word < Lutaml::Xml::Namespace
-        uri 'urn:schemas-microsoft-com:office:word'
-        prefix_default 'w'
+        uri "urn:schemas-microsoft-com:office:word"
+        prefix_default "w"
       end
 
       # Office Math namespace (m:) — mathPr
       class Math < Lutaml::Xml::Namespace
-        uri 'http://schemas.microsoft.com/office/2004/12/omml'
-        prefix_default 'm'
+        uri "http://schemas.microsoft.com/office/2004/12/omml"
+        prefix_default "m"
       end
     end
   end

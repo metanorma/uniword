@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -14,12 +14,12 @@ module Uniword
       attribute :url, :string
 
       xml do
-        element 'smart_tag_type'
+        element "smart_tag_type"
         namespace Uniword::Ooxml::Namespaces::CustomXml
 
-        map_attribute 'namespaceuri', to: :namespace_uri
-        map_attribute 'name', to: :name
-        map_attribute 'url', to: :url
+        map_attribute "namespaceuri", to: :namespace_uri
+        map_attribute "name", to: :name
+        map_attribute "url", to: :url
       end
     end
   end

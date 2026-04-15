@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -15,13 +15,13 @@ module Uniword
       attribute :code, :integer
 
       xml do
-        element 'pgSz'
+        element "pgSz"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'w', to: :width
-        map_attribute 'h', to: :height
-        map_attribute 'orient', to: :orientation
-        map_attribute 'code', to: :code, render_nil: false
+        map_attribute "w", to: :width
+        map_attribute "h", to: :height
+        map_attribute "orient", to: :orientation
+        map_attribute "code", to: :code, render_nil: false
       end
     end
   end

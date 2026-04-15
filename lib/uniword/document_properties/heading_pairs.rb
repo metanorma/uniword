@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentProperties
@@ -12,11 +12,11 @@ module Uniword
       attribute :vector, Vector
 
       xml do
-        element 'HeadingPairs'
+        element "HeadingPairs"
         namespace Uniword::Ooxml::Namespaces::ExtendedProperties
         mixed_content
 
-        map_element 'vector', to: :vector, render_nil: false
+        map_element "vector", to: :vector, render_nil: false
       end
     end
   end

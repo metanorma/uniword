@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require 'lutaml/xml/namespace'
+require "lutaml/model"
+require "lutaml/xml/namespace"
 
 module Uniword
   module VmlOffice
@@ -9,16 +9,16 @@ module Uniword
     # In OOXML, o:shapedefaults belongs to the Office namespace, and its
     # ext/spidmax attributes are unqualified (not prefixed with o:)
     class OfficeNsUnqualified < Lutaml::Xml::Namespace
-      uri 'urn:schemas-microsoft-com:office:office'
-      prefix_default 'o'
+      uri "urn:schemas-microsoft-com:office:office"
+      prefix_default "o"
       element_form_default :qualified
       attribute_form_default :unqualified
     end
 
     # VML namespace for v:ext attribute
     class VmlNsForAttr < Lutaml::Xml::Namespace
-      uri 'urn:schemas-microsoft-com:vml'
-      prefix_default 'v'
+      uri "urn:schemas-microsoft-com:vml"
+      prefix_default "v"
       element_form_default :qualified
       attribute_form_default :qualified
     end
@@ -43,10 +43,10 @@ module Uniword
       attribute :spidmax, :string
 
       xml do
-        element 'shapedefaults'
+        element "shapedefaults"
         namespace OfficeNsUnqualified
-        map_attribute 'ext', to: :ext
-        map_attribute 'spidmax', to: :spidmax
+        map_attribute "ext", to: :ext
+        map_attribute "spidmax", to: :spidmax
       end
     end
   end

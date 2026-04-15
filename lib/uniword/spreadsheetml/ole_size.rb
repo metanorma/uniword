@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -11,10 +11,10 @@ module Uniword
       attribute :ref, :string
 
       xml do
-        element 'oleSize'
+        element "oleSize"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'ref', to: :ref
+        map_attribute "ref", to: :ref
       end
     end
   end

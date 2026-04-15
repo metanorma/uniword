@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -29,7 +29,8 @@ module Uniword
       attribute :rsid_r, :string          # Revision ID for paragraph creation
       attribute :rsid_r_default, :string  # Default revision ID
       attribute :rsid_p, :string          # Revision ID for properties
-      attribute :rsid_r_pr, :string # Revision ID for run properties
+      attribute :rsid_r_pr, :string       # Revision ID for run properties
+      attribute :rsid_del, :string        # Revision ID for deletion
       # Pattern 0: W14 namespace typed attributes
       attribute :para_id, W14ParaId          # Paragraph ID (w14:paraId)
       attribute :text_id, W14TextId          # Text ID (w14:textId)
@@ -39,37 +40,38 @@ module Uniword
       attr_accessor :parent_document
 
       xml do
-        element 'p'
+        element "p"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # Revision tracking attributes
-        map_attribute 'rsidR', to: :rsid_r, render_nil: false
-        map_attribute 'rsidRDefault', to: :rsid_r_default, render_nil: false
-        map_attribute 'rsidP', to: :rsid_p, render_nil: false
-        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
+        map_attribute "rsidR", to: :rsid_r, render_nil: false
+        map_attribute "rsidRDefault", to: :rsid_r_default, render_nil: false
+        map_attribute "rsidP", to: :rsid_p, render_nil: false
+        map_attribute "rsidRPr", to: :rsid_r_pr, render_nil: false
+        map_attribute "rsidDel", to: :rsid_del, render_nil: false
         # W14 namespace typed attributes - namespace declared on the type class
-        map_attribute 'paraId', to: :para_id, render_nil: false
-        map_attribute 'textId', to: :text_id, render_nil: false
+        map_attribute "paraId", to: :para_id, render_nil: false
+        map_attribute "textId", to: :text_id, render_nil: false
 
-        map_element 'pPr', to: :properties, render_nil: false
-        map_element 'r', to: :runs, render_nil: false
-        map_element 'hyperlink', to: :hyperlinks, render_nil: false
-        map_element 'bookmarkStart', to: :bookmark_starts, render_nil: false
-        map_element 'bookmarkEnd', to: :bookmark_ends, render_nil: false
-        map_element 'fldChar', to: :field_chars, render_nil: false
-        map_element 'instrText', to: :instr_text, render_nil: false
-        map_element 'commentRangeStart', to: :comment_range_starts, render_nil: false
-        map_element 'commentRangeEnd', to: :comment_range_ends, render_nil: false
-        map_element 'commentReference', to: :comment_references, render_nil: false
-        map_element 'AlternateContent', to: :alternate_content, render_nil: false
-        map_element 'sdt', to: :sdts, render_nil: false
+        map_element "pPr", to: :properties, render_nil: false
+        map_element "r", to: :runs, render_nil: false
+        map_element "hyperlink", to: :hyperlinks, render_nil: false
+        map_element "bookmarkStart", to: :bookmark_starts, render_nil: false
+        map_element "bookmarkEnd", to: :bookmark_ends, render_nil: false
+        map_element "fldChar", to: :field_chars, render_nil: false
+        map_element "instrText", to: :instr_text, render_nil: false
+        map_element "commentRangeStart", to: :comment_range_starts, render_nil: false
+        map_element "commentRangeEnd", to: :comment_range_ends, render_nil: false
+        map_element "commentReference", to: :comment_references, render_nil: false
+        map_element "AlternateContent", to: :alternate_content, render_nil: false
+        map_element "sdt", to: :sdts, render_nil: false
         # oMathPara from MathML namespace - the target class declares its namespace
-        map_element 'oMathPara', to: :o_math_paras,
+        map_element "oMathPara", to: :o_math_paras,
                                  render_nil: false
         # Proofing errors
-        map_element 'proofErr', to: :proof_errors, render_nil: false
-        map_element 'fldSimple', to: :simple_fields, render_nil: false
+        map_element "proofErr", to: :proof_errors, render_nil: false
+        map_element "fldSimple", to: :simple_fields, render_nil: false
       end
 
       # Set paragraph text (replaces all runs with a single run)
@@ -86,7 +88,7 @@ module Uniword
       #
       # @return [String] Combined text from all runs
       def text
-        return '' unless runs
+        return "" unless runs
 
         runs.map { |r| run_text(r) }.join
       end
@@ -108,7 +110,7 @@ module Uniword
       # @param sdt [StructuredDocumentTag] SDT element
       # @return [String] Text content
       def extract_sdt_text(sdt)
-        return '' unless sdt.content
+        return "" unless sdt.content
 
         sdt.content.runs.map { |r| r.text.to_s }.join
       end

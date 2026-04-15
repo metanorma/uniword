@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -19,18 +19,18 @@ module Uniword
       attribute :shapesize, :string
 
       xml do
-        element 'lock'
+        element "lock"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'v:ext', to: :v_ext
-        map_attribute 'rotation', to: :rotation
-        map_attribute 'cropping', to: :cropping
-        map_attribute 'text', to: :text
-        map_attribute 'groupstatus', to: :groupstatus
-        map_attribute 'ungrouping', to: :ungrouping
-        map_attribute 'selection', to: :selection
-        map_attribute 'changeaspect', to: :changeaspect
-        map_attribute 'shapesize', to: :shapesize
+        map_attribute "v:ext", to: :v_ext
+        map_attribute "rotation", to: :rotation
+        map_attribute "cropping", to: :cropping
+        map_attribute "text", to: :text
+        map_attribute "groupstatus", to: :groupstatus
+        map_attribute "ungrouping", to: :ungrouping
+        map_attribute "selection", to: :selection
+        map_attribute "changeaspect", to: :changeaspect
+        map_attribute "shapesize", to: :shapesize
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -16,14 +16,14 @@ module Uniword
       attribute :indent, :integer
 
       xml do
-        element 'p_pr'
+        element "p_pr"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'algn', to: :algn
-        map_attribute 'lvl', to: :lvl
-        map_attribute 'marL', to: :marL
-        map_attribute 'marR', to: :marR
-        map_attribute 'indent', to: :indent
+        map_attribute "algn", to: :algn
+        map_attribute "lvl", to: :lvl
+        map_attribute "marL", to: :marL
+        map_attribute "marR", to: :marR
+        map_attribute "indent", to: :indent
       end
     end
   end

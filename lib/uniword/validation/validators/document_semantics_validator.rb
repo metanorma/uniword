@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'nokogiri'
+require "zip"
+require "nokogiri"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -25,10 +25,10 @@ module Uniword
       #   result = validator.validate('/path/to/document.docx')
       #   puts result.valid? # => true
       class DocumentSemanticsValidator < LayerValidator
-        WORDML_NAMESPACE = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+        WORDML_NAMESPACE = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
         def layer_name
-          'Document Semantics'
+          "Document Semantics"
         end
 
         def validate(path)
@@ -50,11 +50,11 @@ module Uniword
         private
 
         def validate_document_structure(zip, result)
-          doc_entry = zip.find_entry('word/document.xml')
+          doc_entry = zip.find_entry("word/document.xml")
 
           unless doc_entry
             result.add_error(
-              'word/document.xml not found',
+              "word/document.xml not found",
               critical: true
             )
             return
@@ -85,20 +85,20 @@ module Uniword
 
         def validate_required_elements(doc, result)
           # Check for document element
-          document_elem = doc.at_xpath('//w:document', 'w' => WORDML_NAMESPACE)
+          document_elem = doc.at_xpath("//w:document", "w" => WORDML_NAMESPACE)
           unless document_elem
             result.add_error(
-              'Missing <w:document> root element',
+              "Missing <w:document> root element",
               critical: true
             )
             return
           end
 
           # Check for body element
-          body_elem = doc.at_xpath('//w:body', 'w' => WORDML_NAMESPACE)
+          body_elem = doc.at_xpath("//w:body", "w" => WORDML_NAMESPACE)
           unless body_elem
             result.add_error(
-              'Missing <w:body> element',
+              "Missing <w:body> element",
               critical: true
             )
             return
@@ -107,13 +107,13 @@ module Uniword
           # Check if body is empty
           return unless body_elem.children.none?(&:element?)
 
-          result.add_warning('Document body is empty')
+          result.add_warning("Document body is empty")
         end
 
         def validate_document_hierarchy(doc, result)
           # Check that paragraphs are in body
-          paragraphs = doc.xpath('//w:p', 'w' => WORDML_NAMESPACE)
-          body = doc.at_xpath('//w:body', 'w' => WORDML_NAMESPACE)
+          paragraphs = doc.xpath("//w:p", "w" => WORDML_NAMESPACE)
+          body = doc.at_xpath("//w:body", "w" => WORDML_NAMESPACE)
 
           return unless body
 
@@ -122,16 +122,16 @@ module Uniword
             next if p.ancestors.include?(body)
 
             result.add_warning(
-              'Paragraph found outside document body'
+              "Paragraph found outside document body"
             )
           end
 
           # Check for section properties
-          sect_pr = doc.at_xpath('//w:body/w:sectPr', 'w' => WORDML_NAMESPACE)
+          sect_pr = doc.at_xpath("//w:body/w:sectPr", "w" => WORDML_NAMESPACE)
           return if sect_pr
 
           result.add_info(
-            'No section properties defined (using defaults)'
+            "No section properties defined (using defaults)"
           )
         end
 

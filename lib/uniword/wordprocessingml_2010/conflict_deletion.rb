@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -14,12 +14,12 @@ module Uniword
       attribute :date, :string
 
       xml do
-        element 'conflictDel'
+        element "conflictDel"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'id', to: :id
-        map_attribute 'author', to: :author
-        map_attribute 'date', to: :date
+        map_attribute "id", to: :id
+        map_attribute "author", to: :author
+        map_attribute "date", to: :date
       end
     end
   end

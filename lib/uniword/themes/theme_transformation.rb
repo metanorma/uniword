@@ -126,9 +126,9 @@ module Uniword
       # @return [Drawingml::MajorFont] OOXML major font
       def build_major_font(friendly)
         Drawingml::MajorFont.new(
-          latin: Drawingml::LatinFont.new(typeface: friendly.major_font || ''),
-          ea: Drawingml::EaFont.new(typeface: friendly.major_east_asian || ''),
-          cs: Drawingml::CsFont.new(typeface: friendly.major_complex_script || '')
+          latin: Drawingml::LatinFont.new(typeface: friendly.major_font || ""),
+          ea: Drawingml::EaFont.new(typeface: friendly.major_east_asian || ""),
+          cs: Drawingml::CsFont.new(typeface: friendly.major_complex_script || "")
         )
       end
 
@@ -138,9 +138,9 @@ module Uniword
       # @return [Drawingml::MinorFont] OOXML minor font
       def build_minor_font(friendly)
         Drawingml::MinorFont.new(
-          latin: Drawingml::LatinFont.new(typeface: friendly.minor_font || ''),
-          ea: Drawingml::EaFont.new(typeface: friendly.minor_east_asian || ''),
-          cs: Drawingml::CsFont.new(typeface: friendly.minor_complex_script || '')
+          latin: Drawingml::LatinFont.new(typeface: friendly.minor_font || ""),
+          ea: Drawingml::EaFont.new(typeface: friendly.minor_east_asian || ""),
+          cs: Drawingml::CsFont.new(typeface: friendly.minor_complex_script || "")
         )
       end
 

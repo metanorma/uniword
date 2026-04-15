@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -13,12 +13,12 @@ module Uniword
       attribute :gallery, DocPartGallery
 
       xml do
-        root 'category'
+        root "category"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'name', to: :name, render_nil: false
-        map_element 'gallery', to: :gallery, render_nil: false
+        map_element "name", to: :name, render_nil: false
+        map_element "gallery", to: :gallery, render_nil: false
       end
     end
   end

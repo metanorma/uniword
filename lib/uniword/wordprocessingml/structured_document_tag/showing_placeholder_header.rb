@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -9,7 +9,7 @@ module Uniword
       # Reference XML: <w:showingPlcHdr/>
       class ShowingPlaceholderHeader < Lutaml::Model::Serializable
         xml do
-          element 'showingPlcHdr'
+          element "showingPlcHdr"
           namespace Ooxml::Namespaces::WordProcessingML
         end
       end

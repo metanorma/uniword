@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -16,14 +16,14 @@ module Uniword
       attribute :shadow, :boolean
 
       xml do
-        element 'border'
+        element "border"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :val
-        map_attribute 'color', to: :color
-        map_attribute 'sz', to: :sz
-        map_attribute 'space', to: :space
-        map_attribute 'shadow', to: :shadow
+        map_attribute "val", to: :val
+        map_attribute "color", to: :color
+        map_attribute "sz", to: :sz
+        map_attribute "space", to: :space
+        map_attribute "shadow", to: :shadow
       end
     end
   end

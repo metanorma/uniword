@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module SharedTypes
@@ -12,10 +12,10 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'hex_color'
+        element "hex_color"
         namespace Uniword::Ooxml::Namespaces::SharedTypes
 
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

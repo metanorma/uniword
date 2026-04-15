@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -49,6 +49,7 @@ module Uniword
       attribute :caps, Properties::Caps, default: nil
       attribute :hidden, Properties::Vanish, default: nil
       attribute :no_proof, Properties::NoProof, default: nil
+      attribute :web_hidden, Properties::WebHidden, default: nil
       attribute :shadow, Properties::Shadow, default: nil
       attribute :emboss, Properties::Emboss, default: nil
       attribute :imprint, Properties::Imprint, default: nil
@@ -57,31 +58,31 @@ module Uniword
 
       # YAML mappings for flat YAML structure (StyleSet compatibility)
       yaml do
-        map 'bold', with: { from: :yaml_bold_from, to: :yaml_bold_to }
-        map 'italic', with: { from: :yaml_italic_from, to: :yaml_italic_to }
-        map 'strike', with: { from: :yaml_strike_from, to: :yaml_strike_to }
-        map 'double_strike', with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
-        map 'small_caps', with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
-        map 'caps', with: { from: :yaml_caps_from, to: :yaml_caps_to }
-        map 'all_caps', with: { from: :yaml_caps_from, to: :yaml_caps_to } # Alias
-        map 'hidden', with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
-        map 'size', with: { from: :yaml_size_from, to: :yaml_size_to }
-        map 'spacing', with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
-        map 'character_spacing',
+        map "bold", with: { from: :yaml_bold_from, to: :yaml_bold_to }
+        map "italic", with: { from: :yaml_italic_from, to: :yaml_italic_to }
+        map "strike", with: { from: :yaml_strike_from, to: :yaml_strike_to }
+        map "double_strike", with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
+        map "small_caps", with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
+        map "caps", with: { from: :yaml_caps_from, to: :yaml_caps_to }
+        map "all_caps", with: { from: :yaml_caps_from, to: :yaml_caps_to } # Alias
+        map "hidden", with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
+        map "size", with: { from: :yaml_size_from, to: :yaml_size_to }
+        map "spacing", with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
+        map "character_spacing",
             with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
-        map 'underline', with: { from: :yaml_underline_from, to: :yaml_underline_to }
-        map 'color', with: { from: :yaml_color_from, to: :yaml_color_to }
-        map 'highlight', with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
-        map 'font', with: { from: :yaml_font_from, to: :yaml_font_to }
-        map 'font_ascii', with: { from: :yaml_font_ascii_from, to: :yaml_font_ascii_to }
-        map 'font_east_asia', with: { from: :yaml_font_east_asia_from, to: :yaml_font_east_asia_to }
-        map 'font_h_ansi', with: { from: :yaml_font_h_ansi_from, to: :yaml_font_h_ansi_to }
-        map 'font_cs', with: { from: :yaml_font_cs_from, to: :yaml_font_cs_to }
-        map 'emboss', with: { from: :yaml_emboss_from, to: :yaml_emboss_to }
-        map 'imprint', with: { from: :yaml_imprint_from, to: :yaml_imprint_to }
-        map 'shadow', with: { from: :yaml_shadow_from, to: :yaml_shadow_to }
-        map 'outline', with: { from: :yaml_outline_from, to: :yaml_outline_to }
-        map 'vertical_align', with: { from: :yaml_vertical_align_from, to: :yaml_vertical_align_to }
+        map "underline", with: { from: :yaml_underline_from, to: :yaml_underline_to }
+        map "color", with: { from: :yaml_color_from, to: :yaml_color_to }
+        map "highlight", with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
+        map "font", with: { from: :yaml_font_from, to: :yaml_font_to }
+        map "font_ascii", with: { from: :yaml_font_ascii_from, to: :yaml_font_ascii_to }
+        map "font_east_asia", with: { from: :yaml_font_east_asia_from, to: :yaml_font_east_asia_to }
+        map "font_h_ansi", with: { from: :yaml_font_h_ansi_from, to: :yaml_font_h_ansi_to }
+        map "font_cs", with: { from: :yaml_font_cs_from, to: :yaml_font_cs_to }
+        map "emboss", with: { from: :yaml_emboss_from, to: :yaml_emboss_to }
+        map "imprint", with: { from: :yaml_imprint_from, to: :yaml_imprint_to }
+        map "shadow", with: { from: :yaml_shadow_from, to: :yaml_shadow_to }
+        map "outline", with: { from: :yaml_outline_from, to: :yaml_outline_to }
+        map "vertical_align", with: { from: :yaml_vertical_align_from, to: :yaml_vertical_align_to }
       end
 
       # YAML transform methods
@@ -268,74 +269,75 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element 'rPr'
+        element "rPr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
         # Style reference (wrapper object)
-        map_element 'rStyle', to: :style, render_nil: false
+        map_element "rStyle", to: :style, render_nil: false
 
         # Fonts (complex object)
-        map_element 'rFonts', to: :fonts, render_nil: false
+        map_element "rFonts", to: :fonts, render_nil: false
 
         # Font sizes (wrapper objects)
-        map_element 'sz', to: :size, render_nil: false
-        map_element 'szCs', to: :size_cs, render_nil: false
+        map_element "sz", to: :size, render_nil: false
+        map_element "szCs", to: :size_cs, render_nil: false
 
         # Boolean formatting (wrapper objects)
-        map_element 'b', to: :bold, render_nil: false
-        map_element 'bCs', to: :bold_cs, render_nil: false
-        map_element 'i', to: :italic, render_nil: false
-        map_element 'iCs', to: :italic_cs, render_nil: false
-        map_element 'strike', to: :strike, render_nil: false
-        map_element 'dstrike', to: :double_strike, render_nil: false
-        map_element 'smallCaps', to: :small_caps, render_nil: false
-        map_element 'caps', to: :caps, render_nil: false
-        map_element 'vanish', to: :hidden, render_nil: false
-        map_element 'noProof', to: :no_proof, render_nil: false
+        map_element "b", to: :bold, render_nil: false
+        map_element "bCs", to: :bold_cs, render_nil: false
+        map_element "i", to: :italic, render_nil: false
+        map_element "iCs", to: :italic_cs, render_nil: false
+        map_element "strike", to: :strike, render_nil: false
+        map_element "dstrike", to: :double_strike, render_nil: false
+        map_element "smallCaps", to: :small_caps, render_nil: false
+        map_element "caps", to: :caps, render_nil: false
+        map_element "vanish", to: :hidden, render_nil: false
+        map_element "noProof", to: :no_proof, render_nil: false
+        map_element "webHidden", to: :web_hidden, render_nil: false
 
         # Color (wrapper object)
-        map_element 'color', to: :color, render_nil: false
+        map_element "color", to: :color, render_nil: false
 
         # Underline (wrapper object)
-        map_element 'u', to: :underline, render_nil: false
+        map_element "u", to: :underline, render_nil: false
 
         # Highlight (wrapper object)
-        map_element 'highlight', to: :highlight, render_nil: false
+        map_element "highlight", to: :highlight, render_nil: false
 
         # Vertical alignment (wrapper object)
-        map_element 'vertAlign', to: :vertical_align, render_nil: false
+        map_element "vertAlign", to: :vertical_align, render_nil: false
 
         # Position (wrapper object)
-        map_element 'position', to: :position, render_nil: false
+        map_element "position", to: :position, render_nil: false
 
         # Character spacing (wrapper object)
-        map_element 'spacing', to: :character_spacing, render_nil: false
+        map_element "spacing", to: :character_spacing, render_nil: false
 
         # Kerning (wrapper object)
-        map_element 'kern', to: :kerning, render_nil: false
+        map_element "kern", to: :kerning, render_nil: false
 
         # Width scale (wrapper object)
-        map_element 'w', to: :width_scale, render_nil: false
+        map_element "w", to: :width_scale, render_nil: false
 
         # Emphasis mark (wrapper object)
-        map_element 'em', to: :emphasis_mark, render_nil: false
+        map_element "em", to: :emphasis_mark, render_nil: false
 
         # Shading (complex object)
-        map_element 'shd', to: :shading, render_nil: false
+        map_element "shd", to: :shading, render_nil: false
 
         # Language (complex object)
-        map_element 'lang', to: :language, render_nil: false
+        map_element "lang", to: :language, render_nil: false
 
         # Text effects (complex objects - basic support)
-        map_element 'textFill', to: :text_fill, render_nil: false
-        map_element 'textOutline', to: :text_outline, render_nil: false
+        map_element "textFill", to: :text_fill, render_nil: false
+        map_element "textOutline", to: :text_outline, render_nil: false
 
         # Additional boolean formatting
-        map_element 'shadow', to: :shadow, render_nil: false
-        map_element 'emboss', to: :emboss, render_nil: false
-        map_element 'imprint', to: :imprint, render_nil: false
-        map_element 'outline', to: :outline, render_nil: false
+        map_element "shadow", to: :shadow, render_nil: false
+        map_element "emboss", to: :emboss, render_nil: false
+        map_element "imprint", to: :imprint, render_nil: false
+        map_element "outline", to: :outline, render_nil: false
       end
 
       # Helper methods for boolean values (handle both wrapper and primitive)
@@ -488,7 +490,7 @@ module Uniword
         return false if val.nil?
 
         val = val.val if val.is_a?(Properties::Outline)
-        val != 'false'
+        val != "false"
       end
 
       def shading_color
@@ -529,27 +531,27 @@ module Uniword
       def initialize(attrs = {})
         # Extract flat convenience keys before super (lutaml-model ignores
         # unknown keys). These are converted to proper wrapper objects below.
-        font_val = attrs.delete(:font) || attrs.delete('font')
-        font_ascii_val = attrs.delete(:font_ascii) || attrs.delete('font_ascii')
-        font_ea_val = attrs.delete(:font_east_asia) || attrs.delete('font_east_asia')
-        font_ha_val = attrs.delete(:font_h_ansi) || attrs.delete('font_h_ansi')
-        font_cs_val = attrs.delete(:font_cs) || attrs.delete('font_cs')
-        lang_val = attrs.delete(:language_val) || attrs.delete('language_val')
-        lang_ea = attrs.delete(:language_east_asia) || attrs.delete('language_east_asia')
-        lang_bidi = attrs.delete(:language_bidi) || attrs.delete('language_bidi')
+        font_val = attrs.delete(:font) || attrs.delete("font")
+        font_ascii_val = attrs.delete(:font_ascii) || attrs.delete("font_ascii")
+        font_ea_val = attrs.delete(:font_east_asia) || attrs.delete("font_east_asia")
+        font_ha_val = attrs.delete(:font_h_ansi) || attrs.delete("font_h_ansi")
+        font_cs_val = attrs.delete(:font_cs) || attrs.delete("font_cs")
+        lang_val = attrs.delete(:language_val) || attrs.delete("language_val")
+        lang_ea = attrs.delete(:language_east_asia) || attrs.delete("language_east_asia")
+        lang_bidi = attrs.delete(:language_bidi) || attrs.delete("language_bidi")
         # Also intercept language: 'en-US' (lutaml-model stores raw string
         # when a primitive is passed for a typed attribute via constructor).
         # Only extract if it's a String; leave Properties::Language objects
         # for lutaml-model to handle normally.
-        raw_language = attrs[:language] || attrs['language']
+        raw_language = attrs[:language] || attrs["language"]
         if raw_language.is_a?(String)
           attrs.delete(:language)
-          attrs.delete('language')
+          attrs.delete("language")
         else
           raw_language = nil
         end
-        shading_fill_val = attrs.delete(:shading_fill) || attrs.delete('shading_fill')
-        shading_type_val = attrs.delete(:shading_type) || attrs.delete('shading_type')
+        shading_fill_val = attrs.delete(:shading_fill) || attrs.delete("shading_fill")
+        shading_type_val = attrs.delete(:shading_type) || attrs.delete("shading_type")
 
         super
 
@@ -599,28 +601,14 @@ module Uniword
       def convert_primitive_attributes!
         # Boolean formatting properties
         @bold = Properties::Bold.new(value: @bold) if @bold && !@bold.is_a?(Properties::Bold)
-        if @bold_cs && !@bold_cs.is_a?(Properties::BoldCs)
-          @bold_cs = Properties::BoldCs.new(value: @bold_cs)
-        end
-        if @italic && !@italic.is_a?(Properties::Italic)
-          @italic = Properties::Italic.new(value: @italic)
-        end
-        if @italic_cs && !@italic_cs.is_a?(Properties::ItalicCs)
-          @italic_cs = Properties::ItalicCs.new(value: @italic_cs)
-        end
-        if @strike && !@strike.is_a?(Properties::Strike)
-          @strike = Properties::Strike.new(value: @strike)
-        end
-        if @double_strike && !@double_strike.is_a?(Properties::DoubleStrike)
-          @double_strike = Properties::DoubleStrike.new(value: @double_strike)
-        end
-        if @small_caps && !@small_caps.is_a?(Properties::SmallCaps)
-          @small_caps = Properties::SmallCaps.new(value: @small_caps)
-        end
+        @bold_cs = Properties::BoldCs.new(value: @bold_cs) if @bold_cs && !@bold_cs.is_a?(Properties::BoldCs)
+        @italic = Properties::Italic.new(value: @italic) if @italic && !@italic.is_a?(Properties::Italic)
+        @italic_cs = Properties::ItalicCs.new(value: @italic_cs) if @italic_cs && !@italic_cs.is_a?(Properties::ItalicCs)
+        @strike = Properties::Strike.new(value: @strike) if @strike && !@strike.is_a?(Properties::Strike)
+        @double_strike = Properties::DoubleStrike.new(value: @double_strike) if @double_strike && !@double_strike.is_a?(Properties::DoubleStrike)
+        @small_caps = Properties::SmallCaps.new(value: @small_caps) if @small_caps && !@small_caps.is_a?(Properties::SmallCaps)
         @caps = Properties::Caps.new(value: @caps) if @caps && !@caps.is_a?(Properties::Caps)
-        if @hidden && !@hidden.is_a?(Properties::Vanish)
-          @hidden = Properties::Vanish.new(value: @hidden)
-        end
+        @hidden = Properties::Vanish.new(value: @hidden) if @hidden && !@hidden.is_a?(Properties::Vanish)
 
         # Style - convert string to RunStyleReference wrapper
         @style = Properties::RunStyleReference.new(value: @style) if @style.is_a?(String)
@@ -636,14 +624,12 @@ module Uniword
         end
 
         # Color
-        if @color && !@color.is_a?(Properties::ColorValue)
-          @color = Properties::ColorValue.new(value: @color.to_s)
-        end
+        @color = Properties::ColorValue.new(value: @color.to_s) if @color && !@color.is_a?(Properties::ColorValue)
 
         # Underline
         if @underline && !@underline.is_a?(Properties::Underline)
-          @underline = if @underline == true || @underline == 'single'
-                         Properties::Underline.new(value: 'single')
+          @underline = if @underline == true || @underline == "single"
+                         Properties::Underline.new(value: "single")
                        elsif @underline.is_a?(String)
                          Properties::Underline.new(value: @underline)
                        else
@@ -652,44 +638,28 @@ module Uniword
         end
 
         # Highlight
-        if @highlight && !@highlight.is_a?(Properties::Highlight)
-          @highlight = Properties::Highlight.new(value: @highlight.to_s)
-        end
+        @highlight = Properties::Highlight.new(value: @highlight.to_s) if @highlight && !@highlight.is_a?(Properties::Highlight)
 
         # Vertical alignment
-        if @vertical_align && !@vertical_align.is_a?(Properties::VerticalAlign)
-          @vertical_align = Properties::VerticalAlign.new(value: @vertical_align.to_s)
-        end
+        @vertical_align = Properties::VerticalAlign.new(value: @vertical_align.to_s) if @vertical_align && !@vertical_align.is_a?(Properties::VerticalAlign)
 
         # Position
-        if @position && !@position.is_a?(Properties::Position)
-          @position = Properties::Position.new(value: @position)
-        end
+        @position = Properties::Position.new(value: @position) if @position && !@position.is_a?(Properties::Position)
 
         # Character spacing
-        if @character_spacing && !@character_spacing.is_a?(Properties::CharacterSpacing)
-          @character_spacing = Properties::CharacterSpacing.new(value: @character_spacing)
-        end
+        @character_spacing = Properties::CharacterSpacing.new(value: @character_spacing) if @character_spacing && !@character_spacing.is_a?(Properties::CharacterSpacing)
 
         # Kerning
-        if @kerning && !@kerning.is_a?(Properties::Kerning)
-          @kerning = Properties::Kerning.new(value: @kerning)
-        end
+        @kerning = Properties::Kerning.new(value: @kerning) if @kerning && !@kerning.is_a?(Properties::Kerning)
 
         # Width scale
-        if @width_scale && !@width_scale.is_a?(Properties::WidthScale)
-          @width_scale = Properties::WidthScale.new(value: @width_scale)
-        end
+        @width_scale = Properties::WidthScale.new(value: @width_scale) if @width_scale && !@width_scale.is_a?(Properties::WidthScale)
 
         # Emphasis mark
-        if @emphasis_mark && !@emphasis_mark.is_a?(Properties::EmphasisMark)
-          @emphasis_mark = Properties::EmphasisMark.new(value: @emphasis_mark.to_s)
-        end
+        @emphasis_mark = Properties::EmphasisMark.new(value: @emphasis_mark.to_s) if @emphasis_mark && !@emphasis_mark.is_a?(Properties::EmphasisMark)
 
         # Text fill
-        if @text_fill && !@text_fill.is_a?(Properties::TextFill)
-          @text_fill = Properties::TextFill.new
-        end
+        @text_fill = Properties::TextFill.new if @text_fill && !@text_fill.is_a?(Properties::TextFill)
 
         # Text outline
         return unless @text_outline && !@text_outline.is_a?(Properties::TextOutline)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -19,9 +19,9 @@ module Uniword
       #
       # @return [String] CSS list styling
       def to_css
-        css = +''
+        css = +""
         lists.each do |name, config|
-          list_type = config['type'] || 'decimal'
+          list_type = config["type"] || "decimal"
           css << ".list-#{name} {\n"
           css << "  list-style-type: #{list_type};\n"
           css << "}\n\n"

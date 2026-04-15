@@ -39,12 +39,10 @@ module Uniword
         errors = []
 
         # Check if element is nil
-        return ['Element is nil'] if element.nil?
+        return ["Element is nil"] if element.nil?
 
         # Check paragraph type first (more specific than base check)
-        unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
-          return ['Element must be a Paragraph']
-        end
+        return ["Element must be a Paragraph"] unless element.is_a?(Uniword::Wordprocessingml::Paragraph)
 
         # Validate runs - collect all specific errors
         errors.concat(run_errors(element))
@@ -77,9 +75,7 @@ module Uniword
         return errors if paragraph.runs.nil? || paragraph.runs.empty?
 
         paragraph.runs.each_with_index do |run, index|
-          unless run.is_a?(Uniword::Wordprocessingml::Run)
-            errors << "Run at index #{index} must be a Run instance"
-          end
+          errors << "Run at index #{index} must be a Run instance" unless run.is_a?(Uniword::Wordprocessingml::Run)
         end
 
         errors
@@ -102,9 +98,7 @@ module Uniword
       def property_errors(paragraph)
         return [] if paragraph.properties.nil?
 
-        unless paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
-          return ['Properties must be a ParagraphProperties instance']
-        end
+        return ["Properties must be a ParagraphProperties instance"] unless paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
 
         []
       end

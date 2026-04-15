@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -12,11 +12,11 @@ module Uniword
         attribute :relationships, PackageRelationship, collection: true, initialize_empty: true
 
         xml do
-          element 'Relationships'
+          element "Relationships"
           namespace Uniword::Ooxml::Namespaces::PackageRelationships
           ordered
 
-          map_element 'Relationship', to: :relationships, render_nil: false
+          map_element "Relationship", to: :relationships, render_nil: false
         end
 
         # Generates relationship files (.rels) for DOCX packages
@@ -28,19 +28,19 @@ module Uniword
           new(
             relationships: [
               PackageRelationship.new(
-                id: 'rId3',
-                type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties',
-                target: 'docProps/app.xml'
+                id: "rId3",
+                type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+                target: "docProps/app.xml"
               ),
               PackageRelationship.new(
-                id: 'rId2',
-                type: 'http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties',
-                target: 'docProps/core.xml'
+                id: "rId2",
+                type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+                target: "docProps/core.xml"
               ),
               PackageRelationship.new(
-                id: 'rId1',
-                type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument',
-                target: 'word/document.xml'
+                id: "rId1",
+                type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+                target: "word/document.xml"
               )
             ]
           )

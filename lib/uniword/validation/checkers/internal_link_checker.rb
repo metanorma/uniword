@@ -57,17 +57,17 @@ module Uniword
         # @example
         #   result = checker.check(hyperlink, document)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
+          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
 
           unless document
             return ValidationResult.warning(
               link,
-              'Cannot validate without document context'
+              "Cannot validate without document context"
             )
           end
 
           anchor = link.anchor
-          return ValidationResult.failure(link, 'No anchor specified') unless anchor
+          return ValidationResult.failure(link, "No anchor specified") unless anchor
 
           # Get bookmarks from document
           bookmarks = extract_bookmarks(document)
@@ -82,7 +82,7 @@ module Uniword
             # Try to find similar bookmarks for suggestions
             suggestions = find_similar_bookmarks(anchor, bookmarks)
             message = "Bookmark not found: #{anchor}"
-            message += ". Did you mean: #{suggestions.join(', ')}?" if suggestions.any?
+            message += ". Did you mean: #{suggestions.join(", ")}?" if suggestions.any?
 
             ValidationResult.failure(
               link,
@@ -141,7 +141,7 @@ module Uniword
         # @param text [String] Heading text
         # @return [String] Bookmark name
         def heading_to_bookmark(text)
-          text.to_s.downcase.gsub(/[^a-z0-9_-]/, '_')
+          text.to_s.downcase.gsub(/[^a-z0-9_-]/, "_")
         end
 
         # Check if bookmark exists in list.

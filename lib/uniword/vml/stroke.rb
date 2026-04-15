@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -18,16 +18,16 @@ module Uniword
       attribute :on, :string
 
       xml do
-        element 'stroke'
+        element "stroke"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'color', to: :color
-        map_attribute 'weight', to: :weight
-        map_attribute 'opacity', to: :opacity
-        map_attribute 'linestyle', to: :linestyle
-        map_attribute 'joinstyle', to: :joinstyle
-        map_attribute 'endcap', to: :endcap
-        map_attribute 'on', to: :on
+        map_attribute "color", to: :color
+        map_attribute "weight", to: :weight
+        map_attribute "opacity", to: :opacity
+        map_attribute "linestyle", to: :linestyle
+        map_attribute "joinstyle", to: :joinstyle
+        map_attribute "endcap", to: :endcap
+        map_attribute "on", to: :on
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -13,12 +13,12 @@ module Uniword
       attribute :doc_part_body, DocPartBody
 
       xml do
-        root 'docPart'
+        root "docPart"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'docPartPr', to: :doc_part_pr, render_nil: false
-        map_element 'docPartBody', to: :doc_part_body, render_nil: false
+        map_element "docPartPr", to: :doc_part_pr, render_nil: false
+        map_element "docPartBody", to: :doc_part_body, render_nil: false
       end
     end
   end

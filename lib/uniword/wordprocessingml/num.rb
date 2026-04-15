@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,12 +13,12 @@ module Uniword
       attribute :abstractNumId, AbstractNumId
 
       xml do
-        element 'num'
+        element "num"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'numId', to: :numId
-        map_element 'abstractNumId', to: :abstractNumId, render_nil: false
+        map_attribute "numId", to: :numId
+        map_element "abstractNumId", to: :abstractNumId, render_nil: false
       end
     end
   end

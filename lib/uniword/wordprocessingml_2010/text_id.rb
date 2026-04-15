@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -12,10 +12,10 @@ module Uniword
       attribute :val, :string
 
       xml do
-        element 'textId'
+        element "textId"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'val', to: :val
+        map_attribute "val", to: :val
       end
     end
   end

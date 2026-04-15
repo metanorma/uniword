@@ -27,7 +27,7 @@ module Uniword
                 element: table,
                 severity: @config[:severity] || :error,
                 suggestion: @config[:suggestion] ||
-                  'Mark first row as header: table.rows.first.header = true'
+                  "Mark first row as header: table.rows.first.header = true"
               )
             end
 
@@ -38,7 +38,7 @@ module Uniword
               message: "Table #{index + 1} missing caption",
               element: table,
               severity: :warning,
-              suggestion: 'Add table caption to describe the data presented'
+              suggestion: "Add table caption to describe the data presented"
             )
           end
 

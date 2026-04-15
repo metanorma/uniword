@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -13,9 +13,9 @@ module Uniword
       class OoxmlBoolean < Lutaml::Model::Type::Boolean
         def self.cast(value, _options = {})
           case value
-          when true, '1', 1
+          when true, "1", 1
             true
-          when false, '0', 0, nil
+          when false, "0", 0, nil
             false
           else
             value
@@ -24,8 +24,8 @@ module Uniword
 
         def self.serialize(value)
           return nil if value.nil?
-          return '1' if value == true || value.to_s.match?(/^(true|t|yes|y|1)$/i)
-          return '0' if value == false || value.to_s.match?(/^(false|f|no|n|0)$/i)
+          return "1" if value == true || value.to_s.match?(/^(true|t|yes|y|1)$/i)
+          return "0" if value == false || value.to_s.match?(/^(false|f|no|n|0)$/i)
 
           value
         end
@@ -36,9 +36,9 @@ module Uniword
         def to_xml
           case @value
           when true
-            '1'
+            "1"
           when false
-            '0'
+            "0"
           else
             @value.to_s
           end

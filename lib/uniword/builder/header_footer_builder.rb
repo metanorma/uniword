@@ -17,7 +17,7 @@ module Uniword
     class HeaderFooterBuilder
       attr_reader :model, :kind
 
-      def initialize(kind, type: 'default')
+      def initialize(kind, type: "default")
         @kind = kind
         @model = if kind == :header
                    Wordprocessingml::Header.new

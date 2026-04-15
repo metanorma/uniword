@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -15,13 +15,13 @@ module Uniword
       attribute :swAng, :string
 
       xml do
-        element 'arcTo'
+        element "arcTo"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'wR', to: :wR
-        map_attribute 'hR', to: :hR
-        map_attribute 'stAng', to: :stAng
-        map_attribute 'swAng', to: :swAng
+        map_attribute "wR", to: :wR
+        map_attribute "hR", to: :hR
+        map_attribute "stAng", to: :stAng
+        map_attribute "swAng", to: :swAng
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :data, :string
 
       xml do
-        element 'relationtable'
+        element "relationtable"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_element '', to: :data, render_nil: false
+        map_element "", to: :data, render_nil: false
       end
     end
   end

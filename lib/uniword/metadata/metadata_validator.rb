@@ -42,7 +42,7 @@ module Uniword
       #   validator = MetadataValidator.new(
       #     config_file: 'config/custom_schema.yml'
       #   )
-      def initialize(config_file: 'metadata_schema')
+      def initialize(config_file: "metadata_schema")
         @schema = load_schema(config_file)
       end
 
@@ -217,19 +217,19 @@ module Uniword
         return unless expected_type
 
         valid = case expected_type.to_s
-                when 'string'
+                when "string"
                   value.is_a?(String)
-                when 'integer'
+                when "integer"
                   value.is_a?(Integer)
-                when 'float'
+                when "float"
                   value.is_a?(Float) || value.is_a?(Integer)
-                when 'boolean'
+                when "boolean"
                   value.is_a?(TrueClass) || value.is_a?(FalseClass)
-                when 'array'
+                when "array"
                   value.is_a?(Array)
-                when 'hash'
+                when "hash"
                   value.is_a?(Hash)
-                when 'datetime'
+                when "datetime"
                   value.is_a?(Time) || value.is_a?(DateTime) || value.is_a?(Date)
                 else
                   true
@@ -248,28 +248,18 @@ module Uniword
       # @param errors [Array] Errors array to populate
       def validate_constraints(key, value, rules, errors)
         # Max length for strings
-        if rules[:max_length] && value.is_a?(String) && (value.length > rules[:max_length])
-          errors << "#{key} exceeds maximum length of #{rules[:max_length]}"
-        end
+        errors << "#{key} exceeds maximum length of #{rules[:max_length]}" if rules[:max_length] && value.is_a?(String) && (value.length > rules[:max_length])
 
         # Min/max value for numbers
-        if rules[:min_value] && value.is_a?(Numeric) && (value < rules[:min_value])
-          errors << "#{key} must be at least #{rules[:min_value]}"
-        end
+        errors << "#{key} must be at least #{rules[:min_value]}" if rules[:min_value] && value.is_a?(Numeric) && (value < rules[:min_value])
 
-        if rules[:max_value] && value.is_a?(Numeric) && (value > rules[:max_value])
-          errors << "#{key} cannot exceed #{rules[:max_value]}"
-        end
+        errors << "#{key} cannot exceed #{rules[:max_value]}" if rules[:max_value] && value.is_a?(Numeric) && (value > rules[:max_value])
 
         # Max items for arrays
-        if rules[:max_items] && value.is_a?(Array) && (value.size > rules[:max_items])
-          errors << "#{key} exceeds maximum of #{rules[:max_items]} items"
-        end
+        errors << "#{key} exceeds maximum of #{rules[:max_items]} items" if rules[:max_items] && value.is_a?(Array) && (value.size > rules[:max_items])
 
         # Allowed values
-        if rules[:allowed_values] && !rules[:allowed_values].include?(value)
-          errors << "#{key} must be one of: #{rules[:allowed_values].join(', ')}"
-        end
+        errors << "#{key} must be one of: #{rules[:allowed_values].join(", ")}" if rules[:allowed_values] && !rules[:allowed_values].include?(value)
 
         # Pattern matching for strings
         return unless rules[:pattern] && value.is_a?(String)
@@ -314,9 +304,7 @@ module Uniword
             required_fields = requirements[:requires] || []
             required_fields.each do |req_field|
               req_key = req_field.to_sym
-              if metadata[req_key].nil?
-                errors << "#{req_field} is required when #{field} is '#{value}'"
-              end
+              errors << "#{req_field} is required when #{field} is '#{value}'" if metadata[req_key].nil?
             end
           end
         end

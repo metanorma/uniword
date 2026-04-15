@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -8,7 +8,7 @@ module Uniword
     # Reference XML: <w:lastRenderedPageBreak/>
     class LastRenderedPageBreak < Lutaml::Model::Serializable
       xml do
-        element 'lastRenderedPageBreak'
+        element "lastRenderedPageBreak"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

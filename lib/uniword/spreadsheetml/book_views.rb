@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,11 +12,11 @@ module Uniword
       attribute :views, WorkbookView, collection: true, initialize_empty: true
 
       xml do
-        element 'bookViews'
+        element "bookViews"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 'workbookView', to: :views, render_nil: false
+        map_element "workbookView", to: :views, render_nil: false
       end
     end
   end

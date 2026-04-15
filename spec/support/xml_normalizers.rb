@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
+require "nokogiri"
 
 # XML normalization helpers for round-trip testing
 #
@@ -34,11 +34,11 @@ module XmlNormalizers
   # @param doc [Nokogiri::XML::Document] Document to modify
   def self.normalize_timestamps(doc)
     # Find all dcterms:created and dcterms:modified elements
-    doc.xpath('//dcterms:created | //dcterms:modified',
-              'dcterms' => 'http://purl.org/dc/terms/').each do |node|
+    doc.xpath("//dcterms:created | //dcterms:modified",
+              "dcterms" => "http://purl.org/dc/terms/").each do |node|
       value = node.content
       # Convert +00:00 to Z (both are ISO 8601 UTC representations)
-      node.content = value.gsub(/\+00:00$/, 'Z')
+      node.content = value.gsub(/\+00:00$/, "Z")
     end
   end
 
@@ -54,7 +54,7 @@ module XmlNormalizers
       # Match elements in any namespace (including default namespace)
       doc.xpath("//#{elem_name} | //*[local-name()='#{elem_name}']").each do |node|
         # Replace content with placeholder for comparison
-        node.content = 'NORMALIZED_STAT'
+        node.content = "NORMALIZED_STAT"
       end
     end
   end
@@ -68,7 +68,7 @@ module XmlNormalizers
     return unless root
 
     # List of known unused namespaces in Microsoft Office documents
-    unused_prefixes = ['dcmitype']
+    unused_prefixes = ["dcmitype"]
 
     unused_prefixes.each do |prefix|
       # Remove xmlns:prefix declaration if not used in document

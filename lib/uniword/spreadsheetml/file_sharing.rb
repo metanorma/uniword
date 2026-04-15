@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,10 +12,10 @@ module Uniword
       attribute :read_only_recommended, :string
 
       xml do
-        element 'fileSharing'
+        element "fileSharing"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'read-only-recommended', to: :read_only_recommended
+        map_attribute "read-only-recommended", to: :read_only_recommended
       end
     end
   end

@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'uniword'
+require "bundler/setup"
+require "uniword"
 Uniword::CLI.start(ARGV)

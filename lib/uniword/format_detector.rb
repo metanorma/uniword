@@ -18,10 +18,10 @@ module Uniword
   #   # => :docx
   class FormatDetector
     # ZIP file magic number (PK\x03\x04)
-    ZIP_SIGNATURE = [0x50, 0x4B, 0x03, 0x04].pack('C*').freeze
+    ZIP_SIGNATURE = [0x50, 0x4B, 0x03, 0x04].pack("C*").freeze
 
     # MIME version header for MHTML
-    MIME_HEADER = 'MIME-Version:'
+    MIME_HEADER = "MIME-Version:"
 
     # Detect the format of a file or stream.
     #
@@ -56,13 +56,13 @@ module Uniword
     # @return [void]
     # @raise [ArgumentError] if path is invalid
     def validate_path(path)
-      raise ArgumentError, 'Path cannot be nil' if path.nil?
+      raise ArgumentError, "Path cannot be nil" if path.nil?
 
       # Allow IO and StringIO objects
       return if path.is_a?(IO) || path.is_a?(StringIO)
 
       # For strings, validate as file path
-      raise ArgumentError, 'Path cannot be empty' if path.respond_to?(:empty?) && path.empty?
+      raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
       raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
       raise ArgumentError, "Path is a directory: #{path}" if File.directory?(path)
     end
@@ -95,7 +95,7 @@ module Uniword
     # @return [Symbol, nil] The detected format or nil if unknown
     def detect_by_signature(path)
       # Read first few bytes for signature check
-      header = File.open(path, 'rb') { |f| f.read(512) }
+      header = File.open(path, "rb") { |f| f.read(512) }
       return nil if header.nil? || header.empty?
 
       # Check for ZIP signature (DOCX)
@@ -116,26 +116,26 @@ module Uniword
       extension = File.extname(path).downcase
 
       case extension
-      when '.docx'
+      when ".docx"
         :docx
-      when '.docm'
+      when ".docm"
         :docm
-      when '.dotx'
+      when ".dotx"
         :dotx
-      when '.dotm'
+      when ".dotm"
         :dotm
-      when '.thmx'
+      when ".thmx"
         :thmx
-      when '.mhtml', '.mht'
+      when ".mhtml", ".mht"
         :mhtml
-      when '.doc'
+      when ".doc"
         raise ArgumentError,
-              'Old Word format (.doc) is not supported. Please convert to .docx first. ' \
-              'Uniword supports: .docx, .docm, .dotx, .dotm, .mhtml, .mht'
+              "Old Word format (.doc) is not supported. Please convert to .docx first. " \
+              "Uniword supports: .docx, .docm, .dotx, .dotm, .mhtml, .mht"
       else
         raise ArgumentError,
               "Unsupported file extension: #{extension}. " \
-              'Supported extensions: .docx, .docm, .dotx, .dotm, .thmx, .mhtml, .mht'
+              "Supported extensions: .docx, .docm, .dotx, .dotm, .thmx, .mhtml, .mht"
       end
     end
   end

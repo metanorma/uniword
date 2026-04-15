@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -15,13 +15,13 @@ module Uniword
       attribute :contour_clr, SolidFill
 
       xml do
-        element 'sp3d'
+        element "sp3d"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'contourW', to: :contour_w, render_nil: false
-        map_attribute 'prstMaterial', to: :prst_material, render_nil: false
-        map_element 'bevelT', to: :bevel_t, render_nil: false
-        map_element 'contourClr', to: :contour_clr, render_nil: false
+        map_attribute "contourW", to: :contour_w, render_nil: false
+        map_attribute "prstMaterial", to: :prst_material, render_nil: false
+        map_element "bevelT", to: :bevel_t, render_nil: false
+        map_element "contourClr", to: :contour_clr, render_nil: false
       end
     end
   end

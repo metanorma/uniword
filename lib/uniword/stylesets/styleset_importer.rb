@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'fileutils'
+require "fileutils"
 
 module Uniword
   module Stylesets
@@ -30,7 +30,7 @@ module Uniword
         # Parse styles.xml using lutaml-model
         styles_config = ::Uniword::Wordprocessingml::StylesConfiguration.from_xml(
           files[:styles],
-          encoding: 'UTF-8'
+          encoding: "UTF-8"
         )
 
         # Create StyleSet model
@@ -55,7 +55,7 @@ module Uniword
       def import_all(source_dir, output_dir)
         count = 0
 
-        Dir.glob(File.join(source_dir, '*.dotx')).each do |dotx_file|
+        Dir.glob(File.join(source_dir, "*.dotx")).each do |dotx_file|
           styleset_name = styleset_name_from_file(dotx_file)
           output_file = File.join(output_dir, "#{styleset_name}.yml")
 
@@ -75,10 +75,10 @@ module Uniword
       # @return [String] StyleSet name (e.g., 'Distinctive')
       def extract_name_from_path(path)
         # Get filename without extension
-        filename = File.basename(path, '.*')
+        filename = File.basename(path, ".*")
 
         # Convert to title case (e.g., 'distinctive' -> 'Distinctive')
-        filename.split(/[-_]/).map(&:capitalize).join(' ')
+        filename.split(/[-_]/).map(&:capitalize).join(" ")
       end
 
       # Convert file path to StyleSet name for YAML filename
@@ -86,10 +86,10 @@ module Uniword
       # @param path [String] Path to .dotx file
       # @return [String] StyleSet name for YAML file (e.g., 'distinctive')
       def styleset_name_from_file(path)
-        File.basename(path, '.dotx')
+        File.basename(path, ".dotx")
             .downcase
-            .gsub(/[^a-z0-9]+/, '_')
-            .gsub(/^_|_$/, '')
+            .gsub(/[^a-z0-9]+/, "_")
+            .gsub(/^_|_$/, "")
       end
     end
   end

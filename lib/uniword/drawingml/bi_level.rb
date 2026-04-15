@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :thresh, :integer
 
       xml do
-        element 'biLevel'
+        element "biLevel"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'thresh', to: :thresh
+        map_attribute "thresh", to: :thresh
       end
     end
   end

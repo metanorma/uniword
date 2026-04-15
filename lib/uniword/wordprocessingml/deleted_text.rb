@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,11 +14,11 @@ module Uniword
       attribute :xml_space, :string
 
       xml do
-        element 'delText'
+        element "delText"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'xml:space', to: :xml_space, render_nil: false
+        map_attribute "xml:space", to: :xml_space, render_nil: false
       end
 
       def to_s

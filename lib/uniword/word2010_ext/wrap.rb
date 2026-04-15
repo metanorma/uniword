@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Word2010Ext
@@ -14,12 +14,12 @@ module Uniword
       attribute :anchory, :string
 
       xml do
-        element 'wrap'
+        element "wrap"
         namespace Uniword::Ooxml::Namespaces::Word2010Ext
         mixed_content
 
-        map_attribute 'anchorx', to: :anchorx, render_nil: false
-        map_attribute 'anchory', to: :anchory, render_nil: false
+        map_attribute "anchorx", to: :anchorx, render_nil: false
+        map_attribute "anchory", to: :anchory, render_nil: false
       end
     end
   end

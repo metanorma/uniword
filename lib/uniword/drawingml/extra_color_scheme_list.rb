@@ -8,7 +8,7 @@ module Uniword
     class ExtraColorSchemeList < Lutaml::Model::Serializable
       # OOXML namespace configuration
       xml do
-        element 'extraClrSchemeLst'
+        element "extraClrSchemeLst"
         namespace Ooxml::Namespaces::DrawingML
       end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,11 +12,11 @@ module Uniword
       attribute :caches, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'pivotCaches'
+        element "pivotCaches"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_element 'pivotCache', to: :caches, render_nil: false
+        map_element "pivotCache", to: :caches, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -13,11 +13,11 @@ module Uniword
       attribute :schema_refs, SchemaRefs
 
       xml do
-        element 'datastoreItem'
+        element "datastoreItem"
         namespace Uniword::Ooxml::Namespaces::CustomXml
 
-        map_attribute 'itemID', to: :item_id
-        map_element 'schemaRefs', to: :schema_refs, render_nil: false
+        map_attribute "itemID", to: :item_id
+        map_element "schemaRefs", to: :schema_refs, render_nil: false
       end
     end
   end

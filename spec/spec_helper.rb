@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'bundler/setup'
-require 'uniword'
-require 'canon/rspec_matchers'
+require "bundler/setup"
+require "uniword"
+require "canon/rspec_matchers"
 
 # Patch Canon::Comparison::CompareProfile to treat :namespace_declarations
 # as informative (non-normative) rather than normative.
@@ -38,7 +38,7 @@ Canon::Config.configure do |config|
 end
 
 # Load support files
-Dir[File.join(__dir__, 'support', '**', '*.rb')].each { |f| require f }
+Dir[File.join(__dir__, "support", "**", "*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
@@ -51,26 +51,26 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
   config.filter_run_when_matching :focus
-  config.example_status_persistence_file_path = 'spec/examples.txt'
+  config.example_status_persistence_file_path = "spec/examples.txt"
   config.disable_monkey_patching!
   config.warnings = true
-  config.default_formatter = 'doc' if config.files_to_run.one?
+  config.default_formatter = "doc" if config.files_to_run.one?
   config.order = :random
   Kernel.srand config.seed
 
   # Create test_output directory if it doesn't exist
   config.before(:suite) do
-    FileUtils.mkdir_p('test_output')
+    FileUtils.mkdir_p("test_output")
   end
 
   # Skip LibreOffice tests if soffice is not available
   config.before(:each) do |example|
     if example.metadata[:skip_if_no_libreoffice]
       skip_理由 = if soffice_available?
-                   nil
-                 else
-                   'LibreOffice not installed. Install with: brew install --cask libreoffice (macOS) or apt-get install libreoffice (Linux)'
-                 end
+                  nil
+                else
+                  "LibreOffice not installed. Install with: brew install --cask libreoffice (macOS) or apt-get install libreoffice (Linux)"
+                end
       skip(skip_理由) if skip_理由
     end
   end
@@ -78,14 +78,16 @@ end
 
 # Helper to check if soffice is available
 def soffice_available?
-  return true if system('which soffice > /dev/null 2>&1')
-  File.exist?('/Applications/LibreOffice.app/Contents/MacOS/soffice')
+  return true if system("which soffice > /dev/null 2>&1")
+
+  File.exist?("/Applications/LibreOffice.app/Contents/MacOS/soffice")
 end
 
 # Global helper to safely delete files on Windows (handles file locking)
 # Use this instead of File.delete when cleaning up temp files in specs
 def safe_delete(path)
   return unless path && File.exist?(path)
+
   retries = 5
   begin
     File.delete(path)
@@ -102,6 +104,7 @@ end
 # FileUtils.rm_f suppresses errors but can still fail with EACCES on locked files
 def safe_rm_f(path)
   return unless path
+
   retries = 5
   begin
     FileUtils.rm_f(path)

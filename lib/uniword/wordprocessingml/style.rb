@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -30,18 +30,18 @@ module Uniword
 
       # YAML mapping for flat YAML structure
       yaml do
-        map 'id', to: :styleId
-        map 'type', to: :type
-        map 'name', with: { from: :yaml_name_from, to: :yaml_name_to }
-        map 'default', to: :default
-        map 'custom', to: :customStyle
-        map 'quick_format', with: { from: :yaml_quick_format_from, to: :yaml_quick_format_to }
-        map 'based_on', with: { from: :yaml_based_on_from, to: :yaml_based_on_to }
-        map 'next_style', with: { from: :yaml_next_style_from, to: :yaml_next_style_to }
-        map 'linked_style', with: { from: :yaml_linked_style_from, to: :yaml_linked_style_to }
-        map 'ui_priority', with: { from: :yaml_ui_priority_from, to: :yaml_ui_priority_to }
-        map 'paragraph_properties', to: :pPr
-        map 'run_properties', to: :rPr
+        map "id", to: :styleId
+        map "type", to: :type
+        map "name", with: { from: :yaml_name_from, to: :yaml_name_to }
+        map "default", to: :default
+        map "custom", to: :customStyle
+        map "quick_format", with: { from: :yaml_quick_format_from, to: :yaml_quick_format_to }
+        map "based_on", with: { from: :yaml_based_on_from, to: :yaml_based_on_to }
+        map "next_style", with: { from: :yaml_next_style_from, to: :yaml_next_style_to }
+        map "linked_style", with: { from: :yaml_linked_style_from, to: :yaml_linked_style_to }
+        map "ui_priority", with: { from: :yaml_ui_priority_from, to: :yaml_ui_priority_to }
+        map "paragraph_properties", to: :pPr
+        map "run_properties", to: :rPr
       end
 
       # YAML transform methods (instance methods - called via send on an instance)
@@ -94,29 +94,29 @@ module Uniword
       end
 
       xml do
-        element 'style'
+        element "style"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'type', to: :type
-        map_attribute 'styleId', to: :styleId
-        map_attribute 'default', to: :default, render_default: false,
+        map_attribute "type", to: :type
+        map_attribute "styleId", to: :styleId
+        map_attribute "default", to: :default, render_default: false,
                                  value_map: { to: { true => true, false => :omitted } }
-        map_attribute 'customStyle', to: :customStyle, render_default: false,
+        map_attribute "customStyle", to: :customStyle, render_default: false,
                                      value_map: { to: { true => true, false => :omitted } }
-        map_element 'name', to: :name, render_nil: false
-        map_element 'basedOn', to: :basedOn, render_nil: false
-        map_element 'next', to: :nextStyle, render_nil: false # Maps XML 'next' to nextStyle attribute
-        map_element 'link', to: :link, render_nil: false
-        map_element 'uiPriority', to: :uiPriority, render_nil: false
-        map_element 'qFormat', to: :qFormat, render_nil: false
-        map_element 'semiHidden', to: :semiHidden, render_nil: false
-        map_element 'unhideWhenUsed', to: :unhideWhenUsed, render_nil: false
-        map_element 'rsid', to: :rsid, render_nil: false
-        map_element 'pPr', to: :pPr, render_nil: false
-        map_element 'rPr', to: :rPr, render_nil: false
-        map_element 'tblPr', to: :tblPr, render_nil: false
-        map_element 'tcPr', to: :tcPr, render_nil: false
+        map_element "name", to: :name, render_nil: false
+        map_element "basedOn", to: :basedOn, render_nil: false
+        map_element "next", to: :nextStyle, render_nil: false # Maps XML 'next' to nextStyle attribute
+        map_element "link", to: :link, render_nil: false
+        map_element "uiPriority", to: :uiPriority, render_nil: false
+        map_element "qFormat", to: :qFormat, render_nil: false
+        map_element "semiHidden", to: :semiHidden, render_nil: false
+        map_element "unhideWhenUsed", to: :unhideWhenUsed, render_nil: false
+        map_element "rsid", to: :rsid, render_nil: false
+        map_element "pPr", to: :pPr, render_nil: false
+        map_element "rPr", to: :rPr, render_nil: false
+        map_element "tblPr", to: :tblPr, render_nil: false
+        map_element "tcPr", to: :tcPr, render_nil: false
       end
 
       # Convenience accessor methods for style metadata
@@ -335,28 +335,28 @@ module Uniword
       #
       # @return [Boolean] True if paragraph style
       def paragraph_style?
-        type == 'paragraph'
+        type == "paragraph"
       end
 
       # Check if this is a character style
       #
       # @return [Boolean] True if character style
       def character_style?
-        type == 'character'
+        type == "character"
       end
 
       # Check if this is a table style
       #
       # @return [Boolean] True if table style
       def table_style?
-        type == 'table'
+        type == "table"
       end
 
       # Check if this is a numbering style
       #
       # @return [Boolean] True if numbering style
       def numbering_style?
-        type == 'numbering'
+        type == "numbering"
       end
 
       # Alias for pPr (paragraph properties)

@@ -4,7 +4,7 @@ module Uniword
   module Drawingml
     # Represents a latin, ea, or cs font element
     class FontTypeface < Lutaml::Model::Serializable
-      attribute :typeface, :string, default: -> { '' }
+      attribute :typeface, :string, default: -> { "" }
       attribute :panose, :string
 
       def initialize(attributes = {})
@@ -16,19 +16,19 @@ module Uniword
     # Latin font element
     class LatinFont < FontTypeface
       xml do
-        element 'latin'
+        element "latin"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'typeface', to: :typeface
-        map_attribute 'panose', to: :panose
+        map_attribute "typeface", to: :typeface
+        map_attribute "panose", to: :panose
       end
     end
 
     # East Asian font element
     class EaFont < FontTypeface
       xml do
-        element 'ea'
+        element "ea"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'typeface', to: :typeface, value_map: {
+        map_attribute "typeface", to: :typeface, value_map: {
           to: { empty: :empty, nil: :empty, omitted: :omitted }
         }
       end
@@ -37,9 +37,9 @@ module Uniword
     # Complex Script font element
     class CsFont < FontTypeface
       xml do
-        element 'cs'
+        element "cs"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'typeface', to: :typeface, value_map: {
+        map_attribute "typeface", to: :typeface, value_map: {
           to: { empty: :empty, nil: :empty, omitted: :omitted }
         }
       end
@@ -51,10 +51,10 @@ module Uniword
       attribute :typeface, :string
 
       xml do
-        element 'font'
+        element "font"
         namespace Ooxml::Namespaces::DrawingML
-        map_attribute 'script', to: :script, render_nil: false
-        map_attribute 'typeface', to: :typeface, render_nil: false
+        map_attribute "script", to: :script, render_nil: false
+        map_attribute "typeface", to: :typeface, render_nil: false
       end
 
       def initialize(attributes = {})
@@ -71,17 +71,17 @@ module Uniword
       attribute :fonts, ScriptFont, collection: true
 
       xml do
-        element 'majorFont'
+        element "majorFont"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'latin', to: :latin
-        map_element 'ea', to: :ea
-        map_element 'cs', to: :cs
-        map_element 'font', to: :fonts
+        map_element "latin", to: :latin
+        map_element "ea", to: :ea
+        map_element "cs", to: :cs
+        map_element "font", to: :fonts
       end
 
       def initialize(attributes = {})
         super
-        @latin ||= LatinFont.new(typeface: 'Calibri Light')
+        @latin ||= LatinFont.new(typeface: "Calibri Light")
         @ea ||= EaFont.new
         @cs ||= CsFont.new
         @fonts ||= []
@@ -96,17 +96,17 @@ module Uniword
       attribute :fonts, ScriptFont, collection: true
 
       xml do
-        element 'minorFont'
+        element "minorFont"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'latin', to: :latin
-        map_element 'ea', to: :ea
-        map_element 'cs', to: :cs
-        map_element 'font', to: :fonts
+        map_element "latin", to: :latin
+        map_element "ea", to: :ea
+        map_element "cs", to: :cs
+        map_element "font", to: :fonts
       end
 
       def initialize(attributes = {})
         super
-        @latin ||= LatinFont.new(typeface: 'Calibri')
+        @latin ||= LatinFont.new(typeface: "Calibri")
         @ea ||= EaFont.new
         @cs ||= CsFont.new
         @fonts ||= []
@@ -124,7 +124,7 @@ module Uniword
     #   scheme.minor_font = 'Arial'
     class FontScheme < Lutaml::Model::Serializable
       # Font scheme name
-      attribute :name, :string, default: -> { 'Office' }
+      attribute :name, :string, default: -> { "Office" }
 
       # Major font container
       attribute :major_font_obj, MajorFont
@@ -134,12 +134,12 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'fontScheme'
+        element "fontScheme"
         namespace Ooxml::Namespaces::DrawingML
 
-        map_attribute 'name', to: :name
-        map_element 'majorFont', to: :major_font_obj
-        map_element 'minorFont', to: :minor_font_obj
+        map_attribute "name", to: :name
+        map_element "majorFont", to: :major_font_obj
+        map_element "minorFont", to: :minor_font_obj
       end
 
       # Initialize font scheme

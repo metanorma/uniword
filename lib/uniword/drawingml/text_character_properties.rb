@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -17,16 +17,16 @@ module Uniword
       attribute :cs, TextFont
 
       xml do
-        element 'rPr'
+        element "rPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
         mixed_content
 
-        map_attribute 'sz', to: :sz
-        map_attribute 'b', to: :b
-        map_attribute 'i', to: :i
-        map_element 'latin', to: :latin, render_nil: false
-        map_element 'ea', to: :ea, render_nil: false
-        map_element 'cs', to: :cs, render_nil: false
+        map_attribute "sz", to: :sz
+        map_attribute "b", to: :b
+        map_attribute "i", to: :i
+        map_element "latin", to: :latin, render_nil: false
+        map_element "ea", to: :ea, render_nil: false
+        map_element "cs", to: :cs, render_nil: false
       end
     end
   end

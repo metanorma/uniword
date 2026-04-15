@@ -16,12 +16,12 @@ module Uniword
 
       # XML configuration
       xml do
-        element 'themeElements'
+        element "themeElements"
         namespace Ooxml::Namespaces::DrawingML
 
-        map_element 'clrScheme', to: :clr_scheme
-        map_element 'fontScheme', to: :font_scheme
-        map_element 'fmtScheme', to: :fmt_scheme
+        map_element "clrScheme", to: :clr_scheme
+        map_element "fontScheme", to: :font_scheme
+        map_element "fmtScheme", to: :fmt_scheme
       end
 
       def initialize(attributes = {})
@@ -49,7 +49,7 @@ module Uniword
     # NOTE: Convenience alias Uniword::Theme is available via lib/uniword.rb
     class Theme < Lutaml::Model::Serializable
       # Theme name
-      attribute :name, :string, default: -> { 'Office Theme' }
+      attribute :name, :string, default: -> { "Office Theme" }
 
       # Theme elements container
       attribute :theme_elements, ThemeElements
@@ -65,15 +65,15 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'theme'
+        element "theme"
         # Theme element is in DrawingML namespace
         namespace Ooxml::Namespaces::DrawingML
 
-        map_attribute 'name', to: :name
-        map_element 'themeElements', to: :theme_elements
-        map_element 'objectDefaults', to: :object_defaults
-        map_element 'extraClrSchemeLst', to: :extra_clr_scheme_lst
-        map_element 'extLst', to: :ext_lst
+        map_attribute "name", to: :name
+        map_element "themeElements", to: :theme_elements
+        map_element "objectDefaults", to: :object_defaults
+        map_element "extraClrSchemeLst", to: :extra_clr_scheme_lst
+        map_element "extLst", to: :ext_lst
       end
 
       # Theme variants (Hash of variant_id => ThemeVariant)
@@ -148,18 +148,18 @@ module Uniword
       # Mapping from OOXML themeColor attribute values to ColorScheme slots
       # OOXML uses text1/background1 in styles, but dk1/lt1 in the theme definition
       THEME_COLOR_MAP = {
-        'text1' => :dk1,
-        'text2' => :dk2,
-        'background1' => :lt1,
-        'background2' => :lt2,
-        'accent1' => :accent1,
-        'accent2' => :accent2,
-        'accent3' => :accent3,
-        'accent4' => :accent4,
-        'accent5' => :accent5,
-        'accent6' => :accent6,
-        'hyperlink' => :hlink,
-        'followedHyperlink' => :fol_hlink
+        "text1" => :dk1,
+        "text2" => :dk2,
+        "background1" => :lt1,
+        "background2" => :lt2,
+        "accent1" => :accent1,
+        "accent2" => :accent2,
+        "accent3" => :accent3,
+        "accent4" => :accent4,
+        "accent5" => :accent5,
+        "accent6" => :accent6,
+        "hyperlink" => :hlink,
+        "followedHyperlink" => :fol_hlink
       }.freeze
 
       # Get a theme color by name (accepts both scheme names and OOXML names)
@@ -190,17 +190,17 @@ module Uniword
         return nil unless theme_font_ref && font_scheme
 
         case theme_font_ref
-        when 'majorAscii', 'majorHAnsi'
+        when "majorAscii", "majorHAnsi"
           font_scheme.major_font
-        when 'majorEastAsia'
+        when "majorEastAsia"
           font_scheme.major_east_asian
-        when 'majorBidi'
+        when "majorBidi"
           font_scheme.major_complex_script
-        when 'minorAscii', 'minorHAnsi'
+        when "minorAscii", "minorHAnsi"
           font_scheme.minor_font
-        when 'minorEastAsia'
+        when "minorEastAsia"
           font_scheme.minor_east_asian
-        when 'minorBidi'
+        when "minorBidi"
           font_scheme.minor_complex_script
         end
       end

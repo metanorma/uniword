@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'yaml'
-require 'fileutils'
+require "yaml"
+require "fileutils"
 
 module Uniword
   module Themes
@@ -46,7 +46,7 @@ module Uniword
       def import_all(source_dir, output_dir)
         count = 0
 
-        Dir.glob(File.join(source_dir, '*.thmx')).each do |thmx_file|
+        Dir.glob(File.join(source_dir, "*.thmx")).each do |thmx_file|
           theme_name = theme_name_from_file(thmx_file)
           output_file = File.join(output_dir, "#{theme_name}.yml")
 
@@ -67,12 +67,12 @@ module Uniword
       # @return [Hash] YAML-ready hash
       def serialize_theme(theme, source_file)
         {
-          'name' => theme.name,
-          'source' => File.basename(source_file),
-          'imported_at' => Time.now.utc.iso8601,
-          'color_scheme' => serialize_color_scheme(theme.color_scheme),
-          'font_scheme' => serialize_font_scheme(theme.font_scheme),
-          'variants' => serialize_variants(theme.variants)
+          "name" => theme.name,
+          "source" => File.basename(source_file),
+          "imported_at" => Time.now.utc.iso8601,
+          "color_scheme" => serialize_color_scheme(theme.color_scheme),
+          "font_scheme" => serialize_font_scheme(theme.font_scheme),
+          "variants" => serialize_variants(theme.variants)
         }
       end
 
@@ -82,8 +82,8 @@ module Uniword
       # @return [Hash] YAML-ready hash
       def serialize_color_scheme(color_scheme)
         {
-          'name' => color_scheme.name,
-          'colors' => color_scheme.colors.transform_keys(&:to_s).sort.to_h
+          "name" => color_scheme.name,
+          "colors" => color_scheme.colors.transform_keys(&:to_s).sort.to_h
         }
       end
 
@@ -93,13 +93,13 @@ module Uniword
       # @return [Hash] YAML-ready hash
       def serialize_font_scheme(font_scheme)
         {
-          'name' => font_scheme.name,
-          'major_font' => font_scheme.major_font,
-          'minor_font' => font_scheme.minor_font,
-          'major_east_asian' => font_scheme.major_east_asian,
-          'major_complex_script' => font_scheme.major_complex_script,
-          'minor_east_asian' => font_scheme.minor_east_asian,
-          'minor_complex_script' => font_scheme.minor_complex_script
+          "name" => font_scheme.name,
+          "major_font" => font_scheme.major_font,
+          "minor_font" => font_scheme.minor_font,
+          "major_east_asian" => font_scheme.major_east_asian,
+          "major_complex_script" => font_scheme.major_complex_script,
+          "minor_east_asian" => font_scheme.minor_east_asian,
+          "minor_complex_script" => font_scheme.minor_complex_script
         }
       end
 
@@ -115,8 +115,8 @@ module Uniword
           variant.parse_theme
 
           result[variant_id] = {
-            'color_scheme' => serialize_color_scheme(variant.theme.color_scheme),
-            'font_scheme' => serialize_font_scheme(variant.theme.font_scheme)
+            "color_scheme" => serialize_color_scheme(variant.theme.color_scheme),
+            "font_scheme" => serialize_font_scheme(variant.theme.font_scheme)
           }
         end
 
@@ -128,10 +128,10 @@ module Uniword
       # @param path [String] Path to .thmx file
       # @return [String] Theme name for YAML file
       def theme_name_from_file(path)
-        File.basename(path, '.thmx')
+        File.basename(path, ".thmx")
             .downcase
-            .gsub(/[^a-z0-9]+/, '_')
-            .gsub(/^_|_$/, '')
+            .gsub(/[^a-z0-9]+/, "_")
+            .gsub(/^_|_$/, "")
       end
     end
   end

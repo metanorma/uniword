@@ -16,26 +16,26 @@ module Uniword
   #   doc.paragraph { |p| p << 'Appended content' }
   #   doc.save('output.docx')
   module Builder
-    autoload :DocumentBuilder, 'uniword/builder/document_builder'
-    autoload :ParagraphBuilder, 'uniword/builder/paragraph_builder'
-    autoload :RunBuilder, 'uniword/builder/run_builder'
-    autoload :TableBuilder, 'uniword/builder/table_builder'
-    autoload :TableRowBuilder, 'uniword/builder/table_row_builder'
-    autoload :TableCellBuilder, 'uniword/builder/table_cell_builder'
-    autoload :HeaderFooterBuilder, 'uniword/builder/header_footer_builder'
-    autoload :SectionBuilder, 'uniword/builder/section_builder'
-    autoload :StyleBuilder, 'uniword/builder/style_builder'
-    autoload :NumberingBuilder, 'uniword/builder/numbering_builder'
-    autoload :ImageBuilder, 'uniword/builder/image_builder'
-    autoload :CommentBuilder, 'uniword/builder/comment_builder'
-    autoload :TocBuilder, 'uniword/builder/toc_builder'
-    autoload :ListBuilder, 'uniword/builder/list_builder'
-    autoload :ThemeBuilder, 'uniword/builder/theme_builder'
-    autoload :FootnoteBuilder, 'uniword/builder/footnote_builder'
-    autoload :WatermarkBuilder, 'uniword/builder/watermark_builder'
-    autoload :SdtBuilder, 'uniword/builder/sdt_builder'
-    autoload :BibliographyBuilder, 'uniword/builder/bibliography_builder'
-    autoload :ChartBuilder, 'uniword/builder/chart_builder'
+    autoload :DocumentBuilder, "uniword/builder/document_builder"
+    autoload :ParagraphBuilder, "uniword/builder/paragraph_builder"
+    autoload :RunBuilder, "uniword/builder/run_builder"
+    autoload :TableBuilder, "uniword/builder/table_builder"
+    autoload :TableRowBuilder, "uniword/builder/table_row_builder"
+    autoload :TableCellBuilder, "uniword/builder/table_cell_builder"
+    autoload :HeaderFooterBuilder, "uniword/builder/header_footer_builder"
+    autoload :SectionBuilder, "uniword/builder/section_builder"
+    autoload :StyleBuilder, "uniword/builder/style_builder"
+    autoload :NumberingBuilder, "uniword/builder/numbering_builder"
+    autoload :ImageBuilder, "uniword/builder/image_builder"
+    autoload :CommentBuilder, "uniword/builder/comment_builder"
+    autoload :TocBuilder, "uniword/builder/toc_builder"
+    autoload :ListBuilder, "uniword/builder/list_builder"
+    autoload :ThemeBuilder, "uniword/builder/theme_builder"
+    autoload :FootnoteBuilder, "uniword/builder/footnote_builder"
+    autoload :WatermarkBuilder, "uniword/builder/watermark_builder"
+    autoload :SdtBuilder, "uniword/builder/sdt_builder"
+    autoload :BibliographyBuilder, "uniword/builder/bibliography_builder"
+    autoload :ChartBuilder, "uniword/builder/chart_builder"
 
     # Factory: creates a Run with optional formatting
     #
@@ -59,15 +59,13 @@ module Uniword
       props.bold = Properties::Bold.new(value: true) if formatting[:bold]
       props.italic = Properties::Italic.new(value: true) if formatting[:italic]
       if formatting[:underline]
-        val = formatting[:underline] == true ? 'single' : formatting[:underline].to_s
+        val = formatting[:underline] == true ? "single" : formatting[:underline].to_s
         props.underline = Properties::Underline.new(value: val)
       end
       props.color = Properties::ColorValue.new(value: formatting[:color].to_s) if formatting[:color]
       props.size = Properties::FontSize.new(value: formatting[:size].to_i * 2) if formatting[:size]
       props.font = formatting[:font] if formatting[:font]
-      if formatting[:highlight]
-        props.highlight = Properties::Highlight.new(value: formatting[:highlight].to_s)
-      end
+      props.highlight = Properties::Highlight.new(value: formatting[:highlight].to_s) if formatting[:highlight]
       props.strike = Properties::Strike.new(value: true) if formatting[:strike]
       props.small_caps = Properties::SmallCaps.new(value: true) if formatting[:small_caps]
       props.caps = Properties::Caps.new(value: true) if formatting[:caps]
@@ -86,9 +84,9 @@ module Uniword
       hl = Wordprocessingml::Hyperlink.new
       hl.target = target
       if text
-        color = options.fetch(:color, '0000FF')
+        color = options.fetch(:color, "0000FF")
         ul = options.fetch(:underline, true)
-        run = self.text(text, color: color, underline: ul ? 'single' : nil)
+        run = self.text(text, color: color, underline: ul ? "single" : nil)
         hl.runs << run
       end
       hl
@@ -143,7 +141,7 @@ module Uniword
     # @return [Wordprocessingml::Run]
     def self.page_break
       run = Wordprocessingml::Run.new
-      run.break = Wordprocessingml::Break.new(type: 'page')
+      run.break = Wordprocessingml::Break.new(type: "page")
       run
     end
 
@@ -161,7 +159,7 @@ module Uniword
     # @return [Wordprocessingml::Run]
     def self.line_break
       run = Wordprocessingml::Run.new
-      run.break = Wordprocessingml::Break.new(type: 'line')
+      run.break = Wordprocessingml::Break.new(type: "line")
       run
     end
 
@@ -169,21 +167,21 @@ module Uniword
     #
     # @return [Wordprocessingml::Paragraph]
     def self.page_number_field
-      build_field_paragraph(' PAGE ')
+      build_field_paragraph(" PAGE ")
     end
 
     # Factory: creates a paragraph containing a NUMPAGES field
     #
     # @return [Wordprocessingml::Paragraph]
     def self.total_pages_field
-      build_field_paragraph(' NUMPAGES ')
+      build_field_paragraph(" NUMPAGES ")
     end
 
     # Factory: creates a paragraph containing a DATE field
     #
     # @param format [String] Date format (default 'M/d/yyyy')
     # @return [Wordprocessingml::Paragraph]
-    def self.date_field(format: 'M/d/yyyy')
+    def self.date_field(format: "M/d/yyyy")
       build_field_paragraph(" DATE \\@ \"#{format}\" ")
     end
 
@@ -191,7 +189,7 @@ module Uniword
     #
     # @param format [String] Time format (default 'h:mm:ss am/pm')
     # @return [Wordprocessingml::Paragraph]
-    def self.time_field(format: 'h:mm:ss am/pm')
+    def self.time_field(format: "h:mm:ss am/pm")
       build_field_paragraph(" TIME \\@ \"#{format}\" ")
     end
 
@@ -207,7 +205,7 @@ module Uniword
 
         # Begin character (inside a run wrapper)
         fc_begin = Wordprocessingml::FieldChar.new
-        fc_begin.fldCharType = 'begin'
+        fc_begin.fldCharType = "begin"
         para.field_chars << fc_begin
 
         # Instruction text
@@ -217,12 +215,12 @@ module Uniword
 
         # Separate character
         fc_sep = Wordprocessingml::FieldChar.new
-        fc_sep.fldCharType = 'separate'
+        fc_sep.fldCharType = "separate"
         para.field_chars << fc_sep
 
         # End character
         fc_end = Wordprocessingml::FieldChar.new
-        fc_end.fldCharType = 'end'
+        fc_end.fldCharType = "end"
         para.field_chars << fc_end
 
         para

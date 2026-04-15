@@ -47,7 +47,7 @@ module Uniword
         numeric_value = value.to_f
 
         # Handle zero specially - omit unit
-        return '0' if numeric_value.zero? && OMIT_UNIT_FOR_ZERO.include?(unit)
+        return "0" if numeric_value.zero? && OMIT_UNIT_FOR_ZERO.include?(unit)
 
         # Round to specified precision
         rounded = numeric_value.round(precision)
@@ -57,7 +57,7 @@ module Uniword
                       rounded.to_i.to_s
                     else
                       # Format with precision, then remove trailing zeros
-                      Kernel.format("%.#{precision}f", rounded).sub(/\.?0+$/, '')
+                      Kernel.format("%.#{precision}f", rounded).sub(/\.?0+$/, "")
                     end
 
         "#{formatted}#{unit}"
@@ -75,7 +75,7 @@ module Uniword
         return nil if twips.nil?
 
         points = twips.to_f / TWIPS_PER_POINT
-        format(points, 'pt', precision: precision)
+        format(points, "pt", precision: precision)
       end
 
       # Convert twips to inches and format.
@@ -91,7 +91,7 @@ module Uniword
 
         # 1 inch = 1440 twips
         inches = twips.to_f / 1440.0
-        format(inches, 'in', precision: precision)
+        format(inches, "in", precision: precision)
       end
 
       # Format a font size value (typically in half-points).
@@ -106,7 +106,7 @@ module Uniword
         return nil if half_points.nil?
 
         points = half_points.to_f / 2.0
-        format(points, 'pt', precision: precision)
+        format(points, "pt", precision: precision)
       end
 
       # Format percentage value.
@@ -120,7 +120,7 @@ module Uniword
       def self.format_percentage(value, precision: 0)
         return nil if value.nil?
 
-        format(value, '%', precision: precision)
+        format(value, "%", precision: precision)
       end
     end
   end

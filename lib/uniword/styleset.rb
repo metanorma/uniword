@@ -18,13 +18,13 @@ module Uniword
   class StyleSet < Lutaml::Model::Serializable
     # YAML serialization (for bundled stylesets)
     yaml do
-      map 'name', to: :name
-      map 'source_file', to: :source_file
-      map 'styles', to: :styles
+      map "name", to: :name
+      map "source_file", to: :source_file
+      map "styles", to: :styles
     end
 
     # StyleSet name
-    attribute :name, :string, default: -> { 'Custom StyleSet' }
+    attribute :name, :string, default: -> { "Custom StyleSet" }
 
     # Collection of Style objects
     attribute :styles, Uniword::Wordprocessingml::Style, collection: true, initialize_empty: true
@@ -68,21 +68,21 @@ module Uniword
     #
     # @return [Array<Style>] Paragraph styles
     def paragraph_styles
-      styles_by_type('paragraph')
+      styles_by_type("paragraph")
     end
 
     # Get character styles
     #
     # @return [Array<Style>] Character styles
     def character_styles
-      styles_by_type('character')
+      styles_by_type("character")
     end
 
     # Get table styles
     #
     # @return [Array<Style>] Table styles
     def table_styles
-      styles_by_type('table')
+      styles_by_type("table")
     end
 
     # Provide detailed inspection for debugging
@@ -146,9 +146,7 @@ module Uniword
         when :replace
           document.styles_configuration.add_style(style.dup, allow_overwrite: true)
         when :keep_existing
-          unless document.styles_configuration.style_exists?(style.id)
-            document.styles_configuration.add_style(style.dup)
-          end
+          document.styles_configuration.add_style(style.dup) unless document.styles_configuration.style_exists?(style.id)
         when :rename
           if document.styles_configuration.style_exists?(style.id)
             new_style = style.dup

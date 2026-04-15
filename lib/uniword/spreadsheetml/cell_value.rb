@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,10 +12,10 @@ module Uniword
       attribute :text, :string
 
       xml do
-        element 'v'
+        element "v"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_element '', to: :text, render_nil: false
+        map_element "", to: :text, render_nil: false
       end
     end
   end

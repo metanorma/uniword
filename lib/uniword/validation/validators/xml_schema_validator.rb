@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'nokogiri'
+require "zip"
+require "nokogiri"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -26,7 +26,7 @@ module Uniword
       #   puts result.valid? # => true
       class XmlSchemaValidator < LayerValidator
         def layer_name
-          'XML Schema'
+          "XML Schema"
         end
 
         def validate(path)
@@ -48,11 +48,11 @@ module Uniword
         private
 
         def validate_xml_parts(zip, result)
-          xml_entries = zip.entries.select { |e| e.name.end_with?('.xml') }
+          xml_entries = zip.entries.select { |e| e.name.end_with?(".xml") }
 
           if xml_entries.empty?
             result.add_error(
-              'No XML files found in document',
+              "No XML files found in document",
               critical: true
             )
             return

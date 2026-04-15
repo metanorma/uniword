@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module ContentTypes
@@ -13,11 +13,11 @@ module Uniword
       attribute :content_type, :string
 
       xml do
-        element 'Override'
+        element "Override"
         namespace Uniword::Ooxml::Namespaces::ContentTypes
 
-        map_attribute 'PartName', to: :part_name
-        map_attribute 'ContentType', to: :content_type
+        map_attribute "PartName", to: :part_name
+        map_attribute "ContentType", to: :content_type
       end
     end
   end

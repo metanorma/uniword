@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -30,18 +30,18 @@ module Uniword
       end
 
       xml do
-        element 'tr'
+        element "tr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'rsidR', to: :rsid_r, render_nil: false
-        map_attribute 'rsidRPr', to: :rsid_r_pr, render_nil: false
-        map_attribute 'rsidTr', to: :rsid_tr, render_nil: false
-        map_attribute 'paraId', to: :para_id, render_nil: false
-        map_attribute 'textId', to: :text_id, render_nil: false
+        map_attribute "rsidR", to: :rsid_r, render_nil: false
+        map_attribute "rsidRPr", to: :rsid_r_pr, render_nil: false
+        map_attribute "rsidTr", to: :rsid_tr, render_nil: false
+        map_attribute "paraId", to: :para_id, render_nil: false
+        map_attribute "textId", to: :text_id, render_nil: false
 
-        map_element 'trPr', to: :properties, render_nil: false
-        map_element 'tc', to: :cells, render_nil: false
+        map_element "trPr", to: :properties, render_nil: false
+        map_element "tc", to: :cells, render_nil: false
       end
 
       # Get cell count

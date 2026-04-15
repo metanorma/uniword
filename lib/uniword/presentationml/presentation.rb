@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -20,19 +20,19 @@ module Uniword
       attribute :embedded_font_lst, :string
 
       xml do
-        element 'presentation'
+        element "presentation"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'sldMasterIdLst', to: :sld_master_id_lst, render_nil: false
-        map_element 'sldIdLst', to: :sld_id_lst
-        map_element 'notesMasterIdLst', to: :notes_master_id_lst, render_nil: false
-        map_element 'handoutMasterIdLst', to: :handout_master_id_lst, render_nil: false
-        map_element 'sldSz', to: :sld_sz
-        map_element 'notesSz', to: :notes_sz
-        map_element 'defaultTextStyle', to: :default_text_style, render_nil: false
-        map_element 'colorMap', to: :color_map, render_nil: false
-        map_element 'embeddedFontLst', to: :embedded_font_lst, render_nil: false
+        map_element "sldMasterIdLst", to: :sld_master_id_lst, render_nil: false
+        map_element "sldIdLst", to: :sld_id_lst
+        map_element "notesMasterIdLst", to: :notes_master_id_lst, render_nil: false
+        map_element "handoutMasterIdLst", to: :handout_master_id_lst, render_nil: false
+        map_element "sldSz", to: :sld_sz
+        map_element "notesSz", to: :notes_sz
+        map_element "defaultTextStyle", to: :default_text_style, render_nil: false
+        map_element "colorMap", to: :color_map, render_nil: false
+        map_element "embeddedFontLst", to: :embedded_font_lst, render_nil: false
       end
     end
   end

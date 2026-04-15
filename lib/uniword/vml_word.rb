@@ -9,9 +9,9 @@
 
 module Uniword
   module VmlWord
-    autoload :BorderTop, 'uniword/vml_word/border_top'
-    autoload :BorderLeft, 'uniword/vml_word/border_left'
-    autoload :BorderRight, 'uniword/vml_word/border_right'
-    autoload :BorderBottom, 'uniword/vml_word/border_bottom'
+    autoload :BorderTop, "uniword/vml_word/border_top"
+    autoload :BorderLeft, "uniword/vml_word/border_left"
+    autoload :BorderRight, "uniword/vml_word/border_right"
+    autoload :BorderBottom, "uniword/vml_word/border_bottom"
   end
 end

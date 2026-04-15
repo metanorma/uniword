@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'json'
+require "json"
 
 module Uniword
   module Warnings
@@ -105,7 +105,7 @@ module Uniword
       #
       # @return [String] Summary text
       def summary
-        return 'No warnings' unless any?
+        return "No warnings" unless any?
 
         lines = []
         lines << "Found #{total_count} warning(s):"
@@ -114,8 +114,8 @@ module Uniword
         lines << "  Info: #{info_count}"
 
         if @element_counts.any?
-          lines << ''
-          lines << 'Unsupported elements encountered:'
+          lines << ""
+          lines << "Unsupported elements encountered:"
 
           @element_counts.sort_by { |_, count| -count }.each do |element, count|
             lines << "  #{element}: #{count} occurrence(s)"

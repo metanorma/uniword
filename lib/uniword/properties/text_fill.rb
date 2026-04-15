@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -16,13 +16,13 @@ module Uniword
       attribute :color, :string # RGB hex color for solid fill
 
       xml do
-        element 'textFill'
+        element "textFill"
         namespace Ooxml::Namespaces::WordProcessingML
 
         # NOTE: Simplified - actual OOXML has nested solidFill/gradFill elements
         # For now, we store just the color value for basic support
         # Full structure will be added in v2.0
-        map_attribute 'color', to: :color
+        map_attribute "color", to: :color
       end
 
       # Initialize from color value

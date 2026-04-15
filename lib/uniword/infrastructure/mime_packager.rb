@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'securerandom'
-require 'base64'
+require "securerandom"
+require "base64"
 
 module Uniword
   module Infrastructure
@@ -33,10 +33,10 @@ module Uniword
       #
       # @param output_path [String] The output file path
       def package(output_path)
-        raise ArgumentError, 'Output path cannot be nil' if output_path.nil?
-        raise ArgumentError, 'Output path cannot be empty' if output_path.empty?
+        raise ArgumentError, "Output path cannot be nil" if output_path.nil?
+        raise ArgumentError, "Output path cannot be empty" if output_path.empty?
 
-        File.write(output_path, build_mime_content, encoding: 'UTF-8')
+        File.write(output_path, build_mime_content, encoding: "UTF-8")
       end
 
       # Build complete MIME content as string.
@@ -46,9 +46,9 @@ module Uniword
         parts = []
 
         # MIME global header
-        parts << 'MIME-Version: 1.0'
+        parts << "MIME-Version: 1.0"
         parts << "Content-Type: multipart/related; boundary=\"#{boundary}\""
-        parts << ''
+        parts << ""
 
         # HTML part (main document)
         parts << build_part(document.html_part) if document.html_part
@@ -62,7 +62,7 @@ module Uniword
 
         # Final boundary
         parts << "--#{boundary}--"
-        parts << ''
+        parts << ""
 
         parts.join("\r\n")
       end
@@ -78,28 +78,26 @@ module Uniword
 
         # Headers
         lines << "Content-Location: #{part.content_location}" if part.content_location
-        if part.content_transfer_encoding
-          lines << "Content-Transfer-Encoding: #{part.content_transfer_encoding}"
-        end
+        lines << "Content-Transfer-Encoding: #{part.content_transfer_encoding}" if part.content_transfer_encoding
 
         if part.content_type
           ct = part.content_type
           # Add charset for text types
-          ct += '; charset="utf-8"' if ct.start_with?('text/') && !ct.include?('charset')
+          ct += '; charset="utf-8"' if ct.start_with?("text/") && !ct.include?("charset")
           lines << "Content-Type: #{ct}"
         end
 
         lines << "Content-ID: <#{part.content_id}>" if part.content_id
 
         # Empty line separating headers from body
-        lines << ''
+        lines << ""
 
         # Body — encode if needed
         encoding = part.content_transfer_encoding
-        if encoding == 'quoted-printable'
+        if encoding == "quoted-printable"
           # Use decoded_content to avoid double-encoding on round-trip
           body = quoted_printable_encode(part.decoded_content)
-        elsif encoding == 'base64'
+        elsif encoding == "base64"
           begin
             # Decoded content (round-trip: raw_content is already base64)
             body = Base64.strict_encode64(part.decoded_content)
@@ -118,7 +116,7 @@ module Uniword
 
       # Generate unique MIME boundary.
       def generate_boundary
-        salt = SecureRandom.uuid.tr('-', '.')[0..17]
+        salt = SecureRandom.uuid.tr("-", ".")[0..17]
         "----=_NextPart_#{salt}"
       end
 
@@ -134,7 +132,7 @@ module Uniword
           char = byte.chr
           # Encode only '=' and control characters per RFC 2045
           if byte == 61 || byte < 33 || byte > 126
-            result << ('=%02X' % byte)
+            result << ("=%02X" % byte)
             line_length += 3
           else
             result << char

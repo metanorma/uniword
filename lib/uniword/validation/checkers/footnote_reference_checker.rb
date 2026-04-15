@@ -53,25 +53,25 @@ module Uniword
         # @example
         #   result = checker.check(footnote_ref, document)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
+          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
 
           unless config_value(:check_targets_exist, DEFAULTS[:check_targets_exist])
             return ValidationResult.warning(
               link,
-              'Footnote target checking disabled'
+              "Footnote target checking disabled"
             )
           end
 
           unless document
             return ValidationResult.warning(
               link,
-              'Cannot validate without document context'
+              "Cannot validate without document context"
             )
           end
 
           # Extract footnote/endnote ID
           note_id = extract_note_id(link)
-          return ValidationResult.failure(link, 'No footnote ID specified') unless note_id
+          return ValidationResult.failure(link, "No footnote ID specified") unless note_id
 
           # Determine note type
           note_type = determine_note_type(link)

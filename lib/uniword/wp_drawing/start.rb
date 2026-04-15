@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -13,11 +13,11 @@ module Uniword
       attribute :y, :integer
 
       xml do
-        element 'start'
+        element "start"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
 
-        map_attribute 'x', to: :x
-        map_attribute 'y', to: :y
+        map_attribute "x", to: :x
+        map_attribute "y", to: :y
       end
     end
   end

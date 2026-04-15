@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -12,10 +12,10 @@ module Uniword
       attribute :uri, :string
 
       xml do
-        element 'schemaRef'
+        element "schemaRef"
         namespace Uniword::Ooxml::Namespaces::CustomXml
 
-        map_attribute 'uri', to: :uri
+        map_attribute "uri", to: :uri
       end
     end
 
@@ -27,11 +27,11 @@ module Uniword
       attribute :refs, SchemaRef, collection: true, initialize_empty: true
 
       xml do
-        element 'schemaRefs'
+        element "schemaRefs"
         namespace Uniword::Ooxml::Namespaces::CustomXml
         mixed_content
 
-        map_element 'schemaRef', to: :refs, render_nil: false
+        map_element "schemaRef", to: :refs, render_nil: false
       end
     end
 

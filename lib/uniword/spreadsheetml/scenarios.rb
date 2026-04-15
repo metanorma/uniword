@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -14,13 +14,13 @@ module Uniword
       attribute :entries, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'scenarios'
+        element "scenarios"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'current', to: :current
-        map_attribute 'show', to: :show
-        map_element 'scenario', to: :entries, render_nil: false
+        map_attribute "current", to: :current
+        map_attribute "show", to: :show
+        map_element "scenario", to: :entries, render_nil: false
       end
     end
   end

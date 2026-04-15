@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,10 +12,10 @@ module Uniword
       attribute :id, :string
 
       xml do
-        element 'legacyDrawing'
+        element "legacyDrawing"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'id', to: :id
+        map_attribute "id", to: :id
       end
     end
   end

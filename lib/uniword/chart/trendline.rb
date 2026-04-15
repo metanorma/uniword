@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -18,17 +18,17 @@ module Uniword
       attribute :backward, :string
 
       xml do
-        element 'trendline'
+        element "trendline"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'name', to: :name, render_nil: false
-        map_element 'spPr', to: :sp_pr, render_nil: false
-        map_element 'trendlineType', to: :trendline_type
-        map_element 'order', to: :order, render_nil: false
-        map_element 'period', to: :period, render_nil: false
-        map_element 'forward', to: :forward, render_nil: false
-        map_element 'backward', to: :backward, render_nil: false
+        map_element "name", to: :name, render_nil: false
+        map_element "spPr", to: :sp_pr, render_nil: false
+        map_element "trendlineType", to: :trendline_type
+        map_element "order", to: :order, render_nil: false
+        map_element "period", to: :period, render_nil: false
+        map_element "forward", to: :forward, render_nil: false
+        map_element "backward", to: :backward, render_nil: false
       end
     end
   end

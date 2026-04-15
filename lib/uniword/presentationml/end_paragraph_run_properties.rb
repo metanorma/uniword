@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,12 +14,12 @@ module Uniword
       attribute :b, :string
 
       xml do
-        element 'end_para_r_pr'
+        element "end_para_r_pr"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'lang', to: :lang
-        map_attribute 'sz', to: :sz
-        map_attribute 'b', to: :b
+        map_attribute "lang", to: :lang
+        map_attribute "sz", to: :sz
+        map_attribute "b", to: :b
       end
     end
   end

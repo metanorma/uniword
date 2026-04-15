@@ -59,7 +59,7 @@ module Uniword
       #
       # @return [Boolean] true if image
       def image?
-        content_type&.start_with?('image/')
+        content_type&.start_with?("image/")
       end
 
       # Get file extension
@@ -97,9 +97,9 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if invalid
       def validate!
-        raise ArgumentError, 'filename is required' if filename.nil? || filename.empty?
-        raise ArgumentError, 'content is required' if content.nil?
-        raise ArgumentError, 'filename must be a string' unless filename.is_a?(String)
+        raise ArgumentError, "filename is required" if filename.nil? || filename.empty?
+        raise ArgumentError, "content is required" if content.nil?
+        raise ArgumentError, "filename must be a string" unless filename.is_a?(String)
       end
 
       private
@@ -109,18 +109,18 @@ module Uniword
       # @param filename [String] The filename
       # @return [String] MIME content type
       def detect_content_type(filename)
-        return 'application/octet-stream' unless filename
+        return "application/octet-stream" unless filename
 
         ext = File.extname(filename).downcase
 
         case ext
-        when '.jpeg', '.jpg' then 'image/jpeg'
-        when '.png' then 'image/png'
-        when '.gif' then 'image/gif'
-        when '.bmp' then 'image/bmp'
-        when '.tiff', '.tif' then 'image/tiff'
-        when '.svg' then 'image/svg+xml'
-        else 'application/octet-stream'
+        when ".jpeg", ".jpg" then "image/jpeg"
+        when ".png" then "image/png"
+        when ".gif" then "image/gif"
+        when ".bmp" then "image/bmp"
+        when ".tiff", ".tif" then "image/tiff"
+        when ".svg" then "image/svg+xml"
+        else "application/octet-stream"
         end
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Picture
@@ -16,14 +16,14 @@ module Uniword
       attribute :algn, :string
 
       xml do
-        element 'tile'
+        element "tile"
         namespace Uniword::Ooxml::Namespaces::Picture
 
-        map_attribute 'tx', to: :tx
-        map_attribute 'ty', to: :ty
-        map_attribute 'sx', to: :sx
-        map_attribute 'sy', to: :sy
-        map_attribute 'algn', to: :algn
+        map_attribute "tx", to: :tx
+        map_attribute "ty", to: :ty
+        map_attribute "sx", to: :sx
+        map_attribute "sy", to: :sy
+        map_attribute "algn", to: :algn
       end
     end
   end

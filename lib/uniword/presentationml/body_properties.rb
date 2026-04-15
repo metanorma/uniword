@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -16,14 +16,14 @@ module Uniword
       attribute :wrap, :string
 
       xml do
-        element 'body_pr'
+        element "body_pr"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'rot', to: :rot
-        map_attribute 'vert', to: :vert
-        map_attribute 'anchor', to: :anchor
-        map_attribute 'anchorCtr', to: :anchor_ctr
-        map_attribute 'wrap', to: :wrap
+        map_attribute "rot", to: :rot
+        map_attribute "vert", to: :vert
+        map_attribute "anchor", to: :anchor
+        map_attribute "anchorCtr", to: :anchor_ctr
+        map_attribute "wrap", to: :wrap
       end
     end
   end

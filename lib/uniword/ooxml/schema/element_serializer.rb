@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
+require "nokogiri"
 
 module Uniword
   module Ooxml
@@ -51,12 +51,10 @@ module Uniword
             xml_str = element.to_xml(pretty: options[:pretty])
 
             # Remove XML declaration unless standalone
-            xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, '') unless options.fetch(:standalone, false)
+            xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(:standalone, false)
 
             # Add XML declaration if standalone
-            if options.fetch(:standalone, false)
-              xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}"
-            end
+            xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(:standalone, false)
 
             return xml_str.strip
           end
@@ -79,7 +77,7 @@ module Uniword
                     end
 
           # Remove XML declaration unless standalone
-          xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, '') unless options.fetch(:standalone, false)
+          xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(:standalone, false)
 
           # Add XML declaration if standalone
           xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(
@@ -95,7 +93,7 @@ module Uniword
         #
         # @return [OoxmlSchema] Default schema
         def load_default_schema
-          schema_path = File.expand_path('../../../../config/ooxml/schema_main.yml', __dir__)
+          schema_path = File.expand_path("../../../../config/ooxml/schema_main.yml", __dir__)
           OoxmlSchema.load(schema_path)
         end
 
@@ -189,8 +187,8 @@ module Uniword
         # @return [Nokogiri::XML::Node, nil] Created node
         def serialize_child_to_node(doc, child, child_def, options)
           # Get namespace prefix from tag (e.g., 'w:p' -> 'w')
-          tag_parts = child_def.tag.split(':')
-          prefix = tag_parts.length > 1 ? tag_parts.first : 'w'
+          tag_parts = child_def.tag.split(":")
+          prefix = tag_parts.length > 1 ? tag_parts.first : "w"
           local_name = tag_parts.last
           namespace_uri = @schema.namespace[:uri]
 

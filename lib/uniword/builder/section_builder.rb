@@ -43,7 +43,7 @@ module Uniword
       # @param height [Integer] Page height in twips (default US Letter: 15840)
       # @param orientation [String] 'portrait' or 'landscape'
       # @return [self]
-      def page_size(width: 12_240, height: 15_840, orientation: 'portrait')
+      def page_size(width: 12_240, height: 15_840, orientation: "portrait")
         @model.page_size ||= Wordprocessingml::PageSize.new
         @model.page_size.width = width
         @model.page_size.height = height
@@ -101,7 +101,7 @@ module Uniword
       # @param start [Integer] Starting line number
       # @param restart [String] Restart setting ('continuous', 'newPage', 'newSection')
       # @return [self]
-      def line_numbering(count_by: 1, start: 1, restart: 'continuous')
+      def line_numbering(count_by: 1, start: 1, restart: "continuous")
         @model.line_numbering ||= Wordprocessingml::LineNumbering.new
         @model.line_numbering.count_by = count_by
         @model.line_numbering.start = start
@@ -129,7 +129,7 @@ module Uniword
       # @param type [String] Header type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for header content
       # @return [HeaderFooterBuilder] The header/footer builder
-      def header(type: 'default', &block)
+      def header(type: "default", &block)
         hf = HeaderFooterBuilder.new(:header, type: type)
         block.call(hf) if block_given?
 
@@ -148,7 +148,7 @@ module Uniword
       # @param type [String] Footer type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for footer content
       # @return [HeaderFooterBuilder] The header/footer builder
-      def footer(type: 'default', &block)
+      def footer(type: "default", &block)
         hf = HeaderFooterBuilder.new(:footer, type: type)
         block.call(hf) if block_given?
 

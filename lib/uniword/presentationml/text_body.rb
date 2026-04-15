@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,13 +14,13 @@ module Uniword
       attribute :p, Paragraph, collection: true, initialize_empty: true
 
       xml do
-        element 'tx_body'
+        element "tx_body"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'bodyPr', to: :body_pr
-        map_element 'lstStyle', to: :lst_style, render_nil: false
-        map_element 'p', to: :p
+        map_element "bodyPr", to: :body_pr
+        map_element "lstStyle", to: :lst_style, render_nil: false
+        map_element "p", to: :p
       end
     end
   end

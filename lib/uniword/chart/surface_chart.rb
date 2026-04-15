@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -15,14 +15,14 @@ module Uniword
       attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
-        element 'surfaceChart'
+        element "surfaceChart"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'wireframe', to: :wireframe, render_nil: false
-        map_element 'ser', to: :series, render_nil: false
-        map_element 'bandFmts', to: :band_fmts, render_nil: false
-        map_element 'axId', to: :ax_id
+        map_element "wireframe", to: :wireframe, render_nil: false
+        map_element "ser", to: :series, render_nil: false
+        map_element "bandFmts", to: :band_fmts, render_nil: false
+        map_element "axId", to: :ax_id
       end
     end
   end

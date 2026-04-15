@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -21,20 +21,20 @@ module Uniword
       attribute :alignment, Alignment
 
       xml do
-        element 'xf'
+        element "xf"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
         mixed_content
 
-        map_attribute 'num-fmt-id', to: :num_fmt_id
-        map_attribute 'font-id', to: :font_id
-        map_attribute 'fill-id', to: :fill_id
-        map_attribute 'border-id', to: :border_id
-        map_attribute 'apply-number-format', to: :apply_number_format
-        map_attribute 'apply-font', to: :apply_font
-        map_attribute 'apply-fill', to: :apply_fill
-        map_attribute 'apply-border', to: :apply_border
-        map_attribute 'apply-alignment', to: :apply_alignment
-        map_element 'alignment', to: :alignment, render_nil: false
+        map_attribute "num-fmt-id", to: :num_fmt_id
+        map_attribute "font-id", to: :font_id
+        map_attribute "fill-id", to: :fill_id
+        map_attribute "border-id", to: :border_id
+        map_attribute "apply-number-format", to: :apply_number_format
+        map_attribute "apply-font", to: :apply_font
+        map_attribute "apply-fill", to: :apply_fill
+        map_attribute "apply-border", to: :apply_border
+        map_attribute "apply-alignment", to: :apply_alignment
+        map_element "alignment", to: :alignment, render_nil: false
       end
     end
   end

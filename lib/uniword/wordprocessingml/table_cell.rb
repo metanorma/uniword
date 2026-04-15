@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -22,13 +22,13 @@ module Uniword
       attribute :background_color, :string
 
       xml do
-        element 'tc'
+        element "tc"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_element 'tcPr', to: :properties, render_nil: false
-        map_element 'p', to: :paragraphs, render_nil: false
-        map_element 'tbl', to: :tables, render_nil: false
+        map_element "tcPr", to: :properties, render_nil: false
+        map_element "p", to: :paragraphs, render_nil: false
+        map_element "tbl", to: :tables, render_nil: false
       end
 
       # Accept visitor

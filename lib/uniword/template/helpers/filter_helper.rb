@@ -31,25 +31,25 @@ module Uniword
         # @return [Object] Filtered value
         def apply(value, filter_name, *args)
           case filter_name.to_s
-          when 'format'
-            apply_format(value, args.first || '%Y-%m-%d')
-          when 'upcase'
+          when "format"
+            apply_format(value, args.first || "%Y-%m-%d")
+          when "upcase"
             value.to_s.upcase
-          when 'downcase'
+          when "downcase"
             value.to_s.downcase
-          when 'titleize'
+          when "titleize"
             titleize(value.to_s)
-          when 'capitalize'
+          when "capitalize"
             value.to_s.capitalize
-          when 'currency'
-            apply_currency(value, args.first || 'USD')
-          when 'number'
+          when "currency"
+            apply_currency(value, args.first || "USD")
+          when "number"
             apply_number_format(value, args.first)
-          when 'truncate'
+          when "truncate"
             truncate(value.to_s, args.first&.to_i || 30)
-          when 'strip'
+          when "strip"
             value.to_s.strip
-          when 'reverse'
+          when "reverse"
             value.to_s.reverse
           else
             # Unknown filter - return value unchanged
@@ -81,7 +81,7 @@ module Uniword
         # @return [String] Formatted currency
         def apply_currency(value, currency)
           num = value.to_f
-          formatted = format('%.2f', num)
+          formatted = format("%.2f", num)
           "#{currency} #{formatted}"
         rescue StandardError
           value.to_s
@@ -105,7 +105,7 @@ module Uniword
         # @param text [String] Text to convert
         # @return [String] Title case text
         def titleize(text)
-          text.split(/\s+/).map(&:capitalize).join(' ')
+          text.split(/\s+/).map(&:capitalize).join(" ")
         end
 
         # Truncate text to length

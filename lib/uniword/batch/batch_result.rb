@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'json'
-require 'yaml'
-require 'csv'
+require "json"
+require "yaml"
+require "csv"
 
 module Uniword
   module Batch
@@ -66,7 +66,7 @@ module Uniword
       # @return [self]
       def add_failure(file:, error:, stage: nil, metadata: {})
         error_message = error.is_a?(Exception) ? error.message : error.to_s
-        error_class = error.is_a?(Exception) ? error.class.name : 'Error'
+        error_class = error.is_a?(Exception) ? error.class.name : "Error"
 
         @failures << {
           file: file,
@@ -153,8 +153,8 @@ module Uniword
       # @return [String] Summary text
       def summary_text
         lines = []
-        lines << 'Batch Processing Results'
-        lines << ('=' * 40)
+        lines << "Batch Processing Results"
+        lines << ("=" * 40)
         lines << "Total files:      #{total_count}"
         lines << "Successful:       #{success_count}"
         lines << "Failed:           #{failure_count}"
@@ -185,9 +185,9 @@ module Uniword
       # @return [self]
       def export_yaml(path)
         data = {
-          'summary' => summary,
-          'successes' => successes.map { |s| stringify_keys(s) },
-          'failures' => failures.map { |f| stringify_keys(f) }
+          "summary" => summary,
+          "successes" => successes.map { |s| stringify_keys(s) },
+          "failures" => failures.map { |f| stringify_keys(f) }
         }
 
         File.write(path, YAML.dump(data))
@@ -199,7 +199,7 @@ module Uniword
       # @param path [String] Output file path
       # @return [self]
       def export_csv(path)
-        CSV.open(path, 'wb') do |csv|
+        CSV.open(path, "wb") do |csv|
           # Header row
           csv << %w[File Status Duration Error Stage]
 
@@ -207,10 +207,10 @@ module Uniword
           successes.each do |success|
             csv << [
               success[:file],
-              'SUCCESS',
+              "SUCCESS",
               success[:duration],
-              '',
-              success[:stages].join(', ')
+              "",
+              success[:stages].join(", ")
             ]
           end
 
@@ -218,10 +218,10 @@ module Uniword
           failures.each do |failure|
             csv << [
               failure[:file],
-              'FAILURE',
-              '',
+              "FAILURE",
+              "",
               failure[:error],
-              failure[:stage] || ''
+              failure[:stage] || ""
             ]
           end
         end

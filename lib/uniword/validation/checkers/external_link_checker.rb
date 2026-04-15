@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 # LinkChecker autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -43,7 +43,7 @@ module Uniword
           follow_redirects: true,
           max_redirects: 5,
           check_ssl: true,
-          user_agent: 'Uniword Link Validator/1.0'
+          user_agent: "Uniword Link Validator/1.0"
         }.freeze
 
         # Check if this checker can validate the given link.
@@ -70,7 +70,7 @@ module Uniword
         # @example
         #   result = checker.check(hyperlink)
         def check(link, _document = nil)
-          return ValidationResult.unknown(link, 'Checker disabled') unless enabled?
+          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
 
           url = link.url
           retry_count = config_value(:retry_count, DEFAULTS[:retry_count])
@@ -133,13 +133,13 @@ module Uniword
               unless config_value(:follow_redirects, DEFAULTS[:follow_redirects])
                 return ValidationResult.warning(
                   link,
-                  "Redirect detected: #{status_code} to #{response['location']}",
-                  metadata: { status_code: status_code, location: response['location'] }
+                  "Redirect detected: #{status_code} to #{response["location"]}",
+                  metadata: { status_code: status_code, location: response["location"] }
                 )
               end
 
               # Follow redirect
-              location = response['location']
+              location = response["location"]
               uri = URI.parse(location)
               next
             end
@@ -155,7 +155,7 @@ module Uniword
         rescue SocketError => e
           ValidationResult.failure(link, "Host not found: #{e.message}")
         rescue Timeout::Error
-          ValidationResult.failure(link, 'Request timeout')
+          ValidationResult.failure(link, "Request timeout")
         rescue StandardError => e
           ValidationResult.failure(
             link,
@@ -176,13 +176,13 @@ module Uniword
           Net::HTTP.start(
             uri.host,
             uri.port,
-            use_ssl: uri.scheme == 'https',
+            use_ssl: uri.scheme == "https",
             verify_mode: check_ssl ? OpenSSL::SSL::VERIFY_PEER : OpenSSL::SSL::VERIFY_NONE,
             open_timeout: timeout,
             read_timeout: timeout
           ) do |http|
             request = Net::HTTP::Head.new(uri.request_uri)
-            request['User-Agent'] = user_agent
+            request["User-Agent"] = user_agent
             http.request(request)
           end
         end

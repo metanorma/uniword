@@ -27,12 +27,12 @@ module Uniword
       # Rule class registry
       # Maps rule names to their class implementations
       RULE_CLASSES = {
-        heading_hierarchy: 'HeadingHierarchyRule',
-        table_headers: 'TableHeaderRule',
-        paragraph_length: 'ParagraphLengthRule',
-        image_alt_text: 'ImageAltTextRule',
-        link_validation: 'LinkValidationRule',
-        style_consistency: 'StyleConsistencyRule'
+        heading_hierarchy: "HeadingHierarchyRule",
+        table_headers: "TableHeaderRule",
+        paragraph_length: "ParagraphLengthRule",
+        image_alt_text: "ImageAltTextRule",
+        link_validation: "LinkValidationRule",
+        style_consistency: "StyleConsistencyRule"
       }.freeze
 
       # Initialize document checker
@@ -94,7 +94,7 @@ module Uniword
           Configuration::ConfigurationLoader.load_file(rules_file)
         else
           # Load default quality_rules.yml
-          Configuration::ConfigurationLoader.load('quality_rules')
+          Configuration::ConfigurationLoader.load("quality_rules")
         end
       rescue Configuration::ConfigurationError => e
         raise QualityCheckError,
@@ -136,7 +136,7 @@ module Uniword
         return if document.respond_to?(:paragraphs) && document.respond_to?(:tables)
 
         raise ArgumentError,
-              'Document must respond to :paragraphs and :tables methods'
+              "Document must respond to :paragraphs and :tables methods"
       end
     end
 

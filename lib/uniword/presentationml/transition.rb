@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -17,16 +17,16 @@ module Uniword
       attribute :split, :string
 
       xml do
-        element 'transition'
+        element "transition"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_attribute 'spd', to: :spd
-        map_attribute 'advTm', to: :advTm
-        map_element 'fade', to: :fade, render_nil: false
-        map_element 'push', to: :push, render_nil: false
-        map_element 'wipe', to: :wipe, render_nil: false
-        map_element 'split', to: :split, render_nil: false
+        map_attribute "spd", to: :spd
+        map_attribute "advTm", to: :advTm
+        map_element "fade", to: :fade, render_nil: false
+        map_element "push", to: :push, render_nil: false
+        map_element "wipe", to: :wipe, render_nil: false
+        map_element "split", to: :split, render_nil: false
       end
     end
   end

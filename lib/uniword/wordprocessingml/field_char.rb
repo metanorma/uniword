@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :dirty, :boolean
 
       xml do
-        element 'fldChar'
+        element "fldChar"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'fldCharType', to: :fldCharType
-        map_attribute 'dirty', to: :dirty
+        map_attribute "fldCharType", to: :fldCharType
+        map_attribute "dirty", to: :dirty
       end
     end
   end

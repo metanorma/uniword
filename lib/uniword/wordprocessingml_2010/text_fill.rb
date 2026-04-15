@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -14,13 +14,13 @@ module Uniword
       attribute :no_fill, :string
 
       xml do
-        element 'textFill'
+        element "textFill"
         namespace Uniword::Ooxml::Namespaces::Word2010
         mixed_content
 
-        map_element 'solidFill', to: :solid_fill, render_nil: false
-        map_element 'gradFill', to: :gradient_fill, render_nil: false
-        map_element 'noFill', to: :no_fill, render_nil: false
+        map_element "solidFill", to: :solid_fill, render_nil: false
+        map_element "gradFill", to: :gradient_fill, render_nil: false
+        map_element "noFill", to: :no_fill, render_nil: false
       end
     end
   end

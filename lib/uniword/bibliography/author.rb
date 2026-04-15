@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Bibliography
@@ -15,7 +15,7 @@ module Uniword
       xml do
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
-        map_element 'NameList', to: :name_list, render_nil: false
+        map_element "NameList", to: :name_list, render_nil: false
       end
     end
 
@@ -52,28 +52,28 @@ module Uniword
       attribute :performer, Author
 
       xml do
-        element 'Author'
+        element "Author"
         namespace Uniword::Ooxml::Namespaces::Bibliography
         mixed_content
 
-        map_element 'NameList', to: :name_list, render_nil: false
-        map_element 'Corporate', to: :corporate, render_nil: false
-        map_element 'Artist', to: :artist, render_nil: false
-        map_element 'Author', to: :author, render_nil: false
-        map_element 'BookAuthor', to: :book_author, render_nil: false
-        map_element 'Compiler', to: :compiler, render_nil: false
-        map_element 'Composer', to: :composer, render_nil: false
-        map_element 'Conductor', to: :conductor, render_nil: false
-        map_element 'Counsel', to: :counsel, render_nil: false
-        map_element 'Director', to: :director, render_nil: false
-        map_element 'Editor', to: :editor, render_nil: false
-        map_element 'Interviewee', to: :interviewee, render_nil: false
-        map_element 'Interviewer', to: :interviewer, render_nil: false
-        map_element 'Inventor', to: :inventor, render_nil: false
-        map_element 'Performer', to: :performer, render_nil: false
-        map_element 'ProducerName', to: :producer_name, render_nil: false
-        map_element 'Translator', to: :translator, render_nil: false
-        map_element 'Writer', to: :writer, render_nil: false
+        map_element "NameList", to: :name_list, render_nil: false
+        map_element "Corporate", to: :corporate, render_nil: false
+        map_element "Artist", to: :artist, render_nil: false
+        map_element "Author", to: :author, render_nil: false
+        map_element "BookAuthor", to: :book_author, render_nil: false
+        map_element "Compiler", to: :compiler, render_nil: false
+        map_element "Composer", to: :composer, render_nil: false
+        map_element "Conductor", to: :conductor, render_nil: false
+        map_element "Counsel", to: :counsel, render_nil: false
+        map_element "Director", to: :director, render_nil: false
+        map_element "Editor", to: :editor, render_nil: false
+        map_element "Interviewee", to: :interviewee, render_nil: false
+        map_element "Interviewer", to: :interviewer, render_nil: false
+        map_element "Inventor", to: :inventor, render_nil: false
+        map_element "Performer", to: :performer, render_nil: false
+        map_element "ProducerName", to: :producer_name, render_nil: false
+        map_element "Translator", to: :translator, render_nil: false
+        map_element "Writer", to: :writer, render_nil: false
       end
     end
   end

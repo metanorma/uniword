@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -14,13 +14,13 @@ module Uniword
       attribute :pos_offset, :integer
 
       xml do
-        element 'positionH'
+        element "positionH"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'relative-from', to: :relative_from
-        map_element '', to: :align, render_nil: false
-        map_element 'posOffset', to: :pos_offset, render_nil: false
+        map_attribute "relative-from", to: :relative_from
+        map_element "", to: :align, render_nil: false
+        map_element "posOffset", to: :pos_offset, render_nil: false
       end
     end
   end

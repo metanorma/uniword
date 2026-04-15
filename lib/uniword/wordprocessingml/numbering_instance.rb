@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -16,20 +16,18 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element 'num'
+        element "num"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'numId', to: :num_id
+        map_attribute "numId", to: :num_id
         # w16cid:durableId - typed attribute with namespace
-        map_attribute 'durableId', to: :durable_id, render_nil: false
-        map_element 'abstractNumId', to: :abstract_num_id, render_nil: false
+        map_attribute "durableId", to: :durable_id, render_nil: false
+        map_element "abstractNumId", to: :abstract_num_id, render_nil: false
       end
 
       def initialize(attrs = {})
         # Normalize abstract_num_id: accept either AbstractNumId object or plain integer
-        if attrs[:abstract_num_id] && !attrs[:abstract_num_id].is_a?(AbstractNumId)
-          attrs[:abstract_num_id] = AbstractNumId.new(val: attrs[:abstract_num_id])
-        end
+        attrs[:abstract_num_id] = AbstractNumId.new(val: attrs[:abstract_num_id]) if attrs[:abstract_num_id] && !attrs[:abstract_num_id].is_a?(AbstractNumId)
         super
         validate_ids
       end
@@ -44,11 +42,11 @@ module Uniword
       private
 
       def validate_ids
-        raise ArgumentError, 'num_id must be >= 1' if num_id && num_id < 1
+        raise ArgumentError, "num_id must be >= 1" if num_id && num_id < 1
 
         return unless abstract_num_id&.val&.negative?
 
-        raise ArgumentError, 'abstract_num_id must be >= 0'
+        raise ArgumentError, "abstract_num_id must be >= 0"
       end
     end
   end

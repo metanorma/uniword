@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -15,11 +15,11 @@ module Uniword
         attribute :prefix_mappings, :string
 
         xml do
-          element 'dataBinding'
+          element "dataBinding"
           namespace Ooxml::Namespaces::WordProcessingML
-          map_attribute 'xpath', to: :xpath, render_nil: false
-          map_attribute 'storeItemID', to: :store_item_id, render_nil: false
-          map_attribute 'prefixMappings', to: :prefix_mappings, render_nil: false
+          map_attribute "xpath", to: :xpath, render_nil: false
+          map_attribute "storeItemID", to: :store_item_id, render_nil: false
+          map_attribute "prefixMappings", to: :prefix_mappings, render_nil: false
         end
       end
     end

@@ -21,15 +21,15 @@ module Uniword
   class Comment < Element
     # OOXML namespace configuration for comments
     xml do
-      element 'comment'
+      element "comment"
       namespace Ooxml::Namespaces::WordProcessingML
 
-      map_attribute 'id', to: :comment_id
-      map_attribute 'author', to: :author
-      map_attribute 'date', to: :date
-      map_attribute 'initials', to: :initials
+      map_attribute "id", to: :comment_id
+      map_attribute "author", to: :author
+      map_attribute "date", to: :date
+      map_attribute "initials", to: :initials
 
-      map_element 'p', to: :paragraphs
+      map_element "p", to: :paragraphs
     end
 
     # Unique comment identifier (required in OOXML)
@@ -105,7 +105,7 @@ module Uniword
     # @return [String] A readable representation of the comment
     def inspect
       text_preview = text[0..50]
-      text_preview += '...' if text.length > 50
+      text_preview += "..." if text.length > 50
       "#<Uniword::Comment id=#{comment_id.inspect} author=#{author.inspect} text=#{text_preview.inspect}>"
     end
 

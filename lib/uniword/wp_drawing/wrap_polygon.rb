@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module WpDrawing
@@ -14,13 +14,13 @@ module Uniword
       attribute :line_to, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'wrapPolygon'
+        element "wrapPolygon"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute 'edited', to: :edited
-        map_element '', to: :start, render_nil: false
-        map_element 'lineTo', to: :line_to, render_nil: false
+        map_attribute "edited", to: :edited
+        map_element "", to: :start, render_nil: false
+        map_element "lineTo", to: :line_to, render_nil: false
       end
     end
   end

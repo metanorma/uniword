@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -12,10 +12,10 @@ module Uniword
       attribute :justification, MathSimpleVal
 
       xml do
-        element 'oMathParaPr'
+        element "oMathParaPr"
         namespace Uniword::Ooxml::Namespaces::MathML
 
-        map_element 'jc', to: :justification, render_nil: false
+        map_element "jc", to: :justification, render_nil: false
       end
     end
   end

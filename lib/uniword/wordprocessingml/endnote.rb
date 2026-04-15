@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -14,13 +14,13 @@ module Uniword
       attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
 
       xml do
-        element 'endnote'
+        element "endnote"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        map_attribute 'id', to: :id
-        map_attribute 'type', to: :type
-        map_element 'p', to: :paragraphs, render_nil: false
+        map_attribute "id", to: :id
+        map_attribute "type", to: :type
+        map_element "p", to: :paragraphs, render_nil: false
       end
     end
   end

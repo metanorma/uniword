@@ -37,7 +37,7 @@ module Uniword
           violations << create_violation(
             severity: :warning,
             message: "Table #{index + 1} does not have a header row. " \
-                     'Headers improve accessibility and readability.',
+                     "Headers improve accessibility and readability.",
             location: "Table #{index + 1}",
             element: table
           )

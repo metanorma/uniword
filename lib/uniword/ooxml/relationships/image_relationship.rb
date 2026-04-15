@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -12,7 +12,7 @@ module Uniword
         def initialize(target:)
           super(
             id: "rId#{SecureRandom.hex(4)}",
-            type: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/image',
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
             target: target
           )
         end

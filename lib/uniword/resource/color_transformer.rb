@@ -59,7 +59,7 @@ module Uniword
       # @param hex [String] Hex color code
       # @return [Hash] RGB hash with :r, :g, :b keys
       def self.hex_to_rgb(hex)
-        hex = hex.sub(/^#/, '')
+        hex = hex.sub(/^#/, "")
         { r: hex[0..1].to_i(16), g: hex[2..3].to_i(16), b: hex[4..5].to_i(16) }
       end
 
@@ -68,7 +68,7 @@ module Uniword
       # @param rgb [Hash] RGB hash with :r, :g, :b keys
       # @return [String] Hex color code with # prefix
       def self.rgb_to_hex(rgb)
-        format('#%02X%02X%02X', rgb[:r], rgb[:g], rgb[:b])
+        format("#%02X%02X%02X", rgb[:r], rgb[:g], rgb[:b])
       end
 
       # Convert RGB to HSL

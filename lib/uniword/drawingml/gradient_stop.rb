@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :scheme_clr, SchemeColor
 
       xml do
-        element 'gs'
+        element "gs"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'pos', to: :pos
-        map_element 'srgbClr', to: :srgb_clr, render_nil: false
-        map_element 'schemeClr', to: :scheme_clr, render_nil: false
+        map_attribute "pos", to: :pos
+        map_element "srgbClr", to: :srgb_clr, render_nil: false
+        map_element "schemeClr", to: :scheme_clr, render_nil: false
       end
     end
   end

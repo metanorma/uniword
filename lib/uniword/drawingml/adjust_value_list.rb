@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :guides, GeometryGuide, collection: true, initialize_empty: true
 
       xml do
-        element 'avLst'
+        element "avLst"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_element 'gd', to: :guides, render_nil: false
+        map_element "gd", to: :guides, render_nil: false
       end
     end
   end

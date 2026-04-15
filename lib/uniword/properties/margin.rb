@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -14,8 +14,8 @@ module Uniword
       xml do
         # This is a helper class, child elements define root
         namespace Ooxml::Namespaces::WordProcessingML
-        map_attribute 'w', to: :w
-        map_attribute 'type', to: :type, render_nil: false
+        map_attribute "w", to: :w
+        map_attribute "type", to: :type, render_nil: false
       end
     end
   end

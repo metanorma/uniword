@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2016
@@ -13,11 +13,11 @@ module Uniword
       attribute :video_url, :string
 
       xml do
-        element 'webVideoProperty'
+        element "webVideoProperty"
         namespace Uniword::Ooxml::Namespaces::Word2015
 
-        map_attribute 'embed-code', to: :embed_code
-        map_attribute 'video-url', to: :video_url
+        map_attribute "embed-code", to: :embed_code
+        map_attribute "video-url", to: :video_url
       end
     end
   end

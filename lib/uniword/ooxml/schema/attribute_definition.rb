@@ -30,7 +30,7 @@ module Uniword
           @required = definition.fetch(:required, false)
           @values = definition[:values] # For enum types
           @namespace = definition[:namespace]
-          @prefix = definition[:prefix] || 'w'
+          @prefix = definition[:prefix] || "w"
           @property = definition[:property] # Custom property name mapping
         end
 
@@ -69,7 +69,7 @@ module Uniword
           when :integer
             value.is_a?(Integer) || value.to_s.match?(/^\d+$/)
           when :boolean
-            [true, false, 'true', 'false', '1', '0'].include?(value)
+            [true, false, "true", "false", "1", "0"].include?(value)
           when :string
             true # Any value acceptable
           else
@@ -94,12 +94,12 @@ module Uniword
           return @property.to_sym if @property
 
           # Remove namespace prefix if present
-          name_str = @tag.to_s.sub(/^w:/, '').sub(/^r:/, '')
+          name_str = @tag.to_s.sub(/^w:/, "").sub(/^r:/, "")
 
           # Convert camelCase to snake_case
           name_str.gsub(/([A-Z])/, '_\1')
                   .downcase
-                  .sub(/^_/, '')
+                  .sub(/^_/, "")
                   .to_sym
         end
 
@@ -115,7 +115,7 @@ module Uniword
         def format_value(value)
           case @type
           when :boolean
-            value ? '1' : '0'
+            value ? "1" : "0"
           when :integer
             value.to_i.to_s
           when :enum
@@ -133,7 +133,7 @@ module Uniword
         # @example Attribute names
         #   attribute_name  # => "w:val" or "r:id"
         def attribute_name
-          if @namespace && @prefix != 'w'
+          if @namespace && @prefix != "w"
             "#{@prefix}:#{@name}"
           else
             @tag
@@ -151,7 +151,7 @@ module Uniword
 
           raise ArgumentError,
                 "Invalid value '#{value}' for attribute #{@name}. " \
-                "Valid values: #{@values.join(', ')}"
+                "Valid values: #{@values.join(", ")}"
         end
       end
     end

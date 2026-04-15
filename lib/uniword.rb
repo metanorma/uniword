@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require 'nokogiri'
-require 'zip'
+require "lutaml/model"
+require "nokogiri"
+require "zip"
 
 # Configure lutaml-model to use Nokogiri adapter for XML
 Lutaml::Model::Config.xml_adapter_type = :nokogiri
@@ -33,151 +33,151 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 # @see DocumentFactory Factory for reading documents
 module Uniword
   # Version constant
-  autoload :VERSION, 'uniword/version'
+  autoload :VERSION, "uniword/version"
 
   # === Namespace Modules (autoload) ===
   # All autoloads MUST be inside the module they're registering constants for
 
   # OOXML module with Namespaces autoload chain
-  autoload :Ooxml, 'uniword/ooxml'
+  autoload :Ooxml, "uniword/ooxml"
 
   # Properties module
-  autoload :Properties, 'uniword/properties'
+  autoload :Properties, "uniword/properties"
 
   # XML namespace modules
-  autoload :Wordprocessingml, 'uniword/wordprocessingml'
-  autoload :WpDrawing, 'uniword/wp_drawing'
-  autoload :Drawingml, 'uniword/drawingml'
-  autoload :Vml, 'uniword/vml'
-  autoload :VmlWord, 'uniword/vml_word'
-  autoload :WordprocessingShape, 'uniword/wordprocessing_shape'
-  autoload :WordprocessingGroup, 'uniword/wordprocessing_group'
-  autoload :Math, 'uniword/math'
-  autoload :SharedTypes, 'uniword/shared_types'
+  autoload :Wordprocessingml, "uniword/wordprocessingml"
+  autoload :WpDrawing, "uniword/wp_drawing"
+  autoload :Drawingml, "uniword/drawingml"
+  autoload :Vml, "uniword/vml"
+  autoload :VmlWord, "uniword/vml_word"
+  autoload :WordprocessingShape, "uniword/wordprocessing_shape"
+  autoload :WordprocessingGroup, "uniword/wordprocessing_group"
+  autoload :Math, "uniword/math"
+  autoload :SharedTypes, "uniword/shared_types"
 
   # === Infrastructure Classes (autoload) ===
-  autoload :DocumentFactory, 'uniword/document_factory'
-  autoload :DocumentWriter, 'uniword/document_writer'
-  autoload :ThemeWriter, 'uniword/theme_writer'
-  autoload :FormatDetector, 'uniword/format_detector'
+  autoload :DocumentFactory, "uniword/document_factory"
+  autoload :DocumentWriter, "uniword/document_writer"
+  autoload :ThemeWriter, "uniword/theme_writer"
+  autoload :FormatDetector, "uniword/format_detector"
 
   # Error classes
-  autoload :Error, 'uniword/errors'
-  autoload :FileNotFoundError, 'uniword/errors'
-  autoload :InvalidFormatError, 'uniword/errors'
-  autoload :CorruptedFileError, 'uniword/errors'
-  autoload :ValidationError, 'uniword/errors'
-  autoload :ReadOnlyError, 'uniword/errors'
-  autoload :DependencyError, 'uniword/errors'
-  autoload :UnsupportedOperationError, 'uniword/errors'
-  autoload :ConversionError, 'uniword/errors'
+  autoload :Error, "uniword/errors"
+  autoload :FileNotFoundError, "uniword/errors"
+  autoload :InvalidFormatError, "uniword/errors"
+  autoload :CorruptedFileError, "uniword/errors"
+  autoload :ValidationError, "uniword/errors"
+  autoload :ReadOnlyError, "uniword/errors"
+  autoload :DependencyError, "uniword/errors"
+  autoload :UnsupportedOperationError, "uniword/errors"
+  autoload :ConversionError, "uniword/errors"
 
   # Styles (moved to wordprocessingml/styles/)
-  autoload :Styles, 'uniword/wordprocessingml/styles'
+  autoload :Styles, "uniword/wordprocessingml/styles"
 
   # Namespace autoloads (autoloads done in immediate parent namespace files)
-  autoload :Template, 'uniword/template'
-  autoload :Visitor, 'uniword/visitor'
-  autoload :Validators, 'uniword/validators'
-  autoload :Stylesets, 'uniword/stylesets'
-  autoload :Infrastructure, 'uniword/infrastructure'
-  autoload :Accessibility, 'uniword/accessibility'
-  autoload :Assembly, 'uniword/assembly'
-  autoload :Batch, 'uniword/batch'
-  autoload :Metadata, 'uniword/metadata'
-  autoload :Quality, 'uniword/quality'
-  autoload :Schema, 'uniword/schema'
+  autoload :Template, "uniword/template"
+  autoload :Visitor, "uniword/visitor"
+  autoload :Validators, "uniword/validators"
+  autoload :Stylesets, "uniword/stylesets"
+  autoload :Infrastructure, "uniword/infrastructure"
+  autoload :Accessibility, "uniword/accessibility"
+  autoload :Assembly, "uniword/assembly"
+  autoload :Batch, "uniword/batch"
+  autoload :Metadata, "uniword/metadata"
+  autoload :Quality, "uniword/quality"
+  autoload :Schema, "uniword/schema"
 
   # Namespace autoloads (Phase 2 of autoload migration)
-  autoload :Configuration, 'uniword/configuration'
-  autoload :Transformation, 'uniword/transformation'
-  autoload :Validation, 'uniword/validation'
-  autoload :Warnings, 'uniword/warnings'
-  autoload :Mhtml, 'uniword/mhtml'
-  autoload :Themes, 'uniword/themes'
-  autoload :Resource, 'uniword/resource'
+  autoload :Configuration, "uniword/configuration"
+  autoload :Transformation, "uniword/transformation"
+  autoload :Validation, "uniword/validation"
+  autoload :Warnings, "uniword/warnings"
+  autoload :Mhtml, "uniword/mhtml"
+  autoload :Themes, "uniword/themes"
+  autoload :Resource, "uniword/resource"
 
   # Stylesets and numbering (moved to wordprocessingml/)
-  autoload :StyleSet, 'uniword/styleset'
+  autoload :StyleSet, "uniword/styleset"
 
   # Content types and document properties
-  autoload :ContentTypes, 'uniword/content_types'
-  autoload :DocumentProperties, 'uniword/document_properties'
-  autoload :Glossary, 'uniword/glossary'
-  autoload :HtmlImporter, 'uniword/html_importer'
+  autoload :ContentTypes, "uniword/content_types"
+  autoload :DocumentProperties, "uniword/document_properties"
+  autoload :Glossary, "uniword/glossary"
+  autoload :HtmlImporter, "uniword/html_importer"
 
   # Builder API (construction layer for OOXML models)
-  autoload :Builder, 'uniword/builder'
+  autoload :Builder, "uniword/builder"
 
   # CLI
-  autoload :CLI, 'uniword/cli'
+  autoload :CLI, "uniword/cli"
 
   # Word implementation detection
-  autoload :WordImplementation, 'uniword/word_implementation'
-  autoload :WordImplementationFactory, 'uniword/word_implementation_factory'
-  autoload :WordImplementationMacos, 'uniword/word_implementation_macos'
-  autoload :WordImplementationWindows, 'uniword/word_implementation_windows'
-  autoload :WordImplementationLinux, 'uniword/word_implementation_linux'
-  autoload :WordImplementationNull, 'uniword/word_implementation_null'
+  autoload :WordImplementation, "uniword/word_implementation"
+  autoload :WordImplementationFactory, "uniword/word_implementation_factory"
+  autoload :WordImplementationMacos, "uniword/word_implementation_macos"
+  autoload :WordImplementationWindows, "uniword/word_implementation_windows"
+  autoload :WordImplementationLinux, "uniword/word_implementation_linux"
+  autoload :WordImplementationNull, "uniword/word_implementation_null"
 
   # === Top-Level Classes (autoload) ===
-  autoload :Element, 'uniword/element'
+  autoload :Element, "uniword/element"
 
   # Document structure and components
-  autoload :Bibliography, 'uniword/bibliography'
-  autoload :Bookmark, 'uniword/bookmark'
-  autoload :Chart, 'uniword/chart'
-  autoload :Comment, 'uniword/comment'
-  autoload :CommentRange, 'uniword/comment_range'
-  autoload :CommentsPart, 'uniword/comments_part'
-  autoload :DocumentVariables, 'uniword/document_variables'
-  autoload :Endnote, 'uniword/endnote'
-  autoload :Field, 'uniword/field'
-  autoload :Footer, 'uniword/footer'
-  autoload :Footnote, 'uniword/footnote'
-  autoload :Header, 'uniword/header'
-  autoload :Hyperlink, 'uniword/hyperlink'
-  autoload :Image, 'uniword/image'
-  autoload :MathEquation, 'uniword/math_equation'
-  autoload :Picture, 'uniword/picture'
-  autoload :Revision, 'uniword/revision'
-  autoload :Section, 'uniword/section'
-  autoload :SectionProperties, 'uniword/section_properties'
-  autoload :TextBox, 'uniword/text_box'
-  autoload :TextFrame, 'uniword/text_frame'
-  autoload :TrackedChanges, 'uniword/tracked_changes'
+  autoload :Bibliography, "uniword/bibliography"
+  autoload :Bookmark, "uniword/bookmark"
+  autoload :Chart, "uniword/chart"
+  autoload :Comment, "uniword/comment"
+  autoload :CommentRange, "uniword/comment_range"
+  autoload :CommentsPart, "uniword/comments_part"
+  autoload :DocumentVariables, "uniword/document_variables"
+  autoload :Endnote, "uniword/endnote"
+  autoload :Field, "uniword/field"
+  autoload :Footer, "uniword/footer"
+  autoload :Footnote, "uniword/footnote"
+  autoload :Header, "uniword/header"
+  autoload :Hyperlink, "uniword/hyperlink"
+  autoload :Image, "uniword/image"
+  autoload :MathEquation, "uniword/math_equation"
+  autoload :Picture, "uniword/picture"
+  autoload :Revision, "uniword/revision"
+  autoload :Section, "uniword/section"
+  autoload :SectionProperties, "uniword/section_properties"
+  autoload :TextBox, "uniword/text_box"
+  autoload :TextFrame, "uniword/text_frame"
+  autoload :TrackedChanges, "uniword/tracked_changes"
 
   # Table components
-  autoload :TableBorder, 'uniword/table_border'
+  autoload :TableBorder, "uniword/table_border"
 
   # Formatting and styling
-  autoload :ColumnConfiguration, 'uniword/column_configuration'
-  autoload :LineNumbering, 'uniword/line_numbering'
-  autoload :PageBorders, 'uniword/page_borders'
-  autoload :ParagraphBorder, 'uniword/paragraph_border'
-  autoload :ParagraphBorders, 'uniword/paragraph_border'
-  autoload :ParagraphBorderSide, 'uniword/paragraph_border'
-  autoload :Shading, 'uniword/shading'
-  autoload :TabStop, 'uniword/tab_stop'
+  autoload :ColumnConfiguration, "uniword/column_configuration"
+  autoload :LineNumbering, "uniword/line_numbering"
+  autoload :PageBorders, "uniword/page_borders"
+  autoload :ParagraphBorder, "uniword/paragraph_border"
+  autoload :ParagraphBorders, "uniword/paragraph_border"
+  autoload :ParagraphBorderSide, "uniword/paragraph_border"
+  autoload :Shading, "uniword/shading"
+  autoload :TabStop, "uniword/tab_stop"
 
   # Infrastructure and utilities
-  autoload :Customxml, 'uniword/customxml'
-  autoload :ElementRegistry, 'uniword/element_registry'
-  autoload :FormatConverter, 'uniword/format_converter'
-  autoload :LazyLoader, 'uniword/lazy_loader'
-  autoload :Serialization, 'uniword/serialization/ooxml_serializer'
-  autoload :Logger, 'uniword/logger'
-  autoload :Loggable, 'uniword/loggable'
-  autoload :StreamingParser, 'uniword/streaming_parser'
+  autoload :Customxml, "uniword/customxml"
+  autoload :ElementRegistry, "uniword/element_registry"
+  autoload :FormatConverter, "uniword/format_converter"
+  autoload :LazyLoader, "uniword/lazy_loader"
+  autoload :Serialization, "uniword/serialization/ooxml_serializer"
+  autoload :Logger, "uniword/logger"
+  autoload :Loggable, "uniword/loggable"
+  autoload :StreamingParser, "uniword/streaming_parser"
 
   # Additional namespace loaders (Office ML variants)
-  autoload :Office, 'uniword/office'
-  autoload :Presentationml, 'uniword/presentationml'
-  autoload :Spreadsheetml, 'uniword/spreadsheetml'
-  autoload :VmlOffice, 'uniword/vml_office'
-  autoload :Wordprocessingml2010, 'uniword/wordprocessingml_2010'
-  autoload :Wordprocessingml2013, 'uniword/wordprocessingml_2013'
-  autoload :Wordprocessingml2016, 'uniword/wordprocessingml_2016'
+  autoload :Office, "uniword/office"
+  autoload :Presentationml, "uniword/presentationml"
+  autoload :Spreadsheetml, "uniword/spreadsheetml"
+  autoload :VmlOffice, "uniword/vml_office"
+  autoload :Wordprocessingml2010, "uniword/wordprocessingml_2010"
+  autoload :Wordprocessingml2013, "uniword/wordprocessingml_2013"
+  autoload :Wordprocessingml2016, "uniword/wordprocessingml_2016"
 
   # Module-level convenience methods
   class << self

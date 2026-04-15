@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -14,13 +14,13 @@ module Uniword
       attribute :down_bars, :string
 
       xml do
-        element 'upDownBars'
+        element "upDownBars"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'gapWidth', to: :gap_width, render_nil: false
-        map_element 'upBars', to: :up_bars, render_nil: false
-        map_element 'downBars', to: :down_bars, render_nil: false
+        map_element "gapWidth", to: :gap_width, render_nil: false
+        map_element "upBars", to: :up_bars, render_nil: false
+        map_element "downBars", to: :down_bars, render_nil: false
       end
     end
   end

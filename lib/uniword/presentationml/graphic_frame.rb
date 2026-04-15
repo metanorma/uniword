@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,13 +14,13 @@ module Uniword
       attribute :graphic, :string
 
       xml do
-        element 'graphic_frame'
+        element "graphic_frame"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'nvGraphicFramePr', to: :nv_graphic_frame_pr
-        map_element 'xfrm', to: :xfrm
-        map_element 'graphic', to: :graphic
+        map_element "nvGraphicFramePr", to: :nv_graphic_frame_pr
+        map_element "xfrm", to: :xfrm
+        map_element "graphic", to: :graphic
       end
     end
   end

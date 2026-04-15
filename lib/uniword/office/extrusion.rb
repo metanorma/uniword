@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -28,26 +28,26 @@ module Uniword
       attribute :lightface, :string
 
       xml do
-        element 'extrusion'
+        element "extrusion"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'true', to: true
-        map_attribute 'type', to: :type
-        map_attribute 'render', to: :render
-        map_attribute 'viewpointorigin', to: :viewpointorigin
-        map_attribute 'viewpoint', to: :viewpoint
-        map_attribute 'skewangle', to: :skewangle
-        map_attribute 'skewamt', to: :skewamt
-        map_attribute 'foredepth', to: :foredepth
-        map_attribute 'backdepth', to: :backdepth
-        map_attribute 'orientation', to: :orientation
-        map_attribute 'orientationangle', to: :orientationangle
-        map_attribute 'color', to: :color
-        map_attribute 'rotationangle', to: :rotationangle
-        map_attribute 'lightposition', to: :lightposition
-        map_attribute 'lightlevel', to: :lightlevel
-        map_attribute 'lightharsh', to: :lightharsh
-        map_attribute 'lightface', to: :lightface
+        map_attribute "true", to: true
+        map_attribute "type", to: :type
+        map_attribute "render", to: :render
+        map_attribute "viewpointorigin", to: :viewpointorigin
+        map_attribute "viewpoint", to: :viewpoint
+        map_attribute "skewangle", to: :skewangle
+        map_attribute "skewamt", to: :skewamt
+        map_attribute "foredepth", to: :foredepth
+        map_attribute "backdepth", to: :backdepth
+        map_attribute "orientation", to: :orientation
+        map_attribute "orientationangle", to: :orientationangle
+        map_attribute "color", to: :color
+        map_attribute "rotationangle", to: :rotationangle
+        map_attribute "lightposition", to: :lightposition
+        map_attribute "lightlevel", to: :lightlevel
+        map_attribute "lightharsh", to: :lightharsh
+        map_attribute "lightface", to: :lightface
       end
     end
   end

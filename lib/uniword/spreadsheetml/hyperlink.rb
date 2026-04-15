@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -16,14 +16,14 @@ module Uniword
       attribute :display, :string
 
       xml do
-        element 'hyperlink'
+        element "hyperlink"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'ref', to: :ref
-        map_attribute 'id', to: :id
-        map_attribute 'location', to: :location
-        map_attribute 'tooltip', to: :tooltip
-        map_attribute 'display', to: :display
+        map_attribute "ref", to: :ref
+        map_attribute "id", to: :id
+        map_attribute "location", to: :location
+        map_attribute "tooltip", to: :tooltip
+        map_attribute "display", to: :display
       end
     end
   end

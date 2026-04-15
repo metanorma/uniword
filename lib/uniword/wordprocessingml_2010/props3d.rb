@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -14,12 +14,12 @@ module Uniword
       attribute :material, :string
 
       xml do
-        element 'props3d'
+        element "props3d"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'extrusion-height', to: :extrusion_height
-        map_attribute 'contour-width', to: :contour_width
-        map_attribute 'material', to: :material
+        map_attribute "extrusion-height", to: :extrusion_height
+        map_attribute "contour-width", to: :contour_width
+        map_attribute "material", to: :material
       end
     end
   end

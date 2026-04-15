@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -18,16 +18,16 @@ module Uniword
       attribute :gutter, :integer
 
       xml do
-        element 'pgMar'
+        element "pgMar"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'top', to: :top
-        map_attribute 'bottom', to: :bottom
-        map_attribute 'left', to: :left
-        map_attribute 'right', to: :right
-        map_attribute 'header', to: :header
-        map_attribute 'footer', to: :footer
-        map_attribute 'gutter', to: :gutter
+        map_attribute "top", to: :top
+        map_attribute "bottom", to: :bottom
+        map_attribute "left", to: :left
+        map_attribute "right", to: :right
+        map_attribute "header", to: :header
+        map_attribute "footer", to: :footer
+        map_attribute "gutter", to: :gutter
       end
     end
   end

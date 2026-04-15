@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :fill_to_rect, FillToRect
 
       xml do
-        element 'path'
+        element "path"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'path', to: :path
-        map_element 'fillToRect', to: :fill_to_rect, render_nil: false
+        map_attribute "path", to: :path
+        map_element "fillToRect", to: :fill_to_rect, render_nil: false
       end
     end
   end

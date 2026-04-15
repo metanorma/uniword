@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Chart
@@ -20,19 +20,19 @@ module Uniword
       attribute :ax_id, AxisId, collection: true, initialize_empty: true
 
       xml do
-        element 'bar3DChart'
+        element "bar3DChart"
         namespace Uniword::Ooxml::Namespaces::Chart
         mixed_content
 
-        map_element 'barDir', to: :bar_dir
-        map_element 'grouping', to: :grouping, render_nil: false
-        map_element 'varyColors', to: :vary_colors, render_nil: false
-        map_element 'ser', to: :series, render_nil: false
-        map_element 'dLbls', to: :d_lbls, render_nil: false
-        map_element 'gapWidth', to: :gap_width, render_nil: false
-        map_element 'gapDepth', to: :gap_depth, render_nil: false
-        map_element 'shape', to: :shape, render_nil: false
-        map_element 'axId', to: :ax_id
+        map_element "barDir", to: :bar_dir
+        map_element "grouping", to: :grouping, render_nil: false
+        map_element "varyColors", to: :vary_colors, render_nil: false
+        map_element "ser", to: :series, render_nil: false
+        map_element "dLbls", to: :d_lbls, render_nil: false
+        map_element "gapWidth", to: :gap_width, render_nil: false
+        map_element "gapDepth", to: :gap_depth, render_nil: false
+        map_element "shape", to: :shape, render_nil: false
+        map_element "axId", to: :ax_id
       end
     end
   end

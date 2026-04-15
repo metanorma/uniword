@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :rad, :integer
 
       xml do
-        element 'softEdge'
+        element "softEdge"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'rad', to: :rad
+        map_attribute "rad", to: :rad
       end
     end
   end

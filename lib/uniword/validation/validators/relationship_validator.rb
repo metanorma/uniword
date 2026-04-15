@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'zip'
-require 'nokogiri'
+require "zip"
+require "nokogiri"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -25,10 +25,10 @@ module Uniword
       #   result = validator.validate('/path/to/document.docx')
       #   puts result.valid? # => true
       class RelationshipValidator < LayerValidator
-        RELATIONSHIP_NAMESPACE = 'http://schemas.openxmlformats.org/package/2006/relationships'
+        RELATIONSHIP_NAMESPACE = "http://schemas.openxmlformats.org/package/2006/relationships"
 
         def layer_name
-          'Relationships'
+          "Relationships"
         end
 
         def validate(path)
@@ -50,10 +50,10 @@ module Uniword
         private
 
         def validate_relationships(zip, result)
-          rel_entries = zip.entries.select { |e| e.name.end_with?('.rels') }
+          rel_entries = zip.entries.select { |e| e.name.end_with?(".rels") }
 
           if rel_entries.empty?
-            result.add_warning('No relationship files found')
+            result.add_warning("No relationship files found")
             return
           end
 
@@ -67,10 +67,10 @@ module Uniword
           doc = Nokogiri::XML(xml_content)
 
           # Get the base directory for this .rels file
-          base_dir = File.dirname(entry.name.sub('/_rels/', '/'))
-          base_dir = '' if base_dir == '.'
+          base_dir = File.dirname(entry.name.sub("/_rels/", "/"))
+          base_dir = "" if base_dir == "."
 
-          doc.xpath('//xmlns:Relationship', 'xmlns' => RELATIONSHIP_NAMESPACE).each do |rel|
+          doc.xpath("//xmlns:Relationship", "xmlns" => RELATIONSHIP_NAMESPACE).each do |rel|
             validate_relationship(zip, rel, base_dir, result)
           end
         rescue Nokogiri::XML::SyntaxError => e
@@ -84,15 +84,15 @@ module Uniword
         end
 
         def validate_relationship(zip, rel_node, base_dir, result)
-          target = rel_node['Target']
-          type = rel_node['Type']
-          target_mode = rel_node['TargetMode']
+          target = rel_node["Target"]
+          type = rel_node["Type"]
+          target_mode = rel_node["TargetMode"]
 
           # Skip external relationships
-          return if target_mode == 'External'
+          return if target_mode == "External"
 
           # Check if target exists
-          if check_targets_exist? && target && !target.start_with?('#')
+          if check_targets_exist? && target && !target.start_with?("#")
             target_path = resolve_target_path(base_dir, target)
 
             unless zip.find_entry(target_path)
@@ -110,7 +110,7 @@ module Uniword
 
         def resolve_target_path(base_dir, target)
           # Handle absolute paths (starting with /)
-          return target[1..] if target.start_with?('/')
+          return target[1..] if target.start_with?("/")
 
           # Handle relative paths
           if base_dir.empty?
@@ -122,7 +122,7 @@ module Uniword
 
         def validate_relationship_type(type, result)
           # Just validate it's a URI-like string
-          return if type.include?('/')
+          return if type.include?("/")
 
           result.add_warning(
             "Unusual relationship type: #{type}"

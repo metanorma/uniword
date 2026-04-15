@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Office
@@ -12,10 +12,10 @@ module Uniword
       attribute :checked, :string
 
       xml do
-        element 'forms'
+        element "forms"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_attribute 'checked', to: :checked
+        map_attribute "checked", to: :checked
       end
     end
   end

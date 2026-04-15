@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :dyaOrig, :integer
 
       xml do
-        element 'object'
+        element "object"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'dxaOrig', to: :dxaOrig
-        map_attribute 'dyaOrig', to: :dyaOrig
+        map_attribute "dxaOrig", to: :dxaOrig
+        map_attribute "dyaOrig", to: :dyaOrig
       end
     end
   end

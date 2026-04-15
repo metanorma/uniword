@@ -26,20 +26,20 @@ module Uniword
       # @param opacity [String] Opacity value '0.0' to '1.0' (default '0.3')
       # @param angle [Integer] Rotation angle in degrees (default -45)
       # @return [Vml::Shape] The watermark shape
-      def self.build_shape(text, font: 'Calibri', size: 60, color: nil,
-                           opacity: '0.3', angle: -45)
-        fill_color = color || 'D0D0D0'
+      def self.build_shape(text, font: "Calibri", size: 60, color: nil,
+                           opacity: "0.3", angle: -45)
+        fill_color = color || "D0D0D0"
 
         shape = Vml::Shape.new(
-          id: 'PowerPlusWaterMarkObject1',
-          type: '#_x0000_t136',
+          id: "PowerPlusWaterMarkObject1",
+          type: "#_x0000_t136",
           style: watermark_style(angle),
           fillcolor: fill_color,
-          strokecolor: 'none'
+          strokecolor: "none"
         )
 
         shape.fill = Vml::Fill.new(
-          type: 'tile',
+          type: "tile",
           opacity: opacity,
           color: fill_color
         )
@@ -61,8 +61,8 @@ module Uniword
       # @param opacity [String] Opacity value
       # @param angle [Integer] Rotation angle in degrees
       # @return [Wordprocessingml::Paragraph] Paragraph containing watermark
-      def self.build_paragraph(text, font: 'Calibri', size: 60, color: nil,
-                               opacity: '0.3', angle: -45)
+      def self.build_paragraph(text, font: "Calibri", size: 60, color: nil,
+                               opacity: "0.3", angle: -45)
         para = Wordprocessingml::Paragraph.new
         run = Wordprocessingml::Run.new
         run.pictures << Wordprocessingml::Picture.new(
@@ -82,12 +82,12 @@ module Uniword
         # @return [String] CSS-style style attribute
         def watermark_style(angle)
           # Position centered on the page (in points/twips)
-          'position:absolute;margin-left:0;margin-top:0;width:527.85pt;' \
+          "position:absolute;margin-left:0;margin-top:0;width:527.85pt;" \
             "height:698.45pt;rotation:#{angle};z-index:-251657216;" \
-            'mso-position-horizontal:center;' \
-            'mso-position-horizontal-relative:margin;' \
-            'mso-position-vertical:center;' \
-            'mso-position-vertical-relative:margin'
+            "mso-position-horizontal:center;" \
+            "mso-position-horizontal-relative:margin;" \
+            "mso-position-vertical:center;" \
+            "mso-position-vertical-relative:margin"
         end
       end
     end

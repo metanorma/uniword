@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -14,13 +14,13 @@ module Uniword
       attribute :next_cond_lst, :string
 
       xml do
-        element 'seq'
+        element "seq"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'cTn', to: :c_tn
-        map_element 'prevCondLst', to: :prev_cond_lst, render_nil: false
-        map_element 'nextCondLst', to: :next_cond_lst, render_nil: false
+        map_element "cTn", to: :c_tn
+        map_element "prevCondLst", to: :prev_cond_lst, render_nil: false
+        map_element "nextCondLst", to: :next_cond_lst, render_nil: false
       end
     end
   end

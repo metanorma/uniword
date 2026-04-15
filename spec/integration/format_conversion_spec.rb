@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'fileutils'
+require "spec_helper"
+require "fileutils"
 
-RSpec.describe 'Format Conversion', type: :integration do
-  let(:tmp_dir) { 'spec/tmp' }
-  let(:fixtures_dir) { 'spec/fixtures/docx_gem' }
+RSpec.describe "Format Conversion", type: :integration do
+  let(:tmp_dir) { "spec/tmp" }
+  let(:fixtures_dir) { "spec/fixtures/docx_gem" }
 
   before(:all) do
-    FileUtils.mkdir_p('spec/tmp')
+    FileUtils.mkdir_p("spec/tmp")
   end
 
   after(:each) do
@@ -32,10 +32,10 @@ RSpec.describe 'Format Conversion', type: :integration do
     Uniword::Transformation::Transformer.new.mhtml_to_docx(mhtml_doc)
   end
 
-  describe 'DOCX to MHTML Conversion' do
-    it 'converts DOCX to MHTML' do
+  describe "DOCX to MHTML Conversion" do
+    it "converts DOCX to MHTML" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
 
@@ -43,9 +43,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(mhtml_doc.html_part).to be_a(Uniword::Mhtml::HtmlPart)
     end
 
-    it 'preserves paragraph count in conversion' do
+    it "preserves paragraph count in conversion" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
       docx_paras = docx_pkg.document.body.paragraphs.length
@@ -56,9 +56,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(mht_paras).to be >= docx_paras
     end
 
-    it 'preserves text content across conversion' do
+    it "preserves text content across conversion" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
       docx_pkg.document.body.paragraphs
@@ -66,19 +66,19 @@ RSpec.describe 'Format Conversion', type: :integration do
         p.runs.map do |r|
           r.text&.text
         end
-      end.compact.join(' ')
+      end.compact.join(" ")
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      mht_text = mhtml_doc.body_html.gsub(/<[^>]+>/, ' ').gsub(/\s+/, ' ').strip
+      mht_text = mhtml_doc.body_html.gsub(/<[^>]+>/, " ").gsub(/\s+/, " ").strip
 
       expect(mht_text.length).to be > 0
     end
   end
 
-  describe 'MHTML to DOCX Conversion' do
-    it 'converts MHTML to DOCX' do
-      mht_fixture = 'spec/fixtures/blank/blank.mht'
-      skip 'Fixture not found' unless File.exist?(mht_fixture)
+  describe "MHTML to DOCX Conversion" do
+    it "converts MHTML to DOCX" do
+      mht_fixture = "spec/fixtures/blank/blank.mht"
+      skip "Fixture not found" unless File.exist?(mht_fixture)
 
       mhtml_doc = Uniword::Infrastructure::MimeParser.new.parse_content(File.read(mht_fixture))
       docx_doc = mhtml_to_docx(mhtml_doc)
@@ -86,9 +86,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(docx_doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
 
-    it 'preserves paragraph structure in conversion' do
-      mht_fixture = 'spec/fixtures/blank/blank.mht'
-      skip 'Fixture not found' unless File.exist?(mht_fixture)
+    it "preserves paragraph structure in conversion" do
+      mht_fixture = "spec/fixtures/blank/blank.mht"
+      skip "Fixture not found" unless File.exist?(mht_fixture)
 
       mhtml_doc = Uniword::Infrastructure::MimeParser.new.parse_content(File.read(mht_fixture))
       docx_doc = mhtml_to_docx(mhtml_doc)
@@ -97,10 +97,10 @@ RSpec.describe 'Format Conversion', type: :integration do
     end
   end
 
-  describe 'Round-trip Conversions' do
-    it 'preserves formatting across DOCX -> MHTML -> DOCX' do
+  describe "Round-trip Conversions" do
+    it "preserves formatting across DOCX -> MHTML -> DOCX" do
       docx_fixture = "#{fixtures_dir}/formatting.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
       docx_doc = mhtml_to_docx(mhtml_doc)
@@ -109,44 +109,44 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(docx_doc.body.paragraphs.length).to be >= 1
     end
 
-    it 'preserves bold formatting across conversions' do
+    it "preserves bold formatting across conversions" do
       docx_fixture = "#{fixtures_dir}/formatting.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      has_bold = mhtml_doc.body_html.include?('<strong>') ||
-                 mhtml_doc.body_html.include?('<b>')
+      has_bold = mhtml_doc.body_html.include?("<strong>") ||
+                 mhtml_doc.body_html.include?("<b>")
       expect(has_bold).to be true
     end
 
-    it 'preserves italic formatting across conversions' do
+    it "preserves italic formatting across conversions" do
       docx_fixture = "#{fixtures_dir}/formatting.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      has_italic = mhtml_doc.body_html.include?('<em>') ||
-                   mhtml_doc.body_html.include?('<i>')
+      has_italic = mhtml_doc.body_html.include?("<em>") ||
+                   mhtml_doc.body_html.include?("<i>")
       expect(has_italic).to be true
     end
 
-    it 'preserves tables across conversions' do
+    it "preserves tables across conversions" do
       docx_fixture = "#{fixtures_dir}/tables.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
       docx_tables = docx_pkg.document.body.tables.length
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      mht_tables = mhtml_doc.body_html.scan('<table').length
+      mht_tables = mhtml_doc.body_html.scan("<table").length
 
       expect(mht_tables).to eq(docx_tables)
     end
   end
 
-  describe 'Complex Document Conversion' do
-    it 'converts complex document with mixed content' do
+  describe "Complex Document Conversion" do
+    it "converts complex document with mixed content" do
       docx_fixture = "#{fixtures_dir}/styles.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
 
@@ -154,23 +154,23 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(mhtml_doc.body_html.length).to be > 0
     end
 
-    it 'preserves heading styles across formats' do
+    it "preserves heading styles across formats" do
       docx_fixture = "#{fixtures_dir}/styles.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
       body = mhtml_doc.body_html
 
-      has_style = has_css_class?(body, 'MsoHeading') ||
-                  has_css_class?(body, 'MsoTitle')
+      has_style = has_css_class?(body, "MsoHeading") ||
+                  has_css_class?(body, "MsoTitle")
       expect(has_style).to be true
     end
   end
 
-  describe 'Fixture File Conversions' do
-    it 'converts basic.docx to MHTML and back' do
+  describe "Fixture File Conversions" do
+    it "converts basic.docx to MHTML and back" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
 
@@ -178,9 +178,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(mhtml_doc.body_html.length).to be > 0
     end
 
-    it 'converts formatting.docx to MHTML' do
+    it "converts formatting.docx to MHTML" do
       docx_fixture = "#{fixtures_dir}/formatting.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
 
@@ -188,21 +188,21 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(mhtml_doc.body_html.length).to be > 0
     end
 
-    it 'converts tables.docx to MHTML' do
+    it "converts tables.docx to MHTML" do
       docx_fixture = "#{fixtures_dir}/tables.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
 
       expect(mhtml_doc).to be_a(Uniword::Mhtml::Document)
-      expect(mhtml_doc.body_html.include?('<table')).to be true
+      expect(mhtml_doc.body_html.include?("<table")).to be true
     end
   end
 
-  describe 'Format Detection' do
-    it 'auto-detects DOCX format for reading' do
+  describe "Format Detection" do
+    it "auto-detects DOCX format for reading" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       doc = Uniword::DocumentFactory.from_file(docx_fixture)
 
@@ -210,9 +210,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(doc.body.paragraphs.count).to be > 0
     end
 
-    it 'auto-detects MHTML format for reading' do
-      mht_fixture = 'spec/fixtures/blank/blank.mht'
-      skip 'Fixture not found' unless File.exist?(mht_fixture)
+    it "auto-detects MHTML format for reading" do
+      mht_fixture = "spec/fixtures/blank/blank.mht"
+      skip "Fixture not found" unless File.exist?(mht_fixture)
 
       doc = Uniword::DocumentFactory.from_file(mht_fixture, format: :mhtml)
 
@@ -220,9 +220,9 @@ RSpec.describe 'Format Conversion', type: :integration do
       expect(doc.body.paragraphs.count).to be >= 0
     end
 
-    it 'handles explicit format override' do
+    it "handles explicit format override" do
       docx_fixture = "#{fixtures_dir}/basic.docx"
-      skip 'Fixture not found' unless File.exist?(docx_fixture)
+      skip "Fixture not found" unless File.exist?(docx_fixture)
 
       doc = Uniword::DocumentFactory.from_file(docx_fixture, format: :docx)
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -12,10 +12,10 @@ module Uniword
       attribute :coords, :string
 
       xml do
-        element 'wrapcoords'
+        element "wrapcoords"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'coords', to: :coords
+        map_attribute "coords", to: :coords
       end
     end
   end

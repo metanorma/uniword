@@ -62,7 +62,7 @@ module Uniword
         unless variant
           raise ArgumentError,
                 "Variant '#{variant_id}' not found. " \
-                "Available variants: #{base_theme.variants.keys.join(', ')}"
+                "Available variants: #{base_theme.variants.keys.join(", ")}"
         end
 
         # Apply variant to base theme

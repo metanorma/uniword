@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -16,15 +16,15 @@ module Uniword
       attribute :end_para_r_pr, RunProperties
 
       xml do
-        element 'p'
+        element "p"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'pPr', to: :p_pr, render_nil: false
-        map_element 'r', to: :r, render_nil: false
-        map_element 'br', to: :br, render_nil: false
-        map_element 'fld', to: :fld, render_nil: false
-        map_element 'endParaRPr', to: :end_para_r_pr, render_nil: false
+        map_element "pPr", to: :p_pr, render_nil: false
+        map_element "r", to: :r, render_nil: false
+        map_element "br", to: :br, render_nil: false
+        map_element "fld", to: :fld, render_nil: false
+        map_element "endParaRPr", to: :end_para_r_pr, render_nil: false
       end
     end
   end

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'fileutils'
+require "spec_helper"
+require "fileutils"
 
-RSpec.describe 'DOCX Edge Case Handling' do
-  let(:tmp_dir) { 'tmp/edge_cases' }
+RSpec.describe "DOCX Edge Case Handling" do
+  let(:tmp_dir) { "tmp/edge_cases" }
 
   before(:all) do
-    FileUtils.mkdir_p('tmp/edge_cases')
+    FileUtils.mkdir_p("tmp/edge_cases")
   end
 
   after(:each) do
@@ -15,10 +15,10 @@ RSpec.describe 'DOCX Edge Case Handling' do
     Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
 
-  describe 'Empty Elements' do
+  describe "Empty Elements" do
     let(:test_path) { "#{tmp_dir}/empty_test.docx" }
 
-    it 'handles empty paragraphs' do
+    it "handles empty paragraphs" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       # No runs added
@@ -30,7 +30,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.paragraphs.count).to eq(1)
     end
 
-    it 'handles empty tables' do
+    it "handles empty tables" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       # No rows added
@@ -39,7 +39,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles empty runs' do
+    it "handles empty runs" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
@@ -50,7 +50,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles documents with no content' do
+    it "handles documents with no content" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       # No elements added
 
@@ -60,7 +60,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.paragraphs).to be_empty
     end
 
-    it 'handles table with empty cells' do
+    it "handles table with empty cells" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
@@ -74,7 +74,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles table rows with no cells' do
+    it "handles table rows with no cells" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
@@ -86,10 +86,10 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Special Characters' do
+  describe "Special Characters" do
     let(:test_path) { "#{tmp_dir}/special_chars_test.docx" }
 
-    it 'handles XML special characters' do
+    it "handles XML special characters" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: 'Special: < > & " \'')
@@ -100,15 +100,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       doc2 = Uniword::DocumentFactory.from_file(test_path)
       text = extract_text(doc2)
-      expect(text).to include('<')
-      expect(text).to include('>')
-      expect(text).to include('&')
+      expect(text).to include("<")
+      expect(text).to include(">")
+      expect(text).to include("&")
     end
 
-    it 'handles Unicode characters' do
+    it "handles Unicode characters" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Unicode: 你好世界 مرحبا بالعالم Привет мир')
+      run = Uniword::Wordprocessingml::Run.new(text: "Unicode: 你好世界 مرحبا بالعالم Привет мир")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -116,13 +116,13 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       doc2 = Uniword::DocumentFactory.from_file(test_path)
       text = extract_text(doc2)
-      expect(text).to include('你好世界')
+      expect(text).to include("你好世界")
     end
 
-    it 'handles emoji and symbols' do
+    it "handles emoji and symbols" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥')
+      run = Uniword::Wordprocessingml::Run.new(text: "Emoji: 🌍 🎉 ❤️ 🚀 Symbols: © ® ™ € £ ¥")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -132,7 +132,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.paragraphs.count).to eq(1)
     end
 
-    it 'handles whitespace characters' do
+    it "handles whitespace characters" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Multiple  spaces\tTab\nNewline\r\nCarriage return")
@@ -142,12 +142,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles null characters safely' do
+    it "handles null characters safely" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       # Remove null characters if present
-      text = "Text with\u0000null".gsub("\u0000", '')
+      text = "Text with\u0000null".gsub("\u0000", "")
       run.text = text
       para.runs << run
       doc.body.paragraphs << para
@@ -155,12 +155,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles control characters' do
+    it "handles control characters" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       # Filter out problematic control characters
-      text = "Text\u0001\u0002\u0003".gsub(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, '')
+      text = "Text\u0001\u0002\u0003".gsub(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, "")
       run.text = text
       para.runs << run
       doc.body.paragraphs << para
@@ -168,10 +168,10 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles RTL (right-to-left) text' do
+    it "handles RTL (right-to-left) text" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'RTL: مرحبا بك في العالم العربي')
+      run = Uniword::Wordprocessingml::Run.new(text: "RTL: مرحبا بك في العالم العربي")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -179,13 +179,13 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       doc2 = Uniword::DocumentFactory.from_file(test_path)
       text = extract_text(doc2)
-      expect(text).to include('مرحبا')
+      expect(text).to include("مرحبا")
     end
 
-    it 'handles mixed LTR and RTL text' do
+    it "handles mixed LTR and RTL text" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'English مرحبا English again')
+      run = Uniword::Wordprocessingml::Run.new(text: "English مرحبا English again")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -193,10 +193,10 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Large Documents' do
+  describe "Large Documents" do
     let(:test_path) { "#{tmp_dir}/large_test.docx" }
 
-    it 'handles 100+ paragraphs' do
+    it "handles 100+ paragraphs" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       150.times do |i|
@@ -212,7 +212,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.paragraphs.count).to eq(150)
     end
 
-    it 'handles 50+ tables' do
+    it "handles 50+ tables" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       50.times do |t|
@@ -234,7 +234,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.tables.count).to eq(50)
     end
 
-    it 'handles deep nesting' do
+    it "handles deep nesting" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create nested tables
@@ -244,7 +244,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # Add nested content
       outer_cell_para = Uniword::Wordprocessingml::Paragraph.new
-      outer_cell_run = Uniword::Wordprocessingml::Run.new(text: 'Outer cell content')
+      outer_cell_run = Uniword::Wordprocessingml::Run.new(text: "Outer cell content")
       outer_cell_para.runs << outer_cell_run
       outer_cell.paragraphs << outer_cell_para
 
@@ -255,7 +255,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles many runs per paragraph' do
+    it "handles many runs per paragraph" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
 
@@ -269,7 +269,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles large table with many cells' do
+    it "handles large table with many cells" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
 
@@ -296,44 +296,44 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Malformed Input' do
+  describe "Malformed Input" do
     let(:test_path) { "#{tmp_dir}/malformed_test.docx" }
 
-    it 'handles reading non-existent file gracefully' do
-      expect { Uniword::DocumentFactory.from_file('nonexistent.docx') }
+    it "handles reading non-existent file gracefully" do
+      expect { Uniword::DocumentFactory.from_file("nonexistent.docx") }
         .to raise_error(Uniword::FileNotFoundError, /File not found/)
     end
 
-    it 'handles reading non-DOCX file gracefully' do
+    it "handles reading non-DOCX file gracefully" do
       # Create a text file
       text_file = "#{tmp_dir}/not_a_docx.docx"
-      File.write(text_file, 'This is not a DOCX file')
+      File.write(text_file, "This is not a DOCX file")
 
       expect { Uniword::DocumentFactory.from_file(text_file) }
         .to raise_error # Should raise some error (ZIP or parsing error)
     end
 
-    it 'handles empty file path' do
-      expect { Uniword::DocumentFactory.from_file('') }
+    it "handles empty file path" do
+      expect { Uniword::DocumentFactory.from_file("") }
         .to raise_error(ArgumentError, /Path cannot be empty/)
     end
 
-    it 'handles nil file path' do
+    it "handles nil file path" do
       expect { Uniword::DocumentFactory.from_file(nil) }
         .to raise_error(ArgumentError, /Path cannot be nil/)
     end
 
-    it 'validates document before saving' do
+    it "validates document before saving" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Document should be valid even when empty
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles invalid element types gracefully' do
+    it "handles invalid element types gracefully" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'not an element')
+      run = Uniword::Wordprocessingml::Run.new(text: "not an element")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -341,16 +341,16 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Maximum Values' do
+  describe "Maximum Values" do
     let(:test_path) { "#{tmp_dir}/max_values_test.docx" }
 
-    it 'handles very long text in paragraph' do
+    it "handles very long text in paragraph" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
 
       # 10,000 character text
-      long_text = 'Lorem ipsum dolor sit amet ' * 370
+      long_text = "Lorem ipsum dolor sit amet " * 370
       run.text = long_text[0, 10_000]
       para.runs << run
       doc.body.paragraphs << para
@@ -361,7 +361,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(extract_text(doc2).length).to be >= 9000
     end
 
-    it 'handles maximum font size' do
+    it "handles maximum font size" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
@@ -370,14 +370,14 @@ RSpec.describe 'DOCX Edge Case Handling' do
       run.properties = Uniword::Wordprocessingml::RunProperties.new(
         size: Uniword::Properties::FontSize.new(value: 144)
       )
-      run.text = 'Large text'
+      run.text = "Large text"
       para.runs << run
       doc.body.paragraphs << para
 
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles many list levels' do
+    it "handles many list levels" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Create paragraphs at different indentation levels
@@ -398,7 +398,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles extreme indentation values' do
+    it "handles extreme indentation values" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
 
@@ -407,14 +407,14 @@ RSpec.describe 'DOCX Edge Case Handling' do
       )
       para.properties = props
 
-      run = Uniword::Wordprocessingml::Run.new(text: 'Deeply indented')
+      run = Uniword::Wordprocessingml::Run.new(text: "Deeply indented")
       para.runs << run
       doc.body.paragraphs << para
 
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles wide tables' do
+    it "handles wide tables" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
@@ -436,15 +436,15 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Error Recovery' do
+  describe "Error Recovery" do
     let(:test_path) { "#{tmp_dir}/error_recovery_test.docx" }
 
-    it 'provides informative error messages for invalid paths' do
-      expect { Uniword::DocumentFactory.from_file('') }
+    it "provides informative error messages for invalid paths" do
+      expect { Uniword::DocumentFactory.from_file("") }
         .to raise_error(ArgumentError, /Path cannot be empty/)
     end
 
-    it 'provides informative error messages for invalid elements' do
+    it "provides informative error messages for invalid elements" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # v2.0 API: add_paragraph accepts string and creates paragraph
@@ -453,12 +453,12 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save("#{tmp_dir}/nil_test.docx") }.not_to raise_error
     end
 
-    it 'handles document with mixed valid and edge case content' do
+    it "handles document with mixed valid and edge case content" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Normal paragraph
       para1 = Uniword::Wordprocessingml::Paragraph.new
-      run1 = Uniword::Wordprocessingml::Run.new(text: 'Normal text')
+      run1 = Uniword::Wordprocessingml::Run.new(text: "Normal text")
       para1.runs << run1
       doc.body.paragraphs << para1
 
@@ -468,7 +468,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
 
       # Paragraph with special chars
       para3 = Uniword::Wordprocessingml::Paragraph.new
-      run3 = Uniword::Wordprocessingml::Run.new(text: 'Special: < > &')
+      run3 = Uniword::Wordprocessingml::Run.new(text: "Special: < > &")
       para3.runs << run3
       doc.body.paragraphs << para3
 
@@ -478,10 +478,10 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect(doc2.paragraphs.count).to eq(3)
     end
 
-    it 'validates document structure on save' do
+    it "validates document structure on save" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'Valid content')
+      run = Uniword::Wordprocessingml::Run.new(text: "Valid content")
       para.runs << run
       doc.body.paragraphs << para
 
@@ -491,36 +491,36 @@ RSpec.describe 'DOCX Edge Case Handling' do
     end
   end
 
-  describe 'Boundary Conditions' do
+  describe "Boundary Conditions" do
     let(:test_path) { "#{tmp_dir}/boundary_test.docx" }
 
-    it 'handles single character text' do
+    it "handles single character text" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: 'A')
+      run = Uniword::Wordprocessingml::Run.new(text: "A")
       para.runs << run
       doc.body.paragraphs << para
 
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles text with only whitespace' do
+    it "handles text with only whitespace" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
-      run = Uniword::Wordprocessingml::Run.new(text: '   ')
+      run = Uniword::Wordprocessingml::Run.new(text: "   ")
       para.runs << run
       doc.body.paragraphs << para
 
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles minimum table (1x1)' do
+    it "handles minimum table (1x1)" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       table = Uniword::Wordprocessingml::Table.new
       row = Uniword::Wordprocessingml::TableRow.new
       cell = Uniword::Wordprocessingml::TableCell.new
       cell_para = Uniword::Wordprocessingml::Paragraph.new
-      cell_run = Uniword::Wordprocessingml::Run.new(text: 'Single cell')
+      cell_run = Uniword::Wordprocessingml::Run.new(text: "Single cell")
       cell_para.runs << cell_run
       cell.paragraphs << cell_para
       row.cells << cell
@@ -530,7 +530,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles zero-width spaces' do
+    it "handles zero-width spaces" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Word\u200BBreak")
@@ -540,7 +540,7 @@ RSpec.describe 'DOCX Edge Case Handling' do
       expect { doc.save(test_path) }.not_to raise_error
     end
 
-    it 'handles non-breaking spaces' do
+    it "handles non-breaking spaces" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Non\u00A0breaking space")

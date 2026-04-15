@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :old, :string
 
       xml do
-        element 'entry'
+        element "entry"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'new', to: :new
-        map_attribute 'old', to: :old
+        map_attribute "new", to: :new
+        map_attribute "old", to: :old
       end
     end
   end

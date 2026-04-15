@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -15,14 +15,14 @@ module Uniword
       attribute :grp_sp, GroupShape, collection: true, initialize_empty: true
 
       xml do
-        element 'grp_sp'
+        element "grp_sp"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'nvGrpSpPr', to: :nv_grp_sp_pr
-        map_element 'grpSpPr', to: :grp_sp_pr
-        map_element 'sp', to: :sp, render_nil: false
-        map_element 'grpSp', to: :grp_sp, render_nil: false
+        map_element "nvGrpSpPr", to: :nv_grp_sp_pr
+        map_element "grpSpPr", to: :grp_sp_pr
+        map_element "sp", to: :sp, render_nil: false
+        map_element "grpSp", to: :grp_sp, render_nil: false
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -13,11 +13,11 @@ module Uniword
       attribute :charset, :string
 
       xml do
-        element 'embedded_font'
+        element "embedded_font"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
 
-        map_attribute 'typeface', to: :typeface
-        map_attribute 'charset', to: :charset
+        map_attribute "typeface", to: :typeface
+        map_attribute "charset", to: :charset
       end
     end
   end

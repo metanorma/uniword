@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'base64'
-require 'securerandom'
+require "base64"
+require "securerandom"
 
 module Uniword
   # Represents an image (inline element)
@@ -17,7 +17,7 @@ module Uniword
 
     # OOXML namespace configuration for images (drawing elements)
     xml do
-      element 'drawing'
+      element "drawing"
       namespace Ooxml::Namespaces::WordProcessingML
     end
 
@@ -126,7 +126,7 @@ module Uniword
     #
     # @return [String] Empty string (images don't have text)
     def text
-      ''
+      ""
     end
 
     # Get properties (images don't have RunProperties)
@@ -227,7 +227,7 @@ module Uniword
     # @raise [RuntimeError] if no image data is available
     def save(path)
       data_to_save = image_data
-      raise 'No image data available to save' unless data_to_save
+      raise "No image data available to save" unless data_to_save
 
       File.binwrite(path, data_to_save)
     end

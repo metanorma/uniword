@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -18,14 +18,14 @@ module Uniword
       include BooleanValSetter
 
       xml do
-        element 'contextualSpacing'
+        element "contextualSpacing"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
 
       # For truthiness check
       def to_bool
-        [true, 1, '1', 'true'].include?(value)
+        [true, 1, "1", "true"].include?(value)
       end
     end
   end

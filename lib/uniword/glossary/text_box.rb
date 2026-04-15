@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Glossary
@@ -15,9 +15,9 @@ module Uniword
       include Uniword::Properties::BooleanValSetter
 
       xml do
-        element 'text_box'
+        element "text_box"
         namespace Uniword::Ooxml::Namespaces::Glossary
-        map_attribute 'val', to: :val, render_nil: false, render_default: false
+        map_attribute "val", to: :val, render_nil: false, render_default: false
       end
     end
   end

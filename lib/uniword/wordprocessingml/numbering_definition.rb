@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 # NumberingLevel is autoloaded via lib/uniword/wordprocessingml.rb
 
 module Uniword
@@ -22,17 +22,17 @@ module Uniword
 
       # XML mappings come AFTER attributes
       xml do
-        element 'abstractNum'
+        element "abstractNum"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'abstractNumId', to: :abstract_num_id
+        map_attribute "abstractNumId", to: :abstract_num_id
         # w15:restartNumberingAfterBreak - typed attribute with namespace
-        map_attribute 'restartNumberingAfterBreak', to: :restart_numbering_after_break,
+        map_attribute "restartNumberingAfterBreak", to: :restart_numbering_after_break,
                                                     render_nil: false
-        map_element 'nsid', to: :nsid, render_nil: false
-        map_element 'multiLevelType', to: :multi_level_type, render_nil: false
-        map_element 'tmpl', to: :tmpl, render_nil: false
-        map_element 'lvl', to: :levels, render_nil: false
+        map_element "nsid", to: :nsid, render_nil: false
+        map_element "multiLevelType", to: :multi_level_type, render_nil: false
+        map_element "tmpl", to: :tmpl, render_nil: false
+        map_element "lvl", to: :levels, render_nil: false
         # name and style_link map to child elements
       end
 
@@ -72,22 +72,22 @@ module Uniword
       end
 
       # Create a simple decimal numbering definition
-      def self.decimal(abstract_num_id:, name: 'Decimal')
+      def self.decimal(abstract_num_id:, name: "Decimal")
         new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
           9.times do |i|
             defn.add_level(
               ilvl: i,
               start: Uniword::Wordprocessingml::Start.new(val: 1),
-              numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'decimal'),
-              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: 'left'),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: '360')
+              numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "decimal"),
+              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
+              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
             )
           end
         end
       end
 
       # Create a bullet numbering definition
-      def self.bullet(abstract_num_id:, name: 'Bullet', character: "\u2022")
+      def self.bullet(abstract_num_id:, name: "Bullet", character: "\u2022")
         new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
           9.times do |i|
             level_char = case i % 3
@@ -99,12 +99,12 @@ module Uniword
             defn.add_level(
               ilvl: i,
               start: Uniword::Wordprocessingml::Start.new(val: 1),
-              numFmt: Uniword::Wordprocessingml::NumFmt.new(val: 'bullet'),
+              numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "bullet"),
               lvlText: Uniword::Wordprocessingml::LvlText.new(val: level_char),
-              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: 'left'),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: '360'),
+              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
+              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360"),
               rPr: Uniword::Wordprocessingml::RunProperties.new(
-                fonts: Properties::RunFonts.new(ascii: 'Symbol', h_ansi: 'Symbol', hint: 'default')
+                fonts: Properties::RunFonts.new(ascii: "Symbol", h_ansi: "Symbol", hint: "default")
               )
             )
           end
@@ -112,32 +112,32 @@ module Uniword
       end
 
       # Create a roman numeral numbering definition
-      def self.roman(abstract_num_id:, name: 'Roman', upper: true)
-        format = upper ? 'upperRoman' : 'lowerRoman'
+      def self.roman(abstract_num_id:, name: "Roman", upper: true)
+        format = upper ? "upperRoman" : "lowerRoman"
         new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
           9.times do |i|
             defn.add_level(
               ilvl: i,
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
-              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: 'left'),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: '360')
+              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
+              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
             )
           end
         end
       end
 
       # Create a letter numbering definition
-      def self.letter(abstract_num_id:, name: 'Letter', upper: true)
-        format = upper ? 'upperLetter' : 'lowerLetter'
+      def self.letter(abstract_num_id:, name: "Letter", upper: true)
+        format = upper ? "upperLetter" : "lowerLetter"
         new(abstract_num_id: abstract_num_id, name: name).tap do |defn|
           9.times do |i|
             defn.add_level(
               ilvl: i,
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
-              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: 'left'),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: '360')
+              lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
+              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
             )
           end
         end

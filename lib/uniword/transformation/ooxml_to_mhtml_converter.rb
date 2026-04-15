@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'nokogiri'
+require "nokogiri"
 
 module Uniword
   module Transformation
@@ -61,8 +61,8 @@ module Uniword
         # Build HTML content
         html_content = build_html_body
         html_part = Uniword::Mhtml::HtmlPart.new
-        html_part.content_type = 'text/html'
-        html_part.content_transfer_encoding = 'quoted-printable'
+        html_part.content_type = "text/html"
+        html_part.content_transfer_encoding = "quoted-printable"
         html_part.raw_content = html_content
         html_part.content_location = "file:///C:/D057922B/#{document_name}.htm"
 
@@ -84,7 +84,7 @@ module Uniword
 
         # Generate deterministic boundary based on document name
         # Word uses format: ----=_NextPart_XXXX.XXXX
-        hash = document_name.gsub(/[^a-zA-Z0-9]/, '').upcase[0..7] || 'DOC'
+        hash = document_name.gsub(/[^a-zA-Z0-9]/, "").upcase[0..7] || "DOC"
         mhtml_doc.boundary = "----=_NextPart_01DC60F8.#{hash}"
 
         mhtml_doc
@@ -93,7 +93,7 @@ module Uniword
       # Build the HTML body content
       def build_html_body
         body = @document.body
-        return '' unless body
+        return "" unless body
 
         paragraphs_html = body.elements.map do |element|
           element_to_html(element)
@@ -113,14 +113,12 @@ module Uniword
           props.author = cp.creator.to_s if cp.respond_to?(:creator) && cp.creator
           # Use .value for date types, not .to_s (which returns object inspect)
           props.created = cp.created.value.to_s if cp.respond_to?(:created) && cp.created
-          if cp.respond_to?(:last_modified_by) && cp.last_modified_by
-            props.last_author = cp.last_modified_by.to_s
-          end
+          props.last_author = cp.last_modified_by.to_s if cp.respond_to?(:last_modified_by) && cp.last_modified_by
           props.last_saved = cp.modified.value.to_s if cp.respond_to?(:modified) && cp.modified
           props.pages = cp.pages.to_s if cp.respond_to?(:pages) && cp.pages
           props.words = cp.words.to_s if cp.respond_to?(:words) && cp.words
           props.characters = cp.characters.to_s if cp.respond_to?(:characters) && cp.characters
-          props.application = 'Microsoft Word'
+          props.application = "Microsoft Word"
         end
 
         props
@@ -134,7 +132,7 @@ module Uniword
                             %(<o:File HRef="#{image_data[:target]}"/>)
                           end.join("\n            ")
                         else
-                          ''
+                          ""
                         end
 
         filelist_xml = <<~XML
@@ -147,7 +145,7 @@ module Uniword
 
         part = Uniword::Mhtml::XmlPart.new
         part.content_type = 'text/xml; charset="utf-8"'
-        part.content_transfer_encoding = 'quoted-printable'
+        part.content_transfer_encoding = "quoted-printable"
         part.raw_content = filelist_xml
         part.content_location = "file:///C:/D057922B/#{document_name}.fld/filelist.xml"
 
@@ -167,8 +165,8 @@ module Uniword
 
         @document.image_parts.map do |_r_id, image_data|
           part = Uniword::Mhtml::ImagePart.new
-          part.content_type = image_data[:content_type] || 'image/png'
-          part.content_transfer_encoding = 'base64'
+          part.content_type = image_data[:content_type] || "image/png"
+          part.content_transfer_encoding = "base64"
           part.raw_content = image_data[:data] # Binary data - MimePackager handles base64 encoding
           # Use Content-Location matching the target filename in the MHT structure
           part.content_location = "file:///C:/D057922B/#{document_name}.fld/#{image_data[:target]}"
@@ -296,7 +294,7 @@ module Uniword
       # Build the o:DocumentProperties content lines
       def build_metadata_comments
         props = core_properties
-        return '' unless props
+        return "" unless props
 
         author = props.respond_to?(:creator) ? props.creator : nil
         last_author = props.respond_to?(:last_modified_by) ? props.last_modified_by : nil
@@ -312,7 +310,7 @@ module Uniword
         doc_props << " <o:Author>#{escape_xml(author)}</o:Author>" if author
         doc_props << " <o:LastAuthor>#{escape_xml(last_author)}</o:LastAuthor>" if last_author
         doc_props << " <o:Revision>#{escape_xml(revision)}</o:Revision>" if revision
-        doc_props << ' <o:TotalTime>0</o:TotalTime>'
+        doc_props << " <o:TotalTime>0</o:TotalTime>"
         doc_props << " <o:Created>#{escape_xml(created)}</o:Created>" if created
         doc_props << " <o:LastSaved>#{escape_xml(last_saved)}</o:LastSaved>" if last_saved
         doc_props << " <o:Pages>#{stats[:pages]}</o:Pages>"
@@ -321,7 +319,7 @@ module Uniword
         doc_props << " <o:Lines>#{stats[:lines]}</o:Lines>"
         doc_props << " <o:Paragraphs>#{stats[:paragraphs]}</o:Paragraphs>"
         doc_props << " <o:CharactersWithSpaces>#{stats[:characters_with_spaces]}</o:CharactersWithSpaces>"
-        doc_props << ' <o:Version>16.00</o:Version>'
+        doc_props << " <o:Version>16.00</o:Version>"
 
         doc_props.join("\n")
       end
@@ -379,8 +377,8 @@ module Uniword
       # @return [String] CustomDocumentProperties XML or empty string
       def build_custom_document_properties
         # Check if document has custom properties with AssetID
-        asset_id = custom_property('AssetID')
-        return '' unless asset_id
+        asset_id = custom_property("AssetID")
+        return "" unless asset_id
 
         <<~XML
           <o:CustomDocumentProperties xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -397,9 +395,7 @@ module Uniword
         # Try to get from core_properties via custom_properties hash
         if @document.respond_to?(:core_properties) && @document.core_properties
           cp = @document.core_properties
-          if cp.respond_to?(:custom_properties) && cp.custom_properties
-            return cp.custom_properties[name]
-          end
+          return cp.custom_properties[name] if cp.respond_to?(:custom_properties) && cp.custom_properties
         end
         nil
       end
@@ -427,20 +423,20 @@ module Uniword
           # Try package_rels (has the main document relationship)
           if @relationships
             rel = @relationships.relationships.find do |r|
-              r.target.to_s.include?('document.xml')
+              r.target.to_s.include?("document.xml")
             end
             if rel
               target = rel.target # e.g., "word/document.xml"
               # Extract "document" from "word/document.xml"
-              parts = target.split('/')
-              return parts.last.sub(/\.xml$/, '') if parts.last
+              parts = target.split("/")
+              return parts.last.sub(/\.xml$/, "") if parts.last
             end
           end
           # Fallback to document_rels from document itself
-          location = @document.document_rels&.relationships&.first&.target || 'document'
-          File.basename(location, '.*')
+          location = @document.document_rels&.relationships&.first&.target || "document"
+          File.basename(location, ".*")
         rescue StandardError
-          'document'
+          "document"
         end
       end
 
@@ -1146,7 +1142,7 @@ module Uniword
         when Uniword::Wordprocessingml::Table
           table_to_html(element)
         else
-          ''
+          ""
         end
       end
 
@@ -1191,7 +1187,7 @@ module Uniword
       # Convert OOXML Run to HTML
       def run_to_html(run)
         text = run.text.to_s
-        return '' if text.empty?
+        return "" if text.empty?
 
         # Escape raw text first, then apply formatting around it
         escaped = escape_html(text)
@@ -1230,7 +1226,7 @@ module Uniword
       # Convert OOXML Hyperlink to HTML
       def hyperlink_to_html(hyperlink)
         url = resolve_hyperlink_url(hyperlink)
-        return '' unless url
+        return "" unless url
 
         # Get hyperlink text from runs
         text = hyperlink.runs.map { |r| r.text.to_s }.join
@@ -1246,7 +1242,7 @@ module Uniword
         # External link via relationship ID
         if hyperlink.id && @relationships
           rel = @relationships.relationships.find { |r| r.id == hyperlink.id }
-          return rel.target if rel && rel.target_mode == 'External'
+          return rel.target if rel && rel.target_mode == "External"
         end
 
         nil
@@ -1254,7 +1250,7 @@ module Uniword
 
       # Convert OOXML SDT block to inline MHT SDT
       def sdt_to_inline_html(sdt)
-        return '' unless sdt.content
+        return "" unless sdt.content
 
         sdt_props = sdt.properties
         sdt_content = sdt.content
@@ -1274,18 +1270,18 @@ module Uniword
 
       # Extract text from SDT content
       def extract_sdt_text(content)
-        return '' unless content
+        return "" unless content
 
         # Content uses mixed_content - serialize back to XML and extract text
         xml = content.to_xml
         # Parse the XML to extract text content
         doc = Nokogiri::HTML(xml)
-        doc.text.gsub(/\s+/, ' ').strip
+        doc.text.gsub(/\s+/, " ").strip
       end
 
       # Build SDT attribute string
       def build_sdt_attrs(props)
-        return '' unless props
+        return "" unless props
 
         attrs = []
 
@@ -1301,27 +1297,19 @@ module Uniword
         # DocPart attribute (UUID from placeholder.doc_part)
         if props.placeholder&.doc_part
           doc_part = props.placeholder.doc_part
-          if doc_part.respond_to?(:value) && doc_part.value
-            attrs << %(w:docPart="#{doc_part.value}")
-          end
+          attrs << %(w:docPart="#{doc_part.value}") if doc_part.respond_to?(:value) && doc_part.value
         end
 
         # Text attribute
-        if props.text.respond_to?(:value) && props.text.value
-          attrs << %(w:text="#{props.text.value}")
-        end
+        attrs << %(w:text="#{props.text.value}") if props.text.respond_to?(:value) && props.text.value
 
         # Tag attribute
-        if props.tag.respond_to?(:value) && props.tag.value
-          attrs << %(w:tag="#{escape_xml(props.tag.value)}")
-        end
+        attrs << %(w:tag="#{escape_xml(props.tag.value)}") if props.tag.respond_to?(:value) && props.tag.value
 
         # Alias attribute
-        if props.alias_name.respond_to?(:value) && props.alias_name.value
-          attrs << %(w:alias="#{escape_xml(props.alias_name.value)}")
-        end
+        attrs << %(w:alias="#{escape_xml(props.alias_name.value)}") if props.alias_name.respond_to?(:value) && props.alias_name.value
 
-        attrs.empty? ? '' : " #{attrs.join(' ')}"
+        attrs.empty? ? "" : " #{attrs.join(" ")}"
       end
 
       # Convert OOXML Table to HTML
@@ -1359,47 +1347,47 @@ module Uniword
 
       # Map OOXML style to CSS class
       def style_to_css_class(style)
-        return ' class=MsoNormal' unless style
+        return " class=MsoNormal" unless style
 
         # Handle StyleReference wrapper object or string
         style_value = style.is_a?(String) ? style : style.to_s
 
         case style_value
-        when 'Title' then ' class=MsoTitle'
-        when 'Title2' then ' class=MsoTitle2'
-        when 'Subtitle' then ' class=MsoSubtitle'
-        when 'Heading1' then ' class=MsoHeading1'
-        when 'Heading2' then ' class=MsoHeading2'
-        when 'Heading3' then ' class=MsoHeading3'
-        when 'Heading4' then ' class=MsoHeading4'
-        when 'Heading5' then ' class=MsoHeading5'
-        when 'Heading6' then ' class=MsoHeading6'
-        when 'TOC1', 'TOC2', 'TOC3', 'TOC4', 'TOC5', 'TOC6', 'TOC7', 'TOC8', 'TOC9'
-          ' class=MsoToc1'
-        when 'SectionTitle' then ' class=SectionTitle'
+        when "Title" then " class=MsoTitle"
+        when "Title2" then " class=MsoTitle2"
+        when "Subtitle" then " class=MsoSubtitle"
+        when "Heading1" then " class=MsoHeading1"
+        when "Heading2" then " class=MsoHeading2"
+        when "Heading3" then " class=MsoHeading3"
+        when "Heading4" then " class=MsoHeading4"
+        when "Heading5" then " class=MsoHeading5"
+        when "Heading6" then " class=MsoHeading6"
+        when "TOC1", "TOC2", "TOC3", "TOC4", "TOC5", "TOC6", "TOC7", "TOC8", "TOC9"
+          " class=MsoToc1"
+        when "SectionTitle" then " class=SectionTitle"
         else
-          ' class=MsoNormal'
+          " class=MsoNormal"
         end
       end
 
       # Escape HTML special characters
       def escape_html(text)
         text.to_s
-            .gsub('&', '&amp;')
-            .gsub('<', '&lt;')
-            .gsub('>', '&gt;')
-            .gsub('"', '&quot;')
-            .gsub("'", '&#39;')
+            .gsub("&", "&amp;")
+            .gsub("<", "&lt;")
+            .gsub(">", "&gt;")
+            .gsub('"', "&quot;")
+            .gsub("'", "&#39;")
       end
 
       # Escape XML special characters
       def escape_xml(text)
         text.to_s
-            .gsub('&', '&amp;')
-            .gsub('<', '&lt;')
-            .gsub('>', '&gt;')
-            .gsub('"', '&quot;')
-            .gsub("'", '&apos;')
+            .gsub("&", "&amp;")
+            .gsub("<", "&lt;")
+            .gsub(">", "&gt;")
+            .gsub('"', "&quot;")
+            .gsub("'", "&apos;")
       end
     end
   end

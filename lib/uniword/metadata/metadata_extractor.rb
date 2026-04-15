@@ -42,7 +42,7 @@ module Uniword
       #   extractor = MetadataExtractor.new(
       #     config_file: 'config/custom_schema.yml'
       #   )
-      def initialize(config_file: 'metadata_schema')
+      def initialize(config_file: "metadata_schema")
         @config = load_configuration(config_file)
       end
 
@@ -277,7 +277,7 @@ module Uniword
           next false unless para.respond_to?(:style)
 
           style = para.style
-          style && (style.include?('Heading') || style.include?('heading'))
+          style && (style.include?("Heading") || style.include?("heading"))
         end
 
         if first_heading
@@ -295,7 +295,7 @@ module Uniword
       # @param document [Document] The document
       # @return [Integer] Word count
       def compute_word_count(document)
-        text = document.respond_to?(:text) ? document.text : ''
+        text = document.respond_to?(:text) ? document.text : ""
         return 0 if text.nil? || text.empty?
 
         # Split by whitespace and count non-empty words
@@ -307,7 +307,7 @@ module Uniword
       # @param document [Document] The document
       # @return [Integer] Character count
       def compute_character_count(document)
-        text = document.respond_to?(:text) ? document.text : ''
+        text = document.respond_to?(:text) ? document.text : ""
         return 0 if text.nil?
 
         text.length
@@ -342,7 +342,7 @@ module Uniword
           level = extract_heading_level(style)
           next unless level && level <= max_levels
 
-          text = para.respond_to?(:text) ? para.text : ''
+          text = para.respond_to?(:text) ? para.text : ""
           next if text.empty?
 
           headings << {
@@ -387,7 +387,7 @@ module Uniword
           # Skip if it's a heading
           if para.respond_to?(:style)
             style = para.style
-            next false if style && (style.include?('Heading') || style.include?('heading'))
+            next false if style && (style.include?("Heading") || style.include?("heading"))
           end
 
           true

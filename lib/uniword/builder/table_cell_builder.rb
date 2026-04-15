@@ -52,7 +52,7 @@ module Uniword
       # @param color [String, nil] Shading color
       # @param pattern [String] Pattern (default 'clear')
       # @return [self]
-      def shading(fill:, color: nil, pattern: 'clear')
+      def shading(fill:, color: nil, pattern: "clear")
         ensure_cell_props
         @model.properties.shading = Properties::Shading.new(
           fill: fill, color: color, pattern: pattern
@@ -94,7 +94,7 @@ module Uniword
           border = if value.is_a?(Hash)
                      Properties::Border.new(**value)
                    else
-                     Properties::Border.new(color: value, style: 'single', size: 4)
+                     Properties::Border.new(color: value, style: "single", size: 4)
                    end
           @model.properties.borders.send("#{side}=", border)
         end

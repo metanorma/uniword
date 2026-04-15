@@ -66,7 +66,7 @@ module Uniword
         dir = bundled_directory_for_type(type)
         return [] unless File.directory?(dir)
 
-        Dir.glob(File.join(dir, '*.yml')).map { |f| File.basename(f, '.yml') }
+        Dir.glob(File.join(dir, "*.yml")).map { |f| File.basename(f, ".yml") }
       end
 
       def cache_directory_for_type(type)
@@ -81,18 +81,18 @@ module Uniword
 
       def bundled_directory_for_type(type)
         case type
-        when :theme then bundled_path('themes')
-        when :styleset then bundled_path('stylesets')
-        when :color_scheme then bundled_path('color_schemes')
-        when :font_scheme then bundled_path('font_schemes')
+        when :theme then bundled_path("themes")
+        when :styleset then bundled_path("stylesets")
+        when :color_scheme then bundled_path("color_schemes")
+        when :font_scheme then bundled_path("font_schemes")
         else raise ArgumentError, "Unknown resource type: #{type}"
         end
       end
 
       def bundled_path(subdir)
         # Use Gem.datadir if available, otherwise fall back to data/ directory
-        data_path = (Gem.datadir('uniword') if defined?(Gem) && Gem.respond_to?(:datadir))
-        data_path ||= File.expand_path('../../../data', __dir__)
+        data_path = (Gem.datadir("uniword") if defined?(Gem) && Gem.respond_to?(:datadir))
+        data_path ||= File.expand_path("../../../data", __dir__)
         File.join(data_path, subdir)
       end
     end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2013
@@ -13,12 +13,12 @@ module Uniword
       attribute :people, :string
 
       xml do
-        element 'peopleGroup'
+        element "peopleGroup"
         namespace Uniword::Ooxml::Namespaces::Word2012
         mixed_content
 
-        map_attribute 'group-id', to: :group_id
-        map_element 'people', to: :people, render_nil: false
+        map_attribute "group-id", to: :group_id
+        map_element "people", to: :people, render_nil: false
       end
     end
   end

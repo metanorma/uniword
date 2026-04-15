@@ -24,7 +24,7 @@ module Uniword
       # @return [Boolean] true if Plurimath is available
       def self.plurimath_available?
         @plurimath_available ||= begin
-          require 'plurimath'
+          require "plurimath"
           true
         rescue LoadError
           false
@@ -42,7 +42,7 @@ module Uniword
       # @example Convert simple MathML
       #   omml = MathConverter.mathml_to_omml("<math><mi>x</mi></math>")
       def self.mathml_to_omml(mathml_string)
-        return '' if mathml_string.nil? || mathml_string.empty?
+        return "" if mathml_string.nil? || mathml_string.empty?
 
         if plurimath_available?
           begin
@@ -67,8 +67,8 @@ module Uniword
       #
       # @example Convert AsciiMath formula
       #   omml = MathConverter.asciimath_to_omml("x^2 + y^2 = z^2")
-      def self.asciimath_to_omml(asciimath_string, _delimiters = ['$$', '$$'])
-        return '' if asciimath_string.nil? || asciimath_string.empty?
+      def self.asciimath_to_omml(asciimath_string, _delimiters = ["$$", "$$"])
+        return "" if asciimath_string.nil? || asciimath_string.empty?
 
         if plurimath_available?
           begin
@@ -119,8 +119,8 @@ module Uniword
 
         math_tags = %w[math mml:math m:oMath m:oMathPara]
         return true if math_tags.include?(element.name)
-        return true if element['class']&.include?('math')
-        return true if element['data-mathml']
+        return true if element["class"]&.include?("math")
+        return true if element["data-mathml"]
 
         false
       end
@@ -136,13 +136,13 @@ module Uniword
       #   math = MathConverter.extract_math(element)
       #   # => { type: :mathml, content: "<math>...</math>" }
       def self.extract_math(element)
-        if element['data-mathml']
-          { type: :mathml, content: element['data-mathml'] }
+        if element["data-mathml"]
+          { type: :mathml, content: element["data-mathml"] }
         elsif element.name =~ /^(math|mml:math)$/
           { type: :mathml, content: element.to_s }
         elsif element.name =~ /^m:(oMath|oMathPara)$/
           { type: :omml, content: element.to_s }
-        elsif element['class']&.include?('asciimath')
+        elsif element["class"]&.include?("asciimath")
           { type: :asciimath, content: element.text }
         else
           { type: :unknown, content: element.to_s }

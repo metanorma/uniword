@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -13,7 +13,7 @@ module Uniword
       attribute :value, :string
 
       xml do
-        element 't'
+        element "t"
         namespace Uniword::Ooxml::Namespaces::MathML
 
         map_content to: :value

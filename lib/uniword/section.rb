@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents a document section
@@ -19,7 +19,7 @@ module Uniword
 
     # Add a header to this section
     def add_header(header)
-      raise ArgumentError, 'header must be a Header instance' unless header.is_a?(Header)
+      raise ArgumentError, "header must be a Header instance" unless header.is_a?(Header)
 
       headers << header
     end
@@ -30,17 +30,17 @@ module Uniword
     end
 
     # Get header by type
-    def get_header(type = 'default')
+    def get_header(type = "default")
       headers.find { |h| h.type == type }
     end
 
     # Get footer by type
-    def get_footer(type = 'default')
+    def get_footer(type = "default")
       footers.find { |f| f.type == type }
     end
 
     # Get or create header by type
-    def header(type = 'default')
+    def header(type = "default")
       get_header(type) || begin
         h = Header.new(type: type)
         add_header(h)
@@ -49,7 +49,7 @@ module Uniword
     end
 
     # Get or create footer by type
-    def footer(type = 'default')
+    def footer(type = "default")
       get_footer(type) || begin
         f = Footer.new(type: type)
         add_footer(f)
@@ -59,64 +59,64 @@ module Uniword
 
     # Convenience accessors for different header types
     def default_header
-      get_header('default')
+      get_header("default")
     end
 
     def default_header=(header)
       # Remove existing default header
-      headers.reject! { |h| h.type == 'default' }
-      header.type = 'default' if header
+      headers.reject! { |h| h.type == "default" }
+      header.type = "default" if header
       add_header(header) if header
     end
 
     def first_header
-      get_header('first')
+      get_header("first")
     end
 
     def first_header=(header)
-      headers.reject! { |h| h.type == 'first' }
-      header.type = 'first' if header
+      headers.reject! { |h| h.type == "first" }
+      header.type = "first" if header
       add_header(header) if header
     end
 
     def even_header
-      get_header('even')
+      get_header("even")
     end
 
     def even_header=(header)
-      headers.reject! { |h| h.type == 'even' }
-      header.type = 'even' if header
+      headers.reject! { |h| h.type == "even" }
+      header.type = "even" if header
       add_header(header) if header
     end
 
     # Convenience accessors for different footer types
     def default_footer
-      get_footer('default')
+      get_footer("default")
     end
 
     def default_footer=(footer)
-      footers.reject! { |f| f.type == 'default' }
-      footer.type = 'default' if footer
+      footers.reject! { |f| f.type == "default" }
+      footer.type = "default" if footer
       add_footer(footer) if footer
     end
 
     def first_footer
-      get_footer('first')
+      get_footer("first")
     end
 
     def first_footer=(footer)
-      footers.reject! { |f| f.type == 'first' }
-      footer.type = 'first' if footer
+      footers.reject! { |f| f.type == "first" }
+      footer.type = "first" if footer
       add_footer(footer) if footer
     end
 
     def even_footer
-      get_footer('even')
+      get_footer("even")
     end
 
     def even_footer=(footer)
-      footers.reject! { |f| f.type == 'even' }
-      footer.type = 'even' if footer
+      footers.reject! { |f| f.type == "even" }
+      footer.type = "even" if footer
       add_footer(footer) if footer
     end
 

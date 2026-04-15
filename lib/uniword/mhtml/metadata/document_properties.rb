@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -37,27 +37,27 @@ module Uniword
         attribute :version, :string
 
         xml do
-          element 'DocumentProperties'
+          element "DocumentProperties"
           namespace Uniword::Mhtml::Namespaces::Office
-          map_element 'Author', to: :author
-          map_element 'LastAuthor', to: :last_author
-          map_element 'Revision', to: :revision
-          map_element 'TotalTime', to: :total_time
-          map_element 'Created', to: :created
-          map_element 'LastSaved', to: :last_saved
-          map_element 'Pages', to: :pages
-          map_element 'Words', to: :words
-          map_element 'Characters', to: :characters
-          map_element 'Application', to: :application
-          map_element 'DocSecurity', to: :doc_security
-          map_element 'Lines', to: :lines
-          map_element 'Paragraphs', to: :paragraphs
-          map_element 'Bytes', to: :bytes
-          map_element 'Category', to: :category
-          map_element 'PresentationFormat', to: :presentation_format
-          map_element 'Manager', to: :manager
-          map_element 'Company', to: :company
-          map_element 'Version', to: :version
+          map_element "Author", to: :author
+          map_element "LastAuthor", to: :last_author
+          map_element "Revision", to: :revision
+          map_element "TotalTime", to: :total_time
+          map_element "Created", to: :created
+          map_element "LastSaved", to: :last_saved
+          map_element "Pages", to: :pages
+          map_element "Words", to: :words
+          map_element "Characters", to: :characters
+          map_element "Application", to: :application
+          map_element "DocSecurity", to: :doc_security
+          map_element "Lines", to: :lines
+          map_element "Paragraphs", to: :paragraphs
+          map_element "Bytes", to: :bytes
+          map_element "Category", to: :category
+          map_element "PresentationFormat", to: :presentation_format
+          map_element "Manager", to: :manager
+          map_element "Company", to: :company
+          map_element "Version", to: :version
         end
       end
     end

@@ -1,45 +1,45 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'canon/rspec_matchers'
+require "spec_helper"
+require "canon/rspec_matchers"
 
 RSpec.describe Uniword::Ooxml::AppProperties do
-  describe 'initialization' do
-    it 'creates a new instance with sensible defaults' do
+  describe "initialization" do
+    it "creates a new instance with sensible defaults" do
       props = described_class.new
 
       expect(props).to be_a(described_class)
-      expect(props.template).to eq('Normal.dotm')
-      expect(props.application).to eq('Uniword')
-      expect(props.app_version).to eq('16.0000')
-      expect(props.total_time).to eq('0')
-      expect(props.scale_crop).to eq('false')
+      expect(props.template).to eq("Normal.dotm")
+      expect(props.application).to eq("Uniword")
+      expect(props.app_version).to eq("16.0000")
+      expect(props.total_time).to eq("0")
+      expect(props.scale_crop).to eq("false")
     end
 
-    it 'accepts attributes on initialization' do
+    it "accepts attributes on initialization" do
       props = described_class.new(
-        application: 'TestApp',
-        company: 'Acme Corp',
-        pages: '10',
-        words: '1000',
-        characters: '5000'
+        application: "TestApp",
+        company: "Acme Corp",
+        pages: "10",
+        words: "1000",
+        characters: "5000"
       )
 
-      expect(props.application).to eq('TestApp')
-      expect(props.company).to eq('Acme Corp')
-      expect(props.pages).to eq('10')
-      expect(props.words).to eq('1000')
-      expect(props.characters).to eq('5000')
+      expect(props.application).to eq("TestApp")
+      expect(props.company).to eq("Acme Corp")
+      expect(props.pages).to eq("10")
+      expect(props.words).to eq("1000")
+      expect(props.characters).to eq("5000")
     end
   end
 
-  describe 'XML serialization' do
-    it 'generates valid XML with proper namespaces' do
+  describe "XML serialization" do
+    it "generates valid XML with proper namespaces" do
       props = described_class.new(
-        application: 'Uniword',
-        company: 'Test Company',
-        pages: '5',
-        words: '500'
+        application: "Uniword",
+        company: "Test Company",
+        pages: "5",
+        words: "500"
       )
 
       xml = props.to_xml
@@ -56,11 +56,11 @@ RSpec.describe Uniword::Ooxml::AppProperties do
       expect(xml).to be_xml_equivalent_to(expected)
     end
 
-    it 'includes all default values when explicitly set' do
+    it "includes all default values when explicitly set" do
       props = described_class.new(
-        template: 'Normal.dotm',
-        application: 'Uniword',
-        total_time: '0'
+        template: "Normal.dotm",
+        application: "Uniword",
+        total_time: "0"
       )
 
       xml = props.to_xml
@@ -76,14 +76,14 @@ RSpec.describe Uniword::Ooxml::AppProperties do
       expect(xml).to be_xml_equivalent_to(expected)
     end
 
-    it 'serializes all document statistics' do
+    it "serializes all document statistics" do
       props = described_class.new(
-        pages: '100',
-        words: '10000',
-        characters: '50000',
-        lines: '2000',
-        paragraphs: '500',
-        characters_with_spaces: '60000'
+        pages: "100",
+        words: "10000",
+        characters: "50000",
+        lines: "2000",
+        paragraphs: "500",
+        characters_with_spaces: "60000"
       )
 
       xml = props.to_xml
@@ -103,8 +103,8 @@ RSpec.describe Uniword::Ooxml::AppProperties do
     end
   end
 
-  describe 'XML deserialization' do
-    it 'parses valid OOXML app properties XML' do
+  describe "XML deserialization" do
+    it "parses valid OOXML app properties XML" do
       xml = <<~XML
         <?xml version="1.0" encoding="UTF-8"?>
         <Properties
@@ -131,20 +131,20 @@ RSpec.describe Uniword::Ooxml::AppProperties do
 
       props = described_class.from_xml(xml)
 
-      expect(props.template).to eq('Normal.dotm')
-      expect(props.application).to eq('Microsoft Office Word')
-      expect(props.company).to eq('Test Corporation')
-      expect(props.pages).to eq('25')
-      expect(props.words).to eq('5000')
-      expect(props.characters).to eq('25000')
-      expect(props.lines).to eq('500')
-      expect(props.paragraphs).to eq('100')
-      expect(props.characters_with_spaces).to eq('30000')
-      expect(props.total_time).to eq('120')
-      expect(props.app_version).to eq('16.0000')
+      expect(props.template).to eq("Normal.dotm")
+      expect(props.application).to eq("Microsoft Office Word")
+      expect(props.company).to eq("Test Corporation")
+      expect(props.pages).to eq("25")
+      expect(props.words).to eq("5000")
+      expect(props.characters).to eq("25000")
+      expect(props.lines).to eq("500")
+      expect(props.paragraphs).to eq("100")
+      expect(props.characters_with_spaces).to eq("30000")
+      expect(props.total_time).to eq("120")
+      expect(props.app_version).to eq("16.0000")
     end
 
-    it 'handles minimal XML correctly' do
+    it "handles minimal XML correctly" do
       xml = <<~XML
         <?xml version="1.0" encoding="UTF-8"?>
         <Properties
@@ -155,31 +155,31 @@ RSpec.describe Uniword::Ooxml::AppProperties do
 
       props = described_class.from_xml(xml)
 
-      expect(props.application).to eq('Uniword')
+      expect(props.application).to eq("Uniword")
       # Attributes not in XML remain uninitialized (lutaml-model 0.8+)
       # Only check the attribute that was present
     end
   end
 
-  describe 'round-trip fidelity' do
-    it 'preserves all data through serialize/deserialize cycle' do
+  describe "round-trip fidelity" do
+    it "preserves all data through serialize/deserialize cycle" do
       original = described_class.new(
-        template: 'Custom.dotx',
-        application: 'Uniword Test',
-        company: 'Test Corp',
-        app_version: '16.0000',
-        pages: '50',
-        words: '10000',
-        characters: '50000',
-        lines: '1000',
-        paragraphs: '200',
-        characters_with_spaces: '60000',
-        total_time: '240',
-        scale_crop: 'false',
-        doc_security: '0',
-        links_up_to_date: 'false',
-        shared_doc: 'false',
-        hyperlinks_changed: 'false'
+        template: "Custom.dotx",
+        application: "Uniword Test",
+        company: "Test Corp",
+        app_version: "16.0000",
+        pages: "50",
+        words: "10000",
+        characters: "50000",
+        lines: "1000",
+        paragraphs: "200",
+        characters_with_spaces: "60000",
+        total_time: "240",
+        scale_crop: "false",
+        doc_security: "0",
+        links_up_to_date: "false",
+        shared_doc: "false",
+        hyperlinks_changed: "false"
       )
 
       xml = original.to_xml
@@ -198,33 +198,33 @@ RSpec.describe Uniword::Ooxml::AppProperties do
       expect(restored.total_time).to eq(original.total_time)
     end
 
-    it 'handles default values consistently' do
+    it "handles default values consistently" do
       original = described_class.new
 
       xml = original.to_xml
       restored = described_class.from_xml(xml)
 
       # Default values should be preserved
-      expect(restored.application).to eq('Uniword')
+      expect(restored.application).to eq("Uniword")
     end
   end
 
-  describe 'integration with Document' do
-    it 'can be used as Document app_properties' do
+  describe "integration with Document" do
+    it "can be used as Document app_properties" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       expect(doc.app_properties).to be_a(described_class)
-      expect(doc.app_properties.application).to eq('Uniword')
+      expect(doc.app_properties.application).to eq("Uniword")
     end
 
-    it 'auto-populates statistics during serialization' do
+    it "auto-populates statistics during serialization" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para1 = Uniword::Wordprocessingml::Paragraph.new
-      run1 = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph one')
+      run1 = Uniword::Wordprocessingml::Run.new(text: "Test paragraph one")
       para1.runs << run1
       doc.body.paragraphs << para1
       para2 = Uniword::Wordprocessingml::Paragraph.new
-      run2 = Uniword::Wordprocessingml::Run.new(text: 'Test paragraph two')
+      run2 = Uniword::Wordprocessingml::Run.new(text: "Test paragraph two")
       para2.runs << run2
       doc.body.paragraphs << para2
 

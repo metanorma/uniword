@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'yaml'
+require "yaml"
 
 module Uniword
   module Assembly
@@ -110,31 +110,31 @@ module Uniword
       #
       # @raise [ArgumentError] If manifest structure is invalid
       def validate_structure!
-        raise ArgumentError, 'Manifest must be a Hash' unless @raw_data.is_a?(Hash)
+        raise ArgumentError, "Manifest must be a Hash" unless @raw_data.is_a?(Hash)
 
-        unless @raw_data['document'].is_a?(Hash)
+        unless @raw_data["document"].is_a?(Hash)
           raise ArgumentError,
                 "Manifest must have 'document' key"
         end
 
-        doc = @raw_data['document']
+        doc = @raw_data["document"]
 
-        raise ArgumentError, "Manifest must specify 'output' path" unless doc['output']
+        raise ArgumentError, "Manifest must specify 'output' path" unless doc["output"]
 
-        return if doc['sections'].is_a?(Array)
+        return if doc["sections"].is_a?(Array)
 
         raise ArgumentError, "Manifest must have 'sections' array"
       end
 
       # Parse manifest data.
       def parse_manifest
-        doc = @raw_data['document']
+        doc = @raw_data["document"]
 
-        @output_path = doc['output']
-        @template_name = doc['template']
-        @variables = parse_variables(doc['variables'])
-        @sections = parse_sections(doc['sections'])
-        @options = doc['options'] || {}
+        @output_path = doc["output"]
+        @template_name = doc["template"]
+        @variables = parse_variables(doc["variables"])
+        @sections = parse_sections(doc["sections"])
+        @options = doc["options"] || {}
       end
 
       # Parse variables section.
@@ -144,7 +144,7 @@ module Uniword
       def parse_variables(vars)
         return {} if vars.nil?
 
-        raise ArgumentError, 'Variables must be a Hash' unless vars.is_a?(Hash)
+        raise ArgumentError, "Variables must be a Hash" unless vars.is_a?(Hash)
 
         # Convert all keys to strings for consistency
         vars.transform_keys(&:to_s)
@@ -161,15 +161,15 @@ module Uniword
                   "Section at index #{index} must be a Hash"
           end
 
-          unless section['component']
+          unless section["component"]
             raise ArgumentError,
                   "Section at index #{index} must have 'component' key"
           end
 
           {
-            'component' => section['component'],
-            'options' => section['options'] || {},
-            'order' => section['order']
+            "component" => section["component"],
+            "options" => section["options"] || {},
+            "order" => section["order"]
           }
         end
       end

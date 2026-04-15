@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -13,13 +13,13 @@ module Uniword
       attribute :run_properties, Uniword::Wordprocessingml::RunProperties
 
       xml do
-        element 'ctrlPr'
+        element "ctrlPr"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
         # rPr element from WordProcessingML namespace
         # The RunProperties class declares its own namespace
-        map_element 'rPr', to: :run_properties,
+        map_element "rPr", to: :run_properties,
                            render_nil: false
       end
     end

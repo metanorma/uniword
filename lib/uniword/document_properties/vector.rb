@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module DocumentProperties
@@ -14,13 +14,13 @@ module Uniword
       attribute :variant, :string, collection: true, initialize_empty: true
 
       xml do
-        element 'vector'
+        element "vector"
         namespace Uniword::Ooxml::Namespaces::ExtendedProperties
         mixed_content
 
-        map_attribute 'size', to: :size
-        map_attribute 'baseType', to: :baseType
-        map_element 'variant', to: :variant, render_nil: false
+        map_attribute "size", to: :size
+        map_attribute "baseType", to: :baseType
+        map_element "variant", to: :variant, render_nil: false
       end
     end
   end

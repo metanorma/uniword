@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -15,14 +15,14 @@ module Uniword
       attribute :path, PathGradient
 
       xml do
-        element 'gradFill'
+        element "gradFill"
         namespace Uniword::Ooxml::Namespaces::DrawingML
         ordered
 
-        map_attribute 'rotWithShape', to: :rot_with_shape, render_nil: false
-        map_element 'gsLst', to: :gs_lst
-        map_element 'lin', to: :lin, render_nil: false
-        map_element 'path', to: :path, render_nil: false
+        map_attribute "rotWithShape", to: :rot_with_shape, render_nil: false
+        map_element "gsLst", to: :gs_lst
+        map_element "lin", to: :lin, render_nil: false
+        map_element "path", to: :path, render_nil: false
       end
     end
   end

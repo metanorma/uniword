@@ -137,8 +137,8 @@ module Uniword
       # @param locale [String] Locale (default 'en-US')
       # @param calendar [String] Calendar type (default 'gregorian')
       # @return [SdtBuilder]
-      def self.date(tag: nil, format: 'M/d/yyyy', locale: 'en-US',
-                    calendar: 'gregorian')
+      def self.date(tag: nil, format: "M/d/yyyy", locale: "en-US",
+                    calendar: "gregorian")
         sdt = new
         sdt.tag(tag) if tag
 
@@ -149,7 +149,7 @@ module Uniword
         )
         date.lid = Wordprocessingml::StructuredDocumentTag::Lid.new(value: locale)
         date.store_mapped_data_as = Wordprocessingml::StructuredDocumentTag::StoreMappedDataAs.new(
-          value: 'dateTime'
+          value: "dateTime"
         )
         date.calendar = Wordprocessingml::StructuredDocumentTag::Calendar.new(
           value: calendar
@@ -170,7 +170,7 @@ module Uniword
         # DocPartObj with bibliography gallery
         dpo = Wordprocessingml::StructuredDocumentTag::DocPartObj.new
         dpo.doc_part_gallery = Wordprocessingml::StructuredDocumentTag::DocPartGallery.new(
-          value: 'Bibliographies'
+          value: "Bibliographies"
         )
         dpo.doc_part_unique = Wordprocessingml::StructuredDocumentTag::DocPartUnique.new
         sdt.properties.doc_part_obj = dpo

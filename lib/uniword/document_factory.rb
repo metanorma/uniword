@@ -46,9 +46,7 @@ module Uniword
       def from_file(path, format: :auto)
         # Handle binary strings (for docx gem compatibility)
         # Convert to StringIO if it's a binary string (contains null bytes or has binary encoding)
-        if path.is_a?(String) && (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
-          path = StringIO.new(path)
-        end
+        path = StringIO.new(path) if path.is_a?(String) && (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
 
         validate_path(path)
 
@@ -200,13 +198,13 @@ module Uniword
       # @raise [FileNotFoundError] if file doesn't exist
       # @raise [ArgumentError] if path is nil or empty
       def validate_path(path)
-        raise ArgumentError, 'Path cannot be nil' if path.nil?
+        raise ArgumentError, "Path cannot be nil" if path.nil?
 
         # Allow IO and StringIO objects (for docx gem compatibility)
         return if path.is_a?(IO) || path.is_a?(StringIO)
 
         # For strings, validate
-        raise ArgumentError, 'Path cannot be empty' if path.respond_to?(:empty?) && path.empty?
+        raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
         raise FileNotFoundError, path unless File.exist?(path)
       end
     end

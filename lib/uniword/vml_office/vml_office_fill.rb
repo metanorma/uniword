@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -17,15 +17,15 @@ module Uniword
       attribute :relid, :string
 
       xml do
-        element 'fill'
+        element "fill"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'type', to: :type
-        map_attribute 'true', to: true
-        map_attribute 'color', to: :color
-        map_attribute 'opacity', to: :opacity
-        map_attribute 'detectmouseclick', to: :detectmouseclick
-        map_attribute 'relid', to: :relid
+        map_attribute "type", to: :type
+        map_attribute "true", to: true
+        map_attribute "color", to: :color
+        map_attribute "opacity", to: :opacity
+        map_attribute "detectmouseclick", to: :detectmouseclick
+        map_attribute "relid", to: :relid
       end
     end
   end

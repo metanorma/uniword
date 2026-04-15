@@ -182,7 +182,7 @@ module Uniword
       # @param path [String] Variable path (e.g., 'doc.title')
       # @return [Object, nil] Resolved value
       def resolve_variable_path(path)
-        parts = path.split('.')
+        parts = path.split(".")
         current = @variables
 
         parts.each do |part|
@@ -221,7 +221,7 @@ module Uniword
       # @param hash [Hash] Hash to process
       # @param prefix [String] Key prefix
       # @return [Array<String>] All keys
-      def collect_all_keys(hash, prefix = '')
+      def collect_all_keys(hash, prefix = "")
         keys = []
 
         hash.each do |key, value|

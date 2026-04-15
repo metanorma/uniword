@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'json'
+require "json"
 # All Validation classes autoloaded via lib/uniword/validation.rb and validators.rb
 # Configuration::ConfigurationLoader autoloaded via lib/uniword.rb
 
@@ -108,11 +108,11 @@ module Uniword
           # Try to load default config
           default_path = File.join(
             Configuration::ConfigurationLoader::CONFIG_DIR,
-            'validation_rules.yml'
+            "validation_rules.yml"
           )
 
           if File.exist?(default_path)
-            Configuration::ConfigurationLoader.load('validation_rules')
+            Configuration::ConfigurationLoader.load("validation_rules")
           else
             # Use empty config with defaults
             { document_validation: { fail_fast: true } }
@@ -242,24 +242,24 @@ module Uniword
       def to_s
         lines = [
           "Document Validation Report: #{@file_path}",
-          '=' * 60,
-          ''
+          "=" * 60,
+          ""
         ]
 
         @layer_results.each_value do |result|
           lines << result.to_s
         end
 
-        lines << ''
-        lines << 'Summary:'
+        lines << ""
+        lines << "Summary:"
         lines << "  Valid: #{valid?}"
         lines << "  Errors: #{errors.count}"
         lines << "  Warnings: #{warnings.count}"
         lines << "  Info: #{infos.count}"
 
         if errors.any?
-          lines << ''
-          lines << 'Errors:'
+          lines << ""
+          lines << "Errors:"
           errors.each do |error|
             lines << "  [#{error[:layer]}] #{error[:message]}"
           end

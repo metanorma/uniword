@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Presentationml
@@ -12,11 +12,11 @@ module Uniword
       attribute :sld_master_id, SlideMasterId, collection: true, initialize_empty: true
 
       xml do
-        element 'sld_master_id_lst'
+        element "sld_master_id_lst"
         namespace Uniword::Ooxml::Namespaces::PresentationalML
         mixed_content
 
-        map_element 'sldMasterId', to: :sld_master_id, render_nil: false
+        map_element "sldMasterId", to: :sld_master_id, render_nil: false
       end
     end
   end

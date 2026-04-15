@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -12,10 +12,10 @@ module Uniword
       attribute :amt, :integer
 
       xml do
-        element 'alphaModFix'
+        element "alphaModFix"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'amt', to: :amt
+        map_attribute "amt", to: :amt
       end
     end
   end

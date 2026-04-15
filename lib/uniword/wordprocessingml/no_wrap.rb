@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -8,7 +8,7 @@ module Uniword
     # XML: <w:noWrap/>
     class NoWrap < Lutaml::Model::Serializable
       xml do
-        element 'noWrap'
+        element "noWrap"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
       end
     end

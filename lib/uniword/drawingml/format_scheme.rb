@@ -9,11 +9,11 @@ module Uniword
       attribute :sp3d, Shape3D
 
       xml do
-        element 'effectStyle'
+        element "effectStyle"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'effectLst', to: :effect_lst
-        map_element 'scene3d', to: :scene3d, render_nil: false
-        map_element 'sp3d', to: :sp3d, render_nil: false
+        map_element "effectLst", to: :effect_lst
+        map_element "scene3d", to: :scene3d, render_nil: false
+        map_element "sp3d", to: :sp3d, render_nil: false
       end
 
       def initialize(attributes = {})
@@ -29,11 +29,11 @@ module Uniword
       attribute :blip_fills, BlipFill, collection: true
 
       xml do
-        element 'fillStyleLst'
+        element "fillStyleLst"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'solidFill', to: :solid_fills
-        map_element 'gradFill', to: :gradient_fills
-        map_element 'blipFill', to: :blip_fills
+        map_element "solidFill", to: :solid_fills
+        map_element "gradFill", to: :gradient_fills
+        map_element "blipFill", to: :blip_fills
       end
 
       def initialize(attributes = {})
@@ -49,9 +49,9 @@ module Uniword
       attribute :lines, LineProperties, collection: true
 
       xml do
-        element 'lnStyleLst'
+        element "lnStyleLst"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'ln', to: :lines
+        map_element "ln", to: :lines
       end
 
       def initialize(attributes = {})
@@ -65,9 +65,9 @@ module Uniword
       attribute :effect_styles, EffectStyle, collection: true
 
       xml do
-        element 'effectStyleLst'
+        element "effectStyleLst"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'effectStyle', to: :effect_styles
+        map_element "effectStyle", to: :effect_styles
       end
 
       def initialize(attributes = {})
@@ -83,11 +83,11 @@ module Uniword
       attribute :blip_fills, BlipFill, collection: true
 
       xml do
-        element 'bgFillStyleLst'
+        element "bgFillStyleLst"
         namespace Ooxml::Namespaces::DrawingML
-        map_element 'solidFill', to: :solid_fills
-        map_element 'gradFill', to: :gradient_fills
-        map_element 'blipFill', to: :blip_fills
+        map_element "solidFill", to: :solid_fills
+        map_element "gradFill", to: :gradient_fills
+        map_element "blipFill", to: :blip_fills
       end
 
       def initialize(attributes = {})
@@ -103,7 +103,7 @@ module Uniword
     # Format schemes define fill, line, effect, and background styles.
     class FormatScheme < Lutaml::Model::Serializable
       # Format scheme name
-      attribute :name, :string, default: -> { 'Office' }
+      attribute :name, :string, default: -> { "Office" }
 
       # Fill style list
       attribute :fill_style_lst, FillStyleList
@@ -119,14 +119,14 @@ module Uniword
 
       # OOXML namespace configuration
       xml do
-        element 'fmtScheme'
+        element "fmtScheme"
         namespace Ooxml::Namespaces::DrawingML
 
-        map_attribute 'name', to: :name
-        map_element 'fillStyleLst', to: :fill_style_lst
-        map_element 'lnStyleLst', to: :ln_style_lst
-        map_element 'effectStyleLst', to: :effect_style_lst
-        map_element 'bgFillStyleLst', to: :bg_fill_style_lst
+        map_attribute "name", to: :name
+        map_element "fillStyleLst", to: :fill_style_lst
+        map_element "lnStyleLst", to: :ln_style_lst
+        map_element "effectStyleLst", to: :effect_style_lst
+        map_element "bgFillStyleLst", to: :bg_fill_style_lst
       end
 
       def initialize(attributes = {})

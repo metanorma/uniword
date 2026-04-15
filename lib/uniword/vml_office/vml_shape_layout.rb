@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
-require 'lutaml/xml/namespace'
+require "lutaml/model"
+require "lutaml/xml/namespace"
 
 module Uniword
   module VmlOffice
     # Office namespace with unqualified attributes (for o:shapelayout and o:idmap)
     class OfficeNsUnqualified < Lutaml::Xml::Namespace
-      uri 'urn:schemas-microsoft-com:office:office'
-      prefix_default 'o'
+      uri "urn:schemas-microsoft-com:office:office"
+      prefix_default "o"
       element_form_default :qualified
       attribute_form_default :unqualified
     end
 
     # VML namespace for v:ext attribute
     class VmlNsForAttr < Lutaml::Xml::Namespace
-      uri 'urn:schemas-microsoft-com:vml'
-      prefix_default 'v'
+      uri "urn:schemas-microsoft-com:vml"
+      prefix_default "v"
       element_form_default :qualified
       attribute_form_default :qualified
     end
@@ -41,10 +41,10 @@ module Uniword
       attribute :data, :string
 
       xml do
-        element 'idmap'
+        element "idmap"
         namespace OfficeNsUnqualified
-        map_attribute 'ext', to: :ext
-        map_attribute 'data', to: :data
+        map_attribute "ext", to: :ext
+        map_attribute "data", to: :data
       end
     end
 
@@ -60,10 +60,10 @@ module Uniword
       attribute :idmap, VmlIdmap
 
       xml do
-        element 'shapelayout'
+        element "shapelayout"
         namespace OfficeNsUnqualified
-        map_attribute 'ext', to: :ext
-        map_element 'idmap', to: :idmap, render_nil: false
+        map_attribute "ext", to: :ext
+        map_element "idmap", to: :idmap, render_nil: false
       end
     end
   end

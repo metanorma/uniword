@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -14,12 +14,12 @@ module Uniword
       attribute :dir, :integer
 
       xml do
-        element 'prstShdw'
+        element "prstShdw"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'prst', to: :prst
-        map_attribute 'dist', to: :dist
-        map_attribute 'dir', to: :dir
+        map_attribute "prst", to: :prst
+        map_attribute "dist", to: :dist
+        map_attribute "dir", to: :dir
       end
     end
   end

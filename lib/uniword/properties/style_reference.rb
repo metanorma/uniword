@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -11,10 +11,10 @@ module Uniword
       attribute :value, :string
 
       xml do
-        element 'pStyle'
+        element "pStyle"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :value
+        map_attribute "val", to: :value
       end
 
       # Compare with another StyleReference or a string
@@ -48,10 +48,10 @@ module Uniword
       attribute :value, :string
 
       xml do
-        element 'rStyle'
+        element "rStyle"
         namespace Ooxml::Namespaces::WordProcessingML
 
-        map_attribute 'val', to: :value
+        map_attribute "val", to: :value
       end
 
       # Compare with another RunStyleReference or a string

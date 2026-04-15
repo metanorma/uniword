@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Math
@@ -12,11 +12,11 @@ module Uniword
       attribute :column_properties, MatrixColumnProperties
 
       xml do
-        element 'mc'
+        element "mc"
         namespace Uniword::Ooxml::Namespaces::MathML
         mixed_content
 
-        map_element 'mcPr', to: :column_properties, render_nil: false
+        map_element "mcPr", to: :column_properties, render_nil: false
       end
     end
   end

@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'securerandom'
+require "spec_helper"
+require "securerandom"
 
 RSpec.describe Uniword::DocumentFactory do
-  describe '.create' do
-    it 'creates a new empty document' do
+  describe ".create" do
+    it "creates a new empty document" do
       document = described_class.create
 
       expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       expect(document.paragraphs).to be_empty
     end
 
-    it 'creates documents with independent state' do
+    it "creates documents with independent state" do
       doc1 = described_class.create
       doc2 = described_class.create
 
@@ -20,16 +20,16 @@ RSpec.describe Uniword::DocumentFactory do
     end
   end
 
-  describe '.from_file' do
-    context 'with DOCX file' do
+  describe ".from_file" do
+    context "with DOCX file" do
       let(:docx_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx") }
 
       before do
         # Create a minimal DOCX file
         packager = Uniword::Infrastructure::ZipPackager.new
         content = {
-          'word/document.xml' => '<document></document>',
-          '[Content_Types].xml' => '<Types></Types>'
+          "word/document.xml" => "<document></document>",
+          "[Content_Types].xml" => "<Types></Types>"
         }
         packager.package(content, docx_path)
       end
@@ -38,20 +38,20 @@ RSpec.describe Uniword::DocumentFactory do
         safe_delete(docx_path)
       end
 
-      it 'loads DOCX file with auto format detection' do
+      it "loads DOCX file with auto format detection" do
         document = described_class.from_file(docx_path)
 
         expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
 
-      it 'loads DOCX file with explicit format' do
+      it "loads DOCX file with explicit format" do
         document = described_class.from_file(docx_path, format: :docx)
 
         expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
     end
 
-    context 'with MHTML file' do
+    context "with MHTML file" do
       let(:mhtml_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml") }
 
       before do
@@ -73,46 +73,46 @@ RSpec.describe Uniword::DocumentFactory do
         safe_delete(mhtml_path)
       end
 
-      it 'loads MHTML file with auto format detection' do
+      it "loads MHTML file with auto format detection" do
         document = described_class.from_file(mhtml_path)
 
         expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
 
-      it 'loads MHTML file with explicit format' do
+      it "loads MHTML file with explicit format" do
         document = described_class.from_file(mhtml_path, format: :mhtml)
 
         expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
       end
     end
 
-    context 'with invalid arguments' do
-      it 'raises ArgumentError when path is nil' do
+    context "with invalid arguments" do
+      it "raises ArgumentError when path is nil" do
         expect { described_class.from_file(nil) }.to raise_error(
           ArgumentError,
-          'Path cannot be nil'
+          "Path cannot be nil"
         )
       end
 
-      it 'raises ArgumentError when path is empty' do
-        expect { described_class.from_file('') }.to raise_error(
+      it "raises ArgumentError when path is empty" do
+        expect { described_class.from_file("") }.to raise_error(
           ArgumentError,
-          'Path cannot be empty'
+          "Path cannot be empty"
         )
       end
 
-      it 'raises FileNotFoundError when file does not exist' do
-        expect { described_class.from_file('nonexistent.docx') }.to raise_error(
+      it "raises FileNotFoundError when file does not exist" do
+        expect { described_class.from_file("nonexistent.docx") }.to raise_error(
           Uniword::FileNotFoundError,
           /File not found/
         )
       end
 
-      it 'raises ArgumentError when format is not supported' do
+      it "raises ArgumentError when format is not supported" do
         temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           # Create an empty file (the format check happens before file content check)
-          File.write(temp_path, '')
+          File.write(temp_path, "")
 
           expect do
             described_class.from_file(temp_path, format: :invalid)
@@ -124,13 +124,13 @@ RSpec.describe Uniword::DocumentFactory do
     end
   end
 
-  describe '.detect_format' do
-    context 'with DOCX file' do
-      it 'detects DOCX format' do
+  describe ".detect_format" do
+    context "with DOCX file" do
+      it "detects DOCX format" do
         docx_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           packager = Uniword::Infrastructure::ZipPackager.new
-          packager.package({ 'test.xml' => '<test/>' }, docx_path)
+          packager.package({ "test.xml" => "<test/>" }, docx_path)
 
           format = described_class.detect_format(docx_path)
 
@@ -141,11 +141,11 @@ RSpec.describe Uniword::DocumentFactory do
       end
     end
 
-    context 'with MHTML file' do
-      it 'detects MHTML format' do
+    context "with MHTML file" do
+      it "detects MHTML format" do
         mhtml_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
-          File.write(mhtml_path, 'MIME-Version: 1.0')
+          File.write(mhtml_path, "MIME-Version: 1.0")
 
           format = described_class.detect_format(mhtml_path)
 
@@ -155,10 +155,10 @@ RSpec.describe Uniword::DocumentFactory do
         end
       end
 
-      it 'detects MHT format' do
+      it "detects MHT format" do
         mht_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mht")
         begin
-          File.write(mht_path, 'MIME-Version: 1.0')
+          File.write(mht_path, "MIME-Version: 1.0")
 
           format = described_class.detect_format(mht_path)
 
@@ -169,11 +169,11 @@ RSpec.describe Uniword::DocumentFactory do
       end
     end
 
-    context 'with unsupported file' do
-      it 'raises ArgumentError for unknown format' do
+    context "with unsupported file" do
+      it "raises ArgumentError for unknown format" do
         txt_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.txt")
         begin
-          File.write(txt_path, 'test content')
+          File.write(txt_path, "test content")
 
           expect do
             described_class.detect_format(txt_path)
@@ -184,17 +184,17 @@ RSpec.describe Uniword::DocumentFactory do
       end
     end
 
-    context 'with invalid arguments' do
-      it 'raises ArgumentError when path is nil' do
+    context "with invalid arguments" do
+      it "raises ArgumentError when path is nil" do
         expect { described_class.detect_format(nil) }.to raise_error(
           ArgumentError,
           /Path cannot be nil/
         )
       end
 
-      it 'raises ArgumentError when file does not exist' do
+      it "raises ArgumentError when file does not exist" do
         expect do
-          described_class.detect_format('nonexistent.docx')
+          described_class.detect_format("nonexistent.docx")
         end.to raise_error(ArgumentError, /File not found/)
       end
     end

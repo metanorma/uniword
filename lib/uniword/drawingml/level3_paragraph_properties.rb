@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Drawingml
@@ -13,11 +13,11 @@ module Uniword
       attribute :def_tab_sz, :integer
 
       xml do
-        element 'lvl3pPr'
+        element "lvl3pPr"
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
-        map_attribute 'algn', to: :algn
-        map_attribute 'def-tab-sz', to: :def_tab_sz
+        map_attribute "algn", to: :algn
+        map_attribute "def-tab-sz", to: :def_tab_sz
       end
     end
   end

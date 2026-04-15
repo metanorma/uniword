@@ -96,7 +96,7 @@ module Uniword
         class_name = element_class.name
         return nil if class_name.nil? # Anonymous class
 
-        normalize_key(class_name.split('::').last)
+        normalize_key(class_name.split("::").last)
       end
 
       # Normalize a tag name to a registry key

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml2010
@@ -15,13 +15,13 @@ module Uniword
       attribute :align, :string
 
       xml do
-        element 'textOutline'
+        element "textOutline"
         namespace Uniword::Ooxml::Namespaces::Word2010
 
-        map_attribute 'width', to: :width
-        map_attribute 'cap', to: :cap
-        map_attribute 'compound', to: :compound
-        map_attribute 'align', to: :align
+        map_attribute "width", to: :width
+        map_attribute "cap", to: :cap
+        map_attribute "compound", to: :compound
+        map_attribute "align", to: :align
       end
     end
   end

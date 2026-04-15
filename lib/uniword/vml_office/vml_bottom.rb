@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module VmlOffice
@@ -13,11 +13,11 @@ module Uniword
       attribute :units, :string
 
       xml do
-        element 'bottom'
+        element "bottom"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'value', to: :value
-        map_attribute 'units', to: :units
+        map_attribute "value", to: :value
+        map_attribute "units", to: :units
       end
     end
   end

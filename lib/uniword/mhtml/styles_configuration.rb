@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Mhtml
@@ -19,7 +19,7 @@ module Uniword
       #
       # @return [String] CSS stylesheet content
       def to_css
-        css = +''
+        css = +""
         styles.each do |name, properties|
           css << ".#{name} {\n"
           properties.each do |prop, value|
@@ -50,7 +50,7 @@ module Uniword
 
       # Convert Ruby-style property to CSS property
       def prop_to_css(prop)
-        prop.to_s.gsub('_', '-')
+        prop.to_s.gsub("_", "-")
       end
     end
   end

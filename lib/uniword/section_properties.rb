@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   # Represents section properties
@@ -19,7 +19,7 @@ module Uniword
     attribute :margin_footer, :integer
 
     # Page orientation
-    attribute :orientation, :string, default: -> { 'portrait' }
+    attribute :orientation, :string, default: -> { "portrait" }
 
     # Title page (different first page header/footer)
     attribute :title_page, :boolean, default: -> { false }
@@ -32,7 +32,7 @@ module Uniword
     attribute :page_number_start, :integer
 
     # Section type (continuous, nextPage, nextColumn, evenPage, oddPage)
-    attribute :section_type, :string, default: -> { 'nextPage' }
+    attribute :section_type, :string, default: -> { "nextPage" }
 
     # Header/footer references (relationship IDs)
     attribute :header_default_rel_id, :string
@@ -78,7 +78,7 @@ module Uniword
       new(
         page_width: 11_906,  # 210mm in twips
         page_height: 16_838, # 297mm in twips
-        orientation: 'portrait'
+        orientation: "portrait"
       )
     end
 
@@ -87,7 +87,7 @@ module Uniword
       new(
         page_width: 16_838,  # 297mm in twips
         page_height: 11_906, # 210mm in twips
-        orientation: 'landscape'
+        orientation: "landscape"
       )
     end
 
@@ -96,7 +96,7 @@ module Uniword
       new(
         page_width: 12_240,  # 8.5in in twips
         page_height: 15_840, # 11in in twips
-        orientation: 'portrait'
+        orientation: "portrait"
       )
     end
 
@@ -105,7 +105,7 @@ module Uniword
       new(
         page_width: 15_840,  # 11in in twips
         page_height: 12_240, # 8.5in in twips
-        orientation: 'landscape'
+        orientation: "landscape"
       )
     end
 
@@ -117,18 +117,18 @@ module Uniword
     def set_page_size(name, orientation: :portrait)
       unless PAGE_SIZES.key?(name)
         raise ArgumentError,
-              "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(', ')}"
+              "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(", ")}"
       end
 
       width, height = PAGE_SIZES[name]
       if orientation == :landscape
         self.page_width = height
         self.page_height = width
-        self.orientation = 'landscape'
+        self.orientation = "landscape"
       else
         self.page_width = width
         self.page_height = height
-        self.orientation = 'portrait'
+        self.orientation = "portrait"
       end
     end
 
@@ -149,7 +149,7 @@ module Uniword
     # @param restart [String] When to restart (continuous, newPage, newSection)
     # @param distance [Integer] Distance from text
     # @return [void]
-    def enable_line_numbering(start: 1, count_by: 1, restart: 'newPage', distance: 360)
+    def enable_line_numbering(start: 1, count_by: 1, restart: "newPage", distance: 360)
       self.line_numbering = LineNumbering.new(
         start: start,
         count_by: count_by,
@@ -167,14 +167,14 @@ module Uniword
       return unless orientation && !ORIENTATIONS.include?(orientation)
 
       raise ArgumentError,
-            "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(', ')}"
+            "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(", ")}"
     end
 
     def validate_section_type
       return unless section_type && !SECTION_TYPES.include?(section_type)
 
       raise ArgumentError,
-            "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(', ')}"
+            "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(", ")}"
     end
   end
 end

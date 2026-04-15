@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Wordprocessingml
@@ -11,10 +11,10 @@ module Uniword
       attribute :recipient_data, RecipientData, collection: true, initialize_empty: true
 
       xml do
-        element 'recipients'
+        element "recipients"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_element 'recipientData', to: :recipient_data, render_nil: false
+        map_element "recipientData", to: :recipient_data, render_nil: false
       end
     end
   end

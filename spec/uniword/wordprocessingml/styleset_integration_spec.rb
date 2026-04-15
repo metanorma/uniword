@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
-RSpec.describe 'StyleSet Integration' do
+RSpec.describe "StyleSet Integration" do
   # Skip if submodule not available (e.g., in CI without SSH access)
   before(:all) do
-    skip 'Submodule spec/fixtures/uniword-private not available' unless File.exist?('spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx')
+    skip "Submodule spec/fixtures/uniword-private not available" unless File.exist?("spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx")
   end
 
-  let(:dotx_file) { 'spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx' }
+  let(:dotx_file) { "spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx" }
 
-  describe 'Loading StyleSets from .dotx files' do
-    it 'loads Distinctive.dotx successfully' do
+  describe "Loading StyleSets from .dotx files" do
+    it "loads Distinctive.dotx successfully" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
 
       expect(styleset).to be_a(Uniword::StyleSet)
-      expect(styleset.name).to eq('Distinctive')
+      expect(styleset.name).to eq("Distinctive")
       expect(styleset.styles).to be_an(Array)
       expect(styleset.styles.count).to be > 0
     end
 
-    it 'parses paragraph properties from styles' do
+    it "parses paragraph properties from styles" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       styles_with_pPr = styleset.styles.select(&:paragraph_properties)
 
@@ -32,7 +32,7 @@ RSpec.describe 'StyleSet Integration' do
       end
     end
 
-    it 'parses run properties from styles' do
+    it "parses run properties from styles" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       styles_with_rPr = styleset.styles.select(&:run_properties)
 
@@ -44,9 +44,9 @@ RSpec.describe 'StyleSet Integration' do
       end
     end
 
-    it 'parses specific property values correctly' do
+    it "parses specific property values correctly" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
-      heading1 = styleset.styles.find { |s| s.id == 'Heading1' }
+      heading1 = styleset.styles.find { |s| s.id == "Heading1" }
 
       expect(heading1).not_to be_nil
       expect(heading1.paragraph_properties).not_to be_nil
@@ -63,8 +63,8 @@ RSpec.describe 'StyleSet Integration' do
     end
   end
 
-  describe 'Applying StyleSets to documents' do
-    it 'applies StyleSet to document successfully' do
+  describe "Applying StyleSets to documents" do
+    it "applies StyleSet to document successfully" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
@@ -72,7 +72,7 @@ RSpec.describe 'StyleSet Integration' do
       expect(doc.styles_configuration.styles.count).to eq(styleset.styles.count)
     end
 
-    it 'merges StyleSet with existing styles using :keep_existing strategy' do
+    it "merges StyleSet with existing styles using :keep_existing strategy" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
@@ -85,39 +85,39 @@ RSpec.describe 'StyleSet Integration' do
       expect(doc.styles_configuration.styles.count).to be >= initial_count
     end
 
-    it 'replaces existing styles with :replace strategy' do
+    it "replaces existing styles with :replace strategy" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # Add a custom Normal style (use styleId: not id: for lutaml-model)
-      custom_normal = Uniword::Wordprocessingml::Style.new(styleId: 'Normal',
-                                                           name: 'Custom Normal', type: 'paragraph')
+      custom_normal = Uniword::Wordprocessingml::Style.new(styleId: "Normal",
+                                                           name: "Custom Normal", type: "paragraph")
       doc.styles_configuration.add_style(custom_normal, allow_overwrite: true)
 
       styleset.apply_to(doc, strategy: :replace)
 
       # Normal from StyleSet should replace custom one
-      normal_style = doc.styles_configuration.styles.find { |s| s.id == 'Normal' }
-      expect(normal_style.name).not_to eq('Custom Normal')
+      normal_style = doc.styles_configuration.styles.find { |s| s.id == "Normal" }
+      expect(normal_style.name).not_to eq("Custom Normal")
     end
   end
 
-  describe 'Serializing StyleSet-enhanced documents' do
-    it 'serializes styles.xml with parsed properties' do
+  describe "Serializing StyleSet-enhanced documents" do
+    it "serializes styles.xml with parsed properties" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       styleset.apply_to(doc)
 
       styles_xml = doc.styles_configuration.to_xml(prefix: true)
 
-      expect(styles_xml).to include('<w:style')
+      expect(styles_xml).to include("<w:style")
       expect(styles_xml).to include('styleId="Normal"')
       expect(styles_xml).to include('styleId="Heading1"')
-      expect(styles_xml).to include('<w:pPr>')
-      expect(styles_xml).to include('<w:rPr>')
+      expect(styles_xml).to include("<w:pPr>")
+      expect(styles_xml).to include("<w:rPr>")
     end
 
-    it 'preserves property values in serialized XML' do
+    it "preserves property values in serialized XML" do
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       styleset.apply_to(doc)
@@ -125,23 +125,23 @@ RSpec.describe 'StyleSet Integration' do
       styles_xml = doc.styles_configuration.to_xml(prefix: true)
 
       # Check for specific property serialization
-      expect(styles_xml).to include('<w:spacing')  # Spacing properties
-      expect(styles_xml).to include('<w:sz')       # Font size
-      expect(styles_xml).to include('<w:outlineLvl') # Outline level for headings
+      expect(styles_xml).to include("<w:spacing")  # Spacing properties
+      expect(styles_xml).to include("<w:sz")       # Font size
+      expect(styles_xml).to include("<w:outlineLvl") # Outline level for headings
     end
   end
 
-  describe 'Integration with Document API' do
-    it 'allows shorthand StyleSet application' do
+  describe "Integration with Document API" do
+    it "allows shorthand StyleSet application" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
 
       # This would use bundled YAML StyleSets
-      expect { doc.apply_styleset('distinctive') }.not_to raise_error
+      expect { doc.apply_styleset("distinctive") }.not_to raise_error
     end
   end
 
-  describe 'Performance' do
-    it 'loads and applies StyleSet in under 1 second' do
+  describe "Performance" do
+    it "loads and applies StyleSet in under 1 second" do
       start_time = Time.now
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)

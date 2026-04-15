@@ -11,11 +11,11 @@ module Uniword
         base = word_impl.cache_path
         new(
           base: base,
-          themes: File.join(base, 'themes'),
-          stylesets: File.join(base, 'stylesets'),
-          color_schemes: File.join(base, 'color_schemes'),
-          font_schemes: File.join(base, 'font_schemes'),
-          version_file: File.join(base, 'version.json')
+          themes: File.join(base, "themes"),
+          stylesets: File.join(base, "stylesets"),
+          color_schemes: File.join(base, "color_schemes"),
+          font_schemes: File.join(base, "font_schemes"),
+          version_file: File.join(base, "version.json")
         )
       end
 

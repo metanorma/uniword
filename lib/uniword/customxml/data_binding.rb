@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Customxml
@@ -14,12 +14,12 @@ module Uniword
       attribute :store_item_id, :string
 
       xml do
-        element 'data_binding'
+        element "data_binding"
         namespace Uniword::Ooxml::Namespaces::CustomXml
 
-        map_attribute 'prefixMappings', to: :prefix_mappings
-        map_attribute 'xpath', to: :xpath
-        map_attribute 'storeItemID', to: :store_item_id
+        map_attribute "prefixMappings", to: :prefix_mappings
+        map_attribute "xpath", to: :xpath
+        map_attribute "storeItemID", to: :store_item_id
       end
     end
   end

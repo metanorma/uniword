@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Ooxml
@@ -26,7 +26,7 @@ module Uniword
         # vt:lpwstr - Wide string (Unicode), most common type
         class VtLpwstr < VTValue
           xml do
-            element 'lpwstr'
+            element "lpwstr"
             namespace VT_NS
             map_content to: :value
           end
@@ -35,7 +35,7 @@ module Uniword
         # vt:lpstr - ANSI string
         class VtLpstr < VTValue
           xml do
-            element 'lpstr'
+            element "lpstr"
             namespace VT_NS
             map_content to: :value
           end
@@ -44,7 +44,7 @@ module Uniword
         # vt:bstr - Basic string
         class VtBstr < VTValue
           xml do
-            element 'bstr'
+            element "bstr"
             namespace VT_NS
             map_content to: :value
           end
@@ -53,7 +53,7 @@ module Uniword
         # vt:i1 - 1-byte signed integer
         class VtI1 < VTValue
           xml do
-            element 'i1'
+            element "i1"
             namespace VT_NS
             map_content to: :value
           end
@@ -62,7 +62,7 @@ module Uniword
         # vt:i2 - 2-byte signed integer
         class VtI2 < VTValue
           xml do
-            element 'i2'
+            element "i2"
             namespace VT_NS
             map_content to: :value
           end
@@ -71,7 +71,7 @@ module Uniword
         # vt:i4 - 4-byte signed integer
         class VtI4 < VTValue
           xml do
-            element 'i4'
+            element "i4"
             namespace VT_NS
             map_content to: :value
           end
@@ -80,7 +80,7 @@ module Uniword
         # vt:i8 - 8-byte signed integer
         class VtI8 < VTValue
           xml do
-            element 'i8'
+            element "i8"
             namespace VT_NS
             map_content to: :value
           end
@@ -89,7 +89,7 @@ module Uniword
         # vt:int - Integer
         class VtInt < VTValue
           xml do
-            element 'int'
+            element "int"
             namespace VT_NS
             map_content to: :value
           end
@@ -98,7 +98,7 @@ module Uniword
         # vt:ui1 - 1-byte unsigned integer
         class VtUi1 < VTValue
           xml do
-            element 'ui1'
+            element "ui1"
             namespace VT_NS
             map_content to: :value
           end
@@ -107,7 +107,7 @@ module Uniword
         # vt:ui2 - 2-byte unsigned integer
         class VtUi2 < VTValue
           xml do
-            element 'ui2'
+            element "ui2"
             namespace VT_NS
             map_content to: :value
           end
@@ -116,7 +116,7 @@ module Uniword
         # vt:ui4 - 4-byte unsigned integer
         class VtUi4 < VTValue
           xml do
-            element 'ui4'
+            element "ui4"
             namespace VT_NS
             map_content to: :value
           end
@@ -125,7 +125,7 @@ module Uniword
         # vt:ui8 - 8-byte unsigned integer
         class VtUi8 < VTValue
           xml do
-            element 'ui8'
+            element "ui8"
             namespace VT_NS
             map_content to: :value
           end
@@ -134,7 +134,7 @@ module Uniword
         # vt:uint - Unsigned integer
         class VtUint < VTValue
           xml do
-            element 'uint'
+            element "uint"
             namespace VT_NS
             map_content to: :value
           end
@@ -143,7 +143,7 @@ module Uniword
         # vt:r4 - 4-byte real
         class VtR4 < VTValue
           xml do
-            element 'r4'
+            element "r4"
             namespace VT_NS
             map_content to: :value
           end
@@ -152,7 +152,7 @@ module Uniword
         # vt:r8 - 8-byte real
         class VtR8 < VTValue
           xml do
-            element 'r8'
+            element "r8"
             namespace VT_NS
             map_content to: :value
           end
@@ -161,7 +161,7 @@ module Uniword
         # vt:decimal - Decimal
         class VtDecimal < VTValue
           xml do
-            element 'decimal'
+            element "decimal"
             namespace VT_NS
             map_content to: :value
           end
@@ -170,7 +170,7 @@ module Uniword
         # vt:bool - Boolean (text is "0" or "1")
         class VtBool < VTValue
           xml do
-            element 'bool'
+            element "bool"
             namespace VT_NS
             map_content to: :value
           end
@@ -179,7 +179,7 @@ module Uniword
         # vt:date - Date/time
         class VtDate < VTValue
           xml do
-            element 'date'
+            element "date"
             namespace VT_NS
             map_content to: :value
           end
@@ -188,7 +188,7 @@ module Uniword
         # vt:filetime - File timestamp
         class VtFiletime < VTValue
           xml do
-            element 'filetime'
+            element "filetime"
             namespace VT_NS
             map_content to: :value
           end
@@ -197,7 +197,7 @@ module Uniword
         # vt:cy - Currency
         class VtCy < VTValue
           xml do
-            element 'cy'
+            element "cy"
             namespace VT_NS
             map_content to: :value
           end
@@ -206,7 +206,7 @@ module Uniword
         # vt:error - Error status code
         class VtError < VTValue
           xml do
-            element 'error'
+            element "error"
             namespace VT_NS
             map_content to: :value
           end
@@ -215,7 +215,7 @@ module Uniword
         # vt:clsid - Class ID (GUID)
         class VtClsid < VTValue
           xml do
-            element 'clsid'
+            element "clsid"
             namespace VT_NS
             map_content to: :value
           end
@@ -224,7 +224,7 @@ module Uniword
         # vt:empty - Empty value (no content)
         class VtEmpty < Lutaml::Model::Serializable
           xml do
-            element 'empty'
+            element "empty"
             namespace VT_NS
           end
         end
@@ -232,7 +232,7 @@ module Uniword
         # vt:null - Null value (no content)
         class VtNull < Lutaml::Model::Serializable
           xml do
-            element 'null'
+            element "null"
             namespace VT_NS
           end
         end
@@ -244,12 +244,12 @@ module Uniword
           attribute :i4, VtI4
 
           xml do
-            element 'variant'
+            element "variant"
             namespace VT_NS
 
-            map_element 'lpwstr', to: :lpwstr, render_nil: false
-            map_element 'lpstr', to: :lpstr, render_nil: false
-            map_element 'i4', to: :i4, render_nil: false
+            map_element "lpwstr", to: :lpwstr, render_nil: false
+            map_element "lpstr", to: :lpstr, render_nil: false
+            map_element "i4", to: :i4, render_nil: false
           end
 
           def text_value
@@ -267,15 +267,15 @@ module Uniword
           attribute :variant_values, VtVariant, collection: true
 
           xml do
-            element 'vector'
+            element "vector"
             namespace VT_NS
 
-            map_attribute 'baseType', to: :base_type
-            map_attribute 'size', to: :size
-            map_element 'lpwstr', to: :lpwstr_values, render_nil: false
-            map_element 'lpstr', to: :lpstr_values, render_nil: false
-            map_element 'i4', to: :i4_values, render_nil: false
-            map_element 'variant', to: :variant_values, render_nil: false
+            map_attribute "baseType", to: :base_type
+            map_attribute "size", to: :size
+            map_element "lpwstr", to: :lpwstr_values, render_nil: false
+            map_element "lpstr", to: :lpstr_values, render_nil: false
+            map_element "i4", to: :i4_values, render_nil: false
+            map_element "variant", to: :variant_values, render_nil: false
           end
 
           def values
@@ -293,13 +293,13 @@ module Uniword
           attribute :u_bound, :string
 
           xml do
-            element 'array'
+            element "array"
             namespace VT_NS
 
-            map_attribute 'baseType', to: :base_type
-            map_attribute 'size', to: :size
-            map_attribute 'lBound', to: :l_bound
-            map_attribute 'uBound', to: :u_bound
+            map_attribute "baseType", to: :base_type
+            map_attribute "size", to: :size
+            map_attribute "lBound", to: :l_bound
+            map_attribute "uBound", to: :u_bound
           end
         end
       end

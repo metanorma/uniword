@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -16,14 +16,14 @@ module Uniword
       attribute :shapes, Shape, collection: true, initialize_empty: true
 
       xml do
-        element 'group'
+        element "group"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'id', to: :id
-        map_attribute 'style', to: :style
-        map_attribute 'coordsize', to: :coordsize
-        map_attribute 'coordorigin', to: :coordorigin
-        map_element 'shape', to: :shapes, render_nil: false
+        map_attribute "id", to: :id
+        map_attribute "style", to: :style
+        map_attribute "coordsize", to: :coordsize
+        map_attribute "coordorigin", to: :coordorigin
+        map_element "shape", to: :shapes, render_nil: false
       end
     end
   end

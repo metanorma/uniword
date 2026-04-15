@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Spreadsheetml
@@ -12,11 +12,11 @@ module Uniword
       attribute :cell_color, :string
 
       xml do
-        element 'colorFilter'
+        element "colorFilter"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_attribute 'dxfId', to: :dxf_id, render_nil: false
-        map_attribute 'cellColor', to: :cell_color, render_nil: false
+        map_attribute "dxfId", to: :dxf_id, render_nil: false
+        map_attribute "cellColor", to: :cell_color, render_nil: false
       end
     end
   end

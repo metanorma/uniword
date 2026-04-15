@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Picture
@@ -11,16 +11,16 @@ module Uniword
     class PictureBlipFill < Lutaml::Model::Serializable
       attribute :blip, Drawingml::Blip
       attribute :src_rect, PictureSourceRect
-      attribute :stretch, PictureStretch
+      attribute :stretch, Drawingml::Stretch
 
       xml do
-        element 'blipFill'
+        element "blipFill"
         namespace Uniword::Ooxml::Namespaces::Picture
         mixed_content
 
-        map_element 'blip', to: :blip, render_nil: false
-        map_element 'srcRect', to: :src_rect, render_nil: false
-        map_element 'stretch', to: :stretch, render_nil: false
+        map_element "blip", to: :blip, render_nil: false
+        map_element "srcRect", to: :src_rect, render_nil: false
+        map_element "stretch", to: :stretch, render_nil: false
       end
     end
   end

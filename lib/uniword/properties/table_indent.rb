@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Properties
@@ -13,10 +13,10 @@ module Uniword
       attribute :type, :string
 
       xml do
-        element 'tblInd'
+        element "tblInd"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute 'w', to: :value
-        map_attribute 'type', to: :type
+        map_attribute "w", to: :value
+        map_attribute "type", to: :type
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'lutaml/model'
+require "lutaml/model"
 
 module Uniword
   module Vml
@@ -17,16 +17,16 @@ module Uniword
       attribute :origin, :string
 
       xml do
-        element 'shadow'
+        element "shadow"
         namespace Uniword::Ooxml::Namespaces::Vml
 
-        map_attribute 'id', to: :id
-        map_attribute 'on', to: :on
-        map_attribute 'type', to: :type
-        map_attribute 'color', to: :color
-        map_attribute 'offset', to: :offset
-        map_attribute 'opacity', to: :opacity
-        map_attribute 'origin', to: :origin
+        map_attribute "id", to: :id
+        map_attribute "on", to: :on
+        map_attribute "type", to: :type
+        map_attribute "color", to: :color
+        map_attribute "offset", to: :offset
+        map_attribute "opacity", to: :opacity
+        map_attribute "origin", to: :origin
       end
     end
   end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'yaml'
+require "yaml"
 
 module Uniword
   module Accessibility
@@ -75,7 +75,7 @@ module Uniword
       #
       # @return [String] Default config path
       def default_config_path
-        File.expand_path('../../../config/accessibility_profiles.yml', __dir__)
+        File.expand_path("../../../config/accessibility_profiles.yml", __dir__)
       end
 
       # Initialize rules based on profile configuration
