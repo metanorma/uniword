@@ -56,6 +56,9 @@ module Uniword
       attribute :outline, Properties::Outline, default: nil
       attribute :outline_level, Properties::OutlineLevel, default: nil
 
+      # W14 namespace elements
+      attribute :ligatures, Uniword::Wordprocessingml2010::Ligatures, default: nil
+
       # YAML mappings for flat YAML structure (StyleSet compatibility)
       yaml do
         map "bold", with: { from: :yaml_bold_from, to: :yaml_bold_to }
@@ -338,6 +341,9 @@ module Uniword
         map_element "emboss", to: :emboss, render_nil: false
         map_element "imprint", to: :imprint, render_nil: false
         map_element "outline", to: :outline, render_nil: false
+
+        # W14 namespace elements
+        map_element "ligatures", to: :ligatures, render_nil: false
       end
 
       # Helper methods for boolean values (handle both wrapper and primitive)

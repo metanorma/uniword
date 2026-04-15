@@ -80,6 +80,14 @@ module Uniword
       end
     end
 
+    # NotTrueType element (presence-only marker)
+    class NotTrueType < Lutaml::Model::Serializable
+      xml do
+        element "notTrueType"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      end
+    end
+
     # Font definition with child elements
     #
     # Generated from OOXML schema: wordprocessingml.yml
@@ -90,6 +98,7 @@ module Uniword
       attribute :panose1, Panose1
       attribute :charset, Charset
       attribute :family, Family
+      attribute :not_true_type, NotTrueType
       attribute :pitch, Pitch
       attribute :sig, Sig
 
@@ -102,6 +111,7 @@ module Uniword
         map_element "panose1", to: :panose1
         map_element "charset", to: :charset
         map_element "family", to: :family
+        map_element "notTrueType", to: :not_true_type, render_nil: false
         map_element "pitch", to: :pitch
         map_element "sig", to: :sig
       end
