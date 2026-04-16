@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "benchmark"
+require "benchmark/memory"
 require "tmpdir"
 
 RSpec.describe "Real-World Document Testing", :integration do
@@ -134,19 +135,18 @@ RSpec.describe "Real-World Document Testing", :integration do
       end
 
       it "handles document without memory issues" do
-        skip "RSS memory test only with PROFILE=true" unless ENV["PROFILE"]
+        report = Benchmark.memory(quiet: true) do |x|
+          x.report("load+text") { doc = Uniword.load(doc_path); doc.text }
+        end
 
-        GC.start
-        before_memory = `ps -o rss= -p #{Process.pid}`.to_i
+        entry = report.entries.first
+        allocated_mb = entry.measurement.memory.allocated / 1024.0 / 1024.0
+        retained_mb = entry.measurement.memory.retained / 1024.0 / 1024.0
 
-        doc = Uniword.load(doc_path)
-        _ = doc.text
-
-        GC.start
-        after_memory = `ps -o rss= -p #{Process.pid}`.to_i
-        memory_growth_mb = (after_memory - before_memory) / 1024
-
-        expect(memory_growth_mb).to be < 50
+        expect(allocated_mb).to be < 100,
+                                 "Allocated #{allocated_mb.round(1)} MB, expected < 100 MB"
+        expect(retained_mb).to be < 50,
+                                "Retained #{retained_mb.round(1)} MB, expected < 50 MB"
       end
 
       it "provides responsive text extraction" do
