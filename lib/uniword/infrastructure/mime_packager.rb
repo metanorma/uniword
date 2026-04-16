@@ -36,7 +36,7 @@ module Uniword
         raise ArgumentError, "Output path cannot be nil" if output_path.nil?
         raise ArgumentError, "Output path cannot be empty" if output_path.empty?
 
-        File.write(output_path, build_mime_content, encoding: "UTF-8")
+        File.binwrite(output_path, build_mime_content.encode("UTF-8"))
       end
 
       # Build complete MIME content as string.

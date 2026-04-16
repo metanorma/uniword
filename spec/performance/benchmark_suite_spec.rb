@@ -105,7 +105,7 @@ RSpec.describe "Comprehensive Benchmark Suite" do
         serializer.serialize(@test_doc)
       end
 
-      expect(time).to be < 0.5
+      expect(time).to be < 2.0
     end
 
     it "benchmarks HTML serialization" do

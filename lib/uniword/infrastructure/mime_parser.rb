@@ -22,7 +22,7 @@ module Uniword
         raise ArgumentError, "Path cannot be nil" if path.nil?
         raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
 
-        content = File.read(path, encoding: "UTF-8")
+        content = File.binread(path).force_encoding("UTF-8")
         parse_content(content)
       end
 
