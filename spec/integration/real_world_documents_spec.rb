@@ -134,6 +134,8 @@ RSpec.describe "Real-World Document Testing", :integration do
       end
 
       it "handles document without memory issues" do
+        skip "RSS memory test only with PROFILE=true" unless ENV["PROFILE"]
+
         GC.start
         before_memory = `ps -o rss= -p #{Process.pid}`.to_i
 
