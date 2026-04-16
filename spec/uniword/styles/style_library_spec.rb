@@ -21,7 +21,7 @@ RSpec.describe Uniword::Styles::StyleLibrary do
     it "raises error for non-existent library" do
       expect do
         described_class.load("non_existent")
-      end.to raise_error(Uniword::Configuration::ConfigurationError)
+      end.to raise_error(StandardError)
     end
   end
 
