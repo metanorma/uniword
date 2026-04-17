@@ -13,6 +13,9 @@ Uniword is a comprehensive Ruby library for reading and writing Microsoft Word d
 * Full DOCX read/write support (Word 2007+)
 * Full MHTML read/write support (Word 2003+)
 * Format conversion (DOCX ↔ MHTML)
+* DOCX validation and verification (`uniword verify` with 3-layer pipeline)
+* Prevention layer (auto-fixes footnote/endnote cross-part invariants)
+* Open-source resources (23 color schemes, 25 font schemes, 30-locale document elements)
 * Styles (paragraph, character, table)
 * Lists (numbered, bulleted, multi-level)
 * Tables with borders and cell merging
@@ -121,14 +124,14 @@ doc2 = Uniword.load('output.docx')
 * ✅ **Extension System** - Ruby convenience methods without modifying generated code
 * ✅ **Maintainability** - Changes to OOXML spec only require YAML schema updates
 
-=== DocxPackage - Core Architecture
+=== Docx::Package - Core Architecture
 
 Uniword uses a **pure object-oriented approach** where each XML file in the DOCX ZIP package is represented by a dedicated lutaml-model class. This eliminates the serialization/deserialization anti-pattern and provides perfect round-trip fidelity.
 
-.DocxPackage structure
+.Docx::Package structure
 [source,ruby]
 ----
-class DocxPackage < Lutaml::Model::Serializable
+class Package < Lutaml::Model::Serializable
   # Metadata (fully modeled)
   attribute :core_properties, CoreProperties      # docProps/core.xml
   attribute :app_properties, AppProperties        # docProps/app.xml
@@ -347,6 +350,82 @@ original.save('modified.docx')
 * Math equations: ✅ Preserved via m: namespace
 * Bookmarks: ✅ Native support with ID preservation
 * Complex documents: ✅ Perfect round-trip with schema-driven architecture (v2.0)
+
+== Prevention Layer
+
+Uniword includes a **prevention layer** (`Docx::Reconciler`) that runs automatically during serialization. It enforces cross-part invariants so structurally invalid DOCX output becomes impossible.
+
+**Auto-fixes applied before writing:**
+
+[cols="2,3"]
+|===
+| Condition | Auto-fix
+
+| `footnotePr` set, no `footnotes.xml`
+| Create minimal footnotes with separator entries
+
+| `footnotes.xml` exists, no `footnotePr`
+| Create `FootnotePr` in settings
+
+| `endnotePr` set, no `endnotes.xml`
+| Create minimal endnotes with separator entries
+
+| `endnotes.xml` exists, no `endnotePr`
+| Create `EndnotePr` in settings
+
+| Missing separator entry (id=-1)
+| Inject separator
+
+| Missing continuation entry (id=0)
+| Inject continuation
+|===
+
+The reconciler runs in `Docx::Package#to_zip_content` before the serialization phase. It is NOT an extension point -- it enforces built-in DOCX invariants. For customizable validation, use `uniword verify` or `Uniword::Validation::Rules`.
+
+== Open-Source Resources
+
+Uniword ships with OFL-licensed open-source resources that replace proprietary Microsoft Word assets:
+
+**Resource files:**
+
+[cols="2,1,2"]
+|===
+| Resource | Count | Location
+
+| Color schemes
+| 23
+| `data/color_schemes/*.yml`
+
+| Font schemes
+| 25
+| `data/font_schemes/*.yml`
+
+| Document elements
+| 240
+| `data/resources/document_elements/{locale}/*.yml`
+
+| Font registry
+| 1
+| `data/resources/font_registry.yml`
+
+| XSD schemas
+| 40
+| `data/schemas/{iso,ecma,microsoft}/*.xsd`
+
+| Stylesets
+| 12
+| `data/stylesets/*.yml`
+
+| Themes
+| 29
+| `data/themes/*.yml`
+|===
+
+**30 locales supported:** ar, cs, da, de, el, en, en-GB, es, es-MX, fi, fr, fr-CA, he, hu, id, it, ja, ko, nl, no, pl, pt, pt-PT, ru, sk, sv, th, tr, zh-CN, zh-TW
+
+Each locale has 8 document element types: bibliographies, cover_pages, equations, footers, headers, table_of_contents, tables, watermarks.
+
+See link:docs/RESOURCE_AUTHORING.md[Resource Authoring Guide] and link:docs/RESOURCE_MAPPING.md[Resource Mapping] for details.
 
 == Installation
 
@@ -2061,6 +2140,86 @@ uniword validate document.docx
 # Show detailed validation results
 uniword validate document.docx --verbose
 ----
+
+=== Verify DOCX validity
+
+Comprehensive 3-layer DOCX verification:
+
+[source,shell]
+----
+# Full verification (OPC + semantic)
+uniword verify document.docx
+
+# Enable XSD schema validation (slower, thorough)
+uniword verify document.docx --xsd
+
+# Machine-readable output
+uniword verify document.docx --json
+uniword verify document.docx --yaml
+
+# Show all issues including info-level
+uniword verify document.docx --verbose
+----
+
+**Three verification layers:**
+
+[cols="1,2,4"]
+|===
+| Layer | Checks | Examples
+
+| OPC Package
+| ZIP integrity, content types, relationships, part presence
+| OPC-001 (ZIP opens), OPC-004 (document.xml exists), OPC-006 (relationship targets resolve)
+
+| XSD Schema
+| XML schema validation against bundled XSD files
+| Namespace-aware validation using 40 bundled XSD schemas from ISO, ECMA, and Microsoft
+
+| Word Document
+| Semantic checks for cross-references, styles, numbering, footnotes, etc.
+| DOC-001 (undefined style), DOC-020 (footnotePr without footnotes.xml), DOC-040 (duplicate bookmark)
+|===
+
+**10 built-in semantic rules:**
+
+[cols="2,4"]
+|===
+| Rule | What it checks
+
+| Style references
+| Undefined or unused styles (DOC-001, DOC-002, DOC-003)
+
+| Numbering
+| Missing or orphaned numbering definitions (DOC-010, DOC-011, DOC-012)
+
+| Footnotes
+| footnotePr/footnotes.xml cross-reference, separator entries (DOC-020, DOC-021, DOC-022)
+
+| Headers/footers
+| Missing header/footer reference targets (DOC-030, DOC-031)
+
+| Bookmarks
+| Duplicate bookmark names, orphaned references (DOC-040, DOC-041, DOC-042)
+
+| Images
+| Missing relationship targets, content type coverage (DOC-050, DOC-051, DOC-052)
+
+| Tables
+| Missing or invalid table style references (DOC-060, DOC-061)
+
+| Fonts
+| Empty font entries, missing font references (DOC-070, DOC-071)
+
+| Theme
+| Missing theme part, incomplete color/font scheme (DOC-080, DOC-081)
+
+| Settings
+| Missing or incomplete settings part (DOC-090, DOC-091)
+|===
+
+**Custom rules** can be registered via `Uniword::Validation::Rules.register(MyRule)`.
+
+Exit code 0 for valid documents, 1 for invalid.
 
 === Export Word resources
 

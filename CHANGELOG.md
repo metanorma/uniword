@@ -10,6 +10,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Open-Source Resource System (April 2025)
+- 23 OFL-licensed color scheme YAML files (`data/color_schemes/`)
+- 25 OFL-licensed font scheme YAML files (`data/font_schemes/`)
+- 240 document element templates across 30 locales (`data/resources/document_elements/`)
+- OFL font registry for substitution (`data/resources/font_registry.yml`)
+- Resource loaders: `ColorSchemeLoader`, `FontSchemeLoader`, `DocumentElementLoader`, `DocumentElementConverter`, `DocumentElementTemplate`
+- Resource authoring guide (`docs/RESOURCE_AUTHORING.md`) and mapping reference (`docs/RESOURCE_MAPPING.md`)
+
+#### DOCX Validation System (April 2025)
+- `uniword verify FILE` CLI command with 3-layer verification pipeline
+  - OPC Package layer: ZIP integrity, content types, relationships, part presence
+  - XSD Schema layer: XML schema validation against bundled XSD files (opt-in via `--xsd`)
+  - Word Document layer: 10 semantic validation rules
+- 40 bundled XSD schemas (27 ISO, 4 ECMA, 8 Microsoft, 1 MCE)
+- `SchemaRegistry` with namespace-URI-aware XSD mapping and caching
+- `OpcValidator` for format-agnostic OPC package checks
+- 10 semantic rules: styles, numbering, footnotes, headers/footers, bookmarks, images, tables, fonts, theme, settings
+- `VerificationReport`, `LayerResult`, `ValidationIssue` result models with JSON/YAML serialization
+- `TerminalFormatter` with Rainbow-colored terminal output
+- `VerifyOrchestrator` for 3-layer orchestration
+- CLI options: `--verbose`, `--json`, `--yaml`, `--xsd`
+- Extensible rule system via `Uniword::Validation::Rules.register(MyRule)`
+
+#### Prevention Layer (April 2025)
+- `Docx::Reconciler` that enforces cross-part invariants before serialization
+- Auto-creates footnotes when `footnotePr` is set but `footnotes.xml` is missing
+- Auto-creates `footnotePr` when footnotes exist but `footnotePr` is missing
+- Same bidirectional sync for endnotes/endnotePr
+- Injects missing separator (id=-1) and continuation (id=0) entries
+- Runs during `Docx::Package#to_zip_content` before serialization
+
+### Changed
+
+- `Uniword::Ooxml::DocxPackage` renamed to `Uniword::Docx::Package`
+  - All references in lib/ and spec/ updated (~20 files)
+  - `lib/uniword/ooxml/docx_package.rb` moved to `lib/uniword/docx/package.rb`
+  - New `Uniword::Docx` namespace module with autoloads for `Package` and `Reconciler`
+  - Corrects containment hierarchy: DOCX packages contain OOXML markup
+- All 29 themes reauthored with OFL-licensed fonts
+- All 12 stylesets reauthored with OFL-licensed fonts (Calibri references fixed)
+- `uniword.gemspec` updated to include `data/**/*.yml` and `data/**/*.xsd` in gem
+- Added `rainbow ~> 3.1` gem dependency
+
 #### StylesetPackage Implementation (December 4, 2024)
 - **StylesetPackage**: Proper MODEL-DRIVEN package for .dotx files
   - Replaces deleted manual parsers (StylesetLoader, StylesetPackageReader, StylesetXmlParser)
