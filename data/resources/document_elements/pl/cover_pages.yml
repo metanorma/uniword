@@ -1,0 +1,26 @@
+---
+locale: pl
+category: cover_pages
+description: pl cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Tytuł}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Podtytuł}"
+      alignment: center
+    - style: Normal
+      text: "{Autor}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Data}"
+      alignment: center
+      space_after: 1440

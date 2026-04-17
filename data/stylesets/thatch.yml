@@ -1,6 +1,6 @@
 ---
 name: Thatch
-source_file: references/word-package/style-sets/Thatch.dotx
+source_file: uniword-generated
 styles:
 - id: Normal
   type: paragraph
@@ -30,7 +30,7 @@ styles:
   quick_format: true
   paragraph_properties:
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -38,7 +38,7 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: 'auto'
+    shading_color: auto
     shading_fill: 7C959A
   run_properties:
     bold: false
@@ -65,7 +65,7 @@ styles:
     spacing_before: 200
     spacing_after: 60
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -98,7 +98,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -111,7 +111,7 @@ styles:
     italic: false
     strike: false
     size: 28
-    color: 9B8E0A
+    color: A16207
     small_caps: true
     caps: false
     hidden: false
@@ -133,7 +133,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -146,7 +146,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 5B7176
+    color: 57534E
     small_caps: false
     caps: false
     hidden: false
@@ -166,7 +166,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -179,7 +179,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: true
     hidden: false
@@ -199,7 +199,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -212,7 +212,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: 5B7176
+    color: 57534E
     small_caps: false
     caps: false
     hidden: false
@@ -232,7 +232,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -245,7 +245,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: false
     hidden: false
@@ -265,7 +265,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -298,7 +298,7 @@ styles:
     spacing_before: 200
     spacing_after: 100
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -311,7 +311,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: CEBD0D
+    color: CA8A04
     small_caps: true
     caps: false
     hidden: false
@@ -373,14 +373,14 @@ styles:
   paragraph_properties:
     spacing_after: 120
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: 'auto'
+    shading_color: auto
     shading_fill: FFFFFF
   run_properties:
     bold: true
@@ -428,7 +428,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: CEBD0D
+    color: CA8A04
     small_caps: false
     caps: false
     hidden: false
@@ -448,7 +448,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: CEBD0D
+    color: CA8A04
     small_caps: false
     caps: false
     hidden: false
@@ -468,7 +468,7 @@ styles:
     spacing_before: 200
     spacing_after: 360
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -480,7 +480,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 1B343F
+    color: 1E293B
     small_caps: false
     caps: false
     hidden: false
@@ -499,7 +499,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: false
     hidden: false
@@ -541,7 +541,7 @@ styles:
     italic: false
     strike: false
     size: 28
-    color: 9B8E0A
+    color: A16207
     small_caps: true
     caps: false
     hidden: false
@@ -563,7 +563,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 5B7176
+    color: 57534E
     small_caps: false
     caps: false
     hidden: false
@@ -582,7 +582,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: true
     hidden: false
@@ -601,7 +601,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 5B7176
+    color: 57534E
     small_caps: false
     caps: false
     hidden: false
@@ -620,7 +620,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: false
     hidden: false
@@ -659,7 +659,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: CEBD0D
+    color: CA8A04
     small_caps: true
     caps: false
     hidden: false
@@ -679,7 +679,7 @@ styles:
     italic: false
     strike: false
     size: 18
-    color: 9B8E0A
+    color: A16207
     small_caps: false
     caps: false
     hidden: false
@@ -722,7 +722,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 1B343F
+    color: 1E293B
     small_caps: false
     caps: false
     hidden: false
@@ -741,7 +741,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -787,7 +787,7 @@ styles:
   paragraph_properties:
     alignment: center
     line_spacing: 300.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 2160
     indent_right: 2160
     keep_next: false
@@ -801,7 +801,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: CEBD0D
+    color: CA8A04
     small_caps: false
     caps: false
     hidden: false
@@ -821,7 +821,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: CEBD0D
+    color: CA8A04
     small_caps: false
     caps: false
     hidden: false
@@ -862,7 +862,7 @@ styles:
     hidden: false
     double_strike: true
     all_caps: false
-    shading: CEBD0D
+    shading: CA8A04
 - id: SubtleReference
   type: character
   name: Subtle Reference
@@ -875,7 +875,7 @@ styles:
     italic: true
     underline: single
     strike: false
-    color: CEBD0D
+    color: CA8A04
     small_caps: true
     caps: false
     hidden: false
@@ -893,7 +893,7 @@ styles:
     italic: true
     underline: single
     strike: false
-    color: CEBD0D
+    color: CA8A04
     small_caps: true
     caps: false
     hidden: false
@@ -911,7 +911,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: CEBD0D
+    color: CA8A04
     small_caps: true
     caps: false
     hidden: false
@@ -945,7 +945,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -993,7 +993,7 @@ styles:
   quick_format: false
   paragraph_properties:
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1152
     indent_right: 1152
     keep_next: false
@@ -1025,7 +1025,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -1054,7 +1054,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 220
     keep_next: false
     keep_lines: false
@@ -1084,7 +1084,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 440
     keep_next: false
     keep_lines: false
@@ -1114,7 +1114,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 660
     keep_next: false
     keep_lines: false
@@ -1144,7 +1144,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 880
     keep_next: false
     keep_lines: false
@@ -1174,7 +1174,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1100
     keep_next: false
     keep_lines: false
@@ -1204,7 +1204,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1320
     keep_next: false
     keep_lines: false
@@ -1234,7 +1234,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1540
     keep_next: false
     keep_lines: false
@@ -1264,7 +1264,7 @@ styles:
   paragraph_properties:
     spacing_after: 100
     line_spacing: 276.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1760
     keep_next: false
     keep_lines: false

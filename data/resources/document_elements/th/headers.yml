@@ -1,0 +1,32 @@
+---
+locale: th
+category: headers
+description: th headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{ชื่อเรื่อง}"
+    - text: "{วันที่}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{ชื่อบริษัท}"
+      bold: true
+    - text: "{ชื่อเรื่อง}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{ส่วน}"
+      alignment: center

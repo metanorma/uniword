@@ -1,6 +1,6 @@
 ---
 name: Traditional
-source_file: references/word-package/style-sets/Traditional.dotx
+source_file: uniword-generated
 styles:
 - id: Normal
   type: paragraph
@@ -34,7 +34,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -66,7 +66,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -98,7 +98,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -130,7 +130,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -161,7 +161,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -192,7 +192,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -224,7 +224,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -256,7 +256,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -288,7 +288,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -331,7 +331,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -351,7 +351,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -371,7 +371,7 @@ styles:
     italic: false
     strike: false
     size: 24
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -391,7 +391,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -410,7 +410,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -429,7 +429,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -449,7 +449,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -469,7 +469,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -489,7 +489,7 @@ styles:
     italic: true
     strike: false
     size: 20
-    color: 9BBB59
+    color: 84CC16
     small_caps: false
     caps: false
     hidden: false
@@ -538,7 +538,7 @@ styles:
     italic: true
     strike: false
     size: 60
-    color: 243F60
+    color: 1E3A5F
     small_caps: false
     caps: false
     hidden: false
@@ -558,7 +558,7 @@ styles:
     italic: true
     strike: false
     size: 60
-    color: 243F60
+    color: 1E3A5F
     small_caps: false
     caps: false
     hidden: false
@@ -644,7 +644,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 5A5A5A
+    color: '525252'
     small_caps: false
     caps: false
     hidden: false
@@ -706,7 +706,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 5A5A5A
+    color: '525252'
     small_caps: false
     caps: false
     hidden: false
@@ -725,7 +725,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 5A5A5A
+    color: '525252'
     small_caps: false
     caps: false
     hidden: false
@@ -745,7 +745,7 @@ styles:
     spacing_before: 320
     spacing_after: 320
     line_spacing: 300.0
-    line_rule: 'auto'
+    line_rule: auto
     indent_left: 1440
     indent_right: 1440
     keep_next: false
@@ -754,8 +754,8 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: 'auto'
-    shading_fill: 4F81BD
+    shading_color: auto
+    shading_fill: 3B82F6
   run_properties:
     bold: false
     italic: true
@@ -787,7 +787,7 @@ styles:
     hidden: false
     double_strike: false
     all_caps: false
-    shading: 4F81BD
+    shading: 3B82F6
 - id: SubtleEmphasis
   type: character
   name: Subtle Emphasis
@@ -799,7 +799,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 5A5A5A
+    color: '525252'
     small_caps: false
     caps: false
     hidden: false
@@ -817,7 +817,7 @@ styles:
     italic: true
     strike: false
     size: 22
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -835,7 +835,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: 'auto'
+    color: auto
     small_caps: false
     caps: false
     hidden: false
@@ -854,7 +854,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: 76923C
+    color: 65A30D
     small_caps: false
     caps: false
     hidden: false
@@ -872,7 +872,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 'auto'
+    color: auto
     small_caps: false
     caps: false
     hidden: false

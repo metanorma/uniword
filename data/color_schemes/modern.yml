@@ -1,0 +1,17 @@
+---
+name: "Modern"
+description: "Contemporary cool blue-grey palette for professional use"
+source: "uniword-generated"
+colors:
+  dk1: "111827"
+  lt1: "F9FAFB"
+  dk2: "374151"
+  lt2: "E5E7EB"
+  accent1: "3B82F6"
+  accent2: "6366F1"
+  accent3: "8B5CF6"
+  accent4: "10B981"
+  accent5: "F59E0B"
+  accent6: "EF4444"
+  hlink: "3B82F6"
+  folHlink: "6366F1"

@@ -1,0 +1,31 @@
+---
+locale: ru
+category: footers
+description: ru footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Стр.}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Дата}"
+    - text: "{Стр.}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: КОНФИДЕНЦИАЛЬНО
+    - text: "{Стр.}"
+      alignment: right

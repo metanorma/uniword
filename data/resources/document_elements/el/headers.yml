@@ -1,0 +1,32 @@
+---
+locale: el
+category: headers
+description: el headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Τίτλος}"
+    - text: "{Ημερομηνία}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Ονομα εταιρείας}"
+      bold: true
+    - text: "{Τίτλος}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Τίτλος τμήματος}"
+      alignment: center

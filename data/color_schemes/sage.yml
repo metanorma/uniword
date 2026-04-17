@@ -1,0 +1,17 @@
+---
+name: "Sage"
+description: "Muted stone palette from Tailwind Stone for warm neutrals"
+source: "uniword-generated"
+colors:
+  dk1: "1C1917"
+  lt1: "FAFAF9"
+  dk2: "44403C"
+  lt2: "E7E5E4"
+  accent1: "78716C"
+  accent2: "A8A29E"
+  accent3: "D6D3D1"
+  accent4: "57534E"
+  accent5: "292524"
+  accent6: "F5F5F4"
+  hlink: "57534E"
+  folHlink: "A8A29E"

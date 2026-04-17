@@ -1,0 +1,13 @@
+---
+locale: en-GB
+category: bibliographies
+description: en-GB bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Author, A. (Year). Title. Publisher.
+    - text: Author, B. (Year). Title. Journal, Vol(Issue), pp.

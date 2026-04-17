@@ -1,0 +1,25 @@
+---
+locale: fi
+category: watermarks
+description: fi watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: LUONNOS
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: LUOTTAMUKSELLINEN
+      bold: true
+      size: 72
+      alignment: center

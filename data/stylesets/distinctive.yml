@@ -1,6 +1,6 @@
 ---
 name: Distinctive
-source_file: references/word-package/style-sets/Distinctive.dotx
+source_file: uniword-generated
 styles:
 - id: Normal
   type: paragraph
@@ -165,7 +165,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: '943634'
+    color: 9F1239
     small_caps: true
     caps: false
     hidden: false
@@ -198,7 +198,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: C0504D
+    color: BE123C
     small_caps: true
     caps: false
     hidden: false
@@ -230,7 +230,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: C0504D
+    color: BE123C
     small_caps: true
     caps: false
     hidden: false
@@ -262,7 +262,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: '943634'
+    color: 9F1239
     small_caps: true
     caps: false
     hidden: false
@@ -292,7 +292,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: '622423'
+    color: '881337'
     small_caps: true
     caps: false
     hidden: false
@@ -419,7 +419,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: '943634'
+    color: 9F1239
     small_caps: true
     caps: false
     hidden: false
@@ -441,7 +441,7 @@ styles:
     italic: false
     strike: false
     size: 22
-    color: C0504D
+    color: BE123C
     small_caps: true
     caps: false
     hidden: false
@@ -462,7 +462,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: C0504D
+    color: BE123C
     small_caps: true
     caps: false
     hidden: false
@@ -483,7 +483,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: '943634'
+    color: 9F1239
     small_caps: true
     caps: false
     hidden: false
@@ -502,7 +502,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: '622423'
+    color: '881337'
     small_caps: true
     caps: false
     hidden: false
@@ -540,7 +540,7 @@ styles:
   paragraph_properties:
     alignment: right
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -590,7 +590,7 @@ styles:
     alignment: right
     spacing_after: 720
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -637,7 +637,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: C0504D
+    color: BE123C
     small_caps: false
     caps: false
     hidden: false
@@ -673,7 +673,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -763,8 +763,8 @@ styles:
     suppress_line_numbers: false
     contextual_spacing: false
     bidirectional: false
-    shading_color: 'auto'
-    shading_fill: C0504D
+    shading_color: auto
+    shading_fill: BE123C
   run_properties:
     bold: true
     italic: true
@@ -794,7 +794,7 @@ styles:
     hidden: false
     double_strike: false
     all_caps: false
-    shading: C0504D
+    shading: BE123C
 - id: SubtleEmphasis
   type: character
   name: Subtle Emphasis
@@ -822,7 +822,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: C0504D
+    color: BE123C
     small_caps: false
     caps: false
     hidden: false

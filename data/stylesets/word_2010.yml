@@ -1,6 +1,6 @@
 ---
 name: Word 2010
-source_file: references/word-package/style-sets/Word 2010.dotx
+source_file: uniword-generated
 styles:
 - id: Normal
   type: paragraph
@@ -33,7 +33,7 @@ styles:
     italic: false
     strike: false
     size: 28
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -64,7 +64,7 @@ styles:
     italic: false
     strike: false
     size: 26
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -94,7 +94,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -124,7 +124,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -154,7 +154,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 16505E
+    color: 115E59
     small_caps: false
     caps: false
     hidden: false
@@ -184,7 +184,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 16505E
+    color: 115E59
     small_caps: false
     caps: false
     hidden: false
@@ -245,7 +245,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -315,7 +315,7 @@ styles:
   paragraph_properties:
     spacing_after: 0
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -336,7 +336,7 @@ styles:
     italic: false
     strike: false
     size: 28
-    color: 365F91
+    color: 1D4ED8
     small_caps: false
     caps: false
     hidden: false
@@ -356,7 +356,7 @@ styles:
     italic: false
     strike: false
     size: 26
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -375,7 +375,7 @@ styles:
     bold: true
     italic: false
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -394,7 +394,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -413,7 +413,7 @@ styles:
     bold: false
     italic: false
     strike: false
-    color: 16505E
+    color: 115E59
     small_caps: false
     caps: false
     hidden: false
@@ -432,7 +432,7 @@ styles:
     bold: false
     italic: true
     strike: false
-    color: 16505E
+    color: 115E59
     small_caps: false
     caps: false
     hidden: false
@@ -471,7 +471,7 @@ styles:
     italic: false
     strike: false
     size: 20
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false
@@ -510,7 +510,7 @@ styles:
   paragraph_properties:
     spacing_after: 300
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -522,7 +522,7 @@ styles:
     italic: false
     strike: false
     size: 52
-    color: 17365D
+    color: 1E3A5F
     small_caps: false
     caps: false
     hidden: false
@@ -545,7 +545,7 @@ styles:
     italic: false
     strike: false
     size: 52
-    color: 17365D
+    color: 1E3A5F
     small_caps: false
     caps: false
     hidden: false
@@ -577,7 +577,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -599,7 +599,7 @@ styles:
     italic: true
     strike: false
     size: 24
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -654,7 +654,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -741,7 +741,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -760,7 +760,7 @@ styles:
     bold: true
     italic: true
     strike: false
-    color: 2DA2BF
+    color: 06B6D4
     small_caps: false
     caps: false
     hidden: false
@@ -779,7 +779,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: DA1F28
+    color: DC2626
     small_caps: true
     caps: false
     hidden: false
@@ -798,7 +798,7 @@ styles:
     italic: false
     underline: single
     strike: false
-    color: DA1F28
+    color: DC2626
     small_caps: true
     caps: false
     hidden: false
@@ -1030,7 +1030,7 @@ styles:
   quick_format: true
   paragraph_properties:
     line_spacing: 240.0
-    line_rule: 'auto'
+    line_rule: auto
     keep_next: false
     keep_lines: false
     page_break_before: false
@@ -1042,7 +1042,7 @@ styles:
     italic: false
     strike: false
     size: 18
-    color: 4F81BD
+    color: 3B82F6
     small_caps: false
     caps: false
     hidden: false

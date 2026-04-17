@@ -1,0 +1,25 @@
+---
+locale: es-MX
+category: watermarks
+description: es-MX watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: BORRADOR
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: CONFIDENCIAL
+      bold: true
+      size: 72
+      alignment: center

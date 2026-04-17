@@ -42,7 +42,12 @@ module Uniword
       # These are stored in separate files within the DOCX package
       attr_accessor :theme, :raw_html, :revisions, :comments
       # Headers and footers (stored as hash: type => Header/Footer)
+      # Single-section only. For multi-section, use header_footer_parts.
       attr_accessor :headers, :footers
+      # Multi-section headers/footers (ordered array):
+      # [{r_id: "rIdH1", target: "header1.xml", rel_type: "...",
+      #   content_type: "...", content: Header|Footer}]
+      attr_accessor :header_footer_parts
       # Footnotes and endnotes (separate XML parts in DOCX package)
       attr_accessor :footnotes, :endnotes
       # Image parts to embed in the DOCX package

@@ -1,6 +1,6 @@
 ---
 name: Depth
-source: Depth.thmx
+source: uniword-generated
 imported_at: '2025-11-01T00:14:41Z'
 color_scheme:
   name: Depth
@@ -19,12 +19,12 @@ color_scheme:
     lt2: 94D7E4
 font_scheme:
   name: Depth
-  major_font: Corbel
-  minor_font: Corbel
-  major_east_asian: ''
-  major_complex_script: ''
-  minor_east_asian: ''
-  minor_complex_script: ''
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
 variants:
   variant1:
     color_scheme:
@@ -44,12 +44,12 @@ variants:
         lt2: FFDB82
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant2:
     color_scheme:
       name: Depth
@@ -68,12 +68,12 @@ variants:
         lt2: 8ED5C1
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant3:
     color_scheme:
       name: Depth
@@ -92,12 +92,12 @@ variants:
         lt2: F2ACD2
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant4:
     color_scheme:
       name: Depth
@@ -116,12 +116,12 @@ variants:
         lt2: 94D7E4
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant5:
     color_scheme:
       name: Depth
@@ -140,12 +140,12 @@ variants:
         lt2: FFDB82
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant6:
     color_scheme:
       name: Depth
@@ -164,12 +164,12 @@ variants:
         lt2: 8ED5C1
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant7:
     color_scheme:
       name: Depth
@@ -188,9 +188,9 @@ variants:
         lt2: F2ACD2
     font_scheme:
       name: Depth
-      major_font: Corbel
-      minor_font: Corbel
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic

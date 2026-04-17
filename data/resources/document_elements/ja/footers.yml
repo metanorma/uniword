@@ -1,0 +1,31 @@
+---
+locale: ja
+category: footers
+description: ja footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{ページ}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{日付}"
+    - text: "{ページ}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: 社外秘
+    - text: "{ページ}"
+      alignment: right

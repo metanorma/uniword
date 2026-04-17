@@ -1,0 +1,13 @@
+---
+locale: th
+category: bibliographies
+description: th bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: ผู้แต่ง. ชื่อเรื่อง. สำนักพิมพ์.
+    - text: ผู้แต่ง. ชื่อเรื่อง. วารสาร.

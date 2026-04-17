@@ -1,0 +1,135 @@
+---
+# OFL Font Registry — maps Microsoft font roles to open-source alternatives
+# All target fonts are OFL (SIL Open Font License) or public domain
+version: "1.0"
+
+latin:
+  sans:
+    heading: "Carlito"
+    body: "Carlito"
+  serif:
+    heading: "Caladea"
+    body: "Caladea"
+  mono:
+    heading: "Liberation Mono"
+    body: "Liberation Mono"
+  display:
+    heading: "Source Sans Pro"
+    body: "Source Sans Pro"
+
+east_asian:
+  simplified_chinese:
+    heading: "Noto Sans CJK SC"
+    body: "Noto Sans CJK SC"
+    serif_heading: "Noto Serif CJK SC"
+    serif_body: "Noto Serif CJK SC"
+  traditional_chinese:
+    heading: "Noto Sans CJK TC"
+    body: "Noto Sans CJK TC"
+    serif_heading: "Noto Serif CJK TC"
+    serif_body: "Noto Serif CJK TC"
+  japanese:
+    heading: "Noto Sans CJK JP"
+    body: "Noto Sans CJK JP"
+    serif_heading: "Noto Serif CJK JP"
+    serif_body: "Noto Serif CJK JP"
+
+complex_script:
+  arabic:
+    heading: "Noto Sans Arabic"
+    body: "Noto Sans Arabic"
+  hebrew:
+    heading: "Noto Sans Hebrew"
+    body: "Noto Sans Hebrew"
+  cyrillic:
+    heading: "Liberation Sans"
+    body: "Liberation Sans"
+
+# Per-script typeface substitutions
+# Maps OOXML script codes to OFL typeface names
+# Source: theme-fonts/Calibri.xml (34 script codes)
+per_script:
+  Jpan: "Noto Sans CJK JP"
+  Hang: "Noto Sans CJK KR"
+  Hans: "Noto Sans CJK SC"
+  Hant: "Noto Sans CJK TC"
+  Arab: "Noto Sans Arabic"
+  Hebr: "Noto Sans Hebrew"
+  Deva: "Noto Sans Devanagari"
+  Beng: "Noto Sans Bengali"
+  Gujr: "Noto Sans Gujarati"
+  Guru: "Noto Sans Gurmukhi"
+  Knda: "Noto Sans Kannada"
+  Taml: "Noto Sans Tamil"
+  Telu: "Noto Sans Telugu"
+  Mlym: "Noto Sans Malayalam"
+  Sinh: "Noto Sans Sinhala"
+  Thai: "Noto Sans Thai"
+  Khmr: "Noto Sans Khmer"
+  Laoo: "Noto Sans Lao"
+  Tibt: "Noto Sans Tibetan"
+  Mymr: "Noto Sans Myanmar"
+  Ethi: "Noto Sans Ethiopic"
+  Geor: "Noto Sans Georgian"
+  Armen: "Noto Sans Armenian"
+  Cans: "Noto Sans Canadian Aboriginal"
+  Cher: "Noto Sans Cherokee"
+  Viet: "Liberation Sans"
+  Syrc: "Noto Sans Syriac"
+  Yiii: "Noto Sans Yi"
+  Thaa: "Noto Sans Thaana"
+  Orya: "Noto Sans Oriya"
+  Mong: "Noto Sans Mongolian"
+  Uigh: "Noto Sans Arabic"
+
+# Font family substitution map (MS font → OFL replacement)
+# Used by FontSubstitutor.substitute(font_name)
+substitutions:
+  # Sans-serif
+  "Calibri": "Carlito"
+  "Calibri Light": "Carlito"
+  "Aptos": "Source Sans Pro"
+  "Aptos Display": "Source Sans Pro"
+  "Arial": "Liberation Sans"
+  "Arial Black": "Liberation Sans"
+  "Segoe UI": "Source Sans Pro"
+  "Tahoma": "Liberation Sans"
+  "Verdana": "Liberation Sans"
+  "Trebuchet MS": "Liberation Sans"
+  "Franklin Gothic Book": "Libre Franklin"
+  "Franklin Gothic Medium": "Libre Franklin"
+  "Tw Cen MT": "Source Sans Pro"
+  "Tw Cen MT Condensed": "Source Sans Pro"
+  "Impact": "Oswald"
+  "Gill Sans MT": "Source Sans Pro"
+  "Corbel": "Source Sans Pro"
+  "Candara": "Source Sans Pro"
+  "Century Gothic": "League Gothic"
+
+  # Serif
+  "Cambria": "Caladea"
+  "Cambria Math": "Caladea"
+  "Times New Roman": "Liberation Serif"
+  "Georgia": "Gelasio"
+  "Constantia": "Liberation Serif"
+  "Garamond": "EB Garamond"
+  "Palatino Linotype": "Liberation Serif"
+  "Century Schoolbook": "Libre Bodoni"
+  "Rockwell": "Alfa Slab One"
+  "Rockwell Condensed": "Alfa Slab One"
+  "Bookman Old Style": "Libre Bodoni"
+
+  # Mono
+  "Consolas": "Liberation Mono"
+  "Courier New": "Liberation Mono"
+
+  # East Asian (MS → OFL)
+  "メイリオ": "Noto Sans CJK JP"
+  "MS Gothic": "Noto Sans CJK JP"
+  "MS Mincho": "Noto Serif CJK JP"
+  "맑은 고딕": "Noto Sans CJK KR"
+  "宋体": "Noto Sans CJK SC"
+  "新細明體": "Noto Sans CJK TC"
+  "微软雅黑": "Noto Sans CJK SC"
+  "新宋体": "Noto Serif CJK SC"
+  "细明体": "Noto Sans CJK TC"

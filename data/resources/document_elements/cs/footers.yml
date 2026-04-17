@@ -1,0 +1,31 @@
+---
+locale: cs
+category: footers
+description: cs footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Strana}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Datum}"
+    - text: "{Strana}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: DŪVĚRNÉ
+    - text: "{Strana}"
+      alignment: right

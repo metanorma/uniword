@@ -1,0 +1,31 @@
+---
+locale: 'no'
+category: footers
+description: no footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Side}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Dato}"
+    - text: "{Side}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: KONFIDENSIELT
+    - text: "{Side}"
+      alignment: right

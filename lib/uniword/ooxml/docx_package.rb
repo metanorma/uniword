@@ -722,6 +722,23 @@ module Uniword
           end
         end
 
+        # Multi-section headers/footers (header_footer_parts)
+        # Each entry: {r_id, target, rel_type, content_type, content: Header|Footer}
+        if document&.header_footer_parts && !document.header_footer_parts.empty?
+          document.header_footer_parts.each do |part|
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: "/word/#{part[:target]}",
+              content_type: part[:content_type]
+            )
+
+            document_rels.relationships << Relationships::Relationship.new(
+              id: part[:r_id],
+              type: part[:rel_type],
+              target: part[:target]
+            )
+          end
+        end
+
         # Footnotes and endnotes: add content types and relationships
         if footnotes
           unless content_types.overrides.any? { |o| o.part_name == "/word/footnotes.xml" }
@@ -890,6 +907,15 @@ module Uniword
           document.footers.each_value do |footer_obj|
             f_idx += 1
             content["word/footer#{f_idx}.xml"] = footer_obj.to_xml(
+              encoding: "UTF-8", prefix: true, fix_boolean_elements: true
+            )
+          end
+        end
+
+        # Serialize multi-section header/footer parts
+        if document&.header_footer_parts && !document.header_footer_parts.empty?
+          document.header_footer_parts.each do |part|
+            content["word/#{part[:target]}"] = part[:content].to_xml(
               encoding: "UTF-8", prefix: true, fix_boolean_elements: true
             )
           end

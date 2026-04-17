@@ -1,0 +1,13 @@
+---
+locale: sv
+category: bibliographies
+description: sv bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Författare. Titel. Förlag.
+    - text: Författare. Titel. Tidskrift.

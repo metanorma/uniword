@@ -1,0 +1,13 @@
+---
+locale: ru
+category: bibliographies
+description: ru bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Автор (Год). Название. Издатель.
+    - text: Автор (Год). Название. Журнал.

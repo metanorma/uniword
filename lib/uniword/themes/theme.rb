@@ -74,6 +74,7 @@ module Uniword
       attribute :major_complex_script, :string
       attribute :minor_east_asian, :string
       attribute :minor_complex_script, :string
+      attribute :per_script, :hash
 
       yaml do
         map "name", to: :name
@@ -83,6 +84,7 @@ module Uniword
         map "major_complex_script", to: :major_complex_script
         map "minor_east_asian", to: :minor_east_asian
         map "minor_complex_script", to: :minor_complex_script
+        map "per_script", to: :per_script
       end
     end
 

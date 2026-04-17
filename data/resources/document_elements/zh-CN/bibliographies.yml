@@ -1,0 +1,13 @@
+---
+locale: zh-CN
+category: bibliographies
+description: zh-CN bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: 作者. 标题. 出版社.
+    - text: 作者. 标题. 期刊.

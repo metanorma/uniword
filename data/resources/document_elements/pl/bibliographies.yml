@@ -1,0 +1,13 @@
+---
+locale: pl
+category: bibliographies
+description: pl bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autor. Tytuł. Wydawca.
+    - text: Autor. Tytuł. Czasopismo.

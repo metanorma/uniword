@@ -1,0 +1,25 @@
+---
+locale: de
+category: watermarks
+description: de watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: ENTWURF
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: VERTRAULICH
+      bold: true
+      size: 72
+      alignment: center

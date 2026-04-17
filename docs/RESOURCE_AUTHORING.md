@@ -1,0 +1,267 @@
+# Resource Authoring Guide
+
+How to create new open-source resources for Uniword: themes, color schemes,
+font schemes, stylesets, and document element templates.
+
+## Licensing Requirements
+
+All fonts referenced in resources must use one of these licenses:
+- SIL Open Font License (OFL)
+- Apache License 2.0
+- Public Domain / CC0
+
+Check font licenses at https://fontlibrary.org or the font's homepage before
+adding to the registry. Never reference Microsoft proprietary fonts.
+
+## File Naming Conventions
+
+- Use `snake_case` for file names: `source_sans.yml`
+- Directories use `snake_case` for categories: `cover_pages/`
+- Locale directories use ISO codes: `en/`, `zh-CN/`, `zh-TW/`
+- All resource files use `.yml` extension
+
+---
+
+## Font Registry
+
+**File**: `data/resources/font_registry.yml`
+
+The master registry of OFL font mappings. Add new fonts here first.
+
+### Adding a New MS Font Substitution
+
+```yaml
+# Under substitutions: section
+"Microsoft Font Name": "OFL Replacement Font"
+```
+
+### Adding a New Script Code
+
+```yaml
+# Under per_script: section
+ScriptCode: "OFL Typeface Name"
+```
+
+Script codes follow OOXML ISO 15924 four-letter codes (e.g., `Jpan`, `Hans`,
+`Arab`). See the existing entries for reference.
+
+---
+
+## Color Schemes
+
+**Directory**: `data/color_schemes/`
+**Count**: 23 files
+
+### Schema
+
+```yaml
+---
+name: "Scheme Name"
+description: "One-line description"
+source: "uniword-generated"
+colors:
+  dk1: "1A1206"        # Dark 1 (primary text)
+  lt1: "FFFCF5"        # Light 1 (background)
+  dk2: "5C3D1A"        # Dark 2 (secondary text)
+  lt2: "FEF3C7"        # Light 2 (secondary background)
+  accent1: "D97706"    # Accent 1
+  accent2: "F59E0B"    # Accent 2
+  accent3: "FCD34D"    # Accent 3
+  accent4: "B45309"    # Accent 4
+  accent5: "92400E"    # Accent 5
+  accent6: "FDE68A"    # Accent 6
+  hlink: "D97706"      # Hyperlink
+  folHlink: "FBBF24"   # Followed hyperlink
+```
+
+### Rules
+- All 12 color keys are required
+- Values are 6-character hex codes (uppercase or lowercase)
+- Colors should be visually cohesive
+- Derive palettes from established open-source color systems (Material Design,
+  Tailwind CSS, Solarized, etc.)
+
+### Loading
+
+```ruby
+scheme = Uniword::Resource::ColorSchemeLoader.load("azure")
+```
+
+---
+
+## Font Schemes
+
+**Directory**: `data/font_schemes/`
+**Count**: 25 files
+
+### Schema
+
+```yaml
+---
+name: "Scheme Name"
+description: "One-line description"
+source: "uniword-generated"
+major:
+  latin: "OFL Font Name"
+  east_asian: "Noto Sans CJK JP"
+  complex_script: "Noto Sans Arabic"
+minor:
+  latin: "OFL Font Name"
+  east_asian: "Noto Sans CJK JP"
+  complex_script: "Noto Sans Arabic"
+per_script:
+  Jpan: "Noto Sans CJK JP"
+  Hans: "Noto Sans CJK SC"
+  # ... 30 more script codes
+```
+
+### Rules
+- `major.latin` and `minor.latin` are the only fields that differ per scheme
+- East Asian and Complex Script fields typically use Noto Sans defaults
+- The `per_script` section has 32 script codes — copy from an existing file
+- Serif-based schemes may use `Noto Serif CJK *` for EA scripts
+- No Microsoft font names allowed as values
+
+### Loading
+
+```ruby
+scheme = Uniword::Resource::FontSchemeLoader.load("carlito_sans")
+```
+
+---
+
+## Office Themes
+
+**Directory**: `data/themes/`
+**Count**: 29 files
+
+### Schema
+
+```yaml
+---
+name: "Theme Name"
+source: "uniword-generated"
+imported_at: 2025-01-01T00:00:00+00:00
+color_scheme:
+  name: "..."
+  colors: { ... }
+font_scheme:
+  name: "..."
+  major_font: "OFL Font"
+  minor_font: "OFL Font"
+  major_east_asian: "Noto Sans CJK JP"
+  major_complex_script: "Noto Sans Arabic"
+  minor_east_asian: "Noto Sans CJK JP"
+  minor_complex_script: "Noto Sans Arabic"
+variants:
+  variant1:
+    color_scheme: { ... }
+    font_scheme: { ... }
+  # ... up to 7 variants
+```
+
+### Creating a New Theme
+1. Create the color scheme (pick from existing or create new)
+2. Pick a font scheme (major/minor fonts + EA/CS)
+3. Define 7 variants (different color schemes on the same font scheme)
+4. Set `source: "uniword-generated"`
+
+### Loading
+
+```ruby
+theme = Uniword::Themes::Theme.load("atlas")
+word_theme = theme.to_word_theme  # Convert to OOXML
+```
+
+---
+
+## Quick Styles (Style Sets)
+
+**Directory**: `data/stylesets/`
+**Count**: 12 files
+
+These follow OOXML-faithful YAML style definitions. See existing files for
+structure. When modifying colors, use open-source palette values (Tailwind CSS,
+Material Design). Never use MS-specific color codes (C0504D, 943634, etc.).
+
+---
+
+## Document Element Templates
+
+**Directory**: `data/resources/document_elements/{locale}/`
+**Count**: 240 files (30 locales x 8 categories)
+
+### Schema
+
+```yaml
+---
+locale: en
+category: cover_pages
+description: "en cover pages"
+elements:
+  - name: "Academic"
+    description: "Clean academic cover"
+    gallery: "coverPages"
+    category: "Cover Pages"
+    body:
+      paragraphs:
+        - style: "Title"
+          text: "{Title}"
+          alignment: "center"
+        - style: "Normal"
+          text: "{Author}"
+          bold: true
+          size: 24
+```
+
+### Supported Paragraph Properties
+- `style` — OOXML style name (e.g., "Title", "Subtitle", "Normal")
+- `text` — Text content, use `{variable}` for placeholders
+- `alignment` — "left", "center", "right"
+- `bold` — true/false
+- `italic` — true/false
+- `size` — Font size in half-points (24 = 12pt)
+- `color` — 6-char hex color code
+
+### Categories
+1. `cover_pages` — Cover page layouts
+2. `headers` — Header layouts
+3. `footers` — Footer layouts
+4. `tables` — Table building blocks
+5. `equations` — Equation layouts
+6. `bibliographies` — Bibliography formats
+7. `watermarks` — Watermark overlays
+8. `table_of_contents` — TOC layouts
+
+### Adding a New Locale
+1. Create directory `data/resources/document_elements/{locale}/`
+2. Create 8 YAML files, one per category
+3. Translate all placeholder text to the target language
+4. Use `{variable}` convention for user-replaceable content
+
+### Loading
+
+```ruby
+template = Uniword::Resource::DocumentElementLoader.load("en", "cover_pages")
+converter = Uniword::Resource::DocumentElementConverter.new
+paragraphs = converter.to_paragraphs(template.elements.first)
+```
+
+---
+
+## Testing Checklist
+
+After creating or modifying any resource:
+
+1. `bundle exec rspec spec/uniword/resource/open_source_resources_spec.rb`
+   — Unit tests for all resource types
+2. `bundle exec rspec spec/integration/open_source_resources_roundtrip_spec.rb`
+   — Round-trip tests (YAML to OOXML and back)
+3. Verify no MS fonts in output:
+   ```ruby
+   Uniword::Themes::Theme.available_themes.each do |name|
+     xml = Uniword::Themes::Theme.load(name).to_word_theme.to_xml
+     raise "MS font in #{name}" if xml.match?(/Calibri|Cambria|Arial/)
+   end
+   ```
+4. `bundle exec rspec` — Full test suite must pass

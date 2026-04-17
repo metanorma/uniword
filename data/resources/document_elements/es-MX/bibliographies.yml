@@ -1,0 +1,13 @@
+---
+locale: es-MX
+category: bibliographies
+description: es-MX bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autor. Título. Editorial.
+    - text: Autor. Título. Revista.

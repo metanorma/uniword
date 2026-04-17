@@ -1,0 +1,296 @@
+# Resource Mapping: Open-Source to Microsoft Word Resources
+
+This document maps every file in `data/` to its Microsoft counterpart in
+`spec/fixtures/uniword-private/word-resources/`. The open-source resources use
+OFL-licensed fonts and hand-authored YAML instead of proprietary binary
+formats (.thmx, .dotx) or XML with Microsoft font references.
+
+## Summary
+
+| Resource Type | MS Files | OFL Files | Format Change |
+|---|---|---|---|
+| Font Registry | (none) | 1 YAML | New registry |
+| Theme Colors | 23 XML | 23 YAML | XML -> YAML |
+| Theme Fonts | 25 XML | 25 YAML | XML -> YAML |
+| Office Themes | 29 .thmx | 29 YAML | Binary -> YAML |
+| Quick Styles | 12 .dotx | 12 YAML | Binary -> YAML |
+| Document Elements | 240 .dotx | 240 YAML | Binary -> YAML (30/30 locales) |
+| Citation Styles | 12 .xsl | -- | Deferred |
+| **Totals** | **342** | **330** | |
+
+---
+
+## Font Registry
+
+A new file with no MS counterpart. Maps 30+ Microsoft fonts to OFL equivalents
+across 32 Unicode script codes.
+
+| OFL File | Description |
+|---|---|
+| `data/resources/font_registry.yml` | Latin, East Asian, complex script fonts + per-script mapping |
+
+---
+
+## Theme Colors
+
+23 color scheme files. Each replaces an MS XML color definition with a YAML
+file containing 12 named colors (dk1, lt1, dk2, lt2, accent1-6, hlink, folHlink).
+
+| # | OFL File | MS File | Palette Source |
+|---|---|---|---|
+| 1 | `data/color_schemes/azure.yml` | `theme-colors/Blue.xml` | Material Blue |
+| 2 | `data/color_schemes/emerald.yml` | `theme-colors/Green.xml` | Material Green |
+| 3 | `data/color_schemes/crimson.yml` | `theme-colors/Red.xml` | Material Red |
+| 4 | `data/color_schemes/amber.yml` | `theme-colors/Yellow Orange.xml` | Tailwind Amber |
+| 5 | `data/color_schemes/indigo.yml` | `theme-colors/Violet.xml` | Tailwind Indigo |
+| 6 | `data/color_schemes/monochrome.yml` | `theme-colors/Grayscale.xml` | Grayscale ramp |
+| 7 | `data/color_schemes/teal.yml` | `theme-colors/Blue Green.xml` | Tailwind Teal |
+| 8 | `data/color_schemes/cerulean.yml` | `theme-colors/Blue II.xml` | Cerulean palette |
+| 9 | `data/color_schemes/cobalt.yml` | `theme-colors/Blue Warm.xml` | Cobalt palette |
+| 10 | `data/color_schemes/chartreuse.yml` | `theme-colors/Green Yellow.xml` | Chartreuse palette |
+| 11 | `data/color_schemes/magenta.yml` | `theme-colors/Violet II.xml` | Magenta palette |
+| 12 | `data/color_schemes/sage.yml` | `theme-colors/Median.xml` | Sage palette |
+| 13 | `data/color_schemes/classic.yml` | `theme-colors/Office2007-2010.xml` | Classic Office |
+| 14 | `data/color_schemes/modern.yml` | `theme-colors/Office2013-2022.xml` | Modern Office |
+| 15 | `data/color_schemes/coral.yml` | `theme-colors/Orange.xml` | Coral palette |
+| 16 | `data/color_schemes/parchment.yml` | `theme-colors/Paper.xml` | Parchment palette |
+| 17 | `data/color_schemes/scarlet.yml` | `theme-colors/Red Orange.xml` | Scarlet palette |
+| 18 | `data/color_schemes/burgundy.yml` | `theme-colors/Red Violet.xml` | Burgundy palette |
+| 19 | `data/color_schemes/horizon.yml` | `theme-colors/Aspect.xml` | Horizon palette |
+| 20 | `data/color_schemes/lavender.yml` | `theme-colors/Slipstream.xml` | Lavender palette |
+| 21 | `data/color_schemes/saffron.yml` | `theme-colors/Orange Red.xml` | Saffron palette |
+| 22 | `data/color_schemes/terrain.yml` | `theme-colors/Marquee.xml` | Terrain palette |
+| 23 | `data/color_schemes/solar.yml` | `theme-colors/Yellow.xml` | Solarized-inspired |
+
+---
+
+## Theme Fonts
+
+25 font scheme files. Each replaces an MS XML font definition with a YAML file
+using OFL-licensed fonts and per-script coverage for 32 Unicode script codes.
+
+| # | OFL File | MS File | Primary Font Pair |
+|---|---|---|---|
+| 1 | `data/font_schemes/carlito_sans.yml` | `theme-fonts/Calibri.xml` | Carlito |
+| 2 | `data/font_schemes/caladea.yml` | `theme-fonts/Cambria.xml` | Caladea |
+| 3 | `data/font_schemes/carlito_caladea.yml` | `theme-fonts/Calibri-Cambria.xml` | Carlito + Caladea |
+| 4 | `data/font_schemes/liberation_sans.yml` | `theme-fonts/Arial.xml` | Liberation Sans |
+| 5 | `data/font_schemes/liberation_pair.yml` | `theme-fonts/Arial-TimesNewRoman.xml` | Liberation Sans + Serif |
+| 6 | `data/font_schemes/liberation_reverse.yml` | `theme-fonts/TimesNewRoman-Arial.xml` | Liberation Serif + Sans |
+| 7 | `data/font_schemes/eb_garamond.yml` | `theme-fonts/Garamond.xml` | EB Garamond |
+| 8 | `data/font_schemes/eb_garamond_liberation.yml` | `theme-fonts/Garamond-trebuchetMs.xml` | EB Garamond + Liberation Sans |
+| 9 | `data/font_schemes/source_sans.yml` | `theme-fonts/Corbel.xml` | Source Sans 3 |
+| 10 | `data/font_schemes/source_modern.yml` | `theme-fonts/Consolas-Verdana.xml` | Source Sans 3 + Source Code Pro |
+| 11 | `data/font_schemes/gelasio.yml` | `theme-fonts/Georgia.xml` | Gelasio |
+| 12 | `data/font_schemes/libre_franklin.yml` | `theme-fonts/FranklinGothic.xml` | Libre Franklin |
+| 13 | `data/font_schemes/league_gothic.yml` | `theme-fonts/CenturyGothic.xml` | League Gothic |
+| 14 | `data/font_schemes/league_liberation.yml` | `theme-fonts/CenturyGothic-PalatinoLinetype.xml` | League Gothic + Liberation Serif |
+| 15 | `data/font_schemes/libre_bodoni.yml` | `theme-fonts/CenturySchoolbook.xml` | Libre Bodoni |
+| 16 | `data/font_schemes/source_alfa_slab.yml` | `theme-fonts/TwCenMT-Rockwell.xml` | Source Sans 3 + Alfa Slab One |
+| 17 | `data/font_schemes/source_display.yml` | `theme-fonts/TwCenMT.xml` | Source Sans 3 Display |
+| 18 | `data/font_schemes/source_sans_century.yml` | `theme-fonts/Constantia-FranklinGothicBook.xml` | Source Sans 3 + Century Schoolbook L |
+| 19 | `data/font_schemes/carlito_liberation.yml` | `theme-fonts/CalibriLight-Constantia.xml` | Carlito + Liberation Serif |
+| 20 | `data/font_schemes/liberation_bold_sans.yml` | `theme-fonts/ArialBlack-Arial.xml` | Liberation Sans Bold |
+| 21 | `data/font_schemes/liberation_mono_sans.yml` | `theme-fonts/Candara.xml` | Liberation Mono + Sans |
+| 22 | `data/font_schemes/liberation_libre.yml` | `theme-fonts/GillSansMt.xml` | Liberation Sans + Libre Baskerville |
+| 23 | `data/font_schemes/liberation_sans_trebuchet.yml` | `theme-fonts/TrebuchetMs.xml` | Liberation Sans Display |
+| 24 | `data/font_schemes/classic_office.yml` | `theme-fonts/Office2007-2010.xml` | Carlito + Caladea |
+| 25 | `data/font_schemes/modern_office.yml` | `theme-fonts/Office2013-2022.xml` | Carlito + Caladea |
+
+---
+
+## Office Themes
+
+29 theme files. Each replaces an MS .thmx binary with a YAML file where all
+font references use OFL fonts. Color schemes and structural properties are
+preserved; font schemes are replaced with OFL equivalents.
+
+| # | OFL File | MS File |
+|---|---|---|
+| 1 | `data/themes/atlas.yml` | `office-themes/Atlas.thmx` |
+| 2 | `data/themes/badge.yml` | `office-themes/Badge.thmx` |
+| 3 | `data/themes/berlin.yml` | `office-themes/Berlin.thmx` |
+| 4 | `data/themes/celestial.yml` | `office-themes/Celestial.thmx` |
+| 5 | `data/themes/crop.yml` | `office-themes/Crop.thmx` |
+| 6 | `data/themes/depth.yml` | `office-themes/Depth.thmx` |
+| 7 | `data/themes/droplet.yml` | `office-themes/Droplet.thmx` |
+| 8 | `data/themes/facet.yml` | `office-themes/Facet.thmx` |
+| 9 | `data/themes/feathered.yml` | `office-themes/Feathered.thmx` |
+| 10 | `data/themes/gallery.yml` | `office-themes/Gallery.thmx` |
+| 11 | `data/themes/headlines.yml` | `office-themes/Headlines.thmx` |
+| 12 | `data/themes/integral.yml` | `office-themes/Integral.thmx` |
+| 13 | `data/themes/ion.yml` | `office-themes/Ion.thmx` |
+| 14 | `data/themes/ion_boardroom.yml` | `office-themes/Ion Boardroom.thmx` |
+| 15 | `data/themes/madison.yml` | `office-themes/Madison.thmx` |
+| 16 | `data/themes/main_event.yml` | `office-themes/Main Event.thmx` |
+| 17 | `data/themes/mesh.yml` | `office-themes/Mesh.thmx` |
+| 18 | `data/themes/office_theme.yml` | `office-themes/Office Theme.thmx` |
+| 19 | `data/themes/office_2013_2022_theme.yml` | `office-themes/Office 2013 - 2022 Theme.thmx` |
+| 20 | `data/themes/organic.yml` | `office-themes/Organic.thmx` |
+| 21 | `data/themes/parallax.yml` | `office-themes/Parallax.thmx` |
+| 22 | `data/themes/parcel.yml` | `office-themes/Parcel.thmx` |
+| 23 | `data/themes/retrospect.yml` | `office-themes/Retrospect.thmx` |
+| 24 | `data/themes/savon.yml` | `office-themes/Savon.thmx` |
+| 25 | `data/themes/slice.yml` | `office-themes/Slice.thmx` |
+| 26 | `data/themes/vapor_trail.yml` | `office-themes/Vapor Trail.thmx` |
+| 27 | `data/themes/view.yml` | `office-themes/View.thmx` |
+| 28 | `data/themes/wisp.yml` | `office-themes/Wisp.thmx` |
+| 29 | `data/themes/wood_type.yml` | `office-themes/Wood Type.thmx` |
+
+---
+
+## Quick Styles (Style Sets)
+
+12 style set files. Each replaces an MS .dotx binary with a YAML file
+containing OOXML-faithful style definitions using OFL fonts and open-source
+color values (Tailwind CSS palette).
+
+| # | OFL File | MS File |
+|---|---|---|
+| 1 | `data/stylesets/distinctive.yml` | `quick-styles/Distinctive.dotx` |
+| 2 | `data/stylesets/elegant.yml` | `quick-styles/Elegant.dotx` |
+| 3 | `data/stylesets/fancy.yml` | `quick-styles/Fancy.dotx` |
+| 4 | `data/stylesets/formal.yml` | `quick-styles/Formal.dotx` |
+| 5 | `data/stylesets/manuscript.yml` | `quick-styles/Manuscript.dotx` |
+| 6 | `data/stylesets/modern.yml` | `quick-styles/Modern.dotx` |
+| 7 | `data/stylesets/newsprint.yml` | `quick-styles/Newsprint.dotx` |
+| 8 | `data/stylesets/perspective.yml` | `quick-styles/Perspective.dotx` |
+| 9 | `data/stylesets/simple.yml` | `quick-styles/Simple.dotx` |
+| 10 | `data/stylesets/thatch.yml` | `quick-styles/Thatch.dotx` |
+| 11 | `data/stylesets/traditional.yml` | `quick-styles/Traditional.dotx` |
+| 12 | `data/stylesets/word_2010.yml` | `quick-styles/Word 2010.dotx` |
+
+---
+
+## Document Elements
+
+240 YAML files covering all 30 MS locales and 8 categories each, providing
+complete 1:1 replacement coverage for all 240 MS document element .dotx files.
+
+### Locale Coverage
+
+| OFL Locale | MS Locale | Language |
+|---|---|---|
+| `en` | `en` | English |
+| `ru` | `ru` | Russian |
+| `zh-CN` | `zh_CN` | Simplified Chinese |
+| `zh-TW` | `zh_TW` | Traditional Chinese |
+| `ja` | `ja` | Japanese |
+| `fr` | `fr` | French |
+| `es` | `es` | Spanish |
+| `ar` | `ar` | Arabic |
+| `cs` | `cs` | Czech |
+| `da` | `da` | Danish |
+| `de` | `de` | German |
+| `el` | `el` | Greek |
+| `en-GB` | `en_GB` | English (UK) |
+| `es-MX` | `es_MX` | Spanish (Mexico) |
+| `fi` | `fi` | Finnish |
+| `fr-CA` | `fr_CA` | French (Canada) |
+| `he` | `he` | Hebrew |
+| `hu` | `hu` | Hungarian |
+| `id` | `id` | Indonesian |
+| `it` | `it` | Italian |
+| `ko` | `ko` | Korean |
+| `nl` | `nl` | Dutch |
+| `no` | `no` | Norwegian |
+| `pl` | `pl` | Polish |
+| `pt` | `pt` | Portuguese (Brazil) |
+| `pt-PT` | `pt_PT` | Portuguese (Portugal) |
+| `sk` | `sk` | Slovak |
+| `sv` | `sv` | Swedish |
+| `th` | `th` | Thai |
+| `tr` | `tr` | Turkish |
+
+### Category Mapping
+
+Each locale has these 8 categories, mapping 1:1 to MS document element files:
+
+| OFL File | MS File |
+|---|---|
+| `cover_pages.yml` | `Cover Pages.dotx` |
+| `headers.yml` | `Headers.dotx` |
+| `footers.yml` | `Footers.dotx` |
+| `tables.yml` | `Tables.dotx` |
+| `equations.yml` | `Equations.dotx` |
+| `bibliographies.yml` | `Bibliographies.dotx` |
+| `watermarks.yml` | `Watermarks.dotx` |
+| `table_of_contents.yml` | `Table of Contents.dotx` |
+
+---
+
+## Citation Styles (Deferred)
+
+The 12 MS citation styles are XSL transforms not directly comparable to
+font/color/theme resources. These are deferred to a future phase.
+
+| MS File | Notes |
+|---|---|
+| `APASixthEditionOfficeOnline.xsl` | APA 6th edition |
+| `CHICAGO.XSL` | Chicago |
+| `GB.XSL` | GB/T 7714 |
+| `GostName.XSL` | GOST name-style |
+| `GostTitle.XSL` | GOST title-style |
+| `HarvardAnglia2008OfficeOnline.xsl` | Harvard Anglia |
+| `IEEE2006OfficeOnline.xsl` | IEEE 2006 |
+| `ISO690.XSL` | ISO 690 |
+| `ISO690Nmerical.XSL` | ISO 690 numerical |
+| `MLASeventhEditionOfficeOnline.xsl` | MLA 7th |
+| `SIST02.XSL` | SIST02 |
+| `TURABIAN.XSL` | Turabian |
+
+---
+
+## Ruby API
+
+### Loaders
+
+```ruby
+# Color schemes
+scheme = Uniword::Resource::ColorSchemeLoader.load("azure")
+scheme.name    #=> "Azure"
+scheme.colors  #=> { "dk1" => "000000", "lt1" => "FFFFFF", ... }
+
+# Font schemes
+scheme = Uniword::Resource::FontSchemeLoader.load("carlito_sans")
+scheme.name        #=> "Carlito Sans"
+scheme.major_font  #=> "Carlito"
+scheme.per_script  #=> { "Jpan" => "Noto Sans CJK JP", ... }
+
+# Document elements
+template = Uniword::Resource::DocumentElementLoader.load("en", "cover_pages")
+template.locale    #=> "en"
+template.category  #=> "cover_pages"
+template.elements  #=> [{ "name" => "...", "body" => { ... } }, ...]
+
+# Available listings
+Uniword::Resource::ColorSchemeLoader.available_schemes    #=> 23 names
+Uniword::Resource::FontSchemeLoader.available_schemes     #=> 25 names
+Uniword::Resource::DocumentElementLoader.available_locales #=> 30 codes
+```
+
+### Font Substitution
+
+```ruby
+# Latin font substitution
+Uniword::Resource::FontSubstitutor.substitute("Calibri")  #=> "Carlito"
+Uniword::Resource::FontSubstitutor.substitute("Arial")    #=> "Liberation Sans"
+
+# Per-script substitution
+Uniword::Resource::FontSubstitutor.substitute_script("Jpan", "MS Gothic")
+#=> "Noto Sans CJK JP"
+
+# Transform an entire FontScheme (populates EA/CS fields)
+result = Uniword::Resource::FontSubstitutor.transform_friendly_font_scheme(fs)
+```
+
+### Resource Resolution
+
+```ruby
+resolver = Uniword::Resource::ResourceResolver.new
+resolver.list(:color_scheme)        #=> all color scheme names
+resolver.list(:font_scheme)         #=> all font scheme names
+resolver.list(:theme)               #=> all theme names
+resolver.list(:document_element)    #=> all document element names
+resolver.resolve(:theme, "atlas")   #=> ResourceLocation
+```

@@ -1,0 +1,32 @@
+---
+locale: zh-CN
+category: headers
+description: zh-CN headers
+elements:
+- name: Simple
+  description: Document title header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{标题}"
+    - text: "{日期}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{公司}"
+      bold: true
+    - text: "{标题}"
+      alignment: right
+- name: Section
+  description: Section title header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{章节}"
+      alignment: center

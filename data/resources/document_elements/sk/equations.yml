@@ -1,0 +1,21 @@
+---
+locale: sk
+category: equations
+description: sk equations
+elements:
+- name: Numbered
+  description: Numbered equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Rovnica}"
+      alignment: center
+- name: Display
+  description: Display equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Rovnica}"
+      alignment: center

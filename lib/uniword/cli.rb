@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "thor"
+require "rainbow"
 
 # All classes are autoloaded via lib/uniword.rb
 # No require_relative needed - autoload handles lazy loading
@@ -710,6 +711,52 @@ module Uniword
       say "\nValidation complete!", :green
     rescue StandardError => e
       say "Unexpected error during validation: #{e.message}", :red
+      exit 1
+    end
+
+    desc "verify FILE", "Verify DOCX against OPC and XSD schemas"
+    long_desc <<~DESC
+      Perform comprehensive DOCX verification across three layers:
+
+      1. OPC Package — ZIP integrity, content types, relationships
+      2. XSD Schema — XML schema validation (namespace-aware)
+      3. Word Document — semantic checks (cross-references, styles, etc.)
+
+      Examples:
+        $ uniword verify document.docx
+        $ uniword verify document.docx --verbose
+        $ uniword verify document.docx --json
+        $ uniword verify document.docx --xsd
+    DESC
+    option :verbose, aliases: "-v", desc: "Show detailed issue listing",
+                     type: :boolean, default: false
+    option :json, desc: "Output JSON report", type: :boolean, default: false
+    option :yaml, desc: "Output YAML report", type: :boolean, default: false
+    option :xsd, desc: "Enable XSD schema validation", type: :boolean, default: false
+    def verify(path)
+      unless File.exist?(path)
+        say(Rainbow("  File not found: #{path}").red.bright)
+        exit 1
+      end
+
+      orchestrator = Uniword::Validation::VerifyOrchestrator.new(
+        xsd_validation: options[:xsd]
+      )
+      report = orchestrator.verify(path)
+
+      if options[:json]
+        puts report.to_json
+      elsif options[:yaml]
+        require "yaml"
+        puts YAML.dump(JSON.parse(report.to_json))
+      else
+        formatter = Uniword::Validation::Report::TerminalFormatter.new
+        puts formatter.format(report, verbose: options[:verbose])
+      end
+
+      exit report.valid ? 0 : 1
+    rescue StandardError => e
+      say(Rainbow("  Error: #{e.message}").red.bright)
       exit 1
     end
 

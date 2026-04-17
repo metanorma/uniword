@@ -1,0 +1,32 @@
+---
+locale: nl
+category: headers
+description: nl headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Titel}"
+    - text: "{Datum}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Bedrijfsnaam}"
+      bold: true
+    - text: "{Titel}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{ Sectietitel}"
+      alignment: center

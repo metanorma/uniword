@@ -1,0 +1,13 @@
+---
+locale: ko
+category: bibliographies
+description: ko bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: 저자. 제목. 출판사.
+    - text: 저자. 제목. 학술지.

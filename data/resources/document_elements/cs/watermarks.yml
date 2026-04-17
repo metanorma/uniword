@@ -1,0 +1,25 @@
+---
+locale: cs
+category: watermarks
+description: cs watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: KONCEPT
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: DŪVĚRNÉ
+      bold: true
+      size: 72
+      alignment: center

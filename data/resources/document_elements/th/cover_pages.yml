@@ -1,0 +1,26 @@
+---
+locale: th
+category: cover_pages
+description: th cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{ชื่อเรื่อง}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{ชื่อเรื่องรอง}"
+      alignment: center
+    - style: Normal
+      text: "{ชื่อผู้แต่ง}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{วันที่}"
+      alignment: center
+      space_after: 1440

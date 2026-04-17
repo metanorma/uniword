@@ -1,6 +1,6 @@
 ---
 name: Facet
-source: Facet.thmx
+source: uniword-generated
 imported_at: '2025-11-01T00:14:41Z'
 color_scheme:
   name: Facet
@@ -19,12 +19,12 @@ color_scheme:
     lt2: EBEBEB
 font_scheme:
   name: Facet
-  major_font: Trebuchet MS
-  minor_font: Trebuchet MS
-  major_east_asian: ''
-  major_complex_script: ''
-  minor_east_asian: ''
-  minor_complex_script: ''
+  major_font: Liberation Sans
+  minor_font: Liberation Sans
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
 variants:
   variant1:
     color_scheme:
@@ -44,12 +44,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant2:
     color_scheme:
       name: Facet
@@ -68,12 +68,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant3:
     color_scheme:
       name: Facet
@@ -92,12 +92,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant4:
     color_scheme:
       name: Facet
@@ -116,12 +116,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant5:
     color_scheme:
       name: Facet
@@ -140,12 +140,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant6:
     color_scheme:
       name: Facet
@@ -164,12 +164,12 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant7:
     color_scheme:
       name: Facet
@@ -188,9 +188,9 @@ variants:
         lt2: EBEBEB
     font_scheme:
       name: Facet
-      major_font: Trebuchet MS
-      minor_font: Trebuchet MS
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic

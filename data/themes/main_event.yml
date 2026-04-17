@@ -1,6 +1,6 @@
 ---
 name: Main Event
-source: Main Event.thmx
+source: uniword-generated
 imported_at: '2025-11-01T00:14:42Z'
 color_scheme:
   name: Main Event
@@ -19,12 +19,12 @@ color_scheme:
     lt2: C8C8C8
 font_scheme:
   name: Main Event
-  major_font: Impact
-  minor_font: Impact
-  major_east_asian: ''
-  major_complex_script: ''
-  minor_east_asian: ''
-  minor_complex_script: ''
+  major_font: Oswald
+  minor_font: Oswald
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
 variants:
   variant1:
     color_scheme:
@@ -44,12 +44,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant2:
     color_scheme:
       name: Main Event
@@ -68,12 +68,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant3:
     color_scheme:
       name: Main Event
@@ -92,12 +92,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant4:
     color_scheme:
       name: Main Event
@@ -116,12 +116,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant5:
     color_scheme:
       name: Main Event
@@ -140,12 +140,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant6:
     color_scheme:
       name: Main Event
@@ -164,12 +164,12 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant7:
     color_scheme:
       name: Main Event
@@ -188,9 +188,9 @@ variants:
         lt2: C8C8C8
     font_scheme:
       name: Main Event
-      major_font: Impact
-      minor_font: Impact
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Oswald
+      minor_font: Oswald
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic

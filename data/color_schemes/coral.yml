@@ -1,0 +1,17 @@
+---
+name: "Coral"
+description: "Warm orange-coral palette from Tailwind Orange"
+source: "uniword-generated"
+colors:
+  dk1: "1F0F0A"
+  lt1: "FFFBF5"
+  dk2: "5C2D0A"
+  lt2: "FED7AA"
+  accent1: "C2410C"
+  accent2: "EA580C"
+  accent3: "FB923C"
+  accent4: "9A3412"
+  accent5: "7C2D12"
+  accent6: "FDBA74"
+  hlink: "EA580C"
+  folHlink: "F97316"

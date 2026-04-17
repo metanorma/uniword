@@ -1,0 +1,17 @@
+---
+name: "Horizon"
+description: "Sky gradient palette blending cyan through magenta"
+source: "uniword-generated"
+colors:
+  dk1: "0A1628"
+  lt1: "F0F9FF"
+  dk2: "164E63"
+  lt2: "CFFAFE"
+  accent1: "0891B2"
+  accent2: "06B6D4"
+  accent3: "22D3EE"
+  accent4: "7C3AED"
+  accent5: "A855F7"
+  accent6: "E9D5FF"
+  hlink: "0891B2"
+  folHlink: "67E8F9"

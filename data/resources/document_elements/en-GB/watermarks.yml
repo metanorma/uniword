@@ -1,0 +1,25 @@
+---
+locale: en-GB
+category: watermarks
+description: en-GB watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: DRAFT
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: CONFIDENTIAL
+      bold: true
+      size: 72
+      alignment: center

@@ -75,6 +75,7 @@ module Uniword
         when :styleset then cache.paths.stylesets
         when :color_scheme then cache.paths.color_schemes
         when :font_scheme then cache.paths.font_schemes
+        when :document_element then cache.paths.document_elements
         else raise ArgumentError, "Unknown resource type: #{type}"
         end
       end
@@ -85,6 +86,7 @@ module Uniword
         when :styleset then bundled_path("stylesets")
         when :color_scheme then bundled_path("color_schemes")
         when :font_scheme then bundled_path("font_schemes")
+        when :document_element then bundled_path("resources/document_elements")
         else raise ArgumentError, "Unknown resource type: #{type}"
         end
       end

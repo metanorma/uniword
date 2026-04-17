@@ -1,6 +1,6 @@
 ---
 name: Gallery
-source: Gallery.thmx
+source: uniword-generated
 imported_at: '2025-11-01T00:14:41Z'
 color_scheme:
   name: Gallery
@@ -19,12 +19,12 @@ color_scheme:
     lt2: DFDBD5
 font_scheme:
   name: Gallery
-  major_font: Gill Sans MT
-  minor_font: Gill Sans MT
-  major_east_asian: ''
-  major_complex_script: ''
-  minor_east_asian: ''
-  minor_complex_script: ''
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
 variants:
   variant1:
     color_scheme:
@@ -44,12 +44,12 @@ variants:
         lt2: DCDCE0
     font_scheme:
       name: Gallery
-      major_font: Century Gothic
-      minor_font: Century Gothic
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant2:
     color_scheme:
       name: Gallery
@@ -68,12 +68,12 @@ variants:
         lt2: EDEBE7
     font_scheme:
       name: Gallery
-      major_font: Palatino Linotype
-      minor_font: Palatino Linotype
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Serif
+      minor_font: Liberation Serif
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant3:
     color_scheme:
       name: Gallery
@@ -92,12 +92,12 @@ variants:
         lt2: DFD9D5
     font_scheme:
       name: Gallery
-      major_font: Rockwell
-      minor_font: Rockwell
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Alfa Slab One
+      minor_font: Alfa Slab One
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant4:
     color_scheme:
       name: Gallery
@@ -116,12 +116,12 @@ variants:
         lt2: DFDBD5
     font_scheme:
       name: Gallery
-      major_font: Gill Sans MT
-      minor_font: Gill Sans MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant5:
     color_scheme:
       name: Gallery
@@ -140,12 +140,12 @@ variants:
         lt2: DCDCE0
     font_scheme:
       name: Gallery
-      major_font: Century Gothic
-      minor_font: Century Gothic
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant6:
     color_scheme:
       name: Gallery
@@ -164,12 +164,12 @@ variants:
         lt2: EDEBE7
     font_scheme:
       name: Gallery
-      major_font: Palatino Linotype
-      minor_font: Palatino Linotype
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Liberation Serif
+      minor_font: Liberation Serif
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant7:
     color_scheme:
       name: Gallery
@@ -188,9 +188,9 @@ variants:
         lt2: DFD9D5
     font_scheme:
       name: Gallery
-      major_font: Rockwell
-      minor_font: Rockwell
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Alfa Slab One
+      minor_font: Alfa Slab One
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic

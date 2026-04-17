@@ -1,0 +1,17 @@
+---
+name: "Magenta"
+description: "Vibrant pink-magenta palette from Tailwind Fuchsia"
+source: "uniword-generated"
+colors:
+  dk1: "1F0A1F"
+  lt1: "FEF5FF"
+  dk2: "4A1A4A"
+  lt2: "F5D0FE"
+  accent1: "A21CAF"
+  accent2: "C026D3"
+  accent3: "E879F9"
+  accent4: "86198F"
+  accent5: "701A75"
+  accent6: "F0ABFC"
+  hlink: "A21CAF"
+  folHlink: "D946EF"

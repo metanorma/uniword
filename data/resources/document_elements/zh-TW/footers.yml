@@ -1,0 +1,31 @@
+---
+locale: zh-TW
+category: footers
+description: zh-TW footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{頁碼}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{日期}"
+    - text: "{頁碼}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: 機密
+    - text: "{頁碼}"
+      alignment: right

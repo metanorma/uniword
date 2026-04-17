@@ -1,6 +1,6 @@
 ---
 name: Integral
-source: Integral.thmx
+source: uniword-generated
 imported_at: '2025-11-01T00:14:42Z'
 color_scheme:
   name: Integral
@@ -19,12 +19,12 @@ color_scheme:
     lt2: DFE3E5
 font_scheme:
   name: Integral
-  major_font: Tw Cen MT Condensed
-  minor_font: Tw Cen MT
-  major_east_asian: ''
-  major_complex_script: ''
-  minor_east_asian: ''
-  minor_complex_script: ''
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
 variants:
   variant1:
     color_scheme:
@@ -44,12 +44,12 @@ variants:
         lt2: E3DED1
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant2:
     color_scheme:
       name: Integral
@@ -68,12 +68,12 @@ variants:
         lt2: D8D6BE
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant3:
     color_scheme:
       name: Integral
@@ -92,12 +92,12 @@ variants:
         lt2: D8D6BE
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant4:
     color_scheme:
       name: Integral
@@ -116,12 +116,12 @@ variants:
         lt2: CCD1B9
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant5:
     color_scheme:
       name: Integral
@@ -140,12 +140,12 @@ variants:
         lt2: E1E1DB
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant6:
     color_scheme:
       name: Integral
@@ -164,12 +164,12 @@ variants:
         lt2: CEDBE6
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant7:
     color_scheme:
       name: Integral
@@ -188,12 +188,12 @@ variants:
         lt2: ECEDD1
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant8:
     color_scheme:
       name: Integral
@@ -212,12 +212,12 @@ variants:
         lt2: DFE3E5
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant9:
     color_scheme:
       name: Integral
@@ -236,12 +236,12 @@ variants:
         lt2: E3DED1
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant10:
     color_scheme:
       name: Integral
@@ -260,12 +260,12 @@ variants:
         lt2: D8D6BE
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant11:
     color_scheme:
       name: Integral
@@ -284,12 +284,12 @@ variants:
         lt2: D8D6BE
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant12:
     color_scheme:
       name: Integral
@@ -308,12 +308,12 @@ variants:
         lt2: CCD1B9
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant13:
     color_scheme:
       name: Integral
@@ -332,12 +332,12 @@ variants:
         lt2: E1E1DB
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant14:
     color_scheme:
       name: Integral
@@ -356,12 +356,12 @@ variants:
         lt2: CEDBE6
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
   variant15:
     color_scheme:
       name: Integral
@@ -380,9 +380,9 @@ variants:
         lt2: ECEDD1
     font_scheme:
       name: Integral
-      major_font: Tw Cen MT Condensed
-      minor_font: Tw Cen MT
-      major_east_asian: ''
-      major_complex_script: ''
-      minor_east_asian: ''
-      minor_complex_script: ''
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic

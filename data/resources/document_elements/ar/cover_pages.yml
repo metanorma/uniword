@@ -1,0 +1,26 @@
+---
+locale: ar
+category: cover_pages
+description: ar cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{العنوان}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{العنوان الفرعي}"
+      alignment: center
+    - style: Normal
+      text: "{المؤلف}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{التاريخ}"
+      alignment: center
+      space_after: 1440
