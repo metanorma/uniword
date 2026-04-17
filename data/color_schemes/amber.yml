@@ -1,0 +1,17 @@
+---
+name: "Amber"
+description: "Warm amber palette from Material Design Amber"
+source: "uniword-generated"
+colors:
+  dk1: "1A1206"
+  lt1: "FFFCF5"
+  dk2: "5C3D1A"
+  lt2: "FEF3C7"
+  accent1: "D97706"
+  accent2: "F59E0B"
+  accent3: "FCD34D"
+  accent4: "B45309"
+  accent5: "92400E"
+  accent6: "FDE68A"
+  hlink: "D97706"
+  folHlink: "FBBF24"

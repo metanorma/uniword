@@ -1,0 +1,21 @@
+---
+locale: sv
+category: table_of_contents
+description: sv table of contents
+elements:
+- name: Classic
+  description: TOC with dot leaders
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Innehållsförteckning
+- name: Modern
+  description: Clean TOC
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Innehållsförteckning

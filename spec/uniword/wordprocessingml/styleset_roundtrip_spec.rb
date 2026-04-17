@@ -3,8 +3,77 @@
 require "spec_helper"
 require "canon"
 
-RSpec.describe "StyleSet Round-Trip Fidelity" do
-  # Test both directories
+RSpec.describe "StyleSet Round-Trip Fidelity (Open-Source YAML)" do
+  Uniword::Stylesets::YamlStyleSetLoader.available_stylesets.each do |name|
+    describe name do
+      let(:styleset) { Uniword::Stylesets::YamlStyleSetLoader.load_bundled(name) }
+
+      it "loads successfully from YAML" do
+        expect(styleset).to be_a(Uniword::StyleSet)
+        expect(styleset.name).not_to be_nil
+      end
+
+      it "contains styles" do
+        expect(styleset.styles).to be_an(Array)
+        expect(styleset.styles.count).to be > 0
+      end
+
+      it "round-trips styles through XML serialization" do
+        original_count = styleset.styles.count
+        reparsed_count = 0
+
+        styleset.styles.each do |style|
+          xml = style.to_xml(prefix: true)
+          reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
+          reparsed_count += 1 if reparsed
+        rescue StandardError => e
+          puts "  Failed to round-trip style #{style.id}: #{e.message}"
+        end
+
+        expect(reparsed_count).to eq(original_count)
+      end
+
+      context "paragraph properties" do
+        let(:heading1) { styleset.styles.find { |s| s.id == "Heading1" } }
+
+        it "preserves spacing" do
+          skip "Heading1 not found" unless heading1
+          skip "No paragraph properties" unless heading1.paragraph_properties
+          skip "No spacing" unless heading1.paragraph_properties.spacing
+
+          original = heading1.paragraph_properties.spacing
+          xml = heading1.to_xml(prefix: true)
+          reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
+
+          expect(reparsed.paragraph_properties.spacing.before).to eq(original.before)
+          expect(reparsed.paragraph_properties.spacing.after).to eq(original.after)
+        end
+      end
+
+      context "run properties" do
+        let(:heading1) { styleset.styles.find { |s| s.id == "Heading1" } }
+
+        it "preserves font size" do
+          skip "Heading1 not found" unless heading1
+          skip "No run properties" unless heading1.run_properties
+          skip "No size" unless heading1.run_properties.size
+
+          original = heading1.run_properties.size
+          xml = heading1.to_xml(prefix: true)
+          reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
+
+          expect(reparsed.run_properties.size).to eq(original)
+        end
+      end
+    end
+  end
+end
+
+RSpec.describe "StyleSet Round-Trip Fidelity (Binary .dotx)" do
+  before(:all) do
+    skip "Submodule spec/fixtures/uniword-private not available" unless Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").any?
+  end
+
   %w[quick-styles].each do |dir_name|
     describe "#{dir_name}/" do
       Dir.glob("spec/fixtures/uniword-private/word-resources/#{dir_name}/*.dotx").each do |styleset_file|
@@ -26,7 +95,6 @@ RSpec.describe "StyleSet Round-Trip Fidelity" do
           it "preserves style count in round-trip" do
             original_count = styleset.styles.count
 
-            # Serialize each style and count what comes back
             reparsed_count = 0
             styleset.styles.each do |style|
               xml = style.to_xml(prefix: true)
@@ -98,7 +166,6 @@ RSpec.describe "StyleSet Round-Trip Fidelity" do
     end
   end
 
-  # Summary statistics
   after(:all) do
     total_stylesets = Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count
     puts "\n#{"=" * 60}"

@@ -1,0 +1,25 @@
+---
+locale: ar
+category: watermarks
+description: ar watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: مسودة
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: سري
+      bold: true
+      size: 72
+      alignment: center

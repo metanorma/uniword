@@ -1,0 +1,197 @@
+---
+name: Harvest
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Harvest
+  colors:
+    accent1: 8C8D86
+    accent2: E6C069
+    accent3: 897B61
+    accent4: 8DAB8E
+    accent5: 77A2BB
+    accent6: E28394
+    dk1: '000000'
+    dk2: 191B0E
+    folHlink: 957A99
+    hlink: 77A2BB
+    lt1: FFFFFF
+    lt2: EFEDE3
+font_scheme:
+  name: Harvest
+  major_font: Libre Franklin
+  minor_font: Libre Franklin
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Harvest Variant 1
+      colors:
+        accent1: 8C8D86
+        accent2: E6C069
+        accent3: 897B61
+        accent4: 8DAB8E
+        accent5: 77A2BB
+        accent6: E28394
+        dk1: '000000'
+        dk2: 191B0E
+        folHlink: 957A99
+        hlink: 77A2BB
+        lt1: FFFFFF
+        lt2: EFEDE3
+    font_scheme:
+      name: Harvest Variant 1
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Harvest Variant 2
+      colors:
+        accent1: 69A1AB
+        accent2: F2C418
+        accent3: 87492C
+        accent4: 4A845E
+        accent5: DC9528
+        accent6: 9A5D78
+        dk1: '000000'
+        dk2: 1A2E40
+        folHlink: B162A1
+        hlink: 66C8E3
+        lt1: FFFFFF
+        lt2: EBE7DD
+    font_scheme:
+      name: Harvest Variant 2
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Harvest Variant 3
+      colors:
+        accent1: 69A1AB
+        accent2: F2C418
+        accent3: 87492C
+        accent4: 4A845E
+        accent5: DC9528
+        accent6: 9A5D78
+        dk1: '000000'
+        dk2: 1A2E40
+        folHlink: 9A5D78
+        hlink: 77A1AB
+        lt1: FFFFFF
+        lt2: EBE7DD
+    font_scheme:
+      name: Harvest Variant 3
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Harvest Variant 4
+      colors:
+        accent1: 836C9F
+        accent2: BDAB56
+        accent3: B0565D
+        accent4: 55B1BC
+        accent5: 4D925F
+        accent6: E08C4A
+        dk1: '000000'
+        dk2: 432A30
+        folHlink: 836C9F
+        hlink: 55B1BC
+        lt1: FFFFFF
+        lt2: F2F2F0
+    font_scheme:
+      name: Harvest Variant 4
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Harvest Variant 5
+      colors:
+        accent1: 836C9F
+        accent2: BDAB56
+        accent3: B0565D
+        accent4: 55B1BC
+        accent5: 4D925F
+        accent6: E08C4A
+        dk1: '000000'
+        dk2: 432A30
+        folHlink: 836C9F
+        hlink: 55B1BC
+        lt1: FFFFFF
+        lt2: F2F2F0
+    font_scheme:
+      name: Harvest Variant 5
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Harvest Variant 6
+      colors:
+        accent1: F3C82E
+        accent2: A26176
+        accent3: 74A94E
+        accent4: 188E8D
+        accent5: EE913A
+        accent6: DF5D4A
+        dk1: '000000'
+        dk2: 4A2318
+        folHlink: A26176
+        hlink: 188E8D
+        lt1: FFFFFF
+        lt2: EDECEB
+    font_scheme:
+      name: Harvest Variant 6
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Harvest Variant 7
+      colors:
+        accent1: F3C82E
+        accent2: A26176
+        accent3: 74A94E
+        accent4: 188E8D
+        accent5: EE913A
+        accent6: DF5D4A
+        dk1: '000000'
+        dk2: 4A2318
+        folHlink: A26176
+        hlink: 188E8D
+        lt1: FFFFFF
+        lt2: EDECEB
+    font_scheme:
+      name: Harvest Variant 7
+      major_font: Libre Franklin
+      minor_font: Libre Franklin
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Crop

@@ -1,0 +1,26 @@
+---
+locale: cs
+category: cover_pages
+description: cs cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Název}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Podnadpis}"
+      alignment: center
+    - style: Normal
+      text: "{Autor}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Datum}"
+      alignment: center
+      space_after: 1440

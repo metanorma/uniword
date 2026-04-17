@@ -1,0 +1,17 @@
+---
+name: "Saffron"
+description: "Golden yellow-orange palette from Tailwind Yellow"
+source: "uniword-generated"
+colors:
+  dk1: "1F1A0A"
+  lt1: "FEFCE8"
+  dk2: "5C4A1A"
+  lt2: "FEF9C3"
+  accent1: "CA8A04"
+  accent2: "EAB308"
+  accent3: "FDE047"
+  accent4: "A16207"
+  accent5: "854D0E"
+  accent6: "FEF08A"
+  hlink: "CA8A04"
+  folHlink: "FACC15"

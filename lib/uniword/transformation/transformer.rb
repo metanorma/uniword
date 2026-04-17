@@ -94,7 +94,7 @@ module Uniword
       #
       # Use this when you have a DocxPackage to ensure core_properties are preserved.
       #
-      # @param docx_package [Uniword::Ooxml::DocxPackage] DOCX package with document and core_properties
+      # @param docx_package [Uniword::Docx::Package] DOCX package with document and core_properties
       # @param document_name [String] Optional document name for Content-Location
       #   (e.g., 'blank' for blank.docx). If not provided, extracts from relationships.
       # @return [Uniword::Mhtml::Document] MHTML document model

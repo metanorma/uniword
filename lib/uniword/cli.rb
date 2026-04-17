@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "thor"
+require "rainbow"
 
 # All classes are autoloaded via lib/uniword.rb
 # No require_relative needed - autoload handles lazy loading
@@ -95,7 +96,7 @@ module Uniword
       Apply a StyleSet to an existing document.
 
       You can apply either:
-      - A bundled StyleSet by name (e.g., 'distinctive', 'basic')
+      - A bundled StyleSet by name (e.g., 'signature', 'heritage')
       - A .dotx StyleSet file by path
 
       StyleSets contain collections of paragraph, character, and table styles
@@ -107,7 +108,7 @@ module Uniword
         $ uniword styleset apply input.docx output.docx --file Distinctive.dotx
     DESC
     option :name, type: :string,
-                  desc: "Bundled StyleSet name (e.g., distinctive, basic)"
+                  desc: "Bundled StyleSet name (e.g., signature, heritage)"
     option :file, type: :string,
                   desc: "Path to .dotx StyleSet file"
     option :strategy, type: :string, default: "keep_existing",
@@ -425,7 +426,7 @@ module Uniword
       Apply a theme to an existing document.
 
       You can apply either:
-      - A bundled theme by name (e.g., 'atlas', 'office_theme')
+      - A bundled theme by name (e.g., 'meridian', 'corporate')
       - A .thmx theme file by path
 
       Themes control the document's colors, fonts, and visual styling.
@@ -439,7 +440,7 @@ module Uniword
         $ uniword theme apply input.docx output.docx --file themes/Office.thmx --variant 2
     DESC
     option :name, type: :string,
-                  desc: "Bundled theme name (e.g., atlas, office_theme)"
+                  desc: "Bundled theme name (e.g., meridian, corporate)"
     option :file, type: :string,
                   desc: "Path to .thmx theme file"
     option :variant, type: :string,
@@ -501,6 +502,55 @@ module Uniword
       doc.save(output_path)
 
       say "Theme applied successfully to #{output_path}", :green
+    rescue Uniword::Error => e
+      say "Error: #{e.message}", :red
+      exit 1
+    rescue StandardError => e
+      say "Unexpected error: #{e.message}", :red
+      say e.backtrace.join("\n"), :red if options[:verbose]
+      exit 1
+    end
+
+    desc "auto INPUT OUTPUT", "Auto-transition MS theme to Uniword equivalent"
+    long_desc <<~DESC
+      Detect the Microsoft Word theme in a document and automatically
+      replace it with the corresponding Uniword theme.
+
+      The detection uses color fingerprint matching from config/theme_mapping.yml.
+      This replaces Microsoft fonts with open-source alternatives.
+
+      Examples:
+        $ uniword theme auto ms_report.docx uniword_report.docx
+        $ uniword theme auto input.docx output.docx --verbose
+    DESC
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    def auto(input_path, output_path)
+      say "Loading document #{input_path}...", :green if options[:verbose]
+
+      doc = DocumentFactory.from_file(input_path)
+
+      if options[:verbose]
+        say "  Loaded document:", :cyan
+        say "    Current theme: #{doc.theme&.name || "None"}"
+      end
+
+      result = doc.auto_transition_theme
+
+      if result
+        say "Transitioned MS '#{result.ms_name}' to Uniword '#{result.uniword_slug}'", :green
+        if options[:verbose]
+          friendly = Themes::Theme.load(result.uniword_slug)
+          say "  Uniword theme:", :cyan
+          say "    Name: #{friendly.name}"
+          say "    Major font: #{friendly.font_scheme.major_font}"
+          say "    Minor font: #{friendly.font_scheme.minor_font}"
+        end
+      else
+        say "No matching Uniword theme found for this document's theme", :yellow
+      end
+
+      doc.save(output_path)
+      say "Saved to #{output_path}", :green
     rescue Uniword::Error => e
       say "Error: #{e.message}", :red
       exit 1
@@ -710,6 +760,52 @@ module Uniword
       say "\nValidation complete!", :green
     rescue StandardError => e
       say "Unexpected error during validation: #{e.message}", :red
+      exit 1
+    end
+
+    desc "verify FILE", "Verify DOCX against OPC and XSD schemas"
+    long_desc <<~DESC
+      Perform comprehensive DOCX verification across three layers:
+
+      1. OPC Package — ZIP integrity, content types, relationships
+      2. XSD Schema — XML schema validation (namespace-aware)
+      3. Word Document — semantic checks (cross-references, styles, etc.)
+
+      Examples:
+        $ uniword verify document.docx
+        $ uniword verify document.docx --verbose
+        $ uniword verify document.docx --json
+        $ uniword verify document.docx --xsd
+    DESC
+    option :verbose, aliases: "-v", desc: "Show detailed issue listing",
+                     type: :boolean, default: false
+    option :json, desc: "Output JSON report", type: :boolean, default: false
+    option :yaml, desc: "Output YAML report", type: :boolean, default: false
+    option :xsd, desc: "Enable XSD schema validation", type: :boolean, default: false
+    def verify(path)
+      unless File.exist?(path)
+        say(Rainbow("  File not found: #{path}").red.bright)
+        exit 1
+      end
+
+      orchestrator = Uniword::Validation::VerifyOrchestrator.new(
+        xsd_validation: options[:xsd]
+      )
+      report = orchestrator.verify(path)
+
+      if options[:json]
+        puts report.to_json
+      elsif options[:yaml]
+        require "yaml"
+        puts YAML.dump(JSON.parse(report.to_json))
+      else
+        formatter = Uniword::Validation::Report::TerminalFormatter.new
+        puts formatter.format(report, verbose: options[:verbose])
+      end
+
+      exit report.valid ? 0 : 1
+    rescue StandardError => e
+      say(Rainbow("  Error: #{e.message}").red.bright)
       exit 1
     end
 

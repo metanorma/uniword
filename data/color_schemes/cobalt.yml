@@ -1,0 +1,17 @@
+---
+name: "Cobalt"
+description: "Warm blue palette from Tailwind Blue"
+source: "uniword-generated"
+colors:
+  dk1: "0F172A"
+  lt1: "F8FAFF"
+  dk2: "1E3A5F"
+  lt2: "BFDBFE"
+  accent1: "2563EB"
+  accent2: "3B82F6"
+  accent3: "93C5FD"
+  accent4: "1D4ED8"
+  accent5: "1E40AF"
+  accent6: "DBEAFE"
+  hlink: "2563EB"
+  folHlink: "60A5FA"

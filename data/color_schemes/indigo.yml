@@ -1,0 +1,17 @@
+---
+name: "Indigo"
+description: "Deep violet-indigo palette from Material Design Indigo"
+source: "uniword-generated"
+colors:
+  dk1: "0D0A1F"
+  lt1: "F8F9FF"
+  dk2: "312E81"
+  lt2: "E0E7FF"
+  accent1: "4338CA"
+  accent2: "6366F1"
+  accent3: "A5B4FC"
+  accent4: "7C3AED"
+  accent5: "8B5CF6"
+  accent6: "C4B5FD"
+  hlink: "4F46E5"
+  folHlink: "818CF8"

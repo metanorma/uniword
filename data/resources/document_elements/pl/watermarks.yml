@@ -1,0 +1,25 @@
+---
+locale: pl
+category: watermarks
+description: pl watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: WERSJA ROBOCZA
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: POUFNE
+      bold: true
+      size: 72
+      alignment: center

@@ -1,0 +1,13 @@
+---
+locale: hu
+category: bibliographies
+description: hu bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Szerző. Cím. Kiadó.
+    - text: Szerző. Cím. Folyóirat.

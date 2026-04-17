@@ -1,0 +1,17 @@
+---
+name: "Monochrome"
+description: "Clean grayscale palette for minimal designs"
+source: "uniword-generated"
+colors:
+  dk1: "1A1A1A"
+  lt1: "FFFFFF"
+  dk2: "333333"
+  lt2: "E5E5E5"
+  accent1: "4A4A4A"
+  accent2: "6B6B6B"
+  accent3: "999999"
+  accent4: "B0B0B0"
+  accent5: "CCCCCC"
+  accent6: "E0E0E0"
+  hlink: "555555"
+  folHlink: "888888"

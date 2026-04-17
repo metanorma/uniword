@@ -1,0 +1,32 @@
+---
+locale: cs
+category: headers
+description: cs headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Název}"
+    - text: "{Datum}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Název společnosti}"
+      bold: true
+    - text: "{Název}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Nadpis sekce}"
+      alignment: center

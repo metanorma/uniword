@@ -1,0 +1,88 @@
+---
+layout: default
+title: DOCX Package Model
+nav_order: 6
+parent: Understanding
+permalink: /understanding/docx-package-model/
+---
+= DOCX Package Model
+
+Uniword uses a pure object-oriented approach where each XML file in the DOCX ZIP package is represented by a dedicated lutaml-model class. This eliminates the serialization/deserialization anti-pattern and provides perfect round-trip fidelity.
+
+== Package Class
+
+The `Docx::Package` class is the top-level container for all parts of a DOCX file:
+
+[source,ruby]
+----
+class Package < Lutaml::Model::Serializable
+  # Metadata (fully modeled)
+  attribute :core_properties, CoreProperties      # docProps/core.xml
+  attribute :app_properties, AppProperties        # docProps/app.xml
+
+  # Theme (fully modeled)
+  attribute :theme, Theme                         # word/theme/theme1.xml
+
+  # Document content (in progress)
+  attribute :document, Document                   # word/document.xml
+  attribute :styles, StylesConfiguration          # word/styles.xml
+  # ... other parts
+
+  def self.from_file(path)
+    # Load DOCX and deserialize all parts
+  end
+
+  def to_file(path)
+    # Serialize all parts and package as DOCX
+  end
+end
+----
+
+== Key Attributes
+
+Each attribute maps directly to an XML part inside the DOCX ZIP:
+
+[cols="2,2,3"]
+|===
+| Attribute | XML Part | Description
+
+| `core_properties` | `docProps/core.xml` | Dublin Core metadata (title, author, dates)
+| `app_properties` | `docProps/app.xml` | Application metadata (pages, words, characters)
+| `theme` | `word/theme/theme1.xml` | Theme definition (colors, fonts, formatting)
+| `document` | `word/document.xml` | Main document body (paragraphs, tables, sections)
+| `styles` | `word/styles.xml` | Style definitions (paragraph, character, table)
+|===
+
+== Loading and Saving
+
+[source,ruby]
+----
+# Load an existing DOCX file
+package = Docx::Package.from_file('document.docx')
+
+# Access document content
+paragraphs = package.document.body.paragraphs
+
+# Modify content
+package.document.body.add_paragraph("New paragraph")
+
+# Save back to file
+package.to_file('modified.docx')
+----
+
+== Benefits
+
+Zero hardcoding::
+  All XML generation is handled by lutaml-model, not string concatenation.
+
+Type safety::
+  Strong typing for all attributes means type errors are caught early.
+
+Perfect round-trip::
+  Model serialization guarantees that all content is preserved during load/save cycles.
+
+Easy testing::
+  Each model class is independently testable without needing a full DOCX package.
+
+Maintainability::
+  Changes to OOXML handling are isolated to model definitions, not scattered across the codebase.

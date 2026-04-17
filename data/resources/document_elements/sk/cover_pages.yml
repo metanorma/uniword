@@ -1,0 +1,26 @@
+---
+locale: sk
+category: cover_pages
+description: sk cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Názov}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Podnázov}"
+      alignment: center
+    - style: Normal
+      text: "{Autor}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Dátum}"
+      alignment: center
+      space_after: 1440

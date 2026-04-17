@@ -1,0 +1,59 @@
+---
+layout: default
+title: Configuration
+nav_order: 4
+parent: Ruby API
+permalink: /interfaces/ruby-api/configuration/
+---
+= Configuration
+
+Uniword uses sensible defaults and requires no configuration for typical use.
+When you need to adjust behavior, the options below are available.
+
+== Format detection
+
+`DocumentFactory.from_file` auto-detects the file format from the extension.
+Pass the `format:` keyword to override:
+
+[source,ruby]
+----
+# Auto-detect (default)
+doc = Uniword::DocumentFactory.from_file("document.docx")
+
+# Explicit format
+doc = Uniword::DocumentFactory.from_file("document.bin", format: :docx)
+----
+
+Supported formats:
+
+* `:docx` -- Office Open XML (Word 2007+)
+* `:mhtml` -- MHTML (Word 2003+)
+
+== Logging
+
+Uniword logs warnings and errors to `$stderr` by default. To suppress
+output or redirect it, set the logger before loading documents:
+
+[source,ruby]
+----
+require "logger"
+
+# Custom logger
+Uniword.logger = Logger.new("uniword.log")
+
+# Suppress all output
+Uniword.logger = Logger.new(IO::NULL)
+----
+
+== Save options
+
+`Document#save` accepts a format override:
+
+[source,ruby]
+----
+# Auto-detect from extension
+doc.save("output.docx")
+
+# Explicit format
+doc.save("output.doc", format: :mhtml)
+----

@@ -1,0 +1,96 @@
+---
+layout: default
+title: Round-Trip Fidelity
+nav_order: 19
+parent: Guides
+permalink: /guides/round-trip-fidelity/
+---
+= Round-Trip Fidelity
+
+Guarantees and verification for perfect DOCX round-trip preservation.
+
+== Round-Trip Guarantee
+
+Uniword achieves 100% round-trip fidelity for DOCX documents through complete OOXML
+modeling. Every OOXML element is represented as a Ruby object via lutaml-model,
+ensuring that load-modify-save cycles preserve all original content.
+
+[cols="2,4"]
+|===
+| Guarantee | Details
+
+| Content preservation
+| All text, formatting, and structure maintained
+
+| Element coverage
+| All 760 OOXML elements from 22 namespaces modeled
+
+| Namespace compliance
+| All required OOXML namespaces supported
+
+| Encoding
+| UTF-8 encoding maintained throughout
+
+| Model-driven
+| All XML structures represented as Ruby objects
+|===
+
+== Round-Trip Example
+
+[source,ruby]
+----
+# Load document
+original = Uniword::Document.open('complex.docx')
+
+# Modify it
+original.add_paragraph("New content")
+
+# Save back -- EVERYTHING preserved
+original.save('modified.docx')
+
+# Verify: modified.docx has ALL original content + new paragraph
+----
+
+== Test Results
+
+|===
+| Test Case | Result
+
+| ISO 8601 DOCX (295KB) | 100% fidelity
+| MHTML documents | Content preserved
+| Math equations | Preserved via `m:` namespace
+| Bookmarks | Native support with ID preservation
+| Complex documents | Perfect round-trip with schema-driven architecture
+|===
+
+== Verification with the CLI
+
+Use the `uniword verify` command to validate document structure:
+
+[source,shell]
+----
+# Full verification (OPC + semantic)
+uniword verify document.docx
+
+# Enable XSD schema validation (slower, thorough)
+uniword verify document.docx --xsd
+
+# Machine-readable output
+uniword verify document.docx --json
+----
+
+The verifier runs three layers of checks:
+
+. **OPC Package** -- ZIP integrity, content types, relationships, part presence
+. **XSD Schema** -- XML schema validation against 40 bundled XSD schemas
+. **Word Document** -- 10 built-in semantic rules for cross-references, styles,
+  numbering, footnotes, headers, bookmarks, images, tables, fonts, theme, and settings
+
+== Custom Validation
+
+Register custom validation rules for domain-specific checks:
+
+[source,ruby]
+----
+Uniword::Validation::Rules.register(MyCustomRule)
+----

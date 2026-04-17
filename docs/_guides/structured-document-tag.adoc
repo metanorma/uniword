@@ -1,0 +1,157 @@
+---
+layout: default
+title: Structured Document Tags
+nav_order: 15
+parent: Guides
+permalink: /guides/structured-document-tag/
+---
+= Structured Document Tags (SDT)
+
+Create and manipulate Word content controls using all 13 SDT property types.
+
+== What Are SDTs
+
+Structured Document Tags (SDTs) are Word's content control system for interactive
+fields, data-bound content, and dynamic elements:
+
+* **Text fields** -- User input boxes
+* **Date pickers** -- Calendar selection controls
+* **Drop-down lists** -- Selection menus
+* **Bibliography** -- Citation management
+* **Document part references** -- Reusable content blocks
+* **Data-bound content** -- XML-mapped fields
+
+== SDT Properties Supported
+
+Uniword supports all 13 SDT property types:
+
+.Identity and Display (7 properties)
+* `id` -- Unique integer identifier
+* `alias` -- User-friendly display name
+* `tag` -- Developer-assigned tag
+* `text` -- Text control flag
+* `showingPlcHdr` -- Show placeholder when content is empty
+* `appearance` -- Visual style: `hidden`, `tags`, or `boundingBox`
+* `temporary` -- Remove SDT wrapper on first edit
+
+.Data and References (3 properties)
+* `dataBinding` -- XML data binding with xpath, storeItemID, prefixMappings
+* `placeholder` -- Reference to placeholder docPart content
+* `docPartObj` -- Document part gallery reference
+
+.Special Controls (3 properties)
+* `date` -- Date picker with format, language, calendar, fullDate
+* `bibliography` -- Bibliography content control flag
+* `rPr` -- Run properties for SDT content formatting
+
+== Creating a Text Field SDT
+
+[source,ruby]
+----
+require 'uniword'
+
+sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+sdt.properties = Uniword::StructuredDocumentTagProperties.new
+
+# Set identity
+sdt.properties.id = Uniword::Sdt::Id.new(value: 123456)
+sdt.properties.alias_name = Uniword::Sdt::Alias.new(value: "User Name Field")
+sdt.properties.tag = Uniword::Sdt::Tag.new(value: "user_name")
+
+# Mark as text control
+sdt.properties.text = Uniword::Sdt::Text.new
+
+# Show placeholder when empty
+sdt.properties.showingplaceholder_header = Uniword::Sdt::ShowingPlaceholderHeader.new
+
+# Set appearance
+sdt.properties.appearance = Uniword::Sdt::Appearance.new(value: "boundingBox")
+
+# Create content
+sdt.content = Uniword::Wordprocessingml::SdtContent.new
+para = Uniword::Paragraph.new
+para.add_text("Enter your name here")
+sdt.content.paragraphs << para
+----
+
+== Date Picker SDT
+
+[source,ruby]
+----
+sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+sdt.properties = Uniword::StructuredDocumentTagProperties.new
+sdt.properties.id = Uniword::Sdt::Id.new(value: 789012)
+sdt.properties.alias_name = Uniword::Sdt::Alias.new(value: "Document Date")
+
+# Configure date control
+sdt.properties.date = Uniword::Sdt::Date.new
+sdt.properties.date.date_format = Uniword::Sdt::DateFormat.new(value: "M/d/yyyy")
+sdt.properties.date.lid = Uniword::Sdt::Lid.new(value: "en-US")
+sdt.properties.date.calendar = Uniword::Sdt::Calendar.new(value: "gregorian")
+sdt.properties.date.store_mapped_data_as = Uniword::Sdt::StoreMappedDataAs.new(
+  value: "dateTime"
+)
+sdt.properties.date.full_date = "2024-12-02T00:00:00Z"
+
+# Add content
+sdt.content = Uniword::Wordprocessingml::SdtContent.new
+para = Uniword::Paragraph.new
+para.add_text("12/2/2024")
+sdt.content.paragraphs << para
+----
+
+== Data-Bound SDT
+
+[source,ruby]
+----
+sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+sdt.properties = Uniword::StructuredDocumentTagProperties.new
+sdt.properties.id = Uniword::Sdt::Id.new(value: 345678)
+sdt.properties.alias_name = Uniword::Sdt::Alias.new(value: "Customer Name")
+sdt.properties.tag = Uniword::Sdt::Tag.new(value: "customer_name")
+
+# Configure data binding
+sdt.properties.data_binding = Uniword::Sdt::DataBinding.new
+sdt.properties.data_binding.xpath = "/root/customer/name"
+sdt.properties.data_binding.store_item_id = "{ABCDEFGH-1234-5678-90AB-CDEF12345678}"
+sdt.properties.data_binding.prefix_mappings = 'xmlns:ns="http://example.com/schema"'
+
+sdt.properties.text = Uniword::Sdt::Text.new
+
+sdt.content = Uniword::Wordprocessingml::SdtContent.new
+para = Uniword::Paragraph.new
+para.add_text("John Doe")
+sdt.content.paragraphs << para
+----
+
+== Bibliography SDT
+
+[source,ruby]
+----
+sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+sdt.properties = Uniword::StructuredDocumentTagProperties.new
+sdt.properties.id = Uniword::Sdt::Id.new(value: 234567)
+sdt.properties.alias_name = Uniword::Sdt::Alias.new(value: "Bibliography")
+sdt.properties.bibliography = Uniword::Sdt::Bibliography.new
+
+sdt.content = Uniword::Wordprocessingml::SdtContent.new
+----
+
+== Document Part Reference SDT
+
+[source,ruby]
+----
+sdt = Uniword::Wordprocessingml::StructuredDocumentTag.new
+sdt.properties = Uniword::StructuredDocumentTagProperties.new
+sdt.properties.id = Uniword::Sdt::Id.new(value: 456789)
+sdt.properties.alias_name = Uniword::Sdt::Alias.new(value: "Cover Page")
+
+sdt.properties.doc_part_obj = Uniword::Sdt::DocPartObj.new
+sdt.properties.doc_part_obj.doc_part_gallery = Uniword::Sdt::DocPartGallery.new(
+  value: "Cover Pages"
+)
+sdt.properties.doc_part_obj.doc_part_category = Uniword::Sdt::DocPartCategory.new(
+  value: "General"
+)
+sdt.properties.doc_part_obj.doc_part_unique = Uniword::Sdt::DocPartUnique.new
+----

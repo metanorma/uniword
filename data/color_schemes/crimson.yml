@@ -1,0 +1,17 @@
+---
+name: "Crimson"
+description: "Bold red palette from Tailwind Rose and Red tones"
+source: "uniword-generated"
+colors:
+  dk1: "1A0A0A"
+  lt1: "FDF8F8"
+  dk2: "5C1A1A"
+  lt2: "FED7D7"
+  accent1: "C53030"
+  accent2: "E53E3E"
+  accent3: "FC8181"
+  accent4: "D69E2E"
+  accent5: "ECC94B"
+  accent6: "FEFCBF"
+  hlink: "E53E3E"
+  folHlink: "FEB2B2"

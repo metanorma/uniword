@@ -74,6 +74,7 @@ module Uniword
       attribute :major_complex_script, :string
       attribute :minor_east_asian, :string
       attribute :minor_complex_script, :string
+      attribute :per_script, :hash
 
       yaml do
         map "name", to: :name
@@ -83,6 +84,7 @@ module Uniword
         map "major_complex_script", to: :major_complex_script
         map "minor_east_asian", to: :minor_east_asian
         map "minor_complex_script", to: :minor_complex_script
+        map "per_script", to: :per_script
       end
     end
 
@@ -107,6 +109,7 @@ module Uniword
     class Theme < Lutaml::Model::Serializable
       attribute :name, :string
       attribute :source, :string
+      attribute :ms_equivalent, :string
       attribute :imported_at, :date_time
       attribute :color_scheme, ColorScheme
       attribute :font_scheme, FontScheme
@@ -115,6 +118,7 @@ module Uniword
       yaml do
         map "name", to: :name
         map "source", to: :source
+        map "ms_equivalent", to: :ms_equivalent
         map "imported_at", to: :imported_at
         map "color_scheme", to: :color_scheme
         map "font_scheme", to: :font_scheme

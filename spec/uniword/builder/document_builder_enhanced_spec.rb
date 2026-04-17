@@ -163,14 +163,14 @@ end
 RSpec.describe Uniword::Builder::DocumentBuilder, "#theme" do
   it "applies a bundled theme by name" do
     doc = described_class.new
-    doc.theme("atlas")
+    doc.theme("meridian")
 
     expect(doc.model.theme).not_to be_nil
   end
 
   it "accepts a block for customization" do
     doc = described_class.new
-    result = doc.theme("atlas", &:available)
+    result = doc.theme("meridian", &:available)
 
     expect(result).to be_a(Uniword::Builder::ThemeBuilder)
   end
@@ -282,7 +282,7 @@ RSpec.describe Uniword::Builder::ThemeBuilder do
     it "applies a bundled theme" do
       doc = Uniword::Builder::DocumentBuilder.new
       tb = described_class.new(doc)
-      tb.apply("atlas")
+      tb.apply("meridian")
       expect(doc.model.theme).not_to be_nil
     end
 
@@ -297,7 +297,7 @@ RSpec.describe Uniword::Builder::ThemeBuilder do
     it "overrides theme colors" do
       doc = Uniword::Builder::DocumentBuilder.new
       tb = described_class.new(doc)
-      tb.apply("atlas")
+      tb.apply("meridian")
       tb.colors(accent1: "FF0000")
 
       expect(doc.model.theme.color(:accent1)).to eq("FF0000")
@@ -308,7 +308,7 @@ RSpec.describe Uniword::Builder::ThemeBuilder do
     it "overrides theme fonts" do
       doc = Uniword::Builder::DocumentBuilder.new
       tb = described_class.new(doc)
-      tb.apply("atlas")
+      tb.apply("meridian")
       tb.fonts(major: "Georgia", minor: "Calibri")
 
       fs = doc.model.theme.theme_elements.font_scheme
@@ -323,7 +323,7 @@ RSpec.describe Uniword::Builder::ThemeBuilder do
       tb = described_class.new(doc)
       themes = tb.available
       expect(themes).to be_an(Array)
-      expect(themes).to include("atlas")
+      expect(themes).to include("meridian")
     end
   end
 end

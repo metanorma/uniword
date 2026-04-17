@@ -1,0 +1,21 @@
+---
+locale: da
+category: table_of_contents
+description: da table of contents
+elements:
+- name: Classic
+  description: TOC with dot leaders
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Indholdsfortegnelse
+- name: Modern
+  description: Clean TOC
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Indholdsfortegnelse

@@ -1,0 +1,31 @@
+---
+locale: sk
+category: footers
+description: sk footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Strana}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Dátum}"
+    - text: "{Strana}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: VEREJNÉ
+    - text: "{Strana}"
+      alignment: right

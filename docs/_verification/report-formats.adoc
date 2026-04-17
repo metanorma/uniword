@@ -1,0 +1,110 @@
+---
+layout: default
+title: Report Formats
+nav_order: 6
+parent: Verification
+permalink: /verification/report-formats/
+---
+= Report Formats
+
+Uniword's verification pipeline supports multiple output formats for human and machine consumption.
+
+== Terminal Output (default)
+
+The default output format displays issues in a readable terminal format:
+
+[source,shell]
+----
+uniword verify document.docx
+----
+
+Output example:
+
+```
+[ERROR] DOC-001: Style 'MyStyle' referenced but not defined (word/document.xml:42)
+[WARN]  DOC-002: Style 'UnusedStyle' defined but never used (word/styles.xml)
+[INFO]  DOC-080: Theme part is present
+---
+2 errors, 1 warning, 1 info
+VERIFICATION FAILED
+```
+
+== JSON Output
+
+Machine-readable JSON output for integration with other tools:
+
+[source,shell]
+----
+uniword verify document.docx --json
+----
+
+Output example:
+
+[source,json]
+----
+{
+  "valid": false,
+  "summary": {
+    "errors": 2,
+    "warnings": 1,
+    "info": 1,
+    "total": 4
+  },
+  "issues": [
+    {
+      "code": "DOC-001",
+      "severity": "error",
+      "message": "Style 'MyStyle' referenced but not defined",
+      "location": "word/document.xml:42"
+    }
+  ]
+}
+----
+
+== YAML Output
+
+YAML output for easy reading and configuration integration:
+
+[source,shell]
+----
+uniword verify document.docx --yaml
+----
+
+Output example:
+
+[source,yaml]
+----
+valid: false
+summary:
+  errors: 2
+  warnings: 1
+  info: 1
+  total: 4
+issues:
+- code: DOC-001
+  severity: error
+  message: "Style 'MyStyle' referenced but not defined"
+  location: "word/document.xml:42"
+----
+
+== Exit Codes
+
+0:: Document is valid (no errors)
+1:: Document is invalid (one or more errors)
+
+Warnings and info-level issues do not cause a non-zero exit code.
+
+== Programmatic Access
+
+[source,ruby]
+----
+require 'uniword'
+
+result = Uniword::Verification.verify('document.docx')
+
+# Access as Ruby objects
+result.valid?           # => true or false
+result.issues           # => array of Issue objects
+result.to_json          # => JSON string
+result.to_yaml          # => YAML string
+----

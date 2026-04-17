@@ -1,0 +1,81 @@
+---
+layout: default
+title: SDT Deep Dive
+nav_order: 2
+parent: Advanced
+permalink: /advanced/sdt-deep-dive/
+---
+= SDT Deep Dive
+
+Structured Document Tags (SDTs) are Word's content control mechanism. SDTs define regions in a document where content is constrained or structured -- rich text controls, date pickers, dropdown lists, and more.
+
+== SDT Structure
+
+An SDT consists of two parts:
+
+Properties (`w:sdtPr`):: Define the content control type, appearance, placeholder text, data binding, and constraints.
+Content (`w:sdtContent`):: The actual document content inside the control, using standard WordProcessingML elements.
+
+[source,ruby]
+----
+# Access SDT properties and content
+sdt = paragraph.sdt
+sdt.properties.alias        # => "Title"
+sdt.properties.tag          # => "doc_title"
+sdt.properties.locked?      # => true
+sdt.content.paragraphs      # => array of paragraphs inside the SDT
+----
+
+== Content Control Types
+
+SDTs support several content control types, identified by their child element in `sdtPr`:
+
+Rich text (`w:richText`):: Free-form rich text content. The default type.
+Plain text (`w:text`):: Plain text input, optionally with length limits.
+Date (`w:date`):: Date picker with format string and calendar type.
+Dropdown (`w:comboBox`):: Combo box with predefined entries.
+List (`w:dropDownList`):: Dropdown list with restricted choices.
+Picture (`w:picture`):: Image insertion control.
+Checkbox (`w:checkbox`):: Boolean checkbox control.
+Repeating section (`w:repeatingSection`):: Repeatable block of content.
+
+== Data Binding
+
+SDTs can be bound to custom XML data through XML mapping:
+
+[source,ruby]
+----
+# SDT with data binding to custom XML part
+sdt.properties.data_binding do |binding|
+  binding.xpath = "/invoice/number"
+  binding.store_item_id = "{12345678-1234-1234-1234-123456789012}"
+end
+----
+
+When a data binding is configured, the SDT content is synchronized with the corresponding XML node in a custom XML part.
+
+== SDT Appearance
+
+SDTs can be displayed in several visual modes:
+
+BoundingBox:: Shows a visible box around the content control.
+Tags:: Shows start and end markers.
+Hidden:: No visual indicators.
+Default:: Uses Word's default display settings.
+
+== Locking
+
+SDT properties support several locking behaviors:
+
+* **Content locked** -- Content cannot be edited
+* **SDT locked** -- The control itself cannot be deleted
+* **Both locked** -- Fully locked control
+* **Unlocked** -- No restrictions
+
+== SDTs in Tables and Sections
+
+SDTs can wrap entire table rows, table cells, or sections:
+
+* Row-level SDTs enable repeating row templates
+* Cell-level SDTs provide structured data entry
+* Section-level SDTs enable document assembly workflows

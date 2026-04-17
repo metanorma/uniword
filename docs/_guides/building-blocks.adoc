@@ -1,0 +1,153 @@
+---
+layout: default
+title: Building Blocks
+nav_order: 14
+parent: Guides
+permalink: /guides/building-blocks/
+---
+= Building Blocks
+
+Work with glossary documents and building block entries (reusable content pieces).
+
+== What Are Building Blocks
+
+Building Blocks are reusable content pieces provided by Microsoft Word, also known
+as Glossary documents. They allow users to insert pre-formatted content like headers,
+footers, cover pages, tables of contents, equations, and custom text blocks.
+
+A Building Block (.dotx template) contains:
+
+* **Document Parts** -- Individual building block entries
+* **Properties** -- Name, category, gallery, behaviors, description, style, GUID
+* **Content** -- Paragraphs, tables, and structured document tags (SDTs)
+
+== Building Block Hierarchy
+
+[source]
+----
+GlossaryDocument (root)
+  +-- DocParts (collection container)
+       +-- DocPart (individual building block)
+            +-- DocPartProperties (metadata)
+            |    +-- DocPartName (display name)
+            |    +-- StyleId (associated paragraph style)
+            |    +-- DocPartCategory
+            |    |    +-- CategoryName (e.g., "General")
+            |    |    +-- DocPartGallery (e.g., "hdrs", "ftrs", "coverPg")
+            |    +-- DocPartBehaviors (insertion behavior)
+            |    |    +-- DocPartBehavior (e.g., "content", "page", "para")
+            |    +-- DocPartDescription (help text)
+            |    +-- DocPartId (unique GUID)
+            +-- DocPartBody (actual content)
+                 +-- Paragraphs (formatted text)
+                 +-- Tables (structured data)
+                 +-- StructuredDocumentTags (fields)
+----
+
+== Loading Building Blocks
+
+[source,ruby]
+----
+require 'uniword'
+
+# Load a .dotx template with building blocks
+doc = Uniword::Document.open('template.dotx')
+glossary = doc.glossary_document
+
+# Access building blocks
+glossary.doc_parts.doc_part.each do |part|
+  props = part.doc_part_pr
+
+  puts "Name: #{props.name.val}"
+  puts "Gallery: #{props.category.gallery.val}"
+  puts "Category: #{props.category.name.val}"
+  puts "Description: #{props.description&.val}"
+  puts "Style: #{props.style&.val}"
+  puts "GUID: #{props.guid.val}"
+
+  # Access content
+  part.doc_part_body.paragraphs.each do |para|
+    puts "  - #{para.text}"
+  end
+end
+----
+
+== Creating Building Blocks
+
+[source,ruby]
+----
+require 'uniword'
+
+# Create new glossary document
+glossary = Uniword::Glossary::GlossaryDocument.new
+glossary.doc_parts = Uniword::Glossary::DocParts.new
+
+# Create a custom building block
+part = Uniword::Glossary::DocPart.new
+
+# Set properties
+part.doc_part_pr = Uniword::Glossary::DocPartProperties.new
+part.doc_part_pr.name = Uniword::Glossary::DocPartName.new(
+  val: 'Company Header'
+)
+part.doc_part_pr.style = Uniword::Glossary::StyleId.new(val: 'Heading 1')
+part.doc_part_pr.guid = Uniword::Glossary::DocPartId.new(
+  val: '{12345678-1234-1234-1234-123456789012}'
+)
+part.doc_part_pr.category = Uniword::Glossary::DocPartCategory.new
+part.doc_part_pr.category.name = Uniword::Glossary::CategoryName.new(
+  val: 'General'
+)
+part.doc_part_pr.category.gallery = Uniword::Glossary::DocPartGallery.new(
+  val: 'hdrs'
+)
+
+# Create content
+part.doc_part_body = Uniword::Glossary::DocPartBody.new
+para = Uniword::Paragraph.new
+para.add_text('Company Name')
+part.doc_part_body.paragraphs << para
+
+# Add to glossary
+glossary.doc_parts.doc_part << part
+
+# Save
+doc = Uniword::Document.new
+doc.glossary_document = glossary
+doc.save('template.dotx')
+----
+
+== Building Block Galleries
+
+Word organizes building blocks into galleries:
+
+|===
+| Gallery Code | Description
+
+| `hdrs` | Headers
+| `ftrs` | Footers
+| `coverPg` | Cover Pages
+| `eq` | Equations
+| `toc` | Tables of Contents
+| `bib` | Bibliographies
+| `watermarks` | Watermarks
+| `placeholder` | Custom placeholder blocks
+| `autoText` | AutoText entries
+| `textBox` | Text boxes
+|===
+
+== Building Block Behaviors
+
+Control how building blocks are inserted into documents:
+
+* `content` -- Insert as inline content at cursor
+* `page` -- Insert as a new page (typical for cover pages)
+* `para` -- Insert as a new paragraph (typical for text blocks)
+
+[source,ruby]
+----
+part.doc_part_pr.behaviors = Uniword::Glossary::DocPartBehaviors.new
+part.doc_part_pr.behaviors.behavior << Uniword::Glossary::DocPartBehavior.new(
+  val: 'page'
+)
+----

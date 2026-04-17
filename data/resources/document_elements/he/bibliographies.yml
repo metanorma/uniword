@@ -1,0 +1,13 @@
+---
+locale: he
+category: bibliographies
+description: he bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: מחבר. כותרת. הוזא.
+    - text: מחבר. כותרת. כתב עת.

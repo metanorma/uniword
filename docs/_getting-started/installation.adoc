@@ -1,0 +1,50 @@
+---
+layout: default
+title: Installation
+nav_order: 1
+parent: Getting Started
+permalink: /getting-started/installation/
+---
+= Installation
+
+Uniword is distributed as a Ruby gem and requires Ruby 3.1 or later.
+
+== From Gemfile (recommended)
+
+Add this line to your application's Gemfile:
+
+[source,ruby]
+----
+gem 'uniword'
+----
+
+And then execute:
+
+[source,shell]
+----
+bundle install
+----
+
+== Global install
+
+Or install it yourself as:
+
+[source,shell]
+----
+gem install uniword
+----
+
+== Verify the installation
+
+Confirm Uniword is available:
+
+[source,shell]
+----
+uniword version
+----
+
+You should see the installed version number.
+
+== What's next?
+
+link:../quick-start/[Quick Start] -- Create your first document in under a minute.

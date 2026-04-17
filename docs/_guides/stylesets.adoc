@@ -1,0 +1,130 @@
+---
+layout: default
+title: StyleSets
+nav_order: 13
+parent: Guides
+permalink: /guides/stylesets/
+---
+= StyleSets
+
+Apply bundled Office StyleSets or load them from `.dotx` files.
+
+== What Are StyleSets
+
+StyleSets are collections of professionally designed style definitions. They work
+alongside themes to create beautifully formatted documents with consistent styling.
+
+A StyleSet (.dotx file) contains:
+
+* Style definitions for headings, body text, quotes, etc.
+* Paragraph formatting (spacing, indentation, alignment)
+* Character formatting (fonts, colors, sizes)
+* Table styles
+
+== Using Bundled StyleSets
+
+Uniword includes 12 Office StyleSets as bundled YAML files:
+
+[source,ruby]
+----
+# Load bundled StyleSet by name
+styleset = Uniword::StyleSet.load('distinctive')
+
+# Apply to document
+doc = Uniword::Document.new
+styleset.apply_to(doc)
+
+# Or use shorthand method
+doc.apply_styleset('distinctive')
+
+# List available bundled StyleSets
+available = Uniword::StyleSet.available_stylesets
+# => ["distinctive", "elegant", "fancy", "formal", ...]
+----
+
+[TIP]
+====
+StyleSets use Uniword names (e.g., `signature`, `ceremonial`, `contemporary`), not
+Microsoft display names. The link:../resource-mapping/[Resource Mapping] guide shows the
+full correspondence.
+====
+
+== Loading StyleSets from .dotx Files
+
+Load a StyleSet directly from a Microsoft Office `.dotx` file:
+
+[source,ruby]
+----
+# Load StyleSet from .dotx file
+styleset = Uniword::StyleSet.from_dotx('path/to/Distinctive.dotx')
+
+puts styleset.name
+# => "Distinctive"
+
+puts styleset.styles.count
+# => 42
+
+# Apply to document
+doc = Uniword::Document.new
+styleset.apply_to(doc)
+
+doc.add_paragraph("Heading", heading: :heading_1)
+doc.save('output.docx')
+----
+
+== Conflict Resolution Strategies
+
+When applying a StyleSet, you can control how conflicts with existing styles are handled:
+
+[source,ruby]
+----
+# Keep existing styles, add only new ones (default)
+styleset.apply_to(doc, strategy: :keep_existing)
+
+# Replace existing styles with StyleSet styles
+styleset.apply_to(doc, strategy: :replace)
+
+# Keep both, rename imported styles
+styleset.apply_to(doc, strategy: :rename)
+----
+
+== Combining Themes and StyleSets
+
+Themes define colors and fonts. StyleSets define style formatting:
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+
+# Apply theme (colors and fonts)
+doc.apply_theme('celestial')
+
+# Apply StyleSet (style definitions)
+doc.apply_styleset('distinctive')
+
+# Use the styled content
+doc.add_paragraph('Document Title', heading: :heading_1)
+doc.add_paragraph('Introduction paragraph with consistent styling.')
+
+doc.save('professional_document.docx')
+----
+
+== Available StyleSets
+
+[cols="2,4"]
+|===
+| Uniword Name | Description
+
+| `distinctive` | Bold headings with color accents
+| `elegant` | Refined, professional appearance
+| `fancy` | Decorative, attention-grabbing
+| `formal` | Traditional business document styling
+| `manuscript` | Book-style formatting
+| `modern` | Contemporary, minimalist design
+| `newsprint` | Newspaper-style columns and headers
+| `perspective` | Dynamic, angled headings
+| `simple` | Minimal, unobtrusive formatting
+| `thatch` | Textured, organic appearance
+| `traditional` | Classic document styling
+| `word_2010` | Basic Word 2010 formatting
+|===

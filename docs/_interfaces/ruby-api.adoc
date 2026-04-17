@@ -1,0 +1,104 @@
+---
+layout: default
+title: Ruby API
+nav_order: 1
+parent: Interfaces
+permalink: /interfaces/ruby-api/
+has_children: true
+---
+= Ruby API
+
+The Ruby API is the primary interface for working with Uniword. It provides
+four layers of abstraction for creating, reading, and modifying OOXML
+documents.
+
+== Document lifecycle
+
+Every Uniword workflow follows one of two paths:
+
+*Create from scratch* -- Build a new document using `Document.new` or the
+fluent Builder API, then save it.
+
+*Load and modify* -- Open an existing DOCX or MHTML file with
+`DocumentFactory.from_file`, modify the content, and save it back.
+
+[source,ruby]
+----
+# Create
+doc = Uniword::Document.new
+doc.add_paragraph("Hello World")
+doc.save("output.docx")
+
+# Load and modify
+doc = Uniword::DocumentFactory.from_file("input.docx")
+doc.add_paragraph("Appended paragraph")
+doc.save("modified.docx")
+----
+
+== Builder API
+
+The Builder provides a fluent, declarative interface for constructing
+documents. Each method returns the builder, allowing method chaining.
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading("My Document", level: 1)
+  .add_paragraph("Introduction paragraph")
+  .add_table do
+    row do
+      cell "Header 1", bold: true
+      cell "Header 2", bold: true
+    end
+    row do
+      cell "Data 1"
+      cell "Data 2"
+    end
+  end
+  .build
+----
+
+See link:../builder-api/[Builder API] for the full reference.
+
+== Model classes
+
+Beneath the Builder, Uniword exposes a complete set of OOXML model classes
+representing 760 elements across 22 namespaces. Every class inherits from
+`Lutaml::Model::Serializable` and supports automatic XML serialization.
+
+[source,ruby]
+----
+# Direct model manipulation
+para = Uniword::Paragraph.new
+para.add_text("Bold text", bold: true)
+
+table = Uniword::Table.new
+row = Uniword::TableRow.new
+cell = Uniword::TableCell.new
+cell.add_paragraph("Cell content")
+row.add_cell(cell)
+table.add_row(row)
+----
+
+== Resource system
+
+Uniword ships with open-source resources that replace proprietary Microsoft
+Word assets:
+
+* **Themes** -- 29 bundled color and font schemes (`.thmx` or YAML)
+* **StyleSets** -- 12 bundled style definitions (`.dotx` or YAML)
+* **Document elements** -- 240 templates across 30 locales
+
+[source,ruby]
+----
+# Apply a theme and styleset
+doc.apply_theme("celestial")
+doc.apply_styleset("distinctive")
+----
+
+== Topics
+
+* link:../document-lifecycle/[Document Lifecycle] -- Create, open, save,
+  modify documents
+* link:../builder-api/[Builder API] -- Fluent document construction
+* link:../configuration/[Configuration] -- Logging, format detection

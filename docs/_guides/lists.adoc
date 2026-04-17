@@ -1,0 +1,70 @@
+---
+layout: default
+title: Lists
+nav_order: 4
+parent: Guides
+permalink: /guides/lists/
+---
+= Lists
+
+Create numbered, bulleted, and multi-level lists.
+
+== Numbered Lists
+
+Use `set_numbering` with a numbering ID and level to create numbered list items:
+
+[source,ruby]
+----
+# Create numbered list
+3.times do |i|
+  para = Uniword::Paragraph.new
+  para.set_numbering(1, 0)  # numbering_id=1, level=0
+  para.add_text("Item #{i+1}")
+  doc.add_element(para)
+end
+----
+
+== Bulleted Lists
+
+Use a different numbering ID for bullet-style lists:
+
+[source,ruby]
+----
+# Create bulleted list
+['Apple', 'Banana', 'Cherry'].each do |item|
+  para = Uniword::Paragraph.new
+  para.set_numbering(2, 0)  # numbering_id=2 for bullets
+  para.add_text(item)
+  doc.add_element(para)
+end
+----
+
+== Multi-Level Lists
+
+Increase the level parameter to indent items:
+
+[source,ruby]
+----
+# Level 0 item
+para1 = Uniword::Paragraph.new
+para1.set_numbering(1, 0)
+para1.add_text("Level 0 item")
+doc.add_element(para1)
+
+# Level 1 item (indented)
+para2 = Uniword::Paragraph.new
+para2.set_numbering(1, 1)
+para2.add_text("Level 1 item")
+doc.add_element(para2)
+
+# Level 2 item (more indented)
+para3 = Uniword::Paragraph.new
+para3.set_numbering(1, 2)
+para3.add_text("Level 2 item")
+doc.add_element(para3)
+----
+
+[TIP]
+====
+Levels go from 0 to 8. Level 0 is the top level. The numbering definition in the document's styles controls the bullet/number format at each level.
+====

@@ -1,0 +1,26 @@
+---
+locale: ru
+category: cover_pages
+description: ru cover pages
+elements:
+- name: Academic
+  description: Clean academic cover
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Название}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Подзаголовок}"
+      alignment: center
+    - style: Normal
+      text: "{Автор}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Дата}"
+      alignment: center
+      space_after: 1440

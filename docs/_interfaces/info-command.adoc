@@ -1,0 +1,58 @@
+---
+layout: default
+title: info
+nav_order: 4
+parent: CLI
+permalink: /interfaces/cli/info-command/
+---
+= info
+
+Display information about a document, including format, paragraph count,
+table count, and text length.
+
+== Usage
+
+[source,shell]
+----
+uniword info FILE
+----
+
+== Options
+
+`--verbose`, `-v`::
+Show detailed information including first paragraphs, table dimensions,
+and style counts.
+
+== Examples
+
+Basic information:
+
+[source,shell]
+----
+$ uniword info document.docx
+
+Analyzing document.docx...
+
+Format: DOCX
+
+Document Statistics:
+  Paragraphs: 42
+  Tables: 3
+  Text length: 8742 characters
+----
+
+Detailed information:
+
+[source,shell]
+----
+uniword info document.docx --verbose
+----
+
+== What it shows
+
+* Detected format (DOCX or MHTML)
+* Number of paragraphs
+* Number of tables
+* Total text length in characters
+* Style count (when styles are present)
+* With `--verbose`: first three paragraphs (truncated), table dimensions

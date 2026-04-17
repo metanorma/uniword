@@ -1,0 +1,108 @@
+---
+layout: default
+title: Testing
+nav_order: 3
+parent: Development
+permalink: /development/testing/
+---
+= Testing
+
+Uniword uses RSpec for testing with a comprehensive suite of unit, integration, and round-trip tests.
+
+== Running Tests
+
+=== All Tests
+
+[source,shell]
+----
+bundle exec rspec
+----
+
+=== Specific Test Files
+
+[source,shell]
+----
+bundle exec rspec spec/uniword/document_spec.rb
+----
+
+=== Test Categories
+
+Run specific categories of tests:
+
+[source,shell]
+----
+# Unit tests
+bundle exec rspec spec/uniword/
+
+# Integration tests
+bundle exec rspec spec/integration/
+
+# Performance tests
+bundle exec rspec spec/performance/
+----
+
+== Test Structure
+
+Tests use RSpec with `let` for shared variables. No mocks or stubs are used:
+
+[source,ruby]
+----
+RSpec.describe MyClass do
+  describe '#my_method' do
+    context 'when condition is true' do
+      it 'returns expected result' do
+        # Test implementation
+      end
+    end
+
+    context 'when condition is false' do
+      it 'raises an error' do
+        expect { subject.my_method }.to raise_error(ArgumentError)
+      end
+    end
+  end
+end
+----
+
+== Test Categories
+
+Unit tests::
+  Test individual classes in isolation. Each model class has its own spec file.
+
+Integration tests::
+  Test component interactions such as document loading, saving, and format conversion.
+
+Performance tests::
+  Benchmark critical operations to catch regressions.
+
+Round-trip tests::
+  Verify format conversion fidelity by loading, saving, and comparing documents.
+
+== Test Coverage
+
+The project aims for high test coverage. New features should include comprehensive tests covering:
+
+* Happy path scenarios
+* Edge cases
+* Error conditions
+* Round-trip conversions
+
+== Testing Guidelines
+
+* Each test should focus on a single behavior
+* Follow MECE (Mutually Exclusive, Collectively Exhaustive) principles
+* Use `let` for shared variables
+* Test fixtures belong in `spec/fixtures/`
+* Each class/module requires its own RSpec test file
+* Never use mocks or stubs -- test against real objects
+
+== File Organization
+
+Tests mirror the `lib/` structure:
+
+* `spec/uniword/` -- Unit tests for core classes
+* `spec/uniword/wordprocessingml/` -- WordProcessingML element tests
+* `spec/uniword/drawingml/` -- DrawingML element tests
+* `spec/integration/` -- Integration tests
+* `spec/performance/` -- Performance benchmarks
+* `spec/fixtures/` -- Test fixture files (DOCX, XML, YAML)

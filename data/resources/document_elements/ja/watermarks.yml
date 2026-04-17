@@ -1,0 +1,25 @@
+---
+locale: ja
+category: watermarks
+description: ja watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: 下書き
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: 社外秘
+      bold: true
+      size: 72
+      alignment: center

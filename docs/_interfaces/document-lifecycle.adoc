@@ -1,0 +1,139 @@
+---
+layout: default
+title: Document Lifecycle
+nav_order: 2
+parent: Ruby API
+permalink: /interfaces/ruby-api/document-lifecycle/
+---
+= Document Lifecycle
+
+Uniword supports the full document lifecycle: create, load, modify, and save
+DOCX and MHTML files.
+
+== Creating documents
+
+Use `Document.new` to create a blank document. Add content with convenience
+methods, then save.
+
+[source,ruby]
+----
+require "uniword"
+
+doc = Uniword::Document.new
+doc.add_paragraph("Hello World", bold: true)
+doc.save("output.docx")
+----
+
+You can also create paragraphs and runs directly:
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+para = Uniword::Paragraph.new
+para.add_text("Bold", bold: true)
+para.add_text(" Italic", italic: true)
+doc.add_element(para)
+doc.save("output.docx")
+----
+
+== Loading documents
+
+`DocumentFactory.from_file` opens an existing DOCX or MHTML file. The format
+is auto-detected from the file extension.
+
+[source,ruby]
+----
+# Auto-detect format from extension
+doc = Uniword::DocumentFactory.from_file("input.docx")
+
+# Explicit format
+doc = Uniword::DocumentFactory.from_file("input.doc", format: :mhtml)
+----
+
+== Reading content
+
+Once loaded, access document content through convenience methods:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("report.docx")
+
+# Full text content
+puts doc.text
+
+# Iterate paragraphs
+doc.paragraphs.each { |p| puts p.text }
+
+# Count tables
+puts "Tables: #{doc.tables.count}"
+----
+
+== Modifying documents
+
+Loaded documents can be modified and saved back:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("template.docx")
+
+# Append content
+doc.add_paragraph("Appended paragraph")
+
+# Insert at the beginning
+doc.paragraphs.first.add_text("Prefix: ", bold: true)
+
+# Save changes
+doc.save("modified.docx")
+----
+
+== Saving documents
+
+`save` writes the document to disk. The output format is auto-detected from
+the file extension.
+
+[source,ruby]
+----
+# Save as DOCX (default)
+doc.save("output.docx")
+
+# Save as MHTML
+doc.save("output.doc")
+
+# Explicit format
+doc.save("output.mht", format: :mhtml)
+----
+
+== Format conversion
+
+Because format detection is automatic, converting between DOCX and MHTML is
+a load-then-save operation:
+
+[source,ruby]
+----
+# DOCX to MHTML
+doc = Uniword::DocumentFactory.from_file("input.docx")
+doc.save("output.doc")
+
+# MHTML to DOCX
+doc = Uniword::DocumentFactory.from_file("input.doc")
+doc.save("output.docx")
+----
+
+== Error handling
+
+Document operations raise typed exceptions that you can rescue individually:
+
+[source,ruby]
+----
+begin
+  doc = Uniword::DocumentFactory.from_file("missing.docx")
+rescue Uniword::FileNotFoundError => e
+  puts "File not found: #{e.path}"
+rescue Uniword::CorruptedFileError => e
+  puts "Corrupted file: #{e.reason}"
+rescue Uniword::InvalidFormatError => e
+  puts "Invalid format: #{e.message}"
+rescue Uniword::Error => e
+  puts "Error: #{e.message}"
+end
+----

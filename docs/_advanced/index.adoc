@@ -1,0 +1,18 @@
+---
+layout: default
+title: Advanced
+nav_order: 7
+has_children: true
+permalink: /advanced/
+---
+= Advanced
+
+Deep technical topics for power users and contributors.
+
+== Topics
+
+* link:advanced/glossary-deep-dive/[Glossary Deep Dive] -- Building blocks internals
+* link:advanced/sdt-deep-dive/[SDT Deep Dive] -- Structured document tags internals
+* link:advanced/html-to-ooxml-pipeline/[HTML to OOXML Pipeline] -- Transformation pipeline
+* link:advanced/ooxml-to-mhtml-pipeline/[OOXML to MHTML Pipeline] -- MHTML conversion
+* link:advanced/batch-processing/[Batch Processing] -- Multi-document processing

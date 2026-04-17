@@ -1,0 +1,32 @@
+---
+locale: da
+category: headers
+description: da headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Titel}"
+    - text: "{Dato}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Virksomhedsnavn}"
+      bold: true
+    - text: "{Titel}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Afsnitstitel}"
+      alignment: center

@@ -1,0 +1,17 @@
+---
+name: "Burgundy"
+description: "Deep berry palette blending red and violet"
+source: "uniword-generated"
+colors:
+  dk1: "1A0A14"
+  lt1: "FDF5FA"
+  dk2: "4A1A35"
+  lt2: "F5D0E8"
+  accent1: "9D174D"
+  accent2: "BE185D"
+  accent3: "F472B6"
+  accent4: "831843"
+  accent5: "6B1D3A"
+  accent6: "FBCFE8"
+  hlink: "9D174D"
+  folHlink: "EC4899"

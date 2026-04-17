@@ -669,7 +669,7 @@ RSpec.describe "Scenario: Complete document with Phase 15 features" do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.title("Advanced Document")
     doc.author("Author")
-    doc.apply_styleset("formal")
+    doc.apply_styleset("ceremonial")
 
     # Watermark
     doc.watermark("CONFIDENTIAL", opacity: "0.2")

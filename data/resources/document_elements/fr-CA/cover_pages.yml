@@ -1,0 +1,26 @@
+---
+locale: fr-CA
+category: cover_pages
+description: fr-CA cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Titre}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Sous-titre}"
+      alignment: center
+    - style: Normal
+      text: "{Auteur}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Date}"
+      alignment: center
+      space_after: 1440

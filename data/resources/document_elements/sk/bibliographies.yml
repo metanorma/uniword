@@ -1,0 +1,13 @@
+---
+locale: sk
+category: bibliographies
+description: sk bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autor. Názov. Vydavateľ.
+    - text: Autor. Názov. Časopis.

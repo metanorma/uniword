@@ -1,0 +1,197 @@
+---
+name: Weave
+source: uniword-generated
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Weave
+  colors:
+    accent1: 6F6F6F
+    accent2: BFBFA5
+    accent3: DCD084
+    accent4: E7BF5F
+    accent5: E9A039
+    accent6: CF7133
+    dk1: '000000'
+    dk2: 363D46
+    folHlink: F1B76C
+    hlink: F28943
+    lt1: FFFFFF
+    lt2: EBEBEB
+font_scheme:
+  name: Weave
+  major_font: League Gothic
+  minor_font: League Gothic
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Weave Variant 1
+      colors:
+        accent1: A9E023
+        accent2: 1FCDB6
+        accent3: 5F99C9
+        accent4: AE65D1
+        accent5: D06423
+        accent6: DCAB11
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: C2EA66
+        hlink: ADE133
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 1
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Weave Variant 2
+      colors:
+        accent1: 5AD0B8
+        accent2: 47BB7E
+        accent3: 96CD4B
+        accent4: 61C7DD
+        accent5: 2495CF
+        accent6: 5A74D1
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: 98E6D6
+        hlink: 72CEBB
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 2
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Weave Variant 3
+      colors:
+        accent1: F4B54B
+        accent2: A2C84E
+        accent3: 4BC298
+        accent4: 4CB5D3
+        accent5: 9167E3
+        accent6: E05073
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: E8B15D
+        hlink: E19520
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 3
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Weave Variant 4
+      colors:
+        accent1: 6F6F6F
+        accent2: BFBFA5
+        accent3: DCD084
+        accent4: E7BF5F
+        accent5: E9A039
+        accent6: CF7133
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: F1B76C
+        hlink: F28943
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 4
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Weave Variant 5
+      colors:
+        accent1: A9E023
+        accent2: 1FCDB6
+        accent3: 5F99C9
+        accent4: AE65D1
+        accent5: D06423
+        accent6: DCAB11
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: C2EA66
+        hlink: ADE133
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 5
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Weave Variant 6
+      colors:
+        accent1: 5AD0B8
+        accent2: 47BB7E
+        accent3: 96CD4B
+        accent4: 61C7DD
+        accent5: 2495CF
+        accent6: 5A74D1
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: 98E6D6
+        hlink: 72CEBB
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 6
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Weave Variant 7
+      colors:
+        accent1: F4B54B
+        accent2: A2C84E
+        accent3: 4BC298
+        accent4: 4CB5D3
+        accent5: 9167E3
+        accent6: E05073
+        dk1: '000000'
+        dk2: 363D46
+        folHlink: E8B15D
+        hlink: E19520
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Weave Variant 7
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Mesh

@@ -1,0 +1,98 @@
+---
+layout: default
+title: Batch Processing
+nav_order: 5
+parent: Advanced
+permalink: /advanced/batch-processing/
+---
+= Batch Processing
+
+Uniword supports processing multiple documents in batch, including bulk conversion, validation, and transformation workflows.
+
+== Batch Conversion
+
+Convert multiple DOCX files to MHTML (or vice versa):
+
+[source,ruby]
+----
+require 'uniword'
+
+Dir.glob('documents/*.docx').each do |path|
+  doc = Uniword.load(path)
+  output = path.sub('.docx', '.mhtml')
+  doc.save(output)
+  puts "Converted: #{path} -> #{output}"
+rescue Uniword::Error => e
+  warn "Failed: #{path} - #{e.message}"
+end
+----
+
+== Batch Verification
+
+Verify multiple documents and collect results:
+
+[source,ruby]
+----
+require 'uniword'
+require 'json'
+
+results = {}
+Dir.glob('documents/*.docx').each do |path|
+  result = Uniword::Verification.verify(path)
+  results[path] = {
+    valid: result.valid?,
+    errors: result.issues.count { |i| i.severity == :error },
+    warnings: result.issues.count { |i| i.severity == :warning }
+  }
+end
+
+puts JSON.pretty_generate(results)
+----
+
+== Parallel Processing
+
+For CPU-intensive operations on large document collections, use Ruby's threading:
+
+[source,ruby]
+----
+require 'uniword'
+
+paths = Dir.glob('documents/*.docx')
+mutex = Mutex.new
+results = []
+
+paths.each_slice(4) do |batch|
+  threads = batch.map do |path|
+    Thread.new(path) do |p|
+      result = Uniword::Verification.verify(p)
+      mutex.synchronize { results << [p, result.valid?] }
+    end
+  end
+  threads.each(&:join)
+end
+
+results.each { |path, valid| puts "#{path}: #{valid ? 'OK' : 'FAILED'}" }
+----
+
+[NOTE]
+====
+Uniword's thread safety depends on lutaml-model's thread safety. Each thread should create its own document instances rather than sharing them.
+====
+
+== CLI Batch Processing
+
+Use shell scripting for simple batch operations:
+
+[source,shell]
+----
+# Verify all DOCX files in a directory
+for f in documents/*.docx; do
+  echo "Verifying: $f"
+  uniword verify "$f" --json > "reports/$(basename "$f" .docx).json"
+done
+
+# Convert all DOCX files to MHTML
+for f in documents/*.docx; do
+  ruby -runiword -e "Uniword.load('$f').save('${f%.docx}.mhtml')"
+done
+----

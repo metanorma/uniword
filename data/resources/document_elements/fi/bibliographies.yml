@@ -1,0 +1,13 @@
+---
+locale: fi
+category: bibliographies
+description: fi bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Kirjoittaja. Otsikko. Kustantaja.
+    - text: Kirjoittaja. Otsikko. Lehti.

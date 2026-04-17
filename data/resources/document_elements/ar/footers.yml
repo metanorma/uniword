@@ -1,0 +1,31 @@
+---
+locale: ar
+category: footers
+description: ar footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{صفحة}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{التاريخ}"
+    - text: "{صفحة}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: سري
+    - text: "{صفحة}"
+      alignment: right

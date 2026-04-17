@@ -1,0 +1,31 @@
+---
+locale: es-MX
+category: footers
+description: es-MX footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Página}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Fecha}"
+    - text: "{Página}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: CONFIDENCIAL
+    - text: "{Página}"
+      alignment: right

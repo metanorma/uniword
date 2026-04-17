@@ -1,0 +1,81 @@
+---
+layout: default
+title: MHTML Format
+nav_order: 7
+parent: Understanding
+permalink: /understanding/mhtml-format/
+---
+= MHTML Format
+
+Uniword supports MHTML (MIME HTML) format for Word 2003+ compatibility. MHTML files encode an entire Word document -- including text, formatting, and embedded resources -- into a single MIME multipart file.
+
+== MIME Structure
+
+An MHTML file is a MIME multipart document with the following structure:
+
+* **MIME headers** -- Content-Type and boundary definitions
+* **HTML part** -- The document content rendered as HTML with Word-specific CSS
+* **Embedded resources** -- Images and other binary data encoded as Base64 within MIME parts
+
+The format uses `multipart/related` MIME type with each part referenced by Content-ID (CID) URIs.
+
+== CSS Generation
+
+Uniword generates Word-compatible CSS from document styles:
+
+* Paragraph styles are translated to CSS block-level properties
+* Character styles become inline CSS or `<span>` styles
+* Table styles map to CSS table formatting
+* Theme colors and fonts are resolved to CSS values
+
+== DOCX to MHTML Conversion
+
+[source,ruby]
+----
+# Load a DOCX file and convert to MHTML
+doc = Uniword.load('document.docx')
+doc.save_as('document.mhtml')
+
+# Or use the format handler directly
+doc.save('document.mhtml', format: :mhtml)
+----
+
+The conversion process:
+
+1. Parses the DOCX package into the Document Layer
+2. Generates HTML from document elements
+3. Produces CSS from styles and themes
+4. Encodes embedded images as Base64 MIME parts
+5. Wraps everything in a MIME multipart structure
+
+== MHTML to DOCX Conversion
+
+[source,ruby]
+----
+# Load an MHTML file and convert to DOCX
+doc = Uniword.load('document.mhtml')
+doc.save('document.docx')
+----
+
+The reverse conversion:
+
+1. Parses the MIME multipart structure
+2. Extracts HTML content and CSS
+3. Converts HTML elements back to OOXML document parts
+4. Decodes Base64 resources into image parts
+5. Packages as a valid DOCX ZIP file
+
+== Format Auto-Detection
+
+Uniword automatically detects the file format based on file extension and content:
+
+* `.docx` files are processed by the DOCX handler
+* `.mhtml` or `.mht` files are processed by the MHTML handler
+* Content inspection confirms the detected format
+
+[source,ruby]
+----
+# Format is detected automatically
+doc = Uniword.load('document.mhtml')  # Uses MHTML handler
+doc.save('output.docx')               # Writes as DOCX
+----

@@ -1,0 +1,99 @@
+---
+layout: default
+title: HTML Import
+nav_order: 17
+parent: Guides
+permalink: /guides/html-import/
+---
+= HTML Import
+
+Convert HTML content into OOXML paragraphs using the HtmlImporter pipeline.
+
+== Overview
+
+The `Uniword::HtmlImporter` converts HTML markup into OOXML paragraph objects
+that can be added to a document. The pipeline uses `HtmlToOoxmlConverter` internally
+to transform HTML elements into their Word equivalents.
+
+== Quick Start
+
+Use the class method for one-shot conversion:
+
+[source,ruby]
+----
+paragraphs = Uniword::HtmlImporter.import('<p>Hello World</p>')
+# => Array of Uniword::Wordprocessingml::Paragraph
+----
+
+Add the converted paragraphs to a document:
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+
+paragraphs = Uniword::HtmlImporter.import('<p>First paragraph</p><p>Second</p>')
+paragraphs.each { |p| doc.add_element(p) }
+
+doc.save('from_html.docx')
+----
+
+== Instance-Based Import
+
+For more control, use an instance of the importer:
+
+[source,ruby]
+----
+importer = Uniword::HtmlImporter.new('<h1>Title</h1><p>Content here</p>')
+
+# Convert to paragraphs
+paragraphs = importer.import
+
+# Or convert directly to a DocumentRoot
+doc = importer.to_document
+doc.save('full_doc.docx')
+----
+
+== HTML Elements Supported
+
+The converter maps common HTML elements to OOXML equivalents:
+
+[cols="2,3"]
+|===
+| HTML Element | OOXML Mapping
+
+| `<p>` | Paragraph (`w:p`)
+| `<b>`, `<strong>` | Bold run property
+| `<i>`, `<em>` | Italic run property
+| `<u>` | Underline run property
+| `<h1>` - `<h6>` | Heading paragraphs with style
+| `<ul>`, `<ol>` | Numbered/bulleted list paragraphs
+| `<table>` | Table element
+| `<a>` | Hyperlink
+| `<br>` | Line break
+| `<sub>`, `<sup>` | Subscript/superscript
+|===
+
+== Pipeline Architecture
+
+[source]
+----
+HTML String
+  |
+  v
+HtmlToOoxmlConverter.html_to_paragraphs()
+  |
+  v
+Array<Uniword::Wordprocessingml::Paragraph>
+  |
+  v
+Add to Document or call to_document
+----
+
+The converter can also produce tables from HTML table markup:
+
+[source,ruby]
+----
+tables = Uniword::Transformation::HtmlToOoxmlConverter.html_to_tables(
+  '<table><tr><td>A</td><td>B</td></tr></table>'
+)
+----

@@ -1,0 +1,17 @@
+---
+name: "Classic"
+description: "Traditional warm professional palette with navy and gold"
+source: "uniword-generated"
+colors:
+  dk1: "1A1A2E"
+  lt1: "FAFAFA"
+  dk2: "16213E"
+  lt2: "E8E8F0"
+  accent1: "0F3460"
+  accent2: "533483"
+  accent3: "E94560"
+  accent4: "B8860B"
+  accent5: "DAA520"
+  accent6: "F0E68C"
+  hlink: "0066CC"
+  folHlink: "4D94FF"

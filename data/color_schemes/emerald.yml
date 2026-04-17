@@ -1,0 +1,17 @@
+---
+name: "Emerald"
+description: "Vibrant green palette from Tailwind Emerald tones"
+source: "uniword-generated"
+colors:
+  dk1: "0A1F0A"
+  lt1: "FAFDF7"
+  dk2: "1B4332"
+  lt2: "D8F3DC"
+  accent1: "2D6A4F"
+  accent2: "40916C"
+  accent3: "52B788"
+  accent4: "1B9AAA"
+  accent5: "06D6A0"
+  accent6: "B7E4C7"
+  hlink: "38A169"
+  folHlink: "68D391"

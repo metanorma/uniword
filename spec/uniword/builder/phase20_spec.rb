@@ -764,7 +764,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.author("Style Designer")
 
       # Apply theme
-      doc.theme("celestial") do |t|
+      doc.theme("constellation") do |t|
         t.colors(accent1: "2E5090", accent2: "C55A11")
         t.fonts(major: "Georgia", minor: "Calibri")
       end
@@ -883,7 +883,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.keywords("builder, demo, all-features, uniword")
 
       # --- Theme ---
-      doc.theme("office_theme")
+      doc.theme("workspace")
 
       # --- Headers/Footers ---
       doc.header(type: "default") do |h|

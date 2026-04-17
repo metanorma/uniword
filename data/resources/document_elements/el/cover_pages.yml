@@ -1,0 +1,26 @@
+---
+locale: el
+category: cover_pages
+description: el cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Τίτλος}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Υπότιτλος}"
+      alignment: center
+    - style: Normal
+      text: "{Συγγραφέας}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Ημερομηνία}"
+      alignment: center
+      space_after: 1440

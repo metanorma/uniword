@@ -125,10 +125,12 @@ module Uniword
       # @param friendly [Themes::FontScheme] Friendly font scheme
       # @return [Drawingml::MajorFont] OOXML major font
       def build_major_font(friendly)
+        script_fonts = build_script_fonts(friendly.per_script)
         Drawingml::MajorFont.new(
           latin: Drawingml::LatinFont.new(typeface: friendly.major_font || ""),
           ea: Drawingml::EaFont.new(typeface: friendly.major_east_asian || ""),
-          cs: Drawingml::CsFont.new(typeface: friendly.major_complex_script || "")
+          cs: Drawingml::CsFont.new(typeface: friendly.major_complex_script || ""),
+          fonts: script_fonts
         )
       end
 
@@ -137,11 +139,25 @@ module Uniword
       # @param friendly [Themes::FontScheme] Friendly font scheme
       # @return [Drawingml::MinorFont] OOXML minor font
       def build_minor_font(friendly)
+        script_fonts = build_script_fonts(friendly.per_script)
         Drawingml::MinorFont.new(
           latin: Drawingml::LatinFont.new(typeface: friendly.minor_font || ""),
           ea: Drawingml::EaFont.new(typeface: friendly.minor_east_asian || ""),
-          cs: Drawingml::CsFont.new(typeface: friendly.minor_complex_script || "")
+          cs: Drawingml::CsFont.new(typeface: friendly.minor_complex_script || ""),
+          fonts: script_fonts
         )
+      end
+
+      # Build ScriptFont entries from per_script hash
+      #
+      # @param per_script [Hash, nil] Script code → typeface mapping
+      # @return [Array<Drawingml::ScriptFont>] Script font entries
+      def build_script_fonts(per_script)
+        return [] unless per_script.is_a?(Hash)
+
+        per_script.map do |script, typeface|
+          Drawingml::ScriptFont.new(script: script, typeface: typeface)
+        end
       end
 
       # Extract friendly color scheme from Word theme

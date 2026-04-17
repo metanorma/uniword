@@ -1,0 +1,25 @@
+---
+locale: fr
+category: watermarks
+description: fr watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: BROUILLON
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: CONFIDENTIEL
+      bold: true
+      size: 72
+      alignment: center

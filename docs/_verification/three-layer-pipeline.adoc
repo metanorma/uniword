@@ -1,0 +1,91 @@
+---
+layout: default
+title: Three-Layer Pipeline
+nav_order: 1
+parent: Verification
+permalink: /verification/three-layer-pipeline/
+---
+= Three-Layer Pipeline
+
+Uniword provides comprehensive DOCX verification through a three-layer pipeline that checks ZIP integrity, XML schema compliance, and semantic correctness.
+
+== CLI Usage
+
+[source,shell]
+----
+# Full verification (OPC + semantic)
+uniword verify document.docx
+
+# Enable XSD schema validation (slower, thorough)
+uniword verify document.docx --xsd
+
+# Machine-readable output
+uniword verify document.docx --json
+uniword verify document.docx --yaml
+
+# Show all issues including info-level
+uniword verify document.docx --verbose
+----
+
+Exit code 0 for valid documents, 1 for invalid.
+
+== The Three Layers
+
+[cols="1,2,4"]
+|===
+| Layer | Checks | Examples
+
+| OPC Package | ZIP integrity, content types, relationships, part presence | OPC-001 (ZIP opens), OPC-004 (document.xml exists), OPC-006 (relationship targets resolve)
+
+| XSD Schema | XML schema validation against bundled XSD files | Namespace-aware validation using 40 bundled XSD schemas from ISO, ECMA, and Microsoft
+
+| Word Document | Semantic checks for cross-references, styles, numbering, footnotes, etc. | DOC-001 (undefined style), DOC-020 (footnotePr without footnotes.xml), DOC-040 (duplicate bookmark)
+|===
+
+== Layer 1: OPC Package Validation
+
+The first layer checks the physical package structure:
+
+* ZIP file can be opened and is not corrupted
+* `[Content_Types].xml` exists and lists all parts
+* `_rels/.rels` exists and is well-formed
+* Required parts (`word/document.xml`) are present
+* All relationship targets resolve to existing parts
+
+== Layer 2: XSD Schema Validation
+
+The second layer validates XML parts against their schemas:
+
+* 40+ bundled XSD schemas from ISO, ECMA, and Microsoft
+* Namespace-aware validation with correct prefix resolution
+* Validates `word/document.xml`, `word/styles.xml`, `docProps/core.xml`, and other parts
+
+XSD validation is opt-in (`--xsd` flag) because it is slower than the other layers.
+
+== Layer 3: Semantic Rules
+
+The third layer checks document-level invariants:
+
+* 10 built-in semantic rule categories
+* Style references, numbering, footnotes, headers, bookmarks, images, tables, fonts, theme, settings
+* Custom rules can be registered via `Uniword::Validation::Rules.register`
+
+See link:/verification/semantic-rules/[Semantic Rules] for the full list of rule categories.
+
+== Programmatic Usage
+
+[source,ruby]
+----
+require 'uniword'
+
+# Run verification programmatically
+result = Uniword::Verification.verify('document.docx')
+puts result.valid?           # => true or false
+puts result.issues.count     # => number of issues
+result.issues.each do |issue|
+  puts "#{issue.code}: #{issue.message}"
+end
+
+# With XSD validation
+result = Uniword::Verification.verify('document.docx', xsd: true)
+----

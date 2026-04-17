@@ -1,0 +1,26 @@
+---
+locale: da
+category: cover_pages
+description: da cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Titel}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Undertitel}"
+      alignment: center
+    - style: Normal
+      text: "{Forfatter}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Dato}"
+      alignment: center
+      space_after: 1440

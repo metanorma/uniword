@@ -1,0 +1,31 @@
+---
+locale: el
+category: footers
+description: el footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Σελίδα}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Ημερομηνία}"
+    - text: "{Σελίδα}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: ΕΜΠΙΣΤΕΥΤΙΚΟ
+    - text: "{Σελίδα}"
+      alignment: right

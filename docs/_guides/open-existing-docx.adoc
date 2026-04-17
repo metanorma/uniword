@@ -1,0 +1,108 @@
+---
+layout: default
+title: Open Existing DOCX
+nav_order: 18
+parent: Guides
+permalink: /guides/open-existing-docx/
+---
+= Open Existing DOCX
+
+Read, modify, and save existing DOCX files with perfect round-trip fidelity.
+
+== Reading a Document
+
+Load an existing DOCX file using `DocumentFactory`:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file('input.docx')
+
+# Extract all text
+puts doc.text
+
+# Iterate paragraphs
+doc.paragraphs.each { |p| puts p.text }
+----
+
+Alternatively, use the `Document.open` method:
+
+[source,ruby]
+----
+doc = Uniword::Document.open('report.docx')
+----
+
+== Reading Document Structure
+
+Access the underlying OOXML structure through the document model:
+
+[source,ruby]
+----
+doc = Uniword::Document.open('report.docx')
+
+# Access paragraphs with formatting
+doc.paragraphs.each do |para|
+  puts "Text: #{para.text}"
+  puts "Style: #{para.style}" if para.respond_to?(:style)
+end
+
+# Access tables
+doc.tables.each do |table|
+  table.rows.each do |row|
+    row.cells.each do |cell|
+      puts cell.text
+    end
+  end
+end
+----
+
+== Modifying a Document
+
+After loading, modify the document as needed:
+
+[source,ruby]
+----
+doc = Uniword::Document.open('input.docx')
+
+# Add new content
+doc.add_paragraph("Added by Uniword", bold: true)
+
+# Append a table
+table = doc.add_table(2, 3)
+table.rows[0].cells[0].add_paragraph("Header 1")
+
+# Apply a theme
+doc.apply_theme('celestial')
+
+# Save the modified document
+doc.save('modified.docx')
+----
+
+== Using Docx::Package Directly
+
+For lower-level access, use `Docx::Package` which models the entire DOCX ZIP structure:
+
+[source,ruby]
+----
+package = Uniword::Docx::Package.from_file('input.docx')
+
+# Access individual parts
+puts package.core_properties.title
+puts package.app_properties.application
+puts package.theme.name
+
+# Save back to file
+package.to_file('output.docx')
+----
+
+== Round-Trip Guarantee
+
+Uniword guarantees round-trip fidelity: load a DOCX, modify it, save it, and all
+original content is preserved plus your modifications are applied.
+
+[source,ruby]
+----
+original = Uniword::Document.open('complex.docx')
+original.add_paragraph("New content")
+original.save('modified.docx')
+# modified.docx has ALL original content + new paragraph
+----

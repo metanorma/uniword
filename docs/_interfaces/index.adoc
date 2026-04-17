@@ -1,0 +1,29 @@
+---
+layout: default
+title: Interfaces
+nav_order: 2
+has_children: true
+permalink: /interfaces/
+---
+= Interfaces
+
+Uniword provides two interfaces: a Ruby API for programmatic document manipulation, and a CLI for command-line operations.
+
+== Topics
+
+=== Ruby API
+
+* link:interfaces/ruby-api/[Overview] -- API reference
+* link:interfaces/ruby-api/document-lifecycle/[Document Lifecycle] -- Create, open, save, modify
+* link:interfaces/ruby-api/builder-api/[Builder API] -- Fluent document construction
+* link:interfaces/ruby-api/configuration/[Configuration] -- Logging, format detection
+
+=== Command-Line Interface
+
+* link:interfaces/cli/[Overview] -- CLI reference
+* link:interfaces/cli/convert-command/[convert] -- Format conversion
+* link:interfaces/cli/info-command/[info] -- Document inspection
+* link:interfaces/cli/validate-command/[validate] -- Schema validation
+* link:interfaces/cli/verify-command/[verify] -- Three-layer verification
+* link:interfaces/cli/theme-commands/[theme] -- Theme operations
+* link:interfaces/cli/styleset-commands/[styleset] -- StyleSet operations

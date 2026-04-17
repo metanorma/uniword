@@ -1,0 +1,13 @@
+---
+locale: tr
+category: bibliographies
+description: tr bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Yazar. Başlık. Yayınevi.
+    - text: Yazar. Başlık. Dergi.

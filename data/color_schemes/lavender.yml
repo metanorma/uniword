@@ -1,0 +1,17 @@
+---
+name: "Lavender"
+description: "Soft violet palette from Tailwind Violet"
+source: "uniword-generated"
+colors:
+  dk1: "150D1F"
+  lt1: "FAF5FF"
+  dk2: "3B1A5C"
+  lt2: "DDD6FE"
+  accent1: "7C3AED"
+  accent2: "8B5CF6"
+  accent3: "C4B5FD"
+  accent4: "6D28D9"
+  accent5: "5B21B6"
+  accent6: "EDE9FE"
+  hlink: "7C3AED"
+  folHlink: "A78BFA"

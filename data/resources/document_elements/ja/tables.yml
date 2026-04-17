@@ -1,0 +1,19 @@
+---
+locale: ja
+category: tables
+description: ja tables
+elements:
+- name: Basic Grid
+  description: Simple table
+  gallery: tables
+  category: Tables
+  body:
+    paragraphs:
+    - text: Table
+- name: Header Emphasis
+  description: Bold header table
+  gallery: tables
+  category: Tables
+  body:
+    paragraphs:
+    - text: Table

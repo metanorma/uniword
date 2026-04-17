@@ -1,0 +1,31 @@
+---
+locale: hu
+category: footers
+description: hu footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Oldal}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Dátum}"
+    - text: "{Oldal}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: BIZALMAS
+    - text: "{Oldal}"
+      alignment: right

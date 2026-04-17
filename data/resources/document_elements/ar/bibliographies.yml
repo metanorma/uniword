@@ -1,0 +1,13 @@
+---
+locale: ar
+category: bibliographies
+description: ar bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: المؤلف. العنوان. الناشر.
+    - text: المؤلف. العنوان. المجلة.

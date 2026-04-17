@@ -1,0 +1,197 @@
+---
+name: Prism
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Prism
+  colors:
+    accent1: 90C226
+    accent2: 54A021
+    accent3: E6B91E
+    accent4: E76618
+    accent5: C42F1A
+    accent6: '918655'
+    dk1: '000000'
+    dk2: 2C3C43
+    folHlink: B9D181
+    hlink: 99CA3C
+    lt1: FFFFFF
+    lt2: EBEBEB
+font_scheme:
+  name: Prism
+  major_font: Liberation Sans
+  minor_font: Liberation Sans
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Prism Variant 1
+      colors:
+        accent1: 5FCBEF
+        accent2: 2E83C3
+        accent3: 42D0A2
+        accent4: 2E946B
+        accent5: 42B051
+        accent6: 96D141
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: A9D3E1
+        hlink: 3FCDE7
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 1
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Prism Variant 2
+      colors:
+        accent1: F496CB
+        accent2: BC356F
+        accent3: E65331
+        accent4: F27E19
+        accent5: F2AC19
+        accent6: BC80E0
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: F77F90
+        hlink: EF5285
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 2
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Prism Variant 3
+      colors:
+        accent1: 90C226
+        accent2: 54A021
+        accent3: E6B91E
+        accent4: E76618
+        accent5: C42F1A
+        accent6: '918655'
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: B9D181
+        hlink: 99CA3C
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 3
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Prism Variant 4
+      colors:
+        accent1: 90C226
+        accent2: 54A021
+        accent3: E6B91E
+        accent4: E76618
+        accent5: C42F1A
+        accent6: '918655'
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: B9D181
+        hlink: 99CA3C
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 4
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Prism Variant 5
+      colors:
+        accent1: 5FCBEF
+        accent2: 2E83C3
+        accent3: 42D0A2
+        accent4: 2E946B
+        accent5: 42B051
+        accent6: 96D141
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: A9D3E1
+        hlink: 3FCDE7
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 5
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Prism Variant 6
+      colors:
+        accent1: F496CB
+        accent2: BC356F
+        accent3: E65331
+        accent4: F27E19
+        accent5: F2AC19
+        accent6: BC80E0
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: F77F90
+        hlink: EF5285
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 6
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Prism Variant 7
+      colors:
+        accent1: 90C226
+        accent2: 54A021
+        accent3: E6B91E
+        accent4: E76618
+        accent5: C42F1A
+        accent6: '918655'
+        dk1: '000000'
+        dk2: 2C3C43
+        folHlink: B9D181
+        hlink: 99CA3C
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Prism Variant 7
+      major_font: Liberation Sans
+      minor_font: Liberation Sans
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Facet

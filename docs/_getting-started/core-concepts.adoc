@@ -1,0 +1,67 @@
+---
+layout: default
+title: Core Concepts
+nav_order: 3
+parent: Getting Started
+permalink: /getting-started/core-concepts/
+---
+= Core Concepts
+
+A brief introduction to the ideas behind Uniword.
+
+== OOXML as a format
+
+A `.docx` file is not a monolithic document.
+It is a ZIP archive containing several XML files (plus binary assets like images) that together describe the document's content, styles, relationships, and metadata.
+The specification that defines these XML structures is called Office Open XML (OOXML), standardized as ISO/IEC 29500.
+
+This means every document Uniword handles is, at heart, a collection of XML parts inside a ZIP container.
+
+== Model-driven architecture
+
+Uniword represents every OOXML element as a Ruby object.
+The library covers **760 elements** across **22 namespaces**, giving it 100% specification coverage.
+
+These element classes are generated from the OOXML schema and all inherit from `Lutaml::Model::Serializable`, which provides automatic XML serialization and deserialization.
+The four architectural layers are:
+
+. **Document Model Layer** -- Core OOXML element classes
+. **Properties Layer** -- Wrapper classes for common formatting operations
+. **Serialization Layer** -- XML/JSON/YAML serialization via lutaml-model
+. **Format Handler Layer** -- DOCX package handling via rubyzip
+
+== The round-trip promise
+
+Uniword guarantees **perfect round-trip fidelity**.
+You can read a DOCX file, parse it into Ruby objects, and write it back out without losing any data, formatting, or structure.
+Every element, attribute, and relationship in the original file is preserved.
+
+This is possible because the model covers the full OOXML specification rather than a subset.
+
+== Two interfaces
+
+Uniword provides two ways to interact with documents:
+
+**Ruby API**::
+Programmatic access for building, reading, and modifying documents.
+Includes both a direct model API and a fluent Builder API.
+
+**CLI**::
+A command-line interface (`uniword`) for common tasks like format conversion (`convert`) and validation (`verify`).
+
+== Resource system
+
+Uniword ships with a collection of open-source **resources** that let you style documents without starting from scratch:
+
+* **Themes** -- Visual themes with coordinated colors and fonts
+* **StyleSets** -- Collections of paragraph, character, and table styles
+* **Color schemes** -- 23 bundled palettes
+* **Font schemes** -- 25 bundled font combinations
+* **Document elements** -- 30-locale coverage for bibliographies, cover pages, headers, footers, tables of contents, equations, tables, and watermarks
+
+Resources are loaded on demand and can be applied to any document.
+
+== What's next?
+
+* link:../your-first-document/[Your First Document] -- Put these concepts into practice.
+* link:../quick-start/[Quick Start] -- Back to the basics.

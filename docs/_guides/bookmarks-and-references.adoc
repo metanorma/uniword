@@ -1,0 +1,55 @@
+---
+layout: default
+title: Bookmarks and References
+nav_order: 8
+parent: Guides
+permalink: /guides/bookmarks-and-references/
+---
+= Bookmarks and References
+
+Create bookmarks, hyperlinks, and cross-references within a document.
+
+== Creating Bookmarks
+
+[source,ruby]
+----
+# Create bookmark
+bookmark = Uniword::Bookmark.new(
+  id: 1,
+  name: 'Section1'
+)
+
+para = Uniword::Paragraph.new
+para.add_text("Bookmarked section")
+para.add_bookmark_start(bookmark)
+para.add_bookmark_end(bookmark.id)
+
+doc.bookmarks << bookmark
+doc.add_element(para)
+----
+
+Each bookmark needs a unique `id` (integer) and a `name` (string). The bookmark
+start and end markers wrap the content you want to reference.
+
+== Adding Hyperlinks
+
+Use the `hyperlink` option to link to external URLs or internal bookmarks:
+
+[source,ruby]
+----
+# External hyperlink
+para = Uniword::Paragraph.new
+para.add_text("Visit ")
+para.add_text("our website", hyperlink: 'https://example.com')
+
+# Internal cross-reference to bookmark
+para = Uniword::Paragraph.new
+para.add_text("See ")
+para.add_text("Section 1", hyperlink: '#Section1')
+doc.add_element(para)
+----
+
+[NOTE]
+====
+When linking to a bookmark within the same document, prefix the bookmark name with `#`.
+====

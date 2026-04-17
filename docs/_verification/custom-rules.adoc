@@ -1,0 +1,94 @@
+---
+layout: default
+title: Custom Rules
+nav_order: 5
+parent: Verification
+permalink: /verification/custom-rules/
+---
+= Custom Rules
+
+Uniword's verification pipeline supports custom validation rules. You can create rules for organization-specific document requirements and register them with the verification engine.
+
+== Rules::Base Class
+
+Custom rules inherit from `Uniword::Validation::Rules::Base` and implement the `check` method:
+
+[source,ruby]
+----
+require 'uniword/validation/rules/base'
+
+module MyRules
+  class NoExternalLinks < Uniword::Validation::Rules::Base
+    code 'CUSTOM-001'
+    severity :error
+    description 'Document must not contain external hyperlinks'
+
+    def check(package, issues)
+      package.document.body.paragraphs.each do |para|
+        para.runs.each do |run|
+          if run.has_external_link?
+            issues << issue(
+              "External link found: #{run.link_target}",
+              location: run.xpath
+            )
+          end
+        end
+      end
+    end
+  end
+end
+----
+
+== Registering Rules
+
+Register custom rules with the validation registry:
+
+[source,ruby]
+----
+require 'uniword/validation/rules'
+
+# Register the custom rule
+Uniword::Validation::Rules.register(MyRules::NoExternalLinks)
+
+# Run verification with custom rules included
+result = Uniword::Verification.verify('document.docx')
+result.issues.each do |issue|
+  puts "#{issue.code}: #{issue.message} (#{issue.severity})"
+end
+----
+
+== Rule Attributes
+
+Every rule defines three attributes:
+
+code:: A unique string identifier for the rule (e.g., `'CUSTOM-001'`). Use a prefix that distinguishes your rules from built-in ones.
+
+severity:: The issue severity level: `:error`, `:warning`, or `:info`. Errors cause the verification to fail (exit code 1).
+
+description:: A human-readable description of what the rule checks.
+
+== The check Method
+
+The `check` method receives two arguments:
+
+package:: The `Docx::Package` instance representing the loaded document. You have full access to all parts and their models.
+
+issues:: An array to append issues to. Use the `issue` helper method to create properly formatted issues.
+
+== Using Custom Rules with CLI
+
+To use custom rules with the `uniword verify` CLI command, register them in a Ruby configuration file:
+
+[source,ruby]
+----
+# .uniword.rb (loaded automatically if present)
+require 'my_rules/no_external_links'
+Uniword::Validation::Rules.register(MyRules::NoExternalLinks)
+----
+
+Then run:
+
+[source,shell]
+----
+uniword verify document.docx
+----

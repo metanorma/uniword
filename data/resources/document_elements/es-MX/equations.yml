@@ -1,0 +1,21 @@
+---
+locale: es-MX
+category: equations
+description: es-MX equations
+elements:
+- name: Numbered
+  description: Numbered equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Ecuación}"
+      alignment: center
+- name: Display
+  description: Display equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Ecuación}"
+      alignment: center

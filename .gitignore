@@ -42,5 +42,12 @@ Thumbs.db
 /doc/
 /.yardoc
 
+# Jekyll docs site
+docs/_site/
+docs/.jekyll-cache/
+docs/.sass-cache/
+docs/.bundle/
+docs/vendor/
+
 # Logs
 *.log

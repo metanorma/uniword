@@ -6,7 +6,7 @@ module Uniword
   module Mhtml
     # MHTML Package — MIME-based Word format (.mht, .mhtml, .doc).
     #
-    # IMPORTANT: This is COMPLETELY SEPARATE from OOXML DocxPackage.
+    # IMPORTANT: This is COMPLETELY SEPARATE from OOXML Docx::Package.
     # - OOXML uses ZIP + XML parts
     # - MHTML uses MIME + HTML content
     # - They share NO classes!

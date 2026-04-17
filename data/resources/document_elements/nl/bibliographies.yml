@@ -1,0 +1,13 @@
+---
+locale: nl
+category: bibliographies
+description: nl bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Auteur. Titel. Uitgever.
+    - text: Auteur. Titel. Tijdschrift.

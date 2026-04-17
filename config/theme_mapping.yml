@@ -1,0 +1,447 @@
+---
+description: 'Uniword Theme/StyleSet to Microsoft Office mapping. Used for auto-transition:
+  detect MS theme -> apply Uniword equivalent.'
+themes:
+  meridian:
+    ms_name: Atlas
+    ms_thmx: Atlas.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '454545'
+      lt1: FFFFFF
+      lt2: E0E0E0
+      accent1: F81B02
+      accent2: FC7715
+      accent3: AFBF41
+      accent4: 50C49F
+      accent5: 3B95C4
+      accent6: B560D4
+  emblem:
+    ms_name: Badge
+    ms_thmx: Badge.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 2A1A00
+      lt1: FFFFFF
+      lt2: F3F3F2
+      accent1: F8B323
+      accent2: 656A59
+      accent3: 46B2B5
+      accent4: 8CAA7E
+      accent5: D36F68
+      accent6: '826276'
+  mosaic:
+    ms_name: Berlin
+    ms_thmx: Berlin.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 9D360E
+      lt1: FFFFFF
+      lt2: E7E6E6
+      accent1: F09415
+      accent2: C1B56B
+      accent3: 4BAF73
+      accent4: 5AA6C0
+      accent5: D17DF9
+      accent6: FA7E5C
+  constellation:
+    ms_name: Celestial
+    ms_thmx: Celestial.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 18276C
+      lt1: FFFFFF
+      lt2: EBEBEB
+      accent1: AC3EC1
+      accent2: 477BD1
+      accent3: 46B298
+      accent4: 90BA4C
+      accent5: DD9D31
+      accent6: E25247
+  harvest:
+    ms_name: Crop
+    ms_thmx: Crop.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 191B0E
+      lt1: FFFFFF
+      lt2: EFEDE3
+      accent1: 8C8D86
+      accent2: E6C069
+      accent3: 897B61
+      accent4: 8DAB8E
+      accent5: 77A2BB
+      accent6: E28394
+  abyss:
+    ms_name: Depth
+    ms_thmx: Depth.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 455F51
+      lt1: FFFFFF
+      lt2: 94D7E4
+      accent1: 41AEBD
+      accent2: 97E9D5
+      accent3: A2CF49
+      accent4: 608F3D
+      accent5: F4DE3A
+      accent6: FCB11C
+  ripple:
+    ms_name: Droplet
+    ms_thmx: Droplet.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '355071'
+      lt1: FFFFFF
+      lt2: AABED7
+      accent1: 2FA3EE
+      accent2: 4BCAAD
+      accent3: 86C157
+      accent4: D99C3F
+      accent5: CE6633
+      accent6: A35DD1
+  prism:
+    ms_name: Facet
+    ms_thmx: Facet.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 2C3C43
+      lt1: FFFFFF
+      lt2: EBEBEB
+      accent1: 90C226
+      accent2: 54A021
+      accent3: E6B91E
+      accent4: E76618
+      accent5: C42F1A
+      accent6: '918655'
+  plumage:
+    ms_name: Feathered
+    ms_thmx: Feathered.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '121316'
+      lt1: FFFFFF
+      lt2: FEFCF7
+      accent1: '606372'
+      accent2: 79A8A4
+      accent3: B2AD8F
+      accent4: AD8082
+      accent5: DEC18C
+      accent6: 92A185
+  exhibit:
+    ms_name: Gallery
+    ms_thmx: Gallery.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '454545'
+      lt1: FFFFFF
+      lt2: DFDBD5
+      accent1: B71E42
+      accent2: DE478E
+      accent3: BC72F0
+      accent4: 795FAF
+      accent5: 586EA6
+      accent6: 6892A0
+  bulletin:
+    ms_name: Headlines
+    ms_thmx: Headlines.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 1D1A1D
+      lt1: FFFFFF
+      lt2: F5F5F5
+      accent1: 439EB7
+      accent2: E28B55
+      accent3: DCB64D
+      accent4: 4CA198
+      accent5: 835B82
+      accent6: '645135'
+  calculus:
+    ms_name: Integral
+    ms_thmx: Integral.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 335B74
+      lt1: FFFFFF
+      lt2: DFE3E5
+      accent1: 1CADE4
+      accent2: 2683C6
+      accent3: 27CED7
+      accent4: 42BA97
+      accent5: 3E8853
+      accent6: 62A39F
+  plasma:
+    ms_name: Ion
+    ms_thmx: Ion.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 1E5155
+      lt1: FFFFFF
+      lt2: EBEBEB
+      accent1: B01513
+      accent2: EA6312
+      accent3: E6B729
+      accent4: 6AAC90
+      accent5: 54849A
+      accent6: 9E5E9B
+  boardwalk:
+    ms_name: Ion Boardroom
+    ms_thmx: Ion Boardroom.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 3B3059
+      lt1: FFFFFF
+      lt2: EBEBEB
+      accent1: B31166
+      accent2: E33D6F
+      accent3: E45F3C
+      accent4: E9943A
+      accent5: 9B6BF2
+      accent6: D53DD0
+  parkway:
+    ms_name: Madison
+    ms_thmx: Madison.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 1F2D29
+      lt1: FFFFFF
+      lt2: C5FAEB
+      accent1: A1D68B
+      accent2: 5EC795
+      accent3: 4DADCF
+      accent4: CDB756
+      accent5: E29C36
+      accent6: 8EC0C1
+  spotlight:
+    ms_name: Main Event
+    ms_thmx: Main Event.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '424242'
+      lt1: FFFFFF
+      lt2: C8C8C8
+      accent1: B80E0F
+      accent2: A6987D
+      accent3: 7F9A71
+      accent4: 64969F
+      accent5: 9B75B2
+      accent6: 80737A
+  weave:
+    ms_name: Mesh
+    ms_thmx: Mesh.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 363D46
+      lt1: FFFFFF
+      lt2: EBEBEB
+      accent1: 6F6F6F
+      accent2: BFBFA5
+      accent3: DCD084
+      accent4: E7BF5F
+      accent5: E9A039
+      accent6: CF7133
+  workspace:
+    ms_name: Office Theme
+    ms_thmx: Office Theme.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 0E2841
+      lt1: FFFFFF
+      lt2: E8E8E8
+      accent1: '156082'
+      accent2: E97132
+      accent3: 196B24
+      accent4: 0F9ED5
+      accent5: A02B93
+      accent6: 4EA72E
+  corporate:
+    ms_name: Office 2013-2022
+    ms_thmx: Office 2013 - 2022 Theme.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 44546A
+      lt1: FFFFFF
+      lt2: E7E6E6
+      accent1: 4472C4
+      accent2: ED7D31
+      accent3: A5A5A5
+      accent4: FFC000
+      accent5: 5B9BD5
+      accent6: 70AD47
+  botanical:
+    ms_name: Organic
+    ms_thmx: Organic.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '212121'
+      lt1: FFFFFF
+      lt2: DADADA
+      accent1: 83992A
+      accent2: 3C9770
+      accent3: 44709D
+      accent4: A23C33
+      accent5: D97828
+      accent6: DEB340
+  spectrum:
+    ms_name: Parallax
+    ms_thmx: Parallax.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '212121'
+      lt1: FFFFFF
+      lt2: CDD0D1
+      accent1: 30ACEC
+      accent2: 80C34F
+      accent3: E29D3E
+      accent4: D64A3B
+      accent5: D64787
+      accent6: A666E1
+  archive:
+    ms_name: Parcel
+    ms_thmx: Parcel.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 4A5356
+      lt1: FFFFFF
+      lt2: E8E3CE
+      accent1: F6A21D
+      accent2: 9BAFB5
+      accent3: C96731
+      accent4: 9CA383
+      accent5: 87795D
+      accent6: A0988C
+  memoir:
+    ms_name: Retrospect
+    ms_thmx: Retrospect.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '637052'
+      lt1: FFFFFF
+      lt2: CCDDEA
+      accent1: E48312
+      accent2: BD582C
+      accent3: '865640'
+      accent4: 9B8357
+      accent5: C2BC80
+      accent6: 94A088
+  lather:
+    ms_name: Savon
+    ms_thmx: Savon.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 1485A4
+      lt1: FFFFFF
+      lt2: E3DED1
+      accent1: 1CADE4
+      accent2: 2683C6
+      accent3: 27CED7
+      accent4: 42BA97
+      accent5: 3E8853
+      accent6: 62A39F
+  incision:
+    ms_name: Slice
+    ms_thmx: Slice.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '146194'
+      lt1: FFFFFF
+      lt2: 76DBF4
+      accent1: 052F61
+      accent2: A50E82
+      accent3: 14967C
+      accent4: 6A9E1F
+      accent5: E87D37
+      accent6: C62324
+  contrail:
+    ms_name: Vapor Trail
+    ms_thmx: Vapor Trail.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '454545'
+      lt1: FFFFFF
+      lt2: DADADA
+      accent1: DF2E28
+      accent2: FE801A
+      accent3: E9BF35
+      accent4: 81BB42
+      accent5: 32C7A9
+      accent6: 4A9BDC
+  vista:
+    ms_name: View
+    ms_thmx: View.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 46464A
+      lt1: FFFFFF
+      lt2: D6D3CC
+      accent1: 6F6F74
+      accent2: 92A9B9
+      accent3: A7B789
+      accent4: B9A489
+      accent5: 8D6374
+      accent6: 9B7362
+  zephyr:
+    ms_name: Wisp
+    ms_thmx: Wisp.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: 766F54
+      lt1: FFFFFF
+      lt2: E3EACF
+      accent1: A53010
+      accent2: DE7E18
+      accent3: 9F8351
+      accent4: '728653'
+      accent5: 92AA4C
+      accent6: 6AAC91
+  letterpress:
+    ms_name: Wood Type
+    ms_thmx: Wood Type.thmx
+    color_fingerprint:
+      dk1: '000000'
+      dk2: '696464'
+      lt1: FFFFFF
+      lt2: E9E5DC
+      accent1: D34817
+      accent2: 9B2D1F
+      accent3: A28E6A
+      accent4: '956251'
+      accent5: '918485'
+      accent6: 855D5D
+stylesets:
+  signature:
+    ms_name: Distinctive
+    ms_dotx: Distinctive.dotx
+  refined:
+    ms_name: Elegant
+    ms_dotx: Elegant.dotx
+  ornate:
+    ms_name: Fancy
+    ms_dotx: Fancy.dotx
+  ceremonial:
+    ms_name: Formal
+    ms_dotx: Formal.dotx
+  scrollwork:
+    ms_name: Manuscript
+    ms_dotx: Manuscript.dotx
+  contemporary:
+    ms_name: Modern
+    ms_dotx: Modern.dotx
+  gazette:
+    ms_name: Newsprint
+    ms_dotx: Newsprint.dotx
+  outlook:
+    ms_name: Perspective
+    ms_dotx: Perspective.dotx
+  minimal:
+    ms_name: Simple
+    ms_dotx: Simple.dotx
+  wicker:
+    ms_name: Thatch
+    ms_dotx: Thatch.dotx
+  heritage:
+    ms_name: Traditional
+    ms_dotx: Traditional.dotx
+  classic:
+    ms_name: Word 2010
+    ms_dotx: Word 2010.dotx

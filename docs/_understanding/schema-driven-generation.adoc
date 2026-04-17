@@ -1,0 +1,106 @@
+---
+layout: default
+title: Schema-Driven Generation
+nav_order: 2
+parent: Understanding
+permalink: /understanding/schema-driven-generation/
+---
+= Schema-Driven Generation
+
+Uniword v2.0 uses a schema-driven architecture where document classes are generated from complete OOXML specification coverage. This eliminates hardcoded XML and provides perfect round-trip fidelity.
+
+== Core Principle
+
+NO RAW XML STORAGE -- EVER. Every OOXML element is a proper lutaml-model class generated from YAML schemas.
+
+== Schema System
+
+OOXML elements are defined in YAML files under `config/ooxml/schemas/`. Each schema file describes a namespace, its elements, attributes, and relationships.
+
+.Schema definition example (`config/ooxml/schemas/wordprocessingml.yml`)
+[source,yaml]
+----
+# config/ooxml/schemas/wordprocessingml.yml
+namespace:
+  uri: 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+  prefix: 'w'
+
+elements:
+  p:
+    class_name: Paragraph
+    description: 'Paragraph - block-level text element'
+    attributes:
+      - name: properties
+        type: ParagraphProperties
+        xml_name: pPr
+      - name: runs
+        type: Run
+        collection: true
+        xml_name: r
+----
+
+The YAML schema defines:
+
+* **Namespace** -- URI and prefix for XML serialization
+* **Elements** -- Each element's class name, description, and attributes
+* **Attribute types** -- References to other model classes or primitive types
+* **Collections** -- Whether an attribute can appear multiple times
+
+== Model Generation
+
+Classes are automatically generated from schemas using the model generator:
+
+[source,ruby]
+----
+require 'uniword/schema/model_generator'
+
+generator = Uniword::Schema::ModelGenerator.new('wordprocessingml')
+generator.generate_all
+# => Generates 200+ lutaml-model classes from YAML schema
+----
+
+The generator produces Ruby classes that:
+
+* Inherit from `Lutaml::Model::Serializable`
+* Declare attributes using lutaml-model's `attribute` DSL
+* Define XML mappings in an `xml do` block
+* Automatically enforce Pattern 0 (attributes before xml blocks)
+
+== Generated Classes
+
+Generated classes provide full lutaml-model integration:
+
+[source,ruby]
+----
+require 'uniword'
+
+# Main document classes
+doc = Uniword::Document.new
+para = doc.add_paragraph("Hello World", bold: true)
+
+# All classes support lutaml-model serialization automatically
+xml = doc.to_xml                          # Automatic XML generation
+doc2 = Uniword::Document.from_xml(xml)    # Automatic deserialization
+----
+
+== Benefits
+
+The schema-driven approach provides significant advantages:
+
+100% ISO 29500 coverage::
+  All 760 OOXML elements across 22 namespaces are modeled.
+
+Zero hardcoding::
+  All structure is defined in YAML, not in Ruby code. XML generation is handled entirely by lutaml-model.
+
+Perfect round-trip::
+  Complete modeling guarantees that documents can be loaded, modified, and saved without data loss.
+
+Easy extensibility::
+  New OOXML elements are added by editing YAML schemas, not by writing Ruby code.
+
+Community contributions::
+  Schema editing with YAML is simpler than writing Ruby model classes, lowering the barrier for contributors.
+
+Type safety::
+  All attributes have declared types with strong typing enforced by lutaml-model.
