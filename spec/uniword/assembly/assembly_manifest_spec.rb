@@ -17,7 +17,7 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
         },
         "sections" => [
           { "component" => "cover" },
-          { "component" => "content", "options" => { "style" => "formal" } }
+          { "component" => "content", "options" => { "style" => "ceremonial" } }
         ]
       }
     }
@@ -163,7 +163,7 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
       manifest = described_class.new(manifest_file.path)
       sections = manifest.section_list
 
-      expect(sections[1]["options"]).to eq({ "style" => "formal" })
+      expect(sections[1]["options"]).to eq({ "style" => "ceremonial" })
     end
 
     it "returns copy of sections array" do

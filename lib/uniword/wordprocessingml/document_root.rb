@@ -181,11 +181,32 @@ module Uniword
 
       # Apply theme to document
       #
-      # @param name [String, Symbol] Theme name (e.g., 'celestial', 'atlas')
+      # Applies a Uniword theme by name, updating doc defaults and
+      # built-in heading/hyperlink styles to reference the theme.
+      #
+      # @param name [String, Symbol] Theme slug (e.g., 'meridian', 'corporate')
+      # @param options [Hash] optional overrides
+      # @option options [Hash] :colors override specific color keys
+      # @option options [String] :major_font override major font
+      # @option options [String] :minor_font override minor font
       # @return [self] For method chaining
-      def apply_theme(name)
+      def apply_theme(name, **options)
         friendly = Themes::Theme.load(name.to_s)
-        self.theme = Themes::ThemeTransformation.new.to_word(friendly)
+
+        if options[:colors]
+          options[:colors].each do |key, value|
+            friendly.color_scheme[key.to_s] = value
+          end
+        end
+        if options[:major_font]
+          friendly.font_scheme.major_font = options[:major_font]
+        end
+        if options[:minor_font]
+          friendly.font_scheme.minor_font = options[:minor_font]
+        end
+
+        word_theme = Themes::ThemeTransformation.new.to_word(friendly)
+        Themes::ThemeApplicator.new.apply(word_theme, self)
         self
       end
 
@@ -206,13 +227,27 @@ module Uniword
 
       # Apply StyleSet to document
       #
-      # @param name [String, Symbol] StyleSet name (e.g., 'distinctive', 'formal')
+      # @param name [String, Symbol] StyleSet slug (e.g., 'signature', 'heritage')
       # @param strategy [Symbol] Application strategy (:keep_existing, :replace, :rename)
       # @return [self] For method chaining
       def apply_styleset(name, strategy: :keep_existing)
         styleset = Uniword::Stylesets::YamlStyleSetLoader.load_bundled(name.to_s)
         styleset.apply_to(self, strategy: strategy)
         self
+      end
+
+      # Auto-transition from MS theme to Uniword equivalent
+      #
+      # Detects the MS theme in the document's embedded theme and replaces
+      # it with the corresponding Uniword theme (font-substituted, renamed).
+      #
+      # @return [Hash, nil] { uniword_slug:, ms_name: } or nil if no match
+      #
+      # @example
+      #   result = doc.auto_transition_theme
+      #   puts "Transitioned from #{result[:ms_name]} to #{result[:uniword_slug]}"
+      def auto_transition_theme
+        Resource::ThemeTransition.auto_transition!(self)
       end
 
       # Apply theme from another document

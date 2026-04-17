@@ -10,6 +10,10 @@ module Uniword
     autoload :ColorSchemeLoader, "#{__dir__}/resource/color_scheme_loader"
     autoload :FontSchemeLoader, "#{__dir__}/resource/font_scheme_loader"
     autoload :DocumentElementLoader, "#{__dir__}/resource/document_element_loader"
+    autoload :ThemeMappingLoader, "#{__dir__}/resource/theme_mapping_loader"
+
+    # TRANSITIONS (detect and migrate between theme systems)
+    autoload :ThemeTransition, "#{__dir__}/resource/theme_transition"
 
     # MODELS (have state + behavior)
     autoload :ThemeProcessor, "#{__dir__}/resource/theme_processor"

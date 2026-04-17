@@ -280,3 +280,149 @@ RSpec.describe Uniword::Resource::FontSubstitutor do
     expect(result.major_complex_script).not_to be_empty
   end
 end
+
+RSpec.describe "MS Theme/StyleSet Slug Scan" do
+  it "no theme file uses an MS theme name as slug" do
+    ms_slugs = %w[atlas badge berlin celestial crop depth droplet facet
+                  feathered gallery headlines integral ion ion_boardroom
+                  madison main_event mesh office_theme
+                  office_2013_2022_theme organic parallax parcel
+                  retrospect savon slice vapor_trail view wisp wood_type]
+    actual = Dir.glob("data/themes/*.yml").map { |f| File.basename(f, ".yml") }
+    ms_slugs.each do |slug|
+      expect(actual).not_to include(slug),
+        "MS theme slug '#{slug}' still exists in data/themes/"
+    end
+  end
+
+  it "no styleset file uses an MS styleset name as slug" do
+    ms_slugs = %w[distinctive elegant fancy formal manuscript modern
+                  newsprint perspective simple thatch traditional word_2010]
+    actual = Dir.glob("data/stylesets/*.yml").map { |f| File.basename(f, ".yml") }
+    ms_slugs.each do |slug|
+      expect(actual).not_to include(slug),
+        "MS styleset slug '#{slug}' still exists in data/stylesets/"
+    end
+  end
+
+  it "all 7 target locales have document elements" do
+    %w[en ru zh-CN zh-TW ja fr es].each do |locale|
+      categories = Uniword::Resource::DocumentElementLoader.available_categories(locale)
+      expected = %w[cover_pages headers footers tables equations
+                    bibliographies watermarks table_of_contents]
+      expect(categories).to include(*expected),
+        "Locale #{locale} missing expected categories"
+    end
+  end
+end
+
+RSpec.describe Uniword::Resource::ThemeMappingLoader do
+  it "maps Uniword theme to MS equivalent" do
+    expect(described_class.uniword_to_ms_theme("meridian")).to eq("Atlas")
+    expect(described_class.uniword_to_ms_theme("emblem")).to eq("Badge")
+    expect(described_class.uniword_to_ms_theme("corporate")).to eq("Office 2013-2022")
+  end
+
+  it "maps MS theme to Uniword equivalent" do
+    expect(described_class.ms_to_uniword_theme("Atlas")).to eq("meridian")
+    expect(described_class.ms_to_uniword_theme("Badge")).to eq("emblem")
+    expect(described_class.ms_to_uniword_theme("Office 2013-2022")).to eq("corporate")
+  end
+
+  it "maps Uniword styleset to MS equivalent" do
+    expect(described_class.uniword_to_ms_styleset("signature")).to eq("Distinctive")
+    expect(described_class.uniword_to_ms_styleset("contemporary")).to eq("Modern")
+  end
+
+  it "maps MS styleset to Uniword equivalent" do
+    expect(described_class.ms_to_uniword_styleset("Distinctive")).to eq("signature")
+    expect(described_class.ms_to_uniword_styleset("Modern")).to eq("contemporary")
+  end
+
+  it "returns nil for unknown names" do
+    expect(described_class.ms_to_uniword_theme("NonExistent")).to be_nil
+    expect(described_class.uniword_to_ms_theme("nonexistent")).to be_nil
+    expect(described_class.ms_to_uniword_styleset("NonExistent")).to be_nil
+  end
+
+  it "has color fingerprints for all 29 themes" do
+    mappings = described_class.all_theme_mappings
+    expect(mappings.count).to eq(29)
+    mappings.each do |slug, entry|
+      expect(entry).to include("ms_name", "color_fingerprint"),
+        "Theme #{slug} missing ms_name or color_fingerprint"
+      expect(entry["color_fingerprint"]).to include("accent1", "accent2", "dk2"),
+        "Theme #{slug} fingerprint missing accent1/accent2/dk2"
+    end
+  end
+
+  it "has mapping entries for all 12 stylesets" do
+    mappings = described_class.all_styleset_mappings
+    expect(mappings.count).to eq(12)
+    mappings.each do |slug, entry|
+      expect(entry).to include("ms_name"),
+        "StyleSet #{slug} missing ms_name"
+    end
+  end
+
+  it "color fingerprints are unique by accent1+accent2+dk2" do
+    fingerprints = described_class.all_theme_mappings.map do |_slug, entry|
+      fp = entry["color_fingerprint"]
+      [fp["accent1"], fp["accent2"], fp["dk2"]].join(":")
+    end
+    expect(fingerprints.uniq.count).to eq(fingerprints.count),
+      "Duplicate color fingerprints found"
+  end
+
+  it "finds theme by colors" do
+    result = described_class.find_by_colors(
+      "accent1" => "F81B02", "accent2" => "FC7715", "dk2" => "454545"
+    )
+    expect(result).to eq("meridian")
+  end
+
+  it "returns nil for unmatched colors" do
+    result = described_class.find_by_colors(
+      "accent1" => "000000", "accent2" => "000000", "dk2" => "000000"
+    )
+    expect(result).to be_nil
+  end
+end
+
+RSpec.describe Uniword::Resource::ThemeTransition do
+  let(:transformation) { Uniword::Themes::ThemeTransformation.new }
+
+  it "detects MS theme by name" do
+    expect(described_class.from_ms_name("Atlas")).to eq("meridian")
+    expect(described_class.from_ms_name("Badge")).to eq("emblem")
+    expect(described_class.from_ms_name("Office 2013-2022")).to eq("corporate")
+  end
+
+  it "detects MS styleset by name" do
+    expect(described_class.styleset_from_ms_name("Distinctive")).to eq("signature")
+    expect(described_class.styleset_from_ms_name("Modern")).to eq("contemporary")
+  end
+
+  it "returns nil for unknown MS name" do
+    expect(described_class.from_ms_name("Unknown Theme")).to be_nil
+  end
+
+  it "detects MS theme by color fingerprint in a loaded theme" do
+    # Load a Uniword theme (which has the same colors as its MS equivalent)
+    friendly = Uniword::Themes::Theme.load("meridian")
+    word_theme = transformation.to_word(friendly)
+
+    detected = described_class.detect_ms_theme(word_theme)
+    expect(detected).to eq("meridian")
+  end
+
+  it "auto-transitions a document with a known theme" do
+    doc = Uniword::Wordprocessingml::DocumentRoot.new
+    doc.apply_theme("meridian")
+
+    result = described_class.auto_transition!(doc)
+    expect(result).not_to be_nil
+    expect(result.uniword_slug).to eq("meridian")
+    expect(result.ms_name).to eq("Atlas")
+  end
+end

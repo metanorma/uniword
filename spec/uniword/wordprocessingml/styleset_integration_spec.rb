@@ -3,12 +3,12 @@
 require "spec_helper"
 
 RSpec.describe "StyleSet Integration (Open-Source YAML)" do
-  let(:styleset) { Uniword::Stylesets::YamlStyleSetLoader.load_bundled("distinctive") }
+  let(:styleset) { Uniword::Stylesets::YamlStyleSetLoader.load_bundled("signature") }
 
   describe "Loading StyleSets from YAML" do
-    it "loads distinctive styleset successfully" do
+    it "loads signature styleset successfully" do
       expect(styleset).to be_a(Uniword::StyleSet)
-      expect(styleset.name).to eq("Distinctive")
+      expect(styleset.name).to eq("Signature")
       expect(styleset.styles).to be_an(Array)
       expect(styleset.styles.count).to be > 0
     end
@@ -85,7 +85,7 @@ RSpec.describe "StyleSet Integration (Open-Source YAML)" do
   describe "Integration with Document API" do
     it "applies bundled styleset by name" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      expect { doc.apply_styleset("distinctive") }.not_to raise_error
+      expect { doc.apply_styleset("signature") }.not_to raise_error
     end
   end
 

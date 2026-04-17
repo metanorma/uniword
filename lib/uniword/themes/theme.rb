@@ -109,6 +109,7 @@ module Uniword
     class Theme < Lutaml::Model::Serializable
       attribute :name, :string
       attribute :source, :string
+      attribute :ms_equivalent, :string
       attribute :imported_at, :date_time
       attribute :color_scheme, ColorScheme
       attribute :font_scheme, FontScheme
@@ -117,6 +118,7 @@ module Uniword
       yaml do
         map "name", to: :name
         map "source", to: :source
+        map "ms_equivalent", to: :ms_equivalent
         map "imported_at", to: :imported_at
         map "color_scheme", to: :color_scheme
         map "font_scheme", to: :font_scheme

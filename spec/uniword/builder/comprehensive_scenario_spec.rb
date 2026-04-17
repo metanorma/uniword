@@ -136,7 +136,7 @@ end
 RSpec.describe "Scenario: Document with theme" do
   it "creates a themed document with color overrides" do
     doc = Uniword::Builder::DocumentBuilder.new
-    doc.theme("atlas") do |t|
+    doc.theme("meridian") do |t|
       t.colors(accent1: "FF0000", accent2: "00FF00")
       t.fonts(major: "Georgia", minor: "Calibri")
     end
@@ -354,7 +354,7 @@ RSpec.describe "Scenario: Complete document (all features)" do
     doc.keywords("ruby, docx, builder")
 
     # Theme
-    doc.theme("atlas")
+    doc.theme("meridian")
 
     # Header and footer
     doc.header { |h| h << "Comprehensive Document" }
