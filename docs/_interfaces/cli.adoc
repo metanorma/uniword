@@ -1,0 +1,55 @@
+---
+layout: default
+title: CLI
+nav_order: 2
+parent: Interfaces
+permalink: /interfaces/cli/
+has_children: true
+---
+= CLI
+
+Uniword ships with a command-line interface built on Thor. Invoke it with the
+`uniword` executable after installing the gem.
+
+== Global options
+
+All commands accept `--verbose` (`-v`) for detailed output.
+
+== Commands
+
+|===
+| Command | Description
+
+| `uniword convert INPUT OUTPUT`
+| Convert a document between DOCX and MHTML formats
+
+| `uniword info FILE`
+| Display document statistics and structure
+
+| `uniword validate FILE`
+| Validate document structure and content
+
+| `uniword verify FILE`
+| Three-layer DOCX verification (OPC, XSD, semantic)
+
+| `uniword theme SUBCOMMAND`
+| Manage document themes (list, import, apply, auto)
+
+| `uniword styleset SUBCOMMAND`
+| Manage document StyleSets (list, import, apply)
+
+| `uniword resources SUBCOMMAND`
+| Export Word resources from a local installation
+
+| `uniword version`
+| Show the installed Uniword version
+|===
+
+== Topics
+
+* link:../convert-command/[convert] -- Format conversion
+* link:../info-command/[info] -- Document inspection
+* link:../validate-command/[validate] -- Structural validation
+* link:../verify-command/[verify] -- Three-layer verification pipeline
+* link:../theme-commands/[theme] -- Theme operations
+* link:../styleset-commands/[styleset] -- StyleSet operations

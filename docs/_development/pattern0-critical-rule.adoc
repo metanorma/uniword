@@ -1,0 +1,82 @@
+---
+layout: default
+title: "Pattern 0: Critical Rule"
+nav_order: 6
+parent: Development
+permalink: /development/pattern0-critical-rule/
+---
+= Pattern 0: Critical Rule
+
+When creating or modifying lutaml-model classes, **attributes MUST be declared BEFORE xml mappings**. This is the single most important rule for contributors.
+
+== The Rule
+
+[source,ruby]
+----
+# CORRECT - Attributes FIRST
+class MyClass < Lutaml::Model::Serializable
+  attribute :my_attr, MyType  # Declare attribute first
+
+  xml do
+    element 'myElem'
+    namespace Namespaces::WordProcessingML
+    map_element 'elem', to: :my_attr  # Map after
+  end
+end
+
+# WRONG - Will NOT serialize
+class MyClass < Lutaml::Model::Serializable
+  xml do
+    map_element 'elem', to: :my_attr  # Mapping before attribute
+  end
+
+  attribute :my_attr, MyType  # Too late! Framework doesn't know it exists
+end
+----
+
+== Why This Matters
+
+Lutaml-model builds its internal schema by reading attribute declarations sequentially:
+
+. When the class body is evaluated, Ruby executes statements top to bottom
+. The `xml do` block registers mappings with the framework
+. If `xml do` comes first, the framework processes mappings before knowing attributes exist
+. The framework cannot resolve `to: :my_attr` because the attribute has not been declared yet
+. Result: Serialization produces empty XML, deserialization fails silently
+
+This was the root cause of complete document serialization failure during v1.1.0 development.
+
+== Additional Rules
+
+Use `mixed_content` for elements with nested content::
+  Elements that contain a mix of text and child elements need `mixed_content` enabled.
+
+Only one namespace declaration per element level::
+  Do not declare multiple namespaces at the same element level.
+
+Use `render_default: true` for required optional elements::
+  Optional elements that must always appear in output should use `render_default: true`.
+
+Use `||=` in initialize, not `=`::
+  In `initialize` after `super`, use `||=` to preserve lutaml-model parsed values:
+
+[source,ruby]
+----
+def initialize(**attrs)
+  super
+  @items ||= []  # Preserves parsed values
+  # NOT: @items = []  # Overwrites parsed values!
+end
+----
+
+== Generated Classes Are Safe
+
+Schema-generated classes automatically enforce Pattern 0. The model generator always emits attributes before the `xml do` block. Manual model classes require careful attention.
+
+== Verification
+
+After modifying any lutaml-model class:
+
+. Run the full test suite: `bundle exec rspec`
+. Test serialization round-trip for the affected class
+. Verify XML output is not empty

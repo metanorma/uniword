@@ -1,0 +1,71 @@
+---
+layout: default
+title: Themes Catalog
+nav_order: 2
+parent: Features
+permalink: /features/themes-catalog/
+---
+= Themes Catalog
+
+Uniword bundles 29 open-source themes that replace the proprietary Microsoft Office themes. Each theme is defined in `data/themes/*.yml` and can be applied to any document.
+
+== Using Themes
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+doc.apply_theme('celestial')
+----
+
+The `apply_theme` method looks up the theme name in the bundled catalog and applies the complete theme definition (colors, fonts, and formatting) to the document.
+
+== Theme List
+
+[cols="1,1,1,4"]
+|===
+| Uniword Name | MS Equivalent | File | Description
+
+| meridian | Atlas | Atlas.thmx | Bold primary colors with warm accents
+| emblem | Badge | Badge.thmx | Earthy tones with metallic accents
+| mosaic | Berlin | Berlin.thmx | Rich warm palette with vibrant contrasts
+| constellation | Celestial | Celestial.thmx | Deep blues with jewel-toned accents
+| harvest | Crop | Crop.thmx | Natural earth tones with golden highlights
+| abyss | Depth | Depth.thmx | Deep aquatic colors with bright tropical accents
+| ripple | Droplet | Droplet.thmx | Cool blues and greens with oceanic feel
+| prism | Facet | Facet.thmx | Crisp greens and warm neutrals
+| plumage | Feathered | Feathered.thmx | Soft muted tones with natural elegance
+| exhibit | Gallery | Gallery.thmx | Rich magentas and purples, gallery-inspired
+| bulletin | Headlines | Headlines.thmx | Professional teal with warm accents
+| calculus | Integral | Integral.thmx | Cool blues and teals, technical feel
+| plasma | Ion | Ion.thmx | Bold reds and oranges with cool accents
+| boardwalk | Ion Boardroom | Ion Boardroom.thmx | Deep purples with vibrant pink and orange
+| parkway | Madison | Madison.thmx | Fresh greens with natural warmth
+| spotlight | Main Event | Main Event.thmx | Dramatic reds with sophisticated neutrals
+| weave | Mesh | Mesh.thmx | Neutral grays with warm amber accents
+| workspace | Office Theme | Office Theme.thmx | Classic Office blue with standard accents
+| corporate | Office 2013-2022 | Office 2013 - 2022 Theme.thmx | Professional blue-gray palette
+| botanical | Organic | Organic.thmx | Natural greens with earthy accents
+| spectrum | Parallax | Parallax.thmx | Bright saturated colors across the spectrum
+| archive | Parcel | Parcel.thmx | Warm amber with muted earth tones
+| memoir | Retrospect | Retrospect.thmx | Warm browns with vintage feel
+| lather | Savon | Savon.thmx | Clean blues and teals, refreshing palette
+| incision | Slice | Slice.thmx | Bold contrasts with deep navy and vibrant accents
+| contrail | Vapor Trail | Vapor Trail.thmx | Warm spectrum from red through green to blue
+| vista | View | View.thmx | Subtle neutrals with understated color accents
+| zephyr | Wisp | Wisp.thmx | Soft natural tones with gentle warmth
+| letterpress | Wood Type | Wood Type.thmx | Warm reds and browns, letterpress inspired
+|===
+
+== Theme Detection
+
+When loading a DOCX file created with Microsoft Word, Uniword can detect the original MS theme from its color fingerprint and automatically map it to the corresponding Uniword theme. The mapping is defined in `config/theme_mapping.yml`.
+
+== Theme Structure
+
+Each theme YAML file contains:
+
+* **Color scheme** -- 12 theme colors (dk1, dk2, lt1, lt2, accent1-accent6)
+* **Font scheme** -- Heading and body font families
+* **Format scheme** -- Fill, line, and effect definitions
+
+All theme definitions use OFL-licensed fonts and open color palettes.

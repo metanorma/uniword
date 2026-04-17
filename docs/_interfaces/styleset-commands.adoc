@@ -1,0 +1,101 @@
+---
+layout: default
+title: styleset
+nav_order: 8
+parent: CLI
+permalink: /interfaces/cli/styleset-commands/
+---
+= styleset
+
+Manage document StyleSets: list bundled StyleSets, import `.dotx` files, or
+apply StyleSets to documents.
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `list`
+| List all bundled StyleSets
+
+| `import`
+| Import `.dotx` files to YAML
+
+| `apply INPUT OUTPUT`
+| Apply a StyleSet to a document
+|===
+
+== list
+
+Display all StyleSets bundled with Uniword.
+
+[source,shell]
+----
+uniword styleset list
+uniword styleset list --verbose
+----
+
+`--verbose` shows the style name, and counts of paragraph, character,
+and table styles for each entry.
+
+== import
+
+Import Office `.dotx` StyleSet files to YAML format for faster loading
+and human readability.
+
+[source,shell]
+----
+uniword styleset import
+uniword styleset import --source stylesets/ --output data/stylesets
+----
+
+`--source` sets the input directory (default: `references/word-package/style-sets`).
+
+`--output` sets the output directory (default: `data/stylesets`).
+
+== apply
+
+Apply a bundled or file-based StyleSet to a document.
+
+[source,shell]
+----
+# Apply a bundled StyleSet by name
+uniword styleset apply input.docx output.docx --name distinctive
+
+# Apply with verbose output
+uniword styleset apply input.docx output.docx --name distinctive --verbose
+
+# Apply a .dotx file
+uniword styleset apply input.docx output.docx --file Distinctive.dotx
+----
+
+Options:
+
+`--name`:: Bundled StyleSet name (e.g., `distinctive`, `elegant`, `formal`)
+`--file`:: Path to a `.dotx` StyleSet file
+`--strategy`:: Conflict resolution strategy (default: `keep_existing`)
+`--verbose`, `-v`:: Show detailed output
+
+You must specify `--name` or `--file`, but not both.
+
+=== Conflict resolution strategies
+
+When a StyleSet defines a style that already exists in the document, the
+`--strategy` option controls the behavior:
+
+`keep_existing` (default):: Keep the document's existing style, add only new
+ones.
+`replace`:: Replace existing styles with StyleSet definitions.
+`rename`:: Keep both, renaming imported styles to avoid conflicts.
+
+[source,shell]
+----
+uniword styleset apply in.docx out.docx --name formal --strategy replace
+----
+
+== Bundled StyleSets
+
+Uniword ships with 12 Office StyleSets: Basic, Distinctive, Elegant,
+Fancy, Formal, Manuscript, Modern, Newsprint, Perspective, Simple,
+Thatch, and Traditional. Use `uniword styleset list` to see all available
+names.

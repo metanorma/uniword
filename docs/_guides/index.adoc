@@ -1,0 +1,44 @@
+---
+layout: default
+title: Guides
+nav_order: 3
+has_children: true
+permalink: /guides/
+---
+= Guides
+
+Step-by-step guides for common document tasks.
+
+== Topics
+
+=== Document Elements
+
+* link:guides/text-formatting/[Text Formatting] -- Bold, italic, color, size, effects
+* link:guides/paragraph-formatting/[Paragraph Formatting] -- Borders, shading, tabs, numbering
+* link:guides/tables/[Tables] -- Creation, borders, cell merging
+* link:guides/lists/[Lists] -- Numbered, bulleted, multi-level
+* link:guides/images/[Images] -- Adding and positioning
+* link:guides/headers-and-footers/[Headers and Footers] -- Default, first page, odd/even
+* link:guides/footnotes-and-endnotes/[Footnotes and Endnotes] -- References, prevention layer
+* link:guides/bookmarks-and-references/[Bookmarks and References] -- Hyperlinks, cross-refs
+* link:guides/math-formulas/[Math Formulas] -- MathML, AsciiMath
+* link:guides/text-boxes/[Text Boxes] -- Creating and positioning
+
+=== Styling
+
+* link:guides/styles/[Styles] -- Built-in, custom, properties
+* link:guides/themes/[Themes] -- Bundled, .thmx, applying
+* link:guides/stylesets/[StyleSets] -- Bundled, .dotx, strategies
+* link:guides/building-blocks/[Building Blocks] -- Glossary, gallery types
+* link:guides/structured-document-tag/[Structured Document Tags] -- 13 SDT properties
+
+=== Advanced Guides
+
+* link:guides/format-conversion/[Format Conversion] -- DOCX to MHTML
+* link:guides/html-import/[HTML Import] -- HtmlImporter pipeline
+* link:guides/open-existing-docx/[Open Existing DOCX] -- Read, modify, save
+* link:guides/round-trip-fidelity/[Round-Trip Fidelity] -- Guarantees and verification
+* link:guides/resource-authoring/[Resource Authoring] -- Authoring YAML resources
+* link:guides/resource-mapping/[Resource Mapping] -- MS to Uniword mapping
+* link:guides/custom-resources/[Custom Resources] -- Creating themes and stylesets
+* link:guides/auto-theme-transition/[Auto Theme Transition] -- MS to Uniword auto-detect

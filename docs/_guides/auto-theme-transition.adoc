@@ -1,0 +1,93 @@
+---
+layout: default
+title: Auto Theme Transition
+nav_order: 20
+parent: Guides
+permalink: /guides/auto-theme-transition/
+---
+= Auto Theme Transition
+
+Detect Microsoft Word themes in documents and automatically transition them to
+Uniword open-source equivalents.
+
+== Overview
+
+When opening a DOCX file created in Microsoft Word, the document may reference
+one of 29 built-in MS Office themes. Uniword can detect which theme was used and
+replace it with the equivalent open-source Uniword theme, ensuring the document
+uses only OFL-licensed fonts and open-source color values.
+
+== Auto-Detection and Transition
+
+The `ThemeTransition.auto_transition!` method detects the MS theme in a document
+and applies the Uniword equivalent:
+
+[source,ruby]
+----
+doc = Uniword::Document.open("ms_report.docx")
+
+# Detect and replace MS theme with Uniword equivalent
+result = Uniword::Resource::ThemeTransition.auto_transition!(doc)
+
+if result
+  puts "Replaced MS theme '#{result.ms_name}' with Uniword '#{result.uniword_slug}'"
+else
+  puts "No matching MS theme detected"
+end
+----
+
+The detection algorithm uses color fingerprint matching -- it extracts 10 colors
+from the document's theme and matches them against known MS theme fingerprints.
+
+== Detection Methods
+
+Three detection strategies are available:
+
+[source,ruby]
+----
+# 1. Auto-transition (detect + apply)
+result = ThemeTransition.auto_transition!(doc)
+
+# 2. Detect by theme object (color fingerprint)
+slug = ThemeTransition.detect_ms_theme(doc.theme)
+# => "meridian"
+
+# 3. Detect by MS name string
+slug = ThemeTransition.from_ms_name("Atlas")
+# => "meridian"
+
+# 4. Detect styleset by MS name
+slug = ThemeTransition.styleset_from_ms_name("Distinctive")
+# => "distinctive"
+----
+
+== How Fingerprint Matching Works
+
+Uniword uses three color keys (`accent1`, `accent2`, `dk2`) to uniquely identify
+each of the 29 MS themes. The mapping is stored in `config/theme_mapping.yml`.
+
+The detection pipeline:
+
+. Extract colors from the document's DrawingML theme
+. Normalize hex values (uppercase, 6 characters)
+. Match against fingerprint database
+. Fall back to MS name lookup if colors do not match
+
+== Bidirectional Name Lookup
+
+Use `ThemeMappingLoader` to look up names in either direction:
+
+[source,ruby]
+----
+# Uniword to MS
+ms_name = ThemeMappingLoader.uniword_to_ms_theme("meridian")
+# => "Atlas"
+
+# MS to Uniword
+slug = ThemeMappingLoader.ms_to_uniword_theme("Atlas")
+# => "meridian"
+
+# Styleset lookups
+ms_name = ThemeMappingLoader.uniword_to_ms_styleset("distinctive")
+slug = ThemeMappingLoader.ms_to_uniword_styleset("Distinctive")
+----

@@ -1,0 +1,77 @@
+---
+layout: default
+title: Document Elements Catalog
+nav_order: 6
+parent: Features
+permalink: /features/document-elements-catalog/
+---
+= Document Elements Catalog
+
+Uniword bundles 240 document element templates across 30 locales. Each locale provides 8 categories of reusable document building blocks.
+
+== Locales
+
+30 locales are supported:
+
+|===
+| *Americas* | *Europe* | *Europe (cont.)* | *Middle East* | *Asia*
+
+| en | cs | nl | ar | ja
+| en-GB | da | no | he | ko
+| es | de | pl | | zh-CN
+| es-MX | el | pt | | zh-TW
+| fr | fi | pt-PT | |
+| fr-CA | hu | ru | |
+| | id | sk | |
+| | it | sv | |
+| | | th | |
+| | | tr | |
+|===
+
+== Categories
+
+Each locale provides 8 categories of document elements:
+
+[cols="2,4"]
+|===
+| Category | Description
+
+| Bibliographies | Citation and bibliography formatting templates with locale-specific conventions
+| Cover pages | Pre-designed cover page layouts suitable for professional documents
+| Equations | Equation display templates with proper spacing and numbering
+| Footers | Footer designs with page numbering and document metadata
+| Headers | Header layouts with title, chapter, and date fields
+| Table of contents | TOC formatting templates with multi-level support
+| Tables | Table design templates with borders, shading, and alternating rows
+| Watermarks | Document watermark overlays (confidential, draft, etc.)
+|===
+
+== File Structure
+
+Document elements are stored in YAML files under `data/resources/document_elements/`:
+
+```
+data/resources/document_elements/
+  en/
+    bibliographies.yml
+    cover_pages.yml
+    equations.yml
+    footers.yml
+    headers.yml
+    table_of_contents.yml
+    tables.yml
+    watermarks.yml
+  ja/
+    bibliographies.yml
+    ...
+```
+
+== Usage
+
+Document elements are loaded by locale and category. They provide building blocks for glossary entries and AutoText templates:
+
+[source,ruby]
+----
+# Document elements are applied through the builder API
+# when constructing documents with locale-appropriate formatting
+----

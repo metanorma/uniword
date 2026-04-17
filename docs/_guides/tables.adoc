@@ -1,0 +1,77 @@
+---
+layout: default
+title: Tables
+nav_order: 3
+parent: Guides
+permalink: /guides/tables/
+---
+= Tables
+
+Create tables with borders, cell content, and the Builder API.
+
+== Basic Table Creation
+
+[source,ruby]
+----
+table = Uniword::Table.new
+row = Uniword::TableRow.new
+
+cell1 = Uniword::TableCell.new
+cell1.add_paragraph("Cell 1")
+row.add_cell(cell1)
+
+cell2 = Uniword::TableCell.new
+cell2.add_paragraph("Cell 2")
+row.add_cell(cell2)
+
+table.add_row(row)
+doc.add_element(table)
+----
+
+== Table with Borders
+
+[source,ruby]
+----
+table = Uniword::Table.new
+
+# Set table borders
+table.properties = Uniword::Properties::TableProperties.new
+table.properties.borders = {
+  top: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  bottom: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  left: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  right: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  insideH: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000'),
+  insideV: Uniword::TableBorder.new(style: 'single', size: 4, color: '000000')
+}
+
+# Add rows and cells
+row = Uniword::TableRow.new
+row.add_cell(Uniword::TableCell.new.tap { |c| c.add_paragraph("A1") })
+row.add_cell(Uniword::TableCell.new.tap { |c| c.add_paragraph("B1") })
+table.add_row(row)
+----
+
+The six border positions are:
+
+`top`, `bottom`, `left`, `right`, `insideH` (horizontal interior), `insideV` (vertical interior).
+
+== Using the Builder for Tables
+
+The Builder pattern provides a concise DSL for table creation:
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_table do
+    row do
+      cell 'Header 1', bold: true
+      cell 'Header 2', bold: true
+    end
+    row do
+      cell 'Data 1'
+      cell 'Data 2'
+    end
+  end
+  .build
+----

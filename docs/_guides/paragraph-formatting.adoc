@@ -1,0 +1,107 @@
+---
+layout: default
+title: Paragraph Formatting
+nav_order: 2
+parent: Guides
+permalink: /guides/paragraph-formatting/
+---
+= Paragraph Formatting
+
+Apply borders, shading, tab stops, and numbering to paragraphs.
+
+== Paragraph Borders
+
+Uniword supports all paragraph border positions with detailed styling options.
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Text with borders")
+
+# Simple borders (just color)
+para.set_borders(top: "FF0000", bottom: "0000FF")
+
+# Detailed borders with style, size, and color
+para.set_borders(
+  top: { style: 'single', size: 4, color: 'FF0000' },
+  bottom: { style: 'double', size: 6, color: '0000FF' },
+  left: { style: 'dashed', size: 4, color: '00FF00' },
+  right: { style: 'dotted', size: 4, color: 'FFFF00' }
+)
+----
+
+All border positions: `top`, `bottom`, `left`, `right`, `between` (for consecutive paragraphs), `bar`.
+
+**Border styles:** `single`, `double`, `dashed`, `dotted`, `thick`, `thin`, `none`
+
+== Paragraph Shading
+
+Add background colors and patterns to paragraphs:
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Highlighted text")
+
+# Simple solid fill
+para.set_shading(fill: "FFFF00")
+
+# With pattern and foreground color
+para.set_shading(
+  fill: "FFFF00",      # Background color
+  color: "000000",     # Foreground (pattern) color
+  pattern: "pct10"     # Pattern type
+)
+----
+
+**Pattern types:** `clear`, `solid`, `pct5`, `pct10`, `pct15`, `pct20`, `pct25`, `pct30`, `pct35`, `pct40`, `pct45`, `pct50`, `pct55`, `pct60`, `pct65`, `pct70`, `pct75`, `pct80`, `pct85`, `pct90`, `pct95`
+
+== Tab Stops
+
+Add custom tab stops with alignment and leader characters:
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Column 1\tColumn 2\tColumn 3")
+
+# Add tab stops
+para.add_tab_stop(position: 1440, alignment: "left")    # 1 inch
+para.add_tab_stop(position: 2880, alignment: "center")  # 2 inches
+para.add_tab_stop(position: 4320, alignment: "right", leader: "dot")  # 3 inches
+----
+
+**Alignment options:** `left`, `center`, `right`, `decimal`, `bar`
+
+**Leader options:** `none`, `dot`, `hyphen`, `underscore`, `heavy`, `middleDot`
+
+[TIP]
+====
+Position units are twips: 1/20th of a point. There are 1440 twips per inch.
+====
+
+== Complex Combinations
+
+All paragraph formatting options can be combined freely:
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Professional formatting")
+para.set_borders(top: "000000", bottom: "000000")
+para.set_shading(fill: "F0F0F0", pattern: "solid")
+para.add_tab_stop(position: 1440, alignment: "center")
+----
+
+Combine paragraph and run formatting in the same paragraph:
+
+[source,ruby]
+----
+run = para.runs.first
+run.character_spacing = 20
+run.kerning = 24
+run.position = 5
+run.outline = true
+run.shadow = true
+run.set_shading(fill: "FFFF00")
+----

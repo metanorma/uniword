@@ -1,0 +1,84 @@
+---
+layout: default
+title: Font Registry
+nav_order: 7
+parent: Features
+permalink: /features/font-registry/
+---
+= Font Registry
+
+Uniword includes a font registry that maps Microsoft proprietary fonts to OFL-licensed open-source alternatives. This ensures documents created with Uniword do not depend on proprietary typefaces.
+
+== Key Substitutions
+
+[cols="2,2,3"]
+|===
+| Microsoft Font | OFL Replacement | Category
+
+| Calibri | Carlito | Sans-serif
+| Calibri Light | Carlito | Sans-serif
+| Aptos | Source Sans Pro | Sans-serif
+| Arial | Liberation Sans | Sans-serif
+| Segoe UI | Source Sans Pro | Sans-serif
+| Tahoma | Liberation Sans | Sans-serif
+| Cambria | Caladea | Serif
+| Times New Roman | Liberation Serif | Serif
+| Georgia | Gelasio | Serif
+| Consolas | Liberation Mono | Monospace
+| Courier New | Liberation Mono | Monospace
+|===
+
+== Per-Script Substitutions
+
+The registry defines font substitutions for 30+ writing scripts:
+
+[cols="2,2"]
+|===
+| Script Code | OFL Typeface
+
+| Jpan | Noto Sans CJK JP
+| Hang | Noto Sans CJK KR
+| Hans | Noto Sans CJK SC
+| Hant | Noto Sans CJK TC
+| Arab | Noto Sans Arabic
+| Hebr | Noto Sans Hebrew
+| Deva | Noto Sans Devanagari
+| Beng | Noto Sans Bengali
+| Gujr | Noto Sans Gujarati
+| Guru | Noto Sans Gurmukhi
+| Knda | Noto Sans Kannada
+| Taml | Noto Sans Tamil
+| Telu | Noto Sans Telugu
+| Mlym | Noto Sans Malayalam
+| Thai | Noto Sans Thai
+| Khmr | Noto Sans Khmer
+| Tibt | Noto Sans Tibetan
+| Mymr | Noto Sans Myanmar
+| Geor | Noto Sans Georgian
+| Armen | Noto Sans Armenian
+|===
+
+== East Asian Font Substitutions
+
+[cols="2,2"]
+|===
+| Microsoft Font | OFL Replacement
+
+| MS Gothic | Noto Sans CJK JP
+| MS Mincho | Noto Serif CJK JP
+| Songti (SC) | Noto Sans CJK SC
+| MingLiU (TC) | Noto Sans CJK TC
+| Malgun Gothic (KR) | Noto Sans CJK KR
+|===
+
+== Font Registry File
+
+The complete registry is defined in `data/resources/font_registry.yml` with the following sections:
+
+* **latin** -- Sans, serif, mono, display families for heading and body
+* **east_asian** -- Simplified Chinese, Traditional Chinese, Japanese families
+* **complex_script** -- Arabic, Hebrew, Cyrillic families
+* **per_script** -- 30+ OOXML script code to OFL typeface mappings
+* **substitutions** -- Complete MS font name to OFL replacement map
+
+All replacement fonts are OFL (SIL Open Font License) or public domain.

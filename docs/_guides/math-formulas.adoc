@@ -1,0 +1,44 @@
+---
+layout: default
+title: Math Formulas
+nav_order: 9
+parent: Guides
+permalink: /guides/math-formulas/
+---
+= Math Formulas
+
+Embed mathematical equations using MathML or AsciiMath notation.
+
+== MathML Formulas
+
+Pass MathML markup directly to `add_math`:
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_math('<math><mrow><mi>x</mi><mo>=</mo><mfrac><mrow><mo>-</mo><mi>b</mi></mrow><mrow><mn>2</mn><mi>a</mi></mrow></mfrac></mrow></math>')
+doc.add_element(para)
+----
+
+Uniword converts MathML to Office Math Markup Language (OMML) using the `m:` namespace,
+which is fully supported with 65 modeled elements.
+
+== AsciiMath Formulas
+
+For a more concise syntax, use AsciiMath notation:
+
+[source,ruby]
+----
+# Add AsciiMath formula (converted to MathML)
+para = Uniword::Paragraph.new
+para.add_math('x = (-b)/(2a)', format: :asciimath)
+doc.add_element(para)
+----
+
+AsciiMath input is automatically converted to MathML internally before being
+transformed to OMML for the DOCX output.
+
+[NOTE]
+====
+AsciiMath support depends on the Plurimath gem for the conversion pipeline.
+====

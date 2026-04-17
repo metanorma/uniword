@@ -1,0 +1,95 @@
+---
+layout: default
+title: Adding OOXML Elements
+nav_order: 7
+parent: Development
+permalink: /development/adding-ooxml-elements/
+---
+= Adding OOXML Elements
+
+New OOXML elements are added to Uniword through the schema-driven generation system. The process involves editing YAML schemas and running the model generator.
+
+== Step 1: Edit the YAML Schema
+
+Add new element definitions to the appropriate namespace schema file under `config/ooxml/schemas/`:
+
+[source,yaml]
+----
+# config/ooxml/schemas/wordprocessingml.yml
+elements:
+  myElement:
+    class_name: MyElement
+    description: 'Description of the new element'
+    attributes:
+      - name: value
+        type: :string
+        xml_name: val
+      - name: child
+        type: ChildElement
+        xml_name: child
+      - name: items
+        type: Item
+        collection: true
+        xml_name: item
+----
+
+Attribute types can be:
+
+* Primitive types: `:string`, `:integer`, `:boolean`, `:float`
+* Model references: `ClassName` (another lutaml-model class)
+* Collections: Set `collection: true` for array attributes
+
+== Step 2: Run the Model Generator
+
+Generate Ruby classes from the updated schema:
+
+[source,ruby]
+----
+require 'uniword/schema/model_generator'
+
+generator = Uniword::Schema::ModelGenerator.new('wordprocessingml')
+generator.generate_all
+----
+
+The generator produces:
+
+* A Ruby class inheriting from `Lutaml::Model::Serializable`
+* Attribute declarations (enforcing Pattern 0)
+* XML mappings in an `xml do` block
+* Namespace declarations from the schema
+
+== Step 3: Test the New Element
+
+Create a spec file for the new element:
+
+[source,ruby]
+----
+# spec/uniword/wordprocessingml/my_element_spec.rb
+RSpec.describe Uniword::WordProcessingML::MyElement do
+  let(:xml) do
+    '<w:myElement w:val="test" xmlns:w="..."><w:child/></w:myElement>'
+  end
+
+  it 'round-trips through XML' do
+    element = described_class.from_xml(xml)
+    expect(element.value).to eq('test')
+    output = element.to_xml
+    expect(output).to include('myElement')
+  end
+end
+----
+
+== Step 4: Register Autoload
+
+Add the new class to the autoload list in `lib/uniword.rb`:
+
+[source,ruby]
+----
+autoload :MyElement, 'uniword/wordprocessingml/my_element'
+----
+
+Run the full test suite to verify: `bundle exec rspec`
+
+== Adding to an Existing Element
+
+To add a child element to an existing class, edit the schema to add the attribute and mapping, then regenerate. Existing tests will catch any regressions.

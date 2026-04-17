@@ -1,0 +1,54 @@
+---
+layout: default
+title: StyleSets Catalog
+nav_order: 3
+parent: Features
+permalink: /features/stylesets-catalog/
+---
+= StyleSets Catalog
+
+Uniword bundles 12 open-source stylesets that replace the proprietary Microsoft Quick Style Sets. Each styleset defines a complete set of paragraph, character, and table styles.
+
+== Using StyleSets
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+doc.apply_styleset('distinctive')
+----
+
+The `apply_styleset` method applies all styles from the styleset definition to the document's styles part.
+
+== StyleSet List
+
+[cols="1,1,1,4"]
+|===
+| Uniword Name | MS Equivalent | File | Description
+
+| signature | Distinctive | Distinctive.dotx | Bold, distinctive formatting with strong visual hierarchy
+| refined | Elegant | Elegant.dotx | Refined, sophisticated styling with classical proportions
+| ornate | Fancy | Fancy.dotx | Decorative styling with ornamental details
+| ceremonial | Formal | Formal.dotx | Clean, formal styling suitable for business documents
+| scrollwork | Manuscript | Manuscript.dotx | Manuscript-inspired styling with calligraphic influence
+| contemporary | Modern | Modern.dotx | Clean, modern styling with minimal decoration
+| gazette | Newsprint | Newsprint.dotx | Newspaper-inspired styling with columnar layouts
+| outlook | Perspective | Perspective.dotx | Dynamic styling with strong typographic perspective
+| minimal | Simple | Simple.dotx | Minimal styling with clean, unadorned formatting
+| wicker | Thatch | Thatch.dotx | Textured styling with woven pattern influence
+| heritage | Traditional | Traditional.dotx | Traditional styling with classic serif typography
+| classic | Word 2010 | Word 2010.dotx | Classic Word 2010 default styling
+|===
+
+== StyleSet Mapping
+
+The mapping between Uniword names and Microsoft equivalents is defined in `config/theme_mapping.yml`. When a DOCX file references a Microsoft styleset, Uniword can detect and map it to the corresponding open-source styleset.
+
+== StyleSet Structure
+
+Each styleset YAML file contains definitions for:
+
+* **Paragraph styles** -- Normal, headings (1-9), subtitle, title, and more
+* **Character styles** -- Default paragraph font, heading character styles
+* **Table styles** -- Default table formatting with theme-aware colors
+
+All stylesets use the fonts and colors defined in the applied theme, ensuring visual consistency.

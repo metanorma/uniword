@@ -1,0 +1,58 @@
+---
+layout: default
+title: Format Conversion
+nav_order: 16
+parent: Guides
+permalink: /guides/format-conversion/
+---
+= Format Conversion
+
+Convert between DOCX and MHTML formats.
+
+== DOCX to MHTML
+
+[source,ruby]
+----
+# Read DOCX
+doc = Uniword::DocumentFactory.from_file('input.docx')
+
+# Save as MHTML
+doc.save('output.doc')
+----
+
+== MHTML to DOCX
+
+[source,ruby]
+----
+# Read MHTML
+doc = Uniword::DocumentFactory.from_file('input.doc')
+
+# Save as DOCX
+doc.save('output.docx')
+----
+
+== Auto-Detect Format
+
+The format is auto-detected from the file extension:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file('document.docx')
+doc.save('output.mht')  # Auto-converts to MHTML
+----
+
+== CLI Conversion
+
+Use the command-line interface for batch conversions:
+
+[source,shell]
+----
+# Convert DOCX to MHTML
+uniword convert input.docx output.doc
+
+# Convert MHTML to DOCX
+uniword convert input.doc output.docx --verbose
+
+# Specify formats explicitly
+uniword convert input.mht output.docx --from mhtml --to docx
+----

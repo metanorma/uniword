@@ -1,0 +1,58 @@
+---
+layout: default
+title: Font Schemes Catalog
+nav_order: 5
+parent: Features
+permalink: /features/font-schemes-catalog/
+---
+= Font Schemes Catalog
+
+Uniword bundles 25 open-source font schemes that replace proprietary Microsoft theme fonts. Each font scheme defines heading and body font families using OFL-licensed typefaces.
+
+== Using Font Schemes
+
+Font schemes are typically applied as part of a theme. Each theme references a font scheme for its typography.
+
+== Available Font Schemes
+
+All font schemes are defined in `data/font_schemes/*.yml`:
+
+|===
+| Name | Description
+
+| caladea | Caladea serif for both heading and body
+| carlito_caladea | Carlito sans heading, Caladea serif body
+| carlito_liberation | Carlito sans heading, Liberation Serif body
+| carlito_sans | Carlito sans for both heading and body
+| classic_office | Classic Office font pairing
+| eb_garamond | EB Garamond for both heading and body
+| eb_garamond_liberation | EB Garamond heading, Liberation Serif body
+| gelasio | Gelasio serif for both heading and body
+| league_gothic | League Gothic display heading, sans body
+| league_liberation | League Gothic heading, Liberation Serif body
+| liberation_bold_sans | Bold Liberation Sans for headings and body
+| liberation_libre | Liberation Sans heading, Libre Bodoni body
+| liberation_mono_sans | Liberation Mono heading, Liberation Sans body
+| liberation_pair | Liberation Sans heading, Liberation Serif body
+| liberation_reverse | Liberation Serif heading, Liberation Sans body
+| liberation_sans | Liberation Sans for both heading and body
+| liberation_sans_trebuchet | Liberation Sans heading with Trebuchet body
+| libre_bodoni | Libre Bodoni serif for heading and body
+| libre_franklin | Libre Franklin for both heading and body
+| modern_office | Modern Office font pairing
+| source_alfa_slab | Source Sans Pro heading, Alfa Slab One body
+| source_display | Source Sans Pro display pairing
+| source_modern | Source Sans Pro modern pairing
+| source_sans | Source Sans Pro for both heading and body
+| source_sans_century | Source Sans Pro heading, Century schoolbook body
+|===
+
+== Font Scheme Structure
+
+Each font scheme YAML file defines:
+
+* **Heading font** -- The typeface used for headings and titles
+* **Body font** -- The typeface used for body text
+* **Font substitutions** -- Per-script fallbacks for non-Latin writing systems
+
+All fonts referenced in font schemes are OFL-licensed or public domain, ensuring no proprietary dependencies.

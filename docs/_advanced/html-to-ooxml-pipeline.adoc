@@ -1,0 +1,71 @@
+---
+layout: default
+title: HTML to OOXML Pipeline
+nav_order: 3
+parent: Advanced
+permalink: /advanced/html-to-ooxml-pipeline/
+---
+= HTML to OOXML Pipeline
+
+Uniword provides an HTML import pipeline that converts HTML content into OOXML document parts. This enables importing web content, rich text from web editors, and HTML-formatted data into Word documents.
+
+== Pipeline Overview
+
+The HTML-to-OOXML conversion follows these steps:
+
+1. **Parse HTML** -- The HTML input is parsed into a DOM tree
+2. **Map elements** -- HTML elements are mapped to OOXML equivalents
+3. **Convert styles** -- CSS inline styles and class-based styles are converted to OOXML formatting
+4. **Handle images** -- Base64-encoded or linked images are embedded as document parts
+5. **Build document** -- The converted elements are assembled into the document structure
+
+== Element Mapping
+
+HTML elements map to OOXML elements as follows:
+
+[cols="2,2"]
+|===
+| HTML | OOXML
+
+| `<p>` | `<w:p>` (Paragraph)
+| `<h1>` - `<h6>` | `<w:p>` with heading styles
+| `<strong>`, `<b>` | `<w:r>` with `<w:b>` (Bold)
+| `<em>`, `<i>` | `<w:r>` with `<w:i>` (Italic)
+| `<u>` | `<w:r>` with `<w:u>` (Underline)
+| `<ul>` | `<w:p>` with bulleted list numbering
+| `<ol>` | `<w:p>` with numbered list numbering
+| `<table>` | `<w:tbl>` (Table)
+| `<img>` | `<w:drawing>` (Inline image)
+| `<a>` | `<w:hyperlink>` (Hyperlink)
+| `<br>` | `<w:br>` (Break)
+|===
+
+== Style Conversion
+
+CSS properties are converted to OOXML formatting properties:
+
+* `font-size` maps to `<w:sz>` (half-points)
+* `color` maps to `<w:color>` (hex RGB)
+* `font-family` maps to `<w:rFonts>`
+* `text-align` maps to `<w:jc>` (justification)
+* `background-color` maps to `<w:shd>` (shading)
+
+== Usage
+
+[source,ruby]
+----
+# Import HTML into a document
+doc = Uniword::Document.new
+importer = Uniword::HtmlImporter.new(doc)
+importer.import('<h1>Title</h1><p>Paragraph text</p>')
+doc.save('output.docx')
+----
+
+== Limitations
+
+Not all HTML features have OOXML equivalents:
+
+* CSS positioning (`position: absolute`) is not directly supported
+* CSS flexbox/grid layouts have no OOXML counterpart
+* JavaScript-generated content cannot be imported
+* Complex nested lists may require post-processing

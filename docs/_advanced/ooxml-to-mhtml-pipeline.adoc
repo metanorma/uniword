@@ -1,0 +1,79 @@
+---
+layout: default
+title: OOXML to MHTML Pipeline
+nav_order: 4
+parent: Advanced
+permalink: /advanced/ooxml-to-mhtml-pipeline/
+---
+= OOXML to MHTML Pipeline
+
+Uniword converts OOXML documents to MHTML format for Word 2003+ compatibility. The conversion pipeline transforms the OOXML object model into a MIME multipart HTML document.
+
+== Conversion Steps
+
+1. **Extract content** -- The OOXML document model is traversed to extract paragraphs, tables, images, and formatting
+2. **Generate HTML** -- Document elements are converted to HTML with Word-compatible markup
+3. **Generate CSS** -- OOXML styles and themes are translated to CSS rules
+4. **Encode images** -- Binary image data from the DOCX package is encoded as Base64
+5. **Build MIME structure** -- HTML, CSS, and embedded resources are wrapped in a MIME multipart/related structure
+
+== MIME Structure
+
+The MHTML output follows this structure:
+
+```
+MIME-Version: 1.0
+Content-Type: multipart/related; boundary="----=_boundary"
+
+------=_boundary
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<html>
+  <head>
+    <style><!-- CSS rules --></style>
+  </head>
+  <body>
+    <!-- HTML content -->
+    <img src="cid:image001">
+  </body>
+</html>
+
+------=_boundary
+Content-Type: image/png
+Content-Transfer-Encoding: base64
+Content-ID: <image001>
+
+iVBORw0KGgo...base64 data...
+------=_boundary--
+```
+
+== CSS Generation
+
+OOXML formatting is translated to CSS:
+
+Paragraph formatting:: `spacing`, `indentation`, `alignment` become CSS margin, padding, and text-align properties.
+Character formatting:: `bold`, `italic`, `font-size`, `color` become CSS font and color properties.
+Table formatting:: `borders`, `shading`, `cell-padding` become CSS table properties.
+Theme colors:: Resolved to RGB hex values before CSS generation.
+
+== Binary Data Handling
+
+Images and other binary resources are handled as follows:
+
+* Each image in the DOCX package is extracted from its ZIP part
+* The image binary data is Base64-encoded
+* A MIME part is created with the appropriate Content-Type and Content-ID
+* The HTML references the image via `cid:` URI
+
+== Usage
+
+[source,ruby]
+----
+# Convert DOCX to MHTML
+doc = Uniword.load('document.docx')
+doc.save('document.mhtml')
+
+# Or explicitly specify the format
+doc.save('document.mhtml', format: :mhtml)
+----

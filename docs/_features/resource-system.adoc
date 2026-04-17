@@ -1,0 +1,86 @@
+---
+layout: default
+title: Resource System
+nav_order: 1
+parent: Features
+permalink: /features/resource-system/
+---
+= Resource System
+
+Uniword ships with OFL-licensed open-source resources that replace proprietary Microsoft Word assets. These resources allow you to create professional documents without requiring a Microsoft Word installation.
+
+== Resource Files
+
+[cols="2,1,2"]
+|===
+| Resource | Count | Location
+
+| Color schemes | 23 | `data/color_schemes/*.yml`
+| Font schemes | 25 | `data/font_schemes/*.yml`
+| Document elements | 240 | `data/resources/document_elements/{locale}/*.yml`
+| Font registry | 1 | `data/resources/font_registry.yml`
+| XSD schemas | 40 | `data/schemas/{iso,ecma,microsoft}/*.xsd`
+| Stylesets | 12 | `data/stylesets/*.yml`
+| Themes | 29 | `data/themes/*.yml`
+|===
+
+== Supported Locales
+
+30 locales are supported for document elements:
+
+[cols="6,6,6,6,6"]
+|===
+| *Americas* | *Europe* | *Europe (cont.)* | *Middle East* | *Asia*
+
+| en | cs | nl | ar | ja
+| en-GB | da | no | he | ko
+| es | de | pl | | zh-CN
+| es-MX | el | pt | | zh-TW
+| fr | fi | pt-PT | |
+| fr-CA | hu | ru | |
+| | id | sk | |
+| | it | sv | |
+| | | th | |
+| | | tr | |
+|===
+
+== Document Element Categories
+
+Each locale provides 8 categories of document elements (30 locales x 8 categories = 240 files):
+
+[cols="2,4"]
+|===
+| Category | Description
+
+| Bibliographies | Citation and bibliography formatting templates
+| Cover pages | Pre-designed cover page layouts
+| Equations | Equation display templates
+| Footers | Header and footer designs
+| Headers | Document header layouts
+| Table of contents | TOC formatting and styles
+| Tables | Table design templates
+| Watermarks | Document watermark overlays
+|===
+
+== XSD Schemas
+
+Uniword bundles 40 XSD schemas from three sources for DOCX validation:
+
+ISO:: `data/schemas/iso/` -- ISO/IEC 29500 schema files
+ECMA:: `data/schemas/ecma/` -- ECMA-376 schema files
+Microsoft:: `data/schemas/microsoft/` -- Microsoft-specific extensions
+
+These schemas are used by the `uniword verify --xsd` command for rigorous structural validation.
+
+== Usage
+
+[source,ruby]
+----
+# Apply a bundled theme
+doc.apply_theme('celestial')
+
+# Apply a bundled styleset
+doc.apply_styleset('distinctive')
+
+# Resources are loaded automatically from the gem's data directory
+----

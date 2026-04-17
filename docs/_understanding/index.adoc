@@ -1,0 +1,20 @@
+---
+layout: default
+title: Understanding
+nav_order: 4
+has_children: true
+permalink: /understanding/
+---
+= Understanding
+
+Understand how Uniword works conceptually.
+
+== Topics
+
+* link:understanding/architecture/[Architecture] -- 4-layer architecture diagram
+* link:understanding/schema-driven-generation/[Schema-Driven Generation] -- YAML to models
+* link:understanding/ooxml-namespaces/[OOXML Namespaces] -- 22 namespaces
+* link:understanding/prevention-layer/[Prevention Layer] -- Reconciler, auto-fixes
+* link:understanding/autoload-strategy/[Autoload Strategy] -- 95 autoloads
+* link:understanding/docx-package-model/[DOCX Package Model] -- Package class
+* link:understanding/mhtml-format/[MHTML Format] -- MIME structure, CSS generation

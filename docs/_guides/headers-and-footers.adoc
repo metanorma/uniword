@@ -1,0 +1,67 @@
+---
+layout: default
+title: Headers and Footers
+nav_order: 6
+parent: Guides
+permalink: /guides/headers-and-footers/
+---
+= Headers and Footers
+
+Add headers and footers to document sections, including different headers for the first page.
+
+== Adding a Default Header
+
+[source,ruby]
+----
+section = doc.current_section
+header = Uniword::Header.new(type: 'default')
+
+para = Uniword::Paragraph.new
+para.add_text("Page Header", bold: true)
+para.align('center')
+header.add_element(para)
+
+section.default_header = header
+----
+
+== Adding a Footer with Page Numbers
+
+[source,ruby]
+----
+footer = Uniword::Footer.new(type: 'default')
+
+para = Uniword::Paragraph.new
+para.add_text("Page ")
+# Add page number field
+para.add_text("1", field_type: 'page_number')
+para.align('center')
+footer.add_element(para)
+
+section.default_footer = footer
+----
+
+== Different Headers for First Page
+
+Use separate header types to differentiate the first page:
+
+[source,ruby]
+----
+# First page header
+first_header = Uniword::Header.new(type: 'first')
+para = Uniword::Paragraph.new
+para.add_text("First Page Header")
+first_header.add_element(para)
+section.first_header = first_header
+
+# Default header for other pages
+default_header = Uniword::Header.new(type: 'default')
+para = Uniword::Paragraph.new
+para.add_text("Default Header")
+default_header.add_element(para)
+section.default_header = default_header
+----
+
+[TIP]
+====
+To use odd/even page headers, set `section.different_first_page = true` and assign both `odd_header` and `even_header` on the section.
+====

@@ -1,0 +1,22 @@
+---
+layout: default
+title: Features
+nav_order: 5
+has_children: true
+permalink: /features/
+---
+= Features
+
+Detailed feature documentation and catalogs.
+
+== Topics
+
+* link:features/resource-system/[Resource System] -- Overview, counts, locales
+* link:features/themes-catalog/[Themes Catalog] -- 29 bundled themes
+* link:features/stylesets-catalog/[StyleSets Catalog] -- 12 bundled stylesets
+* link:features/color-schemes-catalog/[Color Schemes Catalog] -- 23 color schemes
+* link:features/font-schemes-catalog/[Font Schemes Catalog] -- 25 font schemes
+* link:features/document-elements-catalog/[Document Elements Catalog] -- 30 locales
+* link:features/font-registry/[Font Registry] -- MS to OFL substitution table
+* link:features/error-handling/[Error Handling] -- Exception hierarchy
+* link:features/streaming-and-performance/[Streaming and Performance] -- Performance tips
