@@ -475,7 +475,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.author("Uniword")
 
       # Apply the celestial theme
-      doc.theme("celestial") do |t|
+      doc.theme("constellation") do |t|
         t.fonts(minor: "Calibri")
       end
 
@@ -561,7 +561,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.author("Uniword")
 
       # Apply theme with custom color overrides
-      doc.theme("office_theme") do |t|
+      doc.theme("workspace") do |t|
         t.colors(accent1: "1F4E79", accent2: "2E75B6", accent3: "9DC3E6")
         t.fonts(major: "Georgia", minor: "Calibri")
       end
@@ -910,7 +910,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc = Uniword::Builder::DocumentBuilder.new
       doc.title("Formal Styleset Document")
       doc.author("Uniword")
-      doc.apply_styleset("formal")
+      doc.apply_styleset("ceremonial")
 
       doc.heading("Formal Document", level: 1)
       doc.paragraph do |p|

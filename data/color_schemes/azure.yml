@@ -1,0 +1,17 @@
+---
+name: "Azure"
+description: "Clear sky blue palette inspired by Material Design Blue"
+source: "uniword-generated"
+colors:
+  dk1: "0D1B2A"
+  lt1: "FAFBFC"
+  dk2: "1B3A5C"
+  lt2: "D6E4F0"
+  accent1: "1565C0"
+  accent2: "42A5F5"
+  accent3: "90CAF9"
+  accent4: "00897B"
+  accent5: "26A69A"
+  accent6: "80CBC4"
+  hlink: "1E88E5"
+  folHlink: "64B5F6"

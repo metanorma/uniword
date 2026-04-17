@@ -1,0 +1,21 @@
+---
+layout: default
+title: Development
+nav_order: 8
+has_children: true
+permalink: /development/
+---
+= Development
+
+Contribute to Uniword development.
+
+== Topics
+
+* link:development/contributing/[Contributing] -- How to contribute
+* link:development/development-setup/[Development Setup] -- Setup, bundle, tests
+* link:development/testing/[Testing] -- Test patterns
+* link:development/code-style/[Code Style] -- RuboCop rules
+* link:development/architecture-patterns/[Architecture Patterns] -- lutaml-model patterns, MECE
+* link:development/pattern0-critical-rule/[Pattern 0: Critical Rule] -- Attributes before XML
+* link:development/adding-ooxml-elements/[Adding OOXML Elements] -- Schema YAML, generator
+* link:development/adding-validation-rules/[Adding Validation Rules] -- Rules::Base, example

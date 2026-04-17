@@ -1,0 +1,17 @@
+---
+name: "Scarlet"
+description: "Bold red-orange palette from Tailwind Red"
+source: "uniword-generated"
+colors:
+  dk1: "1F0A0A"
+  lt1: "FFF5F5"
+  dk2: "5C1A1A"
+  lt2: "FECACA"
+  accent1: "DC2626"
+  accent2: "EF4444"
+  accent3: "FCA5A5"
+  accent4: "B91C1C"
+  accent5: "991B1B"
+  accent6: "FEE2E2"
+  hlink: "DC2626"
+  folHlink: "F87171"

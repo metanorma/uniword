@@ -1,0 +1,31 @@
+---
+locale: tr
+category: footers
+description: tr footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Sayfa}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Tarih}"
+    - text: "{Sayfa}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: GİZLİ
+    - text: "{Sayfa}"
+      alignment: right

@@ -1,0 +1,58 @@
+---
+layout: default
+title: Color Schemes Catalog
+nav_order: 4
+parent: Features
+permalink: /features/color-schemes-catalog/
+---
+= Color Schemes Catalog
+
+Uniword bundles 23 open-source color schemes that replace the proprietary Microsoft theme colors. Each color scheme defines 12 theme colors used across document elements.
+
+== Using Color Schemes
+
+Color schemes are typically applied as part of a theme. Each theme references a color scheme for its palette.
+
+== Available Color Schemes
+
+All color schemes are defined in `data/color_schemes/*.yml`:
+
+|===
+| Name | Description
+
+| amber | Warm amber and gold tones
+| azure | Cool sky blue palette
+| burgundy | Deep wine-red tones
+| cerulean | Bright cerulean blues
+| chartreuse | Vibrant yellow-green palette
+| classic | Traditional Office color set
+| cobalt | Rich cobalt blue tones
+| coral | Warm coral and salmon tones
+| crimson | Bold red tones
+| emerald | Rich green tones
+| horizon | Horizon-inspired warm and cool balance
+| indigo | Deep indigo and violet tones
+| lavender | Soft purple and violet tones
+| magenta | Vibrant magenta tones
+| modern | Contemporary professional palette
+| monochrome | Black, white, and gray scale
+| parchment | Warm neutral parchment tones
+| saffron | Golden saffron tones
+| sage | Muted sage green tones
+| scarlet | Bright scarlet red tones
+| solar | Sun-inspired warm palette
+| teal | Cool teal and turquoise tones
+| terrain | Earth-tone natural palette
+|===
+
+== Color Scheme Structure
+
+Each color scheme YAML file defines 12 OOXML theme colors:
+
+* **dk1** -- Dark 1 (primary dark, typically black)
+* **dk2** -- Dark 2 (secondary dark)
+* **lt1** -- Light 1 (primary light, typically white)
+* **lt2** -- Light 2 (secondary light)
+* **accent1** through **accent6** -- Six accent colors
+
+These colors are referenced throughout the document by theme color indices, ensuring consistency.

@@ -1,0 +1,31 @@
+---
+locale: fr-CA
+category: footers
+description: fr-CA footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Page}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Date}"
+    - text: "{Page}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: CONFIDENTIEL
+    - text: "{Page}"
+      alignment: right

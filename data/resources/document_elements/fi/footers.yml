@@ -1,0 +1,31 @@
+---
+locale: fi
+category: footers
+description: fi footers
+elements:
+- name: Page Number
+  description: Page number footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Sivu}"
+      alignment: center
+- name: With Date
+  description: Date and page number
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: "{Päivämäärä}"
+    - text: "{Sivu}"
+      alignment: right
+- name: Confidential
+  description: Confidential footer
+  gallery: footers
+  category: Footers
+  body:
+    paragraphs:
+    - text: LUOTTAMUKSELLINEN
+    - text: "{Sivu}"
+      alignment: right

@@ -1,0 +1,98 @@
+---
+layout: default
+title: Semantic Rules
+nav_order: 4
+parent: Verification
+permalink: /verification/semantic-rules/
+---
+= Semantic Rules
+
+The third layer of Uniword's verification pipeline applies 10 built-in semantic rule categories that check document-level invariants beyond what schema validation can catch.
+
+== Rule Categories
+
+[cols="2,4"]
+|===
+| Rule | What it checks
+
+| Style references | Undefined or unused styles (DOC-001, DOC-002, DOC-003)
+
+| Numbering | Missing or orphaned numbering definitions (DOC-010, DOC-011, DOC-012)
+
+| Footnotes | footnotePr/footnotes.xml cross-reference, separator entries (DOC-020, DOC-021, DOC-022)
+
+| Headers/footers | Missing header/footer reference targets (DOC-030, DOC-031)
+
+| Bookmarks | Duplicate bookmark names, orphaned references (DOC-040, DOC-041, DOC-042)
+
+| Images | Missing relationship targets, content type coverage (DOC-050, DOC-051, DOC-052)
+
+| Tables | Missing or invalid table style references (DOC-060, DOC-061)
+
+| Fonts | Empty font entries, missing font references (DOC-070, DOC-071)
+
+| Theme | Missing theme part, incomplete color/font scheme (DOC-080, DOC-081)
+
+| Settings | Missing or incomplete settings part (DOC-090, DOC-091)
+|===
+
+== Rule Detail
+
+=== Style References (DOC-001 to DOC-003)
+
+* DOC-001: Style referenced in content but not defined in `styles.xml`
+* DOC-002: Style defined in `styles.xml` but never referenced in content
+* DOC-003: Style inheritance chain is broken or circular
+
+=== Numbering (DOC-010 to DOC-012)
+
+* DOC-010: Numbering definition referenced but not defined
+* DOC-011: Numbering definition defined but never referenced
+* DOC-012: Abstract numbering definition referenced by multiple instances
+
+=== Footnotes (DOC-020 to DOC-022)
+
+* DOC-020: `footnotePr` in settings but `footnotes.xml` is missing
+* DOC-021: `footnotes.xml` exists but `footnotePr` is missing from settings
+* DOC-022: Missing separator or continuation footnote entry
+
+=== Headers/Footers (DOC-030 to DOC-031)
+
+* DOC-030: Header reference target part is missing
+* DOC-031: Footer reference target part is missing
+
+=== Bookmarks (DOC-040 to DOC-042)
+
+* DOC-040: Duplicate bookmark name in document
+* DOC-041: Bookmark reference target does not exist
+* DOC-042: Bookmark ID collision
+
+=== Images (DOC-050 to DOC-052)
+
+* DOC-050: Image relationship target is missing
+* DOC-051: Image content type not declared in `[Content_Types].xml`
+* DOC-052: Image file extension does not match content type
+
+=== Tables (DOC-060 to DOC-061)
+
+* DOC-060: Table style reference does not exist
+* DOC-061: Table style is not a table-style type
+
+=== Fonts (DOC-070 to DOC-071)
+
+* DOC-070: Font entry with empty name
+* DOC-071: Font reference to undefined font
+
+=== Theme (DOC-080 to DOC-081)
+
+* DOC-080: Theme part is missing
+* DOC-081: Theme color or font scheme is incomplete
+
+=== Settings (DOC-090 to DOC-091)
+
+* DOC-090: Settings part is missing
+* DOC-091: Settings part is incomplete
+
+== Custom Rules
+
+Custom rules can be registered via `Uniword::Validation::Rules.register(MyRule)`. See link:/verification/custom-rules/[Custom Rules] for details.

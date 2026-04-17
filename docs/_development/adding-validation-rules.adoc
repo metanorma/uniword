@@ -1,0 +1,111 @@
+---
+layout: default
+title: Adding Validation Rules
+nav_order: 8
+parent: Development
+permalink: /development/adding-validation-rules/
+---
+= Adding Validation Rules
+
+Uniword's verification pipeline is extensible. New validation rules can be added for organization-specific document requirements.
+
+== Step 1: Create the Rule Class
+
+Inherit from `Uniword::Validation::Rules::Base` and implement the required methods:
+
+[source,ruby]
+----
+# lib/uniword/validation/rules/my_custom_rule.rb
+module Uniword
+  module Validation
+    module Rules
+      class NoExternalLinks < Base
+        code 'CUSTOM-001'
+        severity :error
+        description 'Document must not contain external hyperlinks'
+
+        def check(package, issues)
+          document = package.document
+          return unless document&.body
+
+          document.body.paragraphs.each do |para|
+            check_paragraph(para, issues)
+          end
+        end
+
+        private
+
+        def check_paragraph(paragraph, issues)
+          paragraph.runs.each do |run|
+            next unless run.respond_to?(:hyperlink?)
+            next unless run.hyperlink?
+
+            issues << issue(
+              "External hyperlink found: #{run.link_target}",
+              location: "paragraph '#{paragraph.text.truncate(40)}'"
+            )
+          end
+        end
+      end
+    end
+  end
+end
+----
+
+== Step 2: Define Rule Attributes
+
+Every rule class must define:
+
+code:: A unique string identifier (e.g., `'CUSTOM-001'`). Use a prefix that distinguishes custom rules from built-in ones (`DOC-`, `OPC-`).
+
+severity:: One of `:error`, `:warning`, or `:info`. Errors cause verification to fail.
+
+description:: A human-readable description of what the rule checks.
+
+== Step 3: Register the Rule
+
+Register with the validation registry:
+
+[source,ruby]
+----
+Uniword::Validation::Rules.register(
+  Uniword::Validation::Rules::NoExternalLinks
+)
+----
+
+== Step 4: Write Tests
+
+[source,ruby]
+----
+RSpec.describe Uniword::Validation::Rules::NoExternalLinks do
+  it 'reports external hyperlinks as errors' do
+    package = create_package_with_hyperlink('http://example.com')
+    issues = []
+    described_class.new.check(package, issues)
+    expect(issues.length).to eq(1)
+    expect(issues.first.code).to eq('CUSTOM-001')
+  end
+
+  it 'passes documents without hyperlinks' do
+    package = create_simple_package
+    issues = []
+    described_class.new.check(package, issues)
+    expect(issues).to be_empty
+  end
+end
+----
+
+== Built-in Rule Categories
+
+The built-in rules serve as examples for custom rule development:
+
+* Style references (DOC-001 to DOC-003)
+* Numbering (DOC-010 to DOC-012)
+* Footnotes (DOC-020 to DOC-022)
+* Headers/footers (DOC-030 to DOC-031)
+* Bookmarks (DOC-040 to DOC-042)
+* Images (DOC-050 to DOC-052)
+* Tables (DOC-060 to DOC-061)
+* Fonts (DOC-070 to DOC-071)
+* Theme (DOC-080 to DOC-081)
+* Settings (DOC-090 to DOC-091)

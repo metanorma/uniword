@@ -1,0 +1,17 @@
+---
+layout: default
+title: Getting Started
+nav_order: 1
+has_children: true
+permalink: /getting-started/
+---
+= Getting Started
+
+Get Uniword up and running in 5 minutes.
+
+== Topics
+
+* link:getting-started/installation/[Installation] -- Install the gem
+* link:getting-started/quick-start/[Quick Start] -- Create your first document
+* link:getting-started/core-concepts/[Core Concepts] -- OOXML, models, round-trips
+* link:getting-started/your-first-document/[Your First Document] -- Step-by-step walkthrough

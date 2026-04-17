@@ -1,0 +1,57 @@
+---
+layout: default
+title: convert
+nav_order: 3
+parent: CLI
+permalink: /interfaces/cli/convert-command/
+---
+= convert
+
+Convert a document between DOCX and MHTML formats.
+
+== Usage
+
+[source,shell]
+----
+uniword convert INPUT OUTPUT
+----
+
+== Options
+
+`--from`, `-f`::
+Input format (`docx` or `mhtml`). Default: auto-detected from file extension.
+
+`--to`, `-t`::
+Output format (`docx` or `mhtml`). Default: auto-detected from file extension.
+
+`--verbose`, `-v`::
+Show detailed conversion progress.
+
+== Examples
+
+Convert DOCX to MHTML:
+
+[source,shell]
+----
+uniword convert input.docx output.doc
+----
+
+Convert MHTML to DOCX with verbose output:
+
+[source,shell]
+----
+uniword convert input.doc output.docx --verbose
+----
+
+Specify formats explicitly (useful for unusual file extensions):
+
+[source,shell]
+----
+uniword convert input.mht output.docx --from mhtml --to docx
+----
+
+== How it works
+
+The command loads the input document with `DocumentFactory.from_file`,
+which auto-detects the format, then saves it with the target format. All
+content, styles, and formatting are preserved during conversion.

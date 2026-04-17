@@ -1,0 +1,197 @@
+---
+name: Plumage
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Plumage
+  colors:
+    accent1: '606372'
+    accent2: 79A8A4
+    accent3: B2AD8F
+    accent4: AD8082
+    accent5: DEC18C
+    accent6: 92A185
+    dk1: '000000'
+    dk2: '121316'
+    folHlink: 8E8CA7
+    hlink: 85C4D2
+    lt1: FFFFFF
+    lt2: FEFCF7
+font_scheme:
+  name: Plumage
+  major_font: Libre Bodoni
+  minor_font: Carlito
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Plumage Variant 1
+      colors:
+        accent1: '606372'
+        accent2: 79A8A4
+        accent3: B2AD8F
+        accent4: AD8082
+        accent5: DEC18C
+        accent6: 92A185
+        dk1: '000000'
+        dk2: '121316'
+        folHlink: 8E8CA7
+        hlink: 85C4D2
+        lt1: FFFFFF
+        lt2: FEFCF7
+    font_scheme:
+      name: Plumage Variant 1
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Plumage Variant 2
+      colors:
+        accent1: 72626E
+        accent2: AD8082
+        accent3: E9B29A
+        accent4: 72A59F
+        accent5: '798375'
+        accent6: '336971'
+        dk1: '000000'
+        dk2: 1C181C
+        folHlink: 72626E
+        hlink: 72A59F
+        lt1: FFFFFF
+        lt2: FEFCF7
+    font_scheme:
+      name: Plumage Variant 2
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Plumage Variant 3
+      colors:
+        accent1: 72626E
+        accent2: AD8082
+        accent3: E9B29A
+        accent4: 72A59F
+        accent5: '798375'
+        accent6: '336971'
+        dk1: '000000'
+        dk2: 1C181C
+        folHlink: 72626E
+        hlink: 72A59F
+        lt1: FFFFFF
+        lt2: FEFCF7
+    font_scheme:
+      name: Plumage Variant 3
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Plumage Variant 4
+      colors:
+        accent1: 78475D
+        accent2: A7D068
+        accent3: 78C5CF
+        accent4: D36E88
+        accent5: D3C588
+        accent6: ED9E57
+        dk1: '000000'
+        dk2: 1E1217
+        folHlink: D36E88
+        hlink: 78C5CF
+        lt1: FFFFFF
+        lt2: FAFDFD
+    font_scheme:
+      name: Plumage Variant 4
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Plumage Variant 5
+      colors:
+        accent1: 78475D
+        accent2: A7D068
+        accent3: 78C5CF
+        accent4: D36E88
+        accent5: D3C588
+        accent6: ED9E57
+        dk1: '000000'
+        dk2: 1E1217
+        folHlink: D36E88
+        hlink: 78C5CF
+        lt1: FFFFFF
+        lt2: FAFDFD
+    font_scheme:
+      name: Plumage Variant 5
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Plumage Variant 6
+      colors:
+        accent1: '856835'
+        accent2: 454F52
+        accent3: '236869'
+        accent4: AD6675
+        accent5: '795272'
+        accent6: 387D9D
+        dk1: '000000'
+        dk2: '162327'
+        folHlink: AD6675
+        hlink: 387D9D
+        lt1: FFFFFF
+        lt2: FDFCFA
+    font_scheme:
+      name: Plumage Variant 6
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Plumage Variant 7
+      colors:
+        accent1: '856835'
+        accent2: 454F52
+        accent3: '236869'
+        accent4: AD6675
+        accent5: '795272'
+        accent6: 387D9D
+        dk1: '000000'
+        dk2: '162327'
+        folHlink: AD6675
+        hlink: 387D9D
+        lt1: FFFFFF
+        lt2: FDFCFA
+    font_scheme:
+      name: Plumage Variant 7
+      major_font: Libre Bodoni
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Feathered

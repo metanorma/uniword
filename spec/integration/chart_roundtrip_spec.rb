@@ -21,7 +21,7 @@ RSpec.describe "Chart Round-trip Integration" do
         doc.model.to_file(temp_path)
 
         # Load it back via DocxPackage
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         # Verify chart was preserved in chart_parts
         expect(package.document.chart_parts).not_to be_nil
@@ -52,7 +52,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         expect(package.document.chart_parts.size).to eq(2)
         chart_targets = package.document.chart_parts.values.map { |c| c[:target] }
@@ -69,7 +69,7 @@ RSpec.describe "Chart Round-trip Integration" do
         doc.paragraph { |p| p << "No charts here" }
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         expect(package.document.chart_parts.nil? || package.document.chart_parts.empty?).to be(true)
       ensure
@@ -89,7 +89,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include("Pie Chart")
@@ -112,7 +112,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include("Data Points")
@@ -137,7 +137,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include("<c:barChart")
@@ -158,7 +158,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include("<c:lineChart")
@@ -179,7 +179,7 @@ RSpec.describe "Chart Round-trip Integration" do
         end
 
         doc.model.to_file(temp_path)
-        package = Uniword::Ooxml::DocxPackage.from_file(temp_path)
+        package = Uniword::Docx::Package.from_file(temp_path)
 
         chart_data = package.document.chart_parts.values.first
         expect(chart_data[:xml]).to include("<c:pieChart")

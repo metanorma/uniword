@@ -1,0 +1,138 @@
+---
+layout: default
+title: Custom Resources
+nav_order: 21
+parent: Guides
+permalink: /guides/custom-resources/
+---
+= Custom Resources
+
+Create custom themes, style sets, color schemes, and font schemes for your documents.
+
+== Overview
+
+Uniword's resource system uses YAML files with OFL-licensed fonts and open-source
+color values. You can create custom resources that integrate with the same loading
+and application pipeline as the bundled resources.
+
+For the complete authoring reference, see the
+link:../resource-authoring/[Resource Authoring] guide.
+
+== Creating a Custom Color Scheme
+
+Color scheme files define 12 named colors. Place them in `data/color_schemes/`:
+
+[source,yaml]
+----
+# data/color_schemes/my_brand.yml
+---
+name: "My Brand"
+description: "Corporate color palette"
+source: "uniword-generated"
+colors:
+  dk1: "1A1206"
+  lt1: "FFFCF5"
+  dk2: "5C3D1A"
+  lt2: "FEF3C7"
+  accent1: "D97706"
+  accent2: "F59E0B"
+  accent3: "FCD34D"
+  accent4: "B45309"
+  accent5: "92400E"
+  accent6: "FDE68A"
+  hlink: "D97706"
+  folHlink: "FBBF24"
+----
+
+Load and apply your custom color scheme:
+
+[source,ruby]
+----
+scheme = Uniword::Resource::ColorSchemeLoader.load("my_brand")
+puts scheme.name    # => "My Brand"
+puts scheme.colors  # => { "dk1" => "1A1206", ... }
+----
+
+== Creating a Custom Font Scheme
+
+Font scheme files define major/minor fonts for headings and body text:
+
+[source,yaml]
+----
+# data/font_schemes/my_fonts.yml
+---
+name: "My Fonts"
+description: "Custom font pairing"
+source: "uniword-generated"
+major:
+  latin: "Source Sans 3"
+  east_asian: "Noto Sans CJK JP"
+  complex_script: "Noto Sans Arabic"
+minor:
+  latin: "Source Serif 4"
+  east_asian: "Noto Serif CJK JP"
+  complex_script: "Noto Sans Arabic"
+per_script:
+  Jpan: "Noto Sans CJK JP"
+  Hans: "Noto Sans CJK SC"
+  # ... 30 more script codes
+----
+
+[IMPORTANT]
+====
+All fonts must use OFL, Apache 2.0, or Public Domain licenses. Never reference
+Microsoft proprietary fonts (Calibri, Arial, Cambria, etc.).
+====
+
+== Creating a Custom Theme
+
+Combine a color scheme and font scheme into a theme:
+
+[source,yaml]
+----
+# data/themes/my_theme.yml
+---
+name: "My Theme"
+source: "uniword-generated"
+imported_at: 2025-01-01T00:00:00+00:00
+color_scheme:
+  name: "My Brand"
+  colors: { ... }
+font_scheme:
+  name: "My Fonts"
+  major_font: "Source Sans 3"
+  minor_font: "Source Serif 4"
+  major_east_asian: "Noto Sans CJK JP"
+  minor_east_asian: "Noto Serif CJK JP"
+----
+
+Load and apply your custom theme:
+
+[source,ruby]
+----
+theme = Uniword::Themes::Theme.load("my_theme")
+word_theme = theme.to_word_theme
+
+doc = Uniword::Document.new
+doc.theme = word_theme
+doc.save('custom_themed.docx')
+----
+
+== Font Substitution
+
+Register MS font substitutions for your custom resources:
+
+[source,yaml]
+----
+# In data/resources/font_registry.yml
+substitutions:
+  "My Custom Font": "Source Sans 3"
+----
+
+Use the substitution API:
+
+[source,ruby]
+----
+Uniword::Resource::FontSubstitutor.substitute("Calibri")  # => "Carlito"
+Uniword::Resource::FontSubstitutor.substitute("Arial")    # => "Liberation Sans"
+----

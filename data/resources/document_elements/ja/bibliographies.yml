@@ -1,0 +1,13 @@
+---
+locale: ja
+category: bibliographies
+description: ja bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: 著者 (年). タイトル. 出版社.
+    - text: 著者 (年). タイトル. 雑誌.

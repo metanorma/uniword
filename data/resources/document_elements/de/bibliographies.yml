@@ -1,0 +1,13 @@
+---
+locale: de
+category: bibliographies
+description: de bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autor. Titel. Verlag.
+    - text: Autor. Titel. Zeitschrift.

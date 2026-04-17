@@ -1,0 +1,156 @@
+---
+layout: default
+title: Builder API
+nav_order: 3
+parent: Ruby API
+permalink: /interfaces/ruby-api/builder-api/
+---
+= Builder API
+
+The Builder provides a fluent, declarative interface for constructing
+documents. It wraps the lower-level model classes with a chainable API
+that reads like a document outline.
+
+== Basic usage
+
+`Builder.new` returns a builder instance. Chain methods to add content,
+then call `build` to produce a `Document`.
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading("My Document", level: 1)
+  .add_paragraph("Introduction paragraph")
+  .add_blank_line
+  .add_heading("Section 1", level: 2)
+  .add_paragraph("Section content", bold: true)
+  .add_paragraph("Conclusion")
+  .build
+
+doc.save("output.docx")
+----
+
+== Headings
+
+Add heading paragraphs with `add_heading`. The `level` option maps to
+Heading1 through Heading9.
+
+[source,ruby]
+----
+builder = Uniword::Builder.new
+builder.add_heading("Title", level: 1)
+builder.add_heading("Chapter", level: 2)
+builder.add_heading("Subsection", level: 3)
+----
+
+== Paragraphs and text formatting
+
+`add_paragraph` accepts text with inline formatting options:
+
+[source,ruby]
+----
+builder
+  .add_paragraph("Bold text", bold: true)
+  .add_paragraph("Italic text", italic: true)
+  .add_paragraph("Underlined text", underline: "single")
+  .add_paragraph("Red text", color: "FF0000")
+  .add_paragraph("Large text", size: 24)
+  .add_paragraph("Custom font", font: "Arial")
+  .add_paragraph("Combined", bold: true, italic: true, color: "FF0000",
+                  size: 18)
+----
+
+`add_blank_line` inserts an empty paragraph.
+
+== Tables
+
+Tables use a nested block DSL:
+
+[source,ruby]
+----
+builder.add_table do
+  row do
+    cell "Header 1", bold: true
+    cell "Header 2", bold: true
+  end
+  row do
+    cell "Data 1"
+    cell "Data 2"
+  end
+end
+----
+
+== Styles
+
+Apply built-in or custom styles to paragraphs:
+
+[source,ruby]
+----
+builder.add_paragraph("Heading text", heading: :heading_1)
+builder.add_paragraph("Body text", style: "Normal")
+----
+
+== Themes and StyleSets
+
+Apply visual resources to the document before or after building:
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading("Styled Document", level: 1)
+  .add_paragraph("Content with theme colors.")
+  .build
+
+doc.apply_theme("celestial")
+doc.apply_styleset("distinctive")
+doc.save("styled.docx")
+----
+
+== Lists
+
+Create numbered and bulleted lists by setting numbering properties on
+paragraphs:
+
+[source,ruby]
+----
+builder
+  .add_paragraph("First item", numbering_id: 1, numbering_level: 0)
+  .add_paragraph("Second item", numbering_id: 1, numbering_level: 0)
+  .add_paragraph("Sub-item", numbering_id: 1, numbering_level: 1)
+----
+
+== Images
+
+Add images with dimensions and optional positioning:
+
+[source,ruby]
+----
+builder.add_image("logo.png", width: 300, height: 200)
+
+# Positioned image
+builder.add_image("logo.png", width: 100, height: 100,
+                  position: { horizontal: "center", vertical: "top" })
+----
+
+== Chaining
+
+Every method returns the builder, so you can chain calls fluently:
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading("Report", level: 1)
+  .add_paragraph("Executive summary.")
+  .add_table do
+    row do
+      cell "Q1"
+      cell "1,000"
+    end
+    row do
+      cell "Q2"
+      cell "1,500"
+    end
+  end
+  .add_paragraph("End of report.")
+  .build
+----

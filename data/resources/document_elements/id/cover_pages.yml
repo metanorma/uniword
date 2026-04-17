@@ -1,0 +1,26 @@
+---
+locale: id
+category: cover_pages
+description: id cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Judul}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Subjudul}"
+      alignment: center
+    - style: Normal
+      text: "{Penulis}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Tanggal}"
+      alignment: center
+      space_after: 1440

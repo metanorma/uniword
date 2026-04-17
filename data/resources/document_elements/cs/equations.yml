@@ -1,0 +1,21 @@
+---
+locale: cs
+category: equations
+description: cs equations
+elements:
+- name: Numbered
+  description: Numbered equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Rovnice}"
+      alignment: center
+- name: Display
+  description: Display equation
+  gallery: equations
+  category: Equations
+  body:
+    paragraphs:
+    - text: "{Rovnice}"
+      alignment: center

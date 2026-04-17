@@ -1,0 +1,102 @@
+---
+layout: default
+title: theme
+nav_order: 7
+parent: CLI
+permalink: /interfaces/cli/theme-commands/
+---
+= theme
+
+Manage document themes: list bundled themes, import `.thmx` files, apply
+themes to documents, or auto-transition from Microsoft themes to Uniword
+equivalents.
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `list`
+| List all bundled themes
+
+| `import`
+| Import `.thmx` files to YAML
+
+| `apply INPUT OUTPUT`
+| Apply a theme to a document
+
+| `auto INPUT OUTPUT`
+| Auto-transition MS theme to Uniword equivalent
+|===
+
+== list
+
+Display all themes bundled with Uniword.
+
+[source,shell]
+----
+uniword theme list
+uniword theme list --verbose
+----
+
+`--verbose` shows theme name, color count, and variant count for each
+entry.
+
+== import
+
+Import Office `.thmx` theme files to YAML format for faster loading and
+human readability.
+
+[source,shell]
+----
+uniword theme import
+uniword theme import --source themes/ --output data/themes
+----
+
+`--source` sets the input directory (default: `references/word-package/office-themes`).
+
+`--output` sets the output directory (default: `data/themes`).
+
+== apply
+
+Apply a bundled or file-based theme to a document.
+
+[source,shell]
+----
+# Apply a bundled theme by name
+uniword theme apply input.docx output.docx --name atlas
+
+# Apply with a specific variant
+uniword theme apply input.docx output.docx --name atlas --variant 2
+
+# Apply a .thmx file
+uniword theme apply input.docx output.docx --file themes/Office.thmx
+----
+
+Options:
+
+`--name`:: Bundled theme name (e.g., `atlas`, `celestial`, `meridian`)
+`--file`:: Path to a `.thmx` file
+`--variant`:: Theme variant number (e.g., `1`, `2`)
+`--verbose`, `-v`:: Show detailed output
+
+You must specify `--name` or `--file`, but not both.
+
+== auto
+
+Detect the Microsoft Word theme in a document and automatically replace it
+with the matching Uniword theme using color fingerprint matching.
+
+[source,shell]
+----
+uniword theme auto ms_report.docx uniword_report.docx
+uniword theme auto input.docx output.docx --verbose
+----
+
+This replaces proprietary Microsoft fonts with open-source alternatives.
+
+== Bundled themes
+
+Uniword ships with 29 Office themes including Atlas, Berlin, Celestial,
+Facet, Gallery, Ion, Madison, Office, Organic, Slice, and Wood Type. Use
+`uniword theme list` to see all available names.

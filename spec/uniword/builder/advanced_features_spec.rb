@@ -148,7 +148,7 @@ end
 RSpec.describe Uniword::Builder::DocumentBuilder, "#apply_styleset" do
   it "applies a bundled styleset" do
     doc = described_class.new
-    result = doc.apply_styleset("formal")
+    result = doc.apply_styleset("ceremonial")
 
     expect(result).to eq(doc)
     # Verify styles were added to configuration
@@ -158,7 +158,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#apply_styleset" do
 
   it "accepts strategy option" do
     doc = described_class.new
-    doc.apply_styleset("modern", strategy: :replace)
+    doc.apply_styleset("contemporary", strategy: :replace)
     # Should not raise
     expect(doc.model.styles_configuration.styles.size).to be > 0
   end
@@ -285,7 +285,7 @@ end
 RSpec.describe "Scenario: Document with styleset" do
   it "applies formal styleset" do
     doc = Uniword::Builder::DocumentBuilder.new
-    doc.apply_styleset("formal")
+    doc.apply_styleset("ceremonial")
     doc.heading("Styled Heading", level: 1)
     doc.paragraph { |p| p << "Styled paragraph" }
 
@@ -315,8 +315,8 @@ RSpec.describe "Scenario: Complete document with all Phase 12-14 features" do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.title("Advanced Document")
     doc.author("Author")
-    doc.apply_styleset("formal")
-    doc.theme("atlas")
+    doc.apply_styleset("ceremonial")
+    doc.theme("meridian")
 
     # Section with headers/footers
     doc.section do |s|

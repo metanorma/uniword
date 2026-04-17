@@ -631,7 +631,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
     end
 
     it "round-trips APA fixture preserving custom properties" do
-      package = Uniword::Ooxml::DocxPackage.from_file(apa_path)
+      package = Uniword::Docx::Package.from_file(apa_path)
       expect(package.custom_properties).to be_a(Uniword::Ooxml::CustomProperties)
       expect(package.custom_properties.properties.size).to eq(1)
       expect(package.custom_properties.properties.first.name).to eq("AssetID")
@@ -639,7 +639,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
     end
 
     it "round-trips APA fixture preserving bibliography in customXml" do
-      package = Uniword::Ooxml::DocxPackage.from_file(apa_path)
+      package = Uniword::Docx::Package.from_file(apa_path)
       expect(package.custom_xml_items).not_to be_empty
       item1 = package.custom_xml_items.find { |i| i[:index] == 1 }
       expect(item1).not_to be_nil
@@ -648,7 +648,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
     end
 
     it "round-trips cover-toc fixture with multiple custom properties" do
-      package = Uniword::Ooxml::DocxPackage.from_file(cover_toc_path)
+      package = Uniword::Docx::Package.from_file(cover_toc_path)
       expect(package.custom_properties).to be_a(Uniword::Ooxml::CustomProperties)
       expect(package.custom_properties.properties.size).to eq(3)
       names = package.custom_properties.properties.map(&:name)
@@ -656,13 +656,13 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
     end
 
     it "round-trips cover-toc fixture preserving customXml items" do
-      package = Uniword::Ooxml::DocxPackage.from_file(cover_toc_path)
+      package = Uniword::Docx::Package.from_file(cover_toc_path)
       expect(package.custom_xml_items).not_to be_empty
       expect(package.custom_xml_items.size).to be >= 2
     end
 
     it "round-trips APA fixture preserving app.xml basic fields" do
-      package = Uniword::Ooxml::DocxPackage.from_file(apa_path)
+      package = Uniword::Docx::Package.from_file(apa_path)
       app = package.app_properties
       expect(app.template).to eq("APA Style Paper.dotx")
       expect(app.pages).to eq("9")

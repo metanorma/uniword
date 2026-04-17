@@ -1,0 +1,13 @@
+---
+locale: zh-TW
+category: bibliographies
+description: zh-TW bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: 作者. 標題. 出版社.
+    - text: 作者. 標題. 期刊.

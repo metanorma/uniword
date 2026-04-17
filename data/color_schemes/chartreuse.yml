@@ -1,0 +1,17 @@
+---
+name: "Chartreuse"
+description: "Yellow-green palette from Tailwind Lime"
+source: "uniword-generated"
+colors:
+  dk1: "141F0A"
+  lt1: "FCFEF5"
+  dk2: "3F5A1A"
+  lt2: "ECFCCB"
+  accent1: "65A30D"
+  accent2: "84CC16"
+  accent3: "BEF264"
+  accent4: "4D7C0F"
+  accent5: "3F6212"
+  accent6: "D9F99D"
+  hlink: "65A30D"
+  folHlink: "A3E635"

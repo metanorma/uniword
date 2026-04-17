@@ -1,0 +1,73 @@
+---
+layout: default
+title: Glossary Deep Dive
+nav_order: 1
+parent: Advanced
+permalink: /advanced/glossary-deep-dive/
+---
+= Glossary Deep Dive
+
+The OOXML glossary (g: namespace) provides Word's building blocks system -- reusable content fragments that include AutoText entries, document parts, and Quick Parts. Uniword models the complete glossary structure.
+
+== Building Blocks
+
+Building blocks are reusable document fragments stored in a glossary document part. Each building block has:
+
+Name:: A human-readable name for the building block.
+Gallery:: The category it belongs to (headers, footers, cover pages, etc.).
+Category:: A sub-category within the gallery.
+Description:: A description shown in the building block organizer.
+Type:: Whether the block is a document, template, or gallery item.
+
+== Gallery Types
+
+OOXML defines several gallery types that correspond to the Word Quick Parts organizer:
+
+* **Custom** -- User-defined building blocks
+* **AutoText** -- Classic AutoText entries
+* **Cover pages** -- Pre-designed cover page layouts
+* **Bibliographies** -- Bibliography formatting templates
+* **Equations** -- Equation display templates
+* **Quick parts** -- General-purpose reusable content
+* **Footer** -- Footer designs
+* **Header** -- Header designs
+* **Page numbers** -- Page number layouts
+* **Table of contents** -- TOC formatting templates
+* **Tables** -- Table design templates
+* **Watermarks** -- Document watermark overlays
+
+== Template Structure
+
+A glossary document part (`word/glossary/document.xml`) has the same structure as a regular document:
+
+[source,ruby]
+----
+# Glossary document contains building blocks
+glossary = package.glossary_document
+glossary.building_blocks.each do |block|
+  puts block.name
+  puts block.gallery
+  puts block.category
+  # Each block has its own body with paragraphs, tables, etc.
+  block.body.paragraphs.each { |p| puts p.text }
+end
+----
+
+== Building Block Entries
+
+Each building block entry is wrapped in a `<w:docPart>` element that contains:
+
+Properties:: Name, gallery, category, description, type, and behavior flags.
+Body:: The actual document content (paragraphs, runs, tables, images).
+
+The body content uses the same WordProcessingML elements as regular document content.
+
+== Usage
+
+Building blocks are typically used through the document elements system:
+
+* Uniword bundles 240 document element templates across 30 locales
+* These templates are stored as YAML definitions and can be loaded into glossary parts
+* The `uniword resources export` command can extract building blocks from a Word installation
+
+See link:/features/document-elements-catalog/[Document Elements Catalog] for the complete list of bundled templates.

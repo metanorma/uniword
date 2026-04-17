@@ -1,0 +1,119 @@
+---
+layout: default
+title: verify
+nav_order: 6
+parent: CLI
+permalink: /interfaces/cli/verify-command/
+---
+= verify
+
+Perform comprehensive DOCX verification across three layers: OPC package,
+XSD schema, and semantic checks.
+
+== Usage
+
+[source,shell]
+----
+uniword verify FILE
+----
+
+== Options
+
+`--verbose`, `-v`::
+Show all issues including info-level findings.
+
+`--json`::
+Output the verification report as JSON.
+
+`--yaml`::
+Output the verification report as YAML.
+
+`--xsd`::
+Enable XSD schema validation against bundled schemas. This is slower but
+more thorough.
+
+== Examples
+
+Basic verification (OPC + semantic):
+
+[source,shell]
+----
+uniword verify document.docx
+----
+
+Enable XSD validation:
+
+[source,shell]
+----
+uniword verify document.docx --xsd
+----
+
+Machine-readable JSON output:
+
+[source,shell]
+----
+uniword verify document.docx --json
+----
+
+== Three verification layers
+
+[cols="1,2,4"]
+|===
+| Layer | Checks | Examples
+
+| OPC Package
+| ZIP integrity, content types, relationships, part presence
+| ZIP opens correctly, `[Content_Types].xml` is valid, `document.xml` exists
+
+| XSD Schema
+| XML schema validation using 40 bundled XSD files
+| Namespace-aware validation against ISO, ECMA, and Microsoft schemas
+
+| Word Document
+| Semantic checks for cross-references, styles, numbering
+| Undefined styles, orphaned numbering, missing footnote references
+|===
+
+== Built-in semantic rules
+
+[cols="2,4"]
+|===
+| Category | What it checks
+
+| Style references
+| Undefined or unused styles
+
+| Numbering
+| Missing or orphaned numbering definitions
+
+| Footnotes
+| `footnotePr` / `footnotes.xml` cross-reference, separator entries
+
+| Headers/footers
+| Missing reference targets
+
+| Bookmarks
+| Duplicate names, orphaned references
+
+| Images
+| Missing relationship targets, content type coverage
+
+| Tables
+| Missing or invalid table style references
+
+| Fonts
+| Empty font entries, missing font references
+
+| Theme
+| Missing theme part, incomplete color or font scheme
+
+| Settings
+| Missing or incomplete settings part
+|===
+
+You can register custom rules with `Uniword::Validation::Rules.register`.
+
+== Exit codes
+
+* `0` -- Document passed all checks
+* `1` -- One or more issues found

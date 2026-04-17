@@ -1,0 +1,83 @@
+---
+layout: default
+title: Footnotes and Endnotes
+nav_order: 7
+parent: Guides
+permalink: /guides/footnotes-and-endnotes/
+---
+= Footnotes and Endnotes
+
+Add footnote and endnote references, and rely on the prevention layer for structural correctness.
+
+== Adding Footnotes
+
+[source,ruby]
+----
+# Add text with footnote reference
+para = Uniword::Paragraph.new
+para.add_text("This text has a footnote")
+para.add_text("1", footnote_ref: true)
+
+# Create footnote
+footnote = Uniword::Footnote.new(id: 1)
+footnote_para = Uniword::Paragraph.new
+footnote_para.add_text("This is the footnote text")
+footnote.add_element(footnote_para)
+
+doc.footnotes << footnote
+doc.add_element(para)
+----
+
+== Adding Endnotes
+
+[source,ruby]
+----
+# Add text with endnote reference
+para = Uniword::Paragraph.new
+para.add_text("This text has an endnote")
+para.add_text("i", endnote_ref: true)
+
+# Create endnote
+endnote = Uniword::Endnote.new(id: 1)
+endnote_para = Uniword::Paragraph.new
+endnote_para.add_text("This is the endnote text")
+endnote.add_element(endnote_para)
+
+doc.endnotes << endnote
+doc.add_element(para)
+----
+
+== Prevention Layer
+
+Uniword includes a *prevention layer* (`Docx::Reconciler`) that runs automatically
+during serialization. It enforces cross-part invariants so structurally invalid
+DOCX output becomes impossible.
+
+The reconciler runs in `Docx::Package#to_zip_content` before the serialization
+phase. It is not an extension point -- it enforces built-in DOCX invariants.
+
+[cols="2,3"]
+|===
+| Condition | Auto-fix
+
+| `footnotePr` set, no `footnotes.xml`
+| Create minimal footnotes with separator entries
+
+| `footnotes.xml` exists, no `footnotePr`
+| Create `FootnotePr` in settings
+
+| `endnotePr` set, no `endnotes.xml`
+| Create minimal endnotes with separator entries
+
+| `endnotes.xml` exists, no `endnotePr`
+| Create `EndnotePr` in settings
+
+| Missing separator entry (id=-1)
+| Inject separator
+
+| Missing continuation entry (id=0)
+| Inject continuation
+|===
+
+You do not need to call the reconciler manually. It runs every time you save a document.
+For customizable validation, use `uniword verify` or `Uniword::Validation::Rules`.

@@ -1,0 +1,197 @@
+---
+name: Workspace
+source: uniword-generated
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Workspace
+  colors:
+    accent1: '156082'
+    accent2: E97132
+    accent3: 196B24
+    accent4: 0F9ED5
+    accent5: A02B93
+    accent6: 4EA72E
+    dk1: '000000'
+    dk2: 0E2841
+    folHlink: 96607D
+    hlink: '467886'
+    lt1: FFFFFF
+    lt2: E8E8E8
+font_scheme:
+  name: Workspace
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Workspace Variant 1
+      colors:
+        accent1: 196B24
+        accent2: 4EA72E
+        accent3: '156082'
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: E97132
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: 96607D
+        hlink: '467886'
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 1
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Workspace Variant 2
+      colors:
+        accent1: '156082'
+        accent2: E97132
+        accent3: 196B24
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: 4EA72E
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: A5738E
+        hlink: 538D9D
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 2
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Workspace Variant 3
+      colors:
+        accent1: 196B24
+        accent2: 4EA72E
+        accent3: '156082'
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: E97132
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: A5738E
+        hlink: 538D9D
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 3
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Workspace Variant 4
+      colors:
+        accent1: '156082'
+        accent2: E97132
+        accent3: 196B24
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: 4EA72E
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: 96607D
+        hlink: '467886'
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 4
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Workspace Variant 5
+      colors:
+        accent1: 196B24
+        accent2: 4EA72E
+        accent3: '156082'
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: E97132
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: 96607D
+        hlink: '467886'
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 5
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Workspace Variant 6
+      colors:
+        accent1: '156082'
+        accent2: E97132
+        accent3: 196B24
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: 4EA72E
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: A5738E
+        hlink: 538D9D
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 6
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Workspace Variant 7
+      colors:
+        accent1: 196B24
+        accent2: 4EA72E
+        accent3: '156082'
+        accent4: 0F9ED5
+        accent5: A02B93
+        accent6: E97132
+        dk1: '000000'
+        dk2: 0E2841
+        folHlink: A5738E
+        hlink: 538D9D
+        lt1: FFFFFF
+        lt2: E8E8E8
+    font_scheme:
+      name: Workspace Variant 7
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Office Theme

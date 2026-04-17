@@ -1,0 +1,126 @@
+---
+layout: default
+title: Themes
+nav_order: 12
+parent: Guides
+permalink: /guides/themes/
+---
+= Themes
+
+Apply bundled Office themes or load themes from `.thmx` files.
+
+== What Are Themes
+
+Themes are color and font scheme definitions that control the visual appearance of
+documents. A theme contains:
+
+* **Color scheme** -- 12 theme colors (2 dark, 2 light, 6 accents, 2 hyperlinks)
+* **Font scheme** -- Major fonts for headings, minor fonts for body text
+* **Effect scheme** -- 3D effects, shadows, reflections
+
+== Using Bundled Themes
+
+Uniword includes 29 Office themes as bundled YAML files for fast loading:
+
+[source,ruby]
+----
+# Load bundled theme by name
+theme = Uniword::Theme.load('celestial')
+
+# Apply to document
+doc = Uniword::Document.new
+doc.theme = theme
+
+# Or use shorthand method
+doc.apply_theme('celestial')
+
+# List available bundled themes
+available = Uniword::Theme.available_themes
+# => ["atlas", "badge", "berlin", "celestial", ...]
+----
+
+[TIP]
+====
+Themes use Uniword names (e.g., `celestial`, `atlas`, `badge`), not Microsoft display names.
+The link:../resource-mapping/[Resource Mapping] guide shows the full Uniword-to-MS name correspondence.
+====
+
+== Loading Themes from .thmx Files
+
+Load a theme directly from a Microsoft Office `.thmx` file:
+
+[source,ruby]
+----
+# Load theme from .thmx file
+theme = Uniword::Theme.from_thmx('path/to/Celestial.thmx')
+
+puts theme.name
+# => "Celestial"
+
+# Apply to document
+doc = Uniword::Document.new
+doc.theme = theme
+
+doc.save('output.docx')
+----
+
+== Combining Themes and StyleSets
+
+Themes define colors and fonts. StyleSets define style formatting.
+Use them together for professional documents:
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+
+# Apply theme (colors and fonts)
+doc.apply_theme('celestial')
+
+# Apply StyleSet (style definitions)
+doc.apply_styleset('distinctive')
+
+# Content uses theme colors and StyleSet formatting
+doc.add_paragraph('Title', heading: :heading_1)
+doc.add_paragraph('Body text in theme colors.')
+
+doc.save('professional_document.docx')
+----
+
+== Available Themes
+
+Uniword bundles the following themes:
+
+[cols="2,4"]
+|===
+| Uniword Name | Description
+
+| `atlas` | Modern, professional blue-gray palette
+| `badge` | Bold, attention-grabbing design
+| `berlin` | Cool, contemporary color scheme
+| `celestial` | Cosmic, purple-blue gradients
+| `crop` | Nature-inspired green tones
+| `depth` | Rich, layered colors
+| `droplet` | Fresh, water-inspired blues
+| `facet` | Geometric, modern design
+| `feathered` | Soft, elegant colors
+| `gallery` | Artistic, creative palette
+| `headlines` | Bold, newspaper-style
+| `integral` | Integrated, balanced colors
+| `ion` | Electric, energetic design
+| `ion_boardroom` | Professional Ion variant
+| `madison` | Classic, refined styling
+| `main_event` | Celebratory, vibrant
+| `mesh` | Interconnected, network design
+| `office_theme` | Classic Office styling
+| `office_2013_2022_theme` | Default Office theme
+| `organic` | Natural, earthy tones
+| `parallax` | Layered, depth effect
+| `parcel` | Packaged, contained design
+| `retrospect` | Nostalgic, vintage colors
+| `savon` | Clean, soap-inspired palette
+| `slice` | Sharp, geometric cuts
+| `vapor_trail` | Ethereal, flowing design
+| `view` | Perspective, architectural
+| `wisp` | Delicate, light colors
+| `wood_type` | Woodgrain, natural textures
+|===

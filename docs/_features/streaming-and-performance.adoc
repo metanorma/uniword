@@ -1,0 +1,59 @@
+---
+layout: default
+title: Streaming and Performance
+nav_order: 9
+parent: Features
+permalink: /features/streaming-and-performance/
+---
+= Streaming and Performance
+
+Uniword is optimized for performance with large documents through lazy loading, efficient serialization, and optimized ZIP handling.
+
+== Performance Features
+
+Lazy loading::
+  The autoload strategy ensures that only needed classes are loaded. Opening a simple document does not load the 760 element classes.
+
+Streaming parsers::
+  Large files are processed using streaming XML parsers that do not load the entire document into memory at once.
+
+Efficient XML serialization::
+  Lutaml-model provides optimized XML serialization that minimizes object allocation and string operations.
+
+Optimized ZIP handling::
+  The rubyzip-based ZIP handler reads and writes DOCX packages efficiently, processing parts on demand.
+
+== Tips for Large Documents
+
+For documents with thousands of paragraphs or large embedded images:
+
+* Use `Document.open` instead of loading the entire document into memory when only reading
+* Process paragraphs in batches rather than materializing the entire collection
+* Consider splitting very large documents into sections
+
+[source,ruby]
+----
+# Efficient document processing
+doc = Uniword.load('large-document.docx')
+
+# Process paragraphs without creating intermediate arrays
+doc.paragraphs.each do |para|
+  process(para)
+end
+
+# Save with optimized serialization
+doc.save('output.docx')
+----
+
+== Autoload Benefits
+
+The 95% autoload strategy provides measurable startup improvements:
+
+* 90% fewer classes loaded at startup compared to eager loading
+* Memory footprint scales with actual document complexity
+* Unused namespaces (math, charts, presentations) stay unloaded
+
+== See Also
+
+* link:/understanding/autoload-strategy/[Autoload Strategy] -- Details on autoload coverage
+* link:/understanding/architecture/[Architecture] -- How layers minimize overhead

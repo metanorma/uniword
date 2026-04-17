@@ -1,0 +1,13 @@
+---
+locale: fr
+category: bibliographies
+description: fr bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Auteur (Année). Titre. Éditeur.
+    - text: Auteur (Année). Titre. Journal.

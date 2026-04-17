@@ -22,7 +22,7 @@ RSpec.describe "Format Conversion", type: :integration do
   end
 
   def docx_to_mhtml(docx_path)
-    docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+    docx_pkg = Uniword::Docx::Package.from_file(docx_path)
     mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg)
     mime = Uniword::Infrastructure::MimePackager.new(mhtml_doc).build_mime_content
     Uniword::Infrastructure::MimeParser.new.parse_content(mime)
@@ -47,7 +47,7 @@ RSpec.describe "Format Conversion", type: :integration do
       docx_fixture = "#{fixtures_dir}/basic.docx"
       skip "Fixture not found" unless File.exist?(docx_fixture)
 
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
+      docx_pkg = Uniword::Docx::Package.from_file(docx_fixture)
       docx_paras = docx_pkg.document.body.paragraphs.length
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
@@ -60,7 +60,7 @@ RSpec.describe "Format Conversion", type: :integration do
       docx_fixture = "#{fixtures_dir}/basic.docx"
       skip "Fixture not found" unless File.exist?(docx_fixture)
 
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
+      docx_pkg = Uniword::Docx::Package.from_file(docx_fixture)
       docx_pkg.document.body.paragraphs
               .flat_map do |p|
         p.runs.map do |r|
@@ -133,7 +133,7 @@ RSpec.describe "Format Conversion", type: :integration do
       docx_fixture = "#{fixtures_dir}/tables.docx"
       skip "Fixture not found" unless File.exist?(docx_fixture)
 
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_fixture)
+      docx_pkg = Uniword::Docx::Package.from_file(docx_fixture)
       docx_tables = docx_pkg.document.body.tables.length
 
       mhtml_doc = docx_to_mhtml(docx_fixture)

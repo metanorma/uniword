@@ -11,7 +11,7 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
   }.freeze
 
   def docx_to_mht(docx_path, doc_name = nil)
-    docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+    docx_pkg = Uniword::Docx::Package.from_file(docx_path)
     Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
   end
 
@@ -64,7 +64,7 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
 
   describe "OoxmlToMhtmlConverter" do
     it "generates Mhtml::Document with html_part" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       mhtml_doc = Uniword::Transformation::OoxmlToMhtmlConverter.document_to_mht(docx_pkg.document)
 
       expect(mhtml_doc).to be_a(Uniword::Mhtml::Document)
@@ -74,14 +74,14 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
     end
 
     it "generates Word HTML4 with xmlns:w namespace" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       mhtml_doc = Uniword::Transformation::OoxmlToMhtmlConverter.document_to_mht(docx_pkg.document)
 
       expect(mhtml_doc.html_part.raw_content).to include('xmlns:w="urn:schemas-microsoft-com:office:word"')
     end
 
     it "generates metadata comments" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       mhtml_doc = Uniword::Transformation::OoxmlToMhtmlConverter.document_to_mht(docx_pkg.document)
 
       expect(mhtml_doc.html_part.raw_content).to include("<!--[if gte mso 9]>")
@@ -89,14 +89,14 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
     end
 
     it "uses MsoNormal CSS class for default paragraphs" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       mhtml_doc = Uniword::Transformation::OoxmlToMhtmlConverter.document_to_mht(docx_pkg.document)
 
       expect(mhtml_doc.html_part.raw_content).to include("class=MsoNormal")
     end
 
     it "preserves paragraph content from DOCX" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       mhtml_doc = Uniword::Transformation::OoxmlToMhtmlConverter.document_to_mht(docx_pkg.document)
 
       # The body should contain the paragraph with non-breaking space
@@ -106,7 +106,7 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
 
   describe "Transformation pipeline" do
     it "full pipeline: DOCX → MHT → parse back" do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(INTEGRATION_FIXTURES["blank"])
+      docx_pkg = Uniword::Docx::Package.from_file(INTEGRATION_FIXTURES["blank"])
       docx_pkg.document
 
       # Transform to MHT

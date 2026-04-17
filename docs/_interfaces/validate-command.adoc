@@ -1,0 +1,73 @@
+---
+layout: default
+title: validate
+nav_order: 5
+parent: CLI
+permalink: /interfaces/cli/validate-command/
+---
+= validate
+
+Validate a document's structure and check for common issues.
+
+== Usage
+
+[source,shell]
+----
+uniword validate FILE
+----
+
+== Options
+
+`--verbose`, `-v`::
+Show detailed validation results including empty paragraphs and empty
+tables.
+
+== Examples
+
+Validate a document:
+
+[source,shell]
+----
+$ uniword validate document.docx
+
+Validating document.docx...
+  File format is valid
+  Document structure is valid
+  Document contains content
+
+Validation complete!
+----
+
+Verbose output:
+
+[source,shell]
+----
+uniword validate document.docx --verbose
+----
+
+== Checks performed
+
+[cols="2,4"]
+|===
+| Check | Description
+
+| File format
+| Verifies the file can be loaded without errors
+
+| Document structure
+| Calls `doc.valid?` to check structural integrity
+
+| Content presence
+| Confirms the document has paragraphs or tables
+
+| Empty paragraphs
+| Counts paragraphs with no text (verbose only)
+
+| Empty tables
+| Counts tables with no content (verbose only)
+|===
+
+== Exit codes
+
+* `0` -- Document is valid
+* `1` -- Validation failed

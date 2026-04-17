@@ -1,0 +1,17 @@
+---
+name: "Solar"
+description: "Solarized-inspired warm palette with golden accents"
+source: "uniword-generated"
+colors:
+  dk1: "073642"
+  lt1: "FDF6E3"
+  dk2: "586E75"
+  lt2: "EEE8D5"
+  accent1: "B58900"
+  accent2: "CB4B16"
+  accent3: "DC322F"
+  accent4: "268BD2"
+  accent5: "2AA198"
+  accent6: "859900"
+  hlink: "268BD2"
+  folHlink: "6C71C4"

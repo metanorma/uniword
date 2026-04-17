@@ -1,0 +1,95 @@
+---
+layout: default
+title: Architecture Patterns
+nav_order: 5
+parent: Development
+permalink: /development/architecture-patterns/
+---
+= Architecture Patterns
+
+Uniword follows established architecture patterns for maintainability, extensibility, and testability.
+
+== lutaml-model Patterns
+
+All serializable models inherit from `Lutaml::Model::Serializable` and use the lutaml-model DSL:
+
+* Attributes are declared with `attribute` using explicit types
+* XML mappings are defined in an `xml do` block
+* Attributes MUST be declared BEFORE the `xml` block (see link:/development/pattern0-critical-rule/[Pattern 0])
+
+[source,ruby]
+----
+class Bold < Lutaml::Model::Serializable
+  attribute :value, :boolean, default: -> { true }
+
+  xml do
+    element 'b'
+    namespace Uniword::Ooxml::Namespaces::WordProcessingML
+    map_attribute 'val', to: :value, render_nil: false,
+                         render_default: false
+  end
+end
+----
+
+== Model vs Builder Separation
+
+Model classes represent OOXML structure. Builder classes provide user-friendly APIs.
+
+[source,ruby]
+----
+# Builder provides convenience (lib/uniword/builder/)
+class ParagraphBuilder
+  def bold=(value)
+    ensure_properties.bold = Bold.new(value: value)
+    self
+  end
+end
+----
+
+Model classes do NOT have custom getters or setters. All attribute access uses lutaml-model's default mechanisms.
+
+== SOLID Principles
+
+Single Responsibility::
+  Each class has one reason to change. Format handlers handle format-specific logic, models represent XML structure, builders provide convenient APIs.
+
+Open/Closed::
+  New format handlers and validation rules are added without modifying existing code. The Registry pattern enables extension.
+
+Liskov Substitution::
+  All format handlers implement the same interface. Any handler can be used wherever a handler is expected.
+
+Interface Segregation::
+  Each class exposes only the methods its clients need. No "god objects" with hundreds of methods.
+
+Dependency Inversion::
+  High-level code depends on abstractions (lutaml-model serialization), not on concrete XML parsers.
+
+== Design Patterns
+
+Strategy::
+  Format handlers (DOCX, MHTML) implement different strategies for the same document operations.
+
+Factory::
+  `DocumentFactory` creates documents from files, handling format detection and handler selection.
+
+Builder::
+  The fluent builder API provides a convenient interface for constructing complex documents.
+
+Visitor::
+  Document traversal for verification and transformation uses the Visitor pattern.
+
+Registry::
+  Element and handler discovery uses a Registry pattern for dynamic lookup.
+
+Adapter::
+  Format handlers adapt the internal document model to specific file formats.
+
+== MECE Principle
+
+Classes are Mutually Exclusive and Collectively Exhaustive:
+
+* No two classes share the same responsibility
+* All functionality is covered without gaps
+* Clear boundaries between layers
+* Each namespace module handles its own elements only

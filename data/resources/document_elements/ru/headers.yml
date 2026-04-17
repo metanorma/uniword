@@ -1,0 +1,32 @@
+---
+locale: ru
+category: headers
+description: ru headers
+elements:
+- name: Simple
+  description: Document title header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Название}"
+    - text: "{Дата}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Название организации}"
+      bold: true
+    - text: "{Название}"
+      alignment: right
+- name: Section
+  description: Section title header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Раздел}"
+      alignment: center

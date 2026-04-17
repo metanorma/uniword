@@ -1,0 +1,197 @@
+---
+name: Exhibit
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Exhibit
+  colors:
+    accent1: B71E42
+    accent2: DE478E
+    accent3: BC72F0
+    accent4: 795FAF
+    accent5: 586EA6
+    accent6: 6892A0
+    dk1: '000000'
+    dk2: '454545'
+    folHlink: BC658E
+    hlink: FA2B5C
+    lt1: FFFFFF
+    lt2: DFDBD5
+font_scheme:
+  name: Exhibit
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Exhibit Variant 1
+      colors:
+        accent1: '415588'
+        accent2: 4294B6
+        accent3: '087D7C'
+        accent4: 2CB663
+        accent5: DF8822
+        accent6: BC410A
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: A1A9BF
+        hlink: 5977C4
+        lt1: FFFFFF
+        lt2: DCDCE0
+    font_scheme:
+      name: Exhibit Variant 1
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Exhibit Variant 2
+      colors:
+        accent1: 5FA534
+        accent2: DCAB34
+        accent3: D26D23
+        accent4: '972323'
+        accent5: '236797'
+        accent6: 2FB6C6
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: E7C272
+        hlink: 8FC639
+        lt1: FFFFFF
+        lt2: EDEBE7
+    font_scheme:
+      name: Exhibit Variant 2
+      major_font: Liberation Serif
+      minor_font: Liberation Serif
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Exhibit Variant 3
+      colors:
+        accent1: FB8C29
+        accent2: F2C351
+        accent3: D0CBA5
+        accent4: A2C476
+        accent5: 57C293
+        accent6: 06BFDE
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: EDC47E
+        hlink: FBAE29
+        lt1: FFFFFF
+        lt2: DFD9D5
+    font_scheme:
+      name: Exhibit Variant 3
+      major_font: Alfa Slab One
+      minor_font: Alfa Slab One
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Exhibit Variant 4
+      colors:
+        accent1: B71E42
+        accent2: DE478E
+        accent3: BC72F0
+        accent4: 795FAF
+        accent5: 586EA6
+        accent6: 6892A0
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: BC658E
+        hlink: FA2B5C
+        lt1: FFFFFF
+        lt2: DFDBD5
+    font_scheme:
+      name: Exhibit Variant 4
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Exhibit Variant 5
+      colors:
+        accent1: '415588'
+        accent2: 4294B6
+        accent3: '087D7C'
+        accent4: 04B663
+        accent5: DF8822
+        accent6: BC410A
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: 01A9BF
+        hlink: 5977C4
+        lt1: FFFFFF
+        lt2: DCDCE0
+    font_scheme:
+      name: Exhibit Variant 5
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Exhibit Variant 6
+      colors:
+        accent1: 5FA534
+        accent2: DCAB34
+        accent3: D26D23
+        accent4: '972323'
+        accent5: '236797'
+        accent6: 2FB6C6
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: E7C272
+        hlink: 8FC639
+        lt1: FFFFFF
+        lt2: EDEBE7
+    font_scheme:
+      name: Exhibit Variant 6
+      major_font: Liberation Serif
+      minor_font: Liberation Serif
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Exhibit Variant 7
+      colors:
+        accent1: FB8C29
+        accent2: F2C351
+        accent3: D0CBA5
+        accent4: A2C476
+        accent5: 57C293
+        accent6: 43BFDE
+        dk1: '000000'
+        dk2: '454545'
+        folHlink: EDC47E
+        hlink: FBAE29
+        lt1: FFFFFF
+        lt2: DFD9D5
+    font_scheme:
+      name: Exhibit Variant 7
+      major_font: Alfa Slab One
+      minor_font: Alfa Slab One
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Gallery

@@ -1,0 +1,115 @@
+---
+layout: default
+title: Development Setup
+nav_order: 2
+parent: Development
+permalink: /development/development-setup/
+---
+= Development Setup
+
+Set up your local development environment for contributing to Uniword.
+
+== Prerequisites
+
+* Ruby 3.0 or higher
+* Bundler
+
+== Setup Steps
+
+. Fork the repository on GitHub
+. Clone your fork locally:
+
+[source,shell]
+----
+git clone https://github.com/YOUR-USERNAME/uniword.git
+cd uniword
+----
+
+. Install dependencies:
+
+[source,shell]
+----
+bundle install
+----
+
+. Run tests to ensure everything is working:
+
+[source,shell]
+----
+bundle exec rspec
+----
+
+. Create a feature branch:
+
+[source,shell]
+----
+git checkout -b feature/my-new-feature
+----
+
+== Local Dependencies
+
+Uniword uses local paths for bleeding-edge development of related gems:
+
+[source,ruby]
+----
+# Gemfile
+gem 'lutaml-model', path: '/Users/mulgogi/src/lutaml/lutaml-model'
+gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
+gem 'canon', path: '/Users/mulgogi/src/lutaml/canon'
+----
+
+If you are working on the upstream gems, clone them to the paths specified. For normal development, the published gem versions are used.
+
+== Running Tests
+
+Run the complete test suite:
+
+[source,shell]
+----
+bundle exec rspec
+----
+
+Run a single test file:
+
+[source,shell]
+----
+bundle exec rspec spec/uniword/document_spec.rb
+----
+
+Run a specific test by line number:
+
+[source,shell]
+----
+bundle exec rspec spec/uniword/document_spec.rb:42
+----
+
+== Interactive Console
+
+Start an interactive console with Uniword loaded:
+
+[source,shell]
+----
+bundle exec rake console
+----
+
+== Generate Documentation
+
+Generate YARD documentation:
+
+[source,shell]
+----
+bundle exec yard doc
+----
+
+== Linting
+
+Run RuboCop for code style enforcement:
+
+[source,shell]
+----
+# Check for issues
+bundle exec rubocop
+
+# Auto-fix issues
+bundle exec rubocop -A --auto-gen-config
+----

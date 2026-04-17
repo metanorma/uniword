@@ -1,0 +1,32 @@
+---
+locale: fr-CA
+category: headers
+description: fr-CA headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Titre}"
+    - text: "{Date}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Nom de l’entreprise}"
+      bold: true
+    - text: "{Titre}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Titre de section}"
+      alignment: center

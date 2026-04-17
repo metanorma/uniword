@@ -1,0 +1,25 @@
+---
+locale: zh-TW
+category: watermarks
+description: zh-TW watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: 草稿
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: 機密
+      bold: true
+      size: 72
+      alignment: center

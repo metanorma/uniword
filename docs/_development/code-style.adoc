@@ -1,0 +1,88 @@
+---
+layout: default
+title: Code Style
+nav_order: 4
+parent: Development
+permalink: /development/code-style/
+---
+= Code Style
+
+Uniword enforces a consistent code style using RuboCop with project-specific configuration.
+
+== RuboCop
+
+Run RuboCop before committing:
+
+[source,shell]
+----
+# Check for issues
+bundle exec rubocop
+
+# Auto-fix issues where possible
+bundle exec rubocop -A --auto-gen-config
+----
+
+== Code Style Guidelines
+
+Indentation::
+  Use 2 spaces for indentation. No tabs.
+
+Line length::
+  Maximum line length of 80 characters.
+
+File loading::
+  Use `require_relative` for files in the same codebase. Never use `require` for internal files.
+
+Unused requires::
+  Remove unused `require` or `require_relative` statements.
+
+Attributes::
+  Use `attr_reader`, `attr_writer`, and `attr_accessor` for simple attributes in non-model classes.
+
+Object-oriented design::
+  Follow SOLID principles and object-oriented design.
+
+File size::
+  Keep files under 700 lines of code.
+
+Method size::
+  Keep methods focused and under 50 lines.
+
+Data structures::
+  Never use `Struct` or `OpenStruct`. Use proper model classes.
+
+== Documentation Standards
+
+Document all public classes and methods with YARD:
+
+[source,ruby]
+----
+# Calculate the sum of two numbers
+#
+# @param a [Integer] The first number
+# @param b [Integer] The second number
+# @return [Integer] The sum of a and b
+# @raise [ArgumentError] if inputs are not integers
+#
+# @example
+#   add(2, 3)  # => 5
+def add(a, b)
+  raise ArgumentError unless a.is_a?(Integer) && b.is_a?(Integer)
+  a + b
+end
+----
+
+Documentation requirements:
+
+* Include `@param`, `@return`, and `@raise` tags
+* Provide code examples in documentation
+* Use clear, descriptive names for classes and methods
+* Add YARD documentation for all new public methods
+
+== Naming Conventions
+
+* Use `snake_case` for methods and variables
+* Use `CamelCase` for classes and modules
+* Use `SCREAMING_SNAKE_CASE` for constants
+* Prefix boolean methods with `?` (e.g., `valid?`)
+* Prefix dangerous methods with `!` (e.g., `save!`)

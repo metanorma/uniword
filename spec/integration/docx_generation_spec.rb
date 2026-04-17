@@ -21,7 +21,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer.serialize(doc)
 
         # Package into DOCX
-        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
+        Uniword::Docx::Package.to_file(doc, output_path)
 
         # Verify file exists and is a valid ZIP
         expect(File.exist?(output_path)).to be true
@@ -69,7 +69,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         serializer.serialize(doc)
 
-        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
+        Uniword::Docx::Package.to_file(doc, output_path)
 
         # Verify content
         Zip::File.open(output_path) do |zip_file|
@@ -96,7 +96,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         serializer.serialize(doc)
 
-        Uniword::Ooxml::DocxPackage.to_file(doc, output_path)
+        Uniword::Docx::Package.to_file(doc, output_path)
 
         Zip::File.open(output_path) do |zip_file|
           doc_xml = zip_file.read("word/document.xml")

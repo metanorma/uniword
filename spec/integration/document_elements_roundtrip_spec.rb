@@ -3,8 +3,43 @@
 require "spec_helper"
 require "canon/rspec_matchers"
 
-RSpec.describe "Document Elements Round-Trip" do
-  # Skip if submodule not available (e.g., in CI without SSH access)
+RSpec.describe "Document Elements Round-Trip (Open-Source YAML)" do
+  let(:converter) { Uniword::Resource::DocumentElementConverter.new }
+
+  Uniword::Resource::DocumentElementLoader.available_locales.each do |locale|
+    describe "Locale: #{locale}" do
+      Uniword::Resource::DocumentElementLoader.available_categories(locale).each do |category|
+        context category do
+          let(:template) { Uniword::Resource::DocumentElementLoader.load(locale, category) }
+
+          it "loads template successfully" do
+            expect(template).to be_a(Uniword::Resource::DocumentElementTemplate)
+            expect(template.locale).to eq(locale)
+            expect(template.category).to eq(category)
+            expect(template.elements).not_to be_empty
+          end
+
+          it "converts first element to OOXML paragraphs" do
+            element = template.elements.first
+            paragraphs = converter.to_paragraphs(element)
+
+            expect(paragraphs).not_to be_empty
+            expect(paragraphs.first).to be_a(Uniword::Wordprocessingml::Paragraph)
+          end
+
+          it "converts first element to document" do
+            element = template.elements.first
+            doc = converter.to_document(element)
+
+            expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
+          end
+        end
+      end
+    end
+  end
+end
+
+RSpec.describe "Document Elements Round-Trip (Binary .dotx)" do
   before(:all) do
     skip "Submodule spec/fixtures/uniword-private not available" unless File.exist?(File.join(__dir__,
                                                                                               "../../spec/fixtures/uniword-private/word-resources/document-elements/en/Bibliographies.dotx"))
@@ -13,7 +48,6 @@ RSpec.describe "Document Elements Round-Trip" do
   DOCUMENT_ELEMENTS_DIR = File.join(__dir__,
                                     "../../spec/fixtures/uniword-private/word-resources/document-elements/en")
 
-  # All 8 document element reference files
   DOCUMENT_ELEMENT_FILES = {
     "Bibliographies.dotx" => "bibliography",
     "Cover Pages.dotx" => "cover_page",
@@ -41,27 +75,18 @@ RSpec.describe "Document Elements Round-Trip" do
         let(:glossary_roundtrip_path) { File.join(roundtrip_dir, "word/glossary/document.xml") }
 
         it "round-trips #{filename} glossary document" do
-          # Extract original
           FileUtils.mkdir_p(extracted_dir)
           system("unzip -q '#{dotx_path}' -d '#{extracted_dir}'")
 
-          # Skip if no glossary document exists
           next unless File.exist?(glossary_xml_path)
 
-          # Read original XML
           original_xml = File.read(glossary_xml_path)
-
-          # Parse with Uniword
           glossary_doc = Uniword::Glossary::GlossaryDocument.from_xml(original_xml)
-
-          # Serialize back
           roundtrip_xml = glossary_doc.to_xml(pretty: false)
 
-          # Write roundtrip for comparison
           FileUtils.mkdir_p(File.dirname(glossary_roundtrip_path))
           File.write(glossary_roundtrip_path, roundtrip_xml)
 
-          # Compare using Canon (spec_friendly: ignores structural whitespace differences)
           expect(roundtrip_xml).to be_xml_equivalent_to(original_xml,
                                                         match_profile: :spec_friendly)
         end
@@ -69,7 +94,6 @@ RSpec.describe "Document Elements Round-Trip" do
 
       context "[Content_Types].xml" do
         it "preserves #{filename} content types" do
-          # Extract original
           FileUtils.mkdir_p(extracted_dir)
           system("unzip -q '#{dotx_path}' -d '#{extracted_dir}'")
 

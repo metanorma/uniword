@@ -27,6 +27,9 @@ Gem::Specification.new do |spec|
                           lib/**/*.rb
                           lib/**/*.css
                           exe/*
+                          data/**/*.yml
+                          data/**/*.xsd
+                          config/**/*.yml
                           README.adoc
                           CHANGELOG.md
                           CONTRIBUTING.md
@@ -41,6 +44,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "lutaml-model", "~> 0.8"
   spec.add_dependency "mail", "~> 2.8"
   spec.add_dependency "nokogiri", "~> 1.18"
+  spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 2.3"
   spec.add_dependency "thor", "~> 1.3"
 end

@@ -1,0 +1,13 @@
+---
+locale: cs
+category: bibliographies
+description: cs bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autor. Název. Vydavatel.
+    - text: Autor. Název. Časopis.

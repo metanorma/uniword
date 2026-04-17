@@ -1,0 +1,45 @@
+---
+layout: default
+title: Quick Start
+nav_order: 2
+parent: Getting Started
+permalink: /getting-started/quick-start/
+---
+= Quick Start
+
+Get started with Uniword in under a minute.
+This page walks through the two most common operations: creating a new document and reading an existing one.
+
+== Creating documents
+
+[source,ruby]
+----
+require 'uniword'
+
+# Simple document
+doc = Uniword::Document.new
+para = Uniword::Paragraph.new
+para.add_text("Hello World", bold: true)
+doc.add_element(para)
+doc.save('output.docx')
+----
+
+The resulting `output.docx` is a valid Word file you can open in Microsoft Word, LibreOffice, or Google Docs.
+
+== Reading documents
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file('input.docx')
+
+# Extract all text
+puts doc.text
+
+# Iterate over paragraphs
+doc.paragraphs.each { |p| puts p.text }
+----
+
+== What's next?
+
+* link:../core-concepts/[Core Concepts] -- Understand the model-driven architecture.
+* link:../your-first-document/[Your First Document] -- Build a complete document step by step.

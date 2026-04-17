@@ -1,0 +1,26 @@
+---
+locale: ko
+category: cover_pages
+description: ko cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{제목}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{부제목}"
+      alignment: center
+    - style: Normal
+      text: "{저자}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{날짜}"
+      alignment: center
+      space_after: 1440

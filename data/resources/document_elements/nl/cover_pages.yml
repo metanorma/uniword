@@ -1,0 +1,26 @@
+---
+locale: nl
+category: cover_pages
+description: nl cover pages
+elements:
+- name: Academic
+  description: Academic cover page
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{Titel}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{Ondertitel}"
+      alignment: center
+    - style: Normal
+      text: "{Auteur}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{Datum}"
+      alignment: center
+      space_after: 1440

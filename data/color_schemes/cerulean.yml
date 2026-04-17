@@ -1,0 +1,17 @@
+---
+name: "Cerulean"
+description: "Deep sky blue palette from Tailwind Sky tones"
+source: "uniword-generated"
+colors:
+  dk1: "0C1829"
+  lt1: "F7FAFF"
+  dk2: "1E3A5F"
+  lt2: "BAE6FD"
+  accent1: "0284C7"
+  accent2: "0EA5E9"
+  accent3: "7DD3FC"
+  accent4: "0369A1"
+  accent5: "075985"
+  accent6: "E0F2FE"
+  hlink: "0284C7"
+  folHlink: "38BDF8"

@@ -1,0 +1,32 @@
+---
+locale: es-MX
+category: headers
+description: es-MX headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Título}"
+    - text: "{Fecha}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Nombre de la empresa}"
+      bold: true
+    - text: "{Título}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Sección}"
+      alignment: center

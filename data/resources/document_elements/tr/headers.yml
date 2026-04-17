@@ -1,0 +1,32 @@
+---
+locale: tr
+category: headers
+description: tr headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Başlık}"
+    - text: "{Tarih}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Şirket adı}"
+      bold: true
+    - text: "{Başlık}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Bölüm başlığı}"
+      alignment: center

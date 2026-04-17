@@ -1,0 +1,13 @@
+---
+locale: it
+category: bibliographies
+description: it bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Autore. Titolo. Editore.
+    - text: Autore. Titolo. Rivista.

@@ -1,0 +1,21 @@
+---
+locale: en-GB
+category: table_of_contents
+description: en-GB table of contents
+elements:
+- name: Classic
+  description: TOC with dot leaders
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Contents
+- name: Modern
+  description: Clean TOC
+  gallery: tableOfContents
+  category: Table of Contents
+  body:
+    paragraphs:
+    - style: TOC Heading
+      text: Contents

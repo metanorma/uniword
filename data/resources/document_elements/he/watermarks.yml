@@ -1,0 +1,25 @@
+---
+locale: he
+category: watermarks
+description: he watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: טיוטה
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: סודי
+      bold: true
+      size: 72
+      alignment: center

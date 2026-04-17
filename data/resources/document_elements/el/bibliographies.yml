@@ -1,0 +1,13 @@
+---
+locale: el
+category: bibliographies
+description: el bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Συγγραφέας. Τίτλος. Εκδότης.
+    - text: Συγγραφέας. Τίτλος. Περιοδικό.

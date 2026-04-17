@@ -1,0 +1,25 @@
+---
+locale: th
+category: watermarks
+description: th watermarks
+elements:
+- name: DRAFT
+  description: Draft watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: ร่าง
+      bold: true
+      size: 72
+      alignment: center
+- name: CONFIDENTIAL
+  description: Confidential watermark
+  gallery: watermarks
+  category: Watermarks
+  body:
+    paragraphs:
+    - text: ลับ
+      bold: true
+      size: 72
+      alignment: center

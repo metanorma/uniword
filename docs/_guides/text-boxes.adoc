@@ -1,0 +1,40 @@
+---
+layout: default
+title: Text Boxes
+nav_order: 10
+parent: Guides
+permalink: /guides/text-boxes/
+---
+= Text Boxes
+
+Create and position text boxes as floating elements in a document.
+
+== Creating a Text Box
+
+[source,ruby]
+----
+text_box = Uniword::TextBox.new(
+  width: 200,
+  height: 100,
+  position: { x: 100, y: 100 }
+)
+
+para = Uniword::Paragraph.new
+para.add_text("Text inside box")
+text_box.add_element(para)
+
+doc.add_element(text_box)
+----
+
+The `width` and `height` are in points. The `position` coordinates (`x`, `y`)
+place the text box relative to the page origin.
+
+== Text Box Positioning
+
+Position values control where the text box anchor appears on the page:
+
+* `x` -- Horizontal offset from the left edge (in points)
+* `y` -- Vertical offset from the top edge (in points)
+
+Text boxes are implemented as DrawingML shapes with a `txBody` content area
+that can contain paragraphs, runs, and other inline elements.

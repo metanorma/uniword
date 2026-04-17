@@ -1,0 +1,121 @@
+---
+layout: default
+title: Text Formatting
+nav_order: 1
+parent: Guides
+permalink: /guides/text-formatting/
+---
+= Text Formatting
+
+Apply bold, italic, underline, color, size, font, and other formatting to text runs.
+
+== Basic Formatting
+
+Use `add_text` with keyword arguments to create formatted runs inside a paragraph.
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Bold", bold: true)
+para.add_text(" Italic", italic: true)
+para.add_text(" Underline", underline: 'single')
+para.add_text(" Red text", color: 'FF0000')
+para.add_text(" Large text", size: 24)
+para.add_text(" Custom font", font: 'Arial')
+----
+
+[TIP]
+====
+The `size` value is in half-points. Use `24` for 12pt, `28` for 14pt, `32` for 16pt.
+====
+
+== Combined Formatting
+
+You can combine multiple formatting options in a single `add_text` call:
+
+[source,ruby]
+----
+para = Uniword::Paragraph.new
+para.add_text("Bold italic red",
+  bold: true,
+  italic: true,
+  color: 'FF0000',
+  size: 18
+)
+----
+
+== Character Spacing and Text Effects
+
+Fine-grained control over character appearance is available on `Run` objects:
+
+[source,ruby]
+----
+run = Uniword::Run.new(text: "Enhanced text")
+
+# Character spacing (expand or condense)
+run.character_spacing = 20   # Expand by 20 twips (1 point)
+run.character_spacing = -10  # Condense by 10 twips (0.5 point)
+
+# Kerning (font kerning threshold)
+run.kerning = 24  # Enable kerning at 24 half-points (12pt)
+
+# Raised/lowered position (superscript/subscript effect)
+run.position = 5   # Raise by 5 half-points
+run.position = -5  # Lower by 5 half-points
+
+# Text expansion/compression percentage
+run.text_expansion = 120  # 120% width (expanded)
+run.text_expansion = 80   # 80% width (condensed)
+----
+
+== Text Effects
+
+[source,ruby]
+----
+run = Uniword::Run.new(text: "Fancy")
+
+run.outline = true   # Outline text
+run.shadow = true    # Shadow effect
+run.emboss = true    # Embossed (raised) effect
+run.imprint = true   # Imprinted (depressed) effect
+----
+
+== Emphasis Marks
+
+For Asian typography, set emphasis marks on a run:
+
+[source,ruby]
+----
+run.emphasis_mark = "dot"      # Dot above/below text
+run.emphasis_mark = "comma"    # Comma mark
+run.emphasis_mark = "circle"   # Circle mark
+run.emphasis_mark = "underDot" # Dot below text
+----
+
+== Run Shading
+
+Apply background colors to character runs:
+
+[source,ruby]
+----
+run = Uniword::Run.new(text: "Highlighted")
+
+# Simple shading
+run.set_shading(fill: "FFFF00", pattern: "solid")
+
+# With foreground color and pattern
+run.set_shading(
+  fill: "FFFF00",     # Background
+  color: "000000",    # Foreground
+  pattern: "pct10"    # 10% pattern
+)
+----
+
+== Language Settings
+
+Set the language for spell-checking on a per-run basis:
+
+[source,ruby]
+----
+run.language = "en-US"
+----

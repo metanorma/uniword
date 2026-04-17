@@ -1,0 +1,17 @@
+---
+name: "Teal"
+description: "Blue-green teal palette from Material Design Teal"
+source: "uniword-generated"
+colors:
+  dk1: "0A1F1F"
+  lt1: "F5FFFE"
+  dk2: "1A4A4A"
+  lt2: "B2F5EA"
+  accent1: "0D9488"
+  accent2: "14B8A6"
+  accent3: "5EEAD4"
+  accent4: "0F766E"
+  accent5: "115E59"
+  accent6: "99F6E4"
+  hlink: "0D9488"
+  folHlink: "2DD4BF"

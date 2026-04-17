@@ -4,7 +4,64 @@ require "spec_helper"
 require "canon/rspec_matchers"
 require "uniword/ooxml/theme_package"
 
-RSpec.describe "Theme Round-Trip", :theme_roundtrip do
+RSpec.describe "Theme Round-Trip (Open-Source YAML)" do
+  let(:transformation) { Uniword::Themes::ThemeTransformation.new }
+
+  Uniword::Themes::Theme.available_themes.each do |name|
+    describe name do
+      let(:friendly_theme) { Uniword::Themes::Theme.load(name) }
+      let(:word_theme) { transformation.to_word(friendly_theme) }
+
+      it "loads from YAML successfully" do
+        expect(friendly_theme).to be_a(Uniword::Themes::Theme)
+        expect(friendly_theme.name).not_to be_nil
+        expect(friendly_theme.color_scheme).not_to be_nil
+        expect(friendly_theme.font_scheme).not_to be_nil
+      end
+
+      it "converts to Word Theme with valid XML" do
+        xml = word_theme.to_xml
+
+        expect(xml).to be_a(String)
+        expect(xml.length).to be > 100
+        expect(xml).to include("xmlns")
+        expect(xml).to include("<theme")
+        expect(xml).to include("<clrScheme")
+        expect(xml).to include("<fontScheme")
+      end
+
+      it "round-trips preserving theme name" do
+        extracted = transformation.from_word(word_theme)
+        expect(extracted.name).to eq(friendly_theme.name)
+      end
+
+      it "round-trips preserving color scheme name" do
+        expect(word_theme.theme_elements.clr_scheme.name).to eq(friendly_theme.color_scheme.name)
+      end
+
+      it "round-trips preserving font scheme name" do
+        expect(word_theme.theme_elements.font_scheme.name).to eq(friendly_theme.font_scheme.name)
+      end
+
+      it "contains no Microsoft fonts" do
+        xml = word_theme.to_xml
+        ms_fonts = %w[Calibri Cambria Arial "Segoe UI" Consolas Verdana
+                      Georgia Candara Corbel Constantia Aptos "Aptos Display"]
+        ms_fonts.each do |font|
+          expect(xml).not_to include(font),
+            "MS font '#{font}' found in theme #{name}"
+        end
+      end
+
+      it "has East Asian fonts populated" do
+        xml = word_theme.to_xml
+        expect(xml).to include("Noto Sans CJK")
+      end
+    end
+  end
+end
+
+RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
   # Skip if submodule not available (e.g., in CI without SSH access)
   before(:all) do
     skip "Submodule spec/fixtures/uniword-private not available" unless Dir.glob("spec/fixtures/uniword-private/word-resources/office-themes/*.thmx").any?
@@ -65,42 +122,33 @@ RSpec.describe "Theme Round-Trip", :theme_roundtrip do
       end
 
       it "round-trips theme preserving structure" do
-        # Load original
         original_theme = original_package.load_content
 
-        # Save to new file
         output_package.extract
         output_package.save_content(original_theme)
         output_package.package(output_path)
 
-        # Verify file created
         expect(File.exist?(output_path)).to be true
         expect(File.size(output_path)).to be > 0
 
-        # Load again
         roundtrip_theme = verify_package.load_content
 
-        # Verify theme properties preserved
         expect(roundtrip_theme.name).to eq(original_theme.name)
         expect(roundtrip_theme.color_scheme.name).to eq(original_theme.color_scheme.name)
         expect(roundtrip_theme.font_scheme.name).to eq(original_theme.font_scheme.name)
       end
 
       it "round-trips theme XML semantically equivalent" do
-        # Load original
         original_theme = original_package.load_content
         original_xml = original_package.read_theme
 
-        # Save and reload
         output_package.extract
         output_package.save_content(original_theme)
         output_package.package(output_path)
 
-        # Read regenerated XML
         verify_package.extract
         regenerated_xml = verify_package.read_theme
 
-        # Compare using Canon for semantic XML equivalence
         expect(regenerated_xml).to be_xml_equivalent_to(original_xml)
       end
 
@@ -113,7 +161,6 @@ RSpec.describe "Theme Round-Trip", :theme_roundtrip do
 
         roundtrip_theme = verify_package.load_content
 
-        # Compare all 12 theme colors
         Uniword::Drawingml::ColorScheme::THEME_COLORS.each do |color_name|
           original_color = original_theme.color_scheme[color_name]
           roundtrip_color = roundtrip_theme.color_scheme[color_name]
@@ -132,14 +179,12 @@ RSpec.describe "Theme Round-Trip", :theme_roundtrip do
 
         roundtrip_theme = verify_package.load_content
 
-        # Compare major and minor fonts
         expect(roundtrip_theme.major_font).to eq(original_theme.major_font)
         expect(roundtrip_theme.minor_font).to eq(original_theme.minor_font)
       end
     end
   end
 
-  # Summary after all tests
   after(:all) do
     total_themes = Dir.glob(File.join(THEME_DIR, "*.thmx")).count
     puts

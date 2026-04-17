@@ -1,0 +1,32 @@
+---
+locale: pl
+category: headers
+description: pl headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Tytuł}"
+    - text: "{Data}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Nazwa firmy}"
+      bold: true
+    - text: "{Tytuł}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Tytuł sekcji}"
+      alignment: center

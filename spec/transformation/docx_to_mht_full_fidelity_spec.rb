@@ -47,7 +47,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
   end
 
   def docx_to_mht_html(docx_path, doc_name = nil)
-    docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+    docx_pkg = Uniword::Docx::Package.from_file(docx_path)
     mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
     # Get raw HTML from the Mhtml::Document
     mhtml_doc.html_part&.raw_content || ""
@@ -150,7 +150,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
   describe "Generated MHT structure" do
     let(:docx_path) { FULL_FIDELITY_FIXTURES["blank"][:docx] }
     let(:mhtml_doc) do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+      docx_pkg = Uniword::Docx::Package.from_file(docx_path)
       Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, "blank")
     end
 
@@ -183,7 +183,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
 
   describe "Blank fixture produces minimal valid MHT" do
     let(:mhtml_doc) do
-      docx_pkg = Uniword::Ooxml::DocxPackage.from_file(FULL_FIDELITY_FIXTURES["blank"][:docx])
+      docx_pkg = Uniword::Docx::Package.from_file(FULL_FIDELITY_FIXTURES["blank"][:docx])
       Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, "blank")
     end
 

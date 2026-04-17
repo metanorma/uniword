@@ -1,0 +1,13 @@
+---
+locale: fr-CA
+category: bibliographies
+description: fr-CA bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Auteur. Titre. Éditeur.
+    - text: Auteur. Titre. Revue.

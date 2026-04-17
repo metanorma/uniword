@@ -1,0 +1,104 @@
+---
+layout: default
+title: Home
+nav_order: 1
+description: "Uniword: Ruby library for reading, writing, and manipulating OOXML (DOCX) documents"
+permalink: /
+---
+= Uniword Documentation
+:toc: macro
+:toclevels: 2
+
+[.lead]
+Uniword is a comprehensive Ruby library for reading and writing Microsoft Word documents in both DOCX (Word 2007+) and MHTML (Word 2003+) formats, with 100% OOXML specification coverage and perfect round-trip fidelity.
+
+toc::[]
+
+== Quick Navigation
+
+=== By Your Role
+
+**Ruby Developer**::
+Start with link:getting-started/quick-start/[Quick Start] then link:interfaces/ruby-api/[Ruby API] to build documents programmatically.
+
+**Technical Writer**::
+Start with link:guides/themes/[Themes] and link:guides/stylesets/[StyleSets] to style documents, then link:features/themes-catalog/[Theme Catalog] for the full list.
+
+**QA Engineer**::
+Start with link:verification/three-layer-pipeline/[Three-Layer Pipeline] for DOCX validation, then link:interfaces/cli/verify-command/[CLI: verify command].
+
+**DevOps**::
+Start with link:interfaces/cli/[CLI] for command-line conversion and link:guides/format-conversion/[Format Conversion] for batch processing.
+
+**Contributor**::
+Start with link:development/contributing/[Contributing] then link:development/adding-ooxml-elements/[Adding OOXML Elements].
+
+=== By Task
+
+**Create a document**::
+* link:getting-started/quick-start/[Quick Start]
+* link:interfaces/ruby-api/builder-api/[Builder API]
+* link:guides/text-formatting/[Text Formatting]
+
+**Open and modify an existing DOCX**::
+* link:guides/open-existing-docx/[Open Existing DOCX]
+* link:guides/round-trip-fidelity/[Round-Trip Fidelity]
+
+**Apply themes and styles**::
+* link:guides/themes/[Themes Guide]
+* link:guides/stylesets/[StyleSets Guide]
+* link:guides/styles/[Styles Guide]
+
+**Validate DOCX files**::
+* link:verification/three-layer-pipeline/[Three-Layer Pipeline]
+* link:interfaces/cli/verify-command/[CLI: verify]
+
+**Convert formats**::
+* link:guides/format-conversion/[DOCX to MHTML]
+* link:interfaces/cli/convert-command/[CLI: convert]
+
+== Learning Path
+
+=== Level 1: Get Started (5 minutes)
+
+. link:getting-started/installation/[Install Uniword]
+. link:getting-started/quick-start/[Try basic examples]
+. link:getting-started/core-concepts/[Understand core concepts]
+
+=== Level 2: Learn Interfaces (15 minutes)
+
+Choose your interface:
+
+* link:interfaces/ruby-api/[Ruby API] -- Build documents programmatically
+* link:interfaces/cli/[CLI] -- Command-line usage
+
+=== Level 3: Follow Guides (30 minutes)
+
+. link:guides/text-formatting/[Text Formatting]
+. link:guides/tables/[Tables]
+. link:guides/themes/[Themes]
+. link:guides/stylesets/[StyleSets]
+
+=== Level 4: Understand the Design (1 hour)
+
+. link:understanding/architecture/[Architecture overview]
+. link:understanding/schema-driven-generation/[Schema-driven generation]
+. link:understanding/prevention-layer/[Prevention Layer]
+
+=== Level 5: Master Features (As needed)
+
+. link:features/themes-catalog/[29 bundled themes]
+. link:features/stylesets-catalog/[12 bundled stylesets]
+. link:features/color-schemes-catalog/[23 color schemes]
+. link:verification/custom-rules/[Custom validation rules]
+
+== Getting Help
+
+**Found a bug?**::
+link:https://github.com/metanorma/uniword/issues[Report an issue on GitHub]
+
+**Have a question?**::
+Search this documentation or check the link:interfaces/cli/[CLI reference]
+
+**Want to contribute?**::
+See link:development/contributing/[Contributing to Uniword]

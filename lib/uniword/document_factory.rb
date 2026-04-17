@@ -54,7 +54,7 @@ module Uniword
 
         case format
         when :docx, :docm
-          package = Ooxml::DocxPackage.from_file(path)
+          package = Docx::Package.from_file(path)
           doc = package.document
           copy_package_parts_to_document(package, doc)
           doc
@@ -165,7 +165,7 @@ module Uniword
 
       # Copy package parts to document for round-trip preservation
       #
-      # @param package [Ooxml::DocxPackage] The source package
+      # @param package [Docx::Package] The source package
       # @param document [Wordprocessingml::DocumentRoot] The target document
       # @return [void]
       def copy_package_parts_to_document(package, document)

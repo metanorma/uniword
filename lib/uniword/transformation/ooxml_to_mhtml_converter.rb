@@ -10,7 +10,7 @@ module Uniword
     # This converter produces Word HTML4 with proper MIME multipart structure.
     #
     # @example Transform DOCX to MHT
-    #   docx_doc = Uniword::Ooxml::DocxPackage.from_file("document.docx")
+    #   docx_doc = Uniword::Docx::Package.from_file("document.docx")
     #   mhtml_doc = OoxmlToMhtmlConverter.document_to_mht(docx_doc)
     #   output = Uniword::Infrastructure::MimePackager.new(mhtml_doc).build_mime_content
     #

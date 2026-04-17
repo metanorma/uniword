@@ -1,0 +1,71 @@
+---
+layout: default
+title: Error Handling
+nav_order: 8
+parent: Features
+permalink: /features/error-handling/
+---
+= Error Handling
+
+Uniword provides comprehensive error handling with a clear exception hierarchy. All custom exceptions inherit from `Uniword::Error`.
+
+== Exception Hierarchy
+
+```
+Uniword::Error
+  |-- FileNotFoundError
+  |-- CorruptedFileError
+  |-- InvalidFormatError
+  |-- ValidationError
+  |-- ConversionError
+```
+
+== Usage
+
+[source,ruby]
+----
+require 'uniword'
+
+begin
+  doc = Uniword::DocumentFactory.from_file('document.docx')
+rescue Uniword::FileNotFoundError => e
+  puts "File not found: #{e.path}"
+rescue Uniword::CorruptedFileError => e
+  puts "Corrupted file: #{e.reason}"
+rescue Uniword::InvalidFormatError => e
+  puts "Invalid format: #{e.message}"
+rescue Uniword::Error => e
+  puts "Error: #{e.message}"
+end
+----
+
+== Exception Details
+
+FileNotFoundError::
+  Raised when the specified file does not exist. Provides the `path` attribute with the file path.
+
+CorruptedFileError::
+  Raised when the file exists but cannot be parsed. Provides the `reason` attribute describing the corruption.
+
+InvalidFormatError::
+  Raised when the file format is not supported or unrecognized. Covers non-DOCX, non-MHTML files.
+
+ValidationError::
+  Raised when document validation fails. Used by the verification pipeline to report structural issues.
+
+ConversionError::
+  Raised when format conversion between DOCX and MHTML fails. Covers unsupported features or data loss scenarios.
+
+== Catching All Errors
+
+For top-level error handling, catch `Uniword::Error`:
+
+[source,ruby]
+----
+begin
+  doc = Uniword.load(path)
+  doc.save(output)
+rescue Uniword::Error => e
+  logger.error("Uniword error: #{e.message}")
+end
+----

@@ -1,0 +1,32 @@
+---
+locale: hu
+category: headers
+description: hu headers
+elements:
+- name: Simple
+  description: Document header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Cím}"
+    - text: "{Dátum}"
+      alignment: right
+- name: Corporate
+  description: Company header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Cégnév}"
+      bold: true
+    - text: "{Cím}"
+      alignment: right
+- name: Section
+  description: Section header
+  gallery: headers
+  category: Headers
+  body:
+    paragraphs:
+    - text: "{Fejezetcím}"
+      alignment: center

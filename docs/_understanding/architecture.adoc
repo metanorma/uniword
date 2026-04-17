@@ -1,0 +1,98 @@
+---
+layout: default
+title: Architecture
+nav_order: 1
+parent: Understanding
+permalink: /understanding/architecture/
+---
+= Architecture
+
+Uniword uses a 4-layer model-driven architecture where all OOXML structures are represented as Ruby objects.
+
+== Architecture Diagram
+
+[source]
+----
++-------------------------------------------------------------+
+|                      Uniword Gem                            |
+|                   (Public API Layer)                        |
++-------------------------------------------------------------+
+|                                                             |
+|  +----------------+           +------------------+         |
+|  |  Format Layer  |           |  Document Layer  |         |
+|  |                |           |                  |         |
+|  | - DOCX Handler |<----------| - Document Model |         |
+|  |   (Read/Write) |           |   (lutaml-model) |         |
+|  | - MHTML Handler|           | - Element Models |         |
+|  |   (Read/Write) |           | - Style Models   |         |
+|  +----------------+           +------------------+         |
+|         |                              |                   |
+|         v                              v                   |
+|  +----------------+           +------------------+         |
+|  | Serialization  |           |  Component Layer |         |
+|  |     Layer      |           |                  |         |
+|  |                |           | - Paragraphs     |         |
+|  | - XML Parser/  |<----------| - Tables         |         |
+|  |   Serializer   |           | - Images         |         |
+|  |   (lutaml)     |           | - Lists          |         |
+|  | - MIME Handler |           | - Styles         |         |
+|  | - ZIP Handler  |           | - Runs           |         |
+|  +----------------+           +------------------+         |
++-------------------------------------------------------------+
+----
+
+== Format Layer
+
+The Format Layer handles the physical file format. It contains two format handlers:
+
+* **DOCX Handler** -- Reads and writes `.docx` files (Word 2007+). Manages the ZIP package, content types, and relationships.
+* **MHTML Handler** -- Reads and writes `.mhtml` files (Word 2003+). Handles MIME multipart encoding and CSS generation.
+
+Format handlers delegate parsing and serialization to the Serialization Layer, and document structure to the Document Layer.
+
+== Document Layer
+
+The Document Layer contains the core object model:
+
+* **Document Model** -- The top-level `Document` class representing a complete Word document.
+* **Element Models** -- 760 OOXML element classes generated from YAML schemas, covering all 22 namespaces.
+* **Style Models** -- Classes for paragraph styles, character styles, table styles, and numbering definitions.
+
+Every element in the Document Layer inherits from `Lutaml::Model::Serializable` and uses the lutaml-model DSL for XML mapping.
+
+== Serialization Layer
+
+The Serialization Layer converts between in-memory objects and persisted formats:
+
+* **XML Parser/Serializer** -- Powered by lutaml-model, handles all XML reading and writing.
+* **MIME Handler** -- Encodes and decodes MHTML multipart documents.
+* **ZIP Handler** -- Manages the DOCX ZIP package structure via rubyzip.
+
+This layer is responsible for maintaining perfect round-trip fidelity.
+
+== Component Layer
+
+The Component Layer provides high-level document building blocks:
+
+* **Paragraphs** -- Text blocks with formatting
+* **Tables** -- Grid structures with borders and cell merging
+* **Images** -- Embedded pictures with positioning
+* **Lists** -- Numbered, bulleted, and multi-level lists
+* **Styles** -- Reusable formatting definitions
+* **Runs** -- Text segments with inline formatting
+
+== Design Principles
+
+The architecture follows strict object-oriented principles:
+
+SOLID principles::
+  Single responsibility, open/closed, Liskov substitution, interface segregation, and dependency inversion are applied throughout.
+
+MECE (Mutually Exclusive, Collectively Exhaustive)::
+  Clear separation of concerns with no overlap between layers. Each class has one well-defined responsibility.
+
+Design patterns::
+  Strategy (format handlers), Factory (document creation), Builder (fluent API), Visitor (document traversal), Registry (element discovery), and Adapter patterns are used where appropriate.
+
+Model-Driven Architecture::
+  Each OOXML part is a separate lutaml-model class. XML generation is never hardcoded -- all structure is defined through model attributes and mappings.

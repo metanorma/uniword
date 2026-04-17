@@ -16,7 +16,7 @@ FileUtils.mkdir_p(output_dir)
 system("unzip -q -o '#{input_file}' -d #{output_dir}/original")
 
 # Load and save through Uniword
-doc_package = Uniword::Ooxml::DocxPackage.from_file(input_file)
+doc_package = Uniword::Docx::Package.from_file(input_file)
 temp_output = "#{output_dir}/roundtrip.dotx"
 doc_package.save(temp_output)
 

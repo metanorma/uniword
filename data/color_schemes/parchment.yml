@@ -1,0 +1,17 @@
+---
+name: "Parchment"
+description: "Warm neutral palette reminiscent of aged paper"
+source: "uniword-generated"
+colors:
+  dk1: "2C2418"
+  lt1: "FEFDF8"
+  dk2: "5C4A32"
+  lt2: "F5E6D3"
+  accent1: "8B7355"
+  accent2: "A08B6A"
+  accent3: "C4B091"
+  accent4: "6B5B45"
+  accent5: "4A3F30"
+  accent6: "E8DCC8"
+  hlink: "6B4423"
+  folHlink: "9B7653"

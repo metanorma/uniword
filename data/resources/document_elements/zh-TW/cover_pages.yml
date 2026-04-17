@@ -1,0 +1,26 @@
+---
+locale: zh-TW
+category: cover_pages
+description: zh-TW cover pages
+elements:
+- name: Academic
+  description: Clean academic cover
+  gallery: coverPages
+  category: Cover Pages
+  body:
+    paragraphs:
+    - style: Title
+      text: "{標題}"
+      alignment: center
+      space_before: 1440
+    - style: Subtitle
+      text: "{副標題}"
+      alignment: center
+    - style: Normal
+      text: "{作者}"
+      alignment: center
+      space_before: 720
+    - style: Normal
+      text: "{日期}"
+      alignment: center
+      space_after: 1440

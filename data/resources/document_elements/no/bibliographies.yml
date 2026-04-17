@@ -1,0 +1,13 @@
+---
+locale: 'no'
+category: bibliographies
+description: no bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Forfatter. Tittel. Forlag.
+    - text: Forfatter. Tittel. Tidsskrift.

@@ -1,0 +1,13 @@
+---
+locale: id
+category: bibliographies
+description: id bibliographies
+elements:
+- name: References
+  description: Reference list
+  gallery: bibliographies
+  category: Bibliographies
+  body:
+    paragraphs:
+    - text: Penulis. Judul. Penerbit.
+    - text: Penulis. Judul. Jurnal.

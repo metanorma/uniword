@@ -7,7 +7,7 @@ module Uniword
     #
     # Serializes Uniword documents to XML format using lutaml-model.
     # Note: This class is a placeholder for the serialization API.
-    # The actual serialization is done by DocxPackage.to_file which
+    # The actual serialization is done by Docx::Package.to_file which
     # handles the complete package serialization including all XML parts.
     class OoxmlSerializer
       # Serialize a document to XML

@@ -1,0 +1,78 @@
+---
+layout: default
+title: Styles
+nav_order: 11
+parent: Guides
+permalink: /guides/styles/
+---
+= Styles
+
+Use built-in styles or create custom paragraph and character styles.
+
+== Using Built-in Styles
+
+Apply standard Word styles by name:
+
+[source,ruby]
+----
+# Heading styles
+heading = Uniword::Paragraph.new
+heading.set_style('Heading1')
+heading.add_text("Chapter 1")
+
+# Normal style
+para = Uniword::Paragraph.new
+para.set_style('Normal')
+para.add_text("Body text")
+----
+
+Common built-in style names include `Normal`, `Heading1` through `Heading9`,
+`Title`, `Subtitle`, `Quote`, `Header`, `Footer`, and `TOC1` through `TOC9`.
+
+== Creating Custom Styles
+
+Define your own styles with paragraph and run formatting:
+
+[source,ruby]
+----
+doc.styles_configuration.create_paragraph_style(
+  'CustomStyle',
+  'My Custom Style',
+  paragraph_properties: Uniword::Properties::ParagraphProperties.new(
+    alignment: 'center',
+    spacing_before: 240,
+    spacing_after: 120
+  ),
+  run_properties: Uniword::Properties::RunProperties.new(
+    bold: true,
+    color: '0000FF',
+    size: 24
+  )
+)
+
+# Use custom style
+para = Uniword::Paragraph.new
+para.set_style('CustomStyle')
+para.add_text("Styled text")
+----
+
+== Style Properties
+
+Style definitions support these property groups:
+
+.Paragraph Properties
+* Alignment (left, center, right, both, distribute)
+* Spacing (before, after, line spacing)
+* Indentation (left, right, first-line, hanging)
+* Outline level (0-9 for table of contents)
+* Keep with next, keep lines together, page break before
+* Widow/orphan control
+
+.Run Properties
+* Font families (ASCII, East Asian, complex script)
+* Font sizes and colors
+* Bold, italic, small caps, caps, hidden, strikethrough
+* Underline styles, highlight colors
+* Vertical alignment (superscript, subscript, baseline)
+* Character spacing, kerning
+* Borders, shading, tabs

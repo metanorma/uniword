@@ -1,0 +1,60 @@
+---
+layout: default
+title: Prevention Layer
+nav_order: 4
+parent: Understanding
+permalink: /understanding/prevention-layer/
+---
+= Prevention Layer
+
+Uniword includes a **prevention layer** (`Docx::Reconciler`) that runs automatically during serialization. It enforces cross-part invariants so structurally invalid DOCX output becomes impossible.
+
+== How It Works
+
+The reconciler inspects the package's parts and settings before serialization. If it detects an inconsistency -- for example, footnote properties that reference a footnotes part that does not exist -- it creates the missing part or injects the missing property automatically.
+
+== Auto-Fixes
+
+The following conditions are detected and fixed automatically:
+
+[cols="2,3"]
+|===
+| Condition | Auto-fix
+
+| `footnotePr` set, no `footnotes.xml`
+| Create minimal footnotes with separator entries
+
+| `footnotes.xml` exists, no `footnotePr`
+| Create `FootnotePr` in settings
+
+| `endnotePr` set, no `endnotes.xml`
+| Create minimal endnotes with separator entries
+
+| `endnotes.xml` exists, no `endnotePr`
+| Create `EndnotePr` in settings
+
+| Missing separator entry (id=-1)
+| Inject separator
+
+| Missing continuation entry (id=0)
+| Inject continuation
+|===
+
+== When It Runs
+
+The reconciler runs in `Docx::Package#to_zip_content` before the serialization phase. Every time a DOCX file is written, the prevention layer ensures the output is structurally valid.
+
+[NOTE]
+====
+The reconciler is NOT an extension point -- it enforces built-in DOCX invariants. For customizable validation, use `uniword verify` or `Uniword::Validation::Rules`.
+====
+
+== Relationship to Verification
+
+The prevention layer is distinct from the verification system:
+
+Prevention Layer:: Runs automatically during writes. Fixes known invariant violations silently. Cannot be disabled.
+
+Verification Pipeline:: Runs on demand via `uniword verify`. Reports issues across three layers (OPC, XSD, semantic). Can include custom rules.
+
+Use the prevention layer to guarantee valid output. Use the verification pipeline to diagnose existing documents.

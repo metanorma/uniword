@@ -1,0 +1,17 @@
+---
+name: "Terrain"
+description: "Earth tone palette blending browns and greens"
+source: "uniword-generated"
+colors:
+  dk1: "1A1510"
+  lt1: "FAFAF5"
+  dk2: "3D3526"
+  lt2: "E8E0D0"
+  accent1: "5C4033"
+  accent2: "8B6F47"
+  accent3: "A89272"
+  accent4: "556B2F"
+  accent5: "6B8E23"
+  accent6: "BDB76B"
+  hlink: "8B6F47"
+  folHlink: "A89272"

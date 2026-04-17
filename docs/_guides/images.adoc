@@ -1,0 +1,55 @@
+---
+layout: default
+title: Images
+nav_order: 5
+parent: Guides
+permalink: /guides/images/
+---
+= Images
+
+Add and position images in documents.
+
+== Adding Images
+
+[source,ruby]
+----
+# Add image from file
+image = Uniword::Image.new(
+  path: 'path/to/image.png',
+  width: 300,
+  height: 200
+)
+doc.add_element(image)
+----
+
+The `width` and `height` parameters are in points (1 point = 1/72 inch).
+
+== Image Positioning
+
+Position images using the `position` hash:
+
+[source,ruby]
+----
+# Add positioned image
+image = Uniword::Image.new(
+  path: 'logo.png',
+  width: 100,
+  height: 100,
+  position: {
+    horizontal: 'center',
+    vertical: 'top'
+  }
+)
+----
+
+Position values control where the image anchor appears relative to the page.
+
+== Supported Formats
+
+Common image formats are supported for embedding:
+
+* PNG (`.png`) -- Recommended for screenshots and logos
+* JPEG (`.jpg`, `.jpeg`) -- Photographs
+* BMP (`.bmp`) -- Bitmap images
+* GIF (`.gif`) -- Graphics
+* SVG (`.svg`) -- Scalable vector graphics (converted to EMF)

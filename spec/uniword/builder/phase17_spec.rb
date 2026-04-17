@@ -386,7 +386,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       doc.author("Uniword")
 
       # Apply a theme
-      doc.theme("celestial") do |t|
+      doc.theme("constellation") do |t|
         t.fonts(minor: "Calibri")
       end
 

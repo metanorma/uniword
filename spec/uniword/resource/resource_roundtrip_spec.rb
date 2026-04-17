@@ -55,7 +55,7 @@ RSpec.describe "Resource Roundtrip" do
 
     context "theme with color scheme" do
       it "preserves color scheme colors" do
-        friendly = Uniword::Themes::Theme.load("atlas")
+        friendly = Uniword::Themes::Theme.load("meridian")
         theme = transformation.to_word(friendly)
 
         yaml = theme.to_yaml
@@ -79,7 +79,7 @@ RSpec.describe "Resource Roundtrip" do
 
     context "theme with font scheme" do
       it "preserves font scheme fonts" do
-        friendly = Uniword::Themes::Theme.load("atlas")
+        friendly = Uniword::Themes::Theme.load("meridian")
         theme = transformation.to_word(friendly)
 
         yaml = theme.to_yaml
@@ -148,8 +148,8 @@ RSpec.describe "Resource Roundtrip" do
       run = Uniword::Wordprocessingml::Run.new(text: "Test paragraph")
       para.runs << run
       doc.body.paragraphs << para
-      doc.apply_theme("atlas")
-      doc.apply_styleset("distinctive")
+      doc.apply_theme("meridian")
+      doc.apply_styleset("signature")
       doc.save(docx_path)
     end
 
@@ -157,14 +157,14 @@ RSpec.describe "Resource Roundtrip" do
       doc = Uniword::DocumentFactory.from_file(docx_path)
 
       expect(doc.theme).not_to be_nil
-      expect(doc.theme.name).to include("Atlas")
+      expect(doc.theme.name).to include("Meridian")
 
       # Save extracted theme
       File.write(extracted_theme, doc.theme.to_yaml)
 
       # Verify it can be loaded
       loaded = Uniword::Drawingml::Theme.from_yaml(File.read(extracted_theme))
-      expect(loaded.name).to include("Atlas")
+      expect(loaded.name).to include("Meridian")
     end
 
     it "extracts styleset from DOCX" do
@@ -247,7 +247,7 @@ RSpec.describe "Resource Roundtrip" do
       end
 
       it "processes theme creating variant" do
-        friendly = Uniword::Themes::Theme.load("atlas")
+        friendly = Uniword::Themes::Theme.load("meridian")
         theme = transformation.to_word(friendly)
         processor = Uniword::Resource::ThemeProcessor.new(
           hue_shift: 10,
@@ -258,7 +258,7 @@ RSpec.describe "Resource Roundtrip" do
         processed = processor.process(theme)
 
         expect(processed).to be_a(Uniword::Drawingml::Theme)
-        expect(processed.name).to include("Atlas")
+        expect(processed.name).to include("Meridian")
         expect(processed.name).to include("Uniword")
       end
     end

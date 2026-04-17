@@ -1,0 +1,62 @@
+---
+layout: default
+title: OPC Validation
+nav_order: 2
+parent: Verification
+permalink: /verification/opc-validation/
+---
+= OPC Validation
+
+The first layer of Uniword's verification pipeline checks the Open Packaging Conventions (OPC) structure of DOCX files.
+
+== What OPC Checks
+
+ZIP integrity (OPC-001)::
+  Verifies that the file is a valid ZIP archive that can be opened without errors. Corrupted ZIP files fail at this stage.
+
+Content types (OPC-002, OPC-003)::
+  Validates that `[Content_Types].xml` exists, is well-formed XML, and correctly lists all parts in the package with their MIME types.
+
+Relationships (OPC-005, OPC-006)::
+  Checks that `_rels/.rels` and all per-part `.rels` files exist and reference valid targets. Every relationship target must resolve to an actual part within the package.
+
+Part presence (OPC-004)::
+  Verifies that required parts are present. At minimum, `word/document.xml` must exist in a valid DOCX file.
+
+== CLI Usage
+
+[source,shell]
+----
+# OPC validation is included by default in verify
+uniword verify document.docx
+
+# Verbose output shows detailed OPC checks
+uniword verify document.docx --verbose
+----
+
+== Rule Codes
+
+OPC rules use the `OPC-xxx` prefix:
+
+[cols="1,3"]
+|===
+| Code | Description
+
+| OPC-001 | ZIP archive can be opened
+| OPC-002 | Content types file is valid
+| OPC-003 | Content types cover all parts
+| OPC-004 | Required parts are present
+| OPC-005 | Relationships are well-formed
+| OPC-006 | Relationship targets resolve
+|===
+
+== Programmatic Usage
+
+[source,ruby]
+----
+require 'uniword'
+
+result = Uniword::Verification.verify('document.docx')
+opc_issues = result.issues.select { |i| i.code.start_with?('OPC-') }
+opc_issues.each { |i| puts "#{i.code}: #{i.message}" }
+----

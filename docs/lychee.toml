@@ -1,0 +1,35 @@
+# Lychee link checker configuration
+# Used by .github/workflows/links.yml
+
+# Check these file types in the built site
+include = [
+  "_site/**/*.html",
+]
+
+# Exclude external links that are commonly unavailable in CI
+exclude = [
+  "localhost:*",
+  "127.0.0.1:*",
+]
+
+# Don't check mailto links
+include_mail = false
+
+# Use GET requests (HEAD can be blocked by some servers)
+method = "get"
+
+# Accept these status codes
+accept = [200, 201, 204, 301, 302, 303, 304, 307, 308]
+
+# Timeout per request (seconds)
+timeout = 20
+
+# Maximum number of redirects
+max_redirects = 5
+
+# Number of concurrent requests
+max_concurrency = 8
+
+# Retry failed requests
+retry_wait_time = 1
+retry_limit = 2

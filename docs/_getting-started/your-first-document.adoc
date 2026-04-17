@@ -1,0 +1,145 @@
+---
+layout: default
+title: Your First Document
+nav_order: 4
+parent: Getting Started
+permalink: /getting-started/your-first-document/
+---
+= Your First Document
+
+Walk through creating a complete Word document with headings, formatted text, and a table.
+
+== Set up
+
+[source,ruby]
+----
+require 'uniword'
+----
+
+== Create the document
+
+[source,ruby]
+----
+doc = Uniword::Document.new
+----
+
+== Add a title and author
+
+[source,ruby]
+----
+doc.core_properties.title = "Quarterly Report"
+doc.core_properties.creator = "Jane Smith"
+----
+
+== Add a heading
+
+[source,ruby]
+----
+heading = Uniword::Paragraph.new
+heading.style = "Heading1"
+heading.add_text("Quarterly Report")
+doc.add_element(heading)
+----
+
+== Add a paragraph with mixed formatting
+
+[source,ruby]
+----
+intro = Uniword::Paragraph.new
+intro.add_text("This report covers ", size: 22)
+intro.add_text("Q4 2025", bold: true, size: 22)
+intro.add_text(" results for the engineering team.", size: 22)
+doc.add_element(intro)
+----
+
+== Add a sub-heading and body text
+
+[source,ruby]
+----
+sub = Uniword::Paragraph.new
+sub.style = "Heading2"
+sub.add_text("Key Metrics")
+doc.add_element(sub)
+
+body = Uniword::Paragraph.new
+body.add_text("Revenue grew ")
+body.add_text("23%", bold: true, color: "008000")
+body.add_text(" year over year, driven by strong enterprise adoption.")
+doc.add_element(body)
+----
+
+== Add a table
+
+[source,ruby]
+----
+table = Uniword::Table.new(rows: 3, cols: 2)
+table.cell(0, 0).add_text("Metric", bold: true)
+table.cell(0, 1).add_text("Value", bold: true)
+table.cell(1, 0).add_text("Revenue")
+table.cell(1, 1).add_text("$4.2M")
+table.cell(2, 0).add_text("Customers")
+table.cell(2, 1).add_text("1,240")
+doc.add_element(table)
+----
+
+== Save the document
+
+[source,ruby]
+----
+doc.save("quarterly_report.docx")
+----
+
+Open `quarterly_report.docx` in Word or LibreOffice to see the result.
+
+== Complete script
+
+Here is the full script in one piece:
+
+[source,ruby]
+----
+require 'uniword'
+
+doc = Uniword::Document.new
+doc.core_properties.title = "Quarterly Report"
+doc.core_properties.creator = "Jane Smith"
+
+heading = Uniword::Paragraph.new
+heading.style = "Heading1"
+heading.add_text("Quarterly Report")
+doc.add_element(heading)
+
+intro = Uniword::Paragraph.new
+intro.add_text("This report covers ", size: 22)
+intro.add_text("Q4 2025", bold: true, size: 22)
+intro.add_text(" results for the engineering team.", size: 22)
+doc.add_element(intro)
+
+sub = Uniword::Paragraph.new
+sub.style = "Heading2"
+sub.add_text("Key Metrics")
+doc.add_element(sub)
+
+body = Uniword::Paragraph.new
+body.add_text("Revenue grew ")
+body.add_text("23%", bold: true, color: "008000")
+body.add_text(" year over year, driven by strong enterprise adoption.")
+doc.add_element(body)
+
+table = Uniword::Table.new(rows: 3, cols: 2)
+table.cell(0, 0).add_text("Metric", bold: true)
+table.cell(0, 1).add_text("Value", bold: true)
+table.cell(1, 0).add_text("Revenue")
+table.cell(1, 1).add_text("$4.2M")
+table.cell(2, 0).add_text("Customers")
+table.cell(2, 1).add_text("1,240")
+doc.add_element(table)
+
+doc.save("quarterly_report.docx")
+puts "Saved quarterly_report.docx"
+----
+
+== What's next?
+
+* link:../../guides/text-formatting/[Text Formatting] -- All formatting options.
+* link:../../guides/tables/[Tables] -- Advanced table features.
+* link:../../guides/themes/[Themes] -- Apply visual themes to your documents.
