@@ -2,44 +2,44 @@
 
 require "securerandom"
 require "lutaml/model"
+require_relative "reconciler"
 
 module Uniword
-  module Ooxml
-    # DOCX Package - Complete OOXML package model
+  module Docx
+    # DOCX Package - Complete DOCX file format model
     #
     # Represents the entire .docx file structure as a lutaml-model object.
     # Each XML file within the ZIP is a separate lutaml-model class.
     #
-    # This is the CORRECT OOP approach:
-    # - ONE model class for the container (DocxPackage)
-    # - Each XML part is a proper model attribute (content_types, document, styles, etc.)
-    # - No serializer/deserializer anti-pattern
+    # A DOCX package CONTAINS OOXML markup wrapped in an OPC ZIP container.
+    # This class lives in Uniword::Docx, not Uniword::Ooxml, because
+    # DOCX is a file format that uses OOXML, not the other way around.
     #
     # @example Load DOCX
-    #   package = DocxPackage.from_file('document.docx')
+    #   package = Package.from_file('document.docx')
     #   package.core_properties.title = 'New Title'
     #   package.to_file('output.docx')
     #
     # @example Access document content
-    #   package = DocxPackage.from_file('document.docx')
+    #   package = Package.from_file('document.docx')
     #   package.document.body.paragraphs.each { |p| puts p.text }
-    class DocxPackage < Lutaml::Model::Serializable
+    class Package < Lutaml::Model::Serializable
       # === Package Structure (OOXML Part 2: OPC) ===
       # Content Types ([Content_Types].xml)
       attribute :content_types, Uniword::ContentTypes::Types
 
       # Package-level relationships (_rels/.rels)
-      attribute :package_rels, Relationships::PackageRelationships
+      attribute :package_rels, Ooxml::Relationships::PackageRelationships
 
       # === Document Properties (docProps/) ===
       # Core document metadata (docProps/core.xml)
-      attribute :core_properties, CoreProperties
+      attribute :core_properties, Ooxml::CoreProperties
 
       # Extended application properties (docProps/app.xml)
-      attribute :app_properties, AppProperties
+      attribute :app_properties, Ooxml::AppProperties
 
       # Custom document properties (docProps/custom.xml)
-      attribute :custom_properties, CustomProperties
+      attribute :custom_properties, Ooxml::CustomProperties
 
       # Custom XML data items (customXml/item*.xml)
       attr_accessor :custom_xml_items
@@ -64,14 +64,14 @@ module Uniword
       attribute :web_settings, Uniword::Wordprocessingml::WebSettings
 
       # Document-level relationships (word/_rels/document.xml.rels)
-      attribute :document_rels, Relationships::PackageRelationships
+      attribute :document_rels, Ooxml::Relationships::PackageRelationships
 
       # === Theme (word/theme/) ===
       # Document theme (word/theme/theme1.xml)
       attribute :theme, Drawingml::Theme
 
       # Theme-level relationships (word/theme/_rels/theme1.xml.rels)
-      attribute :theme_rels, Relationships::PackageRelationships
+      attribute :theme_rels, Ooxml::Relationships::PackageRelationships
 
       # === Footnotes and Endnotes (word/) ===
       # Footnotes (word/footnotes.xml)
@@ -110,7 +110,7 @@ module Uniword
 
         # Parse Package Relationships
         if zip_content["_rels/.rels"]
-          package.package_rels = Relationships::PackageRelationships.from_xml(
+          package.package_rels = Ooxml::Relationships::PackageRelationships.from_xml(
             zip_content["_rels/.rels"]
           )
         end
@@ -121,20 +121,20 @@ module Uniword
 
         # Parse Document Properties
         if zip_content["docProps/core.xml"]
-          package.core_properties = CoreProperties.from_xml(
+          package.core_properties = Ooxml::CoreProperties.from_xml(
             zip_content["docProps/core.xml"]
           )
         end
 
         if zip_content["docProps/app.xml"]
-          package.app_properties = AppProperties.from_xml(
+          package.app_properties = Ooxml::AppProperties.from_xml(
             zip_content["docProps/app.xml"]
           )
         end
 
         # Parse Custom Properties
         if zip_content["docProps/custom.xml"]
-          package.custom_properties = CustomProperties.from_xml(
+          package.custom_properties = Ooxml::CustomProperties.from_xml(
             zip_content["docProps/custom.xml"]
           )
         end
@@ -206,12 +206,12 @@ module Uniword
 
         # Parse document relationships - use dynamic path based on main document
         if main_doc_rels_path && zip_content[main_doc_rels_path]
-          package.document_rels = Relationships::PackageRelationships.from_xml(
+          package.document_rels = Ooxml::Relationships::PackageRelationships.from_xml(
             zip_content[main_doc_rels_path]
           )
         elsif zip_content["word/_rels/document.xml.rels"]
           # Fallback to standard path
-          package.document_rels = Relationships::PackageRelationships.from_xml(
+          package.document_rels = Ooxml::Relationships::PackageRelationships.from_xml(
             zip_content["word/_rels/document.xml.rels"]
           )
         end
@@ -228,7 +228,7 @@ module Uniword
         end
 
         if zip_content["word/theme/_rels/theme1.xml.rels"]
-          package.theme_rels = Relationships::PackageRelationships.from_xml(
+          package.theme_rels = Ooxml::Relationships::PackageRelationships.from_xml(
             zip_content["word/theme/_rels/theme1.xml.rels"]
           )
         end
@@ -492,19 +492,19 @@ module Uniword
 
       # Create minimal package relationships for a valid DOCX
       def self.minimal_package_rels
-        rels = Relationships::PackageRelationships.new
+        rels = Ooxml::Relationships::PackageRelationships.new
         rels.relationships ||= []
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId1",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
           target: "word/document.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId2",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
           target: "docProps/app.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId3",
           type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
           target: "docProps/core.xml"
@@ -514,24 +514,24 @@ module Uniword
 
       # Create minimal document relationships for a valid DOCX
       def self.minimal_document_rels
-        rels = Relationships::PackageRelationships.new
+        rels = Ooxml::Relationships::PackageRelationships.new
         rels.relationships ||= []
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId1",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
           target: "styles.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId2",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
           target: "fontTable.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId3",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
           target: "settings.xml"
         )
-        rels.relationships << Relationships::Relationship.new(
+        rels.relationships << Ooxml::Relationships::Relationship.new(
           id: "rId4",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
           target: "webSettings.xml"
@@ -565,6 +565,9 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
+        # --- Reconcile: enforce DOCX-level invariants before serialization ---
+        Reconciler.new(self).reconcile
+
         # --- Pre-serialization: inject image/chart/bibliography into content_types and document_rels ---
 
         # Image parts: add content types and relationships
@@ -582,7 +585,7 @@ module Uniword
           # Image relationships are added after finding unique rIds
           document.image_parts.each do |r_id, image_data|
             content["word/#{image_data[:target]}"] = image_data[:data]
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: r_id,
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
               target: image_data[:target]
@@ -601,7 +604,7 @@ module Uniword
 
           document.chart_parts.each do |r_id, chart_data|
             content["word/#{chart_data[:target]}"] = chart_data[:xml]
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: r_id,
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
               target: chart_data[:target]
@@ -619,7 +622,7 @@ module Uniword
           end
 
           unless document_rels.relationships.any? { |r| r.target == "sources.xml" }
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: "rIdSrc#{SecureRandom.hex(4)}",
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
               target: "sources.xml"
@@ -639,7 +642,7 @@ module Uniword
           unless package_rels.relationships.any? do |r|
             r.type.to_s.include?("officeDocument/2006/relationships/custom-properties")
           end
-            package_rels.relationships << Relationships::Relationship.new(
+            package_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: "rIdCustProps",
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
               target: "docProps/custom.xml"
@@ -674,7 +677,7 @@ module Uniword
               content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"
             )
 
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: r_id,
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
               target: "header#{header_counter}.xml"
@@ -703,7 +706,7 @@ module Uniword
               content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"
             )
 
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: r_id,
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
               target: "footer#{footer_counter}.xml"
@@ -731,7 +734,7 @@ module Uniword
               content_type: part[:content_type]
             )
 
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: part[:r_id],
               type: part[:rel_type],
               target: part[:target]
@@ -749,7 +752,7 @@ module Uniword
           end
 
           unless document_rels.relationships.any? { |r| r.target == "footnotes.xml" }
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: "rIdFootnotes",
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
               target: "footnotes.xml"
@@ -766,7 +769,7 @@ module Uniword
           end
 
           unless document_rels.relationships.any? { |r| r.target == "endnotes.xml" }
-            document_rels.relationships << Relationships::Relationship.new(
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
               id: "rIdEndnotes",
               type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
               target: "endnotes.xml"

@@ -5,7 +5,7 @@ require "fileutils"
 
 RSpec.describe "MHTML Round-trip Validation", type: :integration do
   def docx_to_mhtml(docx_path)
-    docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+    docx_pkg = Uniword::Docx::Package.from_file(docx_path)
     mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg)
     mime = Uniword::Infrastructure::MimePackager.new(mhtml_doc).build_mime_content
     Uniword::Infrastructure::MimeParser.new.parse_content(mime)

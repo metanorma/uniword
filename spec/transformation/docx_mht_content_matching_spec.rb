@@ -86,7 +86,7 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
   # Convert DOCX to MHT and extract body HTML
   def docx_to_mht_body(docx_path, doc_name = nil)
-    docx_pkg = Uniword::Ooxml::DocxPackage.from_file(docx_path)
+    docx_pkg = Uniword::Docx::Package.from_file(docx_path)
     mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
     mhtml_doc.html_part&.raw_content || ""
   end

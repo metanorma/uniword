@@ -41,6 +41,9 @@ module Uniword
   # OOXML module with Namespaces autoload chain
   autoload :Ooxml, "uniword/ooxml"
 
+  # DOCX file format namespace
+  autoload :Docx, "uniword/docx"
+
   # Properties module
   autoload :Properties, "uniword/properties"
 

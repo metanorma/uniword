@@ -49,7 +49,7 @@ module Uniword
 
       case format
       when :docx, :docm
-        Ooxml::DocxPackage.to_file(document, path)
+        Docx::Package.to_file(document, path)
       when :dotx, :dotm
         Ooxml::DotxPackage.to_file(document, path)
       when :mhtml

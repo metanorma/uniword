@@ -9,7 +9,7 @@ RSpec.describe "DocxPackage Complete Round-Trip" do
 
   before(:all) do
     # Load and save with DocxPackage (proper OOP model)
-    package = Uniword::Ooxml::DocxPackage.from_file(TEST_DOCUMENT)
+    package = Uniword::Docx::Package.from_file(TEST_DOCUMENT)
     package.to_file(OUTPUT_PATH)
   end
 

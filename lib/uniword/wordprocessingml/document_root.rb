@@ -129,7 +129,7 @@ module Uniword
       #
       # @param path [String] Output file path
       def to_file(path)
-        Ooxml::DocxPackage.to_file(self, path)
+        Docx::Package.to_file(self, path)
       end
 
       # Get all paragraph text

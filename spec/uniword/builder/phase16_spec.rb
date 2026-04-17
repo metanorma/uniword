@@ -13,11 +13,11 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
 
     # Helper: build ZIP content hash for a document model
     def zip_content_for(model)
-      pkg = Uniword::Ooxml::DocxPackage.new
+      pkg = Uniword::Docx::Package.new
       pkg.document = model
-      Uniword::Ooxml::DocxPackage.copy_document_parts_to_package(model, pkg)
-      pkg.content_types ||= Uniword::Ooxml::DocxPackage.minimal_content_types
-      pkg.document_rels ||= Uniword::Ooxml::DocxPackage.minimal_document_rels
+      Uniword::Docx::Package.copy_document_parts_to_package(model, pkg)
+      pkg.content_types ||= Uniword::Docx::Package.minimal_content_types
+      pkg.document_rels ||= Uniword::Docx::Package.minimal_document_rels
       pkg.to_zip_content
     end
 

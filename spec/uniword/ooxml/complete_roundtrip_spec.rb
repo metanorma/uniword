@@ -26,7 +26,7 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
 
   before(:all) do
     # Load and save document once for all tests
-    package = Uniword::Ooxml::DocxPackage.from_file(TEST_DOCUMENT)
+    package = Uniword::Docx::Package.from_file(TEST_DOCUMENT)
     package.to_file(OUTPUT_PATH)
   end
 
