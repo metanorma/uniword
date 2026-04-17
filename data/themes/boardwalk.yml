@@ -1,0 +1,197 @@
+---
+name: Boardwalk
+source: uniword-generated
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Boardwalk
+  colors:
+    accent1: B31166
+    accent2: E33D6F
+    accent3: E45F3C
+    accent4: E9943A
+    accent5: 9B6BF2
+    accent6: D53DD0
+    dk1: '000000'
+    dk2: 3B3059
+    folHlink: A5A5A5
+    hlink: 8F8F8F
+    lt1: FFFFFF
+    lt2: EBEBEB
+font_scheme:
+  name: Boardwalk
+  major_font: League Gothic
+  minor_font: League Gothic
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Boardwalk Variant 1
+      colors:
+        accent1: B01513
+        accent2: EA6312
+        accent3: E6B729
+        accent4: 6AAC90
+        accent5: 5F9C9D
+        accent6: 9E5E9B
+        dk1: '000000'
+        dk2: 1E5155
+        folHlink: 9DFFCB
+        hlink: 58C1BA
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 1
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Boardwalk Variant 2
+      colors:
+        accent1: ACD433
+        accent2: E6C133
+        accent3: EF7A24
+        accent4: 5AA0F5
+        accent5: 75CEEC
+        accent6: 65D6A0
+        dk1: '000000'
+        dk2: 0E5580
+        folHlink: BDE0FB
+        hlink: C4E46E
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 2
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Boardwalk Variant 3
+      colors:
+        accent1: F5A408
+        accent2: FA731A
+        accent3: AB9281
+        accent4: A18CD0
+        accent5: 8EBBD2
+        accent6: ACC995
+        dk1: '000000'
+        dk2: EE5818
+        folHlink: FCDB9B
+        hlink: FAC96A
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 3
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Boardwalk Variant 4
+      colors:
+        accent1: B31166
+        accent2: E33D6F
+        accent3: E45F3C
+        accent4: E9943A
+        accent5: 9B6BF2
+        accent6: D53DD0
+        dk1: '000000'
+        dk2: 3B3059
+        folHlink: A5A5A5
+        hlink: 8F8F8F
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 4
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Boardwalk Variant 5
+      colors:
+        accent1: B01513
+        accent2: EA6312
+        accent3: E6B729
+        accent4: 6AAC90
+        accent5: 5F9C9D
+        accent6: 9E5E9B
+        dk1: '000000'
+        dk2: 1E5155
+        folHlink: 9DD0CB
+        hlink: 58C1BA
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 5
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Boardwalk Variant 6
+      colors:
+        accent1: ACD433
+        accent2: E6C133
+        accent3: EF7A24
+        accent4: 5AA0F5
+        accent5: 75CEEC
+        accent6: 65D6A0
+        dk1: '000000'
+        dk2: 0E5580
+        folHlink: BDE0FB
+        hlink: C4E46E
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 6
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Boardwalk Variant 7
+      colors:
+        accent1: F5A408
+        accent2: FA731A
+        accent3: AB9281
+        accent4: A18CD0
+        accent5: 8EBBD2
+        accent6: ACC995
+        dk1: '000000'
+        dk2: EE5818
+        folHlink: FCDB9B
+        hlink: FAC96A
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Boardwalk Variant 7
+      major_font: League Gothic
+      minor_font: League Gothic
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Ion Boardroom

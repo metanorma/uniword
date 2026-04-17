@@ -1,0 +1,197 @@
+---
+name: Constellation
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Constellation
+  colors:
+    accent1: AC3EC1
+    accent2: 477BD1
+    accent3: 46B298
+    accent4: 90BA4C
+    accent5: DD9D31
+    accent6: E25247
+    dk1: '000000'
+    dk2: 18276C
+    folHlink: CCAEE8
+    hlink: C573D2
+    lt1: FFFFFF
+    lt2: EBEBEB
+font_scheme:
+  name: Constellation
+  major_font: Carlito
+  minor_font: Carlito
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Constellation Variant 1
+      colors:
+        accent1: E5B458
+        accent2: F77754
+        accent3: D8507E
+        accent4: BC70EE
+        accent5: 3CA2E2
+        accent6: 91BF77
+        dk1: '000000'
+        dk2: 16476F
+        folHlink: A6E4C7
+        hlink: 71DDAB
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 1
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Constellation Variant 2
+      colors:
+        accent1: 94CE67
+        accent2: 49D1CD
+        accent3: 61A5D6
+        accent4: 9D8CD3
+        accent5: E45C8A
+        accent6: F98C61
+        dk1: '000000'
+        dk2: 104C7E
+        folHlink: E7F19A
+        hlink: AAF172
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 2
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Constellation Variant 3
+      colors:
+        accent1: E84574
+        accent2: 798FF2
+        accent3: 95C369
+        accent4: EE875A
+        accent5: C363E8
+        accent6: 6AADC8
+        dk1: '000000'
+        dk2: 3F296A
+        folHlink: FBA3EC
+        hlink: FE80C7
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 3
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Constellation Variant 4
+      colors:
+        accent1: AC3EC1
+        accent2: 477BD1
+        accent3: 46B298
+        accent4: 90BA4C
+        accent5: DD9D31
+        accent6: E25247
+        dk1: '000000'
+        dk2: 18276C
+        folHlink: CCAEE8
+        hlink: C573D2
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 4
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Constellation Variant 5
+      colors:
+        accent1: E5B458
+        accent2: F77754
+        accent3: D8507E
+        accent4: BC70EE
+        accent5: 3CA2E2
+        accent6: 91BF77
+        dk1: '000000'
+        dk2: 16476F
+        folHlink: A6E4C7
+        hlink: 71DDAB
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 5
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Constellation Variant 6
+      colors:
+        accent1: 94CE67
+        accent2: 49D1CD
+        accent3: 61A5D6
+        accent4: 9D8CD3
+        accent5: E45C8A
+        accent6: F98C61
+        dk1: '000000'
+        dk2: 104C7E
+        folHlink: E7F19A
+        hlink: AAF172
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 6
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Constellation Variant 7
+      colors:
+        accent1: E84574
+        accent2: 798FF2
+        accent3: 95C369
+        accent4: EE875A
+        accent5: C363E8
+        accent6: 6AADC8
+        dk1: '000000'
+        dk2: 3F296A
+        folHlink: FBA3EC
+        hlink: FE80C7
+        lt1: FFFFFF
+        lt2: EBEBEB
+    font_scheme:
+      name: Constellation Variant 7
+      major_font: Carlito
+      minor_font: Carlito
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Celestial

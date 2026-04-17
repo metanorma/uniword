@@ -1,0 +1,197 @@
+---
+name: Botanical
+source: uniword-generated
+imported_at: '2025-11-01T00:14:42Z'
+color_scheme:
+  name: Botanical
+  colors:
+    accent1: 83992A
+    accent2: 3C9770
+    accent3: 44709D
+    accent4: A23C33
+    accent5: D97828
+    accent6: DEB340
+    dk1: '000000'
+    dk2: '212121'
+    folHlink: B4CA80
+    hlink: A8BF4D
+    lt1: FFFFFF
+    lt2: DADADA
+font_scheme:
+  name: Botanical
+  major_font: EB Garamond
+  minor_font: EB Garamond
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Botanical Variant 1
+      colors:
+        accent1: B15E28
+        accent2: B13228
+        accent3: 8B7B56
+        accent4: E09C41
+        accent5: 9EAE51
+        accent6: 6E7355
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: CA8F55
+        hlink: D37A21
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 1
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Botanical Variant 2
+      colors:
+        accent1: D9B247
+        accent2: CC702D
+        accent3: B53A31
+        accent4: 815F56
+        accent5: AE9E7C
+        accent6: 7B8865
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: CF9C5F
+        hlink: BB7826
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 2
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Botanical Variant 3
+      colors:
+        accent1: AB946B
+        accent2: C04F32
+        accent3: DD8C3C
+        accent4: 8E684C
+        accent5: CBAF62
+        accent6: '803348'
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: B99E84
+        hlink: 86724D
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 3
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Botanical Variant 4
+      colors:
+        accent1: 83992A
+        accent2: 3C9770
+        accent3: 44709D
+        accent4: A23C33
+        accent5: D97828
+        accent6: DEB340
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: B4CA80
+        hlink: A8BF4D
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 4
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Botanical Variant 5
+      colors:
+        accent1: B15E28
+        accent2: B13228
+        accent3: 8B7B56
+        accent4: E09C41
+        accent5: 9EAE51
+        accent6: 6E7355
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: CA8F55
+        hlink: D37A21
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 5
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Botanical Variant 6
+      colors:
+        accent1: D9B247
+        accent2: CC702D
+        accent3: B53A31
+        accent4: 815F56
+        accent5: AE9E7C
+        accent6: 7B8864
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: CF9C5F
+        hlink: BB7826
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 6
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Botanical Variant 7
+      colors:
+        accent1: AB946B
+        accent2: C04F32
+        accent3: DD8C3C
+        accent4: 8E684C
+        accent5: CBAF62
+        accent6: '803348'
+        dk1: '000000'
+        dk2: '212121'
+        folHlink: B99E84
+        hlink: 86724D
+        lt1: FFFFFF
+        lt2: DADADA
+    font_scheme:
+      name: Botanical Variant 7
+      major_font: EB Garamond
+      minor_font: EB Garamond
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Organic

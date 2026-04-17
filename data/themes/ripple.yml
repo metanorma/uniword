@@ -1,0 +1,197 @@
+---
+name: Ripple
+source: uniword-generated
+imported_at: '2025-11-01T00:14:41Z'
+color_scheme:
+  name: Ripple
+  colors:
+    accent1: 2FA3EE
+    accent2: 4BCAAD
+    accent3: 86C157
+    accent4: D99C3F
+    accent5: CE6633
+    accent6: A35DD1
+    dk1: '000000'
+    dk2: '355071'
+    folHlink: 97C5E3
+    hlink: 56BCFE
+    lt1: FFFFFF
+    lt2: AABED7
+font_scheme:
+  name: Ripple
+  major_font: Source Sans Pro
+  minor_font: Source Sans Pro
+  major_east_asian: Noto Sans CJK JP
+  major_complex_script: Noto Sans Arabic
+  minor_east_asian: Noto Sans CJK JP
+  minor_complex_script: Noto Sans Arabic
+variants:
+  variant1:
+    color_scheme:
+      name: Ripple Variant 1
+      colors:
+        accent1: E34B7A
+        accent2: AC339A
+        accent3: 6953B7
+        accent4: 1D7EAB
+        accent5: 43AFD6
+        accent6: DE85E1
+        dk1: '000000'
+        dk2: 27537E
+        folHlink: C99EAC
+        hlink: ED87A6
+        lt1: FFFFFF
+        lt2: AABED7
+    font_scheme:
+      name: Ripple Variant 1
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant2:
+    color_scheme:
+      name: Ripple Variant 2
+      colors:
+        accent1: 274FA4
+        accent2: 48A8D0
+        accent3: 53B18F
+        accent4: D78D38
+        accent5: BA3F51
+        accent6: AE52D9
+        dk1: '000000'
+        dk2: 1C647B
+        folHlink: 76A3B8
+        hlink: 2AA2DA
+        lt1: FFFFFF
+        lt2: 98B7D3
+    font_scheme:
+      name: Ripple Variant 2
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant3:
+    color_scheme:
+      name: Ripple Variant 3
+      colors:
+        accent1: 9AC43E
+        accent2: 44BA98
+        accent3: 43A9D9
+        accent4: 6274D8
+        accent5: AB54D7
+        accent6: D15B37
+        dk1: '000000'
+        dk2: 4B4B4B
+        folHlink: C0D591
+        hlink: BFE962
+        lt1: FFFFFF
+        lt2: B5B5B5
+    font_scheme:
+      name: Ripple Variant 3
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant4:
+    color_scheme:
+      name: Ripple Variant 4
+      colors:
+        accent1: 2FA3EE
+        accent2: 4BCAAD
+        accent3: 86C157
+        accent4: D99C3F
+        accent5: CE6633
+        accent6: A35DD1
+        dk1: '000000'
+        dk2: '355071'
+        folHlink: 97C5E3
+        hlink: 56BCFE
+        lt1: FFFFFF
+        lt2: AABED7
+    font_scheme:
+      name: Ripple Variant 4
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant5:
+    color_scheme:
+      name: Ripple Variant 5
+      colors:
+        accent1: E34B7A
+        accent2: AC339A
+        accent3: 6953B7
+        accent4: 1D7EAB
+        accent5: 43AFD6
+        accent6: DE85E1
+        dk1: '000000'
+        dk2: 27537E
+        folHlink: C99EAC
+        hlink: ED87A6
+        lt1: FFFFFF
+        lt2: AABED7
+    font_scheme:
+      name: Ripple Variant 5
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant6:
+    color_scheme:
+      name: Ripple Variant 6
+      colors:
+        accent1: 274FA4
+        accent2: 48A8D0
+        accent3: 53B18F
+        accent4: D78D38
+        accent5: BA3F51
+        accent6: AE52D9
+        dk1: '000000'
+        dk2: 1C647B
+        folHlink: 76A3B8
+        hlink: 2AA2DA
+        lt1: FFFFFF
+        lt2: 98B7D3
+    font_scheme:
+      name: Ripple Variant 6
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+  variant7:
+    color_scheme:
+      name: Ripple Variant 7
+      colors:
+        accent1: 9AC43E
+        accent2: 44BA98
+        accent3: 43A9D9
+        accent4: 6274D8
+        accent5: AB54D7
+        accent6: D15B37
+        dk1: '000000'
+        dk2: 4B4B4B
+        folHlink: C0D591
+        hlink: BFE962
+        lt1: FFFFFF
+        lt2: B5B5B5
+    font_scheme:
+      name: Ripple Variant 7
+      major_font: Source Sans Pro
+      minor_font: Source Sans Pro
+      major_east_asian: Noto Sans CJK JP
+      major_complex_script: Noto Sans Arabic
+      minor_east_asian: Noto Sans CJK JP
+      minor_complex_script: Noto Sans Arabic
+ms_equivalent: Droplet
