@@ -84,3 +84,118 @@ doc.apply_styleset('distinctive')
 
 # Resources are loaded automatically from the gem's data directory
 ----
+
+== Resource Resolution
+
+The `ResourceResolver` resolves resources from multiple sources in order:
+
+. **Cached** -- User-imported or previously resolved resources stored in the
+  local cache directory
+. **Bundled** -- Resources shipped with the Uniword gem in `data/`
+
+[source,ruby]
+----
+resolver = Uniword::Resource::ResourceResolver.new
+
+# Check if a theme exists in any source
+resolver.exists?(:theme, "celestial")  # => true
+
+# List all available resources (cached + bundled)
+resolver.list_all(:theme)  # => ["celestial", "meridian", ...]
+
+# List only bundled resources
+resolver.list(:theme, source: :bundled)
+
+# Resolve a resource (returns ResourceLocation)
+location = resolver.resolve(:theme, "celestial")
+location.exists?  # => true
+----
+
+== Resource Caching
+
+The `Cache` class manages imported resources on the local filesystem:
+
+[source,ruby]
+----
+cache = Uniword::Resource::Cache.new
+
+# Write a custom theme to cache
+cache.write(:theme, "my-brand", yaml_content)
+
+# Read from cache
+content = cache.read(:theme, "my-brand")
+
+# List cached resources
+cache.list(:theme)  # => ["my-brand"]
+
+# Delete a cached resource
+cache.delete(:theme, "my-brand")
+
+# Clear all cached resources
+cache.clear!
+----
+
+== Font Substitution
+
+The `FontSubstitutor` maps proprietary Microsoft fonts to OFL-licensed
+alternatives at three levels:
+
+[source,ruby]
+----
+# Substitute a single font name
+Uniword::Resource::FontSubstitutor.substitute("Calibri")
+# => "Carlito"
+
+# Substitute by OOXML script code
+Uniword::Resource::FontSubstitutor.substitute_script("Jpan", "MS Gothic")
+# => "Noto Sans CJK JP"
+
+# Transform an entire font scheme (Latin + EA + CS)
+scheme = doc.theme.theme_elements.font_scheme
+Uniword::Resource::FontSubstitutor.transform_font_scheme(scheme)
+
+# Check font availability via Fontist (if installed)
+Uniword::Resource::FontSubstitutor.check_availability("Carlito")
+# => true
+----
+
+== MS Theme Auto-Transition
+
+When opening documents created in Microsoft Word, Uniword can detect and
+replace MS themes with OFL equivalents using color fingerprint matching.
+
+[source,ruby]
+----
+doc = Uniword::Document.open("ms_report.docx")
+
+# Auto-detect MS theme and apply Uniword equivalent
+result = Uniword::Resource::ThemeTransition.auto_transition!(doc)
+puts result.ms_name         # => "Atlas"
+puts result.uniword_slug    # => "meridian"
+
+# Detect by theme object (color fingerprint)
+slug = ThemeTransition.detect_ms_theme(doc.theme)
+
+# Detect by name string
+slug = ThemeTransition.from_ms_name("Atlas")
+# => "meridian"
+----
+
+See link:/guides/auto-theme-transition/[Auto Theme Transition] for full details.
+
+== Resource Architecture
+
+The resource module is organized into categories:
+
+[cols="2,4"]
+|===
+| Category | Components
+
+| Services | `ColorTransformer`, `FontSubstitutor` -- stateless pure functions
+| Loaders | `ColorSchemeLoader`, `FontSchemeLoader`, `DocumentElementLoader`, `ThemeMappingLoader` -- load from data files
+| Transitions | `ThemeTransition` -- detect and migrate between MS and Uniword themes
+| Models | `ThemeProcessor`, `Cache`, `CacheVersion`, `ResourceResolver` -- stateful objects
+| Value Objects | `CachePaths`, `ResourceLocation` -- immutable structs
+| Converters | `DocumentElementConverter` -- transform between formats
+| Templates | `DocumentElementTemplate` -- document element templates
+|===
