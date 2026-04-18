@@ -56,6 +56,7 @@ end
 | `v:` | 15 | v2.0 | VML -- legacy vector graphics for backward compatibility
 | `o:` | 40 | v2.0 | Office -- shared properties for legacy formats
 | `v:o:` | 25 | v2.0 | VML Office extensions -- additional legacy drawing properties
+| `w10:` | 4 | v2.0 | VML Word -- VML borders and text box borders
 | `dp:` | 20 | v2.0 | Document Properties -- core and app metadata
 | `w14:` | 25 | v2.0 | Word 2010 Extended -- enhanced controls, text effects
 | `w15:` | 20 | v2.0 | Word 2013 Extended -- collaboration and comments

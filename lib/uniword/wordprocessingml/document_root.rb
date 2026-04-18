@@ -168,15 +168,26 @@ module Uniword
       end
 
       # Check if document structure is valid.
-      # Performs lightweight structural checks (not full schema validation).
-      # Use the verify CLI command for OPC + XSD + semantic validation.
+      # Runs structural checks via Validation::StructuralValidator.
+      # Use the verify CLI command for full OPC + XSD + semantic validation.
       #
       # @return [Boolean] true if document has valid structure
       def valid?
-        return false unless body
-        return false if body.paragraphs.nil?
+        Validation::StructuralValidator.new(self).valid?
+      end
 
-        true
+      # Get structural validation errors.
+      #
+      # @return [Array<String>] Error messages
+      def validation_errors
+        Validation::StructuralValidator.new(self).errors
+      end
+
+      # Get structural validation warnings.
+      #
+      # @return [Array<String>] Warning messages
+      def validation_warnings
+        Validation::StructuralValidator.new(self).warnings
       end
 
       # Get bookmarks from document paragraphs
