@@ -70,6 +70,21 @@ package.document.body.add_paragraph("New paragraph")
 package.to_file('modified.docx')
 ----
 
+== Module Architecture
+
+The `Package` class is decomposed into focused modules following the single responsibility principle:
+
+`PackageDefaults`::
+Factory methods for constructing minimal DOCX packages (`minimal_content_types`, `minimal_package_rels`, `minimal_document_rels`).
+Provides the `DOCUMENT_TO_PACKAGE_MAPPINGS` hash for open/closed copying of document parts.
+
+`PackageSerialization`::
+Content type injection and XML serialization for all package parts.
+Handles image, chart, header, footer, footnote, bibliography, and custom XML injection.
+Separates the "what to write" phase from the "how to write it" phase.
+
+This decomposition keeps `Package` itself focused on loading and delegation (~390 lines), while each module handles one responsibility.
+
 == Benefits
 
 Zero hardcoding::

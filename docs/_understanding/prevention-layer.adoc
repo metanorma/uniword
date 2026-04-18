@@ -58,3 +58,14 @@ Prevention Layer:: Runs automatically during writes. Fixes known invariant viola
 Verification Pipeline:: Runs on demand via `uniword verify`. Reports issues across three layers (OPC, XSD, semantic). Can include custom rules.
 
 Use the prevention layer to guarantee valid output. Use the verification pipeline to diagnose existing documents.
+
+== Structural Validation
+
+`Validation::StructuralValidator` provides document-level integrity checks used by `DocumentRoot#valid?`:
+
+* Verifies the document body exists and contains at least one block element
+* Checks paragraph integrity (no nil runs within paragraphs)
+* Validates table structure (rows and cells present)
+* Detects broken internal references
+
+This validator runs on demand via `document.valid?` and is separate from the automatic prevention layer.

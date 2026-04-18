@@ -48,6 +48,24 @@ The conversion process:
 4. Encodes embedded images as Base64 MIME parts
 5. Wraps everything in a MIME multipart structure
 
+=== Converter Architecture
+
+The `OoxmlToMhtmlConverter` is decomposed into focused modules:
+
+`MhtmlStyleBuilder`::
+Static CSS stylesheets and latent style definitions extracted from Word.
+Provides `latent_styles` and `style_block` as frozen heredoc constants.
+
+`MhtmlElementRenderer`::
+Converts OOXML elements (Paragraph, Table, Run, etc.) to Word HTML.
+Takes relationships for hyperlink resolution. Each element type has a dedicated rendering method.
+
+`MhtmlMetadataBuilder`::
+Builds metadata, document properties, file parts, and image MIME parts for MHTML output.
+Calculates document statistics and constructs core/custom property blocks.
+
+The converter itself is a thin coordinator (~200 lines) that delegates to these modules.
+
 == MHTML to DOCX Conversion
 
 [source,ruby]
