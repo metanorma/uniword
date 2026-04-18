@@ -435,7 +435,8 @@ module Uniword
           # Fallback to document_rels from document itself
           location = @document.document_rels&.relationships&.first&.target || "document"
           File.basename(location, ".*")
-        rescue StandardError
+        rescue StandardError => e
+          Uniword.logger&.debug { "Falling back to 'document' name: #{e.message}" }
           "document"
         end
       end

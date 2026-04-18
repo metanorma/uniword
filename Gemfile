@@ -9,20 +9,22 @@ gemspec
 
 gem 'lutaml-model', github: 'lutaml/lutaml-model', branch: 'main'
 
-# Development and testing gems
-gem "canon"
-gem "rake"
-gem "rspec"
-gem "rubocop"
-gem "rubocop-performance"
-gem "rubocop-rake"
-gem "rubocop-rspec"
-gem "yard"
+group :development do
+  gem "canon"
+  gem "rake"
+  gem "rspec"
+  gem "rubocop"
+  gem "rubocop-performance"
+  gem "rubocop-rake"
+  gem "rubocop-rspec"
+  gem "yard"
+end
 
-# Performance profiling gems (optional, for development)
-gem "benchmark"
-gem "benchmark-ips"
-gem "benchmark-memory"
-gem "get_process_mem"
-gem "ruby-prof"
+group :profiling, optional: true do
+  gem "benchmark"
+  gem "benchmark-ips"
+  gem "benchmark-memory"
+  gem "get_process_mem"
+  gem "ruby-prof"
+end
 

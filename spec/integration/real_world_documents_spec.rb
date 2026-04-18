@@ -2,7 +2,11 @@
 
 require "spec_helper"
 require "benchmark"
-require "benchmark/memory"
+begin
+  require "benchmark/memory"
+rescue LoadError
+  # benchmark-memory is in optional :profiling group
+end
 require "tmpdir"
 
 RSpec.describe "Real-World Document Testing", :integration do
@@ -135,6 +139,7 @@ RSpec.describe "Real-World Document Testing", :integration do
       end
 
       it "handles document without memory issues" do
+        skip "benchmark-memory gem not available" unless defined?(Benchmark::Memory)
         report = Benchmark.memory(quiet: true) do |x|
           x.report("load+text") { doc = Uniword.load(doc_path); doc.text }
         end

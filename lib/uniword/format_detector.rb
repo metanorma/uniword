@@ -20,6 +20,9 @@ module Uniword
     # ZIP file magic number (PK\x03\x04)
     ZIP_SIGNATURE = [0x50, 0x4B, 0x03, 0x04].pack("C*").freeze
 
+    # HTML tag markers
+    HTML_MARKERS = ["<!DOCTYPE html", "<html", "<HTML"].freeze
+
     # MIME version header for MHTML
     MIME_HEADER = "MIME-Version:"
 
@@ -85,6 +88,10 @@ module Uniword
       # Check for MIME header (MHTML)
       return :mhtml if header.include?(MIME_HEADER)
 
+      # Check for HTML tags
+      lower = header.downcase
+      return :html if HTML_MARKERS.any? { |marker| lower.include?(marker.downcase) }
+
       # Default to DOCX for unknown streams
       :docx
     end
@@ -103,6 +110,10 @@ module Uniword
 
       # Check for MIME header (MHTML)
       return :mhtml if header.include?(MIME_HEADER)
+
+      # Check for HTML tags
+      lower = header.downcase
+      return :html if HTML_MARKERS.any? { |marker| lower.include?(marker.downcase) }
 
       nil
     end
@@ -128,6 +139,8 @@ module Uniword
         :thmx
       when ".mhtml", ".mht"
         :mhtml
+      when ".html", ".htm"
+        :html
       when ".doc"
         raise ArgumentError,
               "Old Word format (.doc) is not supported. Please convert to .docx first. " \
@@ -135,7 +148,7 @@ module Uniword
       else
         raise ArgumentError,
               "Unsupported file extension: #{extension}. " \
-              "Supported extensions: .docx, .docm, .dotx, .dotm, .thmx, .mhtml, .mht"
+              "Supported extensions: .docx, .docm, .dotx, .dotm, .thmx, .mhtml, .mht, .html, .htm"
       end
     end
   end

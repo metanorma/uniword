@@ -21,6 +21,8 @@ schema_files:
   - schemas/10_sections.yml            # Section properties (Phase 1 - complete)
   # Phase 2 - Complete paragraph/run properties and drawings (33 new elements)
   - schemas/11_drawing.yml             # Drawing and image elements (Phase 2 + Phase 3 enhancements)
+  # Phase 4 - Math (OMML) elements (handled via Plurimath integration)
+  - schemas/12_math.yml                # Math elements (Phase 4)
   # Phase 5 Part 2 - Chart support (50 new elements)
   - schemas/13_charts.yml              # Chart elements (Phase 5 Part 2)
 
@@ -57,15 +59,16 @@ namespaces:
 # Schema metadata
 metadata:
   phase: "5"
-  total_files: 12
-  total_elements: 149  # 31 Phase 1 + 33 Phase 2 + 35 Phase 3 + 50 Phase 5 Part 2
+  total_files: 13
+  total_elements: 151  # 31 Phase 1 + 33 Phase 2 + 35 Phase 3 + 2 Phase 4 + 50 Phase 5 Part 2
   phase_1_elements: 31
   phase_2_additions: 33  # 15 paragraph + 13 run + 5 drawing
   phase_3_additions: 35  # 10 styles + 6 numbering + 14 drawing enhancements + 5 drawing base
+  phase_4_additions: 2   # Math elements (oMath, oMathPara)
   phase_5_part2_additions: 50  # Chart elements
-  coverage: "Core structure + paragraph/run properties + drawing + styles + numbering + charts"
+  coverage: "Core structure + paragraph/run properties + drawing + styles + numbering + math + charts"
   status: "active"
-  version: "6.0.0"
+  version: "6.1.0"
 
 # Migration notes
 migration:

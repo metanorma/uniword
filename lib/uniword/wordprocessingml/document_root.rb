@@ -155,11 +155,26 @@ module Uniword
         body&.tables || []
       end
 
-      # Check if document structure is valid
+      # Get all drawings (image references) from the document.
+      # Walks all paragraphs and collects Drawing elements from runs.
+      #
+      # @return [Array<Drawing>] All drawing elements in document
+      def images
+        return [] unless body&.paragraphs
+
+        body.paragraphs.flat_map do |para|
+          (para.runs || []).flat_map(&:drawings)
+        end.compact
+      end
+
+      # Check if document structure is valid.
+      # Performs lightweight structural checks (not full schema validation).
+      # Use the verify CLI command for OPC + XSD + semantic validation.
       #
       # @return [Boolean] true if document has valid structure
       def valid?
         return false unless body
+        return false if body.paragraphs.nil?
 
         true
       end

@@ -1,0 +1,63 @@
+---
+layout: default
+title: metadata
+nav_order: 10
+parent: CLI
+permalink: /interfaces/cli/metadata-command/
+---
+= metadata
+
+Display or edit document metadata (title, author, keywords, etc.).
+
+== Usage
+
+[source,shell]
+----
+uniword metadata FILE
+----
+
+== Options
+
+`--set-title`::
+Set the document title.
+
+`--set-author`::
+Set the document author (creator).
+
+`--set-subject`::
+Set the document subject.
+
+`--set-keywords`::
+Set the document keywords.
+
+`--set-description`::
+Set the document description.
+
+`--output`, `-o`::
+Output file path (required when setting metadata).
+
+`--json`::
+Output metadata as JSON.
+
+== Examples
+
+Display metadata:
+
+[source,shell]
+----
+uniword metadata document.docx
+----
+
+Update title and author:
+
+[source,shell]
+----
+uniword metadata document.docx --set-title "Annual Report" --set-author "Jane Doe" -o updated.docx
+----
+
+Output as JSON:
+
+[source,shell]
+----
+uniword metadata document.docx --json
+----

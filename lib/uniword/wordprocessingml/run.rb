@@ -197,8 +197,8 @@ module Uniword
             elsif base_val
               merged.send(:"#{attr_name}=", base_val)
             end
-          rescue StandardError
-            # Skip attributes that can't be set
+          rescue StandardError => e
+            Uniword.logger&.debug { "Skipping attribute #{attr_name}: #{e.message}" }
           end
         end
 

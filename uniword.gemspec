@@ -38,11 +38,10 @@ Gem::Specification.new do |spec|
   spec.bindir = "exe"
   spec.executables = ["uniword"]
   spec.require_paths = ["lib"]
-  spec.required_ruby_version = ">= 2.7.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   # Core dependencies
   spec.add_dependency "lutaml-model", "~> 0.8"
-  spec.add_dependency "mail", "~> 2.8"
   spec.add_dependency "nokogiri", "~> 1.18"
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 2.3"

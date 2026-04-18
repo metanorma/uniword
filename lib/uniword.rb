@@ -272,18 +272,9 @@ module Uniword
       doc
     end
 
-    # Convert HTML to a document with paragraphs
-    #
-    # @param html [String] HTML content
-    # @return [Uniword::Wordprocessingml::DocumentRoot] Document with paragraphs
-    def html_to_doc(html)
-      doc = Wordprocessingml::DocumentRoot.new
-      paragraphs = HtmlImporter.import(html)
-      paragraphs.each do |para|
-        doc.body.paragraphs << para
-      end
-      doc
-    end
+    # Convert HTML to a document with paragraphs.
+    # Alias for {#from_html} for backward compatibility.
+    alias_method :html_to_doc, :from_html
 
     # Convert HTML directly to a DOCX file
     #
@@ -291,8 +282,7 @@ module Uniword
     # @param path [String] Output path for DOCX file
     # @return [void]
     def html_to_docx(html, path)
-      doc = html_to_doc(html)
-      doc.to_file(path)
+      from_html(html).to_file(path)
     end
   end
 end
