@@ -9,19 +9,88 @@ permalink: /features/streaming-and-performance/
 
 Uniword is optimized for performance with large documents through lazy loading, efficient serialization, and optimized ZIP handling.
 
-== Performance Features
+== Performance Characteristics
+
+=== Document Size Scaling
+
+|===
+| Document | XML Size | Nodes | ZIP Parse | XML Parse | Deserialize | Total
+
+| Typical letter | ~50KB | ~500 | <0.01s | ~0.01s | ~0.1s | ~0.2s
+| ISO 8601 | 295KB | -- | <0.01s | ~0.02s | ~0.5s | ~0.6s
+| ISO 690 | 4.8MB | ~130K | 0.02s | 0.05s | ~20s | ~20s
+| ISO DIS 5878 | 29.4MB | 970K | 0.05s | 0.39s | varies | varies
+|===
+
+ZIP extraction and Nokogiri XML parsing are consistently fast. The bottleneck
+is in lutaml-model deserialization, which creates Ruby objects for every XML
+element and attribute.
+
+=== Node Distribution
+
+For the 970K-node ISO DIS 5878 document, the element breakdown is:
+
+|===
+| Element | Count | Percentage
+
+| `<w:tab>` | 296,980 | 30.6%
+| `<w:rPr>` | 63,336 | 6.5%
+| `<w:sz>` | 55,916 | 5.8%
+| `<w:szCs>` | 33,780 | 3.5%
+| `<w:r>` | 33,207 | 3.4%
+| `<w:t>` | 32,485 | 3.3%
+| `<w:jc>` | 29,718 | 3.1%
+| `<w:divId>` | 29,482 | 3.0%
+| `<w:p>` | 28,283 | 2.9%
+| `<w:pPr>` | 28,283 | 2.9%
+|===
+
+Tab stops dominate because ISO documents use extensive tab-aligned numbering
+(~30 tabs per paragraph across ~27K paragraphs).
+
+=== Optimizations Applied
+
+Twelve optimizations have been applied to lutaml-model deserialization:
+
+[cols="1,4"]
+|===
+| # | Optimization
+
+| 1 | Cached type resolution with `CachedTypeResolver` (thread-safe via mutex)
+| 2 | Predicate method caching to avoid repeated method lookups
+| 3 | Attribute type inference to skip runtime type checks
+| 4 | Reduced object allocation in mapping dispatch
+| 5 | Lazy attribute initialization
+| 6 | XML node caching during deserialization
+| 7 | Bypass redundant `respond_to?` checks for known types
+| 8 | Inlined primitive type casting (String, Integer, Boolean)
+| 9 | Pre-computed mapping tables
+| 10 | Reduced string allocations in namespace handling
+| 11 | Consolidated `mappings_for` calls
+| 12 | GC pressure reduction via object pooling
+|===
+
+These optimizations reduced ISO 690 deserialization from ~52s to ~20s.
+
+== Design Features
 
 Lazy loading::
-  The autoload strategy ensures that only needed classes are loaded. Opening a simple document does not load the 760 element classes.
+  The 95% autoload strategy ensures only needed classes are loaded. Opening a
+  simple document does not load the 760 element classes.
 
-Streaming parsers::
-  Large files are processed using streaming XML parsers that do not load the entire document into memory at once.
-
-Efficient XML serialization::
-  Lutaml-model provides optimized XML serialization that minimizes object allocation and string operations.
+Efficient serialization::
+  Lutaml-model provides optimized XML serialization with minimized object
+  allocation and string operations.
 
 Optimized ZIP handling::
-  The rubyzip-based ZIP handler reads and writes DOCX packages efficiently, processing parts on demand.
+  The rubyzip-based ZIP handler reads and writes DOCX packages efficiently,
+  processing parts on demand.
+
+Thread-safe caching::
+  The `CachedTypeResolver` uses mutex synchronization to ensure thread-safe
+  type resolution. Ruby's Hash operations are atomic for single reads/writes,
+  but compound operations (`||=`) require synchronization to avoid wasteful
+  duplicate computation.
 
 == Tips for Large Documents
 

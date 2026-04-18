@@ -51,17 +51,43 @@ original.save('modified.docx')
 # Verify: modified.docx has ALL original content + new paragraph
 ----
 
-== Test Results
+== Verified Test Results
 
 |===
-| Test Case | Result
+| Test Case | Size | Nodes | Result
 
-| ISO 8601 DOCX (295KB) | 100% fidelity
-| MHTML documents | Content preserved
-| Math equations | Preserved via `m:` namespace
-| Bookmarks | Native support with ID preservation
-| Complex documents | Perfect round-trip with schema-driven architecture
+| ISO 8601-1:2019/Amd1 DOCX | 295KB | -- | 0 normative differences
+| ISO 690:2021 DOCX | 4.8MB | ~130K | 0 normative differences
+| ISO DIS 5878 DOCX | 29.4MB | 970K | 0 normative differences
+| MHTML documents | varies | -- | Content preserved
+| Math equations | varies | -- | Preserved via `m:` namespace
+| Bookmarks | varies | -- | ID preservation
 |===
+
+These results were achieved after implementing complete property coverage for
+paragraph, spacing, table, and section elements.
+
+=== Properties Added for ISO Round-Trip Pass
+
+The following properties were added to achieve 0 normative differences on
+ISO documents:
+
+[cols="2,4"]
+|===
+| Element | Properties
+
+| ParagraphProperties | `autoSpaceDE`, `autoSpaceDN`, `adjustRightInd`, `pageBreakBefore`, `widowControl` (converted to BooleanElement), `sectPr`
+| Spacing | `beforeAutospacing`, `afterAutospacing`
+| TableLayout | Converted to wrapper class with `type` attribute
+| TableCellProperties | `hideMark`
+| TableRowProperties | `divId`
+| SectionProperties | `rsidSect`
+| PageNumbering | `fmt`
+| Paragraph | `rsidDel` (revision deletion tracking)
+|===
+
+Each Boolean property uses a `BooleanElement` wrapper class that correctly
+round-trips the XML presence/absence pattern used by OOXML.
 
 == Verification with the CLI
 
