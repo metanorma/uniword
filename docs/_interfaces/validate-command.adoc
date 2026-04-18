@@ -55,7 +55,7 @@ uniword validate document.docx --verbose
 | Verifies the file can be loaded without errors
 
 | Document structure
-| Calls `doc.valid?` to check structural integrity
+| Runs `StructuralValidator` checks: bookmark pairing, name uniqueness, body integrity
 
 | Content presence
 | Confirms the document has paragraphs or tables

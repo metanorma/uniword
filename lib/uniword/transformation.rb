@@ -14,5 +14,8 @@ module Uniword
     autoload :OoxmlToHtmlConverter, "#{__dir__}/transformation/ooxml_to_html_converter"
     autoload :HtmlToOoxmlConverter, "#{__dir__}/transformation/html_to_ooxml_converter"
     autoload :OoxmlToMhtmlConverter, "#{__dir__}/transformation/ooxml_to_mhtml_converter"
+    autoload :MhtmlStyleBuilder, "#{__dir__}/transformation/mhtml_style_builder"
+    autoload :MhtmlElementRenderer, "#{__dir__}/transformation/mhtml_element_renderer"
+    autoload :MhtmlMetadataBuilder, "#{__dir__}/transformation/mhtml_metadata_builder"
   end
 end

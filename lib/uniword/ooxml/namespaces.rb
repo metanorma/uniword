@@ -56,14 +56,6 @@ module Uniword
         attribute_form_default :qualified
       end
 
-      # DrawingML WordProcessing Drawing namespace
-      class WordProcessingDrawing < Lutaml::Xml::Namespace
-        uri "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
-        prefix_default "wp"
-        element_form_default :qualified
-        attribute_form_default :qualified
-      end
-
       # DrawingML Main namespace
       # Used for graphics and shapes
       # NOTE: DrawingML attributes are UNQUALIFIED (no prefix)
@@ -79,15 +71,6 @@ module Uniword
       class Relationships < Lutaml::Xml::Namespace
         uri "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
         prefix_default "r"
-        element_form_default :qualified
-        attribute_form_default :qualified
-      end
-
-      # VML namespace (legacy)
-      # Used for backward compatibility with older Word versions
-      class VML < Lutaml::Xml::Namespace
-        uri "urn:schemas-microsoft-com:vml"
-        prefix_default "v"
         element_form_default :qualified
         attribute_form_default :qualified
       end
@@ -168,14 +151,6 @@ module Uniword
         prefix_default "rel"
         element_form_default :qualified
         attribute_form_default :unqualified
-      end
-
-      # Document-level Relationships namespace
-      class Relationships < Lutaml::Xml::Namespace
-        uri "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
-        prefix_default "r"
-        element_form_default :qualified
-        attribute_form_default :qualified
       end
 
       # Shared Types namespace
@@ -274,14 +249,6 @@ module Uniword
         attribute_form_default :qualified
       end
 
-      # Custom XML namespace
-      class CustomXml < Lutaml::Xml::Namespace
-        uri "http://schemas.openxmlformats.org/officeDocument/2006/customXml"
-        prefix_default "cxml"
-        element_form_default :qualified
-        attribute_form_default :qualified
-      end
-
       # Office namespace
       class Office < Lutaml::Xml::Namespace
         uri "urn:schemas-microsoft-com:office:office"
@@ -336,9 +303,10 @@ module Uniword
 
       # VML Word namespace
       # Used for VML elements within Word documents (borders, etc.)
+      # Prefix "w10" avoids collision with WordProcessingML prefix "w"
       class VmlWord < Lutaml::Xml::Namespace
         uri "urn:schemas-microsoft-com:office:word"
-        prefix_default "w"
+        prefix_default "w10"
         element_form_default :qualified
         attribute_form_default :qualified
       end

@@ -11,5 +11,6 @@ module Uniword
     autoload :DocumentValidator, "#{__dir__}/validation/document_validator"
     autoload :Checkers, "#{__dir__}/validation/checkers"
     autoload :Validators, "#{__dir__}/validation/validators"
+    autoload :StructuralValidator, "#{__dir__}/validation/structural_validator"
   end
 end
