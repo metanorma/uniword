@@ -68,12 +68,16 @@ module Uniword
           result[type] = import_all_of_type(type, force: force)
         end
 
+        %i[color_scheme font_scheme].each do |type|
+          result[type] = import_bundled(type, force: force)
+        end
+
         result
       end
 
       private
 
-      # Load resource from Word installation
+      # Load resource from Word installation or bundled data
       #
       # @param type [Symbol] Resource type
       # @param name [String] Resource name
@@ -90,12 +94,16 @@ module Uniword
           raise ArgumentError, "StyleSet not found: #{name}" unless File.exist?(path)
 
           Uniword::Ooxml::DotxPackage.from_file(path)&.styles_configuration
+        when :color_scheme
+          ColorSchemeLoader.load(name)
+        when :font_scheme
+          FontSchemeLoader.load(name)
         else
           raise ArgumentError, "Unsupported resource type: #{type}"
         end
       end
 
-      # Get list of available resources from Word
+      # Get list of available resources from Word or bundled data
       #
       # @param type [Symbol] Resource type
       # @return [Array<String>] Available resource names
@@ -105,9 +113,37 @@ module Uniword
           word.available_themes
         when :styleset
           word.available_stylesets
+        when :color_scheme
+          ColorSchemeLoader.available_schemes
+        when :font_scheme
+          FontSchemeLoader.available_schemes
         else
           []
         end
+      end
+
+      # Import all bundled resources of a type (color/font schemes)
+      #
+      # @param type [Symbol] Resource type (:color_scheme, :font_scheme)
+      # @param force [Boolean] Overwrite existing cache entries
+      # @return [Integer] Number of resources imported
+      def import_bundled(type, force: false)
+        available = available_resources(type)
+        count = 0
+
+        available.each do |name|
+          next if !force && cache.exists?(type, name)
+
+          begin
+            resource = load_from_word(type, name)
+            cache.write(type, name, resource.to_yaml)
+            count += 1
+          rescue StandardError => e
+            warn "Failed to import #{type} '#{name}': #{e.message}"
+          end
+        end
+
+        count
       end
     end
   end

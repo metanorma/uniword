@@ -1,0 +1,63 @@
+---
+layout: default
+title: check
+nav_order: 9
+parent: CLI
+permalink: /interfaces/cli/check-command/
+---
+= check
+
+Run accessibility and quality checks on a document.
+
+== Usage
+
+[source,shell]
+----
+uniword check FILE
+----
+
+== Options
+
+`--type`::
+Check type: `quality`, `accessibility`, or `all`. Default: `all`.
+
+`--verbose`, `-v`::
+Show detailed issue listing.
+
+`--json`::
+Output results as JSON.
+
+== Examples
+
+Run all checks:
+
+[source,shell]
+----
+uniword check document.docx
+----
+
+Run only accessibility checks:
+
+[source,shell]
+----
+uniword check document.docx --type accessibility
+----
+
+Output JSON results:
+
+[source,shell]
+----
+uniword check document.docx --json
+----
+
+== Checks performed
+
+Quality checks include:
+- Heading hierarchy validation
+- Empty paragraph detection
+- Style consistency
+
+Accessibility checks include:
+- Image alt text presence
+- Link text quality
+- Color contrast (WCAG 2.1 AA)

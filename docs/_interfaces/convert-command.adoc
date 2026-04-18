@@ -7,7 +7,7 @@ permalink: /interfaces/cli/convert-command/
 ---
 = convert
 
-Convert a document between DOCX and MHTML formats.
+Convert a document between DOCX, MHTML, and HTML formats.
 
 == Usage
 
@@ -19,7 +19,7 @@ uniword convert INPUT OUTPUT
 == Options
 
 `--from`, `-f`::
-Input format (`docx` or `mhtml`). Default: auto-detected from file extension.
+Input format (`docx`, `mhtml`, or `html`). Default: auto-detected from file extension.
 
 `--to`, `-t`::
 Output format (`docx` or `mhtml`). Default: auto-detected from file extension.

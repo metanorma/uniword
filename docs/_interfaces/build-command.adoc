@@ -1,0 +1,54 @@
+---
+layout: default
+title: build
+nav_order: 11
+parent: CLI
+permalink: /interfaces/cli/build-command/
+---
+= build
+
+Build a document by filling a .docx template with data.
+
+Templates use Uniword's template syntax embedded in Word comments.
+Data can be provided via YAML or JSON files, or inline key=value pairs.
+
+== Usage
+
+[source,shell]
+----
+uniword build TEMPLATE OUTPUT
+----
+
+== Options
+
+`--data`::
+Path to a YAML or JSON data file.
+
+`--set`::
+Set a variable inline as `key=value`. Can be repeated.
+
+`--verbose`, `-v`::
+Show template markers and processing details.
+
+== Examples
+
+Build from a template with YAML data:
+
+[source,shell]
+----
+uniword build template.docx output.docx --data data.yml
+----
+
+Build with inline variables:
+
+[source,shell]
+----
+uniword build template.docx output.docx --set title="My Report" --set author="Jane Doe"
+----
+
+Verbose output to inspect template markers:
+
+[source,shell]
+----
+uniword build template.docx output.docx --data data.yml --verbose
+----

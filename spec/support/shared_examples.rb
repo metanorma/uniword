@@ -7,7 +7,7 @@ RSpec.shared_examples "a serializable element" do
     expect(subject).to respond_to(:valid?)
   end
 
-  it "responds to accept" do
-    expect(subject).to respond_to(:accept)
+  it "responds to to_xml" do
+    expect(subject).to respond_to(:to_xml)
   end
 end

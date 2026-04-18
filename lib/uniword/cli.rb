@@ -577,14 +577,15 @@ module Uniword
       Supports automatic format detection based on file extensions,
       or you can specify formats explicitly with --from and --to options.
 
-      Supported formats: DOCX, MHTML
+      Supported formats: DOCX, MHTML, HTML
 
       Examples:
         $ uniword convert input.docx output.mhtml
         $ uniword convert input.mhtml output.docx --verbose
+        $ uniword convert input.html output.docx
         $ uniword convert input.doc output.docx --from doc --to docx
     DESC
-    option :from, aliases: "-f", desc: "Input format (docx/mhtml)", type: :string
+    option :from, aliases: "-f", desc: "Input format (docx/mhtml/html)", type: :string
     option :to, aliases: "-t", desc: "Output format (docx/mhtml)", type: :string
     option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
     def convert(input_path, output_path)
@@ -760,6 +761,288 @@ module Uniword
       say "\nValidation complete!", :green
     rescue StandardError => e
       say "Unexpected error during validation: #{e.message}", :red
+      exit 1
+    end
+
+    desc "build TEMPLATE OUTPUT", "Build document from a .docx template"
+    long_desc <<~DESC
+      Build a document by filling a .docx template with data.
+
+      Templates use Uniword's template syntax embedded in comments.
+      Data is provided via YAML or JSON files, or inline key=value pairs.
+
+      Examples:
+        $ uniword build template.docx output.docx --data data.yml
+        $ uniword build template.docx output.docx --data data.json
+        $ uniword build template.docx output.docx --set title="My Report"
+    DESC
+    option :data, desc: "Path to YAML or JSON data file", type: :string
+    option "set", desc: "Set variable (key=value)", type: :array, default: []
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    def build(template_path, output_path)
+      unless File.exist?(template_path)
+        say("Template not found: #{template_path}", :red)
+        exit 1
+      end
+
+      template = Uniword::Template::Template.load(template_path)
+
+      if options[:verbose]
+        say("Loaded template: #{template_path}", :cyan)
+        say("  Markers found: #{template.markers.count}")
+      end
+
+      # Load data from file
+      data = {}
+      if options[:data]
+        unless File.exist?(options[:data])
+          say("Data file not found: #{options[:data]}", :red)
+          exit 1
+        end
+
+        ext = File.extname(options[:data])
+        content = File.read(options[:data])
+        data = if ext == ".json"
+                 require "json"
+                 JSON.parse(content)
+               else
+                 require "yaml"
+                 YAML.safe_load(content) || {}
+               end
+      end
+
+      # Merge inline --set values
+      options["set"].each do |pair|
+        key, value = pair.split("=", 2)
+        data[key] = value if key && value
+      end
+
+      # Render template with data
+      document = template.render(data)
+      document.save(output_path)
+
+      say("Built document: #{output_path}", :green)
+    rescue Uniword::Error => e
+      say "Error: #{e.message}", :red
+      exit 1
+    rescue StandardError => e
+      say "Unexpected error: #{e.message}", :red
+      say e.backtrace.join("\n"), :red if options[:verbose]
+      exit 1
+    end
+
+    desc "check FILE", "Run accessibility and quality checks on a document"
+    long_desc <<~DESC
+      Run document quality and accessibility checks.
+
+      Checks include heading hierarchy, empty paragraphs, image alt text,
+      and other accessibility and quality rules.
+
+      Examples:
+        $ uniword check document.docx
+        $ uniword check document.docx --type accessibility
+        $ uniword check document.docx --verbose
+        $ uniword check document.docx --json
+    DESC
+    option :type, desc: "Check type (quality/accessibility/all)", type: :string,
+                  default: "all"
+    option :verbose, aliases: "-v", desc: "Show detailed results", type: :boolean,
+                     default: false
+    option :json, desc: "Output JSON report", type: :boolean, default: false
+    def check(path)
+      unless File.exist?(path)
+        say("File not found: #{path}", :red)
+        exit 1
+      end
+
+      doc = DocumentFactory.from_file(path)
+      check_type = options[:type]
+
+      reports = {}
+
+      if check_type == "all" || check_type == "quality"
+        checker = Quality::DocumentChecker.new
+        reports[:quality] = checker.check(doc)
+      end
+
+      if check_type == "all" || check_type == "accessibility"
+        checker = Accessibility::AccessibilityChecker.new
+        reports[:accessibility] = checker.check(doc)
+      end
+
+      if options[:json]
+        require "json"
+        output = reports.transform_values do |r|
+          { valid: r.valid?, issues: r.respond_to?(:issues) ? r.issues.count : 0 }
+        end
+        puts JSON.pretty_generate(output)
+      else
+        reports.each do |type, report|
+          label = type.to_s.capitalize
+          if report.valid?
+            say("#{label}: No issues found", :green)
+          else
+            issue_count = report.respond_to?(:issues) ? report.issues.count : "?"
+            say("#{label}: #{issue_count} issue(s) found", :yellow)
+            if options[:verbose] && report.respond_to?(:issues)
+              report.issues.each do |issue|
+                say("  - #{issue}", :yellow)
+              end
+            end
+          end
+        end
+      end
+    rescue Uniword::Error => e
+      say "Error: #{e.message}", :red
+      exit 1
+    rescue StandardError => e
+      say "Unexpected error: #{e.message}", :red
+      exit 1
+    end
+
+    desc "batch PATTERN OUTPUT_DIR", "Batch convert documents matching a glob pattern"
+    long_desc <<~DESC
+      Convert multiple documents matching a file glob pattern.
+
+      Examples:
+        $ uniword batch "docs/*.html" output/
+        $ uniword batch "*.mhtml" converted/ --format docx
+        $ uniword batch "reports/*.docx" exports/ --format mhtml --verbose
+    DESC
+    option :format, aliases: "-f", desc: "Output format (docx/mhtml)", type: :string,
+                    default: "docx"
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    def batch(pattern, output_dir)
+      require "fileutils"
+      FileUtils.mkdir_p(output_dir)
+
+      files = Dir.glob(pattern)
+      if files.empty?
+        say("No files found matching '#{pattern}'", :yellow)
+        return
+      end
+
+      say("Processing #{files.count} files...", :green) if options[:verbose]
+
+      success = 0
+      errors = []
+
+      files.each do |input_path|
+        basename = File.basename(input_path, ".*")
+        ext = options[:format] == "mhtml" ? ".mhtml" : ".docx"
+        output_path = File.join(output_dir, "#{basename}#{ext}")
+
+        begin
+          doc = DocumentFactory.from_file(input_path)
+          doc.save(output_path, format: options[:format].to_sym)
+          say("  #{File.basename(input_path)} -> #{File.basename(output_path)}") if options[:verbose]
+          success += 1
+        rescue StandardError => e
+          errors << "#{File.basename(input_path)}: #{e.message}"
+          say("  Error: #{File.basename(input_path)}: #{e.message}", :red) if options[:verbose]
+        end
+      end
+
+      say("\nBatch complete: #{success} converted, #{errors.count} errors", :green)
+      unless errors.empty?
+        say("Errors:", :red)
+        errors.each { |e| say("  - #{e}", :red) }
+      end
+    rescue StandardError => e
+      say "Error: #{e.message}", :red
+      exit 1
+    end
+
+    desc "metadata FILE", "Display or edit document metadata"
+    long_desc <<~DESC
+      Display document metadata including title, author, subject,
+      keywords, creation date, and modification date.
+
+      Use --set-title, --set-author, etc. to update metadata fields.
+
+      Examples:
+        $ uniword metadata document.docx
+        $ uniword metadata document.docx --set-title "Annual Report"
+        $ uniword metadata document.docx --set-author "Jane Doe"
+        $ uniword metadata document.docx --json
+    DESC
+    option "set-title", type: :string, desc: "Set document title"
+    option "set-author", type: :string, desc: "Set document author"
+    option "set-subject", type: :string, desc: "Set document subject"
+    option "set-keywords", type: :string, desc: "Set document keywords"
+    option "set-description", type: :string, desc: "Set document description"
+    option :json, desc: "Output as JSON", type: :boolean, default: false
+    option :output, aliases: "-o", desc: "Output file (required when setting metadata)",
+            type: :string
+    def metadata(path)
+      unless File.exist?(path)
+        say("File not found: #{path}", :red)
+        exit 1
+      end
+
+      doc = DocumentFactory.from_file(path)
+      cp = doc.core_properties
+
+      # Apply updates if any --set-* options provided
+      setters = {
+        "set-title" => :title=,
+        "set-author" => :creator=,
+        "set-subject" => :subject=,
+        "set-keywords" => :keywords=,
+        "set-description" => :description=,
+      }
+      updated = false
+      setters.each do |opt, setter|
+        next unless options[opt]
+
+        cp&.send(setter, options[opt])
+        updated = true
+      end
+
+      if updated
+        output_path = options[:output]
+        unless output_path
+          say("Error: --output is required when setting metadata", :red)
+          exit 1
+        end
+        doc.save(output_path)
+        say("Metadata updated and saved to #{output_path}", :green)
+        return
+      end
+
+      # Display metadata
+      meta = {
+        title: cp&.title,
+        author: cp&.creator,
+        subject: cp&.subject,
+        keywords: cp&.keywords,
+        description: cp&.description,
+        last_modified_by: cp&.last_modified_by,
+        revision: cp&.revision,
+        created: cp&.created,
+        modified: cp&.modified,
+      }
+
+      if options[:json]
+        require "json"
+        puts JSON.pretty_generate(meta)
+      else
+        say "Document Metadata:", :cyan
+        say "  Title:       #{meta[:title] || "(none)"}"
+        say "  Author:      #{meta[:author] || "(none)"}"
+        say "  Subject:     #{meta[:subject] || "(none)"}"
+        say "  Keywords:    #{meta[:keywords] || "(none)"}"
+        say "  Description: #{meta[:description] || "(none)"}"
+        say "  Modified by: #{meta[:last_modified_by] || "(none)"}"
+        say "  Revision:    #{meta[:revision] || "(none)"}"
+        say "  Created:     #{meta[:created] || "(unknown)"}"
+        say "  Modified:    #{meta[:modified] || "(unknown)"}"
+      end
+    rescue Uniword::Error => e
+      say "Error: #{e.message}", :red
+      exit 1
+    rescue StandardError => e
+      say "Unexpected error: #{e.message}", :red
       exit 1
     end
 

@@ -1,0 +1,48 @@
+---
+layout: default
+title: batch
+nav_order: 8
+parent: CLI
+permalink: /interfaces/cli/batch-command/
+---
+= batch
+
+Batch convert multiple documents matching a glob pattern.
+
+== Usage
+
+[source,shell]
+----
+uniword batch PATTERN OUTPUT_DIR
+----
+
+== Options
+
+`--format`, `-f`::
+Output format (`docx` or `mhtml`). Default: `docx`.
+
+`--verbose`, `-v`::
+Show progress for each file.
+
+== Examples
+
+Convert all HTML files in a directory to DOCX:
+
+[source,shell]
+----
+uniword batch "docs/*.html" output/
+----
+
+Convert all DOCX files to MHTML:
+
+[source,shell]
+----
+uniword batch "reports/*.docx" exports/ --format mhtml
+----
+
+Verbose output to see each file processed:
+
+[source,shell]
+----
+uniword batch "*.mhtml" converted/ --format docx --verbose
+----

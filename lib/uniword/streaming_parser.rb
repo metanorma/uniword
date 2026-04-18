@@ -39,7 +39,7 @@ module Uniword
     # @return [Boolean] true if file is large enough for streaming
     def self.should_stream?(file_path)
       File.size(file_path) > STREAMING_THRESHOLD
-    rescue StandardError
+    rescue Errno::ENOENT, Errno::EACCES
       false
     end
 

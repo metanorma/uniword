@@ -36,15 +36,29 @@ module Uniword
       # Document numbering configuration
       attribute :numbering_configuration, Uniword::Wordprocessingml::NumberingConfiguration
 
-      # TODO: v2.0: Add proper lutaml-model attributes for:
-      # - Document (word/document.xml)
-      # - FontTable (word/fontTable.xml)
-      # - Settings (word/settings.xml)
-      # - WebSettings (word/webSettings.xml)
-      # - Relationships (.rels files)
-      # - ContentTypes ([Content_Types].xml)
-      #
-      # NO RAW XML STORAGE ALLOWED
+      # Document settings (word/settings.xml)
+      attribute :settings, Uniword::Wordprocessingml::Settings
+
+      # Document font table (word/fontTable.xml)
+      attribute :font_table, Uniword::Wordprocessingml::FontTable
+
+      # Document web settings (word/webSettings.xml)
+      attribute :web_settings, Uniword::Wordprocessingml::WebSettings
+
+      # Content types ([Content_Types].xml)
+      attribute :content_types, Uniword::ContentTypes::Types
+
+      # Package-level relationships (_rels/.rels)
+      attribute :package_rels, Uniword::Ooxml::Relationships::PackageRelationships
+
+      # Document-level relationships (word/_rels/document.xml.rels)
+      attribute :document_rels, Uniword::Ooxml::Relationships::PackageRelationships
+
+      # Footnotes (word/footnotes.xml)
+      attribute :footnotes, Uniword::Wordprocessingml::Footnotes
+
+      # Endnotes (word/endnotes.xml)
+      attribute :endnotes, Uniword::Wordprocessingml::Endnotes
 
       # Load DOTX/DOTM package from file
       #
@@ -74,6 +88,14 @@ module Uniword
         # Transfer model-based configurations
         document.styles_configuration = package.styles_configuration if package.styles_configuration
         document.numbering_configuration = package.numbering_configuration if package.numbering_configuration
+        document.settings = package.settings if package.settings
+        document.font_table = package.font_table if package.font_table
+        document.web_settings = package.web_settings if package.web_settings
+        document.document_rels = package.document_rels if package.document_rels
+        document.content_types = package.content_types if package.content_types
+        document.package_rels = package.package_rels if package.package_rels
+        document.footnotes = package.footnotes if package.footnotes
+        document.endnotes = package.endnotes if package.endnotes
 
         document
       end
@@ -100,8 +122,61 @@ module Uniword
         # Store raw document XML (will be parsed by DotxHandler)
         package.raw_document_xml = zip_content["word/document.xml"] if zip_content["word/document.xml"]
 
-        # TODO: v2.0: Parse fontTable.xml, settings.xml, webSettings.xml
-        # TODO v2.0: Parse relationships and content types
+        # Parse settings
+        if zip_content["word/settings.xml"]
+          package.settings = Uniword::Wordprocessingml::Settings.from_xml(
+            zip_content["word/settings.xml"]
+          )
+        end
+
+        # Parse font table
+        if zip_content["word/fontTable.xml"]
+          package.font_table = Uniword::Wordprocessingml::FontTable.from_xml(
+            zip_content["word/fontTable.xml"]
+          )
+        end
+
+        # Parse web settings
+        if zip_content["word/webSettings.xml"]
+          package.web_settings = Uniword::Wordprocessingml::WebSettings.from_xml(
+            zip_content["word/webSettings.xml"]
+          )
+        end
+
+        # Parse content types
+        if zip_content["[Content_Types].xml"]
+          package.content_types = Uniword::ContentTypes::Types.from_xml(
+            zip_content["[Content_Types].xml"]
+          )
+        end
+
+        # Parse package relationships
+        if zip_content["_rels/.rels"]
+          package.package_rels = Uniword::Ooxml::Relationships::PackageRelationships.from_xml(
+            zip_content["_rels/.rels"]
+          )
+        end
+
+        # Parse document relationships
+        if zip_content["word/_rels/document.xml.rels"]
+          package.document_rels = Uniword::Ooxml::Relationships::PackageRelationships.from_xml(
+            zip_content["word/_rels/document.xml.rels"]
+          )
+        end
+
+        # Parse footnotes
+        if zip_content["word/footnotes.xml"]
+          package.footnotes = Uniword::Wordprocessingml::Footnotes.from_xml(
+            zip_content["word/footnotes.xml"]
+          )
+        end
+
+        # Parse endnotes
+        if zip_content["word/endnotes.xml"]
+          package.endnotes = Uniword::Wordprocessingml::Endnotes.from_xml(
+            zip_content["word/endnotes.xml"]
+          )
+        end
 
         package
       end
@@ -195,8 +270,53 @@ module Uniword
           content["word/document.xml"] = @raw_document_xml
         end
 
-        # TODO: v2.0: Serialize fontTable.xml, settings.xml, webSettings.xml
-        # TODO v2.0: Serialize relationships and content types
+        # Serialize settings
+        if settings
+          content["word/settings.xml"] =
+            settings.to_xml(encoding: "UTF-8")
+        end
+
+        # Serialize font table
+        if font_table
+          content["word/fontTable.xml"] =
+            font_table.to_xml(encoding: "UTF-8")
+        end
+
+        # Serialize web settings
+        if web_settings
+          content["word/webSettings.xml"] =
+            web_settings.to_xml(encoding: "UTF-8")
+        end
+
+        # Serialize content types
+        if content_types
+          content["[Content_Types].xml"] =
+            content_types.to_xml(declaration: true)
+        end
+
+        # Serialize package relationships
+        if package_rels
+          content["_rels/.rels"] =
+            package_rels.to_xml(declaration: true)
+        end
+
+        # Serialize document relationships
+        if document_rels
+          content["word/_rels/document.xml.rels"] =
+            document_rels.to_xml(declaration: true)
+        end
+
+        # Serialize footnotes
+        if footnotes
+          content["word/footnotes.xml"] =
+            footnotes.to_xml(encoding: "UTF-8")
+        end
+
+        # Serialize endnotes
+        if endnotes
+          content["word/endnotes.xml"] =
+            endnotes.to_xml(encoding: "UTF-8")
+        end
 
         content
       end
