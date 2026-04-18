@@ -50,24 +50,22 @@ Tab stops dominate because ISO documents use extensive tab-aligned numbering
 
 === Optimizations Applied
 
-Twelve optimizations have been applied to lutaml-model deserialization:
+The following lutaml-model optimizations have been applied:
 
-[cols="1,4"]
+[cols="1,3"]
 |===
 | # | Optimization
 
-| 1 | Cached type resolution with `CachedTypeResolver` (thread-safe via mutex)
-| 2 | Predicate method caching to avoid repeated method lookups
-| 3 | Attribute type inference to skip runtime type checks
-| 4 | Reduced object allocation in mapping dispatch
-| 5 | Lazy attribute initialization
-| 6 | XML node caching during deserialization
-| 7 | Bypass redundant `respond_to?` checks for known types
-| 8 | Inlined primitive type casting (String, Integer, Boolean)
-| 9 | Pre-computed mapping tables
-| 10 | Reduced string allocations in namespace handling
-| 11 | Consolidated `mappings_for` calls
-| 12 | GC pressure reduction via object pooling
+| 1 | Skip `build_input_declaration_plan` for non-root elements
+| 2 | Fast array key in `TransformationRegistry` (avoids symbol construction)
+| 3 | Fast path in `handle_transform_method` when no transforms present
+| 4 | Cached `Namespace#all_uris` as frozen array
+| 5 | `allocate_for_deserialization` using `allocate` + `init_deserialization_state`
+| 6 | Cache `castable?` at `MappingRule` init; type resolution cached on `Attribute`
+| 7 | Cached `extract_register_id` with fast nil-check
+| 8 | Fast path skip `ImportTransformer` when rule and attr have no transforms
+| 9 | Fast path in `value_map` when options are empty (no nil/empty/omitted)
+| 10 | Cache type/namespace class/URI on `Attribute` (`@type_ns_class_cache`, etc.)
 |===
 
 These optimizations reduced ISO 690 deserialization from ~52s to ~20s.
