@@ -103,6 +103,53 @@ Tests mirror the `lib/` structure:
 * `spec/uniword/` -- Unit tests for core classes
 * `spec/uniword/wordprocessingml/` -- WordProcessingML element tests
 * `spec/uniword/drawingml/` -- DrawingML element tests
+* `spec/uniword/smoke/` -- Autoload and serializable model smoke tests
 * `spec/integration/` -- Integration tests
 * `spec/performance/` -- Performance benchmarks
 * `spec/fixtures/` -- Test fixture files (DOCX, XML, YAML)
+
+== Shared Test Support
+
+`spec/support/` provides reusable test infrastructure:
+
+=== Shared Examples
+
+Defined in `spec/support/shared_examples.rb`:
+
+`"a round-trippable serializable"`::
+Verifies a lutaml-model class can serialize to XML and deserialize with attribute preservation.
+
+`"a round-trippable DOCX file"`::
+Verifies a specific XML file within a DOCX preserves through round-trip using Canon XML comparison.
+
+`"a valid DOCX package"`::
+Verifies a file is a valid ZIP with `[Content_Types].xml`, `_rels/.rels`, and `word/document.xml`.
+
+`"a serializable element"`::
+Verifies a model responds to `to_xml` and produces parseable XML.
+
+`"a namespaced OOXML element"`::
+Verifies root element name, parseable XML, and optional namespace URI.
+
+=== Shared Helpers
+
+Defined in `spec/support/helpers.rb`, included in all specs via `RSpec.configure`:
+
+`extract_text(document)`::
+Extracts plain text from all paragraphs and table cells.
+
+`create_large_document(paragraphs:, runs_per_para:)`::
+Creates a DocumentRoot with many paragraphs for performance testing.
+
+`create_document_with_tables(table_count:, rows:, cols:)`::
+Creates a DocumentRoot with tables for performance testing.
+
+`normalize_xml(xml)`::
+Parse and re-serialize XML for comparison.
+
+`temp_docx_path(prefix:)`::
+Generates a unique temp file path for test output.
+
+=== XML Normalization
+
+`spec/support/xml_normalizers.rb` provides `XmlNormalizers.normalize_for_roundtrip(xml)` for handling acceptable XML differences (timestamps, statistics, unused namespaces).

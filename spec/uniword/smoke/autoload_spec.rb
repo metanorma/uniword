@@ -95,4 +95,25 @@ RSpec.describe "Autoload smoke tests" do
       end
     end
   end
+
+  # Serializable model smoke tests — verify key model classes
+  # can instantiate, serialize to XML, and deserialize back.
+  describe "serializable OOXML models" do
+    models = {
+      "Wordprocessingml::Paragraph" => Uniword::Wordprocessingml::Paragraph,
+      "Wordprocessingml::Run" => Uniword::Wordprocessingml::Run,
+      "Wordprocessingml::Table" => Uniword::Wordprocessingml::Table,
+      "Wordprocessingml::TableRow" => Uniword::Wordprocessingml::TableRow,
+      "Wordprocessingml::TableCell" => Uniword::Wordprocessingml::TableCell,
+      "ContentTypes::Types" => Uniword::ContentTypes::Types,
+    }
+
+    models.each do |name, klass|
+      describe name do
+        subject { klass.new }
+
+        it_behaves_like "a serializable element"
+      end
+    end
+  end
 end

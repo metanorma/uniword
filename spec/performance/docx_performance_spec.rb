@@ -14,52 +14,6 @@ RSpec.describe "DOCX Performance" do
     FileUtils.rm_rf(Dir.glob("tmp/perf_*.docx"))
   end
 
-  # Helper to create a document with many paragraphs
-  def create_large_document(paragraphs: 100, runs_per_para: 5)
-    doc = Uniword::Wordprocessingml::DocumentRoot.new
-
-    paragraphs.times do |i|
-      para = Uniword::Wordprocessingml::Paragraph.new
-      runs_per_para.times do |j|
-        run = Uniword::Wordprocessingml::Run.new(
-          text: "Paragraph #{i + 1}, Run #{j + 1}: Lorem ipsum dolor sit amet."
-        )
-        para.runs << run
-      end
-      doc.body.paragraphs << para
-    end
-
-    doc
-  end
-
-  # Helper to create document with tables
-  def create_document_with_tables(count: 10, rows: 5, cols: 4)
-    doc = Uniword::Wordprocessingml::DocumentRoot.new
-
-    count.times do |t|
-      table = Uniword::Wordprocessingml::Table.new
-
-      rows.times do |r|
-        row = Uniword::Wordprocessingml::TableRow.new
-        cols.times do |c|
-          cell = Uniword::Wordprocessingml::TableCell.new
-          para = Uniword::Wordprocessingml::Paragraph.new
-          run = Uniword::Wordprocessingml::Run.new(
-            text: "Table #{t + 1}, R#{r + 1}C#{c + 1}"
-          )
-          para.runs << run
-          cell.paragraphs << para
-          row.cells << cell
-        end
-        table.rows << row
-      end
-
-      doc.body.tables << table
-    end
-
-    doc
-  end
-
   describe "parsing performance" do
     it "parses small documents quickly (10 paragraphs)" do
       skip "Performance test only in CI or with PROFILE=true" unless ENV["PROFILE"]

@@ -7,22 +7,6 @@ require "securerandom"
 RSpec.describe Uniword::Infrastructure::ZipPackager do
   let(:packager) { described_class.new }
 
-  # Helper to safely delete files on Windows (handles file locking)
-  def safe_delete(path)
-    return unless path && File.exist?(path)
-
-    retries = 5
-    begin
-      File.delete(path)
-    rescue Errno::EACCES
-      if retries > 0
-        sleep(0.2)
-        retries -= 1
-        retry
-      end
-    end
-  end
-
   describe "#package" do
     let(:content) do
       {

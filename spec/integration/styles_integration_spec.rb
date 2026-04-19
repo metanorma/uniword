@@ -4,22 +4,6 @@ require "spec_helper"
 require "securerandom"
 
 RSpec.describe "Styles Integration", :integration do
-  # Helper to safely delete files on Windows (handles file locking)
-  def safe_delete(path)
-    return unless path && File.exist?(path)
-
-    retries = 5
-    begin
-      File.delete(path)
-    rescue Errno::EACCES
-      if retries > 0
-        sleep(0.2)
-        retries -= 1
-        retry
-      end
-    end
-  end
-
   describe "document with styled paragraphs" do
     it "creates and reads back styled paragraphs" do
       temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
