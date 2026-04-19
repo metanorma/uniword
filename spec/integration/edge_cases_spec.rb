@@ -551,18 +551,4 @@ RSpec.describe "DOCX Edge Case Handling" do
     end
   end
 
-  # Helper methods
-  private
-
-  def extract_text(document)
-    text = []
-    document.paragraphs.each do |para|
-      next unless para.respond_to?(:runs)
-
-      para.runs.each do |run|
-        text << run.text if run.respond_to?(:text)
-      end
-    end
-    text.join
-  end
 end

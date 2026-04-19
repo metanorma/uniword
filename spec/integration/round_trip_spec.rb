@@ -351,32 +351,6 @@ RSpec.describe "DOCX Round-trip Validation" do
     end
   end
 
-  # Helper methods
-  private
-
-  def extract_text(document)
-    text = document.paragraphs.map do |para|
-      extract_paragraph_text(para)
-    end
-    document.tables.each do |table|
-      table.rows.each do |row|
-        row.cells.each do |cell|
-          cell.paragraphs.each do |para|
-            text << extract_paragraph_text(para)
-          end
-        end
-      end
-    end
-    text.join("\n")
-  end
-
-  def extract_paragraph_text(paragraph)
-    return "" unless paragraph.respond_to?(:runs)
-
-    paragraph.runs.map do |run|
-      run.respond_to?(:text) ? run.text : ""
-    end.join
-  end
 
   def collect_run_formatting(document)
     formatting = []

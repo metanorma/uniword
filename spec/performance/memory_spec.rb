@@ -4,53 +4,6 @@ require "spec_helper"
 require "objspace"
 
 RSpec.describe "Memory Performance" do
-  # Helper to create a large document for testing
-  def create_large_document(paragraphs: 100, runs_per_para: 5)
-    doc = Uniword::Wordprocessingml::DocumentRoot.new
-
-    paragraphs.times do |i|
-      para = Uniword::Wordprocessingml::Paragraph.new
-      runs_per_para.times do |j|
-        run = Uniword::Wordprocessingml::Run.new(
-          text: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here."
-        )
-        para.runs << run
-      end
-      doc.body.paragraphs << para
-    end
-
-    doc
-  end
-
-  # Helper to create document with tables
-  def create_document_with_tables(table_count: 10, rows: 5, cols: 4)
-    doc = Uniword::Wordprocessingml::DocumentRoot.new
-
-    table_count.times do |t|
-      table = Uniword::Wordprocessingml::Table.new
-
-      rows.times do |r|
-        row = Uniword::Wordprocessingml::TableRow.new
-        cols.times do |c|
-          cell = Uniword::Wordprocessingml::TableCell.new
-          para = Uniword::Wordprocessingml::Paragraph.new
-          run = Uniword::Wordprocessingml::Run.new(
-            text_element: Uniword::TextElement.new(
-              content: "Table #{t + 1}, Row #{r + 1}, Col #{c + 1}"
-            )
-          )
-          para.runs << run
-          cell.paragraphs << para
-          row.cells << cell
-        end
-        table.rows << row
-      end
-
-      doc.body.tables << table
-    end
-
-    doc
-  end
 
   describe "memory leak detection" do
     it "does not leak memory with large documents" do

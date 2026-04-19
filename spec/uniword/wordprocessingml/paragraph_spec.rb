@@ -142,4 +142,15 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
       expect(described_class.ancestors).not_to include(Uniword::Element)
     end
   end
+
+  describe "XML round-trip" do
+    it "round-trips through XML with runs" do
+      run = Uniword::Wordprocessingml::Run.new(text: "Hello")
+      para = described_class.new(runs: [run])
+      xml = para.to_xml
+      restored = described_class.from_xml(xml)
+      expect(restored.runs.size).to eq(1)
+      expect(restored.runs.first.text).to eq("Hello")
+    end
+  end
 end

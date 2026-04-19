@@ -173,4 +173,9 @@ RSpec.describe Uniword::Wordprocessingml::Run do
       expect(described_class.ancestors).not_to include(Uniword::Element)
     end
   end
+
+  describe "XML round-trip" do
+    it_behaves_like "a round-trippable serializable", described_class,
+      { text: "Hello World" }, :text, "Hello World"
+  end
 end

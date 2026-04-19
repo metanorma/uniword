@@ -95,12 +95,14 @@ end
 # @param klass [Class] The model class
 # @param method_name [Symbol] The serialization method (:to_xml, :to_json, etc.)
 RSpec.shared_examples "a serializable element" do
-  it "responds to valid?" do
-    expect(subject).to respond_to(:valid?)
-  end
-
   it "responds to to_xml" do
     expect(subject).to respond_to(:to_xml)
+  end
+
+  it "produces parseable XML" do
+    xml = subject.to_xml
+    doc = Nokogiri::XML(xml)
+    expect(doc.errors).to be_empty
   end
 end
 
