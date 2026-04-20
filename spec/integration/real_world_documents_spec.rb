@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "benchmark"
+begin
+  require "benchmark"
+rescue LoadError
+  # benchmark gem not available (Ruby 4.0+)
+end
 begin
   require "benchmark/memory"
 rescue LoadError
@@ -116,7 +120,7 @@ RSpec.describe "Real-World Document Testing", :integration do
       end
     end
 
-    describe "Performance Benchmarks" do
+    describe "Performance Benchmarks", if: defined?(Benchmark) do
       it "reads document in under 6 seconds" do
         read_time = Benchmark.realtime do
           Uniword.load(doc_path)

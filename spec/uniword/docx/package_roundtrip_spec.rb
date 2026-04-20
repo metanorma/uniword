@@ -7,13 +7,33 @@ RSpec.describe "DocxPackage Complete Round-Trip" do
   TEST_DOCUMENT = "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx"
   OUTPUT_PATH = "test_output/docx_package_complete.docx"
 
-  before(:all) do
+  before(:context) do
     # Load and save with DocxPackage (proper OOP model)
     package = Uniword::Docx::Package.from_file(TEST_DOCUMENT)
     package.to_file(OUTPUT_PATH)
   end
 
-  it_behaves_like "a valid DOCX package", OUTPUT_PATH
+  # Inline the shared example checks to avoid before(:all)/it_behaves_like
+  # interaction issues where shared examples run in a separate nested group
+  # that may not inherit the parent's before(:all) state on CI.
+  it "is a valid ZIP file" do
+    expect(Zip::File.open(OUTPUT_PATH) { |z| z.entries.count }).to be > 0
+  end
+
+  it "contains [Content_Types].xml" do
+    content = ZipHelper.extract_file(OUTPUT_PATH, "[Content_Types].xml")
+    expect(content).to include("Types")
+  end
+
+  it "contains _rels/.rels" do
+    content = ZipHelper.extract_file(OUTPUT_PATH, "_rels/.rels")
+    expect(content).to include("Relationships")
+  end
+
+  it "contains word/document.xml" do
+    content = ZipHelper.extract_file(OUTPUT_PATH, "word/document.xml")
+    expect(content).to include("document")
+  end
 
   # Verify key XML files preserve through round-trip
   %w[[Content_Types].xml _rels/.rels docProps/core.xml docProps/app.xml
