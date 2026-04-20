@@ -1,0 +1,95 @@
+---
+layout: default
+title: diff
+nav_order: 12
+parent: CLI
+permalink: /interfaces/cli/diff-command/
+---
+= diff
+
+Compare two DOCX files and display differences.
+
+== Usage
+
+[source,shell]
+----
+uniword diff compare OLD_FILE NEW_FILE [OPTIONS]
+----
+
+== Options
+
+`--text-only`::
+Compare text only, skip formatting comparison.
+
+`--json`::
+Output differences as JSON.
+
+`--part`::
+Focus on a specific part: `content`, `styles`, or `headers`.
+
+`--verbose`, `-v`::
+Show full text in change listings.
+
+== Examples
+
+Compare two documents:
+
+[source,shell]
+----
+uniword diff compare old.docx new.docx
+----
+
+Text-only comparison:
+
+[source,shell]
+----
+uniword diff compare old.docx new.docx --text-only
+----
+
+JSON output:
+
+[source,shell]
+----
+uniword diff compare old.docx new.docx --json
+----
+
+Focus on styles:
+
+[source,shell]
+----
+uniword diff compare old.docx new.docx --part styles --verbose
+----
+
+== Output
+
+The diff compares five dimensions:
+
+Text changes::
+Added, removed, or modified paragraph text (LCS-aligned).
+
+Format changes::
+Paragraph-level (alignment, style) and run-level (bold, italic, font, size,
+color) formatting differences.
+
+Structure changes::
+Paragraph and table count differences.
+
+Metadata changes::
+Title, author, subject, keywords, description, dates.
+
+Style changes::
+Added, removed, or modified style definitions.
+
+== Ruby API
+
+[source,ruby]
+----
+old_doc = Uniword.load("v1.docx")
+new_doc = Uniword.load("v2.docx")
+
+result = old_doc.diff(new_doc)
+puts result.summary
+
+# Text-only comparison
+result = old_doc.diff(new_doc, text_only: true)
+----

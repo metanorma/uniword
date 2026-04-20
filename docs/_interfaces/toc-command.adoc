@@ -1,0 +1,113 @@
+---
+layout: default
+title: toc
+nav_order: 16
+parent: CLI
+permalink: /interfaces/cli/toc-command/
+---
+= toc
+
+Generate and manage Table of Contents in documents.
+
+== Usage
+
+[source,shell]
+----
+uniword toc SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `generate FILE`
+| List TOC entries from heading paragraphs
+
+| `insert FILE`
+| Insert a TOC field into the document
+
+| `update FILE`
+| Update an existing TOC field
+|===
+
+== Options
+
+=== generate
+
+`--max-level`::
+Maximum heading level to include, 1--6 (default: `6`).
+
+`--json`::
+Output entries as JSON.
+
+`--verbose`, `-v`::
+Show style names and paragraph indices.
+
+=== insert
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--position`::
+Insert position in the paragraph list, 0 = beginning (default: `0`).
+
+`--max-level`::
+Maximum heading level, 1--6 (default: `3`).
+
+=== update
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--max-level`::
+Maximum heading level, 1--6 (default: `6`).
+
+== Examples
+
+Generate TOC entries:
+
+[source,shell]
+----
+uniword toc generate document.docx
+uniword toc generate document.docx --max_level 2 --json
+----
+
+Insert TOC at beginning:
+
+[source,shell]
+----
+uniword toc insert document.docx -o output.docx
+uniword toc insert document.docx -o output.docx --position 2 --max_level 3
+----
+
+Update existing TOC:
+
+[source,shell]
+----
+uniword toc update document.docx -o output.docx
+----
+
+== How it works
+
+Heading detection scans paragraphs for style references matching
+`Heading1` through `Heading6` (case-insensitive). The TOC is inserted as
+a Structured Document Tag (SDT) containing a TOC field instruction that
+Microsoft Word will populate when the document is opened.
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+# Generate entries
+entries = doc.generate_toc(max_level: 3)
+entries.each { |e| puts "#{e.level}: #{e.text}" }
+
+# Insert TOC
+doc.insert_toc(position: 0, max_level: 3).save("output.docx")
+
+# Update existing
+doc.update_toc.save("output.docx")
+----

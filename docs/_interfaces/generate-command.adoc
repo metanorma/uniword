@@ -1,0 +1,68 @@
+---
+layout: default
+title: generate
+nav_order: 19
+parent: CLI
+permalink: /interfaces/cli/generate-command/
+---
+= generate
+
+Generate DOCX documents from structured text files.
+
+== Usage
+
+[source,shell]
+----
+uniword generate INPUT OUTPUT [OPTIONS]
+----
+
+== Options
+
+`--style-source` (required)::
+Path to a source DOCX template for style extraction.
+
+`--style-mapping`::
+Path to a style mapping YAML configuration file.
+
+`--verbose`, `-v`::
+Show parsing progress and element counts.
+
+== Supported input formats
+
+YAML (`.yml` / `.yaml`)::
+Content array with `element` and `text` keys.
+
+Markdown (`.md`)::
+Headings (`#`), notes (`> NOTE`), and body text paragraphs.
+
+== Examples
+
+Generate from YAML:
+
+[source,shell]
+----
+uniword generate content.yml output.docx --style-source template.dotx
+----
+
+Generate from Markdown:
+
+[source,shell]
+----
+uniword generate document.md output.docx --style-source template.dotx
+----
+
+With style mapping:
+
+[source,shell]
+----
+uniword generate content.yml output.docx \
+  --style-source iso.dotx \
+  --style-mapping config/style_mappings/iso_publication.yml
+----
+
+Verbose output:
+
+[source,shell]
+----
+uniword generate content.yml output.docx --style-source template.dotx -v
+----

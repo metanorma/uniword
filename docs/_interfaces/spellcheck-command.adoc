@@ -1,0 +1,90 @@
+---
+layout: default
+title: spellcheck
+nav_order: 13
+parent: CLI
+permalink: /interfaces/cli/spellcheck-command/
+---
+= spellcheck
+
+Run spell and grammar checks on a document.
+
+== Usage
+
+[source,shell]
+----
+uniword spellcheck check FILE [OPTIONS]
+----
+
+== Options
+
+`--language`::
+Dictionary language (default: `en_US`). Examples: `en_GB`, `fr_FR`, `de_DE`.
+
+`--dictionary`::
+Custom dictionary file path (reserved for future use).
+
+`--json`::
+Output results as JSON.
+
+`--verbose`, `-v`::
+Show suggestions for misspellings and context for grammar issues.
+
+== Examples
+
+Check a document:
+
+[source,shell]
+----
+uniword spellcheck check document.docx
+----
+
+British English:
+
+[source,shell]
+----
+uniword spellcheck check document.docx --language en_GB
+----
+
+JSON output:
+
+[source,shell]
+----
+uniword spellcheck check document.docx --json
+----
+
+Verbose with suggestions:
+
+[source,shell]
+----
+uniword spellcheck check document.docx --verbose
+----
+
+== Checks performed
+
+Spell checking::
+Word-by-word analysis using hunspell. Reports misspellings with position and
+suggestions.
+
+Grammar checking::
+Built-in rules detect double spaces, repeated words, and missing
+capitalization at sentence starts.
+
+== Exit codes
+
+0:: No issues found (clean document)
+1:: Issues found
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+result = doc.spellcheck
+puts result.issue_count
+puts result.clean?
+
+# Specific language
+result = doc.spellcheck(language: "en_GB")
+----

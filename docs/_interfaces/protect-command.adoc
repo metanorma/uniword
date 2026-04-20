@@ -1,0 +1,116 @@
+---
+layout: default
+title: protect
+nav_order: 18
+parent: CLI
+permalink: /interfaces/cli/protect-command/
+---
+= protect
+
+Manage document editing restrictions and password protection.
+
+== Usage
+
+[source,shell]
+----
+uniword protect SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `apply FILE`
+| Apply editing restriction to the document
+
+| `remove FILE`
+| Remove all protection from the document
+
+| `info FILE`
+| Display current protection status
+|===
+
+== Protection types
+
+|===
+| Type | Description
+
+| `read_only`
+| No edits allowed
+
+| `comments`
+| Only comments allowed
+
+| `tracked_changes`
+| Only tracked changes allowed
+
+| `forms`
+| Only form fields editable
+|===
+
+== Options
+
+=== apply
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--type`::
+Protection type (default: `read_only`).
+
+`--password`::
+Optional password for the protection.
+
+=== remove
+
+`--output`, `-o` (required)::
+Output file path.
+
+== Examples
+
+Apply read-only protection:
+
+[source,shell]
+----
+uniword protect apply document.docx --type read_only -o protected.docx
+----
+
+Apply with password:
+
+[source,shell]
+----
+uniword protect apply document.docx --type comments --password secret -o out.docx
+----
+
+Check protection:
+
+[source,shell]
+----
+uniword protect info document.docx
+----
+
+Remove protection:
+
+[source,shell]
+----
+uniword protect remove document.docx -o unprotected.docx
+----
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+# Apply protection
+doc.protect(:read_only, password: "secret").save("protected.docx")
+doc.protect(:tracked_changes).save("tracked.docx")
+
+# Check status
+doc.protection_active?  # => true/false
+doc.protection_info     # => { type: :read_only, password_protected: true }
+
+# Remove
+doc.unprotect.save("unprotected.docx")
+----

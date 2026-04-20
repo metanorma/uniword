@@ -1,0 +1,123 @@
+---
+layout: default
+title: images
+nav_order: 14
+parent: CLI
+permalink: /interfaces/cli/images-command/
+---
+= images
+
+Manage images embedded in DOCX documents.
+
+== Usage
+
+[source,shell]
+----
+uniword images SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `list FILE`
+| List all embedded images with metadata
+
+| `extract FILE OUTPUT_DIR`
+| Extract images to a directory
+
+| `insert FILE IMAGE_PATH`
+| Insert an image into the document
+
+| `remove FILE IMAGE_NAME`
+| Remove an image by filename
+|===
+
+== Options
+
+=== list
+
+`--json`::
+Output image metadata as JSON.
+
+=== extract
+
+`--verbose`, `-v`::
+Show names of extracted files.
+
+=== insert
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--position`::
+Paragraph index for insertion (appended at end by default).
+
+`--width`::
+Image width string (e.g., `6in`, `15cm`, `400px`).
+
+`--height`::
+Image height string (e.g., `4in`, `10cm`).
+
+`--description`::
+Alt text / accessibility description.
+
+=== remove
+
+`--output`, `-o` (required)::
+Output file path.
+
+== Examples
+
+List images:
+
+[source,shell]
+----
+uniword images list document.docx
+uniword images list document.docx --json
+----
+
+Extract all images:
+
+[source,shell]
+----
+uniword images extract document.docx ./output_images
+----
+
+Insert an image:
+
+[source,shell]
+----
+uniword images insert document.docx photo.png -o out.docx
+uniword images insert document.docx logo.png -o out.docx --width 6in --height 4in
+uniword images insert document.docx chart.png -o out.docx --position 2
+----
+
+Remove an image:
+
+[source,shell]
+----
+uniword images remove document.docx image1.png -o out.docx
+----
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+# List
+images = doc.list_images
+images.each { |img| puts "#{img.name} (#{img.content_type})" }
+
+# Extract
+count = doc.extract_images("/tmp/images")
+
+# Insert
+doc.insert_image("photo.png", width: "6in", height: "4in")
+    .save("output.docx")
+
+# Remove
+doc.remove_image("image1.png").save("output.docx")
+----
