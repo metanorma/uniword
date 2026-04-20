@@ -61,9 +61,12 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot,
   # --- Spellcheck ---
 
   describe "#spellcheck" do
-    it "returns a SpellcheckResult" do
+    it "returns a SpellcheckResult when hunspell is available" do
+      adapter = Uniword::Spellcheck::HunspellAdapter.new(language: "en_US")
       result = doc.spellcheck
       expect(result).to be_a(Uniword::Spellcheck::SpellcheckResult)
+    rescue Uniword::DependencyError
+      skip "hunspell not available"
     end
   end
 
