@@ -80,6 +80,7 @@ module Uniword
 
   # Namespace autoloads (autoloads done in immediate parent namespace files)
   autoload :Template, "uniword/template"
+  autoload :TemplateManager, "uniword/template_manager"
   autoload :Visitor, "uniword/visitor"
   autoload :Validators, "uniword/validators"
   autoload :Stylesets, "uniword/stylesets"
@@ -87,7 +88,6 @@ module Uniword
   autoload :Accessibility, "uniword/accessibility"
   autoload :Assembly, "uniword/assembly"
   autoload :Batch, "uniword/batch"
-  autoload :Metadata, "uniword/metadata"
   autoload :Quality, "uniword/quality"
   autoload :Schema, "uniword/schema"
 
@@ -99,13 +99,14 @@ module Uniword
   autoload :Mhtml, "uniword/mhtml"
   autoload :Themes, "uniword/themes"
   autoload :Resource, "uniword/resource"
+  autoload :Images, "uniword/images"
+  autoload :Toc, "uniword/toc"
 
   # Stylesets and numbering (moved to wordprocessingml/)
   autoload :StyleSet, "uniword/styleset"
 
   # Content types and document properties
   autoload :ContentTypes, "uniword/content_types"
-  autoload :DocumentProperties, "uniword/document_properties"
   autoload :Glossary, "uniword/glossary"
   autoload :HtmlImporter, "uniword/html_importer"
 
@@ -113,7 +114,31 @@ module Uniword
   autoload :Builder, "uniword/builder"
 
   # CLI
-  autoload :CLI, "uniword/cli"
+  autoload :CLI, "uniword/cli/main"
+  autoload :GenerateCLI, "uniword/cli/generate_cli"
+  autoload :DiffCLI, "uniword/cli/diff_cli"
+  autoload :TemplateCLI, "uniword/cli/template_cli"
+
+  # Diff (document comparison)
+  autoload :Diff, "uniword/diff"
+
+  # Review (comments and tracked changes)
+  autoload :Review, "uniword/review"
+
+  # Spellcheck (spell and grammar checking)
+  autoload :Spellcheck, "uniword/spellcheck"
+
+  # Generation
+  autoload :Generation, "uniword/generation"
+
+  # Headers/Footers
+  autoload :HeadersFooters, "uniword/headers_footers"
+
+  # Watermark
+  autoload :Watermark, "uniword/watermark"
+
+  # Protect
+  autoload :Protect, "uniword/protect"
 
   # Word implementation detection
   autoload :WordImplementation, "uniword/word_implementation"
