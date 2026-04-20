@@ -70,7 +70,8 @@ module Uniword
           else
             value.to_s
           end
-        rescue StandardError
+        rescue ArgumentError, TypeError => e
+          Uniword.logger&.debug { "Filter 'format' failed: #{e.message}" }
           value.to_s
         end
 
@@ -83,7 +84,8 @@ module Uniword
           num = value.to_f
           formatted = format("%.2f", num)
           "#{currency} #{formatted}"
-        rescue StandardError
+        rescue ArgumentError, TypeError => e
+          Uniword.logger&.debug { "Filter 'currency' failed: #{e.message}" }
           value.to_s
         end
 
@@ -96,7 +98,8 @@ module Uniword
           num = value.to_f
           prec = precision ? precision.to_i : 2
           format("%.#{prec}f", num)
-        rescue StandardError
+        rescue ArgumentError, TypeError => e
+          Uniword.logger&.debug { "Filter 'number' failed: #{e.message}" }
           value.to_s
         end
 

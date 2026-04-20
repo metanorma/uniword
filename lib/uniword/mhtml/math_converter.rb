@@ -47,8 +47,8 @@ module Uniword
         if plurimath_available?
           begin
             Plurimath::Math.parse(mathml_string, :mathml).to_omml
-          rescue StandardError
-            # Fallback on error
+          rescue Plurimath::Math::ParseError => e
+            Uniword.logger&.debug { "MathML conversion failed: #{e.message}" }
             wrap_in_omml(mathml_string)
           end
         else
@@ -74,8 +74,8 @@ module Uniword
           begin
             parsed = Plurimath::Math.parse(asciimath_string, :asciimath)
             parsed.to_omml
-          rescue StandardError
-            # Fallback to plain text
+          rescue Plurimath::Math::ParseError => e
+            Uniword.logger&.debug { "AsciiMath conversion failed: #{e.message}" }
             asciimath_string
           end
         else
