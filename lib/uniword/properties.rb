@@ -5,7 +5,6 @@ module Uniword
     # Simple wrappers
     autoload :Alignment, "uniword/properties/alignment"
     autoload :FontSize, "uniword/properties/font_size"
-    autoload :Color, "uniword/properties/color"
     autoload :ColorValue, "uniword/properties/color_value"
     autoload :StyleReference, "uniword/properties/style_reference"
     autoload :RunStyleReference, "uniword/properties/style_reference"
