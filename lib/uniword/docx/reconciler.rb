@@ -19,6 +19,7 @@ module Uniword
       end
 
       def reconcile
+        reconcile_section_properties
         reconcile_footnotes
         reconcile_endnotes
       end
@@ -26,6 +27,25 @@ module Uniword
       private
 
       attr_reader :package
+
+      # -- Section Properties --
+
+      def reconcile_section_properties
+        return unless package.document&.body
+
+        body = package.document.body
+        return if body.section_properties
+
+        body.section_properties = Wordprocessingml::SectionProperties.new(
+          page_size: Wordprocessingml::PageSize.new(width: 12_240, height: 15_840),
+          page_margins: Wordprocessingml::PageMargins.new(
+            top: 1440, right: 1440, bottom: 1440, left: 1440,
+            header: 720, footer: 720, gutter: 0
+          ),
+          columns: Wordprocessingml::Columns.new(space: 720),
+          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360)
+        )
+      end
 
       # -- Footnotes --
 

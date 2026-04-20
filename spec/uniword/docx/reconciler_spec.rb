@@ -20,6 +20,7 @@ RSpec.describe Uniword::Docx::Reconciler do
     allow(package).to receive(:footnotes=)
     allow(package).to receive(:endnotes=)
     allow(package).to receive(:settings=)
+    allow(package).to receive(:document).and_return(nil)
     if settings
       allow(settings).to receive(:footnote_pr=)
       allow(settings).to receive(:endnote_pr=)

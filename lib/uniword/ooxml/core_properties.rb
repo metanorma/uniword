@@ -25,6 +25,7 @@ module Uniword
         namespace_scope [
           { namespace: Namespaces::DublinCore, declare: :always },
           { namespace: Namespaces::DublinCoreTerms, declare: :always },
+          { namespace: Namespaces::DublinCoreMitype, declare: :always },
           { namespace: Namespaces::XmlSchemaInstance, declare: :always }
         ]
 

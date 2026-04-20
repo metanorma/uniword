@@ -5,43 +5,14 @@ require "lutaml/model"
 module Uniword
   module Ooxml
     module Types
-      # xsi:type attribute type
-      class XsiTypeType < Lutaml::Model::Type::String
-      end
-
-      # Dublin Core Terms created timestamp Model
-      class DctermsCreatedType < Lutaml::Model::Serializable
-        attribute :value, :date_time
-        attribute :type, XsiTypeType
+      # Dublin Core Terms W3CDTF type indicator
+      # This is the type value used in xsi:type="dcterms:W3CDTF"
+      class DctermsW3cdtfType < Lutaml::Model::Serializable
+        attribute :value, :string
 
         xml do
-          element "created"
+          root "W3CDTF"
           namespace Namespaces::DublinCoreTerms
-          map_attribute "type", to: :type
-          map_content to: :value
-        end
-
-        def initialize(attributes = {})
-          super
-          @type ||= "dcterms:W3CDTF"
-        end
-      end
-
-      # Dublin Core Terms modified timestamp Model
-      class DctermsModifiedType < Lutaml::Model::Serializable
-        attribute :value, :date_time
-        attribute :type, XsiTypeType
-
-        xml do
-          element "modified"
-          namespace Namespaces::DublinCoreTerms
-          map_attribute "type", to: :type
-          map_content to: :value
-        end
-
-        def initialize(attributes = {})
-          super
-          @type ||= "dcterms:W3CDTF"
         end
       end
     end

@@ -33,10 +33,9 @@ RSpec.describe "DOCX prevention layer" do
     end
   end
 
-  describe "round-trip with html2doc_sample.docx" do
+  describe "round-trip with footnote-err fixture" do
     it "produces a valid DOCX without DOC-020 errors" do
-      sample = "/tmp/html2doc_sample.docx"
-      skip "html2doc_sample.docx not available" unless File.exist?(sample)
+      sample = "spec/fixtures/hello-world-footnote-err.docx"
 
       package = Uniword::Docx::Package.from_file(sample)
       output_path = "test_output/prevention_roundtrip.docx"

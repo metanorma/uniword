@@ -13,5 +13,7 @@ module Uniword
     autoload :DiffResult, "uniword/diff/diff_result"
     autoload :DocumentDiffer, "uniword/diff/document_differ"
     autoload :Formatter, "uniword/diff/formatter"
+    autoload :PackageDiffer, "uniword/diff/package_differ"
+    autoload :PackageDiffResult, "uniword/diff/package_diff_result"
   end
 end
