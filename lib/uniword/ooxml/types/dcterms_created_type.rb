@@ -8,7 +8,7 @@ module Uniword
       # Dublin Core Terms created element type
       class DctermsCreatedType < Lutaml::Model::Serializable
         attribute :value, :string
-        attribute :type, :string
+        attribute :type, :xsi_type
 
         xml do
           element "created"

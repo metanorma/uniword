@@ -114,6 +114,12 @@ module Uniword
         attribute_form_default :qualified
       end
 
+      # Dublin Core MIType namespace
+      class DublinCoreMitype < Lutaml::Xml::Namespace
+        uri "http://purl.org/dc/dcmitype/"
+        prefix_default "dcmitype"
+      end
+
       # XML Schema Instance namespace
       class XmlSchemaInstance < Lutaml::Xml::Namespace
         uri "http://www.w3.org/2001/XMLSchema-instance"
@@ -280,7 +286,7 @@ module Uniword
         uri "http://schemas.microsoft.com/office/thememl/2012/main"
         prefix_default "thm15"
         element_form_default :qualified
-        attribute_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # WordprocessingShape namespace

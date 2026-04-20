@@ -58,11 +58,10 @@ RSpec.describe Uniword::Validation::VerifyOrchestrator do
       tmp.unlink
     end
 
-    it "detects DOC-020 for html2doc_sample.docx" do
-      skip "html2doc_sample.docx not available" unless File.exist?("/tmp/html2doc_sample.docx")
-
+    it "detects DOC-020 for hello-world-footnote-err.docx" do
+      fixture = "spec/fixtures/hello-world-footnote-err.docx"
       orchestrator = described_class.new
-      report = orchestrator.verify("/tmp/html2doc_sample.docx")
+      report = orchestrator.verify(fixture)
 
       expect(report.valid).to be false
       doc_issues = report.layers.flat_map(&:issues)
