@@ -23,6 +23,8 @@ module Uniword
         inject_footers(content_types, document_rels)
         inject_header_footer_parts(content_types, document_rels)
         inject_notes(content_types, document_rels)
+        inject_theme(content_types, document_rels)
+        inject_numbering(content_types, document_rels)
       end
 
       # Serialize all package parts to XML and add to content hash
@@ -33,7 +35,7 @@ module Uniword
 
         # Document properties
         if core_properties
-          content["docProps/core.xml"] = core_properties.to_xml(encoding: "UTF-8", prefix: false)
+          content["docProps/core.xml"] = core_properties.to_xml(encoding: "UTF-8", prefix: true)
         end
         if app_properties
           content["docProps/app.xml"] = app_properties.to_xml(encoding: "UTF-8", prefix: false)
@@ -275,6 +277,44 @@ module Uniword
             id: "rIdEndnotes",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
             target: "endnotes.xml"
+          )
+        end
+      end
+
+      def inject_theme(content_types, document_rels)
+        return unless theme
+
+        unless content_types.overrides.any? { |o| o.part_name == "/word/theme/theme1.xml" }
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: "/word/theme/theme1.xml",
+            content_type: "application/vnd.openxmlformats-officedocument.theme+xml"
+          )
+        end
+
+        unless document_rels.relationships.any? { |r| r.target == "theme/theme1.xml" }
+          document_rels.relationships << Ooxml::Relationships::Relationship.new(
+            id: "rIdTheme",
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+            target: "theme/theme1.xml"
+          )
+        end
+      end
+
+      def inject_numbering(content_types, document_rels)
+        return unless numbering
+
+        unless content_types.overrides.any? { |o| o.part_name == "/word/numbering.xml" }
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: "/word/numbering.xml",
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"
+          )
+        end
+
+        unless document_rels.relationships.any? { |r| r.target == "numbering.xml" }
+          document_rels.relationships << Ooxml::Relationships::Relationship.new(
+            id: "rIdNumbering",
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+            target: "numbering.xml"
           )
         end
       end

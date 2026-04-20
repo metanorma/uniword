@@ -69,10 +69,11 @@ module Uniword
         private
 
         # Helper to create a ValidationIssue with defaults from the rule.
-        def issue(message, part: nil, line: nil, suggestion: nil, severity: nil)
+        def issue(message, part: nil, line: nil, suggestion: nil,
+                  severity: nil, code: nil)
           Report::ValidationIssue.new(
             severity: severity || self.severity,
-            code: code,
+            code: code || self.code,
             message: message,
             part: part,
             line: line,

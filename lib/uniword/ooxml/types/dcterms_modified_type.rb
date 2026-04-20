@@ -8,7 +8,7 @@ module Uniword
       # Dublin Core Terms modified element type
       class DctermsModifiedType < Lutaml::Model::Serializable
         attribute :value, :string
-        attribute :type, :string
+        attribute :type, :xsi_type
 
         xml do
           element "modified"
