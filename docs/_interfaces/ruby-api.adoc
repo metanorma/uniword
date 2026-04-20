@@ -96,9 +96,124 @@ doc.apply_theme("celestial")
 doc.apply_styleset("distinctive")
 ----
 
+== Feature API
+
+DocumentRoot provides convenience methods for common document operations.
+All mutator methods return +self+ for chaining.
+
+=== Review (comments & tracked changes)
+
+[source,ruby]
+----
+doc.list_comments                          # => Array<Comment>
+doc.add_comment(text: "Fix", author: "Al") # => self
+doc.accept_all_changes                     # => self
+doc.reject_all_changes                     # => self
+doc.clear_comments                         # => self
+----
+
+=== Document comparison
+
+[source,ruby]
+----
+result = doc.diff(other_doc)
+result = doc.diff(other_doc, text_only: true)
+# => DiffResult with text_changes, format_changes, structure_changes,
+#    metadata_changes, style_changes
+----
+
+=== Spell and grammar checking
+
+[source,ruby]
+----
+result = doc.spellcheck              # default: en_US
+result = doc.spellcheck(language: "en_GB")
+# => SpellcheckResult with misspellings, grammar_issues, clean?
+----
+
+=== Image management
+
+[source,ruby]
+----
+doc.list_images                    # => Array<ImageInfo>
+doc.extract_images("/tmp/imgs")    # => Integer (count)
+doc.insert_image("photo.png",
+      width: "6in", height: "4in") # => self
+doc.remove_image("image1.png")     # => self
+----
+
+=== Watermarks
+
+[source,ruby]
+----
+doc.add_watermark("DRAFT",
+      color: "#FF0000", font_size: 96)  # => self
+doc.remove_watermark                      # => self
+doc.watermark?                            # => true/false
+doc.list_watermarks                       # => Array<String>
+----
+
+=== Table of Contents
+
+[source,ruby]
+----
+entries = doc.generate_toc(max_level: 3)
+# => Array<TocEntry> with level, text, style_name, paragraph_index
+
+doc.insert_toc(position: 0, max_level: 3) # => self
+doc.update_toc(max_level: 6)              # => self
+----
+
+=== Headers & footers
+
+[source,ruby]
+----
+doc.list_headers                   # => Array<Hash>
+doc.list_footers                   # => Array<Hash>
+doc.add_header("Confidential",
+      type: "default")             # => self
+doc.add_footer("Page 1")          # => self
+doc.remove_headers(type: "first") # => self
+doc.remove_footers(type: "even")  # => self
+----
+
+=== Document protection
+
+[source,ruby]
+----
+doc.protect(:read_only, password: "secret")  # => self
+doc.protect(:tracked_changes)                # => self
+doc.protection_active?                       # => true/false
+doc.protection_info                          # => Hash or nil
+doc.unprotect                                # => self
+----
+
+=== Chaining
+
+All mutator methods return +self+, enabling fluent chains:
+
+[source,ruby]
+----
+doc = Uniword.load("report.docx")
+doc.add_comment(text: "Reviewed", author: "QA")
+    .add_watermark("APPROVED", color: "#008000")
+    .insert_toc(max_level: 3)
+    .protect(:comments)
+    .save("final.docx")
+----
+
 == Topics
 
 * link:../document-lifecycle/[Document Lifecycle] -- Create, open, save,
   modify documents
 * link:../builder-api/[Builder API] -- Fluent document construction
 * link:../configuration/[Configuration] -- Logging, format detection
+* link:../review-command/[review] -- Comments and tracked changes
+* link:../diff-command/[diff] -- Document comparison
+* link:../spellcheck-command/[spellcheck] -- Spell and grammar checking
+* link:../images-command/[images] -- Image management
+* link:../toc-command/[toc] -- Table of Contents
+* link:../headers-command/[headers] -- Headers and footers
+* link:../watermark-command/[watermark] -- Watermarks
+* link:../protect-command/[protect] -- Document protection
+* link:../generate-command/[generate] -- DOCX generation

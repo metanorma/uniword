@@ -1,0 +1,115 @@
+---
+layout: default
+title: headers
+nav_order: 17
+parent: CLI
+permalink: /interfaces/cli/headers-command/
+---
+= headers
+
+Manage document headers and footers.
+
+== Usage
+
+[source,shell]
+----
+uniword headers SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `list FILE`
+| List all headers and footers
+
+| `add-header FILE TEXT`
+| Add a header to the document
+
+| `add-footer FILE TEXT`
+| Add a footer to the document
+
+| `remove FILE`
+| Remove headers or footers by type
+|===
+
+== Options
+
+=== list
+
+`--json`::
+Output as JSON.
+
+=== add-header / add-footer
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--type`::
+Header/footer type: `default`, `first`, or `even` (default: `default`).
+
+=== remove
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--what`::
+What to remove: `headers`, `footers`, or `all` (default: `all`).
+
+`--type`::
+Type to remove: `default`, `first`, or `even` (default: `default`).
+
+== Examples
+
+List headers and footers:
+
+[source,shell]
+----
+uniword headers list document.docx
+uniword headers list document.docx --json
+----
+
+Add headers:
+
+[source,shell]
+----
+uniword headers add-header document.docx "Confidential" -o out.docx
+uniword headers add-header document.docx "Title" --type first -o out.docx
+----
+
+Add footers:
+
+[source,shell]
+----
+uniword headers add-footer document.docx "Page 1" -o out.docx
+----
+
+Remove:
+
+[source,shell]
+----
+uniword headers remove document.docx --what headers --type default -o out.docx
+uniword headers remove document.docx --what all -o out.docx
+----
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+# List
+headers = doc.list_headers
+footers = doc.list_footers
+
+# Add
+doc.add_header("Confidential", type: "default")
+    .add_footer("Page 1")
+    .save("output.docx")
+
+# Remove
+doc.remove_headers(type: "first")
+    .remove_footers(type: "default")
+    .save("output.docx")
+----

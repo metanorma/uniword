@@ -1,0 +1,102 @@
+---
+layout: default
+title: watermark
+nav_order: 15
+parent: CLI
+permalink: /interfaces/cli/watermark-command/
+---
+= watermark
+
+Manage text watermarks in documents.
+
+== Usage
+
+[source,shell]
+----
+uniword watermark SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `add FILE TEXT`
+| Add a text watermark
+
+| `remove FILE`
+| Remove all watermarks
+
+| `list FILE`
+| List watermarks in a document
+|===
+
+== Options
+
+=== add
+
+`--output`, `-o` (required)::
+Output file path.
+
+`--color`::
+Watermark color as hex string (default: `#808080`).
+
+`--font-size`::
+Font size in points (default: `72`).
+
+`--font`::
+Font family name (default: `Segoe UI`).
+
+=== remove
+
+`--output`, `-o` (required)::
+Output file path.
+
+== Examples
+
+Add a watermark:
+
+[source,shell]
+----
+uniword watermark add document.docx "CONFIDENTIAL" -o out.docx
+----
+
+Custom styling:
+
+[source,shell]
+----
+uniword watermark add document.docx "DRAFT" --color "#FF0000" --font-size 96 -o out.docx
+----
+
+Remove watermarks:
+
+[source,shell]
+----
+uniword watermark remove document.docx -o clean.docx
+----
+
+List watermarks:
+
+[source,shell]
+----
+uniword watermark list document.docx
+----
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+doc.add_watermark("DRAFT", color: "#FF0000", font_size: 96)
+    .save("output.docx")
+
+# Check
+doc.watermark?  # => true/false
+
+# List
+doc.list_watermarks  # => ["DRAFT"]
+
+# Remove
+doc.remove_watermark.save("clean.docx")
+----

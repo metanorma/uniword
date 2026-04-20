@@ -1,0 +1,114 @@
+---
+layout: default
+title: review
+nav_order: 11
+parent: CLI
+permalink: /interfaces/cli/review-command/
+---
+= review
+
+Review comments and tracked changes in a document.
+
+== Usage
+
+[source,shell]
+----
+uniword review SUBCOMMAND FILE [OPTIONS]
+----
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `comments FILE`
+| List all comments in a document
+
+| `changes FILE`
+| List tracked changes (revisions)
+
+| `accept FILE REVISION_ID`
+| Accept a single tracked change
+
+| `reject FILE REVISION_ID`
+| Reject a single tracked change
+
+| `accept-all FILE`
+| Accept all tracked changes
+
+| `reject-all FILE`
+| Reject all tracked changes
+
+| `interactive FILE`
+| Step through changes one-by-one
+|===
+
+== Options
+
+`--output`, `-o`::
+Output file path (overwrites source if omitted). Available on accept, reject,
+accept-all, reject-all.
+
+`--author`::
+Filter revisions by author (changes subcommand).
+
+`--type`::
+Filter by revision type: `insert`, `delete`, `format_change` (changes subcommand).
+
+`--verbose`, `-v`::
+Show full comment/revision text.
+
+== Examples
+
+List comments:
+
+[source,shell]
+----
+uniword review comments document.docx
+uniword review comments document.docx --verbose
+----
+
+List tracked changes:
+
+[source,shell]
+----
+uniword review changes document.docx
+uniword review changes document.docx --author "John Doe"
+uniword review changes document.docx --type insert
+----
+
+Accept or reject changes:
+
+[source,shell]
+----
+uniword review accept document.docx 3
+uniword review accept-all document.docx -o clean.docx
+uniword review reject document.docx 5 -o reverted.docx
+----
+
+Interactive review:
+
+[source,shell]
+----
+uniword review interactive document.docx
+----
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword.load("document.docx")
+
+# Comments
+comments = doc.list_comments
+doc.add_comment(text: "Fix this", author: "Alice")
+
+# Tracked changes
+doc.accept_all_changes
+doc.reject_all_changes
+
+# Chaining
+doc.add_comment(text: "Reviewed", author: "Alice")
+    .accept_all_changes
+    .save("output.docx")
+----

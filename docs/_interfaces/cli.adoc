@@ -32,6 +32,45 @@ All commands accept `--verbose` (`-v`) for detailed output.
 | `uniword verify FILE`
 | Three-layer DOCX verification (OPC, XSD, semantic)
 
+| `uniword check FILE`
+| Run accessibility and quality checks
+
+| `uniword build TEMPLATE OUTPUT`
+| Build document from a .docx template
+
+| `uniword batch PATTERN OUTPUT_DIR`
+| Batch convert documents
+
+| `uniword metadata FILE`
+| Display or edit document metadata
+
+| `uniword generate INPUT OUTPUT`
+| Generate DOCX from structured text (YAML/Markdown)
+
+| `uniword review SUBCOMMAND`
+| Review comments and tracked changes
+
+| `uniword diff compare OLD NEW`
+| Compare two DOCX files
+
+| `uniword spellcheck check FILE`
+| Spell and grammar checking
+
+| `uniword images SUBCOMMAND`
+| Manage images in documents
+
+| `uniword toc SUBCOMMAND`
+| Generate and manage Table of Contents
+
+| `uniword headers SUBCOMMAND`
+| Manage headers and footers
+
+| `uniword watermark SUBCOMMAND`
+| Manage watermarks
+
+| `uniword protect SUBCOMMAND`
+| Manage document protection
+
 | `uniword theme SUBCOMMAND`
 | Manage document themes (list, import, apply, auto)
 
@@ -51,5 +90,18 @@ All commands accept `--verbose` (`-v`) for detailed output.
 * link:../info-command/[info] -- Document inspection
 * link:../validate-command/[validate] -- Structural validation
 * link:../verify-command/[verify] -- Three-layer verification pipeline
+* link:../check-command/[check] -- Quality and accessibility checks
+* link:../build-command/[build] -- Template building
+* link:../batch-command/[batch] -- Batch processing
+* link:../metadata-command/[metadata] -- Document metadata
+* link:../generate-command/[generate] -- DOCX generation from structured text
+* link:../review-command/[review] -- Comments and tracked changes
+* link:../diff-command/[diff] -- Document comparison
+* link:../spellcheck-command/[spellcheck] -- Spell and grammar checking
+* link:../images-command/[images] -- Image management
+* link:../toc-command/[toc] -- Table of Contents
+* link:../headers-command/[headers] -- Headers and footers
+* link:../watermark-command/[watermark] -- Watermarks
+* link:../protect-command/[protect] -- Document protection
 * link:../theme-commands/[theme] -- Theme operations
 * link:../styleset-commands/[styleset] -- StyleSet operations
