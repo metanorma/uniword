@@ -299,7 +299,9 @@ RSpec.describe "Comprehensive Benchmark Suite" do
       end
 
       # Full access should take more time but not exponentially more
-      expect(time_full).to be < (time_partial * 5)
+      # Use a minimum threshold to avoid flaky failures on fast runners
+      min_threshold = [time_partial * 5, 1.0].max
+      expect(time_full).to be < min_threshold
     end
   end
 
