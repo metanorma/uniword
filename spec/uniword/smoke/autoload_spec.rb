@@ -30,7 +30,6 @@ RSpec.describe "Autoload smoke tests" do
     Accessibility: "Uniword::Accessibility",
     Assembly: "Uniword::Assembly",
     Batch: "Uniword::Batch",
-    Metadata: "Uniword::Metadata",
     Quality: "Uniword::Quality",
     Schema: "Uniword::Schema",
     Configuration: "Uniword::Configuration",

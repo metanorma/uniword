@@ -83,6 +83,11 @@ def soffice_available?
   File.exist?("/Applications/LibreOffice.app/Contents/MacOS/soffice")
 end
 
+# Helper to check if hunspell is available
+def hunspell_available?
+  system("which hunspell > /dev/null 2>&1")
+end
+
 # Global helper to safely delete files on Windows (handles file locking)
 # Use this instead of File.delete when cleaning up temp files in specs
 def safe_delete(path)

@@ -2,6 +2,8 @@
 
 require "lutaml/model"
 
+require_relative "document_root/feature_facade"
+
 module Uniword
   module Wordprocessingml
     # Root element of a WordprocessingML document
@@ -9,6 +11,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:document>
     class DocumentRoot < Lutaml::Model::Serializable
+      include FeatureFacade
+
       attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
       attribute :body, Body, default: -> { Body.new }
 
