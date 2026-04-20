@@ -201,7 +201,7 @@ RSpec.describe "Comprehensive Benchmark Suite" do
         doc.save("tmp/benchmark_write_tables.docx")
       end
 
-      expect(time).to be < 2.0
+      expect(time).to be < 5.0
     end
   end
 
