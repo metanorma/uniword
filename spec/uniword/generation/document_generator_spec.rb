@@ -25,7 +25,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
       end
 
       after do
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
 
       it "generates a valid DOCX file" do
@@ -84,7 +84,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
       end
 
       after do
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
 
       it "generates a document with a table" do
@@ -106,7 +106,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
       end
 
       after do
-        File.delete(output_path) if File.exist?(output_path)
+        safe_delete(output_path)
       end
 
       it "generates an empty document" do

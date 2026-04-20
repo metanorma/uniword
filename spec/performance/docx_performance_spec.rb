@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "benchmark"
+begin
+  require "benchmark"
+rescue LoadError
+  # benchmark gem not available (Ruby 4.0+)
+end
 
-RSpec.describe "DOCX Performance" do
+RSpec.describe "DOCX Performance", if: defined?(Benchmark) do
   before(:all) do
     # Create temporary directory for performance test files
     FileUtils.mkdir_p("tmp")
