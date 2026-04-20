@@ -32,4 +32,4 @@ max_concurrency = 8
 
 # Retry failed requests
 retry_wait_time = 1
-retry_limit = 2
+max_retries = 2
