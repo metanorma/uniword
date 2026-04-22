@@ -47,7 +47,7 @@ module Uniword
         private
 
         def check_reference(ref, kind, rels_by_id, context, issues)
-          rid = ref["#{R_NS[/\/([^\/]+)$/]}:id"] ||
+          rid = ref["#{R_NS[%r{/([^/]+)$}]}:id"] ||
                 ref.attributes.find { |a| a.name == "id" }&.value
           return unless rid
 
@@ -75,15 +75,15 @@ module Uniword
 
           # DOC-031: Check type
           type_attr = ref.attributes.find { |a| a.name == "type" }
-          if type_attr && !VALID_TYPES.include?(type_attr.value)
-            issues << issue(
-              "#{kind.capitalize} reference has invalid type '#{type_attr.value}'",
-              code: "DOC-031",
-              severity: "warning",
-              part: "word/document.xml",
-              suggestion: "Valid types are: #{VALID_TYPES.join(', ')}."
-            )
-          end
+          return unless type_attr && !VALID_TYPES.include?(type_attr.value)
+
+          issues << issue(
+            "#{kind.capitalize} reference has invalid type '#{type_attr.value}'",
+            code: "DOC-031",
+            severity: "warning",
+            part: "word/document.xml",
+            suggestion: "Valid types are: #{VALID_TYPES.join(", ")}."
+          )
         end
       end
     end

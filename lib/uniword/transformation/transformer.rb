@@ -359,7 +359,10 @@ module Uniword
       # @raise [ArgumentError] if parameters are invalid
       def validate_transformation(source, source_format, target_format)
         # Accept OOXML Document or MHTML Document
-        raise ArgumentError, "Source must be a Document or Mhtml::Document" unless source.is_a?(Wordprocessingml::DocumentRoot) || source.is_a?(Uniword::Mhtml::Document)
+        unless source.is_a?(Wordprocessingml::DocumentRoot) || source.is_a?(Uniword::Mhtml::Document)
+          raise ArgumentError,
+                "Source must be a Document or Mhtml::Document"
+        end
 
         unless %i[docx docm dotx dotm mhtml].include?(source_format)
           raise ArgumentError,

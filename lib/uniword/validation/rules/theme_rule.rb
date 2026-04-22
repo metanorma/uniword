@@ -47,9 +47,7 @@ module Uniword
           end
 
           # DOC-081: Theme part well-formed
-          if context.part_exists?("word/theme/theme1.xml")
-            check_theme_well_formed(context, issues)
-          end
+          check_theme_well_formed(context, issues) if context.part_exists?("word/theme/theme1.xml")
 
           issues
         end

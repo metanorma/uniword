@@ -215,12 +215,13 @@ module Uniword
         if rels_path.start_with?("_rels/")
           ""
         else
-          rels_path.sub(/\/_rels\/.*$/, "")
+          rels_path.sub(%r{/_rels/.*$}, "")
         end
       end
 
       def resolve_target(base_dir, target)
         return target[1..] if target.start_with?("/")
+
         base_dir.empty? ? target : File.join(base_dir, target)
       end
     end

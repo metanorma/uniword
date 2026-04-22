@@ -73,9 +73,7 @@ module Uniword
         marks = []
         (document.headers || []).each do |header|
           header.paragraphs.each do |p|
-            if watermark?(p)
-              marks << extract_watermark_text(p)
-            end
+            marks << extract_watermark_text(p) if watermark?(p)
           end
         end
         marks
@@ -93,7 +91,7 @@ module Uniword
         header
       end
 
-      def build_watermark(text, color, font_size, font, opacity)
+      def build_watermark(text, _color, _font_size, _font, _opacity)
         para = Uniword::Wordprocessingml::Paragraph.new
         para_run = Uniword::Wordprocessingml::Run.new(text: text)
         para.runs << para_run

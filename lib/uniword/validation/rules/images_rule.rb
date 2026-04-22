@@ -70,18 +70,18 @@ module Uniword
             ext = File.extname(target)[1..]
             next unless ext
 
-            declared = ct[ext] || ct["/#{target.start_with?('/') ? target[1..] : "word/#{target}"}"]
+            declared = ct[ext] || ct["/#{target.start_with?("/") ? target[1..] : "word/#{target}"}"]
 
-            if declared && !IMAGE_TYPES.any? { |t| declared.include?(ext.upcase) }
-              issues << issue(
-                "Image extension '.#{ext}' has non-image content type: #{declared}",
-                code: "DOC-051",
-                severity: "warning",
-                part: "[Content_Types].xml",
-                suggestion: "Set the content type for '.#{ext}' to an image " \
-                            "MIME type (e.g., image/#{ext})."
-              )
-            end
+            next unless declared && IMAGE_TYPES.none? { |_t| declared.include?(ext.upcase) }
+
+            issues << issue(
+              "Image extension '.#{ext}' has non-image content type: #{declared}",
+              code: "DOC-051",
+              severity: "warning",
+              part: "[Content_Types].xml",
+              suggestion: "Set the content type for '.#{ext}' to an image " \
+                          "MIME type (e.g., image/#{ext})."
+            )
           end
         end
 
@@ -96,15 +96,15 @@ module Uniword
             next unless embed
 
             rel = rels_by_id[embed]
-            unless rel
-              issues << issue(
-                "blip r:embed='#{embed}' not found in relationships",
-                code: "DOC-052",
-                part: "word/document.xml",
-                suggestion: "Add a relationship for r:id='#{embed}' " \
-                            "pointing to the image."
-              )
-            end
+            next if rel
+
+            issues << issue(
+              "blip r:embed='#{embed}' not found in relationships",
+              code: "DOC-052",
+              part: "word/document.xml",
+              suggestion: "Add a relationship for r:id='#{embed}' " \
+                          "pointing to the image."
+            )
           end
         end
       end

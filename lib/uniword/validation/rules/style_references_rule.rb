@@ -58,7 +58,7 @@ module Uniword
           end
         end
 
-        def check_default_style(context, defined_ids, issues)
+        def check_default_style(context, _defined_ids, issues)
           doc = context.styles_xml
           return unless doc
 

@@ -42,8 +42,8 @@ Gem::Specification.new do |spec|
 
   # Core dependencies
   spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
-  spec.add_dependency "lutaml-model", "~> 0.8"
-  spec.add_dependency "nokogiri", "~> 1.18"
+  spec.add_dependency "lutaml-model", "~> 0.8.0"
+  spec.add_dependency "nokogiri", "~> 1.19"
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 2.3"
   spec.add_dependency "thor", "~> 1.3"

@@ -26,7 +26,7 @@ module Uniword
           next if %w[tr td].include?(element.name)
 
           if %w[div li].include?(element.name) &&
-              element.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").any?
+             element.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").any?
             next
           end
 
