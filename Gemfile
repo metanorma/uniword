@@ -5,10 +5,10 @@ source "https://rubygems.org"
 gemspec
 
 # Math equation support via Plurimath
-# gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
+gem 'plurimath', github: "plurimath/plurimath", branch: "main"
 
-gem "lutaml-model", github: "lutaml/lutaml-model", ref: "67cc814"
-gem "moxml", "0.1.14"
+gem "lutaml-model", github: "lutaml/lutaml-model", branch: "main"
+gem "moxml", ">= 0.1.15"
 
 group :development do
   gem "canon"
