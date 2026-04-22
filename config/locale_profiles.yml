@@ -1,0 +1,226 @@
+# Locale profiles define language-specific settings for DOCX generation.
+# Each profile specifies language tags, separators, and East Asian font
+# selection based on the user's locale.
+#
+# Language tags follow BCP 47. The three key language tags are:
+# - lang: Primary language (e.g., "en-US")
+# - east_asia_lang: East Asian language for themeFontLang (e.g., "zh-CN")
+# - bidi_lang: Bidirectional/RTL language for themeFontLang (e.g., "ar-SA")
+---
+locales:
+  ar:
+    lang: "ar-SA"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ";"
+
+  cs:
+    lang: "cs-CZ"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  da:
+    lang: "da-DK"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  de:
+    lang: "de-DE"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  el:
+    lang: "el-GR"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  en:
+    lang: "en-US"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+
+  en-GB:
+    lang: "en-GB"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+
+  es:
+    lang: "es-ES"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  es-MX:
+    lang: "es-MX"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+
+  fi:
+    lang: "fi-FI"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  fr:
+    lang: "fr-FR"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  fr-CA:
+    lang: "fr-CA"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  he:
+    lang: "he-IL"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "he-IL"
+    decimal_symbol: "."
+    list_separator: ","
+
+  hu:
+    lang: "hu-HU"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  id:
+    lang: "id-ID"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  it:
+    lang: "it-IT"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  ja:
+    lang: "ja-JP"
+    east_asia_lang: "ja-JP"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+    east_asian_font: "Yu Gothic"
+    east_asian_light_font: "Yu Gothic Light"
+
+  ko:
+    lang: "ko-KR"
+    east_asia_lang: "ko-KR"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+    east_asian_font: "Malgun Gothic"
+    east_asian_light_font: "Malgun Gothic Light"
+
+  nl:
+    lang: "nl-NL"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  "no":
+    lang: "nb-NO"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  pl:
+    lang: "pl-PL"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  pt:
+    lang: "pt-BR"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  pt-PT:
+    lang: "pt-PT"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  ru:
+    lang: "ru-RU"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  sk:
+    lang: "sk-SK"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  sv:
+    lang: "sv-SE"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  th:
+    lang: "th-TH"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ";"
+
+  tr:
+    lang: "tr-TR"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: ","
+    list_separator: ";"
+
+  zh-CN:
+    lang: "zh-CN"
+    east_asia_lang: "zh-CN"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+    east_asian_font: "DengXian"
+    east_asian_light_font: "DengXian Light"
+
+  zh-TW:
+    lang: "zh-TW"
+    east_asia_lang: "zh-TW"
+    bidi_lang: "ar-SA"
+    decimal_symbol: "."
+    list_separator: ","
+    east_asian_font: "MingLiU"

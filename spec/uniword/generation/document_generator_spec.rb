@@ -15,7 +15,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
           { element: "heading_1", text: "Introduction" },
           { element: "body", text: "This is body text." },
           { element: "heading_2", text: "Scope" },
-          { element: "note", text: "This is a note." },
+          { element: "note", text: "This is a note." }
         ]
       end
 
@@ -72,9 +72,9 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
             text: "",
             children: [
               ["Header 1", "Header 2"],
-              ["Cell 1", "Cell 2"],
+              ["Cell 1", "Cell 2"]
             ]
-          },
+          }
         ]
       end
 

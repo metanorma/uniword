@@ -36,18 +36,10 @@ module Uniword
 
         # Set properties
         props = Uniword::Wordprocessingml::ParagraphProperties.new
-        if para_def["style"]
-          props.style = para_def["style"]
-        end
-        if para_def["alignment"]
-          props.alignment = para_def["alignment"]
-        end
-        if para_def["space_before"]
-          props.spacing_before = para_def["space_before"].to_i
-        end
-        if para_def["space_after"]
-          props.spacing_after = para_def["space_after"].to_i
-        end
+        props.style = para_def["style"] if para_def["style"]
+        props.alignment = para_def["alignment"] if para_def["alignment"]
+        props.spacing_before = para_def["space_before"].to_i if para_def["space_before"]
+        props.spacing_after = para_def["space_after"].to_i if para_def["space_after"]
         para.properties = props
 
         # Add run with text
@@ -59,9 +51,7 @@ module Uniword
           run_props = Uniword::Wordprocessingml::RunProperties.new
           run_props.bold = true if para_def["bold"]
           run_props.italic = true if para_def["italic"]
-          if para_def["size"]
-            run_props.size = para_def["size"].to_i
-          end
+          run_props.size = para_def["size"].to_i if para_def["size"]
           run.properties = run_props
         end
 

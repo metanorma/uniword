@@ -136,8 +136,6 @@ module Uniword
         sdt
       end
 
-      private
-
       # Apply heading level style from tag name (h1-h6).
       def self.apply_heading_style(paragraph, element)
         return unless element.name.match?(/^h[1-6]$/)

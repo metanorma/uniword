@@ -299,7 +299,7 @@ RSpec.describe "OOXML Namespace Configuration" do
 
   describe "key model namespace verification" do
     it_behaves_like "a namespaced OOXML element",
-      Uniword::Wordprocessingml::DocumentRoot, "document",
-      "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+                    Uniword::Wordprocessingml::DocumentRoot, "document",
+                    "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
   end
 end

@@ -120,3 +120,23 @@ Register custom validation rules for domain-specific checks:
 ----
 Uniword::Validation::Rules.register(MyCustomRule)
 ----
+
+== Profile-Driven Round-Trip
+
+When generating new documents, provide a link:/features/profiles/[Profile] to ensure the output matches Microsoft Word's expected format without triggering the repair dialog:
+
+[source,ruby]
+----
+# Load a document and save with a profile
+doc = Uniword::Document.open("input.docx")
+profile = Uniword::Docx::Profile.load(:word_2024_en)
+doc.save("output.docx", profile: profile)
+
+# The Reconciler populates all 11 items Word checks:
+# - Content types, relationship ordering
+# - Settings defaults (zoom, compat, mathPr, etc.)
+# - Font table entries with full metadata
+# - Style definitions (docDefaults, latentStyles)
+# - Web settings, app/core properties
+# - Theme, tracking attributes
+----

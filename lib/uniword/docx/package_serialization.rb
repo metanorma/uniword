@@ -34,15 +34,9 @@ module Uniword
         content["_rels/.rels"] = package_rels.to_xml(encoding: "UTF-8", declaration: true)
 
         # Document properties
-        if core_properties
-          content["docProps/core.xml"] = core_properties.to_xml(encoding: "UTF-8", prefix: true)
-        end
-        if app_properties
-          content["docProps/app.xml"] = app_properties.to_xml(encoding: "UTF-8", prefix: false)
-        end
-        if custom_properties
-          content["docProps/custom.xml"] = custom_properties.to_xml(encoding: "UTF-8", prefix: false)
-        end
+        content["docProps/core.xml"] = core_properties.to_xml(encoding: "UTF-8", prefix: true) if core_properties
+        content["docProps/app.xml"] = app_properties.to_xml(encoding: "UTF-8", prefix: false) if app_properties
+        content["docProps/custom.xml"] = custom_properties.to_xml(encoding: "UTF-8", prefix: false) if custom_properties
 
         # Custom XML data items
         if custom_xml_items && !custom_xml_items.empty?
@@ -55,28 +49,42 @@ module Uniword
         end
 
         # Document parts
-        if document
-          content["word/document.xml"] = document.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+        content["word/document.xml"] = document.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true) if document
+        if styles
+          content["word/styles.xml"] =
+            styles.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
         end
-        content["word/styles.xml"] = styles.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true) if styles
-        content["word/numbering.xml"] = numbering.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true) if numbering
+        if numbering
+          content["word/numbering.xml"] =
+            numbering.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+        end
         content["word/settings.xml"] = settings.to_xml(encoding: "UTF-8", prefix: true) if settings
         content["word/fontTable.xml"] = font_table.to_xml(encoding: "UTF-8", prefix: true) if font_table
         content["word/webSettings.xml"] = web_settings.to_xml(encoding: "UTF-8", prefix: true) if web_settings
-        content["word/_rels/document.xml.rels"] = document_rels.to_xml(encoding: "UTF-8", declaration: true) if document_rels
+        if document_rels
+          content["word/_rels/document.xml.rels"] =
+            document_rels.to_xml(encoding: "UTF-8", declaration: true)
+        end
 
         # Theme
         content["word/theme/theme1.xml"] = theme.to_xml(encoding: "UTF-8", prefix: true) if theme
-        content["word/theme/_rels/theme1.xml.rels"] = theme_rels.to_xml(encoding: "UTF-8", declaration: true) if theme_rels
+        if theme_rels
+          content["word/theme/_rels/theme1.xml.rels"] =
+            theme_rels.to_xml(encoding: "UTF-8", declaration: true)
+        end
 
         # Notes
-        content["word/footnotes.xml"] = footnotes.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true) if footnotes
-        content["word/endnotes.xml"] = endnotes.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true) if endnotes
+        if footnotes
+          content["word/footnotes.xml"] =
+            footnotes.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+        end
+        if endnotes
+          content["word/endnotes.xml"] =
+            endnotes.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+        end
 
         # Bibliography sources
-        if document&.bibliography_sources
-          content["word/sources.xml"] = document.bibliography_sources.to_xml(encoding: "UTF-8", declaration: true)
-        end
+        content["word/sources.xml"] = document.bibliography_sources.to_xml(encoding: "UTF-8", declaration: true) if document&.bibliography_sources
 
         # Headers and footers
         serialize_headers(content)
@@ -138,13 +146,13 @@ module Uniword
           )
         end
 
-        unless document_rels.relationships.any? { |r| r.target == "sources.xml" }
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdSrc#{SecureRandom.hex(4)}",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
-            target: "sources.xml"
-          )
-        end
+        return if document_rels.relationships.any? { |r| r.target == "sources.xml" }
+
+        document_rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: "rIdSrc#{SecureRandom.hex(4)}",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
+          target: "sources.xml"
+        )
       end
 
       def inject_custom_properties(content_types, package_rels)
@@ -272,13 +280,13 @@ module Uniword
           )
         end
 
-        unless document_rels.relationships.any? { |r| r.target == "endnotes.xml" }
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdEndnotes",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
-            target: "endnotes.xml"
-          )
-        end
+        return if document_rels.relationships.any? { |r| r.target == "endnotes.xml" }
+
+        document_rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: "rIdEndnotes",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+          target: "endnotes.xml"
+        )
       end
 
       def inject_theme(content_types, document_rels)
@@ -291,13 +299,13 @@ module Uniword
           )
         end
 
-        unless document_rels.relationships.any? { |r| r.target == "theme/theme1.xml" }
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdTheme",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
-            target: "theme/theme1.xml"
-          )
-        end
+        return if document_rels.relationships.any? { |r| r.target == "theme/theme1.xml" }
+
+        document_rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: "rIdTheme",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+          target: "theme/theme1.xml"
+        )
       end
 
       def inject_numbering(content_types, document_rels)
@@ -310,13 +318,13 @@ module Uniword
           )
         end
 
-        unless document_rels.relationships.any? { |r| r.target == "numbering.xml" }
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdNumbering",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
-            target: "numbering.xml"
-          )
-        end
+        return if document_rels.relationships.any? { |r| r.target == "numbering.xml" }
+
+        document_rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: "rIdNumbering",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+          target: "numbering.xml"
+        )
       end
 
       def wire_header_reference(type, r_id)
@@ -349,7 +357,8 @@ module Uniword
         idx = 0
         document.headers.each_value do |header_obj|
           idx += 1
-          content["word/header#{idx}.xml"] = header_obj.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+          content["word/header#{idx}.xml"] =
+            header_obj.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
         end
       end
 
@@ -359,7 +368,8 @@ module Uniword
         idx = 0
         document.footers.each_value do |footer_obj|
           idx += 1
-          content["word/footer#{idx}.xml"] = footer_obj.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+          content["word/footer#{idx}.xml"] =
+            footer_obj.to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
         end
       end
 
@@ -367,7 +377,8 @@ module Uniword
         return unless document&.header_footer_parts && !document.header_footer_parts.empty?
 
         document.header_footer_parts.each do |part|
-          content["word/#{part[:target]}"] = part[:content].to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
+          content["word/#{part[:target]}"] =
+            part[:content].to_xml(encoding: "UTF-8", prefix: true, fix_boolean_elements: true)
         end
       end
     end

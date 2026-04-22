@@ -13,32 +13,81 @@ Uniword includes a **prevention layer** (`Docx::Reconciler`) that runs automatic
 
 The reconciler inspects the package's parts and settings before serialization. If it detects an inconsistency -- for example, footnote properties that reference a footnotes part that does not exist -- it creates the missing part or injects the missing property automatically.
 
-== Auto-Fixes
+== Three Reconciliation Groups
 
-The following conditions are detected and fixed automatically:
+The Reconciler is organized into three mutually exclusive, collectively exhaustive (MECE) groups that together cover everything Word checks:
+
+=== Group 1 -- Document Body (profile-independent, always runs)
+
+Intra-part correctness of `word/document.xml`:
 
 [cols="2,3"]
 |===
-| Condition | Auto-fix
+| Check | Auto-fix
 
-| `footnotePr` set, no `footnotes.xml`
-| Create minimal footnotes with separator entries
-
-| `footnotes.xml` exists, no `footnotePr`
-| Create `FootnotePr` in settings
-
-| `endnotePr` set, no `endnotes.xml`
-| Create minimal endnotes with separator entries
-
-| `endnotes.xml` exists, no `endnotePr`
-| Create `EndnotePr` in settings
-
-| Missing separator entry (id=-1)
-| Inject separator
-
-| Missing continuation entry (id=0)
-| Inject continuation
+| Missing section properties | Add `<w:sectPr>` with US Letter defaults
+| `footnotePr` set, no `footnotes.xml` | Create minimal footnotes with separator entries
+| `footnotes.xml` exists, no `footnotePr` | Create `FootnotePr` in settings
+| `endnotePr` set, no `endnotes.xml` | Create minimal endnotes with separator entries
+| `endnotes.xml` exists, no `endnotePr` | Create `EndnotePr` in settings
+| Missing separator entry (id=-1) | Inject separator
+| Missing continuation entry (id=0) | Inject continuation
 |===
+
+=== Group 2 -- Support Parts (profile-dependent, runs when profile provided)
+
+Intra-part content completeness of all parts except `document.xml`. Only runs when a link:/features/profiles/[Profile] is provided.
+
+[cols="2,3"]
+|===
+| Part | What gets populated
+
+| Theme | Load default theme from profile
+| Settings | zoom, proofState, defaultTabStop, characterSpacingControl, compat, rsids, mathPr, themeFontLang, clrSchemeMapping, decimalSymbol, listSeparator, w14:docId, w15:docId
+| Font table | Profile-driven font entries with panose/charset/family/pitch/sig metadata
+| Styles | docDefaults (theme font refs, spacing), latentStyles (~376 exceptions), default styles (Normal, DefaultParagraphFont, TableNormal, NoList)
+| Web settings | optimizeForBrowser, allowPNG, namespace declarations
+| App properties | Template, Application, AppVersion, Company
+| Core properties | lastModifiedBy, creator, revision, UTC timestamps
+| Document body | Tracking attributes: w14:paraId, w14:textId, w:rsidR, w:rsidRDefault on paragraphs; w:rsidR on sectPr
+|===
+
+=== Group 3 -- Package Consistency (profile-independent, always runs)
+
+Cross-part correctness -- relationships, content types, and references form a consistent graph:
+
+[cols="2,3"]
+|===
+| Check | Fix applied
+
+| Content types | Rebuild defaults (rels + xml only). Overrides only for parts that exist.
+| Root rels rId ordering | rId1=officeDocument, rId2=core-properties, rId3=extended-properties. Non-standard rels preserved.
+| Document rels rId ordering | rId1=styles, rId2=settings, rId3=webSettings, rId4=fontTable, rId5=theme. Non-standard rels preserved.
+|===
+
+== Execution Order
+
+The groups run in order:
+
+```
+Group 1 (body) → Group 2 (parts) → Group 3 (consistency)
+```
+
+Group 2 may create parts (e.g., theme) that Group 3 needs to reference. Group 1 runs first because body-level attributes are referenced by settings.
+
+== Profile Gating
+
+Without a link:/features/profiles/[Profile], only Groups 1 and 3 run (backward compatible). With a profile, all three groups run, producing output that matches Microsoft Word's expected format.
+
+[source,ruby]
+----
+# Without profile: structural reconciliation only
+doc.save("output.docx")
+
+# With profile: full reconciliation including content population
+profile = Uniword::Docx::Profile.load(:word_2024_en)
+doc.save("output.docx", profile: profile)
+----
 
 == When It Runs
 

@@ -340,6 +340,177 @@ module Uniword
         element_form_default :qualified
         attribute_form_default :qualified
       end
+
+      # === Additional namespaces for Word 2024 compatibility ===
+
+      # Wordprocessing Canvas namespace
+      class WordprocessingCanvas < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas"
+        prefix_default "wpc"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # ChartEx namespace (base)
+      class ChartEx < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2014/chartex"
+        prefix_default "cx"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # ChartEx variant namespaces (1-8)
+      class ChartEx1 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2015/9/8/chartex"
+        prefix_default "cx1"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx2 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2015/10/21/chartex"
+        prefix_default "cx2"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx3 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/9/chartex"
+        prefix_default "cx3"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx4 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/10/chartex"
+        prefix_default "cx4"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx5 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/11/chartex"
+        prefix_default "cx5"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx6 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/12/chartex"
+        prefix_default "cx6"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx7 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/13/chartex"
+        prefix_default "cx7"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      class ChartEx8 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/5/14/chartex"
+        prefix_default "cx8"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Ink Drawing namespace
+      class InkDrawing < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2016/ink"
+        prefix_default "aink"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # 3D Model namespace
+      class Model3D < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/drawing/2017/model3d"
+        prefix_default "am3d"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Office Extension List namespace
+      class OfficeExtensionList < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/2019/extlst"
+        prefix_default "oel"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2010 Wordprocessing Drawing namespace (wp14)
+      class Word2010Drawing < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing"
+        prefix_default "wp14"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2018 namespace (w16 in Word 2024 output)
+      class Word2018 < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2018/wordml"
+        prefix_default "w16"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2018 CEX namespace
+      class Word2018Cex < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2018/wordml/cex"
+        prefix_default "w16cex"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2023 DU namespace
+      class Word2023Du < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2023/wordml/word16du"
+        prefix_default "w16du"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2020 SDT Data Hash namespace
+      class Word2020SdtDataHash < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash"
+        prefix_default "w16sdtdh"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2024 SDT Format Lock namespace
+      class Word2024SdtFormatLock < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2024/wordml/sdtformatlock"
+        prefix_default "w16sdtfl"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word 2015 Symex namespace
+      class Word2015Symex < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2015/wordml/symex"
+        prefix_default "w16se"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Wordprocessing Ink namespace
+      class WordprocessingInk < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2010/wordprocessingInk"
+        prefix_default "wpi"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
+
+      # Word Numbering Equations namespace
+      class WordNumberingEquations < Lutaml::Xml::Namespace
+        uri "http://schemas.microsoft.com/office/word/2006/wordml"
+        prefix_default "wne"
+        element_form_default :qualified
+        attribute_form_default :qualified
+      end
     end
   end
 end

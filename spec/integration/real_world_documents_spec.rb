@@ -145,7 +145,10 @@ RSpec.describe "Real-World Document Testing", :integration do
       it "handles document without memory issues" do
         skip "benchmark-memory gem not available" unless defined?(Benchmark::Memory)
         report = Benchmark.memory(quiet: true) do |x|
-          x.report("load+text") { doc = Uniword.load(doc_path); doc.text }
+          x.report("load+text") do
+            doc = Uniword.load(doc_path)
+            doc.text
+          end
         end
 
         entry = report.entries.first
@@ -153,9 +156,9 @@ RSpec.describe "Real-World Document Testing", :integration do
         retained_mb = entry.measurement.memory.retained / 1024.0 / 1024.0
 
         expect(allocated_mb).to be < 100,
-                                 "Allocated #{allocated_mb.round(1)} MB, expected < 100 MB"
+                                "Allocated #{allocated_mb.round(1)} MB, expected < 100 MB"
         expect(retained_mb).to be < 50,
-                                "Retained #{retained_mb.round(1)} MB, expected < 50 MB"
+                               "Retained #{retained_mb.round(1)} MB, expected < 50 MB"
       end
 
       it "provides responsive text extraction" do

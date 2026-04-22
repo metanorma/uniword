@@ -22,7 +22,7 @@ RSpec.describe Uniword::Validation::VerifyOrchestrator do
 
       report.layers.each do |layer|
         expect(layer).to be_pass,
-          "Expected #{layer.name} to pass, got #{layer.status}"
+                         "Expected #{layer.name} to pass, got #{layer.status}"
       end
     end
 

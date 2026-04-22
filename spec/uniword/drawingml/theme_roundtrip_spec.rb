@@ -49,7 +49,7 @@ RSpec.describe "Theme Round-Trip (Open-Source YAML)" do
                       Georgia Candara Corbel Constantia Aptos "Aptos Display"]
         ms_fonts.each do |font|
           expect(xml).not_to include(font),
-            "MS font '#{font}' found in theme #{name}"
+                             "MS font '#{font}' found in theme #{name}"
         end
       end
 

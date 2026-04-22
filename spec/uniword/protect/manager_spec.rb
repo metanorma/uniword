@@ -20,9 +20,9 @@ RSpec.describe Uniword::Protect::Manager do
     end
 
     it "raises for invalid protection type" do
-      expect {
+      expect do
         manager.apply(:invalid)
-      }.to raise_error(ArgumentError, /Invalid protection type/)
+      end.to raise_error(ArgumentError, /Invalid protection type/)
     end
 
     it "applies tracked_changes protection" do

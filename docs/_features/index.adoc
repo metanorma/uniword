@@ -18,5 +18,6 @@ Detailed feature documentation and catalogs.
 * link:features/font-schemes-catalog/[Font Schemes Catalog] -- 25 font schemes
 * link:features/document-elements-catalog/[Document Elements Catalog] -- 30 locales
 * link:features/font-registry/[Font Registry] -- MS to OFL substitution table
+* link:features/profiles/[Profiles] -- Target Word version, locale, and user identity
 * link:features/error-handling/[Error Handling] -- Exception hierarchy
 * link:features/streaming-and-performance/[Streaming and Performance] -- Performance tips

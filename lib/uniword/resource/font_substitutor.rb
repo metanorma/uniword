@@ -44,14 +44,10 @@ module Uniword
       def self.transform_font_scheme(font_scheme)
         font_scheme.dup.tap do |scheme|
           # Transform major font Latin
-          if scheme.major_font_obj&.latin
-            scheme.major_font_obj.latin.typeface = substitute(scheme.major_font_obj.latin.typeface)
-          end
+          scheme.major_font_obj.latin.typeface = substitute(scheme.major_font_obj.latin.typeface) if scheme.major_font_obj&.latin
 
           # Transform minor font Latin
-          if scheme.minor_font_obj&.latin
-            scheme.minor_font_obj.latin.typeface = substitute(scheme.minor_font_obj.latin.typeface)
-          end
+          scheme.minor_font_obj.latin.typeface = substitute(scheme.minor_font_obj.latin.typeface) if scheme.minor_font_obj&.latin
         end
       end
 
@@ -67,28 +63,28 @@ module Uniword
           fs.minor_font = substitute(fs.minor_font) if fs.minor_font && !fs.minor_font.empty?
 
           # Populate EA fields if empty
-          if fs.major_east_asian.to_s.empty?
-            fs.major_east_asian = reg.dig("east_asian", "japanese", "heading")
-          else
-            fs.major_east_asian = substitute(fs.major_east_asian)
-          end
-          if fs.minor_east_asian.to_s.empty?
-            fs.minor_east_asian = reg.dig("east_asian", "japanese", "body")
-          else
-            fs.minor_east_asian = substitute(fs.minor_east_asian)
-          end
+          fs.major_east_asian = if fs.major_east_asian.to_s.empty?
+                                  reg.dig("east_asian", "japanese", "heading")
+                                else
+                                  substitute(fs.major_east_asian)
+                                end
+          fs.minor_east_asian = if fs.minor_east_asian.to_s.empty?
+                                  reg.dig("east_asian", "japanese", "body")
+                                else
+                                  substitute(fs.minor_east_asian)
+                                end
 
           # Populate CS fields if empty
-          if fs.major_complex_script.to_s.empty?
-            fs.major_complex_script = reg.dig("complex_script", "arabic", "heading")
-          else
-            fs.major_complex_script = substitute(fs.major_complex_script)
-          end
-          if fs.minor_complex_script.to_s.empty?
-            fs.minor_complex_script = reg.dig("complex_script", "arabic", "body")
-          else
-            fs.minor_complex_script = substitute(fs.minor_complex_script)
-          end
+          fs.major_complex_script = if fs.major_complex_script.to_s.empty?
+                                      reg.dig("complex_script", "arabic", "heading")
+                                    else
+                                      substitute(fs.major_complex_script)
+                                    end
+          fs.minor_complex_script = if fs.minor_complex_script.to_s.empty?
+                                      reg.dig("complex_script", "arabic", "body")
+                                    else
+                                      substitute(fs.minor_complex_script)
+                                    end
         end
       end
 

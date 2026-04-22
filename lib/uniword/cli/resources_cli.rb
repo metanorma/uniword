@@ -55,10 +55,10 @@ module Uniword
         exit 1
       end
 
-      unless File.directory?(path)
-        say "#{path} is not a directory (expected path to Microsoft Word.app)", :red
-        exit 1
-      end
+      return if File.directory?(path)
+
+      say "#{path} is not a directory (expected path to Microsoft Word.app)", :red
+      exit 1
     end
 
     def export_office_themes(resources_path, output_base)

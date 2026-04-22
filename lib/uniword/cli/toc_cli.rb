@@ -146,7 +146,7 @@ module Uniword
           say "    Style: #{entry.style_name || "(unknown)"}"
           say "    Paragraph index: #{entry.paragraph_index}"
         else
-          puts entry.to_s
+          puts entry
         end
       end
     end

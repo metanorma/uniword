@@ -19,7 +19,7 @@ module Uniword
         unless File.exist?(path)
           raise ArgumentError,
                 "Document elements not found: #{locale}/#{category}. " \
-                "Available locales: #{available_locales.join(', ')}"
+                "Available locales: #{available_locales.join(", ")}"
         end
 
         data = YAML.load_file(path)

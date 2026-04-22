@@ -48,9 +48,9 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
     it "detects missing capitalization after period" do
       issues = checker.check("First sentence. second one.")
       expect(issues.size).to be >= 1
-      expect(issues.any? { |i|
+      expect(issues.any? do |i|
         i[:message].match?(/capitalization/)
-      }).to be true
+      end).to be true
     end
 
     it "reports position for each issue" do

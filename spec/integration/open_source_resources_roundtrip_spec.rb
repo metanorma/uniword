@@ -20,7 +20,11 @@ RSpec.describe "Open-Source Resources Round-Trip" do
   end
 
   describe "Font scheme round-trip" do
-    Uniword::Resource::FontSchemeLoader.available_schemes.each do |name|
+    # MS font schemes (ms_office_*) intentionally contain MS fonts
+    ofl_schemes = Uniword::Resource::FontSchemeLoader.available_schemes
+                                                     .reject { |n| n.start_with?("ms_office") }
+
+    ofl_schemes.each do |name|
       it "converts #{name} YAML to OOXML FontScheme with script entries" do
         scheme = Uniword::Resource::FontSchemeLoader.load(name)
         word_fonts = transformation.send(:build_font_scheme, scheme)
@@ -29,12 +33,24 @@ RSpec.describe "Open-Source Resources Round-Trip" do
         expect(xml).to include("<fontScheme")
         expect(xml).to include("name=\"#{scheme.name}\"")
 
-        # No MS fonts in output
+        # No MS fonts in OFL scheme output
         ms_fonts = %w[Calibri Cambria Arial Tahoma Consolas Verdana]
         ms_fonts.each do |font|
           expect(xml).not_to include(font),
-            "MS font '#{font}' found in #{name} output"
+                             "MS font '#{font}' found in #{name} output"
         end
+      end
+    end
+
+    # MS font schemes round-trip without errors (no MS font check)
+    %w[ms_office_2007 ms_office_2013 ms_office_2024].each do |name|
+      it "round-trips #{name} YAML to OOXML FontScheme" do
+        scheme = Uniword::Resource::FontSchemeLoader.load(name)
+        word_fonts = transformation.send(:build_font_scheme, scheme)
+
+        xml = word_fonts.to_xml
+        expect(xml).to include("<fontScheme")
+        expect(xml).to include("name=\"#{scheme.name}\"")
       end
     end
   end
@@ -54,7 +70,7 @@ RSpec.describe "Open-Source Resources Round-Trip" do
                       Georgia Candara Corbel Constantia Aptos "Aptos Display"]
         ms_fonts.each do |font|
           expect(xml).not_to include(font),
-            "MS font '#{font}' in theme #{name}"
+                             "MS font '#{font}' in theme #{name}"
         end
 
         # Verify EA font populated

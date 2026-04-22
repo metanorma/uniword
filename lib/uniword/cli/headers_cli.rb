@@ -73,7 +73,7 @@ module Uniword
     DESC
     option :output, aliases: "-o", required: true, type: :string
     option :type, desc: "Header type (default/first/even)",
-           type: :string, default: "default"
+                  type: :string, default: "default"
     def add_header(path, text)
       doc = load_document(path)
       manager = HeadersFooters::Manager.new(doc)
@@ -96,7 +96,7 @@ module Uniword
     DESC
     option :output, aliases: "-o", required: true, type: :string
     option :type, desc: "Footer type (default/first/even)",
-           type: :string, default: "default"
+                  type: :string, default: "default"
     def add_footer(path, text)
       doc = load_document(path)
       manager = HeadersFooters::Manager.new(doc)
@@ -120,9 +120,9 @@ module Uniword
     DESC
     option :output, aliases: "-o", required: true, type: :string
     option :what, desc: "What to remove (headers/footers/all)",
-           type: :string, default: "all"
+                  type: :string, default: "all"
     option :type, desc: "Type to remove (default/first/even)",
-           type: :string, default: "default"
+                  type: :string, default: "default"
     def remove(path)
       doc = load_document(path)
       manager = HeadersFooters::Manager.new(doc)

@@ -78,28 +78,28 @@ module Uniword
 
         def parse_markdown_line(line)
           case line
-          when /\A#{6}\s+(.+)/
-            build_element("heading_6", $1.strip)
-          when /\A#{5}\s+(.+)/
-            build_element("heading_5", $1.strip)
-          when /\A#{4}\s+(.+)/
-            build_element("heading_4", $1.strip)
-          when /\A#{3}\s+(.+)/
-            build_element("heading_3", $1.strip)
-          when /\A#{2}\s+(.+)/
-            build_element("heading_2", $1.strip)
+          when /\A6\s+(.+)/
+            build_element("heading_6", ::Regexp.last_match(1).strip)
+          when /\A5\s+(.+)/
+            build_element("heading_5", ::Regexp.last_match(1).strip)
+          when /\A4\s+(.+)/
+            build_element("heading_4", ::Regexp.last_match(1).strip)
+          when /\A3\s+(.+)/
+            build_element("heading_3", ::Regexp.last_match(1).strip)
+          when /\A2\s+(.+)/
+            build_element("heading_2", ::Regexp.last_match(1).strip)
           when /\A#\s+(.+)/
-            build_element("heading_1", $1.strip)
+            build_element("heading_1", ::Regexp.last_match(1).strip)
           when /\A>\s*(?:NOTE|Note)[:\s]*(.*)/
-            text = $1.to_s.strip
+            text = ::Regexp.last_match(1).to_s.strip
             text = "NOTE" if text.empty?
             build_element("note", text)
           when /\A>\s*(?:EXAMPLE|Example)[:\s]*(.*)/
-            text = $1.to_s.strip
+            text = ::Regexp.last_match(1).to_s.strip
             text = "EXAMPLE" if text.empty?
             build_element("example", text)
           when /\A>\s*(.+)/
-            build_element("note", $1.strip)
+            build_element("note", ::Regexp.last_match(1).strip)
           when /\A---\s*$/
             nil
           when /\A[*_-]{3,}\s*$/

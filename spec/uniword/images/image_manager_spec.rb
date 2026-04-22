@@ -176,18 +176,18 @@ RSpec.describe Uniword::Images::ImageManager do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       manager = described_class.new(doc)
 
-      expect {
+      expect do
         manager.insert(sample_png, description: "A test image")
-      }.not_to raise_error
+      end.not_to raise_error
     end
 
     it "raises ArgumentError for missing file" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       manager = described_class.new(doc)
 
-      expect {
+      expect do
         manager.insert("/nonexistent/file.png")
-      }.to raise_error(ArgumentError, /not found/)
+      end.to raise_error(ArgumentError, /not found/)
     end
   end
 

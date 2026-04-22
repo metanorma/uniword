@@ -44,11 +44,10 @@ module Uniword
       )
       result = differ.diff
 
+      formatter = Uniword::Diff::Formatter.new
       if options[:json]
-        formatter = Uniword::Diff::Formatter.new
         puts formatter.json(result)
       else
-        formatter = Uniword::Diff::Formatter.new
         puts formatter.terminal(result, verbose: options[:verbose])
       end
 

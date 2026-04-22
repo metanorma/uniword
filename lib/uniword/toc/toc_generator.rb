@@ -28,7 +28,7 @@ module Uniword
     #   document.save("output.docx")
     class TocGenerator
       # Pattern matching heading style names like "Heading1" or "Heading 1"
-      HEADING_PATTERN = /^Heading\s*(\d+)$/i.freeze
+      HEADING_PATTERN = /^Heading\s*(\d+)$/i
 
       # Maximum heading level recognized
       MAX_LEVEL = 6
@@ -89,13 +89,13 @@ module Uniword
         body.structured_document_tags << sdt
 
         # Add the SDT to element_order so it serializes correctly
-        if body.element_order
-          insert_element = Lutaml::Xml::Element.new("Element", "sdt")
-          if position > 0 && body.element_order.size >= position
-            body.element_order.insert(position, insert_element)
-          else
-            body.element_order.insert(0, insert_element)
-          end
+        return unless body.element_order
+
+        insert_element = Lutaml::Xml::Element.new("Element", "sdt")
+        if position.positive? && body.element_order.size >= position
+          body.element_order.insert(position, insert_element)
+        else
+          body.element_order.insert(0, insert_element)
         end
       end
 
