@@ -8,6 +8,7 @@ gemspec
 # gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 
 gem "lutaml-model", github: "lutaml/lutaml-model", ref: "67cc814"
+gem "moxml", "0.1.14"
 
 group :development do
   gem "canon"
