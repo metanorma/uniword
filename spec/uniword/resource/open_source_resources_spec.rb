@@ -43,10 +43,10 @@ RSpec.describe "Open-Source Resource Integrity" do
 
     it "does not use MS fonts as target values in substitutions" do
       ms_font_names = %w[Calibri Cambria Arial Tahoma Consolas Verdana Georgia]
-      registry["substitutions"].each do |_ms, ofl|
+      registry["substitutions"].each_value do |ofl|
         ms_font_names.each do |ms|
           expect(ofl).not_to eq(ms),
-            "Substitution target '#{ofl}' matches MS font '#{ms}'"
+                             "Substitution target '#{ofl}' matches MS font '#{ms}'"
         end
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe "Open-Source Resource Integrity" do
         expected_keys = %w[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink folHlink]
         expected_keys.each do |key|
           expect(colors).to include(key),
-            "#{File.basename(path)} missing color key: #{key}"
+                            "#{File.basename(path)} missing color key: #{key}"
         end
       end
     end
@@ -78,8 +78,9 @@ RSpec.describe "Open-Source Resource Integrity" do
         data = YAML.load_file(path)
         data["colors"].each do |key, value|
           next if value.nil?
+
           expect(value.to_s).to match(/\A[0-9A-Fa-f]{6}\z/),
-            "#{File.basename(path)} color #{key}=#{value} is not valid hex"
+                                "#{File.basename(path)} color #{key}=#{value} is not valid hex"
         end
       end
     end
@@ -87,29 +88,32 @@ RSpec.describe "Open-Source Resource Integrity" do
 
   describe "Font Schemes" do
     let(:schemes_dir) { "data/font_schemes" }
+    let(:ofl_schemes) do
+      Dir.glob(File.join(schemes_dir, "*.yml"))
+         .reject { |p| File.basename(p).start_with?("ms_office") }
+    end
 
-    it "has exactly 25 font scheme files" do
-      files = Dir.glob(File.join(schemes_dir, "*.yml"))
-      expect(files.count).to eq(25)
+    it "has exactly 25 OFL font scheme files" do
+      expect(ofl_schemes.count).to eq(25)
     end
 
     it "each scheme has major and minor sections" do
-      Dir.glob(File.join(schemes_dir, "*.yml")).each do |path|
+      ofl_schemes.each do |path|
         data = YAML.load_file(path)
         expect(data).to include("major", "minor"),
-          "#{File.basename(path)} missing major/minor sections"
+                        "#{File.basename(path)} missing major/minor sections"
         expect(data["major"]).to include("latin"),
-          "#{File.basename(path)} major missing latin"
+                                 "#{File.basename(path)} major missing latin"
         expect(data["minor"]).to include("latin"),
-          "#{File.basename(path)} minor missing latin"
+                                 "#{File.basename(path)} minor missing latin"
       end
     end
 
     it "each scheme has per_script entries" do
-      Dir.glob(File.join(schemes_dir, "*.yml")).each do |path|
+      ofl_schemes.each do |path|
         data = YAML.load_file(path)
         expect(data).to include("per_script"),
-          "#{File.basename(path)} missing per_script"
+                        "#{File.basename(path)} missing per_script"
         expect(data["per_script"]).to be_a(Hash)
       end
     end
@@ -123,28 +127,30 @@ RSpec.describe "Open-Source Resource Integrity" do
           # Check only in value position (after colon)
           if content.match?(/(?:major_font|minor_font): *#{Regexp.escape(font)}$/)
             expect(false).to be true,
-              "MS font '#{font}' found in #{path}"
+                                "MS font '#{font}' found in #{path}"
           end
         end
       end
     end
 
     it "font scheme files contain no Microsoft font names as typeface values" do
-      Dir.glob("data/font_schemes/*.yml").each do |path|
+      Dir.glob("data/font_schemes/*.yml")
+         .reject { |p| File.basename(p).start_with?("ms_office") }
+         .each do |path|
         data = YAML.load_file(path)
         %w[major minor].each do |section|
           %w[latin east_asian complex_script].each do |key|
             val = data.dig(section, key).to_s
             MS_FONTS.each do |font|
               expect(val).not_to eq(font),
-                "MS font '#{font}' found in #{path} #{section}.#{key}"
+                                 "MS font '#{font}' found in #{path} #{section}.#{key}"
             end
           end
         end
         data["per_script"]&.each do |script, typeface|
           MS_FONTS.each do |font|
             expect(typeface.to_s).not_to eq(font),
-              "MS font '#{font}' found in #{path} per_script.#{script}"
+                                         "MS font '#{font}' found in #{path} per_script.#{script}"
           end
         end
       end
@@ -157,9 +163,9 @@ RSpec.describe "Open-Source Resource Integrity" do
         content = File.read(path)
         ms_simple.each do |font|
           expect(content).not_to match(/font: *#{Regexp.escape(font)}$/),
-            "MS font '#{font}' found in #{path}"
+                                 "MS font '#{font}' found in #{path}"
           expect(content).not_to match(/font_ascii: *#{Regexp.escape(font)}$/),
-            "MS font '#{font}' (ascii) found in #{path}"
+                                 "MS font '#{font}' (ascii) found in #{path}"
         end
       end
     end
@@ -195,8 +201,9 @@ RSpec.describe Uniword::Resource::FontSchemeLoader do
 
   it "returns available schemes" do
     schemes = described_class.available_schemes
-    expect(schemes).to include("carlito_sans", "modern_office", "eb_garamond")
-    expect(schemes.count).to eq(25)
+    expect(schemes).to include("carlito_sans", "modern_office", "eb_garamond",
+                               "ms_office_2024", "ms_office_2013", "ms_office_2007")
+    expect(schemes.count).to eq(28)
   end
 
   it "raises ArgumentError for non-existent scheme" do
@@ -246,7 +253,7 @@ RSpec.describe Uniword::Resource::DocumentElementLoader do
     expected.each do |locale|
       categories = described_class.available_categories(locale)
       expect(categories.count).to eq(8),
-        "#{locale} has #{categories.count} categories, expected 8"
+                                  "#{locale} has #{categories.count} categories, expected 8"
     end
   end
 end
@@ -291,7 +298,7 @@ RSpec.describe "MS Theme/StyleSet Slug Scan" do
     actual = Dir.glob("data/themes/*.yml").map { |f| File.basename(f, ".yml") }
     ms_slugs.each do |slug|
       expect(actual).not_to include(slug),
-        "MS theme slug '#{slug}' still exists in data/themes/"
+                            "MS theme slug '#{slug}' still exists in data/themes/"
     end
   end
 
@@ -301,7 +308,7 @@ RSpec.describe "MS Theme/StyleSet Slug Scan" do
     actual = Dir.glob("data/stylesets/*.yml").map { |f| File.basename(f, ".yml") }
     ms_slugs.each do |slug|
       expect(actual).not_to include(slug),
-        "MS styleset slug '#{slug}' still exists in data/stylesets/"
+                            "MS styleset slug '#{slug}' still exists in data/stylesets/"
     end
   end
 
@@ -311,7 +318,7 @@ RSpec.describe "MS Theme/StyleSet Slug Scan" do
       expected = %w[cover_pages headers footers tables equations
                     bibliographies watermarks table_of_contents]
       expect(categories).to include(*expected),
-        "Locale #{locale} missing expected categories"
+                            "Locale #{locale} missing expected categories"
     end
   end
 end
@@ -350,9 +357,9 @@ RSpec.describe Uniword::Resource::ThemeMappingLoader do
     expect(mappings.count).to eq(29)
     mappings.each do |slug, entry|
       expect(entry).to include("ms_name", "color_fingerprint"),
-        "Theme #{slug} missing ms_name or color_fingerprint"
+                       "Theme #{slug} missing ms_name or color_fingerprint"
       expect(entry["color_fingerprint"]).to include("accent1", "accent2", "dk2"),
-        "Theme #{slug} fingerprint missing accent1/accent2/dk2"
+                                            "Theme #{slug} fingerprint missing accent1/accent2/dk2"
     end
   end
 
@@ -361,7 +368,7 @@ RSpec.describe Uniword::Resource::ThemeMappingLoader do
     expect(mappings.count).to eq(12)
     mappings.each do |slug, entry|
       expect(entry).to include("ms_name"),
-        "StyleSet #{slug} missing ms_name"
+                       "StyleSet #{slug} missing ms_name"
     end
   end
 
@@ -371,7 +378,7 @@ RSpec.describe Uniword::Resource::ThemeMappingLoader do
       [fp["accent1"], fp["accent2"], fp["dk2"]].join(":")
     end
     expect(fingerprints.uniq.count).to eq(fingerprints.count),
-      "Duplicate color fingerprints found"
+                                       "Duplicate color fingerprints found"
   end
 
   it "finds theme by colors" do

@@ -26,7 +26,7 @@ module Uniword
         "note" => "Note",
         "example" => "Example",
         "table_title" => "TableTitle",
-        "figure_title" => "FigureTitle",
+        "figure_title" => "FigureTitle"
       }.freeze
 
       # Initialize with a mapping config path.
@@ -47,7 +47,7 @@ module Uniword
       #   (e.g., "heading_1", "body", "note")
       # @param context [Hash] Optional context for disambiguation
       # @return [String] OOXML style name
-      def style_for(element_type, context = {})
+      def style_for(element_type, _context = {})
         @mapping[element_type.to_s] || default_for(element_type)
       end
 

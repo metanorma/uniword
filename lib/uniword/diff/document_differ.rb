@@ -167,16 +167,14 @@ module Uniword
         new_cp = @new_doc.core_properties
 
         fields = %i[title creator subject keywords
-                     description last_modified_by revision
-                     created modified]
+                    description last_modified_by revision
+                    created modified]
 
         changes = {}
         fields.each do |field|
           old_val = metadata_value(old_cp, field)
           new_val = metadata_value(new_cp, field)
-          if old_val != new_val
-            changes[field] = { old: old_val, new: new_val }
-          end
+          changes[field] = { old: old_val, new: new_val } if old_val != new_val
         end
 
         changes
@@ -291,11 +289,11 @@ module Uniword
         dp = Array.new(m + 1) { Array.new(n + 1, 0) }
         (1..m).each do |i|
           (1..n).each do |j|
-            if old_texts[i - 1] == new_texts[j - 1]
-              dp[i][j] = dp[i - 1][j - 1] + 1
-            else
-              dp[i][j] = [dp[i - 1][j], dp[i][j - 1]].max
-            end
+            dp[i][j] = if old_texts[i - 1] == new_texts[j - 1]
+                         dp[i - 1][j - 1] + 1
+                       else
+                         [dp[i - 1][j], dp[i][j - 1]].max
+                       end
           end
         end
 
@@ -460,6 +458,7 @@ module Uniword
 
         val = props.send(method)
         return nil if val.nil?
+
         val.respond_to?(:value) ? val.value : val
       end
 
@@ -473,6 +472,7 @@ module Uniword
 
         val = cp.send(field)
         return nil if val.nil?
+
         val.respond_to?(:value) ? val.value.to_s : val.to_s
       end
 

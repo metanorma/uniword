@@ -64,9 +64,9 @@ module Uniword
       # @return [Hash] Lists of added, removed, modified, unchanged parts
       def diff_parts(old_zip, new_zip)
         old_entries = old_zip.entries.reject(&:directory?)
-                                    .map(&:name).to_set
+                             .map(&:name).to_set
         new_entries = new_zip.entries.reject(&:directory?)
-                                    .map(&:name).to_set
+                             .map(&:name).to_set
 
         added = (new_entries - old_entries).sort
         removed = (old_entries - new_entries).sort
@@ -167,8 +167,8 @@ module Uniword
             part: part_name,
             category: :namespace,
             description: "Added #{added_ns.size} namespace(s): " \
-                         "#{added_ns.map { |p| p.empty? ? 'xmlns' : "xmlns:#{p}" }
-                                   .join(', ')}"
+                         "#{added_ns.map { |p| p.empty? ? "xmlns" : "xmlns:#{p}" }
+                            .join(", ")}"
           )
         end
 
@@ -177,8 +177,8 @@ module Uniword
             part: part_name,
             category: :namespace,
             description: "Removed #{removed_ns.size} namespace(s): " \
-                         "#{removed_ns.map { |p| p.empty? ? 'xmlns' : "xmlns:#{p}" }
-                                     .join(', ')}"
+                         "#{removed_ns.map { |p| p.empty? ? "xmlns" : "xmlns:#{p}" }
+                            .join(", ")}"
           )
         end
 
@@ -197,14 +197,14 @@ module Uniword
         added_attrs = new_attrs.keys - old_attrs.keys
         removed_attrs = old_attrs.keys - new_attrs.keys
         changed_attrs = (old_attrs.keys & new_attrs.keys)
-                          .select { |k| old_attrs[k] != new_attrs[k] }
+                        .reject { |k| old_attrs[k] == new_attrs[k] }
 
         if added_attrs.any?
           changes << XmlChange.new(
             part: part_name,
             category: :attribute,
             description: "Added #{added_attrs.size} attribute(s) on " \
-                         "<#{old_doc.root.name}>: #{added_attrs.join(', ')}"
+                         "<#{old_doc.root.name}>: #{added_attrs.join(", ")}"
           )
         end
 
@@ -213,7 +213,7 @@ module Uniword
             part: part_name,
             category: :attribute,
             description: "Removed #{removed_attrs.size} attribute(s) on " \
-                         "<#{old_doc.root.name}>: #{removed_attrs.join(', ')}"
+                         "<#{old_doc.root.name}>: #{removed_attrs.join(", ")}"
           )
         end
 

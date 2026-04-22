@@ -80,12 +80,10 @@ RSpec.shared_examples "a valid DOCX package" do |path, required_files = nil|
     expect(content).to include("document")
   end
 
-  if required_files
-    required_files.each do |file|
-      it "contains #{file}" do
-        content = ZipHelper.extract_file(path, file)
-        expect(content).not_to be_nil
-      end
+  required_files&.each do |file|
+    it "contains #{file}" do
+      content = ZipHelper.extract_file(path, file)
+      expect(content).not_to be_nil
     end
   end
 end

@@ -212,14 +212,14 @@ module Uniword
           break unless payload
 
           # SOF0..SOF3, SOF5..SOF7, SOF9..SOF11, SOF13..SOF15
-          if (byte1 >= 0xC0 && byte1 <= 0xC3) ||
-             (byte1 >= 0xC5 && byte1 <= 0xC7) ||
-             (byte1 >= 0xC9 && byte1 <= 0xCB) ||
-             (byte1 >= 0xCD && byte1 <= 0xCF)
-            h = payload.byteslice(0, 2).unpack1("n")
-            w = payload.byteslice(2, 2).unpack1("n")
-            return [w, h]
-          end
+          next unless (byte1 >= 0xC0 && byte1 <= 0xC3) ||
+                      (byte1 >= 0xC5 && byte1 <= 0xC7) ||
+                      (byte1 >= 0xC9 && byte1 <= 0xCB) ||
+                      (byte1 >= 0xCD && byte1 <= 0xCF)
+
+          h = payload.byteslice(0, 2).unpack1("n")
+          w = payload.byteslice(2, 2).unpack1("n")
+          return [w, h]
         end
 
         nil

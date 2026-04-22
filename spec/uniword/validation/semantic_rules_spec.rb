@@ -39,11 +39,11 @@ RSpec.describe Uniword::Validation::Rules do
         def category = :custom
         def severity = "warning"
 
-        def applicable?(context)
+        def applicable?(_context)
           true
         end
 
-        def check(context)
+        def check(_context)
           [issue("Custom check passed", code: "CUSTOM-001")]
         end
       end
@@ -61,15 +61,17 @@ RSpec.describe Uniword::Validation::Rules do
     end
 
     it "applies when settings.xml exists" do
-      ctx = instance_double(Uniword::Validation::Rules::DocumentContext)
-      allow(ctx).to receive(:part_exists?).with("word/settings.xml").and_return(true)
+      fixture = "spec/fixtures/docx_gem/basic.docx"
+      ctx = Uniword::Validation::Rules::DocumentContext.new(fixture)
       expect(rule.applicable?(ctx)).to be true
+      ctx.close
     end
 
     it "does not apply when settings.xml missing" do
-      ctx = instance_double(Uniword::Validation::Rules::DocumentContext)
-      allow(ctx).to receive(:part_exists?).with("word/settings.xml").and_return(false)
+      fixture = "spec/fixtures/docx_gem/no_styles.docx"
+      ctx = Uniword::Validation::Rules::DocumentContext.new(fixture)
       expect(rule.applicable?(ctx)).to be false
+      ctx.close
     end
   end
 

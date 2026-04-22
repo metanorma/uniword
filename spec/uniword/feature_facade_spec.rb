@@ -62,7 +62,7 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot,
 
   describe "#spellcheck" do
     it "returns a SpellcheckResult when hunspell is available" do
-      adapter = Uniword::Spellcheck::HunspellAdapter.new(language: "en_US")
+      Uniword::Spellcheck::HunspellAdapter.new(language: "en_US")
       result = doc.spellcheck
       expect(result).to be_a(Uniword::Spellcheck::SpellcheckResult)
     rescue Uniword::DependencyError
@@ -242,11 +242,11 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot,
   describe "method chaining" do
     it "supports chaining mutators" do
       result = doc.add_comment(text: "Fix", author: "Alice")
-                 .add_watermark("DRAFT")
-                 .protect(:read_only)
-                 .add_header("Confidential")
-                 .add_footer("Page 1")
-                 .insert_toc
+                  .add_watermark("DRAFT")
+                  .protect(:read_only)
+                  .add_header("Confidential")
+                  .add_footer("Page 1")
+                  .insert_toc
       expect(result).to be(doc)
     end
   end

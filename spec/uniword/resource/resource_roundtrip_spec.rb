@@ -87,13 +87,9 @@ RSpec.describe "Resource Roundtrip" do
 
         expect(loaded.font_scheme.name).to eq(theme.font_scheme.name)
 
-        if theme.font_scheme.major_font_obj&.latin && loaded.font_scheme.major_font_obj&.latin
-          expect(loaded.font_scheme.major_font_obj.latin.typeface).to eq(theme.font_scheme.major_font_obj.latin.typeface)
-        end
+        expect(loaded.font_scheme.major_font_obj.latin.typeface).to eq(theme.font_scheme.major_font_obj.latin.typeface) if theme.font_scheme.major_font_obj&.latin && loaded.font_scheme.major_font_obj&.latin
 
-        if theme.font_scheme.minor_font_obj&.latin && loaded.font_scheme.minor_font_obj&.latin
-          expect(loaded.font_scheme.minor_font_obj.latin.typeface).to eq(theme.font_scheme.minor_font_obj.latin.typeface)
-        end
+        expect(loaded.font_scheme.minor_font_obj.latin.typeface).to eq(theme.font_scheme.minor_font_obj.latin.typeface) if theme.font_scheme.minor_font_obj&.latin && loaded.font_scheme.minor_font_obj&.latin
       end
     end
   end

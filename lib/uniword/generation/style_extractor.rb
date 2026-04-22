@@ -62,7 +62,7 @@ module Uniword
 
         def extract_name(docx_path)
           File.basename(docx_path, ".*").gsub(/[_-]/, " ")
-                                       .split.map(&:capitalize).join
+              .split.map(&:capitalize).join
         end
 
         def style_to_hash(style)

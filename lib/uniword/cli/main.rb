@@ -191,12 +191,12 @@ module Uniword
 
       reports = {}
 
-      if check_type == "all" || check_type == "quality"
+      if %w[all quality].include?(check_type)
         checker = Quality::DocumentChecker.new
         reports[:quality] = checker.check(doc)
       end
 
-      if check_type == "all" || check_type == "accessibility"
+      if %w[all accessibility].include?(check_type)
         checker = Accessibility::AccessibilityChecker.new
         reports[:accessibility] = checker.check(doc)
       end
@@ -284,7 +284,7 @@ module Uniword
     option "set-description", type: :string, desc: "Set document description"
     option :json, desc: "Output as JSON", type: :boolean, default: false
     option :output, aliases: "-o", desc: "Output file (required when setting metadata)",
-            type: :string
+                    type: :string
     def metadata(path)
       doc = load_document(path)
       cp = doc.core_properties
@@ -413,11 +413,11 @@ module Uniword
         end
       end
 
-      if doc.tables.any?
-        say "  Tables:"
-        doc.tables.each_with_index do |table, i|
-          say "    #{i + 1}. #{table.row_count} rows x #{table.column_count} columns"
-        end
+      return unless doc.tables.any?
+
+      say "  Tables:"
+      doc.tables.each_with_index do |table, i|
+        say "    #{i + 1}. #{table.row_count} rows x #{table.column_count} columns"
       end
     end
 
@@ -431,13 +431,13 @@ module Uniword
         say "  All paragraphs have content", :green
       end
 
-      if doc.tables.any?
-        empty_tables = doc.tables.count(&:empty?)
-        if empty_tables.positive?
-          say "  #{empty_tables} empty table(s) found", :yellow
-        else
-          say "  All tables have content", :green
-        end
+      return unless doc.tables.any?
+
+      empty_tables = doc.tables.count(&:empty?)
+      if empty_tables.positive?
+        say "  #{empty_tables} empty table(s) found", :yellow
+      else
+        say "  All tables have content", :green
       end
     end
 
@@ -491,7 +491,7 @@ module Uniword
         "set-author" => :creator=,
         "set-subject" => :subject=,
         "set-keywords" => :keywords=,
-        "set-description" => :description=,
+        "set-description" => :description=
       }
       updated = false
       setters.each do |opt, setter|
@@ -513,7 +513,7 @@ module Uniword
         last_modified_by: core_properties&.last_modified_by,
         revision: core_properties&.revision,
         created: core_properties&.created,
-        modified: core_properties&.modified,
+        modified: core_properties&.modified
       }
 
       if options[:json]

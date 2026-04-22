@@ -112,6 +112,7 @@ module Uniword
 
       def truncate(text, max_len = 60)
         return "" if text.nil?
+
         text.length > max_len ? "#{text[0...max_len]}..." : text
       end
     end

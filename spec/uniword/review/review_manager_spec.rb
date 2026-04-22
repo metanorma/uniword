@@ -26,7 +26,7 @@ RSpec.describe Uniword::Review::ReviewManager do
 
       result = manager.list_comments
       expect(result.count).to eq(2)
-      expect(result.map(&:author)).to eq(["Alice", "Bob"])
+      expect(result.map(&:author)).to eq(%w[Alice Bob])
     end
   end
 
@@ -235,7 +235,7 @@ RSpec.describe Uniword::Review::ReviewManager do
       doc.revisions.add_insertion("More", author: "Alice")
 
       authors = manager.all_authors
-      expect(authors).to eq(["Alice", "Bob"])
+      expect(authors).to eq(%w[Alice Bob])
     end
 
     it "returns empty array with no comments or revisions" do

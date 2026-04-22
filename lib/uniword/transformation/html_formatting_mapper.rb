@@ -116,8 +116,6 @@ module Uniword
         end
       end
 
-      private
-
       # Apply formatting from span element's style attribute.
       #
       # @param element [Nokogiri::XML::Element] span element

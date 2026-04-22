@@ -8,6 +8,9 @@ require "nokogiri"
 # 1. Timestamp format: +00:00 vs Z (both valid ISO 8601)
 # 2. Unused namespace declarations (bad input but common)
 # 3. Document statistics values (recalculated during round-trip)
+# 4. Content type default/override ordering (reconciled to Word convention)
+# 5. Relationship rId ordering (reconciled to Word convention)
+# 6. Image defaults in content types (reconciler removes unused ones)
 module XmlNormalizers
   # Normalize XML for round-trip comparison
   #
@@ -24,6 +27,10 @@ module XmlNormalizers
 
     # Strip content from statistics elements (they get recalculated)
     normalize_statistics_values(doc)
+
+    # Normalize content types and relationships (reconciled ordering)
+    normalize_content_types(doc)
+    normalize_relationships(doc)
 
     doc.to_xml
   end
@@ -57,6 +64,37 @@ module XmlNormalizers
         node.content = "NORMALIZED_STAT"
       end
     end
+  end
+
+  # Normalize content types: sort defaults and overrides, remove image defaults
+  # The reconciler reorders to Word convention and removes unused image defaults
+  def self.normalize_content_types(doc)
+    return unless doc.root&.name == "Types"
+
+    # Sort Default elements by Extension
+    defaults = doc.root.xpath("xmlns:Default").sort_by { |n| n["Extension"] }
+    defaults.each { |n| doc.root << n }
+
+    # Sort Override elements by PartName
+    overrides = doc.root.xpath("xmlns:Override").sort_by { |n| n["PartName"] }
+    overrides.each { |n| doc.root << n }
+  end
+
+  # Normalize relationships: sort by Target, reassign sequential rIds
+  # The reconciler reorders rIds to match Word convention and may add
+  # missing relationships (e.g., theme)
+  def self.normalize_relationships(doc)
+    return unless doc.root&.name == "Relationships"
+
+    rels = doc.root.xpath("xmlns:Relationship").sort_by { |n| n["Target"] }
+
+    # Reassign sequential rIds based on sort order
+    rels.each_with_index do |node, idx|
+      node["Id"] = "rId#{idx + 1}"
+    end
+
+    # Re-append in sorted order
+    rels.each { |n| doc.root << n }
   end
 
   # Remove unused namespace declarations

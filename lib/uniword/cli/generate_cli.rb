@@ -29,7 +29,7 @@ module Uniword
     option "style-source", required: true, type: :string,
                            desc: "Source DOCX for styles"
     option "style-mapping", type: :string,
-                           desc: "Path to style mapping YAML"
+                            desc: "Path to style mapping YAML"
     option :verbose, aliases: "-v", desc: "Verbose output",
                      type: :boolean, default: false
     def generate(input_path, output_path)
@@ -73,11 +73,11 @@ module Uniword
       end
 
       ext = File.extname(path).downcase
-      unless [".yml", ".yaml", ".md"].include?(ext)
-        say("Unsupported input format: #{ext}. " \
-            "Use .yml, .yaml, or .md", :red)
-        exit 1
-      end
+      return if [".yml", ".yaml", ".md"].include?(ext)
+
+      say("Unsupported input format: #{ext}. " \
+          "Use .yml, .yaml, or .md", :red)
+      exit 1
     end
   end
 end

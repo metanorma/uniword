@@ -90,7 +90,7 @@ module Uniword
 
         case element_type
         when /\Aheading_(\d+)\z/
-          level = $1.to_i
+          level = ::Regexp.last_match(1).to_i
           add_heading(builder, text, level)
         when "table"
           add_table(builder, element)

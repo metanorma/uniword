@@ -112,6 +112,7 @@ module Uniword
 
       def protection_type(protection)
         return :unknown unless protection.is_a?(Hash)
+
         protection[:edit]&.to_sym || :unknown
       end
 

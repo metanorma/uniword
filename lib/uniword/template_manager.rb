@@ -36,9 +36,7 @@ module Uniword
     # @return [Hash] Metadata hash for the created template
     # @raise [ArgumentError] If source file does not exist
     def self.create(name, source_docx, output_dir, description: nil)
-      unless File.exist?(source_docx)
-        raise ArgumentError, "Source file not found: #{source_docx}"
-      end
+      raise ArgumentError, "Source file not found: #{source_docx}" unless File.exist?(source_docx)
 
       FileUtils.mkdir_p(output_dir)
 

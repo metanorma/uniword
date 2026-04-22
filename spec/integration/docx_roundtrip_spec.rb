@@ -45,15 +45,22 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     saved_files = extract_docx_files(saved_path)
 
     added = saved_files.keys - original_files.keys
-    expect(added).to be_empty, "Unexpected files added: #{added.join(', ')}"
+    expect(added).to be_empty, "Unexpected files added: #{added.join(", ")}"
 
     removed = original_files.keys - saved_files.keys
-    expect(removed).to be_empty, "Files removed: #{removed.join(', ')}"
+    expect(removed).to be_empty, "Files removed: #{removed.join(", ")}"
 
     xml_files = original_files.keys.select { |f| f.end_with?(".xml", ".rels") }
     xml_files.each do |filename|
-      expect(saved_files[filename]).to be_xml_equivalent_to(original_files[filename]),
-                                        "#{filename} was modified during round-trip"
+      orig = original_files[filename]
+      saved = saved_files[filename]
+      # Normalize content types and relationships (reconciled by Reconciler)
+      if filename == "[Content_Types].xml" || filename.end_with?(".rels")
+        orig = XmlNormalizers.normalize_for_roundtrip(orig)
+        saved = XmlNormalizers.normalize_for_roundtrip(saved)
+      end
+      expect(saved).to be_xml_equivalent_to(orig),
+                       "#{filename} was modified during round-trip"
     end
   end
 
@@ -193,10 +200,14 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
                    "REMOVED"
                  elsif !orig && saved
                    "ADDED"
-                 elsif Canon::Comparison.equivalent?(orig, saved)
-                   "PRESERVED"
                  else
-                   "MODIFIED"
+                   o = orig
+                   s = saved
+                   if filename == "[Content_Types].xml" || filename.end_with?(".rels")
+                     o = XmlNormalizers.normalize_for_roundtrip(orig)
+                     s = XmlNormalizers.normalize_for_roundtrip(saved)
+                   end
+                   Canon::Comparison.equivalent?(o, s) ? "PRESERVED" : "MODIFIED"
                  end
         puts "  #{status}: #{filename}"
       end
@@ -230,13 +241,13 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
 
   ISO_FIXTURES = {
     "ISO 8601-1:2019/Amd1" => "ISO 8601-1;2019_Amd 1 ed.1 - id.81801 Publication Word (en).docx",
-    "ISO 690:2021" => "ISO_690_2021-Word_document(en).docx",
+    "ISO 690:2021" => "ISO_690_2021-Word_document(en).docx"
   }.freeze
 
   ISO_FIXTURES.each do |name, filename|
     describe "#{name} round-trip" do
       let(:original_path) { File.join(ISO_FIXTURES_DIR, filename) }
-      let(:roundtrip_path) { File.join(temp_dir, "#{name.downcase.tr(' :/', '_')}_roundtrip.docx") }
+      let(:roundtrip_path) { File.join(temp_dir, "#{name.downcase.tr(" :/", "_")}_roundtrip.docx") }
 
       before { skip "ISO fixtures not available" unless File.exist?(original_path) }
 

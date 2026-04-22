@@ -299,7 +299,7 @@ module Uniword
 
     # Convert HTML to a document with paragraphs.
     # Alias for {#from_html} for backward compatibility.
-    alias_method :html_to_doc, :from_html
+    alias html_to_doc from_html
 
     # Convert HTML directly to a DOCX file
     #
