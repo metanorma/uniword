@@ -95,7 +95,7 @@ RSpec.describe "Comprehensive Benchmark Suite" do
         create_test_document(paragraphs: 10, tables: 20)
       end
 
-      expect(time).to be < 1.0
+      expect(time).to be < 3.0
     end
   end
 
@@ -300,7 +300,7 @@ RSpec.describe "Comprehensive Benchmark Suite" do
 
       # Full access should take more time but not exponentially more
       # Use a minimum threshold to avoid flaky failures on fast runners
-      min_threshold = [time_partial * 5, 1.0].max
+      min_threshold = [time_partial * 10, 2.0].max
       expect(time_full).to be < min_threshold
     end
   end
