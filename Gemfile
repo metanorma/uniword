@@ -7,7 +7,7 @@ gemspec
 # Math equation support via Plurimath
 # gem 'plurimath', path: '/Users/mulgogi/src/plurimath/plurimath'
 
-gem "lutaml-model", github: "lutaml/lutaml-model", branch: "main"
+gem "lutaml-model", github: "lutaml/lutaml-model", ref: "67cc814"
 
 group :development do
   gem "canon"
