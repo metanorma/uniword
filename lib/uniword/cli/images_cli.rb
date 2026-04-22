@@ -104,7 +104,7 @@ module Uniword
         $ uniword images insert document.docx chart.png -o out.docx --position 2
     DESC
     option :output, aliases: "-o", required: true, desc: "Output file path",
-                     type: :string
+                    type: :string
     option :position, type: :numeric, desc: "Paragraph position index"
     option :width, type: :string, desc: "Width (e.g., '6in', '15cm', '400px')"
     option :height, type: :string, desc: "Height (e.g., '4in', '10cm')"
@@ -142,7 +142,7 @@ module Uniword
         $ uniword images remove document.docx image1.png -o out.docx
     DESC
     option :output, aliases: "-o", required: true, desc: "Output file path",
-                     type: :string
+                    type: :string
     def remove(path, image_name)
       doc = load_document(path)
       manager = Images::ImageManager.new(doc)

@@ -145,7 +145,7 @@ module Uniword
     option :output, desc: "Output YAML file"
     def extract(docx_path)
       output = options[:output] ||
-        "data/stylesets/#{options[:name]}.yml"
+               "data/stylesets/#{options[:name]}.yml"
       Generation::StyleExtractor.extract_to_yaml(docx_path, output)
       say("StyleSet extracted: #{output}", :green)
     rescue Uniword::Error => e

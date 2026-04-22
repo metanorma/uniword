@@ -78,14 +78,14 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
   describe "#known_namespace?" do
     it "knows WordprocessingML namespace" do
       expect(registry.known_namespace?(
-        "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
-      )).to be true
+               "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+             )).to be true
     end
 
     it "knows relationships namespace" do
       expect(registry.known_namespace?(
-        "http://schemas.openxmlformats.org/package/2006/relationships"
-      )).to be true
+               "http://schemas.openxmlformats.org/package/2006/relationships"
+             )).to be true
     end
 
     it "does not know arbitrary namespace" do

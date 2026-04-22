@@ -1,0 +1,213 @@
+# Font metadata for DOCX font table entries.
+# Each font entry has the properties Word requires in word/fontTable.xml.
+#
+# Source: Extracted from blank.docx (Word 16.107.4) and
+# Microsoft Office bundled fonts.
+---
+fonts:
+  # --- Office 2024+ (Aptos era) ---
+  Aptos:
+    panose1: "020B0004020202020204"
+    charset: "00"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "20000287"
+      usb1: "00000003"
+      usb2: "00000000"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  Aptos Display:
+    panose1: "020B0004020202020204"
+    charset: "00"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "20000287"
+      usb1: "00000003"
+      usb2: "00000000"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  # --- Office 2013-2022 (Calibri era) ---
+  Calibri:
+    panose1: "020F0502020204030204"
+    charset: "00"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00002EF"
+      usb1: "400001FF"
+      usb2: "00000000"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  Calibri Light:
+    panose1: "020F0302020204030204"
+    charset: "00"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00002EF"
+      usb1: "400001FF"
+      usb2: "00000000"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  # --- Office 2007-2010 (Cambria era) ---
+  Cambria:
+    panose1: "02040503050406030204"
+    charset: "00"
+    family: roman
+    pitch: variable
+    sig:
+      usb0: "E00002FF"
+      usb1: "6FFF07FF"
+      usb2: "00000020"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  # --- Legacy serif (always present) ---
+  Times New Roman:
+    panose1: "02020603050405020304"
+    charset: "00"
+    family: roman
+    pitch: variable
+    sig:
+      usb0: "E0002EFF"
+      usb1: "C000785B"
+      usb2: "00000009"
+      usb3: "00000000"
+      csb0: "000001FF"
+      csb1: "00000000"
+
+  # --- East Asian fonts (per locale) ---
+
+  # Chinese Simplified (zh-CN)
+  DengXian:
+    alt_name: "等线"
+    panose1: "02010600030101010101"
+    charset: "86"
+    family: modern
+    pitch: fixed
+    sig:
+      usb0: "00000001"
+      usb1: "080E0000"
+      usb2: "00000010"
+      usb3: "00000000"
+      csb0: "00040000"
+      csb1: "00000000"
+
+  DengXian Light:
+    alt_name: "等线 Light"
+    panose1: "02010600030101010101"
+    charset: "86"
+    family: roman
+    pitch: default
+    not_true_type: true
+
+  # Japanese (ja)
+  Yu Gothic:
+    alt_name: "游ゴシック"
+    panose1: "020B0004020202020204"
+    charset: "80"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00028BF"
+      usb1: "38CF7CFA"
+      usb2: "00000016"
+      usb3: "00000000"
+      csb0: "0004000F"
+      csb1: "00000000"
+
+  Yu Gothic Light:
+    alt_name: "游ゴシック Light"
+    panose1: "020B0004020202020204"
+    charset: "80"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00028BF"
+      usb1: "38CF7CFA"
+      usb2: "00000016"
+      usb3: "00000000"
+      csb0: "0004000F"
+      csb1: "00000000"
+
+  # Korean (ko)
+  Malgun Gothic:
+    alt_name: "맑은 고딕"
+    panose1: "020B0004020202020204"
+    charset: "81"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00028BF"
+      usb1: "38CF7CFA"
+      usb2: "00000016"
+      usb3: "00000000"
+      csb0: "0004000F"
+      csb1: "00000000"
+
+  Malgun Gothic Light:
+    alt_name: "맑은 고딕 Light"
+    panose1: "020B0004020202020204"
+    charset: "81"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00028BF"
+      usb1: "38CF7CFA"
+      usb2: "00000016"
+      usb3: "00000000"
+      csb0: "0004000F"
+      csb1: "00000000"
+
+  # Chinese Traditional (zh-TW)
+  MingLiU:
+    alt_name: "新細明體"
+    panose1: "02010600030101010101"
+    charset: "88"
+    family: modern
+    pitch: fixed
+    sig:
+      usb0: "00000001"
+      usb1: "080E0000"
+      usb2: "00000010"
+      usb3: "00000000"
+      csb0: "00040000"
+      csb1: "00000000"
+
+  # --- OFL substitute fonts ---
+  Carlito:
+    panose1: "020F0502020204030204"
+    charset: "00"
+    family: swiss
+    pitch: variable
+    sig:
+      usb0: "A00002EF"
+      usb1: "400001FF"
+      usb2: "00000000"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  Caladea:
+    panose1: "02040503050406030204"
+    charset: "00"
+    family: roman
+    pitch: variable
+    sig:
+      usb0: "E00002FF"
+      usb1: "6FFF07FF"
+      usb2: "00000020"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"

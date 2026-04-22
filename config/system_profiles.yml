@@ -1,0 +1,87 @@
+# System profiles define Word version-specific settings.
+# Each profile specifies which fonts, theme, compat settings, and
+# namespace declarations to use when generating DOCX output.
+#
+# default_theme references Uniword theme names from data/themes/*.yml.
+# Mapping: workspace=Office Theme, corporate=Office 2013-2022 Theme
+---
+profiles:
+  office_2007:
+    description: "Microsoft Office 2007-2010"
+    compat_mode: "12"
+    font_scheme: ms_office_2007
+    color_scheme: office_2007
+    default_theme: workspace
+    application_name: "Microsoft Office Word"
+    app_version: "12.0000"
+    namespace_set: office_2007
+
+  office_2010:
+    description: "Microsoft Office 2010"
+    compat_mode: "14"
+    font_scheme: ms_office_2007
+    color_scheme: office_2007
+    default_theme: workspace
+    application_name: "Microsoft Office Word"
+    app_version: "14.0000"
+    namespace_set: office_2010
+
+  office_2013:
+    description: "Microsoft Office 2013-2022"
+    compat_mode: "15"
+    font_scheme: ms_office_2013
+    color_scheme: office_2013
+    default_theme: corporate
+    application_name: "Microsoft Office Word"
+    app_version: "16.0000"
+    namespace_set: office_2016
+
+  office_2016:
+    description: "Microsoft Office 2016"
+    compat_mode: "15"
+    font_scheme: ms_office_2013
+    color_scheme: office_2013
+    default_theme: corporate
+    application_name: "Microsoft Office Word"
+    app_version: "16.0000"
+    namespace_set: office_2016
+
+  office_2019:
+    description: "Microsoft Office 2019"
+    compat_mode: "15"
+    font_scheme: ms_office_2013
+    color_scheme: office_2013
+    default_theme: corporate
+    application_name: "Microsoft Office Word"
+    app_version: "16.0000"
+    namespace_set: office_2016
+
+  office_2021:
+    description: "Microsoft Office 2021"
+    compat_mode: "15"
+    font_scheme: ms_office_2013
+    color_scheme: office_2013
+    default_theme: corporate
+    application_name: "Microsoft Office Word"
+    app_version: "16.0000"
+    namespace_set: office_2016
+
+  office_2024:
+    description: "Microsoft Office 2024+"
+    compat_mode: "15"
+    font_scheme: ms_office_2024
+    color_scheme: office_2024
+    default_theme: corporate
+    application_name: "Microsoft Office Word"
+    app_version: "16.0000"
+    namespace_set: office_2024
+
+  uniword:
+    description: "Uniword default (OFL fonts)"
+    compat_mode: "15"
+    font_scheme: carlito_sans
+    color_scheme: meridian
+    default_theme: meridian
+    application_name: "Uniword"
+    app_version: "1.0.0"
+    namespace_set: office_2024

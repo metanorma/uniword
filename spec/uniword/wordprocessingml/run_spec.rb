@@ -176,6 +176,6 @@ RSpec.describe Uniword::Wordprocessingml::Run do
 
   describe "XML round-trip" do
     it_behaves_like "a round-trippable serializable", described_class,
-      { text: "Hello World" }, :text, "Hello World"
+                    { text: "Hello World" }, :text, "Hello World"
   end
 end

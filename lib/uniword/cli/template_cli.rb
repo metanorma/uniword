@@ -69,7 +69,7 @@ module Uniword
     option :dir, default: "templates",
                  desc: "Template library directory"
     option :description, type: :string,
-                        desc: "Template description"
+                         desc: "Template description"
     option :verbose, aliases: "-v", desc: "Verbose output",
                      type: :boolean, default: false
     def create(name, source)
@@ -120,7 +120,7 @@ module Uniword
     option :dir, default: "templates",
                  desc: "Template library directory"
     option "set", type: :array, default: [],
-                 desc: "Set variable (key=value), may be repeated"
+                  desc: "Set variable (key=value), may be repeated"
     option :verbose, aliases: "-v", desc: "Verbose output",
                      type: :boolean, default: false
     def apply(template_name, output_path)
@@ -151,9 +151,7 @@ module Uniword
     def load_template_data
       data = {}
 
-      if options[:data]
-        data = parse_data_file(options[:data])
-      end
+      data = parse_data_file(options[:data]) if options[:data]
 
       merge_set_options(data)
     end

@@ -84,7 +84,7 @@ module Uniword
         details = manager.info
         say "Document is protected:", :yellow
         say "  Type: #{details[:type]}"
-        say "  Password: #{details[:password_protected] ? 'Yes' : 'No'}"
+        say "  Password: #{details[:password_protected] ? "Yes" : "No"}"
       else
         say "Document is not protected.", :green
       end

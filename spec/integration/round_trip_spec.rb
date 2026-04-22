@@ -351,7 +351,6 @@ RSpec.describe "DOCX Round-trip Validation" do
     end
   end
 
-
   def collect_run_formatting(document)
     formatting = []
     document.paragraphs.each do |para|

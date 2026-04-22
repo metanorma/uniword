@@ -550,5 +550,4 @@ RSpec.describe "DOCX Edge Case Handling" do
       expect { doc.save(test_path) }.not_to raise_error
     end
   end
-
 end

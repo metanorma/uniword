@@ -126,7 +126,8 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/[Content_Types].xml")
         saved = File.read("#{saved_dir}/[Content_Types].xml")
 
-        expect(saved).to be_xml_equivalent_to(original)
+        expect(XmlNormalizers.normalize_for_roundtrip(saved))
+          .to be_xml_equivalent_to(XmlNormalizers.normalize_for_roundtrip(original))
       end
     end
 
@@ -135,7 +136,8 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/_rels/.rels")
         saved = File.read("#{saved_dir}/_rels/.rels")
 
-        expect(saved).to be_xml_equivalent_to(original)
+        expect(XmlNormalizers.normalize_for_roundtrip(saved))
+          .to be_xml_equivalent_to(XmlNormalizers.normalize_for_roundtrip(original))
       end
     end
 
@@ -144,7 +146,8 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/word/_rels/document.xml.rels")
         saved = File.read("#{saved_dir}/word/_rels/document.xml.rels")
 
-        expect(saved).to be_xml_equivalent_to(original)
+        expect(XmlNormalizers.normalize_for_roundtrip(saved))
+          .to be_xml_equivalent_to(XmlNormalizers.normalize_for_roundtrip(original))
       end
     end
 

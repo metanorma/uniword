@@ -1,0 +1,172 @@
+---
+layout: default
+title: Profiles
+nav_order: 10
+parent: Features
+permalink: /features/profiles/
+---
+= Profiles
+
+Profiles define what target environment Uniword generates DOCX output for. A Profile is the composition of three independent axes:
+
+* **SystemProfile** -- What Word version to target (fonts, theme, compat settings)
+* **LocaleProfile** -- What locale/language to use (lang tags, separators)
+* **UserProfile** -- Who is creating this document (author metadata)
+
+== Quick Start
+
+[source,ruby]
+----
+# Load a named preset
+profile = Uniword::Docx::Profile.load(:word_2024_en)
+
+# Apply profile when saving a document
+doc = Uniword::Document.open("input.docx")
+doc.save("output.docx", profile: profile)
+----
+
+== Named Presets
+
+Presets are defined in `config/profiles.yml`:
+
+[cols="2,2,2"]
+|===
+| Preset | System | Locale
+
+| `word_2024_en` | Office 2024+ | en-US
+| `word_2024_zh` | Office 2024+ | zh-CN
+| `word_2024_ja` | Office 2024+ | ja
+| `word_2024_ko` | Office 2024+ | ko
+| `word_2024_de` | Office 2024+ | de
+| `word_2024_fr` | Office 2024+ | fr
+| `word_2016_en` | Office 2016 | en-US
+| `word_2013_en` | Office 2013 | en-US
+| `word_2010_en` | Office 2010 | en-US
+| `word_2007_en` | Office 2007 | en-US
+| `uniword_default` | Uniword (OFL fonts) | en-US
+|===
+
+== SystemProfile
+
+The SystemProfile determines what Word version to target. Each profile specifies:
+
+[cols="2,3"]
+|===
+| Property | Description
+
+| `compat_mode` | Compatibility mode value (12=2007, 14=2010, 15=2013+)
+| `font_scheme_name` | Named font scheme from `data/font_schemes/`
+| `default_theme_name` | Named theme from `data/themes/`
+| `application_name` | Application string in `docProps/app.xml`
+| `app_version` | Version string (e.g., `16.0000`)
+| `namespace_set` | OOXML namespace declarations to emit
+|===
+
+Available system profiles:
+
+[cols="2,2,3,2"]
+|===
+| Profile | Font Scheme | Theme | Compat Mode
+
+| `office_2024` | `ms_office_2024` (Aptos) | corporate | 15
+| `office_2016` | `ms_office_2013` (Calibri) | corporate | 15
+| `office_2013` | `ms_office_2013` (Calibri) | corporate | 15
+| `office_2010` | `ms_office_2007` (Cambria/Calibri) | workspace | 14
+| `office_2007` | `ms_office_2007` (Cambria/Calibri) | workspace | 12
+| `uniword` | `carlito_sans` (OFL) | meridian | 15
+|===
+
+== LocaleProfile
+
+The LocaleProfile determines language-specific settings for DOCX generation:
+
+[cols="2,3"]
+|===
+| Property | Description
+
+| `lang` | Primary language tag (e.g., `en-US`)
+| `east_asia_lang` | East Asian language tag (e.g., `zh-CN`, `ja-JP`)
+| `bidi_lang` | Bidirectional language tag (e.g., `ar-SA`)
+| `decimal_symbol` | Decimal separator (`.` or `,`)
+| `list_separator` | List separator (`,` or `;`)
+|===
+
+[source,ruby]
+----
+# Load a specific locale
+locale = Uniword::Docx::LocaleProfile.from_locale("ja")
+
+locale.lang              # => "ja"
+locale.east_asia_lang    # => "ja-JP"
+locale.bidi_lang         # => "ar-SA"
+locale.decimal_symbol    # => "."
+locale.list_separator    # => ","
+
+# List all available locales
+Uniword::Docx::LocaleProfile.available_locales
+# => ["ar", "cs", "da", "de", "el", "en", ...]
+----
+
+Locale data is defined in `config/locale_profiles.yml`.
+
+== UserProfile
+
+The UserProfile maps to Word's UserInfo registry/plist entries:
+
+[source,ruby]
+----
+user = Uniword::Docx::UserProfile.new(
+  name: "Ada Lovelace",
+  company: "Analytical Engine Co."
+)
+
+# These values populate docProps/core.xml and docProps/app.xml
+profile = Uniword::Docx::Profile.load(:word_2024_en, user: user)
+----
+
+UserProfile fields:
+
+[cols="2,3"]
+|===
+| Field | Maps to
+
+| `name` | `cp:lastModifiedBy` (core.xml), `dc:creator`
+| `company` | `app:Company` (app.xml)
+| `initials` | Revision tracking author tags
+| `address` | Envelope generation (not in OOXML directly)
+|===
+
+== Custom Profiles
+
+Create profiles programmatically:
+
+[source,ruby]
+----
+# Compose from individual profiles
+profile = Uniword::Docx::Profile.new(
+  system: Uniword::Docx::SystemProfile.load("office_2024"),
+  locale: Uniword::Docx::LocaleProfile.from_locale("ja"),
+  user: Uniword::Docx::UserProfile.new(name: "Taro Yamada")
+)
+
+# Delegate accessors
+profile.lang           # => "ja"
+profile.compat_mode    # => "15"
+profile.user_name      # => "Taro Yamada"
+profile.body_font      # => "Aptos"
+profile.heading_font   # => "Aptos Display"
+----
+
+== Relationship to Reconciler
+
+When a Profile is provided, the link:/understanding/prevention-layer/[Reconciler] uses it during serialization to populate DOCX parts with Word-expected content:
+
+* **Settings** -- zoom, proofState, defaultTabStop, compat, mathPr, themeFontLang
+* **Font table** -- profile-driven font entries with full metadata
+* **Styles** -- docDefaults, latentStyles, default style definitions
+* **Web settings** -- optimizeForBrowser, allowPNG, namespace declarations
+* **App properties** -- Application, AppVersion, Template
+* **Core properties** -- lastModifiedBy, revision, timestamps
+* **Theme** -- loaded from profile's default theme
+
+Without a profile, only structural reconciliation runs (Group 1 and Group 3), preserving backward compatibility.

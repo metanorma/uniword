@@ -83,21 +83,19 @@ module Uniword
               "(position #{m[:position]})"
           if options[:verbose] && m[:suggestions].any?
             say "     Suggestions: " \
-                "#{m[:suggestions].first(5).join(', ')}"
+                "#{m[:suggestions].first(5).join(", ")}"
           end
         end
       end
 
-      if result.grammar_issues.any?
-        say "\nGrammar issues " \
-            "(#{result.grammar_issues.size}):", :cyan
-        result.grammar_issues.each_with_index do |g, idx|
-          say "  #{idx + 1}. #{g[:message]} " \
-              "(position #{g[:position]})"
-          if options[:verbose] && g[:context]
-            say "     Context: \"#{g[:context]}\""
-          end
-        end
+      return unless result.grammar_issues.any?
+
+      say "\nGrammar issues " \
+          "(#{result.grammar_issues.size}):", :cyan
+      result.grammar_issues.each_with_index do |g, idx|
+        say "  #{idx + 1}. #{g[:message]} " \
+            "(position #{g[:position]})"
+        say "     Context: \"#{g[:context]}\"" if options[:verbose] && g[:context]
       end
     end
   end

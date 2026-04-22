@@ -4,7 +4,6 @@ require "spec_helper"
 require "objspace"
 
 RSpec.describe "Memory Performance" do
-
   describe "memory leak detection" do
     it "does not leak memory with large documents" do
       skip "Memory profiling only with PROFILE=true" unless ENV["PROFILE"]

@@ -184,7 +184,7 @@ module Uniword
         custom_properties: :custom_properties,
         custom_xml_items: :custom_xml_items,
         footnotes: :footnotes,
-        endnotes: :endnotes,
+        endnotes: :endnotes
       }.freeze
 
       # Copy package parts to document for round-trip preservation

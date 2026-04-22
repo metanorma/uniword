@@ -6,28 +6,20 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
   let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
   describe "#check" do
-    let(:fake_adapter) do
-      instance_double(
-        Uniword::Spellcheck::HunspellAdapter
-      )
+    let(:known_words) do
+      Set.new(%w[correct hello world the test document
+                 This is a has word some with in table])
     end
 
-    before do
-      allow(fake_adapter).to receive(:check) do |word|
-        # Simple fake: "correct" and common words are OK
-        ["correct", "hello", "world", "the", "test", "document",
-         "This", "is", "a", "has", "word", "some", "with"].include?(word)
-      end
-      allow(fake_adapter).to receive(:suggest) do |word|
-        case word
-        when "mispelled"
-          ["misspelled", "misspelt"]
-        when "wrold"
-          ["world", "wold"]
-        else
-          []
-        end
-      end
+    let(:fake_adapter) do
+      adapter = Object.new
+      known = known_words
+      suggestions = { "mispelled" => %w[misspelled misspelt],
+                      "wrold" => %w[world wold] }
+
+      adapter.define_singleton_method(:check) { |word| known.include?(word) }
+      adapter.define_singleton_method(:suggest) { |word| suggestions.fetch(word, []) }
+      adapter
     end
 
     it "returns a SpellcheckResult" do

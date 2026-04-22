@@ -50,13 +50,13 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
       result.add_misspelling(
         word: "teh",
         position: 4,
-        suggestions: ["the", "tea"]
+        suggestions: %w[the tea]
       )
       expect(result.misspellings.size).to eq(1)
       m = result.misspellings.first
       expect(m[:word]).to eq("teh")
       expect(m[:position]).to eq(4)
-      expect(m[:suggestions]).to eq(["the", "tea"])
+      expect(m[:suggestions]).to eq(%w[the tea])
     end
   end
 

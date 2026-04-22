@@ -66,9 +66,7 @@ module Uniword
         uniword_slug = detect_ms_theme(word_theme)
 
         # Fall back to detection by theme name
-        if uniword_slug.nil? && word_theme.respond_to?(:name) && word_theme.name
-          uniword_slug = from_ms_name(word_theme.name)
-        end
+        uniword_slug = from_ms_name(word_theme.name) if uniword_slug.nil? && word_theme.respond_to?(:name) && word_theme.name
 
         return nil unless uniword_slug
 
@@ -91,8 +89,6 @@ module Uniword
         Themes::ThemeApplicator.new.apply(word_theme, document)
       end
 
-      private
-
       # Extract color values from a Drawingml::Theme's color scheme
       #
       # @param drawingml_theme [Drawingml::Theme]
@@ -111,7 +107,7 @@ module Uniword
           "accent3" => extract_hex(cs, :accent3),
           "accent4" => extract_hex(cs, :accent4),
           "accent5" => extract_hex(cs, :accent5),
-          "accent6" => extract_hex(cs, :accent6),
+          "accent6" => extract_hex(cs, :accent6)
         }
       end
 

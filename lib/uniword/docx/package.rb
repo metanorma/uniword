@@ -86,7 +86,7 @@ module Uniword
       attribute :endnotes, Uniword::Wordprocessingml::Endnotes
 
       # Non-serialized attributes (DOCX packaging helpers)
-      attr_accessor :chart_parts, :bibliography_sources
+      attr_accessor :chart_parts, :bibliography_sources, :profile
 
       # Load DOCX package from file
       #
@@ -368,15 +368,15 @@ module Uniword
       def to_zip_content
         content = {}
 
-        content_types = self.content_types || self.class.minimal_content_types
-        package_rels = self.package_rels || self.class.minimal_package_rels
-        document_rels = self.document_rels || self.class.minimal_document_rels
+        self.content_types ||= self.class.minimal_content_types
+        self.package_rels ||= self.class.minimal_package_rels
+        self.document_rels ||= self.class.minimal_document_rels
 
         self.settings ||= Uniword::Wordprocessingml::Settings.new
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
-        Reconciler.new(self).reconcile
+        Reconciler.new(self, profile: profile).reconcile
 
         inject_part_relationships(content, content_types, package_rels, document_rels)
         serialize_package_parts(content, content_types, package_rels, document_rels)

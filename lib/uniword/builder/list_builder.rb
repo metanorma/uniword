@@ -30,7 +30,7 @@ module Uniword
         model = document.model
         model.numbering_configuration ||= Uniword::Wordprocessingml::NumberingConfiguration.new
         @num_id = model.numbering_configuration
-                          .create_numbering(type)
+                       .create_numbering(type)
       end
 
       # Add an item to the list

@@ -25,7 +25,7 @@ module Uniword
         package_rels: :package_rels,
         content_types: :content_types,
         footnotes: :footnotes,
-        endnotes: :endnotes,
+        endnotes: :endnotes
       }.freeze
 
       def self.included(base)
@@ -45,9 +45,7 @@ module Uniword
             package.send(:"#{pkg_attr}=", value) if value
           end
 
-          if document.numbering_configuration_loaded?
-            package.numbering = document.numbering_configuration
-          end
+          package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?
 
           package.chart_parts = document.chart_parts if document.chart_parts
           package.custom_xml_items = document.custom_xml_items if document.custom_xml_items
@@ -66,20 +64,6 @@ module Uniword
             extension: "xml",
             content_type: "application/xml"
           )
-
-          %w[png jpeg jpg gif bmp tif tiff svg].each do |ext|
-            mime = case ext
-                   when "jpg", "jpeg" then "image/jpeg"
-                   when "png" then "image/png"
-                   when "gif" then "image/gif"
-                   when "bmp" then "image/bmp"
-                   when "tif", "tiff" then "image/tiff"
-                   when "svg" then "image/svg+xml"
-                   end
-            ct.defaults << Uniword::ContentTypes::Default.new(
-              extension: ext, content_type: mime
-            )
-          end
 
           ct.overrides ||= []
           ct.overrides << Uniword::ContentTypes::Override.new(
@@ -124,13 +108,13 @@ module Uniword
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId2",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-            target: "docProps/app.xml"
+            type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+            target: "docProps/core.xml"
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId3",
-            type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-            target: "docProps/core.xml"
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+            target: "docProps/app.xml"
           )
           rels
         end
@@ -146,18 +130,18 @@ module Uniword
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId2",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
-            target: "fontTable.xml"
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId3",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
             target: "settings.xml"
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId4",
+            id: "rId3",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
             target: "webSettings.xml"
+          )
+          rels.relationships << Ooxml::Relationships::Relationship.new(
+            id: "rId4",
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
+            target: "fontTable.xml"
           )
           rels
         end

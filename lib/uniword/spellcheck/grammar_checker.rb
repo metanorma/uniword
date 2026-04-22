@@ -51,7 +51,7 @@ module Uniword
 
         text.scan(/  +/) do
           pos = Regexp.last_match
-                     .offset(0)
+                      .offset(0)
           start_pos = pos[0] + offset
 
           context_start = [start_pos - 10, 0].max
@@ -111,7 +111,7 @@ module Uniword
           # Skip single-character "words" (likely abbreviations)
           char_pos = match.begin(1)
           next_char = text[char_pos + 1]
-          next if next_char && next_char.match?(/[a-z]/) &&
+          next if next_char&.match?(/[a-z]/) &&
                   (char_pos < 2 ||
                    text[char_pos - 2] =~ /[a-z]/)
 

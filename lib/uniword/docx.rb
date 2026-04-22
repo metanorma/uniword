@@ -8,6 +8,7 @@ module Uniword
   # document-level reconciliation, and user-defined requirements.
   module Docx
     autoload :Package, "#{__dir__}/docx/package"
+    autoload :Profile, "#{__dir__}/docx/profile"
     autoload :Reconciler, "#{__dir__}/docx/reconciler"
   end
 end

@@ -58,14 +58,20 @@ module Uniword
       def extract_text(document)
         parts = []
 
-        paragraphs = document.respond_to?(:paragraphs) ?
-                     document.paragraphs : []
+        paragraphs = if document.respond_to?(:paragraphs)
+                       document.paragraphs
+                     else
+                       []
+                     end
         paragraphs.each do |para|
           parts << para.text if para.respond_to?(:text)
         end
 
-        tables = document.respond_to?(:tables) ?
-                 document.tables : []
+        tables = if document.respond_to?(:tables)
+                   document.tables
+                 else
+                   []
+                 end
         tables.each do |table|
           extract_table_text(table, parts)
         end

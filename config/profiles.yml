@@ -1,0 +1,49 @@
+# Named profile presets combining SystemProfile + LocaleProfile.
+# Use Profile.load(:name) to load a preset.
+#
+# UserProfile is always user-supplied and not part of presets.
+---
+presets:
+  word_2024_en:
+    system: office_2024
+    locale: en
+
+  word_2024_ja:
+    system: office_2024
+    locale: ja
+
+  word_2024_ko:
+    system: office_2024
+    locale: ko
+
+  word_2024_zh_cn:
+    system: office_2024
+    locale: zh-CN
+
+  word_2024_zh_tw:
+    system: office_2024
+    locale: zh-TW
+
+  word_2024_de:
+    system: office_2024
+    locale: de
+
+  word_2024_fr:
+    system: office_2024
+    locale: fr
+
+  word_2016_en:
+    system: office_2016
+    locale: en
+
+  word_2013_en:
+    system: office_2013
+    locale: en
+
+  word_2007_en:
+    system: office_2007
+    locale: en
+
+  uniword_default:
+    system: uniword
+    locale: en

@@ -49,7 +49,7 @@ RSpec.describe "Autoload smoke tests" do
     Wordprocessingml2013: "Uniword::Wordprocessingml2013",
     Wordprocessingml2016: "Uniword::Wordprocessingml2016",
     Customxml: "Uniword::Customxml",
-    Builder: "Uniword::Builder",
+    Builder: "Uniword::Builder"
   }.each do |name, const_path|
     describe name do
       it "autoloads without error" do
@@ -67,7 +67,7 @@ RSpec.describe "Autoload smoke tests" do
     "HtmlImporter" => "Uniword::HtmlImporter",
     "CLI" => "Uniword::CLI",
     "StreamingParser" => "Uniword::StreamingParser",
-    "VERSION" => "Uniword::VERSION",
+    "VERSION" => "Uniword::VERSION"
   }.each do |name, const_path|
     describe name do
       it "autoloads without error" do
@@ -86,7 +86,7 @@ RSpec.describe "Autoload smoke tests" do
     "ReadOnlyError" => "Uniword::ReadOnlyError",
     "DependencyError" => "Uniword::DependencyError",
     "UnsupportedOperationError" => "Uniword::UnsupportedOperationError",
-    "ConversionError" => "Uniword::ConversionError",
+    "ConversionError" => "Uniword::ConversionError"
   }.each do |name, const_path|
     describe name do
       it "autoloads without error" do
@@ -104,7 +104,7 @@ RSpec.describe "Autoload smoke tests" do
       "Wordprocessingml::Table" => Uniword::Wordprocessingml::Table,
       "Wordprocessingml::TableRow" => Uniword::Wordprocessingml::TableRow,
       "Wordprocessingml::TableCell" => Uniword::Wordprocessingml::TableCell,
-      "ContentTypes::Types" => Uniword::ContentTypes::Types,
+      "ContentTypes::Types" => Uniword::ContentTypes::Types
     }
 
     models.each do |name, klass|

@@ -42,9 +42,9 @@ RSpec.describe Uniword::HeadersFooters::Manager do
     end
 
     it "raises for invalid type" do
-      expect {
+      expect do
         manager.add_header("Text", type: "invalid")
-      }.to raise_error(ArgumentError, /Invalid type/)
+      end.to raise_error(ArgumentError, /Invalid type/)
     end
   end
 

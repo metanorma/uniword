@@ -121,8 +121,6 @@ module Uniword
         end
       end
 
-      private
-
       def self.normalize_colors(colors)
         result = {}
         colors.each { |k, v| result[k.to_s] = v }

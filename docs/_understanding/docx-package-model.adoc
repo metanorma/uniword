@@ -70,6 +70,17 @@ package.document.body.add_paragraph("New paragraph")
 package.to_file('modified.docx')
 ----
 
+=== Profile-Driven Saving
+
+Pass a link:/features/profiles/[Profile] to populate DOCX parts with Word-expected content:
+
+[source,ruby]
+----
+profile = Uniword::Docx::Profile.load(:word_2024_en)
+package.profile = profile
+package.to_file('output.docx')
+----
+
 == Module Architecture
 
 The `Package` class is decomposed into focused modules following the single responsibility principle:
