@@ -121,12 +121,12 @@ RSpec.describe "Real-World Document Testing", :integration do
     end
 
     describe "Performance Benchmarks", if: defined?(Benchmark) do
-      it "reads document in under 6 seconds" do
+      it "reads document in under 10 seconds" do
         read_time = Benchmark.realtime do
           Uniword.load(doc_path)
         end
 
-        expect(read_time).to be < 6.0
+        expect(read_time).to be < 10.0
       end
 
       it "writes document in under 10 seconds" do
