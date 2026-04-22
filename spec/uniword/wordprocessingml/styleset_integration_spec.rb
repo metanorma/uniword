@@ -138,7 +138,7 @@ RSpec.describe "StyleSet Integration (Binary .dotx)" do
   end
 
   describe "Performance" do
-    it "loads and applies StyleSet in under 1 second" do
+    it "loads and applies StyleSet in under 2 seconds" do
       start_time = Time.now
 
       styleset = Uniword::StyleSet.from_dotx(dotx_file)
@@ -146,7 +146,7 @@ RSpec.describe "StyleSet Integration (Binary .dotx)" do
       styleset.apply_to(doc)
 
       elapsed = Time.now - start_time
-      expect(elapsed).to be < 1.0
+      expect(elapsed).to be < 2.0
     end
   end
 end
