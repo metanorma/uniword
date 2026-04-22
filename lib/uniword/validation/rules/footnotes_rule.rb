@@ -82,22 +82,22 @@ module Uniword
             end
           end
 
-          if has_endnote_pr && context.part_exists?("word/endnotes.xml")
-            en_doc = context.part("word/endnotes.xml")
-            if en_doc
-              en_ids = en_doc.root.xpath(".//w:endnote/@w:id",
-                                         "w" => W_NS).map(&:value).to_set
-              unless en_ids.include?("-1")
-                issues << issue(
-                  "Endnotes missing separator entry (id=-1)",
-                  code: "DOC-022",
-                  severity: "warning",
-                  part: "word/endnotes.xml",
-                  suggestion: "Add a separator endnote with id=-1."
-                )
-              end
-            end
-          end
+          return unless has_endnote_pr && context.part_exists?("word/endnotes.xml")
+
+          en_doc = context.part("word/endnotes.xml")
+          return unless en_doc
+
+          en_ids = en_doc.root.xpath(".//w:endnote/@w:id",
+                                     "w" => W_NS).map(&:value).to_set
+          return if en_ids.include?("-1")
+
+          issues << issue(
+            "Endnotes missing separator entry (id=-1)",
+            code: "DOC-022",
+            severity: "warning",
+            part: "word/endnotes.xml",
+            suggestion: "Add a separator endnote with id=-1."
+          )
         end
 
         def check_footnote_references(context, issues)
@@ -113,22 +113,30 @@ module Uniword
           # Collect defined footnote IDs
           fn_defined = if context.part_exists?("word/footnotes.xml")
                          fn_doc = context.part("word/footnotes.xml")
-                         fn_doc ? fn_doc.root.xpath(".//w:footnote/@w:id",
-                                                    "w" => W_NS).map(&:value).to_set : Set.new
+                         if fn_doc
+                           fn_doc.root.xpath(".//w:footnote/@w:id",
+                                             "w" => W_NS).map(&:value).to_set
+                         else
+                           Set.new
+                         end
                        else
                          Set.new
                        end
 
           en_defined = if context.part_exists?("word/endnotes.xml")
                          en_doc = context.part("word/endnotes.xml")
-                         en_doc ? en_doc.root.xpath(".//w:endnote/@w:id",
-                                                    "w" => W_NS).map(&:value).to_set : Set.new
+                         if en_doc
+                           en_doc.root.xpath(".//w:endnote/@w:id",
+                                             "w" => W_NS).map(&:value).to_set
+                         else
+                           Set.new
+                         end
                        else
                          Set.new
                        end
 
           # Check content footnote refs (exclude separators: id < 0)
-          content_fn_refs = fn_refs.reject { |id| id.to_i < 0 }
+          content_fn_refs = fn_refs.reject { |id| id.to_i.negative? }
           (content_fn_refs - fn_defined.to_a).each do |id|
             issues << issue(
               "footnoteReference id='#{id}' not found in footnotes.xml",
@@ -139,7 +147,7 @@ module Uniword
             )
           end
 
-          content_en_refs = en_refs.reject { |id| id.to_i < 0 }
+          content_en_refs = en_refs.reject { |id| id.to_i.negative? }
           (content_en_refs - en_defined.to_a).each do |id|
             issues << issue(
               "endnoteReference id='#{id}' not found in endnotes.xml",

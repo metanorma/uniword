@@ -21,10 +21,40 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         namespace_scope [
+          { namespace: Uniword::Ooxml::Namespaces::WordprocessingCanvas, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx1, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx2, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx3, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx4, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx5, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx6, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx7, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::ChartEx8, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::InkDrawing, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Model3D, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::OfficeExtensionList, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::WordProcessingDrawing, declare: :auto },
-          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :auto },
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Vml, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010Drawing, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordProcessingDrawing, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::VmlWord, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2023Du, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordprocessingGroup, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordprocessingInk, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordNumberingEquations, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::WordprocessingShape, declare: :always }
         ]
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
@@ -223,17 +253,11 @@ module Uniword
       def apply_theme(name, **options)
         friendly = Themes::Theme.load(name.to_s)
 
-        if options[:colors]
-          options[:colors].each do |key, value|
-            friendly.color_scheme[key.to_s] = value
-          end
+        options[:colors]&.each do |key, value|
+          friendly.color_scheme[key.to_s] = value
         end
-        if options[:major_font]
-          friendly.font_scheme.major_font = options[:major_font]
-        end
-        if options[:minor_font]
-          friendly.font_scheme.minor_font = options[:minor_font]
-        end
+        friendly.font_scheme.major_font = options[:major_font] if options[:major_font]
+        friendly.font_scheme.minor_font = options[:minor_font] if options[:minor_font]
 
         word_theme = Themes::ThemeTransformation.new.to_word(friendly)
         Themes::ThemeApplicator.new.apply(word_theme, self)

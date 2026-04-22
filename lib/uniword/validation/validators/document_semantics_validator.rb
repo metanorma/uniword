@@ -35,6 +35,7 @@ module Uniword
             rules = Rules::Registry.all
             rules.each do |rule|
               next unless rule.applicable?(context)
+
               issues.concat(rule.check(context))
             end
           ensure

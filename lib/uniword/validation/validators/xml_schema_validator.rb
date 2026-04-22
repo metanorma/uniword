@@ -46,9 +46,7 @@ module Uniword
               validate_entry(entry, issues)
             end
 
-            if xsd_validation?
-              validate_schemas(zip, xml_entries, issues)
-            end
+            validate_schemas(zip, xml_entries, issues) if xsd_validation?
           end
 
           build_result(issues)
@@ -76,7 +74,7 @@ module Uniword
           )
         end
 
-        def validate_schemas(zip, xml_entries, issues)
+        def validate_schemas(_zip, xml_entries, issues)
           registry = SchemaRegistry.new
 
           xml_entries.each do |entry|

@@ -112,7 +112,10 @@ module Uniword
         border_attrs = {}
         %i[top bottom left right inside_h inside_v].each do |side|
           key = "#{side}_border"
-          border_attrs[side] = attrs.delete(key) || attrs.delete(key.to_sym) if attrs.key?(key) || attrs.key?(key.to_sym)
+          if attrs.key?(key) || attrs.key?(key.to_sym)
+            border_attrs[side] =
+              attrs.delete(key) || attrs.delete(key.to_sym)
+          end
         end
 
         # Extract other convenience attributes

@@ -23,7 +23,17 @@ module Uniword
 
         # Force mc: namespace declaration on root element
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2023Du, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex, declare: :always }
         ]
 
         # Map mc:Ignorable attribute
