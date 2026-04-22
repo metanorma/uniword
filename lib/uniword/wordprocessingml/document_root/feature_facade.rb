@@ -137,7 +137,7 @@ module Uniword
         def add_watermark(text, color: "#808080", font_size: 72,
                           font: "Segoe UI", opacity: ".5")
           watermark_manager.add(text, color: color, font_size: font_size,
-                                font: font, opacity: opacity)
+                                      font: font, opacity: opacity)
           self
         end
 
@@ -181,7 +181,7 @@ module Uniword
         def insert_toc(position: 0, max_level: 6)
           entries = toc_generator.generate(max_level: max_level)
           toc_generator.insert(entries, position: position,
-                               max_level: max_level)
+                                        max_level: max_level)
           self
         end
 

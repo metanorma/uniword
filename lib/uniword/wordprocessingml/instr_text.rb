@@ -22,7 +22,10 @@ module Uniword
       end
 
       def initialize(attrs = {})
-        attrs[:xml_space] = "preserve" if attrs[:text].is_a?(String) && (attrs[:text].start_with?(" ") || attrs[:text].end_with?(" ") || attrs[:text].include?("\t"))
+        if attrs[:text].is_a?(String) && (attrs[:text].start_with?(" ") || attrs[:text].end_with?(" ") || attrs[:text].include?("\t"))
+          attrs[:xml_space] =
+            "preserve"
+        end
         super
       end
     end

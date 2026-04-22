@@ -545,7 +545,17 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Vml, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::VmlWord, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2023Du, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex, declare: :always }
         ]
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false

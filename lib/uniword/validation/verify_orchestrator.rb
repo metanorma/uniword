@@ -51,7 +51,7 @@ module Uniword
         # Only skip downstream layers for critical OPC failures:
         # ZIP can't be opened (OPC-001) or word/document.xml missing (OPC-004)
         critical_failure = opc_layer.issues.any? do |i|
-          i.code == "OPC-001" || i.code == "OPC-004"
+          %w[OPC-001 OPC-004].include?(i.code)
         end
 
         if critical_failure

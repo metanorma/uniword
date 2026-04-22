@@ -52,11 +52,11 @@ module Uniword
 
         def extract_raw_language(attrs)
           raw = attrs[:language] || attrs["language"]
-          if raw.is_a?(String)
-            attrs.delete(:language)
-            attrs.delete("language")
-            raw
-          end
+          return unless raw.is_a?(String)
+
+          attrs.delete(:language)
+          attrs.delete("language")
+          raw
         end
 
         def apply_font_overrides(font_val, font_ascii_val, font_ea_val,
@@ -73,10 +73,10 @@ module Uniword
             self.fonts ||= Properties::RunFonts.new
             fonts.h_ansi = font_ha_val
           end
-          if font_cs_val
-            self.fonts ||= Properties::RunFonts.new
-            fonts.cs = font_cs_val
-          end
+          return unless font_cs_val
+
+          self.fonts ||= Properties::RunFonts.new
+          fonts.cs = font_cs_val
         end
 
         def apply_language_overrides(lang_val, lang_ea, lang_bidi, raw_language)
@@ -117,10 +117,10 @@ module Uniword
             val = @size.is_a?(Numeric) ? @size : @size.to_i
             @size = Properties::FontSize.new(value: val)
           end
-          if @size_cs && !@size_cs.is_a?(Properties::FontSize)
-            val = @size_cs.is_a?(Numeric) ? @size_cs : @size_cs.to_i
-            @size_cs = Properties::FontSize.new(value: val)
-          end
+          return unless @size_cs && !@size_cs.is_a?(Properties::FontSize)
+
+          val = @size_cs.is_a?(Numeric) ? @size_cs : @size_cs.to_i
+          @size_cs = Properties::FontSize.new(value: val)
         end
 
         def convert_color_attr!

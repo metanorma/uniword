@@ -27,7 +27,10 @@ module Uniword
 
       def initialize(attrs = {})
         # Normalize abstract_num_id: accept either AbstractNumId object or plain integer
-        attrs[:abstract_num_id] = AbstractNumId.new(val: attrs[:abstract_num_id]) if attrs[:abstract_num_id] && !attrs[:abstract_num_id].is_a?(AbstractNumId)
+        if attrs[:abstract_num_id] && !attrs[:abstract_num_id].is_a?(AbstractNumId)
+          attrs[:abstract_num_id] =
+            AbstractNumId.new(val: attrs[:abstract_num_id])
+        end
         super
         validate_ids
       end
