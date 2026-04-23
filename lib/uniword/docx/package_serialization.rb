@@ -33,25 +33,30 @@ document_rels)
 document_rels)
         # Package infrastructure
         content["[Content_Types].xml"] =
-          content_types.to_xml(encoding: "UTF-8", declaration: true)
+          content_types.to_xml(encoding: "UTF-8", declaration: true,
+                               standalone: true)
         content["_rels/.rels"] =
-          package_rels.to_xml(encoding: "UTF-8", declaration: true)
+          package_rels.to_xml(encoding: "UTF-8", declaration: true,
+                              standalone: true)
 
         # Document properties
         if core_properties
           content["docProps/core.xml"] =
             core_properties.to_xml(encoding: "UTF-8",
-                                   prefix: true)
+                                   prefix: true,
+                                   standalone: true)
         end
         if app_properties
           content["docProps/app.xml"] =
             app_properties.to_xml(encoding: "UTF-8",
-                                  prefix: false)
+                                  prefix: false,
+                                  standalone: true)
         end
         if custom_properties
           content["docProps/custom.xml"] =
             custom_properties.to_xml(encoding: "UTF-8",
-                                     prefix: false)
+                                     prefix: false,
+                                     standalone: true)
         end
 
         # Custom XML data items
@@ -74,62 +79,74 @@ document_rels)
         if document
           content["word/document.xml"] =
             document.to_xml(encoding: "UTF-8", prefix: true,
-                            fix_boolean_elements: true)
+                            fix_boolean_elements: true,
+                            standalone: true)
         end
         if styles
           content["word/styles.xml"] =
             styles.to_xml(encoding: "UTF-8", prefix: true,
-                          fix_boolean_elements: true)
+                          fix_boolean_elements: true,
+                          standalone: true)
         end
         if numbering
           content["word/numbering.xml"] =
             numbering.to_xml(encoding: "UTF-8", prefix: true,
-                             fix_boolean_elements: true)
+                             fix_boolean_elements: true,
+                             standalone: true)
         end
         if settings
           content["word/settings.xml"] =
-            settings.to_xml(encoding: "UTF-8", prefix: true)
+            settings.to_xml(encoding: "UTF-8", prefix: true,
+                            standalone: true)
         end
         if font_table
           content["word/fontTable.xml"] =
-            font_table.to_xml(encoding: "UTF-8", prefix: true)
+            font_table.to_xml(encoding: "UTF-8", prefix: true,
+                              standalone: true)
         end
         if web_settings
           content["word/webSettings.xml"] =
-            web_settings.to_xml(encoding: "UTF-8", prefix: true)
+            web_settings.to_xml(encoding: "UTF-8", prefix: true,
+                                standalone: true)
         end
         if document_rels
           content["word/_rels/document.xml.rels"] =
-            document_rels.to_xml(encoding: "UTF-8", declaration: true)
+            document_rels.to_xml(encoding: "UTF-8", declaration: true,
+                                 standalone: true)
         end
 
         # Theme
         if theme
           content["word/theme/theme1.xml"] =
-            theme.to_xml(encoding: "UTF-8", prefix: true)
+            theme.to_xml(encoding: "UTF-8", prefix: true,
+                         standalone: true)
         end
         if theme_rels
           content["word/theme/_rels/theme1.xml.rels"] =
-            theme_rels.to_xml(encoding: "UTF-8", declaration: true)
+            theme_rels.to_xml(encoding: "UTF-8", declaration: true,
+                              standalone: true)
         end
 
         # Notes
         if footnotes
           content["word/footnotes.xml"] =
             footnotes.to_xml(encoding: "UTF-8", prefix: true,
-                             fix_boolean_elements: true)
+                             fix_boolean_elements: true,
+                             standalone: true)
         end
         if endnotes
           content["word/endnotes.xml"] =
             endnotes.to_xml(encoding: "UTF-8", prefix: true,
-                            fix_boolean_elements: true)
+                            fix_boolean_elements: true,
+                            standalone: true)
         end
 
         # Bibliography sources
         if document&.bibliography_sources
           content["word/sources.xml"] =
             document.bibliography_sources.to_xml(encoding: "UTF-8",
-                                                 declaration: true)
+                                                 declaration: true,
+                                                 standalone: true)
         end
 
         # Headers and footers
@@ -435,7 +452,8 @@ document_rels)
           idx += 1
           content["word/header#{idx}.xml"] =
             header_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              fix_boolean_elements: true)
+                              fix_boolean_elements: true,
+                              standalone: true)
         end
       end
 
@@ -447,7 +465,8 @@ document_rels)
           idx += 1
           content["word/footer#{idx}.xml"] =
             footer_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              fix_boolean_elements: true)
+                              fix_boolean_elements: true,
+                              standalone: true)
         end
       end
 
@@ -457,7 +476,8 @@ document_rels)
         document.header_footer_parts.each do |part|
           content["word/#{part[:target]}"] =
             part[:content].to_xml(encoding: "UTF-8", prefix: true,
-                                  fix_boolean_elements: true)
+                                  fix_boolean_elements: true,
+                                  standalone: true)
         end
       end
     end

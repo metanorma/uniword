@@ -16,7 +16,6 @@ module Uniword
         element "Types"
         namespace Uniword::Ooxml::Namespaces::ContentTypes
         mixed_content
-        ordered
 
         map_element "Default", to: :defaults, render_nil: false
         map_element "Override", to: :overrides, render_nil: false

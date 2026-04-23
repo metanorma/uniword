@@ -15,7 +15,6 @@ module Uniword
         xml do
           element "Relationships"
           namespace Uniword::Ooxml::Namespaces::PackageRelationships
-          ordered
 
           map_element "Relationship", to: :relationships, render_nil: false
         end
