@@ -16,7 +16,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
 
     it "returns empty array for clean text" do
       issues = checker.check(
-        "This is a sentence. This is another."
+        "This is a sentence. This is another.",
       )
       expect(issues).to be_empty
     end
@@ -33,7 +33,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
       issues = checker.check("I went to the the store")
       expect(issues.size).to be >= 1
       expect(issues.first[:message]).to match(
-        /Repeated word.*the/
+        /Repeated word.*the/,
       )
     end
 
@@ -41,7 +41,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
       issues = checker.check("The the dog ran")
       expect(issues.size).to be >= 1
       expect(issues.first[:message]).to match(
-        /Repeated word.*the/i
+        /Repeated word.*the/i,
       )
     end
 
@@ -49,7 +49,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
       issues = checker.check("First sentence. second one.")
       expect(issues.size).to be >= 1
       expect(issues.any? do |i|
-        i[:message].match?(/capitalization/)
+        i[:message].include?("capitalization")
       end).to be true
     end
 
@@ -71,7 +71,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
 
     it "finds multiple issues in the same text" do
       issues = checker.check(
-        "First  sentence. second  one the the end"
+        "First  sentence. second  one the the end",
       )
       expect(issues.size).to be >= 3
     end

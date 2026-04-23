@@ -8,13 +8,13 @@ require "uniword/validation/report/validation_issue"
 RSpec.describe Uniword::Validation::Report::VerificationReport do
   let(:error_issue) do
     Uniword::Validation::Report::ValidationIssue.new(
-      severity: "error", code: "DOC-020", message: "footnotes.xml missing"
+      severity: "error", code: "DOC-020", message: "footnotes.xml missing",
     )
   end
 
   let(:warning_issue) do
     Uniword::Validation::Report::ValidationIssue.new(
-      severity: "warning", code: "DOC-070", message: "Font not in fontTable"
+      severity: "warning", code: "DOC-070", message: "Font not in fontTable",
     )
   end
 
@@ -27,15 +27,15 @@ RSpec.describe Uniword::Validation::Report::VerificationReport do
         duration_ms: 50,
         layers: [
           Uniword::Validation::Report::LayerResult.new(
-            name: "OPC Package", status: "pass", duration_ms: 10, issues: []
+            name: "OPC Package", status: "pass", duration_ms: 10, issues: [],
           ),
           Uniword::Validation::Report::LayerResult.new(
-            name: "XSD Schema", status: "pass", duration_ms: 20, issues: []
+            name: "XSD Schema", status: "pass", duration_ms: 20, issues: [],
           ),
           Uniword::Validation::Report::LayerResult.new(
-            name: "Word Document", status: "pass", duration_ms: 15, issues: []
-          )
-        ]
+            name: "Word Document", status: "pass", duration_ms: 15, issues: [],
+          ),
+        ],
       )
     end
 
@@ -78,8 +78,8 @@ RSpec.describe Uniword::Validation::Report::VerificationReport do
           Uniword::Validation::Report::LayerResult.new(
             name: "Word Document", status: "fail", duration_ms: 15,
             issues: [warning_issue]
-          )
-        ]
+          ),
+        ],
       )
     end
 

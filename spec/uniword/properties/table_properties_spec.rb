@@ -16,7 +16,7 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
         style: "TableGrid",
         table_width: Uniword::Properties::TableWidth.new(w: 100),
         alignment: "center",
-        borders: true
+        borders: true,
       )
       expect(props.style).to eq("TableGrid")
       expect(props.table_width.w).to eq(100)
@@ -69,14 +69,14 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
         width: 100,
         alignment: "center",
         borders: true,
-        cell_spacing: 0
+        cell_spacing: 0,
       )
       props2 = described_class.new(
         style: "TableGrid",
         width: 100,
         alignment: "center",
         borders: true,
-        cell_spacing: 0
+        cell_spacing: 0,
       )
       expect(props1).to eq(props2)
     end
@@ -125,7 +125,7 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
     it "allows setting boolean attributes" do
       props = described_class.new(
         borders: true,
-        allow_break: false
+        allow_break: false,
       )
       expect(props.borders).to be true
       expect(props.allow_break).to be false

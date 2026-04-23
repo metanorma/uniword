@@ -287,11 +287,13 @@ RSpec.describe "Real-World Document Testing", :integration do
       results = []
       mutex = Mutex.new
 
-      threads = 10.times.map do
+      threads = Array.new(10) do
         Thread.new do
           text = doc.text
           count = doc.paragraphs.count
-          mutex.synchronize { results << { text_length: text.length, para_count: count } }
+          mutex.synchronize do
+            results << { text_length: text.length, para_count: count }
+          end
         end
       end
 
@@ -311,12 +313,14 @@ RSpec.describe "Real-World Document Testing", :integration do
       results = []
       mutex = Mutex.new
 
-      threads = 5.times.map do
+      threads = Array.new(5) do
         Thread.new do
           doc = Uniword.load(fixture_path)
           text_len = doc.text.length
           para_count = doc.paragraphs.count
-          mutex.synchronize { results << { text_length: text_len, para_count: para_count } }
+          mutex.synchronize do
+            results << { text_length: text_len, para_count: para_count }
+          end
         end
       end
 
@@ -365,7 +369,9 @@ RSpec.describe "Real-World Document Testing", :integration do
   describe "Production Readiness Checklist" do
     it "validates all critical functionality works" do
       checklist = {
-        "Document creation" => -> { Uniword::Wordprocessingml::DocumentRoot.new },
+        "Document creation" => -> {
+          Uniword::Wordprocessingml::DocumentRoot.new
+        },
         "Document opening" => lambda {
           Uniword.load("spec/fixtures/docx_gem/styles.docx")
         },
@@ -385,7 +391,7 @@ RSpec.describe "Real-World Document Testing", :integration do
           path = File.join(Dir.tmpdir, "test_#{Time.now.to_i}.docx")
           doc.save(path)
           safe_rm_f(path)
-        }
+        },
       }
 
       failures = []
@@ -395,7 +401,7 @@ RSpec.describe "Real-World Document Testing", :integration do
         failures << "#{name}: #{e.message}"
       end
 
-      expect(failures).to be_empty, "Failed checks: #{failures.join(", ")}"
+      expect(failures).to be_empty, "Failed checks: #{failures.join(', ')}"
     end
   end
 end

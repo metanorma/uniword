@@ -4,7 +4,7 @@ require "spec_helper"
 require "fileutils"
 require "zip"
 
-# Phase 19: Elaborated Document Generation — Themed, Styled, Complete
+# Elaborated Document Generation — Themed, Styled, Complete
 #
 # Tests elaborate Builder API scenarios including:
 # - Simple document with just headings and paragraphs
@@ -12,23 +12,23 @@ require "zip"
 #   bibliography/links/many sections/bullet lists)
 # - Documents with themes (applying/changing themes, fonts, colors)
 # - Document manipulation (load → modify → save)
-#
-# Run: bundle exec rspec spec/uniword/builder/phase19_spec.rb
-# Generated files: examples/generated/*.docx
 
-OUTPUT_DIR = File.expand_path("../../../examples/generated", __dir__)
-B = Uniword::Builder
+RSpec.describe "Elaborated Document Generation" do
+  let(:output_dir) do
+    File.expand_path("../../../examples/generated", __dir__)
+  end
+  let(:b) { Uniword::Builder }
 
-RSpec.describe "Phase 19: Elaborated Document Generation" do
   before(:all) do
-    FileUtils.mkdir_p(OUTPUT_DIR)
+    FileUtils.mkdir_p(File.expand_path("../../../examples/generated",
+                                       __dir__))
   end
 
   # =========================================================================
   # Example 1: Simple Document (headings + paragraphs only)
   # =========================================================================
   describe "simple_headings_paragraphs.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "simple_headings_paragraphs.docx") }
+    let(:path) { File.join(output_dir, "simple_headings_paragraphs.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -103,7 +103,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 2: Complete Document with ALL Features
   # =========================================================================
   describe "complete_all_features.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "complete_all_features.docx") }
+    let(:path) { File.join(output_dir, "complete_all_features.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -136,34 +136,35 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.heading("1. Text Formatting", level: 1)
       doc.paragraph do |p|
         p << "This paragraph demonstrates "
-        p << B.text("bold", bold: true)
+        p << b.text("bold", bold: true)
         p << ", "
-        p << B.text("italic", italic: true)
+        p << b.text("italic", italic: true)
         p << ", "
-        p << B.text("underline", underline: "single")
+        p << b.text("underline", underline: "single")
         p << ", "
-        p << B.text("colored", color: "FF0000")
+        p << b.text("colored", color: "FF0000")
         p << ", "
-        p << B.text("highlighted", highlight: "yellow")
+        p << b.text("highlighted", highlight: "yellow")
         p << ", and "
-        p << B.text("bold italic colored", bold: true, italic: true, color: "0000FF")
+        p << b.text("bold italic colored", bold: true, italic: true,
+                                           color: "0000FF")
         p << " text."
       end
 
       doc.paragraph do |p|
         p << "Different sizes: "
-        p << B.text("small", size: 16)
+        p << b.text("small", size: 16)
         p << ", "
-        p << B.text("normal", size: 22)
+        p << b.text("normal", size: 22)
         p << ", "
-        p << B.text("large", size: 32)
+        p << b.text("large", size: 32)
       end
 
       doc.paragraph do |p|
         p << "Text effects: "
-        p << B.text("superscript", size: 16) << B.text("2", size: 16)
+        p << b.text("superscript", size: 16) << b.text("2", size: 16)
         p << " and "
-        p << B.text("H", size: 16) << B.text("2", size: 16)
+        p << b.text("H", size: 16) << b.text("2", size: 16)
         p << "O"
       end
 
@@ -180,7 +181,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
         l.item("Round-trip fidelity")
         l.item("Theme support")
         l.item do |p|
-          p << B.text("Rich text", bold: true)
+          p << b.text("Rich text", bold: true)
           p << " in list items"
         end
       end
@@ -206,7 +207,9 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.table do |t|
         # Header row
         t.row do |r|
-          r.cell(text: "Metric") { |c| c.shading(fill: "2E5090", color: "FFFFFF") }
+          r.cell(text: "Metric") do |c|
+            c.shading(fill: "2E5090", color: "FFFFFF")
+          end
           r.cell(text: "Q1") { |c| c.shading(fill: "2E5090", color: "FFFFFF") }
           r.cell(text: "Q2") { |c| c.shading(fill: "2E5090", color: "FFFFFF") }
           r.cell(text: "Q3") { |c| c.shading(fill: "2E5090", color: "FFFFFF") }
@@ -257,13 +260,13 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.heading("5. Hyperlinks", level: 1)
       doc.paragraph do |p|
         p << "Visit the "
-        p << B.hyperlink("https://www.ecma-international.org/publications-and-standards/standards/ecma-376/",
+        p << b.hyperlink("https://www.ecma-international.org/publications-and-standards/standards/ecma-376/",
                          "ECMA-376 specification")
         p << " for the complete OOXML standard."
       end
       doc.paragraph do |p|
         p << "Uniword is hosted at "
-        p << B.hyperlink("https://github.com/publicruby/uniword", "GitHub")
+        p << b.hyperlink("https://github.com/publicruby/uniword", "GitHub")
         p << "."
       end
 
@@ -280,7 +283,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
           title: "Office Open XML File Formats",
           year: "2024",
           publisher: "ECMA International",
-          city: "Geneva"
+          city: "Geneva",
         )
         bib.journal(
           tag: "Smith2024",
@@ -290,13 +293,13 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
           journal: "Ruby Journal",
           volume: "12",
           issue: "1",
-          pages: "15-30"
+          pages: "15-30",
         )
         bib.website(
           tag: "OOXMLSpec",
           title: "ISO/IEC 29500 Information Technology",
           url: "https://standards.iso.org/iso/29500",
-          year: "2024"
+          year: "2024",
         )
       end
       doc.bibliography_placeholder
@@ -342,17 +345,17 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
 
       # --- Header/Footer ---
       doc.header do |h|
-        h << B.text("Complete Feature Showcase", bold: true, color: "808080")
-        h << B.tab
-        h << B.text("CONFIDENTIAL", color: "CC0000")
+        h << b.text("Complete Feature Showcase", bold: true, color: "808080")
+        h << b.tab
+        h << b.text("CONFIDENTIAL", color: "CC0000")
       end
 
       doc.footer do |f|
         f << "Page "
-        f << B.page_number_field
+        f << b.page_number_field
         f << " of "
-        f << B.total_pages_field
-        f << B.tab
+        f << b.total_pages_field
+        f << b.tab
         f << "Generated by Uniword"
       end
 
@@ -467,7 +470,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 3: Themed Document — Multiple Themes
   # =========================================================================
   describe "themed_multi.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "themed_multi.docx") }
+    let(:path) { File.join(output_dir, "themed_multi.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -488,7 +491,8 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.heading("Styled Content", level: 2)
       doc.paragraph do |p|
         p << "Paragraphs inherit theme fonts and colors. "
-        p << B.text("This text uses explicit formatting.", bold: true, color: "0070C0")
+        p << b.text("This text uses explicit formatting.", bold: true,
+                                                           color: "0070C0")
       end
 
       doc.bullet_list do |l|
@@ -499,8 +503,12 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
 
       doc.table do |t|
         t.row do |r|
-          r.cell(text: "Feature") { |c| c.shading(fill: "0070C0", color: "FFFFFF") }
-          r.cell(text: "Value") { |c| c.shading(fill: "0070C0", color: "FFFFFF") }
+          r.cell(text: "Feature") do |c|
+            c.shading(fill: "0070C0", color: "FFFFFF")
+          end
+          r.cell(text: "Value") do |c|
+            c.shading(fill: "0070C0", color: "FFFFFF")
+          end
         end
         t.row do |r|
           r.cell(text: "Theme")
@@ -553,7 +561,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 4: Theme with Custom Colors
   # =========================================================================
   describe "themed_custom_colors.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "themed_custom_colors.docx") }
+    let(:path) { File.join(output_dir, "themed_custom_colors.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -574,15 +582,15 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
 
       doc.heading("Color Samples", level: 2)
       doc.paragraph do |p|
-        p << B.text("Accent 1 Color", bold: true, color: "1F4E79")
+        p << b.text("Accent 1 Color", bold: true, color: "1F4E79")
         p << " — Dark blue"
       end
       doc.paragraph do |p|
-        p << B.text("Accent 2 Color", bold: true, color: "2E75B6")
+        p << b.text("Accent 2 Color", bold: true, color: "2E75B6")
         p << " — Medium blue"
       end
       doc.paragraph do |p|
-        p << B.text("Accent 3 Color", bold: true, color: "9DC3E6")
+        p << b.text("Accent 3 Color", bold: true, color: "9DC3E6")
         p << " — Light blue"
       end
 
@@ -624,7 +632,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 5: Multi-Section Document with Sections
   # =========================================================================
   describe "multi_section_complete.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "multi_section_complete.docx") }
+    let(:path) { File.join(output_dir, "multi_section_complete.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -674,9 +682,15 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc.heading("1.1 Revenue Breakdown", level: 2)
       doc.table do |t|
         t.row do |r|
-          r.cell(text: "Category") { |c| c.shading(fill: "1F4E79", color: "FFFFFF") }
-          r.cell(text: "Amount") { |c| c.shading(fill: "1F4E79", color: "FFFFFF") }
-          r.cell(text: "% of Total") { |c| c.shading(fill: "1F4E79", color: "FFFFFF") }
+          r.cell(text: "Category") do |c|
+            c.shading(fill: "1F4E79", color: "FFFFFF")
+          end
+          r.cell(text: "Amount") do |c|
+            c.shading(fill: "1F4E79", color: "FFFFFF")
+          end
+          r.cell(text: "% of Total") do |c|
+            c.shading(fill: "1F4E79", color: "FFFFFF")
+          end
         end
         t.row do |r|
           r.cell(text: "Subscriptions")
@@ -740,21 +754,21 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
           title: "Annual Report 2026",
           year: "2026",
           publisher: "Uniword Inc.",
-          city: "San Francisco"
+          city: "San Francisco",
         )
       end
       doc.bibliography_placeholder
 
       # --- Header/Footer ---
       doc.header do |h|
-        h << B.text("Annual Report 2026", bold: true, color: "808080")
+        h << b.text("Annual Report 2026", bold: true, color: "808080")
       end
 
       doc.footer do |f|
         f << "Page "
-        f << B.page_number_field
+        f << b.page_number_field
         f << " of "
-        f << B.total_pages_field
+        f << b.total_pages_field
       end
 
       # --- Section Properties ---
@@ -826,8 +840,12 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 6: Document Manipulation (Load → Modify → Save)
   # =========================================================================
   describe "manipulation_load_modify.docx" do
-    let(:original_path) { File.join(OUTPUT_DIR, "manipulation_load_modify_original.docx") }
-    let(:modified_path) { File.join(OUTPUT_DIR, "manipulation_load_modify_modified.docx") }
+    let(:original_path) do
+      File.join(output_dir, "manipulation_load_modify_original.docx")
+    end
+    let(:modified_path) do
+      File.join(output_dir, "manipulation_load_modify_modified.docx")
+    end
 
     before do
       # Create original document
@@ -849,7 +867,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
       doc2.author("New Author")
       doc2.paragraph do |p|
         p << "Appended paragraph with "
-        p << B.text("formatted text", bold: true, color: "FF0000")
+        p << b.text("formatted text", bold: true, color: "FF0000")
         p << "."
       end
       doc2.bullet_list do |l|
@@ -904,7 +922,7 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 7: Styleset Application
   # =========================================================================
   describe "styleset_formal.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "styleset_formal.docx") }
+    let(:path) { File.join(output_dir, "styleset_formal.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -969,14 +987,15 @@ RSpec.describe "Phase 19: Elaborated Document Generation" do
   # Example 8: Watermark Document
   # =========================================================================
   describe "watermark.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "watermark.docx") }
+    let(:path) { File.join(output_dir, "watermark.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
       doc.title("Watermark Demo")
       doc.author("Uniword")
 
-      doc.watermark("DRAFT", font: "Calibri", size: 72, color: "D0D0D0", opacity: "0.3")
+      doc.watermark("DRAFT", font: "Calibri", size: 72, color: "D0D0D0",
+                             opacity: "0.3")
 
       doc.heading("Watermark Demo", level: 1)
       doc.paragraph do |p|

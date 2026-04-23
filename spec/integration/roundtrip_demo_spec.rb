@@ -4,7 +4,9 @@ require "spec_helper"
 require "canon/rspec_matchers"
 
 RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
-  let(:input_file) { "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx" }
+  let(:input_file) do
+    "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx"
+  end
   let(:output_file) { "test_output/demo_formal_integral_roundtrip_spec.docx" }
   let(:original_dir) { "test_output/roundtrip_spec_original" }
   let(:saved_dir) { "test_output/roundtrip_spec_saved" }
@@ -16,8 +18,10 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
 
     # Extract both packages using Ruby zip (cross-platform)
     FileUtils.mkdir_p("test_output")
-    extract_zip("spec/fixtures/uniword-demo/demo_formal_integral_proper.docx", "test_output/roundtrip_spec_original")
-    extract_zip("test_output/demo_formal_integral_roundtrip_spec.docx", "test_output/roundtrip_spec_saved")
+    extract_zip("spec/fixtures/uniword-demo/demo_formal_integral_proper.docx",
+                "test_output/roundtrip_spec_original")
+    extract_zip("test_output/demo_formal_integral_roundtrip_spec.docx",
+                "test_output/roundtrip_spec_saved")
   end
 
   def extract_zip(zip_path, dest_dir)

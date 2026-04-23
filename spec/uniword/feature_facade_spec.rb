@@ -242,11 +242,11 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot,
   describe "method chaining" do
     it "supports chaining mutators" do
       result = doc.add_comment(text: "Fix", author: "Alice")
-                  .add_watermark("DRAFT")
-                  .protect(:read_only)
-                  .add_header("Confidential")
-                  .add_footer("Page 1")
-                  .insert_toc
+        .add_watermark("DRAFT")
+        .protect(:read_only)
+        .add_header("Confidential")
+        .add_footer("Page 1")
+        .insert_toc
       expect(result).to be(doc)
     end
   end

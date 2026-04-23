@@ -12,35 +12,35 @@ RSpec.describe Uniword::Diff::DiffResult do
 
     it "is not empty when text changes exist" do
       result = described_class.new(
-        text_changes: [{ type: :text, change: :added }]
+        text_changes: [{ type: :text, change: :added }],
       )
       expect(result).not_to be_empty
     end
 
     it "is not empty when format changes exist" do
       result = described_class.new(
-        format_changes: [{ type: :format, change: :modified }]
+        format_changes: [{ type: :format, change: :modified }],
       )
       expect(result).not_to be_empty
     end
 
     it "is not empty when structure changes exist" do
       result = described_class.new(
-        structure_changes: [{ type: :structure, change: :paragraph_count }]
+        structure_changes: [{ type: :structure, change: :paragraph_count }],
       )
       expect(result).not_to be_empty
     end
 
     it "is not empty when metadata changes exist" do
       result = described_class.new(
-        metadata_changes: { title: { old: "A", new: "B" } }
+        metadata_changes: { title: { old: "A", new: "B" } },
       )
       expect(result).not_to be_empty
     end
 
     it "is not empty when style changes exist" do
       result = described_class.new(
-        style_changes: [{ type: :style, change: :added }]
+        style_changes: [{ type: :style, change: :added }],
       )
       expect(result).not_to be_empty
     end
@@ -51,7 +51,7 @@ RSpec.describe Uniword::Diff::DiffResult do
       result = described_class.new(
         text_changes: [{}, {}],
         format_changes: [{}],
-        style_changes: [{}, {}, {}]
+        style_changes: [{}, {}, {}],
       )
       expect(result.total_changes).to eq(6)
     end
@@ -71,7 +71,7 @@ RSpec.describe Uniword::Diff::DiffResult do
     it "lists change categories" do
       result = described_class.new(
         text_changes: [{}, {}],
-        format_changes: [{}]
+        format_changes: [{}],
       )
       expect(result.summary).to eq("2 text change(s), 1 format change(s)")
     end
@@ -81,7 +81,7 @@ RSpec.describe Uniword::Diff::DiffResult do
     it "produces valid JSON" do
       require "json"
       result = described_class.new(
-        text_changes: [{ change: :added }]
+        text_changes: [{ change: :added }],
       )
       parsed = JSON.parse(result.to_json)
       expect(parsed["text_changes"].length).to eq(1)

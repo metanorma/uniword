@@ -16,7 +16,7 @@ RSpec.describe Uniword::Quality::DocumentChecker do
       # Use default config file for this test
       config_path = File.join(
         Uniword::Configuration::ConfigurationLoader::CONFIG_DIR,
-        "quality_rules.yml"
+        "quality_rules.yml",
       )
       checker = described_class.new(rules_file: config_path)
       expect(checker.rules).not_to be_empty
@@ -27,9 +27,9 @@ RSpec.describe Uniword::Quality::DocumentChecker do
         quality_rules: {
           paragraph_length: {
             enabled: true,
-            max_words: 100
-          }
-        }
+            max_words: 100,
+          },
+        },
       }
       checker = described_class.new(config: config)
       expect(checker.config).to eq(config)
@@ -58,8 +58,8 @@ RSpec.describe Uniword::Quality::DocumentChecker do
     it "skips disabled rules" do
       config = {
         quality_rules: {
-          paragraph_length: { enabled: false }
-        }
+          paragraph_length: { enabled: false },
+        },
       }
       checker = described_class.new(config: config)
 
@@ -70,7 +70,9 @@ RSpec.describe Uniword::Quality::DocumentChecker do
 
       report = checker.check(document)
       # Should have fewer violations since paragraph_length is disabled
-      expect(report.violations.select { |v| v.rule == "paragraph_length" }).to be_empty
+      expect(report.violations.select do |v|
+        v.rule == "paragraph_length"
+      end).to be_empty
     end
 
     it "raises error for invalid document" do
@@ -93,8 +95,8 @@ RSpec.describe Uniword::Quality::DocumentChecker do
       config = {
         quality_rules: {
           paragraph_length: { enabled: false },
-          image_alt_text: { enabled: true }
-        }
+          image_alt_text: { enabled: true },
+        },
       }
       checker = described_class.new(config: config)
       expect(checker.disabled_rules).to include("paragraph_length")

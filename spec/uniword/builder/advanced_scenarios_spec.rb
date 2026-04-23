@@ -3,30 +3,33 @@
 require "spec_helper"
 require "zip"
 
-RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
-  B = Uniword::Builder
-  OUTPUT_DIR = File.expand_path("../../../examples/generated", __dir__)
+RSpec.describe "Advanced Builder Scenarios" do
+  let(:b) { Uniword::Builder }
+  let(:output_dir) do
+    File.expand_path("../../../examples/generated", __dir__)
+  end
 
-  before { FileUtils.mkdir_p(OUTPUT_DIR) }
+  before { FileUtils.mkdir_p(output_dir) }
 
   # ──────────────────────────────────────────────────────────
   # 1. Document with Comments (Review Workflow)
   # ──────────────────────────────────────────────────────────
   describe "review document with comments" do
-    let(:path) { File.join(OUTPUT_DIR, "review_document.docx") }
+    let(:path) { File.join(output_dir, "review_document.docx") }
 
     it "creates a document with multiple comments" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Quarterly Report")
       doc.author("Jane Smith")
 
       doc.heading("Executive Summary", level: 1)
       doc.paragraph do |p|
         p << "The company experienced significant growth in Q4 2025."
-        p << B.text("Revenue increased by 23%.", bold: true)
+        p << b.text("Revenue increased by 23%.", bold: true)
       end
 
-      doc.comment(author: "John Doe", initials: "JD", text: "Can we add the exact revenue figure?")
+      doc.comment(author: "John Doe", initials: "JD",
+                  text: "Can we add the exact revenue figure?")
 
       doc.paragraph do |p|
         p << "Key achievements include expanding to three new markets and "
@@ -39,9 +42,12 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       end
 
       doc.heading("Financial Analysis", level: 1)
-      doc.paragraph { |p| p << "Detailed financial metrics are presented below." }
+      doc.paragraph do |p|
+        p << "Detailed financial metrics are presented below."
+      end
 
-      doc.comment(author: "John Doe", initials: "JD", text: "Add the financial table here")
+      doc.comment(author: "John Doe", initials: "JD",
+                  text: "Add the financial table here")
 
       doc.table do |t|
         t.row do |r|
@@ -88,10 +94,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 2. Form Template with Multiple Content Controls
   # ──────────────────────────────────────────────────────────
   describe "form template with content controls" do
-    let(:path) { File.join(OUTPUT_DIR, "form_template.docx") }
+    let(:path) { File.join(output_dir, "form_template.docx") }
 
     it "creates a form with text, date, and bibliography controls" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Employee Onboarding Form")
       doc.author("HR Department")
 
@@ -99,31 +105,31 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       # Name field
       doc.paragraph do |p|
-        p << B.text("Full Name: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "employee_name", alias_name: "Employee Name",
+        p << b.text("Full Name: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "employee_name", alias_name: "Employee Name",
                                  placeholder_text: "Enter full name")
         p << sdt.build
       end
 
       # Email field
       doc.paragraph do |p|
-        p << B.text("Email: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "employee_email", alias_name: "Email",
+        p << b.text("Email: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "employee_email", alias_name: "Email",
                                  placeholder_text: "Enter email address")
         p << sdt.build
       end
 
       # Date of birth
       doc.paragraph do |p|
-        p << B.text("Date of Birth: ", bold: true)
-        sdt = B::SdtBuilder.date(tag: "dob", format: "yyyy-MM-dd").tap { |s| s.alias("Date of Birth") }
+        p << b.text("Date of Birth: ", bold: true)
+        sdt = b::SdtBuilder.date(tag: "dob", format: "yyyy-MM-dd").tap { |s| s.alias("Date of Birth") }
         p << sdt.build
       end
 
       # Department dropdown (simulated as text control)
       doc.paragraph do |p|
-        p << B.text("Department: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "department", alias_name: "Department",
+        p << b.text("Department: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "department", alias_name: "Department",
                                  placeholder_text: "Select department")
         p << sdt.build
       end
@@ -134,23 +140,23 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       # Start date
       doc.paragraph do |p|
-        p << B.text("Start Date: ", bold: true)
-        sdt = B::SdtBuilder.date(tag: "start_date", format: "MMMM d, yyyy").tap { |s| s.alias("Start Date") }
+        p << b.text("Start Date: ", bold: true)
+        sdt = b::SdtBuilder.date(tag: "start_date", format: "MMMM d, yyyy").tap { |s| s.alias("Start Date") }
         p << sdt.build
       end
 
       # Manager
       doc.paragraph do |p|
-        p << B.text("Reporting Manager: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "manager", alias_name: "Manager",
+        p << b.text("Reporting Manager: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "manager", alias_name: "Manager",
                                  placeholder_text: "Manager's name")
         p << sdt.build
       end
 
       # Position
       doc.paragraph do |p|
-        p << B.text("Position: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "position", alias_name: "Position",
+        p << b.text("Position: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "position", alias_name: "Position",
                                  placeholder_text: "Job title")
         p << sdt.build
       end
@@ -159,8 +165,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       doc.heading("Notes", level: 1)
       doc.paragraph do |p|
-        p << B.text("Additional Notes: ", bold: true)
-        sdt = B::SdtBuilder.text(tag: "notes", alias_name: "Notes",
+        p << b.text("Additional Notes: ", bold: true)
+        sdt = b::SdtBuilder.text(tag: "notes", alias_name: "Notes",
                                  placeholder_text: "Enter any additional information")
         p << sdt.build
       end
@@ -168,14 +174,16 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.save(path)
 
       # Verify SDTs in paragraphs
-      paragraphs_with_sdts = doc.model.paragraphs.select { |p| p.sdts && !p.sdts.empty? }
+      paragraphs_with_sdts = doc.model.paragraphs.select do |p|
+        p.sdts && !p.sdts.empty?
+      end
       expect(paragraphs_with_sdts.size).to be >= 6
 
       # Verify specific controls
       all_sdts = paragraphs_with_sdts.flat_map(&:sdts)
-      tag_names = all_sdts.map do |s|
+      tag_names = all_sdts.filter_map do |s|
         s.properties&.alias_name&.value || s.properties&.tag&.value
-      end.compact
+      end
       expect(tag_names).to include("Employee Name")
       expect(tag_names).to include("Email")
       expect(tag_names).to include("Date of Birth")
@@ -198,10 +206,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 3. Complex Tables (Nested, Merged Cells, Styled)
   # ──────────────────────────────────────────────────────────
   describe "complex table document" do
-    let(:path) { File.join(OUTPUT_DIR, "complex_tables.docx") }
+    let(:path) { File.join(output_dir, "complex_tables.docx") }
 
     it "creates tables with merged cells and styling" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Complex Table Examples")
       doc.author("Table Designer")
 
@@ -258,7 +266,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
           r.cell(text: "Q3") { |c| c.shading(fill: "2E75B6") }
           r.cell(text: "Q4") { |c| c.shading(fill: "2E75B6") }
         end
-        %w[Widget Gadget Thingamajig Doohickey].each_with_index do |product, idx|
+        %w[Widget Gadget Thingamajig
+           Doohickey].each_with_index do |product, idx|
           fill = idx.even? ? "F2F2F2" : "FFFFFF"
           t.row do |r|
             r.cell(text: product) { |c| c.shading(fill: fill) }
@@ -283,7 +292,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
         t.row do |r|
           r.cell(text: "Members") do |c|
             # Nested table inside this cell
-            nested = B::TableBuilder.new
+            nested = b::TableBuilder.new
             nested.row { |nr| nr.cell(text: "Alice") }
             nested.row { |nr| nr.cell(text: "Bob") }
             nested.row { |nr| nr.cell(text: "Carol") }
@@ -325,17 +334,17 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 4. Multi-Section with Section-Specific Headers/Footers
   # ──────────────────────────────────────────────────────────
   describe "multi-section document with per-section headers" do
-    let(:path) { File.join(OUTPUT_DIR, "multi_section_headers.docx") }
+    let(:path) { File.join(output_dir, "multi_section_headers.docx") }
 
     it "creates a document with different headers per section" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Multi-Section Report")
       doc.author("Report Generator")
 
       # Section 1: Cover page
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("Annual Report 2025", bold: true, size: 48)
+        p << b.text("Annual Report 2025", bold: true, size: 48)
       end
       doc.paragraph do |p|
         p.align = "center"
@@ -347,12 +356,14 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.section(type: "nextPage") do |s|
         s.margins(top: 1440, bottom: 1440)
         s.page_numbering(start: 1)
-        s.header(type: "default") { |h| h << "Annual Report 2025 — Acme Corporation" }
+        s.header(type: "default") do |h|
+          h << "Annual Report 2025 — Acme Corporation"
+        end
         s.footer(type: "default") do |f|
           f << "Page "
-          f << B.page_number_field
+          f << b.page_number_field
           f << " of "
-          f << B.total_pages_field
+          f << b.total_pages_field
         end
       end
 
@@ -372,7 +383,9 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       # Section 3: Appendix with different header
       doc.section(type: "nextPage") do |s|
         s.header(type: "default") { |h| h << "Appendix — Confidential" }
-        s.footer(type: "default") { |f| f << "CONFIDENTIAL — Do Not Distribute" }
+        s.footer(type: "default") do |f|
+          f << "CONFIDENTIAL — Do Not Distribute"
+        end
       end
 
       doc.heading("Appendix A: Raw Data", level: 1)
@@ -419,10 +432,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 5. Academic Paper with Footnotes, Bibliography, TOC
   # ──────────────────────────────────────────────────────────
   describe "academic paper with full scholarly features" do
-    let(:path) { File.join(OUTPUT_DIR, "academic_full.docx") }
+    let(:path) { File.join(output_dir, "academic_full.docx") }
 
     it "creates a complete academic paper" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("The Impact of Builder Patterns on Software Quality")
       doc.author("Dr. Jane Researcher")
       doc.subject("Software Engineering")
@@ -430,21 +443,22 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       # Header with page numbers
       doc.header do |h|
-        h << B.text("Research Paper", italic: true)
+        h << b.text("Research Paper", italic: true)
       end
       doc.footer do |f|
         f << "Page "
-        f << B.page_number_field
+        f << b.page_number_field
       end
 
       # Title page
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text('The Impact of Builder Patterns\non Software Quality', bold: true, size: 28)
+        p << b.text('The Impact of Builder Patterns\non Software Quality',
+                    bold: true, size: 28)
       end
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("Dr. Jane Researcher", italic: true)
+        p << b.text("Dr. Jane Researcher", italic: true)
       end
       doc.paragraph do |p|
         p.align = "center"
@@ -529,7 +543,9 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
         t.row do |r|
           r.cell(text: "Parameter") { |c| c.shading(fill: "4472C4") }
           r.cell(text: "Group A (Builder)") { |c| c.shading(fill: "4472C4") }
-          r.cell(text: "Group B (Traditional)") { |c| c.shading(fill: "4472C4") }
+          r.cell(text: "Group B (Traditional)") do |c|
+            c.shading(fill: "4472C4")
+          end
         end
         t.row do |r|
           r.cell(text: "Developers")
@@ -576,7 +592,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
           author: ["Gamma, E.", "Helm, R.", "Johnson, R.", "Vlissides, J."],
           title: "Design Patterns: Elements of Reusable Object-Oriented Software",
           year: "1994",
-          publisher: "Addison-Wesley"
+          publisher: "Addison-Wesley",
         )
         b.journal(
           tag: "smith2024",
@@ -585,14 +601,14 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
           year: "2024",
           journal: "Journal of Software Engineering",
           volume: "15",
-          pages: "45-67"
+          pages: "45-67",
         )
         b.website(
           tag: "builder2025",
           author: ["Martin, R."],
           title: "Builder Pattern in Modern Ruby",
           year: "2025",
-          url: "https://example.com/builder-pattern-ruby"
+          url: "https://example.com/builder-pattern-ruby",
         )
       end
 
@@ -630,10 +646,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 6. Document with Bookmarks and Cross-References
   # ──────────────────────────────────────────────────────────
   describe "document with bookmarks" do
-    let(:path) { File.join(OUTPUT_DIR, "bookmarked_document.docx") }
+    let(:path) { File.join(output_dir, "bookmarked_document.docx") }
 
     it "creates a document with multiple bookmarks" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Technical Manual")
       doc.author("Engineering Team")
 
@@ -653,7 +669,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
         p << "To install Uniword, add the following to your Gemfile:"
       end
       doc.paragraph do |p|
-        p << B.text("gem 'uniword'", font: "Courier New", size: 20)
+        p << b.text("gem 'uniword'", font: "Courier New", size: 20)
       end
 
       doc.heading("2. Quick Start", level: 1)
@@ -676,7 +692,9 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       end
 
       doc.heading("3.3 TableBuilder", level: 2)
-      doc.paragraph { |p| p << "TableBuilder creates tables with rows and cells." }
+      doc.paragraph do |p|
+        p << "TableBuilder creates tables with rows and cells."
+      end
 
       doc.heading("4. Advanced Topics", level: 1)
       doc.bookmark("advanced") do |p|
@@ -756,10 +774,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 7. Themed Document with Custom Styles and Colors
   # ──────────────────────────────────────────────────────────
   describe "themed document with custom styles" do
-    let(:path) { File.join(OUTPUT_DIR, "themed_custom_styles.docx") }
+    let(:path) { File.join(output_dir, "themed_custom_styles.docx") }
 
     it "creates a themed document with custom style definitions" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Styled Report")
       doc.author("Style Designer")
 
@@ -791,7 +809,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       # Cover page
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("Project Status Report", bold: true, size: 48, color: "2E5090")
+        p << b.text("Project Status Report", bold: true, size: 48,
+                                             color: "2E5090")
       end
 
       doc.paragraph do |p|
@@ -873,10 +892,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 8. Ultimate Document — ALL Features Combined
   # ──────────────────────────────────────────────────────────
   describe "ultimate document with all features" do
-    let(:path) { File.join(OUTPUT_DIR, "ultimate_document.docx") }
+    let(:path) { File.join(output_dir, "ultimate_document.docx") }
 
     it "creates a document combining every builder feature" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("The Ultimate Document")
       doc.author("Uniword Builder Demo")
       doc.subject("Comprehensive Feature Demonstration")
@@ -887,15 +906,15 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       # --- Headers/Footers ---
       doc.header(type: "default") do |h|
-        h << B.text("The Ultimate Document", bold: true)
+        h << b.text("The Ultimate Document", bold: true)
         h << " — "
-        h << B.text("All Features Demo", italic: true)
+        h << b.text("All Features Demo", italic: true)
       end
       doc.footer(type: "default") do |f|
         f << "Page "
-        f << B.page_number_field
+        f << b.page_number_field
         f << " of "
-        f << B.total_pages_field
+        f << b.total_pages_field
         f << " | Generated by Uniword Builder"
       end
 
@@ -910,7 +929,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.paragraph do |p|
         p.align = "center"
         p.spacing(before: 2400)
-        p << B.text("The Ultimate Document", bold: true, size: 56, color: "1F4E79")
+        p << b.text("The Ultimate Document", bold: true, size: 56,
+                                             color: "1F4E79")
       end
       doc.paragraph do |p|
         p.align = "center"
@@ -932,7 +952,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.heading("1. Introduction", level: 1)
       doc.paragraph do |p|
         p << "This document demonstrates "
-        p << B.text("every feature", bold: true, underline: "single")
+        p << b.text("every feature", bold: true, underline: "single")
         p << " of the Uniword Builder API in a single, coherent document."
       end
 
@@ -944,14 +964,15 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       # Footnote + endnote
       doc.paragraph do |p|
         p << "The Builder API provides a fluent interface"
-        p << doc.footnote("Builder API was introduced in Phase 7 of the development plan.")
+        p << doc.footnote("Builder API was introduced in an earlier version of the library.")
         p << " for constructing OOXML documents programmatically"
         p << doc.endnote("OOXML stands for Office Open XML, the file format used by Microsoft Word.")
         p << "."
       end
 
       # Comment
-      doc.comment(author: "Reviewer", initials: "RV", text: "Great introduction!")
+      doc.comment(author: "Reviewer", initials: "RV",
+                  text: "Great introduction!")
 
       # Horizontal rule
       doc.horizontal_rule(color: "4472C4", size: 12)
@@ -961,46 +982,46 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       doc.heading("2.1 Run Formatting", level: 2)
       doc.paragraph do |p|
-        p << B.text("Bold text", bold: true)
+        p << b.text("Bold text", bold: true)
         p << ", "
-        p << B.text("italic text", italic: true)
+        p << b.text("italic text", italic: true)
         p << ", "
-        p << B.text("underlined text", underline: "single")
+        p << b.text("underlined text", underline: "single")
         p << ", "
-        p << B.text("colored text", color: "FF0000")
+        p << b.text("colored text", color: "FF0000")
         p << ", "
-        p << B.text("highlighted text", highlight: "yellow")
+        p << b.text("highlighted text", highlight: "yellow")
         p << ", and "
-        p << B.text("strike-through text", strike: true)
+        p << b.text("strike-through text", strike: true)
         p << "."
       end
 
       doc.heading("2.2 Font Sizes", level: 2)
       doc.paragraph do |p|
-        p << B.text("8pt", size: 8)
+        p << b.text("8pt", size: 8)
         p << " "
-        p << B.text("10pt", size: 10)
+        p << b.text("10pt", size: 10)
         p << " "
-        p << B.text("12pt", size: 12)
+        p << b.text("12pt", size: 12)
         p << " "
-        p << B.text("16pt", size: 16)
+        p << b.text("16pt", size: 16)
         p << " "
-        p << B.text("24pt", size: 24)
+        p << b.text("24pt", size: 24)
         p << " "
-        p << B.text("36pt", size: 36)
+        p << b.text("36pt", size: 36)
         p << " "
-        p << B.text("48pt", size: 48)
+        p << b.text("48pt", size: 48)
       end
 
       doc.heading("2.3 Special Characters", level: 2)
       doc.paragraph do |p|
         p << "Line break example:"
-        p << B.line_break
+        p << b.line_break
         p << "This text is on a new line."
       end
       doc.paragraph do |p|
         p << "Tab stop example:"
-        p << B.tab
+        p << b.tab
         p << "After tab"
       end
 
@@ -1012,7 +1033,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
         l.item("First bullet point")
         l.item("Second bullet point")
         l.item("Third bullet point") do |p|
-          p << B.text(" with bold emphasis", bold: true)
+          p << b.text(" with bold emphasis", bold: true)
         end
       end
 
@@ -1075,9 +1096,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.heading("5. Hyperlinks", level: 1)
       doc.paragraph do |p|
         p << "Visit the "
-        p << B.hyperlink("https://example.com", "project website")
+        p << b.hyperlink("https://example.com", "project website")
         p << " for more information, or check the "
-        p << B.hyperlink("https://example.com/docs", "documentation", color: "2E5090")
+        p << b.hyperlink("https://example.com/docs", "documentation",
+                         color: "2E5090")
         p << "."
       end
 
@@ -1091,13 +1113,13 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       # === SECTION 7: Content Controls ===
       doc.heading("7. Content Controls", level: 1)
       doc.paragraph do |p|
-        p << B.text("Name: ", bold: true)
-        p << B::SdtBuilder.text(tag: "user_name", alias_name: "User Name",
+        p << b.text("Name: ", bold: true)
+        p << b::SdtBuilder.text(tag: "user_name", alias_name: "User Name",
                                 placeholder_text: "Enter your name").build
       end
       doc.paragraph do |p|
-        p << B.text("Date: ", bold: true)
-        p << B::SdtBuilder.date(tag: "form_date", format: "yyyy-MM-dd").build
+        p << b.text("Date: ", bold: true)
+        p << b::SdtBuilder.date(tag: "form_date", format: "yyyy-MM-dd").build
       end
 
       doc.horizontal_rule
@@ -1116,7 +1138,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.paragraph do |p|
         p << "This paragraph has a comment attached."
       end
-      doc.comment(author: "Editor", initials: "ED", text: "Please expand this section.")
+      doc.comment(author: "Editor", initials: "ED",
+                  text: "Please expand this section.")
       doc.comment(author: "Technical Reviewer", initials: "TR") do |c|
         c << "Consider adding code examples."
         c << "Also, add performance benchmarks."
@@ -1126,8 +1149,10 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.section(type: "nextPage") do |s|
         s.margins(top: 720, bottom: 720)
         s.page_numbering(start: 1)
-        s.header(type: "default") { |h| h << "Appendix — Page numbering restarts here" }
-        s.footer(type: "default") { |f| f << "Page " << B.page_number_field }
+        s.header(type: "default") do |h|
+          h << "Appendix — Page numbering restarts here"
+        end
+        s.footer(type: "default") { |f| f << "Page " << b.page_number_field }
       end
 
       doc.heading("Appendix", level: 1)
@@ -1144,7 +1169,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
           author: ["Gamma, E.", "et al."],
           title: "Design Patterns",
           year: "1994",
-          publisher: "Addison-Wesley"
+          publisher: "Addison-Wesley",
         )
       end
       doc.bibliography_placeholder
@@ -1211,27 +1236,27 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 9. Invoice Document (Real-World Use Case)
   # ──────────────────────────────────────────────────────────
   describe "invoice document" do
-    let(:path) { File.join(OUTPUT_DIR, "invoice.docx") }
+    let(:path) { File.join(output_dir, "invoice.docx") }
 
     it "creates a professional invoice" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Invoice INV-2025-0042")
       doc.author("Acme Services Inc.")
 
       # Header
       doc.header do |h|
-        h << B.text("ACME SERVICES INC.", bold: true, color: "2E5090")
+        h << b.text("ACME SERVICES INC.", bold: true, color: "2E5090")
         h << " | Invoice INV-2025-0042"
       end
       doc.footer do |f|
         f << "Thank you for your business!"
-        f << B.line_break
+        f << b.line_break
         f << "Payment due within 30 days"
       end
 
       # Invoice header
       doc.paragraph do |p|
-        p << B.text("INVOICE", bold: true, size: 36, color: "1F4E79")
+        p << b.text("INVOICE", bold: true, size: 36, color: "1F4E79")
       end
 
       doc.horizontal_rule(color: "2E5090", size: 18)
@@ -1240,26 +1265,26 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.table do |t|
         t.row do |r|
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap do |pb|
+            c << b::ParagraphBuilder.new.tap do |pb|
               pb << "From: "
-              pb << B.text("Acme Services Inc.", bold: true)
-              pb << B.line_break
+              pb << b.text("Acme Services Inc.", bold: true)
+              pb << b.line_break
               pb << "123 Business Ave"
-              pb << B.line_break
+              pb << b.line_break
               pb << "San Francisco, CA 94102"
-              pb << B.line_break
+              pb << b.line_break
               pb << "contact@acme.com"
             end
           end
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap do |pb|
+            c << b::ParagraphBuilder.new.tap do |pb|
               pb << "To: "
-              pb << B.text("Client Corporation", bold: true)
-              pb << B.line_break
+              pb << b.text("Client Corporation", bold: true)
+              pb << b.line_break
               pb << "456 Client Street"
-              pb << B.line_break
+              pb << b.line_break
               pb << "New York, NY 10001"
-              pb << B.line_break
+              pb << b.line_break
               pb << "billing@client.com"
             end
           end
@@ -1268,11 +1293,11 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
 
       doc.paragraph do |p|
         p << "Invoice Number: "
-        p << B.text("INV-2025-0042", bold: true)
+        p << b.text("INV-2025-0042", bold: true)
         p << "    Date: "
-        p << B.text("March 26, 2026", bold: true)
+        p << b.text("March 26, 2026", bold: true)
         p << "    Due: "
-        p << B.text("April 25, 2026", bold: true)
+        p << b.text("April 25, 2026", bold: true)
       end
 
       doc.horizontal_rule
@@ -1289,7 +1314,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
           ["Consulting Services", "40", "$150.00", "$6,000.00"],
           ["Software Development", "80", "$200.00", "$16,000.00"],
           ["Project Management", "20", "$175.00", "$3,500.00"],
-          ["Quality Assurance", "15", "$125.00", "$1,875.00"]
+          ["Quality Assurance", "15", "$125.00", "$1,875.00"],
         ]
         items.each do |desc, qty, price, amount|
           t.row do |r|
@@ -1303,8 +1328,8 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
         t.row do |r|
           r.cell(text: "") { |c| c.column_span(3) }
           r.cell do |c|
-            c << B::ParagraphBuilder.new.tap do |pb|
-              pb << B.text("Total: $27,375.00", bold: true, size: 22)
+            c << b::ParagraphBuilder.new.tap do |pb|
+              pb << b.text("Total: $27,375.00", bold: true, size: 22)
             end
             c.shading(fill: "E2EFDA")
           end
@@ -1314,7 +1339,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.horizontal_rule
 
       doc.paragraph do |p|
-        p << B.text("Payment Terms: ", bold: true)
+        p << b.text("Payment Terms: ", bold: true)
         p << "Net 30 days. Please reference invoice number INV-2025-0042 "
         p << "on your payment."
       end
@@ -1342,17 +1367,17 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
   # 10. Resume/CV Document
   # ──────────────────────────────────────────────────────────
   describe "resume document" do
-    let(:path) { File.join(OUTPUT_DIR, "resume.docx") }
+    let(:path) { File.join(output_dir, "resume.docx") }
 
     it "creates a professional resume" do
-      doc = B::DocumentBuilder.new
+      doc = b::DocumentBuilder.new
       doc.title("Jane Developer — Resume")
       doc.author("Jane Developer")
 
       # Name and contact
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("Jane Developer", bold: true, size: 36, color: "1F4E79")
+        p << b.text("Jane Developer", bold: true, size: 36, color: "1F4E79")
       end
       doc.paragraph do |p|
         p.align = "center"
@@ -1360,9 +1385,9 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       end
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("jane@example.com", color: "4472C4")
+        p << b.text("jane@example.com", color: "4472C4")
         p << " | (555) 123-4567 | San Francisco, CA | "
-        p << B.hyperlink("https://github.com/janedev", "github.com/janedev")
+        p << b.hyperlink("https://github.com/janedev", "github.com/janedev")
       end
 
       doc.horizontal_rule(color: "4472C4", size: 12)
@@ -1379,7 +1404,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       doc.heading("Experience", level: 1)
 
       doc.paragraph do |p|
-        p << B.text("Senior Software Engineer", bold: true)
+        p << b.text("Senior Software Engineer", bold: true)
         p << " — TechCorp Inc. (2021 - Present)"
       end
       doc.bullet_list do |l|
@@ -1390,7 +1415,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       end
 
       doc.paragraph do |p|
-        p << B.text("Software Engineer", bold: true)
+        p << b.text("Software Engineer", bold: true)
         p << " — StartupXYZ (2018 - 2021)"
       end
       doc.bullet_list do |l|
@@ -1400,7 +1425,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       end
 
       doc.paragraph do |p|
-        p << B.text("Junior Developer", bold: true)
+        p << b.text("Junior Developer", bold: true)
         p << " — WebAgency Co. (2016 - 2018)"
       end
       doc.bullet_list do |l|
@@ -1440,7 +1465,7 @@ RSpec.describe "Builder Phase 20: Ultra-Elaborate Scenarios" do
       # Education
       doc.heading("Education", level: 1)
       doc.paragraph do |p|
-        p << B.text("B.S. Computer Science", bold: true)
+        p << b.text("b.S. Computer Science", bold: true)
         p << " — University of California, Berkeley (2016)"
       end
 

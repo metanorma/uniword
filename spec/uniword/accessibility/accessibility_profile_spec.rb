@@ -12,24 +12,24 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           enabled: true,
           wcag_criterion: "1.1.1 Non-text Content",
           level: "A",
-          severity: :error
+          severity: :error,
         },
         contrast_ratio: {
           enabled: true,
           wcag_criterion: "1.4.3 Contrast (Minimum)",
           level: "AA",
           severity: :error,
-          min_contrast_ratio: 4.5
-        }
-      }
+          min_contrast_ratio: 4.5,
+        },
+      },
     }
   end
 
   let(:config) do
     {
       profiles: {
-        wcag_2_1_aa: base_profile_config
-      }
+        wcag_2_1_aa: base_profile_config,
+      },
     }
   end
 
@@ -42,8 +42,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
     it "loads profile by string name" do
       config_with_string = {
         profiles: {
-          "wcag_2_1_aa" => base_profile_config
-        }
+          "wcag_2_1_aa" => base_profile_config,
+        },
       }
       profile = described_class.load(config_with_string, :wcag_2_1_aa)
       expect(profile).to be_a(described_class)
@@ -64,8 +64,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
     it "works with string keys in config" do
       string_config = {
         "profiles" => {
-          "wcag_2_1_aa" => base_profile_config
-        }
+          "wcag_2_1_aa" => base_profile_config,
+        },
       }
       profile = described_class.load(string_config, :wcag_2_1_aa)
       expect(profile.name).to eq("WCAG 2.1")
@@ -104,9 +104,9 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           "rules" => {
             "image_alt_text" => {
               "enabled" => true,
-              "wcag_criterion" => "1.1.1"
-            }
-          }
+              "wcag_criterion" => "1.1.1",
+            },
+          },
         }
       end
 
@@ -151,8 +151,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           name: "Test",
           level: "A",
           rules: {
-            disabled_rule: { enabled: false }
-          }
+            disabled_rule: { enabled: false },
+          },
         }
       end
 
@@ -167,8 +167,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           name: "Test",
           level: "A",
           rules: {
-            default_rule: { wcag_criterion: "1.1.1" }
-          }
+            default_rule: { wcag_criterion: "1.1.1" },
+          },
         }
       end
 
@@ -193,14 +193,14 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           image_alt_text: {
             enabled: true,
             wcag_criterion: "1.1.1",
-            severity: :error
+            severity: :error,
           },
           contrast_ratio: {
             enabled: true,
             wcag_criterion: "1.4.3",
-            severity: :error
-          }
-        }
+            severity: :error,
+          },
+        },
       }
     end
 
@@ -211,9 +211,9 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
         inherits: :wcag_2_1_aa,
         overrides: {
           contrast_ratio: {
-            enabled: false
-          }
-        }
+            enabled: false,
+          },
+        },
       }
     end
 
@@ -221,8 +221,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
       {
         profiles: {
           wcag_2_1_aa: parent_profile_config,
-          wcag_2_1_a: child_profile_config
-        }
+          wcag_2_1_a: child_profile_config,
+        },
       }
     end
 
@@ -248,16 +248,16 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
         inherits: :wcag_2_1_aa,
         overrides: {
           contrast_ratio: {
-            min_contrast_ratio: 7.0
-          }
-        }
+            min_contrast_ratio: 7.0,
+          },
+        },
       }
 
       config = {
         profiles: {
           wcag_2_1_aa: parent_profile_config,
-          test: child_with_merge
-        }
+          test: child_with_merge,
+        },
       }
 
       profile = described_class.load(config, :test)
@@ -268,6 +268,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
   end
 
   describe "profile with multiple rules" do
+    subject(:profile) { described_class.new(complex_config) }
+
     let(:complex_config) do
       {
         name: "Complex Profile",
@@ -276,27 +278,25 @@ RSpec.describe Uniword::Accessibility::AccessibilityProfile do
           image_alt_text: {
             enabled: true,
             wcag_criterion: "1.1.1",
-            check_quality: true
+            check_quality: true,
           },
           heading_structure: {
             enabled: true,
-            wcag_criterion: "1.3.1"
+            wcag_criterion: "1.3.1",
           },
           table_headers: {
             enabled: false,
-            wcag_criterion: "1.3.1"
-          }
-        }
+            wcag_criterion: "1.3.1",
+          },
+        },
       }
     end
-
-    subject(:profile) { described_class.new(complex_config) }
 
     it "stores all rules" do
       expect(profile.rules.keys).to contain_exactly(
         :image_alt_text,
         :heading_structure,
-        :table_headers
+        :table_headers,
       )
     end
 

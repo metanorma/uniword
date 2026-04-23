@@ -31,7 +31,7 @@ RSpec.describe "Enhanced Properties Round-Trip" do
       para = create_para(doc, "Text with borders")
       Uniword::Builder::ParagraphBuilder.new(para).borders(
         top: { style: "single", color: "FF0000", size: 4 },
-        bottom: { style: "double", color: "0000FF", size: 6 }
+        bottom: { style: "double", color: "0000FF", size: 6 },
       )
 
       # Save and reload
@@ -56,7 +56,7 @@ RSpec.describe "Enhanced Properties Round-Trip" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = create_para(doc, "Shaded text")
       Uniword::Builder::ParagraphBuilder.new(para).shading(
-        fill: "FFFF00", pattern: "solid"
+        fill: "FFFF00", pattern: "solid",
       )
 
       # Save and reload
@@ -76,10 +76,10 @@ RSpec.describe "Enhanced Properties Round-Trip" do
       para = create_para(doc, "Text\twith\ttabs")
       builder = Uniword::Builder::ParagraphBuilder.new(para)
       builder << Uniword::Builder.tab_stop(
-        position: 1440, alignment: "center", leader: "dot"
+        position: 1440, alignment: "center", leader: "dot",
       )
       builder << Uniword::Builder.tab_stop(
-        position: 2880, alignment: "right"
+        position: 2880, alignment: "right",
       )
 
       # Save and reload
@@ -243,7 +243,7 @@ RSpec.describe "Enhanced Properties Round-Trip" do
       builder.borders(top: "000000", bottom: "FF0000")
       builder.shading(fill: "FFFF00", pattern: "solid")
       builder << Uniword::Builder.tab_stop(
-        position: 1440, alignment: "center"
+        position: 1440, alignment: "center",
       )
 
       # Save and reload
@@ -295,7 +295,7 @@ RSpec.describe "Enhanced Properties Round-Trip" do
 
       para3 = create_para(doc, "Paragraph 3")
       Uniword::Builder::ParagraphBuilder.new(para3) << Uniword::Builder.tab_stop(
-        position: 1440
+        position: 1440,
       )
 
       # Save and reload

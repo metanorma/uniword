@@ -10,7 +10,7 @@ RSpec.describe "MHTML Compatibility", type: :integration do
     FileUtils.mkdir_p("spec/tmp")
   end
 
-  after(:each) do
+  after do
     Dir.glob("#{tmp_dir}/*.{doc,mhtml}").each { |f| safe_delete(f) }
   end
 

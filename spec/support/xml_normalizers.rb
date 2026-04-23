@@ -61,7 +61,8 @@ module XmlNormalizers
     cp_ns = "http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
 
     # Normalize timestamp content (created/modified get new values)
-    doc.xpath("//dcterms:created | //dcterms:modified", "dcterms" => dcterms_ns).each do |node|
+    doc.xpath("//dcterms:created | //dcterms:modified",
+              "dcterms" => dcterms_ns).each do |node|
       node.content = "NORMALIZED_TIME"
     end
 
@@ -79,7 +80,8 @@ module XmlNormalizers
   # @param doc [Nokogiri::XML::Document] Document to modify
   def self.normalize_statistics_values(doc)
     # List of statistics elements that get recalculated
-    stat_elements = %w[Pages Words Characters Lines Paragraphs CharactersWithSpaces TotalTime]
+    stat_elements = %w[Pages Words Characters Lines Paragraphs
+                       CharactersWithSpaces TotalTime]
 
     stat_elements.each do |elem_name|
       # Match elements in any namespace (including default namespace)
@@ -154,13 +156,16 @@ module XmlNormalizers
     doc.root&.delete_attribute("Ignorable") if doc.root&.namespace&.prefix == "mc"
 
     # Strip paragraph tracking attributes (reconciler adds rsid, paraId, textId)
-    doc.xpath("//w:p", "w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main").each do |node|
+    doc.xpath("//w:p",
+              "w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main").each do |node|
       %w[rsidR rsidRDefault paraId textId].each do |attr|
         ns_attr = node.attributes[attr]
-        ns_attr&.remove if ns_attr
+        ns_attr&.remove
       end
       # Also remove w14: prefixed tracking attrs
-      node.attribute_nodes.select { |a| a.namespace&.prefix == "w14" }.each(&:remove)
+      node.attribute_nodes.select do |a|
+        a.namespace&.prefix == "w14"
+      end.each(&:remove)
     end
 
     doc.to_xml

@@ -12,7 +12,7 @@ RSpec.describe Uniword::Validation::Report::ValidationIssue do
         message: "Cannot open ZIP file",
         part: "document.docx",
         line: 42,
-        suggestion: "Ensure the file is a valid .docx archive."
+        suggestion: "Ensure the file is a valid .docx archive.",
       )
 
       expect(issue.severity).to eq("error")
@@ -27,7 +27,7 @@ RSpec.describe Uniword::Validation::Report::ValidationIssue do
       issue = described_class.new(
         severity: "warning",
         code: "DOC-070",
-        message: "Font not found"
+        message: "Font not found",
       )
 
       expect(issue.part).to be_nil
@@ -67,7 +67,7 @@ RSpec.describe Uniword::Validation::Report::ValidationIssue do
         code: "DOC-020",
         message: "footnotes.xml is missing",
         part: "word/settings.xml",
-        suggestion: "Add footnotes.xml"
+        suggestion: "Add footnotes.xml",
       )
 
       json = issue.to_json

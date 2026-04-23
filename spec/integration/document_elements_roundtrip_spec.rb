@@ -56,7 +56,7 @@ RSpec.describe "Document Elements Round-Trip (Binary .dotx)" do
     "Headers.dotx" => "header",
     "Table of Contents.dotx" => "toc",
     "Tables.dotx" => "table",
-    "Watermarks.dotx" => "watermark"
+    "Watermarks.dotx" => "watermark",
   }.freeze
 
   DOCUMENT_ELEMENT_FILES.each_key do |filename|
@@ -71,8 +71,12 @@ RSpec.describe "Document Elements Round-Trip (Binary .dotx)" do
       end
 
       context "Glossary Document" do
-        let(:glossary_xml_path) { File.join(extracted_dir, "word/glossary/document.xml") }
-        let(:glossary_roundtrip_path) { File.join(roundtrip_dir, "word/glossary/document.xml") }
+        let(:glossary_xml_path) do
+          File.join(extracted_dir, "word/glossary/document.xml")
+        end
+        let(:glossary_roundtrip_path) do
+          File.join(roundtrip_dir, "word/glossary/document.xml")
+        end
 
         it "round-trips #{filename} glossary document" do
           FileUtils.mkdir_p(extracted_dir)

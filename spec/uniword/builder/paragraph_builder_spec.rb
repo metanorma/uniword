@@ -118,13 +118,13 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
     it "sets keep_next" do
       builder = described_class.new
       builder.keep_next
-      expect(builder.model.properties.keep_next).to eq(true)
+      expect(builder.model.properties.keep_next).to be(true)
     end
 
     it "sets page_break_before" do
       builder = described_class.new
       builder.page_break_before
-      expect(builder.model.properties.page_break_before).to eq(true)
+      expect(builder.model.properties.page_break_before).to be(true)
     end
   end
 

@@ -68,8 +68,8 @@ RSpec.describe Uniword::Diff::DocumentDiffer do
         result = described_class.new(old_doc, new_doc).diff
         expect(result.text_changes.size).to be >= 1
         changes = result.text_changes
-        old_texts = changes.map { |c| c[:old] }.compact
-        new_texts = changes.map { |c| c[:new] }.compact
+        old_texts = changes.filter_map { |c| c[:old] }
+        new_texts = changes.filter_map { |c| c[:new] }
         expect(old_texts).to include("Hello World")
         expect(new_texts).to include("Hello Universe")
       end

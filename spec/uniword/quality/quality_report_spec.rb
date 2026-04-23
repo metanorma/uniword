@@ -10,7 +10,7 @@ RSpec.describe Uniword::Quality::QualityReport do
       rule: "test_rule",
       severity: :error,
       message: "Error message",
-      location: "Line 1"
+      location: "Line 1",
     )
   end
   let(:warning_violation) do
@@ -18,7 +18,7 @@ RSpec.describe Uniword::Quality::QualityReport do
       rule: "test_rule",
       severity: :warning,
       message: "Warning message",
-      location: "Line 2"
+      location: "Line 2",
     )
   end
   let(:info_violation) do
@@ -26,7 +26,7 @@ RSpec.describe Uniword::Quality::QualityReport do
       rule: "test_rule",
       severity: :info,
       message: "Info message",
-      location: "Line 3"
+      location: "Line 3",
     )
   end
 
@@ -70,7 +70,8 @@ RSpec.describe Uniword::Quality::QualityReport do
 
   describe "violation counts" do
     before do
-      report.add_violations([error_violation, warning_violation, info_violation])
+      report.add_violations([error_violation, warning_violation,
+                             info_violation])
     end
 
     it "counts errors" do
@@ -92,7 +93,8 @@ RSpec.describe Uniword::Quality::QualityReport do
 
   describe "#by_severity" do
     before do
-      report.add_violations([error_violation, warning_violation, info_violation])
+      report.add_violations([error_violation, warning_violation,
+                             info_violation])
     end
 
     it "groups violations by severity" do
@@ -109,12 +111,13 @@ RSpec.describe Uniword::Quality::QualityReport do
         rule: "other_rule",
         severity: :error,
         message: "Test",
-        location: "Test"
+        location: "Test",
       )
     end
 
     before do
-      report.add_violations([error_violation, warning_violation, another_violation])
+      report.add_violations([error_violation, warning_violation,
+                             another_violation])
     end
 
     it "groups violations by rule" do

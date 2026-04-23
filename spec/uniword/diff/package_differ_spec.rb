@@ -54,7 +54,9 @@ RSpec.describe Uniword::Diff::PackageDiffer do
       end
 
       it "tracks size changes" do
-        doc_change = result.modified_parts.find { |p| p.name == "word/document.xml" }
+        doc_change = result.modified_parts.find do |p|
+          p.name == "word/document.xml"
+        end
         expect(doc_change.old_size).to be < doc_change.new_size
       end
     end

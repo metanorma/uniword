@@ -62,7 +62,9 @@ RSpec.describe "StyleSet Integration (Open-Source YAML)" do
       doc.styles_configuration.add_style(custom_normal, allow_overwrite: true)
 
       styleset.apply_to(doc, strategy: :replace)
-      normal_style = doc.styles_configuration.styles.find { |s| s.id == "Normal" }
+      normal_style = doc.styles_configuration.styles.find do |s|
+        s.id == "Normal"
+      end
       expect(normal_style.name).not_to eq("Custom Normal")
     end
   end
@@ -108,7 +110,9 @@ RSpec.describe "StyleSet Integration (Binary .dotx)" do
     skip "Submodule spec/fixtures/uniword-private not available" unless File.exist?("spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx")
   end
 
-  let(:dotx_file) { "spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx" }
+  let(:dotx_file) do
+    "spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx"
+  end
 
   describe "Loading StyleSets from .dotx files" do
     it "loads Distinctive.dotx successfully" do

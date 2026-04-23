@@ -23,7 +23,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
         "Uniword::Validation::Checkers::ExternalLinkChecker",
         "Uniword::Validation::Checkers::InternalLinkChecker",
         "Uniword::Validation::Checkers::FileReferenceChecker",
-        "Uniword::Validation::Checkers::FootnoteReferenceChecker"
+        "Uniword::Validation::Checkers::FootnoteReferenceChecker",
       )
     end
   end
@@ -132,7 +132,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
         Uniword::Validation::Checkers::ExternalLinkChecker,
         Uniword::Validation::Checkers::InternalLinkChecker,
         Uniword::Validation::Checkers::FileReferenceChecker,
-        Uniword::Validation::Checkers::FootnoteReferenceChecker
+        Uniword::Validation::Checkers::FootnoteReferenceChecker,
       )
     end
   end
@@ -150,7 +150,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
       it "accepts custom config file path" do
         # Use existing config file
         validator = described_class.new(
-          config_file: "config/link_validation_rules.yml"
+          config_file: "config/link_validation_rules.yml",
         )
 
         expect(validator.config).to be_a(Hash)

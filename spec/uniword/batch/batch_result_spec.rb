@@ -31,7 +31,7 @@ RSpec.describe Uniword::Batch::BatchResult do
         file: "test.docx",
         duration: 1.0,
         stages: %w[normalize validate],
-        metadata: { custom: "data" }
+        metadata: { custom: "data" },
       )
 
       success = result.successes.first
@@ -66,7 +66,7 @@ RSpec.describe Uniword::Batch::BatchResult do
         file: "test.docx",
         error: "Error",
         stage: "validate",
-        metadata: { info: "test" }
+        metadata: { info: "test" },
       )
 
       failure = result.failures.first
@@ -75,7 +75,8 @@ RSpec.describe Uniword::Batch::BatchResult do
     end
 
     it "returns self for chaining" do
-      expect(result.add_failure(file: "test.docx", error: "Error")).to eq(result)
+      expect(result.add_failure(file: "test.docx",
+                                error: "Error")).to eq(result)
     end
   end
 
@@ -235,7 +236,8 @@ RSpec.describe Uniword::Batch::BatchResult do
 
   describe "#export_csv" do
     it "exports results to CSV file" do
-      result.add_success(file: "test1.docx", duration: 1.0, stages: ["normalize"])
+      result.add_success(file: "test1.docx", duration: 1.0,
+                         stages: ["normalize"])
       result.add_failure(file: "test2.docx", error: "Error", stage: "validate")
 
       Tempfile.create(["batch_result", ".csv"]) do |file|

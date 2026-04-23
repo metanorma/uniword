@@ -19,9 +19,11 @@ RSpec.describe "Bug fix: SectionProperties header/footer references" do
   it "stores multiple header references" do
     sect = Uniword::Wordprocessingml::SectionProperties.new
     sect.header_references <<
-      Uniword::Wordprocessingml::HeaderReference.new(type: "default", r_id: "rId1")
+      Uniword::Wordprocessingml::HeaderReference.new(type: "default",
+                                                     r_id: "rId1")
     sect.header_references <<
-      Uniword::Wordprocessingml::HeaderReference.new(type: "first", r_id: "rId2")
+      Uniword::Wordprocessingml::HeaderReference.new(type: "first",
+                                                     r_id: "rId2")
 
     expect(sect.header_references.size).to eq(2)
     expect(sect.header_references[0].type).to eq("default")
@@ -31,7 +33,8 @@ RSpec.describe "Bug fix: SectionProperties header/footer references" do
   it "stores multiple footer references" do
     sect = Uniword::Wordprocessingml::SectionProperties.new
     sect.footer_references <<
-      Uniword::Wordprocessingml::FooterReference.new(type: "default", r_id: "rId3")
+      Uniword::Wordprocessingml::FooterReference.new(type: "default",
+                                                     r_id: "rId3")
     sect.footer_references <<
       Uniword::Wordprocessingml::FooterReference.new(type: "even", r_id: "rId4")
 
@@ -42,7 +45,7 @@ end
 RSpec.describe "Bug fix: HeaderReference r:id namespace" do
   it "serializes id as r:id" do
     ref = Uniword::Wordprocessingml::HeaderReference.new(
-      type: "default", r_id: "rId1"
+      type: "default", r_id: "rId1",
     )
     xml = ref.to_xml(prefix: true)
 
@@ -54,7 +57,7 @@ end
 RSpec.describe "Bug fix: FooterReference r:id namespace" do
   it "serializes id as r:id" do
     ref = Uniword::Wordprocessingml::FooterReference.new(
-      type: "default", r_id: "rId1"
+      type: "default", r_id: "rId1",
     )
     xml = ref.to_xml(prefix: true)
 

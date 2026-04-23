@@ -124,7 +124,7 @@ RSpec.describe Uniword::Mhtml::WordCss do
       instances = [
         double("NumberingInstance", num_id: 1),
         double("NumberingInstance", num_id: 2),
-        double("NumberingInstance", num_id: 3)
+        double("NumberingInstance", num_id: 3),
       ]
 
       config = double("NumberingConfiguration")
