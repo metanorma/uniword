@@ -53,7 +53,7 @@ module Uniword
           removed_parts: part_diff[:removed],
           modified_parts: part_diff[:modified],
           unchanged_parts: part_diff[:unchanged],
-          xml_changes: content_diff
+          xml_changes: content_diff,
         )
       end
 
@@ -64,9 +64,9 @@ module Uniword
       # @return [Hash] Lists of added, removed, modified, unchanged parts
       def diff_parts(old_zip, new_zip)
         old_entries = old_zip.entries.reject(&:directory?)
-                             .map(&:name).to_set
+          .to_set(&:name)
         new_entries = new_zip.entries.reject(&:directory?)
-                             .map(&:name).to_set
+          .to_set(&:name)
 
         added = (new_entries - old_entries).sort
         removed = (old_entries - new_entries).sort
@@ -88,7 +88,7 @@ module Uniword
               name: name,
               old_size: old_size,
               new_size: new_size,
-              changes: []
+              changes: [],
             )
           end
         end
@@ -132,17 +132,17 @@ module Uniword
 
         # Compare namespace declarations
         changes.concat(
-          diff_namespaces(part_name, old_doc, new_doc)
+          diff_namespaces(part_name, old_doc, new_doc),
         )
 
         # Compare root element attributes
         changes.concat(
-          diff_root_attributes(part_name, old_doc, new_doc)
+          diff_root_attributes(part_name, old_doc, new_doc),
         )
 
         # Compare element counts
         changes.concat(
-          diff_element_counts(part_name, old_doc, new_doc)
+          diff_element_counts(part_name, old_doc, new_doc),
         )
 
         changes
@@ -167,8 +167,10 @@ module Uniword
             part: part_name,
             category: :namespace,
             description: "Added #{added_ns.size} namespace(s): " \
-                         "#{added_ns.map { |p| p.empty? ? "xmlns" : "xmlns:#{p}" }
-                            .join(", ")}"
+                         "#{added_ns.map do |p|
+                           p.empty? ? 'xmlns' : "xmlns:#{p}"
+                         end
+                           .join(', ')}",
           )
         end
 
@@ -177,8 +179,10 @@ module Uniword
             part: part_name,
             category: :namespace,
             description: "Removed #{removed_ns.size} namespace(s): " \
-                         "#{removed_ns.map { |p| p.empty? ? "xmlns" : "xmlns:#{p}" }
-                            .join(", ")}"
+                         "#{removed_ns.map do |p|
+                           p.empty? ? 'xmlns' : "xmlns:#{p}"
+                         end
+                           .join(', ')}",
           )
         end
 
@@ -197,14 +201,14 @@ module Uniword
         added_attrs = new_attrs.keys - old_attrs.keys
         removed_attrs = old_attrs.keys - new_attrs.keys
         changed_attrs = (old_attrs.keys & new_attrs.keys)
-                        .reject { |k| old_attrs[k] == new_attrs[k] }
+          .reject { |k| old_attrs[k] == new_attrs[k] }
 
         if added_attrs.any?
           changes << XmlChange.new(
             part: part_name,
             category: :attribute,
             description: "Added #{added_attrs.size} attribute(s) on " \
-                         "<#{old_doc.root.name}>: #{added_attrs.join(", ")}"
+                         "<#{old_doc.root.name}>: #{added_attrs.join(', ')}",
           )
         end
 
@@ -213,7 +217,7 @@ module Uniword
             part: part_name,
             category: :attribute,
             description: "Removed #{removed_attrs.size} attribute(s) on " \
-                         "<#{old_doc.root.name}>: #{removed_attrs.join(", ")}"
+                         "<#{old_doc.root.name}>: #{removed_attrs.join(', ')}",
           )
         end
 
@@ -222,7 +226,7 @@ module Uniword
             part: part_name,
             category: :attribute,
             description: "Changed #{attr} on <#{old_doc.root.name}>: " \
-                         "'#{old_attrs[attr]}' -> '#{new_attrs[attr]}'"
+                         "'#{old_attrs[attr]}' -> '#{new_attrs[attr]}'",
           )
         end
 
@@ -248,7 +252,7 @@ module Uniword
           changes << XmlChange.new(
             part: part_name,
             category: :element_count,
-            description: "#{element}: #{old_count} -> #{new_count}"
+            description: "#{element}: #{old_count} -> #{new_count}",
           )
         end
 

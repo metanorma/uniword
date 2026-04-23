@@ -53,9 +53,12 @@ module Uniword
         map_attribute "numberingStyles", to: :numbering_styles
         map_attribute "tableStyles", to: :table_styles
         map_attribute "directFormattingOnRuns", to: :direct_formatting_on_runs
-        map_attribute "directFormattingOnParagraphs", to: :direct_formatting_on_paragraphs
-        map_attribute "directFormattingOnNumbering", to: :direct_formatting_on_numbering
-        map_attribute "directFormattingOnTables", to: :direct_formatting_on_tables
+        map_attribute "directFormattingOnParagraphs",
+                      to: :direct_formatting_on_paragraphs
+        map_attribute "directFormattingOnNumbering",
+                      to: :direct_formatting_on_numbering
+        map_attribute "directFormattingOnTables",
+                      to: :direct_formatting_on_tables
         map_attribute "clearFormatting", to: :clear_formatting
         map_attribute "top3HeadingStyles", to: :top3_heading_styles
         map_attribute "visibleStyles", to: :visible_styles
@@ -544,42 +547,57 @@ module Uniword
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::MathML, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::SchemaLibrary,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Relationships,
+            declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Vml, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::VmlWord, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid,
+            declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2018, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2023Du, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::Word2023Du,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex,
+            declare: :always },
         ]
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
         map_element "zoom", to: :zoom, render_nil: false
         map_element "compat", to: :compat, render_nil: false
         map_element "proofState", to: :proof_state, render_nil: false
-        map_element "stylePaneFormatFilter", to: :style_pane_format_filter, render_nil: false
+        map_element "stylePaneFormatFilter", to: :style_pane_format_filter,
+                                             render_nil: false
         map_element "defaultTabStop", to: :default_tab_stop, render_nil: false
-        map_element "characterSpacingControl", to: :character_spacing_control, render_nil: false
+        map_element "characterSpacingControl", to: :character_spacing_control,
+                                               render_nil: false
         map_element "rsids", to: :rsids, render_nil: false
         map_element "mathPr", to: :math_pr, render_nil: false
         map_element "themeFontLang", to: :theme_font_lang, render_nil: false
-        map_element "clrSchemeMapping", to: :clr_scheme_mapping, render_nil: false
+        map_element "clrSchemeMapping", to: :clr_scheme_mapping,
+                                        render_nil: false
         map_element "shapeDefaults", to: :shape_defaults, render_nil: false
         map_element "decimalSymbol", to: :decimal_symbol, render_nil: false
         map_element "listSeparator", to: :list_separator, render_nil: false
-        map_element "attachedTemplate", to: :attached_template, render_nil: false
+        map_element "attachedTemplate", to: :attached_template,
+                                        render_nil: false
         map_element "footnotePr", to: :footnote_pr, render_nil: false
         map_element "endnotePr", to: :endnote_pr, render_nil: false
-        map_element "hdrShapeDefaults", to: :hdr_shape_defaults, render_nil: false
+        map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
+                                        render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root
-        map_element "chartTrackingRefBased", to: :w15_chart_tracking_ref_based, render_nil: false
+        map_element "chartTrackingRefBased", to: :w15_chart_tracking_ref_based,
+                                             render_nil: false
         map_element "docId", to: :w14_doc_id, render_nil: false
         map_element "docId", to: :w15_doc_id, render_nil: false
         map_element "schemaLibrary", to: :schema_library, render_nil: false

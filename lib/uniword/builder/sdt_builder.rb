@@ -42,7 +42,7 @@ module Uniword
       # @return [self]
       def id(value = nil)
         properties.id = Wordprocessingml::StructuredDocumentTag::Id.new(
-          value: value || next_id
+          value: value || next_id,
         )
         self
       end
@@ -53,7 +53,7 @@ module Uniword
       # @return [self]
       def tag(value)
         properties.tag = Wordprocessingml::StructuredDocumentTag::Tag.new(
-          value: value
+          value: value,
         )
         self
       end
@@ -64,7 +64,7 @@ module Uniword
       # @return [self]
       def alias(value)
         properties.alias_name = Wordprocessingml::StructuredDocumentTag::Alias.new(
-          value: value
+          value: value,
         )
         self
       end
@@ -94,7 +94,7 @@ module Uniword
         # Auto-assign ID if not set
         unless properties.id
           properties.id = Wordprocessingml::StructuredDocumentTag::Id.new(
-            value: next_id
+            value: next_id,
           )
         end
         @model
@@ -117,7 +117,8 @@ module Uniword
       # @param placeholder_text [String, nil] Placeholder text
       # @param lock [Boolean] Lock content
       # @return [SdtBuilder]
-      def self.text(tag: nil, alias_name: nil, placeholder_text: nil, lock: false)
+      def self.text(tag: nil, alias_name: nil, placeholder_text: nil,
+lock: false)
         sdt = new
         sdt.tag(tag) if tag
         sdt.alias(alias_name) if alias_name
@@ -145,14 +146,14 @@ module Uniword
         # Date control
         date = Wordprocessingml::StructuredDocumentTag::Date.new
         date.date_format = Wordprocessingml::StructuredDocumentTag::DateFormat.new(
-          value: format
+          value: format,
         )
         date.lid = Wordprocessingml::StructuredDocumentTag::Lid.new(value: locale)
         date.store_mapped_data_as = Wordprocessingml::StructuredDocumentTag::StoreMappedDataAs.new(
-          value: "dateTime"
+          value: "dateTime",
         )
         date.calendar = Wordprocessingml::StructuredDocumentTag::Calendar.new(
-          value: calendar
+          value: calendar,
         )
         sdt.properties.date = date
         sdt
@@ -170,7 +171,7 @@ module Uniword
         # DocPartObj with bibliography gallery
         dpo = Wordprocessingml::StructuredDocumentTag::DocPartObj.new
         dpo.doc_part_gallery = Wordprocessingml::StructuredDocumentTag::DocPartGallery.new(
-          value: "Bibliographies"
+          value: "Bibliographies",
         )
         dpo.doc_part_unique = Wordprocessingml::StructuredDocumentTag::DocPartUnique.new
         sdt.properties.doc_part_obj = dpo
@@ -187,7 +188,7 @@ module Uniword
 
         dpo = Wordprocessingml::StructuredDocumentTag::DocPartObj.new
         dpo.doc_part_gallery = Wordprocessingml::StructuredDocumentTag::DocPartGallery.new(
-          value: gallery
+          value: gallery,
         )
         dpo.doc_part_unique = Wordprocessingml::StructuredDocumentTag::DocPartUnique.new if unique
         sdt.properties.doc_part_obj = dpo

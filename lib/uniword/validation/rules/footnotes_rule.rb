@@ -39,7 +39,7 @@ module Uniword
               part: "word/settings.xml",
               suggestion: "Add a minimal footnotes.xml with separator entries " \
                           "(id=-1, id=0), or remove footnotePr from settings.xml " \
-                          "if no footnotes are used."
+                          "if no footnotes are used.",
             )
           end
 
@@ -49,7 +49,7 @@ module Uniword
               part: "word/settings.xml",
               suggestion: "Add a minimal endnotes.xml with separator entries " \
                           "(id=-1, id=0), or remove endnotePr from settings.xml " \
-                          "if no endnotes are used."
+                          "if no endnotes are used.",
             )
           end
 
@@ -69,14 +69,14 @@ module Uniword
             fn_doc = context.part("word/footnotes.xml")
             if fn_doc
               fn_ids = fn_doc.root.xpath(".//w:footnote/@w:id",
-                                         "w" => W_NS).map(&:value).to_set
+                                         "w" => W_NS).to_set(&:value)
               unless fn_ids.include?("-1")
                 issues << issue(
                   "Footnotes missing separator entry (id=-1)",
                   code: "DOC-022",
                   severity: "warning",
                   part: "word/footnotes.xml",
-                  suggestion: "Add a separator footnote with id=-1."
+                  suggestion: "Add a separator footnote with id=-1.",
                 )
               end
             end
@@ -88,7 +88,7 @@ module Uniword
           return unless en_doc
 
           en_ids = en_doc.root.xpath(".//w:endnote/@w:id",
-                                     "w" => W_NS).map(&:value).to_set
+                                     "w" => W_NS).to_set(&:value)
           return if en_ids.include?("-1")
 
           issues << issue(
@@ -96,7 +96,7 @@ module Uniword
             code: "DOC-022",
             severity: "warning",
             part: "word/endnotes.xml",
-            suggestion: "Add a separator endnote with id=-1."
+            suggestion: "Add a separator endnote with id=-1.",
           )
         end
 
@@ -106,16 +106,16 @@ module Uniword
 
           # Collect referenced footnote IDs
           fn_refs = doc.root.xpath(".//w:footnoteReference/@w:id",
-                                   "w" => W_NS).map(&:value).to_set
+                                   "w" => W_NS).to_set(&:value)
           en_refs = doc.root.xpath(".//w:endnoteReference/@w:id",
-                                   "w" => W_NS).map(&:value).to_set
+                                   "w" => W_NS).to_set(&:value)
 
           # Collect defined footnote IDs
           fn_defined = if context.part_exists?("word/footnotes.xml")
                          fn_doc = context.part("word/footnotes.xml")
                          if fn_doc
                            fn_doc.root.xpath(".//w:footnote/@w:id",
-                                             "w" => W_NS).map(&:value).to_set
+                                             "w" => W_NS).to_set(&:value)
                          else
                            Set.new
                          end
@@ -127,7 +127,7 @@ module Uniword
                          en_doc = context.part("word/endnotes.xml")
                          if en_doc
                            en_doc.root.xpath(".//w:endnote/@w:id",
-                                             "w" => W_NS).map(&:value).to_set
+                                             "w" => W_NS).to_set(&:value)
                          else
                            Set.new
                          end
@@ -143,7 +143,7 @@ module Uniword
               code: "DOC-021",
               part: "word/document.xml",
               suggestion: "Add footnote entry with id='#{id}' to " \
-                          "word/footnotes.xml."
+                          "word/footnotes.xml.",
             )
           end
 
@@ -154,7 +154,7 @@ module Uniword
               code: "DOC-021",
               part: "word/document.xml",
               suggestion: "Add endnote entry with id='#{id}' to " \
-                          "word/endnotes.xml."
+                          "word/endnotes.xml.",
             )
           end
         end

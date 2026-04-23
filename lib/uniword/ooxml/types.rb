@@ -19,7 +19,8 @@ module Uniword
       # Core Properties Types (cp: namespace)
       autoload :CpKeywordsType, "#{__dir__}/types/cp_keywords_type"
       autoload :CpDescriptionType, "#{__dir__}/types/cp_description_type"
-      autoload :CpLastModifiedByType, "#{__dir__}/types/cp_last_modified_by_type"
+      autoload :CpLastModifiedByType,
+               "#{__dir__}/types/cp_last_modified_by_type"
       autoload :CpRevisionType, "#{__dir__}/types/cp_revision_type"
 
       # Dublin Core Terms Types (dcterms: namespace)
@@ -68,7 +69,7 @@ module Uniword
           "error" => VariantTypes::VtError,
           "clsid" => VariantTypes::VtClsid,
           "empty" => VariantTypes::VtEmpty,
-          "null" => VariantTypes::VtNull
+          "null" => VariantTypes::VtNull,
         }[element_name]
       end
     end

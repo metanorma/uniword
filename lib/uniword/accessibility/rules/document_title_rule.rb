@@ -26,7 +26,7 @@ module Uniword
               element: document,
               severity: @config[:severity] || :error,
               suggestion: @config[:suggestion] ||
-                "Document must have a descriptive title"
+                "Document must have a descriptive title",
             )
             return violations
           end
@@ -37,7 +37,7 @@ module Uniword
               message: "Document title too short (#{title.length} chars)",
               element: document,
               severity: :warning,
-              suggestion: "Title should be descriptive (min #{@config[:min_title_length]} chars)"
+              suggestion: "Title should be descriptive (min #{@config[:min_title_length]} chars)",
             )
           end
 

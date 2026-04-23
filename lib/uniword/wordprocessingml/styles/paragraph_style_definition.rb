@@ -30,7 +30,8 @@ module Uniword
 
         {
           properties: merge_properties(base_props[:properties], properties),
-          run_properties: merge_properties(base_props[:run_properties], @run_properties)
+          run_properties: merge_properties(base_props[:run_properties],
+                                           @run_properties),
         }
       end
 
@@ -40,7 +41,7 @@ module Uniword
       def full_properties
         {
           properties: properties,
-          run_properties: @run_properties
+          run_properties: @run_properties,
         }
       end
 

@@ -107,7 +107,7 @@ module Uniword
           "accent3" => extract_hex(cs, :accent3),
           "accent4" => extract_hex(cs, :accent4),
           "accent5" => extract_hex(cs, :accent5),
-          "accent6" => extract_hex(cs, :accent6)
+          "accent6" => extract_hex(cs, :accent6),
         }
       end
 

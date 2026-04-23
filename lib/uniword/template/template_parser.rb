@@ -137,7 +137,7 @@ module Uniword
             type: :loop_start,
             collection: ::Regexp.last_match(1),
             element: element,
-            position: position
+            position: position,
           )
 
         when /^\{\{@end\}\}$/
@@ -145,7 +145,7 @@ module Uniword
           TemplateMarker.new(
             type: :loop_end,
             element: element,
-            position: position
+            position: position,
           )
 
         when /^\{\{@if\s+(.+)\}\}$/
@@ -154,7 +154,7 @@ module Uniword
             type: :conditional_start,
             condition: ::Regexp.last_match(1),
             element: element,
-            position: position
+            position: position,
           )
 
         when /^\{\{@unless\s+(.+)\}\}$/
@@ -164,7 +164,7 @@ module Uniword
             type: :conditional_start,
             condition: "!(#{::Regexp.last_match(1)})",
             element: element,
-            position: position
+            position: position,
           )
 
         when /^\{\{([^@].+?)\}\}$/
@@ -173,7 +173,7 @@ module Uniword
             type: :variable,
             expression: ::Regexp.last_match(1).strip,
             element: element,
-            position: position
+            position: position,
           )
 
         else

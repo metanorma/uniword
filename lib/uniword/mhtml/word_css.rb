@@ -129,7 +129,7 @@ module Uniword
         # Font properties
         properties << "font-family: '#{style.font}'" if style.respond_to?(:font) && style.font
         if style.respond_to?(:font_size) && style.font_size
-          properties << "font-size: #{CssNumberFormatter.format(style.font_size, "pt",
+          properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt',
                                                                 precision: 1)}"
         end
         properties << "font-weight: bold" if style.respond_to?(:bold) && style.bold

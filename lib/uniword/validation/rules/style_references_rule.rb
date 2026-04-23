@@ -53,7 +53,7 @@ module Uniword
               "Style '#{style_id}' referenced in document.xml but not defined in styles.xml",
               part: "word/document.xml",
               suggestion: "Define style '#{style_id}' in styles.xml, " \
-                          "or remove references to it."
+                          "or remove references to it.",
             )
           end
         end
@@ -72,7 +72,7 @@ module Uniword
             severity: "warning",
             part: "word/styles.xml",
             suggestion: "Set w:default='1' on a paragraph style to define " \
-                        "the document default."
+                        "the document default.",
           )
         end
 
@@ -88,7 +88,7 @@ module Uniword
               code: "DOC-003",
               severity: "warning",
               part: "word/numbering.xml",
-              suggestion: "Define style '#{attr.value}' in styles.xml."
+              suggestion: "Define style '#{attr.value}' in styles.xml.",
             )
           end
         end

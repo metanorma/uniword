@@ -85,7 +85,9 @@ module Uniword
       # @param row [Uniword::Wordprocessingml::TableRow]
       # @return [String] HTML <tr> element
       def self.table_row_to_html(row)
-        cells_html = row.cells.map { |cell| table_cell_to_html(cell) }.join("\n")
+        cells_html = row.cells.map do |cell|
+          table_cell_to_html(cell)
+        end.join("\n")
         "<tr>\n#{cells_html}\n</tr>"
       end
 
@@ -94,7 +96,9 @@ module Uniword
       # @param cell [Uniword::Wordprocessingml::TableCell]
       # @return [String] HTML <td> element
       def self.table_cell_to_html(cell)
-        paragraphs_html = cell.paragraphs.map { |p| paragraph_to_html(p) }.join("\n")
+        paragraphs_html = cell.paragraphs.map do |p|
+          paragraph_to_html(p)
+        end.join("\n")
         "<td>\n#{paragraphs_html}\n</td>"
       end
 
@@ -157,11 +161,11 @@ module Uniword
       # @return [String] Escaped text
       def self.escape_html(text)
         text.to_s
-            .gsub("&", "&amp;")
-            .gsub("<", "&lt;")
-            .gsub(">", "&gt;")
-            .gsub('"', "&quot;")
-            .gsub("'", "&#39;")
+          .gsub("&", "&amp;")
+          .gsub("<", "&lt;")
+          .gsub(">", "&gt;")
+          .gsub('"', "&quot;")
+          .gsub("'", "&#39;")
       end
     end
   end

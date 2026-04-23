@@ -29,7 +29,7 @@ module Uniword
         element "ea"
         namespace Ooxml::Namespaces::DrawingML
         map_attribute "typeface", to: :typeface, value_map: {
-          to: { empty: :empty, nil: :empty, omitted: :omitted }
+          to: { empty: :empty, nil: :empty, omitted: :omitted },
         }
       end
     end
@@ -40,7 +40,7 @@ module Uniword
         element "cs"
         namespace Ooxml::Namespaces::DrawingML
         map_attribute "typeface", to: :typeface, value_map: {
-          to: { empty: :empty, nil: :empty, omitted: :omitted }
+          to: { empty: :empty, nil: :empty, omitted: :omitted },
         }
       end
     end

@@ -9,7 +9,8 @@ module Uniword
     # Generated from OOXML schema: drawingml.yml
     # Element: <a:duotone>
     class Duotone < Lutaml::Model::Serializable
-      attribute :scheme_colors, SchemeColor, collection: true, initialize_empty: true
+      attribute :scheme_colors, SchemeColor, collection: true,
+                                             initialize_empty: true
 
       xml do
         element "duotone"

@@ -135,7 +135,7 @@ module Uniword
           critical_failures: critical_failures?,
           errors: @errors,
           warnings: @warnings,
-          infos: @infos
+          infos: @infos,
         }
       end
 
@@ -149,7 +149,7 @@ module Uniword
         details << "#{warning_count} warning(s)" if warning_count.positive?
         details << "#{info_count} info(s)" if info_count.positive?
 
-        detail_str = details.empty? ? "" : " (#{details.join(", ")})"
+        detail_str = details.empty? ? "" : " (#{details.join(', ')})"
         "[#{status}] #{@layer_name}#{detail_str}"
       end
     end

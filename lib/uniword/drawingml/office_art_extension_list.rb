@@ -8,7 +8,8 @@ module Uniword
     #
     # Complex type containing a collection of extensions.
     class OfficeArtExtensionList < Lutaml::Model::Serializable
-      attribute :extensions, OfficeArtExtension, collection: true, initialize_empty: true
+      attribute :extensions, OfficeArtExtension, collection: true,
+                                                 initialize_empty: true
 
       xml do
         element "extLst"

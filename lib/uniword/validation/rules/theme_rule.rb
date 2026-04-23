@@ -42,12 +42,15 @@ module Uniword
               "Document uses theme colors/fonts but no theme relationship exists",
               part: "word/document.xml",
               suggestion: "Add a theme relationship in document.xml.rels " \
-                          "pointing to word/theme/theme1.xml."
+                          "pointing to word/theme/theme1.xml.",
             )
           end
 
           # DOC-081: Theme part well-formed
-          check_theme_well_formed(context, issues) if context.part_exists?("word/theme/theme1.xml")
+          if context.part_exists?("word/theme/theme1.xml")
+            check_theme_well_formed(context,
+                                    issues)
+          end
 
           issues
         end
@@ -68,7 +71,7 @@ module Uniword
             severity: "error",
             part: "word/theme/theme1.xml",
             suggestion: "The theme part should have <a:theme> as its " \
-                        "root element per DrawingML specification."
+                        "root element per DrawingML specification.",
           )
         rescue Nokogiri::XML::SyntaxError => e
           issues << issue(
@@ -76,7 +79,7 @@ module Uniword
             code: "DOC-081",
             severity: "error",
             part: "word/theme/theme1.xml",
-            suggestion: "Fix the XML syntax in the theme part."
+            suggestion: "Fix the XML syntax in the theme part.",
           )
         end
       end

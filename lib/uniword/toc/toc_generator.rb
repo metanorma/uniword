@@ -64,7 +64,7 @@ module Uniword
             level: level,
             text: text.strip,
             style_name: style_name,
-            paragraph_index: index
+            paragraph_index: index,
           )
         end
 
@@ -171,7 +171,7 @@ module Uniword
         # SDT properties
         sdt.properties = Wordprocessingml::StructuredDocumentTagProperties.new
         sdt.properties.id = Wordprocessingml::StructuredDocumentTag::Id.new(
-          value: rand(100_000..999_999)
+          value: rand(100_000..999_999),
         )
 
         # SDT content with TOC paragraphs
@@ -198,7 +198,7 @@ module Uniword
         para = Wordprocessingml::Paragraph.new
         para.properties = Wordprocessingml::ParagraphProperties.new
         para.properties.style = Uniword::Properties::StyleReference.new(
-          value: "TOCHeading"
+          value: "TOCHeading",
         )
 
         run = Wordprocessingml::Run.new
@@ -224,7 +224,7 @@ module Uniword
 
         # Instruction text
         instr = Wordprocessingml::InstrText.new(
-          text: " TOC \\o \"1-#{max_level}\" \\h \\z \\u "
+          text: " TOC \\o \"1-#{max_level}\" \\h \\z \\u ",
         )
         para.instr_text << instr
 
@@ -252,7 +252,7 @@ module Uniword
         para = Wordprocessingml::Paragraph.new
         para.properties = Wordprocessingml::ParagraphProperties.new
         para.properties.style = Uniword::Properties::StyleReference.new(
-          value: "TOC#{entry.level}"
+          value: "TOC#{entry.level}",
         )
 
         run = Wordprocessingml::Run.new

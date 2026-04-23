@@ -169,7 +169,7 @@ module Uniword
           media[filename] = Themes::MediaFile.new(
             filename: filename,
             content: content,
-            source_path: file_path
+            source_path: file_path,
           )
         end
 

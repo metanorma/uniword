@@ -111,6 +111,6 @@ end
 if defined?(Uniword::Validators::ElementValidator)
   Uniword::Validators::ElementValidator.register(
     Uniword::Wordprocessingml::Paragraph,
-    Uniword::Validators::ParagraphValidator
+    Uniword::Validators::ParagraphValidator,
   )
 end

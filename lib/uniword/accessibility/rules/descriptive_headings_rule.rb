@@ -31,19 +31,19 @@ module Uniword
                 element: heading[:paragraph],
                 severity: @config[:severity] || :warning,
                 suggestion: @config[:suggestion] ||
-                  "Use descriptive headings that clearly describe content"
+                  "Use descriptive headings that clearly describe content",
               )
             end
 
             # Check for generic headings
             generic_headings = %w[heading section part introduction conclusion]
-            next unless text && generic_headings.any? { |g| text.downcase == g }
+            next unless text && generic_headings.any?(text.downcase)
 
             violations << create_violation(
               message: "Heading #{index + 1} is too generic: '#{text}'",
               element: heading[:paragraph],
               severity: :warning,
-              suggestion: "Make headings specific to the content they describe"
+              suggestion: "Make headings specific to the content they describe",
             )
           end
 
@@ -58,8 +58,8 @@ module Uniword
         # @return [Array<Hash>] Headings with level and paragraph
         def extract_headings(document)
           document.paragraphs
-                  .select { |p| heading_paragraph?(p) }
-                  .map { |p| { level: extract_heading_level(p), paragraph: p } }
+            .select { |p| heading_paragraph?(p) }
+            .map { |p| { level: extract_heading_level(p), paragraph: p } }
         end
 
         # Check if paragraph is a heading

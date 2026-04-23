@@ -99,7 +99,10 @@ module Uniword
       # @param path [String] Path to YAML file
       # @return [Hash] Parsed YAML content
       def load_yaml(path)
-        raise ArgumentError, "Manifest file not found: #{path}" unless File.exist?(path)
+        unless File.exist?(path)
+          raise ArgumentError,
+                "Manifest file not found: #{path}"
+        end
 
         YAML.load_file(path)
       rescue Psych::SyntaxError => e
@@ -110,7 +113,10 @@ module Uniword
       #
       # @raise [ArgumentError] If manifest structure is invalid
       def validate_structure!
-        raise ArgumentError, "Manifest must be a Hash" unless @raw_data.is_a?(Hash)
+        unless @raw_data.is_a?(Hash)
+          raise ArgumentError,
+                "Manifest must be a Hash"
+        end
 
         unless @raw_data["document"].is_a?(Hash)
           raise ArgumentError,
@@ -119,7 +125,10 @@ module Uniword
 
         doc = @raw_data["document"]
 
-        raise ArgumentError, "Manifest must specify 'output' path" unless doc["output"]
+        unless doc["output"]
+          raise ArgumentError,
+                "Manifest must specify 'output' path"
+        end
 
         return if doc["sections"].is_a?(Array)
 
@@ -169,7 +178,7 @@ module Uniword
           {
             "component" => section["component"],
             "options" => section["options"] || {},
-            "order" => section["order"]
+            "order" => section["order"],
           }
         end
       end

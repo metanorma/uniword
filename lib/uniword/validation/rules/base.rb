@@ -77,7 +77,7 @@ module Uniword
             message: message,
             part: part,
             line: line,
-            suggestion: suggestion
+            suggestion: suggestion,
           )
         end
       end

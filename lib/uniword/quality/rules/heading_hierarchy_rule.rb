@@ -44,7 +44,7 @@ module Uniword
               severity: :error,
               message: "Heading level #{heading_level} exceeds maximum allowed level #{@max_level}",
               location: "Paragraph #{index + 1}",
-              element: para
+              element: para,
             )
           end
 
@@ -55,7 +55,7 @@ module Uniword
               message: "Heading level skips from #{previous_level} to #{heading_level} " \
                        "(expected #{previous_level + 1} or less)",
               location: "Paragraph #{index + 1}",
-              element: para
+              element: para,
             )
           end
 

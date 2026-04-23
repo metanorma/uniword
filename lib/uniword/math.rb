@@ -34,8 +34,10 @@ module Uniword
     autoload :MatrixProperties, "uniword/math/matrix_properties"
     autoload :SubscriptProperties, "uniword/math/subscript_properties"
     autoload :SuperscriptProperties, "uniword/math/superscript_properties"
-    autoload :PreSubSuperscriptProperties, "uniword/math/pre_sub_superscript_properties"
-    autoload :SubSuperscriptProperties, "uniword/math/sub_superscript_properties"
+    autoload :PreSubSuperscriptProperties,
+             "uniword/math/pre_sub_superscript_properties"
+    autoload :SubSuperscriptProperties,
+             "uniword/math/sub_superscript_properties"
     autoload :RadicalProperties, "uniword/math/radical_properties"
     autoload :LowerLimitProperties, "uniword/math/lower_limit_properties"
     autoload :UpperLimitProperties, "uniword/math/upper_limit_properties"

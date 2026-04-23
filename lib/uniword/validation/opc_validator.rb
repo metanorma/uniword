@@ -72,7 +72,7 @@ module Uniword
           severity: "error",
           code: "OPC-001",
           message: "Cannot open ZIP file: #{e.message}",
-          suggestion: "Ensure the file is a valid .docx (ZIP) archive."
+          suggestion: "Ensure the file is a valid .docx (ZIP) archive.",
         )
         nil
       end
@@ -87,7 +87,7 @@ module Uniword
             message: "Missing required OPC part: #{part}",
             part: part,
             suggestion: "This is a required part per ISO/IEC 29500-2. " \
-                        "The file may be corrupted."
+                        "The file may be corrupted.",
           )
         end
 
@@ -99,7 +99,7 @@ module Uniword
             code: "OPC-004",
             message: "Missing required DOCX part: #{part}",
             part: part,
-            suggestion: "The main document content is missing."
+            suggestion: "The main document content is missing.",
           )
         end
       end
@@ -112,11 +112,11 @@ module Uniword
 
         # Get declared extensions
         declared_exts = ct_doc.xpath("//xmlns:Default", "xmlns" => CT_NS)
-                              .map { |n| n["Extension"] }.compact.to_set
+          .filter_map { |n| n["Extension"] }.to_set
 
         # Get declared overrides
         declared_overrides = ct_doc.xpath("//xmlns:Override", "xmlns" => CT_NS)
-                                   .map { |n| n["PartName"] }.compact.to_set
+          .filter_map { |n| n["PartName"] }.to_set
 
         # Check all files have content types
         # (skip .rels files — they have implicit content type per OPC spec)
@@ -135,7 +135,7 @@ module Uniword
             code: "OPC-005",
             message: "No content type declared for #{entry.name}",
             part: entry.name,
-            suggestion: "Add a Default or Override entry in [Content_Types].xml."
+            suggestion: "Add a Default or Override entry in [Content_Types].xml.",
           )
         end
       rescue Nokogiri::XML::SyntaxError => e
@@ -143,7 +143,7 @@ module Uniword
           severity: "error",
           code: "OPC-008",
           message: "Malformed [Content_Types].xml: #{e.message}",
-          part: "[Content_Types].xml"
+          part: "[Content_Types].xml",
         )
       end
 
@@ -179,7 +179,7 @@ module Uniword
                      "(referenced from #{entry.name})",
             part: entry.name,
             suggestion: "The part '#{target_path}' is referenced but missing " \
-                        "from the package. Remove the relationship or add the part."
+                        "from the package. Remove the relationship or add the part.",
           )
         end
       rescue Nokogiri::XML::SyntaxError => e
@@ -187,7 +187,7 @@ module Uniword
           severity: "error",
           code: "OPC-008",
           message: "Malformed relationship file #{entry.name}: #{e.message}",
-          part: entry.name
+          part: entry.name,
         )
       end
 
@@ -204,7 +204,7 @@ module Uniword
             message: "Malformed XML in #{entry.name}: #{e.message}",
             part: entry.name,
             suggestion: "The XML part is not well-formed and may cause " \
-                        "applications to reject the file."
+                        "applications to reject the file.",
           )
         end
       end

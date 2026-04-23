@@ -66,7 +66,8 @@ module Uniword
           map_attribute "fullDate", to: :full_date, render_nil: false
           map_element "dateFormat", to: :date_format, render_nil: false
           map_element "lid", to: :lid, render_nil: false
-          map_element "storeMappedDataAs", to: :store_mapped_data_as, render_nil: false
+          map_element "storeMappedDataAs", to: :store_mapped_data_as,
+                                           render_nil: false
           map_element "calendar", to: :calendar, render_nil: false
         end
       end

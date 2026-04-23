@@ -197,7 +197,7 @@ module Uniword
           retry
         end
       ensure
-        FileUtils.rm_f(temp_path) if File.exist?(temp_path)
+        FileUtils.rm_f(temp_path)
       end
 
       # Validate the content hash.
@@ -213,7 +213,10 @@ module Uniword
         content.each do |path, data|
           raise ArgumentError, "Entry path cannot be nil" if path.nil?
           raise ArgumentError, "Entry path cannot be empty" if path.empty?
-          raise ArgumentError, "Entry content cannot be nil for #{path}" if data.nil?
+          if data.nil?
+            raise ArgumentError,
+                  "Entry content cannot be nil for #{path}"
+          end
         end
       end
 

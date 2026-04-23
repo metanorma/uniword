@@ -7,7 +7,8 @@ module Uniword
     autoload :LinkChecker, "#{__dir__}/validation/link_checker"
     autoload :LinkValidator, "#{__dir__}/validation/link_validator"
     autoload :LayerValidator, "#{__dir__}/validation/layer_validator"
-    autoload :LayerValidationResult, "#{__dir__}/validation/layer_validation_result"
+    autoload :LayerValidationResult,
+             "#{__dir__}/validation/layer_validation_result"
     autoload :DocumentValidator, "#{__dir__}/validation/document_validator"
     autoload :Checkers, "#{__dir__}/validation/checkers"
     autoload :Validators, "#{__dir__}/validation/validators"

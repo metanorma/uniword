@@ -18,7 +18,8 @@ module Uniword
       #     required: true
       #   })
       class AttributeDefinition
-        attr_reader :name, :tag, :type, :required, :values, :namespace, :prefix, :property
+        attr_reader :name, :tag, :type, :required, :values, :namespace,
+                    :prefix, :property
 
         # Initialize attribute definition from configuration
         #
@@ -98,9 +99,9 @@ module Uniword
 
           # Convert camelCase to snake_case
           name_str.gsub(/([A-Z])/, '_\1')
-                  .downcase
-                  .sub(/^_/, "")
-                  .to_sym
+            .downcase
+            .sub(/^_/, "")
+            .to_sym
         end
 
         # Format value for XML output
@@ -151,7 +152,7 @@ module Uniword
 
           raise ArgumentError,
                 "Invalid value '#{value}' for attribute #{@name}. " \
-                "Valid values: #{@values.join(", ")}"
+                "Valid values: #{@values.join(', ')}"
         end
       end
     end

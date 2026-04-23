@@ -53,7 +53,7 @@ module Uniword
       end
 
       def html_content?
-        content_type.to_s.match?(%r{text/html})
+        content_type.to_s.include?("text/html")
       end
 
       def image_content?

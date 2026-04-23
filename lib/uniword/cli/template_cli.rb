@@ -44,10 +44,10 @@ module Uniword
         if options[:verbose]
           say "  #{t[:name]}:", :cyan
           say "    Path: #{t[:path]}"
-          say "    Description: #{t[:description] || "(none)"}"
-          say "    Source: #{t[:source] || "(unknown)"}"
+          say "    Description: #{t[:description] || '(none)'}"
+          say "    Source: #{t[:source] || '(unknown)'}"
           say "    Markers: #{t[:markers] || 0}"
-          say "    Created: #{t[:created_at] || "(unknown)"}"
+          say "    Created: #{t[:created_at] || '(unknown)'}"
         else
           label = t[:description] ? " - #{t[:description]}" : ""
           say "  - #{t[:name]}#{label}"
@@ -78,19 +78,22 @@ module Uniword
         exit 1
       end
 
-      say "Creating template '#{name}' from #{source}...", :green if options[:verbose]
+      if options[:verbose]
+        say "Creating template '#{name}' from #{source}...",
+            :green
+      end
 
       metadata = Uniword::TemplateManager.create(
         name,
         source,
         options[:dir],
-        description: options[:description]
+        description: options[:description],
       )
 
       say "Created template '#{name}' in #{options[:dir]}/", :green
 
       if options[:verbose]
-        say "  Description: #{metadata[:description] || "(none)"}", :cyan
+        say "  Description: #{metadata[:description] || '(none)'}", :cyan
         say "  Markers: #{metadata[:markers]}", :cyan
         say "  Created: #{metadata[:created_at]}", :cyan
       end
@@ -127,13 +130,16 @@ module Uniword
       data = load_template_data
 
       say "Applying template '#{template_name}'...", :green if options[:verbose]
-      say "  Data keys: #{data.keys.join(", ")}", :cyan if options[:verbose] && data.any?
+      if options[:verbose] && data.any?
+        say "  Data keys: #{data.keys.join(', ')}",
+            :cyan
+      end
 
       Uniword::TemplateManager.apply(
         template_name,
         data,
         output_path,
-        template_dir: options[:dir]
+        template_dir: options[:dir],
       )
 
       say "Applied template '#{template_name}' -> #{output_path}", :green

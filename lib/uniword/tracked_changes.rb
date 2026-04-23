@@ -47,7 +47,10 @@ module Uniword
     # @param revision [Revision] The revision to add
     # @return [Revision] The added revision with assigned ID
     def add_revision(revision)
-      raise ArgumentError, "revision must be a Revision instance" unless revision.is_a?(Revision)
+      unless revision.is_a?(Revision)
+        raise ArgumentError,
+              "revision must be a Revision instance"
+      end
 
       # Assign sequential ID if not already set
       revision.revision_id = next_revision_id unless revision.revision_id && !revision.revision_id.empty?
@@ -67,7 +70,7 @@ module Uniword
         type: :insert,
         text: text,
         author: author,
-        date: date
+        date: date,
       )
       add_revision(revision)
     end
@@ -83,7 +86,7 @@ module Uniword
         type: :delete,
         text: text,
         author: author,
-        date: date
+        date: date,
       )
       add_revision(revision)
     end
@@ -99,7 +102,7 @@ module Uniword
         type: :format_change,
         content: content,
         author: author,
-        date: date
+        date: date,
       )
       add_revision(revision)
     end

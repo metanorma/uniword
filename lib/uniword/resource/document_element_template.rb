@@ -31,7 +31,7 @@ module Uniword
           locale: data["locale"],
           category: data["category"],
           description: data["description"] || "",
-          elements: data["elements"] || []
+          elements: data["elements"] || [],
         )
       end
 

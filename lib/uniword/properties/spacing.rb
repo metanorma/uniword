@@ -24,8 +24,10 @@ module Uniword
         map_attribute "after", to: :after
         map_attribute "line", to: :line
         map_attribute "lineRule", to: :line_rule
-        map_attribute "beforeAutospacing", to: :before_autospacing, render_nil: false
-        map_attribute "afterAutospacing", to: :after_autospacing, render_nil: false
+        map_attribute "beforeAutospacing", to: :before_autospacing,
+                                           render_nil: false
+        map_attribute "afterAutospacing", to: :after_autospacing,
+                                          render_nil: false
       end
     end
   end

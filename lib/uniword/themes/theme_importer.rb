@@ -72,7 +72,7 @@ module Uniword
           "imported_at" => Time.now.utc.iso8601,
           "color_scheme" => serialize_color_scheme(theme.color_scheme),
           "font_scheme" => serialize_font_scheme(theme.font_scheme),
-          "variants" => serialize_variants(theme.variants)
+          "variants" => serialize_variants(theme.variants),
         }
       end
 
@@ -83,7 +83,7 @@ module Uniword
       def serialize_color_scheme(color_scheme)
         {
           "name" => color_scheme.name,
-          "colors" => color_scheme.colors.transform_keys(&:to_s).sort.to_h
+          "colors" => color_scheme.colors.transform_keys(&:to_s).sort.to_h,
         }
       end
 
@@ -99,7 +99,7 @@ module Uniword
           "major_east_asian" => font_scheme.major_east_asian,
           "major_complex_script" => font_scheme.major_complex_script,
           "minor_east_asian" => font_scheme.minor_east_asian,
-          "minor_complex_script" => font_scheme.minor_complex_script
+          "minor_complex_script" => font_scheme.minor_complex_script,
         }
       end
 
@@ -116,7 +116,7 @@ module Uniword
 
           result[variant_id] = {
             "color_scheme" => serialize_color_scheme(variant.theme.color_scheme),
-            "font_scheme" => serialize_font_scheme(variant.theme.font_scheme)
+            "font_scheme" => serialize_font_scheme(variant.theme.font_scheme),
           }
         end
 
@@ -129,9 +129,9 @@ module Uniword
       # @return [String] Theme name for YAML file
       def theme_name_from_file(path)
         File.basename(path, ".thmx")
-            .downcase
-            .gsub(/[^a-z0-9]+/, "_")
-            .gsub(/^_|_$/, "")
+          .downcase
+          .gsub(/[^a-z0-9]+/, "_")
+          .gsub(/^_|_$/, "")
       end
     end
   end

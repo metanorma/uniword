@@ -35,11 +35,16 @@ module Uniword
         map "name", with: { from: :yaml_name_from, to: :yaml_name_to }
         map "default", to: :default
         map "custom", to: :customStyle
-        map "quick_format", with: { from: :yaml_quick_format_from, to: :yaml_quick_format_to }
-        map "based_on", with: { from: :yaml_based_on_from, to: :yaml_based_on_to }
-        map "next_style", with: { from: :yaml_next_style_from, to: :yaml_next_style_to }
-        map "linked_style", with: { from: :yaml_linked_style_from, to: :yaml_linked_style_to }
-        map "ui_priority", with: { from: :yaml_ui_priority_from, to: :yaml_ui_priority_to }
+        map "quick_format",
+            with: { from: :yaml_quick_format_from, to: :yaml_quick_format_to }
+        map "based_on",
+            with: { from: :yaml_based_on_from, to: :yaml_based_on_to }
+        map "next_style",
+            with: { from: :yaml_next_style_from, to: :yaml_next_style_to }
+        map "linked_style",
+            with: { from: :yaml_linked_style_from, to: :yaml_linked_style_to }
+        map "ui_priority",
+            with: { from: :yaml_ui_priority_from, to: :yaml_ui_priority_to }
         map "paragraph_properties", to: :pPr
         map "run_properties", to: :rPr
       end

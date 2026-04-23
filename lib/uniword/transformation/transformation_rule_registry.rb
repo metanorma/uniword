@@ -68,7 +68,7 @@ module Uniword
           rule.matches?(
             element_type: element_type,
             source_format: source_format,
-            target_format: target_format
+            target_format: target_format,
           )
         end || @null_rule
       end

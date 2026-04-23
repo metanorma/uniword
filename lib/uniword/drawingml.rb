@@ -20,8 +20,10 @@ module Uniword
 
     # Shapes (4)
     autoload :Shape, "uniword/drawingml/shape"
-    autoload :NonVisualShapeProperties, "uniword/drawingml/non_visual_shape_properties"
-    autoload :NonVisualDrawingProperties, "uniword/drawingml/non_visual_drawing_properties"
+    autoload :NonVisualShapeProperties,
+             "uniword/drawingml/non_visual_shape_properties"
+    autoload :NonVisualDrawingProperties,
+             "uniword/drawingml/non_visual_drawing_properties"
     autoload :ShapeProperties, "uniword/drawingml/shape_properties"
 
     # Style & References (6)
@@ -54,12 +56,18 @@ module Uniword
 
     # Text Properties (10)
     autoload :ListStyle, "uniword/drawingml/list_style"
-    autoload :DefaultParagraphProperties, "uniword/drawingml/default_paragraph_properties"
-    autoload :Level1ParagraphProperties, "uniword/drawingml/level1_paragraph_properties"
-    autoload :Level2ParagraphProperties, "uniword/drawingml/level2_paragraph_properties"
-    autoload :Level3ParagraphProperties, "uniword/drawingml/level3_paragraph_properties"
-    autoload :TextParagraphProperties, "uniword/drawingml/text_paragraph_properties"
-    autoload :TextCharacterProperties, "uniword/drawingml/text_character_properties"
+    autoload :DefaultParagraphProperties,
+             "uniword/drawingml/default_paragraph_properties"
+    autoload :Level1ParagraphProperties,
+             "uniword/drawingml/level1_paragraph_properties"
+    autoload :Level2ParagraphProperties,
+             "uniword/drawingml/level2_paragraph_properties"
+    autoload :Level3ParagraphProperties,
+             "uniword/drawingml/level3_paragraph_properties"
+    autoload :TextParagraphProperties,
+             "uniword/drawingml/text_paragraph_properties"
+    autoload :TextCharacterProperties,
+             "uniword/drawingml/text_character_properties"
     autoload :TextFont, "uniword/drawingml/text_font"
     autoload :EastAsianFont, "uniword/drawingml/east_asian_font"
     autoload :ComplexScriptFont, "uniword/drawingml/complex_script_font"
@@ -146,29 +154,37 @@ module Uniword
 
     # GVML classes (16)
     autoload :Gvml, "uniword/drawingml/gvml"
-    autoload :GvmlUseShapeRectangle, "uniword/drawingml/gvml_use_shape_rectangle"
+    autoload :GvmlUseShapeRectangle,
+             "uniword/drawingml/gvml_use_shape_rectangle"
     autoload :GvmlTextShape, "uniword/drawingml/gvml_text_shape"
     autoload :GvmlShapeNonVisual, "uniword/drawingml/gvml_shape_non_visual"
     autoload :GvmlShape, "uniword/drawingml/gvml_shape"
-    autoload :GvmlConnectorNonVisual, "uniword/drawingml/gvml_connector_non_visual"
+    autoload :GvmlConnectorNonVisual,
+             "uniword/drawingml/gvml_connector_non_visual"
     autoload :GvmlConnector, "uniword/drawingml/gvml_connector"
     autoload :GvmlPictureNonVisual, "uniword/drawingml/gvml_picture_non_visual"
     autoload :GvmlPicture, "uniword/drawingml/gvml_picture"
-    autoload :GvmlGraphicFrameNonVisual, "uniword/drawingml/gvml_graphic_frame_non_visual"
-    autoload :GvmlGraphicalObjectFrame, "uniword/drawingml/gvml_graphical_object_frame"
-    autoload :GvmlGroupShapeNonVisual, "uniword/drawingml/gvml_group_shape_non_visual"
+    autoload :GvmlGraphicFrameNonVisual,
+             "uniword/drawingml/gvml_graphic_frame_non_visual"
+    autoload :GvmlGraphicalObjectFrame,
+             "uniword/drawingml/gvml_graphical_object_frame"
+    autoload :GvmlGroupShapeNonVisual,
+             "uniword/drawingml/gvml_group_shape_non_visual"
     autoload :GvmlGroupShape, "uniword/drawingml/gvml_group_shape"
 
     # Supporting types (9)
-    autoload :NonVisualConnectorProperties, "uniword/drawingml/non_visual_connector_properties"
+    autoload :NonVisualConnectorProperties,
+             "uniword/drawingml/non_visual_connector_properties"
     autoload :NonVisualGraphicFrameProperties,
              "uniword/drawingml/non_visual_graphic_frame_properties"
     autoload :NonVisualGroupDrawingShapeProperties,
              "uniword/drawingml/non_visual_group_drawing_shape_properties"
-    autoload :NonVisualPictureProperties, "uniword/drawingml/non_visual_picture_properties"
+    autoload :NonVisualPictureProperties,
+             "uniword/drawingml/non_visual_picture_properties"
     autoload :GroupShapeProperties, "uniword/drawingml/group_shape_properties"
     autoload :OfficeArtExtension, "uniword/drawingml/office_art_extension"
-    autoload :OfficeArtExtensionList, "uniword/drawingml/office_art_extension_list"
+    autoload :OfficeArtExtensionList,
+             "uniword/drawingml/office_art_extension_list"
     autoload :UseLocalDpi, "uniword/drawingml/use_local_dpi"
     autoload :PictureLocking, "uniword/drawingml/picture_locking"
     autoload :GroupLocking, "uniword/drawingml/group_locking"

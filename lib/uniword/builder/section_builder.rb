@@ -131,10 +131,10 @@ module Uniword
       # @return [HeaderFooterBuilder] The header/footer builder
       def header(type: "default", &block)
         hf = HeaderFooterBuilder.new(:header, type: type)
-        block.call(hf) if block_given?
+        yield(hf) if block
 
         ref = Wordprocessingml::HeaderReference.new(
-          type: type, r_id: "rIdHdr#{type}"
+          type: type, r_id: "rIdHdr#{type}",
         )
         @model.header_references << ref
         hf
@@ -150,10 +150,10 @@ module Uniword
       # @return [HeaderFooterBuilder] The header/footer builder
       def footer(type: "default", &block)
         hf = HeaderFooterBuilder.new(:footer, type: type)
-        block.call(hf) if block_given?
+        yield(hf) if block
 
         ref = Wordprocessingml::FooterReference.new(
-          type: type, r_id: "rIdFtr#{type}"
+          type: type, r_id: "rIdFtr#{type}",
         )
         @model.footer_references << ref
         hf

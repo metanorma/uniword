@@ -131,12 +131,14 @@ module Uniword
       # @param core_properties [Uniword::Ooxml::CoreProperties] Optional core properties
       # @param relationships [Uniword::Ooxml::Relationships::PackageRelationships] Optional relationships
       # @return [String] Word HTML4 body content
-      def self.document_to_html_body(document, core_properties = nil, relationships = nil)
+      def self.document_to_html_body(document, core_properties = nil,
+relationships = nil)
         converter = new(document, core_properties, relationships)
         converter.build_html_body
       end
 
-      def initialize(document, core_properties = nil, relationships = nil, document_name = nil)
+      def initialize(document, core_properties = nil, relationships = nil,
+document_name = nil)
         @document = document
         @relationships = relationships
         @core_properties = core_properties

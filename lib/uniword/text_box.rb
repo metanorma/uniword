@@ -6,7 +6,8 @@ module Uniword
   # Represents a text box (floating text container)
   # Can be positioned absolutely or relatively
   class TextBox < Lutaml::Model::Serializable
-    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
+    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true,
+                                                        initialize_empty: true
 
     # Position (in twips from page origin)
     attribute :x, :integer
@@ -49,7 +50,7 @@ module Uniword
       return unless wrapping && !WRAPPING_STYLES.include?(wrapping)
 
       raise ArgumentError,
-            "Invalid wrapping: #{wrapping}. Must be one of: #{WRAPPING_STYLES.join(", ")}"
+            "Invalid wrapping: #{wrapping}. Must be one of: #{WRAPPING_STYLES.join(', ')}"
     end
   end
 end

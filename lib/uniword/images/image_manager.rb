@@ -61,7 +61,7 @@ module Uniword
             content_type: entry[:content_type].to_s,
             size: data ? data.bytesize : 0,
             width: px_w,
-            height: px_h
+            height: px_h,
           )
         end
       end
@@ -104,7 +104,10 @@ module Uniword
       # @option options [String]  :description  Alt text / description
       # @return [String] Relationship ID assigned to the new image
       def insert(image_path, **options)
-        raise ArgumentError, "Image file not found: #{image_path}" unless File.exist?(image_path)
+        unless File.exist?(image_path)
+          raise ArgumentError,
+                "Image file not found: #{image_path}"
+        end
 
         width_emu = parse_dimension(options[:width])
         height_emu = parse_dimension(options[:height])
@@ -212,10 +215,10 @@ module Uniword
           break unless payload
 
           # SOF0..SOF3, SOF5..SOF7, SOF9..SOF11, SOF13..SOF15
-          next unless (byte1 >= 0xC0 && byte1 <= 0xC3) ||
-                      (byte1 >= 0xC5 && byte1 <= 0xC7) ||
-                      (byte1 >= 0xC9 && byte1 <= 0xCB) ||
-                      (byte1 >= 0xCD && byte1 <= 0xCF)
+          next unless byte1.between?(0xC0, 0xC3) ||
+            byte1.between?(0xC5, 0xC7) ||
+            byte1.between?(0xC9, 0xCB) ||
+            byte1.between?(0xCD, 0xCF)
 
           h = payload.byteslice(0, 2).unpack1("n")
           w = payload.byteslice(2, 2).unpack1("n")
@@ -237,7 +240,7 @@ module Uniword
           (stripped.to_f * EMU_PER_INCH).round
         elsif stripped.end_with?("cm")
           (stripped.to_f * EMU_PER_CM).round
-        elsif stripped.end_with?("px") || stripped.end_with?("pt")
+        elsif stripped.end_with?("px", "pt")
           stripped.to_i * EMU_PER_PX
         elsif stripped.match?(/\A\d+\z/)
           stripped.to_i # assume EMU when unit-less integer

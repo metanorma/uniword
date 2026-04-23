@@ -57,7 +57,7 @@ module Uniword
             path: path,
             data: File.binread(path),
             content_type: content_type,
-            target: "media/#{File.basename(path)}"
+            target: "media/#{File.basename(path)}",
           }
         end
         r_id
@@ -90,9 +90,9 @@ module Uniword
             byte1 = marker.bytes[1]
             # SOF0, SOF2, SOF3 markers contain dimensions
             next unless byte1.between?(0xC0, 0xC3) ||
-                        byte1 == 0xC5 || byte1 == 0xC6 ||
-                        byte1 == 0xC7 || byte1.between?(0xC9, 0xCB) ||
-                        byte1 == 0xCD || byte1 == 0xCE || byte1 == 0xCF
+              byte1 == 0xC5 || byte1 == 0xC6 ||
+              byte1 == 0xC7 || byte1.between?(0xC9, 0xCB) ||
+              byte1 == 0xCD || byte1 == 0xCE || byte1 == 0xCF
 
             h = payload[0, 2].unpack1("n")
             w = payload[2, 2].unpack1("n")
@@ -120,7 +120,8 @@ module Uniword
       # @param height [Integer, nil] Height in EMU
       # @param alt_text [String, nil] Alternative text
       # @return [Wordprocessingml::Drawing]
-      def self.create_drawing(document, path, width: nil, height: nil, alt_text: nil)
+      def self.create_drawing(document, path, width: nil, height: nil,
+alt_text: nil)
         r_id = register_image(document, path)
 
         px_w, px_h = read_dimensions(path)
@@ -134,7 +135,7 @@ module Uniword
         inline.effect_extent = WpDrawing::EffectExtent.new
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: SecureRandom.random_number(1_000_000_000),
-          name: File.basename(path, ".*")
+          name: File.basename(path, ".*"),
         )
         inline.graphic = build_graphic(r_id, w, h)
 
@@ -177,7 +178,7 @@ module Uniword
 
         # Horizontal positioning
         anchor.position_h = WpDrawing::PositionH.new(
-          relative_from: "margin"
+          relative_from: "margin",
         )
         if align
           anchor.position_h.align = align.to_s
@@ -189,7 +190,7 @@ module Uniword
 
         # Vertical positioning
         anchor.position_v = WpDrawing::PositionV.new(
-          relative_from: "margin"
+          relative_from: "margin",
         )
         if vertical_align
           anchor.position_v.align = vertical_align.to_s
@@ -214,7 +215,7 @@ module Uniword
 
         anchor.doc_properties = WpDrawing::DocProperties.new(
           id: SecureRandom.random_number(1_000_000_000),
-          name: File.basename(path, ".*")
+          name: File.basename(path, ".*"),
         )
         anchor.graphic = build_graphic(r_id, w, h)
 
@@ -230,7 +231,8 @@ module Uniword
       # @param height [Integer, nil] Height in EMU
       # @param alt_text [String, nil] Alternative text
       # @return [Wordprocessingml::Run]
-      def self.create_run(document, path, width: nil, height: nil, alt_text: nil)
+      def self.create_run(document, path, width: nil, height: nil,
+alt_text: nil)
         run = Wordprocessingml::Run.new
         run.drawings << create_drawing(document, path,
                                        width: width, height: height,
@@ -291,7 +293,7 @@ module Uniword
           pic.nv_pic_pr = Picture::NonVisualPictureProperties.new
           pic.nv_pic_pr.c_nv_pr = Drawingml::NonVisualDrawingProperties.new(
             id: SecureRandom.random_number(1_000_000_000),
-            name: "Picture #{SecureRandom.random_number(1_000_000)}"
+            name: "Picture #{SecureRandom.random_number(1_000_000)}",
           )
           pic.nv_pic_pr.c_nv_pic_pr = Picture::NonVisualPictureDrawingProperties.new
 

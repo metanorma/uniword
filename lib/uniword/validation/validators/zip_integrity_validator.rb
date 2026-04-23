@@ -37,7 +37,7 @@ module Uniword
           rescue Zip::Error => e
             result.add_error(
               "Invalid ZIP file: #{e.message}",
-              critical: true
+              critical: true,
             )
           end
 
@@ -65,7 +65,7 @@ module Uniword
         def validate_required_entries(zip_file, result)
           required_entries = [
             "[Content_Types].xml",
-            "word/document.xml"
+            "word/document.xml",
           ]
 
           required_entries.each do |entry_name|
@@ -73,7 +73,7 @@ module Uniword
 
             result.add_error(
               "Missing required file: #{entry_name}",
-              critical: true
+              critical: true,
             )
           end
         end
@@ -87,7 +87,7 @@ module Uniword
               entry.get_input_stream { |io| io.read(1) }
             rescue StandardError => e
               result.add_error(
-                "Corrupted entry: #{entry.name} (#{e.message})"
+                "Corrupted entry: #{entry.name} (#{e.message})",
               )
             end
           end

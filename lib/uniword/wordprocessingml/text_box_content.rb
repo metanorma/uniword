@@ -11,7 +11,8 @@ module Uniword
       # PATTERN 0: Attributes FIRST
       attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
       attribute :tables, Table, collection: true, initialize_empty: true
-      attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
+      attribute :sdts, StructuredDocumentTag, collection: true,
+                                              initialize_empty: true
 
       xml do
         element "txbxContent"

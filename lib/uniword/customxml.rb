@@ -16,13 +16,19 @@ module Uniword
     autoload :CustomXmlAttribute, "uniword/customxml/custom_xml_attribute"
     autoload :CustomXmlBlock, "uniword/customxml/custom_xml_block"
     autoload :CustomXmlCell, "uniword/customxml/custom_xml_cell"
-    autoload :CustomXmlDelRangeStart, "uniword/customxml/custom_xml_del_range_start"
+    autoload :CustomXmlDelRangeStart,
+             "uniword/customxml/custom_xml_del_range_start"
     autoload :CustomXmlInsRangeEnd, "uniword/customxml/custom_xml_ins_range_end"
-    autoload :CustomXmlInsRangeStart, "uniword/customxml/custom_xml_ins_range_start"
-    autoload :CustomXmlMoveFromRangeEnd, "uniword/customxml/custom_xml_move_from_range_end"
-    autoload :CustomXmlMoveFromRangeStart, "uniword/customxml/custom_xml_move_from_range_start"
-    autoload :CustomXmlMoveToRangeEnd, "uniword/customxml/custom_xml_move_to_range_end"
-    autoload :CustomXmlMoveToRangeStart, "uniword/customxml/custom_xml_move_to_range_start"
+    autoload :CustomXmlInsRangeStart,
+             "uniword/customxml/custom_xml_ins_range_start"
+    autoload :CustomXmlMoveFromRangeEnd,
+             "uniword/customxml/custom_xml_move_from_range_end"
+    autoload :CustomXmlMoveFromRangeStart,
+             "uniword/customxml/custom_xml_move_from_range_start"
+    autoload :CustomXmlMoveToRangeEnd,
+             "uniword/customxml/custom_xml_move_to_range_end"
+    autoload :CustomXmlMoveToRangeStart,
+             "uniword/customxml/custom_xml_move_to_range_start"
     autoload :CustomXmlProperties, "uniword/customxml/custom_xml_properties"
     autoload :CustomXmlRow, "uniword/customxml/custom_xml_row"
     autoload :CustomXmlRun, "uniword/customxml/custom_xml_run"
@@ -38,7 +44,8 @@ module Uniword
     autoload :SchemaRefs, "uniword/customxml/schema_reference"
     autoload :SchemaReference, "uniword/customxml/schema_reference"
     autoload :ShowingPlaceholder, "uniword/customxml/showing_placeholder"
-    autoload :ShowingPlaceholderHeader, "uniword/customxml/showing_placeholder_header"
+    autoload :ShowingPlaceholderHeader,
+             "uniword/customxml/showing_placeholder_header"
     autoload :SmartTag, "uniword/customxml/smart_tag"
     autoload :SmartTagAttribute, "uniword/customxml/smart_tag_attribute"
     autoload :SmartTagElement, "uniword/customxml/smart_tag_element"

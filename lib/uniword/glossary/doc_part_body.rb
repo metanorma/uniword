@@ -12,7 +12,8 @@ module Uniword
     class DocPartBody < Lutaml::Model::Serializable
       attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true,
                                                                    initialize_empty: true
-      attribute :tables, Uniword::Wordprocessingml::Table, collection: true, initialize_empty: true
+      attribute :tables, Uniword::Wordprocessingml::Table, collection: true,
+                                                           initialize_empty: true
       attribute :sdts, Uniword::Wordprocessingml::StructuredDocumentTag, collection: true,
                                                                          initialize_empty: true
 

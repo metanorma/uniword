@@ -28,7 +28,7 @@ module Uniword
         # Default configuration values
         DEFAULTS = {
           case_sensitive: false,
-          check_heading_links: true
+          check_heading_links: true,
         }.freeze
 
         # Check if this checker can validate the given link.
@@ -57,17 +57,23 @@ module Uniword
         # @example
         #   result = checker.check(hyperlink, document)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+          unless enabled?
+            return ValidationResult.unknown(link,
+                                            "Checker disabled")
+          end
 
           unless document
             return ValidationResult.warning(
               link,
-              "Cannot validate without document context"
+              "Cannot validate without document context",
             )
           end
 
           anchor = link.anchor
-          return ValidationResult.failure(link, "No anchor specified") unless anchor
+          unless anchor
+            return ValidationResult.failure(link,
+                                            "No anchor specified")
+          end
 
           # Get bookmarks from document
           bookmarks = extract_bookmarks(document)
@@ -76,18 +82,18 @@ module Uniword
           if bookmark_exists?(anchor, bookmarks)
             ValidationResult.success(
               link,
-              metadata: { anchor: anchor, bookmark_count: bookmarks.size }
+              metadata: { anchor: anchor, bookmark_count: bookmarks.size },
             )
           else
             # Try to find similar bookmarks for suggestions
             suggestions = find_similar_bookmarks(anchor, bookmarks)
             message = "Bookmark not found: #{anchor}"
-            message += ". Did you mean: #{suggestions.join(", ")}?" if suggestions.any?
+            message += ". Did you mean: #{suggestions.join(', ')}?" if suggestions.any?
 
             ValidationResult.failure(
               link,
               message,
-              metadata: { anchor: anchor, suggestions: suggestions }
+              metadata: { anchor: anchor, suggestions: suggestions },
             )
           end
         end
@@ -130,10 +136,10 @@ module Uniword
 
           document.paragraphs.select do |p|
             p.respond_to?(:style) && p.style&.match?(/^Heading/)
-          end.map do |p|
+          end.filter_map do |p|
             # Generate bookmark from heading text
             p.respond_to?(:text) ? heading_to_bookmark(p.text) : nil
-          end.compact
+          end
         end
 
         # Convert heading text to bookmark name.
@@ -150,7 +156,8 @@ module Uniword
         # @param bookmarks [Array<String>] Available bookmarks
         # @return [Boolean] true if bookmark exists
         def bookmark_exists?(anchor, bookmarks)
-          case_sensitive = config_value(:case_sensitive, DEFAULTS[:case_sensitive])
+          case_sensitive = config_value(:case_sensitive,
+                                        DEFAULTS[:case_sensitive])
 
           if case_sensitive
             bookmarks.include?(anchor)
@@ -165,7 +172,8 @@ module Uniword
         # @param bookmarks [Array<String>] Available bookmarks
         # @return [Array<String>] Similar bookmark names
         def find_similar_bookmarks(anchor, bookmarks)
-          case_sensitive = config_value(:case_sensitive, DEFAULTS[:case_sensitive])
+          case_sensitive = config_value(:case_sensitive,
+                                        DEFAULTS[:case_sensitive])
           anchor_norm = case_sensitive ? anchor : anchor.downcase
 
           # Find bookmarks that partially match

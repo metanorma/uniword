@@ -66,7 +66,7 @@ module Uniword
 
         # Check for inconsistent column counts
         column_counts = element.rows.map { |row| row.cells.count }.uniq
-        warnings << "Table has inconsistent column counts: #{column_counts.join(", ")}" if column_counts.size > 1
+        warnings << "Table has inconsistent column counts: #{column_counts.join(', ')}" if column_counts.size > 1
 
         warnings
       end
@@ -129,6 +129,6 @@ end
 if defined?(Uniword::Validators::ElementValidator)
   Uniword::Validators::ElementValidator.register(
     Uniword::Wordprocessingml::Table,
-    Uniword::Validators::TableValidator
+    Uniword::Validators::TableValidator,
   )
 end

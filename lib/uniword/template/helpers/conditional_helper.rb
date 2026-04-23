@@ -51,7 +51,8 @@ module Uniword
         # @return [void]
         def remove_conditional_content(start_marker, end_marker, document)
           # Find elements between markers
-          elements_to_remove = extract_conditional_elements(start_marker, end_marker, document)
+          elements_to_remove = extract_conditional_elements(start_marker,
+                                                            end_marker, document)
 
           # Remove each element from document
           elements_to_remove.each do |element|

@@ -77,7 +77,7 @@ module Uniword
       {
         name: @name,
         target_element: @target_element,
-        bookmark_id: @bookmark_id
+        bookmark_id: @bookmark_id,
       }
     end
 

@@ -38,7 +38,7 @@ module Uniword
 
         {
           numbering_definition: @numbering_definition || base_props[:numbering_definition],
-          levels: merge_levels(base_props[:levels], @levels)
+          levels: merge_levels(base_props[:levels], @levels),
         }
       end
 
@@ -48,7 +48,7 @@ module Uniword
       def full_properties
         {
           numbering_definition: @numbering_definition,
-          levels: @levels
+          levels: @levels,
         }
       end
 
