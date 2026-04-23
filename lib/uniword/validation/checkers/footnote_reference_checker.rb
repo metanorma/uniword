@@ -25,7 +25,7 @@ module Uniword
       class FootnoteReferenceChecker < LinkChecker
         # Default configuration values
         DEFAULTS = {
-          check_targets_exist: true
+          check_targets_exist: true,
         }.freeze
 
         # Check if this checker can validate the given link.
@@ -41,7 +41,8 @@ module Uniword
           # Check if link is a footnote reference
           link.respond_to?(:footnote_id) ||
             link.respond_to?(:endnote_id) ||
-            (link.respond_to?(:type) && %i[footnote endnote].include?(link.type))
+            (link.respond_to?(:type) && %i[footnote
+                                           endnote].include?(link.type))
         end
 
         # Validate the footnote reference.
@@ -53,25 +54,32 @@ module Uniword
         # @example
         #   result = checker.check(footnote_ref, document)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+          unless enabled?
+            return ValidationResult.unknown(link,
+                                            "Checker disabled")
+          end
 
-          unless config_value(:check_targets_exist, DEFAULTS[:check_targets_exist])
+          unless config_value(:check_targets_exist,
+                              DEFAULTS[:check_targets_exist])
             return ValidationResult.warning(
               link,
-              "Footnote target checking disabled"
+              "Footnote target checking disabled",
             )
           end
 
           unless document
             return ValidationResult.warning(
               link,
-              "Cannot validate without document context"
+              "Cannot validate without document context",
             )
           end
 
           # Extract footnote/endnote ID
           note_id = extract_note_id(link)
-          return ValidationResult.failure(link, "No footnote ID specified") unless note_id
+          unless note_id
+            return ValidationResult.failure(link,
+                                            "No footnote ID specified")
+          end
 
           # Determine note type
           note_type = determine_note_type(link)
@@ -86,8 +94,8 @@ module Uniword
               metadata: {
                 note_id: note_id,
                 note_type: note_type,
-                note_count: notes.size
-              }
+                note_count: notes.size,
+              },
             )
           else
             ValidationResult.failure(
@@ -96,8 +104,8 @@ module Uniword
               metadata: {
                 note_id: note_id,
                 note_type: note_type,
-                available_notes: notes.keys
-              }
+                available_notes: notes.keys,
+              },
             )
           end
         end

@@ -39,7 +39,7 @@ module Uniword
 
       checker = Spellcheck::SpellChecker.new(
         language: options[:language],
-        dictionary: options[:dictionary]
+        dictionary: options[:dictionary],
       )
       result = checker.check(doc)
 
@@ -83,7 +83,7 @@ module Uniword
               "(position #{m[:position]})"
           if options[:verbose] && m[:suggestions].any?
             say "     Suggestions: " \
-                "#{m[:suggestions].first(5).join(", ")}"
+                "#{m[:suggestions].first(5).join(', ')}"
           end
         end
       end

@@ -19,7 +19,7 @@ module Uniword
 
         namespace_scope [
           { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility,
-            declare: :always }
+            declare: :always },
         ]
 
         map_element "docParts", to: :doc_parts, render_nil: false

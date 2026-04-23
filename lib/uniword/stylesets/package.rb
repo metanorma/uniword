@@ -46,14 +46,17 @@ module Uniword
 
         # Deserialize styles.xml using lutaml-model (MODEL-DRIVEN!)
         styles_xml = extracted["word/styles.xml"]
-        raise Uniword::CorruptedFileError.new(path, "styles.xml missing") unless styles_xml
+        unless styles_xml
+          raise Uniword::CorruptedFileError.new(path,
+                                                "styles.xml missing")
+        end
 
         styles_config = Uniword::Wordprocessingml::StylesConfiguration.from_xml(styles_xml)
 
         # Create Package instance
         new(
           styles_configuration: styles_config,
-          source_path: path
+          source_path: path,
         )
       end
 
@@ -64,7 +67,7 @@ module Uniword
         StyleSet.new(
           name: extract_name,
           styles: styles_configuration.styles,
-          source_file: source_path
+          source_file: source_path,
         )
       end
 
@@ -87,7 +90,8 @@ module Uniword
         end
         contents
       rescue Zip::Error => e
-        raise Uniword::CorruptedFileError.new(path, "Failed to extract: #{e.message}")
+        raise Uniword::CorruptedFileError.new(path,
+                                              "Failed to extract: #{e.message}")
       end
 
       # Extract StyleSet name from source path

@@ -39,7 +39,7 @@ module Uniword
       def check(document)
         report = AccessibilityReport.new(
           profile_name: @profile.name,
-          profile_level: @profile.level
+          profile_level: @profile.level,
         )
 
         # Run all enabled rules
@@ -107,7 +107,7 @@ module Uniword
           Rules::DescriptiveHeadingsRule.new(@profile.rule_config(:descriptive_headings)),
 
           # WCAG 3.1.1: Language of Page
-          Rules::LanguageSpecificationRule.new(@profile.rule_config(:language_specification))
+          Rules::LanguageSpecificationRule.new(@profile.rule_config(:language_specification)),
         ].compact
       end
     end

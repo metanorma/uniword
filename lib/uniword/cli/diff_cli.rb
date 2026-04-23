@@ -101,7 +101,7 @@ module Uniword
     def build_differ_options
       {
         text_only: options["text-only"],
-        part: options[:part]
+        part: options[:part],
       }
     end
 

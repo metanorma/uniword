@@ -58,7 +58,7 @@ module Uniword
       a3: [16_838, 23_811],        # 297mm x 420mm
       legal: [12_240, 20_160],     # 8.5" x 14"
       tabloid: [15_840, 24_480],   # 11" x 17"
-      a5: [8391, 11_906] # 148mm x 210mm
+      a5: [8391, 11_906], # 148mm x 210mm
     }.freeze
 
     # Valid orientations
@@ -78,7 +78,7 @@ module Uniword
       new(
         page_width: 11_906,  # 210mm in twips
         page_height: 16_838, # 297mm in twips
-        orientation: "portrait"
+        orientation: "portrait",
       )
     end
 
@@ -87,7 +87,7 @@ module Uniword
       new(
         page_width: 16_838,  # 297mm in twips
         page_height: 11_906, # 210mm in twips
-        orientation: "landscape"
+        orientation: "landscape",
       )
     end
 
@@ -96,7 +96,7 @@ module Uniword
       new(
         page_width: 12_240,  # 8.5in in twips
         page_height: 15_840, # 11in in twips
-        orientation: "portrait"
+        orientation: "portrait",
       )
     end
 
@@ -105,7 +105,7 @@ module Uniword
       new(
         page_width: 15_840,  # 11in in twips
         page_height: 12_240, # 8.5in in twips
-        orientation: "landscape"
+        orientation: "landscape",
       )
     end
 
@@ -117,7 +117,7 @@ module Uniword
     def set_page_size(name, orientation: :portrait)
       unless PAGE_SIZES.key?(name)
         raise ArgumentError,
-              "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(", ")}"
+              "Unknown page size: #{name}. Available: #{PAGE_SIZES.keys.join(', ')}"
       end
 
       width, height = PAGE_SIZES[name]
@@ -139,7 +139,8 @@ module Uniword
     # @param separator [Boolean] Show separator line
     # @return [void]
     def set_columns(count, space: 720, separator: false)
-      self.columns = ColumnConfiguration.equal(count, space: space, separator: separator)
+      self.columns = ColumnConfiguration.equal(count, space: space,
+                                                      separator: separator)
     end
 
     # Enable line numbering
@@ -149,12 +150,13 @@ module Uniword
     # @param restart [String] When to restart (continuous, newPage, newSection)
     # @param distance [Integer] Distance from text
     # @return [void]
-    def enable_line_numbering(start: 1, count_by: 1, restart: "newPage", distance: 360)
+    def enable_line_numbering(start: 1, count_by: 1, restart: "newPage",
+distance: 360)
       self.line_numbering = LineNumbering.new(
         start: start,
         count_by: count_by,
         restart: restart,
-        distance: distance
+        distance: distance,
       )
     end
 
@@ -167,14 +169,14 @@ module Uniword
       return unless orientation && !ORIENTATIONS.include?(orientation)
 
       raise ArgumentError,
-            "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(", ")}"
+            "Invalid orientation: #{orientation}. Must be one of: #{ORIENTATIONS.join(', ')}"
     end
 
     def validate_section_type
       return unless section_type && !SECTION_TYPES.include?(section_type)
 
       raise ArgumentError,
-            "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(", ")}"
+            "Invalid section type: #{section_type}. Must be one of: #{SECTION_TYPES.join(', ')}"
     end
   end
 end

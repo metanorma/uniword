@@ -25,7 +25,7 @@ module Uniword
                 element: image,
                 severity: @config[:severity] || :error,
                 suggestion: @config[:suggestion] ||
-                  "Add descriptive alternative text using image.alt_text = '...'"
+                  "Add descriptive alternative text using image.alt_text = '...'",
               )
               next # Skip quality checks if no alt text
             end
@@ -55,7 +55,7 @@ module Uniword
               message: "Image #{index + 1} has insufficient alt text (too short: #{image.alt_text.length} chars)",
               element: image,
               severity: :warning,
-              suggestion: "Alternative text should describe the image content meaningfully (min #{@config[:min_length]} chars)"
+              suggestion: "Alternative text should describe the image content meaningfully (min #{@config[:min_length]} chars)",
             )
           end
 
@@ -65,19 +65,21 @@ module Uniword
               message: "Image #{index + 1} has excessive alt text (too long: #{image.alt_text.length} chars)",
               element: image,
               severity: :warning,
-              suggestion: "Keep alternative text concise (max #{@config[:max_length]} chars)"
+              suggestion: "Keep alternative text concise (max #{@config[:max_length]} chars)",
             )
           end
 
           # Check for unhelpful generic text
           unhelpful = %w[image picture photo img graphic icon]
           alt_lower = image.alt_text.downcase
-          if unhelpful.any? { |word| alt_lower == word || alt_lower.start_with?("#{word} of") }
+          if unhelpful.any? do |word|
+            alt_lower == word || alt_lower.start_with?("#{word} of")
+          end
             violations << create_violation(
               message: "Image #{index + 1} has generic alt text: '#{image.alt_text}'",
               element: image,
               severity: :warning,
-              suggestion: "Describe what the image shows, not that it's an image"
+              suggestion: "Describe what the image shows, not that it's an image",
             )
           end
 

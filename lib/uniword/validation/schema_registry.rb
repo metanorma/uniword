@@ -49,7 +49,7 @@ module Uniword
         "http://schemas.openxmlformats.org/package/2006/content-types" =>
           "ecma/opc-contentTypes.xsd",
         "http://schemas.openxmlformats.org/package/2006/relationships" =>
-          "ecma/opc-relationships.xsd"
+          "ecma/opc-relationships.xsd",
       }.freeze
 
       # Parts that use WordprocessingML schemas
@@ -100,7 +100,7 @@ module Uniword
         doc = @moxml.parse(xml_content)
         root = doc.root
         ignorable = root["Ignorable"] ||
-                    root["mc:Ignorable"]
+          root["mc:Ignorable"]
         return [] unless ignorable
 
         ignorable.split(/\s+/).reject(&:empty?)
@@ -137,7 +137,10 @@ module Uniword
         return @schema_cache[xsd_relative_path] if @schema_cache.key?(xsd_relative_path)
 
         xsd_path = File.join(schemas_dir, xsd_relative_path)
-        raise ArgumentError, "XSD schema not found: #{xsd_path}" unless File.exist?(xsd_path)
+        unless File.exist?(xsd_path)
+          raise ArgumentError,
+                "XSD schema not found: #{xsd_path}"
+        end
 
         # Nokogiri::XML::Schema resolves relative imports from CWD.
         # We chdir to the schema file's own directory so imports like

@@ -31,7 +31,8 @@ module Uniword
     autoload :Symbol, "uniword/wordprocessingml/symbol"
     autoload :DeletedText, "uniword/wordprocessingml/deleted_text"
     autoload :NoBreakHyphen, "uniword/wordprocessingml/no_break_hyphen"
-    autoload :LastRenderedPageBreak, "uniword/wordprocessingml/last_rendered_page_break"
+    autoload :LastRenderedPageBreak,
+             "uniword/wordprocessingml/last_rendered_page_break"
     autoload :CarriageReturn, "uniword/wordprocessingml/carriage_return"
     autoload :SimpleField, "uniword/wordprocessingml/simple_field"
     autoload :TextBoxContent, "uniword/wordprocessingml/text_box_content"
@@ -60,7 +61,8 @@ module Uniword
     # Structure and metadata
     autoload :Level, "uniword/wordprocessingml/level"
     autoload :Style, "uniword/wordprocessingml/style"
-    autoload :StructuredDocumentTag, "uniword/wordprocessingml/structured_document_tag"
+    autoload :StructuredDocumentTag,
+             "uniword/wordprocessingml/structured_document_tag"
     autoload :StructuredDocumentTagProperties,
              "uniword/wordprocessingml/structured_document_tag_properties"
     autoload :SectionProperties, "uniword/wordprocessingml/section_properties"
@@ -159,11 +161,14 @@ module Uniword
     autoload :RFonts, "uniword/wordprocessingml/numbering_elements"
     autoload :Tabs, "uniword/wordprocessingml/level"
     autoload :PStyle, "uniword/wordprocessingml/level"
-    autoload :NumberingConfiguration, "uniword/wordprocessingml/numbering_configuration"
-    autoload :NumberingDefinition, "uniword/wordprocessingml/numbering_definition"
+    autoload :NumberingConfiguration,
+             "uniword/wordprocessingml/numbering_configuration"
+    autoload :NumberingDefinition,
+             "uniword/wordprocessingml/numbering_definition"
     autoload :NumberingInstance, "uniword/wordprocessingml/numbering_instance"
     autoload :NumberingLevel, "uniword/wordprocessingml/numbering_level"
-    autoload :StylesConfiguration, "uniword/wordprocessingml/styles_configuration"
+    autoload :StylesConfiguration,
+             "uniword/wordprocessingml/styles_configuration"
 
     # Footnotes and endnotes
     autoload :Footnote, "uniword/wordprocessingml/footnote"
@@ -192,8 +197,10 @@ module Uniword
     autoload :Shadow, "uniword/wordprocessingml/shadow"
 
     # Properties
-    autoload :TableCellProperties, "uniword/wordprocessingml/table_cell_properties"
-    autoload :TableRowProperties, "uniword/wordprocessingml/table_row_properties"
+    autoload :TableCellProperties,
+             "uniword/wordprocessingml/table_cell_properties"
+    autoload :TableRowProperties,
+             "uniword/wordprocessingml/table_row_properties"
     autoload :TableCellBorders, "uniword/wordprocessingml/table_cell_borders"
     autoload :Border, "uniword/wordprocessingml/border"
     autoload :ParagraphBorders, "uniword/wordprocessingml/paragraph_borders"
@@ -218,13 +225,15 @@ module Uniword
     autoload :TextDirection, "uniword/wordprocessingml/text_direction"
 
     # Properties classes (consolidated from Ooxml::WordProcessingML)
-    autoload :ParagraphProperties, "uniword/wordprocessingml/paragraph_properties"
+    autoload :ParagraphProperties,
+             "uniword/wordprocessingml/paragraph_properties"
     autoload :RunProperties, "uniword/wordprocessingml/run_properties"
     autoload :TableProperties, "uniword/wordprocessingml/table_properties"
 
     autoload :W14ParaId, "uniword/wordprocessingml/w14_attributes"
     autoload :W14TextId, "uniword/wordprocessingml/w14_attributes"
-    autoload :W15RestartNumberingAfterBreak, "uniword/wordprocessingml/w14_attributes"
+    autoload :W15RestartNumberingAfterBreak,
+             "uniword/wordprocessingml/w14_attributes"
     autoload :W16CidDurableId, "uniword/wordprocessingml/w14_attributes"
     autoload :DocGrid, "uniword/wordprocessingml/doc_grid"
     autoload :TitlePg, "uniword/wordprocessingml/title_pg"

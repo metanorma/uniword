@@ -38,7 +38,8 @@ module Uniword
     def validate_style
       return unless style && !STYLES.include?(style)
 
-      raise ArgumentError, "Invalid border style: #{style}. Must be one of: #{STYLES.join(", ")}"
+      raise ArgumentError,
+            "Invalid border style: #{style}. Must be one of: #{STYLES.join(', ')}"
     end
   end
 
@@ -75,13 +76,13 @@ module Uniword
         style: style,
         color: color,
         size: size,
-        space: space
+        space: space,
       )
       new(
         top: border_side,
         bottom: border_side,
         left: border_side,
-        right: border_side
+        right: border_side,
       )
     end
 

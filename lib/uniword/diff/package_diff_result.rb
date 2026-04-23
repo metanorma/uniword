@@ -41,7 +41,7 @@ module Uniword
           name: @name,
           old_size: @old_size,
           new_size: @new_size,
-          size_delta: size_delta
+          size_delta: size_delta,
         }
         result[:xml_changes] = @changes.map(&:to_h) if @changes.any?
         result
@@ -132,7 +132,7 @@ module Uniword
           removed_parts: @removed_parts,
           modified_parts: @modified_parts.map(&:to_h),
           unchanged_count: @unchanged_parts.size,
-          xml_changes: @xml_changes.map(&:to_h)
+          xml_changes: @xml_changes.map(&:to_h),
         }
       end
     end

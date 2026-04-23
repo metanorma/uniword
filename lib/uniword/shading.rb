@@ -103,7 +103,8 @@ module Uniword
     def validate_type
       return unless type && !TYPES.include?(type)
 
-      raise ArgumentError, "Invalid shading type: #{type}. Must be one of: #{TYPES.join(", ")}"
+      raise ArgumentError,
+            "Invalid shading type: #{type}. Must be one of: #{TYPES.join(', ')}"
     end
   end
 end

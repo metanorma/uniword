@@ -30,7 +30,7 @@ module Uniword
         def check(context)
           issues = []
           rels = context.relationships
-          rels_by_id = rels.each_with_object({}) { |r, h| h[r[:id]] = r }
+          rels_by_id = rels.to_h { |r| [r[:id], r] }
 
           # DOC-050: Image relationship targets
           image_rels = rels.select { |r| r[:type]&.include?("image") }
@@ -46,7 +46,7 @@ module Uniword
               "Image target '#{target_path}' not found in package",
               part: "word/_rels/document.xml.rels",
               suggestion: "Add the image file '#{target_path}' to the " \
-                          "package, or remove the relationship."
+                          "package, or remove the relationship.",
             )
           end
 
@@ -70,9 +70,11 @@ module Uniword
             ext = File.extname(target)[1..]
             next unless ext
 
-            declared = ct[ext] || ct["/#{target.start_with?("/") ? target[1..] : "word/#{target}"}"]
+            declared = ct[ext] || ct["/#{target.start_with?('/') ? target[1..] : "word/#{target}"}"]
 
-            next unless declared && IMAGE_TYPES.none? { |_t| declared.include?(ext.upcase) }
+            next unless declared && IMAGE_TYPES.none? do |_t|
+              declared.include?(ext.upcase)
+            end
 
             issues << issue(
               "Image extension '.#{ext}' has non-image content type: #{declared}",
@@ -80,7 +82,7 @@ module Uniword
               severity: "warning",
               part: "[Content_Types].xml",
               suggestion: "Set the content type for '.#{ext}' to an image " \
-                          "MIME type (e.g., image/#{ext})."
+                          "MIME type (e.g., image/#{ext}).",
             )
           end
         end
@@ -92,7 +94,7 @@ module Uniword
           doc = Nokogiri::XML(raw)
           doc.xpath("//a:blip", "a" => A_NS).each do |blip|
             embed = blip["r:embed"] ||
-                    blip.attributes.find { |a| a.name == "embed" }&.value
+              blip.attributes.find { |a| a.name == "embed" }&.value
             next unless embed
 
             rel = rels_by_id[embed]
@@ -103,7 +105,7 @@ module Uniword
               code: "DOC-052",
               part: "word/document.xml",
               suggestion: "Add a relationship for r:id='#{embed}' " \
-                          "pointing to the image."
+                          "pointing to the image.",
             )
           end
         end

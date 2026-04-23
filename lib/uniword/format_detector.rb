@@ -65,9 +65,15 @@ module Uniword
       return if path.is_a?(IO) || path.is_a?(StringIO)
 
       # For strings, validate as file path
-      raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
+      if path.respond_to?(:empty?) && path.empty?
+        raise ArgumentError,
+              "Path cannot be empty"
+      end
       raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
-      raise ArgumentError, "Path is a directory: #{path}" if File.directory?(path)
+      if File.directory?(path)
+        raise ArgumentError,
+              "Path is a directory: #{path}"
+      end
     end
 
     # Detect format from stream content
@@ -90,7 +96,9 @@ module Uniword
 
       # Check for HTML tags
       lower = header.downcase
-      return :html if HTML_MARKERS.any? { |marker| lower.include?(marker.downcase) }
+      return :html if HTML_MARKERS.any? do |marker|
+        lower.include?(marker.downcase)
+      end
 
       # Default to DOCX for unknown streams
       :docx
@@ -113,7 +121,9 @@ module Uniword
 
       # Check for HTML tags
       lower = header.downcase
-      return :html if HTML_MARKERS.any? { |marker| lower.include?(marker.downcase) }
+      return :html if HTML_MARKERS.any? do |marker|
+        lower.include?(marker.downcase)
+      end
 
       nil
     end

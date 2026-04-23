@@ -79,7 +79,7 @@ module Uniword
         {
           accepted: @accepted,
           rejected: @rejected,
-          skipped: @skipped
+          skipped: @skipped,
         }
       end
 
@@ -94,7 +94,7 @@ module Uniword
       def display_item(entry, idx, total)
         item = entry[:item]
         @output.puts "[#{idx + 1}/#{total}] " \
-                     "#{entry[:type] == :comment ? "Comment" : "Revision"}"
+                     "#{entry[:type] == :comment ? 'Comment' : 'Revision'}"
 
         if entry[:type] == :comment
           display_comment(item)
@@ -108,8 +108,8 @@ module Uniword
       # @param comment [Uniword::Comment] The comment
       # @return [void]
       def display_comment(comment)
-        @output.puts "  Author: #{comment.author || "(unknown)"}"
-        @output.puts "  Date:   #{comment.date || "(unknown)"}"
+        @output.puts "  Author: #{comment.author || '(unknown)'}"
+        @output.puts "  Date:   #{comment.date || '(unknown)'}"
         @output.puts "  Text:   #{truncate(comment.text, 60)}"
       end
 
@@ -118,8 +118,8 @@ module Uniword
       # @param revision [Uniword::Revision] The revision
       # @return [void]
       def display_revision(revision)
-        @output.puts "  Author: #{revision.author || "(unknown)"}"
-        @output.puts "  Date:   #{revision.date || "(unknown)"}"
+        @output.puts "  Author: #{revision.author || '(unknown)'}"
+        @output.puts "  Date:   #{revision.date || '(unknown)'}"
         @output.puts "  Type:   #{format_revision_type(revision.type)}"
         @output.puts "  Text:   #{truncate(revision.text, 60)}"
       end

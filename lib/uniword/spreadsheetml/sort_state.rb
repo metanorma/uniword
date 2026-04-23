@@ -9,7 +9,8 @@ module Uniword
     # Element: <sortState>
     class SortState < Lutaml::Model::Serializable
       attribute :ref, :string
-      attribute :sort_condition, SortCondition, collection: true, initialize_empty: true
+      attribute :sort_condition, SortCondition, collection: true,
+                                                initialize_empty: true
 
       xml do
         element "sortState"

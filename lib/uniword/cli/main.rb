@@ -41,14 +41,19 @@ module Uniword
         $ uniword convert input.mhtml output.docx --verbose
         $ uniword convert input.html output.docx
     DESC
-    option :from, aliases: "-f", desc: "Input format (docx/mhtml/html)", type: :string
+    option :from, aliases: "-f", desc: "Input format (docx/mhtml/html)",
+                  type: :string
     option :to, aliases: "-t", desc: "Output format (docx/mhtml)", type: :string
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     def convert(input_path, output_path)
       from_format = options[:from]&.to_sym || :auto
       to_format = options[:to]&.to_sym || :auto
 
-      say "Converting #{input_path} to #{output_path}...", :green if options[:verbose]
+      if options[:verbose]
+        say "Converting #{input_path} to #{output_path}...",
+            :green
+      end
 
       doc = DocumentFactory.from_file(input_path, format: from_format)
 
@@ -146,7 +151,8 @@ module Uniword
     DESC
     option :data, desc: "Path to YAML or JSON data file", type: :string
     option "set", desc: "Set variable (key=value)", type: :array, default: []
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     def build(template_path, output_path)
       unless File.exist?(template_path)
         say("Template not found: #{template_path}", :red)
@@ -204,7 +210,8 @@ module Uniword
       if options[:json]
         require "json"
         output = reports.transform_values do |r|
-          { valid: r.valid?, issues: r.respond_to?(:issues) ? r.issues.count : 0 }
+          { valid: r.valid?,
+            issues: r.respond_to?(:issues) ? r.issues.count : 0 }
         end
         puts JSON.pretty_generate(output)
       else
@@ -216,7 +223,8 @@ module Uniword
       handle_error(e)
     end
 
-    desc "batch PATTERN OUTPUT_DIR", "Batch convert documents matching a glob pattern"
+    desc "batch PATTERN OUTPUT_DIR",
+         "Batch convert documents matching a glob pattern"
     long_desc <<~DESC
       Convert multiple documents matching a file glob pattern.
 
@@ -226,7 +234,8 @@ module Uniword
     DESC
     option :format, aliases: "-f", desc: "Output format (docx/mhtml)", type: :string,
                     default: "docx"
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     def batch(pattern, output_dir)
       require "fileutils"
       FileUtils.mkdir_p(output_dir)
@@ -254,11 +263,15 @@ module Uniword
           success += 1
         rescue StandardError => e
           errors << "#{File.basename(input_path)}: #{e.message}"
-          say("  Error: #{File.basename(input_path)}: #{e.message}", :red) if options[:verbose]
+          if options[:verbose]
+            say("  Error: #{File.basename(input_path)}: #{e.message}",
+                :red)
+          end
         end
       end
 
-      say("\nBatch complete: #{success} converted, #{errors.count} errors", :green)
+      say("\nBatch complete: #{success} converted, #{errors.count} errors",
+          :green)
       return if errors.empty?
 
       say("Errors:", :red)
@@ -326,7 +339,8 @@ module Uniword
                      type: :boolean, default: false
     option :json, desc: "Output JSON report", type: :boolean, default: false
     option :yaml, desc: "Output YAML report", type: :boolean, default: false
-    option :xsd, desc: "Enable XSD schema validation", type: :boolean, default: false
+    option :xsd, desc: "Enable XSD schema validation", type: :boolean,
+                 default: false
     def verify(path)
       unless File.exist?(path)
         say(Rainbow("  File not found: #{path}").red.bright)
@@ -334,7 +348,7 @@ module Uniword
       end
 
       orchestrator = Uniword::Validation::VerifyOrchestrator.new(
-        xsd_validation: options[:xsd]
+        xsd_validation: options[:xsd],
       )
       report = orchestrator.verify(path)
 
@@ -491,7 +505,7 @@ module Uniword
         "set-author" => :creator=,
         "set-subject" => :subject=,
         "set-keywords" => :keywords=,
-        "set-description" => :description=
+        "set-description" => :description=,
       }
       updated = false
       setters.each do |opt, setter|
@@ -513,7 +527,7 @@ module Uniword
         last_modified_by: core_properties&.last_modified_by,
         revision: core_properties&.revision,
         created: core_properties&.created,
-        modified: core_properties&.modified
+        modified: core_properties&.modified,
       }
 
       if options[:json]
@@ -521,15 +535,15 @@ module Uniword
         puts JSON.pretty_generate(meta)
       else
         say "Document Metadata:", :cyan
-        say "  Title:       #{meta[:title] || "(none)"}"
-        say "  Author:      #{meta[:author] || "(none)"}"
-        say "  Subject:     #{meta[:subject] || "(none)"}"
-        say "  Keywords:    #{meta[:keywords] || "(none)"}"
-        say "  Description: #{meta[:description] || "(none)"}"
-        say "  Modified by: #{meta[:last_modified_by] || "(none)"}"
-        say "  Revision:    #{meta[:revision] || "(none)"}"
-        say "  Created:     #{meta[:created] || "(unknown)"}"
-        say "  Modified:    #{meta[:modified] || "(unknown)"}"
+        say "  Title:       #{meta[:title] || '(none)'}"
+        say "  Author:      #{meta[:author] || '(none)'}"
+        say "  Subject:     #{meta[:subject] || '(none)'}"
+        say "  Keywords:    #{meta[:keywords] || '(none)'}"
+        say "  Description: #{meta[:description] || '(none)'}"
+        say "  Modified by: #{meta[:last_modified_by] || '(none)'}"
+        say "  Revision:    #{meta[:revision] || '(none)'}"
+        say "  Created:     #{meta[:created] || '(unknown)'}"
+        say "  Modified:    #{meta[:modified] || '(unknown)'}"
       end
     end
   end

@@ -27,7 +27,7 @@ module Uniword
         REQUIRED_PARTS = {
           "[Content_Types].xml" => "Content Types definition",
           "word/document.xml" => "Main document content",
-          "_rels/.rels" => "Package relationships"
+          "_rels/.rels" => "Package relationships",
         }.freeze
 
         # Optional but commonly used parts
@@ -37,7 +37,7 @@ module Uniword
           "word/_rels/document.xml.rels" => "Document relationships",
           "word/settings.xml" => "Document settings",
           "word/fontTable.xml" => "Font table",
-          "word/theme/theme1.xml" => "Theme definition"
+          "word/theme/theme1.xml" => "Theme definition",
         }.freeze
 
         def layer_name
@@ -56,7 +56,7 @@ module Uniword
         rescue Zip::Error => e
           result.add_error(
             "Cannot open ZIP file: #{e.message}",
-            critical: true
+            critical: true,
           )
           result
         end
@@ -65,8 +65,8 @@ module Uniword
 
         def validate_required_parts(zip, result)
           return unless require_content_types? ||
-                        require_document? ||
-                        require_relationships?
+            require_document? ||
+            require_relationships?
 
           REQUIRED_PARTS.each do |part_name, description|
             next unless should_check_part?(part_name)
@@ -75,7 +75,7 @@ module Uniword
 
             result.add_error(
               "Missing #{description}: #{part_name}",
-              critical: true
+              critical: true,
             )
           end
         end
@@ -85,7 +85,7 @@ module Uniword
             next if zip.find_entry(part_name)
 
             result.add_info(
-              "Missing #{description}: #{part_name} (optional)"
+              "Missing #{description}: #{part_name} (optional)",
             )
           end
         end

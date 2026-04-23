@@ -51,7 +51,7 @@ module Uniword
 
         raise ArgumentError,
               "Invalid semantic type: #{@semantic_type}. " \
-              "Must be one of: #{SEMANTIC_TYPES.join(", ")}"
+              "Must be one of: #{SEMANTIC_TYPES.join(', ')}"
       end
     end
   end

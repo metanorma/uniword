@@ -324,7 +324,7 @@ module Uniword
         BorderInfo.new(
           style: style,
           size: send("border_#{side}_size"),
-          color: send("border_#{side}_color")
+          color: send("border_#{side}_color"),
         )
       end
 

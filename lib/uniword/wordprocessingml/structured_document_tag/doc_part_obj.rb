@@ -48,7 +48,8 @@ module Uniword
           mixed_content
 
           map_element "docPartGallery", to: :doc_part_gallery, render_nil: false
-          map_element "docPartCategory", to: :doc_part_category, render_nil: false
+          map_element "docPartCategory", to: :doc_part_category,
+                                         render_nil: false
           map_element "docPartUnique", to: :doc_part_unique, render_nil: false
         end
       end

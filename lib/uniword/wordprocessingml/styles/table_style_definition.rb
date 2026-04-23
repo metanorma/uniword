@@ -30,12 +30,14 @@ module Uniword
         base_props = base_def.resolve_inheritance(library)
 
         {
-          table_properties: merge_properties(base_props[:table_properties], @table_properties),
-          cell_properties: merge_properties(base_props[:cell_properties], @cell_properties),
+          table_properties: merge_properties(base_props[:table_properties],
+                                             @table_properties),
+          cell_properties: merge_properties(base_props[:cell_properties],
+                                            @cell_properties),
           conditional_formatting: merge_properties(
             base_props[:conditional_formatting],
-            @conditional_formatting
-          )
+            @conditional_formatting,
+          ),
         }
       end
 
@@ -46,7 +48,7 @@ module Uniword
         {
           table_properties: @table_properties,
           cell_properties: @cell_properties,
-          conditional_formatting: @conditional_formatting
+          conditional_formatting: @conditional_formatting,
         }
       end
 

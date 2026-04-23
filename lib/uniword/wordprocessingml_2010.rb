@@ -16,9 +16,12 @@ module Uniword
     # Autoload all Wordprocessingml2010 classes (25)
     autoload :Checkbox, "uniword/wordprocessingml_2010/checkbox"
     autoload :CheckedState, "uniword/wordprocessingml_2010/checked_state"
-    autoload :ConditionalFormatStyle, "uniword/wordprocessingml_2010/conditional_format_style"
-    autoload :ConflictDeletion, "uniword/wordprocessingml_2010/conflict_deletion"
-    autoload :ConflictInsertion, "uniword/wordprocessingml_2010/conflict_insertion"
+    autoload :ConditionalFormatStyle,
+             "uniword/wordprocessingml_2010/conditional_format_style"
+    autoload :ConflictDeletion,
+             "uniword/wordprocessingml_2010/conflict_deletion"
+    autoload :ConflictInsertion,
+             "uniword/wordprocessingml_2010/conflict_insertion"
     autoload :ConflictMode, "uniword/wordprocessingml_2010/conflict_mode"
     autoload :CustomXmlConflictInsertion,
              "uniword/wordprocessingml_2010/custom_xml_conflict_insertion"
@@ -32,7 +35,8 @@ module Uniword
     autoload :Props3d, "uniword/wordprocessingml_2010/props3d"
     autoload :SdtContent, "uniword/wordprocessingml_2010/sdt_content"
     autoload :SdtProperties, "uniword/wordprocessingml_2010/sdt_properties"
-    autoload :StructuredDocumentTag, "uniword/wordprocessingml_2010/structured_document_tag"
+    autoload :StructuredDocumentTag,
+             "uniword/wordprocessingml_2010/structured_document_tag"
     autoload :TextFill, "uniword/wordprocessingml_2010/text_fill"
     autoload :TextGlow, "uniword/wordprocessingml_2010/text_glow"
     autoload :TextId, "uniword/wordprocessingml_2010/text_id"

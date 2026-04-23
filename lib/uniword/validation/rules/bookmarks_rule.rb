@@ -30,7 +30,7 @@ module Uniword
           start_ids = doc.root.xpath(".//w:bookmarkStart/@w:id",
                                      "w" => W_NS).map(&:value)
           end_ids = doc.root.xpath(".//w:bookmarkEnd/@w:id",
-                                   "w" => W_NS).map(&:value).to_set
+                                   "w" => W_NS).to_set(&:value)
 
           start_ids.each do |id|
             next if end_ids.include?(id)
@@ -39,7 +39,7 @@ module Uniword
               "bookmarkStart id='#{id}' has no matching bookmarkEnd",
               part: "word/document.xml",
               suggestion: "Add a <w:bookmarkEnd w:id='#{id}'/> to close " \
-                          "this bookmark."
+                          "this bookmark.",
             )
           end
 
@@ -54,7 +54,7 @@ module Uniword
                 code: "DOC-041",
                 severity: "warning",
                 part: "word/document.xml",
-                suggestion: "Bookmark names should be unique within a document."
+                suggestion: "Bookmark names should be unique within a document.",
               )
             else
               seen[name] = true
@@ -72,7 +72,7 @@ module Uniword
               code: "DOC-042",
               part: "word/document.xml",
               suggestion: "Create a bookmark named '#{anchor.value}' or " \
-                          "fix the hyperlink anchor."
+                          "fix the hyperlink anchor.",
             )
           end
 

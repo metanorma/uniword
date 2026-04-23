@@ -70,9 +70,11 @@ module Uniword
         map_element "wrapNone", to: :wrap_none, render_nil: false
         map_element "wrapSquare", to: :wrap_square, render_nil: false
         map_element "wrapTight", to: :wrap_tight, render_nil: false
-        map_element "wrapTopAndBottom", to: :wrap_top_and_bottom, render_nil: false
+        map_element "wrapTopAndBottom", to: :wrap_top_and_bottom,
+                                        render_nil: false
         map_element "docPr", to: :doc_properties, render_nil: false
-        map_element "cNvGraphicFramePr", to: :non_visual_props, render_nil: false
+        map_element "cNvGraphicFramePr", to: :non_visual_props,
+                                         render_nil: false
         map_element "graphic", to: :graphic, render_nil: false
       end
     end

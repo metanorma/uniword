@@ -80,7 +80,9 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "decimal"),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
+              ind: Uniword::Wordprocessingml::Ind.new(
+                left: (720 * (i + 1)).to_s, hanging: "360",
+              ),
             )
           end
         end
@@ -102,10 +104,13 @@ module Uniword
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "bullet"),
               lvlText: Uniword::Wordprocessingml::LvlText.new(val: level_char),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360"),
+              ind: Uniword::Wordprocessingml::Ind.new(
+                left: (720 * (i + 1)).to_s, hanging: "360",
+              ),
               rPr: Uniword::Wordprocessingml::RunProperties.new(
-                fonts: Properties::RunFonts.new(ascii: "Symbol", h_ansi: "Symbol", hint: "default")
-              )
+                fonts: Properties::RunFonts.new(ascii: "Symbol",
+                                                h_ansi: "Symbol", hint: "default"),
+              ),
             )
           end
         end
@@ -121,7 +126,9 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
+              ind: Uniword::Wordprocessingml::Ind.new(
+                left: (720 * (i + 1)).to_s, hanging: "360",
+              ),
             )
           end
         end
@@ -137,7 +144,9 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(left: (720 * (i + 1)).to_s, hanging: "360")
+              ind: Uniword::Wordprocessingml::Ind.new(
+                left: (720 * (i + 1)).to_s, hanging: "360",
+              ),
             )
           end
         end
@@ -148,7 +157,8 @@ module Uniword
       def validate_levels
         return if levels.size <= MAX_LEVELS
 
-        raise ArgumentError, "NumberingDefinition cannot have more than #{MAX_LEVELS} levels"
+        raise ArgumentError,
+              "NumberingDefinition cannot have more than #{MAX_LEVELS} levels"
       end
     end
   end

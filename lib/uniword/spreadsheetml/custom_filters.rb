@@ -9,7 +9,8 @@ module Uniword
     # Element: <customFilters>
     class CustomFilters < Lutaml::Model::Serializable
       attribute :and, :string
-      attribute :custom_filter, CustomFilter, collection: true, initialize_empty: true
+      attribute :custom_filter, CustomFilter, collection: true,
+                                              initialize_empty: true
 
       xml do
         element "customFilters"

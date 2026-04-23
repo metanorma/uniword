@@ -15,7 +15,7 @@ module Uniword
         path = File.join(DATA_DIR, "#{name}.yml")
         unless File.exist?(path)
           raise ArgumentError,
-                "Color scheme '#{name}' not found. Available: #{available_schemes.join(", ")}"
+                "Color scheme '#{name}' not found. Available: #{available_schemes.join(', ')}"
         end
 
         Themes::ColorScheme.from_yaml(File.read(path))
@@ -28,8 +28,8 @@ module Uniword
         return [] unless Dir.exist?(DATA_DIR)
 
         Dir.glob(File.join(DATA_DIR, "*.yml"))
-           .map { |p| File.basename(p, ".yml") }
-           .sort
+          .map { |p| File.basename(p, ".yml") }
+          .sort
       end
     end
   end

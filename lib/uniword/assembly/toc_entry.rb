@@ -35,7 +35,8 @@ module Uniword
       # @param paragraph_index [Integer] The paragraph index
       # @param bookmark_name [String, nil] Optional bookmark name
       # @param page_number [Integer, nil] Optional page number
-      def initialize(text:, level:, paragraph_index:, bookmark_name: nil, page_number: nil)
+      def initialize(text:, level:, paragraph_index:, bookmark_name: nil,
+page_number: nil)
         @text = text
         @level = level
         @paragraph_index = paragraph_index

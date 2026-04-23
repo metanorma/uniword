@@ -108,7 +108,7 @@ module Uniword
           # Try to load default config
           default_path = File.join(
             Configuration::ConfigurationLoader::CONFIG_DIR,
-            "validation_rules.yml"
+            "validation_rules.yml",
           )
 
           if File.exist?(default_path)
@@ -133,7 +133,7 @@ module Uniword
           Validators::XmlSchemaValidator.new(config_hash),
           Validators::RelationshipValidator.new(config_hash),
           Validators::ContentTypeValidator.new(config_hash),
-          Validators::DocumentSemanticsValidator.new(config_hash)
+          Validators::DocumentSemanticsValidator.new(config_hash),
         ]
       end
 
@@ -222,7 +222,7 @@ module Uniword
           errors: errors.count,
           warnings: warnings.count,
           infos: infos.count,
-          critical: critical_failures?
+          critical: critical_failures?,
         }
       end
 
@@ -232,7 +232,7 @@ module Uniword
       def to_json(*_args)
         JSON.pretty_generate(
           summary: summary,
-          layers: @layer_results.transform_values(&:to_h)
+          layers: @layer_results.transform_values(&:to_h),
         )
       end
 
@@ -243,7 +243,7 @@ module Uniword
         lines = [
           "Document Validation Report: #{@file_path}",
           "=" * 60,
-          ""
+          "",
         ]
 
         @layer_results.each_value do |result|

@@ -28,7 +28,7 @@ module Uniword
         require "json"
         data = {
           headers: manager.list_headers,
-          footers: manager.list_footers
+          footers: manager.list_footers,
         }
         puts JSON.pretty_generate(data)
         return

@@ -63,7 +63,7 @@ module Uniword
           width_type: source.properties.width_type,
           alignment: source.properties.alignment,
           border_style: source.properties.border_style,
-          borders: source.properties.borders
+          borders: source.properties.borders,
         )
       end
 
@@ -105,7 +105,7 @@ module Uniword
         # Transform cell content (paragraphs)
         para_rule = ParagraphTransformationRule.new(
           source_format: @source_format,
-          target_format: @target_format
+          target_format: @target_format,
         )
 
         source_cell.paragraphs.each do |source_para|

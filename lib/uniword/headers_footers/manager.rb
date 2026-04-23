@@ -31,7 +31,7 @@ module Uniword
           {
             type: h.type,
             text: extract_text(h),
-            empty: h.empty?
+            empty: h.empty?,
           }
         end
       end
@@ -45,7 +45,7 @@ module Uniword
           {
             type: f.type,
             text: extract_text(f),
-            empty: f.empty?
+            empty: f.empty?,
           }
         end
       end
@@ -122,7 +122,7 @@ module Uniword
         return if TYPES.include?(type)
 
         raise ArgumentError,
-              "Invalid type: #{type}. Must be one of: #{TYPES.join(", ")}"
+              "Invalid type: #{type}. Must be one of: #{TYPES.join(', ')}"
       end
 
       def extract_text(container)

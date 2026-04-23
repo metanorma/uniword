@@ -37,7 +37,9 @@ module Uniword
           location = @document.document_rels&.relationships&.first&.target || "document"
           File.basename(location, ".*")
         rescue StandardError => e
-          Uniword.logger&.debug { "Falling back to 'document' name: #{e.message}" }
+          Uniword.logger&.debug do
+            "Falling back to 'document' name: #{e.message}"
+          end
           "document"
         end
       end
@@ -204,7 +206,7 @@ module Uniword
           paragraphs: paragraphs,
           lines: lines,
           pages: pages,
-          characters_with_spaces: characters + paragraphs
+          characters_with_spaces: characters + paragraphs,
         }
       end
 
@@ -220,11 +222,11 @@ module Uniword
       # Escape XML special characters
       def escape_xml(text)
         text.to_s
-            .gsub("&", "&amp;")
-            .gsub("<", "&lt;")
-            .gsub(">", "&gt;")
-            .gsub('"', "&quot;")
-            .gsub("'", "&apos;")
+          .gsub("&", "&amp;")
+          .gsub("<", "&lt;")
+          .gsub(">", "&gt;")
+          .gsub('"', "&quot;")
+          .gsub("'", "&apos;")
       end
     end
   end

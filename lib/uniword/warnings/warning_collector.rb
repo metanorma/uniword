@@ -68,7 +68,7 @@ module Uniword
           message: "Unsupported element: #{element_tag}",
           context: context,
           location: location,
-          suggestion: get_suggestion(element_tag)
+          suggestion: get_suggestion(element_tag),
         )
 
         @warnings << warning
@@ -98,7 +98,7 @@ module Uniword
           element: element_tag,
           attribute: attribute_name,
           message: "Unsupported attribute: #{element_tag}/@#{attribute_name}",
-          context: context
+          context: context,
         )
 
         @warnings << warning
@@ -116,7 +116,7 @@ module Uniword
         WarningReport.new(
           warnings: @warnings,
           element_counts: @element_counts,
-          config: @config
+          config: @config,
         )
       end
 
@@ -144,7 +144,7 @@ module Uniword
           # Try to load default config
           default_path = File.join(
             Configuration::ConfigurationLoader::CONFIG_DIR,
-            "warning_rules.yml"
+            "warning_rules.yml",
           )
 
           if File.exist?(default_path)
@@ -169,9 +169,9 @@ module Uniword
             warning_elements: [],
             element_suggestions: {},
             reporting: {
-              max_warnings: 100
-            }
-          }
+              max_warnings: 100,
+            },
+          },
         }
       end
 

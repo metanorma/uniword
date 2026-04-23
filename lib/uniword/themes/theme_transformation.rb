@@ -36,7 +36,7 @@ module Uniword
       def to_word(friendly_theme)
         Drawingml::Theme.new(
           name: friendly_theme.name,
-          theme_elements: build_theme_elements(friendly_theme)
+          theme_elements: build_theme_elements(friendly_theme),
         )
       end
 
@@ -48,7 +48,7 @@ module Uniword
         Theme.new(
           name: word_theme.name,
           color_scheme: extract_color_scheme(word_theme),
-          font_scheme: extract_font_scheme(word_theme)
+          font_scheme: extract_font_scheme(word_theme),
         )
       end
 
@@ -63,7 +63,7 @@ module Uniword
 
         Drawingml::ThemeElements.new(
           clr_scheme: build_color_scheme(friendly.color_scheme),
-          font_scheme: build_font_scheme(friendly.font_scheme)
+          font_scheme: build_font_scheme(friendly.font_scheme),
         )
       end
 
@@ -87,7 +87,7 @@ module Uniword
           accent5: build_color_reference(friendly_colors[:accent5], Drawingml::Accent5Color),
           accent6: build_color_reference(friendly_colors[:accent6], Drawingml::Accent6Color),
           hlink: build_color_reference(friendly_colors[:hlink], Drawingml::HlinkColor),
-          fol_hlink: build_color_reference(friendly_colors[:fol_hlink], Drawingml::FolHlinkColor)
+          fol_hlink: build_color_reference(friendly_colors[:fol_hlink], Drawingml::FolHlinkColor),
         )
       end
 
@@ -116,7 +116,7 @@ module Uniword
         Drawingml::FontScheme.new(
           name: friendly_fonts.name,
           major_font_obj: build_major_font(friendly_fonts),
-          minor_font_obj: build_minor_font(friendly_fonts)
+          minor_font_obj: build_minor_font(friendly_fonts),
         )
       end
 
@@ -130,7 +130,7 @@ module Uniword
           latin: Drawingml::LatinFont.new(typeface: friendly.major_font || ""),
           ea: Drawingml::EaFont.new(typeface: friendly.major_east_asian || ""),
           cs: Drawingml::CsFont.new(typeface: friendly.major_complex_script || ""),
-          fonts: script_fonts
+          fonts: script_fonts,
         )
       end
 
@@ -144,7 +144,7 @@ module Uniword
           latin: Drawingml::LatinFont.new(typeface: friendly.minor_font || ""),
           ea: Drawingml::EaFont.new(typeface: friendly.minor_east_asian || ""),
           cs: Drawingml::CsFont.new(typeface: friendly.minor_complex_script || ""),
-          fonts: script_fonts
+          fonts: script_fonts,
         )
       end
 
@@ -177,7 +177,7 @@ module Uniword
 
         ColorScheme.new(
           name: word_colors.name,
-          colors: colors
+          colors: colors,
         )
       end
 
@@ -210,7 +210,7 @@ module Uniword
           major_east_asian: word_fonts.major_font_obj&.ea&.typeface,
           major_complex_script: word_fonts.major_font_obj&.cs&.typeface,
           minor_east_asian: word_fonts.minor_font_obj&.ea&.typeface,
-          minor_complex_script: word_fonts.minor_font_obj&.cs&.typeface
+          minor_complex_script: word_fonts.minor_font_obj&.cs&.typeface,
         )
       end
     end

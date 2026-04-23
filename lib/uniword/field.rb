@@ -19,7 +19,7 @@ module Uniword
       time: "TIME",
       seq: "SEQ",
       ref: "REF",
-      hyperlink: "HYPERLINK"
+      hyperlink: "HYPERLINK",
     }.freeze
 
     # Create a page number field
@@ -27,7 +27,7 @@ module Uniword
       new(
         type: "PAGE",
         instruction: " PAGE \\* #{format} ",
-        simple: true
+        simple: true,
       )
     end
 
@@ -36,7 +36,7 @@ module Uniword
       new(
         type: "NUMPAGES",
         instruction: " NUMPAGES \\* #{format} ",
-        simple: true
+        simple: true,
       )
     end
 
@@ -45,7 +45,7 @@ module Uniword
       new(
         type: "DATE",
         instruction: " DATE \\@ \"#{format}\" ",
-        simple: true
+        simple: true,
       )
     end
 
@@ -54,7 +54,7 @@ module Uniword
       new(
         type: "SEQ",
         instruction: " SEQ #{label} \\* #{format} ",
-        simple: false
+        simple: false,
       )
     end
 

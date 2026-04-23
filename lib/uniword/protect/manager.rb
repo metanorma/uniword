@@ -71,7 +71,7 @@ module Uniword
 
         {
           type: protection_type(@protection),
-          password_protected: password_protected?(@protection)
+          password_protected: password_protected?(@protection),
         }
       end
 
@@ -82,13 +82,13 @@ module Uniword
 
         raise ArgumentError,
               "Invalid protection type: #{type}. " \
-              "Must be one of: #{PROTECTION_TYPES.join(", ")}"
+              "Must be one of: #{PROTECTION_TYPES.join(', ')}"
       end
 
       def build_protection(type, password)
         result = {
           edit: map_type(type),
-          enforcement: true
+          enforcement: true,
         }
         result[:password_hash] = hash_password(password) if password
         result

@@ -230,27 +230,27 @@ module Uniword
 
         attrs << %(w:alias="#{escape_xml(props.alias_name.value)}") if props.alias_name.respond_to?(:value) && props.alias_name.value
 
-        attrs.empty? ? "" : " #{attrs.join(" ")}"
+        attrs.empty? ? "" : " #{attrs.join(' ')}"
       end
 
       # Escape HTML special characters
       def escape_html(text)
         text.to_s
-            .gsub("&", "&amp;")
-            .gsub("<", "&lt;")
-            .gsub(">", "&gt;")
-            .gsub('"', "&quot;")
-            .gsub("'", "&#39;")
+          .gsub("&", "&amp;")
+          .gsub("<", "&lt;")
+          .gsub(">", "&gt;")
+          .gsub('"', "&quot;")
+          .gsub("'", "&#39;")
       end
 
       # Escape XML special characters
       def escape_xml(text)
         text.to_s
-            .gsub("&", "&amp;")
-            .gsub("<", "&lt;")
-            .gsub(">", "&gt;")
-            .gsub('"', "&quot;")
-            .gsub("'", "&apos;")
+          .gsub("&", "&amp;")
+          .gsub("<", "&lt;")
+          .gsub(">", "&gt;")
+          .gsub('"', "&quot;")
+          .gsub("'", "&apos;")
       end
     end
   end

@@ -100,16 +100,16 @@ module Uniword
         JSON.pretty_generate(
           profile: {
             name: @profile_name,
-            level: @profile_level
+            level: @profile_level,
           },
           compliant: compliant?,
           summary: {
             total: @violations.count,
             errors: errors.count,
             warnings: warnings.count,
-            infos: infos.count
+            infos: infos.count,
           },
-          violations: @violations.map(&:to_h)
+          violations: @violations.map(&:to_h),
         )
       end
 
@@ -152,8 +152,8 @@ module Uniword
           <body>
             <h1>Accessibility Report</h1>
             <p><strong>Profile:</strong> #{@profile_name} #{@profile_level}</p>
-            <p class="#{compliant? ? "compliant" : "non-compliant"}">
-              Status: #{compliant? ? "✅ Compliant" : "❌ Not Compliant"}
+            <p class="#{compliant? ? 'compliant' : 'non-compliant'}">
+              Status: #{compliant? ? '✅ Compliant' : '❌ Not Compliant'}
             </p>
 
             <div class="summary">
@@ -203,9 +203,9 @@ module Uniword
       # @return [String] Formatted rule name
       def format_rule_name(rule_id)
         rule_id.to_s
-               .split("_")
-               .map(&:capitalize)
-               .join(" ")
+          .split("_")
+          .map(&:capitalize)
+          .join(" ")
       end
     end
   end

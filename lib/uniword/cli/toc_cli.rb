@@ -143,7 +143,7 @@ module Uniword
       entries.each do |entry|
         if options[:verbose]
           say "  Level #{entry.level}: #{entry.text}"
-          say "    Style: #{entry.style_name || "(unknown)"}"
+          say "    Style: #{entry.style_name || '(unknown)'}"
           say "    Paragraph index: #{entry.paragraph_index}"
         else
           puts entry

@@ -48,7 +48,10 @@ module Uniword
         log_report_summary(report)
 
         # Generate report file if requested
-        generate_report_file(report, context) if @generate_report && context[:output_path]
+        if @generate_report && context[:output_path]
+          generate_report_file(report,
+                               context)
+        end
 
         # Check if we should fail
         check_failure_conditions(report, context[:filename])
@@ -93,7 +96,10 @@ module Uniword
 
           log "Quality check found violations:", level: :warn
           log "  Errors: #{error_count}", level: :warn if error_count.positive?
-          log "  Warnings: #{warning_count}", level: :warn if warning_count.positive?
+          if warning_count.positive?
+            log "  Warnings: #{warning_count}",
+                level: :warn
+          end
           log "  Info: #{info_count}" if info_count.positive?
 
           # Log first few violations

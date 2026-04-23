@@ -23,17 +23,25 @@ module Uniword
 
         # Force mc: namespace declaration on root element
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Relationships, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::MarkupCompatibility,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Relationships,
+            declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2018Cex,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2016Cid,
+            declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2018, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2023Du, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock, declare: :always },
-          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::Word2023Du,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2020SdtDataHash,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2024SdtFormatLock,
+            declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2015Symex,
+            declare: :always },
         ]
 
         # Map mc:Ignorable attribute
@@ -61,14 +69,23 @@ module Uniword
       # @return [Style] The added style
       # @raise [ArgumentError] if style with same ID already exists
       def add_style(style, allow_overwrite: false)
-        raise ArgumentError, "Style must be a Style instance" unless style.is_a?(Style)
+        unless style.is_a?(Style)
+          raise ArgumentError,
+                "Style must be a Style instance"
+        end
 
         # Skip if ID is empty
-        raise ArgumentError, "Style must have a non-empty ID" if style.id.to_s.strip.empty?
+        if style.id.to_s.strip.empty?
+          raise ArgumentError,
+                "Style must have a non-empty ID"
+        end
 
         existing = style_by_id(style.id)
         if existing
-          raise ArgumentError, "Style with ID '#{style.id}' already exists" unless allow_overwrite
+          unless allow_overwrite
+            raise ArgumentError,
+                  "Style with ID '#{style.id}' already exists"
+          end
 
           # Remove existing and add new
           remove_style(style.id)
@@ -232,7 +249,7 @@ module Uniword
           name: StyleName.new(val: name),
           customStyle: true,
           type: "paragraph",
-          **attributes
+          **attributes,
         )
         add_style(style)
         style
@@ -273,7 +290,7 @@ module Uniword
           name: StyleName.new(val: name),
           customStyle: true,
           type: "character",
-          **attributes
+          **attributes,
         )
         add_style(style)
         style

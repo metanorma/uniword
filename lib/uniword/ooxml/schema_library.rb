@@ -25,7 +25,8 @@ module Uniword
     end
 
     class SchemaLibrary < Lutaml::Model::Serializable
-      attribute :schemas, SchemaLibEntry, collection: true, initialize_empty: true
+      attribute :schemas, SchemaLibEntry, collection: true,
+                                          initialize_empty: true
 
       xml do
         element "schemaLibrary"

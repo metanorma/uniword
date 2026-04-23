@@ -52,7 +52,7 @@ module Uniword
           duration: duration,
           stages: stages,
           metadata: metadata,
-          timestamp: Time.now
+          timestamp: Time.now,
         }
         self
       end
@@ -74,7 +74,7 @@ module Uniword
           error_class: error_class,
           stage: stage,
           metadata: metadata,
-          timestamp: Time.now
+          timestamp: Time.now,
         }
         self
       end
@@ -144,7 +144,7 @@ module Uniword
           failures: failure_count,
           success_rate: success_rate,
           elapsed_time: elapsed_time,
-          average_duration: average_duration
+          average_duration: average_duration,
         }
       end
 
@@ -172,7 +172,7 @@ module Uniword
         data = {
           summary: summary,
           successes: successes,
-          failures: failures
+          failures: failures,
         }
 
         File.write(path, JSON.pretty_generate(data))
@@ -187,7 +187,7 @@ module Uniword
         data = {
           "summary" => summary,
           "successes" => successes.map { |s| stringify_keys(s) },
-          "failures" => failures.map { |f| stringify_keys(f) }
+          "failures" => failures.map { |f| stringify_keys(f) },
         }
 
         File.write(path, YAML.dump(data))
@@ -210,7 +210,7 @@ module Uniword
               "SUCCESS",
               success[:duration],
               "",
-              success[:stages].join(", ")
+              success[:stages].join(", "),
             ]
           end
 
@@ -221,7 +221,7 @@ module Uniword
               "FAILURE",
               "",
               failure[:error],
-              failure[:stage] || ""
+              failure[:stage] || "",
             ]
           end
         end

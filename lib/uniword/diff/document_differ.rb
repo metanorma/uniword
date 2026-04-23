@@ -39,7 +39,7 @@ module Uniword
           format_changes: text_only? ? [] : diff_formatting,
           structure_changes: diff_structure,
           metadata_changes: diff_metadata,
-          style_changes: diff_styles
+          style_changes: diff_styles,
         )
       end
 
@@ -117,10 +117,10 @@ module Uniword
           new_para = new_paras[new_idx]
 
           changes.concat(
-            diff_paragraph_formatting(old_para, new_para, new_idx)
+            diff_paragraph_formatting(old_para, new_para, new_idx),
           )
           changes.concat(
-            diff_run_formatting(old_para, new_para, new_idx)
+            diff_run_formatting(old_para, new_para, new_idx),
           )
         end
 
@@ -143,7 +143,7 @@ module Uniword
             type: :structure,
             change: :paragraph_count,
             old_count: old_paras.size,
-            new_count: new_paras.size
+            new_count: new_paras.size,
           }
         end
 
@@ -152,7 +152,7 @@ module Uniword
             type: :structure,
             change: :table_count,
             old_count: old_tables.size,
-            new_count: new_tables.size
+            new_count: new_tables.size,
           }
         end
 
@@ -189,18 +189,16 @@ module Uniword
       def diff_styles
         old_styles = extract_styles(@old_doc)
         new_styles = extract_styles(@new_doc)
-        changes = []
-
         old_ids = old_styles.keys
         new_ids = new_styles.keys
 
         # Added styles
-        (new_ids - old_ids).each do |style_id|
-          changes << {
+        changes = (new_ids - old_ids).map do |style_id|
+          {
             type: :style,
             change: :added,
             style_id: style_id,
-            name: new_styles[style_id]
+            name: new_styles[style_id],
           }
         end
 
@@ -210,7 +208,7 @@ module Uniword
             type: :style,
             change: :removed,
             style_id: style_id,
-            name: old_styles[style_id]
+            name: old_styles[style_id],
           }
         end
 
@@ -238,9 +236,9 @@ module Uniword
 
         while old_i < old_texts.size || new_i < new_texts.size
           old_in_lcs = lcs_idx < lcs.size &&
-                       lcs[lcs_idx][0] == old_i
+            lcs[lcs_idx][0] == old_i
           new_in_lcs = lcs_idx < lcs.size &&
-                       lcs[lcs_idx][1] == new_i
+            lcs[lcs_idx][1] == new_i
 
           if old_in_lcs && new_in_lcs
             # LCS match at both positions -- aligned
@@ -329,7 +327,7 @@ module Uniword
 
         fmt_fields = {
           alignment: :alignment,
-          style: :style
+          style: :style,
         }
 
         fmt_fields.each do |field, method|
@@ -343,7 +341,7 @@ module Uniword
             field: field.to_s,
             old: old_val,
             new: new_val,
-            paragraph: position
+            paragraph: position,
           }
         end
 
@@ -373,7 +371,7 @@ module Uniword
               type: :format,
               change: :run_added,
               paragraph: position,
-              run_index: i
+              run_index: i,
             }
             next
           end
@@ -383,7 +381,7 @@ module Uniword
               type: :format,
               change: :run_removed,
               paragraph: position,
-              run_index: i
+              run_index: i,
             }
             next
           end
@@ -414,7 +412,7 @@ module Uniword
           underline: :underline,
           font: :fonts,
           size: :size,
-          color: :color
+          color: :color,
         }
 
         fields.each do |field, method|
@@ -429,7 +427,7 @@ module Uniword
             old: old_val,
             new: new_val,
             paragraph: para_pos,
-            run: run_idx
+            run: run_idx,
           }
         end
 
@@ -511,7 +509,7 @@ module Uniword
           change: change,
           old: old_text,
           new: new_text,
-          position: position
+          position: position,
         }
       end
     end

@@ -20,7 +20,8 @@ module Uniword
     # Element: <w:compat>
     class Compat < Lutaml::Model::Serializable
       attribute :use_fe_layout, UseFELayout
-      attribute :compatSetting, CompatSetting, collection: true, initialize_empty: true
+      attribute :compatSetting, CompatSetting, collection: true,
+                                               initialize_empty: true
 
       xml do
         element "compat"

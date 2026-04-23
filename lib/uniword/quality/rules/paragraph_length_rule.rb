@@ -43,7 +43,7 @@ module Uniword
               message: "Paragraph has #{word_count} words (maximum: #{@max_words}). " \
                        "Consider breaking into smaller paragraphs for readability.",
               location: "Paragraph #{index + 1}",
-              element: para
+              element: para,
             )
           elsif word_count > @warning_words
             violations << create_violation(
@@ -51,7 +51,7 @@ module Uniword
               message: "Paragraph has #{word_count} words (warning threshold: #{@warning_words}). " \
                        "Consider reviewing for clarity.",
               location: "Paragraph #{index + 1}",
-              element: para
+              element: para,
             )
           end
         end

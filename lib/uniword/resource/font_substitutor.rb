@@ -16,7 +16,7 @@ module Uniword
         "Times New Roman" => "Liberation Serif",
         "Courier New" => "Liberation Mono",
         "Segoe UI" => "Source Sans Pro",
-        "Tahoma" => "Liberation Sans"
+        "Tahoma" => "Liberation Sans",
       }.freeze
 
       # Get substitute font name
@@ -76,12 +76,14 @@ module Uniword
 
           # Populate CS fields if empty
           fs.major_complex_script = if fs.major_complex_script.to_s.empty?
-                                      reg.dig("complex_script", "arabic", "heading")
+                                      reg.dig("complex_script", "arabic",
+                                              "heading")
                                     else
                                       substitute(fs.major_complex_script)
                                     end
           fs.minor_complex_script = if fs.minor_complex_script.to_s.empty?
-                                      reg.dig("complex_script", "arabic", "body")
+                                      reg.dig("complex_script", "arabic",
+                                              "body")
                                     else
                                       substitute(fs.minor_complex_script)
                                     end

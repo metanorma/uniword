@@ -10,7 +10,8 @@ module Uniword
       # Uses officeDocument namespace: http://schemas.openxmlformats.org/officeDocument/2006/relationships
       # Attributes are prefixed with r: (r:id, r:type, r:target)
       class Relationships < Lutaml::Model::Serializable
-        attribute :relationships, Relationship, collection: true, initialize_empty: true
+        attribute :relationships, Relationship, collection: true,
+                                                initialize_empty: true
 
         xml do
           element "Relationships"
@@ -25,7 +26,7 @@ module Uniword
         # @return [Relationships] Relationships object for word/_rels/document.xml.rels
         def self.generate_document_rels
           new(
-            relationships: []
+            relationships: [],
           )
         end
 
@@ -34,7 +35,7 @@ module Uniword
         # @return [Relationships] Relationships object for theme/_rels/theme1.xml.rels
         def self.generate_theme_rels
           new(
-            relationships: []
+            relationships: [],
           )
         end
       end

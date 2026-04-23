@@ -26,7 +26,7 @@ module Uniword
           { namespace: Namespaces::DublinCore, declare: :always },
           { namespace: Namespaces::DublinCoreTerms, declare: :always },
           { namespace: Namespaces::DublinCoreMitype, declare: :always },
-          { namespace: Namespaces::XmlSchemaInstance, declare: :always }
+          { namespace: Namespaces::XmlSchemaInstance, declare: :always },
         ]
 
         # Type namespaces automatically applied - NO namespace params needed!
@@ -58,11 +58,11 @@ module Uniword
         now = DateTime.now
         @created ||= Types::DctermsCreatedType.new(
           value: now,
-          type: "dcterms:W3CDTF"
+          type: "dcterms:W3CDTF",
         )
         @modified ||= Types::DctermsModifiedType.new(
           value: now,
-          type: "dcterms:W3CDTF"
+          type: "dcterms:W3CDTF",
         )
       end
     end

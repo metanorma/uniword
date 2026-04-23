@@ -47,7 +47,7 @@ module Uniword
           issues << Report::ValidationIssue.new(
             severity: "error",
             code: "DOC-000",
-            message: "Semantic validation failed: #{e.message}"
+            message: "Semantic validation failed: #{e.message}",
           )
           build_result(issues)
         end

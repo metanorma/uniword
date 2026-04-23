@@ -73,13 +73,14 @@ module Uniword
       return unless alignment && !ALIGNMENTS.include?(alignment)
 
       raise ArgumentError,
-            "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(", ")}"
+            "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
     end
 
     def validate_leader
       return unless leader && !LEADERS.include?(leader)
 
-      raise ArgumentError, "Invalid leader: #{leader}. Must be one of: #{LEADERS.join(", ")}"
+      raise ArgumentError,
+            "Invalid leader: #{leader}. Must be one of: #{LEADERS.join(', ')}"
     end
   end
 end
