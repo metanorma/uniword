@@ -29,7 +29,7 @@ module Uniword
           Default.new(extension: "rels",
                       content_type: "application/vnd.openxmlformats-package.relationships+xml"),
           Default.new(extension: "xml",
-                      content_type: "application/xml")
+                      content_type: "application/xml"),
         ],
         overrides: [
           Override.new(part_name: "/word/document.xml",
@@ -49,8 +49,8 @@ module Uniword
           Override.new(part_name: "/docProps/core.xml",
                        content_type: "application/vnd.openxmlformats-package.core-properties+xml"),
           Override.new(part_name: "/docProps/app.xml",
-                       content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml")
-        ]
+                       content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml"),
+        ],
       )
     end
     module_function :generate
@@ -63,12 +63,12 @@ module Uniword
         defaults: [
           Default.new(extension: "rels",
                       content_type: "application/vnd.openxmlformats-package.relationships+xml"),
-          Default.new(extension: "xml", content_type: "application/xml")
+          Default.new(extension: "xml", content_type: "application/xml"),
         ],
         overrides: [
           Override.new(part_name: "/theme/theme1.xml",
-                       content_type: "application/vnd.openxmlformats-officedocument.theme+xml")
-        ]
+                       content_type: "application/vnd.openxmlformats-officedocument.theme+xml"),
+        ],
       )
     end
     module_function :generate_for_theme

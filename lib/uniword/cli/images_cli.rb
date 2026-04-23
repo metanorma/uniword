@@ -47,7 +47,7 @@ module Uniword
             content_type: img.content_type,
             size: img.size,
             width: img.width,
-            height: img.height
+            height: img.height,
           }
         end
         puts JSON.pretty_generate(data)
@@ -122,7 +122,10 @@ module Uniword
       insert_options[:position] = options[:position] if options[:position]
       insert_options[:width] = options[:width] if options[:width]
       insert_options[:height] = options[:height] if options[:height]
-      insert_options[:description] = options[:description] if options[:description]
+      if options[:description]
+        insert_options[:description] =
+          options[:description]
+      end
 
       r_id = manager.insert(image_path, **insert_options)
       doc.save(options[:output])

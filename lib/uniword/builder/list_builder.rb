@@ -30,7 +30,7 @@ module Uniword
         model = document.model
         model.numbering_configuration ||= Uniword::Wordprocessingml::NumberingConfiguration.new
         @num_id = model.numbering_configuration
-                       .create_numbering(type)
+          .create_numbering(type)
       end
 
       # Add an item to the list
@@ -43,7 +43,7 @@ module Uniword
         para = ParagraphBuilder.new
         para.numbering(@num_id, level)
         para << text if text
-        block.call(para) if block_given?
+        yield(para) if block
         @document << para.build
         para
       end

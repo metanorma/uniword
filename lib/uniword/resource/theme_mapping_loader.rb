@@ -18,7 +18,8 @@ module Uniword
     # @example Get color fingerprint for detection
     #   ThemeMappingLoader.theme_fingerprint("meridian")
     class ThemeMappingLoader
-      MAPPING_PATH = File.join(__dir__, "../../..", "config", "theme_mapping.yml")
+      MAPPING_PATH = File.join(__dir__, "../../..", "config",
+                               "theme_mapping.yml")
 
       # Load and cache the mapping YAML
       #

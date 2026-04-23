@@ -36,7 +36,10 @@ module Uniword
     # @return [Hash] Metadata hash for the created template
     # @raise [ArgumentError] If source file does not exist
     def self.create(name, source_docx, output_dir, description: nil)
-      raise ArgumentError, "Source file not found: #{source_docx}" unless File.exist?(source_docx)
+      unless File.exist?(source_docx)
+        raise ArgumentError,
+              "Source file not found: #{source_docx}"
+      end
 
       FileUtils.mkdir_p(output_dir)
 
@@ -46,7 +49,7 @@ module Uniword
       metadata = build_metadata(
         name: name,
         description: description,
-        source: File.basename(source_docx)
+        source: File.basename(source_docx),
       )
 
       write_metadata(output_dir, name, metadata)
@@ -65,7 +68,7 @@ module Uniword
     def self.list(template_dir)
       return [] unless Dir.exist?(template_dir)
 
-      docx_files = Dir.glob(File.join(template_dir, "*.docx")).sort
+      docx_files = Dir.glob(File.join(template_dir, "*.docx"))
 
       docx_files.map do |path|
         name = File.basename(path, ".docx")
@@ -78,7 +81,7 @@ module Uniword
           source: metadata[:source],
           created_at: metadata[:created_at],
           updated_at: metadata[:updated_at],
-          markers: metadata[:markers]
+          markers: metadata[:markers],
         }
       end
     end
@@ -118,7 +121,7 @@ module Uniword
           source: source,
           created_at: now,
           updated_at: now,
-          markers: count_markers(source)
+          markers: count_markers(source),
         }
       end
 

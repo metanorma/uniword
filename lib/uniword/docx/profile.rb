@@ -42,7 +42,7 @@ module Uniword
         unless presets.key?(key)
           raise ArgumentError,
                 "Profile preset '#{key}' not found. " \
-                "Available: #{presets.keys.join(", ")}"
+                "Available: #{presets.keys.join(', ')}"
         end
 
         preset = presets[key]
@@ -56,7 +56,7 @@ module Uniword
         new(
           system: SystemProfile.defaults,
           locale: LocaleProfile.from_locale("en"),
-          user: UserProfile.defaults
+          user: UserProfile.defaults,
         )
       end
 
@@ -150,13 +150,19 @@ module Uniword
         unless all.key?(name)
           raise ArgumentError,
                 "System profile '#{name}' not found. " \
-                "Available: #{all.keys.join(", ")}"
+                "Available: #{all.keys.join(', ')}"
         end
 
         data = all[name]
         # Rename YAML keys to match constructor parameter names
-        data["font_scheme_name"] = data.delete("font_scheme") if data.key?("font_scheme")
-        data["default_theme_name"] = data.delete("default_theme") if data.key?("default_theme")
+        if data.key?("font_scheme")
+          data["font_scheme_name"] =
+            data.delete("font_scheme")
+        end
+        if data.key?("default_theme")
+          data["default_theme_name"] =
+            data.delete("default_theme")
+        end
         new(name: name, **data.transform_keys(&:to_sym))
       end
 
@@ -203,7 +209,7 @@ module Uniword
         unless all.key?(locale_code)
           raise ArgumentError,
                 "Locale '#{locale_code}' not found. " \
-                "Available: #{all.keys.join(", ")}"
+                "Available: #{all.keys.join(', ')}"
         end
 
         data = all[locale_code]

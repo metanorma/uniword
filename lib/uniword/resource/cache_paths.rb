@@ -16,12 +16,13 @@ module Uniword
           color_schemes: File.join(base, "color_schemes"),
           font_schemes: File.join(base, "font_schemes"),
           document_elements: File.join(base, "document_elements"),
-          version_file: File.join(base, "version.json")
+          version_file: File.join(base, "version.json"),
         )
       end
 
       def ensure_directories_exist!
-        [base, themes, stylesets, color_schemes, font_schemes, document_elements].each do |dir|
+        [base, themes, stylesets, color_schemes, font_schemes,
+         document_elements].each do |dir|
           FileUtils.mkdir_p(dir) unless File.directory?(dir)
         end
       end

@@ -25,7 +25,7 @@ module Uniword
         package_rels: :package_rels,
         content_types: :content_types,
         footnotes: :footnotes,
-        endnotes: :endnotes
+        endnotes: :endnotes,
       }.freeze
 
       def self.included(base)
@@ -58,41 +58,41 @@ module Uniword
           ct.defaults ||= []
           ct.defaults << Uniword::ContentTypes::Default.new(
             extension: "rels",
-            content_type: "application/vnd.openxmlformats-package.relationships+xml"
+            content_type: "application/vnd.openxmlformats-package.relationships+xml",
           )
           ct.defaults << Uniword::ContentTypes::Default.new(
             extension: "xml",
-            content_type: "application/xml"
+            content_type: "application/xml",
           )
 
           ct.overrides ||= []
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/word/document.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/word/styles.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/word/fontTable.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/word/settings.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/word/webSettings.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/docProps/app.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml"
+            content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml",
           )
           ct.overrides << Uniword::ContentTypes::Override.new(
             part_name: "/docProps/core.xml",
-            content_type: "application/vnd.openxmlformats-package.core-properties+xml"
+            content_type: "application/vnd.openxmlformats-package.core-properties+xml",
           )
           ct
         end
@@ -104,17 +104,17 @@ module Uniword
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId1",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-            target: "word/document.xml"
+            target: "word/document.xml",
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId2",
             type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-            target: "docProps/core.xml"
+            target: "docProps/core.xml",
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId3",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-            target: "docProps/app.xml"
+            target: "docProps/app.xml",
           )
           rels
         end
@@ -126,22 +126,22 @@ module Uniword
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId1",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
-            target: "styles.xml"
+            target: "styles.xml",
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId2",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
-            target: "settings.xml"
+            target: "settings.xml",
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId3",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
-            target: "webSettings.xml"
+            target: "webSettings.xml",
           )
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rId4",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
-            target: "fontTable.xml"
+            target: "fontTable.xml",
           )
           rels
         end

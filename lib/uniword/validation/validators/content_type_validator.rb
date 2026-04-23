@@ -29,7 +29,7 @@ module Uniword
 
         REQUIRED_CONTENT_TYPES = [
           "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
-          "application/vnd.openxmlformats-package.relationships+xml"
+          "application/vnd.openxmlformats-package.relationships+xml",
         ].freeze
 
         def layer_name
@@ -47,7 +47,7 @@ module Uniword
         rescue Zip::Error => e
           result.add_error(
             "Cannot open ZIP file: #{e.message}",
-            critical: true
+            critical: true,
           )
           result
         end
@@ -60,7 +60,7 @@ module Uniword
           unless entry
             result.add_error(
               "Missing [Content_Types].xml",
-              critical: true
+              critical: true,
             )
             return
           end
@@ -76,15 +76,18 @@ module Uniword
           validate_required_types(doc, result) if check_consistency?
 
           # Validate extensions match actual files
-          validate_extension_consistency(zip, doc, result) if validate_extensions?
+          if validate_extensions?
+            validate_extension_consistency(zip, doc,
+                                           result)
+          end
         rescue Nokogiri::XML::SyntaxError => e
           result.add_error(
             "Malformed [Content_Types].xml: #{e.message}",
-            critical: true
+            critical: true,
           )
         rescue StandardError => e
           result.add_error(
-            "Failed to validate content types: #{e.message}"
+            "Failed to validate content types: #{e.message}",
           )
         end
 
@@ -95,7 +98,7 @@ module Uniword
             next if declared_types.include?(required_type)
 
             result.add_warning(
-              "Required content type not declared: #{required_type}"
+              "Required content type not declared: #{required_type}",
             )
           end
         end
@@ -104,12 +107,14 @@ module Uniword
           types = []
 
           # From Default elements
-          doc.xpath("//xmlns:Default", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
+          doc.xpath("//xmlns:Default",
+                    "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
             types << default["ContentType"] if default["ContentType"]
           end
 
           # From Override elements
-          doc.xpath("//xmlns:Override", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |override|
+          doc.xpath("//xmlns:Override",
+                    "xmlns" => CONTENT_TYPES_NAMESPACE).each do |override|
             types << override["ContentType"] if override["ContentType"]
           end
 
@@ -119,7 +124,8 @@ module Uniword
         def validate_extension_consistency(zip, doc, result)
           # Get declared extensions
           extensions = {}
-          doc.xpath("//xmlns:Default", "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
+          doc.xpath("//xmlns:Default",
+                    "xmlns" => CONTENT_TYPES_NAMESPACE).each do |default|
             ext = default["Extension"]
             content_type = default["ContentType"]
             extensions[ext] = content_type if ext && content_type
@@ -136,7 +142,7 @@ module Uniword
               # Expected extension found
             else
               result.add_info(
-                "File #{entry.name} has undeclared extension: .#{ext}"
+                "File #{entry.name} has undeclared extension: .#{ext}",
               )
             end
           end

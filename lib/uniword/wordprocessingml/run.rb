@@ -47,16 +47,20 @@ module Uniword
         map_element "br", to: :break, render_nil: false
         map_element "drawing", to: :drawings, render_nil: false
         map_element "pict", to: :pictures, render_nil: false
-        map_element "AlternateContent", to: :alternate_content, render_nil: false
-        map_element "footnoteReference", to: :footnote_reference, render_nil: false
-        map_element "endnoteReference", to: :endnote_reference, render_nil: false
+        map_element "AlternateContent", to: :alternate_content,
+                                        render_nil: false
+        map_element "footnoteReference", to: :footnote_reference,
+                                         render_nil: false
+        map_element "endnoteReference", to: :endnote_reference,
+                                        render_nil: false
         map_element "fldChar", to: :field_char, render_nil: false
         map_element "instrText", to: :instr_text, render_nil: false
         map_element "ptab", to: :position_tab, render_nil: false
         map_element "delText", to: :del_text, render_nil: false
         map_element "noBreakHyphen", to: :no_break_hyphen, render_nil: false
         map_element "sym", to: :sym, render_nil: false
-        map_element "lastRenderedPageBreak", to: :last_rendered_page_break, render_nil: false
+        map_element "lastRenderedPageBreak", to: :last_rendered_page_break,
+                                             render_nil: false
       end
 
       # Initialize with text normalization
@@ -95,7 +99,7 @@ module Uniword
         return self unless text
 
         self.text = text.to_s.gsub(pattern) do |_match_str|
-          block.call(Regexp.last_match)
+          yield(Regexp.last_match)
         end
         self
       end
@@ -111,7 +115,7 @@ module Uniword
         flags << "bold" if properties&.bold&.value == true
         flags << "italic" if properties&.italic&.value == true
         if flags.any?
-          "#<#{self.class} text=\"#{text_preview}\", #{flags.join(", ")}>"
+          "#<#{self.class} text=\"#{text_preview}\", #{flags.join(', ')}>"
         else
           "#<#{self.class} text=\"#{text_preview}\">"
         end
@@ -198,7 +202,9 @@ module Uniword
               merged.send(:"#{attr_name}=", base_val)
             end
           rescue StandardError => e
-            Uniword.logger&.debug { "Skipping attribute #{attr_name}: #{e.message}" }
+            Uniword.logger&.debug do
+              "Skipping attribute #{attr_name}: #{e.message}"
+            end
           end
         end
 

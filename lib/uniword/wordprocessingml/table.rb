@@ -22,7 +22,8 @@ module Uniword
         map_element "tblPr", to: :properties, render_nil: false
         map_element "tblGrid", to: :grid, render_nil: false
         map_element "tr", to: :rows, render_nil: false
-        map_element "AlternateContent", to: :alternate_content, render_nil: false
+        map_element "AlternateContent", to: :alternate_content,
+                                        render_nil: false
       end
 
       # Get row count
@@ -56,7 +57,7 @@ module Uniword
 
         max_cols = rows.map { |r| r.cells&.count || 0 }.max || 0
         (0...max_cols).map do |col_idx|
-          rows.map { |r| r.cells&.[](col_idx) }.compact
+          rows.filter_map { |r| r.cells&.[](col_idx) }
         end
       end
 

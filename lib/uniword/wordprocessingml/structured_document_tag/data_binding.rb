@@ -19,7 +19,8 @@ module Uniword
           namespace Ooxml::Namespaces::WordProcessingML
           map_attribute "xpath", to: :xpath, render_nil: false
           map_attribute "storeItemID", to: :store_item_id, render_nil: false
-          map_attribute "prefixMappings", to: :prefix_mappings, render_nil: false
+          map_attribute "prefixMappings", to: :prefix_mappings,
+                                          render_nil: false
         end
       end
     end

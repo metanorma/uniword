@@ -30,7 +30,8 @@ module Uniword
     # Properties (4)
     autoload :DocProperties, "uniword/wp_drawing/doc_properties"
     autoload :DocPr, "uniword/wp_drawing/doc_pr"
-    autoload :NonVisualDrawingProps, "uniword/wp_drawing/non_visual_drawing_props"
+    autoload :NonVisualDrawingProps,
+             "uniword/wp_drawing/non_visual_drawing_props"
     autoload :CNvGraphicFramePr, "uniword/wp_drawing/c_nv_graphic_frame_pr"
 
     # Wrapping (6)

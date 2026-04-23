@@ -40,15 +40,15 @@ module Uniword
       # @return [Array<String>] Error messages (severity: error)
       def errors
         @errors ||= issues
-                    .select { |i| i[:severity] == :error }
-                    .map { |i| i[:message] }
+          .select { |i| i[:severity] == :error }
+          .map { |i| i[:message] }
       end
 
       # @return [Array<String>] Warning messages (severity: warning)
       def warnings
         @warnings ||= issues
-                      .select { |i| i[:severity] == :warning }
-                      .map { |i| i[:message] }
+          .select { |i| i[:severity] == :warning }
+          .map { |i| i[:message] }
       end
 
       # @return [Array<Hash>] All issues
@@ -70,15 +70,15 @@ module Uniword
 
         starts = document.body.bookmark_starts || []
         ends = document.body.bookmark_ends || []
-        end_ids = ends.map(&:id).compact.to_set
+        end_ids = ends.filter_map(&:id).to_set
 
-        starts.map do |bs|
+        starts.filter_map do |bs|
           next if end_ids.include?(bs.id)
 
           { severity: :error,
             message: "bookmarkStart id='#{bs.id}' (name='#{bs.name}') " \
                      "has no matching bookmarkEnd" }
-        end.compact
+        end
       end
 
       def check_bookmark_uniqueness
@@ -86,7 +86,7 @@ module Uniword
 
         starts = document.body.bookmark_starts || []
         seen = {}
-        starts.map do |bs|
+        starts.filter_map do |bs|
           next unless bs.name
           next if bs.name.to_s == "_GoBack" # Word internal bookmark
 
@@ -97,19 +97,19 @@ module Uniword
             seen[bs.name.to_s] = true
             nil
           end
-        end.compact
+        end
       end
 
       def check_empty_paragraphs
         return [] unless document.body
 
         paragraphs = document.body.paragraphs || []
-        paragraphs.each_with_index.map do |para, idx|
+        paragraphs.each_with_index.filter_map do |para, idx|
           next unless para.runs.nil? || para.runs.empty?
 
           { severity: :warning,
             message: "Empty paragraph at index #{idx}" }
-        end.compact
+        end
       end
     end
   end

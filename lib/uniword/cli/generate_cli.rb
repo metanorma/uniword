@@ -44,7 +44,7 @@ module Uniword
 
       generator = Generation::DocumentGenerator.new(
         style_source: options["style-source"],
-        style_mapping: options["style-mapping"]
+        style_mapping: options["style-mapping"],
       )
 
       generator.generate(content, output_path)

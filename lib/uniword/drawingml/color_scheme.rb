@@ -301,7 +301,7 @@ module Uniword
           accent5: @accent5&.value,
           accent6: @accent6&.value,
           hlink: @hlink&.value,
-          folHlink: @fol_hlink&.value
+          folHlink: @fol_hlink&.value,
         }.compact
       end
 

@@ -62,14 +62,19 @@ module Uniword
                     desc: "Source directory with .dotx files"
     option :output, type: :string, default: "data/stylesets",
                     desc: "Output directory for YAML files"
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     def import
-      say "Importing StyleSet from #{options[:source]}...", :green if options[:verbose]
+      if options[:verbose]
+        say "Importing StyleSet from #{options[:source]}...",
+            :green
+      end
 
       importer = Stylesets::StyleSetImporter.new
       count = importer.import_all(options[:source], options[:output])
 
-      say "Successfully imported #{count} StyleSets to #{options[:output]}/", :green
+      say "Successfully imported #{count} StyleSets to #{options[:output]}/",
+          :green
 
       if options[:verbose]
         stylesets = Dir.glob(File.join(options[:output], "*.yml")).map do |f|
@@ -101,7 +106,8 @@ module Uniword
                   desc: "Path to .dotx StyleSet file"
     option :strategy, type: :string, default: "keep_existing",
                       desc: "Application strategy (keep_existing, replace, rename)"
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     def apply(input_path, output_path)
       unless options[:name] || options[:file]
         say "Error: Must specify either --name for bundled StyleSet or --file for .dotx file",
@@ -145,7 +151,7 @@ module Uniword
     option :output, desc: "Output YAML file"
     def extract(docx_path)
       output = options[:output] ||
-               "data/stylesets/#{options[:name]}.yml"
+        "data/stylesets/#{options[:name]}.yml"
       Generation::StyleExtractor.extract_to_yaml(docx_path, output)
       say("StyleSet extracted: #{output}", :green)
     rescue Uniword::Error => e
@@ -160,14 +166,20 @@ module Uniword
       strategy = options[:strategy].to_sym
 
       if options[:name]
-        say "Applying bundled StyleSet '#{options[:name]}'...", :green if options[:verbose]
+        if options[:verbose]
+          say "Applying bundled StyleSet '#{options[:name]}'...",
+              :green
+        end
         doc.apply_styleset(options[:name], strategy: strategy)
       else
         unless File.exist?(options[:file])
           say "StyleSet file not found: #{options[:file]}", :red
           exit 1
         end
-        say "Applying StyleSet from #{options[:file]}...", :green if options[:verbose]
+        if options[:verbose]
+          say "Applying StyleSet from #{options[:file]}...",
+              :green
+        end
         styleset = StyleSet.from_dotx(options[:file])
         styleset.apply_to(doc, strategy: strategy)
       end

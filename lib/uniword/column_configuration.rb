@@ -56,7 +56,7 @@ module Uniword
         count: count,
         equal_width: true,
         space: space,
-        separator: separator
+        separator: separator,
       )
     end
 

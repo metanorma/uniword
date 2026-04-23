@@ -27,7 +27,8 @@ module Uniword
       # Update cached version
       def update(word_version)
         cache.paths.ensure_directories_exist!
-        File.write(cache.paths.version_file, JSON.generate(word_version: word_version))
+        File.write(cache.paths.version_file,
+                   JSON.generate(word_version: word_version))
       end
 
       # Check if cache is stale (Word was updated)

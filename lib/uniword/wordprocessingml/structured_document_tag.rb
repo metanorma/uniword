@@ -24,24 +24,29 @@ module Uniword
                "#{__dir__}/structured_document_tag/showing_placeholder_header"
       autoload :Appearance, "#{__dir__}/structured_document_tag/appearance"
       autoload :Placeholder, "#{__dir__}/structured_document_tag/placeholder"
-      autoload :DocPartReference, "#{__dir__}/structured_document_tag/placeholder"
+      autoload :DocPartReference,
+               "#{__dir__}/structured_document_tag/placeholder"
       autoload :DataBinding, "#{__dir__}/structured_document_tag/data_binding"
       autoload :Bibliography, "#{__dir__}/structured_document_tag/bibliography"
       autoload :Temporary, "#{__dir__}/structured_document_tag/temporary"
       autoload :DocPartObj, "#{__dir__}/structured_document_tag/doc_part_obj"
-      autoload :DocPartGallery, "#{__dir__}/structured_document_tag/doc_part_obj"
-      autoload :DocPartCategory, "#{__dir__}/structured_document_tag/doc_part_obj"
+      autoload :DocPartGallery,
+               "#{__dir__}/structured_document_tag/doc_part_obj"
+      autoload :DocPartCategory,
+               "#{__dir__}/structured_document_tag/doc_part_obj"
       autoload :DocPartUnique, "#{__dir__}/structured_document_tag/doc_part_obj"
       autoload :Date, "#{__dir__}/structured_document_tag/date"
       autoload :DateFormat, "#{__dir__}/structured_document_tag/date"
       autoload :Lid, "#{__dir__}/structured_document_tag/date"
       autoload :StoreMappedDataAs, "#{__dir__}/structured_document_tag/date"
       autoload :Calendar, "#{__dir__}/structured_document_tag/date"
-      autoload :RunProperties, "#{__dir__}/structured_document_tag/run_properties"
+      autoload :RunProperties,
+               "#{__dir__}/structured_document_tag/run_properties"
 
       # SDT content and end properties classes (autoloaded)
       autoload :Content, "#{__dir__}/structured_document_tag/content"
-      autoload :EndProperties, "#{__dir__}/structured_document_tag/end_properties"
+      autoload :EndProperties,
+               "#{__dir__}/structured_document_tag/end_properties"
 
       # Main SDT attributes
       attribute :properties, StructuredDocumentTagProperties

@@ -11,7 +11,8 @@ module Uniword
   class ResourcesCLI < Thor
     include CLIHelpers
 
-    desc "export OUTPUT_DIR", "Export Word resources from local Microsoft Word installation"
+    desc "export OUTPUT_DIR",
+         "Export Word resources from local Microsoft Word installation"
     long_desc <<~DESC
       Export raw Word resources (.thmx themes, .dotx stylesets) from the
       local Microsoft Word installation to a target directory.
@@ -19,7 +20,8 @@ module Uniword
       Examples:
         $ uniword resources export output/ --word-app "/Applications/Microsoft Word.app"
     DESC
-    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
     option :word_app, aliases: "-w", desc: "Path to Microsoft Word.app", type: :string,
                       required: true, banner: "PATH"
     def export(output_dir)
@@ -57,13 +59,17 @@ module Uniword
 
       return if File.directory?(path)
 
-      say "#{path} is not a directory (expected path to Microsoft Word.app)", :red
+      say "#{path} is not a directory (expected path to Microsoft Word.app)",
+          :red
       exit 1
     end
 
     def export_office_themes(resources_path, output_base)
       themes_path = File.join(resources_path, "Office Themes")
-      return say("No themes found in Word installation", :yellow) unless Dir.exist?(themes_path)
+      unless Dir.exist?(themes_path)
+        return say("No themes found in Word installation",
+                   :yellow)
+      end
 
       themes_dir = File.join(output_base, "office-themes")
       count = copy_glob("#{themes_path}/*.thmx", themes_dir)
@@ -72,7 +78,10 @@ module Uniword
 
     def export_quick_styles(resources_path, output_base)
       stylesets_path = File.join(resources_path, "QuickStyles")
-      return say("No QuickStyles found in Word installation", :yellow) unless Dir.exist?(stylesets_path)
+      unless Dir.exist?(stylesets_path)
+        return say("No QuickStyles found in Word installation",
+                   :yellow)
+      end
 
       styles_dir = File.join(output_base, "quick-styles")
       count = copy_glob("#{stylesets_path}/*.dotx", styles_dir)
@@ -109,7 +118,10 @@ module Uniword
 
     def export_citation_styles(resources_path, output_base)
       path = File.join(resources_path, "Style")
-      return say("No citation styles found in Word installation", :yellow) unless Dir.exist?(path)
+      unless Dir.exist?(path)
+        return say("No citation styles found in Word installation",
+                   :yellow)
+      end
 
       dir = File.join(output_base, "citation-styles")
       count = copy_glob("#{path}/*.xsl", dir)
@@ -118,7 +130,10 @@ module Uniword
 
     def export_theme_colors(resources_path, output_base)
       path = File.join(resources_path, "Office Themes", "Theme Colors")
-      return say("No theme colors found in Word installation", :yellow) unless Dir.exist?(path)
+      unless Dir.exist?(path)
+        return say("No theme colors found in Word installation",
+                   :yellow)
+      end
 
       dir = File.join(output_base, "theme-colors")
       count = copy_glob("#{path}/*.xml", dir)
@@ -127,7 +142,10 @@ module Uniword
 
     def export_theme_fonts(resources_path, output_base)
       path = File.join(resources_path, "Office Themes", "Theme Fonts")
-      return say("No theme fonts found in Word installation", :yellow) unless Dir.exist?(path)
+      unless Dir.exist?(path)
+        return say("No theme fonts found in Word installation",
+                   :yellow)
+      end
 
       dir = File.join(output_base, "theme-fonts")
       count = copy_glob("#{path}/*.xml", dir)

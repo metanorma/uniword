@@ -35,7 +35,8 @@ module Uniword
           zip_file.each do |entry|
             next if entry.directory?
 
-            content[entry.name] = entry.get_input_stream.read.force_encoding("UTF-8")
+            content[entry.name] =
+              entry.get_input_stream.read.force_encoding("UTF-8")
           end
 
           # Explicitly extract theme if present
@@ -60,7 +61,8 @@ module Uniword
           zip_file.each do |entry|
             next if entry.directory?
 
-            content[entry.name] = entry.get_input_stream.read.force_encoding("UTF-8")
+            content[entry.name] =
+              entry.get_input_stream.read.force_encoding("UTF-8")
           end
 
           # Explicitly extract theme if present
@@ -124,9 +126,15 @@ module Uniword
         return if path.is_a?(IO) || path.is_a?(StringIO)
 
         # For strings, validate as file path
-        raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
+        if path.respond_to?(:empty?) && path.empty?
+          raise ArgumentError,
+                "Path cannot be empty"
+        end
         raise ArgumentError, "File not found: #{path}" unless File.exist?(path)
-        raise ArgumentError, "Path is a directory: #{path}" if File.directory?(path)
+        if File.directory?(path)
+          raise ArgumentError,
+                "Path is a directory: #{path}"
+        end
       end
     end
   end

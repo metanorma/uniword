@@ -39,7 +39,8 @@ module Uniword
       appdata = ENV.fetch("APPDATA", nil)
       return nil unless appdata
 
-      File.join(appdata, "Microsoft", "Templates", "Document Themes", "Theme Colors")
+      File.join(appdata, "Microsoft", "Templates", "Document Themes",
+                "Theme Colors")
     end
 
     def font_schemes_path
@@ -48,7 +49,8 @@ module Uniword
       appdata = ENV.fetch("APPDATA", nil)
       return nil unless appdata
 
-      File.join(appdata, "Microsoft", "Templates", "Document Themes", "Theme Fonts")
+      File.join(appdata, "Microsoft", "Templates", "Document Themes",
+                "Theme Fonts")
     end
 
     def cache_path
@@ -65,10 +67,13 @@ module Uniword
 
       # Try to find Word executable
       [
-        File.join(program_files, "Microsoft Office", "root", "Office16", "WINWORD.EXE"),
-        File.join(program_files_x86, "Microsoft Office", "root", "Office16", "WINWORD.EXE"),
+        File.join(program_files, "Microsoft Office", "root", "Office16",
+                  "WINWORD.EXE"),
+        File.join(program_files_x86, "Microsoft Office", "root", "Office16",
+                  "WINWORD.EXE"),
         File.join(program_files, "Microsoft Office", "Office16", "WINWORD.EXE"),
-        File.join(program_files_x86, "Microsoft Office", "Office16", "WINWORD.EXE")
+        File.join(program_files_x86, "Microsoft Office", "Office16",
+                  "WINWORD.EXE"),
       ].find { |path| File.exist?(path) }
     end
   end

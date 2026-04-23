@@ -19,7 +19,8 @@ module Uniword
       # @param hue_shift [Integer, nil] Hue shift in degrees (random if nil)
       # @param saturation_shift [Integer, nil] Saturation shift percent (random if nil)
       # @param lightness_shift [Integer, nil] Lightness shift percent (random if nil)
-      def initialize(hue_shift: nil, saturation_shift: nil, lightness_shift: nil)
+      def initialize(hue_shift: nil, saturation_shift: nil,
+lightness_shift: nil)
         @hue_shift = hue_shift || rand(HUE_SHIFT_RANGE)
         @saturation_shift = saturation_shift || rand(SATURATION_SHIFT_RANGE)
         @lightness_shift = lightness_shift || rand(LIGHTNESS_SHIFT_RANGE)
@@ -40,7 +41,7 @@ module Uniword
         new(
           hue_shift: hue_shift,
           saturation_shift: saturation_shift,
-          lightness_shift: lightness_shift
+          lightness_shift: lightness_shift,
         )
       end
 
@@ -94,7 +95,7 @@ module Uniword
             original,
             hue_shift: hue_shift,
             saturation_shift: saturation_shift,
-            lightness_shift: lightness_shift
+            lightness_shift: lightness_shift,
           )
         end
       end

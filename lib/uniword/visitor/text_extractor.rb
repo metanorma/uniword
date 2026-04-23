@@ -54,10 +54,10 @@ module Uniword
       # @param paragraph [Paragraph] The paragraph to visit
       # @return [void]
       def visit_paragraph(paragraph)
-        paragraph_text = paragraph.runs.map do |run|
+        paragraph_text = paragraph.runs.filter_map do |run|
           run.accept(self)
           @text_parts.pop # Get the last added text
-        end.compact.join
+        end.join
 
         @text_parts << paragraph_text unless paragraph_text.empty?
       end
@@ -77,10 +77,10 @@ module Uniword
       # @param table_row [TableRow] The table row to visit
       # @return [void]
       def visit_table_row(table_row)
-        row_text = table_row.cells.map do |cell|
+        row_text = table_row.cells.filter_map do |cell|
           cell.accept(self)
           @text_parts.pop # Get the last added text
-        end.compact.join(" | ")
+        end.join(" | ")
 
         @text_parts << row_text unless row_text.empty?
       end
@@ -90,10 +90,10 @@ module Uniword
       # @param table_cell [TableCell] The table cell to visit
       # @return [void]
       def visit_table_cell(table_cell)
-        cell_text = table_cell.paragraphs.map do |paragraph|
+        cell_text = table_cell.paragraphs.filter_map do |paragraph|
           paragraph.accept(self)
           @text_parts.pop # Get the last added text
-        end.compact.join
+        end.join
 
         @text_parts << cell_text
       end

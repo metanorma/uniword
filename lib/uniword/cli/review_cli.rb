@@ -40,8 +40,8 @@ module Uniword
       say "Comments (#{comment_list.count}):", :green
       comment_list.each_with_index do |comment, idx|
         say "  #{idx + 1}. ID: #{comment.comment_id}"
-        say "     Author: #{comment.author || "(unknown)"}"
-        say "     Date:   #{comment.date || "(unknown)"}"
+        say "     Author: #{comment.author || '(unknown)'}"
+        say "     Date:   #{comment.date || '(unknown)'}"
 
         if options[:verbose]
           say "     Text:   #{comment.text}"
@@ -86,8 +86,8 @@ module Uniword
       revisions.each_with_index do |rev, idx|
         say "  #{idx + 1}. ID: #{rev.revision_id}"
         say "     Type:   #{format_type(rev.type)}"
-        say "     Author: #{rev.author || "(unknown)"}"
-        say "     Date:   #{rev.date || "(unknown)"}"
+        say "     Author: #{rev.author || '(unknown)'}"
+        say "     Date:   #{rev.date || '(unknown)'}"
 
         if options[:verbose]
           say "     Text:   #{rev.text}"
@@ -228,7 +228,7 @@ module Uniword
       session = Review::InteractiveReview.new(
         manager,
         output: $stdout,
-        input: $stdin
+        input: $stdin,
       )
       result = session.run
 

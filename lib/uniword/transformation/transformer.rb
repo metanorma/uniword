@@ -86,7 +86,7 @@ module Uniword
         transform(
           source: docx_document,
           source_format: :docx,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
       end
 
@@ -106,7 +106,7 @@ module Uniword
           docx_package.document,
           docx_package.core_properties,
           docx_package.package_rels,
-          document_name
+          document_name,
         )
       end
 
@@ -123,7 +123,7 @@ module Uniword
         transform(
           source: mhtml_document,
           source_format: :mhtml,
-          target_format: :docx
+          target_format: :docx,
         )
       end
 
@@ -187,13 +187,13 @@ module Uniword
           ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
           if doc_props.respond_to?(:created) && doc_props.created
             ooxml_doc.core_properties.created = Uniword::Ooxml::Types::DctermsCreatedType.new(
-              value: doc_props.created, type: "dcterms:W3CDTF"
+              value: doc_props.created, type: "dcterms:W3CDTF",
             )
           end
           ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.respond_to?(:last_author) && doc_props.last_author
           if doc_props.respond_to?(:last_saved) && doc_props.last_saved
             ooxml_doc.core_properties.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
-              value: doc_props.last_saved, type: "dcterms:W3CDTF"
+              value: doc_props.last_saved, type: "dcterms:W3CDTF",
             )
           end
         end
@@ -213,7 +213,7 @@ module Uniword
           transformed = transform_element(
             element: element,
             source_format: source_format,
-            target_format: target_format
+            target_format: target_format,
           )
 
           # Add transformed element to target
@@ -242,7 +242,7 @@ module Uniword
         rule = @rule_registry.find_rule(
           element_type: element.class,
           source_format: source_format,
-          target_format: target_format
+          target_format: target_format,
         )
 
         # Apply transformation
@@ -284,70 +284,70 @@ module Uniword
         @rule_registry.register(
           ParagraphTransformationRule.new(
             source_format: :docx,
-            target_format: :mhtml
-          )
+            target_format: :mhtml,
+          ),
         )
         @rule_registry.register(
           ParagraphTransformationRule.new(
             source_format: :mhtml,
-            target_format: :docx
-          )
+            target_format: :docx,
+          ),
         )
 
         # Register Run transformation (bidirectional)
         @rule_registry.register(
           RunTransformationRule.new(
             source_format: :docx,
-            target_format: :mhtml
-          )
+            target_format: :mhtml,
+          ),
         )
         @rule_registry.register(
           RunTransformationRule.new(
             source_format: :mhtml,
-            target_format: :docx
-          )
+            target_format: :docx,
+          ),
         )
 
         # Register Table transformation (bidirectional)
         @rule_registry.register(
           TableTransformationRule.new(
             source_format: :docx,
-            target_format: :mhtml
-          )
+            target_format: :mhtml,
+          ),
         )
         @rule_registry.register(
           TableTransformationRule.new(
             source_format: :mhtml,
-            target_format: :docx
-          )
+            target_format: :docx,
+          ),
         )
 
         # Register Image transformation (bidirectional)
         @rule_registry.register(
           ImageTransformationRule.new(
             source_format: :docx,
-            target_format: :mhtml
-          )
+            target_format: :mhtml,
+          ),
         )
         @rule_registry.register(
           ImageTransformationRule.new(
             source_format: :mhtml,
-            target_format: :docx
-          )
+            target_format: :docx,
+          ),
         )
 
         # Register Hyperlink transformation (bidirectional)
         @rule_registry.register(
           HyperlinkTransformationRule.new(
             source_format: :docx,
-            target_format: :mhtml
-          )
+            target_format: :mhtml,
+          ),
         )
         @rule_registry.register(
           HyperlinkTransformationRule.new(
             source_format: :mhtml,
-            target_format: :docx
-          )
+            target_format: :docx,
+          ),
         )
       end
 

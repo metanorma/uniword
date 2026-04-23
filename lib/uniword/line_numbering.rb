@@ -52,7 +52,7 @@ module Uniword
         start: 1,
         count_by: count_by,
         restart: "continuous",
-        distance: distance
+        distance: distance,
       )
     end
 
@@ -66,7 +66,7 @@ module Uniword
         start: 1,
         count_by: count_by,
         restart: "newPage",
-        distance: distance
+        distance: distance,
       )
     end
 
@@ -80,7 +80,7 @@ module Uniword
         start: 1,
         count_by: count_by,
         restart: "newSection",
-        distance: distance
+        distance: distance,
       )
     end
 
@@ -111,7 +111,7 @@ module Uniword
       return unless restart && !RESTART_OPTIONS.include?(restart)
 
       raise ArgumentError,
-            "Invalid restart option: #{restart}. Must be one of: #{RESTART_OPTIONS.join(", ")}"
+            "Invalid restart option: #{restart}. Must be one of: #{RESTART_OPTIONS.join(', ')}"
     end
 
     def validate_start

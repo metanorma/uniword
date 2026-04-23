@@ -52,7 +52,7 @@ module Uniword
               "Font '#{font}' referenced but not in fontTable.xml",
               part: "word/document.xml",
               suggestion: "The font may render incorrectly. Add it to " \
-                          "fontTable.xml or substitute with an available font."
+                          "fontTable.xml or substitute with an available font.",
             )
           end
 

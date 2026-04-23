@@ -50,7 +50,7 @@ module Uniword
         comment = Uniword::Comment.new(
           text: text,
           author: author,
-          initials: initials
+          initials: initials,
         )
         comments_part.add_comment(comment)
       end
@@ -74,7 +74,7 @@ module Uniword
 
         comment = Uniword::Comment.new(
           text: text,
-          author: author
+          author: author,
         )
         comments_part.add_comment(comment)
       end
@@ -193,13 +193,11 @@ module Uniword
       #
       # @return [Array<Hash>] Combined review queue
       def review_queue
-        items = []
-
-        comments_part.comments.each do |comment|
-          items << {
+        items = comments_part.comments.map do |comment|
+          {
             type: :comment,
             item: comment,
-            position: comment.date.to_s
+            position: comment.date.to_s,
           }
         end
 
@@ -207,7 +205,7 @@ module Uniword
           items << {
             type: :revision,
             item: revision,
-            position: revision.date.to_s
+            position: revision.date.to_s,
           }
         end
 

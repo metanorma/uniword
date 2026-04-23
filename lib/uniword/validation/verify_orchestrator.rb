@@ -56,10 +56,10 @@ module Uniword
 
         if critical_failure
           layers << Report::LayerResult.new(
-            name: "XSD Schema", status: "skipped", duration_ms: 0, issues: []
+            name: "XSD Schema", status: "skipped", duration_ms: 0, issues: [],
           )
           layers << Report::LayerResult.new(
-            name: "Word Document", status: "skipped", duration_ms: 0, issues: []
+            name: "Word Document", status: "skipped", duration_ms: 0, issues: [],
           )
         else
           layers << run_xsd_layer(path)
@@ -73,7 +73,7 @@ module Uniword
           file_path: path,
           valid: layers.all?(&:pass?),
           duration_ms: total_ms,
-          layers: layers
+          layers: layers,
         )
       end
 
@@ -91,7 +91,7 @@ module Uniword
           name: "OPC Package",
           status: status,
           duration_ms: duration,
-          issues: issues
+          issues: issues,
         )
       end
 
@@ -111,7 +111,7 @@ module Uniword
           name: "XSD Schema",
           status: result.valid? ? "pass" : "fail",
           duration_ms: duration,
-          issues: issues
+          issues: issues,
         )
       end
 
@@ -127,33 +127,32 @@ module Uniword
           name: "Word Document",
           status: result.valid? ? "pass" : "fail",
           duration_ms: duration,
-          issues: issues
+          issues: issues,
         )
       end
 
       def extract_issues(layer_result)
         # LayerValidationResult stores issues as error/warning/info hashes
         # We need to convert them to ValidationIssue objects
-        issues = []
-        layer_result.errors.each do |err|
-          issues << Report::ValidationIssue.new(
+        issues = layer_result.errors.map do |err|
+          Report::ValidationIssue.new(
             severity: "error",
             code: extract_code(err[:message]),
-            message: clean_message(err[:message])
+            message: clean_message(err[:message]),
           )
         end
         layer_result.warnings.each do |warn|
           issues << Report::ValidationIssue.new(
             severity: "warning",
             code: extract_code(warn[:message]),
-            message: clean_message(warn[:message])
+            message: clean_message(warn[:message]),
           )
         end
         layer_result.infos.each do |info|
           issues << Report::ValidationIssue.new(
             severity: "info",
             code: extract_code(info[:message]),
-            message: clean_message(info[:message])
+            message: clean_message(info[:message]),
           )
         end
         issues

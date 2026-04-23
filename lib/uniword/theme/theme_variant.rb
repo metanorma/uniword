@@ -80,7 +80,7 @@ module Uniword
       def inspect
         "#<Uniword::Theme::ThemeVariant id=#{@id.inspect} " \
           "guid=#{@guid.inspect} " \
-          "theme=#{@theme ? @theme.name : "not parsed"}>"
+          "theme=#{@theme ? @theme.name : 'not parsed'}>"
       end
     end
   end

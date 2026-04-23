@@ -19,7 +19,10 @@ module Uniword
 
     # Add a header to this section
     def add_header(header)
-      raise ArgumentError, "header must be a Header instance" unless header.is_a?(Header)
+      unless header.is_a?(Header)
+        raise ArgumentError,
+              "header must be a Header instance"
+      end
 
       headers << header
     end
@@ -142,7 +145,7 @@ module Uniword
         left: @properties.margin_left,
         right: @properties.margin_right,
         header: @properties.margin_header,
-        footer: @properties.margin_footer
+        footer: @properties.margin_footer,
       }
     end
 

@@ -126,7 +126,7 @@ module Uniword
           keep_next: source_props.keep_next,
           keep_lines: source_props.keep_lines,
           page_break_before: source_props.page_break_before,
-          outline_level: source_props.outline_level
+          outline_level: source_props.outline_level,
         )
       end
 
@@ -137,7 +137,7 @@ module Uniword
       def transform_runs(source, target)
         run_rule = RunTransformationRule.new(
           source_format: @source_format,
-          target_format: @target_format
+          target_format: @target_format,
         )
 
         source.runs.each do |source_run|
@@ -145,13 +145,13 @@ module Uniword
           transformed = if source_run.is_a?(Image)
                           image_rule = ImageTransformationRule.new(
                             source_format: @source_format,
-                            target_format: @target_format
+                            target_format: @target_format,
                           )
                           image_rule.transform(source_run)
                         elsif source_run.is_a?(Hyperlink)
                           link_rule = HyperlinkTransformationRule.new(
                             source_format: @source_format,
-                            target_format: @target_format
+                            target_format: @target_format,
                           )
                           link_rule.transform(source_run)
                         else

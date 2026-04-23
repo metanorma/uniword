@@ -26,7 +26,7 @@ module Uniword
         "note" => "Note",
         "example" => "Example",
         "table_title" => "TableTitle",
-        "figure_title" => "FigureTitle"
+        "figure_title" => "FigureTitle",
       }.freeze
 
       # Initialize with a mapping config path.
@@ -68,7 +68,7 @@ module Uniword
       private
 
       def load_mapping(path)
-        data = YAML.safe_load(File.read(path))
+        data = YAML.safe_load_file(path)
         return DEFAULT_MAPPING.dup unless data.is_a?(Hash)
         return DEFAULT_MAPPING.dup unless data["mappings"]
 

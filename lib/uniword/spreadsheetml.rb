@@ -39,8 +39,10 @@ module Uniword
     autoload :Comment, "uniword/spreadsheetml/comment"
     autoload :CommentList, "uniword/spreadsheetml/comment_list"
     autoload :Comments, "uniword/spreadsheetml/comments"
-    autoload :ConditionalFormatting, "uniword/spreadsheetml/conditional_formatting"
-    autoload :ConditionalFormattingRule, "uniword/spreadsheetml/conditional_formatting_rule"
+    autoload :ConditionalFormatting,
+             "uniword/spreadsheetml/conditional_formatting"
+    autoload :ConditionalFormattingRule,
+             "uniword/spreadsheetml/conditional_formatting_rule"
     autoload :CustomFilter, "uniword/spreadsheetml/custom_filter"
     autoload :CustomFilters, "uniword/spreadsheetml/custom_filters"
     autoload :CustomWorkbookViews, "uniword/spreadsheetml/custom_workbook_views"
@@ -82,7 +84,8 @@ module Uniword
     autoload :PhoneticPr, "uniword/spreadsheetml/phonetic_pr"
     autoload :PivotCaches, "uniword/spreadsheetml/pivot_caches"
     autoload :PivotTable, "uniword/spreadsheetml/pivot_table"
-    autoload :PivotTableDefinition, "uniword/spreadsheetml/pivot_table_definition"
+    autoload :PivotTableDefinition,
+             "uniword/spreadsheetml/pivot_table_definition"
     autoload :ProtectedRanges, "uniword/spreadsheetml/protected_ranges"
     autoload :QueryTable, "uniword/spreadsheetml/query_table"
     autoload :RichTextRun, "uniword/spreadsheetml/rich_text_run"

@@ -133,7 +133,7 @@ module Uniword
         {
           enabled: @cache_enabled,
           size: @cache.size,
-          components: @cache.keys
+          components: @cache.keys,
         }
       end
 
@@ -198,7 +198,7 @@ module Uniword
           name = extract_component_name(path)
           {
             name: name,
-            document: get(name)
+            document: get(name),
           }
         end
       end

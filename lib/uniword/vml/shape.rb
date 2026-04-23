@@ -41,7 +41,7 @@ module Uniword
 
         # Declare Office namespace at root level so o:spid, o:allowincell work
         namespace_scope [
-          { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always }
+          { namespace: Uniword::Ooxml::Namespaces::Office, declare: :always },
         ]
 
         map_attribute "id", to: :id, render_nil: false

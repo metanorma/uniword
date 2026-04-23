@@ -25,7 +25,8 @@ module Uniword
           doc = context.document_xml
           return issues unless doc
 
-          doc.root.xpath(".//w:tbl", "w" => W_NS).each_with_index do |table, idx|
+          doc.root.xpath(".//w:tbl",
+                         "w" => W_NS).each_with_index do |table, idx|
             check_table(table, idx, issues)
           end
 
@@ -58,7 +59,7 @@ module Uniword
               severity: "warning",
               part: "word/document.xml",
               suggestion: "Adjust gridSpan values or add/remove cells " \
-                          "to match the grid."
+                          "to match the grid.",
             )
           end
         end

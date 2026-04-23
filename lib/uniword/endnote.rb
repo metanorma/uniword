@@ -59,7 +59,7 @@ module Uniword
     def to_h
       {
         id: @id,
-        content: @content
+        content: @content,
       }
     end
   end

@@ -67,35 +67,49 @@ module Uniword
       attribute :outline_level, Properties::OutlineLevel, default: nil
 
       # W14 namespace elements
-      attribute :ligatures, Uniword::Wordprocessingml2010::Ligatures, default: nil
+      attribute :ligatures, Uniword::Wordprocessingml2010::Ligatures,
+                default: nil
 
       # YAML mappings for flat YAML structure (StyleSet compatibility)
       yaml do
         map "bold", with: { from: :yaml_bold_from, to: :yaml_bold_to }
         map "italic", with: { from: :yaml_italic_from, to: :yaml_italic_to }
         map "strike", with: { from: :yaml_strike_from, to: :yaml_strike_to }
-        map "double_strike", with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
-        map "small_caps", with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
+        map "double_strike",
+            with: { from: :yaml_double_strike_from, to: :yaml_double_strike_to }
+        map "small_caps",
+            with: { from: :yaml_small_caps_from, to: :yaml_small_caps_to }
         map "caps", with: { from: :yaml_caps_from, to: :yaml_caps_to }
         map "all_caps", with: { from: :yaml_caps_from, to: :yaml_caps_to } # Alias
         map "hidden", with: { from: :yaml_hidden_from, to: :yaml_hidden_to }
         map "size", with: { from: :yaml_size_from, to: :yaml_size_to }
-        map "spacing", with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
+        map "spacing",
+            with: { from: :yaml_character_spacing_from,
+                    to: :yaml_character_spacing_to }
         map "character_spacing",
-            with: { from: :yaml_character_spacing_from, to: :yaml_character_spacing_to }
-        map "underline", with: { from: :yaml_underline_from, to: :yaml_underline_to }
+            with: { from: :yaml_character_spacing_from,
+                    to: :yaml_character_spacing_to }
+        map "underline",
+            with: { from: :yaml_underline_from, to: :yaml_underline_to }
         map "color", with: { from: :yaml_color_from, to: :yaml_color_to }
-        map "highlight", with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
+        map "highlight",
+            with: { from: :yaml_highlight_from, to: :yaml_highlight_to }
         map "font", with: { from: :yaml_font_from, to: :yaml_font_to }
-        map "font_ascii", with: { from: :yaml_font_ascii_from, to: :yaml_font_ascii_to }
-        map "font_east_asia", with: { from: :yaml_font_east_asia_from, to: :yaml_font_east_asia_to }
-        map "font_h_ansi", with: { from: :yaml_font_h_ansi_from, to: :yaml_font_h_ansi_to }
+        map "font_ascii",
+            with: { from: :yaml_font_ascii_from, to: :yaml_font_ascii_to }
+        map "font_east_asia",
+            with: { from: :yaml_font_east_asia_from,
+                    to: :yaml_font_east_asia_to }
+        map "font_h_ansi",
+            with: { from: :yaml_font_h_ansi_from, to: :yaml_font_h_ansi_to }
         map "font_cs", with: { from: :yaml_font_cs_from, to: :yaml_font_cs_to }
         map "emboss", with: { from: :yaml_emboss_from, to: :yaml_emboss_to }
         map "imprint", with: { from: :yaml_imprint_from, to: :yaml_imprint_to }
         map "shadow", with: { from: :yaml_shadow_from, to: :yaml_shadow_to }
         map "outline", with: { from: :yaml_outline_from, to: :yaml_outline_to }
-        map "vertical_align", with: { from: :yaml_vertical_align_from, to: :yaml_vertical_align_to }
+        map "vertical_align",
+            with: { from: :yaml_vertical_align_from,
+                    to: :yaml_vertical_align_to }
       end
 
       # XML mappings come AFTER attributes

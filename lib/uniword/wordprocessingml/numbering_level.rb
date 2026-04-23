@@ -76,14 +76,15 @@ module Uniword
       def validate_format
         return unless format && !FORMATS.include?(format)
 
-        raise ArgumentError, "Invalid format: #{format}. Must be one of: #{FORMATS.join(", ")}"
+        raise ArgumentError,
+              "Invalid format: #{format}. Must be one of: #{FORMATS.join(', ')}"
       end
 
       def validate_alignment
         return unless alignment && !ALIGNMENTS.include?(alignment)
 
         raise ArgumentError,
-              "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(", ")}"
+              "Invalid alignment: #{alignment}. Must be one of: #{ALIGNMENTS.join(', ')}"
       end
     end
   end

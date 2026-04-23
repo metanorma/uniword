@@ -9,7 +9,8 @@ module Uniword
     # Generated from OOXML schema: customxml.yml
     # Element: <cxml:smart_tag_properties>
     class SmartTagProperties < Lutaml::Model::Serializable
-      attribute :attr, SmartTagAttribute, collection: true, initialize_empty: true
+      attribute :attr, SmartTagAttribute, collection: true,
+                                          initialize_empty: true
 
       xml do
         element "smart_tag_properties"

@@ -194,9 +194,11 @@ module Uniword
     # @param alt_text [String, nil] Alternative text
     # @param title [String, nil] Image title
     # @return [Image] New image instance
-    def self.from_base64(base64_data, width: nil, height: nil, alt_text: nil, title: nil)
+    def self.from_base64(base64_data, width: nil, height: nil, alt_text: nil,
+title: nil)
       binary_data = Base64.decode64(base64_data)
-      from_data(binary_data, width: width, height: height, alt_text: alt_text, title: title)
+      from_data(binary_data, width: width, height: height, alt_text: alt_text,
+                             title: title)
     end
 
     # Create image from binary data
@@ -207,13 +209,14 @@ module Uniword
     # @param alt_text [String, nil] Alternative text
     # @param title [String, nil] Image title
     # @return [Image] New image instance
-    def self.from_data(binary_data, width: nil, height: nil, alt_text: nil, title: nil)
+    def self.from_data(binary_data, width: nil, height: nil, alt_text: nil,
+title: nil)
       image = new(
         width: width,
         height: height,
         alt_text: alt_text,
         title: title,
-        relationship_id: "temp_#{SecureRandom.hex(8)}"
+        relationship_id: "temp_#{SecureRandom.hex(8)}",
       )
       image.image_data = binary_data
       image

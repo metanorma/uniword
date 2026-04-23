@@ -90,7 +90,10 @@ module Uniword
         content = {}
 
         # Serialize theme (the only content)
-        content["theme/theme/theme1.xml"] = theme.to_xml(encoding: "UTF-8") if theme
+        if theme
+          content["theme/theme/theme1.xml"] =
+            theme.to_xml(encoding: "UTF-8")
+        end
 
         content
       end
