@@ -11,7 +11,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :insert,
         author: "Alice",
-        text: "New text"
+        text: "New text",
       )
 
       result = handler.accept(revision)
@@ -23,7 +23,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :delete,
         author: "Alice",
-        text: "Old text"
+        text: "Old text",
       )
 
       result = handler.accept(revision)
@@ -36,7 +36,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :format_change,
         author: "Alice",
-        content: "Changed to bold"
+        content: "Changed to bold",
       )
 
       result = handler.accept(revision)
@@ -59,7 +59,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :insert,
         author: "Alice",
-        text: "New text"
+        text: "New text",
       )
 
       result = handler.reject(revision)
@@ -72,7 +72,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :delete,
         author: "Alice",
-        text: "Old text"
+        text: "Old text",
       )
 
       result = handler.reject(revision)
@@ -84,7 +84,7 @@ RSpec.describe Uniword::Review::AcceptReject do
       revision = Uniword::Revision.new(
         type: :format_change,
         author: "Alice",
-        content: "Changed to bold"
+        content: "Changed to bold",
       )
 
       result = handler.reject(revision)

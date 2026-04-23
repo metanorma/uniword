@@ -11,7 +11,7 @@ RSpec.describe "Format Conversion", type: :integration do
     FileUtils.mkdir_p("spec/tmp")
   end
 
-  after(:each) do
+  after do
     Dir.glob("#{tmp_dir}/*.{docx,doc,mhtml,mht}").each { |f| safe_delete(f) }
   end
 
@@ -51,7 +51,7 @@ RSpec.describe "Format Conversion", type: :integration do
       docx_paras = docx_pkg.document.body.paragraphs.length
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
-      mht_paras = mhtml_doc.body_html.scan(/<p[\s >]/).length
+      mht_paras = mhtml_doc.body_html.scan(/<p[ >]/).length
 
       expect(mht_paras).to be >= docx_paras
     end
@@ -62,7 +62,7 @@ RSpec.describe "Format Conversion", type: :integration do
 
       docx_pkg = Uniword::Docx::Package.from_file(docx_fixture)
       docx_pkg.document.body.paragraphs
-              .flat_map do |p|
+        .flat_map do |p|
         p.runs.map do |r|
           r.text&.text
         end
@@ -115,7 +115,7 @@ RSpec.describe "Format Conversion", type: :integration do
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
       has_bold = mhtml_doc.body_html.include?("<strong>") ||
-                 mhtml_doc.body_html.include?("<b>")
+        mhtml_doc.body_html.include?("<b>")
       expect(has_bold).to be true
     end
 
@@ -125,7 +125,7 @@ RSpec.describe "Format Conversion", type: :integration do
 
       mhtml_doc = docx_to_mhtml(docx_fixture)
       has_italic = mhtml_doc.body_html.include?("<em>") ||
-                   mhtml_doc.body_html.include?("<i>")
+        mhtml_doc.body_html.include?("<i>")
       expect(has_italic).to be true
     end
 
@@ -162,7 +162,7 @@ RSpec.describe "Format Conversion", type: :integration do
       body = mhtml_doc.body_html
 
       has_style = has_css_class?(body, "MsoHeading") ||
-                  has_css_class?(body, "MsoTitle")
+        has_css_class?(body, "MsoTitle")
       expect(has_style).to be true
     end
   end

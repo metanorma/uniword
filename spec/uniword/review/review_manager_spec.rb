@@ -34,7 +34,7 @@ RSpec.describe Uniword::Review::ReviewManager do
     it "adds a comment and returns it" do
       comment = manager.add_comment(
         text: "Please review",
-        author: "Alice"
+        author: "Alice",
       )
 
       expect(comment).to be_a(Uniword::Comment)
@@ -47,7 +47,7 @@ RSpec.describe Uniword::Review::ReviewManager do
       comment = manager.add_comment(
         text: "Note",
         author: "Alice",
-        initials: "A"
+        initials: "A",
       )
       expect(comment.initials).to eq("A")
     end
@@ -57,13 +57,13 @@ RSpec.describe Uniword::Review::ReviewManager do
     it "replies to an existing comment" do
       parent = manager.add_comment(
         text: "Original",
-        author: "Alice"
+        author: "Alice",
       )
 
       reply = manager.reply_to_comment(
         parent.comment_id,
         text: "Reply text",
-        author: "Bob"
+        author: "Bob",
       )
 
       expect(reply).to be_a(Uniword::Comment)
@@ -83,7 +83,7 @@ RSpec.describe Uniword::Review::ReviewManager do
     it "marks a comment as resolved" do
       comment = manager.add_comment(
         text: "Review this",
-        author: "Alice"
+        author: "Alice",
       )
 
       result = manager.resolve_comment(comment.comment_id)
@@ -101,7 +101,7 @@ RSpec.describe Uniword::Review::ReviewManager do
     it "removes a comment" do
       comment = manager.add_comment(
         text: "Remove me",
-        author: "Alice"
+        author: "Alice",
       )
 
       expect(manager.list_comments.count).to eq(1)
@@ -252,7 +252,7 @@ RSpec.describe Uniword::Review::ReviewManager do
       c1 = Uniword::Comment.new(
         author: "Alice",
         text: "Comment",
-        date: "2024-01-01T10:00:00Z"
+        date: "2024-01-01T10:00:00Z",
       )
       doc.comments.add_comment(c1)
 
@@ -260,7 +260,7 @@ RSpec.describe Uniword::Review::ReviewManager do
         type: :insert,
         author: "Bob",
         text: "Insert",
-        date: "2024-01-01T09:00:00Z"
+        date: "2024-01-01T09:00:00Z",
       )
       doc.revisions.add_revision(r1)
 

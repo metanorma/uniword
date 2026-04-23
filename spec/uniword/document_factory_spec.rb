@@ -22,14 +22,16 @@ RSpec.describe Uniword::DocumentFactory do
 
   describe ".from_file" do
     context "with DOCX file" do
-      let(:docx_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx") }
+      let(:docx_path) do
+        File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      end
 
       before do
         # Create a minimal DOCX file
         packager = Uniword::Infrastructure::ZipPackager.new
         content = {
           "word/document.xml" => "<document></document>",
-          "[Content_Types].xml" => "<Types></Types>"
+          "[Content_Types].xml" => "<Types></Types>",
         }
         packager.package(content, docx_path)
       end
@@ -52,7 +54,9 @@ RSpec.describe Uniword::DocumentFactory do
     end
 
     context "with MHTML file" do
-      let(:mhtml_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml") }
+      let(:mhtml_path) do
+        File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+      end
 
       before do
         content = <<~MHTML
@@ -90,26 +94,27 @@ RSpec.describe Uniword::DocumentFactory do
       it "raises ArgumentError when path is nil" do
         expect { described_class.from_file(nil) }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
 
       it "raises ArgumentError when path is empty" do
         expect { described_class.from_file("") }.to raise_error(
           ArgumentError,
-          "Path cannot be empty"
+          "Path cannot be empty",
         )
       end
 
       it "raises FileNotFoundError when file does not exist" do
         expect { described_class.from_file("nonexistent.docx") }.to raise_error(
           Uniword::FileNotFoundError,
-          /File not found/
+          /File not found/,
         )
       end
 
       it "raises ArgumentError when format is not supported" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           # Create an empty file (the format check happens before file content check)
           File.write(temp_path, "")
@@ -127,7 +132,8 @@ RSpec.describe Uniword::DocumentFactory do
   describe ".detect_format" do
     context "with DOCX file" do
       it "detects DOCX format" do
-        docx_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        docx_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           packager = Uniword::Infrastructure::ZipPackager.new
           packager.package({ "test.xml" => "<test/>" }, docx_path)
@@ -143,7 +149,8 @@ RSpec.describe Uniword::DocumentFactory do
 
     context "with MHTML file" do
       it "detects MHTML format" do
-        mhtml_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        mhtml_path = File.join(Dir.tmpdir,
+                               "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
           File.write(mhtml_path, "MIME-Version: 1.0")
 
@@ -156,7 +163,8 @@ RSpec.describe Uniword::DocumentFactory do
       end
 
       it "detects MHT format" do
-        mht_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mht")
+        mht_path = File.join(Dir.tmpdir,
+                             "uniword_test_#{SecureRandom.uuid}.mht")
         begin
           File.write(mht_path, "MIME-Version: 1.0")
 
@@ -171,7 +179,8 @@ RSpec.describe Uniword::DocumentFactory do
 
     context "with unsupported file" do
       it "raises ArgumentError for unknown format" do
-        txt_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.txt")
+        txt_path = File.join(Dir.tmpdir,
+                             "uniword_test_#{SecureRandom.uuid}.txt")
         begin
           File.write(txt_path, "test content")
 
@@ -188,7 +197,7 @@ RSpec.describe Uniword::DocumentFactory do
       it "raises ArgumentError when path is nil" do
         expect { described_class.detect_format(nil) }.to raise_error(
           ArgumentError,
-          /Path cannot be nil/
+          /Path cannot be nil/,
         )
       end
 

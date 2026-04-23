@@ -6,7 +6,8 @@ require "securerandom"
 RSpec.describe "Styles Integration", :integration do
   describe "document with styled paragraphs" do
     it "creates and reads back styled paragraphs" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Create document with styled paragraphs
         doc = Uniword::Wordprocessingml::DocumentRoot.new
@@ -14,8 +15,8 @@ RSpec.describe "Styles Integration", :integration do
         # Add Normal paragraph
         p1 = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            style: "Normal"
-          )
+            style: "Normal",
+          ),
         )
         p1_run = Uniword::Wordprocessingml::Run.new(text: "This is a normal paragraph.")
         p1.runs << p1_run
@@ -24,8 +25,8 @@ RSpec.describe "Styles Integration", :integration do
         # Add Heading 1
         p2 = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            style: "Heading1"
-          )
+            style: "Heading1",
+          ),
         )
         p2_run = Uniword::Wordprocessingml::Run.new(text: "This is Heading 1")
         p2.runs << p2_run
@@ -34,8 +35,8 @@ RSpec.describe "Styles Integration", :integration do
         # Add Heading 2
         p3 = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            style: "Heading2"
-          )
+            style: "Heading2",
+          ),
         )
         p3_run = Uniword::Wordprocessingml::Run.new(text: "This is Heading 2")
         p3.runs << p3_run
@@ -79,7 +80,8 @@ RSpec.describe "Styles Integration", :integration do
     end
 
     it "preserves custom styles" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Wordprocessingml::DocumentRoot.new
 
@@ -90,20 +92,20 @@ RSpec.describe "Styles Integration", :integration do
           pPr: Uniword::Wordprocessingml::ParagraphProperties.new(
             alignment: "center",
             spacing_before: 240,
-            spacing_after: 120
+            spacing_after: 120,
           ),
           rPr: Uniword::Wordprocessingml::RunProperties.new(
             bold: true,
             size: 32,
-            color: "FF0000"
-          )
+            color: "FF0000",
+          ),
         )
 
         # Use the custom style
         p = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            style: "MyCustomStyle"
-          )
+            style: "MyCustomStyle",
+          ),
         )
         p_run = Uniword::Wordprocessingml::Run.new(text: "Styled with custom style")
         p.runs << p_run
@@ -132,7 +134,8 @@ RSpec.describe "Styles Integration", :integration do
 
   describe "style inheritance" do
     it "creates styles with basedOn relationship" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Wordprocessingml::DocumentRoot.new
 
@@ -142,8 +145,8 @@ RSpec.describe "Styles Integration", :integration do
           "Derived Heading",
           based_on: "Heading1",
           paragraph_properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            alignment: "right"
-          )
+            alignment: "right",
+          ),
         )
 
         expect(derived_style.based_on).to eq("Heading1")
@@ -151,8 +154,8 @@ RSpec.describe "Styles Integration", :integration do
         # Save and reload
         p = Uniword::Wordprocessingml::Paragraph.new(
           properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-            style: "DerivedHeading"
-          )
+            style: "DerivedHeading",
+          ),
         )
         p_run = Uniword::Wordprocessingml::Run.new(text: "Derived heading text")
         p.runs << p_run
@@ -173,7 +176,8 @@ RSpec.describe "Styles Integration", :integration do
 
   describe "character styles" do
     it "applies character styles to runs" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Wordprocessingml::DocumentRoot.new
 
@@ -183,8 +187,8 @@ RSpec.describe "Styles Integration", :integration do
         strong_run = Uniword::Wordprocessingml::Run.new(
           text: "Bold text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            style: "Strong"
-          )
+            style: "Strong",
+          ),
         )
         p.runs << strong_run
 
@@ -192,8 +196,8 @@ RSpec.describe "Styles Integration", :integration do
         emphasis_run = Uniword::Wordprocessingml::Run.new(
           text: " and italic text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            style: "Emphasis"
-          )
+            style: "Emphasis",
+          ),
         )
         p.runs << emphasis_run
 
@@ -215,15 +219,16 @@ RSpec.describe "Styles Integration", :integration do
 
   describe "all heading levels" do
     it "creates document with all 9 heading levels" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Wordprocessingml::DocumentRoot.new
 
         (1..9).each do |level|
           p = Uniword::Wordprocessingml::Paragraph.new(
             properties: Uniword::Wordprocessingml::ParagraphProperties.new(
-              style: "Heading#{level}"
-            )
+              style: "Heading#{level}",
+            ),
           )
           p_run = Uniword::Wordprocessingml::Run.new(text: "Heading level #{level}")
           p.runs << p_run

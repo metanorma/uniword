@@ -14,7 +14,7 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
     FileUtils.mkdir_p("spec/tmp")
   end
 
-  after(:each) do
+  after do
     Dir.glob("#{tmp_dir}/*.{doc,mhtml}").each { |f| safe_delete(f) }
   end
 
@@ -457,7 +457,7 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
       # Bold run
       bold_run = Uniword::Wordprocessingml::Run.new(
         text: "Bold",
-        properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
+        properties: Uniword::Wordprocessingml::RunProperties.new(bold: true),
       )
       para.runs << bold_run
 
@@ -469,8 +469,8 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
       italic_run = Uniword::Wordprocessingml::Run.new(
         text: "italic",
         properties: Uniword::Wordprocessingml::RunProperties.new(
-          italic: true
-        )
+          italic: true,
+        ),
       )
       para.runs << italic_run
 
@@ -520,7 +520,7 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
 
       %w[Heading1 Heading2 Heading3 Heading4 Heading5 Heading6].each do |style|
         para = Uniword::Wordprocessingml::Paragraph.new(
-          properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style)
+          properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: style),
         )
         run = Uniword::Wordprocessingml::Run.new(text: "#{style} text")
         para.runs << run
@@ -559,8 +559,8 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
           italic: true,
           underline: true,
           font: "Arial",
-          size: 48
-        )
+          size: 48,
+        ),
       )
       para.runs << run
 

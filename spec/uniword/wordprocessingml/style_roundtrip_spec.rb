@@ -51,7 +51,7 @@ RSpec.describe "Style Round-Trip Fidelity" do
       result = Canon::Comparison.equivalent?(
         sample_style_xml,
         output_xml,
-        verbose: true
+        verbose: true,
       )
 
       expect(result.equivalent?).to be(true),

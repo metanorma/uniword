@@ -58,7 +58,7 @@ RSpec.describe Uniword::CommentsPart do
     it "finds comment by ID" do
       comment = Uniword::Comment.new(
         author: "John",
-        comment_id: "123"
+        comment_id: "123",
       )
       comments_part.add_comment(comment)
 
@@ -74,7 +74,7 @@ RSpec.describe Uniword::CommentsPart do
     it "handles numeric IDs" do
       comment = Uniword::Comment.new(
         author: "John",
-        comment_id: "5"
+        comment_id: "5",
       )
       comments_part.add_comment(comment)
 
@@ -87,7 +87,7 @@ RSpec.describe Uniword::CommentsPart do
     it "removes comment by ID" do
       comment = Uniword::Comment.new(
         author: "John",
-        comment_id: "1"
+        comment_id: "1",
       )
       comments_part.add_comment(comment)
 
@@ -105,13 +105,13 @@ RSpec.describe Uniword::CommentsPart do
   describe "#comments_by_author" do
     before do
       comments_part.add_comment(
-        Uniword::Comment.new(author: "John", text: "Comment 1")
+        Uniword::Comment.new(author: "John", text: "Comment 1"),
       )
       comments_part.add_comment(
-        Uniword::Comment.new(author: "Jane", text: "Comment 2")
+        Uniword::Comment.new(author: "Jane", text: "Comment 2"),
       )
       comments_part.add_comment(
-        Uniword::Comment.new(author: "John", text: "Comment 3")
+        Uniword::Comment.new(author: "John", text: "Comment 3"),
       )
     end
 

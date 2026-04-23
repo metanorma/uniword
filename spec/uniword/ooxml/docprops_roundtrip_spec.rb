@@ -4,7 +4,9 @@ require "spec_helper"
 require "canon/rspec_matchers"
 
 RSpec.describe "DocProps Round-Trip Fidelity" do
-  let(:test_document) { "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx" }
+  let(:test_document) do
+    "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx"
+  end
   let(:output_path) { "test_output/docprops_roundtrip.docx" }
 
   before(:all) do

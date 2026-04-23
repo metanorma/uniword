@@ -9,7 +9,8 @@ RSpec.describe Uniword::FormatDetector do
   describe "#detect" do
     context "with DOCX file" do
       it "detects DOCX by ZIP signature" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           # Create a ZIP file (DOCX is a ZIP archive)
           packager = Uniword::Infrastructure::ZipPackager.new
@@ -24,7 +25,8 @@ RSpec.describe Uniword::FormatDetector do
       end
 
       it "detects DOCX by extension when signature missing" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           # Write non-ZIP content
           File.binwrite(temp_path, "Not a ZIP file")
@@ -40,7 +42,8 @@ RSpec.describe Uniword::FormatDetector do
 
     context "with MHTML file" do
       it "detects MHTML by MIME header" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
           content = <<~MHTML
             MIME-Version: 1.0
@@ -59,7 +62,8 @@ RSpec.describe Uniword::FormatDetector do
       end
 
       it "detects MHTML by .mhtml extension" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
           File.write(temp_path, "Some content")
 
@@ -72,7 +76,8 @@ RSpec.describe Uniword::FormatDetector do
       end
 
       it "detects MHTML by .mht extension" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mht")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mht")
         begin
           File.write(temp_path, "Some content")
 
@@ -87,13 +92,14 @@ RSpec.describe Uniword::FormatDetector do
 
     context "with unsupported file" do
       it "raises ArgumentError for unknown extension" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.txt")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.txt")
         begin
           File.write(temp_path, "Text content")
 
           expect { detector.detect(temp_path) }.to raise_error(
             ArgumentError,
-            /Unsupported file extension/
+            /Unsupported file extension/,
           )
         ensure
           safe_delete(temp_path)
@@ -101,13 +107,14 @@ RSpec.describe Uniword::FormatDetector do
       end
 
       it "raises ArgumentError for .pdf extension" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.pdf")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.pdf")
         begin
           File.write(temp_path, "PDF content")
 
           expect { detector.detect(temp_path) }.to raise_error(
             ArgumentError,
-            /Unsupported file extension/
+            /Unsupported file extension/,
           )
         ensure
           safe_delete(temp_path)
@@ -119,21 +126,21 @@ RSpec.describe Uniword::FormatDetector do
       it "raises ArgumentError when path is nil" do
         expect { detector.detect(nil) }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
 
       it "raises ArgumentError when path is empty" do
         expect { detector.detect("") }.to raise_error(
           ArgumentError,
-          "Path cannot be empty"
+          "Path cannot be empty",
         )
       end
 
       it "raises ArgumentError when file does not exist" do
         expect { detector.detect("nonexistent.docx") }.to raise_error(
           ArgumentError,
-          /File not found/
+          /File not found/,
         )
       end
 
@@ -141,7 +148,7 @@ RSpec.describe Uniword::FormatDetector do
         Dir.mktmpdir do |dir|
           expect { detector.detect(dir) }.to raise_error(
             ArgumentError,
-            /Path is a directory/
+            /Path is a directory/,
           )
         end
       end
@@ -149,7 +156,8 @@ RSpec.describe Uniword::FormatDetector do
 
     context "with empty file" do
       it "falls back to extension detection" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           # Create empty file
           File.write(temp_path, "")
@@ -166,7 +174,8 @@ RSpec.describe Uniword::FormatDetector do
     context "signature detection priority" do
       it "prefers signature over extension" do
         # Create a ZIP file with wrong extension
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
           packager = Uniword::Infrastructure::ZipPackager.new
           packager.package({ "test.xml" => "<test/>" }, temp_path)

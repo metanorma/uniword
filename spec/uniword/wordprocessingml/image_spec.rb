@@ -13,7 +13,7 @@ RSpec.describe Uniword::Image do
       image = described_class.new(
         relationship_id: "rId1",
         width: 1_270_000,
-        height: 952_500
+        height: 952_500,
       )
       expect(image.width).to eq(1_270_000)
       expect(image.height).to eq(952_500)
@@ -22,7 +22,7 @@ RSpec.describe Uniword::Image do
     it "creates an image with alt text" do
       image = described_class.new(
         relationship_id: "rId1",
-        alt_text: "A beautiful landscape"
+        alt_text: "A beautiful landscape",
       )
       expect(image.alt_text).to eq("A beautiful landscape")
     end
@@ -30,7 +30,7 @@ RSpec.describe Uniword::Image do
     it "creates an image with title" do
       image = described_class.new(
         relationship_id: "rId1",
-        title: "Landscape Photo"
+        title: "Landscape Photo",
       )
       expect(image.title).to eq("Landscape Photo")
     end
@@ -38,7 +38,7 @@ RSpec.describe Uniword::Image do
     it "creates an image with filename" do
       image = described_class.new(
         relationship_id: "rId1",
-        filename: "image.jpg"
+        filename: "image.jpg",
       )
       expect(image.filename).to eq("image.jpg")
     end
@@ -122,7 +122,7 @@ RSpec.describe Uniword::Image do
       image = described_class.new(
         relationship_id: "rId1",
         width: 1_600_000,
-        height: 1_200_000
+        height: 1_200_000,
       )
       expect(image.aspect_ratio).to be_within(0.01).of(1.33)
     end
@@ -131,7 +131,7 @@ RSpec.describe Uniword::Image do
       image = described_class.new(
         relationship_id: "rId1",
         width: 1_000_000,
-        height: 1_000_000
+        height: 1_000_000,
       )
       expect(image.aspect_ratio).to eq(1.0)
     end

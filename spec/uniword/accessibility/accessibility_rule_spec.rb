@@ -10,16 +10,16 @@ RSpec.describe Uniword::Accessibility::AccessibilityRule do
     end
   end
 
+  subject(:rule) { TestAccessibilityRule.new(config) }
+
   let(:config) do
     {
       wcag_criterion: "1.1.1 Non-text Content",
       level: "A",
       enabled: true,
-      severity: :error
+      severity: :error,
     }
   end
-
-  subject(:rule) { TestAccessibilityRule.new(config) }
 
   describe "#initialize" do
     it "sets configuration" do
@@ -79,7 +79,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityRule do
         document = double("Document")
         expect { base_rule.check(document) }.to raise_error(
           NotImplementedError,
-          /must implement #check/
+          /must implement #check/,
         )
       end
     end
@@ -99,7 +99,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityRule do
         message: "Test violation",
         element: element,
         severity: :error,
-        suggestion: "Fix the issue"
+        suggestion: "Fix the issue",
       }
     end
 

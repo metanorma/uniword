@@ -4,29 +4,26 @@ require "spec_helper"
 require "fileutils"
 require "zip"
 
-# Phase 17: End-to-end document generation examples.
+# End-to-end document generation examples.
 #
 # These specs create real DOCX files using the Builder API and verify
 # their structure. Generated files are saved to examples/generated/.
-#
-# Run: bundle exec rspec spec/uniword/builder/phase17_spec.rb
-# Generated files: examples/generated/*.docx
 
-OUTPUT_DIR = File.expand_path("../../../examples/generated", __dir__)
+RSpec.describe "End-to-end Document Generation" do
+  let(:output_dir) { File.expand_path("../../examples/generated", __dir__) }
 
-# Shortcut for Builder factory methods (avoids module resolution issues
-# inside DocumentBuilder blocks where Uniword::Builder resolves incorrectly)
-B = Uniword::Builder
+  # Shortcut for Builder factory methods (avoids module resolution issues
+  # inside DocumentBuilder blocks where Uniword::Builder resolves incorrectly)
+  let(:b) { Uniword::Builder }
 
-RSpec.describe "Phase 17: End-to-end Document Generation" do
   before(:all) do
-    FileUtils.mkdir_p(OUTPUT_DIR)
+    FileUtils.mkdir_p(File.expand_path("../../examples/generated", __dir__))
   end
 
   after(:all) do
     # Cleanup temp files
     %w[
-      /tmp/test_phase17_*.docx
+      /tmp/test_doc_gen_*.docx
     ].each do |pattern|
       Dir[pattern].each { |f| safe_delete(f) }
     end
@@ -36,7 +33,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 1: Simple Document
   # =========================================================================
   describe "simple_document.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "simple_document.docx") }
+    let(:path) { File.join(output_dir, "simple_document.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -47,20 +44,20 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       doc.paragraph { |p| p << "This is the introduction to our document." }
       doc.paragraph do |p|
         p << "It contains "
-        p << B.text("basic formatting", bold: true)
+        p << b.text("basic formatting", bold: true)
         p << " such as bold, italic, and colored text."
       end
       doc.paragraph do |p|
         p << "Links are also supported: "
-        p << B.hyperlink("https://example.com", "Visit Example")
+        p << b.hyperlink("https://example.com", "Visit Example")
       end
 
       doc.heading("Chapter 2: Content", level: 1)
       doc.paragraph { |p| p << "More content goes here." }
       doc.paragraph do |p|
-        p << B.text("Colored text", color: "FF0000")
+        p << b.text("Colored text", color: "FF0000")
         p << " and "
-        p << B.text("underlined text", underline: "single")
+        p << b.text("underlined text", underline: "single")
         p << " demonstrate inline formatting."
       end
 
@@ -110,7 +107,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 2: Complete Document (all features)
   # =========================================================================
   describe "complete_document.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "complete_document.docx") }
+    let(:path) { File.join(output_dir, "complete_document.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -154,7 +151,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
         l.item("Paragraph and text formatting")
         l.item("Tables with styled cells")
         l.item("Charts (bar, line, pie)")
-        l.item("Bibliography and citations")
+        l.item("bibliography and citations")
         l.item("Headers and footers")
         l.item("Table of contents")
       end
@@ -171,9 +168,15 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       # Table
       doc.table do |t|
         t.row do |r|
-          r.cell(text: "Quarter") { |c| c.shading(fill: "4472C4", color: "FFFFFF") }
-          r.cell(text: "Revenue") { |c| c.shading(fill: "4472C4", color: "FFFFFF") }
-          r.cell(text: "Growth") { |c| c.shading(fill: "4472C4", color: "FFFFFF") }
+          r.cell(text: "Quarter") do |c|
+            c.shading(fill: "4472C4", color: "FFFFFF")
+          end
+          r.cell(text: "Revenue") do |c|
+            c.shading(fill: "4472C4", color: "FFFFFF")
+          end
+          r.cell(text: "Growth") do |c|
+            c.shading(fill: "4472C4", color: "FFFFFF")
+          end
         end
         t.row do |r|
           r.cell(text: "Q1")
@@ -223,26 +226,26 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
         bib.book(
           tag: "Smith2024",
           author: ["John Smith", "Jane Doe"],
-          title: "Data Analysis Best Practices",
+          title: "Data Analysis best Practices",
           year: "2024",
           publisher: "Academic Press",
-          city: "New York"
+          city: "New York",
         )
         bib.journal(
           tag: "Johnson2023",
           author: ["Robert Johnson"],
           title: "Modern Sales Techniques",
           year: "2023",
-          journal: "Harvard Business Review",
+          journal: "Harvard business Review",
           volume: "101",
           issue: "3",
-          pages: "45-60"
+          pages: "45-60",
         )
         bib.website(
           tag: "OOXML2024",
           title: "Office Open XML Specification",
           url: "https://www.ecma-international.org/publications-and-standards/standards/ecma-376/",
-          year: "2024"
+          year: "2024",
         )
         bib.conference(
           tag: "Lee2023",
@@ -250,23 +253,23 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
           title: "Machine Learning for Sales Forecasting",
           year: "2023",
           publisher: "NeurIPS Conference",
-          city: "New Orleans"
+          city: "New Orleans",
         )
       end
       doc.bibliography_placeholder
 
       # --- Header/Footer ---
       doc.header do |h|
-        h << B.text("Complete Document", bold: true, color: "808080")
-        h << B.tab
-        h << B.text("Confidential", color: "FF0000")
+        h << b.text("Complete Document", bold: true, color: "808080")
+        h << b.tab
+        h << b.text("Confidential", color: "FF0000")
       end
 
       doc.footer do |f|
         f << "Page "
-        f << B.page_number_field
+        f << b.page_number_field
         f << " of "
-        f << B.total_pages_field
+        f << b.total_pages_field
       end
 
       doc.save(path)
@@ -378,7 +381,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 3: Themed Document
   # =========================================================================
   describe "themed_document.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "themed_document.docx") }
+    let(:path) { File.join(output_dir, "themed_document.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -396,19 +399,19 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       end
 
       # Custom styled paragraph
-      doc.define_style("CustomBody", base_on: "Normal") do |s|
+      doc.define_style("Custombody", base_on: "Normal") do |s|
         s.font_size(12)
       end
 
       doc.paragraph do |p|
-        p.style = "CustomBody"
+        p.style = "Custombody"
         p << "Custom styled paragraph using defined style."
       end
 
       # Colored heading
       doc.heading("Section with Custom Style", level: 2)
       doc.paragraph do |p|
-        p << B.text("Highlighted text", highlight: "yellow")
+        p << b.text("Highlighted text", highlight: "yellow")
         p << " within a themed document."
       end
 
@@ -423,7 +426,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       Zip::File.open(path) do |zip|
         doc_xml = zip.read("word/document.xml")
         expect(doc_xml).to include("Themed Document")
-        expect(doc_xml).to include("CustomBody")
+        expect(doc_xml).to include("Custombody")
         expect(doc_xml).to include("highlight")
       end
     end
@@ -441,7 +444,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 4: Academic Paper
   # =========================================================================
   describe "academic_paper.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "academic_paper.docx") }
+    let(:path) { File.join(output_dir, "academic_paper.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -451,25 +454,25 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
 
       # Header with paper title
       doc.header do |h|
-        h << B.text("Doe - Ruby Document Generation", font: "Arial", size: 9)
+        h << b.text("Doe - Ruby Document Generation", font: "Arial", size: 9)
       end
 
       # Footer with page numbers
       doc.footer do |f|
-        f << B.page_number_field
+        f << b.page_number_field
       end
 
       # --- Title ---
       doc.paragraph do |p|
         p.align = "center"
-        p << B.text("A Study of Ruby Document Generation", bold: true, size: 24)
+        p << b.text("A Study of Ruby Document Generation", bold: true, size: 24)
       end
       doc.paragraph do |p|
         p.align = "center"
         p << "Dr. Jane Doe"
-        p << B.line_break
+        p << b.line_break
         p << "Department of Computer Science, Example University"
-        p << B.line_break
+        p << b.line_break
         p << "March 2026"
       end
       doc.page_break
@@ -484,7 +487,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
         p << "including tables, charts, and bibliographies."
       end
       doc.paragraph do |p|
-        p << B.text("Keywords: ", bold: true)
+        p << b.text("Keywords: ", bold: true)
         p << "OOXML, Ruby, document generation, Builder API"
       end
       doc.page_break
@@ -536,7 +539,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
         p << "complex documents with 100+ paragraphs in under 100ms."
       end
 
-      doc.heading("3.1 Benchmark Results", level: 2)
+      doc.heading("3.1 benchmark Results", level: 2)
       doc.chart(type: :bar) do |c|
         c.title("Document Generation Performance (ms)")
         c.categories(["Simple", "Medium", "Complex", "Very Complex"])
@@ -571,7 +574,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
           title: "Office Open XML File Formats",
           year: "2024",
           publisher: "Ecma International",
-          edition: "5th"
+          edition: "5th",
         )
         bib.journal(
           tag: "Johnson2023",
@@ -581,7 +584,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
           journal: "Journal of Software Engineering",
           volume: "15",
           issue: "2",
-          pages: "100-120"
+          pages: "100-120",
         )
         bib.journal(
           tag: "Smith2024",
@@ -591,13 +594,13 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
           journal: "ACM Computing Surveys",
           volume: "56",
           issue: "4",
-          pages: "1-25"
+          pages: "1-25",
         )
         bib.website(
           tag: "Uniword2026",
           title: "Uniword Ruby Library Documentation",
           url: "https://github.com/mulgogi/uniword",
-          year: "2026"
+          year: "2026",
         )
       end
       doc.bibliography_placeholder
@@ -661,7 +664,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 5: Multi-Section Report
   # =========================================================================
   describe "multi_section_report.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "multi_section_report.docx") }
+    let(:path) { File.join(output_dir, "multi_section_report.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -691,16 +694,22 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
 
       # --- Section 2: Landscape (wide table) ---
       doc.heading("Detailed Financial Data", level: 1)
-      doc.paragraph { |p| p << "The following table is best viewed in landscape." }
+      doc.paragraph do |p|
+        p << "The following table is best viewed in landscape."
+      end
 
       doc.table do |t|
         t.row do |r|
-          r.cell(text: "Category") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
+          r.cell(text: "Category") do |c|
+            c.shading(fill: "2F5496", color: "FFFFFF")
+          end
           r.cell(text: "Q1") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
           r.cell(text: "Q2") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
           r.cell(text: "Q3") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
           r.cell(text: "Q4") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
-          r.cell(text: "Total") { |c| c.shading(fill: "2F5496", color: "FFFFFF") }
+          r.cell(text: "Total") do |c|
+            c.shading(fill: "2F5496", color: "FFFFFF")
+          end
         end
         5.times do |i|
           t.row do |r|
@@ -712,8 +721,8 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       end
 
       doc.paragraph do |p|
-        p << B.text("Total Annual Revenue: ", bold: true)
-        p << B.text("$2,040K", bold: true, color: "00B050", size: 14)
+        p << b.text("Total Annual Revenue: ", bold: true)
+        p << b.text("$2,040K", bold: true, color: "00b050", size: 14)
       end
 
       # Section break back to portrait
@@ -731,15 +740,15 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
 
       doc.paragraph do |p|
         p << "For questions, contact "
-        p << B.hyperlink("mailto:info@example.com", "info@example.com")
+        p << b.hyperlink("mailto:info@example.com", "info@example.com")
         p << "."
       end
 
       # Footer for all sections
       doc.footer do |f|
-        f << B.text("Confidential", color: "FF0000", size: 8)
+        f << b.text("Confidential", color: "FF0000", size: 8)
         f << " | "
-        f << B.page_number_field
+        f << b.page_number_field
       end
 
       doc.save(path)
@@ -779,8 +788,8 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 6: Document Manipulation (load → modify → save)
   # =========================================================================
   describe "document manipulation" do
-    let(:original_path) { File.join(OUTPUT_DIR, "manipulation_original.docx") }
-    let(:modified_path) { File.join(OUTPUT_DIR, "manipulation_modified.docx") }
+    let(:original_path) { File.join(output_dir, "manipulation_original.docx") }
+    let(:modified_path) { File.join(output_dir, "manipulation_modified.docx") }
 
     before do
       # Create original document
@@ -807,7 +816,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
 
       loaded.heading("New Section", level: 1)
       loaded.paragraph do |p|
-        p << B.text("New content", bold: true)
+        p << b.text("New content", bold: true)
         p << " added after loading."
       end
 
@@ -847,7 +856,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 7: Image Document
   # =========================================================================
   describe "image_document.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "image_document.docx") }
+    let(:path) { File.join(output_dir, "image_document.docx") }
     let(:sample_png) { "spec/fixtures/sample.png" }
 
     before do
@@ -874,7 +883,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
         width: 150_000,
         height: 150_000,
         align: :right,
-        wrap: :square
+        wrap: :square,
       )
 
       doc.paragraph do |p|
@@ -912,7 +921,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
   # Example 8: Chart Gallery
   # =========================================================================
   describe "chart_gallery.docx" do
-    let(:path) { File.join(OUTPUT_DIR, "chart_gallery.docx") }
+    let(:path) { File.join(output_dir, "chart_gallery.docx") }
 
     before do
       doc = Uniword::Builder::DocumentBuilder.new
@@ -921,7 +930,7 @@ RSpec.describe "Phase 17: End-to-end Document Generation" do
       doc.heading("Chart Gallery", level: 1)
       doc.paragraph { |p| p << "This document showcases all chart types." }
 
-      doc.heading("Bar Chart", level: 2)
+      doc.heading("bar Chart", level: 2)
       doc.paragraph { |p| p << "Clustered bar chart showing sales by region:" }
       doc.chart(type: :bar) do |c|
         c.title("Sales by Region")

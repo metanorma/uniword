@@ -11,13 +11,14 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
     let(:content) do
       {
         "file1.txt" => "Content 1",
-        "dir/file2.txt" => "Content 2"
+        "dir/file2.txt" => "Content 2",
       }
     end
 
     context "with valid arguments" do
       it "creates ZIP file with content" do
-        temp_zip = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.zip")
+        temp_zip = File.join(Dir.tmpdir,
+                             "uniword_test_#{SecureRandom.uuid}.zip")
         begin
           packager.package(content, temp_zip)
 
@@ -73,66 +74,74 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
       it "raises ArgumentError when content is nil" do
         expect { packager.package(nil, "output.zip") }.to raise_error(
           ArgumentError,
-          "Content cannot be nil"
+          "Content cannot be nil",
         )
       end
 
       it "raises ArgumentError when content is not a Hash" do
         expect { packager.package("invalid", "output.zip") }.to raise_error(
           ArgumentError,
-          "Content must be a Hash"
+          "Content must be a Hash",
         )
       end
 
       it "raises ArgumentError when content is empty" do
         expect { packager.package({}, "output.zip") }.to raise_error(
           ArgumentError,
-          "Content cannot be empty"
+          "Content cannot be empty",
         )
       end
 
       it "raises ArgumentError when entry path is nil" do
         invalid_content = { nil => "content" }
-        expect { packager.package(invalid_content, "output.zip") }.to raise_error(
+        expect do
+          packager.package(invalid_content, "output.zip")
+        end.to raise_error(
           ArgumentError,
-          "Entry path cannot be nil"
+          "Entry path cannot be nil",
         )
       end
 
       it "raises ArgumentError when entry path is empty" do
         invalid_content = { "" => "content" }
-        expect { packager.package(invalid_content, "output.zip") }.to raise_error(
+        expect do
+          packager.package(invalid_content, "output.zip")
+        end.to raise_error(
           ArgumentError,
-          "Entry path cannot be empty"
+          "Entry path cannot be empty",
         )
       end
 
       it "raises ArgumentError when entry content is nil" do
         invalid_content = { "file.txt" => nil }
-        expect { packager.package(invalid_content, "output.zip") }.to raise_error(
+        expect do
+          packager.package(invalid_content, "output.zip")
+        end.to raise_error(
           ArgumentError,
-          /Entry content cannot be nil/
+          /Entry content cannot be nil/,
         )
       end
 
       it "raises ArgumentError when output path is nil" do
         expect { packager.package(content, nil) }.to raise_error(
           ArgumentError,
-          "Output path cannot be nil"
+          "Output path cannot be nil",
         )
       end
 
       it "raises ArgumentError when output path is empty" do
         expect { packager.package(content, "") }.to raise_error(
           ArgumentError,
-          "Output path cannot be empty"
+          "Output path cannot be empty",
         )
       end
     end
   end
 
   describe "#add_file" do
-    let(:temp_zip) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.zip") }
+    let(:temp_zip) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.zip")
+    end
 
     before do
       File.write(temp_zip, "")
@@ -187,7 +196,9 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
   end
 
   describe "#remove_file" do
-    let(:temp_zip) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.zip") }
+    let(:temp_zip) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.zip")
+    end
 
     before do
       File.write(temp_zip, "")

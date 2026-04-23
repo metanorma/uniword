@@ -16,7 +16,7 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
         style: "Heading1",
         alignment: "center",
         spacing_before: 240,
-        spacing_after: 120
+        spacing_after: 120,
       )
       expect(props.style.value).to eq("Heading1")
       expect(props.alignment.value).to eq("center")
@@ -67,14 +67,14 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
         alignment: "left",
         spacing_before: 120,
         spacing_after: 120,
-        indent_left: 720
+        indent_left: 720,
       )
       props2 = described_class.new(
         style: "Normal",
         alignment: "left",
         spacing_before: 120,
         spacing_after: 120,
-        indent_left: 720
+        indent_left: 720,
       )
       expect(props1).to eq(props2)
     end
@@ -121,7 +121,7 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       props = described_class.new(
         keep_next_wrapper: Uniword::Properties::KeepNext.new(value: true),
         keep_lines_wrapper: Uniword::Properties::KeepLines.new(value: true),
-        page_break_before: true
+        page_break_before: true,
       )
       expect(props.keep_next).to be true
       expect(props.keep_lines).to be true

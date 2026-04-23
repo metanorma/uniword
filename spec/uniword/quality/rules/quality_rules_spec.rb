@@ -143,7 +143,7 @@ RSpec.describe "Quality Rules" do
       inline.doc_properties = Uniword::WpDrawing::DocProperties.new(
         id: "1",
         name: "image1",
-        descr: alt_text
+        descr: alt_text,
       )
       drawing.inline = inline
       drawing
@@ -191,7 +191,9 @@ RSpec.describe "Quality Rules" do
   end
 
   describe Uniword::Quality::LinkValidationRule do
-    let(:rule) { described_class.new(check_internal: true, check_external: true) }
+    let(:rule) do
+      described_class.new(check_internal: true, check_external: true)
+    end
 
     it "passes for valid external links" do
       para = Uniword::Wordprocessingml::Paragraph.new
@@ -218,7 +220,7 @@ RSpec.describe "Quality Rules" do
     it "detects broken internal links" do
       para = Uniword::Wordprocessingml::Paragraph.new
       hyperlink = Uniword::Wordprocessingml::Hyperlink.new(
-        anchor: "nonexistent_bookmark"
+        anchor: "nonexistent_bookmark",
       )
       para.hyperlinks << hyperlink
       document.body.paragraphs << para
@@ -234,7 +236,7 @@ RSpec.describe "Quality Rules" do
     let(:rule) do
       described_class.new(
         allow_direct_formatting: false,
-        require_standard_styles: true
+        require_standard_styles: true,
       )
     end
 
@@ -252,7 +254,7 @@ RSpec.describe "Quality Rules" do
     it "warns for direct formatting without styles" do
       para = Uniword::Wordprocessingml::Paragraph.new
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
-        alignment: "center"
+        alignment: "center",
       )
       run = Uniword::Wordprocessingml::Run.new(text: "Unst yled paragraph")
       para.runs << run

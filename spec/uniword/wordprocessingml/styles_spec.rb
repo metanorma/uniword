@@ -8,7 +8,7 @@ RSpec.describe Uniword::Wordprocessingml::Style do
       style = described_class.new(
         styleId: "TestStyle",
         name: Uniword::Wordprocessingml::StyleName.new(val: "Test Style"),
-        type: "paragraph"
+        type: "paragraph",
       )
 
       expect(style.id).to eq("TestStyle")
@@ -22,7 +22,7 @@ RSpec.describe Uniword::Wordprocessingml::Style do
         name: Uniword::Wordprocessingml::StyleName.new(val: "Custom Style"),
         type: "paragraph",
         customStyle: true,
-        basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "Normal")
+        basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "Normal"),
       )
 
       expect(style.custom?).to be true
@@ -101,7 +101,10 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
 
   describe "#remove_style" do
     let(:config) { described_class.new(include_defaults: false) }
-    let(:style) { Uniword::Wordprocessingml::Style.new(styleId: "Custom", name: Uniword::Wordprocessingml::StyleName.new(val: "Custom"), type: "paragraph") }
+    let(:style) do
+      Uniword::Wordprocessingml::Style.new(styleId: "Custom",
+                                           name: Uniword::Wordprocessingml::StyleName.new(val: "Custom"), type: "paragraph")
+    end
 
     before { config.add_style(style) }
 
@@ -114,7 +117,10 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
 
   describe "#style_by_id" do
     let(:config) { described_class.new }
-    let(:style) { Uniword::Wordprocessingml::Style.new(styleId: "TestID", name: Uniword::Wordprocessingml::StyleName.new(val: "Test Name"), type: "paragraph") }
+    let(:style) do
+      Uniword::Wordprocessingml::Style.new(styleId: "TestID",
+                                           name: Uniword::Wordprocessingml::StyleName.new(val: "Test Name"), type: "paragraph")
+    end
 
     before { config.add_style(style) }
 
@@ -130,7 +136,10 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
 
   describe "#style_by_name" do
     let(:config) { described_class.new }
-    let(:style) { Uniword::Wordprocessingml::Style.new(styleId: "TestID", name: Uniword::Wordprocessingml::StyleName.new(val: "Test Name"), type: "paragraph") }
+    let(:style) do
+      Uniword::Wordprocessingml::Style.new(styleId: "TestID",
+                                           name: Uniword::Wordprocessingml::StyleName.new(val: "Test Name"), type: "paragraph")
+    end
 
     before { config.add_style(style) }
 
@@ -146,8 +155,14 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
 
   describe "style filtering" do
     let(:config) { described_class.new(include_defaults: false) }
-    let(:para_style) { Uniword::Wordprocessingml::Style.new(styleId: "Para", name: Uniword::Wordprocessingml::StyleName.new(val: "Para"), type: "paragraph") }
-    let(:char_style) { Uniword::Wordprocessingml::Style.new(styleId: "Char", name: Uniword::Wordprocessingml::StyleName.new(val: "Char"), type: "character") }
+    let(:para_style) do
+      Uniword::Wordprocessingml::Style.new(styleId: "Para",
+                                           name: Uniword::Wordprocessingml::StyleName.new(val: "Para"), type: "paragraph")
+    end
+    let(:char_style) do
+      Uniword::Wordprocessingml::Style.new(styleId: "Char",
+                                           name: Uniword::Wordprocessingml::StyleName.new(val: "Char"), type: "character")
+    end
 
     before do
       config.add_style(para_style)

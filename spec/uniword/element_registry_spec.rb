@@ -95,7 +95,7 @@ RSpec.describe Uniword::ElementRegistry do
       described_class.register(Uniword::Wordprocessingml::Run)
       expect(described_class.all).to contain_exactly(
         Uniword::Wordprocessingml::Paragraph,
-        Uniword::Wordprocessingml::Run
+        Uniword::Wordprocessingml::Run,
       )
     end
   end

@@ -65,20 +65,18 @@ RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
   # Skip if submodule not available (e.g., in CI without SSH access)
   before(:all) do
     skip "Submodule spec/fixtures/uniword-private not available" unless Dir.glob("spec/fixtures/uniword-private/word-resources/office-themes/*.thmx").any?
+    FileUtils.mkdir_p(THEME_OUTPUT_DIR)
   end
 
   # Directory containing reference theme files
   THEME_DIR = "spec/fixtures/uniword-private/word-resources/office-themes"
 
   # Output directory for round-trip tests
-  OUTPUT_DIR = "tmp/theme_roundtrip"
-
-  before(:all) do
-    FileUtils.mkdir_p(OUTPUT_DIR)
-  end
+  THEME_OUTPUT_DIR = "tmp/theme_roundtrip"
 
   after(:all) do
-    FileUtils.rm_rf(OUTPUT_DIR)
+    FileUtils.rm_rf(THEME_OUTPUT_DIR)
+    Dir.glob(File.join(THEME_DIR, "*.thmx")).count
   end
 
   # Get all .thmx files from reference directory
@@ -89,7 +87,9 @@ RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
 
     describe theme_name do
       let(:input_path) { theme_path }
-      let(:output_path) { File.join(OUTPUT_DIR, "#{theme_name}_roundtrip.thmx") }
+      let(:output_path) do
+        File.join(THEME_OUTPUT_DIR, "#{theme_name}_roundtrip.thmx")
+      end
       let(:original_package) { Uniword::Ooxml::ThemePackage.new(path: input_path) }
       let(:output_package) { Uniword::Ooxml::ThemePackage.new(path: input_path) }
       let(:verify_package) { Uniword::Ooxml::ThemePackage.new(path: output_path) }
@@ -104,9 +104,9 @@ RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
         theme = original_package.load_content
 
         expect(theme).to be_a(Uniword::Drawingml::Theme)
-        expect(theme.name).to_not be_nil
-        expect(theme.color_scheme).to_not be_nil
-        expect(theme.font_scheme).to_not be_nil
+        expect(theme.name).not_to be_nil
+        expect(theme.color_scheme).not_to be_nil
+        expect(theme.font_scheme).not_to be_nil
       end
 
       it "serializes theme to valid XML" do
@@ -114,7 +114,7 @@ RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
 
         xml = theme.to_xml
 
-        expect(xml).to_not be_nil
+        expect(xml).not_to be_nil
         expect(xml).to be_a(String)
         expect(xml.length).to be > 100
         expect(xml).to include("xmlns")
@@ -183,16 +183,5 @@ RSpec.describe "Theme Round-Trip (Binary .thmx)", :theme_roundtrip do
         expect(roundtrip_theme.minor_font).to eq(original_theme.minor_font)
       end
     end
-  end
-
-  after(:all) do
-    total_themes = Dir.glob(File.join(THEME_DIR, "*.thmx")).count
-    puts
-    puts "=" * 60
-    puts "Theme Round-Trip Summary"
-    puts "=" * 60
-    puts "Total Themes tested: #{total_themes}"
-    puts "=" * 60
-    puts
   end
 end

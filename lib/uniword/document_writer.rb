@@ -55,7 +55,8 @@ module Uniword
       when :mhtml
         Mhtml::MhtmlPackage.to_file(document, path)
       else
-        raise ArgumentError, "No handler registered for format: #{format.inspect}"
+        raise ArgumentError,
+              "No handler registered for format: #{format.inspect}"
       end
     end
 

@@ -34,7 +34,8 @@ RSpec.describe Uniword::Wordprocessingml::Run, "Enhanced Properties" do
 
   describe "#set_shading" do
     it "sets text shading with fill color" do
-      shading = Uniword::Properties::Shading.new(fill: "FFFF00", pattern: "clear")
+      shading = Uniword::Properties::Shading.new(fill: "FFFF00",
+                                                 pattern: "clear")
       run.properties = run_properties_class.new(shading: shading)
 
       expect(run.properties&.shading).not_to be_nil
@@ -42,7 +43,8 @@ RSpec.describe Uniword::Wordprocessingml::Run, "Enhanced Properties" do
     end
 
     it "sets shading with pattern" do
-      shading = Uniword::Properties::Shading.new(fill: "FF00FF", pattern: "solid")
+      shading = Uniword::Properties::Shading.new(fill: "FF00FF",
+                                                 pattern: "solid")
       run.properties = run_properties_class.new(shading: shading)
 
       expect(run.properties&.shading&.fill).to eq("FF00FF")
@@ -50,7 +52,8 @@ RSpec.describe Uniword::Wordprocessingml::Run, "Enhanced Properties" do
     end
 
     it "defaults to clear pattern" do
-      shading = Uniword::Properties::Shading.new(fill: "CCCCCC", pattern: "clear")
+      shading = Uniword::Properties::Shading.new(fill: "CCCCCC",
+                                                 pattern: "clear")
       run.properties = run_properties_class.new(shading: shading)
 
       expect(run.properties&.shading&.pattern).to eq("clear")
@@ -218,7 +221,8 @@ RSpec.describe Uniword::Wordprocessingml::Run, "Enhanced Properties" do
       width_scale = Uniword::Properties::WidthScale.new(value: 110)
       outline = Uniword::Properties::TextOutline.new
       text_fill = Uniword::Properties::TextFill.new
-      shading = Uniword::Properties::Shading.new(fill: "FFFF00", pattern: "solid")
+      shading = Uniword::Properties::Shading.new(fill: "FFFF00",
+                                                 pattern: "solid")
 
       run.properties = run_properties_class.new(
         character_spacing: spacing,
@@ -227,7 +231,7 @@ RSpec.describe Uniword::Wordprocessingml::Run, "Enhanced Properties" do
         width_scale: width_scale,
         text_outline: outline,
         text_fill: text_fill,
-        shading: shading
+        shading: shading,
       )
 
       expect(run.properties&.character_spacing&.value).to eq(20)

@@ -16,7 +16,7 @@ RSpec.describe Uniword::Diff::Formatter do
     it "shows summary for non-empty result" do
       result = Uniword::Diff::DiffResult.new(
         text_changes: [{ type: :text, change: :added, new: "hello",
-                         old: nil, position: 0 }]
+                         old: nil, position: 0 }],
       )
       output = formatter.terminal(result)
       expect(output).to include("1 text change")
@@ -27,7 +27,7 @@ RSpec.describe Uniword::Diff::Formatter do
         text_changes: [{ type: :text, change: :added, new: "hello",
                          old: nil, position: 0 }],
         structure_changes: [{ type: :structure, change: :paragraph_count,
-                              old_count: 1, new_count: 2 }]
+                              old_count: 1, new_count: 2 }],
       )
       output = formatter.terminal(result, verbose: true)
       expect(output).to include("hello")
@@ -39,7 +39,7 @@ RSpec.describe Uniword::Diff::Formatter do
     it "produces valid JSON" do
       require "json"
       result = Uniword::Diff::DiffResult.new(
-        text_changes: [{ change: :added }]
+        text_changes: [{ change: :added }],
       )
       parsed = JSON.parse(formatter.json(result))
       expect(parsed["text_changes"].length).to eq(1)

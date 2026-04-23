@@ -46,7 +46,9 @@ RSpec.describe "DOCX prevention layer" do
       orchestrator = Uniword::Validation::VerifyOrchestrator.new
       report = orchestrator.verify(output_path)
 
-      doc020_issues = report.layers.flat_map(&:issues).select { |i| i.code == "DOC-020" }
+      doc020_issues = report.layers.flat_map(&:issues).select do |i|
+        i.code == "DOC-020"
+      end
       expect(doc020_issues).to be_empty
 
       FileUtils.rm_f(output_path)
@@ -63,9 +65,9 @@ RSpec.describe "DOCX prevention layer" do
       package.footnotes = Uniword::Wordprocessingml::Footnotes.new(
         footnote_entries: [
           Uniword::Wordprocessingml::Footnote.new(
-            id: "1", paragraphs: [Uniword::Wordprocessingml::Paragraph.new]
-          )
-        ]
+            id: "1", paragraphs: [Uniword::Wordprocessingml::Paragraph.new],
+          ),
+        ],
       )
 
       output_path = "test_output/prevention_fn_reverse.docx"

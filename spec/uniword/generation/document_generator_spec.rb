@@ -15,7 +15,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
           { element: "heading_1", text: "Introduction" },
           { element: "body", text: "This is body text." },
           { element: "heading_2", text: "Scope" },
-          { element: "note", text: "This is a note." }
+          { element: "note", text: "This is a note." },
         ]
       end
 
@@ -30,7 +30,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
 
       it "generates a valid DOCX file" do
         generator = described_class.new(
-          style_source: "nonexistent.docx"
+          style_source: "nonexistent.docx",
         )
         generator.generate(content, output_path)
 
@@ -40,7 +40,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
 
       it "produces a document with correct paragraph count" do
         generator = described_class.new(
-          style_source: "nonexistent.docx"
+          style_source: "nonexistent.docx",
         )
         generator.generate(content, output_path)
 
@@ -50,7 +50,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
 
       it "preserves text content in paragraphs" do
         generator = described_class.new(
-          style_source: "nonexistent.docx"
+          style_source: "nonexistent.docx",
         )
         generator.generate(content, output_path)
 
@@ -72,9 +72,9 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
             text: "",
             children: [
               ["Header 1", "Header 2"],
-              ["Cell 1", "Cell 2"]
-            ]
-          }
+              ["Cell 1", "Cell 2"],
+            ],
+          },
         ]
       end
 
@@ -89,7 +89,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
 
       it "generates a document with a table" do
         generator = described_class.new(
-          style_source: "nonexistent.docx"
+          style_source: "nonexistent.docx",
         )
         generator.generate(content, output_path)
 
@@ -111,7 +111,7 @@ RSpec.describe Uniword::Generation::DocumentGenerator do
 
       it "generates an empty document" do
         generator = described_class.new(
-          style_source: "nonexistent.docx"
+          style_source: "nonexistent.docx",
         )
         generator.generate([], output_path)
 

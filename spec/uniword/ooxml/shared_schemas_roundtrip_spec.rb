@@ -59,8 +59,8 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         size: "2",
         lpstr_values: [
           VT::VtLpstr.new(value: "Title"),
-          VT::VtLpstr.new(value: "")
-        ]
+          VT::VtLpstr.new(value: ""),
+        ],
       )
       xml = obj.to_xml
       restored = described_class.from_xml(xml)
@@ -75,8 +75,8 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         size: "2",
         variant_values: [
           VT::VtVariant.new(lpstr: VT::VtLpstr.new(value: "Title")),
-          VT::VtVariant.new(i4: VT::VtI4.new(value: "1"))
-        ]
+          VT::VtVariant.new(i4: VT::VtI4.new(value: "1")),
+        ],
       )
       xml = obj.to_xml
       restored = described_class.from_xml(xml)
@@ -93,8 +93,8 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         i4_values: [
           VT::VtI4.new(value: "10"),
           VT::VtI4.new(value: "20"),
-          VT::VtI4.new(value: "30")
-        ]
+          VT::VtI4.new(value: "30"),
+        ],
       )
       xml = obj.to_xml
       restored = described_class.from_xml(xml)
@@ -108,7 +108,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         base_type: "lpwstr",
         size: "2",
         l_bound: "0",
-        u_bound: "1"
+        u_bound: "1",
       )
       xml = obj.to_xml
       restored = described_class.from_xml(xml)
@@ -190,12 +190,12 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
       restored = described_class.from_xml(xml)
       expect(restored.properties.size).to eq(3)
       expect(restored.properties.map(&:name)).to eq(
-        %w[_dlc_DocIdItemGuid ContentTypeId AssetID]
+        %w[_dlc_DocIdItemGuid ContentTypeId AssetID],
       )
       expect(restored.properties.map(&:value)).to eq(
         %w[40c25c02-a5e0-48a4-913c-93e0d5121f72
            0x010100012E2E405031D74DB051ADDB3D34E572
-           TF10002005]
+           TF10002005],
       )
     end
 
@@ -205,7 +205,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         fmtid: "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
         pid: 2,
         name: "Department",
-        lpwstr: VT::VtLpwstr.new(value: "Engineering")
+        lpwstr: VT::VtLpwstr.new(value: "Engineering"),
       )
       props.properties << prop
 
@@ -222,7 +222,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
         fmtid: "{D5CDD505-2E9C-101B-9397-08002B2CF9AE}",
         pid: 2,
         name: "IsReviewed",
-        bool: VT::VtBool.new(value: "1")
+        bool: VT::VtBool.new(value: "1"),
       )
       props.properties << prop
 
@@ -358,7 +358,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
       expect(item.schema_refs).to be_a(Uniword::Customxml::SchemaRefs)
       expect(item.schema_refs.refs.size).to eq(1)
       expect(item.schema_refs.refs.first.uri).to eq(
-        "http://schemas.openxmlformats.org/officeDocument/2006/bibliography"
+        "http://schemas.openxmlformats.org/officeDocument/2006/bibliography",
       )
     end
 
@@ -369,7 +369,7 @@ RSpec.describe "Shared OOXML Schemas Round-Trip" do
       expect(restored.item_id).to eq("{9B8B2303-F514-4E15-89A3-727D86B05CBD}")
       expect(restored.schema_refs.refs.size).to eq(1)
       expect(restored.schema_refs.refs.first.uri).to eq(
-        "http://schemas.openxmlformats.org/officeDocument/2006/bibliography"
+        "http://schemas.openxmlformats.org/officeDocument/2006/bibliography",
       )
     end
   end

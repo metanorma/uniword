@@ -22,7 +22,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
         company: "Acme Corp",
         pages: "10",
         words: "1000",
-        characters: "5000"
+        characters: "5000",
       )
 
       expect(props.application).to eq("TestApp")
@@ -39,7 +39,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
         application: "Uniword",
         company: "Test Company",
         pages: "5",
-        words: "500"
+        words: "500",
       )
 
       xml = props.to_xml
@@ -60,7 +60,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
       props = described_class.new(
         template: "Normal.dotm",
         application: "Uniword",
-        total_time: "0"
+        total_time: "0",
       )
 
       xml = props.to_xml
@@ -83,7 +83,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
         characters: "50000",
         lines: "2000",
         paragraphs: "500",
-        characters_with_spaces: "60000"
+        characters_with_spaces: "60000",
       )
 
       xml = props.to_xml
@@ -179,7 +179,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
         doc_security: "0",
         links_up_to_date: "false",
         shared_doc: "false",
-        hyperlinks_changed: "false"
+        hyperlinks_changed: "false",
       )
 
       xml = original.to_xml

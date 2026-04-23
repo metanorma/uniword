@@ -50,7 +50,8 @@ RSpec.describe "MHTML Write Integration", type: :integration do
 
       # Bold text
       props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-      run = Uniword::Wordprocessingml::Run.new(text: "Bold text", properties: props)
+      run = Uniword::Wordprocessingml::Run.new(text: "Bold text",
+                                               properties: props)
       para.runs << run
 
       document.body.paragraphs << para
@@ -233,7 +234,8 @@ RSpec.describe "MHTML Write Integration", type: :integration do
       # Normal paragraph with formatting
       para1 = Uniword::Wordprocessingml::Paragraph.new
       bold_props = Uniword::Wordprocessingml::RunProperties.new(bold: true)
-      bold_run = Uniword::Wordprocessingml::Run.new(text: "Bold text ", properties: bold_props)
+      bold_run = Uniword::Wordprocessingml::Run.new(text: "Bold text ",
+                                                    properties: bold_props)
       para1.runs << bold_run
       italic_props = Uniword::Wordprocessingml::RunProperties.new(italic: true)
       italic_run = Uniword::Wordprocessingml::Run.new(text: "and italic text.",

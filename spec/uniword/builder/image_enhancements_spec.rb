@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-# Phase 15 specs: Image enhancements, floating images, watermarks, SDT content controls
+# Image enhancements: floating images, watermarks, SDT content controls
 
 # --- OOXML Model Fixes ---
 
@@ -10,10 +10,10 @@ RSpec.describe "Fix: Anchor model child elements" do
   it "supports position_h and position_v" do
     anchor = Uniword::WpDrawing::Anchor.new
     anchor.position_h = Uniword::WpDrawing::PositionH.new(
-      relative_from: "margin", align: "center"
+      relative_from: "margin", align: "center",
     )
     anchor.position_v = Uniword::WpDrawing::PositionV.new(
-      relative_from: "page", pos_offset: 100_000
+      relative_from: "page", pos_offset: 100_000,
     )
 
     expect(anchor.position_h.relative_from).to eq("margin")
@@ -45,7 +45,8 @@ RSpec.describe "Fix: Anchor model child elements" do
 
   it "supports effect_extent" do
     anchor = Uniword::WpDrawing::Anchor.new
-    anchor.effect_extent = Uniword::WpDrawing::EffectExtent.new(l: 0, t: 0, r: 0, b: 0)
+    anchor.effect_extent = Uniword::WpDrawing::EffectExtent.new(l: 0, t: 0,
+                                                                r: 0, b: 0)
 
     expect(anchor.effect_extent).not_to be_nil
   end
@@ -54,14 +55,14 @@ RSpec.describe "Fix: Anchor model child elements" do
     anchor = Uniword::WpDrawing::Anchor.new
     anchor.simple_pos = Uniword::WpDrawing::SimplePos.new(x: 0, y: 0)
     anchor.position_h = Uniword::WpDrawing::PositionH.new(
-      relative_from: "margin", align: "center"
+      relative_from: "margin", align: "center",
     )
     anchor.position_v = Uniword::WpDrawing::PositionV.new(
-      relative_from: "margin", align: "top"
+      relative_from: "margin", align: "top",
     )
     anchor.extent = Uniword::WpDrawing::Extent.new(cx: 100_000, cy: 100_000)
     anchor.doc_properties = Uniword::WpDrawing::DocProperties.new(
-      id: 1, name: "Test"
+      id: 1, name: "Test",
     )
     anchor.wrap_square = Uniword::WpDrawing::WrapSquare.new(wrap_text: "bothSides")
     anchor.graphic = Uniword::Drawingml::Graphic.new
@@ -97,7 +98,7 @@ RSpec.describe "Fix: Picture model types" do
   it "NonVisualPictureProperties uses NonVisualDrawingProperties" do
     nv = Uniword::Picture::NonVisualPictureProperties.new
     nv.c_nv_pr = Uniword::Drawingml::NonVisualDrawingProperties.new(
-      id: 100, name: "Picture 1"
+      id: 100, name: "Picture 1",
     )
 
     expect(nv.c_nv_pr).to be_a(Uniword::Drawingml::NonVisualDrawingProperties)
@@ -116,7 +117,7 @@ RSpec.describe "VML TextPath model" do
   it "serializes textpath with string attribute" do
     tp = Uniword::Vml::TextPath.new(
       string: "DRAFT",
-      style: "font-family:'Arial';font-size:60pt"
+      style: "font-family:'Arial';font-size:60pt",
     )
 
     xml = tp.to_xml
@@ -128,7 +129,7 @@ end
 RSpec.describe "VML Shape with textpath" do
   it "supports textpath child element" do
     shape = Uniword::Vml::Shape.new(
-      id: "test", type: "#_x0000_t136"
+      id: "test", type: "#_x0000_t136",
     )
     shape.textpath = Uniword::Vml::TextPath.new(string: "WATERMARK")
 
@@ -141,7 +142,7 @@ RSpec.describe "VML Shape with textpath" do
       id: "PowerPlusWaterMarkObject1",
       type: "#_x0000_t136",
       fillcolor: "D0D0D0",
-      strokecolor: "none"
+      strokecolor: "none",
     )
     shape.fill = Uniword::Vml::Fill.new(type: "tile", opacity: "0.3")
     shape.textpath = Uniword::Vml::TextPath.new(string: "DRAFT")
@@ -554,7 +555,8 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#floating_image" do
 
   it "sets wrap square by default" do
     doc = described_class.new
-    doc.floating_image("spec/fixtures/sample.png", width: 500_000, height: 300_000)
+    doc.floating_image("spec/fixtures/sample.png", width: 500_000,
+                                                   height: 300_000)
 
     run = doc.model.body.paragraphs.first.runs.first
     drawing = run.drawings.first
@@ -607,7 +609,8 @@ RSpec.describe "Scenario: Document with watermark" do
   it "creates a document with a DRAFT watermark" do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.title("Draft Document")
-    doc.watermark("DRAFT", font: "Arial", size: 80, color: "FF0000", opacity: "0.3")
+    doc.watermark("DRAFT", font: "Arial", size: 80, color: "FF0000",
+                           opacity: "0.3")
     doc.paragraph { |p| p << "This is a draft document." }
     doc.paragraph { |p| p << "Do not distribute." }
 
@@ -626,7 +629,8 @@ RSpec.describe "Scenario: Document with content controls" do
     end
     doc.paragraph do |p|
       p << "Date: "
-      p << Uniword::Builder::SdtBuilder.date(tag: "date", format: "yyyy-MM-dd").build
+      p << Uniword::Builder::SdtBuilder.date(tag: "date",
+                                             format: "yyyy-MM-dd").build
     end
     doc.paragraph do |p|
       p << "Comments: "
@@ -664,7 +668,7 @@ RSpec.describe "Scenario: Document with inline and floating images" do
   end
 end
 
-RSpec.describe "Scenario: Complete document with Phase 15 features" do
+RSpec.describe "Scenario: Complete document with images, watermarks, and content controls" do
   it "combines watermark, content controls, and images" do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.title("Advanced Document")

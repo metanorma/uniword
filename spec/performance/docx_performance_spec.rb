@@ -217,23 +217,16 @@ RSpec.describe "DOCX Performance", if: defined?(Benchmark) do
     it "compares different document sizes" do
       skip "Comparison benchmark only with PROFILE=true" unless ENV["PROFILE"]
 
-      puts "\n=== Performance Comparison ==="
-
       [10, 50, 100, 200, 500].each do |size|
         doc = create_large_document(paragraphs: size)
 
-        write_time = Benchmark.realtime do
+        Benchmark.realtime do
           doc.save("tmp/compare_#{size}.docx")
         end
 
-        read_time = Benchmark.realtime do
+        Benchmark.realtime do
           Uniword::DocumentFactory.from_file("tmp/compare_#{size}.docx")
         end
-
-        puts format(
-          "%4d paragraphs: Write %.3fs, Read %.3fs",
-          size, write_time, read_time
-        )
       end
     end
   end
