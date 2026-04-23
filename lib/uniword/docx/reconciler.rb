@@ -197,11 +197,11 @@ module Uniword
         )
 
         settings.w14_doc_id ||= Wordprocessingml::W14DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}",
+          val: SecureRandom.hex(4).upcase,
         )
         settings.w15_chart_tracking_ref_based ||= Wordprocessingml::W15ChartTrackingRefBased.new
         settings.w15_doc_id ||= Wordprocessingml::W15DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}",
+          val: SecureRandom.hex(4).upcase,
         )
 
         settings.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
@@ -529,7 +529,7 @@ module Uniword
             Wordprocessingml::CompatSetting.new(
               name: "useWord2013TrackBottomHyphenation",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1",
+              val: "0",
             ),
           ],
         )
@@ -550,8 +550,8 @@ module Uniword
           brk_bin_sub: Wordprocessingml::BrkBinSub.new(val: "--"),
           small_frac: Wordprocessingml::SmallFrac.new(val: "0"),
           disp_def: Wordprocessingml::DispDef.new,
-          l_margin: Wordprocessingml::LMargin.new(val: "1440"),
-          r_margin: Wordprocessingml::RMargin.new(val: "1440"),
+          l_margin: Wordprocessingml::LMargin.new(val: "0"),
+          r_margin: Wordprocessingml::RMargin.new(val: "0"),
           def_jc: Wordprocessingml::DefJc.new(val: "centerGroup"),
           wrap_indent: Wordprocessingml::WrapIndent.new(val: "1440"),
           int_lim: Wordprocessingml::IntLim.new(val: "subSup"),

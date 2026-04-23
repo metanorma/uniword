@@ -239,7 +239,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(settings.theme_font_lang.east_asia).to eq("zh-CN")
       expect(settings.decimal_symbol.val).to eq(".")
       expect(settings.list_separator.val).to eq(",")
-      expect(settings.w14_doc_id.val).to match(/\{[0-9A-F-]+\}/)
+      expect(settings.w14_doc_id.val).to match(/^[0-9A-F]+$/)
     end
 
     it "populates font table with profile fonts" do
