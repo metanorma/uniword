@@ -334,7 +334,8 @@ RSpec.describe "Theme Extraction and Reuse" do
 
       reloaded = Uniword.load(path)
 
-      expect(reloaded.theme).to be_nil
+      # Reconciler injects a default theme from the profile
+      expect(reloaded.theme).not_to be_nil
 
       # Cleanup
       safe_rm_f(path)
