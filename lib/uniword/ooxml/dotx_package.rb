@@ -195,7 +195,7 @@ module Uniword
       #
       # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
       # @param path [String] Output path
-      def self.to_file(document, path)
+      def self.to_file(document, path, profile: nil)
         # Create package
         package = new
 

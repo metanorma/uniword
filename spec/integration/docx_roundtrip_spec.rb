@@ -54,10 +54,17 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     xml_files.each do |filename|
       orig = original_files[filename]
       saved = saved_files[filename]
-      # Normalize content types and relationships (reconciled by Reconciler)
-      if filename == "[Content_Types].xml" || filename.end_with?(".rels")
+      # Normalize reconciled files (content types, relationships, metadata)
+      if filename == "[Content_Types].xml" || filename.end_with?(".rels") ||
+         filename.start_with?("docProps/")
         orig = XmlNormalizers.normalize_for_roundtrip(orig)
         saved = XmlNormalizers.normalize_for_roundtrip(saved)
+      end
+      # Normalize document.xml: Reconciler adds namespace declarations,
+      # mc:Ignorable, and paragraph tracking attributes (rsid, paraId)
+      if filename == "word/document.xml"
+        orig = XmlNormalizers.normalize_document_xml(orig)
+        saved = XmlNormalizers.normalize_document_xml(saved)
       end
       expect(saved).to be_xml_equivalent_to(orig),
                        "#{filename} was modified during round-trip"
