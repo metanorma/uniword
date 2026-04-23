@@ -176,6 +176,10 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/docProps/core.xml")
         saved = File.read("#{saved_dir}/docProps/core.xml")
 
+        # Normalize: Reconciler updates modified timestamp, lastModifiedBy, revision
+        original = XmlNormalizers.normalize_for_roundtrip(original)
+        saved = XmlNormalizers.normalize_for_roundtrip(saved)
+
         expect(saved).to be_xml_equivalent_to(original)
       end
     end

@@ -154,16 +154,17 @@ module Uniword
       #
       # @param path [String] Output file path
       # @param format [Symbol] Format (:docx, :mhtml, :auto)
-      def save(path, format: :auto)
+      def save(path, format: :auto, profile: nil)
         writer = DocumentWriter.new(self)
-        writer.save(path, format: format)
+        writer.save(path, format: format, profile: profile)
       end
 
       # Save document to DOCX file using DocxPackage
       #
       # @param path [String] Output file path
-      def to_file(path)
-        Docx::Package.to_file(self, path)
+      # @param profile [Docx::Profile, nil] Profile for reconciliation
+      def to_file(path, profile: nil)
+        Docx::Package.to_file(self, path, profile: profile)
       end
 
       # Get all paragraph text

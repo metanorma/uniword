@@ -40,7 +40,7 @@ RSpec.describe "DOCX Generation Integration" do
           expect(doc_xml).to include("Hello, World!")
           expect(doc_xml).to include("<w:document")
           expect(doc_xml).to include("<w:body>")
-          expect(doc_xml).to include("<w:p>")
+          expect(doc_xml).to include("<w:p ")
           expect(doc_xml).to include("<w:r>")
           expect(doc_xml).to include("<w:t>")
         end
@@ -77,7 +77,7 @@ RSpec.describe "DOCX Generation Integration" do
           expect(doc_xml).to include("First paragraph")
           expect(doc_xml).to include("Second paragraph")
           # Should have two <w:p> tags
-          expect(doc_xml.scan("<w:p>").count).to eq(2)
+          expect(doc_xml.scan(/<w:p[ >]/).count).to eq(2)
         end
       ensure
         safe_delete(output_path)

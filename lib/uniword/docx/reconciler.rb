@@ -202,7 +202,7 @@ module Uniword
         )
 
         settings.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
         )
       end
 
@@ -244,7 +244,7 @@ module Uniword
         end
 
         font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
         )
       end
 
@@ -263,7 +263,7 @@ module Uniword
         ensure_default_styles(styles)
 
         styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
         )
       end
 
@@ -279,7 +279,7 @@ module Uniword
         ws.optimize_for_browser ||= Wordprocessingml::OptimizeForBrowser.new
         ws.allow_png ||= Wordprocessingml::AllowPng.new
         ws.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
         )
       end
 
@@ -301,11 +301,26 @@ module Uniword
       def reconcile_core_properties
         return unless profile
 
-        cp = package.core_properties
-        cp ||= begin
+        # Rebuild from parsed state to ensure namespace_scope
+        # declarations (e.g. xmlns:dcmitype) are applied on
+        # serialization (lutaml-model preserves parsed namespaces)
+        old_cp = package.core_properties
+        if old_cp
+          package.core_properties = Ooxml::CoreProperties.new(
+            title: old_cp.title,
+            subject: old_cp.subject,
+            creator: old_cp.creator,
+            keywords: old_cp.keywords,
+            description: old_cp.description,
+            last_modified_by: old_cp.last_modified_by,
+            revision: old_cp.revision,
+            created: old_cp.created,
+            modified: old_cp.modified
+          )
+        else
           package.core_properties = Ooxml::CoreProperties.new
-          package.core_properties
         end
+        cp = package.core_properties
 
         if profile.user_name && !profile.user_name.empty?
           cp.last_modified_by = profile.user_name
@@ -313,8 +328,12 @@ module Uniword
         end
 
         now = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-        cp.modified = now
-        cp.created ||= now
+        cp.modified = Ooxml::Types::DctermsModifiedType.new(
+          value: now, type: "dcterms:W3CDTF"
+        )
+        cp.created ||= Ooxml::Types::DctermsCreatedType.new(
+          value: now, type: "dcterms:W3CDTF"
+        )
 
         cp.revision = "1" unless cp.revision
       end
@@ -323,8 +342,13 @@ module Uniword
         return unless profile
         return unless package.document&.body
 
+        doc = package.document
+        doc.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
+          "w14 w15 wp14"
+        )
+
         rsid = generate_rsid
-        body = package.document.body
+        body = doc.body
 
         body.paragraphs.each do |para|
           para.rsid_r ||= rsid
