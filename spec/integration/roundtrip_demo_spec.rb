@@ -150,8 +150,11 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/word/_rels/document.xml.rels")
         saved = File.read("#{saved_dir}/word/_rels/document.xml.rels")
 
-        expect(XmlNormalizers.normalize_for_roundtrip(saved))
-          .to be_xml_equivalent_to(XmlNormalizers.normalize_for_roundtrip(original))
+        # Reconciler may add relationships for present parts (e.g. theme)
+        # — check original targets are a subset of saved targets
+        orig_targets = rel_targets_from_xml(original)
+        saved_targets = rel_targets_from_xml(saved)
+        expect(saved_targets).to include(*orig_targets)
       end
     end
 
@@ -187,6 +190,12 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         expect(saved).to be_xml_equivalent_to(original)
       end
     end
+  end
+
+  def rel_targets_from_xml(xml)
+    return [] if xml.nil?
+
+    xml.scan(/Target="([^"]+)"/).flatten
   end
 
   describe "Media Files" do
