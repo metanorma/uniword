@@ -5,13 +5,14 @@ require "spec_helper"
 RSpec.describe "DOCX → MHT Content Matching" do
   # These fixtures represent real Word documents saved as MHT
   CONTENT_MATCHING_FIXTURES = {
-    "blank" => { docx: "spec/fixtures/blank/blank.docx", mht: "spec/fixtures/blank/blank.mht" },
+    "blank" => { docx: "spec/fixtures/blank/blank.docx",
+                 mht: "spec/fixtures/blank/blank.mht" },
     "apa" => { docx: "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx",
                mht: "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht" },
     "mla" => { docx: "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.docx",
                mht: "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht" },
     "cover_toc" => { docx: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx",
-                     mht: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht" }
+                     mht: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht" },
   }.freeze
 
   # Expected counts from fixture analysis
@@ -19,7 +20,7 @@ RSpec.describe "DOCX → MHT Content Matching" do
     "blank" => { paragraphs: 1, sdts: 0, hyperlinks: 0, tables: 0 },
     "apa" => { paragraphs: 84, sdts: 28, hyperlinks: 18, tables: 1 },
     "mla" => { paragraphs: 51, sdts: 24, hyperlinks: 0, tables: 1 },
-    "cover_toc" => { paragraphs: 39, sdts: 22, hyperlinks: 3, tables: 1 }
+    "cover_toc" => { paragraphs: 39, sdts: 22, hyperlinks: 3, tables: 1 },
   }.freeze
 
   # Helper: Decode quoted-printable
@@ -28,7 +29,9 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
     str = str.dup if str.frozen?
     str.force_encoding("BINARY") if str.encoding == Encoding::UTF_8
-    str.gsub(/=([0-9A-Fa-f]{2})/) { Regexp.last_match(1).to_i(16).chr }.force_encoding("UTF-8")
+    str.gsub(/=([0-9A-Fa-f]{2})/) do
+      Regexp.last_match(1).to_i(16).chr
+    end.force_encoding("UTF-8")
   end
 
   # Helper: Normalize HTML for comparison (strip whitespace variations)
@@ -81,13 +84,15 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
     decoded = decode_qp(html)
     doc = Nokogiri::HTML(decoded)
-    doc.css("p[class]").map { |p| p["class"] }.compact.uniq.sort
+    doc.css("p[class]").filter_map { |p| p["class"] }.uniq.sort
   end
 
   # Convert DOCX to MHT and extract body HTML
   def docx_to_mht_body(docx_path, doc_name = nil)
     docx_pkg = Uniword::Docx::Package.from_file(docx_path)
-    mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
+    mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(
+      docx_pkg, doc_name
+    )
     mhtml_doc.html_part&.raw_content || ""
   end
 
@@ -102,8 +107,12 @@ RSpec.describe "DOCX → MHT Content Matching" do
   end
 
   describe "blank fixture" do
-    let(:generated_html) { docx_to_mht_body(CONTENT_MATCHING_FIXTURES["blank"][:docx], "blank") }
-    let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES["blank"][:mht]) }
+    let(:generated_html) do
+      docx_to_mht_body(CONTENT_MATCHING_FIXTURES["blank"][:docx], "blank")
+    end
+    let(:fixture_html) do
+      fixture_mht_body(CONTENT_MATCHING_FIXTURES["blank"][:mht])
+    end
     let(:expected) { EXPECTED_COUNTS["blank"] }
 
     it "matches paragraph count (1)" do
@@ -142,8 +151,12 @@ RSpec.describe "DOCX → MHT Content Matching" do
   end
 
   describe "apa fixture" do
-    let(:generated_html) { docx_to_mht_body(CONTENT_MATCHING_FIXTURES["apa"][:docx], "apa") }
-    let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES["apa"][:mht]) }
+    let(:generated_html) do
+      docx_to_mht_body(CONTENT_MATCHING_FIXTURES["apa"][:docx], "apa")
+    end
+    let(:fixture_html) do
+      fixture_mht_body(CONTENT_MATCHING_FIXTURES["apa"][:mht])
+    end
     let(:expected) { EXPECTED_COUNTS["apa"] }
 
     # NOTE: MHT fixtures have MORE paragraphs than DOCX because Word
@@ -199,8 +212,12 @@ RSpec.describe "DOCX → MHT Content Matching" do
   end
 
   describe "mla fixture" do
-    let(:generated_html) { docx_to_mht_body(CONTENT_MATCHING_FIXTURES["mla"][:docx], "mla") }
-    let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES["mla"][:mht]) }
+    let(:generated_html) do
+      docx_to_mht_body(CONTENT_MATCHING_FIXTURES["mla"][:docx], "mla")
+    end
+    let(:fixture_html) do
+      fixture_mht_body(CONTENT_MATCHING_FIXTURES["mla"][:mht])
+    end
     let(:expected) { EXPECTED_COUNTS["mla"] }
 
     # DOCX has 11 paragraphs → MHT fixture has 51
@@ -240,9 +257,12 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
   describe "cover_toc fixture" do
     let(:generated_html) do
-      docx_to_mht_body(CONTENT_MATCHING_FIXTURES["cover_toc"][:docx], "cover_toc")
+      docx_to_mht_body(CONTENT_MATCHING_FIXTURES["cover_toc"][:docx],
+                       "cover_toc")
     end
-    let(:fixture_html) { fixture_mht_body(CONTENT_MATCHING_FIXTURES["cover_toc"][:mht]) }
+    let(:fixture_html) do
+      fixture_mht_body(CONTENT_MATCHING_FIXTURES["cover_toc"][:mht])
+    end
     let(:expected) { EXPECTED_COUNTS["cover_toc"] }
 
     # DOCX has 7 paragraphs → MHT fixture has 39
@@ -289,7 +309,8 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
         it "generated body text is non-empty" do
           text = strip_tags(generated_html)
-          expect(text.length).to be > 0, "Generated HTML for #{name} has empty text"
+          expect(text.length).to be > 0,
+                                 "Generated HTML for #{name} has empty text"
         end
 
         it "generated text length is substantial (> 10 chars)" do

@@ -8,11 +8,16 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
   describe "#parse" do
     context "with invalid input" do
       it "raises error when path is nil" do
-        expect { parser.parse(nil) }.to raise_error(ArgumentError, /Path cannot be nil/)
+        expect do
+          parser.parse(nil)
+        end.to raise_error(ArgumentError, /Path cannot be nil/)
       end
 
       it "raises error when file does not exist" do
-        expect { parser.parse("nonexistent.mhtml") }.to raise_error(ArgumentError, /File not found/)
+        expect do
+          parser.parse("nonexistent.mhtml")
+        end.to raise_error(ArgumentError,
+                           /File not found/)
       end
     end
 
@@ -123,7 +128,9 @@ RSpec.describe Uniword::Infrastructure::MimeParser do
       end
 
       it "raises error when no boundary found" do
-        expect { parser.parse_content("No boundary here") }.to raise_error(/No MIME boundary found/)
+        expect do
+          parser.parse_content("No boundary here")
+        end.to raise_error(/No MIME boundary found/)
       end
     end
 

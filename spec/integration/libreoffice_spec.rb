@@ -10,7 +10,7 @@ RSpec.describe "LibreOffice Compatibility Testing" do
     FileUtils.mkdir_p("tmp/libreoffice")
   end
 
-  after(:each) do
+  after do
     # Clean up temporary files after each test
     # On Windows, files may be locked briefly after writing
     Dir.glob("#{tmp_dir}/*").each do |f|
@@ -111,8 +111,8 @@ RSpec.describe "LibreOffice Compatibility Testing" do
         run = Uniword::Wordprocessingml::Run.new(
           text: "Bold text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            bold: Uniword::Properties::Bold.new(value: true)
-          )
+            bold: Uniword::Properties::Bold.new(value: true),
+          ),
         )
         para.runs << run
         doc.body.paragraphs << para
@@ -129,8 +129,8 @@ RSpec.describe "LibreOffice Compatibility Testing" do
         run = Uniword::Wordprocessingml::Run.new(
           text: "Italic text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            italic: Uniword::Properties::Italic.new(value: true)
-          )
+            italic: Uniword::Properties::Italic.new(value: true),
+          ),
         )
         para.runs << run
         doc.body.paragraphs << para
@@ -146,8 +146,8 @@ RSpec.describe "LibreOffice Compatibility Testing" do
         run = Uniword::Wordprocessingml::Run.new(
           text: "Underlined text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            underline: Uniword::Properties::Underline.new(value: "single")
-          )
+            underline: Uniword::Properties::Underline.new(value: "single"),
+          ),
         )
         para.runs << run
         doc.body.paragraphs << para
@@ -163,8 +163,8 @@ RSpec.describe "LibreOffice Compatibility Testing" do
         run = Uniword::Wordprocessingml::Run.new(
           text: "Large text",
           properties: Uniword::Wordprocessingml::RunProperties.new(
-            size: Uniword::Properties::FontSize.new(value: 48)
-          )
+            size: Uniword::Properties::FontSize.new(value: 48),
+          ),
         )
         para.runs << run
         doc.body.paragraphs << para

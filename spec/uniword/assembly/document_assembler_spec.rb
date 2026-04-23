@@ -38,13 +38,13 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
         "template" => "standard",
         "variables" => {
           "title" => "Test Document",
-          "version" => "1.0"
+          "version" => "1.0",
         },
         "sections" => sections || [
           { "component" => "cover_page" },
-          { "component" => "legal_notice" }
-        ]
-      }
+          { "component" => "legal_notice" },
+        ],
+      },
     }
 
     File.write(manifest_file, YAML.dump(manifest_data))
@@ -70,7 +70,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     it "can disable caching" do
       assembler = described_class.new(
         components_dir: components_dir,
-        cache_components: false
+        cache_components: false,
       )
       stats = assembler.cache_stats
       expect(stats[:enabled]).to be false
@@ -110,7 +110,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     it "accepts variable overrides" do
       doc = assembler.assemble(
         manifest_file,
-        variables: { title: "Override Title" }
+        variables: { title: "Override Title" },
       )
 
       text = doc.paragraphs.first.runs.first.text
@@ -146,7 +146,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
       path = assembler.assemble_and_save(
         manifest_file,
-        output_path: "custom.docx"
+        output_path: "custom.docx",
       )
       expect(path).to eq("custom.docx")
     end
@@ -157,7 +157,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
       expect do
         assembler.assemble_and_save(
           manifest_file,
-          variables: { custom: "value" }
+          variables: { custom: "value" },
         )
       end.not_to raise_error
     end
@@ -236,7 +236,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
     before do
       create_manifest(sections: [
-                        { "component" => "__toc__", "options" => { "max_level" => 3 } }
+                        { "component" => "__toc__",
+                          "options" => { "max_level" => 3 } },
                       ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file)
@@ -258,7 +259,8 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
       create_component("clauses/clause_2")
 
       create_manifest(sections: [
-                        { "component" => "clauses/*", "order" => "alphabetical" }
+                        { "component" => "clauses/*",
+                          "order" => "alphabetical" },
                       ])
 
       allow(Uniword::DocumentFactory).to receive(:from_file) do

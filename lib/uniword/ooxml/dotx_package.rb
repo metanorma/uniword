@@ -125,56 +125,56 @@ module Uniword
         # Parse settings
         if zip_content["word/settings.xml"]
           package.settings = Uniword::Wordprocessingml::Settings.from_xml(
-            zip_content["word/settings.xml"]
+            zip_content["word/settings.xml"],
           )
         end
 
         # Parse font table
         if zip_content["word/fontTable.xml"]
           package.font_table = Uniword::Wordprocessingml::FontTable.from_xml(
-            zip_content["word/fontTable.xml"]
+            zip_content["word/fontTable.xml"],
           )
         end
 
         # Parse web settings
         if zip_content["word/webSettings.xml"]
           package.web_settings = Uniword::Wordprocessingml::WebSettings.from_xml(
-            zip_content["word/webSettings.xml"]
+            zip_content["word/webSettings.xml"],
           )
         end
 
         # Parse content types
         if zip_content["[Content_Types].xml"]
           package.content_types = Uniword::ContentTypes::Types.from_xml(
-            zip_content["[Content_Types].xml"]
+            zip_content["[Content_Types].xml"],
           )
         end
 
         # Parse package relationships
         if zip_content["_rels/.rels"]
           package.package_rels = Uniword::Ooxml::Relationships::PackageRelationships.from_xml(
-            zip_content["_rels/.rels"]
+            zip_content["_rels/.rels"],
           )
         end
 
         # Parse document relationships
         if zip_content["word/_rels/document.xml.rels"]
           package.document_rels = Uniword::Ooxml::Relationships::PackageRelationships.from_xml(
-            zip_content["word/_rels/document.xml.rels"]
+            zip_content["word/_rels/document.xml.rels"],
           )
         end
 
         # Parse footnotes
         if zip_content["word/footnotes.xml"]
           package.footnotes = Uniword::Wordprocessingml::Footnotes.from_xml(
-            zip_content["word/footnotes.xml"]
+            zip_content["word/footnotes.xml"],
           )
         end
 
         # Parse endnotes
         if zip_content["word/endnotes.xml"]
           package.endnotes = Uniword::Wordprocessingml::Endnotes.from_xml(
-            zip_content["word/endnotes.xml"]
+            zip_content["word/endnotes.xml"],
           )
         end
 
@@ -249,7 +249,10 @@ module Uniword
         end
 
         # Theme serialization (no raw XML fallback)
-        content["word/theme/theme1.xml"] = theme.to_xml(encoding: "UTF-8") if theme
+        if theme
+          content["word/theme/theme1.xml"] =
+            theme.to_xml(encoding: "UTF-8")
+        end
 
         # Serialize model-based configurations
         if styles_configuration
@@ -343,7 +346,7 @@ module Uniword
 
         zip_content["word/_rels/document.xml.rels"] =
           Uniword::Ooxml::Relationships::Relationships.generate_document_rels.to_xml(
-            declaration: true
+            declaration: true,
           )
       end
 

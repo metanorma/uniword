@@ -59,13 +59,14 @@ module Uniword
         return if body.section_properties
 
         body.section_properties = Wordprocessingml::SectionProperties.new(
-          page_size: Wordprocessingml::PageSize.new(width: 12_240, height: 15_840),
+          page_size: Wordprocessingml::PageSize.new(width: 12_240,
+                                                    height: 15_840),
           page_margins: Wordprocessingml::PageMargins.new(
             top: 1440, right: 1440, bottom: 1440, left: 1440,
             header: 720, footer: 720, gutter: 0
           ),
           columns: Wordprocessingml::Columns.new(space: 720),
-          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360)
+          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
         )
       end
 
@@ -105,13 +106,15 @@ module Uniword
 
       def minimal_footnotes
         Wordprocessingml::Footnotes.new(
-          footnote_entries: [separator_entry(:footnote), continuation_entry(:footnote)]
+          footnote_entries: [separator_entry(:footnote),
+                             continuation_entry(:footnote)],
         )
       end
 
       def minimal_endnotes
         Wordprocessingml::Endnotes.new(
-          endnote_entries: [separator_entry(:endnote), continuation_entry(:endnote)]
+          endnote_entries: [separator_entry(:endnote),
+                            continuation_entry(:endnote)],
         )
       end
 
@@ -135,7 +138,7 @@ module Uniword
 
       def ensure_separators(notes, type)
         entries = notes.public_send(:"#{type}_entries")
-        ids = entries.map(&:id).to_set
+        ids = entries.to_set(&:id)
 
         entries.unshift(separator_entry(type)) unless ids.include?("-1")
         entries.unshift(continuation_entry(type)) unless ids.include?("0")
@@ -171,11 +174,11 @@ module Uniword
 
         settings.zoom ||= Wordprocessingml::Zoom.new(percent: 100)
         settings.proof_state ||= Wordprocessingml::ProofState.new(
-          spelling: "clean", grammar: "clean"
+          spelling: "clean", grammar: "clean",
         )
         settings.default_tab_stop ||= Wordprocessingml::DefaultTabStop.new(val: "720")
         settings.character_spacing_control ||= Wordprocessingml::CharacterSpacingControl.new(
-          val: "doNotCompress"
+          val: "doNotCompress",
         )
 
         settings.compat ||= build_compat
@@ -183,26 +186,26 @@ module Uniword
         settings.math_pr ||= build_math_pr
         settings.theme_font_lang ||= Wordprocessingml::ThemeFontLang.new(
           val: profile.lang,
-          east_asia: profile.east_asia_lang
+          east_asia: profile.east_asia_lang,
         )
         settings.clr_scheme_mapping ||= build_clr_scheme_mapping
         settings.decimal_symbol ||= Wordprocessingml::DecimalSymbol.new(
-          val: profile.decimal_symbol
+          val: profile.decimal_symbol,
         )
         settings.list_separator ||= Wordprocessingml::ListSeparator.new(
-          val: profile.list_separator
+          val: profile.list_separator,
         )
 
         settings.w14_doc_id ||= Wordprocessingml::W14DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}"
+          val: "{#{SecureRandom.uuid.upcase}}",
         )
         settings.w15_chart_tracking_ref_based ||= Wordprocessingml::W15ChartTrackingRefBased.new
         settings.w15_doc_id ||= Wordprocessingml::W15DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}"
+          val: "{#{SecureRandom.uuid.upcase}}",
         )
 
         settings.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -236,7 +239,7 @@ module Uniword
               usb0: sig_data["usb0"], usb1: sig_data["usb1"],
               usb2: sig_data["usb2"], usb3: sig_data["usb3"],
               csb0: sig_data["csb0"], csb1: sig_data["csb1"]
-            )
+            ),
           )
 
           font.alt_name = Wordprocessingml::AltName.new(val: meta["alt_name"]) if meta["alt_name"]
@@ -244,7 +247,7 @@ module Uniword
         end
 
         font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -263,7 +266,7 @@ module Uniword
         ensure_default_styles(styles)
 
         styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -279,7 +282,7 @@ module Uniword
         ws.optimize_for_browser ||= Wordprocessingml::OptimizeForBrowser.new
         ws.allow_png ||= Wordprocessingml::AllowPng.new
         ws.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -305,21 +308,21 @@ module Uniword
         # declarations (e.g. xmlns:dcmitype) are applied on
         # serialization (lutaml-model preserves parsed namespaces)
         old_cp = package.core_properties
-        if old_cp
-          package.core_properties = Ooxml::CoreProperties.new(
-            title: old_cp.title,
-            subject: old_cp.subject,
-            creator: old_cp.creator,
-            keywords: old_cp.keywords,
-            description: old_cp.description,
-            last_modified_by: old_cp.last_modified_by,
-            revision: old_cp.revision,
-            created: old_cp.created,
-            modified: old_cp.modified
-          )
-        else
-          package.core_properties = Ooxml::CoreProperties.new
-        end
+        package.core_properties = if old_cp
+                                    Ooxml::CoreProperties.new(
+                                      title: old_cp.title,
+                                      subject: old_cp.subject,
+                                      creator: old_cp.creator,
+                                      keywords: old_cp.keywords,
+                                      description: old_cp.description,
+                                      last_modified_by: old_cp.last_modified_by,
+                                      revision: old_cp.revision,
+                                      created: old_cp.created,
+                                      modified: old_cp.modified,
+                                    )
+                                  else
+                                    Ooxml::CoreProperties.new
+                                  end
         cp = package.core_properties
 
         if profile.user_name && !profile.user_name.empty?
@@ -329,10 +332,10 @@ module Uniword
 
         now = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
         cp.modified = Ooxml::Types::DctermsModifiedType.new(
-          value: now, type: "dcterms:W3CDTF"
+          value: now, type: "dcterms:W3CDTF",
         )
         cp.created ||= Ooxml::Types::DctermsCreatedType.new(
-          value: now, type: "dcterms:W3CDTF"
+          value: now, type: "dcterms:W3CDTF",
         )
 
         cp.revision = "1" unless cp.revision
@@ -344,7 +347,7 @@ module Uniword
 
         doc = package.document
         doc.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 wp14"
+          "w14 w15 wp14",
         )
 
         rsid = generate_rsid
@@ -373,17 +376,17 @@ module Uniword
         ct.defaults = [
           Uniword::ContentTypes::Default.new(
             extension: "rels",
-            content_type: "application/vnd.openxmlformats-package.relationships+xml"
+            content_type: "application/vnd.openxmlformats-package.relationships+xml",
           ),
           Uniword::ContentTypes::Default.new(
             extension: "xml",
-            content_type: "application/xml"
-          )
+            content_type: "application/xml",
+          ),
         ]
 
         # Overrides: rebuild for standard parts that exist
         standard = content_type_overrides_for_present_parts
-        standard_parts = standard.map(&:part_name).to_set
+        standard_parts = standard.to_set(&:part_name)
         non_standard = ct.overrides.reject do |o|
           standard_parts.include?(o.part_name)
         end
@@ -405,10 +408,10 @@ module Uniword
                     "docProps/core.xml"),
           build_rel("rId3",
                     "#{base}/officeDocument/2006/relationships/extended-properties",
-                    "docProps/app.xml")
+                    "docProps/app.xml"),
         ]
 
-        standard_targets = standard.map(&:target).to_set
+        standard_targets = standard.to_set(&:target)
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
         end
@@ -426,7 +429,7 @@ module Uniword
           ["rId2", "settings", "settings.xml", package.settings],
           ["rId3", "webSettings", "webSettings.xml", package.web_settings],
           ["rId4", "fontTable", "fontTable.xml", package.font_table],
-          ["rId5", "theme", "theme/theme1.xml", package.theme]
+          ["rId5", "theme", "theme/theme1.xml", package.theme],
         ]
 
         standard = defs.filter_map do |rid, suffix, target, obj|
@@ -435,7 +438,7 @@ module Uniword
           build_rel(rid, "#{base}/#{suffix}", target)
         end
 
-        standard_targets = standard.map(&:target).to_set
+        standard_targets = standard.to_set(&:target)
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
         end
@@ -476,7 +479,7 @@ module Uniword
           [package.endnotes, "/word/endnotes.xml",
            "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"],
           [package.numbering, "/word/numbering.xml",
-           "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"]
+           "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"],
         ]
 
         checks.filter_map do |obj, part_name, content_type|
@@ -484,14 +487,14 @@ module Uniword
 
           Uniword::ContentTypes::Override.new(
             part_name: part_name,
-            content_type: content_type
+            content_type: content_type,
           )
         end
       end
 
       def build_rel(id, type, target)
         Ooxml::Relationships::Relationship.new(
-          id: id, type: type, target: target
+          id: id, type: type, target: target,
         )
       end
 
@@ -501,34 +504,34 @@ module Uniword
             Wordprocessingml::CompatSetting.new(
               name: "compatibilityMode",
               uri: "http://schemas.microsoft.com/office/word",
-              val: profile.compat_mode
+              val: profile.compat_mode,
             ),
             Wordprocessingml::CompatSetting.new(
               name: "overrideTableStyleFontSizeAndJustification",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "enableOpenTypeFeatures",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "doNotFlipMirrorIndents",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "differentiateMultirowTableHeaders",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "useWord2013TrackBottomHyphenation",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
-            )
-          ]
+              val: "1",
+            ),
+          ],
         )
       end
 
@@ -536,7 +539,7 @@ module Uniword
         root = "00#{SecureRandom.hex(3).upcase}"
         Wordprocessingml::Rsids.new(
           rsid_root: Wordprocessingml::RsidRoot.new(val: root),
-          rsid: [Wordprocessingml::Rsid.new(val: rsid)]
+          rsid: [Wordprocessingml::Rsid.new(val: rsid)],
         )
       end
 
@@ -552,7 +555,7 @@ module Uniword
           def_jc: Wordprocessingml::DefJc.new(val: "centerGroup"),
           wrap_indent: Wordprocessingml::WrapIndent.new(val: "1440"),
           int_lim: Wordprocessingml::IntLim.new(val: "subSup"),
-          nary_lim: Wordprocessingml::NaryLim.new(val: "undOvr")
+          nary_lim: Wordprocessingml::NaryLim.new(val: "undOvr"),
         )
       end
 
@@ -571,7 +574,7 @@ module Uniword
             ascii_theme: "minorHAnsi",
             east_asia_theme: "minorEastAsia",
             h_ansi_theme: "minorHAnsi",
-            cs_theme: "minorBidi"
+            cs_theme: "minorBidi",
           ),
           kerning: Properties::Kerning.new(val: 2),
           size: Properties::FontSize.new(val: 24),
@@ -579,17 +582,18 @@ module Uniword
           language: Properties::Language.new(
             val: profile.lang,
             east_asia: profile.east_asia_lang,
-            bidi: profile.bidi_lang
-          )
+            bidi: profile.bidi_lang,
+          ),
         )
 
         p_pr = Wordprocessingml::ParagraphProperties.new(
-          spacing: Properties::Spacing.new(after: 160, line: 278, line_rule: "auto")
+          spacing: Properties::Spacing.new(after: 160, line: 278,
+                                           line_rule: "auto"),
         )
 
         Wordprocessingml::DocDefaults.new(
           rPrDefault: Wordprocessingml::RPrDefault.new(rPr: r_pr),
-          pPrDefault: Wordprocessingml::PPrDefault.new(pPr: p_pr)
+          pPrDefault: Wordprocessingml::PPrDefault.new(pPr: p_pr),
         )
       end
 
@@ -602,7 +606,10 @@ module Uniword
           attrs[:ui_priority] = ex["uiPriority"].to_i if ex["uiPriority"]
           attrs[:q_format] = ex["qFormat"] if ex["qFormat"]
           attrs[:semi_hidden] = ex["semiHidden"] if ex["semiHidden"]
-          attrs[:unhide_when_used] = ex["unhideWhenUsed"] if ex["unhideWhenUsed"]
+          if ex["unhideWhenUsed"]
+            attrs[:unhide_when_used] =
+              ex["unhideWhenUsed"]
+          end
           attrs[:locked] = ex["locked"] if ex["locked"]
           Wordprocessingml::LatentStylesException.new(attrs)
         end
@@ -614,12 +621,12 @@ module Uniword
           def_unhide_when_used: config["defUnhideWhenUsed"],
           def_q_format: config["defQFormat"],
           count: config["count"].to_i,
-          lsd_exception: exceptions
+          lsd_exception: exceptions,
         )
       end
 
       def ensure_default_styles(styles)
-        style_ids = styles.styles.map(&:id).to_set
+        style_ids = styles.styles.to_set(&:id)
 
         unless style_ids.include?("Normal")
           styles.add_style(Wordprocessingml::Style.new(
@@ -646,8 +653,8 @@ module Uniword
               top: Properties::Margin.new(w: 0, type: "dxa"),
               left: Properties::Margin.new(w: 108, type: "dxa"),
               bottom: Properties::Margin.new(w: 0, type: "dxa"),
-              right: Properties::Margin.new(w: 108, type: "dxa")
-            )
+              right: Properties::Margin.new(w: 108, type: "dxa"),
+            ),
           )
 
           styles.add_style(Wordprocessingml::Style.new(

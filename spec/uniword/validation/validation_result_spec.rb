@@ -39,7 +39,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
       result = described_class.failure(
         external_link,
         "Not found",
-        metadata: { status_code: 404 }
+        metadata: { status_code: 404 },
       )
 
       expect(result.metadata[:status_code]).to eq(404)
@@ -106,7 +106,7 @@ RSpec.describe Uniword::Validation::ValidationResult do
       result = described_class.failure(
         external_link,
         "Not found",
-        metadata: { code: 404 }
+        metadata: { code: 404 },
       )
 
       hash = result.to_h

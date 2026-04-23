@@ -7,7 +7,8 @@ require "zip"
 RSpec.describe "DOCX Generation Integration" do
   describe "generating a minimal DOCX file" do
     it "creates a valid DOCX file structure" do
-      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      output_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Create a document
         doc = Uniword::Wordprocessingml::DocumentRoot.new
@@ -50,7 +51,8 @@ RSpec.describe "DOCX Generation Integration" do
     end
 
     it "handles multiple paragraphs" do
-      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      output_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Create a document with multiple paragraphs
         doc = Uniword::Wordprocessingml::DocumentRoot.new
@@ -85,7 +87,8 @@ RSpec.describe "DOCX Generation Integration" do
     end
 
     it "handles text with whitespace preservation" do
-      output_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      output_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Wordprocessingml::DocumentRoot.new
         paragraph = Uniword::Wordprocessingml::Paragraph.new
@@ -142,7 +145,7 @@ RSpec.describe "DOCX Generation Integration" do
         run = Uniword::Wordprocessingml::Run.new(text: "Colored Text")
         run.properties = Uniword::Wordprocessingml::RunProperties.new(
           size: 28, # 14pt in half-points
-          color: "FF0000" # Red
+          color: "FF0000", # Red
         )
         para.runs << run
         doc.body.paragraphs << para
@@ -161,7 +164,7 @@ RSpec.describe "DOCX Generation Integration" do
         run = Uniword::Wordprocessingml::Run.new(text: "Formatted")
         run.properties = Uniword::Wordprocessingml::RunProperties.new(
           underline: "single",
-          strike: true
+          strike: true,
         )
         para.runs << run
         doc.body.paragraphs << para
@@ -179,7 +182,7 @@ RSpec.describe "DOCX Generation Integration" do
         doc = Uniword::Wordprocessingml::DocumentRoot.new
         para = Uniword::Wordprocessingml::Paragraph.new
         para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
-          alignment: "center"
+          alignment: "center",
         )
         run = Uniword::Wordprocessingml::Run.new(text: "Centered Text")
         para.runs << run
@@ -196,7 +199,7 @@ RSpec.describe "DOCX Generation Integration" do
         para = Uniword::Wordprocessingml::Paragraph.new
         para.properties = Uniword::Wordprocessingml::ParagraphProperties.new(
           spacing_before: 240,
-          spacing_after: 120
+          spacing_after: 120,
         )
         run = Uniword::Wordprocessingml::Run.new(text: "Spaced Paragraph")
         para.runs << run
@@ -303,7 +306,7 @@ RSpec.describe "DOCX Generation Integration" do
         table = Uniword::Wordprocessingml::Table.new
         table.properties = Uniword::Wordprocessingml::TableProperties.new(
           width: "5000",
-          alignment: "center"
+          alignment: "center",
         )
 
         row = Uniword::Wordprocessingml::TableRow.new

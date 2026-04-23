@@ -13,7 +13,7 @@ RSpec.describe Uniword::CommentRange do
     it "creates a start marker explicitly" do
       range = described_class.new(
         comment_id: "1",
-        marker_type: :start
+        marker_type: :start,
       )
       expect(range.marker_type).to eq(:start)
     end
@@ -21,7 +21,7 @@ RSpec.describe Uniword::CommentRange do
     it "creates an end marker" do
       range = described_class.new(
         comment_id: "1",
-        marker_type: :end
+        marker_type: :end,
       )
       expect(range.marker_type).to eq(:end)
     end
@@ -29,7 +29,7 @@ RSpec.describe Uniword::CommentRange do
     it "creates a reference marker" do
       range = described_class.new(
         comment_id: "1",
-        marker_type: :reference
+        marker_type: :reference,
       )
       expect(range.marker_type).to eq(:reference)
     end
@@ -100,7 +100,7 @@ RSpec.describe Uniword::CommentRange do
     it "returns true with valid attributes" do
       range = described_class.new(
         comment_id: "1",
-        marker_type: :start
+        marker_type: :start,
       )
       expect(range).to be_valid
     end
@@ -113,7 +113,7 @@ RSpec.describe Uniword::CommentRange do
     it "returns false with empty comment_id" do
       range = described_class.new(
         comment_id: "",
-        marker_type: :start
+        marker_type: :start,
       )
       expect(range).not_to be_valid
     end

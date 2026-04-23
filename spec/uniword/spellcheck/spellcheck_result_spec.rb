@@ -13,14 +13,14 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
 
     it "returns false with misspellings" do
       result.add_misspelling(
-        word: "teh", position: 0, suggestions: ["the"]
+        word: "teh", position: 0, suggestions: ["the"],
       )
       expect(result.clean?).to be false
     end
 
     it "returns false with grammar issues" do
       result.add_grammar_issue(
-        message: "Double space", position: 5
+        message: "Double space", position: 5,
       )
       expect(result.clean?).to be false
     end
@@ -33,13 +33,13 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
 
     it "counts misspellings and grammar issues" do
       result.add_misspelling(
-        word: "teh", position: 0, suggestions: ["the"]
+        word: "teh", position: 0, suggestions: ["the"],
       )
       result.add_misspelling(
-        word: "wrold", position: 10, suggestions: ["world"]
+        word: "wrold", position: 10, suggestions: ["world"],
       )
       result.add_grammar_issue(
-        message: "Double space", position: 5
+        message: "Double space", position: 5,
       )
       expect(result.issue_count).to eq(3)
     end
@@ -50,7 +50,7 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
       result.add_misspelling(
         word: "teh",
         position: 4,
-        suggestions: %w[the tea]
+        suggestions: %w[the tea],
       )
       expect(result.misspellings.size).to eq(1)
       m = result.misspellings.first
@@ -65,7 +65,7 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
       result.add_grammar_issue(
         message: "Double space detected",
         position: 8,
-        context: "is  a"
+        context: "is  a",
       )
       expect(result.grammar_issues.size).to eq(1)
       g = result.grammar_issues.first
@@ -78,7 +78,7 @@ RSpec.describe Uniword::Spellcheck::SpellcheckResult do
   describe "#to_json" do
     it "produces valid JSON" do
       result.add_misspelling(
-        word: "teh", position: 0, suggestions: ["the"]
+        word: "teh", position: 0, suggestions: ["the"],
       )
       parsed = JSON.parse(result.to_json)
       expect(parsed["misspellings"].size).to eq(1)

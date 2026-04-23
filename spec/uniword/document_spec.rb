@@ -6,7 +6,7 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot do
   describe ".new" do
     it "creates a new document" do
       document = described_class.new
-      expect(document).to be_a(Uniword::Wordprocessingml::DocumentRoot)
+      expect(document).to be_a(described_class)
     end
 
     it "initializes with a default body" do

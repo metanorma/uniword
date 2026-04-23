@@ -43,7 +43,8 @@ RSpec.describe Uniword::Builder do
     end
 
     it "creates a Run with multiple formatting options" do
-      run = described_class.text("Styled", bold: true, italic: true, color: "0000FF", size: 12)
+      run = described_class.text("Styled", bold: true, italic: true,
+                                           color: "0000FF", size: 12)
       expect(run.properties.bold).not_to be_nil
       expect(run.properties.italic).not_to be_nil
       expect(run.properties.color).not_to be_nil
@@ -81,7 +82,8 @@ RSpec.describe Uniword::Builder do
     end
 
     it "creates a TabStop with leader" do
-      tab = described_class.tab_stop(position: 3600, alignment: :decimal, leader: "dot")
+      tab = described_class.tab_stop(position: 3600, alignment: :decimal,
+                                     leader: "dot")
       expect(tab.leader).to eq("dot")
     end
   end

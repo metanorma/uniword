@@ -8,7 +8,7 @@ RSpec.describe "MHT → DOCX Content Matching" do
     "blank" => "spec/fixtures/blank/blank.mht",
     "apa" => "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht",
     "mla" => "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht",
-    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht"
+    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht",
   }.freeze
 
   # Expected counts from DOCX source analysis
@@ -16,7 +16,7 @@ RSpec.describe "MHT → DOCX Content Matching" do
     "blank" => { paragraphs: 1, tables: 0 },
     "apa" => { paragraphs: 21, tables: 1 },
     "mla" => { paragraphs: 11, tables: 1 },
-    "cover_toc" => { paragraphs: 7, tables: 1 }
+    "cover_toc" => { paragraphs: 7, tables: 1 },
   }.freeze
 
   # Helper: Parse MHT body HTML

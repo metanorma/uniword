@@ -2,10 +2,6 @@
 
 require "spec_helper"
 
-def hunspell_available?
-  system("which hunspell > /dev/null 2>&1")
-end
-
 RSpec.describe Uniword::Spellcheck::HunspellAdapter do
   describe "#initialize" do
     it "raises DependencyError when hunspell is not found" do
@@ -17,7 +13,7 @@ RSpec.describe Uniword::Spellcheck::HunspellAdapter do
   end
 
   describe "with hunspell available", if: hunspell_available? do
-    before(:each) do
+    before do
       skip "en_US dictionary not installed" unless dict_available?
     end
 

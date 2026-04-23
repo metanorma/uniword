@@ -7,9 +7,7 @@ RSpec.describe "Accessibility Rules Integration" do
 
   before do
     # Setup default document structure
-    allow(document).to receive(:images).and_return([])
-    allow(document).to receive(:tables).and_return([])
-    allow(document).to receive(:paragraphs).and_return([])
+    allow(document).to receive_messages(images: [], tables: [], paragraphs: [])
   end
 
   describe "All rules can be instantiated" do
@@ -18,7 +16,7 @@ RSpec.describe "Accessibility Rules Integration" do
         wcag_criterion: "Test",
         level: "A",
         enabled: true,
-        severity: :error
+        severity: :error,
       }
     end
 
@@ -91,7 +89,7 @@ RSpec.describe "Accessibility Rules Integration" do
       rule = Uniword::Accessibility::Rules::ImageAltTextRule.new(
         wcag_criterion: "1.1.1",
         level: "A",
-        severity: :error
+        severity: :error,
       )
       violations = rule.check(document)
 
@@ -107,7 +105,7 @@ RSpec.describe "Accessibility Rules Integration" do
       rule = Uniword::Accessibility::Rules::TableHeadersRule.new(
         wcag_criterion: "1.3.1",
         level: "A",
-        severity: :error
+        severity: :error,
       )
       violations = rule.check(document)
 
@@ -124,7 +122,7 @@ RSpec.describe "Accessibility Rules Integration" do
         level: "A",
         check_hierarchy: true,
         no_level_skipping: true,
-        severity: :error
+        severity: :error,
       )
       violations = rule.check(document)
 
@@ -142,7 +140,7 @@ RSpec.describe "Accessibility Rules Integration" do
         wcag_criterion: "1.1.1",
         level: "A",
         enabled: false,
-        severity: :error
+        severity: :error,
       )
 
       expect(rule.enabled?).to be false

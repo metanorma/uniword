@@ -22,7 +22,7 @@ RSpec.describe "Open-Source Resources Round-Trip" do
   describe "Font scheme round-trip" do
     # MS font schemes (ms_office_*) intentionally contain MS fonts
     ofl_schemes = Uniword::Resource::FontSchemeLoader.available_schemes
-                                                     .reject { |n| n.start_with?("ms_office") }
+      .reject { |n| n.start_with?("ms_office") }
 
     ofl_schemes.each do |name|
       it "converts #{name} YAML to OOXML FontScheme with script entries" do
@@ -93,7 +93,8 @@ RSpec.describe "Open-Source Resources Round-Trip" do
 
   describe "Document element to OOXML conversion" do
     it "converts an English cover page to a valid document" do
-      template = Uniword::Resource::DocumentElementLoader.load("en", "cover_pages")
+      template = Uniword::Resource::DocumentElementLoader.load("en",
+                                                               "cover_pages")
       expect(template.elements).not_to be_empty
 
       converter = Uniword::Resource::DocumentElementConverter.new

@@ -8,7 +8,7 @@ RSpec.describe Uniword::Comment do
     it "creates a comment with required attributes" do
       comment = described_class.new(
         author: "John Doe",
-        text: "This needs revision"
+        text: "This needs revision",
       )
 
       expect(comment.author).to eq("John Doe")
@@ -25,7 +25,7 @@ RSpec.describe Uniword::Comment do
     it "uses provided comment_id" do
       comment = described_class.new(
         author: "Jane",
-        comment_id: "custom_123"
+        comment_id: "custom_123",
       )
       expect(comment.comment_id).to eq("custom_123")
     end
@@ -39,7 +39,7 @@ RSpec.describe Uniword::Comment do
       date_str = "2024-01-15T10:30:00Z"
       comment = described_class.new(
         author: "Jane",
-        date: date_str
+        date: date_str,
       )
       expect(comment.date).to eq(date_str)
     end
@@ -47,7 +47,7 @@ RSpec.describe Uniword::Comment do
     it "accepts initials" do
       comment = described_class.new(
         author: "John Doe",
-        initials: "JD"
+        initials: "JD",
       )
       expect(comment.initials).to eq("JD")
     end
@@ -149,7 +149,7 @@ RSpec.describe Uniword::Comment do
     it "returns true for valid comment" do
       comment = described_class.new(
         author: "John Doe",
-        comment_id: "1"
+        comment_id: "1",
       )
       expect(comment).to be_valid
     end
@@ -186,7 +186,7 @@ RSpec.describe Uniword::Comment do
         comment_id: "1",
         author: "John Doe",
         initials: "JD",
-        text: "Review this"
+        text: "Review this",
       )
 
       xml = comment.to_xml

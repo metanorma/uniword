@@ -7,7 +7,7 @@ RSpec.describe Uniword::Revision do
     it "creates an insertion by default" do
       revision = described_class.new(
         author: "John Doe",
-        text: "New text"
+        text: "New text",
       )
 
       expect(revision.type).to eq(:insert)
@@ -19,7 +19,7 @@ RSpec.describe Uniword::Revision do
       revision = described_class.new(
         type: :delete,
         author: "Jane Smith",
-        text: "Deleted text"
+        text: "Deleted text",
       )
 
       expect(revision.type).to eq(:delete)
@@ -30,7 +30,7 @@ RSpec.describe Uniword::Revision do
       revision = described_class.new(
         type: :format_change,
         author: "Editor",
-        content: "Changed to bold"
+        content: "Changed to bold",
       )
 
       expect(revision.type).to eq(:format_change)
@@ -46,7 +46,7 @@ RSpec.describe Uniword::Revision do
     it "uses provided revision_id" do
       revision = described_class.new(
         author: "John",
-        revision_id: "rev_123"
+        revision_id: "rev_123",
       )
       expect(revision.revision_id).to eq("rev_123")
     end
@@ -60,7 +60,7 @@ RSpec.describe Uniword::Revision do
       date_str = "2024-01-15T10:30:00Z"
       revision = described_class.new(
         author: "John",
-        date: date_str
+        date: date_str,
       )
       expect(revision.date).to eq(date_str)
     end
@@ -123,7 +123,7 @@ RSpec.describe Uniword::Revision do
     it "returns text content" do
       revision = described_class.new(
         author: "John",
-        text: "Content"
+        text: "Content",
       )
       expect(revision.text).to eq("Content")
     end
@@ -139,14 +139,14 @@ RSpec.describe Uniword::Revision do
       revision = described_class.new(
         type: :insert,
         author: "John Doe",
-        revision_id: "1"
+        revision_id: "1",
       )
       expect(revision).to be_valid
     end
 
     it "returns false without author" do
       revision = described_class.new(
-        revision_id: "1"
+        revision_id: "1",
       )
       expect(revision).not_to be_valid
     end
@@ -154,7 +154,7 @@ RSpec.describe Uniword::Revision do
     it "returns false with empty author" do
       revision = described_class.new(
         author: "",
-        revision_id: "1"
+        revision_id: "1",
       )
       expect(revision).not_to be_valid
     end

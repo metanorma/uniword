@@ -62,7 +62,7 @@ RSpec.describe "Scenario: Document with header/footer and page numbers" do
 
     expect(doc.model.footers).not_to be_nil
     expect(doc.model.footers["default"].paragraphs.first).to be_a(
-      Uniword::Wordprocessingml::Paragraph
+      Uniword::Wordprocessingml::Paragraph,
     )
 
     path = "/tmp/scenario_page_number.docx"
@@ -401,7 +401,8 @@ RSpec.describe "Scenario: Complete document (all features)" do
       l.item("First bullet")
       l.item("Second bullet")
       l.item do |p|
-        p << Uniword::Builder.text("Formatted bullet", bold: true, color: "FF0000")
+        p << Uniword::Builder.text("Formatted bullet", bold: true,
+                                                       color: "FF0000")
       end
     end
 

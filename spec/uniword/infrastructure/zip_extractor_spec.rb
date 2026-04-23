@@ -38,7 +38,9 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.get_output_stream("file1.txt") { |f| f.write("Content 1") }
-            zip_file.get_output_stream("dir/file2.txt") { |f| f.write("Content 2") }
+            zip_file.get_output_stream("dir/file2.txt") do |f|
+              f.write("Content 2")
+            end
           end
 
           result = extractor.extract(temp_zip.path)
@@ -96,21 +98,21 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       it "raises ArgumentError when path is nil" do
         expect { extractor.extract(nil) }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
 
       it "raises ArgumentError when path is empty" do
         expect { extractor.extract("") }.to raise_error(
           ArgumentError,
-          "Path cannot be empty"
+          "Path cannot be empty",
         )
       end
 
       it "raises ArgumentError when file does not exist" do
         expect { extractor.extract("nonexistent.zip") }.to raise_error(
           ArgumentError,
-          /File not found/
+          /File not found/,
         )
       end
 
@@ -118,7 +120,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         Dir.mktmpdir do |dir|
           expect { extractor.extract(dir) }.to raise_error(
             ArgumentError,
-            /Path is a directory/
+            /Path is a directory/,
           )
         end
       end
@@ -137,7 +139,9 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
 
     before do
       Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
-        zip_file.get_output_stream("document.xml") { |f| f.write("<doc>Test</doc>") }
+        zip_file.get_output_stream("document.xml") do |f|
+          f.write("<doc>Test</doc>")
+        end
         zip_file.get_output_stream("styles.xml") { |f| f.write("<styles/>") }
       end
     end
@@ -172,7 +176,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       it "raises ArgumentError when path is nil" do
         expect { extractor.extract_file(nil, "file.txt") }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
     end
@@ -235,7 +239,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       it "raises ArgumentError when path is nil" do
         expect { extractor.list_files(nil) }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
     end

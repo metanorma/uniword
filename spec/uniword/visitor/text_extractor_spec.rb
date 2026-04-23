@@ -322,16 +322,16 @@ RSpec.describe Uniword::Visitor::TextExtractor do
 
     it "overrides all visit methods" do
       expect(described_class.instance_method(:visit_document)).not_to eq(
-        Uniword::Visitor::BaseVisitor.instance_method(:visit_document)
+        Uniword::Visitor::BaseVisitor.instance_method(:visit_document),
       )
       expect(described_class.instance_method(:visit_paragraph)).not_to eq(
-        Uniword::Visitor::BaseVisitor.instance_method(:visit_paragraph)
+        Uniword::Visitor::BaseVisitor.instance_method(:visit_paragraph),
       )
       expect(described_class.instance_method(:visit_table)).not_to eq(
-        Uniword::Visitor::BaseVisitor.instance_method(:visit_table)
+        Uniword::Visitor::BaseVisitor.instance_method(:visit_table),
       )
       expect(described_class.instance_method(:visit_run)).not_to eq(
-        Uniword::Visitor::BaseVisitor.instance_method(:visit_run)
+        Uniword::Visitor::BaseVisitor.instance_method(:visit_run),
       )
     end
   end

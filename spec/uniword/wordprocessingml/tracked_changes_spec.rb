@@ -21,7 +21,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "adds a revision to the collection" do
       revision = Uniword::Revision.new(
         author: "John",
-        text: "New text"
+        text: "New text",
       )
       tracked_changes.add_revision(revision)
 
@@ -45,7 +45,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "preserves existing revision ID" do
       revision = Uniword::Revision.new(
         author: "John",
-        revision_id: "custom_123"
+        revision_id: "custom_123",
       )
       tracked_changes.add_revision(revision)
 
@@ -80,7 +80,7 @@ RSpec.describe Uniword::TrackedChanges do
       revision = tracked_changes.add_insertion(
         "Text",
         author: "John",
-        date: date_str
+        date: date_str,
       )
       expect(revision.date).to eq(date_str)
     end
@@ -101,7 +101,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "creates and adds a format change revision" do
       revision = tracked_changes.add_format_change(
         "Changed to bold",
-        author: "Editor"
+        author: "Editor",
       )
 
       expect(revision).to be_format_change
@@ -115,7 +115,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "finds revision by ID" do
       revision = Uniword::Revision.new(
         author: "John",
-        revision_id: "123"
+        revision_id: "123",
       )
       tracked_changes.add_revision(revision)
 
@@ -131,7 +131,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "handles numeric IDs" do
       revision = Uniword::Revision.new(
         author: "John",
-        revision_id: "5"
+        revision_id: "5",
       )
       tracked_changes.add_revision(revision)
 
@@ -144,7 +144,7 @@ RSpec.describe Uniword::TrackedChanges do
     it "removes revision by ID" do
       revision = Uniword::Revision.new(
         author: "John",
-        revision_id: "1"
+        revision_id: "1",
       )
       tracked_changes.add_revision(revision)
 

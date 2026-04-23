@@ -5,7 +5,8 @@ require "spec_helper"
 RSpec.describe "Batch Processing Stages" do
   let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
   let(:context) do
-    { filename: "test.docx", input_path: "input/test.docx", output_path: "output/test.docx" }
+    { filename: "test.docx", input_path: "input/test.docx",
+      output_path: "output/test.docx" }
   end
 
   describe Uniword::Batch::NormalizeStylesStage do
@@ -31,7 +32,7 @@ RSpec.describe "Batch Processing Stages" do
     it "accepts custom options" do
       stage = described_class.new(
         remove_direct_formatting: false,
-        apply_standard_styles: true
+        apply_standard_styles: true,
       )
       expect(stage.options[:remove_direct_formatting]).to be false
       expect(stage.options[:apply_standard_styles]).to be true
@@ -66,7 +67,7 @@ RSpec.describe "Batch Processing Stages" do
     it "accepts company and title" do
       stage = described_class.new(
         company: "Test Corp",
-        title: "Test Document"
+        title: "Test Document",
       )
       expect(stage.options[:company]).to eq("Test Corp")
       expect(stage.options[:title]).to eq("Test Document")
@@ -97,7 +98,7 @@ RSpec.describe "Batch Processing Stages" do
       stage = described_class.new(
         check_internal: true,
         check_external: false,
-        check_bookmarks: true
+        check_bookmarks: true,
       )
       expect(stage.options[:check_internal]).to be true
       expect(stage.options[:check_external]).to be false
@@ -132,7 +133,9 @@ RSpec.describe "Batch Processing Stages" do
     end
 
     it "validates target format" do
-      expect { described_class.new(target_format: :invalid) }.to raise_error(ArgumentError)
+      expect do
+        described_class.new(target_format: :invalid)
+      end.to raise_error(ArgumentError)
     end
 
     it "accepts docx format" do
@@ -170,7 +173,7 @@ RSpec.describe "Batch Processing Stages" do
       stage = described_class.new(
         max_width: 1920,
         max_height: 1080,
-        quality: 85
+        quality: 85,
       )
       expect(stage.options[:max_width]).to eq(1920)
       expect(stage.options[:max_height]).to eq(1080)
@@ -181,7 +184,7 @@ RSpec.describe "Batch Processing Stages" do
       stage = described_class.new(
         preserve_aspect_ratio: true,
         skip_small_images: true,
-        min_size_kb: 100
+        min_size_kb: 100,
       )
       expect(stage.options[:preserve_aspect_ratio]).to be true
       expect(stage.options[:skip_small_images]).to be true
@@ -218,7 +221,7 @@ RSpec.describe "Batch Processing Stages" do
       stage = described_class.new(
         fail_on_errors: true,
         fail_on_warnings: false,
-        generate_report: true
+        generate_report: true,
       )
       expect(stage.options[:fail_on_errors]).to be true
       expect(stage.options[:fail_on_warnings]).to be false
@@ -233,7 +236,7 @@ RSpec.describe "Batch Processing Stages" do
       Uniword::Batch::ValidateLinksStage,
       Uniword::Batch::ConvertFormatStage,
       Uniword::Batch::CompressImagesStage,
-      Uniword::Batch::QualityCheckStage
+      Uniword::Batch::QualityCheckStage,
     ].each do |stage_class|
       it "#{stage_class} inherits from ProcessingStage" do
         expect(stage_class.superclass).to eq(Uniword::Batch::ProcessingStage)

@@ -8,7 +8,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
     Uniword::Wordprocessingml::RunProperties.new(
       bold: true,
       italic: false,
-      size: 24
+      size: 24,
     )
   end
 
@@ -103,7 +103,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
   describe "underline property (via properties)" do
     it "returns truthy when underline is set with single value" do
       props = Uniword::Wordprocessingml::RunProperties.new(
-        underline: Uniword::Properties::Underline.new(value: "single")
+        underline: Uniword::Properties::Underline.new(value: "single"),
       )
       run = described_class.new(text: "Test", properties: props)
       expect(run.properties.underline && run.properties.underline != "none").to be_truthy
@@ -112,7 +112,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
     it 'returns truthy when underline is set (even with "none" value)' do
       # NOTE: The 'none' check compares the underline value, not the wrapper
       props = Uniword::Wordprocessingml::RunProperties.new(
-        underline: Uniword::Properties::Underline.new(value: "none")
+        underline: Uniword::Properties::Underline.new(value: "none"),
       )
       run = described_class.new(text: "Test", properties: props)
       underline_val = run.properties.underline
@@ -142,7 +142,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
 
     it "can access size via properties.size.value (in half-points)" do
       props = Uniword::Wordprocessingml::RunProperties.new(
-        size: Uniword::Properties::FontSize.new(value: 24)
+        size: Uniword::Properties::FontSize.new(value: 24),
       )
       run = described_class.new(text: "Test", properties: props)
       expect(run.properties.size&.value).to eq(24)
