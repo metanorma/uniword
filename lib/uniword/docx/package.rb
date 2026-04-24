@@ -377,7 +377,7 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
-        Reconciler.new(self, profile: profile).reconcile
+        Reconciler.new(self, profile: profile || Profile.defaults).reconcile
 
         inject_part_relationships(content, content_types, package_rels, document_rels)
         serialize_package_parts(content, content_types, package_rels, document_rels)
