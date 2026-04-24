@@ -19,7 +19,6 @@ module Uniword
       xml do
         element "styles"
         namespace Ooxml::Namespaces::WordProcessingML
-        mixed_content
 
         # Force mc: namespace declaration on root element
         namespace_scope [
