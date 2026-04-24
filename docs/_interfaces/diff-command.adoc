@@ -7,16 +7,46 @@ permalink: /interfaces/cli/diff-command/
 ---
 = diff
 
-Compare two DOCX files and display differences.
+Compare two DOCX files and display their differences.
 
-== Usage
+Uniword provides two diff modes that operate at different levels of abstraction:
+
+Document-level diff (`compare`)::
+  Compares the *rendered content* of two documents -- text, formatting,
+  structure, metadata, and styles. This is what you want when reviewing
+  edits between two versions of a document.
+
+Package-level diff (`package`)::
+  Compares the *raw DOCX structure* -- ZIP parts, XML content, ZIP entry
+  metadata, and OPC packaging compliance. This is what you want when
+  debugging DOCX generation, investigating Word repair behavior, or
+  auditing byte-level changes between two files.
+
+== When to use which
+
+[cols="1,3,2"]
+|===
+| Mode | Best for | Example
+
+| `compare`
+| Content review, editorial changes, style drift
+| Comparing draft v1 vs v2 of a report
+
+| `package`
+| DOCX generation debugging, Word repair analysis, structural auditing
+| Investigating why Word flags "Summary Info 1 is invalid"
+|===
+
+== compare -- Document-level comparison
+
+=== Usage
 
 [source,shell]
 ----
 uniword diff compare OLD_FILE NEW_FILE [OPTIONS]
 ----
 
-== Options
+=== Options
 
 `--text-only`::
 Compare text only, skip formatting comparison.
@@ -30,46 +60,34 @@ Focus on a specific part: `content`, `styles`, or `headers`.
 `--verbose`, `-v`::
 Show full text in change listings.
 
-== Examples
-
-Compare two documents:
+=== Examples
 
 [source,shell]
 ----
+# Basic comparison
 uniword diff compare old.docx new.docx
-----
 
-Text-only comparison:
-
-[source,shell]
-----
+# Text-only (ignore formatting)
 uniword diff compare old.docx new.docx --text-only
-----
 
-JSON output:
-
-[source,shell]
-----
+# JSON output for programmatic processing
 uniword diff compare old.docx new.docx --json
-----
 
-Focus on styles:
-
-[source,shell]
-----
+# Focus on styles
 uniword diff compare old.docx new.docx --part styles --verbose
 ----
 
-== Output
+=== What it compares
 
-The diff compares five dimensions:
+The document-level diff compares five dimensions:
 
 Text changes::
-Added, removed, or modified paragraph text (LCS-aligned).
+Added, removed, or modified paragraph text, aligned using LCS (Longest
+Common Subsequence) matching.
 
 Format changes::
-Paragraph-level (alignment, style) and run-level (bold, italic, font, size,
-color) formatting differences.
+Paragraph-level (alignment, style) and run-level (bold, italic, font,
+size, color) formatting differences.
 
 Structure changes::
 Paragraph and table count differences.
@@ -80,7 +98,7 @@ Title, author, subject, keywords, description, dates.
 Style changes::
 Added, removed, or modified style definitions.
 
-== Ruby API
+=== Ruby API
 
 [source,ruby]
 ----
@@ -93,3 +111,200 @@ puts result.summary
 # Text-only comparison
 result = old_doc.diff(new_doc, text_only: true)
 ----
+
+== package -- Package-level comparison
+
+=== Usage
+
+[source,shell]
+----
+uniword diff package OLD_FILE NEW_FILE [OPTIONS]
+----
+
+=== Options
+
+`--canon`::
+Use the Canon library for semantic XML comparison. Without this flag,
+identical XML with different whitespace or attribute order is reported as
+"different". With `--canon`, only semantically meaningful changes are
+flagged.
+
+`--json`::
+Output differences as JSON.
+
+`--verbose`, `-v`::
+Show XML change details and ZIP metadata differences.
+
+=== Examples
+
+[source,shell]
+----
+# Basic structural diff
+uniword diff package generated.docx word-repaired.docx
+
+# With Canon semantic comparison (recommended)
+uniword diff package generated.docx word-repaired.docx --canon
+
+# Full details
+uniword diff package generated.docx word-repaired.docx --canon --verbose
+
+# JSON output
+uniword diff package generated.docx word-repaired.docx --canon --json
+----
+
+=== What it compares
+
+The package-level diff compares four dimensions:
+
+ZIP parts (added/removed/modified)::
+Lists which ZIP entries were added, removed, or changed. Reports size
+deltas for each modified part.
+
+ZIP metadata::
+For each modified entry, reports differences in:
+
+* Compression method (stored vs deflated)
+* Internal attributes (text vs binary flag)
+* Timestamps
+
+OPC validation::
+Checks Open Packaging Convention compliance for both files:
+
+* Required parts exist (`[Content_Types].xml`, `_rels/.rels`,
+  `word/document.xml`)
+* Content type overrides match existing parts
+* Relationships point to existing parts
+
+Canon semantic comparison (with `--canon`)::
+Uses the Canon XML comparison library to determine whether XML parts are
+*semantically equivalent*. Parts that differ only in whitespace,
+attribute order, or formatting are reported as `[canon: equivalent]`.
+Parts with real content differences are reported as `[canon: DIFFERENT]`
+with a summary of what changed.
+
+=== Output format
+
+Without `--json`, the package diff outputs a structured report:
+
+[source]
+----
+Package diff: generated.docx -> word-repaired.docx
+  11 part(s) modified
+
+  Modified parts:
+    ~ word/document.xml (3093 -> 3016 bytes, -77) [canon: DIFFERENT]
+      canon: attribute_values: /#document[0]/document[0]/body[0]/p[0] ...
+    ~ word/webSettings.xml (1017 -> 1018 bytes, +1) [canon: equivalent]
+
+  ZIP metadata differences:
+    word/document.xml: internal_attr text -> binary
+    word/document.xml: timestamp 2026-04-24 ... -> 1980-01-01 ...
+----
+
+With `--verbose`, XML change details (namespace, attribute, element count
+differences) are shown for each modified part.
+
+=== Ruby API
+
+[source,ruby]
+----
+require "uniword/diff/package_differ"
+
+# Basic package diff
+differ = Uniword::Diff::PackageDiffer.new("old.docx", "new.docx")
+result = differ.diff
+
+puts result.summary
+puts result.modified_parts.map { |p| "#{p.name}: #{p.size_delta} bytes" }
+
+# With Canon semantic comparison
+differ = Uniword::Diff::PackageDiffer.new("old.docx", "new.docx",
+  canon: true)
+result = differ.diff
+
+result.modified_parts.each do |part|
+  status = part.canon_equivalent ? "equivalent" : "DIFFERENT"
+  puts "#{part.name}: canon #{status}"
+  puts "  #{part.canon_summary}" if part.canon_equivalent == false
+end
+
+# JSON output
+puts result.to_json
+----
+
+=== Result object
+
+The `PackageDiffResult` returned by `diff` provides:
+
+[cols="1,2,1"]
+|===
+| Method | Description | Type
+
+| `added_parts`
+| ZIP entries present only in the new file
+| `Array<String>`
+
+| `removed_parts`
+| ZIP entries present only in the old file
+| `Array<String>`
+
+| `modified_parts`
+| Changed parts with size and Canon info
+| `Array<PartChange>`
+
+| `unchanged_parts`
+| Identical ZIP entry names
+| `Array<String>`
+
+| `xml_changes`
+| Namespace, attribute, element count changes
+| `Array<XmlChange>`
+
+| `zip_metadata_changes`
+| Compression, text/binary, timestamp diffs
+| `Array<ZipMetadataChange>`
+
+| `opc_issues`
+| OPC validation problems
+| `Array<OpcIssue>`
+
+| `summary`
+| Human-readable one-line summary
+| `String`
+
+| `empty?`
+| True if no differences found
+| `Boolean`
+
+| `to_json`
+| JSON serialization
+| `String`
+
+| `to_h`
+| Hash serialization
+| `Hash`
+|===
+
+Each `PartChange` has:
+
+|===
+| Attribute | Description
+
+| `name`
+| ZIP entry path (e.g. `word/document.xml`)
+
+| `old_size`, `new_size`
+| Byte sizes in old and new files
+
+| `size_delta`
+| `new_size - old_size`
+
+| `canon_equivalent`
+| `true` / `false` / `nil` (nil when Canon not used)
+
+| `canon_summary`
+| Human-readable Canon diff summary (nil if equivalent or Canon not used)
+
+| `changes`
+| Array of `XmlChange` (namespace, attribute, element count details)
+|===
