@@ -9,7 +9,7 @@ module Uniword
   #
   # Provides commands for comparing two DOCX files at the document
   # level (text, formatting, structure) and package level (ZIP parts,
-  # XML structure).
+  # XML structure, OPC validation).
   class DiffCLI < Thor
     include CLIHelpers
 
@@ -63,15 +63,23 @@ module Uniword
       Compare two DOCX files at the structural/package level.
 
       Detects added/removed ZIP parts, XML namespace differences,
-      attribute changes, and element count differences. Useful for
-      understanding what Word or other applications changed during
-      repair.
+      attribute changes, element count differences, ZIP metadata
+      differences (compression, text/binary flag, timestamps), and
+      OPC validation issues (missing parts, content type mismatches).
+
+      With --canon, also checks semantic XML equivalence using the
+      Canon library, so byte-level changes that are semantically
+      identical (whitespace, attribute order) are distinguished from
+      real content changes.
 
       Examples:
         $ uniword diff package bad.docx repaired.docx
+        $ uniword diff package bad.docx repaired.docx --canon
         $ uniword diff package bad.docx repaired.docx --json
         $ uniword diff package bad.docx repaired.docx --verbose
     DESC
+    option :canon, desc: "Use Canon for semantic XML comparison",
+                   type: :boolean, default: false
     option :json, desc: "Output as JSON", type: :boolean, default: false
     option :verbose, aliases: "-v", desc: "Show XML change details",
                      type: :boolean, default: false
@@ -79,7 +87,10 @@ module Uniword
       validate_file_exists(old_path)
       validate_file_exists(new_path)
 
-      differ = Uniword::Diff::PackageDiffer.new(old_path, new_path)
+      differ = Uniword::Diff::PackageDiffer.new(
+        old_path, new_path,
+        canon: options[:canon],
+      )
       result = differ.diff
 
       if options[:json]
@@ -119,6 +130,14 @@ module Uniword
                "#{File.basename(result.new_path)}\n"
       lines << "  #{result.summary}\n"
 
+      if result.opc_issues.any?
+        lines << "\n  OPC validation:\n"
+        result.opc_issues.each do |issue|
+          marker = issue.severity == :error ? "!!" : "??"
+          lines << "    #{marker} [#{issue.category}] #{issue.description}\n"
+        end
+      end
+
       if result.added_parts.any?
         lines << "\n  Added parts:\n"
         result.added_parts.each { |p| lines << "    + #{p}\n" }
@@ -134,13 +153,31 @@ module Uniword
         result.modified_parts.each do |p|
           delta = p.size_delta
           delta_str = delta.positive? ? "+#{delta}" : delta.to_s
+          canon_tag = if p.canon_equivalent == true
+                        " [canon: equivalent]"
+                      elsif p.canon_equivalent == false
+                        " [canon: DIFFERENT]"
+                      end
           lines << "    ~ #{p.name} " \
-                   "(#{p.old_size} -> #{p.new_size} bytes, #{delta_str})\n"
+                   "(#{p.old_size} -> #{p.new_size} bytes, #{delta_str})#{canon_tag}\n"
+
+          if p.canon_summary && p.canon_equivalent == false
+            lines << "      canon: #{p.canon_summary}\n"
+          end
 
           next unless verbose && p.changes.any?
 
           p.changes.each do |change|
             lines << "      [#{change.category}] #{change.description}\n"
+          end
+        end
+      end
+
+      if result.zip_metadata_changes.any? && verbose
+        lines << "\n  ZIP metadata differences:\n"
+        result.zip_metadata_changes.each do |mc|
+          mc.differences.each do |key, (old_val, new_val)|
+            lines << "    #{mc.part}: #{key} #{old_val} -> #{new_val}\n"
           end
         end
       end

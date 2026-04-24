@@ -116,10 +116,18 @@ doc.clear_comments                         # => self
 
 [source,ruby]
 ----
+# Document-level: content, formatting, structure, metadata, styles
 result = doc.diff(other_doc)
 result = doc.diff(other_doc, text_only: true)
 # => DiffResult with text_changes, format_changes, structure_changes,
 #    metadata_changes, style_changes
+
+# Package-level: ZIP parts, XML content, OPC validation
+require "uniword/diff/package_differ"
+result = Uniword::Diff::PackageDiffer.new("old.docx", "new.docx",
+  canon: true).diff
+# => PackageDiffResult with added/removed/modified parts,
+#    zip_metadata_changes, opc_issues, canon equivalence
 ----
 
 === Spell and grammar checking
