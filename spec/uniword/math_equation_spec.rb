@@ -2,6 +2,7 @@
 
 require "spec_helper"
 require "uniword/math_equation"
+require "uniword/math/plurimath_adapter"
 
 RSpec.describe Uniword::MathEquation do
   describe "#initialize" do
