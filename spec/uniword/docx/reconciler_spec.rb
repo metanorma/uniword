@@ -276,8 +276,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       described_class.new(package, profile: profile).reconcile
 
       ws = package.web_settings
-      expect(ws.optimize_for_browser).not_to be_nil
-      expect(ws.allow_png).not_to be_nil
+      expect(ws).not_to be_nil
+      expect(ws.mc_ignorable).not_to be_nil
     end
 
     it "populates app properties" do

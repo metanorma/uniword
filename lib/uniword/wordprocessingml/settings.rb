@@ -92,6 +92,16 @@ module Uniword
       end
     end
 
+    # Do not display page boundaries
+    #
+    # Element: <w:doNotDisplayPageBoundaries>
+    class DoNotDisplayPageBoundaries < Lutaml::Model::Serializable
+      xml do
+        element "doNotDisplayPageBoundaries"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      end
+    end
+
     # RSID root marker
     #
     # Element: <w:rsidRoot>
@@ -513,6 +523,7 @@ module Uniword
     class Settings < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :zoom, Zoom
+      attribute :do_not_display_page_boundaries, DoNotDisplayPageBoundaries
       attribute :compat, Compat
       attribute :proof_state, ProofState
       attribute :style_pane_format_filter, StylePaneFormatFilter
@@ -572,6 +583,7 @@ module Uniword
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
         map_element "zoom", to: :zoom, render_nil: false
+        map_element "doNotDisplayPageBoundaries", to: :do_not_display_page_boundaries, render_nil: false
         map_element "compat", to: :compat, render_nil: false
         map_element "proofState", to: :proof_state, render_nil: false
         map_element "stylePaneFormatFilter", to: :style_pane_format_filter,
