@@ -33,7 +33,7 @@ module Uniword
         {
           name: extract_name(docx_path),
           source_file: File.basename(docx_path),
-          styles: styles_data
+          styles: styles_data,
         }
       end
 
@@ -46,7 +46,7 @@ module Uniword
         data = extract_from_docx(docx_path)
 
         dir = File.dirname(output_path)
-        FileUtils.mkdir_p(dir) unless Dir.exist?(dir)
+        FileUtils.mkdir_p(dir)
 
         File.write(output_path, YAML.dump(stringify_keys(data)))
       end
@@ -62,7 +62,7 @@ module Uniword
 
         def extract_name(docx_path)
           File.basename(docx_path, ".*").gsub(/[_-]/, " ")
-              .split.map(&:capitalize).join
+            .split.map(&:capitalize).join
         end
 
         def style_to_hash(style)

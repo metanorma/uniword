@@ -158,7 +158,7 @@ module Uniword
       # @return [self]
       def shading(fill:, color: nil, pattern: "clear")
         ensure_props.shading = Properties::Shading.new(
-          fill: fill, color: color, pattern: pattern
+          fill: fill, color: color, pattern: pattern,
         )
         self
       end

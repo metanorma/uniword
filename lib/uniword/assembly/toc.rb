@@ -89,7 +89,7 @@ module Uniword
             text: text.strip,
             level: level,
             paragraph_index: index,
-            bookmark_name: bookmark_name
+            bookmark_name: bookmark_name,
           )
         end
 
@@ -215,7 +215,7 @@ module Uniword
         if run.respond_to?(:properties=)
           run.properties = Wordprocessingml::RunProperties.new(
             bold: true,
-            size: 48 # 24pt = 48 half-points
+            size: 48, # 24pt = 48 half-points
           )
         end
 

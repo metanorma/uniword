@@ -13,8 +13,10 @@ module Uniword
       attribute :grp_sp_pr, :string
       attribute :sp, Shape, collection: true, initialize_empty: true
       attribute :grp_sp, GroupShape, collection: true, initialize_empty: true
-      attribute :graphic_frame, GraphicFrame, collection: true, initialize_empty: true
-      attribute :cxn_sp, ConnectionShape, collection: true, initialize_empty: true
+      attribute :graphic_frame, GraphicFrame, collection: true,
+                                              initialize_empty: true
+      attribute :cxn_sp, ConnectionShape, collection: true,
+                                          initialize_empty: true
       attribute :pic, Picture, collection: true, initialize_empty: true
 
       xml do

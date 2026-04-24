@@ -8,7 +8,8 @@ module Uniword
     #
     # Element: <recipients>
     class Recipients < Lutaml::Model::Serializable
-      attribute :recipient_data, RecipientData, collection: true, initialize_empty: true
+      attribute :recipient_data, RecipientData, collection: true,
+                                                initialize_empty: true
 
       xml do
         element "recipients"

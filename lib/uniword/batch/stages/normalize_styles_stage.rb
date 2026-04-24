@@ -23,9 +23,11 @@ module Uniword
       # @option options [Hash] :target_styles Target style mappings
       def initialize(options = {})
         super
-        @remove_direct_formatting = options.fetch(:remove_direct_formatting, true)
+        @remove_direct_formatting = options.fetch(:remove_direct_formatting,
+                                                  true)
         @apply_standard_styles = options.fetch(:apply_standard_styles, true)
-        @preserve_semantic_styles = options.fetch(:preserve_semantic_styles, true)
+        @preserve_semantic_styles = options.fetch(:preserve_semantic_styles,
+                                                  true)
         @target_styles = options.fetch(:target_styles, default_target_styles)
       end
 
@@ -61,7 +63,7 @@ module Uniword
           heading1: "Heading 1",
           heading2: "Heading 2",
           heading3: "Heading 3",
-          normal: "Normal"
+          normal: "Normal",
         }
       end
 

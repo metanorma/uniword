@@ -16,7 +16,7 @@ module Uniword
           author: author,
           comment_id: comment_id,
           date: date,
-          initials: initials
+          initials: initials,
         )
       end
 

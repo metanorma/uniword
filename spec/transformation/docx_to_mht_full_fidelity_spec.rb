@@ -5,13 +5,14 @@ require "spec_helper"
 RSpec.describe "DOCX → MHT Full Fidelity" do
   # These fixtures represent real Word documents saved as MHT
   FULL_FIDELITY_FIXTURES = {
-    "blank" => { docx: "spec/fixtures/blank/blank.docx", mht: "spec/fixtures/blank/blank.mht" },
+    "blank" => { docx: "spec/fixtures/blank/blank.docx",
+                 mht: "spec/fixtures/blank/blank.mht" },
     "apa" => { docx: "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx",
                mht: "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht" },
     "mla" => { docx: "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.docx",
                mht: "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht" },
     "cover_toc" => { docx: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx",
-                     mht: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht" }
+                     mht: "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht" },
   }.freeze
 
   # Expected structure counts per fixture (from fixture analysis)
@@ -19,7 +20,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
     "blank" => { paragraphs: 1, sdts: 0, hyperlinks: 0, tables: 0 },
     "apa" => { paragraphs: 84, sdts: 28, hyperlinks: 18, tables: 1 },
     "mla" => { paragraphs: 51, sdts: 24, hyperlinks: 0, tables: 1 },
-    "cover_toc" => { paragraphs: 39, sdts: 22, hyperlinks: 3, tables: 1 }
+    "cover_toc" => { paragraphs: 39, sdts: 22, hyperlinks: 3, tables: 1 },
   }.freeze
 
   # Expected paragraph classes per fixture
@@ -30,7 +31,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
     "mla" => %w[MsoBibliography MsoHeader MsoNoSpacing MsoNormal MsoQuote
                 MsoTitle SectionTitle TableNote TableSource TableTitle].to_set,
     "cover_toc" => %w[Author MsoFooter MsoListBullet MsoNormal MsoQuote
-                      MsoSubtitle MsoTitle MsoToc1 MsoToc2 MsoTocHeading].to_set
+                      MsoSubtitle MsoTitle MsoToc1 MsoToc2 MsoTocHeading].to_set,
   }.freeze
 
   def decode_qp(str)
@@ -48,7 +49,9 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
 
   def docx_to_mht_html(docx_path, doc_name = nil)
     docx_pkg = Uniword::Docx::Package.from_file(docx_path)
-    mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
+    mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(
+      docx_pkg, doc_name
+    )
     # Get raw HTML from the Mhtml::Document
     mhtml_doc.html_part&.raw_content || ""
   end
@@ -64,7 +67,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
         it "produces MHT with WordSection1 div wrapper" do
           # The MHT body should have a div.WordSection1 wrapper
           has_wrapper = generated_html.include?("class=WordSection1") ||
-                        generated_html.include?('class="WordSection1"')
+            generated_html.include?('class="WordSection1"')
           expect(has_wrapper).to be true
         end
 
@@ -87,7 +90,7 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
 
         it "has Word HTML namespace declaration" do
           has_ns = generated_html.include?("xmlns:w=") ||
-                   generated_html.include?('xmlns:w="')
+            generated_html.include?('xmlns:w="')
           expect(has_ns).to be true
         end
 
@@ -111,7 +114,8 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
     end
 
     it "maps Heading1 style to MsoHeading1 class" do
-      html = docx_to_mht_html(FULL_FIDELITY_FIXTURES["cover_toc"][:docx], "cover_toc")
+      html = docx_to_mht_html(FULL_FIDELITY_FIXTURES["cover_toc"][:docx],
+                              "cover_toc")
       expect(html).to include("class=MsoHeading1")
     end
 
@@ -134,7 +138,8 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
       html = docx_to_mht_html(FULL_FIDELITY_FIXTURES["apa"][:docx], "apa")
       expected = %w[MsoHeading2 MsoNormal MsoTitle SectionTitle]
       expected.each do |cls|
-        expect(html).to include("class=#{cls}"), "Expected class=#{cls} in output"
+        expect(html).to include("class=#{cls}"),
+                        "Expected class=#{cls} in output"
       end
     end
 
@@ -142,7 +147,8 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
       html = docx_to_mht_html(FULL_FIDELITY_FIXTURES["mla"][:docx], "mla")
       expected = %w[MsoNormal MsoTitle SectionTitle]
       expected.each do |cls|
-        expect(html).to include("class=#{cls}"), "Expected class=#{cls} in output"
+        expect(html).to include("class=#{cls}"),
+                        "Expected class=#{cls} in output"
       end
     end
   end
@@ -151,7 +157,8 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
     let(:docx_path) { FULL_FIDELITY_FIXTURES["blank"][:docx] }
     let(:mhtml_doc) do
       docx_pkg = Uniword::Docx::Package.from_file(docx_path)
-      Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, "blank")
+      Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg,
+                                                                     "blank")
     end
 
     it "creates Mhtml::Document with html_part" do
@@ -184,7 +191,8 @@ RSpec.describe "DOCX → MHT Full Fidelity" do
   describe "Blank fixture produces minimal valid MHT" do
     let(:mhtml_doc) do
       docx_pkg = Uniword::Docx::Package.from_file(FULL_FIDELITY_FIXTURES["blank"][:docx])
-      Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, "blank")
+      Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg,
+                                                                     "blank")
     end
 
     it "produces Mhtml::Document" do

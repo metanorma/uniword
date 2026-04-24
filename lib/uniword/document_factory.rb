@@ -78,7 +78,8 @@ module Uniword
         # Re-raise validation errors as-is
         raise
       rescue Zip::Error => e
-        raise CorruptedFileError.new(path.to_s, "Invalid ZIP structure: #{e.message}")
+        raise CorruptedFileError.new(path.to_s,
+                                     "Invalid ZIP structure: #{e.message}")
       rescue Nokogiri::XML::SyntaxError => e
         raise CorruptedFileError.new(path.to_s, "Invalid XML: #{e.message}")
       rescue StandardError => e
@@ -133,13 +134,15 @@ module Uniword
         when :thmx
           Ooxml::ThmxPackage.from_file(path)
         else
-          raise ArgumentError, "Not a theme format: #{format}. Use from_file() for documents."
+          raise ArgumentError,
+                "Not a theme format: #{format}. Use from_file() for documents."
         end
       rescue ArgumentError
         # Re-raise validation errors as-is
         raise
       rescue Zip::Error => e
-        raise CorruptedFileError.new(path.to_s, "Invalid ZIP structure: #{e.message}")
+        raise CorruptedFileError.new(path.to_s,
+                                     "Invalid ZIP structure: #{e.message}")
       rescue Nokogiri::XML::SyntaxError => e
         raise CorruptedFileError.new(path.to_s, "Invalid XML: #{e.message}")
       rescue StandardError => e
@@ -184,7 +187,7 @@ module Uniword
         custom_properties: :custom_properties,
         custom_xml_items: :custom_xml_items,
         footnotes: :footnotes,
-        endnotes: :endnotes
+        endnotes: :endnotes,
       }.freeze
 
       # Copy package parts to document for round-trip preservation
@@ -229,7 +232,10 @@ module Uniword
         return if path.is_a?(IO) || path.is_a?(StringIO)
 
         # For strings, validate
-        raise ArgumentError, "Path cannot be empty" if path.respond_to?(:empty?) && path.empty?
+        if path.respond_to?(:empty?) && path.empty?
+          raise ArgumentError,
+                "Path cannot be empty"
+        end
         raise FileNotFoundError, path unless File.exist?(path)
       end
     end

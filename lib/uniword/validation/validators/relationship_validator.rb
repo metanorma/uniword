@@ -42,7 +42,7 @@ module Uniword
         rescue Zip::Error => e
           result.add_error(
             "Cannot open ZIP file: #{e.message}",
-            critical: true
+            critical: true,
           )
           result
         end
@@ -70,16 +70,17 @@ module Uniword
           base_dir = File.dirname(entry.name.sub("/_rels/", "/"))
           base_dir = "" if base_dir == "."
 
-          doc.xpath("//xmlns:Relationship", "xmlns" => RELATIONSHIP_NAMESPACE).each do |rel|
+          doc.xpath("//xmlns:Relationship",
+                    "xmlns" => RELATIONSHIP_NAMESPACE).each do |rel|
             validate_relationship(zip, rel, base_dir, result)
           end
         rescue Nokogiri::XML::SyntaxError => e
           result.add_error(
-            "Malformed relationship file #{entry.name}: #{e.message}"
+            "Malformed relationship file #{entry.name}: #{e.message}",
           )
         rescue StandardError => e
           result.add_error(
-            "Failed to validate #{entry.name}: #{e.message}"
+            "Failed to validate #{entry.name}: #{e.message}",
           )
         end
 
@@ -97,7 +98,7 @@ module Uniword
 
             unless zip.find_entry(target_path)
               result.add_error(
-                "Relationship target not found: #{target_path}"
+                "Relationship target not found: #{target_path}",
               )
             end
           end
@@ -125,7 +126,7 @@ module Uniword
           return if type.include?("/")
 
           result.add_warning(
-            "Unusual relationship type: #{type}"
+            "Unusual relationship type: #{type}",
           )
         end
 

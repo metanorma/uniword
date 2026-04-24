@@ -134,7 +134,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
       expect do
         Uniword::Styles::SemanticStyle.new(
           name: "Invalid",
-          semantic: :invalid_type
+          semantic: :invalid_type,
         )
       end.to raise_error(ArgumentError, /Invalid semantic type/)
     end
@@ -144,7 +144,7 @@ RSpec.describe Uniword::Styles::StyleDefinition do
         Uniword::Styles::SemanticStyle.new(
           name: "Example",
           semantic: :example,
-          run_properties: {}
+          run_properties: {},
         )
       end.not_to raise_error
     end

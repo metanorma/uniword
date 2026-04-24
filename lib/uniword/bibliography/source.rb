@@ -104,8 +104,10 @@ module Uniword
         map_element "BookTitle", to: :book_title, render_nil: false
         map_element "AlbumTitle", to: :album_title, render_nil: false
         map_element "PeriodicalTitle", to: :periodical_title, render_nil: false
-        map_element "PublicationTitle", to: :publication_title, render_nil: false
-        map_element "InternetSiteTitle", to: :internet_site_title, render_nil: false
+        map_element "PublicationTitle", to: :publication_title,
+                                        render_nil: false
+        map_element "InternetSiteTitle", to: :internet_site_title,
+                                         render_nil: false
         map_element "BroadcastTitle", to: :broadcast_title, render_nil: false
         map_element "ConferenceName", to: :conference_name, render_nil: false
 
@@ -133,7 +135,8 @@ module Uniword
 
         # Legal/court fields
         map_element "CaseNumber", to: :case_number, render_nil: false
-        map_element "AbbreviatedCaseNumber", to: :abbreviated_case_number, render_nil: false
+        map_element "AbbreviatedCaseNumber", to: :abbreviated_case_number,
+                                             render_nil: false
         map_element "Court", to: :court, render_nil: false
         map_element "Reporter", to: :reporter, render_nil: false
 
@@ -142,7 +145,8 @@ module Uniword
         map_element "Station", to: :station, render_nil: false
         map_element "Theater", to: :theater, render_nil: false
         map_element "Distributor", to: :distributor, render_nil: false
-        map_element "ProductionCompany", to: :production_company, render_nil: false
+        map_element "ProductionCompany", to: :production_company,
+                                         render_nil: false
         map_element "Medium", to: :medium, render_nil: false
         map_element "PatentNumber", to: :patent_number, render_nil: false
         map_element "RecordingNumber", to: :recording_number, render_nil: false

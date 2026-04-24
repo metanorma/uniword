@@ -12,7 +12,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
     it "serializes borders to correct XML" do
       para = Uniword::Wordprocessingml::Paragraph.new
       Uniword::Builder::ParagraphBuilder.new(para).borders(
-        top: "000000", bottom: "FF0000"
+        top: "000000", bottom: "FF0000",
       )
 
       xml = para.to_xml
@@ -41,7 +41,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
         left: "222222",
         right: "333333",
         between: "444444",
-        bar: "555555"
+        bar: "555555",
       )
 
       xml = para.to_xml
@@ -64,7 +64,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
     it "serializes shading to correct XML" do
       para = Uniword::Wordprocessingml::Paragraph.new
       Uniword::Builder::ParagraphBuilder.new(para).shading(
-        fill: "FFFF00", pattern: "solid"
+        fill: "FFFF00", pattern: "solid",
       )
 
       xml = para.to_xml
@@ -79,7 +79,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
     it "serializes shading with foreground color" do
       para = Uniword::Wordprocessingml::Paragraph.new
       Uniword::Builder::ParagraphBuilder.new(para).shading(
-        fill: "FFFF00", color: "000000", pattern: "diagCross"
+        fill: "FFFF00", color: "000000", pattern: "diagCross",
       )
 
       xml = para.to_xml
@@ -97,7 +97,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
       para = Uniword::Wordprocessingml::Paragraph.new
       builder = Uniword::Builder::ParagraphBuilder.new(para)
       builder << Uniword::Builder.tab_stop(
-        position: 1440, alignment: "center", leader: "dot"
+        position: 1440, alignment: "center", leader: "dot",
       )
 
       xml = para.to_xml
@@ -119,7 +119,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
       builder << Uniword::Builder.tab_stop(position: 1440, alignment: "left")
       builder << Uniword::Builder.tab_stop(position: 2880, alignment: "center")
       builder << Uniword::Builder.tab_stop(
-        position: 4320, alignment: "right", leader: "dot"
+        position: 4320, alignment: "right", leader: "dot",
       )
 
       xml = para.to_xml
@@ -254,7 +254,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
     it "serializes run shading to correct XML" do
       run = Uniword::Wordprocessingml::Run.new(text: "Test")
       Uniword::Builder::RunBuilder.new(run).shading(
-        fill: "FFFF00", pattern: "solid"
+        fill: "FFFF00", pattern: "solid",
       )
 
       xml = run.to_xml
@@ -269,7 +269,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
     it "serializes run shading with foreground" do
       run = Uniword::Wordprocessingml::Run.new(text: "Test")
       Uniword::Builder::RunBuilder.new(run).shading(
-        fill: "FFFF00", color: "000000", pattern: "pct10"
+        fill: "FFFF00", color: "000000", pattern: "pct10",
       )
 
       xml = run.to_xml
@@ -331,7 +331,7 @@ RSpec.describe "Enhanced Properties XML Serialization" do
       builder.borders(top: "000000", bottom: "FF0000")
       builder.shading(fill: "FFFF00")
       builder << Uniword::Builder.tab_stop(
-        position: 1440, alignment: "center"
+        position: 1440, alignment: "center",
       )
 
       xml = para.to_xml

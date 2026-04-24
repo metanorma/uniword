@@ -48,7 +48,7 @@ module Uniword
                   message: "Image #{image_count} is missing alt text. " \
                            "Alt text is required for accessibility.",
                   location: "Paragraph #{para_index + 1}, Image #{image_count}",
-                  element: drawing
+                  element: drawing,
                 )
               elsif alt_text.length < @min_length
                 violations << create_violation(
@@ -57,7 +57,7 @@ module Uniword
                            "(#{alt_text.length} characters, minimum: #{@min_length}). " \
                            "Provide more descriptive alt text.",
                   location: "Paragraph #{para_index + 1}, Image #{image_count}",
-                  element: drawing
+                  element: drawing,
                 )
               end
             end

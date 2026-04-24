@@ -26,8 +26,7 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Open-Source YAML)" do
           xml = style.to_xml(prefix: true)
           reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
           reparsed_count += 1 if reparsed
-        rescue StandardError => e
-          puts "  Failed to round-trip style #{style.id}: #{e.message}"
+        rescue StandardError
         end
 
         expect(reparsed_count).to eq(original_count)
@@ -100,8 +99,7 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Binary .dotx)" do
               xml = style.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
               reparsed_count += 1 if reparsed
-            rescue StandardError => e
-              puts "  Failed to round-trip style #{style.id}: #{e.message}"
+            rescue StandardError
             end
 
             expect(reparsed_count).to eq(original_count)
@@ -167,12 +165,6 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Binary .dotx)" do
   end
 
   after(:all) do
-    total_stylesets = Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count
-    puts "\n#{"=" * 60}"
-    puts "StyleSet Round-Trip Summary"
-    puts "=" * 60
-    puts "Total StyleSets tested: #{total_stylesets}"
-    puts "  - quick-styles: #{Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count}"
-    puts "=" * 60
+    Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count
   end
 end

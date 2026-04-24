@@ -9,7 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:footnotes>
     class Footnotes < Lutaml::Model::Serializable
-      attribute :footnote_entries, Footnote, collection: true, initialize_empty: true
+      attribute :footnote_entries, Footnote, collection: true,
+                                             initialize_empty: true
 
       xml do
         element "footnotes"

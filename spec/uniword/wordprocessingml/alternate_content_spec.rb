@@ -8,7 +8,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       ac = described_class.new
       ac.choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "<wps:wsp>test</wps:wsp>"
+        content: "<wps:wsp>test</wps:wsp>",
       )
 
       xml = ac.to_xml
@@ -23,10 +23,10 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       ac = described_class.new
       ac.choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "<wps:wsp>modern</wps:wsp>"
+        content: "<wps:wsp>modern</wps:wsp>",
       )
       ac.fallback = Uniword::Wordprocessingml::Fallback.new(
-        content: "<v:shape>legacy</v:shape>"
+        content: "<v:shape>legacy</v:shape>",
       )
 
       xml = ac.to_xml
@@ -40,7 +40,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       ac = described_class.new
       ac.choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "<wps:wsp>test</wps:wsp>"
+        content: "<wps:wsp>test</wps:wsp>",
       )
 
       xml = ac.to_xml
@@ -103,7 +103,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       original = described_class.new
       original.choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "<wps:wsp>content</wps:wsp>"
+        content: "<wps:wsp>content</wps:wsp>",
       )
 
       xml = original.to_xml
@@ -118,10 +118,10 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       original = described_class.new
       original.choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "<wps:wsp>modern</wps:wsp>"
+        content: "<wps:wsp>modern</wps:wsp>",
       )
       original.fallback = Uniword::Wordprocessingml::Fallback.new(
-        content: "<v:shape>legacy</v:shape>"
+        content: "<v:shape>legacy</v:shape>",
       )
 
       xml = original.to_xml
@@ -137,7 +137,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
     it "serializes with Requires attribute" do
       choice = Uniword::Wordprocessingml::Choice.new(
         requires: "wps",
-        content: "test"
+        content: "test",
       )
 
       xml = choice.to_xml
@@ -161,7 +161,7 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
   describe "Fallback class" do
     it "serializes content" do
       fallback = Uniword::Wordprocessingml::Fallback.new(
-        content: "<v:shape>test</v:shape>"
+        content: "<v:shape>test</v:shape>",
       )
 
       xml = fallback.to_xml

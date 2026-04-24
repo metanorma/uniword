@@ -56,7 +56,7 @@ module Uniword
     # @param errors [Array<String>] Array of validation error messages
     def initialize(element, errors)
       element_name = element.class.name.split("::").last
-      super("Validation failed for #{element_name}: #{errors.join(", ")}")
+      super("Validation failed for #{element_name}: #{errors.join(', ')}")
       @element = element
       @errors = errors
     end

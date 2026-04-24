@@ -191,7 +191,7 @@ module Uniword
       def start_text(_attrs)
         return unless @current_run
 
-        @current_text = String.new
+        @current_text = +""
       end
 
       # End parsing text
@@ -263,7 +263,7 @@ module Uniword
       metadata = {
         paragraph_count: 0,
         table_count: 0,
-        has_images: false
+        has_images: false,
       }
 
       # Use simple regex for fast counting (not parsing full DOM)

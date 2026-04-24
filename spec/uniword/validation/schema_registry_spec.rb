@@ -16,7 +16,7 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
 
       ns_uris = registry.detect_namespaces(xml)
       expect(ns_uris).to include(
-        "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
       )
     end
 
@@ -78,13 +78,13 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
   describe "#known_namespace?" do
     it "knows WordprocessingML namespace" do
       expect(registry.known_namespace?(
-               "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+               "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
              )).to be true
     end
 
     it "knows relationships namespace" do
       expect(registry.known_namespace?(
-               "http://schemas.openxmlformats.org/package/2006/relationships"
+               "http://schemas.openxmlformats.org/package/2006/relationships",
              )).to be true
     end
 
@@ -97,7 +97,7 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
     it "filters out known namespaces" do
       ns_uris = [
         "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
-        "http://example.com/unknown"
+        "http://example.com/unknown",
       ]
 
       unknown = registry.unknown_namespaces(ns_uris)
@@ -116,7 +116,9 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
     end
 
     it "raises for non-existent schema" do
-      expect { registry.load_schema("nonexistent.xsd") }.to raise_error(ArgumentError)
+      expect do
+        registry.load_schema("nonexistent.xsd")
+      end.to raise_error(ArgumentError)
     end
   end
 end

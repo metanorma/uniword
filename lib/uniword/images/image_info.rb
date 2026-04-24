@@ -25,7 +25,8 @@ module Uniword
       # @param size [Integer] File size in bytes
       # @param width [Integer, nil] Pixel width
       # @param height [Integer, nil] Pixel height
-      def initialize(name:, path:, content_type:, size:, width: nil, height: nil)
+      def initialize(name:, path:, content_type:, size:, width: nil,
+height: nil)
         @name = name
         @path = path
         @content_type = content_type

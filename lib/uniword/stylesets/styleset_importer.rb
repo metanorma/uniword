@@ -30,14 +30,14 @@ module Uniword
         # Parse styles.xml using lutaml-model
         styles_config = ::Uniword::Wordprocessingml::StylesConfiguration.from_xml(
           files[:styles],
-          encoding: "UTF-8"
+          encoding: "UTF-8",
         )
 
         # Create StyleSet model
         styleset = ::Uniword::StyleSet.new(
           name: extract_name_from_path(dotx_path),
           styles: styles_config.styles,
-          source_file: File.basename(dotx_path)
+          source_file: File.basename(dotx_path),
         )
 
         # Ensure output directory exists
@@ -87,9 +87,9 @@ module Uniword
       # @return [String] StyleSet name for YAML file (e.g., 'distinctive')
       def styleset_name_from_file(path)
         File.basename(path, ".dotx")
-            .downcase
-            .gsub(/[^a-z0-9]+/, "_")
-            .gsub(/^_|_$/, "")
+          .downcase
+          .gsub(/[^a-z0-9]+/, "_")
+          .gsub(/^_|_$/, "")
       end
     end
   end

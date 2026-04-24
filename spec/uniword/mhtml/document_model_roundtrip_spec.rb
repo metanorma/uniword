@@ -7,7 +7,7 @@ RSpec.describe "MHTML Document Model Round-Trip", type: :integration do
     "blank" => "spec/fixtures/blank/blank.mht",
     "apa" => "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.mht",
     "mla" => "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.mht",
-    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht"
+    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.mht",
   }.freeze
 
   # Shared helper to parse an MHTML fixture

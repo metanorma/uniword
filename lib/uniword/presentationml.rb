@@ -24,16 +24,19 @@ module Uniword
     autoload :Embed, "uniword/presentationml/embed"
     autoload :EmbeddedFont, "uniword/presentationml/embedded_font"
     autoload :EndConditionsList, "uniword/presentationml/end_conditions_list"
-    autoload :EndParagraphRunProperties, "uniword/presentationml/end_paragraph_run_properties"
+    autoload :EndParagraphRunProperties,
+             "uniword/presentationml/end_paragraph_run_properties"
     autoload :Extension, "uniword/presentationml/extension"
     autoload :ExtensionList, "uniword/presentationml/extension_list"
     autoload :Field, "uniword/presentationml/field"
     autoload :GraphicFrame, "uniword/presentationml/graphic_frame"
     autoload :GroupShape, "uniword/presentationml/group_shape"
     autoload :HandoutMaster, "uniword/presentationml/handout_master"
-    autoload :HandoutMasterIdList, "uniword/presentationml/handout_master_id_list"
+    autoload :HandoutMasterIdList,
+             "uniword/presentationml/handout_master_id_list"
     autoload :ListStyle, "uniword/presentationml/list_style"
-    autoload :NonVisualShapeProperties, "uniword/presentationml/non_visual_shape_properties"
+    autoload :NonVisualShapeProperties,
+             "uniword/presentationml/non_visual_shape_properties"
     autoload :Notes, "uniword/presentationml/notes"
     autoload :NotesMasterIdList, "uniword/presentationml/notes_master_id_list"
     autoload :NotesSize, "uniword/presentationml/notes_size"
@@ -57,7 +60,8 @@ module Uniword
     autoload :SlideMasterId, "uniword/presentationml/slide_master_id"
     autoload :SlideMasterIdList, "uniword/presentationml/slide_master_id_list"
     autoload :SlideSize, "uniword/presentationml/slide_size"
-    autoload :StartConditionsList, "uniword/presentationml/start_conditions_list"
+    autoload :StartConditionsList,
+             "uniword/presentationml/start_conditions_list"
     autoload :TextBody, "uniword/presentationml/text_body"
     autoload :TimeNodeList, "uniword/presentationml/time_node_list"
     autoload :Timing, "uniword/presentationml/timing"

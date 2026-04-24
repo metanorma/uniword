@@ -9,12 +9,12 @@ module Uniword
       #
       # Uses package namespace: http://schemas.openxmlformats.org/package/2006/relationships
       class PackageRelationships < Lutaml::Model::Serializable
-        attribute :relationships, PackageRelationship, collection: true, initialize_empty: true
+        attribute :relationships, PackageRelationship, collection: true,
+                                                       initialize_empty: true
 
         xml do
           element "Relationships"
           namespace Uniword::Ooxml::Namespaces::PackageRelationships
-          ordered
 
           map_element "Relationship", to: :relationships, render_nil: false
         end
@@ -30,19 +30,19 @@ module Uniword
               PackageRelationship.new(
                 id: "rId3",
                 type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-                target: "docProps/app.xml"
+                target: "docProps/app.xml",
               ),
               PackageRelationship.new(
                 id: "rId2",
                 type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-                target: "docProps/core.xml"
+                target: "docProps/core.xml",
               ),
               PackageRelationship.new(
                 id: "rId1",
                 type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-                target: "word/document.xml"
-              )
-            ]
+                target: "word/document.xml",
+              ),
+            ],
           )
         end
       end

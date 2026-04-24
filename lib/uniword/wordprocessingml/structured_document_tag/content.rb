@@ -9,13 +9,18 @@ module Uniword
       # Contains the actual content (paragraphs, runs, tables, etc.)
       # Reference XML: <w:sdtContent><w:p>...</w:p></w:sdtContent>
       class Content < Lutaml::Model::Serializable
-        attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
+        attribute :paragraphs, Paragraph, collection: true,
+                                          initialize_empty: true
         attribute :tables, Table, collection: true, initialize_empty: true
-        attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
+        attribute :sdts, StructuredDocumentTag, collection: true,
+                                                initialize_empty: true
         attribute :runs, Run, collection: true, initialize_empty: true
-        attribute :hyperlinks, Hyperlink, collection: true, initialize_empty: true
-        attribute :bookmark_starts, BookmarkStart, collection: true, initialize_empty: true
-        attribute :bookmark_ends, BookmarkEnd, collection: true, initialize_empty: true
+        attribute :hyperlinks, Hyperlink, collection: true,
+                                          initialize_empty: true
+        attribute :bookmark_starts, BookmarkStart, collection: true,
+                                                   initialize_empty: true
+        attribute :bookmark_ends, BookmarkEnd, collection: true,
+                                               initialize_empty: true
 
         xml do
           element "sdtContent"

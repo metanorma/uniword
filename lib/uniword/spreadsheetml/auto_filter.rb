@@ -9,7 +9,8 @@ module Uniword
     # Element: <autoFilter>
     class AutoFilter < Lutaml::Model::Serializable
       attribute :ref, :string
-      attribute :filter_columns, FilterColumn, collection: true, initialize_empty: true
+      attribute :filter_columns, FilterColumn, collection: true,
+                                               initialize_empty: true
       attribute :sort_state, SortState
 
       xml do

@@ -93,7 +93,7 @@ module Uniword
               type: determine_link_type(run),
               target: run.target || run.anchor,
               element: run,
-              text: run.text
+              text: run.text,
             }
           end
         end
@@ -110,7 +110,7 @@ module Uniword
           :bookmark
         elsif hyperlink.target&.start_with?("#")
           :internal
-        elsif hyperlink.target && (hyperlink.target.start_with?("http://") || hyperlink.target.start_with?("https://"))
+        elsif hyperlink.target&.start_with?("http://", "https://")
           :external
         else
           :internal

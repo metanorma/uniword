@@ -86,23 +86,31 @@ module Uniword
       # which match the flat attributes defined in this class.
       yaml do
         map "style", with: { from: :yaml_style_from, to: :yaml_style_to }
-        map "alignment", with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
+        map "alignment",
+            with: { from: :yaml_alignment_from, to: :yaml_alignment_to }
         map "spacing_before", to: :spacing_before
         map "spacing_after", to: :spacing_after
         map "line_spacing", to: :line_spacing
         map "line_rule", to: :line_rule
-        map "keep_next", with: { from: :yaml_keep_next_from, to: :yaml_keep_next_to }
-        map "keep_lines", with: { from: :yaml_keep_lines_from, to: :yaml_keep_lines_to }
-        map "page_break_before", with: { from: :yaml_page_break_before_from, to: :yaml_page_break_before_to }
-        map "outline_level", with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
+        map "keep_next",
+            with: { from: :yaml_keep_next_from, to: :yaml_keep_next_to }
+        map "keep_lines",
+            with: { from: :yaml_keep_lines_from, to: :yaml_keep_lines_to }
+        map "page_break_before",
+            with: { from: :yaml_page_break_before_from,
+                    to: :yaml_page_break_before_to }
+        map "outline_level",
+            with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
         map "suppress_line_numbers", to: :suppress_line_numbers
         map "contextual_spacing",
-            with: { from: :yaml_contextual_spacing_from, to: :yaml_contextual_spacing_to }
+            with: { from: :yaml_contextual_spacing_from,
+                    to: :yaml_contextual_spacing_to }
         map "bidirectional", to: :bidirectional
         map "indent_left", to: :indent_left
         map "indent_right", to: :indent_right
         map "indent_first_line", to: :indent_first_line
-        map "widow_control", with: { from: :yaml_widow_control_from, to: :yaml_widow_control_to }
+        map "widow_control",
+            with: { from: :yaml_widow_control_from, to: :yaml_widow_control_to }
       end
 
       # YAML transform methods (instance methods - called via send on an instance)
@@ -201,8 +209,10 @@ module Uniword
         map_element "numPr", to: :numbering_properties, render_nil: false
 
         # Keep options (only render if true)
-        map_element "keepNext", to: :keep_next_wrapper, render_nil: false, render_default: false
-        map_element "keepLines", to: :keep_lines_wrapper, render_nil: false, render_default: false
+        map_element "keepNext", to: :keep_next_wrapper, render_nil: false,
+                                render_default: false
+        map_element "keepLines", to: :keep_lines_wrapper, render_nil: false,
+                                 render_default: false
         map_element "pageBreakBefore", to: :page_break_before_wrapper, render_nil: false,
                                        render_default: false
         map_element "widowControl", to: :widow_control_wrapper, render_nil: false,
@@ -215,7 +225,8 @@ module Uniword
                                            render_default: false
 
         # Bidirectional (only render if true)
-        map_element "bidi", to: :bidirectional, render_nil: false, render_default: false
+        map_element "bidi", to: :bidirectional, render_nil: false,
+                            render_default: false
 
         # East Asian typography
         map_element "autoSpaceDE", to: :auto_space_de, render_nil: false,

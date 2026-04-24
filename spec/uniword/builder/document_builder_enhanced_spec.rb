@@ -105,7 +105,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#list" do
     # Second item has bold run
     second_runs = paragraphs[1].runs
     expect(second_runs.size).to be >= 2
-    expect(second_runs.first.properties&.bold&.value).to eq(true)
+    expect(second_runs.first.properties&.bold&.value).to be(true)
   end
 
   it "supports :roman list type" do

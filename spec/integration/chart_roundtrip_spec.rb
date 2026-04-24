@@ -6,7 +6,8 @@ require "securerandom"
 RSpec.describe "Chart Round-trip Integration" do
   describe "chart preservation" do
     it "preserves charts through round-trip" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Create a document with a chart using the Builder API
         doc = Uniword::Builder::DocumentBuilder.new
@@ -36,7 +37,8 @@ RSpec.describe "Chart Round-trip Integration" do
     end
 
     it "preserves multiple charts" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Two charts here" }
@@ -55,15 +57,19 @@ RSpec.describe "Chart Round-trip Integration" do
         package = Uniword::Docx::Package.from_file(temp_path)
 
         expect(package.document.chart_parts.size).to eq(2)
-        chart_targets = package.document.chart_parts.values.map { |c| c[:target] }
-        expect(chart_targets).to include("charts/chart1.xml", "charts/chart2.xml")
+        chart_targets = package.document.chart_parts.values.map do |c|
+          c[:target]
+        end
+        expect(chart_targets).to include("charts/chart1.xml",
+                                         "charts/chart2.xml")
       ensure
         safe_delete(temp_path)
       end
     end
 
     it "handles documents without charts" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "No charts here" }
@@ -78,7 +84,8 @@ RSpec.describe "Chart Round-trip Integration" do
     end
 
     it "validates chart properties from XML" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Chart test" }
@@ -100,7 +107,8 @@ RSpec.describe "Chart Round-trip Integration" do
     end
 
     it "preserves chart metadata through round-trip" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Data chart" }
@@ -126,7 +134,8 @@ RSpec.describe "Chart Round-trip Integration" do
 
   describe "chart type detection" do
     it "detects bar charts" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Bar chart" }
@@ -147,7 +156,8 @@ RSpec.describe "Chart Round-trip Integration" do
     end
 
     it "detects line charts" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Line chart" }
@@ -168,7 +178,8 @@ RSpec.describe "Chart Round-trip Integration" do
     end
 
     it "detects pie charts" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         doc = Uniword::Builder::DocumentBuilder.new
         doc.paragraph { |p| p << "Pie chart" }

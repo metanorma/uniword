@@ -49,7 +49,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
   describe "missing required parts" do
     it "reports OPC-002 for missing Content_Types.xml" do
       zip_path = create_test_zip(
-        "word/document.xml" => "<w:document/>"
+        "word/document.xml" => "<w:document/>",
       )
 
       issues = validator.validate(zip_path)
@@ -62,7 +62,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
     it "reports OPC-004 for missing word/document.xml" do
       zip_path = create_test_zip(
         "[Content_Types].xml" => '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"/>',
-        "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>'
+        "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
       )
 
       issues = validator.validate(zip_path)
@@ -78,7 +78,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
       zip_path = create_test_zip(
         "[Content_Types].xml" => '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/></Types>',
         "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/core-properties" Target="docProps/core.xml"/></Relationships>',
-        "word/document.xml" => '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>'
+        "word/document.xml" => '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"/>',
       )
 
       issues = validator.validate(zip_path)
@@ -96,7 +96,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
         "[Content_Types].xml" => '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/></Types>',
         "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
         "word/document.xml" => "<w:document/>",
-        "word/media/image1.png" => "PNG data"
+        "word/media/image1.png" => "PNG data",
       )
 
       issues = validator.validate(zip_path)
@@ -112,7 +112,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
         "[Content_Types].xml" => '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/></Types>',
         "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="test" Target="word/document.xml"/></Relationships>',
         "word/_rels/document.xml.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
-        "word/document.xml" => "<w:document/>"
+        "word/document.xml" => "<w:document/>",
       )
 
       issues = validator.validate(zip_path)
@@ -128,7 +128,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
       zip_path = create_test_zip(
         "[Content_Types].xml" => '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="xml" ContentType="application/xml"/></Types>',
         "_rels/.rels" => '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"/>',
-        "word/document.xml" => "<w:document><unclosed>"
+        "word/document.xml" => "<w:document><unclosed>",
       )
 
       issues = validator.validate(zip_path)

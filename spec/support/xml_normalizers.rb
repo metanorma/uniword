@@ -28,6 +28,9 @@ module XmlNormalizers
     # Strip content from statistics elements (they get recalculated)
     normalize_statistics_values(doc)
 
+    # Normalize core properties (timestamps, metadata updated by Reconciler)
+    normalize_core_properties(doc)
+
     # Normalize content types and relationships (reconciled ordering)
     normalize_content_types(doc)
     normalize_relationships(doc)
@@ -49,13 +52,36 @@ module XmlNormalizers
     end
   end
 
+  # Normalize core property values updated by Reconciler during round-trip
+  # Reconciler updates: modified timestamp, lastModifiedBy, revision
+  #
+  # @param doc [Nokogiri::XML::Document] Document to modify
+  def self.normalize_core_properties(doc)
+    dcterms_ns = "http://purl.org/dc/terms/"
+    cp_ns = "http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
+
+    # Normalize timestamp content (created/modified get new values)
+    doc.xpath("//dcterms:created | //dcterms:modified",
+              "dcterms" => dcterms_ns).each do |node|
+      node.content = "NORMALIZED_TIME"
+    end
+
+    # Normalize metadata that Reconciler may set
+    %w[lastModifiedBy revision].each do |elem|
+      doc.xpath("//cp:#{elem}", "cp" => cp_ns).each do |node|
+        node.content = "NORMALIZED"
+      end
+    end
+  end
+
   # Normalize document statistics values
   # These are recalculated during round-trip, so we strip values for comparison
   #
   # @param doc [Nokogiri::XML::Document] Document to modify
   def self.normalize_statistics_values(doc)
     # List of statistics elements that get recalculated
-    stat_elements = %w[Pages Words Characters Lines Paragraphs CharactersWithSpaces TotalTime]
+    stat_elements = %w[Pages Words Characters Lines Paragraphs
+                       CharactersWithSpaces TotalTime]
 
     stat_elements.each do |elem_name|
       # Match elements in any namespace (including default namespace)
@@ -116,6 +142,33 @@ module XmlNormalizers
       # For now, just document this limitation
       # TODO: Implement namespace removal if Canon still fails
     end
+  end
+
+  # Normalize document.xml for round-trip comparison
+  # Reconciler adds: namespace declarations, mc:Ignorable, rsid/paraId attributes
+  #
+  # @param xml [String] XML content to normalize
+  # @return [String] Normalized XML
+  def self.normalize_document_xml(xml)
+    doc = Nokogiri::XML(xml)
+
+    # Strip mc:Ignorable attribute (reconciler adds it)
+    doc.root&.delete_attribute("Ignorable") if doc.root&.namespace&.prefix == "mc"
+
+    # Strip paragraph tracking attributes (reconciler adds rsid, paraId, textId)
+    doc.xpath("//w:p",
+              "w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main").each do |node|
+      %w[rsidR rsidRDefault paraId textId].each do |attr|
+        ns_attr = node.attributes[attr]
+        ns_attr&.remove
+      end
+      # Also remove w14: prefixed tracking attrs
+      node.attribute_nodes.select do |a|
+        a.namespace&.prefix == "w14"
+      end.each(&:remove)
+    end
+
+    doc.to_xml
   end
 
   # Check if a namespace is actually used in the document

@@ -26,11 +26,14 @@ module Uniword
 
         map_element "sldMasterIdLst", to: :sld_master_id_lst, render_nil: false
         map_element "sldIdLst", to: :sld_id_lst
-        map_element "notesMasterIdLst", to: :notes_master_id_lst, render_nil: false
-        map_element "handoutMasterIdLst", to: :handout_master_id_lst, render_nil: false
+        map_element "notesMasterIdLst", to: :notes_master_id_lst,
+                                        render_nil: false
+        map_element "handoutMasterIdLst", to: :handout_master_id_lst,
+                                          render_nil: false
         map_element "sldSz", to: :sld_sz
         map_element "notesSz", to: :notes_sz
-        map_element "defaultTextStyle", to: :default_text_style, render_nil: false
+        map_element "defaultTextStyle", to: :default_text_style,
+                                        render_nil: false
         map_element "colorMap", to: :color_map, render_nil: false
         map_element "embeddedFontLst", to: :embedded_font_lst, render_nil: false
       end

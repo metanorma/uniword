@@ -60,7 +60,7 @@ module Uniword
           formula: formula,
           display_type: display_type,
           alignment: properties[:alignment],
-          break_enabled: properties[:break_enabled]
+          break_enabled: properties[:break_enabled],
         )
       end
 
@@ -77,7 +77,10 @@ module Uniword
       #
       # @raise [ArgumentError] if equation has no formula
       def self.to_omml(equation, options = {})
-        raise ArgumentError, "Equation must have a formula" unless equation.formula
+        unless equation.formula
+          raise ArgumentError,
+                "Equation must have a formula"
+        end
 
         # Convert Plurimath formula to OMML using Plurimath's OMML serializer
         omml_content = formula_to_omml(equation.formula)
@@ -263,7 +266,8 @@ module Uniword
           doc = Nokogiri::XML(xml)
           doc.root || raise(ArgumentError, "Invalid XML: no root element")
         else
-          raise ArgumentError, "Expected String or Nokogiri::XML::Node, got #{xml.class}"
+          raise ArgumentError,
+                "Expected String or Nokogiri::XML::Node, got #{xml.class}"
         end
       end
 

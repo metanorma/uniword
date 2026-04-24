@@ -8,10 +8,11 @@ RSpec.describe "ISO Standard Document Testing", :integration do
   # Integration tests for ISO standard documents from spec/fixtures/uniword-private/fixtures/iso/
   # These are real ISO standards documents with complex track-changes and revision markup
 
-  ISO_FIXTURES_DIR = File.join(__dir__, "../../spec/fixtures/uniword-private/fixtures/iso")
+  ISO_DISCOVERY_DIR = File.join(__dir__,
+                           "../../spec/fixtures/uniword-private/fixtures/iso")
 
   # Dynamically discover all .docx files in the ISO fixtures directory
-  ISO_DOCX_FILES = Dir.glob(File.join(ISO_FIXTURES_DIR, "*.docx")).freeze
+  ISO_DOCX_FILES = Dir.glob(File.join(ISO_DISCOVERY_DIR, "*.docx")).freeze
 
   before(:all) do
     skip "ISO fixtures not available" if ISO_DOCX_FILES.empty?

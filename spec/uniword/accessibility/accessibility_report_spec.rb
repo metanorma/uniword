@@ -4,16 +4,14 @@ require "spec_helper"
 require "tempfile"
 
 RSpec.describe Uniword::Accessibility::AccessibilityReport do
-  let(:profile_name) { "WCAG 2.1" }
-  let(:profile_level) { "Level AA" }
-
   subject(:report) do
     described_class.new(
       profile_name: profile_name,
-      profile_level: profile_level
+      profile_level: profile_level,
     )
   end
 
+  let(:profile_name) { "WCAG 2.1" }
   let(:error_violation) do
     Uniword::Accessibility::AccessibilityViolation.new(
       rule_id: :image_alt_text,
@@ -22,10 +20,9 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       message: "Image 1 missing alternative text",
       element: double("Image"),
       severity: :error,
-      suggestion: "Add descriptive alt text"
+      suggestion: "Add descriptive alt text",
     )
   end
-
   let(:warning_violation) do
     Uniword::Accessibility::AccessibilityViolation.new(
       rule_id: :heading_structure,
@@ -34,10 +31,9 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       message: "Heading hierarchy skip",
       element: double("Paragraph"),
       severity: :warning,
-      suggestion: "Use sequential heading levels"
+      suggestion: "Use sequential heading levels",
     )
   end
-
   let(:info_violation) do
     Uniword::Accessibility::AccessibilityViolation.new(
       rule_id: :descriptive_headings,
@@ -46,9 +42,10 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       message: "Heading could be more descriptive",
       element: double("Paragraph"),
       severity: :info,
-      suggestion: "Make headings more descriptive"
+      suggestion: "Make headings more descriptive",
     )
   end
+  let(:profile_level) { "Level AA" }
 
   describe "#initialize" do
     it "sets profile name" do
@@ -200,8 +197,8 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
               message: "Image #{i + 1} issue",
               element: double("Image"),
               severity: :error,
-              suggestion: "Fix it"
-            )
+              suggestion: "Fix it",
+            ),
           )
         end
       end
@@ -313,7 +310,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       let(:compliant_report) do
         described_class.new(
           profile_name: "WCAG 2.1",
-          profile_level: "Level AA"
+          profile_level: "Level AA",
         )
       end
 

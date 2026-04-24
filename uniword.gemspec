@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
     "source_code_uri" => "https://github.com/metanorma/uniword",
     "changelog_uri" => "https://github.com/metanorma/uniword/blob/main/CHANGELOG.md",
     "documentation_uri" => "https://www.rubydoc.info/gems/uniword",
-    "rubygems_mfa_required" => "true"
+    "rubygems_mfa_required" => "true",
   }
 
   spec.files = Dir.glob(%w[

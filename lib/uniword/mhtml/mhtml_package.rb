@@ -57,7 +57,7 @@ module Uniword
         {
           "html" => raw_html_content,
           "filelist" => filelist_xml,
-          "images" => images || {}
+          "images" => images || {},
         }
       end
     end

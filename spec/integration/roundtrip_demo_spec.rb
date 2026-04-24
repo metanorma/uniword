@@ -4,7 +4,9 @@ require "spec_helper"
 require "canon/rspec_matchers"
 
 RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
-  let(:input_file) { "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx" }
+  let(:input_file) do
+    "spec/fixtures/uniword-demo/demo_formal_integral_proper.docx"
+  end
   let(:output_file) { "test_output/demo_formal_integral_roundtrip_spec.docx" }
   let(:original_dir) { "test_output/roundtrip_spec_original" }
   let(:saved_dir) { "test_output/roundtrip_spec_saved" }
@@ -16,8 +18,10 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
 
     # Extract both packages using Ruby zip (cross-platform)
     FileUtils.mkdir_p("test_output")
-    extract_zip("spec/fixtures/uniword-demo/demo_formal_integral_proper.docx", "test_output/roundtrip_spec_original")
-    extract_zip("test_output/demo_formal_integral_roundtrip_spec.docx", "test_output/roundtrip_spec_saved")
+    extract_zip("spec/fixtures/uniword-demo/demo_formal_integral_proper.docx",
+                "test_output/roundtrip_spec_original")
+    extract_zip("test_output/demo_formal_integral_roundtrip_spec.docx",
+                "test_output/roundtrip_spec_saved")
   end
 
   def extract_zip(zip_path, dest_dir)
@@ -146,8 +150,11 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/word/_rels/document.xml.rels")
         saved = File.read("#{saved_dir}/word/_rels/document.xml.rels")
 
-        expect(XmlNormalizers.normalize_for_roundtrip(saved))
-          .to be_xml_equivalent_to(XmlNormalizers.normalize_for_roundtrip(original))
+        # Reconciler may add relationships for present parts (e.g. theme)
+        # — check original targets are a subset of saved targets
+        orig_targets = rel_targets_from_xml(original)
+        saved_targets = rel_targets_from_xml(saved)
+        expect(saved_targets).to include(*orig_targets)
       end
     end
 
@@ -176,9 +183,19 @@ RSpec.describe "Ultimate Round-Trip: demo_formal_integral_proper.docx" do
         original = File.read("#{original_dir}/docProps/core.xml")
         saved = File.read("#{saved_dir}/docProps/core.xml")
 
+        # Normalize: Reconciler updates modified timestamp, lastModifiedBy, revision
+        original = XmlNormalizers.normalize_for_roundtrip(original)
+        saved = XmlNormalizers.normalize_for_roundtrip(saved)
+
         expect(saved).to be_xml_equivalent_to(original)
       end
     end
+  end
+
+  def rel_targets_from_xml(xml)
+    return [] if xml.nil?
+
+    xml.scan(/Target="([^"]+)"/).flatten
   end
 
   describe "Media Files" do

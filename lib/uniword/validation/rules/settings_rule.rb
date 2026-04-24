@@ -35,7 +35,7 @@ module Uniword
                 "Attached template not found: #{template_path}",
                 part: "word/settings.xml",
                 suggestion: "The template path may be local to the original " \
-                            "machine. This is informational and usually harmless."
+                            "machine. This is informational and usually harmless.",
               )
             end
           end
@@ -66,7 +66,7 @@ module Uniword
               severity: "notice",
               part: "word/settings.xml",
               suggestion: "Add style '#{id}' to styles.xml or remove " \
-                          "the reference from settings."
+                          "the reference from settings.",
             )
           end
         end

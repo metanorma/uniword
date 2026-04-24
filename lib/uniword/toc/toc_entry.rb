@@ -65,7 +65,7 @@ module Uniword
           text: text,
           page: page,
           style_name: style_name,
-          paragraph_index: paragraph_index
+          paragraph_index: paragraph_index,
         }
       end
     end

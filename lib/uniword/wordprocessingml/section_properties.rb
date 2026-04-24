@@ -12,8 +12,10 @@ module Uniword
       attribute :page_size, PageSize
       attribute :page_margins, PageMargins
       attribute :columns, Columns
-      attribute :header_references, HeaderReference, collection: true, initialize_empty: true
-      attribute :footer_references, FooterReference, collection: true, initialize_empty: true
+      attribute :header_references, HeaderReference, collection: true,
+                                                     initialize_empty: true
+      attribute :footer_references, FooterReference, collection: true,
+                                                     initialize_empty: true
       attribute :type, :string
       attribute :page_numbering, PageNumbering
       attribute :doc_grid, DocGrid

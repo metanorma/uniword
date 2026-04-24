@@ -65,7 +65,7 @@ module Uniword
       def paragraph(text = nil, &block)
         para = ParagraphBuilder.new
         para << text if text
-        block.call(para) if block_given?
+        yield(para) if block
         @model.paragraphs << para.build
         para
       end

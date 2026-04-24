@@ -19,7 +19,7 @@ module Uniword
         unless File.exist?(path)
           raise ArgumentError,
                 "Document elements not found: #{locale}/#{category}. " \
-                "Available locales: #{available_locales.join(", ")}"
+                "Available locales: #{available_locales.join(', ')}"
         end
 
         data = YAML.load_file(path)
@@ -35,8 +35,8 @@ module Uniword
         return [] unless Dir.exist?(dir)
 
         Dir.glob(File.join(dir, "*.yml"))
-           .map { |p| File.basename(p, ".yml") }
-           .sort
+          .map { |p| File.basename(p, ".yml") }
+          .sort
       end
 
       # List all available locales
@@ -46,8 +46,8 @@ module Uniword
         return [] unless Dir.exist?(DATA_DIR)
 
         Dir.glob(File.join(DATA_DIR, "*/"))
-           .map { |p| File.basename(p) }
-           .sort
+          .map { |p| File.basename(p) }
+          .sort
       end
     end
   end

@@ -189,7 +189,7 @@ RSpec.describe "Resource Roundtrip" do
           original,
           hue_shift: 180,
           saturation_shift: 0,
-          lightness_shift: 0
+          lightness_shift: 0,
         )
 
         # Red shifted 180 degrees should be cyan-ish
@@ -204,7 +204,7 @@ RSpec.describe "Resource Roundtrip" do
           original,
           hue_shift: 0,
           saturation_shift: 0,
-          lightness_shift: 0
+          lightness_shift: 0,
         )
 
         expect(result).to eq(original)
@@ -248,7 +248,7 @@ RSpec.describe "Resource Roundtrip" do
         processor = Uniword::Resource::ThemeProcessor.new(
           hue_shift: 10,
           saturation_shift: 5,
-          lightness_shift: -5
+          lightness_shift: -5,
         )
 
         processed = processor.process(theme)

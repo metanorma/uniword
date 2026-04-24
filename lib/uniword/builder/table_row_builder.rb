@@ -29,7 +29,7 @@ module Uniword
       def cell(text: nil, &block)
         c = TableCellBuilder.new
         c << text if text
-        block.call(c) if block_given?
+        yield(c) if block
         @model.cells << c.build
         c
       end

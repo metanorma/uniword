@@ -8,7 +8,9 @@ RSpec.describe Uniword::Stylesets::Package do
     skip "Submodule spec/fixtures/uniword-private not available" unless File.exist?("spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx")
   end
 
-  let(:dotx_path) { "spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx" }
+  let(:dotx_path) do
+    "spec/fixtures/uniword-private/word-resources/quick-styles/Distinctive.dotx"
+  end
 
   describe ".from_file" do
     context "with valid .dotx file" do

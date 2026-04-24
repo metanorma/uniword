@@ -85,7 +85,7 @@ module Uniword
         # @return [Uniword::Spellcheck::SpellcheckResult]
         def spellcheck(language: "en_US")
           Uniword::Spellcheck::SpellChecker.new(language: language)
-                                           .check(self)
+            .check(self)
         end
 
         # --- Images ---

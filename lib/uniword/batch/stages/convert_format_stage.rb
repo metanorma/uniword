@@ -48,7 +48,7 @@ module Uniword
         if context[:output_path]
           context[:output_path] = update_output_extension(
             context[:output_path],
-            @target_format
+            @target_format,
           )
         end
 
@@ -74,7 +74,7 @@ module Uniword
 
         raise ArgumentError,
               "Invalid target_format: #{@target_format}. " \
-              "Must be one of: #{valid_formats.join(", ")}"
+              "Must be one of: #{valid_formats.join(', ')}"
       end
 
       # Detect format from file path

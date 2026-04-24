@@ -31,14 +31,15 @@ module Uniword
         mixed_content
 
         namespace_scope [
-          { namespace: Ooxml::Namespaces::Word2012, declare: :auto }
+          { namespace: Ooxml::Namespaces::Word2012, declare: :auto },
         ]
 
         map_element "id", to: :id, render_nil: false
         map_element "alias", to: :alias_name, render_nil: false
         map_element "tag", to: :tag, render_nil: false
         map_element "text", to: :text, render_nil: false
-        map_element "showingPlcHdr", to: :showing_placeholder_header, render_nil: false
+        map_element "showingPlcHdr", to: :showing_placeholder_header,
+                                     render_nil: false
         map_element "appearance", to: :appearance, render_nil: false
         map_element "placeholder", to: :placeholder, render_nil: false
         map_element "dataBinding", to: :data_binding, render_nil: false

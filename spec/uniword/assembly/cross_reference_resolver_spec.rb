@@ -91,7 +91,9 @@ RSpec.describe Uniword::Assembly::CrossReferenceResolver do
 
     it "handles unmapped bookmark IDs" do
       # Should not raise error for unmapped IDs
-      expect { resolver.resolve(Uniword::Wordprocessingml::DocumentRoot.new) }.not_to raise_error
+      expect do
+        resolver.resolve(Uniword::Wordprocessingml::DocumentRoot.new)
+      end.not_to raise_error
     end
   end
 end

@@ -27,7 +27,7 @@ RSpec.describe Uniword::Wordprocessingml::Table do
   let(:properties) do
     Uniword::Wordprocessingml::TableProperties.new(
       style: "TableGrid",
-      alignment: "center"
+      alignment: "center",
     )
   end
 

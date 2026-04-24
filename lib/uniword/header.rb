@@ -7,8 +7,10 @@ module Uniword
   # Headers can contain paragraphs and tables
   class Header < Lutaml::Model::Serializable
     attribute :type, :string, default: -> { "default" }
-    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true, initialize_empty: true
-    attribute :tables, Wordprocessingml::Table, collection: true, initialize_empty: true
+    attribute :paragraphs, Wordprocessingml::Paragraph, collection: true,
+                                                        initialize_empty: true
+    attribute :tables, Wordprocessingml::Table, collection: true,
+                                                initialize_empty: true
 
     # Valid header types
     TYPES = %w[default first even].freeze
@@ -35,7 +37,8 @@ module Uniword
     def validate_type
       return unless type && !TYPES.include?(type)
 
-      raise ArgumentError, "Invalid header type: #{type}. Must be one of: #{TYPES.join(", ")}"
+      raise ArgumentError,
+            "Invalid header type: #{type}. Must be one of: #{TYPES.join(', ')}"
     end
   end
 end

@@ -20,7 +20,8 @@ RSpec.describe Uniword::Mhtml::CssNumberFormatter do
     end
 
     it "rounds to specified precision" do
-      expect(described_class.format(12.345, "pt", precision: 2)).to eq("12.35pt")
+      expect(described_class.format(12.345, "pt",
+                                    precision: 2)).to eq("12.35pt")
       expect(described_class.format(12.345, "pt", precision: 1)).to eq("12.3pt")
       expect(described_class.format(12.345, "pt", precision: 0)).to eq("12pt")
     end
@@ -141,8 +142,10 @@ RSpec.describe Uniword::Mhtml::CssNumberFormatter do
     end
 
     it "supports custom precision" do
-      expect(described_class.format_percentage(50.5, precision: 1)).to eq("50.5%")
-      expect(described_class.format_percentage(75.25, precision: 2)).to eq("75.25%")
+      expect(described_class.format_percentage(50.5,
+                                               precision: 1)).to eq("50.5%")
+      expect(described_class.format_percentage(75.25,
+                                               precision: 2)).to eq("75.25%")
     end
 
     it "handles nil values" do
@@ -167,7 +170,8 @@ RSpec.describe Uniword::Mhtml::CssNumberFormatter do
 
     it "handles precision edge cases" do
       # Very high precision
-      expect(described_class.format(1.23456789, "pt", precision: 5)).to eq("1.23457pt")
+      expect(described_class.format(1.23456789, "pt",
+                                    precision: 5)).to eq("1.23457pt")
 
       # Zero precision
       expect(described_class.format(12.9, "pt", precision: 0)).to eq("13pt")

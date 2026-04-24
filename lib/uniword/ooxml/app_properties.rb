@@ -88,7 +88,7 @@ module Uniword
         # Force vt namespace declaration even though unused
         # This matches Microsoft Word's output format
         namespace_scope [
-          { namespace: Namespaces::VariantTypes, declare: :always }
+          { namespace: Namespaces::VariantTypes, declare: :always },
         ]
 
         # OOXML spec order (ISO 29500)
@@ -106,7 +106,7 @@ module Uniword
                                render_nil: true,
                                value_map: {
                                  from: { empty: :empty },
-                                 to: { empty: :empty, nil: :empty }
+                                 to: { empty: :empty, nil: :empty },
                                }
         map_element "LinksUpToDate", to: :links_up_to_date
         map_element "CharactersWithSpaces", to: :characters_with_spaces

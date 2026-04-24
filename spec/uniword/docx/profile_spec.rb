@@ -187,7 +187,7 @@ RSpec.describe Uniword::Docx::UserProfile do
         zip: "",
         country_region: "HK",
         phone: "+852-1234-5678",
-        email: "ronald@example.com"
+        email: "ronald@example.com",
       )
 
       expect(user.name).to eq("Ronald Tse")

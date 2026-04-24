@@ -47,7 +47,7 @@ module Uniword
           base: base_theme_xml,
           variants: variants,
           variant_manager: variant_manager_xml,
-          media: media
+          media: media,
         }
       end
 
@@ -91,7 +91,7 @@ module Uniword
           media[filename] = MediaFile.new(
             filename: filename,
             content: content[file_path],
-            source_path: file_path
+            source_path: file_path,
           )
         end
 

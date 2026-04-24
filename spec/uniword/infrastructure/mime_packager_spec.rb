@@ -82,13 +82,17 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     it "raises ArgumentError for nil path" do
       doc = build_mhtml_document("<html><body>Test</body></html>")
       packager = described_class.new(doc)
-      expect { packager.package(nil) }.to raise_error(ArgumentError, /cannot be nil/)
+      expect do
+        packager.package(nil)
+      end.to raise_error(ArgumentError, /cannot be nil/)
     end
 
     it "raises ArgumentError for empty path" do
       doc = build_mhtml_document("<html><body>Test</body></html>")
       packager = described_class.new(doc)
-      expect { packager.package("") }.to raise_error(ArgumentError, /cannot be empty/)
+      expect do
+        packager.package("")
+      end.to raise_error(ArgumentError, /cannot be empty/)
     end
 
     it "writes valid MIME structure" do
@@ -114,8 +118,10 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
     end
 
     it "includes filelist.xml when present in document" do
-      xml_part = build_xml_part("filelist.xml", '<xml><o:MainFile HRef="document.html"/></xml>')
-      doc = build_mhtml_document("<html><body>Test</body></html>", parts: [xml_part])
+      xml_part = build_xml_part("filelist.xml",
+                                '<xml><o:MainFile HRef="document.html"/></xml>')
+      doc = build_mhtml_document("<html><body>Test</body></html>",
+                                 parts: [xml_part])
       packager = described_class.new(doc)
       packager.package(output_path)
       content = File.read(output_path, encoding: "UTF-8")
@@ -140,7 +146,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       image_part = build_image_part("image1.png", image_data, "image/png")
       doc = build_mhtml_document(
         '<html><body><img src="cid:image1.png"/></body></html>',
-        parts: [image_part]
+        parts: [image_part],
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -155,7 +161,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       image_part = build_image_part("image1.png", image_data, "image/png")
       doc = build_mhtml_document(
         '<html><body><img src="cid:image1.png"/></body></html>',
-        parts: [image_part]
+        parts: [image_part],
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -167,7 +173,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
 
     it "preserves data: URLs" do
       doc = build_mhtml_document(
-        '<html><body><img src="data:image/png;base64,ABC123"/></body></html>'
+        '<html><body><img src="data:image/png;base64,ABC123"/></body></html>',
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -178,7 +184,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
 
     it "preserves http: URLs" do
       doc = build_mhtml_document(
-        '<html><body><img src="http://example.com/image.png"/></body></html>'
+        '<html><body><img src="http://example.com/image.png"/></body></html>',
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -194,7 +200,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
 
       doc = build_mhtml_document(
         '<html><body><img src="cid:image1.png"/><img src="cid:image2.jpg"/></body></html>',
-        parts: [image1, image2, image3]
+        parts: [image1, image2, image3],
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -230,18 +236,20 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       "style.css" => 'text/css; charset="utf-8"',
       "data.xml" => 'text/xml; charset="utf-8"',
       "page.html" => "text/html",
-      "unknown.xyz" => "application/octet-stream"
+      "unknown.xyz" => "application/octet-stream",
     }.each do |filename, expected_type|
       it "detects #{expected_type} for #{filename}" do
         # Create part with correct content type
         ext = filename.split(".").last
         if %w[png jpg jpeg gif svg bmp tiff webp].include?(ext)
-          image_part = build_image_part(filename, "test_data", expected_type.split(";").first)
+          image_part = build_image_part(filename, "test_data",
+                                        expected_type.split(";").first)
         else
           image_part = build_xml_part(filename, "test_data")
           image_part.content_type = expected_type
         end
-        doc = build_mhtml_document("<html><body>Test</body></html>", parts: [image_part])
+        doc = build_mhtml_document("<html><body>Test</body></html>",
+                                   parts: [image_part])
         packager = described_class.new(doc)
         packager.package(output_path)
         content = File.read(output_path, encoding: "UTF-8")
@@ -267,7 +275,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       image_part = build_image_part("shape.png", image_data, "image/png")
       doc = build_mhtml_document(
         '<html><body><v:imagedata src="shape.png"/></body></html>',
-        parts: [image_part]
+        parts: [image_part],
       )
       packager = described_class.new(doc)
       packager.package(output_path)
@@ -294,7 +302,8 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
 
     it "wraps base64 at 76 characters" do
       image_part = build_image_part("large.png", long_data, "image/png")
-      doc = build_mhtml_document("<html><body>Test</body></html>", parts: [image_part])
+      doc = build_mhtml_document("<html><body>Test</body></html>",
+                                 parts: [image_part])
       packager = described_class.new(doc)
       packager.package(output_path)
       content = File.read(output_path, encoding: "UTF-8")
@@ -315,7 +324,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
 
   describe "boundary uniqueness" do
     it "generates different boundaries for different instances" do
-      boundaries = 10.times.map do
+      boundaries = Array.new(10) do
         doc = build_mhtml_document("<html><body>Test</body></html>")
         described_class.new(doc).boundary
       end
@@ -328,7 +337,7 @@ RSpec.describe Uniword::Infrastructure::MimePackager do
       image_part = build_image_part("image1.png", "data", "image/png")
       doc = build_mhtml_document(
         "<html><body>Test</body></html>",
-        parts: [image_part]
+        parts: [image_part],
       )
       packager = described_class.new(doc)
       packager.package("spec/tmp/test_boundary.doc")

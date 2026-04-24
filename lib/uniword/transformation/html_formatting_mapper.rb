@@ -209,7 +209,7 @@ module Uniword
         "Heading6" => "Heading6",
         "Quote" => "Quote",
         "Bibliography" => "Bibliography",
-        "NoSpacing" => "No Spacing"
+        "NoSpacing" => "No Spacing",
       }.freeze
 
       # Standard HTML entities
@@ -238,7 +238,7 @@ module Uniword
         "euro" => [8364].pack("U"),
         "pound" => [163].pack("U"),
         "yen" => [165].pack("U"),
-        "cent" => [162].pack("U")
+        "cent" => [162].pack("U"),
       }.freeze
     end
   end

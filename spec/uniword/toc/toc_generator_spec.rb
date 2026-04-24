@@ -10,7 +10,7 @@ RSpec.describe Uniword::Toc::TocGenerator do
     para = Uniword::Wordprocessingml::Paragraph.new
     para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
     para.properties.style = Uniword::Properties::StyleReference.new(
-      value: "Heading#{level}"
+      value: "Heading#{level}",
     )
     para.text = text
     para
@@ -114,7 +114,7 @@ RSpec.describe Uniword::Toc::TocGenerator do
       para = Uniword::Wordprocessingml::Paragraph.new
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.style = Uniword::Properties::StyleReference.new(
-        value: "heading 2"
+        value: "heading 2",
       )
       para.text = "Lowercase heading"
       document.body.paragraphs << para
@@ -239,7 +239,7 @@ RSpec.describe Uniword::Toc::TocEntry do
         text: "Section 1",
         page: 5,
         style_name: "Heading2",
-        paragraph_index: 10
+        paragraph_index: 10,
       )
 
       expect(entry.level).to eq(2)
@@ -282,7 +282,7 @@ RSpec.describe Uniword::Toc::TocEntry do
         text: "Intro",
         page: 2,
         style_name: "Heading1",
-        paragraph_index: 0
+        paragraph_index: 0,
       )
 
       h = entry.to_h

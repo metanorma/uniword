@@ -19,7 +19,8 @@ module Uniword
         @schema_name = schema_name
         @loader = SchemaLoader.instance
         @namespace_info = @loader.namespace(schema_name)
-        @output_dir = output_dir || File.join(__dir__, "../../generated", schema_name)
+        @output_dir = output_dir || File.join(__dir__, "../../generated",
+                                              schema_name)
       end
 
       # Generate all classes for this schema
@@ -84,7 +85,7 @@ module Uniword
                 # #{description}
                 #
                 # Generated from OOXML schema: #{schema_name}.yml
-                # Element: <#{@namespace_info["prefix"]}:#{element_name}>
+                # Element: <#{@namespace_info['prefix']}:#{element_name}>
                 class #{class_name} < Lutaml::Model::Serializable
           #{generate_attributes(attributes)}
 
@@ -108,11 +109,11 @@ module Uniword
           # Convert type to symbol for primitive types
           type_str = if %w[String
                            Integer].include?(attr["type"])
-                       ":#{attr["type"].downcase}"
+                       ":#{attr['type'].downcase}"
                      else
                        attr["type"]
                      end
-          attr_code = "          attribute :#{attr["name"]}, #{type_str}"
+          attr_code = "          attribute :#{attr['name']}, #{type_str}"
           attr_code += ", collection: true" if attr["collection"]
           attr_code += ", initialize_empty: true" if attr["collection"]
           attr_code
@@ -131,7 +132,7 @@ module Uniword
         lines = []
         lines << "          xml do"
         lines << "            element '#{element_name}'"
-        lines << "            namespace '#{@namespace_info["uri"]}', '#{@namespace_info["prefix"]}'"
+        lines << "            namespace '#{@namespace_info['uri']}', '#{@namespace_info['prefix']}'"
         lines << "            mixed_content" if has_nested_content?(attributes)
         lines << ""
 
@@ -139,10 +140,10 @@ module Uniword
         attributes.each do |attr|
           if attr["xml_attribute"]
             # Attribute value (e.g., <w:p w:val="value">)
-            lines << "            map_attribute '#{attr["xml_name"]}', to: :#{attr["name"]}"
+            lines << "            map_attribute '#{attr['xml_name']}', to: :#{attr['name']}"
           else
             # Element value (e.g., <w:p><w:pPr>...</w:pPr></w:p>)
-            map_line = "            map_element '#{attr["xml_name"]}', to: :#{attr["name"]}"
+            map_line = "            map_element '#{attr['xml_name']}', to: :#{attr['name']}"
             map_line += ", render_nil: false" unless attr["required"]
             lines << map_line
           end
@@ -166,8 +167,8 @@ module Uniword
       # @return [String] snake_case string
       def underscore(str)
         str.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-           .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-           .downcase
+          .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+          .downcase
       end
 
       # Convert snake_case to CamelCase

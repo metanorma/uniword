@@ -36,7 +36,7 @@ module Uniword
               "numId '#{attr.value}' referenced but not defined in numbering.xml",
               part: "word/document.xml",
               suggestion: "Define numbering with numId '#{attr.value}' " \
-                          "in numbering.xml, or fix the reference."
+                          "in numbering.xml, or fix the reference.",
             )
           end
 
@@ -71,7 +71,7 @@ module Uniword
               severity: "warning",
               part: "word/numbering.xml",
               suggestion: "Remove the unused abstractNum or reference it " \
-                          "from a num element."
+                          "from a num element.",
             )
           end
         end

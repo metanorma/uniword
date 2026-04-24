@@ -186,7 +186,7 @@ module Uniword
           status: @status,
           link: link_identifier,
           message: @message,
-          metadata: @metadata
+          metadata: @metadata,
         }.compact
       end
 

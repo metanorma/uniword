@@ -33,7 +33,8 @@ module Uniword
           map_element "ValidateAgainstSchemas", to: :validate_against_schemas
           map_element "SaveIfXMLInvalid", to: :save_if_xml_invalid
           map_element "IgnoreMixedContent", to: :ignore_mixed_content
-          map_element "AlwaysShowPlaceholderText", to: :always_show_placeholder_text
+          map_element "AlwaysShowPlaceholderText",
+                      to: :always_show_placeholder_text
           map_element "DoNotPromoteQF", to: :do_not_promote_qf
           map_element "LidThemeOther", to: :lid_theme_other
           map_element "LidThemeAsian", to: :lid_theme_asian

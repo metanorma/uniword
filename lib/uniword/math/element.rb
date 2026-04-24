@@ -14,19 +14,24 @@ module Uniword
       attribute :runs, MathRun, collection: true, initialize_empty: true
       attribute :functions, Function, collection: true, initialize_empty: true
       attribute :fractions, Fraction, collection: true, initialize_empty: true
-      attribute :superscripts, Superscript, collection: true, initialize_empty: true
+      attribute :superscripts, Superscript, collection: true,
+                                            initialize_empty: true
       attribute :subscripts, Subscript, collection: true, initialize_empty: true
-      attribute :sub_superscripts, SubSuperscript, collection: true, initialize_empty: true
+      attribute :sub_superscripts, SubSuperscript, collection: true,
+                                                   initialize_empty: true
       attribute :delimiters, Delimiter, collection: true, initialize_empty: true
       attribute :radicals, Radical, collection: true, initialize_empty: true
       attribute :narys, Nary, collection: true, initialize_empty: true
       attribute :boxes, Box, collection: true, initialize_empty: true
       attribute :accents, Accent, collection: true, initialize_empty: true
       attribute :bars, Bar, collection: true, initialize_empty: true
-      attribute :group_chars, GroupChar, collection: true, initialize_empty: true
-      attribute :border_boxes, BorderBox, collection: true, initialize_empty: true
+      attribute :group_chars, GroupChar, collection: true,
+                                         initialize_empty: true
+      attribute :border_boxes, BorderBox, collection: true,
+                                          initialize_empty: true
       attribute :matrices, Matrix, collection: true, initialize_empty: true
-      attribute :equation_arrays, EquationArray, collection: true, initialize_empty: true
+      attribute :equation_arrays, EquationArray, collection: true,
+                                                 initialize_empty: true
 
       xml do
         element "e"

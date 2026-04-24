@@ -159,7 +159,7 @@ module Uniword
         "accent5" => :accent5,
         "accent6" => :accent6,
         "hyperlink" => :hlink,
-        "followedHyperlink" => :fol_hlink
+        "followedHyperlink" => :fol_hlink,
       }.freeze
 
       # Get a theme color by name (accepts both scheme names and OOXML names)

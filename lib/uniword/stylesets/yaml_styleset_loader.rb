@@ -48,7 +48,7 @@ module Uniword
           available = available_stylesets
           raise ArgumentError,
                 "StyleSet '#{name}' not found. " \
-                "Available StyleSets: #{available.join(", ")}"
+                "Available StyleSets: #{available.join(', ')}"
         end
 
         new.load(path)

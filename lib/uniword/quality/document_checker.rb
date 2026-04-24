@@ -32,7 +32,7 @@ module Uniword
         paragraph_length: "ParagraphLengthRule",
         image_alt_text: "ImageAltTextRule",
         link_validation: "LinkValidationRule",
-        style_consistency: "StyleConsistencyRule"
+        style_consistency: "StyleConsistencyRule",
       }.freeze
 
       # Initialize document checker
@@ -107,10 +107,10 @@ module Uniword
       def load_rules
         rules_config = @config[:quality_rules] || {}
 
-        RULE_CLASSES.map do |rule_key, class_name|
+        RULE_CLASSES.filter_map do |rule_key, class_name|
           rule_config = rules_config[rule_key] || {}
           instantiate_rule(class_name, rule_config)
-        end.compact
+        end
       end
 
       # Instantiate a rule class with configuration

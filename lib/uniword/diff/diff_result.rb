@@ -92,7 +92,7 @@ module Uniword
           structure_changes: structure_changes,
           metadata_changes: metadata_changes,
           style_changes: style_changes,
-          summary: summary
+          summary: summary,
         }
       end
     end

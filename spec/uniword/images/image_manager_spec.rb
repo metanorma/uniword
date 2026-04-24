@@ -56,10 +56,12 @@ RSpec.describe Uniword::Images::ImageManager do
   end
 
   describe "#extract" do
-    let(:output_dir) { File.join(Dir.tmpdir, "uniword_images_test_#{Process.pid}") }
+    let(:output_dir) do
+      File.join(Dir.tmpdir, "uniword_images_test_#{Process.pid}")
+    end
 
     after do
-      FileUtils.rm_rf(output_dir) if File.exist?(output_dir)
+      FileUtils.rm_rf(output_dir)
     end
 
     it "returns 0 for document without images" do
@@ -113,10 +115,12 @@ RSpec.describe Uniword::Images::ImageManager do
   end
 
   describe "#insert" do
-    let(:output_path) { File.join(Dir.tmpdir, "uniword_insert_test_#{Process.pid}.docx") }
+    let(:output_path) do
+      File.join(Dir.tmpdir, "uniword_insert_test_#{Process.pid}.docx")
+    end
 
     after do
-      FileUtils.rm_f(output_path) if File.exist?(output_path)
+      FileUtils.rm_f(output_path)
     end
 
     it "inserts an image and returns relationship id" do
@@ -198,8 +202,8 @@ RSpec.describe Uniword::Images::ImageManager do
         "rIdImg1" => {
           data: "binary",
           target: "media/image1.png",
-          content_type: "image/png"
-        }
+          content_type: "image/png",
+        },
       }
       manager = described_class.new(doc)
 
@@ -235,7 +239,7 @@ RSpec.describe Uniword::Images::ImageInfo do
       content_type: "image/png",
       size: 1024,
       width: 200,
-      height: 150
+      height: 150,
     )
 
     expect(info.name).to eq("photo.png")
@@ -251,7 +255,7 @@ RSpec.describe Uniword::Images::ImageInfo do
       name: "photo.png",
       path: "word/media/photo.png",
       content_type: "image/png",
-      size: 512
+      size: 512,
     )
 
     expect(info.width).to be_nil
@@ -263,7 +267,7 @@ RSpec.describe Uniword::Images::ImageInfo do
       name: "photo.png",
       path: "word/media/photo.png",
       content_type: "image/png",
-      size: 100
+      size: 100,
     )
 
     expect(info).to be_frozen
@@ -276,7 +280,7 @@ RSpec.describe Uniword::Images::ImageInfo do
       content_type: "image/png",
       size: 2048,
       width: 200,
-      height: 150
+      height: 150,
     )
 
     str = info.to_s

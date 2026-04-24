@@ -20,7 +20,8 @@ module Uniword
     class StyleConsistencyRule < QualityRule
       def initialize(config = {})
         super
-        @allow_direct_formatting = @config.fetch(:allow_direct_formatting, false)
+        @allow_direct_formatting = @config.fetch(:allow_direct_formatting,
+                                                 false)
         @require_standard_styles = @config.fetch(:require_standard_styles, true)
       end
 
@@ -42,7 +43,7 @@ module Uniword
               message: "Paragraph #{index + 1} uses direct formatting instead of a style. " \
                        "Consider applying a standard paragraph style.",
               location: "Paragraph #{index + 1}",
-              element: para
+              element: para,
             )
           end
 
@@ -60,7 +61,7 @@ module Uniword
               message: "Direct text formatting detected in paragraph #{index + 1}, run #{run_index + 1}. " \
                        "Consider using character styles for consistency.",
               location: "Paragraph #{index + 1}, Run #{run_index + 1}",
-              element: run
+              element: run,
             )
           end
         end

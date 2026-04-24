@@ -19,7 +19,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         creator: "John Doe",
         subject: "Testing",
         keywords: "test, rspec",
-        description: "A test document"
+        description: "A test document",
       )
 
       expect(props.title).to eq("Test Document")
@@ -39,7 +39,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: "2024-01-01T00:00:00Z",
                                                                type: "dcterms:W3CDTF"),
         modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: "2024-01-02T00:00:00Z",
-                                                                 type: "dcterms:W3CDTF")
+                                                                 type: "dcterms:W3CDTF"),
       )
 
       xml = props.to_xml
@@ -71,7 +71,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: "2024-01-01T00:00:00Z",
                                                                type: "dcterms:W3CDTF"),
         modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: "2024-01-15T12:30:00Z",
-                                                                 type: "dcterms:W3CDTF")
+                                                                 type: "dcterms:W3CDTF"),
       )
 
       xml = props.to_xml
@@ -99,7 +99,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       props = described_class.new(
         title: "Test Document",
         creator: "",
-        subject: nil
+        subject: nil,
       )
 
       xml = props.to_xml
@@ -177,7 +177,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
         created: Uniword::Ooxml::Types::DctermsCreatedType.new(value: "2024-01-01T00:00:00Z",
                                                                type: "dcterms:W3CDTF"),
         modified: Uniword::Ooxml::Types::DctermsModifiedType.new(value: "2024-01-15T12:00:00Z",
-                                                                 type: "dcterms:W3CDTF")
+                                                                 type: "dcterms:W3CDTF"),
       )
 
       xml = original.to_xml
@@ -198,7 +198,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       original = described_class.new(
         title: "Test",
         creator: "",
-        subject: nil
+        subject: nil,
       )
 
       xml = original.to_xml

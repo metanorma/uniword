@@ -38,7 +38,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it "returns true for paragraph with valid properties" do
       properties = Uniword::Wordprocessingml::ParagraphProperties.new(
-        alignment: "center"
+        alignment: "center",
       )
       paragraph = Uniword::Wordprocessingml::Paragraph.new(properties: properties)
       run = Uniword::Wordprocessingml::Run.new(text: "Centered text")
@@ -159,7 +159,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
     it "validates a complex paragraph with multiple runs and properties" do
       properties = Uniword::Wordprocessingml::ParagraphProperties.new(
         alignment: "justify",
-        style: "Heading1"
+        style: "Heading1",
       )
       paragraph = Uniword::Wordprocessingml::Paragraph.new(properties: properties)
 

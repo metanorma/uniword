@@ -141,10 +141,10 @@ module Uniword
           by_severity: {
             errors: error_count,
             warnings: warning_count,
-            infos: info_count
+            infos: info_count,
           },
           element_counts: @element_counts,
-          warnings: @warnings.map(&:to_h)
+          warnings: @warnings.map(&:to_h),
         }
       end
 

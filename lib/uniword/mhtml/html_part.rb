@@ -58,10 +58,10 @@ module Uniword
 
       # Extract all <xml> blocks from head
       def xml_blocks
-        html_document.at_css("head")&.xpath("comment()")&.map do |comment|
+        html_document.at_css("head")&.xpath("comment()")&.filter_map do |comment|
           text = comment.text
           ::Regexp.last_match(1).strip if text =~ %r{<xml>(.*?)</xml>}m
-        end&.compact || []
+        end || []
       end
 
       # Get the full HTML string
@@ -96,7 +96,10 @@ module Uniword
           xml = ::Regexp.last_match(1)
           # Ensure namespace declaration is present
           ns_decl = "xmlns:#{prefix}=\"#{namespace_uri}\""
-          xml = xml.sub(/(<#{prefix}:#{element_name})/, "\\1 #{ns_decl}") unless xml.include?(ns_decl)
+          unless xml.include?(ns_decl)
+            xml = xml.sub(/(<#{prefix}:#{element_name})/,
+                          "\\1 #{ns_decl}")
+          end
           return xml
         end
         nil

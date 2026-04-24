@@ -72,7 +72,7 @@ module Uniword
           level: @level,
           severity: @severity,
           message: @message,
-          suggestion: @suggestion
+          suggestion: @suggestion,
         }
       end
     end

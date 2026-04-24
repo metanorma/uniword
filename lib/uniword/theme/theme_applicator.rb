@@ -31,7 +31,8 @@ module Uniword
         elsif theme.is_a?(Uniword::Themes::Theme)
           Uniword::Themes::ThemeTransformation.new.to_word(theme)
         else
-          raise ArgumentError, "Expected Drawingml::Theme or Themes::Theme, got #{theme.class}"
+          raise ArgumentError,
+                "Expected Drawingml::Theme or Themes::Theme, got #{theme.class}"
         end
       end
 
@@ -91,7 +92,7 @@ module Uniword
 
           rpr.color = Uniword::Properties::ColorValue.new(
             value: heading_color,
-            theme_color: "text1"
+            theme_color: "text1",
           )
         end
       end
@@ -109,7 +110,7 @@ module Uniword
 
         rpr.color = Uniword::Properties::ColorValue.new(
           value: hlink_color,
-          theme_color: "hyperlink"
+          theme_color: "hyperlink",
         )
       end
 
@@ -121,7 +122,7 @@ module Uniword
           ascii_theme: "minorAscii",
           h_ansi_theme: "minorHAnsi",
           east_asia_theme: "minorEastAsia",
-          cs_theme: "minorBidi"
+          cs_theme: "minorBidi",
         )
       end
 
@@ -133,7 +134,7 @@ module Uniword
           ascii_theme: "majorAscii",
           h_ansi_theme: "majorHAnsi",
           east_asia_theme: "majorEastAsia",
-          cs_theme: "majorBidi"
+          cs_theme: "majorBidi",
         )
       end
     end

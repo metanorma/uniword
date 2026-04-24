@@ -15,7 +15,8 @@ module Uniword
         element "cNvGraphicFramePr"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
 
-        map_element "graphicFrameLocks", to: :graphic_frame_locks, render_nil: false
+        map_element "graphicFrameLocks", to: :graphic_frame_locks,
+                                         render_nil: false
       end
     end
   end

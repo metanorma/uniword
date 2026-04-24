@@ -28,7 +28,7 @@ RSpec.describe Uniword::Transformation::Transformer do
         result = transformer.transform(
           source: source_doc,
           source_format: :docx,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         expect(result).to be_a(Uniword::Mhtml::Document)
@@ -43,7 +43,7 @@ RSpec.describe Uniword::Transformation::Transformer do
         result = transformer.transform(
           source: mhtml_doc,
           source_format: :mhtml,
-          target_format: :docx
+          target_format: :docx,
         )
 
         expect(result).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -56,7 +56,7 @@ RSpec.describe Uniword::Transformation::Transformer do
           transformer.transform(
             source: nil,
             source_format: :docx,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Source must be a Document/)
       end
@@ -66,7 +66,7 @@ RSpec.describe Uniword::Transformation::Transformer do
           transformer.transform(
             source: source_doc,
             source_format: :invalid,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Source format must be/)
       end
@@ -76,7 +76,7 @@ RSpec.describe Uniword::Transformation::Transformer do
           transformer.transform(
             source: source_doc,
             source_format: :docx,
-            target_format: :invalid
+            target_format: :invalid,
           )
         end.to raise_error(ArgumentError, /Target format must be/)
       end
@@ -118,7 +118,7 @@ RSpec.describe Uniword::Transformation::Transformer do
         result = transformer.transform(
           source: complex_doc,
           source_format: :docx,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         expect(result).to be_a(Uniword::Mhtml::Document)
@@ -130,7 +130,7 @@ RSpec.describe Uniword::Transformation::Transformer do
         result = transformer.transform(
           source: complex_doc,
           source_format: :docx,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         # Text extraction from HTML preserves content
@@ -143,7 +143,7 @@ RSpec.describe Uniword::Transformation::Transformer do
         result = transformer.transform(
           source: complex_doc,
           source_format: :docx,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         # HTML should contain formatting tags

@@ -130,7 +130,7 @@ module Uniword
 
         root.chart_parts[r_id] = {
           xml: build_xml,
-          target: target
+          target: target,
         }
 
         create_drawing(r_id)
@@ -348,7 +348,7 @@ module Uniword
         inline.effect_extent = WpDrawing::EffectExtent.new
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: SecureRandom.random_number(1_000_000_000),
-          name: "Chart #{SecureRandom.random_number(1_000_000)}"
+          name: "Chart #{SecureRandom.random_number(1_000_000)}",
         )
 
         graphic = Drawingml::Graphic.new

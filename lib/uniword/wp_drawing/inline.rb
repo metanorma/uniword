@@ -34,7 +34,8 @@ module Uniword
         map_element "extent", to: :extent, render_nil: false
         map_element "effectExtent", to: :effect_extent, render_nil: false
         map_element "docPr", to: :doc_properties, render_nil: false
-        map_element "cNvGraphicFramePr", to: :non_visual_props, render_nil: false
+        map_element "cNvGraphicFramePr", to: :non_visual_props,
+                                         render_nil: false
         map_element "graphic", to: :graphic, render_nil: false
       end
     end

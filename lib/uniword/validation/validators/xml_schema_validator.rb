@@ -37,7 +37,7 @@ module Uniword
                 severity: "error",
                 code: "XSD-001",
                 message: "No XML files found in document",
-                suggestion: "A valid DOCX must contain at least [Content_Types].xml."
+                suggestion: "A valid DOCX must contain at least [Content_Types].xml.",
               )
               return build_result(issues)
             end
@@ -54,7 +54,7 @@ module Uniword
           issues << Report::ValidationIssue.new(
             severity: "error",
             code: "XSD-001",
-            message: "Cannot open ZIP file: #{e.message}"
+            message: "Cannot open ZIP file: #{e.message}",
           )
           build_result(issues)
         end
@@ -70,7 +70,7 @@ module Uniword
             code: "XSD-001",
             message: "Malformed XML in #{entry.name}: #{e.message}",
             part: entry.name,
-            suggestion: "Fix the XML syntax error in this part."
+            suggestion: "Fix the XML syntax error in this part.",
           )
         end
 
@@ -90,9 +90,9 @@ module Uniword
                 issues << Report::ValidationIssue.new(
                   severity: "error",
                   code: "XSD-002",
-                  message: error.message.gsub(/\n/, " ").strip,
+                  message: error.message.gsub("\n", " ").strip,
                   part: entry.name,
-                  line: error.line
+                  line: error.line,
                 )
               end
 
@@ -103,14 +103,14 @@ module Uniword
                 severity: "warning",
                 code: "XSD-003",
                 message: "Schema not available for #{entry.name}: #{e.message}",
-                part: entry.name
+                part: entry.name,
               )
             rescue StandardError => e
               issues << Report::ValidationIssue.new(
                 severity: "warning",
                 code: "XSD-003",
                 message: "Cannot validate #{entry.name}: #{e.message}",
-                part: entry.name
+                part: entry.name,
               )
             end
           end
@@ -127,7 +127,7 @@ module Uniword
               message: "Unknown namespace: #{uri}",
               part: part_name,
               suggestion: "This namespace has no bundled XSD schema. " \
-                          "Validation of its elements is skipped."
+                          "Validation of its elements is skipped.",
             )
           end
         end

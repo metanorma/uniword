@@ -55,7 +55,9 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it "raises error for non-stage objects" do
-      expect { processor.add_stage("not a stage") }.to raise_error(ArgumentError)
+      expect do
+        processor.add_stage("not a stage")
+      end.to raise_error(ArgumentError)
     end
   end
 
@@ -79,8 +81,12 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
   end
 
   describe "#process_file" do
-    let(:input_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_input.docx") }
-    let(:output_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_output.docx") }
+    let(:input_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_input.docx")
+    end
+    let(:output_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}_output.docx")
+    end
 
     before do
       # Create a minimal DOCX structure for testing
@@ -128,7 +134,9 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it "records failure when error occurs" do
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(StandardError, "Test error")
+      allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(
+        StandardError, "Test error"
+      )
 
       result = processor.process_file(input_path, output_path)
 
@@ -156,7 +164,8 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     it "processes batch of documents" do
-      result = processor.process_batch(input_dir: input_dir, output_dir: output_dir)
+      result = processor.process_batch(input_dir: input_dir,
+                                       output_dir: output_dir)
 
       expect(result).to be_a(Uniword::Batch::BatchResult)
       expect(result.total_count).to eq(2)
@@ -170,7 +179,8 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
 
     it "raises error when input directory does not exist" do
       expect do
-        processor.process_batch(input_dir: "nonexistent", output_dir: output_dir)
+        processor.process_batch(input_dir: "nonexistent",
+                                output_dir: output_dir)
       end.to raise_error(ArgumentError, /does not exist/)
     end
 
@@ -180,7 +190,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
       result = processor.process_batch(
         input_dir: input_dir,
         output_dir: output_dir,
-        pattern: "*.docx"
+        pattern: "*.docx",
       )
 
       # Should process only .docx files, not .txt

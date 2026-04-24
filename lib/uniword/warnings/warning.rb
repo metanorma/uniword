@@ -112,7 +112,7 @@ module Uniword
           message: @message,
           context: @context,
           location: @location,
-          suggestion: @suggestion
+          suggestion: @suggestion,
         }.compact
       end
 

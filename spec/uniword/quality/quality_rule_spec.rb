@@ -9,7 +9,7 @@ RSpec.describe Uniword::Quality::QualityRule do
       [create_violation(
         severity: :error,
         message: "Test violation",
-        location: "Test location"
+        location: "Test location",
       )]
     end
   end
@@ -68,7 +68,7 @@ RSpec.describe Uniword::Quality::QualityViolation do
         rule: "test_rule",
         severity: :error,
         message: "Error message",
-        location: "Line 1"
+        location: "Line 1",
       )
 
       expect(violation.rule).to eq("test_rule")
@@ -83,7 +83,7 @@ RSpec.describe Uniword::Quality::QualityViolation do
           rule: "test",
           severity: :invalid,
           message: "Test",
-          location: "Test"
+          location: "Test",
         )
       end.to raise_error(ArgumentError, /Invalid severity/)
     end
@@ -127,7 +127,7 @@ RSpec.describe Uniword::Quality::QualityViolation do
         rule: "test_rule",
         severity: :warning,
         message: "Warning message",
-        location: "Paragraph 5"
+        location: "Paragraph 5",
       )
 
       hash = violation.to_h
@@ -135,7 +135,7 @@ RSpec.describe Uniword::Quality::QualityViolation do
         rule: "test_rule",
         severity: :warning,
         message: "Warning message",
-        location: "Paragraph 5"
+        location: "Paragraph 5",
       )
     end
   end

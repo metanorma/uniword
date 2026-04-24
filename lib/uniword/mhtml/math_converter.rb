@@ -75,7 +75,9 @@ module Uniword
             parsed = Plurimath::Math.parse(asciimath_string, :asciimath)
             parsed.to_omml
           rescue Plurimath::Math::ParseError => e
-            Uniword.logger&.debug { "AsciiMath conversion failed: #{e.message}" }
+            Uniword.logger&.debug do
+              "AsciiMath conversion failed: #{e.message}"
+            end
             asciimath_string
           end
         else
@@ -138,9 +140,9 @@ module Uniword
       def self.extract_math(element)
         if element["data-mathml"]
           { type: :mathml, content: element["data-mathml"] }
-        elsif element.name =~ /^(math|mml:math)$/
+        elsif /^(math|mml:math)$/.match?(element.name)
           { type: :mathml, content: element.to_s }
-        elsif element.name =~ /^m:(oMath|oMathPara)$/
+        elsif /^m:(oMath|oMathPara)$/.match?(element.name)
           { type: :omml, content: element.to_s }
         elsif element["class"]&.include?("asciimath")
           { type: :asciimath, content: element.text }

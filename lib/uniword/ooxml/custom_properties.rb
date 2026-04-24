@@ -122,7 +122,7 @@ module Uniword
         namespace Namespaces::CustomProperties
 
         namespace_scope [
-          { namespace: Namespaces::VariantTypes, declare: :always }
+          { namespace: Namespaces::VariantTypes, declare: :always },
         ]
 
         map_element "property", to: :properties, render_nil: false

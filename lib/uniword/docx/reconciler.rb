@@ -40,6 +40,9 @@ module Uniword
           reconcile_document_body
         end
 
+        # Clear stored namespace plans so declare: :always scopes take effect
+        clear_stored_namespace_plans
+
         # Group 3: Package consistency (always)
         reconcile_content_types
         reconcile_package_rels
@@ -50,6 +53,27 @@ module Uniword
 
       attr_reader :package, :profile
 
+      # Clear stored namespace plans from parsed XML so that
+      # declare: :always namespace_scopes take full effect during
+      # serialization. Without this, parsed objects limit namespace
+      # declarations to only those present in the source XML.
+      def clear_stored_namespace_plans
+        parts = [
+          package.document,
+          package.settings,
+          package.font_table,
+          package.styles,
+          package.web_settings,
+          package.core_properties,
+          package.app_properties,
+        ].compact
+
+        parts.each do |part|
+          part.instance_variable_set(:@pending_namespace_data, nil)
+          part.instance_variable_set(:@import_declaration_plan, nil)
+        end
+      end
+
       # -- Section Properties --
 
       def reconcile_section_properties
@@ -59,13 +83,14 @@ module Uniword
         return if body.section_properties
 
         body.section_properties = Wordprocessingml::SectionProperties.new(
-          page_size: Wordprocessingml::PageSize.new(width: 12_240, height: 15_840),
+          page_size: Wordprocessingml::PageSize.new(width: 12_240,
+                                                    height: 15_840),
           page_margins: Wordprocessingml::PageMargins.new(
             top: 1440, right: 1440, bottom: 1440, left: 1440,
             header: 720, footer: 720, gutter: 0
           ),
           columns: Wordprocessingml::Columns.new(space: 720),
-          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360)
+          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
         )
       end
 
@@ -105,13 +130,15 @@ module Uniword
 
       def minimal_footnotes
         Wordprocessingml::Footnotes.new(
-          footnote_entries: [separator_entry(:footnote), continuation_entry(:footnote)]
+          footnote_entries: [separator_entry(:footnote),
+                             continuation_entry(:footnote)],
         )
       end
 
       def minimal_endnotes
         Wordprocessingml::Endnotes.new(
-          endnote_entries: [separator_entry(:endnote), continuation_entry(:endnote)]
+          endnote_entries: [separator_entry(:endnote),
+                            continuation_entry(:endnote)],
         )
       end
 
@@ -135,7 +162,7 @@ module Uniword
 
       def ensure_separators(notes, type)
         entries = notes.public_send(:"#{type}_entries")
-        ids = entries.map(&:id).to_set
+        ids = entries.to_set(&:id)
 
         entries.unshift(separator_entry(type)) unless ids.include?("-1")
         entries.unshift(continuation_entry(type)) unless ids.include?("0")
@@ -152,7 +179,9 @@ module Uniword
 
         begin
           friendly = Themes::Theme.load(theme_name)
-          package.theme = friendly.to_word_theme
+          word_theme = friendly.to_word_theme
+          word_theme.name = "Office Theme"
+          package.theme = word_theme
         rescue ArgumentError
           nil
         end
@@ -170,12 +199,13 @@ module Uniword
         rsid = generate_rsid
 
         settings.zoom ||= Wordprocessingml::Zoom.new(percent: 100)
+        settings.do_not_display_page_boundaries ||= Wordprocessingml::DoNotDisplayPageBoundaries.new
         settings.proof_state ||= Wordprocessingml::ProofState.new(
-          spelling: "clean", grammar: "clean"
+          spelling: "clean", grammar: "clean",
         )
         settings.default_tab_stop ||= Wordprocessingml::DefaultTabStop.new(val: "720")
         settings.character_spacing_control ||= Wordprocessingml::CharacterSpacingControl.new(
-          val: "doNotCompress"
+          val: "doNotCompress",
         )
 
         settings.compat ||= build_compat
@@ -183,26 +213,25 @@ module Uniword
         settings.math_pr ||= build_math_pr
         settings.theme_font_lang ||= Wordprocessingml::ThemeFontLang.new(
           val: profile.lang,
-          east_asia: profile.east_asia_lang
+          east_asia: profile.east_asia_lang,
         )
         settings.clr_scheme_mapping ||= build_clr_scheme_mapping
         settings.decimal_symbol ||= Wordprocessingml::DecimalSymbol.new(
-          val: profile.decimal_symbol
+          val: profile.decimal_symbol,
         )
         settings.list_separator ||= Wordprocessingml::ListSeparator.new(
-          val: profile.list_separator
+          val: profile.list_separator,
         )
 
         settings.w14_doc_id ||= Wordprocessingml::W14DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}"
+          val: SecureRandom.hex(4).upcase,
         )
-        settings.w15_chart_tracking_ref_based ||= Wordprocessingml::W15ChartTrackingRefBased.new
         settings.w15_doc_id ||= Wordprocessingml::W15DocId.new(
-          val: "{#{SecureRandom.uuid.upcase}}"
+          val: SecureRandom.hex(4).upcase,
         )
 
         settings.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -236,7 +265,7 @@ module Uniword
               usb0: sig_data["usb0"], usb1: sig_data["usb1"],
               usb2: sig_data["usb2"], usb3: sig_data["usb3"],
               csb0: sig_data["csb0"], csb1: sig_data["csb1"]
-            )
+            ),
           )
 
           font.alt_name = Wordprocessingml::AltName.new(val: meta["alt_name"]) if meta["alt_name"]
@@ -244,7 +273,7 @@ module Uniword
         end
 
         font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -263,7 +292,7 @@ module Uniword
         ensure_default_styles(styles)
 
         styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -276,10 +305,8 @@ module Uniword
           package.web_settings
         end
 
-        ws.optimize_for_browser ||= Wordprocessingml::OptimizeForBrowser.new
-        ws.allow_png ||= Wordprocessingml::AllowPng.new
         ws.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          value: "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du"
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
       end
 
@@ -292,29 +319,69 @@ module Uniword
           package.app_properties
         end
 
-        app.template ||= "Normal.dotm"
+        # Always assign to override lutaml-model's using_default tracking,
+        # which prevents serialization of attributes that equal their defaults.
+        app.template = "Normal.dotm"
         app.application = profile.application_name
         app.app_version = profile.app_version
         app.company = profile.user_company if profile.user_company && !profile.user_company.empty?
+
+        # Calculate document statistics
+        stats = calculate_document_statistics
+        app.pages = stats[:pages].to_s
+        app.words = stats[:words].to_s
+        app.characters = stats[:characters].to_s
+        app.characters_with_spaces = stats[:characters_with_spaces].to_s
+        app.paragraphs = stats[:paragraphs].to_s
+        app.lines = stats[:lines].to_s
+
+        # Static defaults
+        app.total_time = "0"
+        app.scale_crop = "false"
+        app.doc_security = "0"
+        app.links_up_to_date = "false"
+        app.shared_doc = "false"
+        app.hyperlinks_changed = "false"
       end
 
       def reconcile_core_properties
         return unless profile
 
+        # Rebuild from parsed state to ensure namespace_scope
+        # declarations (e.g. xmlns:dcmitype) are applied on
+        # serialization (lutaml-model preserves parsed namespaces)
+        old_cp = package.core_properties
+        package.core_properties = if old_cp
+                                    Ooxml::CoreProperties.new(
+                                      title: old_cp.title,
+                                      subject: old_cp.subject,
+                                      creator: old_cp.creator,
+                                      keywords: old_cp.keywords,
+                                      description: old_cp.description,
+                                      last_modified_by: old_cp.last_modified_by,
+                                      revision: old_cp.revision,
+                                      created: old_cp.created,
+                                      modified: old_cp.modified,
+                                    )
+                                  else
+                                    Ooxml::CoreProperties.new
+                                  end
         cp = package.core_properties
-        cp ||= begin
-          package.core_properties = Ooxml::CoreProperties.new
-          package.core_properties
-        end
 
         if profile.user_name && !profile.user_name.empty?
           cp.last_modified_by = profile.user_name
           cp.creator ||= profile.user_name
         end
 
+        cp.last_modified_by ||= profile.application_name
+
         now = Time.now.utc.strftime("%Y-%m-%dT%H:%M:%SZ")
-        cp.modified = now
-        cp.created ||= now
+        cp.modified = Ooxml::Types::DctermsModifiedType.new(
+          value: now, type: "dcterms:W3CDTF",
+        )
+        cp.created ||= Ooxml::Types::DctermsCreatedType.new(
+          value: now, type: "dcterms:W3CDTF",
+        )
 
         cp.revision = "1" unless cp.revision
       end
@@ -323,8 +390,13 @@ module Uniword
         return unless profile
         return unless package.document&.body
 
+        doc = package.document
+        doc.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
+          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14",
+        )
+
         rsid = generate_rsid
-        body = package.document.body
+        body = doc.body
 
         body.paragraphs.each do |para|
           para.rsid_r ||= rsid
@@ -349,17 +421,17 @@ module Uniword
         ct.defaults = [
           Uniword::ContentTypes::Default.new(
             extension: "rels",
-            content_type: "application/vnd.openxmlformats-package.relationships+xml"
+            content_type: "application/vnd.openxmlformats-package.relationships+xml",
           ),
           Uniword::ContentTypes::Default.new(
             extension: "xml",
-            content_type: "application/xml"
-          )
+            content_type: "application/xml",
+          ),
         ]
 
         # Overrides: rebuild for standard parts that exist
         standard = content_type_overrides_for_present_parts
-        standard_parts = standard.map(&:part_name).to_set
+        standard_parts = standard.to_set(&:part_name)
         non_standard = ct.overrides.reject do |o|
           standard_parts.include?(o.part_name)
         end
@@ -381,10 +453,10 @@ module Uniword
                     "docProps/core.xml"),
           build_rel("rId3",
                     "#{base}/officeDocument/2006/relationships/extended-properties",
-                    "docProps/app.xml")
+                    "docProps/app.xml"),
         ]
 
-        standard_targets = standard.map(&:target).to_set
+        standard_targets = standard.to_set(&:target)
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
         end
@@ -402,7 +474,7 @@ module Uniword
           ["rId2", "settings", "settings.xml", package.settings],
           ["rId3", "webSettings", "webSettings.xml", package.web_settings],
           ["rId4", "fontTable", "fontTable.xml", package.font_table],
-          ["rId5", "theme", "theme/theme1.xml", package.theme]
+          ["rId5", "theme", "theme/theme1.xml", package.theme],
         ]
 
         standard = defs.filter_map do |rid, suffix, target, obj|
@@ -411,7 +483,7 @@ module Uniword
           build_rel(rid, "#{base}/#{suffix}", target)
         end
 
-        standard_targets = standard.map(&:target).to_set
+        standard_targets = standard.to_set(&:target)
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
         end
@@ -420,6 +492,10 @@ module Uniword
       end
 
       # -- Helpers --
+
+      def calculate_document_statistics
+        DocumentStatistics.new(package).calculate
+      end
 
       def generate_rsid
         "00#{SecureRandom.hex(3).upcase}"
@@ -452,7 +528,7 @@ module Uniword
           [package.endnotes, "/word/endnotes.xml",
            "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"],
           [package.numbering, "/word/numbering.xml",
-           "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"]
+           "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"],
         ]
 
         checks.filter_map do |obj, part_name, content_type|
@@ -460,14 +536,14 @@ module Uniword
 
           Uniword::ContentTypes::Override.new(
             part_name: part_name,
-            content_type: content_type
+            content_type: content_type,
           )
         end
       end
 
       def build_rel(id, type, target)
         Ooxml::Relationships::Relationship.new(
-          id: id, type: type, target: target
+          id: id, type: type, target: target,
         )
       end
 
@@ -477,34 +553,34 @@ module Uniword
             Wordprocessingml::CompatSetting.new(
               name: "compatibilityMode",
               uri: "http://schemas.microsoft.com/office/word",
-              val: profile.compat_mode
+              val: profile.compat_mode,
             ),
             Wordprocessingml::CompatSetting.new(
               name: "overrideTableStyleFontSizeAndJustification",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "enableOpenTypeFeatures",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "doNotFlipMirrorIndents",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "differentiateMultirowTableHeaders",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
+              val: "1",
             ),
             Wordprocessingml::CompatSetting.new(
               name: "useWord2013TrackBottomHyphenation",
               uri: "http://schemas.microsoft.com/office/word",
-              val: "1"
-            )
-          ]
+              val: "0",
+            ),
+          ],
         )
       end
 
@@ -512,7 +588,7 @@ module Uniword
         root = "00#{SecureRandom.hex(3).upcase}"
         Wordprocessingml::Rsids.new(
           rsid_root: Wordprocessingml::RsidRoot.new(val: root),
-          rsid: [Wordprocessingml::Rsid.new(val: rsid)]
+          rsid: [Wordprocessingml::Rsid.new(val: rsid)],
         )
       end
 
@@ -523,12 +599,12 @@ module Uniword
           brk_bin_sub: Wordprocessingml::BrkBinSub.new(val: "--"),
           small_frac: Wordprocessingml::SmallFrac.new(val: "0"),
           disp_def: Wordprocessingml::DispDef.new,
-          l_margin: Wordprocessingml::LMargin.new(val: "1440"),
-          r_margin: Wordprocessingml::RMargin.new(val: "1440"),
+          l_margin: Wordprocessingml::LMargin.new(val: "0"),
+          r_margin: Wordprocessingml::RMargin.new(val: "0"),
           def_jc: Wordprocessingml::DefJc.new(val: "centerGroup"),
           wrap_indent: Wordprocessingml::WrapIndent.new(val: "1440"),
           int_lim: Wordprocessingml::IntLim.new(val: "subSup"),
-          nary_lim: Wordprocessingml::NaryLim.new(val: "undOvr")
+          nary_lim: Wordprocessingml::NaryLim.new(val: "undOvr"),
         )
       end
 
@@ -547,7 +623,7 @@ module Uniword
             ascii_theme: "minorHAnsi",
             east_asia_theme: "minorEastAsia",
             h_ansi_theme: "minorHAnsi",
-            cs_theme: "minorBidi"
+            cs_theme: "minorBidi",
           ),
           kerning: Properties::Kerning.new(val: 2),
           size: Properties::FontSize.new(val: 24),
@@ -555,17 +631,18 @@ module Uniword
           language: Properties::Language.new(
             val: profile.lang,
             east_asia: profile.east_asia_lang,
-            bidi: profile.bidi_lang
-          )
+            bidi: profile.bidi_lang,
+          ),
         )
 
         p_pr = Wordprocessingml::ParagraphProperties.new(
-          spacing: Properties::Spacing.new(after: 160, line: 278, line_rule: "auto")
+          spacing: Properties::Spacing.new(after: 160, line: 278,
+                                           line_rule: "auto"),
         )
 
         Wordprocessingml::DocDefaults.new(
           rPrDefault: Wordprocessingml::RPrDefault.new(rPr: r_pr),
-          pPrDefault: Wordprocessingml::PPrDefault.new(pPr: p_pr)
+          pPrDefault: Wordprocessingml::PPrDefault.new(pPr: p_pr),
         )
       end
 
@@ -578,7 +655,10 @@ module Uniword
           attrs[:ui_priority] = ex["uiPriority"].to_i if ex["uiPriority"]
           attrs[:q_format] = ex["qFormat"] if ex["qFormat"]
           attrs[:semi_hidden] = ex["semiHidden"] if ex["semiHidden"]
-          attrs[:unhide_when_used] = ex["unhideWhenUsed"] if ex["unhideWhenUsed"]
+          if ex["unhideWhenUsed"]
+            attrs[:unhide_when_used] =
+              ex["unhideWhenUsed"]
+          end
           attrs[:locked] = ex["locked"] if ex["locked"]
           Wordprocessingml::LatentStylesException.new(attrs)
         end
@@ -590,12 +670,12 @@ module Uniword
           def_unhide_when_used: config["defUnhideWhenUsed"],
           def_q_format: config["defQFormat"],
           count: config["count"].to_i,
-          lsd_exception: exceptions
+          lsd_exception: exceptions,
         )
       end
 
       def ensure_default_styles(styles)
-        style_ids = styles.styles.map(&:id).to_set
+        style_ids = styles.styles.to_set(&:id)
 
         unless style_ids.include?("Normal")
           styles.add_style(Wordprocessingml::Style.new(
@@ -622,8 +702,8 @@ module Uniword
               top: Properties::Margin.new(w: 0, type: "dxa"),
               left: Properties::Margin.new(w: 108, type: "dxa"),
               bottom: Properties::Margin.new(w: 0, type: "dxa"),
-              right: Properties::Margin.new(w: 108, type: "dxa")
-            )
+              right: Properties::Margin.new(w: 108, type: "dxa"),
+            ),
           )
 
           styles.add_style(Wordprocessingml::Style.new(
@@ -664,14 +744,27 @@ module Uniword
       def font_names_for_profile
         names = []
         fs = profile.system.font_scheme
+        loc = profile.locale
+
+        # Order matches Word's canonical output:
+        # 1. Minor font (body), 2. East Asian font, 3. Legacy serif,
+        # 4. East Asian light font, 5. Major font (headings)
         names << fs&.minor_font if fs&.minor_font
+
+        ea_font = loc.respond_to?(:east_asian_font) && loc.east_asian_font
+        ea_light = loc.respond_to?(:east_asian_light_font) && loc.east_asian_light_font
+
+        # Default East Asian fonts for zh-CN when locale profile omits them
+        if loc.east_asia_lang == "zh-CN"
+          ea_font ||= "DengXian"
+          ea_light ||= "DengXian Light"
+        end
+
+        names << ea_font if ea_font
+        names << "Times New Roman"
+        names << ea_light if ea_light
         names << fs&.major_font if fs&.major_font
 
-        loc = profile.locale
-        names << loc.east_asian_font if loc.respond_to?(:east_asian_font) && loc.east_asian_font
-        names << loc.east_asian_light_font if loc.respond_to?(:east_asian_light_font) && loc.east_asian_light_font
-
-        names << "Times New Roman"
         names.uniq
       end
     end

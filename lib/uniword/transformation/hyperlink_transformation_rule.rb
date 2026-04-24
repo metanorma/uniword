@@ -41,7 +41,7 @@ module Uniword
           anchor: source_link.anchor,
           text: source_link.text,
           tooltip: source_link.tooltip,
-          relationship_id: source_link.relationship_id
+          relationship_id: source_link.relationship_id,
         )
 
         # Transform runs within hyperlink
@@ -59,7 +59,7 @@ module Uniword
       def transform_runs(source, target)
         run_rule = RunTransformationRule.new(
           source_format: @source_format,
-          target_format: @target_format
+          target_format: @target_format,
         )
 
         source.runs.each do |source_run|

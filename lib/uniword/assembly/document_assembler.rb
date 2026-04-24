@@ -65,7 +65,7 @@ module Uniword
         @components_dir = components_dir
         @registry = ComponentRegistry.new(
           components_dir,
-          cache_enabled: cache_components
+          cache_enabled: cache_components,
         )
       end
 
@@ -86,7 +86,7 @@ module Uniword
         # Load manifest
         manifest = AssemblyManifest.new(
           manifest_path,
-          override_variables: variables
+          override_variables: variables,
         )
 
         # Create new document
@@ -125,7 +125,7 @@ module Uniword
         # Load manifest to get output path
         manifest = AssemblyManifest.new(
           manifest_path,
-          override_variables: variables
+          override_variables: variables,
         )
 
         # Determine output path
@@ -159,7 +159,7 @@ module Uniword
             # Resolve wildcard
             resolved = @registry.resolve(
               section["component"],
-              order: section["order"]
+              order: section["order"],
             )
             resolved.each do |comp|
               components << { type: :component, name: comp[:name] }
@@ -174,7 +174,7 @@ module Uniword
           template: manifest.template_name,
           variables: manifest.variables,
           component_count: components.size,
-          components: components
+          components: components,
         }
       end
 
@@ -214,7 +214,7 @@ module Uniword
             document,
             component_name,
             section["order"],
-            substitutor
+            substitutor,
           )
         else
           # Insert single component
@@ -269,7 +269,7 @@ module Uniword
 
         toc = Toc.new(
           max_level: max_level,
-          title: title
+          title: title,
         )
 
         # Generate TOC paragraphs

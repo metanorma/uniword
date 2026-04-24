@@ -79,6 +79,7 @@ module Uniword
     autoload :RelationshipIdValue, "uniword/properties/relationship_id"
     autoload :HistoryValue, "uniword/properties/history_value"
     autoload :Word2010IdValue, "uniword/properties/word2010_id_value"
-    autoload :DisplacedByCustomXmlValue, "uniword/properties/displaced_by_custom_xml_value"
+    autoload :DisplacedByCustomXmlValue,
+             "uniword/properties/displaced_by_custom_xml_value"
   end
 end

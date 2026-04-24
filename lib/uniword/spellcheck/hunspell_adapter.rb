@@ -69,7 +69,7 @@ module Uniword
 
         raise DependencyError.new(
           "hunspell",
-          "spell checking"
+          "spell checking",
         )
       end
 
@@ -90,7 +90,7 @@ module Uniword
           next unless rest
 
           suggestions.concat(
-            rest.strip.split(", ").map(&:strip)
+            rest.strip.split(", ").map(&:strip),
           )
         end
         suggestions

@@ -11,7 +11,8 @@ module Uniword
       attribute :blank, :string
       attribute :calendar_type, :string
       attribute :filter, Filter, collection: true, initialize_empty: true
-      attribute :date_group_item, DateGroupItem, collection: true, initialize_empty: true
+      attribute :date_group_item, DateGroupItem, collection: true,
+                                                 initialize_empty: true
 
       xml do
         element "filters"

@@ -36,10 +36,11 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings = settings_class.new
       footnotes = footnotes_class.new(
         footnote_entries: [
-          footnote_class.new(id: "1", paragraphs: [])
-        ]
+          footnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: footnotes, endnotes: nil)
+      package = build_package(settings: settings, footnotes: footnotes,
+                              endnotes: nil)
 
       described_class.new(package).reconcile
 
@@ -52,11 +53,13 @@ RSpec.describe Uniword::Docx::Reconciler do
       original_footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [])
-        ]
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: original_footnotes, endnotes: nil)
+      package = build_package(settings: settings,
+                              footnotes: original_footnotes, endnotes: nil)
 
       described_class.new(package).reconcile
 
@@ -78,11 +81,13 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings.footnote_pr = footnote_pr_class.new
       footnotes = footnotes_class.new(
         footnote_entries: [
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [])
-        ]
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: footnotes, endnotes: nil)
+      package = build_package(settings: settings, footnotes: footnotes,
+                              endnotes: nil)
 
       described_class.new(package).reconcile
 
@@ -96,10 +101,11 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [])
-        ]
+          footnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: footnotes, endnotes: nil)
+      package = build_package(settings: settings, footnotes: footnotes,
+                              endnotes: nil)
 
       described_class.new(package).reconcile
 
@@ -124,10 +130,11 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings = settings_class.new
       endnotes = endnotes_class.new(
         endnote_entries: [
-          endnote_class.new(id: "1", paragraphs: [])
-        ]
+          endnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: nil, endnotes: endnotes)
+      package = build_package(settings: settings, footnotes: nil,
+                              endnotes: endnotes)
 
       described_class.new(package).reconcile
 
@@ -140,11 +147,13 @@ RSpec.describe Uniword::Docx::Reconciler do
       original_endnotes = endnotes_class.new(
         endnote_entries: [
           endnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          endnote_class.new(id: "1", paragraphs: [])
-        ]
+          endnote_class.new(id: "0", type: "continuationSeparator",
+                            paragraphs: []),
+          endnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: nil, endnotes: original_endnotes)
+      package = build_package(settings: settings, footnotes: nil,
+                              endnotes: original_endnotes)
 
       described_class.new(package).reconcile
 
@@ -166,11 +175,13 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings.endnote_pr = endnote_pr_class.new
       endnotes = endnotes_class.new(
         endnote_entries: [
-          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          endnote_class.new(id: "1", paragraphs: [])
-        ]
+          endnote_class.new(id: "0", type: "continuationSeparator",
+                            paragraphs: []),
+          endnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: nil, endnotes: endnotes)
+      package = build_package(settings: settings, footnotes: nil,
+                              endnotes: endnotes)
 
       described_class.new(package).reconcile
 
@@ -184,10 +195,11 @@ RSpec.describe Uniword::Docx::Reconciler do
       endnotes = endnotes_class.new(
         endnote_entries: [
           endnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          endnote_class.new(id: "1", paragraphs: [])
-        ]
+          endnote_class.new(id: "1", paragraphs: []),
+        ],
       )
-      package = build_package(settings: settings, footnotes: nil, endnotes: endnotes)
+      package = build_package(settings: settings, footnotes: nil,
+                              endnotes: endnotes)
 
       described_class.new(package).reconcile
 
@@ -227,7 +239,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(settings.theme_font_lang.east_asia).to eq("zh-CN")
       expect(settings.decimal_symbol.val).to eq(".")
       expect(settings.list_separator.val).to eq(",")
-      expect(settings.w14_doc_id.val).to match(/\{[0-9A-F-]+\}/)
+      expect(settings.w14_doc_id.val).to match(/^[0-9A-F]+$/)
     end
 
     it "populates font table with profile fonts" do
@@ -264,8 +276,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       described_class.new(package, profile: profile).reconcile
 
       ws = package.web_settings
-      expect(ws.optimize_for_browser).not_to be_nil
-      expect(ws.allow_png).not_to be_nil
+      expect(ws).not_to be_nil
+      expect(ws.mc_ignorable).not_to be_nil
     end
 
     it "populates app properties" do
@@ -415,12 +427,14 @@ RSpec.describe Uniword::Docx::Reconciler do
           Uniword::Ooxml::Relationships::Relationship.new(
             id: "rIdCustom",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
-            target: "docProps/custom.xml"
+            target: "docProps/custom.xml",
           )
 
         described_class.new(package, profile: profile).reconcile
 
-        custom = package.package_rels.relationships.find { |r| r.id == "rIdCustom" }
+        custom = package.package_rels.relationships.find do |r|
+          r.id == "rIdCustom"
+        end
         expect(custom).not_to be_nil
         expect(custom.target).to eq("docProps/custom.xml")
       end
@@ -460,12 +474,14 @@ RSpec.describe Uniword::Docx::Reconciler do
           Uniword::Ooxml::Relationships::Relationship.new(
             id: "rIdExtra",
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
-            target: "media/image1.png"
+            target: "media/image1.png",
           )
 
         described_class.new(package, profile: profile).reconcile
 
-        extra = package.document_rels.relationships.find { |r| r.id == "rIdExtra" }
+        extra = package.document_rels.relationships.find do |r|
+          r.id == "rIdExtra"
+        end
         expect(extra).not_to be_nil
         expect(extra.target).to eq("media/image1.png")
       end

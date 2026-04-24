@@ -70,7 +70,9 @@ module Uniword
         parts.reject! { |p| p.strip.empty? || p.strip == "--" }
         # Skip the global MIME header (Content-Type: multipart/related)
         # Strip leading CRLF first since boundary lines end with \r\n
-        parts.reject! { |p| p.gsub(/^\r?\n/, "").match?(/^Content-Type:\s*multipart/i) }
+        parts.reject! do |p|
+          p.gsub(/^\r?\n/, "").match?(/^Content-Type:\s*multipart/i)
+        end
         parts
       end
 
@@ -177,7 +179,7 @@ module Uniword
 
           fname = part.filename
           next unless fname&.include?("header") || fname&.include?("footer") ||
-                      fname&.include?("plchdr")
+            fname&.include?("plchdr")
 
           # Convert to HeaderFooterPart
           idx = document.parts.index(part)

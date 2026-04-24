@@ -205,7 +205,7 @@ RSpec.describe "DOCX Reading Integration", :integration do
         "tables.docx",
         "internal-links.docx",
         "replacement.docx",
-        "saving.docx"
+        "saving.docx",
       ]
 
       reference_fixtures.each do |fixture_file|

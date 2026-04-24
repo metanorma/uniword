@@ -9,7 +9,8 @@ module Uniword
     # Generated from OOXML schema: presentationml.yml
     # Element: <p:sld_master_id_lst>
     class SlideMasterIdList < Lutaml::Model::Serializable
-      attribute :sld_master_id, SlideMasterId, collection: true, initialize_empty: true
+      attribute :sld_master_id, SlideMasterId, collection: true,
+                                               initialize_empty: true
 
       xml do
         element "sld_master_id_lst"
