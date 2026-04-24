@@ -51,7 +51,10 @@ All commands accept `--verbose` (`-v`) for detailed output.
 | Review comments and tracked changes
 
 | `uniword diff compare OLD NEW`
-| Compare two DOCX files
+| Compare two DOCX files (document level)
+
+| `uniword diff package OLD NEW`
+| Compare two DOCX files (package/ZIP level)
 
 | `uniword spellcheck check FILE`
 | Spell and grammar checking

@@ -2,33 +2,65 @@
 
 require "zip"
 require "nokogiri"
+require "canon"
 require_relative "package_diff_result"
 
 module Uniword
   module Diff
-    # Compares two DOCX files at the ZIP/XML structural level.
+    # Compares two DOCX files at the ZIP/XML/OPC structural level.
     #
     # Detects differences in:
     # - ZIP entries (added/removed parts)
-    # - XML content (element structure, attributes, namespaces)
-    # - Content size differences
+    # - ZIP entry metadata (compression, text/binary flag, timestamps)
+    # - XML content (semantic equivalence via Canon, element structure)
+    # - OPC validation (content types, relationships, required parts)
     #
     # Unlike DocumentDiffer (which compares loaded DocumentRoot models),
     # PackageDiffer works on raw DOCX ZIP contents, detecting what Word
     # or other applications changed during repair.
     #
-    # @example
+    # @example Basic comparison
     #   differ = PackageDiffer.new("bad.docx", "repaired.docx")
     #   result = differ.diff
     #   puts result.summary
+    #
+    # @example With Canon semantic comparison
+    #   result = PackageDiffer.new("bad.docx", "repaired.docx",
+    #     canon: true).diff
+    #   result.modified_parts.each do |p|
+    #     puts "#{p.name}: canon_equivalent=#{p.canon_equivalent}"
+    #   end
     class PackageDiffer
+      # Required parts for a valid OOXML DOCX package.
+      REQUIRED_PARTS = %w[
+        [Content_Types].xml
+        _rels/.rels
+        word/document.xml
+      ].freeze
+
+      # Standard DOCX parts and their expected content types.
+      STANDARD_CONTENT_TYPES = {
+        "word/document.xml" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
+        "word/styles.xml" => "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
+        "word/settings.xml" => "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml",
+        "word/fontTable.xml" => "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml",
+        "word/webSettings.xml" => "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml",
+        "word/theme/theme1.xml" => "application/vnd.openxmlformats-officedocument.theme+xml",
+        "docProps/core.xml" => "application/vnd.openxmlformats-package.core-properties+xml",
+        "docProps/app.xml" => "application/vnd.openxmlformats-officedocument.extended-properties+xml",
+      }.freeze
+
       # Initialize with two DOCX file paths.
       #
       # @param old_path [String] Path to original DOCX
       # @param new_path [String] Path to modified/repaired DOCX
-      def initialize(old_path, new_path)
+      # @param canon [Boolean] Whether to use Canon for semantic XML comparison
+      # @param canon_profile [Symbol] Canon match profile to use
+      def initialize(old_path, new_path, canon: false, canon_profile: :spec_friendly)
         @old_path = old_path
         @new_path = new_path
+        @canon = canon
+        @canon_profile = canon_profile
       end
 
       # Perform structural diff and return a PackageDiffResult.
@@ -41,6 +73,8 @@ module Uniword
         begin
           part_diff = diff_parts(old_zip, new_zip)
           content_diff = diff_xml_content(old_zip, new_zip, part_diff)
+          metadata_diff = diff_zip_metadata(old_zip, new_zip)
+          opc = validate_opc(old_zip, new_zip)
         ensure
           old_zip.close
           new_zip.close
@@ -54,6 +88,8 @@ module Uniword
           modified_parts: part_diff[:modified],
           unchanged_parts: part_diff[:unchanged],
           xml_changes: content_diff,
+          zip_metadata_changes: metadata_diff,
+          opc_issues: opc,
         )
       end
 
@@ -98,6 +134,7 @@ module Uniword
       end
 
       # Compare XML content for modified parts.
+      # Uses Canon for semantic comparison when enabled.
       #
       # @return [Array<XmlChange>]
       def diff_xml_content(old_zip, new_zip, part_diff)
@@ -110,6 +147,12 @@ module Uniword
           old_xml = old_zip.read(name)
           new_xml = new_zip.read(name)
 
+          # Canon semantic comparison
+          if @canon
+            check_canon_equivalence(part_change, old_xml, new_xml)
+          end
+
+          # Structural comparison (always run)
           part_changes = compare_xml(name, old_xml, new_xml)
           part_change.changes = part_changes
           changes.concat(part_changes)
@@ -118,7 +161,37 @@ module Uniword
         changes
       end
 
-      # Compare two XML strings and return changes.
+      # Check semantic equivalence using Canon.
+      #
+      # @param part_change [PartChange] the part to check
+      # @param old_xml [String]
+      # @param new_xml [String]
+      def check_canon_equivalence(part_change, old_xml, new_xml)
+        result = Canon::Comparison.equivalent?(
+          old_xml, new_xml,
+          format: :xml,
+          profile: @canon_profile,
+          verbose: true,
+        )
+        part_change.canon_equivalent = result.equivalent?
+        return if result.equivalent?
+
+        diffs = result.normative_differences
+        if diffs.any?
+          summary = diffs.first(3).map do |d|
+            "#{d.dimension}: #{d.path} — #{d.reason}"
+          end
+          part_change.canon_summary = summary.join("; ")
+          part_change.canon_summary += " (#{diffs.size} differences total)" if diffs.size > 3
+        else
+          part_change.canon_summary = "No normative differences found"
+        end
+      rescue StandardError => e
+        part_change.canon_equivalent = false
+        part_change.canon_summary = "Canon error: #{e.message}"
+      end
+
+      # Compare two XML strings and return structural changes.
       #
       # @param part_name [String] ZIP part name
       # @param old_xml [String] Original XML content
@@ -149,6 +222,180 @@ module Uniword
       rescue Nokogiri::XML::SyntaxError
         changes
       end
+
+      # Compare ZIP entry metadata between two packages.
+      #
+      # @param old_zip [Zip::File]
+      # @param new_zip [Zip::File]
+      # @return [Array<ZipMetadataChange>]
+      def diff_zip_metadata(old_zip, new_zip)
+        old_entries = entry_map(old_zip)
+        new_entries = entry_map(new_zip)
+        common = old_entries.keys & new_entries.keys
+
+        common.filter_map do |name|
+          old_e = old_entries[name]
+          new_e = new_entries[name]
+          diffs = {}
+
+          if old_e.compression_method != new_e.compression_method
+            diffs[:compression] = [compression_name(old_e.compression_method),
+                                   compression_name(new_e.compression_method)]
+          end
+
+          old_text = old_e.internal_file_attributes & 1 != 0
+          new_text = new_e.internal_file_attributes & 1 != 0
+          if old_text != new_text
+            diffs[:internal_attr] = [old_text ? "text" : "binary",
+                                     new_text ? "text" : "binary"]
+          end
+
+          if old_e.time != new_e.time
+            diffs[:timestamp] = [old_e.time.to_s, new_e.time.to_s]
+          end
+
+          next if diffs.empty?
+
+          ZipMetadataChange.new(part: name, differences: diffs)
+        end
+      end
+
+      # Validate OPC structure for both packages.
+      #
+      # @param old_zip [Zip::File]
+      # @param new_zip [Zip::File]
+      # @return [Array<OpcIssue>]
+      def validate_opc(old_zip, new_zip)
+        issues = []
+        [%i[old old_zip], %i[new new_zip]].each do |label, zip_var|
+          zip = binding.local_variable_get(zip_var)
+          issues.concat(validate_opc_for(zip, label))
+        end
+        issues
+      end
+
+      # Validate OPC structure for a single package.
+      #
+      # @param zip [Zip::File]
+      # @param label [Symbol] :old or :new
+      # @return [Array<OpcIssue>]
+      def validate_opc_for(zip, label)
+        issues = []
+        part_names = zip.entries.reject(&:directory?).map(&:name).to_set
+
+        # Check required parts
+        REQUIRED_PARTS.each do |req|
+          next if part_names.include?(req)
+
+          issues << OpcIssue.new(
+            part: req,
+            severity: :error,
+            category: :missing_part,
+            description: "Missing required part '#{req}' in #{label} package",
+          )
+        end
+
+        # Parse content types
+        ct_overrides = parse_content_types(zip)
+        if ct_overrides.nil?
+          issues << OpcIssue.new(
+            part: "[Content_Types].xml",
+            severity: :error,
+            category: :missing_content_type,
+            description: "[Content_Types].xml missing or unparseable in #{label} package",
+          )
+          return issues
+        end
+
+        # Check: every XML part should have a content type
+        part_names.each do |part|
+          next if part == "[Content_Types].xml"
+          next if part.end_with?(".rels")
+          next if ct_overrides.key?("/#{part}")
+
+          # Only warn for known standard parts
+          next unless STANDARD_CONTENT_TYPES.key?(part)
+
+          issues << OpcIssue.new(
+            part: part,
+            severity: :warning,
+            category: :missing_content_type,
+            description: "No content type override for '#{part}' in #{label} package",
+          )
+        end
+
+        # Check: content type overrides should point to existing parts
+        ct_overrides.each_key do |part_name|
+          # Strip leading /
+          stripped = part_name.start_with?("/") ? part_name[1..] : part_name
+          next if part_names.include?(stripped)
+
+          issues << OpcIssue.new(
+            part: stripped,
+            severity: :warning,
+            category: :orphan_content_type,
+            description: "Content type entry for '#{stripped}' but part not found in #{label} package",
+          )
+        end
+
+        # Check relationships point to existing parts
+        issues.concat(validate_relationships(zip, part_names, label))
+
+        issues
+      end
+
+      # Validate that relationships point to existing parts.
+      #
+      # @param zip [Zip::File]
+      # @param part_names [Set<String>]
+      # @param label [Symbol]
+      # @return [Array<OpcIssue>]
+      def validate_relationships(zip, part_names, label)
+        issues = []
+
+        # Check package-level relationships
+        begin
+          rels_xml = zip.read("_rels/.rels")
+        rescue StandardError
+          return issues
+        end
+
+        doc = Nokogiri::XML(rels_xml)
+        doc.xpath("//xmlns:Relationship").each do |rel|
+          target = rel["Target"]&.sub(%r{^/}, "")
+          next unless target
+          next if part_names.include?(target)
+
+          issues << OpcIssue.new(
+            part: target,
+            severity: :warning,
+            category: :broken_relationship,
+            description: "Relationship #{rel['Id']} targets '#{target}' but part not found in #{label} package",
+          )
+        end
+
+        issues
+      rescue Nokogiri::XML::SyntaxError
+        issues
+      end
+
+      # Parse [Content_Types].xml into a hash of PartName => ContentType.
+      #
+      # @param zip [Zip::File]
+      # @return [Hash{String => String}, nil]
+      def parse_content_types(zip)
+        ct_xml = zip.read("[Content_Types].xml")
+        doc = Nokogiri::XML(ct_xml)
+        overrides = {}
+        doc.xpath("//xmlns:Override").each do |node|
+          overrides[node["PartName"]] = node["ContentType"]
+        end
+        overrides
+      rescue StandardError
+        nil
+      end
+
+      # --- Legacy structural comparison methods (kept for backward compat) ---
 
       # Compare namespace declarations between two XML documents.
       #
@@ -257,6 +504,28 @@ module Uniword
         end
 
         changes
+      end
+
+      # --- Utility methods ---
+
+      # Build a hash of entry name -> Zip::Entry for non-directory entries.
+      #
+      # @param zip [Zip::File]
+      # @return [Hash{String => Zip::Entry}]
+      def entry_map(zip)
+        zip.entries.reject(&:directory?).to_h { |e| [e.name, e] }
+      end
+
+      # Human-readable compression method name.
+      #
+      # @param method [Integer]
+      # @return [String]
+      def compression_name(method)
+        case method
+        when 0 then "stored"
+        when 8 then "deflated"
+        else "unknown(#{method})"
+        end
       end
 
       # Extract namespace prefix-to-URI mapping from an element.
