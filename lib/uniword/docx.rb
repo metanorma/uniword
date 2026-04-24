@@ -9,6 +9,7 @@ module Uniword
   module Docx
     autoload :Package, "#{__dir__}/docx/package"
     autoload :Profile, "#{__dir__}/docx/profile"
+    autoload :DocumentStatistics, "#{__dir__}/docx/document_statistics"
     autoload :Reconciler, "#{__dir__}/docx/reconciler"
   end
 end

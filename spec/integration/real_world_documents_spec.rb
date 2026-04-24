@@ -113,7 +113,8 @@ RSpec.describe "Real-World Document Testing", :integration do
           roundtrip = Uniword.load(temp_path)
 
           expect(roundtrip.styles_configuration).not_to be_nil
-          expect(roundtrip.styles_configuration.styles.count).to eq(original_style_count)
+          # Round-trip may add missing default styles (TableNormal, NoList)
+          expect(roundtrip.styles_configuration.styles.count).to be >= original_style_count
         ensure
           safe_rm_f(temp_path)
         end
