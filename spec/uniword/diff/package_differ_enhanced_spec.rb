@@ -18,9 +18,7 @@ RSpec.describe Uniword::Diff::PackageDiffer do
     end
 
     it "returns ZipMetadataChange instances" do
-      result.zip_metadata_changes.each do |mc|
-        expect(mc).to be_a(Uniword::Diff::ZipMetadataChange)
-      end
+      expect(result.zip_metadata_changes).to all(be_a(Uniword::Diff::ZipMetadataChange))
     end
 
     it "serializes ZipMetadataChange to hash" do
@@ -126,7 +124,7 @@ RSpec.describe Uniword::Diff::PackageDiffer do
           result = described_class.new(path_a, path_b, canon: true).diff
           doc_part = result.modified_parts.find { |p| p.name == "word/document.xml" }
           expect(doc_part).not_to be_nil
-          expect(doc_part.canon_equivalent).to eq(true)
+          expect(doc_part.canon_equivalent).to be(true)
         end
       end
     end

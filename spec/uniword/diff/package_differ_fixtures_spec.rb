@@ -61,7 +61,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
       ]
 
       all_results.each do |label, result|
-        modified_names = result.modified_parts.map(&:name).to_set
+        modified_names = result.modified_parts.to_set(&:name)
         always_modified.each do |part|
           expect(modified_names).to include(part),
             "#{label}: expected #{part} to be modified"
@@ -86,7 +86,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
       all_results.each do |label, result|
         ws = result.modified_parts.find { |p| p.name == "word/webSettings.xml" }
         expect(ws).not_to be_nil, "#{label}: webSettings.xml not in modified parts"
-        expect(ws.canon_equivalent).to eq(true),
+        expect(ws.canon_equivalent).to be(true),
           "#{label}: webSettings.xml should be canon-equivalent"
       end
     end
@@ -104,7 +104,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
         always_different.each do |part_name|
           part = result.modified_parts.find { |p| p.name == part_name }
           expect(part).not_to be_nil, "#{label}: #{part_name} not in modified parts"
-          expect(part.canon_equivalent).to eq(false),
+          expect(part.canon_equivalent).to be(false),
             "#{label}: #{part_name} should be canon-different"
         end
       end
@@ -245,8 +245,8 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
 
     it "every ZIP entry has metadata changes (no exceptions)" do
       all_results.each do |label, result|
-        metadata_parts = result.zip_metadata_changes.map(&:part).to_set
-        modified_parts = result.modified_parts.map(&:name).to_set
+        metadata_parts = result.zip_metadata_changes.to_set(&:part)
+        modified_parts = result.modified_parts.to_set(&:name)
         expect(metadata_parts).to eq(modified_parts),
           "#{label}: metadata changes don't cover all modified parts. " \
           "Missing: #{modified_parts - metadata_parts}"
@@ -272,7 +272,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
       all_results.each do |label, result|
         core = result.modified_parts.find { |p| p.name == "docProps/core.xml" }
         expect(core).not_to be_nil
-        expect(core.canon_equivalent).to eq(false),
+        expect(core.canon_equivalent).to be(false),
           "#{label}: core.xml should be canon-different"
         expect(core.canon_summary).to include("lastModifiedBy"),
           "#{label}: core.xml canon_summary should mention lastModifiedBy"
@@ -283,7 +283,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
       all_results.each do |label, result|
         app = result.modified_parts.find { |p| p.name == "docProps/app.xml" }
         expect(app).not_to be_nil
-        expect(app.canon_equivalent).to eq(false),
+        expect(app.canon_equivalent).to be(false),
           "#{label}: app.xml should be canon-different"
       end
     end
