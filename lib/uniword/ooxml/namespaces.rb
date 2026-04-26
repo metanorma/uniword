@@ -53,7 +53,7 @@ module Uniword
         uri "http://schemas.openxmlformats.org/drawingml/2006/picture"
         prefix_default "pic"
         element_form_default :qualified
-        attribute_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # DrawingML Main namespace
