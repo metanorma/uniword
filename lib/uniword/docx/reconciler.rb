@@ -326,22 +326,24 @@ module Uniword
         app.app_version = profile.app_version
         app.company = profile.user_company if profile.user_company && !profile.user_company.empty?
 
-        # Calculate document statistics
-        stats = calculate_document_statistics
-        app.pages = stats[:pages].to_s
-        app.words = stats[:words].to_s
-        app.characters = stats[:characters].to_s
-        app.characters_with_spaces = stats[:characters_with_spaces].to_s
-        app.paragraphs = stats[:paragraphs].to_s
-        app.lines = stats[:lines].to_s
+        # Calculate document statistics only when missing
+        unless app.pages && !app.pages.to_s.empty?
+          stats = calculate_document_statistics
+          app.pages = stats[:pages].to_s
+          app.words = stats[:words].to_s
+          app.characters = stats[:characters].to_s
+          app.characters_with_spaces = stats[:characters_with_spaces].to_s
+          app.paragraphs = stats[:paragraphs].to_s
+          app.lines = stats[:lines].to_s
+        end
 
-        # Static defaults
-        app.total_time = "0"
-        app.scale_crop = "false"
-        app.doc_security = "0"
-        app.links_up_to_date = "false"
-        app.shared_doc = "false"
-        app.hyperlinks_changed = "false"
+        # Static defaults (only set when missing)
+        app.total_time ||= "0"
+        app.scale_crop ||= "false"
+        app.doc_security ||= "0"
+        app.links_up_to_date ||= "false"
+        app.shared_doc ||= "false"
+        app.hyperlinks_changed ||= "false"
       end
 
       def reconcile_core_properties
@@ -549,6 +551,7 @@ module Uniword
 
       def build_compat
         Wordprocessingml::Compat.new(
+          use_fe_layout: Wordprocessingml::UseFELayout.new,
           compatSetting: [
             Wordprocessingml::CompatSetting.new(
               name: "compatibilityMode",
@@ -632,6 +635,9 @@ module Uniword
             val: profile.lang,
             east_asia: profile.east_asia_lang,
             bidi: profile.bidi_lang,
+          ),
+          ligatures: Uniword::Wordprocessingml2010::Ligatures.new(
+            val: "standardContextual",
           ),
         )
 
