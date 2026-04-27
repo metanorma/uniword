@@ -102,10 +102,12 @@ module Uniword
       # @example Transform DOCX Package to MHTML
       #   mhtml_doc = transformer.docx_package_to_mhtml(docx_pkg, 'blank')
       def docx_package_to_mhtml(docx_package, document_name = nil)
+        # Prefer document_rels (contains hyperlinks) over package_rels
+        rels = docx_package.document_rels || docx_package.package_rels
         OoxmlToMhtmlConverter.document_to_mht(
           docx_package.document,
           docx_package.core_properties,
-          docx_package.package_rels,
+          rels,
           document_name,
         )
       end

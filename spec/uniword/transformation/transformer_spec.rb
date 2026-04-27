@@ -146,9 +146,9 @@ RSpec.describe Uniword::Transformation::Transformer do
           target_format: :mhtml,
         )
 
-        # HTML should contain formatting tags
-        expect(result.raw_html).to include("<strong>")
-        expect(result.raw_html).to include("<em>")
+        # HTML should contain formatting tags (HTML4 <b>/<i> for Word compatibility)
+        expect(result.raw_html).to include("<b>")
+        expect(result.raw_html).to include("<i>")
       end
     end
   end
