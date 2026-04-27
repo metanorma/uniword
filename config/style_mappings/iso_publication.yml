@@ -1,0 +1,30 @@
+# ISO Publication style mappings
+#
+# Maps semantic element types to OOXML style names as used in
+# ISO standard documents.
+#
+# Usage:
+#   mapper = Uniword::Generation::StyleMapper.new("config/style_mappings/iso_publication.yml")
+#   mapper.style_for("heading_1")  # => "Heading1"
+
+mappings:
+  heading_1: "Heading1"
+  heading_2: "Heading2"
+  heading_3: "Heading3"
+  heading_4: "Heading4"
+  heading_5: "Heading5"
+  heading_6: "Heading6"
+  body: "Body Text"
+  note: "Note"
+  example: "Example"
+  term_number: "TermNumber"
+  term: "Term"
+  definition: "Definition"
+  table_title: "TableTitle"
+  table_header: "TableHeader"
+  table_body: "TableBody"
+  figure_title: "FigureTitle"
+  annex_title: "AnnexTitle"
+  biblio_title: "BiblioTitle"
+  foreword_title: "ForewordTitle"
+  foreword_text: "ForewordText"
