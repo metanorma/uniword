@@ -337,13 +337,14 @@ module Uniword
           app.lines = stats[:lines].to_s
         end
 
-        # Static defaults (only set when missing)
-        app.total_time ||= "0"
-        app.scale_crop ||= "false"
-        app.doc_security ||= "0"
-        app.links_up_to_date ||= "false"
-        app.shared_doc ||= "false"
-        app.hyperlinks_changed ||= "false"
+        # Static defaults - must use = (not ||=) to clear lutaml-model's
+        # @using_default tracking, which otherwise omits these from XML output
+        app.total_time = "0"
+        app.scale_crop = "false"
+        app.doc_security = "0"
+        app.links_up_to_date = "false"
+        app.shared_doc = "false"
+        app.hyperlinks_changed = "false"
       end
 
       def reconcile_core_properties
@@ -628,9 +629,9 @@ module Uniword
             h_ansi_theme: "minorHAnsi",
             cs_theme: "minorBidi",
           ),
-          kerning: Properties::Kerning.new(val: 2),
-          size: Properties::FontSize.new(val: 24),
-          size_cs: Properties::FontSize.new(val: 24),
+          kerning: Properties::Kerning.new(value: 2),
+          size: Properties::FontSize.new(value: 24),
+          size_cs: Properties::FontSize.new(value: 24),
           language: Properties::Language.new(
             val: profile.lang,
             east_asia: profile.east_asia_lang,
