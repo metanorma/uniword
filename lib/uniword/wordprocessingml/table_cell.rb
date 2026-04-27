@@ -14,6 +14,9 @@ module Uniword
       attribute :paragraphs, Paragraph, collection: true, initialize_empty: true
       attribute :tables, Table, collection: true, initialize_empty: true
 
+      # Non-serialized runtime flag: true if this cell originated from <th>
+      attr_accessor :header
+
       # Convenience flat attributes for API access
       attribute :column_span, :integer
       attribute :row_span, :integer
