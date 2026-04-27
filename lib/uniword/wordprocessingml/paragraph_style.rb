@@ -56,7 +56,7 @@ module Uniword
           uiPriority: UiPriority.new(val: "10"),
           qFormat: Properties::QuickFormat.new,
           rPr: RunProperties.new(
-            size: Properties::FontSize.new(val: "56"),
+            size: Properties::FontSize.new(value: "56"),
             fonts: Properties::RunFonts.new(ascii: "Calibri Light",
                                             h_ansi: "Calibri Light"),
           ),
@@ -76,8 +76,8 @@ module Uniword
           uiPriority: UiPriority.new(val: "11"),
           qFormat: Properties::QuickFormat.new,
           rPr: RunProperties.new(
-            color: Properties::ColorValue.new(val: "595959"),
-            size: Properties::FontSize.new(val: "28"),
+            color: Properties::ColorValue.new(value: "595959"),
+            size: Properties::FontSize.new(value: "28"),
             fonts: Properties::RunFonts.new(ascii: "Calibri Light",
                                             h_ansi: "Calibri Light"),
           ),
@@ -131,7 +131,7 @@ module Uniword
         outline_level = [level - 1, 0].max
 
         ParagraphProperties.new(
-          outline_level: Properties::OutlineLevel.new(val: outline_level.to_s),
+          outline_level: Properties::OutlineLevel.new(value: outline_level.to_s),
           spacing: Properties::Spacing.new(before: (240 + (level * 80)).to_s,
                                            after: "0"),
         )
@@ -158,10 +158,10 @@ module Uniword
         }
 
         RunProperties.new(
-          size: Properties::FontSize.new(val: sizes[level]),
+          size: Properties::FontSize.new(value: sizes[level]),
           fonts: Properties::RunFonts.new(ascii: fonts[level],
                                           h_ansi: fonts[level]),
-          color: Properties::ColorValue.new(val: colors[level]),
+          color: Properties::ColorValue.new(value: colors[level]),
           bold: Properties::Bold.new,
         )
       end
