@@ -76,24 +76,23 @@ outline_level&.value  # => NoMethodError: undefined method `value' for Uninitial
 
 ### Workaround applied
 
-Added `prop_value` helper that checks `Lutaml::Model::Utils.initialized?`
-before accessing the value:
+NONE — reverted. Adding `prop_value` / `yaml_val` helpers violates the
+project principle of model-driven architecture. This must be fixed in
+lutaml-model itself.
 
-```ruby
-def prop_value(wrapper, method = :value)
-  return nil unless wrapper && Lutaml::Model::Utils.initialized?(wrapper)
-  wrapper.public_send(method)
-end
-```
-
-Applied to all 20+ `yaml_*_to` methods in `run_properties/yaml_transforms.rb`.
-
-### Proper fix
+### Required fix
 
 `UninitializedClass#method_missing` should return `nil` (or the UninitializedClass
 instance) instead of raising `NoMethodError`, so that safe navigation `&.method`
 works as expected. Alternatively, `UninitializedClass` should be falsy (`nil?`
 returns `true`) so that `&.` skips it.
+
+**Files affected in uniword:**
+- `wordprocessingml/run_properties/yaml_transforms.rb` — 20+ yaml_*_to methods
+- `wordprocessingml/paragraph_properties.rb` — 8 yaml_*_to methods
+- `wordprocessingml/style.rb` — 6 yaml_*_to methods
+- `wordprocessingml/table_cell_properties.rb` — vertical_merge getter
+- `wordprocessingml/run.rb` — bold/italic flag getters
 
 ---
 
