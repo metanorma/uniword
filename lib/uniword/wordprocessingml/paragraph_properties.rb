@@ -119,7 +119,7 @@ module Uniword
       end
 
       def yaml_style_to(instance, _doc)
-        instance.style&.value
+        yaml_prop_value(instance.style)
       end
 
       def yaml_alignment_from(instance, value)
@@ -127,7 +127,7 @@ module Uniword
       end
 
       def yaml_alignment_to(instance, _doc)
-        instance.alignment&.value
+        yaml_prop_value(instance.alignment)
       end
 
       def yaml_keep_next_from(instance, value)
@@ -135,7 +135,7 @@ module Uniword
       end
 
       def yaml_keep_next_to(instance, _doc)
-        instance.keep_next_wrapper&.value
+        yaml_prop_value(instance.keep_next_wrapper)
       end
 
       def yaml_keep_lines_from(instance, value)
@@ -143,7 +143,7 @@ module Uniword
       end
 
       def yaml_keep_lines_to(instance, _doc)
-        instance.keep_lines_wrapper&.value
+        yaml_prop_value(instance.keep_lines_wrapper)
       end
 
       def yaml_outline_level_from(instance, value)
@@ -151,7 +151,7 @@ module Uniword
       end
 
       def yaml_outline_level_to(instance, _doc)
-        instance.outline_level&.value
+        yaml_prop_value(instance.outline_level)
       end
 
       def yaml_contextual_spacing_from(instance, value)
@@ -161,7 +161,7 @@ module Uniword
       end
 
       def yaml_contextual_spacing_to(instance, _doc)
-        instance.contextual_spacing&.value
+        yaml_prop_value(instance.contextual_spacing)
       end
 
       def yaml_page_break_before_from(instance, value)
@@ -171,7 +171,7 @@ module Uniword
       end
 
       def yaml_page_break_before_to(instance, _doc)
-        instance.page_break_before_wrapper&.value
+        yaml_prop_value(instance.page_break_before_wrapper)
       end
 
       def yaml_widow_control_from(instance, value)
@@ -181,7 +181,15 @@ module Uniword
       end
 
       def yaml_widow_control_to(instance, _doc)
-        instance.widow_control_wrapper&.value
+        yaml_prop_value(instance.widow_control_wrapper)
+      end
+
+      private
+
+      def yaml_prop_value(wrapper)
+        return nil unless wrapper && Lutaml::Model::Utils.initialized?(wrapper)
+
+        wrapper.value
       end
 
       # XML mappings come AFTER attributes
