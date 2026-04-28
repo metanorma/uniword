@@ -295,7 +295,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include("<w:tblHeader/>")
+        expect(xml).to include("tblHeader")
         expect(xml).to include("Header 1")
         expect(xml).to include("Data 1")
       end

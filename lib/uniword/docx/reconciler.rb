@@ -337,14 +337,15 @@ module Uniword
           app.lines = stats[:lines].to_s
         end
 
-        # Static defaults - must use = (not ||=) to clear lutaml-model's
-        # @using_default tracking, which otherwise omits these from XML output
-        app.total_time = "0"
-        app.scale_crop = "false"
-        app.doc_security = "0"
-        app.links_up_to_date = "false"
-        app.shared_doc = "false"
-        app.hyperlinks_changed = "false"
+        # Re-assign to clear lutaml-model's @using_default tracking
+        # which otherwise omits these from XML output.
+        # Preserve source values when present.
+        app.total_time = app.total_time || "0"
+        app.scale_crop = app.scale_crop || "false"
+        app.doc_security = app.doc_security || "0"
+        app.links_up_to_date = app.links_up_to_date || "false"
+        app.shared_doc = app.shared_doc || "false"
+        app.hyperlinks_changed = app.hyperlinks_changed || "false"
       end
 
       def reconcile_core_properties
