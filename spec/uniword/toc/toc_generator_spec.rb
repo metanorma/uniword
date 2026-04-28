@@ -12,13 +12,13 @@ RSpec.describe Uniword::Toc::TocGenerator do
     para.properties.style = Uniword::Properties::StyleReference.new(
       value: "Heading#{level}",
     )
-    para.text = text
+    para.runs << Uniword::Wordprocessingml::Run.new(text: text)
     para
   end
 
   def build_normal_paragraph(text)
     para = Uniword::Wordprocessingml::Paragraph.new
-    para.text = text
+    para.runs << Uniword::Wordprocessingml::Run.new(text: text)
     para
   end
 
@@ -116,7 +116,7 @@ RSpec.describe Uniword::Toc::TocGenerator do
       para.properties.style = Uniword::Properties::StyleReference.new(
         value: "heading 2",
       )
-      para.text = "Lowercase heading"
+      para.runs << Uniword::Wordprocessingml::Run.new(text: "Lowercase heading")
       document.body.paragraphs << para
 
       generator = described_class.new(document)

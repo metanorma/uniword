@@ -88,9 +88,9 @@ module Uniword
         target_props.style = source_props.style
         target_props.num_id = source_props.num_id
         target_props.ilvl = source_props.ilvl
-        target_props.keep_next = source_props.keep_next
-        target_props.keep_lines = source_props.keep_lines
-        target_props.page_break_before = source_props.page_break_before
+        target_props.keep_next_wrapper = source_props.keep_next_wrapper
+        target_props.keep_lines_wrapper = source_props.keep_lines_wrapper
+        target_props.page_break_before_wrapper = source_props.page_break_before_wrapper
         target_props.outline_level = source_props.outline_level
 
         target_para.properties = target_props
@@ -123,9 +123,9 @@ module Uniword
           style: source_props.style,
           num_id: source_props.num_id,
           ilvl: source_props.ilvl,
-          keep_next: source_props.keep_next,
-          keep_lines: source_props.keep_lines,
-          page_break_before: source_props.page_break_before,
+          keep_next_wrapper: source_props.keep_next_wrapper,
+          keep_lines_wrapper: source_props.keep_lines_wrapper,
+          page_break_before_wrapper: source_props.page_break_before_wrapper,
           outline_level: source_props.outline_level,
         )
       end

@@ -74,9 +74,9 @@ module Uniword
           document.revision = (current_revision.to_i + 1).to_s
         end
 
-        return unless @title && document.respond_to?(:title=)
+        return unless @title && document.respond_to?(:core_properties)
 
-        document.title = @title
+        document.core_properties.title = @title
       end
 
       # Update extended document properties

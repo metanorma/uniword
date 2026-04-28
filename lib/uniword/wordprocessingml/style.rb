@@ -124,173 +124,80 @@ module Uniword
         map_element "tcPr", to: :tcPr, render_nil: false
       end
 
-      # Convenience accessor methods for style metadata
+      # Convenience read-only accessors (aliases for lutaml-model attributes)
 
-      # Get style ID
-      #
-      # @return [String, nil] Style ID
       def id
         styleId
       end
 
-      # Set style ID
-      #
-      # @param value [String] Style ID
-      def id=(value)
-        self.styleId = value
-      end
-
-      # Get style name value
-      #
-      # @return [String, nil] Style name
       def style_name
         @name&.val
       end
 
-      # Set style name
-      #
-      # @param value [String] Style name
-      def style_name=(value)
-        self.name = StyleName.new(val: value)
-      end
-
-      # Get based-on style reference
-      #
-      # @return [String, nil] Parent style ID
       def based_on
         basedOn&.val
       end
 
-      # Set based-on style reference
-      #
-      # @param value [String] Parent style ID
-      def based_on=(value)
-        self.basedOn = BasedOn.new(val: value)
-      end
-
-      # Get next style reference
-      #
-      # @return [String, nil] Next style ID
       def next_style
         nextStyle&.val
       end
 
-      # Set next style reference
-      #
-      # @param value [String] Next style ID
-      def next_style=(value)
-        self.nextStyle = Next.new(val: value)
-      end
-
-      # Get linked style reference
-      #
-      # @return [String, nil] Linked style ID
       def linked_style
         link&.val
       end
 
-      # Set linked style reference
-      #
-      # @param value [String] Linked style ID
-      def linked_style=(value)
-        self.link = Link.new(val: value)
-      end
-
-      # Get UI priority
-      #
-      # @return [Integer, nil] UI priority value
       def ui_priority
         uiPriority&.val&.to_i
       end
 
-      # Set UI priority
-      #
-      # @param value [Integer] UI priority value
-      def ui_priority=(value)
-        self.uiPriority = UiPriority.new(val: value.to_s)
-      end
-
-      # Check if quick format
-      #
-      # @return [Boolean] True if quick format style
       def quick_format
         val = qFormat
-        # Handle boolean primitive
         return true if val == true
 
-        # Handle Bold wrapper object
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
-      # Convenience accessors for paragraph properties
-
-      # Get spacing before
-      #
-      # @return [Integer, nil] Spacing before in twips
       def spacing_before
         pPr&.spacing&.before || pPr&.spacing_before
       end
 
-      # Get spacing after
-      #
-      # @return [Integer, nil] Spacing after in twips
       def spacing_after
         pPr&.spacing&.after || pPr&.spacing_after
       end
 
-      # Get alignment
-      #
-      # @return [String, nil] Alignment value
       def alignment
         pPr&.alignment
       end
 
-      # Check keep next
-      #
-      # @return [Boolean] True if keep with next
       def keep_next
         return false unless pPr
 
-        val = pPr.keep_next
-        return true if val == true
+        val = pPr.keep_next_wrapper
+        return false if val.nil?
 
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
-      # Check keep lines
-      #
-      # @return [Boolean] True if keep lines together
       def keep_lines
         return false unless pPr
 
-        val = pPr.keep_lines
-        return true if val == true
+        val = pPr.keep_lines_wrapper
+        return false if val.nil?
 
         val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
         val == true
       end
 
-      # Get outline level
-      #
-      # @return [Integer, nil] Outline level
       def outline_level
         pPr&.outline_level&.value&.to_i
       end
 
-      # Convenience accessors for run properties
-
-      # Get font family
-      #
-      # @return [String, nil] Font family name
       def font_family
         rPr&.fonts&.ascii || rPr&.font
       end
 
-      # Check bold
-      #
-      # @return [Boolean, nil] True if bold
       def bold
         return nil unless rPr
 
@@ -301,85 +208,50 @@ module Uniword
         val == true
       end
 
-      # Get font size
-      #
-      # @return [Integer, nil] Font size in half-points
       def font_size
         rPr&.size&.value&.to_i
       end
 
-      # Get font color
-      #
-      # @return [String, nil] Font color as hex
       def font_color
         rPr&.color&.value
       end
 
-      # Get font color theme
-      #
-      # @return [String, nil] Theme color name
       def font_color_theme
         rPr&.color&.theme_color
       end
 
-      # Get font color theme tint/shade
-      #
-      # @return [String, nil] Theme shade/tint value
       def font_color_theme_tint
         rPr&.color&.theme_shade || rPr&.color&.theme_tint
       end
 
-      # Check if custom style
-      #
-      # @return [Boolean] True if custom style
       def custom?
         customStyle == true
       end
 
-      # Check if this is a paragraph style
-      #
-      # @return [Boolean] True if paragraph style
       def paragraph_style?
         type == "paragraph"
       end
 
-      # Check if this is a character style
-      #
-      # @return [Boolean] True if character style
       def character_style?
         type == "character"
       end
 
-      # Check if this is a table style
-      #
-      # @return [Boolean] True if table style
       def table_style?
         type == "table"
       end
 
-      # Check if this is a numbering style
-      #
-      # @return [Boolean] True if numbering style
       def numbering_style?
         type == "numbering"
       end
 
-      # Alias for pPr (paragraph properties)
-      #
-      # @return [ParagraphProperties, nil] Paragraph properties
       def paragraph_properties
         pPr
       end
 
-      # Alias for rPr (run properties)
-      #
-      # @return [RunProperties, nil] Run properties
       def run_properties
         rPr
       end
 
-      # Serialize to XML with canonical OOXML format
-      # Always applies fix_boolean_elements to produce self-closing boolean elements
       def to_xml(options = {})
         super(options.merge(fix_boolean_elements: true))
       end

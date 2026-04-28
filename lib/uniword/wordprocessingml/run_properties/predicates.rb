@@ -32,20 +32,6 @@ module Uniword
         end
 
         def all_caps
-          val = @all_caps || caps
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-          val == true
-        end
-
-        def all_caps=(value)
-          @all_caps = value
-          self.caps = value.is_a?(Properties::Caps) ? value : Properties::Caps.new(value: value)
-          value
-        end
-
-        def all_caps?
           caps?
         end
 

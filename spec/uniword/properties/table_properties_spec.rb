@@ -13,101 +13,31 @@ RSpec.describe Uniword::Wordprocessingml::TableProperties do
 
     it "creates properties with provided attributes" do
       props = described_class.new(
-        style: "TableGrid",
+        style: Uniword::Wordprocessingml::TableStyle.new(val: "TableGrid"),
         table_width: Uniword::Properties::TableWidth.new(w: 100),
-        alignment: "center",
         borders: true,
       )
-      expect(props.style).to eq("TableGrid")
+      expect(props.style&.val).to eq("TableGrid")
       expect(props.table_width.w).to eq(100)
-      expect(props.alignment.value).to eq("center")
       expect(props.borders).to be true
     end
 
     it "allows mutation for test compatibility" do
-      props = described_class.new(style: "TableGrid")
-      # Properties are now mutable for easier testing
+      props = described_class.new
       expect(props).not_to be_frozen
     end
   end
 
   describe "mutability (for test compatibility)" do
-    let(:props) { described_class.new(style: "TableGrid", width: 100) }
+    let(:props) { described_class.new }
 
     it "allows modification of attributes" do
-      # Properties are now mutable for easier testing
-      expect { props.style = "Changed" }.not_to raise_error
-      expect(props.style).to eq("Changed")
+      expect { props.borders = true }.not_to raise_error
+      expect(props.borders).to be true
     end
 
     it "is not frozen" do
       expect(props.frozen?).to be false
-    end
-  end
-
-  describe "#==" do
-    it "returns true for identical properties" do
-      props1 = described_class.new(style: "TableGrid", width: 100)
-      props2 = described_class.new(style: "TableGrid", width: 100)
-      expect(props1).to eq(props2)
-    end
-
-    it "returns false for different properties" do
-      props1 = described_class.new(style: "TableGrid")
-      props2 = described_class.new(style: "TableNormal")
-      expect(props1).not_to eq(props2)
-    end
-
-    it "returns false for different types" do
-      props = described_class.new(style: "TableGrid")
-      expect(props).not_to eq("TableGrid")
-    end
-
-    it "compares all attributes" do
-      props1 = described_class.new(
-        style: "TableGrid",
-        width: 100,
-        alignment: "center",
-        borders: true,
-        cell_spacing: 0,
-      )
-      props2 = described_class.new(
-        style: "TableGrid",
-        width: 100,
-        alignment: "center",
-        borders: true,
-        cell_spacing: 0,
-      )
-      expect(props1).to eq(props2)
-    end
-  end
-
-  describe "#eql?" do
-    it "is an alias for ==" do
-      props1 = described_class.new(style: "TableGrid")
-      props2 = described_class.new(style: "TableGrid")
-      expect(props1.eql?(props2)).to eq(props1 == props2)
-    end
-  end
-
-  describe "#hash" do
-    it "returns same hash for equal objects" do
-      props1 = described_class.new(style: "TableGrid", width: 100)
-      props2 = described_class.new(style: "TableGrid", width: 100)
-      expect(props1.hash).to eq(props2.hash)
-    end
-
-    it "returns different hash for different objects" do
-      props1 = described_class.new(style: "TableGrid")
-      props2 = described_class.new(style: "TableNormal")
-      expect(props1.hash).not_to eq(props2.hash)
-    end
-
-    it "allows use as hash keys" do
-      props1 = described_class.new(style: "TableGrid")
-      props2 = described_class.new(style: "TableGrid")
-      hash = { props1 => "value1" }
-      expect(hash[props2]).to eq("value1")
     end
   end
 

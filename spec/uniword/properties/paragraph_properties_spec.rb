@@ -8,7 +8,7 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       props = described_class.new
       expect(props.style).to be_nil
       expect(props.alignment).to be_nil
-      expect(props.keep_next).to be false
+      expect(props.keep_next_wrapper).to be_nil
     end
 
     it "creates properties with provided attributes" do
@@ -110,22 +110,22 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
   end
 
   describe "boolean attributes" do
-    it "defaults boolean attributes to false" do
+    it "defaults boolean attributes to nil" do
       props = described_class.new
-      expect(props.keep_next).to be false
-      expect(props.keep_lines).to be false
-      expect(props.page_break_before).to be false
+      expect(props.keep_next_wrapper).to be_nil
+      expect(props.keep_lines_wrapper).to be_nil
+      expect(props.page_break_before_wrapper).to be_nil
     end
 
     it "allows setting boolean attributes" do
       props = described_class.new(
         keep_next_wrapper: Uniword::Properties::KeepNext.new(value: true),
         keep_lines_wrapper: Uniword::Properties::KeepLines.new(value: true),
-        page_break_before: true,
+        page_break_before_wrapper: Uniword::Properties::PageBreakBefore.new(value: true),
       )
-      expect(props.keep_next).to be true
-      expect(props.keep_lines).to be true
-      expect(props.page_break_before).to be true
+      expect(props.keep_next_wrapper&.value).to be true
+      expect(props.keep_lines_wrapper&.value).to be true
+      expect(props.page_break_before_wrapper&.value).to be true
     end
   end
 

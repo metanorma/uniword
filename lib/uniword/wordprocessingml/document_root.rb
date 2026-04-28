@@ -146,17 +146,8 @@ module Uniword
       end
 
       # Get document title (delegates to core_properties)
-      #
-      # @return [String, nil] The document title
       def title
         core_properties.title
-      end
-
-      # Set document title (delegates to core_properties)
-      #
-      # @param value [String] The document title
-      def title=(value)
-        core_properties.title = value
       end
 
       # Lazy initialization for styles_configuration

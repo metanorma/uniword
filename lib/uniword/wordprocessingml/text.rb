@@ -65,11 +65,6 @@ module Uniword
         content.to_s.include?(substr)
       end
 
-      # Set text value
-      def text=(value)
-        self.content = value
-      end
-
       # Check if space should be preserved
       def space_preserve?
         xml_space == "preserve"

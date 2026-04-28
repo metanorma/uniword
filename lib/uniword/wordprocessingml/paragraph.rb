@@ -78,16 +78,6 @@ module Uniword
         map_element "fldSimple", to: :simple_fields, render_nil: false
       end
 
-      # Set paragraph text (replaces all runs with a single run)
-      #
-      # @param value [String] Text value
-      def text=(value)
-        runs.clear
-        return if value.nil? || value.to_s.empty?
-
-        runs << Run.new(text: value.to_s)
-      end
-
       # Get paragraph text
       #
       # @return [String] Combined text from all runs
@@ -98,9 +88,6 @@ module Uniword
       end
 
       # Extract text from a run or SDT element
-      #
-      # @param run_or_sdt [Run, StructuredDocumentTag] Run or SDT element
-      # @return [String] Text content
       def run_text(run_or_sdt)
         if run_or_sdt.is_a?(StructuredDocumentTag)
           extract_sdt_text(run_or_sdt)
@@ -110,89 +97,54 @@ module Uniword
       end
 
       # Extract text from SDT content
-      #
-      # @param sdt [StructuredDocumentTag] SDT element
-      # @return [String] Text content
       def extract_sdt_text(sdt)
         return "" unless sdt.content
 
         sdt.content.runs.map { |r| r.text.to_s }.join
       end
 
-      # Check if paragraph is empty
-      #
-      # @return [Boolean] true if no runs or all runs empty
       def empty?
         !runs || runs.empty? || runs.all? { |r| run_text(r).empty? }
       end
 
-      # Get paragraph style (convenience accessor)
-      #
-      # @return [String, nil] Style name
       def style
         properties&.style
       end
 
-      # Get paragraph alignment (convenience accessor)
-      #
-      # @return [String, nil] Alignment value (center, left, right, etc.)
       def alignment
         properties&.alignment
       end
 
-      # Iterate over text runs (convenience alias)
-      #
-      # @yield [Run] Each run in the paragraph
       def each_text_run(&)
         runs.each(&)
       end
 
-      # Remove all content from this paragraph
       def remove!
         runs.clear
       end
 
-      # Numbering ID
-      #
-      # @return [Integer, nil] Numbering ID
       def num_id
         properties&.num_id
       end
 
-      # Numbering level
-      #
-      # @return [Integer, nil] Numbering level (0-based)
       def ilvl
         properties&.ilvl
       end
 
-      # Get numbering properties
-      #
-      # @return [Hash, nil] Hash with :num_id and :level, or nil
       def numbering
         return nil unless properties&.num_id
 
         { num_id: properties.num_id, level: properties.ilvl }
       end
 
-      # Check if paragraph has numbering
-      #
-      # @return [Boolean] true if paragraph has numbering
       def numbered?
         properties&.num_id ? true : false
       end
 
-      # Accept a visitor (Visitor pattern)
-      #
-      # @param visitor [BaseVisitor] The visitor to accept
-      # @return [void]
       def accept(visitor)
         visitor.visit_paragraph(self)
       end
 
-      # Custom inspect for readable output
-      #
-      # @return [String] Human-readable representation
       def inspect
         text_preview = text.to_s
         text_preview = "#{text_preview[0, 47]}..." if text_preview.length > 50
