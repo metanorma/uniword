@@ -21,7 +21,7 @@ module Uniword
         map_attribute "t", to: :t
         map_attribute "ref", to: :ref
         map_attribute "si", to: :si
-        map_element "", to: :text, render_nil: false
+        map_content to: :text
       end
     end
   end
