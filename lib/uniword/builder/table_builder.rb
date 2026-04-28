@@ -29,7 +29,7 @@ module Uniword
       # @return [TableRowBuilder] The row builder
       def row(&block)
         r = TableRowBuilder.new
-        block.call(r) if block_given?
+        yield(r) if block
         @model.rows << r.build
         r
       end
@@ -69,7 +69,8 @@ module Uniword
           border = if value.is_a?(Hash)
                      Properties::Border.new(**value)
                    else
-                     Properties::Border.new(color: value, style: "single", size: 4)
+                     Properties::Border.new(color: value, style: "single",
+                                            size: 4)
                    end
           @model.properties.borders.send("#{side}=", border)
         end

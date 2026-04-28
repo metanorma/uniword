@@ -26,7 +26,7 @@ module Uniword
 
       # Key name aliases (maps snake_case to camelCase)
       KEY_ALIASES = {
-        fol_hlink: "folHlink"
+        fol_hlink: "folHlink",
       }.freeze
 
       # Convenience accessor for colors hash
@@ -138,7 +138,7 @@ module Uniword
         path = File.join(__dir__, "../../../data/themes", "#{name}.yml")
         unless File.exist?(path)
           raise ArgumentError,
-                "Theme '#{name}' not found. Available: #{available_themes.join(", ")}"
+                "Theme '#{name}' not found. Available: #{available_themes.join(', ')}"
         end
 
         from_yaml(File.read(path))
@@ -152,8 +152,8 @@ module Uniword
         return [] unless Dir.exist?(theme_dir)
 
         Dir.glob(File.join(theme_dir, "*.yml"))
-           .map { |p| File.basename(p, ".yml") }
-           .sort
+          .map { |p| File.basename(p, ".yml") }
+          .sort
       end
 
       # Convert to Word Theme for document generation

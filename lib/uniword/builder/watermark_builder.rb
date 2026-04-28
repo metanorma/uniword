@@ -35,18 +35,18 @@ module Uniword
           type: "#_x0000_t136",
           style: watermark_style(angle),
           fillcolor: fill_color,
-          strokecolor: "none"
+          strokecolor: "none",
         )
 
         shape.fill = Vml::Fill.new(
           type: "tile",
           opacity: opacity,
-          color: fill_color
+          color: fill_color,
         )
 
         shape.textpath = Vml::TextPath.new(
           string: text,
-          style: "font-family:'#{font}';font-size:#{size}pt"
+          style: "font-family:'#{font}';font-size:#{size}pt",
         )
 
         shape
@@ -67,7 +67,7 @@ module Uniword
         run = Wordprocessingml::Run.new
         run.pictures << Wordprocessingml::Picture.new(
           shape: build_shape(text, font: font, size: size,
-                                   color: color, opacity: opacity, angle: angle)
+                                   color: color, opacity: opacity, angle: angle),
         )
         para.runs << run
         para

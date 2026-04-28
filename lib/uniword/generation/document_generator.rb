@@ -72,7 +72,7 @@ module Uniword
         source_doc.styles_configuration.styles.each do |style|
           builder.model.styles_configuration.add_style(
             style.dup,
-            allow_overwrite: true
+            allow_overwrite: true,
           )
         end
       end

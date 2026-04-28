@@ -6,47 +6,47 @@ require "uniword/logger"
 RSpec.describe Uniword do
   describe ".logger" do
     it "returns a Logger instance" do
-      expect(Uniword.logger).to be_a(Logger)
+      expect(described_class.logger).to be_a(Logger)
     end
 
     it "uses WARN level by default" do
       # Reset to default
-      Uniword.logger = nil
-      expect(Uniword.logger.level).to eq(Logger::WARN)
+      described_class.logger = nil
+      expect(described_class.logger.level).to eq(Logger::WARN)
     end
   end
 
   describe ".debug?" do
     it "returns true when debug level is set" do
-      Uniword.logger.level = Logger::DEBUG
-      expect(Uniword.debug?).to be true
+      described_class.logger.level = Logger::DEBUG
+      expect(described_class.debug?).to be true
     end
 
     it "returns false when not debug level" do
-      Uniword.logger.level = Logger::WARN
-      expect(Uniword.debug?).to be false
+      described_class.logger.level = Logger::WARN
+      expect(described_class.debug?).to be false
     end
   end
 
   describe ".enable_debug_logging" do
     it "sets logger to DEBUG level" do
-      Uniword.enable_debug_logging
-      expect(Uniword.logger.level).to eq(Logger::DEBUG)
+      described_class.enable_debug_logging
+      expect(described_class.logger.level).to eq(Logger::DEBUG)
     end
   end
 
   describe ".disable_debug_logging" do
     it "sets logger to WARN level" do
-      Uniword.disable_debug_logging
-      expect(Uniword.logger.level).to eq(Logger::WARN)
+      described_class.disable_debug_logging
+      expect(described_class.logger.level).to eq(Logger::WARN)
     end
   end
 
   describe "custom logger" do
     it "allows setting a custom logger" do
       custom_logger = Logger.new(StringIO.new)
-      Uniword.logger = custom_logger
-      expect(Uniword.logger).to eq(custom_logger)
+      described_class.logger = custom_logger
+      expect(described_class.logger).to eq(custom_logger)
     end
   end
 end
@@ -110,7 +110,7 @@ end
 
 RSpec.describe "Inspection helpers" do
   describe Uniword::Wordprocessingml::DocumentRoot do
-    let(:doc) { Uniword::Wordprocessingml::DocumentRoot.new }
+    let(:doc) { described_class.new }
 
     it "provides readable inspect output" do
       para = Uniword::Wordprocessingml::Paragraph.new
@@ -123,7 +123,7 @@ RSpec.describe "Inspection helpers" do
   end
 
   describe Uniword::Wordprocessingml::Paragraph do
-    let(:para) { Uniword::Wordprocessingml::Paragraph.new }
+    let(:para) { described_class.new }
 
     it "provides readable inspect output" do
       run = Uniword::Wordprocessingml::Run.new(text: "Hello World")
@@ -142,7 +142,7 @@ RSpec.describe "Inspection helpers" do
   end
 
   describe Uniword::Wordprocessingml::Run do
-    let(:run) { Uniword::Wordprocessingml::Run.new(text: "Test text") }
+    let(:run) { described_class.new(text: "Test text") }
 
     it "provides readable inspect output" do
       expect(run.inspect).to include("Uniword::Wordprocessingml::Run")
@@ -150,7 +150,8 @@ RSpec.describe "Inspection helpers" do
     end
 
     it "shows formatting flags" do
-      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true, italic: true)
+      run.properties = Uniword::Wordprocessingml::RunProperties.new(bold: true,
+                                                                    italic: true)
       expect(run.inspect).to include("bold")
       expect(run.inspect).to include("italic")
     end

@@ -135,7 +135,8 @@ module Uniword
           border = if value.is_a?(Hash)
                      Properties::Border.new(**value)
                    else
-                     Properties::Border.new(color: value, style: "single", size: 4)
+                     Properties::Border.new(color: value, style: "single",
+                                            size: 4)
                    end
           @model.properties.borders.send("#{side}=", border)
         end
@@ -150,7 +151,7 @@ module Uniword
       # @return [self]
       def shading(fill:, color: nil, pattern: "clear")
         ensure_properties.shading = Properties::Shading.new(
-          fill: fill, color: color, pattern: pattern
+          fill: fill, color: color, pattern: pattern,
         )
         self
       end
@@ -166,7 +167,7 @@ module Uniword
         props.ilvl = level
         props.numbering_properties = Properties::NumberingProperties.new(
           num_id: Properties::NumberingId.new(value: num_id),
-          ilvl: Properties::NumberingLevel.new(value: level)
+          ilvl: Properties::NumberingLevel.new(value: level),
         )
         self
       end

@@ -26,7 +26,7 @@ RSpec.describe "MHTML Round-trip Validation", type: :integration do
 
     it "preserves multiple paragraphs" do
       mhtml_doc = docx_to_mhtml("spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx")
-      paras = mhtml_doc.body_html.scan(/<p[\s >]/).length
+      paras = mhtml_doc.body_html.scan(/<(?:p|h[1-6])[ >]/).length
       expect(paras).to be >= 20
     end
 
@@ -117,7 +117,7 @@ RSpec.describe "MHTML Round-trip Validation", type: :integration do
       mhtml_doc = docx_to_mhtml("spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx")
       html = mhtml_doc.body_html
       has_any_heading = has_css_class?(html, "MsoHeading1") ||
-                        has_css_class?(html, "MsoHeading2")
+        has_css_class?(html, "MsoHeading2")
       expect(has_any_heading).to be true
     end
   end

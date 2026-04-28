@@ -25,7 +25,7 @@ module Canon
         return false if dimension == :namespace_declarations
 
         # Use original logic for other dimensions
-        original_normative_dimension.bind(self).call(dimension)
+        original_normative_dimension.bind_call(self, dimension)
       end
     end
   end
@@ -64,7 +64,7 @@ RSpec.configure do |config|
   end
 
   # Skip LibreOffice tests if soffice is not available
-  config.before(:each) do |example|
+  config.before do |example|
     if example.metadata[:skip_if_no_libreoffice]
       skip_理由 = if soffice_available?
                   nil

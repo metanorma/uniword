@@ -54,7 +54,10 @@ module Uniword
       # @return [String] Path to temporary extraction directory
       # @raise [ArgumentError] if file doesn't exist or is invalid
       def extract
-        raise ArgumentError, "File not found: #{@path}" unless File.exist?(@path)
+        unless File.exist?(@path)
+          raise ArgumentError,
+                "File not found: #{@path}"
+        end
 
         @extracted_dir = Dir.mktmpdir("uniword-package-")
 

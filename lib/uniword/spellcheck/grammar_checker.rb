@@ -37,7 +37,7 @@ module Uniword
         [
           method(:check_double_spaces),
           method(:check_repeated_words),
-          method(:check_capitalization_after_period)
+          method(:check_capitalization_after_period),
         ]
       end
 
@@ -51,18 +51,18 @@ module Uniword
 
         text.scan(/  +/) do
           pos = Regexp.last_match
-                      .offset(0)
+            .offset(0)
           start_pos = pos[0] + offset
 
           context_start = [start_pos - 10, 0].max
           context_end = [start_pos + 20, text.length].min
           context = text[context_start...context_end]
-                    .strip
+            .strip
 
           issues << {
             message: "Double space detected",
             position: start_pos,
-            context: context
+            context: context,
           }
         end
 
@@ -83,12 +83,12 @@ module Uniword
           context_start = [match.begin(0) - 15, 0].max
           context_end = [match.end(0) + 15, text.length].min
           context = text[context_start...context_end]
-                    .strip
+            .strip
 
           issues << {
             message: "Repeated word: '#{repeated_word}'",
             position: match.begin(0),
-            context: context
+            context: context,
           }
         end
 
@@ -112,19 +112,19 @@ module Uniword
           char_pos = match.begin(1)
           next_char = text[char_pos + 1]
           next if next_char&.match?(/[a-z]/) &&
-                  (char_pos < 2 ||
-                   text[char_pos - 2] =~ /[a-z]/)
+            (char_pos < 2 ||
+             text[char_pos - 2] =~ /[a-z]/)
 
           context_start = [match.begin(0) - 15, 0].max
           context_end = [match.end(0) + 15, text.length].min
           context = text[context_start...context_end]
-                    .strip
+            .strip
 
           issues << {
             message: "Missing capitalization " \
                      "after period",
             position: match.begin(0),
-            context: context
+            context: context,
           }
         end
 

@@ -68,7 +68,7 @@ module Uniword
           message: message,
           element: element,
           severity: severity,
-          suggestion: suggestion
+          suggestion: suggestion,
         )
       end
 
@@ -81,12 +81,12 @@ module Uniword
       #   ImageAltTextRule => :image_alt_text
       def derive_rule_id
         self.class.name
-            .split("::")
-            .last
-            .gsub("Rule", "")
-            .gsub(/([A-Z])/) { |m| "_#{m.downcase}" }
-            .sub(/^_/, "")
-            .to_sym
+          .split("::")
+          .last
+          .gsub("Rule", "")
+          .gsub(/([A-Z])/) { |m| "_#{m.downcase}" }
+          .sub(/^_/, "")
+          .to_sym
       end
     end
   end

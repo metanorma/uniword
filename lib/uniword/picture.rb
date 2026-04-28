@@ -22,6 +22,7 @@ module Uniword
     autoload :PictureStretch, "#{__dir__}/picture/picture_stretch"
     autoload :FillRect, "#{__dir__}/picture/fill_rect"
     autoload :Tile, "#{__dir__}/picture/tile"
-    autoload :PictureShapeProperties, "#{__dir__}/picture/picture_shape_properties"
+    autoload :PictureShapeProperties,
+             "#{__dir__}/picture/picture_shape_properties"
   end
 end

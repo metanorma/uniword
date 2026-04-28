@@ -37,13 +37,15 @@ RSpec.describe Uniword::Validators::ElementValidator do
     it "raises ArgumentError for non-Element class" do
       expect do
         described_class.for(String)
-      end.to raise_error(ArgumentError, /must be a lutaml-model serializable class/)
+      end.to raise_error(ArgumentError,
+                         /must be a lutaml-model serializable class/)
     end
 
     it "raises ArgumentError for non-class argument" do
       expect do
         described_class.for("not a class")
-      end.to raise_error(ArgumentError, /must be a lutaml-model serializable class/)
+      end.to raise_error(ArgumentError,
+                         /must be a lutaml-model serializable class/)
     end
 
     it "returns base validator for unregistered element types" do
@@ -78,7 +80,8 @@ RSpec.describe Uniword::Validators::ElementValidator do
 
     it "allows overriding existing validator registrations" do
       custom_validator = Class.new(described_class)
-      described_class.register(Uniword::Wordprocessingml::Paragraph, custom_validator)
+      described_class.register(Uniword::Wordprocessingml::Paragraph,
+                               custom_validator)
 
       result = described_class.for(Uniword::Wordprocessingml::Paragraph)
       expect(result).to be_a(custom_validator)

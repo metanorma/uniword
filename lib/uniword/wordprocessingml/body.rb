@@ -14,8 +14,10 @@ module Uniword
       attribute :section_properties, SectionProperties
       attribute :structured_document_tags, StructuredDocumentTag, collection: true,
                                                                   initialize_empty: true
-      attribute :bookmark_starts, BookmarkStart, collection: true, initialize_empty: true
-      attribute :bookmark_ends, BookmarkEnd, collection: true, initialize_empty: true
+      attribute :bookmark_starts, BookmarkStart, collection: true,
+                                                 initialize_empty: true
+      attribute :bookmark_ends, BookmarkEnd, collection: true,
+                                             initialize_empty: true
 
       xml do
         element "body"
@@ -73,8 +75,12 @@ module Uniword
         ordered_p_count = element_order.count { |e| e.name == "p" }
         ordered_tbl_count = element_order.count { |e| e.name == "tbl" }
         ordered_sdt_count = element_order.count { |e| e.name == "sdt" }
-        ordered_bookmark_start_count = element_order.count { |e| e.name == "bookmarkStart" }
-        ordered_bookmark_end_count = element_order.count { |e| e.name == "bookmarkEnd" }
+        ordered_bookmark_start_count = element_order.count do |e|
+          e.name == "bookmarkStart"
+        end
+        ordered_bookmark_end_count = element_order.count do |e|
+          e.name == "bookmarkEnd"
+        end
 
         # Add missing paragraphs
         (paragraphs.size - ordered_p_count).times do
@@ -102,7 +108,9 @@ module Uniword
         end
 
         # Ensure section_properties is in element_order if present
-        return unless section_properties && element_order.none? { |e| e.name == "sectPr" }
+        return unless section_properties && element_order.none? do |e|
+          e.name == "sectPr"
+        end
 
         element_order << Lutaml::Xml::Element.new("Element", "sectPr")
       end

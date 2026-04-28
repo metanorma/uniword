@@ -22,9 +22,13 @@ module Uniword
         when "base64"
           Base64.strict_decode64(raw_content.gsub(/\s+/, ""))
         when "quoted-printable"
-          raw_content
+          # Work in BINARY encoding to avoid gsub encoding conflicts,
+          # then force UTF-8 at the end. Use .b to get BINARY encoding
+          # without altering bytes.
+          content = raw_content.dup.force_encoding("BINARY")
+          content
             .gsub(/=\r?\n/, "")
-            .gsub(/=([0-9A-Fa-f]{2})/) { ::Regexp.last_match(1).hex.chr }
+            .gsub(/=([0-9A-Fa-f]{2})/) { [::Regexp.last_match(1).hex].pack("C") }
             .force_encoding("UTF-8")
         else
           raw_content
@@ -53,7 +57,7 @@ module Uniword
       end
 
       def html_content?
-        content_type.to_s.match?(%r{text/html})
+        content_type.to_s.include?("text/html")
       end
 
       def image_content?

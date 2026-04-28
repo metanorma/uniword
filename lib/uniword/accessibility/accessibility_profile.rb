@@ -21,10 +21,16 @@ module Uniword
       # @raise [ArgumentError] If profile not found
       def self.load(config, profile_name)
         profiles_config = config[:profiles] || config["profiles"]
-        raise ArgumentError, "No profiles found in configuration" unless profiles_config
+        unless profiles_config
+          raise ArgumentError,
+                "No profiles found in configuration"
+        end
 
         profile_config = profiles_config[profile_name] || profiles_config[profile_name.to_s]
-        raise ArgumentError, "Profile '#{profile_name}' not found" unless profile_config
+        unless profile_config
+          raise ArgumentError,
+                "Profile '#{profile_name}' not found"
+        end
 
         new(profile_config, profiles_config)
       end
@@ -88,7 +94,10 @@ module Uniword
         if overrides_rules && !overrides_rules.empty?
           # Only apply overrides that affect existing rules
           normalize_keys(overrides_rules).each do |rule_name, override_config|
-            rules[rule_name] = deep_merge(rules[rule_name], override_config) if rules[rule_name]
+            if rules[rule_name]
+              rules[rule_name] =
+                deep_merge(rules[rule_name], override_config)
+            end
           end
         end
 

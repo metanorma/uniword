@@ -10,7 +10,7 @@ RSpec.describe "DOCX Edge Case Handling" do
     FileUtils.mkdir_p("tmp/edge_cases")
   end
 
-  after(:each) do
+  after do
     # Clean up temporary files after each test
     Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
@@ -160,7 +160,9 @@ RSpec.describe "DOCX Edge Case Handling" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new
       # Filter out problematic control characters
-      text = "Text\u0001\u0002\u0003".gsub(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, "")
+      text = "Text\u0001\u0002\u0003".gsub(
+        /[\u0000-\u0008\u000B-\u000C\u000E-\u001F]/, ""
+      )
       run.text = text
       para.runs << run
       doc.body.paragraphs << para
@@ -368,7 +370,7 @@ RSpec.describe "DOCX Edge Case Handling" do
 
       # Use v2.0 API: set font size via properties
       run.properties = Uniword::Wordprocessingml::RunProperties.new(
-        size: Uniword::Properties::FontSize.new(value: 144)
+        size: Uniword::Properties::FontSize.new(value: 144),
       )
       run.text = "Large text"
       para.runs << run
@@ -386,7 +388,7 @@ RSpec.describe "DOCX Edge Case Handling" do
 
         # Use v2.0 API: set indentation via properties
         props = Uniword::Wordprocessingml::ParagraphProperties.new(
-          left_indent: 720 * level
+          left_indent: 720 * level,
         )
         para.properties = props
 
@@ -403,7 +405,7 @@ RSpec.describe "DOCX Edge Case Handling" do
       para = Uniword::Wordprocessingml::Paragraph.new
 
       props = Uniword::Wordprocessingml::ParagraphProperties.new(
-        left_indent: 5040 # 7 inches in twips
+        left_indent: 5040, # 7 inches in twips
       )
       para.properties = props
 

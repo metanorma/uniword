@@ -16,7 +16,7 @@ module Uniword
         end
 
         def yaml_bold_to(_instance, _doc)
-          bold&.value
+          prop_value(bold)
         end
 
         def yaml_italic_from(instance, value)
@@ -24,7 +24,7 @@ module Uniword
         end
 
         def yaml_italic_to(_instance, _doc)
-          italic&.value
+          prop_value(italic)
         end
 
         def yaml_strike_from(instance, value)
@@ -32,7 +32,7 @@ module Uniword
         end
 
         def yaml_strike_to(_instance, _doc)
-          strike&.value
+          prop_value(strike)
         end
 
         def yaml_double_strike_from(instance, value)
@@ -40,7 +40,7 @@ module Uniword
         end
 
         def yaml_double_strike_to(_instance, _doc)
-          double_strike&.value
+          prop_value(double_strike)
         end
 
         def yaml_small_caps_from(instance, value)
@@ -48,7 +48,7 @@ module Uniword
         end
 
         def yaml_small_caps_to(_instance, _doc)
-          small_caps&.value
+          prop_value(small_caps)
         end
 
         def yaml_caps_from(instance, value)
@@ -56,7 +56,7 @@ module Uniword
         end
 
         def yaml_caps_to(_instance, _doc)
-          caps&.value
+          prop_value(caps)
         end
 
         def yaml_hidden_from(instance, value)
@@ -64,7 +64,7 @@ module Uniword
         end
 
         def yaml_hidden_to(_instance, _doc)
-          hidden&.value
+          prop_value(hidden)
         end
 
         # --- Numeric transforms ---
@@ -74,7 +74,7 @@ module Uniword
         end
 
         def yaml_size_to(_instance, _doc)
-          size&.value
+          prop_value(size)
         end
 
         def yaml_character_spacing_from(instance, value)
@@ -82,7 +82,7 @@ module Uniword
         end
 
         def yaml_character_spacing_to(_instance, _doc)
-          character_spacing&.value
+          prop_value(character_spacing)
         end
 
         # --- String transforms ---
@@ -92,7 +92,7 @@ module Uniword
         end
 
         def yaml_underline_to(_instance, _doc)
-          underline&.value
+          prop_value(underline)
         end
 
         def yaml_color_from(instance, value)
@@ -100,7 +100,7 @@ module Uniword
         end
 
         def yaml_color_to(_instance, _doc)
-          color&.value
+          prop_value(color)
         end
 
         def yaml_highlight_from(instance, value)
@@ -108,7 +108,7 @@ module Uniword
         end
 
         def yaml_highlight_to(_instance, _doc)
-          highlight&.value
+          prop_value(highlight)
         end
 
         # --- Font transforms ---
@@ -119,7 +119,7 @@ module Uniword
         end
 
         def yaml_font_to(_instance, _doc)
-          fonts&.ascii
+          prop_value(fonts, :ascii)
         end
 
         def yaml_font_ascii_from(instance, value)
@@ -128,7 +128,7 @@ module Uniword
         end
 
         def yaml_font_ascii_to(_instance, _doc)
-          fonts&.ascii
+          prop_value(fonts, :ascii)
         end
 
         def yaml_font_east_asia_from(instance, value)
@@ -137,7 +137,7 @@ module Uniword
         end
 
         def yaml_font_east_asia_to(_instance, _doc)
-          fonts&.east_asia
+          prop_value(fonts, :east_asia)
         end
 
         def yaml_font_h_ansi_from(instance, value)
@@ -146,7 +146,7 @@ module Uniword
         end
 
         def yaml_font_h_ansi_to(_instance, _doc)
-          fonts&.h_ansi
+          prop_value(fonts, :h_ansi)
         end
 
         def yaml_font_cs_from(instance, value)
@@ -155,7 +155,7 @@ module Uniword
         end
 
         def yaml_font_cs_to(_instance, _doc)
-          fonts&.cs
+          prop_value(fonts, :cs)
         end
 
         # --- Effect transforms ---
@@ -165,7 +165,7 @@ module Uniword
         end
 
         def yaml_emboss_to(_instance, _doc)
-          emboss&.value
+          prop_value(emboss)
         end
 
         def yaml_imprint_from(instance, value)
@@ -173,7 +173,7 @@ module Uniword
         end
 
         def yaml_imprint_to(_instance, _doc)
-          imprint&.value
+          prop_value(imprint)
         end
 
         def yaml_shadow_from(instance, value)
@@ -181,7 +181,7 @@ module Uniword
         end
 
         def yaml_shadow_to(_instance, _doc)
-          shadow&.value
+          prop_value(shadow)
         end
 
         def yaml_outline_from(instance, value)
@@ -189,7 +189,7 @@ module Uniword
         end
 
         def yaml_outline_to(_instance, _doc)
-          outline_level&.value
+          prop_value(outline_level)
         end
 
         def yaml_vertical_align_from(instance, value)
@@ -197,7 +197,18 @@ module Uniword
         end
 
         def yaml_vertical_align_to(_instance, _doc)
-          vertical_align&.value
+          prop_value(vertical_align)
+        end
+
+        private
+
+        # Safely extract a value from a wrapper object, handling
+        # lutaml-model's UninitializedClass that may be returned for
+        # unset attributes.
+        def prop_value(wrapper, method = :value)
+          return nil unless wrapper && Lutaml::Model::Utils.initialized?(wrapper)
+
+          wrapper.public_send(method)
         end
       end
     end

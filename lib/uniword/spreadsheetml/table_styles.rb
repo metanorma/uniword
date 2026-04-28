@@ -9,7 +9,8 @@ module Uniword
     # Complex type for a collection of table styles.
     class TableStyles < Lutaml::Model::Serializable
       attribute :count, :integer
-      attribute :table_style, TableStyleInfo, collection: true, initialize_empty: true
+      attribute :table_style, TableStyleInfo, collection: true,
+                                              initialize_empty: true
 
       xml do
         element "tableStyles"

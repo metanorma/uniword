@@ -126,7 +126,7 @@ module Uniword
               id: rel["Id"],
               type: rel["Type"],
               target: rel["Target"],
-              target_mode: rel["TargetMode"]
+              target_mode: rel["TargetMode"],
             }
           end
         end

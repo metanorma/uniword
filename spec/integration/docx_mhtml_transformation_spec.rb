@@ -7,12 +7,13 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
     "blank" => "spec/fixtures/blank/blank.docx",
     "apa" => "spec/fixtures/word-template-apa-style-paper/word-template-apa-style-paper.docx",
     "mla" => "spec/fixtures/word-template-mla-style-paper/word-template-mla-style-paper.docx",
-    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx"
+    "cover_toc" => "spec/fixtures/word-template-paper-with-cover-and-toc/word-template-paper-with-cover-and-toc.docx",
   }.freeze
 
   def docx_to_mht(docx_path, doc_name = nil)
     docx_pkg = Uniword::Docx::Package.from_file(docx_path)
-    Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, doc_name)
+    Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg,
+                                                                   doc_name)
   end
 
   def mht_to_string(mhtml_doc)
@@ -110,7 +111,9 @@ RSpec.describe "DOCX → MHT Transformation", type: :integration do
       docx_pkg.document
 
       # Transform to MHT
-      mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(docx_pkg, "blank")
+      mhtml_doc = Uniword::Transformation::Transformer.new.docx_package_to_mhtml(
+        docx_pkg, "blank"
+      )
 
       # Serialize to MIME
       mime_string = Uniword::Infrastructure::MimePackager.new(mhtml_doc).build_mime_content

@@ -17,7 +17,7 @@ module Uniword
     class ThemeXmlParser
       # DrawingML namespace used in theme XML
       THEME_NS = {
-        "a" => "http://schemas.openxmlformats.org/drawingml/2006/main"
+        "a" => "http://schemas.openxmlformats.org/drawingml/2006/main",
       }.freeze
 
       # Parse theme1.xml into Theme model
@@ -29,7 +29,10 @@ module Uniword
         doc = Nokogiri::XML(xml)
         theme_node = doc.at_xpath("//a:theme", THEME_NS)
 
-        raise ArgumentError, "Invalid theme XML: missing theme element" unless theme_node
+        unless theme_node
+          raise ArgumentError,
+                "Invalid theme XML: missing theme element"
+        end
 
         theme = ::Uniword::Drawingml::Theme.new
         theme.name = theme_node["name"] || "Untitled Theme"
@@ -38,14 +41,16 @@ module Uniword
         theme.theme_elements ||= ::Uniword::Drawingml::ThemeElements.new
 
         # Parse color scheme
-        color_scheme_node = doc.at_xpath("//a:themeElements/a:clrScheme", THEME_NS)
+        color_scheme_node = doc.at_xpath("//a:themeElements/a:clrScheme",
+                                         THEME_NS)
         if color_scheme_node
           scheme = parse_color_scheme(color_scheme_node)
           theme.theme_elements.clr_scheme = scheme
         end
 
         # Parse font scheme
-        font_scheme_node = doc.at_xpath("//a:themeElements/a:fontScheme", THEME_NS)
+        font_scheme_node = doc.at_xpath("//a:themeElements/a:fontScheme",
+                                        THEME_NS)
         if font_scheme_node
           scheme = parse_font_scheme(font_scheme_node)
           theme.theme_elements.font_scheme = scheme
@@ -117,7 +122,7 @@ module Uniword
           color_obj = color_class.new
           color_obj.sys_clr = Uniword::SysColor.new(
             val: sys_node["val"],
-            last_clr: sys_node["lastClr"]
+            last_clr: sys_node["lastClr"],
           )
           color_obj.srgb_clr = nil # Explicitly clear srgb_clr
           return color_obj
@@ -169,7 +174,7 @@ module Uniword
           "blue" => "0000FF",
           "yellow" => "FFFF00",
           "magenta" => "FF00FF",
-          "cyan" => "00FFFF"
+          "cyan" => "00FFFF",
         }
 
         preset_colors[color_name.downcase] || "000000"
@@ -185,11 +190,17 @@ module Uniword
 
         # Parse major font
         major_font_node = node.at_xpath("a:majorFont", THEME_NS)
-        scheme.major_font_obj = parse_font_container(major_font_node, :major) if major_font_node
+        if major_font_node
+          scheme.major_font_obj = parse_font_container(major_font_node,
+                                                       :major)
+        end
 
         # Parse minor font
         minor_font_node = node.at_xpath("a:minorFont", THEME_NS)
-        scheme.minor_font_obj = parse_font_container(minor_font_node, :minor) if minor_font_node
+        if minor_font_node
+          scheme.minor_font_obj = parse_font_container(minor_font_node,
+                                                       :minor)
+        end
 
         scheme
       end
@@ -203,7 +214,7 @@ module Uniword
         if latin_node
           container.latin = Uniword::LatinFont.new(
             typeface: latin_node["typeface"] || "",
-            panose: latin_node["panose"]
+            panose: latin_node["panose"],
           )
         end
 
@@ -211,7 +222,7 @@ module Uniword
         ea_node = node.at_xpath("a:ea", THEME_NS)
         if ea_node
           container.ea = Uniword::EaFont.new(
-            typeface: ea_node["typeface"] || ""
+            typeface: ea_node["typeface"] || "",
           )
         end
 
@@ -219,7 +230,7 @@ module Uniword
         cs_node = node.at_xpath("a:cs", THEME_NS)
         if cs_node
           container.cs = Uniword::CsFont.new(
-            typeface: cs_node["typeface"] || ""
+            typeface: cs_node["typeface"] || "",
           )
         end
 
@@ -228,7 +239,7 @@ module Uniword
         container.fonts = font_nodes.map do |font_node|
           Uniword::ScriptFont.new(
             script: font_node["script"] || "",
-            typeface: font_node["typeface"] || ""
+            typeface: font_node["typeface"] || "",
           )
         end
 

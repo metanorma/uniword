@@ -110,7 +110,7 @@ if PLURIMATH_AVAILABLE
         Uniword::MathEquation.new(
           formula: formula,
           display_type: "block",
-          alignment: "center"
+          alignment: "center",
         )
       end
 

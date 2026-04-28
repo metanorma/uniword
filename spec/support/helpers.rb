@@ -39,7 +39,7 @@ module DocumentHelpers
       para = Uniword::Wordprocessingml::Paragraph.new
       runs_per_para.times do |j|
         run = Uniword::Wordprocessingml::Run.new(
-          text: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here."
+          text: "Paragraph #{i + 1}, Run #{j + 1}: Some test content here.",
         )
         para.runs << run
       end
@@ -62,7 +62,7 @@ module DocumentHelpers
           cell = Uniword::Wordprocessingml::TableCell.new
           para = Uniword::Wordprocessingml::Paragraph.new
           run = Uniword::Wordprocessingml::Run.new(
-            text: "Table #{t + 1}, Row #{r + 1}, Col #{c + 1}"
+            text: "Table #{t + 1}, Row #{r + 1}, Col #{c + 1}",
           )
           para.runs << run
           cell.paragraphs << para

@@ -19,8 +19,12 @@ RSpec.describe Uniword::FormatConverter do
   end
 
   describe "#convert" do
-    let(:docx_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx") }
-    let(:mhtml_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml") }
+    let(:docx_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+    end
+    let(:mhtml_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+    end
 
     before do
       # Create a simple DOCX file for testing
@@ -45,7 +49,7 @@ RSpec.describe Uniword::FormatConverter do
           source: docx_path,
           source_format: :docx,
           target: mhtml_path,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         expect(result).to be_a(Uniword::FormatConverter::ConversionResult)
@@ -56,7 +60,8 @@ RSpec.describe Uniword::FormatConverter do
 
       it "converts MHTML to DOCX with all parameters specified" do
         # First create an MHTML file
-        mhtml_src = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        mhtml_src = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mhtml")
         doc = Uniword::Wordprocessingml::DocumentRoot.new
         para = Uniword::Wordprocessingml::Paragraph.new
         run = Uniword::Wordprocessingml::Run.new(text: "MHTML content")
@@ -65,13 +70,14 @@ RSpec.describe Uniword::FormatConverter do
         doc.save(mhtml_src, format: :mhtml)
 
         # Convert to DOCX
-        output_docx = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        output_docx = File.join(Dir.tmpdir,
+                                "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           result = converter.convert(
             source: mhtml_src,
             source_format: :mhtml,
             target: output_docx,
-            target_format: :docx
+            target_format: :docx,
           )
 
           expect(result.success?).to be true
@@ -89,7 +95,7 @@ RSpec.describe Uniword::FormatConverter do
             source: nil,
             source_format: :docx,
             target: mhtml_path,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Source cannot be nil/)
       end
@@ -100,7 +106,7 @@ RSpec.describe Uniword::FormatConverter do
             source: docx_path,
             source_format: nil,
             target: mhtml_path,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Source format must be specified/)
       end
@@ -111,7 +117,7 @@ RSpec.describe Uniword::FormatConverter do
             source: docx_path,
             source_format: :docx,
             target: nil,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Target cannot be nil/)
       end
@@ -122,7 +128,7 @@ RSpec.describe Uniword::FormatConverter do
             source: docx_path,
             source_format: :docx,
             target: mhtml_path,
-            target_format: nil
+            target_format: nil,
           )
         end.to raise_error(ArgumentError, /Target format must be specified/)
       end
@@ -133,7 +139,7 @@ RSpec.describe Uniword::FormatConverter do
             source: docx_path,
             source_format: :invalid,
             target: mhtml_path,
-            target_format: :mhtml
+            target_format: :mhtml,
           )
         end.to raise_error(ArgumentError, /Unsupported source format/)
       end
@@ -144,7 +150,7 @@ RSpec.describe Uniword::FormatConverter do
             source: docx_path,
             source_format: :docx,
             target: mhtml_path,
-            target_format: :invalid
+            target_format: :invalid,
           )
         end.to raise_error(ArgumentError, /Unsupported target format/)
       end
@@ -156,7 +162,7 @@ RSpec.describe Uniword::FormatConverter do
           source: docx_path,
           source_format: :docx,
           target: mhtml_path,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         expect(result.paragraphs_count).to be > 0
@@ -169,7 +175,7 @@ RSpec.describe Uniword::FormatConverter do
           source: docx_path,
           source_format: :docx,
           target: mhtml_path,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         expect(result.success?).to be true
@@ -180,7 +186,7 @@ RSpec.describe Uniword::FormatConverter do
           source: docx_path,
           source_format: :docx,
           target: mhtml_path,
-          target_format: :mhtml
+          target_format: :mhtml,
         )
 
         summary = result.to_s
@@ -191,8 +197,12 @@ RSpec.describe Uniword::FormatConverter do
   end
 
   describe "#mhtml_to_docx" do
-    let(:mhtml_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml") }
-    let(:docx_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx") }
+    let(:mhtml_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+    end
+    let(:docx_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+    end
 
     before do
       # Create MHTML file
@@ -212,7 +222,7 @@ RSpec.describe Uniword::FormatConverter do
     it "explicitly declares MHTML to DOCX conversion" do
       result = converter.mhtml_to_docx(
         source: mhtml_path,
-        target: docx_path
+        target: docx_path,
       )
 
       expect(result.success?).to be true
@@ -223,7 +233,7 @@ RSpec.describe Uniword::FormatConverter do
     it "produces valid DOCX output from MHTML source" do
       result = converter.mhtml_to_docx(
         source: mhtml_path,
-        target: docx_path
+        target: docx_path,
       )
 
       expect(result.success?).to be true
@@ -236,8 +246,12 @@ RSpec.describe Uniword::FormatConverter do
   end
 
   describe "#docx_to_mhtml" do
-    let(:docx_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx") }
-    let(:mhtml_path) { File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml") }
+    let(:docx_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+    end
+    let(:mhtml_path) do
+      File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+    end
 
     before do
       # Create DOCX file
@@ -259,7 +273,7 @@ RSpec.describe Uniword::FormatConverter do
     it "explicitly declares DOCX to MHTML conversion" do
       result = converter.docx_to_mhtml(
         source: docx_path,
-        target: mhtml_path
+        target: mhtml_path,
       )
 
       expect(result.success?).to be true
@@ -296,7 +310,7 @@ RSpec.describe Uniword::FormatConverter do
         sources: sources,
         source_format: :docx,
         target_format: :mhtml,
-        target_dir: output_dir
+        target_dir: output_dir,
       )
 
       expect(results.count).to eq(3)
@@ -317,7 +331,7 @@ RSpec.describe Uniword::FormatConverter do
         success: true,
         paragraphs_count: 10,
         tables_count: 2,
-        images_count: 3
+        images_count: 3,
       )
     end
 
@@ -364,7 +378,7 @@ RSpec.describe Uniword::FormatConverter do
           target: "output.mhtml",
           target_format: :mhtml,
           success: false,
-          error: "File not found"
+          error: "File not found",
         )
       end
 

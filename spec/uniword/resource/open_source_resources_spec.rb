@@ -65,7 +65,8 @@ RSpec.describe "Open-Source Resource Integrity" do
         data = YAML.load_file(path)
         colors = data["colors"]
         expect(colors).to be_a(Hash)
-        expected_keys = %w[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4 accent5 accent6 hlink folHlink]
+        expected_keys = %w[dk1 lt1 dk2 lt2 accent1 accent2 accent3 accent4
+                           accent5 accent6 hlink folHlink]
         expected_keys.each do |key|
           expect(colors).to include(key),
                             "#{File.basename(path)} missing color key: #{key}"
@@ -90,7 +91,7 @@ RSpec.describe "Open-Source Resource Integrity" do
     let(:schemes_dir) { "data/font_schemes" }
     let(:ofl_schemes) do
       Dir.glob(File.join(schemes_dir, "*.yml"))
-         .reject { |p| File.basename(p).start_with?("ms_office") }
+        .reject { |p| File.basename(p).start_with?("ms_office") }
     end
 
     it "has exactly 25 OFL font scheme files" do
@@ -135,8 +136,8 @@ RSpec.describe "Open-Source Resource Integrity" do
 
     it "font scheme files contain no Microsoft font names as typeface values" do
       Dir.glob("data/font_schemes/*.yml")
-         .reject { |p| File.basename(p).start_with?("ms_office") }
-         .each do |path|
+        .reject { |p| File.basename(p).start_with?("ms_office") }
+        .each do |path|
         data = YAML.load_file(path)
         %w[major minor].each do |section|
           %w[latin east_asian complex_script].each do |key|
@@ -186,7 +187,10 @@ RSpec.describe Uniword::Resource::ColorSchemeLoader do
   end
 
   it "raises ArgumentError for non-existent scheme" do
-    expect { described_class.load("nonexistent") }.to raise_error(ArgumentError, /not found/)
+    expect do
+      described_class.load("nonexistent")
+    end.to raise_error(ArgumentError,
+                       /not found/)
   end
 end
 
@@ -207,7 +211,10 @@ RSpec.describe Uniword::Resource::FontSchemeLoader do
   end
 
   it "raises ArgumentError for non-existent scheme" do
-    expect { described_class.load("nonexistent") }.to raise_error(ArgumentError, /not found/)
+    expect do
+      described_class.load("nonexistent")
+    end.to raise_error(ArgumentError,
+                       /not found/)
   end
 
   it "populates per_script from YAML" do
@@ -244,7 +251,9 @@ RSpec.describe Uniword::Resource::DocumentElementLoader do
   end
 
   it "raises ArgumentError for non-existent locale/category" do
-    expect { described_class.load("xx", "nonexistent") }.to raise_error(ArgumentError)
+    expect do
+      described_class.load("xx", "nonexistent")
+    end.to raise_error(ArgumentError)
   end
 
   it "all 30 locales have 8 categories" do
@@ -266,8 +275,10 @@ RSpec.describe Uniword::Resource::FontSubstitutor do
   end
 
   it "substitutes per-script fonts" do
-    expect(described_class.substitute_script("Jpan", "メイリオ")).to eq("Noto Sans CJK JP")
-    expect(described_class.substitute_script("Hans", "宋体")).to eq("Noto Sans CJK SC")
+    expect(described_class.substitute_script("Jpan",
+                                             "メイリオ")).to eq("Noto Sans CJK JP")
+    expect(described_class.substitute_script("Hans",
+                                             "宋体")).to eq("Noto Sans CJK SC")
   end
 
   it "returns original font when no substitution exists" do
@@ -278,7 +289,7 @@ RSpec.describe Uniword::Resource::FontSubstitutor do
     fs = Uniword::Themes::FontScheme.new(
       name: "Test",
       major_font: "Calibri",
-      minor_font: "Arial"
+      minor_font: "Arial",
     )
     result = described_class.transform_friendly_font_scheme(fs)
     expect(result.major_font).to eq("Carlito")
@@ -305,7 +316,9 @@ RSpec.describe "MS Theme/StyleSet Slug Scan" do
   it "no styleset file uses an MS styleset name as slug" do
     ms_slugs = %w[distinctive elegant fancy formal manuscript modern
                   newsprint perspective simple thatch traditional word_2010]
-    actual = Dir.glob("data/stylesets/*.yml").map { |f| File.basename(f, ".yml") }
+    actual = Dir.glob("data/stylesets/*.yml").map do |f|
+      File.basename(f, ".yml")
+    end
     ms_slugs.each do |slug|
       expect(actual).not_to include(slug),
                             "MS styleset slug '#{slug}' still exists in data/stylesets/"
@@ -383,14 +396,14 @@ RSpec.describe Uniword::Resource::ThemeMappingLoader do
 
   it "finds theme by colors" do
     result = described_class.find_by_colors(
-      "accent1" => "F81B02", "accent2" => "FC7715", "dk2" => "454545"
+      "accent1" => "F81B02", "accent2" => "FC7715", "dk2" => "454545",
     )
     expect(result).to eq("meridian")
   end
 
   it "returns nil for unmatched colors" do
     result = described_class.find_by_colors(
-      "accent1" => "000000", "accent2" => "000000", "dk2" => "000000"
+      "accent1" => "000000", "accent2" => "000000", "dk2" => "000000",
     )
     expect(result).to be_nil
   end

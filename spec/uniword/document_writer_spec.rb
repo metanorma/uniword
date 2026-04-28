@@ -16,14 +16,14 @@ RSpec.describe Uniword::DocumentWriter do
       it "raises ArgumentError when document is nil" do
         expect { described_class.new(nil) }.to raise_error(
           ArgumentError,
-          "Document cannot be nil"
+          "Document cannot be nil",
         )
       end
 
       it "raises ArgumentError when not a Document instance" do
         expect { described_class.new("invalid") }.to raise_error(
           ArgumentError,
-          "Must be a Document instance"
+          "Must be a Document instance",
         )
       end
     end
@@ -32,7 +32,8 @@ RSpec.describe Uniword::DocumentWriter do
   describe "#save" do
     context "with DOCX format" do
       it "saves document as DOCX with auto format" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           writer.save(temp_path)
 
@@ -43,7 +44,8 @@ RSpec.describe Uniword::DocumentWriter do
       end
 
       it "saves document with explicit DOCX format" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.docx")
         begin
           writer.save(temp_path, format: :docx)
 
@@ -56,7 +58,8 @@ RSpec.describe Uniword::DocumentWriter do
 
     context "with MHTML format" do
       it "saves document as MHTML with auto format" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mhtml")
         begin
           writer.save(temp_path)
 
@@ -69,7 +72,8 @@ RSpec.describe Uniword::DocumentWriter do
       end
 
       it "saves document with explicit MHTML format" do
-        temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mht")
+        temp_path = File.join(Dir.tmpdir,
+                              "uniword_test_#{SecureRandom.uuid}.mht")
         begin
           writer.save(temp_path, format: :mhtml)
 
@@ -84,14 +88,14 @@ RSpec.describe Uniword::DocumentWriter do
       it "raises ArgumentError when path is nil" do
         expect { writer.save(nil) }.to raise_error(
           ArgumentError,
-          "Path cannot be nil"
+          "Path cannot be nil",
         )
       end
 
       it "raises ArgumentError when path is empty" do
         expect { writer.save("") }.to raise_error(
           ArgumentError,
-          "Path cannot be empty"
+          "Path cannot be empty",
         )
       end
 
@@ -150,7 +154,8 @@ RSpec.describe Uniword::DocumentWriter do
 
   describe "integration" do
     it "performs full write-read cycle for DOCX" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.docx")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.docx")
       begin
         # Write document
         writer.save(temp_path)
@@ -165,7 +170,8 @@ RSpec.describe Uniword::DocumentWriter do
     end
 
     it "performs full write-read cycle for MHTML" do
-      temp_path = File.join(Dir.tmpdir, "uniword_test_#{SecureRandom.uuid}.mhtml")
+      temp_path = File.join(Dir.tmpdir,
+                            "uniword_test_#{SecureRandom.uuid}.mhtml")
       begin
         # Write document
         writer.save(temp_path)

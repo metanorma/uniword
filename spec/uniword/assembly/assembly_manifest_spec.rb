@@ -13,13 +13,14 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
         "template" => "standard",
         "variables" => {
           "title" => "Test Document",
-          "version" => "1.0"
+          "version" => "1.0",
         },
         "sections" => [
           { "component" => "cover" },
-          { "component" => "content", "options" => { "style" => "ceremonial" } }
-        ]
-      }
+          { "component" => "content",
+            "options" => { "style" => "ceremonial" } },
+        ],
+      },
     }
   end
 
@@ -118,7 +119,7 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
     it "applies variable overrides" do
       manifest = described_class.new(
         manifest_file.path,
-        override_variables: { "version" => "2.0", "new_var" => "value" }
+        override_variables: { "version" => "2.0", "new_var" => "value" },
       )
 
       expect(manifest.variables["version"]).to eq("2.0")
@@ -243,7 +244,7 @@ RSpec.describe Uniword::Assembly::AssemblyManifest do
     it "handles sections with order specification" do
       data = valid_manifest_data.dup
       data["document"]["sections"] = [
-        { "component" => "clauses/*", "order" => "alphabetical" }
+        { "component" => "clauses/*", "order" => "alphabetical" },
       ]
 
       file = Tempfile.new(["manifest", ".yml"])

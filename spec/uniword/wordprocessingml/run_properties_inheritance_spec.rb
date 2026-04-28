@@ -36,7 +36,7 @@ RSpec.describe "Run Properties Inheritance" do
       para.runs << run
 
       # Run should inherit bold from Heading1 style
-      expect(run.effective_run_properties&.bold&.value).to eq(true)
+      expect(run.effective_run_properties&.bold&.value).to be(true)
     end
 
     it "inherits font size when not explicitly set" do
@@ -83,7 +83,7 @@ RSpec.describe "Run Properties Inheritance" do
       para.runs << run
 
       # Run should use explicit values, not inherited
-      expect(run.effective_run_properties.bold.value).to eq(false)
+      expect(run.effective_run_properties.bold.value).to be(false)
       expect(run.effective_run_properties.size.value).to eq(20)
     end
 
@@ -129,15 +129,15 @@ RSpec.describe "Run Properties Inheritance" do
       para.runs << run3
 
       # Run 1: inherits everything from style
-      expect(run1.effective_run_properties.bold.value).to eq(true)
+      expect(run1.effective_run_properties.bold.value).to be(true)
       expect(run1.effective_run_properties.size.value).to eq(32)
 
       # Run 2: explicit bold=false overrides, but size inherited
-      expect(run2.effective_run_properties.bold.value).to eq(false)
+      expect(run2.effective_run_properties.bold.value).to be(false)
       expect(run2.effective_run_properties.size.value).to eq(32)
 
       # Run 3: all explicit
-      expect(run3.effective_run_properties.bold.value).to eq(false)
+      expect(run3.effective_run_properties.bold.value).to be(false)
       expect(run3.effective_run_properties.size.value).to eq(16)
       expect(run3.effective_run_properties.color.value).to eq("0000FF")
     end

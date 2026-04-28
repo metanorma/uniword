@@ -326,9 +326,10 @@ module Uniword
       end
 
       # Save document to file (class method for DocumentWriter compatibility)
-      def self.to_file(document, path)
+      def self.to_file(document, path, profile: nil)
         package = new
         package.document = document
+        package.profile = profile || Profile.defaults
         copy_document_parts_to_package(document, package)
         package.content_types ||= minimal_content_types
         package.package_rels ||= minimal_package_rels
@@ -376,7 +377,7 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
-        Reconciler.new(self, profile: profile).reconcile
+        Reconciler.new(self, profile: profile || Profile.defaults).reconcile
 
         inject_part_relationships(content, content_types, package_rels, document_rels)
         serialize_package_parts(content, content_types, package_rels, document_rels)

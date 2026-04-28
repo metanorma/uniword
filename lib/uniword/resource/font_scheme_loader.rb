@@ -17,7 +17,7 @@ module Uniword
         path = File.join(DATA_DIR, "#{name}.yml")
         unless File.exist?(path)
           raise ArgumentError,
-                "Font scheme '#{name}' not found. Available: #{available_schemes.join(", ")}"
+                "Font scheme '#{name}' not found. Available: #{available_schemes.join(', ')}"
         end
 
         raw = YAML.load_file(path)
@@ -31,7 +31,7 @@ module Uniword
           minor_complex_script: raw.dig("minor", "complex_script"),
           per_script: raw["per_script"],
           major_per_script: raw["major_per_script"],
-          minor_per_script: raw["minor_per_script"]
+          minor_per_script: raw["minor_per_script"],
         )
       end
 
@@ -42,8 +42,8 @@ module Uniword
         return [] unless Dir.exist?(DATA_DIR)
 
         Dir.glob(File.join(DATA_DIR, "*.yml"))
-           .map { |p| File.basename(p, ".yml") }
-           .sort
+          .map { |p| File.basename(p, ".yml") }
+          .sort
       end
     end
   end

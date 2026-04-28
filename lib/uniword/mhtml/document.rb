@@ -124,17 +124,23 @@ module Uniword
 
       # @return [String, nil] Header HTML
       def header_html
-        header_footer_parts.find { |p| p.filename&.include?("header") }&.decoded_content
+        header_footer_parts.find do |p|
+          p.filename&.include?("header")
+        end&.decoded_content
       end
 
       # @return [String, nil] Footer HTML (placeholder)
       def footer_html
-        header_footer_parts.find { |p| p.filename&.include?("footer") }&.decoded_content
+        header_footer_parts.find do |p|
+          p.filename&.include?("footer")
+        end&.decoded_content
       end
 
       # @return [String, nil] Placeholder header HTML
       def placeholder_html
-        header_footer_parts.find { |p| p.filename&.include?("plchdr") }&.decoded_content
+        header_footer_parts.find do |p|
+          p.filename&.include?("plchdr")
+        end&.decoded_content
       end
 
       # @return [Hash] Images as filename => decoded data
@@ -153,7 +159,7 @@ module Uniword
       # Build a summary of the document structure
       def inspect
         "#<#{self.class} parts=#{parts.length} images=#{image_parts.length} " \
-          "xml=#{xml_parts.length} theme=#{theme_part ? "yes" : "no"}>"
+          "xml=#{xml_parts.length} theme=#{theme_part ? 'yes' : 'no'}>"
       end
     end
   end

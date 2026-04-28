@@ -28,7 +28,7 @@ module Uniword
         @language = language
         @dictionary = dictionary
         @spell_adapter = spell_adapter ||
-                         HunspellAdapter.new(language: language)
+          HunspellAdapter.new(language: language)
         @grammar_checker = GrammarChecker.new
       end
 
@@ -114,7 +114,7 @@ module Uniword
           result.add_misspelling(
             word: word,
             position: pos,
-            suggestions: suggestions
+            suggestions: suggestions,
           )
         end
       end

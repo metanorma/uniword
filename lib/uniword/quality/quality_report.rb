@@ -83,7 +83,7 @@ module Uniword
         {
           error: violations.select(&:error?),
           warning: violations.select(&:warning?),
-          info: violations.select(&:info?)
+          info: violations.select(&:info?),
         }
       end
 
@@ -106,9 +106,9 @@ module Uniword
             errors: error_count,
             warnings: warning_count,
             info: info_count,
-            valid: valid?
+            valid: valid?,
           },
-          violations: violations.map(&:to_h)
+          violations: violations.map(&:to_h),
         }
 
         json_string = JSON.pretty_generate(json_data)
@@ -130,9 +130,9 @@ module Uniword
             "errors" => error_count,
             "warnings" => warning_count,
             "info" => info_count,
-            "valid" => valid?
+            "valid" => valid?,
           },
-          "violations" => violations.map(&:to_h)
+          "violations" => violations.map(&:to_h),
         }
 
         yaml_string = YAML.dump(yaml_data)
@@ -160,13 +160,13 @@ module Uniword
           "Document Quality Report",
           "=" * 50,
           "Checked at: #{checked_at}",
-          "Status: #{valid? ? "VALID" : "INVALID"}",
+          "Status: #{valid? ? 'VALID' : 'INVALID'}",
           "",
           "Summary:",
           "  Total violations: #{total_count}",
           "  Errors: #{error_count}",
           "  Warnings: #{warning_count}",
-          "  Info: #{info_count}"
+          "  Info: #{info_count}",
         ].join("\n")
       end
 
@@ -256,8 +256,8 @@ module Uniword
 
             <div class="summary">
               <div>Checked at: #{checked_at}</div>
-              <div class="status #{valid? ? "valid" : "invalid"}">
-                Status: #{valid? ? "VALID ✓" : "INVALID ✗"}
+              <div class="status #{valid? ? 'valid' : 'invalid'}">
+                Status: #{valid? ? 'VALID ✓' : 'INVALID ✗'}
               </div>
 
               <div class="stats">

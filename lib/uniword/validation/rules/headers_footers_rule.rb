@@ -29,7 +29,7 @@ module Uniword
           return issues unless doc
 
           rels = context.relationships
-          rels_by_id = rels.each_with_object({}) { |r, h| h[r[:id]] = r }
+          rels_by_id = rels.to_h { |r| [r[:id], r] }
 
           # Check header references
           doc.root.xpath(".//w:headerReference", "w" => W_NS).each do |ref|
@@ -48,7 +48,7 @@ module Uniword
 
         def check_reference(ref, kind, rels_by_id, context, issues)
           rid = ref["#{R_NS[%r{/([^/]+)$}]}:id"] ||
-                ref.attributes.find { |a| a.name == "id" }&.value
+            ref.attributes.find { |a| a.name == "id" }&.value
           return unless rid
 
           rel = rels_by_id[rid]
@@ -57,7 +57,7 @@ module Uniword
               "#{kind} reference r:id='#{rid}' not found in relationships",
               part: "word/document.xml",
               suggestion: "Add a relationship for r:id='#{rid}' in " \
-                          "word/_rels/document.xml.rels."
+                          "word/_rels/document.xml.rels.",
             )
             return
           end
@@ -69,7 +69,7 @@ module Uniword
             issues << issue(
               "#{kind.capitalize} target '#{target_path}' not found in package",
               part: "word/document.xml",
-              suggestion: "Create '#{target_path}' or fix the relationship target."
+              suggestion: "Create '#{target_path}' or fix the relationship target.",
             )
           end
 
@@ -82,7 +82,7 @@ module Uniword
             code: "DOC-031",
             severity: "warning",
             part: "word/document.xml",
-            suggestion: "Valid types are: #{VALID_TYPES.join(", ")}."
+            suggestion: "Valid types are: #{VALID_TYPES.join(', ')}.",
           )
         end
       end

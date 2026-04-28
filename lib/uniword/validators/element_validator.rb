@@ -23,7 +23,9 @@ module Uniword
         # @raise [ArgumentError] if element_class is not a valid Element class
         def for(element_class)
           unless element_class.is_a?(Class) &&
-                 element_class.ancestors.any? { |a| a.to_s.include?("Serializable") }
+              element_class.ancestors.any? do |a|
+                a.to_s.include?("Serializable")
+              end
             raise ArgumentError,
                   "element_class must be a lutaml-model serializable class"
           end
@@ -68,7 +70,9 @@ module Uniword
       def valid?(element)
         return false if element.nil?
         # v2.0: Check if element is a serializable object (has lutaml-model ancestry)
-        return false unless element.class.ancestors.any? { |a| a.to_s.include?("Serializable") }
+        return false unless element.class.ancestors.any? do |a|
+          a.to_s.include?("Serializable")
+        end
 
         # v2.0: All lutaml-model objects are valid by default
         # v1.x: Elements have a valid? method

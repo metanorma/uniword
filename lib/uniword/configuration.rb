@@ -2,6 +2,7 @@
 
 module Uniword
   module Configuration
-    autoload :ConfigurationLoader, "#{__dir__}/configuration/configuration_loader"
+    autoload :ConfigurationLoader,
+             "#{__dir__}/configuration/configuration_loader"
   end
 end

@@ -7,7 +7,7 @@ RSpec.describe "Theme Extraction and Reuse" do
 
   describe Uniword::Drawingml::Theme do
     it "can be created programmatically" do
-      theme = Uniword::Drawingml::Theme.new(name: "Corporate")
+      theme = described_class.new(name: "Corporate")
       theme.color_scheme[:accent1] = "0066CC"
       theme.font_scheme.major_font = "Helvetica"
 
@@ -17,7 +17,7 @@ RSpec.describe "Theme Extraction and Reuse" do
     end
 
     it "can be duplicated" do
-      theme = Uniword::Drawingml::Theme.new(name: "Original")
+      theme = described_class.new(name: "Original")
       theme.color_scheme[:accent1] = "0066CC"
       theme.font_scheme.major_font = "Helvetica"
 
@@ -30,17 +30,17 @@ RSpec.describe "Theme Extraction and Reuse" do
     end
 
     it "validates correctly" do
-      valid_theme = Uniword::Drawingml::Theme.new(name: "Valid")
+      valid_theme = described_class.new(name: "Valid")
       expect(valid_theme.valid?).to be true
 
-      invalid_theme = Uniword::Drawingml::Theme.new(name: "")
+      invalid_theme = described_class.new(name: "")
       expect(invalid_theme.valid?).to be false
     end
   end
 
   describe Uniword::Drawingml::ColorScheme do
     it "has default Office theme colors" do
-      scheme = Uniword::Drawingml::ColorScheme.new
+      scheme = described_class.new
 
       expect(scheme[:dk1]).to eq("000000")
       expect(scheme[:lt1]).to eq("FFFFFF")
@@ -48,7 +48,7 @@ RSpec.describe "Theme Extraction and Reuse" do
     end
 
     it "allows custom colors" do
-      scheme = Uniword::Drawingml::ColorScheme.new
+      scheme = described_class.new
       scheme[:accent1] = "FF0000"
 
       expect(scheme[:accent1]).to eq("FF0000")
@@ -56,7 +56,7 @@ RSpec.describe "Theme Extraction and Reuse" do
     end
 
     it "can be duplicated" do
-      scheme = Uniword::Drawingml::ColorScheme.new
+      scheme = described_class.new
       scheme[:accent1] = "FF0000"
 
       duplicated = scheme.dup
@@ -68,14 +68,14 @@ RSpec.describe "Theme Extraction and Reuse" do
 
   describe Uniword::Drawingml::FontScheme do
     it "has default Office theme fonts" do
-      scheme = Uniword::Drawingml::FontScheme.new
+      scheme = described_class.new
 
       expect(scheme.major_font).to eq("Calibri Light")
       expect(scheme.minor_font).to eq("Calibri")
     end
 
     it "allows custom fonts" do
-      scheme = Uniword::Drawingml::FontScheme.new
+      scheme = described_class.new
       scheme.major_font = "Helvetica"
       scheme.minor_font = "Arial"
 
@@ -84,7 +84,7 @@ RSpec.describe "Theme Extraction and Reuse" do
     end
 
     it "can be duplicated" do
-      scheme = Uniword::Drawingml::FontScheme.new
+      scheme = described_class.new
       scheme.major_font = "Helvetica"
 
       duplicated = scheme.dup
@@ -97,7 +97,7 @@ RSpec.describe "Theme Extraction and Reuse" do
   describe Uniword::Wordprocessingml::DocumentRoot do
     describe "#theme" do
       it "can have a theme assigned" do
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc = described_class.new
         theme = Uniword::Drawingml::Theme.new(name: "Corporate")
 
         doc.theme = theme
@@ -107,7 +107,7 @@ RSpec.describe "Theme Extraction and Reuse" do
       end
 
       it "starts with no theme" do
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc = described_class.new
         expect(doc.theme).to be_nil
       end
     end
@@ -115,14 +115,14 @@ RSpec.describe "Theme Extraction and Reuse" do
     describe "#apply_theme_from" do
       it "applies theme from source document" do
         # Create source document with theme
-        source = Uniword::Wordprocessingml::DocumentRoot.new
+        source = described_class.new
         source.theme = Uniword::Drawingml::Theme.new(name: "Source Theme")
         source.theme.color_scheme.colors[:accent1] = "FF0000"
         source_path = "spec/fixtures/temp_source.docx"
         source.save(source_path)
 
         # Apply theme to new document
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc = described_class.new
         doc.apply_theme_from(source_path)
 
         expect(doc.theme).not_to be_nil
@@ -137,16 +137,16 @@ RSpec.describe "Theme Extraction and Reuse" do
     describe "#apply_styles_from" do
       it "applies styles from source document with conflict resolution" do
         # Create source with custom style
-        source = Uniword::Wordprocessingml::DocumentRoot.new
+        source = described_class.new
         source.styles_configuration.create_paragraph_style(
           "CustomStyle",
-          "Custom Style"
+          "Custom Style",
         )
         source_path = "spec/fixtures/temp_source_styles.docx"
         source.save(source_path)
 
         # Apply to new document
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc = described_class.new
         doc.apply_styles_from(source_path)
 
         expect(doc.styles_configuration.style_by_id("CustomStyle")).not_to be_nil
@@ -159,17 +159,17 @@ RSpec.describe "Theme Extraction and Reuse" do
     describe "#apply_template" do
       it "applies both theme and styles from template" do
         # Create template
-        template = Uniword::Wordprocessingml::DocumentRoot.new
+        template = described_class.new
         template.theme = Uniword::Drawingml::Theme.new(name: "Template Theme")
         template.styles_configuration.create_paragraph_style(
           "TemplateStyle",
-          "Template Style"
+          "Template Style",
         )
         template_path = "spec/fixtures/temp_template.docx"
         template.save(template_path)
 
         # Apply template
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc = described_class.new
         doc.apply_template(template_path)
 
         expect(doc.theme.name).to eq("Template Theme")
@@ -185,7 +185,8 @@ RSpec.describe "Theme Extraction and Reuse" do
     describe "#import_from_document" do
       it "imports styles from another document" do
         source = Uniword::Wordprocessingml::DocumentRoot.new
-        source.styles_configuration.create_paragraph_style("Imported", "Imported")
+        source.styles_configuration.create_paragraph_style("Imported",
+                                                           "Imported")
 
         target = Uniword::Wordprocessingml::DocumentRoot.new
         target.styles_configuration.import_from_document(source)
@@ -195,12 +196,13 @@ RSpec.describe "Theme Extraction and Reuse" do
 
       it "skips existing styles" do
         source = Uniword::Wordprocessingml::DocumentRoot.new
-        source.styles_configuration.create_paragraph_style("Existing", "Existing")
+        source.styles_configuration.create_paragraph_style("Existing",
+                                                           "Existing")
 
         target = Uniword::Wordprocessingml::DocumentRoot.new
         target.styles_configuration.create_paragraph_style(
           "Existing",
-          "Original"
+          "Original",
         )
         target.styles_configuration.import_from_document(source)
 
@@ -210,7 +212,7 @@ RSpec.describe "Theme Extraction and Reuse" do
 
     describe "#export_styles" do
       it "exports all styles as copies" do
-        config = Uniword::Wordprocessingml::StylesConfiguration.new
+        config = described_class.new
         config.create_paragraph_style("Export1", "Export 1")
         config.create_paragraph_style("Export2", "Export 2")
 
@@ -223,10 +225,10 @@ RSpec.describe "Theme Extraction and Reuse" do
 
     describe "#merge" do
       it "keeps existing styles by default" do
-        target = Uniword::Wordprocessingml::StylesConfiguration.new
+        target = described_class.new
         target.create_paragraph_style("Conflict", "Original")
 
-        source = Uniword::Wordprocessingml::StylesConfiguration.new
+        source = described_class.new
         source.create_paragraph_style("Conflict", "Updated")
         source.create_paragraph_style("New", "New Style")
 
@@ -237,10 +239,10 @@ RSpec.describe "Theme Extraction and Reuse" do
       end
 
       it "replaces existing styles when requested" do
-        target = Uniword::Wordprocessingml::StylesConfiguration.new
+        target = described_class.new
         target.create_paragraph_style("Conflict", "Original")
 
-        source = Uniword::Wordprocessingml::StylesConfiguration.new
+        source = described_class.new
         source.create_paragraph_style("Conflict", "Updated")
 
         target.merge(source, conflict_resolution: :replace)
@@ -249,10 +251,10 @@ RSpec.describe "Theme Extraction and Reuse" do
       end
 
       it "renames conflicting styles when requested" do
-        target = Uniword::Wordprocessingml::StylesConfiguration.new
+        target = described_class.new
         target.create_paragraph_style("Conflict", "Original")
 
-        source = Uniword::Wordprocessingml::StylesConfiguration.new
+        source = described_class.new
         source.create_paragraph_style("Conflict", "Updated")
 
         target.merge(source, conflict_resolution: :rename)
@@ -262,8 +264,8 @@ RSpec.describe "Theme Extraction and Reuse" do
       end
 
       it "raises error for invalid conflict resolution" do
-        target = Uniword::Wordprocessingml::StylesConfiguration.new
-        source = Uniword::Wordprocessingml::StylesConfiguration.new
+        target = described_class.new
+        source = described_class.new
 
         expect do
           target.merge(source, conflict_resolution: :invalid)
@@ -273,7 +275,7 @@ RSpec.describe "Theme Extraction and Reuse" do
 
     describe "#style_exists?" do
       it "checks if style exists by ID" do
-        config = Uniword::Wordprocessingml::StylesConfiguration.new
+        config = described_class.new
         config.create_paragraph_style("Exists", "Exists")
 
         expect(config.style_exists?("Exists")).to be true
@@ -283,7 +285,7 @@ RSpec.describe "Theme Extraction and Reuse" do
 
     describe "#find_by_id" do
       it "finds style by ID" do
-        config = Uniword::Wordprocessingml::StylesConfiguration.new
+        config = described_class.new
         style = config.create_paragraph_style("FindMe", "Find Me")
 
         found = config.find_by_id("FindMe")
@@ -334,7 +336,8 @@ RSpec.describe "Theme Extraction and Reuse" do
 
       reloaded = Uniword.load(path)
 
-      expect(reloaded.theme).to be_nil
+      # Reconciler injects a default theme from the profile
+      expect(reloaded.theme).not_to be_nil
 
       # Cleanup
       safe_rm_f(path)
@@ -356,13 +359,13 @@ RSpec.describe "Theme Extraction and Reuse" do
           color: doc.theme.color(:accent1),
           font: doc.theme.major_font,
           bold: true,
-          size: 32
-        )
+          size: 32,
+        ),
       )
 
       # Use the style - create paragraph with properties first
       heading = Uniword::Wordprocessingml::Paragraph.new(
-        properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: "CorporateHeading")
+        properties: Uniword::Wordprocessingml::ParagraphProperties.new(style: "CorporateHeading"),
       )
       run = Uniword::Wordprocessingml::Run.new(text: "Corporate Heading")
       heading.runs << run

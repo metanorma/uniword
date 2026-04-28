@@ -34,7 +34,7 @@ module Uniword
         @misspellings << {
           word: word,
           position: position,
-          suggestions: suggestions
+          suggestions: suggestions,
         }
       end
 
@@ -48,7 +48,7 @@ module Uniword
         @grammar_issues << {
           message: message,
           position: position,
-          context: context
+          context: context,
         }
       end
 
@@ -74,7 +74,7 @@ module Uniword
           misspellings: misspellings,
           grammar_issues: grammar_issues,
           issue_count: issue_count,
-          clean: clean?
+          clean: clean?,
         )
       end
     end

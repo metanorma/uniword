@@ -9,7 +9,8 @@ module Uniword
     # LOADERS (load resources from data files)
     autoload :ColorSchemeLoader, "#{__dir__}/resource/color_scheme_loader"
     autoload :FontSchemeLoader, "#{__dir__}/resource/font_scheme_loader"
-    autoload :DocumentElementLoader, "#{__dir__}/resource/document_element_loader"
+    autoload :DocumentElementLoader,
+             "#{__dir__}/resource/document_element_loader"
     autoload :ThemeMappingLoader, "#{__dir__}/resource/theme_mapping_loader"
 
     # TRANSITIONS (detect and migrate between theme systems)
@@ -26,9 +27,11 @@ module Uniword
     autoload :ResourceLocation, "#{__dir__}/resource/resource_location"
 
     # CONVERTERS (transform between formats)
-    autoload :DocumentElementConverter, "#{__dir__}/resource/document_element_converter"
+    autoload :DocumentElementConverter,
+             "#{__dir__}/resource/document_element_converter"
 
     # TEMPLATES
-    autoload :DocumentElementTemplate, "#{__dir__}/resource/document_element_template"
+    autoload :DocumentElementTemplate,
+             "#{__dir__}/resource/document_element_template"
   end
 end

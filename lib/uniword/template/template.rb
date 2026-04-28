@@ -76,7 +76,7 @@ module Uniword
           markers: @markers.count,
           variables: variables,
           loops: loops,
-          conditionals: conditionals.count
+          conditionals: conditionals.count,
         }
       end
 
@@ -92,7 +92,9 @@ module Uniword
       # @return [Array<Hash>] Loop information
       def loops
         loop_starts = @markers.select(&:loop_start?)
-        loop_starts.map { |m| { collection: m.collection, position: m.position } }
+        loop_starts.map do |m|
+          { collection: m.collection, position: m.position }
+        end
       end
 
       # Get all conditional markers

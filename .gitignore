@@ -51,3 +51,6 @@ docs/vendor/
 
 # Logs
 *.log
+# Test artifacts
+test_output/
+verify_stats/

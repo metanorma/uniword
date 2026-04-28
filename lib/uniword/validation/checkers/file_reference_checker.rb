@@ -31,7 +31,7 @@ module Uniword
         DEFAULTS = {
           base_path: ".",
           check_relative_paths: true,
-          check_absolute_paths: true
+          check_absolute_paths: true,
         }.freeze
 
         # Check if this checker can validate the given link.
@@ -66,27 +66,35 @@ module Uniword
         # @example
         #   result = checker.check(file_link)
         def check(link, document = nil)
-          return ValidationResult.unknown(link, "Checker disabled") unless enabled?
+          unless enabled?
+            return ValidationResult.unknown(link,
+                                            "Checker disabled")
+          end
 
           file_path = extract_file_path(link)
-          return ValidationResult.failure(link, "No file path specified") unless file_path
+          unless file_path
+            return ValidationResult.failure(link,
+                                            "No file path specified")
+          end
 
           # Resolve the file path
           resolved_path = resolve_path(file_path, document)
 
           # Check if path type is enabled
           if resolved_path.absolute?
-            unless config_value(:check_absolute_paths, DEFAULTS[:check_absolute_paths])
+            unless config_value(:check_absolute_paths,
+                                DEFAULTS[:check_absolute_paths])
               return ValidationResult.warning(
                 link,
-                "Absolute path checking disabled"
+                "Absolute path checking disabled",
               )
             end
           else
-            unless config_value(:check_relative_paths, DEFAULTS[:check_relative_paths])
+            unless config_value(:check_relative_paths,
+                                DEFAULTS[:check_relative_paths])
               return ValidationResult.warning(
                 link,
-                "Relative path checking disabled"
+                "Relative path checking disabled",
               )
             end
           end
@@ -96,7 +104,7 @@ module Uniword
             metadata = {
               path: file_path,
               resolved_path: resolved_path.to_s,
-              type: File.directory?(resolved_path) ? "directory" : "file"
+              type: File.directory?(resolved_path) ? "directory" : "file",
             }
 
             ValidationResult.success(link, metadata: metadata)
@@ -106,15 +114,15 @@ module Uniword
               "File not found: #{file_path}",
               metadata: {
                 path: file_path,
-                resolved_path: resolved_path.to_s
-              }
+                resolved_path: resolved_path.to_s,
+              },
             )
           end
         rescue StandardError => e
           ValidationResult.failure(
             link,
             "Error checking file: #{e.message}",
-            metadata: { error: e.class.name }
+            metadata: { error: e.class.name },
           )
         end
 

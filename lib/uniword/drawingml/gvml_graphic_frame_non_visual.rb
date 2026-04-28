@@ -16,7 +16,8 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::DrawingML
 
         map_element "cNvPr", to: :c_nv_pr, render_nil: false
-        map_element "cNvGraphicFramePr", to: :c_nv_graphic_frame_pr, render_nil: false
+        map_element "cNvGraphicFramePr", to: :c_nv_graphic_frame_pr,
+                                         render_nil: false
       end
     end
   end

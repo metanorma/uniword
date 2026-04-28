@@ -15,7 +15,7 @@ module Uniword
           type: "character",
           styleId: "DefaultParagraphFont",
           name: StyleName.new(val: "Default Paragraph Font"),
-          default: true
+          default: true,
         )
       end
 
@@ -29,8 +29,8 @@ module Uniword
           name: StyleName.new(val: "Emphasis"),
           customStyle: true,
           rPr: RunProperties.new(
-            italic: Properties::Italic.new
-          )
+            italic: Properties::Italic.new,
+          ),
         )
       end
 
@@ -44,8 +44,8 @@ module Uniword
           name: StyleName.new(val: "Strong"),
           customStyle: true,
           rPr: RunProperties.new(
-            bold: Properties::Bold.new
-          )
+            bold: Properties::Bold.new,
+          ),
         )
       end
 
@@ -60,8 +60,8 @@ module Uniword
           customStyle: true,
           rPr: RunProperties.new(
             italic: Properties::Italic.new,
-            color: Properties::ColorValue.new(val: "595959")
-          )
+            color: Properties::ColorValue.new(value: "595959"),
+          ),
         )
       end
 
@@ -77,8 +77,8 @@ module Uniword
           rPr: RunProperties.new(
             italic: Properties::Italic.new,
             bold: Properties::Bold.new,
-            color: Properties::ColorValue.new(val: "2E74B5")
-          )
+            color: Properties::ColorValue.new(value: "2E74B5"),
+          ),
         )
       end
 
@@ -93,8 +93,8 @@ module Uniword
           basedOn: BasedOn.new(val: "DefaultParagraphFont"),
           customStyle: true,
           rPr: RunProperties.new(
-            italic: Properties::Italic.new
-          )
+            italic: Properties::Italic.new,
+          ),
         )
       end
 
@@ -110,8 +110,8 @@ module Uniword
           customStyle: true,
           rPr: RunProperties.new(
             italic: Properties::Italic.new,
-            bold: Properties::Bold.new
-          )
+            bold: Properties::Bold.new,
+          ),
         )
       end
 
@@ -126,8 +126,8 @@ module Uniword
           customStyle: true,
           rPr: RunProperties.new(
             italic: Properties::Italic.new,
-            color: Properties::ColorValue.new(val: "595959")
-          )
+            color: Properties::ColorValue.new(value: "595959"),
+          ),
         )
       end
 
@@ -142,8 +142,8 @@ module Uniword
           customStyle: true,
           rPr: RunProperties.new(
             bold: Properties::Bold.new,
-            color: Properties::ColorValue.new(val: "2E74B5")
-          )
+            color: Properties::ColorValue.new(value: "2E74B5"),
+          ),
         )
       end
 
@@ -158,8 +158,9 @@ module Uniword
           customStyle: true,
           rPr: RunProperties.new(
             italic: Properties::Italic.new,
-            fonts: Properties::RunFonts.new(ascii: "Constantia", h_ansi: "Constantia")
-          )
+            fonts: Properties::RunFonts.new(ascii: "Constantia",
+                                            h_ansi: "Constantia"),
+          ),
         )
       end
 
@@ -173,9 +174,9 @@ module Uniword
           name: StyleName.new(val: "Hyperlink"),
           customStyle: true,
           rPr: RunProperties.new(
-            color: Properties::ColorValue.new(val: "0000FF"),
-            underline: Properties::Underline.new(val: "single")
-          )
+            color: Properties::ColorValue.new(value: "0000FF"),
+            underline: Properties::Underline.new(value: "single"),
+          ),
         )
       end
 
@@ -189,9 +190,9 @@ module Uniword
           name: StyleName.new(val: "Followed Hyperlink"),
           customStyle: true,
           rPr: RunProperties.new(
-            color: Properties::ColorValue.new(val: "800080"),
-            underline: Properties::Underline.new(val: "single")
-          )
+            color: Properties::ColorValue.new(value: "800080"),
+            underline: Properties::Underline.new(value: "single"),
+          ),
         )
       end
     end

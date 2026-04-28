@@ -25,7 +25,10 @@ module Uniword
       # @return [Object] The imported resource
       # @raise [ArgumentError] if Word not installed or resource not found
       def import_one(type, name)
-        raise ArgumentError, "Microsoft Word is not installed" unless word.installed?
+        unless word.installed?
+          raise ArgumentError,
+                "Microsoft Word is not installed"
+        end
 
         resource = load_from_word(type, name)
         cache.write(type, name, resource.to_yaml)
@@ -38,7 +41,10 @@ module Uniword
       # @param force [Boolean] Overwrite existing cache entries
       # @return [Integer] Number of resources imported
       def import_all_of_type(type, force: false)
-        raise ArgumentError, "Microsoft Word is not installed" unless word.installed?
+        unless word.installed?
+          raise ArgumentError,
+                "Microsoft Word is not installed"
+        end
 
         available = available_resources(type)
         count = 0
@@ -86,12 +92,18 @@ module Uniword
         case type
         when :theme
           path = File.join(word.themes_path, "#{name}.thmx")
-          raise ArgumentError, "Theme not found: #{name}" unless File.exist?(path)
+          unless File.exist?(path)
+            raise ArgumentError,
+                  "Theme not found: #{name}"
+          end
 
           Uniword::Ooxml::ThmxPackage.from_file(path)&.theme
         when :styleset
           path = File.join(word.stylesets_path, "#{name}.dotx")
-          raise ArgumentError, "StyleSet not found: #{name}" unless File.exist?(path)
+          unless File.exist?(path)
+            raise ArgumentError,
+                  "StyleSet not found: #{name}"
+          end
 
           Uniword::Ooxml::DotxPackage.from_file(path)&.styles_configuration
         when :color_scheme

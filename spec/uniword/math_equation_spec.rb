@@ -2,12 +2,13 @@
 
 require "spec_helper"
 require "uniword/math_equation"
+require "uniword/math/plurimath_adapter"
 
 RSpec.describe Uniword::MathEquation do
   describe "#initialize" do
     it "creates a new math equation" do
       equation = described_class.new
-      expect(equation).to be_a(Uniword::MathEquation)
+      expect(equation).to be_a(described_class)
     end
 
     it "accepts formula parameter" do
@@ -33,7 +34,7 @@ RSpec.describe Uniword::MathEquation do
 
     it "sets break_enabled to false by default" do
       equation = described_class.new
-      expect(equation.break_enabled).to eq(false)
+      expect(equation.break_enabled).to be(false)
     end
   end
 
@@ -132,7 +133,7 @@ RSpec.describe Uniword::MathEquation do
       omml = '<m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math"/>'
 
       # Mock the adapter
-      adapter = class_double("Uniword::Math::PlurimathAdapter")
+      adapter = class_double(Uniword::Math::PlurimathAdapter)
       stub_const("Uniword::Math::PlurimathAdapter", adapter)
 
       expected_equation = described_class.new
@@ -149,11 +150,12 @@ RSpec.describe Uniword::MathEquation do
       equation = described_class.new(formula: formula)
 
       # Mock the adapter
-      adapter = class_double("Uniword::Math::PlurimathAdapter")
+      adapter = class_double(Uniword::Math::PlurimathAdapter)
       stub_const("Uniword::Math::PlurimathAdapter", adapter)
 
       expected_omml = "<m:oMath/>"
-      expect(adapter).to receive(:to_omml).with(equation, {}).and_return(expected_omml)
+      expect(adapter).to receive(:to_omml).with(equation,
+                                                {}).and_return(expected_omml)
 
       result = equation.to_omml
       expect(result).to eq(expected_omml)
@@ -163,7 +165,7 @@ RSpec.describe Uniword::MathEquation do
       formula = double("formula", to_latex: "x^2")
       equation = described_class.new(formula: formula)
 
-      adapter = class_double("Uniword::Math::PlurimathAdapter")
+      adapter = class_double(Uniword::Math::PlurimathAdapter)
       stub_const("Uniword::Math::PlurimathAdapter", adapter)
 
       options = { pretty: true }

@@ -32,7 +32,10 @@ module Uniword
           result = LayerValidationResult.new(layer_name)
 
           # Check file exists
-          return result.add_error("File does not exist", critical: true) unless File.exist?(path)
+          unless File.exist?(path)
+            return result.add_error("File does not exist",
+                                    critical: true)
+          end
 
           # Check readable
           unless File.readable?(path)
@@ -69,7 +72,7 @@ module Uniword
           return if allowed.any? { |ext| path.end_with?(ext) }
 
           result.add_warning(
-            "Unusual file extension (expected #{allowed.join(" or ")})"
+            "Unusual file extension (expected #{allowed.join(' or ')})",
           )
         end
 
@@ -81,7 +84,7 @@ module Uniword
             result.add_error("File is empty", critical: true)
           elsif size > max_size
             result.add_warning(
-              "File is very large (#{format_bytes(size)})"
+              "File is very large (#{format_bytes(size)})",
             )
           end
         end

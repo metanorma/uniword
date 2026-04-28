@@ -16,7 +16,7 @@ module Uniword
           styleId: "Normal",
           default: true,
           name: StyleName.new(val: "Normal"),
-          qFormat: Properties::QuickFormat.new
+          qFormat: Properties::QuickFormat.new,
         )
       end
 
@@ -25,7 +25,10 @@ module Uniword
       # @param level [Integer] Heading level (1-9)
       # @return [Style] Heading style instance
       def self.heading(level)
-        raise ArgumentError, "Heading level must be 1-9" unless (1..9).cover?(level)
+        unless (1..9).cover?(level)
+          raise ArgumentError,
+                "Heading level must be 1-9"
+        end
 
         Style.new(
           type: "paragraph",
@@ -36,7 +39,7 @@ module Uniword
           uiPriority: UiPriority.new(val: (level + 8).to_s),
           qFormat: Properties::QuickFormat.new,
           pPr: create_heading_paragraph_properties(level),
-          rPr: create_heading_run_properties(level)
+          rPr: create_heading_run_properties(level),
         )
       end
 
@@ -53,9 +56,10 @@ module Uniword
           uiPriority: UiPriority.new(val: "10"),
           qFormat: Properties::QuickFormat.new,
           rPr: RunProperties.new(
-            size: Properties::FontSize.new(val: "56"),
-            fonts: Properties::RunFonts.new(ascii: "Calibri Light", h_ansi: "Calibri Light")
-          )
+            size: Properties::FontSize.new(value: "56"),
+            fonts: Properties::RunFonts.new(ascii: "Calibri Light",
+                                            h_ansi: "Calibri Light"),
+          ),
         )
       end
 
@@ -72,10 +76,11 @@ module Uniword
           uiPriority: UiPriority.new(val: "11"),
           qFormat: Properties::QuickFormat.new,
           rPr: RunProperties.new(
-            color: Properties::ColorValue.new(val: "595959"),
-            size: Properties::FontSize.new(val: "28"),
-            fonts: Properties::RunFonts.new(ascii: "Calibri Light", h_ansi: "Calibri Light")
-          )
+            color: Properties::ColorValue.new(value: "595959"),
+            size: Properties::FontSize.new(value: "28"),
+            fonts: Properties::RunFonts.new(ascii: "Calibri Light",
+                                            h_ansi: "Calibri Light"),
+          ),
         )
       end
 
@@ -92,11 +97,11 @@ module Uniword
           uiPriority: UiPriority.new(val: "29"),
           qFormat: Properties::QuickFormat.new,
           pPr: ParagraphProperties.new(
-            indentation: Properties::Indentation.new(left: "720")
+            indentation: Properties::Indentation.new(left: "720"),
           ),
           rPr: RunProperties.new(
-            italic: Properties::Italic.new
-          )
+            italic: Properties::Italic.new,
+          ),
         )
       end
 
@@ -113,8 +118,8 @@ module Uniword
           uiPriority: UiPriority.new(val: "30"),
           qFormat: Properties::QuickFormat.new,
           rPr: RunProperties.new(
-            bold: Properties::Bold.new
-          )
+            bold: Properties::Bold.new,
+          ),
         )
       end
 
@@ -126,8 +131,9 @@ module Uniword
         outline_level = [level - 1, 0].max
 
         ParagraphProperties.new(
-          outline_level: Properties::OutlineLevel.new(val: outline_level.to_s),
-          spacing: Properties::Spacing.new(before: (240 + (level * 80)).to_s, after: "0")
+          outline_level: Properties::OutlineLevel.new(value: outline_level.to_s),
+          spacing: Properties::Spacing.new(before: (240 + (level * 80)).to_s,
+                                           after: "0"),
         )
       end
 
@@ -152,10 +158,11 @@ module Uniword
         }
 
         RunProperties.new(
-          size: Properties::FontSize.new(val: sizes[level]),
-          fonts: Properties::RunFonts.new(ascii: fonts[level], h_ansi: fonts[level]),
-          color: Properties::ColorValue.new(val: colors[level]),
-          bold: Properties::Bold.new
+          size: Properties::FontSize.new(value: sizes[level]),
+          fonts: Properties::RunFonts.new(ascii: fonts[level],
+                                          h_ansi: fonts[level]),
+          color: Properties::ColorValue.new(value: colors[level]),
+          bold: Properties::Bold.new,
         )
       end
     end

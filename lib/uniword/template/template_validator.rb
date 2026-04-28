@@ -98,7 +98,8 @@ module Uniword
             # Check if this {{@end}} could be closing a conditional
             # This is a simplified check - more sophisticated logic would track
             # the nesting hierarchy properly
-            conditional_stack.pop if should_close_conditional?(marker, conditional_stack.last)
+            conditional_stack.pop if should_close_conditional?(marker,
+                                                               conditional_stack.last)
           end
         end
 

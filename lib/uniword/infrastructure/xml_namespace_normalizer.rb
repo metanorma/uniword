@@ -12,7 +12,7 @@ module Uniword
       # Prefixed namespaces that should be declared at root level in OOXML documents
       PREFIXED_NAMESPACES = {
         "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" => "wp",
-        "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" => "wp14"
+        "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" => "wp14",
       }.freeze
 
       # Normalize XML to ensure prefixed namespace declarations are at root level
@@ -90,7 +90,9 @@ module Uniword
       # @return [Hash] Updated zip content
       def self.normalize_zip_content(zip_content, target_files = nil)
         result = zip_content.dup
-        target_files ||= result.keys.select { |k| k.end_with?(".xml") || k.end_with?(".rels") }
+        target_files ||= result.keys.select do |k|
+          k.end_with?(".xml", ".rels")
+        end
 
         target_files.each do |path|
           next unless result[path]

@@ -42,20 +42,21 @@ module Uniword
     #
     # @example Save with explicit format
     #   writer.save("output.mht", format: :mhtml)
-    def save(path, format: :auto)
+    def save(path, format: :auto, profile: nil)
       validate_path(path)
 
       format = infer_format(path) if format == :auto
 
       case format
       when :docx, :docm
-        Docx::Package.to_file(document, path)
+        Docx::Package.to_file(document, path, profile: profile)
       when :dotx, :dotm
-        Ooxml::DotxPackage.to_file(document, path)
+        Ooxml::DotxPackage.to_file(document, path, profile: profile)
       when :mhtml
         Mhtml::MhtmlPackage.to_file(document, path)
       else
-        raise ArgumentError, "No handler registered for format: #{format.inspect}"
+        raise ArgumentError,
+              "No handler registered for format: #{format.inspect}"
       end
     end
 

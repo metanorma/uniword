@@ -104,7 +104,7 @@ module Uniword
           external_links: { enabled: true },
           internal_bookmarks: { enabled: true },
           file_references: { enabled: true },
-          footnote_references: { enabled: true }
+          footnote_references: { enabled: true },
         }
       end
 
@@ -116,17 +116,17 @@ module Uniword
 
         [
           Checkers::ExternalLinkChecker.new(
-            config: config_root[:external_links] || {}
+            config: config_root[:external_links] || {},
           ),
           Checkers::InternalLinkChecker.new(
-            config: config_root[:internal_bookmarks] || {}
+            config: config_root[:internal_bookmarks] || {},
           ),
           Checkers::FileReferenceChecker.new(
-            config: config_root[:file_references] || {}
+            config: config_root[:file_references] || {},
           ),
           Checkers::FootnoteReferenceChecker.new(
-            config: config_root[:footnote_references] || {}
-          )
+            config: config_root[:footnote_references] || {},
+          ),
         ]
       end
 
@@ -180,7 +180,7 @@ module Uniword
         else
           ValidationResult.unknown(
             link,
-            "No checker available for this link type"
+            "No checker available for this link type",
           )
         end
       end

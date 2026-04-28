@@ -68,7 +68,7 @@ module Uniword
           vertical_align: source_props.vertical_align,
           small_caps: source_props.small_caps,
           all_caps: source_props.all_caps,
-          style: source_props.style
+          style: source_props.style,
         )
       end
     end

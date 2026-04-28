@@ -11,13 +11,10 @@ RSpec.describe "Comprehensive Benchmark Suite" do
   after(:all) do
     # Print summary if running with PROFILE=true
     if ENV["PROFILE"]
-      puts "\n#{"=" * 70}"
-      puts "BENCHMARK SUMMARY"
-      puts "=" * 70
+
       @benchmark_results.each do |name, time|
-        puts format("%-50s: %.4f seconds", name, time)
       end
-      puts "=" * 70
+
     end
 
     # Clean up
@@ -45,7 +42,7 @@ RSpec.describe "Comprehensive Benchmark Suite" do
     paragraphs.times do |i|
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "Paragraph #{i + 1}: Test content for benchmarking."
+        text: "Paragraph #{i + 1}: Test content for benchmarking.",
       )
       para.runs << run
       doc.body.paragraphs << para

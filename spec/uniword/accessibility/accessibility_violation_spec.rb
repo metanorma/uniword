@@ -3,6 +3,8 @@
 require "spec_helper"
 
 RSpec.describe Uniword::Accessibility::AccessibilityViolation do
+  subject(:violation) { described_class.new(violation_attributes) }
+
   let(:violation_attributes) do
     {
       rule_id: :image_alt_text,
@@ -11,11 +13,9 @@ RSpec.describe Uniword::Accessibility::AccessibilityViolation do
       message: "Image 1 missing alternative text",
       element: double("Image"),
       severity: :error,
-      suggestion: "Add descriptive alternative text for images"
+      suggestion: "Add descriptive alternative text for images",
     }
   end
-
-  subject(:violation) { described_class.new(violation_attributes) }
 
   describe "#initialize" do
     it "sets all attributes correctly" do
@@ -87,7 +87,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityViolation do
         level: "A",
         severity: :error,
         message: "Image 1 missing alternative text",
-        suggestion: "Add descriptive alternative text for images"
+        suggestion: "Add descriptive alternative text for images",
       )
     end
 

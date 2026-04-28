@@ -51,10 +51,14 @@ module Uniword
             xml_str = element.to_xml(pretty: options[:pretty])
 
             # Remove XML declaration unless standalone
-            xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(:standalone, false)
+            xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(
+              :standalone, false
+            )
 
             # Add XML declaration if standalone
-            xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(:standalone, false)
+            xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(
+              :standalone, false
+            )
 
             return xml_str.strip
           end
@@ -77,7 +81,9 @@ module Uniword
                     end
 
           # Remove XML declaration unless standalone
-          xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(:standalone, false)
+          xml_str = xml_str.sub(/<\?xml[^?]*\?>\n?/, "") unless options.fetch(
+            :standalone, false
+          )
 
           # Add XML declaration if standalone
           xml_str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n#{xml_str}" if options.fetch(
@@ -93,7 +99,9 @@ module Uniword
         #
         # @return [OoxmlSchema] Default schema
         def load_default_schema
-          schema_path = File.expand_path("../../../../config/ooxml/schema_main.yml", __dir__)
+          schema_path = File.expand_path(
+            "../../../../config/ooxml/schema_main.yml", __dir__
+          )
           OoxmlSchema.load(schema_path)
         end
 
@@ -167,12 +175,14 @@ module Uniword
             if child_def.multiple?
               # Serialize each child in collection
               Array(children).each do |child|
-                child_node = serialize_child_to_node(doc, child, child_def, options)
+                child_node = serialize_child_to_node(doc, child, child_def,
+                                                     options)
                 node.add_child(child_node) if child_node
               end
             elsif children
               # Serialize single child
-              child_node = serialize_child_to_node(doc, children, child_def, options)
+              child_node = serialize_child_to_node(doc, children, child_def,
+                                                   options)
               node.add_child(child_node) if child_node
             end
           end
@@ -195,12 +205,14 @@ module Uniword
           if child_def.presence_only?
             # Presence-only element (e.g., <w:b/> for bold)
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
             node
           elsif child.is_a?(String)
             # Simple string value (e.g., text content)
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
             node.content = child
             node
           elsif child.respond_to?(:is_a?) && child.is_a?(Element)
@@ -208,7 +220,8 @@ module Uniword
             if child.instance_of?(::Uniword::TextElement) && child.respond_to?(:content)
               # TextElement: serialize as element with text content
               node = Nokogiri::XML::Node.new(local_name, doc)
-              node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+              node.namespace = node.add_namespace_definition(prefix,
+                                                             namespace_uri)
               node.content = child.content.to_s if child.content
               node
             else
@@ -226,13 +239,17 @@ module Uniword
               # For properties without schema, create empty element
               # (will be filled with children if schema definition exists for element type)
               node = Nokogiri::XML::Node.new(local_name, doc)
-              node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+              node.namespace = node.add_namespace_definition(prefix,
+                                                             namespace_uri)
 
               if child_def.has_attributes?
                 child_def.attributes.each do |attr_config|
                   attr_def = AttributeDefinition.new(attr_config)
                   value = get_attribute_value(child, attr_def)
-                  node[attr_def.attribute_name] = attr_def.format_value(value) if value
+                  if value
+                    node[attr_def.attribute_name] =
+                      attr_def.format_value(value)
+                  end
                 end
               end
               node
@@ -240,30 +257,37 @@ module Uniword
           elsif child_def.has_attributes?
             # Element with attributes but no child elements
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
 
             child_def.attributes.each do |attr_config|
               attr_def = AttributeDefinition.new(attr_config)
               value = get_attribute_value(child, attr_def)
-              node[attr_def.attribute_name] = attr_def.format_value(value) if value
+              if value
+                node[attr_def.attribute_name] =
+                  attr_def.format_value(value)
+              end
             end
             node
           elsif child.is_a?(String)
             # Simple string value
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
             node.content = child
             node
           elsif child.respond_to?(:content)
             # TextElement or similar - get the content
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
             node.content = child.content.to_s if child.content
             node
           elsif child
             # Other value element - convert to string
             node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+            node.namespace = node.add_namespace_definition(prefix,
+                                                           namespace_uri)
             node.content = child.to_s
             node
           end

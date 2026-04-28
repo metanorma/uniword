@@ -18,30 +18,32 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
                       "wrold" => %w[world wold] }
 
       adapter.define_singleton_method(:check) { |word| known.include?(word) }
-      adapter.define_singleton_method(:suggest) { |word| suggestions.fetch(word, []) }
+      adapter.define_singleton_method(:suggest) do |word|
+        suggestions.fetch(word, [])
+      end
       adapter
     end
 
     it "returns a SpellcheckResult" do
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
       expect(result).to be_a(
-        Uniword::Spellcheck::SpellcheckResult
+        Uniword::Spellcheck::SpellcheckResult,
       )
     end
 
     it "detects misspelled words in paragraphs" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "This is a mispelled wrold test"
+        text: "This is a mispelled wrold test",
       )
       para.runs << run
       document.body.paragraphs << para
 
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
 
@@ -53,13 +55,13 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
     it "detects grammar issues" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "This is  a test with  double spaces"
+        text: "This is  a test with  double spaces",
       )
       para.runs << run
       document.body.paragraphs << para
 
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
 
@@ -71,13 +73,13 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
     it "detects repeated words" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "This is the the test"
+        text: "This is the the test",
       )
       para.runs << run
       document.body.paragraphs << para
 
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
 
@@ -88,7 +90,7 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
     it "extracts text from tables" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "mispelled in table"
+        text: "mispelled in table",
       )
       para.runs << run
 
@@ -103,7 +105,7 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
       document.body.tables << table
 
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
 
@@ -114,13 +116,13 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
     it "returns clean result for correct text" do
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(
-        text: "This is correct"
+        text: "This is correct",
       )
       para.runs << run
       document.body.paragraphs << para
 
       checker = described_class.new(
-        spell_adapter: fake_adapter
+        spell_adapter: fake_adapter,
       )
       result = checker.check(document)
 

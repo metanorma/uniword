@@ -36,7 +36,7 @@ module Uniword
         validate_links: "ValidateLinksStage",
         quality_check: "QualityCheckStage",
         convert_format: "ConvertFormatStage",
-        compress_images: "CompressImagesStage"
+        compress_images: "CompressImagesStage",
       }.freeze
 
       # Initialize document processor
@@ -45,10 +45,13 @@ module Uniword
       # @param config [Hash, nil] Direct configuration hash (overrides pipeline_config)
       # @param parallel [Boolean] Enable parallel processing
       # @param max_workers [Integer] Maximum number of parallel workers
-      def initialize(pipeline_config: nil, config: nil, parallel: false, max_workers: 4)
+      def initialize(pipeline_config: nil, config: nil, parallel: false,
+max_workers: 4)
         @config = load_configuration(pipeline_config, config)
-        @parallel = parallel || @config.dig(:pipeline, :parallel, :enabled) || false
-        @max_workers = max_workers || @config.dig(:pipeline, :parallel, :max_workers) || 4
+        @parallel = parallel || @config.dig(:pipeline, :parallel,
+                                            :enabled) || false
+        @max_workers = max_workers || @config.dig(:pipeline, :parallel,
+                                                  :max_workers) || 4
         @stages = load_stages
         @custom_stages = []
       end
@@ -96,7 +99,7 @@ module Uniword
           context = {
             input_path: input_path,
             output_path: output_path,
-            filename: File.basename(input_path)
+            filename: File.basename(input_path),
           }
 
           # Execute pipeline
@@ -119,7 +122,7 @@ module Uniword
           result.add_success(
             file: input_path,
             duration: duration,
-            stages: executed_stages
+            stages: executed_stages,
           )
         rescue StandardError => e
           handle_error(e, input_path, result)
@@ -187,17 +190,17 @@ module Uniword
         {
           pipeline: {
             default: {
-              stages: []
+              stages: [],
             },
             parallel: {
               enabled: false,
-              max_workers: 4
+              max_workers: 4,
             },
             error_handling: {
               continue_on_error: true,
-              log_errors: true
-            }
-          }
+              log_errors: true,
+            },
+          },
         }
       end
 
@@ -207,14 +210,14 @@ module Uniword
       def load_stages
         stages_config = @config.dig(:pipeline, :default, :stages) || []
 
-        stages_config.map do |stage_config|
+        stages_config.filter_map do |stage_config|
           stage_name = stage_config[:name]&.to_sym
           class_name = STAGE_CLASSES[stage_name]
 
           next unless class_name
 
           instantiate_stage(class_name, stage_config[:options] || {})
-        end.compact
+        end
       end
 
       # Instantiate a stage class with configuration
@@ -275,7 +278,7 @@ module Uniword
           context = {
             input_path: input_path,
             output_path: output_path,
-            filename: File.basename(input_path)
+            filename: File.basename(input_path),
           }
 
           # Execute pipeline
@@ -298,7 +301,7 @@ module Uniword
           result.add_success(
             file: input_path,
             duration: duration,
-            stages: executed_stages
+            stages: executed_stages,
           )
         rescue StandardError => e
           handle_error(e, input_path, result)
@@ -311,7 +314,8 @@ module Uniword
       # @param file_path [String] File being processed
       # @param result [BatchResult] Result tracker
       def handle_error(error, file_path, result)
-        continue_on_error = @config.dig(:pipeline, :error_handling, :continue_on_error)
+        continue_on_error = @config.dig(:pipeline, :error_handling,
+                                        :continue_on_error)
         log_errors = @config.dig(:pipeline, :error_handling, :log_errors)
 
         result.add_failure(file: file_path, error: error)

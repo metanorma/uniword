@@ -7,26 +7,26 @@ require "uniword/validation/report/validation_issue"
 RSpec.describe Uniword::Validation::Report::LayerResult do
   let(:error_issue) do
     Uniword::Validation::Report::ValidationIssue.new(
-      severity: "error", code: "OPC-001", message: "ZIP error"
+      severity: "error", code: "OPC-001", message: "ZIP error",
     )
   end
 
   let(:warning_issue) do
     Uniword::Validation::Report::ValidationIssue.new(
-      severity: "warning", code: "OPC-005", message: "Missing content type"
+      severity: "warning", code: "OPC-005", message: "Missing content type",
     )
   end
 
   let(:info_issue) do
     Uniword::Validation::Report::ValidationIssue.new(
-      severity: "info", code: "XSD-003", message: "Unknown namespace"
+      severity: "info", code: "XSD-003", message: "Unknown namespace",
     )
   end
 
   describe "pass/fail predicates" do
     it "passes when status is pass" do
       layer = described_class.new(
-        name: "OPC Package", status: "pass", duration_ms: 10, issues: []
+        name: "OPC Package", status: "pass", duration_ms: 10, issues: [],
       )
 
       expect(layer).to be_pass
@@ -35,7 +35,7 @@ RSpec.describe Uniword::Validation::Report::LayerResult do
 
     it "fails when status is fail" do
       layer = described_class.new(
-        name: "OPC Package", status: "fail", duration_ms: 10, issues: [error_issue]
+        name: "OPC Package", status: "fail", duration_ms: 10, issues: [error_issue],
       )
 
       expect(layer).to be_fail
@@ -44,7 +44,7 @@ RSpec.describe Uniword::Validation::Report::LayerResult do
 
     it "is skipped when status is skipped" do
       layer = described_class.new(
-        name: "XSD Schema", status: "skipped", duration_ms: 0, issues: []
+        name: "XSD Schema", status: "skipped", duration_ms: 0, issues: [],
       )
 
       expect(layer).not_to be_pass
@@ -58,7 +58,7 @@ RSpec.describe Uniword::Validation::Report::LayerResult do
         name: "Test Layer",
         status: "fail",
         duration_ms: 50,
-        issues: [error_issue, warning_issue, info_issue]
+        issues: [error_issue, warning_issue, info_issue],
       )
     end
 
@@ -84,7 +84,7 @@ RSpec.describe Uniword::Validation::Report::LayerResult do
         name: "OPC Package",
         status: "pass",
         duration_ms: 15,
-        issues: []
+        issues: [],
       )
 
       parsed = JSON.parse(layer.to_json)

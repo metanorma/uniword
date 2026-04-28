@@ -172,7 +172,7 @@ module Uniword
         def raise_element_not_found(name)
           raise ArgumentError,
                 "No schema definition for element: #{name}. " \
-                "Available elements: #{element_names.join(", ")}"
+                "Available elements: #{element_names.join(', ')}"
         end
 
         # Check if file is a loader configuration
@@ -208,9 +208,9 @@ module Uniword
           {
             schema: {
               version: loader_config[:version],
-              namespace: loader_config[:namespaces]&.dig(:w)
+              namespace: loader_config[:namespaces]&.dig(:w),
             },
-            elements: all_elements
+            elements: all_elements,
           }
         end
 
@@ -218,7 +218,8 @@ module Uniword
         #
         # @return [String] Path to default schema loader
         def self.default_loader_path
-          File.expand_path("../../../../config/ooxml/schema_loader.yml", __dir__)
+          File.expand_path("../../../../config/ooxml/schema_loader.yml",
+                           __dir__)
         end
       end
     end

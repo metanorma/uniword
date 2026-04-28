@@ -97,9 +97,15 @@ module Uniword
       # @return [void]
       # @raise [ArgumentError] if invalid
       def validate!
-        raise ArgumentError, "filename is required" if filename.nil? || filename.empty?
+        if filename.nil? || filename.empty?
+          raise ArgumentError,
+                "filename is required"
+        end
         raise ArgumentError, "content is required" if content.nil?
-        raise ArgumentError, "filename must be a string" unless filename.is_a?(String)
+        unless filename.is_a?(String)
+          raise ArgumentError,
+                "filename must be a string"
+        end
       end
 
       private

@@ -102,7 +102,7 @@ module Uniword
       Properties::TabStop.new(
         position: position,
         alignment: alignment.to_s,
-        leader: leader
+        leader: leader,
       )
     end
 

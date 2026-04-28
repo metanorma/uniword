@@ -160,7 +160,7 @@ RSpec.describe Uniword::Builder, ".line_break" do
     doc = Uniword::Builder::DocumentBuilder.new
     doc.paragraph do |p|
       p << "Line 1"
-      p << Uniword::Builder.line_break
+      p << described_class.line_break
       p << "Line 2"
     end
 
@@ -193,7 +193,7 @@ end
 RSpec.describe Uniword::Wordprocessingml::Run, "footnote/endnote references" do
   it "stores a footnoteReference" do
     run = described_class.new(
-      footnote_reference: Uniword::Wordprocessingml::FootnoteReference.new(id: "1")
+      footnote_reference: Uniword::Wordprocessingml::FootnoteReference.new(id: "1"),
     )
 
     expect(run.footnote_reference).not_to be_nil
@@ -202,7 +202,7 @@ RSpec.describe Uniword::Wordprocessingml::Run, "footnote/endnote references" do
 
   it "stores an endnoteReference" do
     run = described_class.new(
-      endnote_reference: Uniword::Wordprocessingml::EndnoteReference.new(id: "1")
+      endnote_reference: Uniword::Wordprocessingml::EndnoteReference.new(id: "1"),
     )
 
     expect(run.endnote_reference).not_to be_nil
@@ -211,7 +211,7 @@ RSpec.describe Uniword::Wordprocessingml::Run, "footnote/endnote references" do
 
   it "serializes footnoteReference in XML" do
     run = described_class.new(
-      footnote_reference: Uniword::Wordprocessingml::FootnoteReference.new(id: "2")
+      footnote_reference: Uniword::Wordprocessingml::FootnoteReference.new(id: "2"),
     )
     xml = run.to_xml(prefix: true)
 
@@ -221,7 +221,7 @@ RSpec.describe Uniword::Wordprocessingml::Run, "footnote/endnote references" do
 
   it "serializes endnoteReference in XML" do
     run = described_class.new(
-      endnote_reference: Uniword::Wordprocessingml::EndnoteReference.new(id: "3")
+      endnote_reference: Uniword::Wordprocessingml::EndnoteReference.new(id: "3"),
     )
     xml = run.to_xml(prefix: true)
 

@@ -11,7 +11,7 @@ RSpec.describe "DOCX Round-trip Validation" do
     FileUtils.mkdir_p("tmp/roundtrip")
   end
 
-  after(:each) do
+  after do
     # Clean up temporary files after each test
     Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
@@ -285,7 +285,7 @@ RSpec.describe "DOCX Round-trip Validation" do
 
       original_structure = {
         elements: doc1.body.paragraphs.count + doc1.body.tables.count,
-        text: extract_text(doc1)
+        text: extract_text(doc1),
       }
 
       doc1.save(temp_path)
@@ -293,7 +293,7 @@ RSpec.describe "DOCX Round-trip Validation" do
 
       roundtrip_structure = {
         elements: doc2.body.paragraphs.count + doc2.body.tables.count,
-        text: extract_text(doc2)
+        text: extract_text(doc2),
       }
 
       expect(roundtrip_structure).to eq(original_structure)
@@ -310,8 +310,8 @@ RSpec.describe "DOCX Round-trip Validation" do
       para = Uniword::Wordprocessingml::Paragraph.new(
         properties: Uniword::Wordprocessingml::ParagraphProperties.new(
           alignment: "center",
-          line_spacing: 240
-        )
+          line_spacing: 240,
+        ),
       )
 
       run = Uniword::Wordprocessingml::Run.new(text: "Test paragraph")
@@ -336,8 +336,8 @@ RSpec.describe "DOCX Round-trip Validation" do
         properties: Uniword::Wordprocessingml::RunProperties.new(
           bold: true,
           italic: true,
-          size: 48 # font_size * 2
-        )
+          size: 48, # font_size * 2
+        ),
       )
 
       para.runs << run
@@ -362,7 +362,7 @@ RSpec.describe "DOCX Round-trip Validation" do
         formatting << {
           bold: run.properties.respond_to?(:bold) ? run.properties.bold : nil,
           italic: run.properties.respond_to?(:italic) ? run.properties.italic : nil,
-          font: run.properties.respond_to?(:font) ? run.properties.font : nil
+          font: run.properties.respond_to?(:font) ? run.properties.font : nil,
         }
       end
     end
@@ -409,7 +409,7 @@ RSpec.describe "DOCX Round-trip Validation" do
     document.tables.map do |table|
       {
         row_count: table.rows.count,
-        cell_counts: table.rows.map { |row| row.cells.count }
+        cell_counts: table.rows.map { |row| row.cells.count },
       }
     end
   end
@@ -478,12 +478,12 @@ RSpec.describe "DOCX Round-trip Validation" do
       run = if i.even?
               Uniword::Wordprocessingml::Run.new(
                 text: "Paragraph #{i + 1} with content",
-                properties: Uniword::Wordprocessingml::RunProperties.new(bold: true)
+                properties: Uniword::Wordprocessingml::RunProperties.new(bold: true),
               )
             elsif i.odd?
               Uniword::Wordprocessingml::Run.new(
                 text: "Paragraph #{i + 1} with content",
-                properties: Uniword::Wordprocessingml::RunProperties.new(italic: true)
+                properties: Uniword::Wordprocessingml::RunProperties.new(italic: true),
               )
             else
               Uniword::Wordprocessingml::Run.new(text: "Paragraph #{i + 1} with content")
@@ -525,7 +525,7 @@ RSpec.describe "DOCX Round-trip Validation" do
       paragraph_count: document.paragraphs.count,
       table_count: document.tables.count,
       text_content: extract_text(document),
-      formatting_count: collect_run_formatting(document).count
+      formatting_count: collect_run_formatting(document).count,
     }
   end
 end

@@ -3,7 +3,7 @@
 require "spec_helper"
 require "securerandom"
 
-RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
+RSpec.describe "Image Embedding, Bibliography, Charts" do
   # =========================================================================
   # 16A: DocxPackage Image Embedding
   # =========================================================================
@@ -116,7 +116,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           year: "2024",
           publisher: "ACME Press",
           city: "New York",
-          edition: "3rd"
+          edition: "3rd",
         )
 
         src = builder.sources.source.first
@@ -136,7 +136,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           author: ["Jane Doe"],
           title: "A Book",
           year: "2023",
-          publisher: "Pub"
+          publisher: "Pub",
         )
 
         src = builder.sources.source.first
@@ -153,7 +153,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           author: ["Alice Smith", "Bob Jones"],
           title: "Collaboration",
           year: "2024",
-          publisher: "Pub"
+          publisher: "Pub",
         )
 
         src = builder.sources.source.first
@@ -173,7 +173,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           journal: "Nature",
           volume: "42",
           issue: "5",
-          pages: "100-110"
+          pages: "100-110",
         )
 
         src = builder.sources.source.first
@@ -191,7 +191,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           tag: "Web2024",
           title: "Example Page",
           url: "https://example.com",
-          year: "2024"
+          year: "2024",
         )
 
         src = builder.sources.source.first
@@ -204,7 +204,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           tag: "AuthWeb",
           title: "Authored Page",
           url: "https://example.com",
-          author: ["John Smith"]
+          author: ["John Smith"],
         )
 
         src = builder.sources.source.first
@@ -220,7 +220,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           title: "My Paper",
           year: "2024",
           publisher: "ACM",
-          city: "Berlin"
+          city: "Berlin",
         )
 
         src = builder.sources.source.first
@@ -236,7 +236,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           source_type: "Report",
           title: "Annual Report",
           year: "2024",
-          url: "https://example.com/report"
+          url: "https://example.com/report",
         )
 
         src = builder.sources.source.first
@@ -289,7 +289,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
           author: ["John Smith"],
           title: "The Book",
           year: "2024",
-          publisher: "ACME"
+          publisher: "ACME",
         )
 
         xml = builder.build.to_xml(encoding: "UTF-8", declaration: true)
@@ -765,7 +765,7 @@ RSpec.describe "Phase 16: Image Embedding, Bibliography, Charts" do
       end
       doc.bibliography_placeholder
 
-      path = "/tmp/test_complete_phase16.docx"
+      path = "/tmp/test_complete_image_embedding.docx"
       doc.save(path)
 
       expect(File.exist?(path)).to be(true)

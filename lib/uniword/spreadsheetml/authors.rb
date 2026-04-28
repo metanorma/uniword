@@ -9,7 +9,8 @@ module Uniword
     # Generated from OOXML schema: spreadsheetml.yml
     # Element: <xls:authors>
     class Authors < Lutaml::Model::Serializable
-      attribute :author_entries, :string, collection: true, initialize_empty: true
+      attribute :author_entries, :string, collection: true,
+                                          initialize_empty: true
 
       xml do
         element "authors"

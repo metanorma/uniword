@@ -42,7 +42,7 @@ module Uniword
           height: source_image.height,
           filename: source_image.filename,
           alt_text: source_image.alt_text,
-          title: source_image.title
+          title: source_image.title,
         )
 
         # Transform positioning properties

@@ -55,10 +55,10 @@ module Uniword
       # @return [String] Rule name
       def name
         self.class.name.split("::").last
-            .gsub(/Rule$/, "")
-            .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-            .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-            .downcase
+          .gsub(/Rule$/, "")
+          .gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
+          .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+          .downcase
       end
 
       protected
@@ -76,7 +76,7 @@ module Uniword
           severity: severity,
           message: message,
           location: location,
-          element: element
+          element: element,
         )
       end
     end
@@ -131,7 +131,7 @@ module Uniword
           rule: rule,
           severity: severity,
           message: message,
-          location: location
+          location: location,
         }
       end
 
@@ -146,7 +146,7 @@ module Uniword
 
         raise ArgumentError,
               "Invalid severity: #{severity}. " \
-              "Must be one of: #{valid_severities.join(", ")}"
+              "Must be one of: #{valid_severities.join(', ')}"
       end
     end
   end

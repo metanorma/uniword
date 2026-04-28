@@ -11,7 +11,7 @@ RSpec.describe "DOCX Compatibility Testing" do
     FileUtils.mkdir_p("tmp/compatibility")
   end
 
-  after(:each) do
+  after do
     # Clean up temporary files after each test
     Dir.glob("#{tmp_dir}/*.docx").each { |f| safe_delete(f) }
   end
@@ -117,10 +117,10 @@ RSpec.describe "DOCX Compatibility Testing" do
         namespaces = doc_node.collect_namespaces
 
         expect(namespaces).to include(
-          "xmlns:w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+          "xmlns:w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
         )
         expect(namespaces).to include(
-          "xmlns:r" => "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+          "xmlns:r" => "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
         )
       end
     end
@@ -164,7 +164,8 @@ RSpec.describe "DOCX Compatibility Testing" do
 
         overrides = ct_node.xpath("//ct:Override",
                                   "ct" => "http://schemas.openxmlformats.org/package/2006/content-types")
-        expect(overrides).not_to be_empty, "Missing Override content type entries"
+        expect(overrides).not_to be_empty,
+                                 "Missing Override content type entries"
       end
     end
 
@@ -201,7 +202,7 @@ RSpec.describe "DOCX Compatibility Testing" do
         main_doc = ct_node.at_xpath('//ct:Override[@PartName="/word/document.xml"]',
                                     "ct" => "http://schemas.openxmlformats.org/package/2006/content-types")
         expect(main_doc&.attr("ContentType")).to eq(
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
         )
       end
     end
@@ -218,7 +219,7 @@ RSpec.describe "DOCX Compatibility Testing" do
         rels_default = ct_node.at_xpath('//ct:Default[@Extension="rels"]',
                                         "ct" => "http://schemas.openxmlformats.org/package/2006/content-types")
         expect(rels_default&.attr("ContentType")).to eq(
-          "application/vnd.openxmlformats-package.relationships+xml"
+          "application/vnd.openxmlformats-package.relationships+xml",
         )
       end
     end
@@ -251,7 +252,7 @@ RSpec.describe "DOCX Compatibility Testing" do
         styles_override = ct_node.at_xpath('//ct:Override[@PartName="/word/styles.xml"]',
                                            "ct" => "http://schemas.openxmlformats.org/package/2006/content-types")
         expect(styles_override&.attr("ContentType")).to eq(
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
         )
       end
     end
@@ -307,7 +308,7 @@ RSpec.describe "DOCX Compatibility Testing" do
         rels_node.xpath("//pr:Relationship",
                         "pr" => "http://schemas.openxmlformats.org/package/2006/relationships").each do |rel|
           target = rel.attr("Target")
-          next if target.start_with?("http://") || target.start_with?("https://")
+          next if target.start_with?("http://", "https://")
 
           # Internal target should exist in ZIP
           full_path = if target.start_with?("/")
@@ -349,7 +350,7 @@ RSpec.describe "DOCX Compatibility Testing" do
           "[Content_Types].xml",
           "_rels/.rels",
           "word/document.xml",
-          "word/_rels/document.xml.rels"
+          "word/_rels/document.xml.rels",
         ]
 
         required_parts.each do |part|

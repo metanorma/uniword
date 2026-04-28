@@ -22,7 +22,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
       builder = Uniword::Builder::ParagraphBuilder.new(paragraph)
       builder.borders(
         top: { style: "double", size: 8, color: "0000FF" },
-        left: { style: "dashed", size: 4, color: "00FF00" }
+        left: { style: "dashed", size: 4, color: "00FF00" },
       )
 
       expect(paragraph.properties.borders.top.style).to eq("double")
@@ -46,7 +46,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
         left: "333333",
         right: "444444",
         between: "555555",
-        bar: "666666"
+        bar: "666666",
       )
 
       expect(paragraph.properties.borders.top.color).to eq("111111")
@@ -130,7 +130,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
     it "sets tab leader" do
       builder = Uniword::Builder::ParagraphBuilder.new(paragraph)
       builder << Uniword::Builder.tab_stop(
-        position: 1440, alignment: "right", leader: "dot"
+        position: 1440, alignment: "right", leader: "dot",
       )
 
       tab = paragraph.properties.tabs.tab_stops.first
@@ -180,7 +180,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
         outline_level: 1,
         contextual_spacing: true,
         bidirectional: false,
-        widow_control: true
+        widow_control: true,
       )
 
       # Verify all properties are accessible

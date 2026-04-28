@@ -3,6 +3,8 @@
 require "spec_helper"
 
 RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
+  subject(:rule) { described_class.new(config) }
+
   let(:config) do
     {
       wcag_criterion: "1.1.1 Non-text Content",
@@ -12,11 +14,9 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
       check_quality: true,
       min_length: 10,
       max_length: 150,
-      suggestion: "Add descriptive alternative text"
+      suggestion: "Add descriptive alternative text",
     }
   end
-
-  subject(:rule) { described_class.new(config) }
 
   describe "#check" do
     let(:document) { double("Document") }
@@ -73,7 +73,9 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     end
 
     context "with valid alt text" do
-      let(:image_with_alt) { double("Image", alt_text: "A beautiful sunset over mountains") }
+      let(:image_with_alt) do
+        double("Image", alt_text: "A beautiful sunset over mountains")
+      end
 
       before do
         allow(document).to receive(:images).and_return([image_with_alt])
@@ -132,7 +134,7 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
           "photo",
           "IMAGE",
           "image of sunset",
-          "picture of"
+          "picture of",
         ].each do |generic_text|
           context "with '#{generic_text}'" do
             let(:image_generic) { double("Image", alt_text: generic_text) }
@@ -143,14 +145,18 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
 
             it "returns warning for generic text" do
               violations = rule.check(document)
-              expect(violations.any? { |v| v.message.include?("generic") }).to be true
+              expect(violations.any? do |v|
+                v.message.include?("generic")
+              end).to be true
             end
           end
         end
       end
 
       context "with good alt text" do
-        let(:image_good) { double("Image", alt_text: "Company logo showing blue mountain") }
+        let(:image_good) do
+          double("Image", alt_text: "Company logo showing blue mountain")
+        end
 
         before do
           allow(document).to receive(:images).and_return([image_good])
@@ -172,7 +178,7 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
           check_quality: false,
           min_length: 10,
           max_length: 150,
-          suggestion: "Add descriptive alternative text"
+          suggestion: "Add descriptive alternative text",
         }
       end
       let(:rule_no_quality) { described_class.new(config_no_quality) }

@@ -131,12 +131,14 @@ module Uniword
       # @param core_properties [Uniword::Ooxml::CoreProperties] Optional core properties
       # @param relationships [Uniword::Ooxml::Relationships::PackageRelationships] Optional relationships
       # @return [String] Word HTML4 body content
-      def self.document_to_html_body(document, core_properties = nil, relationships = nil)
+      def self.document_to_html_body(document, core_properties = nil,
+relationships = nil)
         converter = new(document, core_properties, relationships)
         converter.build_html_body
       end
 
-      def initialize(document, core_properties = nil, relationships = nil, document_name = nil)
+      def initialize(document, core_properties = nil, relationships = nil,
+document_name = nil)
         @document = document
         @relationships = relationships
         @core_properties = core_properties
@@ -144,7 +146,7 @@ module Uniword
         @metadata_builder = MhtmlMetadataBuilder.new(
           document, core_properties, relationships, document_name
         )
-        @element_renderer = MhtmlElementRenderer.new(relationships)
+        @element_renderer = MhtmlElementRenderer.new(relationships, document.image_parts)
       end
 
       # Get the core properties to use (provided or from document)
@@ -196,22 +198,24 @@ module Uniword
         body = @document.body
         return "" unless body
 
-        paragraphs_html = body.elements.map do |element|
-          @element_renderer.element_to_html(element)
-        end.join("\n")
+        # Split body elements into sections based on paragraph section_properties
+        sections = split_into_sections(body.elements)
 
-        wrap_html_document(paragraphs_html)
+        wrap_html_document(sections)
       end
 
       private
 
       # Wrap HTML content in full Word HTML document
-      def wrap_html_document(body_html)
+      def wrap_html_document(sections)
         name = document_name
         meta_tags = @metadata_builder.build_meta_tags
         link_tags = @metadata_builder.build_link_tags
         metadata_comments = @metadata_builder.build_metadata_comments
         custom_props = @metadata_builder.build_custom_document_properties
+
+        # Build body content from sections
+        body_content = build_sections_html(sections)
 
         <<~HTML
           <html xmlns:o="urn:schemas-microsoft-com:office:office"
@@ -238,15 +242,67 @@ module Uniword
           </head>
           <body lang=EN-US style='tab-interval:.5in;word-wrap:break-word'>
 
-          <div class=WordSection1>
-
-          #{body_html}
-
-          </div>
+          #{body_content}
 
           </body>
           </html>
         HTML
+      end
+
+      # Split body elements into sections based on paragraph section_properties.
+      # Returns an array of arrays: each inner array is one section's elements.
+      def split_into_sections(elements)
+        return [elements] if elements.empty?
+
+        sections = []
+        current_section = []
+
+        elements.each do |element|
+          current_section << element
+
+          # Check if this paragraph marks a section boundary
+          if element.is_a?(Uniword::Wordprocessingml::Paragraph) &&
+             element.properties&.section_properties
+            sections << current_section
+            current_section = []
+          end
+        end
+
+        # Add remaining elements as the last section
+        sections << current_section unless current_section.empty?
+
+        sections
+      end
+
+      # Build HTML body content from sections array.
+      # Each section is wrapped in a <div class=WordSectionN> with <br> between them.
+      def build_sections_html(sections)
+        return "" if sections.empty?
+
+        # Single section: wrap in WordSection1 without breaks
+        if sections.size == 1
+          elements_html = sections.first.map do |element|
+            @element_renderer.element_to_html(element)
+          end.join("\n")
+          return "<div class=WordSection1>\n\n#{elements_html}\n\n</div>"
+        end
+
+        section_divs = sections.each_with_index.map do |section_elements, idx|
+          elements_html = section_elements.map do |element|
+            @element_renderer.element_to_html(element)
+          end.join("\n")
+
+          # First N sections get WordSection1..N class, last section is unnamed
+          if idx < sections.size - 1
+            "<div class=WordSection#{idx + 1}>\n\n#{elements_html}\n\n</div>"
+          else
+            "<div class=>\n\n#{elements_html}\n\n</div>"
+          end
+        end
+
+        # Join with <br> between sections (not after the last one)
+        # Word HTML uses <br clear="all" class="section" /> between sections
+        section_divs.join("\n\n<br clear=\"all\" class=\"section\" />\n\n")
       end
     end
   end

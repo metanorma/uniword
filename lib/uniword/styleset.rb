@@ -27,7 +27,8 @@ module Uniword
     attribute :name, :string, default: -> { "Custom StyleSet" }
 
     # Collection of Style objects
-    attribute :styles, Uniword::Wordprocessingml::Style, collection: true, initialize_empty: true
+    attribute :styles, Uniword::Wordprocessingml::Style, collection: true,
+                                                         initialize_empty: true
 
     # Source .dotx file path (for reference)
     attribute :source_file, :string
@@ -144,7 +145,8 @@ module Uniword
       styles.each do |style|
         case strategy
         when :replace
-          document.styles_configuration.add_style(style.dup, allow_overwrite: true)
+          document.styles_configuration.add_style(style.dup,
+                                                  allow_overwrite: true)
         when :keep_existing
           document.styles_configuration.add_style(style.dup) unless document.styles_configuration.style_exists?(style.id)
         when :rename
