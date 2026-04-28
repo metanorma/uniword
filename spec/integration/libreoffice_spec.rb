@@ -240,7 +240,7 @@ RSpec.describe "LibreOffice Compatibility Testing" do
 
         if para.respond_to?(:properties=)
           props = Uniword::Wordprocessingml::ParagraphProperties.new
-          props.left_indent = 720
+          props.indentation = Uniword::Properties::Indentation.new(left: 720)
           para.properties = props
         end
 

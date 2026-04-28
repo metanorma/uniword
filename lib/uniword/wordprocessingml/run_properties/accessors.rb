@@ -3,7 +3,7 @@
 module Uniword
   module Wordprocessingml
     class RunProperties < Lutaml::Model::Serializable
-      # Convenience getter/setter methods for RunProperties.
+      # Convenience getter methods for RunProperties.
       #
       # Delegates to wrapper objects (RunFonts, Language, Shading)
       # for ergonomic access to nested properties.
@@ -63,29 +63,10 @@ module Uniword
           shading&.fill
         end
 
-        def shading_color=(value)
-          self.shading ||= Properties::Shading.new
-          shading.fill = value
-          self
-        end
-
         # --- Misc accessors ---
-
-        def page_break=(_value)
-          self
-        end
 
         def text_expansion
           width_scale
-        end
-
-        def text_expansion=(value)
-          self.width_scale = if value.is_a?(Properties::WidthScale)
-                               value
-                             else
-                               Properties::WidthScale.new(value: value)
-                             end
-          self
         end
       end
     end

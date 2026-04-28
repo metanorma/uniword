@@ -42,21 +42,6 @@ module Uniword
                                      render_nil: false
       end
 
-      # Set vertical merge
-      #
-      # @param value [String, Integer] Vertical merge value
-      # @return [self] For method chaining
-      def vertical_merge=(value)
-        self.v_merge = ValInt.new(value: value.to_i)
-        self
-      end
-
-      # Get vertical merge
-      #
-      # @return [String, nil] Vertical merge value
-      def vertical_merge
-        v_merge&.value
-      end
     end
   end
 end

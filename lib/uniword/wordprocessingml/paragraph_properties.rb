@@ -264,10 +264,20 @@ module Uniword
         super
 
         # Set wrapper attributes after super (super clears them)
-        self.keep_next = keep_next_val if keep_next_val
-        self.keep_lines = keep_lines_val if keep_lines_val
-        self.page_break_before = page_break_before_val if page_break_before_val
-        self.widow_control = widow_control_val unless widow_control_val.nil?
+        if keep_next_val
+          self.keep_next_wrapper = Properties::KeepNext.new(value: keep_next_val)
+        end
+        if keep_lines_val
+          self.keep_lines_wrapper = Properties::KeepLines.new(value: keep_lines_val)
+        end
+        if page_break_before_val
+          self.page_break_before_wrapper =
+            Properties::PageBreakBefore.new(value: page_break_before_val)
+        end
+        unless widow_control_val.nil?
+          self.widow_control_wrapper =
+            Properties::WidowControl.new(value: widow_control_val)
+        end
         self.style = style_val if style_val
 
         # Convert flat attributes to wrapper objects (Pattern 0: after super)
@@ -314,129 +324,6 @@ module Uniword
         @run_properties = rp
       end
 
-      # Set left indent (alias for indentation.left)
-      #
-      # @param value [Integer] Left indent in twips
-      # @return [self] For method chaining
-      def left_indent=(value)
-        self.indentation ||= Properties::Indentation.new
-        indentation.left = value
-        self
-      end
-
-      # Boolean predicate for keep_next
-      #
-      # @return [Boolean] True if keep_next is set
-      def keep_next?
-        val = keep_next_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Properties::KeepNext)
-        val == true
-      end
-      alias keep_next keep_next?
-
-      # Boolean setter for keep_next
-      #
-      # @param value [Boolean] True to enable keep_next
-      def keep_next=(value)
-        self.keep_next_wrapper = case value
-                                 when Properties::KeepNext
-                                   value
-                                 when true, false
-                                   value ? Properties::KeepNext.new(value: true) : nil
-                                 when nil
-                                   nil
-                                 else
-                                   value
-                                 end
-      end
-
-      # Boolean predicate for keep_lines
-      #
-      # @return [Boolean] True if keep_lines is set
-      def keep_lines?
-        val = keep_lines_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Properties::KeepLines)
-        val == true
-      end
-      alias keep_lines keep_lines?
-
-      # Boolean setter for keep_lines
-      #
-      # @param value [Boolean] True to enable keep_lines
-      def keep_lines=(value)
-        self.keep_lines_wrapper = case value
-                                  when Properties::KeepLines
-                                    value
-                                  when true, false
-                                    value ? Properties::KeepLines.new(value: true) : nil
-                                  when nil
-                                    nil
-                                  else
-                                    value
-                                  end
-      end
-
-      # Boolean predicate for page_break_before
-      #
-      # @return [Boolean] True if page_break_before is set
-      def page_break_before?
-        val = page_break_before_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Properties::PageBreakBefore)
-        val == true
-      end
-      alias page_break_before page_break_before?
-
-      # Boolean setter for page_break_before
-      #
-      # @param value [Boolean] True to enable page_break_before
-      def page_break_before=(value)
-        self.page_break_before_wrapper = case value
-                                         when Properties::PageBreakBefore
-                                           value
-                                         when true, false
-                                           value ? Properties::PageBreakBefore.new(value: true) : nil
-                                         when nil
-                                           nil
-                                         else
-                                           value
-                                         end
-      end
-
-      # Boolean predicate for widow_control
-      #
-      # @return [Boolean] True if widow_control is set
-      def widow_control?
-        val = widow_control_wrapper
-        return true if val.nil? # default is true
-
-        val = val.value if val.is_a?(Properties::WidowControl)
-        val == true
-      end
-      alias widow_control widow_control?
-
-      # Boolean setter for widow_control
-      #
-      # @param value [Boolean] True to enable widow_control
-      def widow_control=(value)
-        self.widow_control_wrapper = case value
-                                     when Properties::WidowControl
-                                       value
-                                     when true
-                                       Properties::WidowControl.new(value: true)
-                                     when false
-                                       Properties::WidowControl.new(value: false)
-                                     when nil
-                                       nil
-                                     else
-                                       value
-                                     end
-      end
     end
   end
 end
