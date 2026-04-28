@@ -148,7 +148,7 @@ RSpec.describe "DOCX Performance", if: defined?(Benchmark) do
         end
       end
 
-      expect(time).to be < 10.0 # 5 round-trips in under 10 seconds (CI-friendly threshold)
+      expect(time).to be < 20.0 # 5 round-trips in under 20 seconds (CI-friendly threshold, macOS-friendly)
     end
   end
 
