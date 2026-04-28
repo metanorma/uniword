@@ -19,7 +19,7 @@ module Uniword
         mixed_content
 
         map_attribute "edited", to: :edited
-        map_element "", to: :start, render_nil: false
+        map_element "start", to: :start, render_nil: false
         map_element "lineTo", to: :line_to, render_nil: false
       end
     end

@@ -15,7 +15,7 @@ module Uniword
         element "align"
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
 
-        map_element "", to: :value, render_nil: false
+        map_content to: :value
       end
     end
   end

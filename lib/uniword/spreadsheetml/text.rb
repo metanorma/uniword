@@ -16,7 +16,7 @@ module Uniword
         element "t"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
 
-        map_element "", to: :text, render_nil: false
+        map_content to: :text
         map_attribute "space", to: :space
       end
     end
