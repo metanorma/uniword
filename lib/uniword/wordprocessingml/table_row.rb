@@ -51,22 +51,6 @@ module Uniword
         cells.count
       end
 
-      # Get row height
-      #
-      # @return [Integer, nil] Row height
-      def height
-        properties&.height
-      end
-
-      # Set row height
-      #
-      # @param value [Integer] Height value
-      # @return [Integer] The height value
-      def height=(value)
-        self.properties ||= TableRowProperties.new
-        properties.height = value
-      end
-
       # Accept a visitor (Visitor pattern)
       #
       # @param visitor [BaseVisitor] The visitor to accept

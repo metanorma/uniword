@@ -97,7 +97,7 @@ module Uniword
         if target_cell.properties
           target_cell.properties.width = source_cell.properties&.width
           target_cell.properties.grid_span = source_cell.properties&.grid_span
-          target_cell.properties.vertical_merge = source_cell.properties&.vertical_merge
+          target_cell.properties.v_merge = source_cell.properties&.v_merge
           target_cell.properties.shading = source_cell.properties&.shading
           target_cell.properties.vertical_align = source_cell.properties&.vertical_align
         end

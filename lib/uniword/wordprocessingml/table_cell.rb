@@ -46,38 +46,6 @@ module Uniword
         paragraphs.map(&:text).join("\n")
       end
 
-      # Set cell text content
-      #
-      # @param value [String] Text to set
-      # @return [String] The text value
-      def text=(value)
-        paragraphs.clear
-        para = Paragraph.new
-        run = Run.new(text: value.to_s)
-        para.runs << run
-        paragraphs << para
-        value
-      end
-
-      # Alias for column_span
-      def colspan
-        column_span
-      end
-
-      # Alias for column_span=
-      def colspan=(value)
-        self.column_span = value
-      end
-
-      # Alias for row_span
-      def rowspan
-        row_span
-      end
-
-      # Alias for row_span=
-      def rowspan=(value)
-        self.row_span = value
-      end
     end
   end
 end

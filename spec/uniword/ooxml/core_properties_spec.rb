@@ -218,7 +218,7 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
 
     it "updates when document title is set" do
       doc = Uniword::Wordprocessingml::DocumentRoot.new
-      doc.title = "Integration Test"
+      doc.core_properties.title = "Integration Test"
 
       expect(doc.core_properties.title).to eq("Integration Test")
     end

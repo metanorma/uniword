@@ -177,7 +177,8 @@ module Uniword
       # @param value [Boolean] Keep with next paragraph (default true)
       # @return [self]
       def keep_next(value = true)
-        ensure_properties.keep_next = value
+        ensure_properties.keep_next_wrapper =
+          value ? Properties::KeepNext.new(value: true) : nil
         self
       end
 
@@ -186,7 +187,8 @@ module Uniword
       # @param value [Boolean] Page break before (default true)
       # @return [self]
       def page_break_before(value = true)
-        ensure_properties.page_break_before = value
+        ensure_properties.page_break_before_wrapper =
+          value ? Properties::PageBreakBefore.new(value: true) : nil
         self
       end
 

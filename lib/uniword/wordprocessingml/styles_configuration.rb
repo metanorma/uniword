@@ -362,7 +362,7 @@ module Uniword
               add_style(style.dup)
             when :rename
               new_style = style.dup
-              new_style.id = "#{style.id}_imported"
+              new_style.styleId = "#{style.id}_imported"
               add_style(new_style)
             else
               raise ArgumentError,

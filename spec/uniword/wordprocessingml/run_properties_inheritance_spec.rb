@@ -11,7 +11,7 @@ RSpec.describe "Run Properties Inheritance" do
     # Add custom heading style with run properties
     heading_style = Uniword::Wordprocessingml::Style.new
     heading_style.type = "paragraph"
-    heading_style.id = "TestHeading1"
+    heading_style.styleId = "TestHeading1"
     heading_style.name = Uniword::Wordprocessingml::StyleName.new(val: "Test Heading 1")
 
     rp = Uniword::Wordprocessingml::RunProperties.new

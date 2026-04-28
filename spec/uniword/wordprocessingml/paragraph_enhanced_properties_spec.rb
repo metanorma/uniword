@@ -193,13 +193,19 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
       expect(paragraph.properties.indent_left).to eq(720)
       expect(paragraph.properties.indent_right).to eq(720)
       expect(paragraph.properties.indent_first_line).to eq(360)
-      expect(paragraph.properties.keep_next).to be true
-      expect(paragraph.properties.keep_lines).to be true
-      expect(paragraph.properties.page_break_before).to be false
-      expect(paragraph.properties.outline_level).to eq(1)
-      expect(paragraph.properties.contextual_spacing).to be true
+      expect(paragraph.properties.keep_next_wrapper&.value).to be true
+      expect(paragraph.properties.keep_lines_wrapper&.value).to be true
+      expect(paragraph.properties.page_break_before_wrapper).to be_nil
+      ol = paragraph.properties.outline_level
+      ol_val = ol.is_a?(Integer) ? ol : ol&.value
+      expect(ol_val.to_i).to eq(1)
+      cs = paragraph.properties.contextual_spacing
+      cs_val = cs.is_a?(TrueClass) || cs.is_a?(FalseClass) ? cs : cs&.value
+      expect(cs_val).to be true
       expect(paragraph.properties.bidirectional).to be false
-      expect(paragraph.properties.widow_control).to be true
+      wc = paragraph.properties.widow_control_wrapper
+      wc_val = wc.is_a?(TrueClass) || wc.is_a?(FalseClass) ? wc : wc&.value
+      expect(wc_val).to be true
     end
   end
 

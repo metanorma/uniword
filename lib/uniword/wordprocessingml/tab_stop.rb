@@ -22,37 +22,6 @@ module Uniword
         map_attribute "leader", to: :leader
       end
 
-      # Get tab alignment
-      #
-      # @return [String, nil] Alignment value (left, center, right, decimal)
-      def alignment
-        val
-      end
-
-      # Set tab alignment
-      #
-      # @param value [String, Symbol] Alignment value
-      # @return [String] The alignment that was set
-      def alignment=(value)
-        self.val = value.to_s
-        value
-      end
-
-      # Get tab position
-      #
-      # @return [Integer, nil] Position in twips
-      def position
-        pos
-      end
-
-      # Set tab position
-      #
-      # @param value [Integer] Position in twips
-      # @return [Integer] The position that was set
-      def position=(value)
-        self.pos = value
-        value
-      end
     end
   end
 end
