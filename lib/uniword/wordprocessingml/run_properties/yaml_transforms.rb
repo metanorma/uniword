@@ -189,7 +189,7 @@ module Uniword
         end
 
         def yaml_outline_to(_instance, _doc)
-          outline_level&.value
+          outline_level.value if outline_level.is_a?(Properties::OutlineLevel)
         end
 
         def yaml_vertical_align_from(instance, value)
