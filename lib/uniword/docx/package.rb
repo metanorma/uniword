@@ -247,6 +247,9 @@ module Uniword
           )
         end
 
+        # Parse Header and Footer parts
+        extract_header_footer_parts(zip_content, package)
+
         # Parse Chart parts
         chart_files = zip_content.keys.grep(%r{^word/charts/chart\d+\.xml$})
         if chart_files.any? && package.document_rels
@@ -270,6 +273,51 @@ module Uniword
         extract_image_parts(zip_content, package, zip_path)
 
         package
+      end
+
+      def self.extract_header_footer_parts(zip_content, package)
+        return unless package.document && package.document_rels
+
+        header_files = zip_content.keys.grep(%r{^word/header\d+\.xml$})
+        footer_files = zip_content.keys.grep(%r{^word/footer\d+\.xml$})
+
+        return if header_files.empty? && footer_files.empty?
+
+        package.document.header_footer_parts ||= []
+
+        header_files.sort.each do |path|
+          target = path.sub("word/", "")
+          rel = package.document_rels.relationships.find do |r|
+            r.target == target &&
+              r.type.to_s.include?("officeDocument/2006/relationships/header")
+          end
+          next unless rel
+
+          package.document.header_footer_parts << {
+            r_id: rel.id,
+            target: target,
+            rel_type: rel.type,
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
+            content: Uniword::Wordprocessingml::Header.from_xml(zip_content[path]),
+          }
+        end
+
+        footer_files.sort.each do |path|
+          target = path.sub("word/", "")
+          rel = package.document_rels.relationships.find do |r|
+            r.target == target &&
+              r.type.to_s.include?("officeDocument/2006/relationships/footer")
+          end
+          next unless rel
+
+          package.document.header_footer_parts << {
+            r_id: rel.id,
+            target: target,
+            rel_type: rel.type,
+            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
+            content: Uniword::Wordprocessingml::Footer.from_xml(zip_content[path]),
+          }
+        end
       end
 
       # Extract image files from word/media/ directory in DOCX

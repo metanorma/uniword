@@ -313,16 +313,21 @@ document_rels)
         return unless document&.header_footer_parts && !document.header_footer_parts.empty?
 
         document.header_footer_parts.each do |part|
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/#{part[:target]}",
-            content_type: part[:content_type],
-          )
+          part_name = "/word/#{part[:target]}"
+          unless content_types.overrides.any? { |o| o.part_name == part_name }
+            content_types.overrides << Uniword::ContentTypes::Override.new(
+              part_name: part_name,
+              content_type: part[:content_type],
+            )
+          end
 
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: part[:r_id],
-            type: part[:rel_type],
-            target: part[:target],
-          )
+          unless document_rels.relationships.any? { |r| r.id == part[:r_id] }
+            document_rels.relationships << Ooxml::Relationships::Relationship.new(
+              id: part[:r_id],
+              type: part[:rel_type],
+              target: part[:target],
+            )
+          end
         end
       end
 

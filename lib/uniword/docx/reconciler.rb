@@ -346,6 +346,10 @@ module Uniword
         app.links_up_to_date = app.links_up_to_date || "false"
         app.shared_doc = app.shared_doc || "false"
         app.hyperlinks_changed = app.hyperlinks_changed || "false"
+
+        # HeadingPairs and TitlesOfParts are NOT generated here.
+        # Word repairs files that have incorrect values, so we only
+        # preserve what was parsed from the source document.
       end
 
       def reconcile_core_properties
@@ -448,21 +452,27 @@ module Uniword
         return unless rels
 
         base = "http://schemas.openxmlformats.org"
-        standard = [
-          build_rel("rId1",
-                    "#{base}/officeDocument/2006/relationships/officeDocument",
-                    "word/document.xml"),
-          build_rel("rId2",
-                    "#{base}/package/2006/relationships/metadata/core-properties",
-                    "docProps/core.xml"),
-          build_rel("rId3",
-                    "#{base}/officeDocument/2006/relationships/extended-properties",
-                    "docProps/app.xml"),
+        standard_defs = [
+          ["rId1",
+           "#{base}/officeDocument/2006/relationships/officeDocument",
+           "word/document.xml"],
+          ["rId2",
+           "#{base}/package/2006/relationships/metadata/core-properties",
+           "docProps/core.xml"],
+          ["rId3",
+           "#{base}/officeDocument/2006/relationships/extended-properties",
+           "docProps/app.xml"],
         ]
 
-        standard_targets = standard.to_set(&:target)
+        standard_targets = standard_defs.map { |_, _, t| t }.to_set
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
+        end
+
+        existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
+        standard = standard_defs.map do |rid, type, target|
+          existing = existing_by_target[target]
+          build_rel(existing ? existing.id : rid, type, target)
         end
 
         rels.relationships = standard + non_standard
@@ -481,15 +491,19 @@ module Uniword
           ["rId5", "theme", "theme/theme1.xml", package.theme],
         ]
 
-        standard = defs.filter_map do |rid, suffix, target, obj|
-          next unless obj
-
-          build_rel(rid, "#{base}/#{suffix}", target)
-        end
-
-        standard_targets = standard.to_set(&:target)
+        standard_targets = defs.filter_map { |_, _, target, obj| target if obj }.to_set
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target)
+        end
+
+        # Reuse existing rIds for matching targets to avoid duplicates
+        existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
+        standard = defs.filter_map do |_rid, suffix, target, obj|
+          next unless obj
+
+          existing = existing_by_target[target]
+          rid = existing ? existing.id : _rid
+          build_rel(rid, "#{base}/#{suffix}", target)
         end
 
         rels.relationships = standard + non_standard
