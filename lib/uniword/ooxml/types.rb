@@ -40,6 +40,9 @@ module Uniword
       # Serializes true -> "1", false/nil -> omitted
       autoload :OoxmlBooleanOptional, "#{__dir__}/types/ooxml_boolean_optional"
 
+      # Relationships namespace type for r:embed/r:link cross-namespace attrs
+      autoload :RelationshipId, "#{__dir__}/types/relationship_id"
+
       # Variant Types (vt: namespace) for OLE property values
       autoload :VariantTypes, "#{__dir__}/types/variant_types"
 
