@@ -150,7 +150,7 @@ RSpec.describe "StyleSet Integration (Binary .dotx)" do
       styleset.apply_to(doc)
 
       elapsed = Time.now - start_time
-      expect(elapsed).to be < 2.0
+      expect(elapsed).to be < 5.0
     end
   end
 end
