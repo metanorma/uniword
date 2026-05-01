@@ -1,0 +1,49 @@
+== Rule ID: R9
+**Summary:** `footnotePr` in settings must be paired with `footnotes.xml`, and vice versa. Footnotes.xml must contain separator and continuation entries.
+**Severity:** error
+**Applies to:** `word/settings.xml`, `word/footnotes.xml`, `word/endnotes.xml`
+
+=== What Word expects
+
+1. If `<w:footnotePr/>` exists in settings.xml, then `word/footnotes.xml` must exist
+2. If `word/footnotes.xml` exists, then `<w:footnotePr/>` must exist in settings.xml
+3. `word/footnotes.xml` must contain:
+   * A separator entry: `<w:footnote w:type="separator" w:id="-1">`
+   * A continuation entry: `<w:footnote w:type="continuationSeparator" w:id="0">`
+4. Same pattern for endnotes (`endnotePr` ↔ `endnotes.xml`)
+
+=== What happens on violation
+
+Missing separator entries cause Word to add them on repair. Missing pairing causes Word to either add footnotePr or remove footnotes.xml.
+
+=== Reconciler enforcement
+
+`reconcile_footnotes`:
+* Creates minimal footnotes if footnotePr exists but footnotes.xml is missing
+* Adds footnotePr to settings if footnotes.xml exists but footnotePr is missing
+* `ensure_separators` adds separator and continuation entries if missing
+
+`reconcile_endnotes` — same pattern for endnotes.
+
+=== Validation rule
+
+DOC-020 (existing `FootnotesRule`) — checks footnotePr ↔ footnotes.xml pairing.
+DOC-022 — checks separator/continuation entries exist.
+
+=== Example
+
+Valid footnotes.xml:
+[source,xml]
+----
+<w:footnotes>
+  <w:footnote w:type="separator" w:id="-1">
+    <w:p><w:r><w:separator/></w:r></w:p>
+  </w:footnote>
+  <w:footnote w:type="continuationSeparator" w:id="0">
+    <w:p><w:r><w:continuationSeparator/></w:r></w:p>
+  </w:footnote>
+  <w:footnote w:id="1">
+    <w:p><w:r><w:t>Footnote text</w:t></w:r></w:p>
+  </w:footnote>
+</w:footnotes>
+----

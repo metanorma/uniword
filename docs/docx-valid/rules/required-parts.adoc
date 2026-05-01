@@ -1,0 +1,48 @@
+== Rule ID: R8
+**Summary:** A valid DOCX must contain four required parts and should contain several standard optional parts.
+**Severity:** error (required) / warning (optional)
+**Applies to:** ZIP package structure
+
+=== What Word expects
+
+Required parts (missing = error):
+* `[Content_Types].xml` — content type registry
+* `_rels/.rels` — package relationships
+* `word/document.xml` — main document content
+* `word/_rels/document.xml.rels` — document relationships
+
+Standard optional parts (missing = Word adds defaults on repair):
+* `word/styles.xml` — style definitions
+* `word/settings.xml` — document settings
+* `word/fontTable.xml` — font table
+* `word/webSettings.xml` — web settings
+* `word/theme/theme1.xml` — theme
+* `word/numbering.xml` — numbering definitions (only if document uses lists)
+* `word/footnotes.xml` — footnotes (only if document has footnotes)
+* `word/endnotes.xml` — endnotes (only if document has endnotes)
+
+=== Reconciler enforcement
+
+The reconciler creates missing optional parts when a profile is provided:
+* `reconcile_settings` — creates Settings if missing
+* `reconcile_font_table` — creates FontTable if missing
+* `reconcile_styles` — creates StylesConfiguration if missing
+* `reconcile_web_settings` — creates WebSettings if missing
+* `reconcile_theme` — creates Theme if missing
+* `reconcile_numbering` — only sets mc:Ignorable; does not create numbering if missing
+
+=== Validation rule
+
+`OoxmlPartValidator` (Layer 3) — checks required parts exist, reports optional parts as info-level.
+
+=== Example
+
+Minimal valid DOCX structure:
+```
+[Content_Types].xml
+_rels/.rels
+word/
+  document.xml
+  _rels/
+    document.xml.rels
+```

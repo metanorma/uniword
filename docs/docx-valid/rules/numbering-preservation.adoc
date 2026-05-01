@@ -1,0 +1,75 @@
+== Rule ID: R4 + R5
+**Summary:** Numbering elements must be fully preserved during round-trip. R4 covers `<w:lvl>` children; R5 covers `<w:lvlOverride>/<w:startOverride>` inside `<w:num>`.
+**Severity:** error
+**Applies to:** `word/numbering.xml`
+
+=== What Word expects
+
+R4: Every `<w:lvl>` element may contain these children (all optional, all must be preserved):
+
+* `<w:start>` — start value
+* `<w:numFmt>` — numbering format (decimal, bullet, upperLetter, etc.)
+* `<w:pStyle>` — paragraph style reference
+* `<w:suff>` — suffix type (tab, space, nothing)
+* `<w:lvlRestart>` — restart after level
+* `<w:lvlText>` — level text template (e.g., `%1.%2`)
+* `<w:lvlJc>` — justification
+* `<w:pPr>` — paragraph properties (indents, tabs)
+* `<w:tabs>` — tab stops
+* `<w:ind>` — indentation
+* `<w:rPr>` — run properties (fonts, bold, etc.)
+* `@w:tentative` — tentative flag attribute
+
+R5: Each `<w:num>` instance may contain `<w:lvlOverride>` elements, each with an `@w:ilvl` and optional `<w:startOverride>`:
+
+[source,xml]
+----
+<w:num w:numId="2">
+  <w:abstractNumId w:val="0"/>
+  <w:lvlOverride w:ilvl="0">
+    <w:startOverride w:val="1"/>
+  </w:lvlOverride>
+</w:num>
+----
+
+=== What happens on violation
+
+Missing elements cause numbering to render differently or restart incorrectly.
+Missing `<w:pStyle>` references cause Word to strip the reference during repair.
+
+=== Reconciler enforcement
+
+* `Level` model class in `level.rb` — has attributes for all children (start, numFmt, pStyle, suff, lvlRestart, lvlText, lvlJc, pPr, tabs, ind, rPr) plus `@tentative`
+* `LevelOverride` and `StartOverride` model classes in `numbering_instance.rb`
+* `NumberingInstance.lvl_overrides` attribute maps `<w:lvlOverride>` elements
+* `Num.lvlOverrides` attribute provides same mapping for the `Numbering` model
+
+=== Validation rule
+
+DOC-103 (`NumberingPreservationRule`) — performs round-trip diff of numbering.xml; verifies no content loss.
+
+=== Example
+
+Valid — complete level with all mapped children:
+[source,xml]
+----
+<w:lvl w:ilvl="0" w:tentative="1">
+  <w:start w:val="1"/>
+  <w:numFmt w:val="upperLetter"/>
+  <w:pStyle w:val="ANNEX"/>
+  <w:suff w:val="nothing"/>
+  <w:lvlText w:val="Annex %1"/>
+  <w:lvlJc w:val="left"/>
+</w:lvl>
+----
+
+Valid — instance with level overrides:
+[source,xml]
+----
+<w:num w:numId="2">
+  <w:abstractNumId w:val="0"/>
+  <w:lvlOverride w:ilvl="0">
+    <w:startOverride w:val="1"/>
+  </w:lvlOverride>
+</w:num>
+----

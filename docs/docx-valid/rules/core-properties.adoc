@@ -1,0 +1,47 @@
+== Rule ID: R14
+**Summary:** docProps/core.xml must declare dc, dcterms, and xsi namespaces. Date elements must have xsi:type attribute.
+**Severity:** error
+**Applies to:** `docProps/core.xml`
+
+=== What Word expects
+
+Core properties must declare these namespaces on the root element:
+
+* `xmlns:dc="http://purl.org/dc/elements/1.1/"`
+* `xmlns:dcterms="http://purl.org/dc/terms/"`
+* `xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"`
+
+Date elements must have the xsi:type attribute:
+
+[source,xml]
+----
+<dcterms:created xsi:type="dcterms:W3CDTF">2026-05-01T00:00:00Z</dcterms:created>
+<dcterms:modified xsi:type="dcterms:W3CDTF">2026-05-01T12:00:00Z</dcterms:modified>
+----
+
+=== What happens on violation
+
+Word may strip or recreate core properties during repair.
+
+=== Reconciler enforcement
+
+`reconcile_core_properties` rebuilds the entire CoreProperties object from parsed state to ensure namespace_scope declarations are applied. The CoreProperties model class has namespace_scope for dc, dcterms, dcmitype, xsi namespaces.
+
+=== Validation rule
+
+DOC-105 (`CorePropertiesNamespaceRule`) — checks namespace declarations and xsi:type attributes.
+
+=== Example
+
+Valid:
+[source,xml]
+----
+<cp:coreProperties
+  xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dc:title>Document Title</dc:title>
+  <dcterms:created xsi:type="dcterms:W3CDTF">2026-05-01T00:00:00Z</dcterms:created>
+</cp:coreProperties>
+----

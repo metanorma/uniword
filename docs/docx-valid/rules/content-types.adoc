@@ -1,0 +1,50 @@
+== Rule ID: R7
+**Summary:** Every ZIP entry must be covered by either a `<Default>` or `<Override>` in `[Content_Types].xml`.
+**Severity:** error
+**Applies to:** `[Content_Types].xml`, all ZIP entries.
+
+=== What Word expects
+
+The `[Content_Types].xml` file tells Word how to interpret each part in the package. Two mechanisms:
+
+* `<Default Extension="xml" ContentType="application/xml"/>` — covers all `.xml` files
+* `<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>` — covers all `.rels` files
+* `<Override PartName="/word/document.xml" ContentType="..."/>` — covers specific parts with non-default types
+
+Every file in the ZIP must be matched by either a Default (by extension) or an Override (by exact path).
+
+Standard OOXML content types:
+* `/word/document.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml`
+* `/word/styles.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml`
+* `/word/settings.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml`
+* `/word/fontTable.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml`
+* `/word/webSettings.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml`
+* `/word/numbering.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml`
+* `/word/theme/theme1.xml` → `application/vnd.openxmlformats-officedocument.theme+xml`
+* `/word/footnotes.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml`
+* `/word/endnotes.xml` → `application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml`
+* `/docProps/core.xml` → `application/vnd.openxmlformats-package.core-properties+xml`
+* `/docProps/app.xml` → `application/vnd.openxmlformats-officedocument.extended-properties+xml`
+* Images → `image/png`, `image/jpeg`, `image/gif`, etc.
+
+=== Reconciler enforcement
+
+`reconcile_content_types` rebuilds defaults (rels, xml) and overrides for all standard parts that exist in the package. Image content types are added by `inject_image_parts` in Package.
+
+=== Validation rule
+
+DOC-106 (`ContentTypesCoverageRule`) — enumerates ZIP entries, verifies each has content type coverage.
+
+=== Example
+
+Valid:
+[source,xml]
+----
+<Types xmlns="...">
+  <Default Extension="rels" ContentType="application/...+rels+xml"/>
+  <Default Extension="xml" ContentType="application/xml"/>
+  <Override PartName="/word/document.xml" ContentType="...main+xml"/>
+  <Override PartName="/word/styles.xml" ContentType="...styles+xml"/>
+  ...
+</Types>
+----

@@ -1,0 +1,48 @@
+== Rule ID: R10
+**Summary:** styles.xml must contain at minimum four default styles: Normal, DefaultParagraphFont, TableNormal, NoList.
+**Severity:** error
+**Applies to:** `word/styles.xml`
+
+=== What Word expects
+
+A valid Word document must define these minimum styles:
+
+* `Normal` (paragraph, default=true) — the base paragraph style
+* `DefaultParagraphFont` (character, default=true) — the base character style
+* `TableNormal` (table, default=true) — the base table style
+* `NoList` (numbering, default=true) — the "no list" style
+
+Each must have a `<w:name>` element and appropriate `<w:pPr>`, `<w:rPr>`, or `<w:tblPr>`.
+
+=== What happens on violation
+
+Word adds missing default styles during repair.
+
+=== Reconciler enforcement
+
+`reconcile_styles` calls `ensure_default_styles(styles)` which checks for each default style by styleId and creates missing ones with appropriate properties.
+
+=== Validation rule
+
+DOC-002 (existing `StyleReferencesRule`) — checks that default paragraph style exists.
+
+=== Example
+
+Minimum valid styles:
+[source,xml]
+----
+<w:styles>
+  <w:style w:type="paragraph" w:default="1" w:styleId="Normal">
+    <w:name w:val="Normal"/>
+  </w:style>
+  <w:style w:type="character" w:default="1" w:styleId="DefaultParagraphFont">
+    <w:name w:val="Default Paragraph Font"/>
+  </w:style>
+  <w:style w:type="table" w:default="1" w:styleId="TableNormal">
+    <w:name w:val="Normal Table"/>
+  </w:style>
+  <w:style w:type="numbering" w:default="1" w:styleId="NoList">
+    <w:name w:val="No List"/>
+  </w:style>
+</w:styles>
+----

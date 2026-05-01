@@ -1,0 +1,55 @@
+== Rule ID: R3
+**Summary:** `<a:fmtScheme>` in theme.xml must have non-empty child style lists with minimum element counts.
+**Severity:** error
+**Applies to:** `word/theme/theme1.xml`
+
+=== What Word expects
+
+The `<a:fmtScheme>` element inside `<a:themeElements>` must contain four style lists, each with minimum content:
+
+* `<a:fillStyleLst>` — at least 2 fill elements (e.g., `<a:solidFill>`, `<a:gradFill>`)
+* `<a:lnStyleLst>` — at least 3 line elements (`<a:ln>`)
+* `<a:effectStyleLst>` — at least 3 effect elements (`<a:effectStyle>`)
+* `<a:bgFillStyleLst>` — at least 2 fill elements
+
+=== What happens on violation
+
+Word reports "Summary Info 1 is corrupted". During repair, Word replaces the entire theme with its default Office theme (theme file grows from ~1.6KB to ~8.7KB).
+
+=== Reconciler enforcement
+
+`reconcile_theme` loads the default Office theme from `data/themes/office_theme.xml` via `Themes::Theme.load`. The `ThemeTransformation` class's `default_format_scheme` method provides a complete fmtScheme.
+
+=== Validation rule
+
+DOC-102 (`ThemeCompletenessRule`) — counts children in each style list, reports error if below minimum.
+
+=== Example
+
+Invalid — empty style lists:
+[source,xml]
+----
+<a:fmtScheme name="Office">
+  <a:fillStyleLst/>      <!-- ERROR: needs 2+ fills -->
+  <a:lnStyleLst/>        <!-- ERROR: needs 3+ lines -->
+  <a:effectStyleLst/>    <!-- ERROR: needs 3+ effects -->
+  <a:bgFillStyleLst/>    <!-- ERROR: needs 2+ fills -->
+</a:fmtScheme>
+----
+
+Valid — each list has required content:
+[source,xml]
+----
+<a:fmtScheme name="Office">
+  <a:fillStyleLst>
+    <a:solidFill>...</a:solidFill>
+    <a:gradFill>...</a:gradFill>
+  </a:fillStyleLst>
+  <a:lnStyleLst>
+    <a:ln>...</a:ln>
+    <a:ln>...</a:ln>
+    <a:ln>...</a:ln>
+  </a:lnStyleLst>
+  ...
+</a:fmtScheme>
+----

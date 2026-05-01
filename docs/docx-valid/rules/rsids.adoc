@@ -1,0 +1,37 @@
+== Rule ID: R12
+**Summary:** Paragraphs should have `w:rsidR` and `w:rsidRDefault` attributes.
+**Severity:** warning
+**Applies to:** `word/document.xml`
+
+=== What Word expects
+
+Word tracks edit sessions using rsid (revision save ID) attributes. While not strictly required for validity, Word adds them to every paragraph during editing and repair:
+
+* `w:rsidR` — revision ID of the paragraph's creation
+* `w:rsidRDefault` — default revision ID for runs within the paragraph
+* `w:rsidP` — paragraph revision ID
+
+=== What happens on violation
+
+No error, but Word adds rsids during repair, which changes the file.
+
+=== Reconciler enforcement
+
+`reconcile_document_body` assigns:
+* `para.rsid_r` — generated from `SecureRandom.hex(3)`
+* `para.rsid_r_default` — `"00000000"`
+* `sect_pr.rsid_r` — same generated rsid
+
+=== Validation rule
+
+DOC-104 (warning level) — reports paragraphs without rsid attributes.
+
+=== Example
+
+Valid:
+[source,xml]
+----
+<w:p w:rsidR="00A1B2C3" w:rsidRDefault="00000000">
+  <w:r><w:t>Text</w:t></w:r>
+</w:p>
+----

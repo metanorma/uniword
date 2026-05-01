@@ -1,0 +1,42 @@
+== Rule ID: R11
+**Summary:** Document body must have a `<w:sectPr>` with `<w:pgSz>` and `<w:pgMar>`.
+**Severity:** error
+**Applies to:** `word/document.xml`
+
+=== What Word expects
+
+Every Word document must have at least one `<w:sectPr>` element — typically on the last paragraph in `<w:body>`. The section properties define page layout:
+
+* `<w:pgSz w:w="12240" w:h="15840"/>` — page size (US Letter in twips)
+* `<w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"/>` — page margins
+* `<w:cols w:space="720"/>` — column spacing
+* `<w:docGrid w:type="default" w:linePitch="360"/>` — document grid
+
+Multi-section documents have `<w:sectPr>` elements within `<w:pPr>` on the last paragraph of each section.
+
+=== What happens on violation
+
+Word adds default section properties during repair.
+
+=== Reconciler enforcement
+
+`reconcile_section_properties` — creates a default SectionProperties with US Letter page size and standard margins if body has no section properties.
+
+=== Validation rule
+
+DOC-104 (`SectionPropertiesRule`) — checks that body has sectPr with pgSz and pgMar.
+
+=== Example
+
+Valid:
+[source,xml]
+----
+<w:body>
+  <w:p>...</w:p>
+  <w:sectPr>
+    <w:pgSz w:w="12240" w:h="15840"/>
+    <w:pgMar w:top="1440" w:right="1440" w:bottom="1440" w:left="1440"
+             w:header="720" w:footer="720" w:gutter="0"/>
+  </w:sectPr>
+</w:body>
+----
