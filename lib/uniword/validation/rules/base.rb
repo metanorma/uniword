@@ -36,6 +36,20 @@ module Uniword
           nil
         end
 
+        # Reference to the validity rule in docs/docx-valid/rules/.
+        #
+        # @return [String, nil] e.g. "R1"
+        def validity_rule
+          nil
+        end
+
+        # Human-readable description of what this rule checks.
+        #
+        # @return [String, nil]
+        def description
+          nil
+        end
+
         # Category for grouping (e.g., :styles, :footnotes).
         #
         # @return [Symbol]
