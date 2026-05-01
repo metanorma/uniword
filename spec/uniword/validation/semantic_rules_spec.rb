@@ -17,8 +17,8 @@ RSpec.describe Uniword::Validation::Rules do
       end
     end
 
-    it "has 10 built-in rules registered" do
-      expect(described_class::Registry.all.size).to eq(10)
+    it "has 20 built-in rules registered" do
+      expect(described_class::Registry.all.size).to eq(20)
     end
 
     it "finds rules by code" do
@@ -144,6 +144,140 @@ RSpec.describe Uniword::Validation::Rules do
 
     it "has code DOC-030" do
       expect(rule.code).to eq("DOC-030")
+    end
+  end
+
+  describe "McIgnorableNamespaceRule" do
+    let(:rule) { Uniword::Validation::Rules::McIgnorableNamespaceRule.new }
+
+    it "has code DOC-100" do
+      expect(rule.code).to eq("DOC-100")
+    end
+
+    it "has validity rule R1" do
+      expect(rule.validity_rule).to eq("R1")
+    end
+  end
+
+  describe "SettingsValuesRule" do
+    let(:rule) { Uniword::Validation::Rules::SettingsValuesRule.new }
+
+    it "has code DOC-101" do
+      expect(rule.code).to eq("DOC-101")
+    end
+
+    it "has validity rule R2" do
+      expect(rule.validity_rule).to eq("R2")
+    end
+  end
+
+  describe "ThemeCompletenessRule" do
+    let(:rule) { Uniword::Validation::Rules::ThemeCompletenessRule.new }
+
+    it "has code DOC-102" do
+      expect(rule.code).to eq("DOC-102")
+    end
+
+    it "has validity rule R3" do
+      expect(rule.validity_rule).to eq("R3")
+    end
+  end
+
+  describe "NumberingPreservationRule" do
+    let(:rule) { Uniword::Validation::Rules::NumberingPreservationRule.new }
+
+    it "has code DOC-103" do
+      expect(rule.code).to eq("DOC-103")
+    end
+
+    it "has validity rule R4" do
+      expect(rule.validity_rule).to eq("R4")
+    end
+  end
+
+  describe "SectionPropertiesRule" do
+    let(:rule) { Uniword::Validation::Rules::SectionPropertiesRule.new }
+
+    it "has code DOC-104" do
+      expect(rule.code).to eq("DOC-104")
+    end
+
+    it "has validity rule R11" do
+      expect(rule.validity_rule).to eq("R11")
+    end
+  end
+
+  describe "CorePropertiesNamespaceRule" do
+    let(:rule) { Uniword::Validation::Rules::CorePropertiesNamespaceRule.new }
+
+    it "has code DOC-105" do
+      expect(rule.code).to eq("DOC-105")
+    end
+
+    it "has validity rule R14" do
+      expect(rule.validity_rule).to eq("R14")
+    end
+  end
+
+  describe "ContentTypesCoverageRule" do
+    let(:rule) { Uniword::Validation::Rules::ContentTypesCoverageRule.new }
+
+    it "has code DOC-106" do
+      expect(rule.code).to eq("DOC-106")
+    end
+
+    it "has validity rule R7" do
+      expect(rule.validity_rule).to eq("R7")
+    end
+  end
+
+  describe "FontTableSignatureRule" do
+    let(:rule) { Uniword::Validation::Rules::FontTableSignatureRule.new }
+
+    it "has code DOC-107" do
+      expect(rule.code).to eq("DOC-107")
+    end
+
+    it "has validity rule R13" do
+      expect(rule.validity_rule).to eq("R13")
+    end
+  end
+
+  describe "RelationshipIntegrityRule" do
+    let(:rule) { Uniword::Validation::Rules::RelationshipIntegrityRule.new }
+
+    it "has code DOC-108" do
+      expect(rule.code).to eq("DOC-108")
+    end
+
+    it "has validity rule R6" do
+      expect(rule.validity_rule).to eq("R6")
+    end
+
+    it "detects broken relationship target" do
+      fixture = "spec/fixtures/docx_gem/basic.docx"
+      ctx = Uniword::Validation::Rules::DocumentContext.new(fixture)
+      issues = rule.check(ctx)
+      # basic.docx has valid rels — should have no errors
+      errors = issues.select { |i| i.severity == "error" }
+      expect(errors).to be_empty
+      ctx.close
+    end
+  end
+
+  describe "RsidRule" do
+    let(:rule) { Uniword::Validation::Rules::RsidRule.new }
+
+    it "has code DOC-109" do
+      expect(rule.code).to eq("DOC-109")
+    end
+
+    it "has validity rule R12" do
+      expect(rule.validity_rule).to eq("R12")
+    end
+
+    it "has warning severity" do
+      expect(rule.severity).to eq("warning")
     end
   end
 end
