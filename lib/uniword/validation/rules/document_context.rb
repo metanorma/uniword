@@ -112,6 +112,16 @@ module Uniword
           part("word/fontTable.xml")
         end
 
+        # Convenience: Uniword model-level access to the DOCX package.
+        # Lazy-loads via Package.from_file for model-driven validation rules.
+        #
+        # @return [Uniword::Docx::Package, nil]
+        def model
+          @model ||= Uniword::Docx::Package.from_file(@path)
+        rescue StandardError
+          @model = nil
+        end
+
         # Get all relationships from a .rels file.
         #
         # @param rels_path [String] Path to .rels file
