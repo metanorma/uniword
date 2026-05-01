@@ -1,0 +1,52 @@
+== Rule ID: R12
+**Summary:** Paragraphs should have `w:rsidR` and `w:rsidRDefault` attributes for change tracking.
+**Severity:** warning
+**Applies to:** `word/document.xml` (paragraph elements)
+
+=== What Word expects
+
+Word adds revision save IDs (rsids) to every paragraph and section property during editing:
+
+* `w:rsidR` — identifies the revision that inserted the paragraph
+* `w:rsidRDefault` — default rsid for runs within the paragraph
+* `w:rsidRPr` — (optional) rsid for paragraph property changes
+* `w:paraId` — unique paragraph identifier (8-character hex)
+* `w:textId` — unique text content identifier
+
+These are not strictly required for file validity, but Word adds them on repair if missing.
+
+=== What happens on violation
+
+Word silently adds rsid attributes during repair. No error is shown to the user. However, files without rsids may show as "modified" when opened and saved, which can interfere with document comparison and version control.
+
+=== Reconciler enforcement
+
+`reconcile_document_body` assigns:
+
+* `rsidR` — random 8-char hex (same for all paragraphs in the document)
+* `rsidRDefault` — "00000000"
+* `paraId` — random 8-char hex (unique per paragraph)
+* `textId` — "77777777"
+
+=== Validation rule
+
+DOC-109 (`RsidRule`) — checks that paragraphs have `w:rsidR` and `w:rsidRDefault` attributes. Reports as warning when all paragraphs are missing these attributes.
+
+=== Example
+
+Missing rsids (valid but suboptimal):
+[source,xml]
+----
+<w:p>
+  <w:r><w:t>Hello</w:t></w:r>
+</w:p>
+----
+
+With rsids (recommended):
+[source,xml]
+----
+<w:p w:rsidR="00A1B2C3" w:rsidRDefault="00000000"
+     w:paraId="12345678" w:textId="77777777">
+  <w:r><w:t>Hello</w:t></w:r>
+</w:p>
+----

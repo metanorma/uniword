@@ -1,0 +1,61 @@
+== Rule ID: R6
+**Summary:** rId values referenced in XML parts must have matching Relationship entries in the corresponding .rels files, and each relationship target must exist as a ZIP entry.
+**Severity:** error
+**Applies to:** All XML parts that use `r:id` or `r:embed` attributes, and all `.rels` files.
+
+=== What Word expects
+
+Every relationship reference (`r:id`, `r:embed`, `r:link`) in an XML part must resolve through the associated `.rels` file:
+
+1. `word/document.xml` uses `r:id="rId6"` → `word/_rels/document.xml.rels` must have `<Relationship Id="rId6" .../>`
+2. The relationship target must exist in the ZIP (e.g., `numbering.xml` must exist in `word/`)
+3. `_rels/.rels` must reference all top-level parts
+
+The relationship type must match the target part's purpose:
+* `styles` → `word/styles.xml`
+* `settings` → `word/settings.xml`
+* `fontTable` → `word/fontTable.xml`
+* `webSettings` → `word/webSettings.xml`
+* `theme` → `word/theme/theme1.xml`
+* `numbering` → `word/numbering.xml`
+* `header` → `word/header*.xml`
+* `footer` → `word/footer*.xml`
+* `image` → `word/media/image*.*`
+
+=== What happens on violation
+
+Broken references cause content loss, missing formatting, or repair prompts. Word may remove unreferenced parts or add missing relationships during repair.
+
+=== Reconciler enforcement
+
+* `reconcile_package_rels` — ensures `_rels/.rels` has rId1 (document), rId2 (core), rId3 (app)
+* `reconcile_document_rels` — ensures `word/_rels/document.xml.rels` has:
+  ** rId1 (styles), rId2 (settings), rId3 (webSettings), rId4 (fontTable), rId5 (theme), rId6 (numbering)
+  ** Additional rels for headers, footers, images preserved from source
+* `reconcile_content_types` — ensures content types cover all referenced parts
+
+=== Validation rule
+
+DOC-006 (existing `RelationshipValidator` layer 5) — checks relationship targets exist.
+DOC-100 series (new model-driven checks) — verifies rId cross-references are consistent between document.xml and document.xml.rels.
+
+=== Example
+
+Invalid — rId6 referenced but not in .rels:
+[source,xml]
+----
+<!-- word/document.xml -->
+<w:sectPr>
+  <w:numId w:val="1"/>  <!-- uses numbering via reference chain -->
+</w:sectPr>
+----
+But `word/_rels/document.xml.rels` has no relationship to `numbering.xml` → error.
+
+Valid — consistent cross-reference:
+[source,xml]
+----
+<!-- word/_rels/document.xml.rels -->
+<Relationship Id="rId6"
+  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"
+  Target="numbering.xml"/>
+----
