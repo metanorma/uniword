@@ -1,0 +1,51 @@
+= Validation Mapping
+
+Maps each validity rule (R1-R15) to the validation rule class that checks it.
+
+== Existing rules (DOC-001 to DOC-091)
+
+|===
+| Rule | Validation Code | Rule Class | What it checks
+
+| R10 | DOC-001..DOC-003 | `StyleReferencesRule` | Style references exist in styles.xml
+| R4,R5 | DOC-010..DOC-012 | `NumberingRule` | Numbering definitions properly referenced
+| R9 | DOC-020..DOC-022 | `FootnotesRule` | Footnote consistency
+| R15 | DOC-030,DOC-031 | `HeadersFootersRule` | Header/footer targets exist
+| _ | DOC-040..DOC-042 | `BookmarksRule` | Bookmark pairing and uniqueness
+| _ | DOC-050..DOC-052 | `ImagesRule` | Image reference targets
+| _ | DOC-060,DOC-061 | `TablesRule` | Table grid and merge cells
+| R13 | DOC-070,DOC-071 | `FontsRule` | Font references
+| R3 | DOC-080,DOC-081 | `ThemeRule` | Theme presence and completeness
+| R2,R8 | DOC-090,DOC-091 | `SettingsRule` | Settings completeness
+|===
+
+== New rules (DOC-100 to DOC-109)
+
+|===
+| Rule | Validation Code | Rule Class | What it checks
+
+| R1 | DOC-100 | `McIgnorableNamespaceRule` | mc:Ignorable prefixes have xmlns declarations in scope
+| R2 | DOC-101 | `SettingsValuesRule` | w15:docId is GUID, w14:docId is hex
+| R3 | DOC-102 | `ThemeCompletenessRule` | fmtScheme has minimum child counts
+| R4,R5 | DOC-103 | `NumberingPreservationRule` | Level and lvlOverride/startOverride elements preserved
+| R11 | DOC-104 | `SectionPropertiesRule` | sectPr exists with pgSz and pgMar
+| R14 | DOC-105 | `CorePropertiesNamespaceRule` | dc/dcterms/xsi namespaces declared, xsi:type on dates
+| R7 | DOC-106 | `ContentTypesCoverageRule` | Every ZIP entry has content type
+| R13 | DOC-107 | `FontTableSignatureRule` | sig elements have valid attributes
+| R6 | DOC-108 | `RelationshipIntegrityRule` | rId references resolve to existing parts
+| R12 | DOC-109 | `RsidRule` | Paragraphs have rsidR and rsidRDefault (warning)
+|===
+
+== Layer validators
+
+|===
+| Layer | Validator | Rules covered
+
+| 1 | `FileStructureValidator` | File exists, readable
+| 2 | `ZipIntegrityValidator` | Valid ZIP archive
+| 3 | `OoxmlPartValidator` | R8 (required parts)
+| 4 | `XmlSchemaValidator` | Well-formed XML
+| 5 | `RelationshipValidator` | R6 (relationship targets)
+| 6 | `ContentTypeValidator` | R7 (content type declarations)
+| 7 | `DocumentSemanticsValidator` | R1-R15 (semantic rules)
+|===

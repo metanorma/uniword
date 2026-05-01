@@ -1,0 +1,82 @@
+---
+layout: default
+title: DOCX Validity Rules
+nav_order: 99
+permalink: /docx-valid/
+---
+= DOCX Validity Rules Reference
+
+This document catalogues every rule that makes a DOCX file valid in Microsoft Word.
+Each rule was discovered through systematic debugging: round-trip testing (load → save → open in Word),
+swap-testing (isolate which part causes failure), and repair analysis (diff broken vs Word-repaired).
+
+== How to use this reference
+
+* **Reconciler authors** — see link:reconciler-mapping.html[Reconciler Mapping] to find which method enforces each rule
+* **Validation rule authors** — see link:validation-mapping.html[Validation Mapping] to find which DOC-code checks each rule
+* **Contributors** — follow the rule template below to add new rules
+
+== Rule template
+
+Each rule document follows this structure:
+
+```
+== Rule ID: R{n}
+**Summary:** one-line description
+**Severity:** error / warning / info
+**Applies to:** which XML parts
+
+=== What Word expects
+Detailed description of the valid state.
+
+=== What happens on violation
+Error message or behavior.
+
+=== Reconciler enforcement
+Which reconciler method ensures this, and how.
+
+=== Validation rule
+Which DOC-{code} checks this.
+
+=== Example
+Valid vs invalid XML snippet.
+```
+
+== Rules by category
+
+=== Package Structure
+* link:rules/required-parts.html[R8: Required Parts] — a DOCX must contain [Content_Types].xml, _rels/.rels, word/document.xml
+* link:rules/content-types.html[R7: Content Types Coverage] — every ZIP entry must be covered by a content type declaration
+
+=== Namespace Consistency
+* link:rules/namespace-consistency.html[R1: mc:Ignorable Namespace Consistency] — all listed prefixes must have xmlns declarations in scope
+
+=== Relationship Integrity
+* link:rules/relationship-integrity.html[R6: Relationship Cross-Reference Integrity] — rId values must be consistent across parts and .rels files, targets must exist in ZIP
+
+=== Settings
+* link:rules/settings-values.html[R2: Settings Value Formats] — w15:docId must be GUID format
+
+=== Theme
+* link:rules/theme-completeness.html[R3: Theme fmtScheme Completeness] — fill/line/effect/bgFill style lists must have minimum content
+
+=== Numbering
+* link:rules/numbering-preservation.html[R4: Level Element Preservation] — all w:lvl children must round-trip
+* link:rules/numbering-preservation.html[R5: Instance lvlOverride Preservation] — lvlOverride/startOverride inside w:num must be preserved
+
+=== Styles
+* link:rules/style-completeness.html[R10: Style Definition Completeness] — minimum default styles must exist
+
+=== Footnotes and Endnotes
+* link:rules/footnote-consistency.html[R9: Footnote/Endnote Consistency] — footnotePr ↔ footnotes.xml must be consistent
+
+=== Section Properties
+* link:rules/section-properties.html[R11: Section Properties] — sectPr with pgSz and pgMar must exist
+
+=== Document Metadata
+* link:rules/rsids.html[R12: Document rsids] — paragraphs should have rsidR and rsidRDefault attributes
+* link:rules/font-table.html[R13: Font Table Signatures] — sig elements should have valid attributes
+* link:rules/core-properties.html[R14: Core Properties Namespaces] — dc/dcterms/xsi namespaces must be declared
+
+=== Headers and Footers
+* link:rules/header-footer-refs.html[R15: Header/Footer Reference Consistency] — references must resolve to existing parts

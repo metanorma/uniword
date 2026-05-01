@@ -1,0 +1,61 @@
+== Rule ID: R6
+**Summary:** All rId values referenced in XML parts must resolve through `.rels` files to existing ZIP entries.
+**Severity:** error
+**Applies to:** All XML parts that use `r:id`, `r:embed`, or `r:link` attributes; all `.rels` files.
+
+=== What Word expects
+
+Every relationship reference in an XML part must resolve through the associated `.rels` file:
+
+1. `word/document.xml` uses `r:id="rId6"` → `word/_rels/document.xml.rels` must have `<Relationship Id="rId6" .../>`
+2. The relationship target must exist in the ZIP (e.g., `numbering.xml` must exist in `word/`)
+3. `_rels/.rels` must reference all top-level parts (document, core properties, app properties)
+
+Standard relationship types:
+
+[horizontal]
+`styles` → `word/styles.xml`:: Style definitions
+`settings` → `word/settings.xml`:: Document settings
+`fontTable` → `word/fontTable.xml`:: Font table
+`webSettings` → `word/webSettings.xml`:: Web settings
+`theme` → `word/theme/theme1.xml`:: Theme
+`numbering` → `word/numbering.xml`:: Numbering definitions
+`header` → `word/header*.xml`:: Header parts
+`footer` → `word/footer*.xml`:: Footer parts
+`image` → `word/media/image*.*`:: Embedded images
+
+=== What happens on violation
+
+Broken references cause content loss, missing formatting, or repair prompts. Word may remove unreferenced parts or add missing relationships during repair.
+
+=== Reconciler enforcement
+
+* `reconcile_package_rels` — ensures `_rels/.rels` has rId1 (document), rId2 (core), rId3 (app)
+* `reconcile_document_rels` — ensures `word/_rels/document.xml.rels` has rId1-rId6 for standard parts; preserves non-standard rels (headers, footers, images)
+* `reconcile_content_types` — ensures content types cover all referenced parts
+
+=== Validation rule
+
+DOC-108 (`RelationshipIntegrityRule`) — resolves each relationship target against ZIP entries. Checks both `word/_rels/document.xml.rels` and `_rels/.rels`.
+
+Layer 5 `RelationshipValidator` also checks relationship targets as part of the 7-layer validation pipeline.
+
+=== Example
+
+Invalid — relationship target does not exist:
+[source,xml]
+----
+<Relationship Id="rId6"
+  Type="...numbering"
+  Target="numbering.xml"/>
+----
+But `word/numbering.xml` is missing from the ZIP → error.
+
+Valid — target exists:
+[source,xml]
+----
+<Relationship Id="rId6"
+  Type="...numbering"
+  Target="numbering.xml"/>
+----
+And `word/numbering.xml` exists in the ZIP.

@@ -1,0 +1,61 @@
+== Rule ID: R1
+**Summary:** Every namespace prefix listed in `mc:Ignorable` must have a corresponding xmlns declaration in scope.
+**Severity:** error
+**Applies to:** `word/document.xml`, `word/styles.xml`, `word/settings.xml`, `word/numbering.xml`, `word/fontTable.xml`, `word/webSettings.xml`
+
+=== What Word expects
+
+The Markup Compatibility (mc) attribute `mc:Ignorable` lists namespace prefixes that consumers may safely ignore. Per the OOXML specification (ISO/IEC 29500), every prefix listed in `mc:Ignorable` MUST have a namespace declaration (`xmlns:PREFIX="..."`) in scope at the point of declaration — typically on the same root element.
+
+Example of valid output:
+
+[source,xml]
+----
+<w:numbering
+  xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"
+  xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml"
+  mc:Ignorable="w14 w15">
+----
+
+=== What happens on violation
+
+Word refuses to open the file with "Word found unreadable content" or reports "Summary Info 1 is corrupted".
+During repair, Word either strips the mc:Ignorable attribute or adds the missing namespace declarations.
+
+=== Reconciler enforcement
+
+Each part's XML model uses `namespace_scope` with `declare: :always` for all prefixes that could appear in mc:Ignorable:
+
+* `DocumentRoot` — declares w14, w15, w16se, w16cid, w16, w16cex, w16sdtdh, w16sdtfl, w16du, wp14, plus drawing/chart namespaces
+* `NumberingConfiguration` — same set as DocumentRoot
+* `Settings` — comprehensive set including w14, w15, MathML, Office, VML, etc.
+* `StylesConfiguration` — same as Settings
+* `FontTable` — same as Settings
+* `WebSettings` — same as Settings
+
+The reconciler's `clear_stored_namespace_plans` method clears lutaml-model's cached namespace plans so that `declare: :always` scopes take full effect during serialization.
+
+=== Validation rule
+
+DOC-100 (`McIgnorableNamespaceRule`) — parses each XML part, extracts mc:Ignorable prefixes, verifies each has xmlns declaration in scope.
+
+=== Example
+
+Invalid — `w14` listed in mc:Ignorable but no xmlns:w14 declaration:
+
+[source,xml]
+----
+<w:numbering xmlns:w="..." xmlns:mc="..."
+  mc:Ignorable="w14 w15">  <!-- ERROR: xmlns:w14 missing -->
+----
+
+Valid — all listed prefixes declared:
+
+[source,xml]
+----
+<w:numbering xmlns:w="..." xmlns:mc="..."
+  xmlns:w14="..." xmlns:w15="..."
+  mc:Ignorable="w14 w15">
+----

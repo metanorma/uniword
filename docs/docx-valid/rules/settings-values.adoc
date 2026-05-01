@@ -1,0 +1,56 @@
+== Rule ID: R2
+**Summary:** `w15:docId` in settings.xml must use GUID format `{XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}`.
+**Severity:** error
+**Applies to:** `word/settings.xml`
+
+=== What Word expects
+
+The `<w15:docId>` element stores a unique document identifier. Word expects this to be a GUID (UUID) enclosed in curly braces.
+
+Valid:
+[source,xml]
+----
+<w15:docId w:val="{4BAFCB90-5B37-CD4C-A11A-D733A52FF527}"/>
+----
+
+The companion `<w14:docId>` uses a different format — an 8-character hex string:
+[source,xml]
+----
+<w14:docId w:val="1A2131BC"/>
+----
+
+=== What happens on violation
+
+Word reports "Summary Info 1 is corrupted" and offers repair. During repair, Word replaces the docId with a properly formatted GUID.
+
+=== Reconciler enforcement
+
+`reconcile_settings` in the reconciler generates defaults:
+
+[source,ruby]
+----
+settings.w14_doc_id ||= Wordprocessingml::W14DocId.new(
+  val: SecureRandom.hex(4).upcase,
+)
+settings.w15_doc_id ||= Wordprocessingml::W15DocId.new(
+  val: "{#{SecureRandom.uuid.upcase}}",
+)
+----
+
+=== Validation rule
+
+DOC-101 (`SettingsValuesRule`) — checks w15:docId matches GUID regex `^\{[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}\}$`, w14:docId matches hex regex `^[0-9A-F]{8}$`.
+
+=== Example
+
+Invalid — plain hex string instead of GUID:
+[source,xml]
+----
+<w15:docId w:val="1A2131BC"/>  <!-- ERROR: not GUID format -->
+----
+
+Valid:
+[source,xml]
+----
+<w15:docId w:val="{4BAFCB90-5B37-CD4C-A11A-D733A52FF527}"/>
+----

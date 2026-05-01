@@ -1,0 +1,54 @@
+== Rule ID: R15
+**Summary:** Header/footer references in sectPr must resolve to existing XML parts via valid rIds.
+**Severity:** error
+**Applies to:** `word/document.xml`, `word/header*.xml`, `word/footer*.xml`, `word/_rels/document.xml.rels`
+
+=== What Word expects
+
+Section properties may reference headers and footers:
+
+[source,xml]
+----
+<w:sectPr>
+  <w:headerReference w:type="default" r:id="rId7"/>
+  <w:footerReference w:type="default" r:id="rId8"/>
+</w:sectPr>
+----
+
+Each reference must:
+1. Have a matching `<Relationship>` in `word/_rels/document.xml.rels`
+2. The relationship target must be an existing part in the ZIP
+3. The relationship type must be `.../relationships/header` or `.../relationships/footer`
+4. The content type for the header/footer part must be declared in `[Content_Types].xml`
+
+=== What happens on violation
+
+Missing header/footer parts cause Word to either use blank headers/footers or offer repair.
+
+=== Reconciler enforcement
+
+* `build_header_footer_parts` — creates header/footer XML parts from parsed HTML
+* `wire_header_footer_refs` — connects sectPr references to the parts via rIds
+* `reconcile_document_rels` — ensures standard relationships exist; header/footer rels added by wire_header_footer_refs
+
+=== Validation rule
+
+DOC-030 (existing `HeadersFootersRule`) — checks reference targets exist.
+
+=== Example
+
+Valid — consistent cross-reference:
+[source,xml]
+----
+<!-- word/document.xml -->
+<w:sectPr>
+  <w:headerReference w:type="default" r:id="rId7"/>
+</w:sectPr>
+
+<!-- word/_rels/document.xml.rels -->
+<Relationship Id="rId7"
+  Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"
+  Target="header1.xml"/>
+
+<!-- ZIP contains: word/header1.xml -->
+----

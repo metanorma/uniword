@@ -1,0 +1,81 @@
+= Reconciler Mapping
+
+Maps each validity rule (R1-R15) to the reconciler method that enforces it.
+
+|===
+| Rule | Reconciler Method | What it does
+
+| R1 mc:Ignorable
+| `clear_stored_namespace_plans` + model `namespace_scope`
+| Clears cached namespace plans so `declare: :always` scopes take effect. Each model class declares all mc:Ignorable prefixes in namespace_scope. Reconciler adds mc:Ignorable to document, settings, font_table, styles, numbering, web_settings.
+
+| R2 Settings values
+| `reconcile_settings`
+| Generates w14:docId (hex) and w15:docId (GUID format) when missing.
+
+| R3 Theme completeness
+| `reconcile_theme`
+| Loads default Office theme from profile with complete fmtScheme.
+
+| R4 Level elements
+| `Level` model class in `level.rb`
+| Maps all `<w:lvl>` children (start, numFmt, pStyle, suff, lvlRestart, lvlText, lvlJc, pPr, tabs, ind, rPr) + @tentative attribute.
+
+| R5 lvlOverride
+| `LevelOverride`/`StartOverride` model classes in `numbering_instance.rb`
+| Maps `<w:lvlOverride>/<w:startOverride>` inside `<w:num>`.
+
+| R6 Relationship integrity
+| `reconcile_package_rels` + `reconcile_document_rels`
+| Rebuilds standard relationships (rId1-rId6); preserves non-standard rels (headers, footers, images).
+
+| R7 Content types
+| `reconcile_content_types`
+| Rebuilds defaults (rels, xml) and overrides for all standard parts.
+
+| R8 Required parts
+| Reconciler Group 2 methods
+| Creates settings, font_table, styles, web_settings, theme when profile is set.
+
+| R9 Footnotes
+| `reconcile_footnotes` + `reconcile_endnotes`
+| Ensures footnotePr ↔ footnotes.xml pairing; adds separator entries.
+
+| R10 Style completeness
+| `reconcile_styles` → `ensure_default_styles`
+| Adds Normal, DefaultParagraphFont, TableNormal, NoList if missing.
+
+| R11 Section properties
+| `reconcile_section_properties`
+| Creates default sectPr with US Letter page size if missing.
+
+| R12 Rsids
+| `reconcile_document_body`
+| Assigns rsidR and rsidRDefault to paragraphs, rsidR to sectPr, paraId and textId to paragraphs.
+
+| R13 Font signatures
+| `reconcile_font_table`
+| Loads font metadata from `config/font_metadata.yml` with complete sig data.
+
+| R14 Core properties
+| `reconcile_core_properties`
+| Rebuilds CoreProperties from parsed state for namespace_scope.
+
+| R15 Header/footer refs
+| `build_header_footer_parts` + `wire_header_footer_refs`
+| Creates header/footer parts and wires rId references.
+|===
+
+== Audit trail
+
+Every reconciler method records its fixes via `record_fix(validity_rule, message)`.
+The `applied_fixes` array is available after `reconcile` completes:
+
+[source,ruby]
+----
+reconciler = Uniword::Docx::Reconciler.new(package, profile: profile)
+reconciler.reconcile
+reconciler.applied_fixes.each do |fix|
+  puts "[#{fix[:validity_rule]}] #{fix[:message]}"
+end
+----

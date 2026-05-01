@@ -1,0 +1,36 @@
+== Rule ID: R13
+**Summary:** Each `<w:font>` entry's `<w:sig>` element should have valid usb0-usb3 and csb0-csb1 attributes.
+**Severity:** warning
+**Applies to:** `word/fontTable.xml`
+
+=== What Word expects
+
+Each font entry in the font table should have a `<w:sig>` element with Unicode subset bitfields:
+
+* `w:usb0` through `w:usb3` — Unicode subset bitfields (hex strings)
+* `w:csb0` and `w:csb1` — Code page subset bitfields (hex strings)
+
+Empty `<w:sig/>` (no attributes) is tolerated but non-standard.
+
+=== What happens on violation
+
+Word may report unknown errors or silently fix the signatures during repair.
+
+=== Reconciler enforcement
+
+`reconcile_font_table` loads font metadata from `config/font_metadata.yml` which includes complete sig data for standard fonts.
+
+=== Validation rule
+
+DOC-107 (`FontTableSignatureRule`) — checks sig elements for completeness.
+
+=== Example
+
+Valid:
+[source,xml]
+----
+<w:font w:name="Calibri">
+  <w:sig w:usb0="E0002AFF" w:usb1="C000247B" w:usb2="00000009"
+         w:usb3="00000000" w:csb0="000001FF" w:csb1="00000000"/>
+</w:font>
+----
