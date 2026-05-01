@@ -31,15 +31,46 @@ module Uniword
       end
     end
 
+    # Numbering level suffix type
+    #
+    # Element: <w:suff>
+    class Suff < Lutaml::Model::Serializable
+      attribute :val, :string
+
+      xml do
+        element "suff"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+
+        map_attribute "val", to: :val
+      end
+    end
+
+    # Numbering level restart
+    #
+    # Element: <w:lvlRestart>
+    class LvlRestart < Lutaml::Model::Serializable
+      attribute :val, :integer
+
+      xml do
+        element "lvlRestart"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+
+        map_attribute "val", to: :val
+      end
+    end
+
     # Numbering level definition
     #
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:lvl>
     class Level < Lutaml::Model::Serializable
       attribute :ilvl, :integer
+      attribute :tentative, :string
       attribute :start, Start
       attribute :numFmt, NumFmt
       attribute :pStyle, PStyle
+      attribute :suff, Suff
+      attribute :lvlRestart, LvlRestart
       attribute :lvlText, LvlText
       attribute :lvlJc, LvlJc
       attribute :pPr, ParagraphProperties
@@ -53,9 +84,12 @@ module Uniword
         mixed_content
 
         map_attribute "ilvl", to: :ilvl
+        map_attribute "tentative", to: :tentative, render_nil: false
         map_element "start", to: :start, render_nil: false
         map_element "numFmt", to: :numFmt, render_nil: false
         map_element "pStyle", to: :pStyle, render_nil: false
+        map_element "suff", to: :suff, render_nil: false
+        map_element "lvlRestart", to: :lvlRestart, render_nil: false
         map_element "lvlText", to: :lvlText, render_nil: false
         map_element "lvlJc", to: :lvlJc, render_nil: false
         map_element "pPr", to: :pPr, render_nil: false
