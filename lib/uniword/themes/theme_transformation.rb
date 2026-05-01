@@ -54,6 +54,15 @@ module Uniword
 
       private
 
+      OFFICE_THEME_PATH = File.expand_path("../../../data/themes/office_theme.xml", __dir__).freeze
+
+      def default_format_scheme
+        @default_format_scheme ||= begin
+          theme = Drawingml::Theme.from_xml(File.read(OFFICE_THEME_PATH))
+          theme.theme_elements.fmt_scheme
+        end
+      end
+
       # Build OOXML ThemeElements from friendly theme
       #
       # @param friendly [Themes::Theme] Friendly theme
@@ -64,6 +73,7 @@ module Uniword
         Drawingml::ThemeElements.new(
           clr_scheme: build_color_scheme(friendly.color_scheme),
           font_scheme: build_font_scheme(friendly.font_scheme),
+          fmt_scheme: default_format_scheme,
         )
       end
 

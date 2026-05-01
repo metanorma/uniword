@@ -28,6 +28,8 @@ module Uniword
             declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2010, declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2012, declare: :always },
+          { namespace: Uniword::Ooxml::Namespaces::Word2010Drawing,
+            declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2018Cex,
             declare: :always },
           { namespace: Uniword::Ooxml::Namespaces::Word2016Cid,
