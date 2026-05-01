@@ -20,6 +20,7 @@ module Uniword
       def initialize(package, profile: nil)
         @package = package
         @profile = profile
+        @applied_fixes = []
       end
 
       def reconcile
@@ -27,6 +28,7 @@ module Uniword
         reconcile_section_properties
         reconcile_footnotes
         reconcile_endnotes
+        repair_theme
 
         # Group 2: Support parts (profile-dependent)
         if @profile
@@ -34,6 +36,7 @@ module Uniword
           reconcile_settings
           reconcile_font_table
           reconcile_styles
+          reconcile_numbering
           reconcile_web_settings
           reconcile_app_properties
           reconcile_core_properties
@@ -49,9 +52,21 @@ module Uniword
         reconcile_document_rels
       end
 
+      # Audit trail of fixes applied during reconciliation.
+      # Each entry is { validity_rule:, message:, timestamp: }.
+      attr_reader :applied_fixes
+
       private
 
       attr_reader :package, :profile
+
+      def record_fix(validity_rule, message)
+        @applied_fixes << {
+          validity_rule: validity_rule,
+          message: message,
+          timestamp: Time.now,
+        }
+      end
 
       # Clear stored namespace plans from parsed XML so that
       # declare: :always namespace_scopes take full effect during
@@ -64,6 +79,7 @@ module Uniword
           package.font_table,
           package.styles,
           package.web_settings,
+          package.numbering,
           package.core_properties,
           package.app_properties,
         ].compact
@@ -92,6 +108,7 @@ module Uniword
           columns: Wordprocessingml::Columns.new(space: 720),
           doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
         )
+        record_fix("R11", "Added default section properties with US Letter page size")
       end
 
       # -- Footnotes --
@@ -102,9 +119,11 @@ module Uniword
 
         if has_fn_pr && !has_footnotes
           package.footnotes = minimal_footnotes
+          record_fix("R9", "Created footnotes.xml to match footnotePr in settings")
         elsif has_footnotes && !has_fn_pr
           package.settings ||= Wordprocessingml::Settings.new
           package.settings.footnote_pr = Wordprocessingml::FootnotePr.new
+          record_fix("R9", "Added footnotePr to settings to match footnotes.xml")
         end
 
         ensure_separators(package.footnotes, :footnote) if package.footnotes
@@ -118,9 +137,11 @@ module Uniword
 
         if has_en_pr && !has_endnotes
           package.endnotes = minimal_endnotes
+          record_fix("R9", "Created endnotes.xml to match endnotePr in settings")
         elsif has_endnotes && !has_en_pr
           package.settings ||= Wordprocessingml::Settings.new
           package.settings.endnote_pr = Wordprocessingml::EndnotePr.new
+          record_fix("R9", "Added endnotePr to settings to match endnotes.xml")
         end
 
         ensure_separators(package.endnotes, :endnote) if package.endnotes
@@ -182,9 +203,110 @@ module Uniword
           word_theme = friendly.to_word_theme
           word_theme.name = "Office Theme"
           package.theme = word_theme
+          record_fix("R3", "Created default theme with complete fmtScheme")
         rescue ArgumentError
           nil
         end
+      end
+
+      # Repair broken theme fmtScheme even without a profile.
+      # Word replaces the entire theme on repair; we fill minimum content.
+      def repair_theme
+        theme = package.theme
+        return unless theme
+
+        fmt = theme.theme_elements&.fmt_scheme
+        return unless fmt
+
+        repaired = false
+
+        if count_fill_styles(fmt.fill_style_lst) < 2
+          ensure_minimal_fill_list(fmt)
+          repaired = true
+        end
+
+        if count_line_styles(fmt.ln_style_lst) < 3
+          ensure_minimal_line_list(fmt)
+          repaired = true
+        end
+
+        if count_effect_styles(fmt.effect_style_lst) < 3
+          ensure_minimal_effect_list(fmt)
+          repaired = true
+        end
+
+        if count_fill_styles(fmt.bg_fill_style_lst) < 2
+          ensure_minimal_bg_fill_list(fmt)
+          repaired = true
+        end
+
+        record_fix("R3", "Repaired theme fmtScheme with minimum required content") if repaired
+      end
+
+      def count_fill_styles(lst)
+        return 0 unless lst
+        (lst.solid_fills || []).size + (lst.gradient_fills || []).size + (lst.blip_fills || []).size
+      end
+
+      def count_line_styles(lst)
+        return 0 unless lst
+        (lst.lines || []).size
+      end
+
+      def count_effect_styles(lst)
+        return 0 unless lst
+        (lst.effect_styles || []).size
+      end
+
+      def ensure_minimal_fill_list(fmt)
+        lst = fmt.fill_style_lst || Drawingml::FillStyleList.new
+        fills = Array(lst.solid_fills).dup
+        while fills.size < 2
+          fills << Drawingml::SolidFill.new(
+            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}")
+          )
+        end
+        lst.solid_fills = fills
+        fmt.fill_style_lst = lst
+      end
+
+      def ensure_minimal_line_list(fmt)
+        lst = fmt.ln_style_lst || Drawingml::LineStyleList.new
+        lines = Array(lst.lines).dup
+        widths = [9525, 25400, 38100]
+        while lines.size < 3
+          idx = lines.size
+          lines << Drawingml::LineProperties.new(
+            width: widths[idx] || 9525,
+            solid_fill: Drawingml::SolidFill.new(
+              scheme_color: Drawingml::SchemeColor.new(val: "accent#{idx + 1}")
+            )
+          )
+        end
+        lst.lines = lines
+        fmt.ln_style_lst = lst
+      end
+
+      def ensure_minimal_effect_list(fmt)
+        lst = fmt.effect_style_lst || Drawingml::EffectStyleList.new
+        styles = Array(lst.effect_styles).dup
+        while styles.size < 3
+          styles << Drawingml::EffectStyle.new
+        end
+        lst.effect_styles = styles
+        fmt.effect_style_lst = lst
+      end
+
+      def ensure_minimal_bg_fill_list(fmt)
+        lst = fmt.bg_fill_style_lst || Drawingml::BackgroundFillStyleList.new
+        fills = Array(lst.solid_fills).dup
+        while fills.size < 2
+          fills << Drawingml::SolidFill.new(
+            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}")
+          )
+        end
+        lst.solid_fills = fills
+        fmt.bg_fill_style_lst = lst
       end
 
       def reconcile_settings
@@ -223,16 +345,25 @@ module Uniword
           val: profile.list_separator,
         )
 
-        settings.w14_doc_id ||= Wordprocessingml::W14DocId.new(
-          val: SecureRandom.hex(4).upcase,
-        )
-        settings.w15_doc_id ||= Wordprocessingml::W15DocId.new(
-          val: SecureRandom.hex(4).upcase,
-        )
+        unless settings.w14_doc_id
+          settings.w14_doc_id = Wordprocessingml::W14DocId.new(
+            val: SecureRandom.hex(4).upcase,
+          )
+          record_fix("R2", "Generated w14:docId")
+        end
+        unless settings.w15_doc_id
+          settings.w15_doc_id = Wordprocessingml::W15DocId.new(
+            val: "{#{SecureRandom.uuid.upcase}}",
+          )
+          record_fix("R2", "Generated w15:docId in GUID format")
+        end
 
-        settings.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
-        )
+        unless settings.mc_ignorable
+          settings.mc_ignorable = Ooxml::Types::McIgnorable.new(
+            "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
+          )
+          record_fix("R1", "Added mc:Ignorable to settings")
+        end
       end
 
       def reconcile_font_table
@@ -241,6 +372,7 @@ module Uniword
         font_table = package.font_table
         font_table ||= begin
           package.font_table = Wordprocessingml::FontTable.new
+          record_fix("R13", "Created font table")
           package.font_table
         end
 
@@ -275,6 +407,7 @@ module Uniword
         font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
+        record_fix("R13", "Populated font table with profile fonts and signatures")
       end
 
       def reconcile_styles
@@ -294,6 +427,31 @@ module Uniword
         styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
+        record_fix("R10", "Ensured styles have docDefaults, latentStyles, and default styles")
+      end
+
+      def reconcile_numbering
+        return unless profile
+        return unless package.numbering
+
+        unless package.numbering.mc_ignorable
+          package.numbering.mc_ignorable = Ooxml::Types::McIgnorable.new(
+            "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14",
+          )
+          record_fix("R1", "Added mc:Ignorable to numbering")
+        end
+
+        # Validate instance → definition references
+        package.numbering.instances.each do |inst|
+          next unless inst.abstract_num_id
+
+          abs_id = inst.abstract_num_id.respond_to?(:val) ? inst.abstract_num_id.val : inst.abstract_num_id
+          defn = package.numbering.definitions.find { |d| d.abstract_num_id == abs_id }
+          next if defn
+
+          record_fix("R4", "Numbering instance numId=#{inst.num_id} references " \
+                           "missing abstractNumId=#{abs_id}")
+        end
       end
 
       def reconcile_web_settings
@@ -308,6 +466,7 @@ module Uniword
         ws.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
+        record_fix("R1", "Added mc:Ignorable to webSettings")
       end
 
       def reconcile_app_properties
@@ -350,6 +509,7 @@ module Uniword
         # HeadingPairs and TitlesOfParts are NOT generated here.
         # Word repairs files that have incorrect values, so we only
         # preserve what was parsed from the source document.
+        record_fix("R8", "Ensured app properties with statistics")
       end
 
       def reconcile_core_properties
@@ -392,6 +552,7 @@ module Uniword
         )
 
         cp.revision = "1" unless cp.revision
+        record_fix("R14", "Rebuilt core properties with namespace declarations")
       end
 
       def reconcile_document_body
@@ -402,6 +563,9 @@ module Uniword
         doc.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14",
         )
+
+        record_fix("R1", "Added mc:Ignorable to document body")
+        record_fix("R12", "Assigned rsid and paraId to paragraphs")
 
         rsid = generate_rsid
         body = doc.body
@@ -445,6 +609,7 @@ module Uniword
         end
 
         ct.overrides = standard + non_standard
+        record_fix("R7", "Rebuilt content types for standard parts")
       end
 
       def reconcile_package_rels
@@ -465,8 +630,9 @@ module Uniword
         ]
 
         standard_targets = standard_defs.map { |_, _, t| t }.to_set
+        standard_rids = standard_defs.map { |rid, _, _| rid }.to_set
         non_standard = rels.relationships.reject do |r|
-          standard_targets.include?(r.target)
+          standard_targets.include?(r.target) || standard_rids.include?(r.id)
         end
 
         existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
@@ -476,6 +642,7 @@ module Uniword
         end
 
         rels.relationships = standard + non_standard
+        record_fix("R6", "Rebuilt package relationships for standard parts")
       end
 
       def reconcile_document_rels
@@ -489,12 +656,23 @@ module Uniword
           ["rId3", "webSettings", "webSettings.xml", package.web_settings],
           ["rId4", "fontTable", "fontTable.xml", package.font_table],
           ["rId5", "theme", "theme/theme1.xml", package.theme],
+          ["rId6", "numbering", "numbering.xml", package.numbering],
         ]
 
         standard_targets = defs.filter_map { |_, _, target, obj| target if obj }.to_set
+
+        # Known targets that the package actually carries (headers, footers, etc.)
+        known_targets = standard_targets.dup
+        known_targets.merge(header_footer_targets)
+        known_targets.merge(image_targets)
+
         non_standard = rels.relationships.reject do |r|
-          standard_targets.include?(r.target)
+          standard_targets.include?(r.target) ||
+            known_targets.include?(r.target)
         end
+
+        # Drop non-standard relationships whose targets are not present in the model
+        non_standard = non_standard.select { |r| known_targets.include?(r.target) }
 
         # Reuse existing rIds for matching targets to avoid duplicates
         existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
@@ -507,9 +685,30 @@ module Uniword
         end
 
         rels.relationships = standard + non_standard
+        record_fix("R6", "Rebuilt document relationships for standard parts")
       end
 
       # -- Helpers --
+
+      def header_footer_targets
+        targets = Set.new
+        if package.respond_to?(:header_footer_parts) && package.header_footer_parts
+          package.header_footer_parts.each do |part|
+            targets << part[:filename] if part[:filename]
+          end
+        end
+        targets
+      end
+
+      def image_targets
+        targets = Set.new
+        if package.respond_to?(:image_parts) && package.image_parts
+          package.image_parts.each do |part|
+            targets << part[:filename] if part[:filename]
+          end
+        end
+        targets
+      end
 
       def calculate_document_statistics
         DocumentStatistics.new(package).calculate
