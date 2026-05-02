@@ -19,11 +19,27 @@ RSpec.describe "Round-trip validation with DOC-100..DOC-107 rules" do
 
   round_trip_fixtures = {
     basic: "basic.docx",
+    editing: "editing.docx",
     formatting: "formatting.docx",
     tables: "tables.docx",
     styles: "styles.docx",
     office365: "office365.docx",
+    internal_links: "internal-links.docx",
+    no_styles: "no_styles.docx",
+    saving: "saving.docx",
+    substitution: "substitution.docx",
+    test_with_style: "test_with_style.docx",
+    weird: "weird_docx.docx",
   }.freeze
+
+  synthetic_fixtures = %w[
+    01_single_word.docx
+    02_two_words.docx
+    03_two_paragraphs.docx
+    04_with_empty_para.docx
+    05_longer_text.docx
+    06_cjk_text.docx
+  ].freeze
 
   def run_validation(docx_path)
     context = Uniword::Validation::Rules::DocumentContext.new(docx_path)
@@ -180,6 +196,26 @@ RSpec.describe "Round-trip validation with DOC-100..DOC-107 rules" do
     }.each do |_name, filename|
       it "round-trips #{filename} without new errors" do
         source = "#{fixtures_dir}/#{filename}"
+        temp = "#{tmp_dir}/rt_#{filename}"
+
+        round_trip(source, temp)
+        regressions = new_rule_errors_after_roundtrip(source, temp)
+
+        expect(regressions).to be_empty,
+          "Round-trip of #{filename} introduced new errors:\n" \
+          "#{regressions.map { |e| "  #{e.code}: #{e.message}" }.join("\n")}"
+      ensure
+        safe_delete(temp)
+      end
+    end
+  end
+
+  describe "synthetic fixtures (spec/fixtures/)" do
+    let(:synthetic_dir) { "spec/fixtures" }
+
+    synthetic_fixtures.each do |filename|
+      it "round-trips #{filename} without introducing new errors" do
+        source = "#{synthetic_dir}/#{filename}"
         temp = "#{tmp_dir}/rt_#{filename}"
 
         round_trip(source, temp)
