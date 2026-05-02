@@ -96,19 +96,36 @@ module Uniword
         return unless package.document&.body
 
         body = package.document.body
-        return if body.section_properties
 
-        body.section_properties = Wordprocessingml::SectionProperties.new(
-          page_size: Wordprocessingml::PageSize.new(width: 12_240,
-                                                    height: 15_840),
-          page_margins: Wordprocessingml::PageMargins.new(
+        unless body.section_properties
+          body.section_properties = Wordprocessingml::SectionProperties.new(
+            page_size: Wordprocessingml::PageSize.new(width: 12_240,
+                                                      height: 15_840),
+            page_margins: Wordprocessingml::PageMargins.new(
+              top: 1440, right: 1440, bottom: 1440, left: 1440,
+              header: 720, footer: 720, gutter: 0
+            ),
+            columns: Wordprocessingml::Columns.new(space: 720),
+            doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
+          )
+          record_fix("R11", "Added default section properties with US Letter page size")
+          return
+        end
+
+        sect_pr = body.section_properties
+        fixed = false
+        unless sect_pr.page_size
+          sect_pr.page_size = Wordprocessingml::PageSize.new(width: 12_240, height: 15_840)
+          fixed = true
+        end
+        unless sect_pr.page_margins
+          sect_pr.page_margins = Wordprocessingml::PageMargins.new(
             top: 1440, right: 1440, bottom: 1440, left: 1440,
             header: 720, footer: 720, gutter: 0
-          ),
-          columns: Wordprocessingml::Columns.new(space: 720),
-          doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
-        )
-        record_fix("R11", "Added default section properties with US Letter page size")
+          )
+          fixed = true
+        end
+        record_fix("R11", "Filled missing pgSz/pgMar in existing section properties") if fixed
       end
 
       # -- Footnotes --
