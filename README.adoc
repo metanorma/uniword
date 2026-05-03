@@ -48,6 +48,20 @@ doc = Uniword::Wordprocessingml::DocumentRoot.new
 doc.apply_theme('meridian')
 doc.apply_styleset('signature')
 doc.save('styled.docx')
+
+# Compare two documents (content-level)
+old_doc = Uniword.load("v1.docx")
+new_doc = Uniword.load("v2.docx")
+result = old_doc.diff(new_doc)
+puts result.summary
+
+# Compare two DOCX packages (structural, with Canon semantic diff)
+differ = Uniword::Diff::PackageDiffer.new("old.docx", "new.docx", canon: true)
+pkg_result = differ.diff
+pkg_result.modified_parts.each do |part|
+  status = part.canon_equivalent ? "equivalent" : "DIFFERENT"
+  puts "#{part.name}: canon #{status}"
+end
 ----
 
 == CLI
@@ -58,6 +72,8 @@ uniword convert input.docx output.doc        # DOCX to MHTML
 uniword info document.docx                   # Document info
 uniword validate document.docx               # Schema validation
 uniword verify document.docx                 # Full 3-layer verification
+uniword diff compare old.docx new.docx       # Document-level diff (content, styles)
+uniword diff package old.docx new.docx --canon  # Package-level diff (ZIP, XML, OPC)
 uniword theme apply doc.docx out.docx -n meridian  # Apply theme
 uniword theme auto ms.docx uniword.docx      # Auto MS->Uniword transition
 ----
@@ -69,6 +85,7 @@ uniword theme auto ms.docx uniword.docx      # Auto MS->Uniword transition
 * 30-locale document elements (240 templates)
 * MS font to open-source substitution (Calibri->Carlito, Arial->Liberation Sans)
 * Auto theme transition: detect MS themes by color fingerprint
+* DOCX diffing: document-level (content/formatting) and package-level (ZIP/XML/OPC with Canon semantic comparison)
 * DOCX validation: 3-layer pipeline (OPC + XSD + semantic rules)
 * Prevention layer: auto-fix footnote/endnote cross-part invariants
 * Tables, lists, images, headers/footers, footnotes, bookmarks, math
