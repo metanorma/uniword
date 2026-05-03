@@ -132,8 +132,8 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include("<w:b/>")
-        expect(xml).to include("<w:i/>")
+        expect(xml).to match(/<w:b\s*\/>|<w:b><\/w:b>/)
+        expect(xml).to match(/<w:i\s*\/>|<w:i><\/w:i>/)
         expect(xml).to include("Bold ")
         expect(xml).to include("Italic")
       end
@@ -153,8 +153,8 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include('<w:sz w:val="28"/>')
-        expect(xml).to include('<w:color w:val="FF0000"/>')
+        expect(xml).to match(/<w:sz w:val="28"\s*\/>|<w:sz w:val="28"><\/w:sz>/)
+        expect(xml).to match(/<w:color w:val="FF0000"\s*\/>|<w:color w:val="FF0000"><\/w:color>/)
       end
 
       it "generates DOCX with underline and strike-through" do
@@ -172,8 +172,8 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include('<w:u w:val="single"/>')
-        expect(xml).to include("<w:strike/>")
+        expect(xml).to match(/<w:u w:val="single"\s*\/>|<w:u w:val="single"><\/w:u>/)
+        expect(xml).to match(/<w:strike\s*\/>|<w:strike><\/w:strike>/)
       end
     end
 
@@ -191,7 +191,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include('<w:jc w:val="center"/>')
+        expect(xml).to match(/<w:jc w:val="center"\s*\/>|<w:jc w:val="center"><\/w:jc>/)
       end
 
       it "generates DOCX with paragraph spacing" do
@@ -208,7 +208,7 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include('<w:spacing w:before="240" w:after="120"/>')
+        expect(xml).to match(/<w:spacing w:before="240" w:after="120"\s*\/>|<w:spacing w:before="240" w:after="120"><\/w:spacing>/)
       end
     end
 
@@ -323,8 +323,8 @@ RSpec.describe "DOCX Generation Integration" do
         serializer = Uniword::Serialization::OoxmlSerializer.new
         xml = serializer.serialize(doc)
 
-        expect(xml).to include('<w:tblW w:w="5000" w:type="dxa"/>')
-        expect(xml).to include('<w:jc w:val="center"/>')
+        expect(xml).to match(/<w:tblW w:w="5000" w:type="dxa"\s*\/>|<w:tblW w:w="5000" w:type="dxa"><\/w:tblW>/)
+        expect(xml).to match(/<w:jc w:val="center"\s*\/>|<w:jc w:val="center"><\/w:jc>/)
       end
 
       it "generates DOCX with cell background color" do
