@@ -7,7 +7,7 @@ gemspec
 # Math equation support via Plurimath
 gem "plurimath", github: "plurimath/plurimath", branch: "main"
 
-gem "lutaml-model", github: "lutaml/lutaml-model", branch: "main"
+gem "lutaml-model", github: "lutaml/lutaml-model", ref: "5e672b47758a3f50f373a1c3736dc56e89ab58de"
 gem "moxml", ">= 0.1.15"
 
 # Standard library gems that will be removed from default in Ruby 4.0
