@@ -87,6 +87,7 @@ module Uniword
         parts.each do |part|
           part.instance_variable_set(:@pending_namespace_data, nil)
           part.instance_variable_set(:@import_declaration_plan, nil)
+          part.instance_variable_set(:@xml_input_namespaces, nil)
         end
       end
 
@@ -660,19 +661,10 @@ module Uniword
         ]
 
         standard_targets = defs.filter_map { |_, _, target, obj| target if obj }.to_set
-
-        # Known targets that the package actually carries (headers, footers, etc.)
-        known_targets = standard_targets.dup
-        known_targets.merge(header_footer_targets)
-        known_targets.merge(image_targets)
-
+        standard_rids = defs.filter_map { |rid, _, _, obj| rid if obj }.to_set
         non_standard = rels.relationships.reject do |r|
-          standard_targets.include?(r.target) ||
-            known_targets.include?(r.target)
+          standard_targets.include?(r.target) || standard_rids.include?(r.id)
         end
-
-        # Drop non-standard relationships whose targets are not present in the model
-        non_standard = non_standard.select { |r| known_targets.include?(r.target) }
 
         # Reuse existing rIds for matching targets to avoid duplicates
         existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
@@ -689,26 +681,6 @@ module Uniword
       end
 
       # -- Helpers --
-
-      def header_footer_targets
-        targets = Set.new
-        if package.respond_to?(:header_footer_parts) && package.header_footer_parts
-          package.header_footer_parts.each do |part|
-            targets << part[:filename] if part[:filename]
-          end
-        end
-        targets
-      end
-
-      def image_targets
-        targets = Set.new
-        if package.respond_to?(:image_parts) && package.image_parts
-          package.image_parts.each do |part|
-            targets << part[:filename] if part[:filename]
-          end
-        end
-        targets
-      end
 
       def calculate_document_statistics
         DocumentStatistics.new(package).calculate
