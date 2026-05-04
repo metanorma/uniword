@@ -15,7 +15,7 @@ module Uniword
         element "rules"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_element "", to: :rule, render_nil: false
+        map_element "rule", to: :rule, render_nil: false
       end
     end
   end
