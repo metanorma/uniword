@@ -98,7 +98,8 @@ module Uniword
         return true unless defined?(Fontist)
 
         Fontist.available?(font_name)
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.debug { "Font availability check failed for #{font_name}: #{e.message}" }
         false
       end
 

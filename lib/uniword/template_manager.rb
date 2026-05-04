@@ -131,7 +131,8 @@ module Uniword
         doc = Uniword::DocumentFactory.from_file(source_path)
         template = Uniword::Template::Template.new(doc)
         template.markers.count
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.debug { "Template marker count failed: #{e.message}" }
         0
       end
 

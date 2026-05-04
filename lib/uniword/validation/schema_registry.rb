@@ -88,7 +88,8 @@ module Uniword
       def detect_namespaces(xml_content)
         doc = @moxml.parse(xml_content)
         doc.root.namespaces.map(&:uri)
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.debug { "Namespace detection failed: #{e.message}" }
         []
       end
 
@@ -104,7 +105,8 @@ module Uniword
         return [] unless ignorable
 
         ignorable.split(/\s+/).reject(&:empty?)
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.debug { "Ignorable detection failed: #{e.message}" }
         []
       end
 

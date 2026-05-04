@@ -69,3 +69,25 @@ rescue Uniword::Error => e
   logger.error("Uniword error: #{e.message}")
 end
 ----
+
+== Logging
+
+Uniword uses `Uniword::Logger` for internal diagnostics. The default log level is `WARN` and output goes to `$stdout`.
+
+[source,ruby]
+----
+# Use the default logger
+Uniword::Logger.info("Processing document")
+Uniword::Logger.warn("Unexpected format")
+Uniword::Logger.error("Failed to process")
+
+# Or provide your own logger
+Uniword::Logger.logger = MyCustomLogger.new
+----
+
+Internal operations that encounter recoverable errors (e.g., image dimension detection, metadata parsing, font availability checks) log diagnostic messages at `debug` level. Config file load failures log at `warn` level. To see these messages, set the log level:
+
+[source,ruby]
+----
+Uniword::Logger.logger.level = ::Logger::DEBUG
+----
