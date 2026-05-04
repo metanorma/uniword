@@ -15,7 +15,7 @@ module Uniword
         element "relationtable"
         namespace Uniword::Ooxml::Namespaces::Office
 
-        map_element "", to: :data, render_nil: false
+        map_content to: :data
       end
     end
   end

@@ -16,7 +16,7 @@ module Uniword
       attribute :control1, :string
       attribute :control2, :string
       attribute :strokecolor, :string
-      attribute :stroke, :string
+      attribute :stroke, Stroke
 
       xml do
         element "curve"
@@ -29,7 +29,7 @@ module Uniword
         map_attribute "control1", to: :control1
         map_attribute "control2", to: :control2
         map_attribute "strokecolor", to: :strokecolor
-        map_element "", to: :stroke, render_nil: false
+        map_element "stroke", to: :stroke, render_nil: false
       end
     end
   end
