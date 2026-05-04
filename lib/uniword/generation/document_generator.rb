@@ -61,7 +61,8 @@ module Uniword
         return nil unless File.exist?(@style_source)
 
         DocumentFactory.from_file(@style_source)
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.warn { "Style source load failed: #{e.message}" }
         nil
       end
 

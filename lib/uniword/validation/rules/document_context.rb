@@ -83,7 +83,8 @@ module Uniword
 
           raw = part_raw(name)
           @parsed_parts[name] = raw ? @moxml.parse(raw) : nil
-        rescue StandardError
+        rescue StandardError => e
+          Uniword.logger&.debug { "Part parse failed (#{name}): #{e.message}" }
           @parsed_parts[name] = nil
         end
 
@@ -118,7 +119,8 @@ module Uniword
         # @return [Uniword::Docx::Package, nil]
         def model
           @model ||= Uniword::Docx::Package.from_file(@path)
-        rescue StandardError
+        rescue StandardError => e
+          Uniword.logger&.debug { "Package model load failed: #{e.message}" }
           @model = nil
         end
 

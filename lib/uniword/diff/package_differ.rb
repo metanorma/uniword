@@ -356,7 +356,8 @@ module Uniword
         # Check package-level relationships
         begin
           rels_xml = zip.read("_rels/.rels")
-        rescue StandardError
+        rescue StandardError => e
+          Uniword.logger&.debug { "Relationships read failed: #{e.message}" }
           return issues
         end
 
@@ -391,7 +392,8 @@ module Uniword
           overrides[node["PartName"]] = node["ContentType"]
         end
         overrides
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.debug { "Content types parse failed: #{e.message}" }
         nil
       end
 

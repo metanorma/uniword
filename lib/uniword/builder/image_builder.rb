@@ -102,8 +102,9 @@ module Uniword
         else
           [100, 100] # fallback for unknown formats
         end
-      rescue StandardError
-        [100, 100] # fallback
+      rescue StandardError => e
+        Uniword.logger&.debug { "Image dimension detection failed: #{e.message}" }
+        [100, 100]
       end
 
       # Create an inline Drawing from an image file

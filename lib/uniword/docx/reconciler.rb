@@ -263,16 +263,19 @@ module Uniword
 
       def count_fill_styles(lst)
         return 0 unless lst
+
         (lst.solid_fills || []).size + (lst.gradient_fills || []).size + (lst.blip_fills || []).size
       end
 
       def count_line_styles(lst)
         return 0 unless lst
+
         (lst.lines || []).size
       end
 
       def count_effect_styles(lst)
         return 0 unless lst
+
         (lst.effect_styles || []).size
       end
 
@@ -281,7 +284,7 @@ module Uniword
         fills = Array(lst.solid_fills).dup
         while fills.size < 2
           fills << Drawingml::SolidFill.new(
-            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}")
+            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}"),
           )
         end
         lst.solid_fills = fills
@@ -297,8 +300,8 @@ module Uniword
           lines << Drawingml::LineProperties.new(
             width: widths[idx] || 9525,
             solid_fill: Drawingml::SolidFill.new(
-              scheme_color: Drawingml::SchemeColor.new(val: "accent#{idx + 1}")
-            )
+              scheme_color: Drawingml::SchemeColor.new(val: "accent#{idx + 1}"),
+            ),
           )
         end
         lst.lines = lines
@@ -320,7 +323,7 @@ module Uniword
         fills = Array(lst.solid_fills).dup
         while fills.size < 2
           fills << Drawingml::SolidFill.new(
-            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}")
+            scheme_color: Drawingml::SchemeColor.new(val: "accent#{fills.size + 1}"),
           )
         end
         lst.solid_fills = fills
@@ -647,13 +650,13 @@ module Uniword
            "docProps/app.xml"],
         ]
 
-        standard_targets = standard_defs.map { |_, _, t| t }.to_set
-        standard_rids = standard_defs.map { |rid, _, _| rid }.to_set
+        standard_targets = standard_defs.to_set { |_, _, t| t }
+        standard_rids = standard_defs.to_set { |rid, _, _| rid }
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target) || standard_rids.include?(r.id)
         end
 
-        existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
+        existing_by_target = rels.relationships.to_h { |r| [r.target, r] }
         standard = standard_defs.map do |rid, type, target|
           existing = existing_by_target[target]
           build_rel(existing ? existing.id : rid, type, target)
@@ -684,7 +687,7 @@ module Uniword
         end
 
         # Reuse existing rIds for matching targets to avoid duplicates
-        existing_by_target = rels.relationships.each_with_object({}) { |r, h| h[r.target] = r }
+        existing_by_target = rels.relationships.to_h { |r| [r.target, r] }
         standard = defs.filter_map do |_rid, suffix, target, obj|
           next unless obj
 
@@ -940,14 +943,16 @@ module Uniword
       def load_font_metadata
         path = File.join(CONFIG_DIR, "font_metadata.yml")
         YAML.load_file(path)["fonts"]
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.warn { "Font metadata load failed: #{e.message}" }
         nil
       end
 
       def load_latent_styles_config
         path = File.join(CONFIG_DIR, "latent_styles.yml")
         YAML.load_file(path)
-      rescue StandardError
+      rescue StandardError => e
+        Uniword.logger&.warn { "Latent styles config load failed: #{e.message}" }
         nil
       end
 
