@@ -22,7 +22,7 @@ module Uniword
         map_attribute "uri", to: :uri
         map_attribute "element", to: :element
         map_element "smartTagPr", to: :smart_tag_pr, render_nil: false
-        map_element "", to: :content, render_nil: false
+        map_content to: :content, render_nil: false
       end
     end
   end

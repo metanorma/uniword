@@ -17,7 +17,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::Vml
 
         map_attribute "ext", to: :ext
-        map_element "", to: :rule, render_nil: false
+        map_element "rule", to: :rule, render_nil: false
       end
     end
   end

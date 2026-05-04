@@ -14,7 +14,7 @@ module Uniword
       attribute :points, :string
       attribute :strokecolor, :string
       attribute :strokeweight, :string
-      attribute :stroke, :string
+      attribute :stroke, Stroke
 
       xml do
         element "polyline"
@@ -25,7 +25,7 @@ module Uniword
         map_attribute "points", to: :points
         map_attribute "strokecolor", to: :strokecolor
         map_attribute "strokeweight", to: :strokeweight
-        map_element "", to: :stroke, render_nil: false
+        map_element "stroke", to: :stroke, render_nil: false
       end
     end
   end

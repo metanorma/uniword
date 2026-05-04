@@ -13,8 +13,8 @@ module Uniword
       attribute :coordsize, :string
       attribute :coordorigin, :string
       attribute :path, :string
-      attribute :stroke, :string
-      attribute :fill, :string
+      attribute :stroke, Stroke
+      attribute :fill, Fill
 
       xml do
         element "shapetype"
@@ -24,8 +24,8 @@ module Uniword
         map_attribute "coordsize", to: :coordsize
         map_attribute "coordorigin", to: :coordorigin
         map_attribute "path", to: :path
-        map_element "", to: :stroke, render_nil: false
-        map_element "", to: :fill, render_nil: false
+        map_element "stroke", to: :stroke, render_nil: false
+        map_element "fill", to: :fill, render_nil: false
       end
     end
   end

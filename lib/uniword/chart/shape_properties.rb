@@ -15,7 +15,7 @@ module Uniword
         element "spPr"
         namespace Uniword::Ooxml::Namespaces::Chart
 
-        map_element "", to: :content, render_nil: false
+        map_content to: :content
       end
     end
   end
