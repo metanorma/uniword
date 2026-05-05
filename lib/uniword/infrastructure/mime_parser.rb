@@ -138,7 +138,9 @@ module Uniword
             document.document_properties =
               Mhtml::Metadata::DocumentProperties.from_xml(props_xml)
           rescue StandardError => e
-            Uniword.logger&.debug { "DocumentProperties parse failed: #{e.message}" }
+            Uniword.logger&.debug do
+              "DocumentProperties parse failed: #{e.message}"
+            end
             document.document_properties =
               Mhtml::Metadata::DocumentProperties.new
           end
@@ -151,7 +153,9 @@ module Uniword
             document.office_document_settings =
               Mhtml::Metadata::OfficeDocumentSettings.from_xml(ods_xml)
           rescue StandardError => e
-            Uniword.logger&.debug { "OfficeDocumentSettings parse failed: #{e.message}" }
+            Uniword.logger&.debug do
+              "OfficeDocumentSettings parse failed: #{e.message}"
+            end
             document.office_document_settings =
               Mhtml::Metadata::OfficeDocumentSettings.new
           end
@@ -164,7 +168,9 @@ module Uniword
             document.word_document_settings =
               Mhtml::Metadata::WordDocumentSettings.from_xml(wd_xml)
           rescue StandardError => e
-            Uniword.logger&.debug { "WordDocumentSettings parse failed: #{e.message}" }
+            Uniword.logger&.debug do
+              "WordDocumentSettings parse failed: #{e.message}"
+            end
             document.word_document_settings =
               Mhtml::Metadata::WordDocumentSettings.new
           end

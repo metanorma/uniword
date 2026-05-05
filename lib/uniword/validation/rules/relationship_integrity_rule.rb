@@ -41,6 +41,8 @@ module Uniword
           entries = context.zip_entries.to_set
 
           rels.each do |rel|
+            next if rel[:target_mode] == "External"
+
             target = rel[:target]
             next unless target
 
@@ -61,6 +63,8 @@ module Uniword
           entries = context.zip_entries.to_set
 
           rels.each do |rel|
+            next if rel[:target_mode] == "External"
+
             target = rel[:target]
             next unless target
 

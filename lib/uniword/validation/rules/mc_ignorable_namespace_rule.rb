@@ -44,7 +44,7 @@ module Uniword
             next unless root
 
             ignorable_attr = root.attribute("Ignorable") ||
-                             root.attributes.find { |a| a.name == "Ignorable" }
+              root.attributes.find { |a| a.name == "Ignorable" }
             next unless ignorable_attr && !ignorable_attr.value.strip.empty?
 
             prefixes = ignorable_attr.value.strip.split(/\s+/)

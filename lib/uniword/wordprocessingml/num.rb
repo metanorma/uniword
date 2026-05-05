@@ -12,7 +12,7 @@ module Uniword
       attribute :numId, :integer
       attribute :abstractNumId, AbstractNumId
       attribute :lvlOverrides, LevelOverride, collection: true,
-                                           initialize_empty: true
+                                              initialize_empty: true
 
       xml do
         element "num"

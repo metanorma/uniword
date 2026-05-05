@@ -42,7 +42,7 @@ module Uniword
       attribute :durable_id, W16CidDurableId
       attribute :abstract_num_id, AbstractNumId
       attribute :lvl_overrides, LevelOverride, collection: true,
-                                              initialize_empty: true
+                                               initialize_empty: true
 
       # XML mappings come AFTER attributes
       xml do

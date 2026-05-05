@@ -21,7 +21,6 @@ module Uniword
         map_attribute "pos", to: :pos
         map_attribute "leader", to: :leader
       end
-
     end
   end
 end

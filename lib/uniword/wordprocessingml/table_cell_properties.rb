@@ -41,7 +41,6 @@ module Uniword
         map_element "textDirection", to: :text_direction,
                                      render_nil: false
       end
-
     end
   end
 end

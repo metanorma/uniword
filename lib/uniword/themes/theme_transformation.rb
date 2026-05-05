@@ -54,7 +54,9 @@ module Uniword
 
       private
 
-      OFFICE_THEME_PATH = File.expand_path("../../../data/themes/office_theme.xml", __dir__).freeze
+      OFFICE_THEME_PATH = File.expand_path(
+        "../../../data/themes/office_theme.xml", __dir__
+      ).freeze
 
       def default_format_scheme
         @default_format_scheme ||= begin

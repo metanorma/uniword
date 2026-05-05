@@ -103,7 +103,9 @@ module Uniword
           [100, 100] # fallback for unknown formats
         end
       rescue StandardError => e
-        Uniword.logger&.debug { "Image dimension detection failed: #{e.message}" }
+        Uniword.logger&.debug do
+          "Image dimension detection failed: #{e.message}"
+        end
         [100, 100]
       end
 

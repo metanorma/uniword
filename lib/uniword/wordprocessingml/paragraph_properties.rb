@@ -323,7 +323,6 @@ module Uniword
         rp.size = @run_properties[:size] if @run_properties[:size]
         @run_properties = rp
       end
-
     end
   end
 end

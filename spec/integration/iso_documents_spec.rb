@@ -9,7 +9,7 @@ RSpec.describe "ISO Standard Document Testing", :integration do
   # These are real ISO standards documents with complex track-changes and revision markup
 
   ISO_DISCOVERY_DIR = File.join(__dir__,
-                           "../../spec/fixtures/uniword-private/fixtures/iso")
+                                "../../spec/fixtures/uniword-private/fixtures/iso")
 
   # Dynamically discover all .docx files in the ISO fixtures directory
   ISO_DOCX_FILES = Dir.glob(File.join(ISO_DISCOVERY_DIR, "*.docx")).freeze

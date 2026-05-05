@@ -146,7 +146,8 @@ document_name = nil)
         @metadata_builder = MhtmlMetadataBuilder.new(
           document, core_properties, relationships, document_name
         )
-        @element_renderer = MhtmlElementRenderer.new(relationships, document.image_parts)
+        @element_renderer = MhtmlElementRenderer.new(relationships,
+                                                     document.image_parts)
       end
 
       # Get the core properties to use (provided or from document)
@@ -262,7 +263,7 @@ document_name = nil)
 
           # Check if this paragraph marks a section boundary
           if element.is_a?(Uniword::Wordprocessingml::Paragraph) &&
-             element.properties&.section_properties
+              element.properties&.section_properties
             sections << current_section
             current_section = []
           end

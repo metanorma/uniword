@@ -45,7 +45,6 @@ module Uniword
       def text
         paragraphs.map(&:text).join("\n")
       end
-
     end
   end
 end

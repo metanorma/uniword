@@ -40,7 +40,8 @@ module Uniword
         private
 
         def check_w15_doc_id(doc, issues)
-          node = doc.root.at_xpath(".//w15:docId/@w:val", "w15" => W15_NS, "w" => W_NS)
+          node = doc.root.at_xpath(".//w15:docId/@w:val", "w15" => W15_NS,
+                                                          "w" => W_NS)
           return unless node
 
           val = node.value
@@ -55,7 +56,8 @@ module Uniword
         end
 
         def check_w14_doc_id(doc, issues)
-          node = doc.root.at_xpath(".//w14:docId/@w:val", "w14" => W14_NS, "w" => W_NS)
+          node = doc.root.at_xpath(".//w14:docId/@w:val", "w14" => W14_NS,
+                                                          "w" => W_NS)
           return unless node
 
           val = node.value

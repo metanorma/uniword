@@ -56,8 +56,10 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
   # Create individual test for each XML file
   describe "[Content_Types].xml" do
     it "preserves content through round-trip" do
-      original = self.class.extract_file(COMPLETE_TEST_DOC, "[Content_Types].xml")
-      roundtrip = self.class.extract_file(COMPLETE_OUTPUT, "[Content_Types].xml")
+      original = self.class.extract_file(COMPLETE_TEST_DOC,
+                                         "[Content_Types].xml")
+      roundtrip = self.class.extract_file(COMPLETE_OUTPUT,
+                                          "[Content_Types].xml")
 
       expect(normalize_xml(roundtrip)).to be_xml_equivalent_to(normalize_xml(original))
     end
@@ -110,7 +112,8 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
 
   describe "word/fontTable.xml" do
     it "preserves content through round-trip" do
-      original = self.class.extract_file(COMPLETE_TEST_DOC, "word/fontTable.xml")
+      original = self.class.extract_file(COMPLETE_TEST_DOC,
+                                         "word/fontTable.xml")
       roundtrip = self.class.extract_file(COMPLETE_OUTPUT, "word/fontTable.xml")
 
       expect(normalize_xml(roundtrip)).to be_xml_equivalent_to(normalize_xml(original))
@@ -128,8 +131,10 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
 
   describe "word/webSettings.xml" do
     it "preserves content through round-trip" do
-      original = self.class.extract_file(COMPLETE_TEST_DOC, "word/webSettings.xml")
-      roundtrip = self.class.extract_file(COMPLETE_OUTPUT, "word/webSettings.xml")
+      original = self.class.extract_file(COMPLETE_TEST_DOC,
+                                         "word/webSettings.xml")
+      roundtrip = self.class.extract_file(COMPLETE_OUTPUT,
+                                          "word/webSettings.xml")
 
       expect(normalize_xml(roundtrip)).to be_xml_equivalent_to(normalize_xml(original))
     end
@@ -137,7 +142,8 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
 
   describe "word/numbering.xml" do
     it "preserves content through round-trip" do
-      original = self.class.extract_file(COMPLETE_TEST_DOC, "word/numbering.xml")
+      original = self.class.extract_file(COMPLETE_TEST_DOC,
+                                         "word/numbering.xml")
       roundtrip = self.class.extract_file(COMPLETE_OUTPUT, "word/numbering.xml")
 
       expect(normalize_xml(roundtrip)).to be_xml_equivalent_to(normalize_xml(original))
@@ -162,8 +168,10 @@ RSpec.describe "Complete DOCX Round-Trip Fidelity" do
 
   describe "word/theme/theme1.xml" do
     it "preserves content through round-trip" do
-      original = self.class.extract_file(COMPLETE_TEST_DOC, "word/theme/theme1.xml")
-      roundtrip = self.class.extract_file(COMPLETE_OUTPUT, "word/theme/theme1.xml")
+      original = self.class.extract_file(COMPLETE_TEST_DOC,
+                                         "word/theme/theme1.xml")
+      roundtrip = self.class.extract_file(COMPLETE_OUTPUT,
+                                          "word/theme/theme1.xml")
 
       skip "theme1.xml not found in original" if original.nil?
       expect(normalize_xml(roundtrip)).to be_xml_equivalent_to(normalize_xml(original))

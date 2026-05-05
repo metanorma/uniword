@@ -99,7 +99,9 @@ module Uniword
 
         Fontist.available?(font_name)
       rescue StandardError => e
-        Uniword.logger&.debug { "Font availability check failed for #{font_name}: #{e.message}" }
+        Uniword.logger&.debug do
+          "Font availability check failed for #{font_name}: #{e.message}"
+        end
         false
       end
 

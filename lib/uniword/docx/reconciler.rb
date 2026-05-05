@@ -109,14 +109,16 @@ module Uniword
             columns: Wordprocessingml::Columns.new(space: 720),
             doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
           )
-          record_fix("R11", "Added default section properties with US Letter page size")
+          record_fix("R11",
+                     "Added default section properties with US Letter page size")
           return
         end
 
         sect_pr = body.section_properties
         fixed = false
         unless sect_pr.page_size
-          sect_pr.page_size = Wordprocessingml::PageSize.new(width: 12_240, height: 15_840)
+          sect_pr.page_size = Wordprocessingml::PageSize.new(width: 12_240,
+                                                             height: 15_840)
           fixed = true
         end
         unless sect_pr.page_margins
@@ -126,7 +128,10 @@ module Uniword
           )
           fixed = true
         end
-        record_fix("R11", "Filled missing pgSz/pgMar in existing section properties") if fixed
+        if fixed
+          record_fix("R11",
+                     "Filled missing pgSz/pgMar in existing section properties")
+        end
       end
 
       # -- Footnotes --
@@ -137,11 +142,13 @@ module Uniword
 
         if has_fn_pr && !has_footnotes
           package.footnotes = minimal_footnotes
-          record_fix("R9", "Created footnotes.xml to match footnotePr in settings")
+          record_fix("R9",
+                     "Created footnotes.xml to match footnotePr in settings")
         elsif has_footnotes && !has_fn_pr
           package.settings ||= Wordprocessingml::Settings.new
           package.settings.footnote_pr = Wordprocessingml::FootnotePr.new
-          record_fix("R9", "Added footnotePr to settings to match footnotes.xml")
+          record_fix("R9",
+                     "Added footnotePr to settings to match footnotes.xml")
         end
 
         ensure_separators(package.footnotes, :footnote) if package.footnotes
@@ -155,7 +162,8 @@ module Uniword
 
         if has_en_pr && !has_endnotes
           package.endnotes = minimal_endnotes
-          record_fix("R9", "Created endnotes.xml to match endnotePr in settings")
+          record_fix("R9",
+                     "Created endnotes.xml to match endnotePr in settings")
         elsif has_endnotes && !has_en_pr
           package.settings ||= Wordprocessingml::Settings.new
           package.settings.endnote_pr = Wordprocessingml::EndnotePr.new
@@ -258,7 +266,10 @@ module Uniword
           repaired = true
         end
 
-        record_fix("R3", "Repaired theme fmtScheme with minimum required content") if repaired
+        if repaired
+          record_fix("R3",
+                     "Repaired theme fmtScheme with minimum required content")
+        end
       end
 
       def count_fill_styles(lst)
@@ -428,7 +439,8 @@ module Uniword
         font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
-        record_fix("R13", "Populated font table with profile fonts and signatures")
+        record_fix("R13",
+                   "Populated font table with profile fonts and signatures")
       end
 
       def reconcile_styles
@@ -448,7 +460,8 @@ module Uniword
         styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
           "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
         )
-        record_fix("R10", "Ensured styles have docDefaults, latentStyles, and default styles")
+        record_fix("R10",
+                   "Ensured styles have docDefaults, latentStyles, and default styles")
       end
 
       def reconcile_numbering
@@ -467,7 +480,9 @@ module Uniword
           next unless inst.abstract_num_id
 
           abs_id = inst.abstract_num_id.respond_to?(:val) ? inst.abstract_num_id.val : inst.abstract_num_id
-          defn = package.numbering.definitions.find { |d| d.abstract_num_id == abs_id }
+          defn = package.numbering.definitions.find do |d|
+            d.abstract_num_id == abs_id
+          end
           next if defn
 
           record_fix("R4", "Numbering instance numId=#{inst.num_id} references " \
@@ -680,7 +695,9 @@ module Uniword
           ["rId6", "numbering", "numbering.xml", package.numbering],
         ]
 
-        standard_targets = defs.filter_map { |_, _, target, obj| target if obj }.to_set
+        standard_targets = defs.filter_map do |_, _, target, obj|
+          target if obj
+        end.to_set
         standard_rids = defs.filter_map { |rid, _, _, obj| rid if obj }.to_set
         non_standard = rels.relationships.reject do |r|
           standard_targets.include?(r.target) || standard_rids.include?(r.id)
@@ -952,7 +969,9 @@ module Uniword
         path = File.join(CONFIG_DIR, "latent_styles.yml")
         YAML.load_file(path)
       rescue StandardError => e
-        Uniword.logger&.warn { "Latent styles config load failed: #{e.message}" }
+        Uniword.logger&.warn do
+          "Latent styles config load failed: #{e.message}"
+        end
         nil
       end
 

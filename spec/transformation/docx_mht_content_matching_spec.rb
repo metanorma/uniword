@@ -85,7 +85,9 @@ RSpec.describe "DOCX → MHT Content Matching" do
     decoded = decode_qp(html)
     doc = Nokogiri::HTML(decoded)
     doc.css("p[class], h1[class], h2[class], h3[class], h4[class], h5[class], h6[class]")
-      .filter_map { |el| el["class"] }.uniq.sort
+      .filter_map do |el|
+      el["class"]
+    end.uniq.sort
   end
 
   # Convert DOCX to MHT and extract body HTML
@@ -117,7 +119,8 @@ RSpec.describe "DOCX → MHT Content Matching" do
     let(:expected) { EXPECTED_COUNTS["blank"] }
 
     it "matches paragraph count (1)" do
-      generated_count = count_elements(generated_html, "p, h1, h2, h3, h4, h5, h6")
+      generated_count = count_elements(generated_html,
+                                       "p, h1, h2, h3, h4, h5, h6")
       expect(generated_count).to eq(expected[:paragraphs]),
                                  "Expected #{expected[:paragraphs]} paragraphs, got #{generated_count}"
     end
@@ -164,7 +167,8 @@ RSpec.describe "DOCX → MHT Content Matching" do
     # expands inline content when saving to MHT format.
     # DOCX: 21 paragraphs → MHT fixture: 84 paragraphs
     it "generates paragraphs (DOCX has 21, fixture has 84)" do
-      generated_count = count_elements(generated_html, "p, h1, h2, h3, h4, h5, h6")
+      generated_count = count_elements(generated_html,
+                                       "p, h1, h2, h3, h4, h5, h6")
       # We should have at least the DOCX count
       expect(generated_count).to be >= 21,
                                  "Expected at least 21 paragraphs (DOCX count), got #{generated_count}"
@@ -223,7 +227,8 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
     # DOCX has 11 paragraphs → MHT fixture has 51
     it "generates paragraphs (DOCX has 11, fixture has 51)" do
-      generated_count = count_elements(generated_html, "p, h1, h2, h3, h4, h5, h6")
+      generated_count = count_elements(generated_html,
+                                       "p, h1, h2, h3, h4, h5, h6")
       expect(generated_count).to be >= 11,
                                  "Expected at least 11 paragraphs (DOCX count), got #{generated_count}"
     end
@@ -268,7 +273,8 @@ RSpec.describe "DOCX → MHT Content Matching" do
 
     # DOCX has 7 paragraphs → MHT fixture has 39
     it "generates paragraphs (DOCX has 7, fixture has 39)" do
-      generated_count = count_elements(generated_html, "p, h1, h2, h3, h4, h5, h6")
+      generated_count = count_elements(generated_html,
+                                       "p, h1, h2, h3, h4, h5, h6")
       expect(generated_count).to be >= 7,
                                  "Expected at least 7 paragraphs (DOCX count), got #{generated_count}"
     end

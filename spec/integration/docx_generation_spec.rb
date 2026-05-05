@@ -305,7 +305,8 @@ RSpec.describe "DOCX Generation Integration" do
 
         table = Uniword::Wordprocessingml::Table.new
         table.properties = Uniword::Wordprocessingml::TableProperties.new(
-          table_width: Uniword::Properties::TableWidth.new(w: 5000, type: "dxa"),
+          table_width: Uniword::Properties::TableWidth.new(w: 5000,
+                                                           type: "dxa"),
           alignment: Uniword::Properties::TableJustification.new(value: "center"),
         )
 
