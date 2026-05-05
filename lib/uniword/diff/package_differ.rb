@@ -56,7 +56,8 @@ module Uniword
       # @param new_path [String] Path to modified/repaired DOCX
       # @param canon [Boolean] Whether to use Canon for semantic XML comparison
       # @param canon_profile [Symbol] Canon match profile to use
-      def initialize(old_path, new_path, canon: false, canon_profile: :spec_friendly)
+      def initialize(old_path, new_path, canon: false,
+canon_profile: :spec_friendly)
         @old_path = old_path
         @new_path = new_path
         @canon = canon
@@ -171,7 +172,7 @@ module Uniword
           old_xml, new_xml,
           format: :xml,
           profile: @canon_profile,
-          verbose: true,
+          verbose: true
         )
         part_change.canon_equivalent = result.equivalent?
         return if result.equivalent?
@@ -281,7 +282,7 @@ module Uniword
       # @return [Array<OpcIssue>]
       def validate_opc_for(zip, label)
         issues = []
-        part_names = zip.entries.reject(&:directory?).map(&:name).to_set
+        part_names = zip.entries.reject(&:directory?).to_set(&:name)
 
         # Check required parts
         REQUIRED_PARTS.each do |req|

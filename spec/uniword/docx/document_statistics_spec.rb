@@ -187,7 +187,7 @@ RSpec.describe Uniword::Docx::DocumentStatistics do
     it "matches Word statistics for multi-paragraph document" do
       stats = described_class.new(build_package(
                                     "The quick brown fox jumps over the lazy dog.",
-        "This is a second paragraph with more text.",
+                                    "This is a second paragraph with more text.",
                                   )).calculate
 
       # Word 2024: W=17 C=71 CWS=86 P=2 L=2

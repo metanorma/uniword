@@ -89,7 +89,10 @@ module Uniword
           new_size: @new_size,
           size_delta: size_delta,
         }
-        result[:canon_equivalent] = @canon_equivalent unless @canon_equivalent.nil?
+        unless @canon_equivalent.nil?
+          result[:canon_equivalent] =
+            @canon_equivalent
+        end
         result[:canon_summary] = @canon_summary if @canon_summary
         result[:xml_changes] = @changes.map(&:to_h) if @changes.any?
         result
@@ -189,7 +192,10 @@ module Uniword
           unchanged_count: @unchanged_parts.size,
           xml_changes: @xml_changes.map(&:to_h),
         }
-        h[:zip_metadata_changes] = @zip_metadata_changes.map(&:to_h) if @zip_metadata_changes.any?
+        if @zip_metadata_changes.any?
+          h[:zip_metadata_changes] =
+            @zip_metadata_changes.map(&:to_h)
+        end
         h[:opc_issues] = @opc_issues.map(&:to_h) if @opc_issues.any?
         h
       end

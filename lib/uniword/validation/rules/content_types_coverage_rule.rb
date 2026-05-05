@@ -26,8 +26,9 @@ module Uniword
           issues = []
 
           content_types = context.content_types
-          default_extensions = content_types.keys.select { |k| !k.start_with?("/") }
-          override_parts = content_types.keys.select { |k| k.start_with?("/") }
+          override_parts, default_extensions = content_types.keys.partition do |k|
+            k.start_with?("/")
+          end
 
           context.zip_entries.each do |entry|
             next if entry.end_with?("/")

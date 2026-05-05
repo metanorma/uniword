@@ -52,12 +52,12 @@ RSpec.describe Uniword::Resource::FontSubstitutor do
   describe ".check_availability" do
     it "returns true or false without raising" do
       result = described_class.check_availability("SomeRandomFont12345")
-      expect(result).to satisfy { |v| v == true || v == false }
+      expect(result).to(satisfy { |v| [true, false].include?(v) })
     end
 
     it "returns boolean for common fonts" do
       result = described_class.check_availability("Arial")
-      expect(result).to satisfy { |v| v == true || v == false }
+      expect(result).to(satisfy { |v| [true, false].include?(v) })
     end
   end
 

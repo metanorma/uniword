@@ -31,8 +31,8 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       html = first_element("<table><tr><th>Header</th><td>Data</td></tr></table>")
       table = described_class.build_table(html)
       cells = table.rows.first.cells
-      expect(cells[0].header).to eq(true)
-      expect(cells[1].header).to eq(false)
+      expect(cells[0].header).to be(true)
+      expect(cells[1].header).to be(false)
     end
 
     it "handles rowspan → vMerge restart with continuation cells" do
@@ -88,7 +88,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
     it "sets header flag for <th>" do
       html = first_element("<th>Header</th>")
       cell = described_class.build_cell(html)
-      expect(cell.header).to eq(true)
+      expect(cell.header).to be(true)
     end
 
     it "sets grid_span for colspan" do
@@ -117,8 +117,8 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       para = Uniword::Wordprocessingml::Paragraph.new
       described_class.build_children(para, html)
 
-      texts = para.runs.select { |r| r.text.to_s.length > 0 }
-      breaks = para.runs.select { |r| r.break }
+      texts = para.runs.reject { |r| r.text.to_s.empty? }
+      breaks = para.runs.select(&:break)
       expect(texts.size).to eq(2)
       expect(breaks.size).to eq(1)
     end
@@ -128,7 +128,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       para = Uniword::Wordprocessingml::Paragraph.new
       described_class.build_children(para, html)
 
-      break_run = para.runs.find { |r| r.break }
+      break_run = para.runs.find(&:break)
       expect(break_run).not_to be_nil
       expect(break_run.break.type).to eq("page")
     end
@@ -223,17 +223,17 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
   describe ".footnote_reference_span?" do
     it "returns true for MsoFootnoteReference class" do
       html = first_element('<span class="MsoFootnoteReference">1</span>')
-      expect(described_class.footnote_reference_span?(html)).to eq(true)
+      expect(described_class.footnote_reference_span?(html)).to be(true)
     end
 
     it "returns false for regular spans" do
       html = first_element("<span>text</span>")
-      expect(described_class.footnote_reference_span?(html)).to eq(false)
+      expect(described_class.footnote_reference_span?(html)).to be(false)
     end
 
     it "returns false for non-span elements" do
       html = first_element("<b>bold</b>")
-      expect(described_class.footnote_reference_span?(html)).to eq(false)
+      expect(described_class.footnote_reference_span?(html)).to be(false)
     end
   end
 
@@ -267,7 +267,11 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       HTML
       para = described_class.build_paragraph(html)
       expect(para).not_to be_nil
-      expect(para.runs.select { |r| r.text.to_s.length > 0 }.size).to eq(2) # "Some text" and "and"
+      expect( # "Some text" and "and"
+        para.runs.reject do |r|
+          r.text.to_s.empty?
+        end.size,
+      ).to eq(2)
       expect(para.runs.select(&:footnote_reference).size).to eq(1)
       expect(para.hyperlinks.size).to eq(1)
     end
@@ -332,16 +336,16 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       # Row 0: 2 cells (th with rowspan=2 + th with colspan=4)
       row0 = table.rows[0]
       expect(row0.cells.size).to eq(2)
-      expect(row0.cells[0].header).to eq(true)
+      expect(row0.cells[0].header).to be(true)
       expect(row0.cells[0].properties.v_merge.value).to eq(1) # restart
-      expect(row0.cells[1].header).to eq(true)
+      expect(row0.cells[1].header).to be(true)
       expect(row0.cells[1].properties.grid_span.value).to eq(4)
 
       # Row 1: continuation cell + 4 data cells
       row1 = table.rows[1]
       expect(row1.cells.size).to eq(5)
       expect(row1.cells[0].properties.v_merge.value).to be_nil # continuation
-      expect(row1.cells[0].header).not_to eq(true) # continuation cells are not <th>
+      expect(row1.cells[0].header).not_to be(true) # continuation cells are not <th>
     end
 
     it "handles table with colspan=5 rows (rice.doc rows 18-19)" do

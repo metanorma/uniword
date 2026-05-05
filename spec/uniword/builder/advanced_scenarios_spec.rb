@@ -122,7 +122,9 @@ RSpec.describe "Advanced Builder Scenarios" do
       # Date of birth
       doc.paragraph do |p|
         p << b.text("Date of Birth: ", bold: true)
-        sdt = b::SdtBuilder.date(tag: "dob", format: "yyyy-MM-dd").tap { |s| s.alias("Date of Birth") }
+        sdt = b::SdtBuilder.date(tag: "dob", format: "yyyy-MM-dd").tap do |s|
+          s.alias("Date of Birth")
+        end
         p << sdt.build
       end
 
@@ -141,7 +143,10 @@ RSpec.describe "Advanced Builder Scenarios" do
       # Start date
       doc.paragraph do |p|
         p << b.text("Start Date: ", bold: true)
-        sdt = b::SdtBuilder.date(tag: "start_date", format: "MMMM d, yyyy").tap { |s| s.alias("Start Date") }
+        sdt = b::SdtBuilder.date(tag: "start_date",
+                                 format: "MMMM d, yyyy").tap do |s|
+          s.alias("Start Date")
+        end
         p << sdt.build
       end
 

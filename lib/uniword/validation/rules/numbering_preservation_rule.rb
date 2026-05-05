@@ -12,7 +12,8 @@ module Uniword
       class NumberingPreservationRule < Base
         W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
-        LEVEL_CHILDREN = %w[start numFmt suff lvlRestart lvlText lvlJc pPr ind rPr].freeze
+        LEVEL_CHILDREN = %w[start numFmt suff lvlRestart lvlText lvlJc pPr ind
+                            rPr].freeze
 
         def code = "DOC-103"
         def validity_rule = "R4"
@@ -89,7 +90,7 @@ module Uniword
         def check_ilvl_range(doc, issues)
           doc.root.xpath(".//w:lvl/@w:ilvl", "w" => W_NS).each do |attr|
             ilvl = attr.value.to_i
-            next if ilvl >= 0 && ilvl <= 8
+            next if ilvl.between?(0, 8)
 
             issues << issue(
               "Level ilvl=#{ilvl} is out of valid range (0-8)",

@@ -21,8 +21,8 @@ module Uniword
         build_children(paragraph, element)
 
         has_content = paragraph.runs.any? ||
-                      paragraph.hyperlinks.any? ||
-                      paragraph.sdts.any?
+          paragraph.hyperlinks.any? ||
+          paragraph.sdts.any?
         has_content ? paragraph : nil
       end
 
@@ -66,7 +66,7 @@ module Uniword
               colspan.times { |c| occupied[col_idx + c] = rowspan - 1 }
             end
 
-            col_idx += (html_cell.attr("colspan")&.to_i || 1)
+            col_idx += html_cell.attr("colspan")&.to_i || 1
           end
 
           # Handle remaining occupied columns at end of row

@@ -70,7 +70,7 @@ module Uniword
             next unless node
 
             type_attr = node.attribute("type") ||
-                        node.attributes.find { |a| a.name == "type" }
+              node.attributes.find { |a| a.name == "type" }
             next if type_attr && type_attr.value == "dcterms:W3CDTF"
 
             issues << issue(

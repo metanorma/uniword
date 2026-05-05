@@ -69,9 +69,9 @@ module Uniword
         if container.respond_to?(:structured_document_tags)
           container.structured_document_tags.each do |sdt|
             sdt.content&.paragraphs&.each do |para|
-                text = para.text
-                text_per_paragraph << text
-              end
+              text = para.text
+              text_per_paragraph << text
+            end
           end
         end
       end
@@ -89,9 +89,9 @@ module Uniword
           segments = text.scan(/[\u4E00-\u9FFF\u3400-\u4DBF\uF900-\uFAFF\u2F00-\u2FDF\u2E80-\u2EFF]+|[^ \t\r\n]+/)
           segments.each do |seg|
             total += if seg.match?(CJK_REGEX)
-              seg.length
+                       seg.length
                      else
-              seg.split(/\s+/).reject(&:empty?).size
+                       seg.split(/\s+/).reject(&:empty?).size
                      end
           end
         end

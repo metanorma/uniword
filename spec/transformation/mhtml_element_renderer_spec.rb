@@ -39,7 +39,8 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
     para
   end
 
-  def make_table_cell(paragraphs:, grid_span: nil, v_merge: false, v_merge_val: nil, header: false)
+  def make_table_cell(paragraphs:, grid_span: nil, v_merge: false,
+v_merge_val: nil, header: false)
     cell = Uniword::Wordprocessingml::TableCell.new
     cell.header = header
     has_merge = grid_span || v_merge
@@ -94,7 +95,7 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
       run.footnote_reference = Uniword::Wordprocessingml::FootnoteReference.new(id: "3")
       html = renderer.run_to_html(run)
       expect(html).to eq(
-        '<span class="MsoFootnoteReference"><span style="mso-special-character:footnote"></span></span>'
+        '<span class="MsoFootnoteReference"><span style="mso-special-character:footnote"></span></span>',
       )
     end
 
@@ -125,7 +126,8 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
     end
 
     it "renders Heading2 style paragraphs as <h2>" do
-      para = make_paragraph(runs: [make_run(text: "Section")], style: "Heading2")
+      para = make_paragraph(runs: [make_run(text: "Section")],
+                            style: "Heading2")
       html = renderer.paragraph_to_html(para)
       expect(html).to start_with("<h2")
       expect(html).to end_with("</h2>")
@@ -135,9 +137,9 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
       fn_run = Uniword::Wordprocessingml::Run.new
       fn_run.footnote_reference = Uniword::Wordprocessingml::FootnoteReference.new(id: "1")
       para = make_paragraph(runs: [
-        make_run(text: "Some text"),
-        fn_run,
-      ])
+                              make_run(text: "Some text"),
+                              fn_run,
+                            ])
       html = renderer.paragraph_to_html(para)
       expect(html).to include("Some text")
       expect(html).to include("MsoFootnoteReference")
@@ -148,11 +150,11 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
   describe "#table_to_html" do
     it "renders simple tables" do
       table = make_table(rows: [
-        make_table_row(cells: [
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "A")])]),
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B")])]),
-        ]),
-      ])
+                           make_table_row(cells: [
+                                            make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "A")])]),
+                                            make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B")])]),
+                                          ]),
+                         ])
       html = renderer.table_to_html(table)
       expect(html).to include("<table>")
       expect(html).to include("<td>A</td>")
@@ -161,10 +163,12 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
 
     it "renders gridSpan as colspan attribute" do
       table = make_table(rows: [
-        make_table_row(cells: [
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "Wide")])], grid_span: 3),
-        ]),
-      ])
+                           make_table_row(cells: [
+                                            make_table_cell(
+                                              paragraphs: [make_paragraph(runs: [make_run(text: "Wide")])], grid_span: 3,
+                                            ),
+                                          ]),
+                         ])
       html = renderer.table_to_html(table)
       expect(html).to include("colspan=3")
       expect(html).to include("Wide")
@@ -172,10 +176,12 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
 
     it "renders header cells with <th> tag" do
       table = make_table(rows: [
-        make_table_row(cells: [
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "Header")])], header: true),
-        ]),
-      ])
+                           make_table_row(cells: [
+                                            make_table_cell(
+                                              paragraphs: [make_paragraph(runs: [make_run(text: "Header")])], header: true,
+                                            ),
+                                          ]),
+                         ])
       html = renderer.table_to_html(table)
       expect(html).to include("<th>")
       expect(html).to include("Header")
@@ -184,15 +190,19 @@ RSpec.describe Uniword::Transformation::MhtmlElementRenderer do
     it "renders vMerge as rowspan and skips continuation cells" do
       # Table with vertical merge: Row 0 has start cell, Row 1 has continuation
       table = make_table(rows: [
-        make_table_row(cells: [
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "Merged")])], v_merge: true, v_merge_val: 1),
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B1")])]),
-        ]),
-        make_table_row(cells: [
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "")])], v_merge: true, v_merge_val: nil),
-          make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B2")])]),
-        ]),
-      ])
+                           make_table_row(cells: [
+                                            make_table_cell(
+                                              paragraphs: [make_paragraph(runs: [make_run(text: "Merged")])], v_merge: true, v_merge_val: 1,
+                                            ),
+                                            make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B1")])]),
+                                          ]),
+                           make_table_row(cells: [
+                                            make_table_cell(
+                                              paragraphs: [make_paragraph(runs: [make_run(text: "")])], v_merge: true, v_merge_val: nil,
+                                            ),
+                                            make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "B2")])]),
+                                          ]),
+                         ])
       html = renderer.table_to_html(table)
 
       # Row 0 should have rowspan=2 on the merged cell

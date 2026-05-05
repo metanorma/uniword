@@ -88,7 +88,9 @@ RSpec.describe Uniword::Diff::PackageDiffer do
       end
 
       it "sets canon_equivalent on XML parts" do
-        xml_parts = result.modified_parts.select { |p| p.name.end_with?(".xml") }
+        xml_parts = result.modified_parts.select do |p|
+          p.name.end_with?(".xml")
+        end
         xml_parts.each do |p|
           expect(p.canon_equivalent).not_to be_nil
         end
@@ -105,7 +107,9 @@ RSpec.describe Uniword::Diff::PackageDiffer do
 
       it "includes canon info in to_h output" do
         h = result.to_h
-        parts_with_canon = h[:modified_parts].select { |p| p.key?(:canon_equivalent) }
+        parts_with_canon = h[:modified_parts].select do |p|
+          p.key?(:canon_equivalent)
+        end
         expect(parts_with_canon).not_to be_empty
       end
     end
@@ -122,7 +126,9 @@ RSpec.describe Uniword::Diff::PackageDiffer do
                                        parts: { "word/document.xml" => xml_b })
 
           result = described_class.new(path_a, path_b, canon: true).diff
-          doc_part = result.modified_parts.find { |p| p.name == "word/document.xml" }
+          doc_part = result.modified_parts.find do |p|
+            p.name == "word/document.xml"
+          end
           expect(doc_part).not_to be_nil
           expect(doc_part.canon_equivalent).to be(true)
         end

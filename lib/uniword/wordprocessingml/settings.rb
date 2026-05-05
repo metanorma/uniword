@@ -583,7 +583,8 @@ module Uniword
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
         map_element "zoom", to: :zoom, render_nil: false
-        map_element "doNotDisplayPageBoundaries", to: :do_not_display_page_boundaries, render_nil: false
+        map_element "doNotDisplayPageBoundaries",
+                    to: :do_not_display_page_boundaries, render_nil: false
         map_element "compat", to: :compat, render_nil: false
         map_element "proofState", to: :proof_state, render_nil: false
         map_element "stylePaneFormatFilter", to: :style_pane_format_filter,

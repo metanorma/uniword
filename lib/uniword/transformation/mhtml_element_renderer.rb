@@ -96,8 +96,11 @@ module Uniword
         # and style class wrapping
         props = run.properties
         if props
-          content = apply_run_formatting(content, props) unless run.field_char || run.tab
-          if props.style && props.style.value
+          unless run.field_char || run.tab
+            content = apply_run_formatting(content,
+                                           props)
+          end
+          if props.style&.value
             style_id = props.style.value.downcase
             # Skip wrapping for internal OOXML styles that shouldn't produce
             # visible HTML class wrappers
@@ -124,17 +127,18 @@ module Uniword
         else
           text = run.text.to_s
           return "" if text.empty?
+
           escape_html(text)
         end
       end
 
       # Convert OOXML FootnoteReference to HTML
-      def footnote_reference_to_html(run)
+      def footnote_reference_to_html(_run)
         %(<span class="MsoFootnoteReference"><span style="mso-special-character:footnote"></span></span>)
       end
 
       # Convert OOXML EndnoteReference to HTML
-      def endnote_reference_to_html(run)
+      def endnote_reference_to_html(_run)
         %(<span class="MsoEndnoteReference"><span style="mso-special-character:endnote"></span></span>)
       end
 
@@ -163,11 +167,12 @@ module Uniword
       def instr_text_to_html(run)
         text = run.instr_text.text.to_s
         return "" if text.empty?
+
         escape_html(text)
       end
 
       # Convert OOXML Tab to HTML
-      def tab_to_html(run)
+      def tab_to_html(_run)
         # TOC tab leader: rendered as dotted leader
         %(<span style="mso-tab-count:1 dotted">. </span>)
       end
@@ -287,7 +292,7 @@ module Uniword
 
         rows_html = rows.each_with_index.map do |row, row_idx|
           cells = row.cells || []
-          cells_html = cells.each_with_index.map do |cell, col_idx|
+          cells_html = cells.each_with_index.filter_map do |cell, col_idx|
             # Skip vMerge continuation cells — they're absorbed by the start cell's rowspan
             merge_state = merge_map[[row_idx, col_idx]]
             next if merge_state == :continue
@@ -296,7 +301,7 @@ module Uniword
             rowspan = compute_rowspan(rows, row_idx, col_idx, merge_map)
 
             table_cell_to_html(cell, rowspan: rowspan)
-          end.compact.join
+          end.join
 
           %(<tr>#{cells_html}</tr>)
         end.join("\n")
@@ -322,11 +327,11 @@ module Uniword
             has_vmerge = cell.properties&.v_merge ? true : false
 
             if has_vmerge
-              if prev_col_has_vmerge[col_idx]
-                merge_map[[row_idx, col_idx]] = :continue
-              else
-                merge_map[[row_idx, col_idx]] = :start
-              end
+              merge_map[[row_idx, col_idx]] = if prev_col_has_vmerge[col_idx]
+                                                :continue
+                                              else
+                                                :start
+                                              end
             end
 
             prev_col_has_vmerge[col_idx] = has_vmerge
@@ -341,8 +346,9 @@ module Uniword
         return nil unless merge_map[[start_row_idx, col_idx]] == :start
 
         rowspan = 1
-        (start_row_idx + 1...rows.size).each do |row_idx|
+        ((start_row_idx + 1)...rows.size).each do |row_idx|
           break unless merge_map[[row_idx, col_idx]] == :continue
+
           rowspan += 1
         end
 
@@ -395,6 +401,7 @@ module Uniword
         return false if para.o_math_paras && !para.o_math_paras.empty?
         # SDTs need wrapping
         return false if para.sdts && !para.sdts.empty?
+
         true
       end
 
@@ -505,11 +512,11 @@ module Uniword
             hl_by_pos[idx].each { |hl| parts << hyperlink_to_html(hl) }
           end
 
-          if run.is_a?(Uniword::Wordprocessingml::StructuredDocumentTag)
-            parts << sdt_to_inline_html(run)
-          else
-            parts << run_to_html(run)
-          end
+          parts << if run.is_a?(Uniword::Wordprocessingml::StructuredDocumentTag)
+                     sdt_to_inline_html(run)
+                   else
+                     run_to_html(run)
+                   end
         end
 
         # Append any remaining oMaths at the end

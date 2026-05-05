@@ -89,7 +89,7 @@ module Uniword
 
       differ = Uniword::Diff::PackageDiffer.new(
         old_path, new_path,
-        canon: options[:canon],
+        canon: options[:canon]
       )
       result = differ.diff
 
