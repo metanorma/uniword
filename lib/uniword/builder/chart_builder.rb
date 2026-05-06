@@ -60,10 +60,6 @@ module Uniword
         end
       end
 
-      # Set chart title
-      #
-      # @param text [String] Title text
-      # @return [self]
       def title(text)
         @title_text = text
         self
@@ -141,7 +137,6 @@ module Uniword
       # Build the inner chart XML
       def build_chart_xml(xml)
         xml["c"].chart do
-          # Title
           if @title_text
             xml["c"].title do
               xml["c"].tx do
@@ -161,44 +156,15 @@ module Uniword
 
           xml["c"].autoTitleDeleted("val" => "0")
 
-          # Plot area
           xml["c"].plotArea do
             build_chart_type(xml)
 
-            # Category axis (for bar/line, not pie)
             unless @chart_type == :pie
-              xml["c"].catAx do
-                xml["c"].axId("val" => "10")
-                xml["c"].scaling do
-                  xml["c"].orientation("val" => "minMax")
-                end
-                xml["c"].delete("val" => "0")
-                xml["c"].axPos("val" => "b")
-                xml["c"].majorGridlines
-                xml["c"].numFmt("formatCode" => "General",
-                                "sourceLinked" => "1")
-                xml["c"].tickLblPos("val" => "nextTo")
-                xml["c"].crossAx("val" => "20")
-              end
-
-              # Value axis
-              xml["c"].valAx do
-                xml["c"].axId("val" => "20")
-                xml["c"].scaling do
-                  xml["c"].orientation("val" => "minMax")
-                end
-                xml["c"].delete("val" => "0")
-                xml["c"].axPos("val" => "l")
-                xml["c"].majorGridlines
-                xml["c"].numFmt("formatCode" => "General",
-                                "sourceLinked" => "1")
-                xml["c"].tickLblPos("val" => "nextTo")
-                xml["c"].crossAx("val" => "10")
-              end
+              build_axis(xml, "catAx", "10", "b", "20")
+              build_axis(xml, "valAx", "20", "l", "10")
             end
           end
 
-          # Legend
           if @show_legend
             xml["c"].legend do
               xml["c"].legendPos("val" => @legend_position)
@@ -210,99 +176,57 @@ module Uniword
         end
       end
 
-      # Build the specific chart type element (bar, line, pie)
+      # Build the specific chart type element
       def build_chart_type(xml)
         case @chart_type
         when :bar
-          build_bar_chart(xml)
+          xml["c"].barChart do
+            xml["c"].barDir("val" => "col")
+            xml["c"].grouping("val" => "clustered")
+            xml["c"].varyColors("val" => "0")
+            build_all_series(xml)
+            xml["c"].axId("val" => "10")
+            xml["c"].axId("val" => "20")
+          end
         when :line
-          build_line_chart(xml)
+          xml["c"].lineChart do
+            xml["c"].grouping("val" => "standard")
+            xml["c"].varyColors("val" => "0")
+            build_all_series(xml)
+            xml["c"].axId("val" => "10")
+            xml["c"].axId("val" => "20")
+          end
         when :pie
-          build_pie_chart(xml)
+          xml["c"].pieChart do
+            xml["c"].varyColors("val" => "1")
+            build_all_series(xml)
+          end
         end
       end
 
-      # Build bar chart XML
-      def build_bar_chart(xml)
-        xml["c"].barChart do
-          xml["c"].barDir("val" => "col")
-          xml["c"].grouping("val" => "clustered")
-          xml["c"].varyColors("val" => "0")
-
-          @series_list.each_with_index do |s, i|
-            xml["c"].ser do
-              xml["c"].idx("val" => i)
-              xml["c"].order("val" => i)
-              xml["c"].tx do
-                xml["c"].strRef do
-                  xml["c"].f("Sheet1!$B$#{i + 1}")
-                  xml["c"].strCache do
-                    xml["c"].ptCount("val" => 1)
-                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
-                  end
-                end
-              end
-              build_categories(xml)
-              build_values(xml, s[:data])
-            end
-          end
-
-          xml["c"].axId("val" => "10")
-          xml["c"].axId("val" => "20")
+      # Build all series XML blocks
+      def build_all_series(xml)
+        @series_list.each_with_index do |s, i|
+          build_series(xml, s, i)
         end
       end
 
-      # Build line chart XML
-      def build_line_chart(xml)
-        xml["c"].lineChart do
-          xml["c"].grouping("val" => "standard")
-          xml["c"].varyColors("val" => "0")
-
-          @series_list.each_with_index do |s, i|
-            xml["c"].ser do
-              xml["c"].idx("val" => i)
-              xml["c"].order("val" => i)
-              xml["c"].tx do
-                xml["c"].strRef do
-                  xml["c"].f("Sheet1!$B$#{i + 1}")
-                  xml["c"].strCache do
-                    xml["c"].ptCount("val" => 1)
-                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
-                  end
-                end
+      # Build a single series XML block
+      def build_series(xml, series, index)
+        xml["c"].ser do
+          xml["c"].idx("val" => index)
+          xml["c"].order("val" => index)
+          xml["c"].tx do
+            xml["c"].strRef do
+              xml["c"].f("Sheet1!$B$#{index + 1}")
+              xml["c"].strCache do
+                xml["c"].ptCount("val" => 1)
+                xml["c"].pt("idx" => 0) { xml["c"].v(series[:name]) }
               end
-              build_categories(xml)
-              build_values(xml, s[:data])
             end
           end
-
-          xml["c"].axId("val" => "10")
-          xml["c"].axId("val" => "20")
-        end
-      end
-
-      # Build pie chart XML
-      def build_pie_chart(xml)
-        xml["c"].pieChart do
-          xml["c"].varyColors("val" => "1")
-
-          @series_list.each_with_index do |s, i|
-            xml["c"].ser do
-              xml["c"].idx("val" => i)
-              xml["c"].order("val" => i)
-              xml["c"].tx do
-                xml["c"].strRef do
-                  xml["c"].f("Sheet1!$B$#{i + 1}")
-                  xml["c"].strCache do
-                    xml["c"].ptCount("val" => 1)
-                    xml["c"].pt("idx" => 0) { xml["c"].v(s[:name]) }
-                  end
-                end
-              end
-              build_categories(xml)
-              build_values(xml, s[:data])
-            end
-          end
+          build_categories(xml)
+          build_values(xml, series[:data])
         end
       end
 
@@ -336,6 +260,23 @@ module Uniword
               end
             end
           end
+        end
+      end
+
+      # Build a chart axis
+      def build_axis(xml, tag, id, position, cross_id)
+        xml["c"].send(tag) do
+          xml["c"].axId("val" => id)
+          xml["c"].scaling do
+            xml["c"].orientation("val" => "minMax")
+          end
+          xml["c"].delete("val" => "0")
+          xml["c"].axPos("val" => position)
+          xml["c"].majorGridlines
+          xml["c"].numFmt("formatCode" => "General",
+                          "sourceLinked" => "1")
+          xml["c"].tickLblPos("val" => "nextTo")
+          xml["c"].crossAx("val" => cross_id)
         end
       end
 
