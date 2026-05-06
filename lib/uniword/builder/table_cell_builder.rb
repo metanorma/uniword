@@ -9,22 +9,18 @@ module Uniword
     #     c << 'Cell content'
     #     c.shading(fill: '4472C4')
     #   end
-    class TableCellBuilder
-      attr_reader :model
+    class TableCellBuilder < BaseBuilder
+      include HasBorders
+      include HasShading
 
-      def initialize(model = nil)
-        @model = model || Wordprocessingml::TableCell.new
-      end
-
-      # Wrap an existing TableCell model
-      def self.from_model(model)
-        new(model)
+      def self.default_model_class
+        Wordprocessingml::TableCell
       end
 
       # Append content to the cell. Routes by type:
-      # - String → creates a Paragraph with a Run
-      # - Paragraph → appends to paragraphs
-      # - Table → appends to nested tables
+      # - String -> creates a Paragraph with a Run
+      # - Paragraph -> appends to paragraphs
+      # - Table -> appends to nested tables
       #
       # @param element [String, Paragraph, Table]
       # @return [self]
@@ -46,59 +42,22 @@ module Uniword
         self
       end
 
-      # Set cell shading
-      #
-      # @param fill [String] Fill color
-      # @param color [String, nil] Shading color
-      # @param pattern [String] Pattern (default 'clear')
-      # @return [self]
-      def shading(fill:, color: nil, pattern: "clear")
-        ensure_cell_props
-        @model.properties.shading = Properties::Shading.new(
-          fill: fill, color: color, pattern: pattern,
-        )
-        self
-      end
-
       # Set cell width
       #
       # @param value [Integer] Width in twips
       # @param rule [String] Width rule ('auto', 'exact', 'pct')
       # @return [self]
       def width(value, rule: nil)
-        ensure_cell_props
+        ensure_properties
         @model.properties.width ||= Properties::CellWidth.new
         @model.properties.width.value = value
         @model.properties.width.rule = rule if rule
         self
       end
 
-      # Set vertical alignment
-      #
-      # @param value [String] :top, :center, :bottom, :both
-      # @return [self]
       def vertical_align(value)
-        ensure_cell_props
+        ensure_properties
         @model.properties.vertical_align = Properties::CellVerticalAlign.new(value: value.to_s)
-        self
-      end
-
-      # Set cell borders
-      #
-      # @param sides [Hash] Border specifications by side
-      # @return [self]
-      def borders(**sides)
-        ensure_cell_props
-        @model.properties.borders ||= Properties::Borders.new
-        sides.each do |side, value|
-          border = if value.is_a?(Hash)
-                     Properties::Border.new(**value)
-                   else
-                     Properties::Border.new(color: value, style: "single",
-                                            size: 4)
-                   end
-          @model.properties.borders.send("#{side}=", border)
-        end
         self
       end
 
@@ -107,7 +66,7 @@ module Uniword
       # @param count [Integer] Number of columns to span
       # @return [self]
       def column_span(count)
-        ensure_cell_props
+        ensure_properties
         @model.properties.grid_span =
           Wordprocessingml::ValInt.new(value: count)
         self
@@ -118,21 +77,17 @@ module Uniword
       # @param count [Integer] Number of rows to span
       # @return [self]
       def row_span(count)
-        ensure_cell_props
+        ensure_properties
         @model.properties.v_merge =
           Wordprocessingml::ValInt.new(value: count)
         self
       end
 
-      # Return the underlying TableCell model
-      def build
-        @model
-      end
-
       private
 
-      def ensure_cell_props
+      def ensure_properties
         @model.properties ||= Wordprocessingml::TableCellProperties.new
+        @model.properties
       end
     end
   end

@@ -21,7 +21,7 @@ on:
 
 jobs:
   release:
-    uses: metanorma/ci/.github/workflows/rubygems-release.yml@fix/checkout-token-for-submodules
+    uses: metanorma/ci/.github/workflows/rubygems-release.yml@main
     with:
       next_version: ${{ github.event.inputs.next_version }}
     secrets:

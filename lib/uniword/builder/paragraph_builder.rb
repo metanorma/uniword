@@ -18,28 +18,21 @@ module Uniword
     #   para << Builder.hyperlink('https://example.com', 'link')
     #   para << Builder.tab_stop(position: 7200)
     #   para.build
-    class ParagraphBuilder
-      attr_reader :model
+    class ParagraphBuilder < BaseBuilder
+      include HasBorders
+      include HasShading
 
-      def initialize(model = nil)
-        @model = model || Wordprocessingml::Paragraph.new
-      end
-
-      # Wrap an existing Paragraph model for manipulation
-      #
-      # @param model [Wordprocessingml::Paragraph] Existing paragraph
-      # @return [ParagraphBuilder]
-      def self.from_model(model)
-        new(model)
+      def self.default_model_class
+        Wordprocessingml::Paragraph
       end
 
       # Append a child element. Routes by type:
-      # - String → creates a Run
-      # - Run → appends to runs
-      # - Hyperlink → appends to hyperlinks
-      # - TabStop → appends to properties.tabs
-      # - BookmarkStart/End → appends to bookmarks
-      # - StructuredDocumentTag → appends to sdts
+      # - String -> creates a Run
+      # - Run -> appends to runs
+      # - Hyperlink -> appends to hyperlinks
+      # - TabStop -> appends to properties.tabs
+      # - BookmarkStart/End -> appends to bookmarks
+      # - StructuredDocumentTag -> appends to sdts
       #
       # @param element [String, Run, Hyperlink, Properties::TabStop, ...]
       # @return [self]
@@ -69,19 +62,11 @@ module Uniword
         self
       end
 
-      # Set paragraph style
-      #
-      # @param name [String] Style name or ID
-      # @return [self]
       def style=(name)
         ensure_properties.style = Properties::StyleReference.new(value: name)
         self
       end
 
-      # Set paragraph alignment
-      #
-      # @param value [String, Symbol] :left, :center, :right, :justify
-      # @return [self]
       def align=(value)
         ensure_properties.alignment = Properties::Alignment.new(value: value.to_s)
         self
@@ -121,41 +106,6 @@ module Uniword
         self
       end
 
-      # Set paragraph borders
-      #
-      # @param sides [Hash] Border specifications by side
-      # @option sides [Hash, String] :top Border hash or color string
-      # @option sides [Hash, String] :bottom Border hash or color string
-      # @option sides [Hash, String] :left Border hash or color string
-      # @option sides [Hash, String] :right Border hash or color string
-      # @return [self]
-      def borders(**sides)
-        ensure_properties.borders ||= Properties::Borders.new
-        sides.each do |side, value|
-          border = if value.is_a?(Hash)
-                     Properties::Border.new(**value)
-                   else
-                     Properties::Border.new(color: value, style: "single",
-                                            size: 4)
-                   end
-          @model.properties.borders.send("#{side}=", border)
-        end
-        self
-      end
-
-      # Set paragraph shading
-      #
-      # @param fill [String] Fill color
-      # @param color [String, nil] Shading color
-      # @param pattern [String] Pattern (default 'clear')
-      # @return [self]
-      def shading(fill:, color: nil, pattern: "clear")
-        ensure_properties.shading = Properties::Shading.new(
-          fill: fill, color: color, pattern: pattern,
-        )
-        self
-      end
-
       # Set numbering
       #
       # @param num_id [Integer] Numbering definition ID
@@ -172,56 +122,30 @@ module Uniword
         self
       end
 
-      # Set keep next
-      #
-      # @param value [Boolean] Keep with next paragraph (default true)
-      # @return [self]
       def keep_next(value = true)
         ensure_properties.keep_next_wrapper =
           value ? Properties::KeepNext.new(value: true) : nil
         self
       end
 
-      # Set page break before
-      #
-      # @param value [Boolean] Page break before (default true)
-      # @return [self]
       def page_break_before(value = true)
         ensure_properties.page_break_before_wrapper =
           value ? Properties::PageBreakBefore.new(value: true) : nil
         self
       end
 
-      # Set contextual spacing
-      #
-      # @param value [Boolean] Contextual spacing state
-      # @return [self]
       def contextual_spacing=(value)
         ensure_properties.contextual_spacing = value
         self
       end
 
-      # Set outline level
-      #
-      # @param value [String] Outline level
-      # @return [self]
       def outline_level=(value)
         ensure_properties.outline_level = value
         self
       end
 
-      # Return the underlying Paragraph model
-      #
-      # @return [Wordprocessingml::Paragraph]
-      def build
-        @model
-      end
-
       private
 
-      # Ensure ParagraphProperties exist on the model
-      #
-      # @return [Wordprocessingml::ParagraphProperties]
       def ensure_properties
         @model.properties ||= Wordprocessingml::ParagraphProperties.new
         @model.properties

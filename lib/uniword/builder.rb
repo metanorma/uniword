@@ -16,6 +16,9 @@ module Uniword
   #   doc.paragraph { |p| p << 'Appended content' }
   #   doc.save('output.docx')
   module Builder
+    autoload :BaseBuilder, "uniword/builder/base_builder"
+    autoload :HasBorders, "uniword/builder/has_borders"
+    autoload :HasShading, "uniword/builder/has_shading"
     autoload :DocumentBuilder, "uniword/builder/document_builder"
     autoload :ParagraphBuilder, "uniword/builder/paragraph_builder"
     autoload :RunBuilder, "uniword/builder/run_builder"

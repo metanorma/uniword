@@ -16,22 +16,11 @@ module Uniword
     #     s.page_numbering(start: 1, format: 'lowerRoman')
     #     s.margins(top: 720, bottom: 720)
     #   end
-    class SectionBuilder
-      attr_reader :model
-
-      def initialize(model = nil)
-        @model = model || Wordprocessingml::SectionProperties.new
+    class SectionBuilder < BaseBuilder
+      def self.default_model_class
+        Wordprocessingml::SectionProperties
       end
 
-      # Wrap an existing SectionProperties model
-      def self.from_model(model)
-        new(model)
-      end
-
-      # Set section break type
-      #
-      # @param value [String] 'nextPage', 'continuous', 'evenPage', 'oddPage'
-      # @return [self]
       def type=(value)
         @model.type = value
         self
@@ -86,10 +75,6 @@ module Uniword
         self
       end
 
-      # Set page borders
-      #
-      # @param options [Hash] Border options
-      # @return [self]
       def page_borders(**_options)
         @model.page_borders ||= Wordprocessingml::PageBorders.new
         self
@@ -123,9 +108,6 @@ module Uniword
 
       # Configure a header for this section
       #
-      # Creates a HeaderReference attached to the section properties.
-      # The header content is built using a HeaderFooterBuilder.
-      #
       # @param type [String] Header type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for header content
       # @return [HeaderFooterBuilder] The header/footer builder
@@ -142,9 +124,6 @@ module Uniword
 
       # Configure a footer for this section
       #
-      # Creates a FooterReference attached to the section properties.
-      # The footer content is built using a HeaderFooterBuilder.
-      #
       # @param type [String] Footer type ('default', 'first', 'even')
       # @yield [HeaderFooterBuilder] Builder for footer content
       # @return [HeaderFooterBuilder] The header/footer builder
@@ -157,13 +136,6 @@ module Uniword
         )
         @model.footer_references << ref
         hf
-      end
-
-      # Return the underlying SectionProperties model
-      #
-      # @return [Wordprocessingml::SectionProperties]
-      def build
-        @model
       end
     end
   end
