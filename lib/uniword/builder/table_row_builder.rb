@@ -9,16 +9,9 @@ module Uniword
     #     r.cell(text: 'Header 1')
     #     r.cell(text: 'Header 2')
     #   end
-    class TableRowBuilder
-      attr_reader :model
-
-      def initialize(model = nil)
-        @model = model || Wordprocessingml::TableRow.new
-      end
-
-      # Wrap an existing TableRow model
-      def self.from_model(model)
-        new(model)
+    class TableRowBuilder < BaseBuilder
+      def self.default_model_class
+        Wordprocessingml::TableRow
       end
 
       # Create and add a cell to the row
@@ -54,11 +47,6 @@ module Uniword
         @model.properties ||= Wordprocessingml::TableRowProperties.new
         @model.properties.table_header = value
         self
-      end
-
-      # Return the underlying TableRow model
-      def build
-        @model
       end
     end
   end

@@ -11,16 +11,12 @@ module Uniword
     #       r.cell(text: 'Value')
     #     end
     #   end
-    class TableBuilder
-      attr_reader :model
+    class TableBuilder < BaseBuilder
+      include HasBorders
+      include HasShading
 
-      def initialize(model = nil)
-        @model = model || Wordprocessingml::Table.new
-      end
-
-      # Wrap an existing Table model
-      def self.from_model(model)
-        new(model)
+      def self.default_model_class
+        Wordprocessingml::Table
       end
 
       # Create and add a row to the table
@@ -40,7 +36,7 @@ module Uniword
       # @param rule [String] Width rule ('auto', 'exact', 'pct')
       # @return [self]
       def width(value, rule: nil)
-        ensure_table_props
+        ensure_properties
         @model.properties.table_width ||= Properties::TableWidth.new
         @model.properties.table_width.value = value
         @model.properties.table_width.rule = rule if rule
@@ -52,60 +48,23 @@ module Uniword
       # @param value [Integer] Indent in twips
       # @return [self]
       def indent(value)
-        ensure_table_props
+        ensure_properties
         @model.properties.table_indent ||= Properties::TableIndent.new
         @model.properties.table_indent.value = value
         self
       end
 
-      # Set table borders
-      #
-      # @param sides [Hash] Border specifications by side
-      # @return [self]
-      def borders(**sides)
-        ensure_table_props
-        @model.properties.borders ||= Properties::Borders.new
-        sides.each do |side, value|
-          border = if value.is_a?(Hash)
-                     Properties::Border.new(**value)
-                   else
-                     Properties::Border.new(color: value, style: "single",
-                                            size: 4)
-                   end
-          @model.properties.borders.send("#{side}=", border)
-        end
-        self
-      end
-
-      # Set table shading
-      #
-      # @param fill [String] Fill color
-      # @return [self]
-      def shading(fill:)
-        ensure_table_props
-        @model.properties.shading = Properties::Shading.new(fill: fill)
-        self
-      end
-
-      # Set table alignment
-      #
-      # @param value [String] :left, :center, :right
-      # @return [self]
       def align=(value)
-        ensure_table_props
+        ensure_properties
         @model.properties.justification = Properties::TableJustification.new(value: value.to_s)
         self
       end
 
-      # Return the underlying Table model
-      def build
-        @model
-      end
-
       private
 
-      def ensure_table_props
+      def ensure_properties
         @model.properties ||= Wordprocessingml::TableProperties.new
+        @model.properties
       end
     end
   end

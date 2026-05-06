@@ -28,11 +28,13 @@ module Uniword
     #   doc.page_break
     #   doc.footer { |f| f << Builder.page_number_field }
     #   doc.save('report.docx')
-    class DocumentBuilder
-      attr_reader :model
+    class DocumentBuilder < BaseBuilder
+      def self.default_model_class
+        Wordprocessingml::DocumentRoot
+      end
 
       def initialize(model = nil)
-        @model = model || Wordprocessingml::DocumentRoot.new
+        super
         @bookmark_counter = 0
         @footnote_builder = FootnoteBuilder.new(self)
         @comment_counter = 0
@@ -211,8 +213,6 @@ module Uniword
 
       # Create a footnote and return a Run with a footnoteReference.
       #
-      # The returned Run can be appended to a paragraph using <<.
-      #
       # @param text [String] Footnote text
       # @yield [ParagraphBuilder] Builder for rich footnote content
       # @return [Wordprocessingml::Run] Run with footnote reference
@@ -254,64 +254,36 @@ module Uniword
         style
       end
 
-      # Set document title
-      #
-      # @param value [String] Title
-      # @return [self]
       def title(value)
         @model.core_properties.title = value
         self
       end
 
-      # Set document author (creator)
-      #
-      # @param value [String] Author name
-      # @return [self]
       def author(value)
         @model.core_properties.creator = value
         self
       end
 
-      # Set document description
-      #
-      # @param value [String] Description
-      # @return [self]
       def description(value)
         @model.core_properties.description = value
         self
       end
 
-      # Set document subject
-      #
-      # @param value [String] Subject
-      # @return [self]
       def subject(value)
         @model.core_properties.subject = value
         self
       end
 
-      # Set document keywords
-      #
-      # @param value [String] Keywords
-      # @return [self]
       def keywords(value)
         @model.core_properties.keywords = value
         self
       end
 
-      # Set document creation date
-      #
-      # @param value [Time, String] Creation date
-      # @return [self]
       def created(value)
         @model.core_properties.created = value
         self
       end
 
-      # Set document modification date
-      #
-      # @param value [Time, String] Modification date
-      # @return [self]
       def modified(value)
         @model.core_properties.modified = value
         self
@@ -384,9 +356,6 @@ module Uniword
 
       # Add a watermark to the document header
       #
-      # Creates a VML text shape in the default header that renders
-      # as a semi-transparent watermark across the page.
-      #
       # @param text [String, nil] Watermark text (nil to clear)
       # @param font [String] Font name (default 'Calibri')
       # @param size [Integer] Font size in points (default 60)
@@ -413,9 +382,6 @@ module Uniword
       end
 
       # Create a comment and store it in the document's comments collection.
-      #
-      # The comment is created using CommentBuilder and stored in
-      # document.comments for later serialization.
       #
       # @param author [String] Comment author name
       # @param text [String, nil] Comment text
@@ -528,13 +494,6 @@ module Uniword
       def time_field(format: "h:mm:ss am/pm")
         @model.body.paragraphs << Builder.time_field(format: format)
         self
-      end
-
-      # Return the underlying DocumentRoot model
-      #
-      # @return [Wordprocessingml::DocumentRoot]
-      def build
-        @model
       end
 
       # Save document to file

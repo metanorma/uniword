@@ -18,22 +18,14 @@ module Uniword
     # @example Create a bibliography placeholder
     #   sdt = SdtBuilder.bibliography
     #   doc.paragraph { |p| p << sdt.build }
-    class SdtBuilder
-      attr_reader :model
-
-      def initialize
-        @model = Wordprocessingml::StructuredDocumentTag.new
-        @sdt_id_counter = 0
+    class SdtBuilder < BaseBuilder
+      def self.default_model_class
+        Wordprocessingml::StructuredDocumentTag
       end
 
-      # Wrap an existing StructuredDocumentTag model
-      #
-      # @param model [Wordprocessingml::StructuredDocumentTag]
-      # @return [SdtBuilder]
-      def self.from_model(model)
-        builder = allocate
-        builder.instance_variable_set(:@model, model)
-        builder
+      def initialize(model = nil)
+        super
+        @sdt_id_counter = 0
       end
 
       # Set the SDT identifier
@@ -87,11 +79,7 @@ module Uniword
         self
       end
 
-      # Return the underlying StructuredDocumentTag model
-      #
-      # @return [Wordprocessingml::StructuredDocumentTag]
       def build
-        # Auto-assign ID if not set
         unless properties.id
           properties.id = Wordprocessingml::StructuredDocumentTag::Id.new(
             value: next_id,
@@ -100,9 +88,6 @@ module Uniword
         @model
       end
 
-      # Access the properties object, initializing if needed
-      #
-      # @return [Wordprocessingml::StructuredDocumentTagProperties]
       def properties
         @model.properties ||= Wordprocessingml::StructuredDocumentTagProperties.new
         @model.properties
@@ -124,7 +109,6 @@ lock: false)
         sdt.alias(alias_name) if alias_name
         sdt.lock if lock
 
-        # Text control flag
         sdt.properties.text = Wordprocessingml::StructuredDocumentTag::Text.new
 
         sdt.showing_placeholder if placeholder_text
@@ -143,7 +127,6 @@ lock: false)
         sdt = new
         sdt.tag(tag) if tag
 
-        # Date control
         date = Wordprocessingml::StructuredDocumentTag::Date.new
         date.date_format = Wordprocessingml::StructuredDocumentTag::DateFormat.new(
           value: format,
@@ -165,10 +148,8 @@ lock: false)
       def self.bibliography
         sdt = new
 
-        # Bibliography flag
         sdt.properties.bibliography = Wordprocessingml::StructuredDocumentTag::Bibliography.new
 
-        # DocPartObj with bibliography gallery
         dpo = Wordprocessingml::StructuredDocumentTag::DocPartObj.new
         dpo.doc_part_gallery = Wordprocessingml::StructuredDocumentTag::DocPartGallery.new(
           value: "Bibliographies",
