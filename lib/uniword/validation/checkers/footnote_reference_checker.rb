@@ -39,10 +39,10 @@ module Uniword
           return false unless enabled?
 
           # Check if link is a footnote reference
-          link.respond_to?(:footnote_id) ||
-            link.respond_to?(:endnote_id) ||
-            (link.respond_to?(:type) && %i[footnote
-                                           endnote].include?(link.type))
+          (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:footnote_id)) ||
+            (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:endnote_id)) ||
+            (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:type) && %i[footnote
+                                                                                                endnote].include?(link.type))
         end
 
         # Validate the footnote reference.
@@ -117,11 +117,11 @@ module Uniword
         # @param link [Object] The link object
         # @return [String, Integer, nil] Note ID
         def extract_note_id(link)
-          if link.respond_to?(:footnote_id)
+          if link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:footnote_id)
             link.footnote_id
-          elsif link.respond_to?(:endnote_id)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:endnote_id)
             link.endnote_id
-          elsif link.respond_to?(:id)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:id)
             link.id
           end
         end
@@ -131,9 +131,9 @@ module Uniword
         # @param link [Object] The link object
         # @return [Symbol] Note type (:footnote or :endnote)
         def determine_note_type(link)
-          if link.respond_to?(:type)
+          if link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:type)
             link.type
-          elsif link.respond_to?(:endnote_id)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:endnote_id)
             :endnote
           else
             :footnote
@@ -151,8 +151,8 @@ module Uniword
           # Try to get notes from document
           collection_name = note_type == :endnote ? :endnotes : :footnotes
 
-          if document.respond_to?(collection_name)
-            collection = document.send(collection_name)
+          if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
+            collection = document.public_send(collection_name)
 
             case collection
             when Hash
@@ -160,7 +160,7 @@ module Uniword
             when Array
               # Convert array to hash indexed by ID
               collection.each do |note|
-                id = note.respond_to?(:id) ? note.id : note.to_s
+                id = note.is_a?(Lutaml::Model::Serializable) && note.class.attributes.key?(:id) ? note.id : note.to_s
                 notes[id] = note
               end
             end

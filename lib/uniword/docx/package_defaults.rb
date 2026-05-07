@@ -41,8 +41,8 @@ module Uniword
           return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
           DOCUMENT_TO_PACKAGE_MAPPINGS.each do |doc_attr, pkg_attr|
-            value = document.send(doc_attr)
-            package.send(:"#{pkg_attr}=", value) if value
+            value = document.public_send(doc_attr)
+            package.public_send(:"#{pkg_attr}=", value) if value
           end
 
           package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?

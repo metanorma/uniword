@@ -152,7 +152,9 @@ module Uniword
       # If present, it should be a Plurimath formula
       return true if formula.nil?
 
-      formula.respond_to?(:to_latex)
+      return false unless defined?(Plurimath::Formula)
+
+      formula.is_a?(Plurimath::Formula)
     end
   end
 end

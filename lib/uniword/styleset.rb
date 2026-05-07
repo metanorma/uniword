@@ -140,7 +140,7 @@ module Uniword
     #   - :rename - Keep both, rename imported styles
     # @return [void]
     def apply_to(document, strategy: :keep_existing)
-      return unless document.respond_to?(:styles_configuration)
+      return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
       styles.each do |style|
         case strategy

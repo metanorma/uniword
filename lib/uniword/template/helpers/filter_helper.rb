@@ -65,7 +65,7 @@ module Uniword
         # @param format_string [String] Format string
         # @return [String] Formatted value
         def apply_format(value, format_string)
-          if value.respond_to?(:strftime)
+          if value.is_a?(Date) || value.is_a?(Time)
             value.strftime(format_string)
           else
             value.to_s

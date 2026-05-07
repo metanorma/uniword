@@ -117,7 +117,7 @@ module Uniword
       # @example Check if element is math
       #   is_math = MathConverter.math_element?(element)
       def self.math_element?(element)
-        return false unless element.respond_to?(:name)
+        return false unless element.is_a?(Nokogiri::XML::Element)
 
         math_tags = %w[math mml:math m:oMath m:oMathPara]
         return true if math_tags.include?(element.name)

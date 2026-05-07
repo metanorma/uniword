@@ -18,7 +18,7 @@ RSpec.describe Uniword::Builder::HasBorders do
     it "sets borders with hash options" do
       builder.borders(
         left: { color: "0000FF", style: "double", size: 8 },
-        right: { color: "CCCCCC", style: "dashed", size: 2 }
+        right: { color: "CCCCCC", style: "dashed", size: 2 },
       )
       borders = builder.model.properties.borders
       expect(borders.left.color).to eq("0000FF")

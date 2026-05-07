@@ -149,7 +149,7 @@ module Uniword
       #
       # @return [String] The character read
       def read_single_char
-        if @input.respond_to?(:getch)
+        if @input.is_a?(IO)
           @input.getch
         else
           @input.gets&.chomp&.first || "q"

@@ -278,18 +278,18 @@ module Uniword
     # @return [Hash] Statistics hash
     def document_stats(document)
       # Handle OOXML document
-      if document.respond_to?(:paragraphs)
+      if document.is_a?(Uniword::Wordprocessingml::DocumentRoot) || document.is_a?(Uniword::Wordprocessingml::Body)
         return {
           paragraphs: document.paragraphs.count,
-          tables: document.respond_to?(:tables) ? document.tables.count : 0,
-          images: document.respond_to?(:images) ? document.images.count : 0
+          tables: document.is_a?(Uniword::Wordprocessingml::DocumentRoot) ? document.tables.count : 0,
+          images: document.is_a?(Uniword::Wordprocessingml::DocumentRoot) ? document.images.count : 0
         }
       end
 
       # Handle MHTML document - estimate from HTML content
-      html = if document.respond_to?(:raw_html) && document.raw_html
+      html = if document.is_a?(Mhtml::Document) && document.raw_html
                document.raw_html
-             elsif document.respond_to?(:html_content) && document.html_content
+             elsif document.is_a?(Mhtml::Document) && document.html_content
                document.html_content
              end
       if html
@@ -339,8 +339,8 @@ module Uniword
     def log_conversion_start(source, source_format, target, target_format)
       return unless @logger
 
-      source_name = source.respond_to?(:path) ? source.path : source.to_s
-      target_name = target.respond_to?(:path) ? target.path : target.to_s
+      source_name = source.is_a?(IO) ? source.path : source.to_s
+      target_name = target.is_a?(IO) ? target.path : target.to_s
 
       @logger.info(
         "Converting #{source_name} (#{source_format}) → #{target_name} (#{target_format})"

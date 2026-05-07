@@ -51,7 +51,7 @@ module Uniword
           next if @allow_direct_formatting
 
           para.runs.each_with_index do |run, run_index|
-            next unless run.respond_to?(:properties)
+            next unless run.is_a?(Uniword::Wordprocessingml::Run)
             next unless run.properties
 
             next unless has_direct_run_formatting?(run)

@@ -69,16 +69,14 @@ module Uniword
         def heading_paragraph?(paragraph)
           return false unless paragraph.style
 
-          paragraph.style.match?(/^Heading\s*\d+$/i) ||
-            paragraph.style.match?(/^h\d+$/i)
+          style_str = paragraph.style.to_s
+          style_str.match?(/^Heading\s*\d+$/i) ||
+            style_str.match?(/^h\d+$/i)
         end
 
-        # Extract heading level from paragraph
-        #
-        # @param paragraph [Paragraph] Paragraph to extract from
-        # @return [Integer] Heading level
         def extract_heading_level(paragraph)
-          match = paragraph.style.match(/(\d+)/)
+          style_str = paragraph.style.to_s
+          match = style_str.match(/(\d+)/)
           match ? match[1].to_i : 1
         end
 
@@ -87,9 +85,9 @@ module Uniword
         # @param paragraph [Paragraph] Paragraph to extract from
         # @return [String, nil] Heading text
         def extract_heading_text(paragraph)
-          if paragraph.respond_to?(:text)
+          if paragraph.is_a?(Lutaml::Model::Serializable) && paragraph.class.attributes.key?(:text)
             paragraph.text
-          elsif paragraph.respond_to?(:runs)
+          elsif paragraph.is_a?(Lutaml::Model::Serializable) && paragraph.class.attributes.key?(:runs)
             paragraph.runs.map(&:text).join
           end
         end

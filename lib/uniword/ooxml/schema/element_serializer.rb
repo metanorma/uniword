@@ -47,7 +47,7 @@ module Uniword
 
           # If element has its own to_xml method, use it directly
           # This ensures proper serialization with all attributes and content
-          if element.respond_to?(:to_xml) && !options[:use_schema]
+          if element.is_a?(Lutaml::Model::Serializable) && !options[:use_schema]
             xml_str = element.to_xml(pretty: options[:pretty])
 
             # Remove XML declaration unless standalone
@@ -169,7 +169,7 @@ module Uniword
 
             # Skip if no children and optional
             next if children.nil? && child_def.optional?
-            next if children.respond_to?(:empty?) && children.empty? && child_def.optional?
+            next if children.is_a?(Array) && children.empty? && child_def.optional?
 
             # Serialize child elements
             if child_def.multiple?
@@ -215,9 +215,9 @@ module Uniword
                                                            namespace_uri)
             node.content = child
             node
-          elsif child.respond_to?(:is_a?) && child.is_a?(Element)
+          elsif child.is_a?(Uniword::Element)
             # Check if this is a TextElement that needs special handling
-            if child.instance_of?(::Uniword::TextElement) && child.respond_to?(:content)
+            if child.instance_of?(::Uniword::TextElement) && child.is_a?(Uniword::TextElement)
               # TextElement: serialize as element with text content
               node = Nokogiri::XML::Node.new(local_name, doc)
               node.namespace = node.add_namespace_definition(prefix,
@@ -276,7 +276,7 @@ module Uniword
                                                            namespace_uri)
             node.content = child
             node
-          elsif child.respond_to?(:content)
+          elsif child.is_a?(Uniword::TextElement)
             # TextElement or similar - get the content
             node = Nokogiri::XML::Node.new(local_name, doc)
             node.namespace = node.add_namespace_definition(prefix,
@@ -302,10 +302,10 @@ module Uniword
           property_name = attr_def.property_name
 
           # Try to get value using property name
-          if element.respond_to?(property_name)
-            element.send(property_name)
-          elsif element.respond_to?(:attributes) && element.attributes.is_a?(Hash) && element.attributes.key?(property_name)
-            element.attributes[property_name]
+          if element.is_a?(Lutaml::Model::Serializable) && element.class.attributes.key?(property_name)
+            element.public_send(property_name)
+          elsif element.is_a?(Hash) && element.key?(property_name)
+            element[property_name]
           end
         end
 
@@ -318,10 +318,10 @@ module Uniword
           property_name = child_def.property_name
 
           # Try to get children using property name
-          if element.respond_to?(property_name)
-            element.send(property_name)
-          elsif element.respond_to?(:attributes) && element.attributes.key?(property_name)
-            element.attributes[property_name]
+          if element.is_a?(Lutaml::Model::Serializable) && element.class.attributes.key?(property_name)
+            element.public_send(property_name)
+          elsif element.is_a?(Hash) && element.key?(property_name)
+            element[property_name]
           end
         end
 
@@ -330,7 +330,7 @@ module Uniword
         # @param element [Object] Object to validate
         # @raise [ArgumentError] if not a valid element
         def validate_element(element)
-          return if element.respond_to?(:to_xml)
+          return if element.is_a?(Lutaml::Model::Serializable)
 
           raise ArgumentError,
                 "Element must respond to #to_xml, got #{element.class}"

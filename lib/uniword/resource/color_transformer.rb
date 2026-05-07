@@ -42,7 +42,7 @@ module Uniword
         color_scheme.dup.tap do |scheme|
           # Transform each color in the scheme
           scheme.colors&.each_value do |color|
-            next unless color.respond_to?(:val) && color.val&.match?(/^[0-9A-Fa-f]{6}$/)
+            next unless color.is_a?(Uniword::Drawingml::SrgbColor) && color.val&.match?(/^[0-9A-Fa-f]{6}$/)
 
             color.val = shift_color(
               color.val,

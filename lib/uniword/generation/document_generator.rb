@@ -67,7 +67,7 @@ module Uniword
       end
 
       def import_styles(builder, source_doc)
-        return unless source_doc.respond_to?(:styles_configuration)
+        return unless source_doc.is_a?(Uniword::Wordprocessingml::DocumentRoot)
         return unless source_doc.styles_configuration
 
         source_doc.styles_configuration.styles.each do |style|
@@ -79,7 +79,7 @@ module Uniword
       end
 
       def import_theme(builder, source_doc)
-        return unless source_doc.respond_to?(:theme)
+        return unless source_doc.is_a?(Uniword::Wordprocessingml::DocumentRoot)
         return unless source_doc.theme
 
         builder.model.theme = source_doc.theme

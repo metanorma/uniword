@@ -178,10 +178,10 @@ module Uniword
       def remove_template_comments(document)
         # Remove comments from paragraphs
         document.paragraphs.each do |para|
-          next unless para.respond_to?(:comments)
+          next unless para.is_a?(Uniword::CommentsPart)
 
           # Filter out template comments
-          next unless para.respond_to?(:attached_comments)
+          next unless para.is_a?(Uniword::CommentsPart)
 
           para.attached_comments.reject! do |c|
             template_comment?(c)
@@ -194,7 +194,7 @@ module Uniword
       # @param comment [Comment] Comment to check
       # @return [Boolean] true if template comment
       def template_comment?(comment)
-        return false unless comment.respond_to?(:text)
+        return false unless comment.is_a?(Uniword::Comment)
 
         text = comment.text
         text.match?(/^\{\{.+\}\}$/)

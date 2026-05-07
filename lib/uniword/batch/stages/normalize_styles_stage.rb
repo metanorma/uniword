@@ -89,7 +89,7 @@ module Uniword
         props = paragraph.properties
 
         # Check outline level for headings
-        if props.respond_to?(:outline_level)
+        if props&.outline_level
           case props.outline_level
           when 0, 1
             return :heading1
@@ -137,16 +137,16 @@ module Uniword
         props = run.properties
 
         # Preserve bold for emphasis
-        bold = props.respond_to?(:bold) ? props.bold : nil
+        bold = props&.bold
         # Preserve italic for emphasis
-        italic = props.respond_to?(:italic) ? props.italic : nil
+        italic = props&.italic
 
         # Clear all properties
         clear_all_run_properties(run)
 
         # Restore semantic properties
-        props.bold = bold if props.respond_to?(:bold=) && bold
-        return unless props.respond_to?(:italic=) && italic
+        props.bold = bold if bold
+        return unless italic
 
         props.italic = italic
       end
@@ -159,15 +159,15 @@ module Uniword
         return unless props
 
         # Reset font properties
-        props.font_size = nil if props.respond_to?(:font_size=)
-        props.font_name = nil if props.respond_to?(:font_name=)
-        props.color = nil if props.respond_to?(:color=)
+        props.font_size = nil
+        props.font_name = nil
+        props.color = nil
 
         # Reset text effects (keep if you want to preserve semantic formatting)
-        # props.bold = nil if props.respond_to?(:bold=)
-        # props.italic = nil if props.respond_to?(:italic=)
-        props.underline = nil if props.respond_to?(:underline=)
-        props.strike = nil if props.respond_to?(:strike=)
+        # props.bold = nil
+        # props.italic = nil
+        props.underline = nil
+        props.strike = nil
       end
     end
   end

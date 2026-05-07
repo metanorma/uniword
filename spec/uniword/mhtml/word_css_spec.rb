@@ -91,8 +91,13 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "handles styles without optional properties" do
-      style = double("Style", style_id: "Simple")
-      allow(style).to receive(:respond_to?).and_return(false)
+      style = double("Style",
+                     style_id: "Simple",
+                     font: nil,
+                     font_size: nil,
+                     bold: nil,
+                     italic: nil,
+                     alignment: nil)
 
       config = double("StylesConfiguration")
       allow(config).to receive(:styles).and_return([style])
@@ -144,12 +149,13 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "builds CSS rule for style with font" do
-      style = double("Style", style_id: "TestStyle", font: "Times New Roman")
-      allow(style).to receive(:respond_to?).with(:font).and_return(true)
-      allow(style).to receive(:respond_to?).with(:font_size).and_return(false)
-      allow(style).to receive(:respond_to?).with(:bold).and_return(false)
-      allow(style).to receive(:respond_to?).with(:italic).and_return(false)
-      allow(style).to receive(:respond_to?).with(:alignment).and_return(false)
+      style = double("Style",
+                     style_id: "TestStyle",
+                     font: "Times New Roman",
+                     font_size: nil,
+                     bold: nil,
+                     italic: nil,
+                     alignment: nil)
 
       rule = described_class.build_style_rule(style)
       expect(rule).to include(".TestStyle")
@@ -164,11 +170,6 @@ RSpec.describe Uniword::Mhtml::WordCss do
                      bold: true,
                      italic: true,
                      alignment: "right")
-      allow(style).to receive(:respond_to?).with(:font).and_return(true)
-      allow(style).to receive(:respond_to?).with(:font_size).and_return(true)
-      allow(style).to receive(:respond_to?).with(:bold).and_return(true)
-      allow(style).to receive(:respond_to?).with(:italic).and_return(true)
-      allow(style).to receive(:respond_to?).with(:alignment).and_return(true)
 
       rule = described_class.build_style_rule(style)
       expect(rule).to include(".RichStyle")
@@ -180,8 +181,13 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "returns nil for style with no properties" do
-      style = double("Style", style_id: "EmptyStyle")
-      allow(style).to receive(:respond_to?).and_return(false)
+      style = double("Style",
+                     style_id: "EmptyStyle",
+                     font: nil,
+                     font_size: nil,
+                     bold: nil,
+                     italic: nil,
+                     alignment: nil)
 
       rule = described_class.build_style_rule(style)
       expect(rule).to be_nil

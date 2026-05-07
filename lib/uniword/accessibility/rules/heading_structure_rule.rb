@@ -65,8 +65,9 @@ module Uniword
         def heading_paragraph?(paragraph)
           return false unless paragraph.style
 
-          paragraph.style.match?(/^Heading\s*\d+$/i) ||
-            paragraph.style.match?(/^h\d+$/i)
+          style_str = paragraph.style.to_s
+          style_str.match?(/^Heading\s*\d+$/i) ||
+            style_str.match?(/^h\d+$/i)
         end
 
         # Extract heading level from paragraph
@@ -74,7 +75,7 @@ module Uniword
         # @param paragraph [Paragraph] Paragraph to extract from
         # @return [Integer] Heading level
         def extract_heading_level(paragraph)
-          match = paragraph.style.match(/(\d+)/)
+          match = paragraph.style.to_s.match(/(\d+)/)
           match ? match[1].to_i : 1
         end
 

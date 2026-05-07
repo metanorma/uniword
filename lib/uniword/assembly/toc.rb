@@ -174,7 +174,7 @@ module Uniword
         return match[1].to_i if match
 
         # Check for outline level in properties
-        if paragraph.properties.respond_to?(:outline_level)
+        if paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
           outline = paragraph.properties.outline_level
           return outline if outline.is_a?(Integer)
         end
@@ -212,7 +212,7 @@ module Uniword
         run.text = @title
 
         # Set run properties
-        if run.respond_to?(:properties=)
+        if run.is_a?(Uniword::Wordprocessingml::Run)
           run.properties = Wordprocessingml::RunProperties.new(
             bold: true,
             size: 48, # 24pt = 48 half-points

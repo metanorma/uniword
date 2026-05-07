@@ -93,7 +93,7 @@ module Uniword
 
       def bundled_path(subdir)
         # Use Gem.datadir if available, otherwise fall back to data/ directory
-        data_path = (Gem.datadir("uniword") if defined?(Gem) && Gem.respond_to?(:datadir))
+        data_path = (Gem.datadir("uniword") if defined?(Gem) && Gem.is_a?(Module))
         data_path ||= File.expand_path("../../../data", __dir__)
         File.join(data_path, subdir)
       end

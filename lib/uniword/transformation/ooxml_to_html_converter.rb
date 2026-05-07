@@ -110,7 +110,7 @@ module Uniword
       def self.wrap_html(body_html, document)
         title = document.title ? escape_html(document.title) : "Document"
         core_props = document.core_properties
-        author = core_props.respond_to?(:creator) ? core_props.creator : nil
+        author = core_props.is_a?(Uniword::Ooxml::CoreProperties) ? core_props.creator : nil
 
         meta_tags = []
         meta_tags << "<meta name=\"author\" content=\"#{escape_html(author)}\">" if author

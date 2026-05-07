@@ -442,8 +442,8 @@ module Uniword
       def format_value(props, method)
         return nil unless props
 
-        val = props.send(method)
-        val.respond_to?(:value) ? val.value : val
+        val = props.public_send(method)
+        unwrap_value(val)
       end
 
       # Extract a value from run properties.
@@ -454,10 +454,10 @@ module Uniword
       def run_prop_value(props, method)
         return nil unless props
 
-        val = props.send(method)
+        val = props.public_send(method)
         return nil if val.nil?
 
-        val.respond_to?(:value) ? val.value : val
+        unwrap_value(val)
       end
 
       # Extract a metadata field value from core properties.
@@ -468,10 +468,10 @@ module Uniword
       def metadata_value(cp, field)
         return nil unless cp
 
-        val = cp.send(field)
+        val = cp.public_send(field)
         return nil if val.nil?
 
-        val.respond_to?(:value) ? val.value.to_s : val.to_s
+        unwrap_value(val).to_s
       end
 
       # Extract styles from a document as a hash of style_id => name.
@@ -489,11 +489,15 @@ module Uniword
         styles.each do |style|
           style_id = style.styleId&.to_s
           name_obj = style.name
-          name = name_obj.respond_to?(:val) ? name_obj.val : name_obj.to_s
+          name = name_obj.is_a?(Lutaml::Model::Serializable) && name_obj.class.attributes.key?(:val) ? name_obj.val : name_obj.to_s
           result[style_id] = name if style_id
         end
 
         result
+      end
+
+      def unwrap_value(val)
+        val.is_a?(Lutaml::Model::Serializable) && val.class.attributes.key?(:value) ? val.value : val
       end
 
       # Build a text change hash.

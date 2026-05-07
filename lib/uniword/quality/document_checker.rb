@@ -133,10 +133,10 @@ module Uniword
       # @param document [Object] The document to validate
       # @raise [ArgumentError] if document is invalid
       def validate_document!(document)
-        return if document.respond_to?(:paragraphs) && document.respond_to?(:tables)
+        return if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
         raise ArgumentError,
-              "Document must respond to :paragraphs and :tables methods"
+              "Document must be a Uniword::Wordprocessingml::DocumentRoot"
       end
     end
 

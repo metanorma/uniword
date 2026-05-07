@@ -108,9 +108,8 @@ module Uniword
         # For hashes, use key access
         if object.is_a?(Hash)
           object[property.to_sym] || object[property]
-        # For objects with methods, call the method
-        elsif object.respond_to?(property.to_sym)
-          object.send(property.to_sym)
+        else
+          object.public_send(property.to_sym)
         end
       end
 
@@ -176,7 +175,7 @@ module Uniword
 
         return false if left_num.nil? || right_num.nil?
 
-        left_num.send(operator, right_num)
+        left_num.public_send(operator, right_num)
       end
 
       # Convert value to number
@@ -185,8 +184,8 @@ module Uniword
       # @return [Numeric, nil] Numeric value or nil
       def to_number(value)
         return value if value.is_a?(Numeric)
-        return value.to_i if value.respond_to?(:to_i) && value.to_s.match?(/^\d+$/)
-        return value.to_f if value.respond_to?(:to_f) && value.to_s.match?(/^\d+\.\d+$/)
+        return value.to_i if value.to_s.match?(/^\d+$/)
+        return value.to_f if value.to_s.match?(/^\d+\.\d+$/)
 
         nil
       end

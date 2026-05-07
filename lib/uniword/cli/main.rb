@@ -211,7 +211,7 @@ module Uniword
         require "json"
         output = reports.transform_values do |r|
           { valid: r.valid?,
-            issues: r.respond_to?(:issues) ? r.issues.count : 0 }
+            issues: r.is_a?(Uniword::Quality::CheckReport) ? r.issues.count : 0 }
         end
         puts JSON.pretty_generate(output)
       else
@@ -461,9 +461,9 @@ module Uniword
         if report.valid?
           say("#{label}: No issues found", :green)
         else
-          issue_count = report.respond_to?(:issues) ? report.issues.count : "?"
+          issue_count = report.is_a?(Uniword::Quality::CheckReport) ? report.issues.count : "?"
           say("#{label}: #{issue_count} issue(s) found", :yellow)
-          if options[:verbose] && report.respond_to?(:issues)
+          if options[:verbose] && report.is_a?(Uniword::Quality::CheckReport)
             report.issues.each do |issue|
               say("  - #{issue}", :yellow)
             end
@@ -511,7 +511,7 @@ module Uniword
       setters.each do |opt, setter|
         next unless options[opt]
 
-        core_properties&.send(setter, options[opt])
+        core_properties&.public_send(setter, options[opt])
         updated = true
       end
       updated

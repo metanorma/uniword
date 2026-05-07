@@ -65,7 +65,7 @@ module Uniword
       return if path.is_a?(IO) || path.is_a?(StringIO)
 
       # For strings, validate as file path
-      if path.respond_to?(:empty?) && path.empty?
+      if path.is_a?(String) && path.empty?
         raise ArgumentError,
               "Path cannot be empty"
       end

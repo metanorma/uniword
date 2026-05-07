@@ -43,9 +43,9 @@ module Uniword
         # @return [String, nil] Document language code
         def extract_language(document)
           # Try to get language from document metadata/properties
-          if document.respond_to?(:language)
+          if document.is_a?(Lutaml::Model::Serializable) && document.class.attributes.key?(:language)
             document.language
-          elsif document.respond_to?(:metadata)
+          elsif document.is_a?(Lutaml::Model::Serializable) && document.class.attributes.key?(:metadata)
             document.metadata&.language
           end
         end

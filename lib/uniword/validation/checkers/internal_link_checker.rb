@@ -40,12 +40,10 @@ module Uniword
         #   checker.can_check?(hyperlink) # => true
         def can_check?(link)
           return false unless enabled?
-          return false unless link.respond_to?(:anchor)
+          return false unless link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:anchor)
 
           # Internal links have anchor but no URL
-          link.anchor && !link.respond_to?(:url).then do |has_url|
-            has_url ? !link.url : true
-          end
+          link.anchor && !(link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:url) && link.url)
         end
 
         # Validate the internal link.
@@ -108,13 +106,13 @@ module Uniword
           bookmarks = []
 
           # Extract from document.bookmarks if available
-          if document.respond_to?(:bookmarks)
+          if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
             case document.bookmarks
             when Hash
               bookmarks.concat(document.bookmarks.keys.map(&:to_s))
             when Array
               bookmarks.concat(document.bookmarks.map do |b|
-                b.respond_to?(:name) ? b.name : b.to_s
+                b.is_a?(Lutaml::Model::Serializable) && b.class.attributes.key?(:name) ? b.name : b.to_s
               end)
             end
           end
@@ -132,13 +130,13 @@ module Uniword
         # @param document [Object] The document
         # @return [Array<String>] Heading bookmark names
         def extract_heading_bookmarks(document)
-          return [] unless document.respond_to?(:paragraphs)
+          return [] unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
           document.paragraphs.select do |p|
-            p.respond_to?(:style) && p.style&.match?(/^Heading/)
+            p.is_a?(Lutaml::Model::Serializable) && p.class.attributes.key?(:style) && p.style&.match?(/^Heading/)
           end.filter_map do |p|
             # Generate bookmark from heading text
-            p.respond_to?(:text) ? heading_to_bookmark(p.text) : nil
+            p.is_a?(Lutaml::Model::Serializable) && p.class.attributes.key?(:text) ? heading_to_bookmark(p.text) : nil
           end
         end
 

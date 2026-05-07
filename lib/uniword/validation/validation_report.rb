@@ -330,11 +330,13 @@ module Uniword
       # @param link [Object] The link object
       # @return [Symbol] Link type
       def classify_link_type(link)
-        if link.respond_to?(:url) && link.url
+        if link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:url) && link.url
           :external
-        elsif link.respond_to?(:anchor) && link.anchor
+        elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:anchor) && link.anchor
           :internal
-        elsif link.respond_to?(:id)
+        elsif link.is_a?(Uniword::Wordprocessingml::Hyperlink) && link.id
+          :external
+        elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:id)
           :footnote
         elsif link.is_a?(String) && File.exist?(link)
           :file

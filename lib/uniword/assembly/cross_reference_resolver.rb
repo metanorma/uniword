@@ -104,32 +104,8 @@ module Uniword
       # @param document [Document] Source document
       # @return [void]
       def collect_bookmarks(document)
-        # Process body paragraphs
         document.paragraphs.each do |paragraph|
           collect_paragraph_bookmarks(paragraph)
-        end
-
-        # Process sections (headers/footers)
-        return unless document.respond_to?(:sections)
-
-        document.sections.each do |section|
-          # Process headers if section has them
-          if section.respond_to?(:headers)
-            section.headers.each do |header|
-              header.paragraphs.each do |paragraph|
-                collect_paragraph_bookmarks(paragraph)
-              end
-            end
-          end
-
-          # Process footers if section has them
-          next unless section.respond_to?(:footers)
-
-          section.footers.each do |footer|
-            footer.paragraphs.each do |paragraph|
-              collect_paragraph_bookmarks(paragraph)
-            end
-          end
         end
       end
 
@@ -138,12 +114,7 @@ module Uniword
       # @param paragraph [Paragraph] Source paragraph
       # @return [void]
       def collect_paragraph_bookmarks(paragraph)
-        paragraph.runs.each do |run|
-          # Check if run contains bookmark
-          next unless run.respond_to?(:bookmark_start)
-          next unless run.bookmark_start
-
-          bookmark = run.bookmark_start
+        paragraph.bookmark_starts.each do |bookmark|
           @bookmark_registry[bookmark.id] = bookmark
         end
       end
@@ -153,32 +124,8 @@ module Uniword
       # @param document [Document] Document to process
       # @return [void]
       def resolve_references(document)
-        # Process body paragraphs
         document.paragraphs.each do |paragraph|
           resolve_paragraph_references(paragraph)
-        end
-
-        # Process sections (headers/footers)
-        return unless document.respond_to?(:sections)
-
-        document.sections.each do |section|
-          # Process headers if section has them
-          if section.respond_to?(:headers)
-            section.headers.each do |header|
-              header.paragraphs.each do |paragraph|
-                resolve_paragraph_references(paragraph)
-              end
-            end
-          end
-
-          # Process footers if section has them
-          next unless section.respond_to?(:footers)
-
-          section.footers.each do |footer|
-            footer.paragraphs.each do |paragraph|
-              resolve_paragraph_references(paragraph)
-            end
-          end
         end
       end
 
@@ -187,12 +134,12 @@ module Uniword
       # @param paragraph [Paragraph] Source paragraph
       # @return [void]
       def resolve_paragraph_references(paragraph)
-        paragraph.runs.each do |run|
-          # Process hyperlinks
-          resolve_hyperlink(run.hyperlink) if run.respond_to?(:hyperlink) && run.hyperlink
+        paragraph.hyperlinks.each do |hyperlink|
+          resolve_hyperlink(hyperlink)
+        end
 
-          # Process fields (for cross-references)
-          resolve_field(run.field) if run.respond_to?(:field) && run.field
+        paragraph.simple_fields.each do |field|
+          resolve_field(field)
         end
       end
 

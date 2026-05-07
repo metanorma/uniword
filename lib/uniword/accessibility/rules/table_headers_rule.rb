@@ -53,7 +53,7 @@ module Uniword
         # @return [Boolean] True if caption exists
         def table_has_caption?(table)
           # Tables may have a caption property or title
-          table.respond_to?(:caption) && !table.caption.to_s.strip.empty?
+          table.is_a?(Lutaml::Model::Serializable) && table.class.attributes.key?(:caption) && !table.caption.to_s.strip.empty?
         end
       end
     end

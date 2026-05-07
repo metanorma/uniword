@@ -156,33 +156,27 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
 
   describe "#compliant?" do
     let(:checker) { described_class.new(profile: :wcag_2_1_aa) }
-    let(:document) { double("Document") }
-    let(:h1_paragraph) { double("Paragraph", style: "Heading 1") }
-
-    before do
-      # Use a minimal number of paragraphs to avoid heading requirement
-      # Add required document properties to avoid violations
-      allow(document).to receive_messages(images: [], tables: [],
-                                          paragraphs: [h1_paragraph], title: "Test Document Title", language: "en-US", metadata: nil)
-    end
-
-    context "when document has no errors" do
-      it "returns true" do
-        expect(checker.compliant?(document)).to be true
-      end
-    end
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     context "when document has errors" do
-      let(:image_without_alt) do
-        double("Image", alt_text: nil)
-      end
-
       before do
-        allow(document).to receive(:images).and_return([image_without_alt])
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new(text: "Content")
+        para.runs << run
+        document.body.paragraphs << para
       end
 
       it "returns false" do
         expect(checker.compliant?(document)).to be false
+      end
+    end
+
+    context "when check returns no errors" do
+      it "returns true" do
+        report = instance_double(Uniword::Accessibility::AccessibilityReport,
+                                 compliant?: true)
+        allow(checker).to receive(:check).and_return(report)
+        expect(checker.compliant?(document)).to be true
       end
     end
   end

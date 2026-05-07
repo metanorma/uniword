@@ -56,7 +56,7 @@ module Uniword
         return false if table.rows.empty?
 
         first_row = table.rows.first
-        return false unless first_row.respond_to?(:cells)
+        return false unless first_row.is_a?(Uniword::Wordprocessingml::TableRow)
 
         # Check if first row cells have header properties
         # In OOXML, header rows typically have specific table cell properties

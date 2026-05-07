@@ -218,7 +218,7 @@ module Uniword
 
         # Use Uniword logger if available
         if defined?(Uniword::Logger)
-          Uniword::Logger.send(level, message)
+          Uniword::Logger.public_send(level, message)
         elsif %i[warn error].include?(level)
           # Fall back to standard output
           puts message

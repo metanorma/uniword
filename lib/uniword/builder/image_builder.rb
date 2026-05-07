@@ -33,7 +33,7 @@ module Uniword
       # @param path [String] Path to image file
       # @return [String] Relationship ID (e.g., 'rIdImg1')
       def self.register_image(document, path)
-        root = document.respond_to?(:model) ? document.model : document
+        root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
         if root
           root.image_parts ||= {}
           r_id = "rIdImg#{root.image_parts.size + 1}"

@@ -97,10 +97,9 @@ module Uniword
         # @return [void]
         def remove_element(element, document)
           # Remove from paragraphs
-          document.body.paragraphs.delete(element) if document.body.respond_to?(:paragraphs)
-
-          # Clear document cache
-          document.clear_element_cache if document.respond_to?(:clear_element_cache)
+          if document.body.is_a?(Uniword::Wordprocessingml::Body)
+            document.body.paragraphs.delete(element)
+          end
         end
       end
     end

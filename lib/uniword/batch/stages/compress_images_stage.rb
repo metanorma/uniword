@@ -155,8 +155,8 @@ module Uniword
       def get_image_dimensions(image)
         # Placeholder - would need to parse image data
         # For now, return dimensions from image properties if available
-        width = image.respond_to?(:width) ? image.width : 800
-        height = image.respond_to?(:height) ? image.height : 600
+        width = image.is_a?(Uniword::Image) ? image.width : 800
+        height = image.is_a?(Uniword::Image) ? image.height : 600
         [width || 800, height || 600]
       end
 

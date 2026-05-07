@@ -118,7 +118,7 @@ module Uniword
       # @param document [DocumentBuilder, DocumentRoot] Target document
       # @return [Wordprocessingml::Drawing]
       def build_drawing(document)
-        root = document.respond_to?(:model) ? document.model : document
+        root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
         root.chart_parts ||= {}
 
         r_id = "rIdChart#{root.chart_parts.size + 1}"
@@ -265,7 +265,7 @@ module Uniword
 
       # Build a chart axis
       def build_axis(xml, tag, id, position, cross_id)
-        xml["c"].send(tag) do
+        xml["c"].public_send(tag) do
           xml["c"].axId("val" => id)
           xml["c"].scaling do
             xml["c"].orientation("val" => "minMax")
