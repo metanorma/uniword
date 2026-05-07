@@ -479,7 +479,7 @@ module Uniword
         package.numbering.instances.each do |inst|
           next unless inst.abstract_num_id
 
-          abs_id = inst.abstract_num_id.respond_to?(:val) ? inst.abstract_num_id.val : inst.abstract_num_id
+          abs_id = inst.abstract_num_id.is_a?(Uniword::Wordprocessingml::AbstractNumId) ? inst.abstract_num_id.val : inst.abstract_num_id
           defn = package.numbering.definitions.find do |d|
             d.abstract_num_id == abs_id
           end
@@ -985,8 +985,8 @@ module Uniword
         # 4. East Asian light font, 5. Major font (headings)
         names << fs&.minor_font if fs&.minor_font
 
-        ea_font = loc.respond_to?(:east_asian_font) && loc.east_asian_font
-        ea_light = loc.respond_to?(:east_asian_light_font) && loc.east_asian_light_font
+        ea_font = loc&.east_asian_font
+        ea_light = loc&.east_asian_light_font
 
         # Default East Asian fonts for zh-CN when locale profile omits them
         if loc.east_asia_lang == "zh-CN"

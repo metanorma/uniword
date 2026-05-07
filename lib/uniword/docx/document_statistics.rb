@@ -50,13 +50,13 @@ module Uniword
 
       # Recursively collect text from paragraphs, tables, and SDTs.
       def collect_text(container, text_per_paragraph)
-        if container.respond_to?(:paragraphs)
+        if container.is_a?(Uniword::Wordprocessingml::Body) || container.is_a?(Uniword::Wordprocessingml::DocumentRoot) || container.is_a?(Uniword::Wordprocessingml::TableCell)
           container.paragraphs.each do |para|
             text_per_paragraph << para.text
           end
         end
 
-        if container.respond_to?(:tables)
+        if container.is_a?(Uniword::Wordprocessingml::Body) || container.is_a?(Uniword::Wordprocessingml::DocumentRoot)
           container.tables.each do |table|
             table.rows.each do |row|
               row.cells.each do |cell|
@@ -66,7 +66,7 @@ module Uniword
           end
         end
 
-        if container.respond_to?(:structured_document_tags)
+        if container.is_a?(Uniword::Wordprocessingml::Body)
           container.structured_document_tags.each do |sdt|
             sdt.content&.paragraphs&.each do |para|
               text = para.text

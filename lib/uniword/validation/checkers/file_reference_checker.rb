@@ -47,10 +47,10 @@ module Uniword
           # Check if link is a file path (string or has path attribute)
           if link.is_a?(String)
             looks_like_file_path?(link)
-          elsif link.respond_to?(:url)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:url)
             url = link.url
             url && looks_like_file_path?(url)
-          elsif link.respond_to?(:path)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:path)
             true
           else
             false
@@ -135,9 +135,9 @@ module Uniword
         def extract_file_path(link)
           if link.is_a?(String)
             link
-          elsif link.respond_to?(:path)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:path)
             link.path
-          elsif link.respond_to?(:url)
+          elsif link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:url)
             url = link.url
             # Extract file path from file:// URLs
             if url&.start_with?("file://")
@@ -170,7 +170,7 @@ module Uniword
         # @return [String] Base path
         def determine_base_path(document)
           # Try to get document's directory
-          if document.respond_to?(:file_path)
+          if document.is_a?(Lutaml::Model::Serializable) && document.class.attributes.key?(:file_path)
             File.dirname(document.file_path)
           else
             # Use configured base path

@@ -71,7 +71,7 @@ module Uniword
       # @param link [Hyperlink] The link to check
       # @return [Boolean] true if internal link
       def internal_link?(link)
-        link.respond_to?(:anchor) && !link.anchor.nil? && !link.anchor.empty?
+        link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:anchor) && !link.anchor.nil? && !link.anchor.empty?
       end
 
       # Check if link is external (URL)
@@ -83,10 +83,10 @@ module Uniword
         return false unless link
 
         # Check for id attribute (relationship-based external link)
-        return true if link.respond_to?(:id) && !link.id.nil? && !link.id.empty? && !internal_link?(link)
+        return true if link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:id) && !link.id.nil? && !link.id.empty? && !internal_link?(link)
 
         # Check for target that looks like a URL
-        return !link.target.start_with?("#") if link.respond_to?(:target) && !link.target.nil? && !link.target.empty?
+        return !link.target.start_with?("#") if link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:target) && !link.target.nil? && !link.target.empty?
 
         false
       end
@@ -114,7 +114,7 @@ module Uniword
       # @return [String, nil] The URL or nil
       def link_url(link)
         # External links use id attribute (relationship ID) or target
-        link.respond_to?(:target) ? link.target : link.id
+        link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:target) ? link.target : link.id
       end
 
       # Validate URL format

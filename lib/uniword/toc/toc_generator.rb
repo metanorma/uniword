@@ -145,7 +145,7 @@ module Uniword
         style_ref = paragraph.properties&.style
         return nil unless style_ref
 
-        if style_ref.respond_to?(:value)
+        if style_ref.is_a?(Uniword::Properties::StyleReference)
           style_ref.value
         else
           style_ref.to_s

@@ -180,8 +180,8 @@ module Uniword
 
         # Get all attribute names from RunProperties class
         RunProperties.attributes.each_key do |attr_name|
-          override_val = override.send(attr_name)
-          base_val = base.send(attr_name)
+          override_val = override.public_send(attr_name)
+          base_val = base.public_send(attr_name)
 
           # Use override if it's non-nil AND not using default value
           # For boolean properties like Bold, check if it was explicitly set
@@ -197,9 +197,9 @@ module Uniword
 
           begin
             if use_override
-              merged.send(:"#{attr_name}=", override_val)
+              merged.public_send(:"#{attr_name}=", override_val)
             elsif base_val
-              merged.send(:"#{attr_name}=", base_val)
+              merged.public_send(:"#{attr_name}=", base_val)
             end
           rescue StandardError => e
             Uniword.logger&.debug do

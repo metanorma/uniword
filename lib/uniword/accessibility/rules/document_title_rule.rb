@@ -52,9 +52,9 @@ module Uniword
         # @return [String, nil] Document title
         def extract_title(document)
           # Try to get title from document metadata/properties
-          if document.respond_to?(:title)
+          if document.is_a?(Lutaml::Model::Serializable) && document.class.attributes.key?(:title)
             document.title
-          elsif document.respond_to?(:metadata)
+          elsif document.is_a?(Lutaml::Model::Serializable) && document.class.attributes.key?(:metadata)
             document.metadata&.title
           end
         end

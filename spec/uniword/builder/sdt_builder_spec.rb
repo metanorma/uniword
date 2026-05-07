@@ -63,7 +63,7 @@ RSpec.describe Uniword::Builder::SdtBuilder do
     it "sets showing_placeholder when placeholder_text provided" do
       sdt = described_class.text(placeholder_text: "Enter name")
       expect(sdt.properties.showing_placeholder_header).to be_a(
-        Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader
+        Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader,
       )
     end
   end
@@ -80,7 +80,7 @@ RSpec.describe Uniword::Builder::SdtBuilder do
     it "creates a bibliography placeholder" do
       sdt = described_class.bibliography
       expect(sdt.properties.bibliography).to be_a(
-        Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography
+        Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography,
       )
       expect(sdt.properties.doc_part_obj).not_to be_nil
     end

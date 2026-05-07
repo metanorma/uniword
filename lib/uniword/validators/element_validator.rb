@@ -74,13 +74,7 @@ module Uniword
           a.to_s.include?("Serializable")
         end
 
-        # v2.0: All lutaml-model objects are valid by default
-        # v1.x: Elements have a valid? method
-        if element.respond_to?(:valid?)
-          element.valid?
-        else
-          true
-        end
+        true
       end
 
       # Get validation errors for an element

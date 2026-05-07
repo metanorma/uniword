@@ -62,7 +62,7 @@ module Uniword
       def parse_paragraphs(paragraphs)
         paragraphs.each_with_index do |para, index|
           # Check paragraph's own comments
-          if para.respond_to?(:comments) && para.comments
+          if para.is_a?(Uniword::CommentsPart) && para.comments
             para.comments.each do |comment|
               marker = parse_comment_text(comment.text, para, index)
               @markers << marker if marker
@@ -70,10 +70,10 @@ module Uniword
           end
 
           # Check run comments
-          next unless para.respond_to?(:runs)
+          next unless para.is_a?(Uniword::Wordprocessingml::Paragraph)
 
           para.runs.each do |run|
-            next unless run.respond_to?(:comments) && run.comments
+            next unless run.is_a?(Uniword::CommentsPart) && run.comments
 
             run.comments.each do |comment|
               marker = parse_comment_text(comment.text, run, index)
@@ -93,13 +93,13 @@ module Uniword
           base_position = @document.paragraphs.size + (table_index * 100)
 
           # Parse table rows
-          next unless table.respond_to?(:rows)
+          next unless table.is_a?(Uniword::Wordprocessingml::Table)
 
           table.rows.each_with_index do |row, row_index|
             row_position = base_position + (row_index * 10)
 
             # Check row comments
-            if row.respond_to?(:comments) && row.comments
+            if row.is_a?(Uniword::CommentsPart) && row.comments
               row.comments.each do |comment|
                 marker = parse_comment_text(comment.text, row, row_position)
                 @markers << marker if marker
@@ -107,11 +107,13 @@ module Uniword
             end
 
             # Parse cells
-            next unless row.respond_to?(:cells)
+            next unless row.is_a?(Uniword::Wordprocessingml::TableRow)
 
             row.cells.each_with_index do |cell, _cell_index|
               # Parse cell paragraphs
-              parse_paragraphs(cell.paragraphs) if cell.respond_to?(:paragraphs)
+              if cell.is_a?(Uniword::Wordprocessingml::TableCell)
+                parse_paragraphs(cell.paragraphs)
+              end
             end
           end
         end

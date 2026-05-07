@@ -62,30 +62,45 @@ module Uniword
       #
       # @param document [Document] Document to update
       def update_core_properties(document)
-        # NOTE: Actual implementation depends on Document API
-        # This is a placeholder that shows the intended structure
+        return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
-        document.author = @author || current_user if @update_author && document.respond_to?(:author=)
+        cp = document.core_properties
 
-        document.modified_date = Time.now if @update_modified_date && document.respond_to?(:modified_date=)
-
-        if @update_revision_number && document.respond_to?(:revision=)
-          current_revision = document.respond_to?(:revision) ? document.revision : 0
-          document.revision = (current_revision.to_i + 1).to_s
+        if @update_author
+          cp.creator = Uniword::Ooxml::Types::DcCreatorType.new(
+            @author || current_user,
+          )
         end
 
-        return unless @title && document.respond_to?(:core_properties)
+        if @update_modified_date
+          cp.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
+            value: Time.now.to_s,
+            type: "dcterms:W3CDTF",
+          )
+        end
 
-        document.core_properties.title = @title
+        if @update_revision_number
+          current = cp.revision.to_i
+          cp.revision = Uniword::Ooxml::Types::CpRevisionType.new(
+            (current + 1).to_s,
+          )
+        end
+
+        return unless @title
+
+        cp.title = Uniword::Ooxml::Types::DcTitleType.new(@title)
       end
 
       # Update extended document properties
       #
       # @param document [Document] Document to update
       def update_extended_properties(document)
-        return unless @company && document.respond_to?(:company=)
+        return unless @company && document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
-        document.company = @company
+        app = document.app_properties
+        return unless app
+
+        app.company = @company
       end
 
       # Get current user name

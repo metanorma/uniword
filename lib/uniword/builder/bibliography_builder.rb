@@ -35,7 +35,7 @@ module Uniword
       # @param document [DocumentBuilder, DocumentRoot] Target document
       # @return [self]
       def attach(document)
-        root = document.respond_to?(:model) ? document.model : document
+        root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
         root.bibliography_sources = @sources
         self
       end

@@ -66,32 +66,8 @@ module Uniword
       # @example Process document
       #   sub.substitute_document(document)
       def substitute_document(document)
-        # Process all paragraphs
         document.paragraphs.each do |paragraph|
           substitute_paragraph(paragraph)
-        end
-
-        # Process sections (headers/footers)
-        if document.respond_to?(:sections)
-          document.sections.each do |section|
-            # Process headers if section has them
-            if section.respond_to?(:headers)
-              section.headers.each do |header|
-                header.paragraphs.each do |paragraph|
-                  substitute_paragraph(paragraph)
-                end
-              end
-            end
-
-            # Process footers if section has them
-            next unless section.respond_to?(:footers)
-
-            section.footers.each do |footer|
-              footer.paragraphs.each do |paragraph|
-                substitute_paragraph(paragraph)
-              end
-            end
-          end
         end
 
         document

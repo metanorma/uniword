@@ -78,14 +78,14 @@ module Uniword
       # @param section_name [String] The section name
       # @return [String, nil] The CSS @page rule
       def self.build_page_rule(section, section_name)
-        properties = section.respond_to?(:properties) ? section.properties : nil
+        properties = section&.properties
         return nil unless properties
 
         rules = []
 
         # Page size
-        width = properties.respond_to?(:page_width) && properties.page_width
-        height = properties.respond_to?(:page_height) && properties.page_height
+        width = properties.page_width
+        height = properties.page_height
         if width && height
           # Convert from twips to inches (1 inch = 1440 twips)
           w_in = CssNumberFormatter.twips_to_in(width, precision: 1)
@@ -97,14 +97,14 @@ module Uniword
         end
 
         # Margins
-        rules << "margin-top: #{CssNumberFormatter.twips_to_in(properties.margin_top)}" if properties.respond_to?(:margin_top) && properties.margin_top
-        rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}" if properties.respond_to?(:margin_bottom) && properties.margin_bottom
-        rules << "margin-left: #{CssNumberFormatter.twips_to_in(properties.margin_left)}" if properties.respond_to?(:margin_left) && properties.margin_left
-        rules << "margin-right: #{CssNumberFormatter.twips_to_in(properties.margin_right)}" if properties.respond_to?(:margin_right) && properties.margin_right
+        rules << "margin-top: #{CssNumberFormatter.twips_to_in(properties.margin_top)}" if properties.margin_top
+        rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}" if properties.margin_bottom
+        rules << "margin-left: #{CssNumberFormatter.twips_to_in(properties.margin_left)}" if properties.margin_left
+        rules << "margin-right: #{CssNumberFormatter.twips_to_in(properties.margin_right)}" if properties.margin_right
 
         # Header/Footer margins
-        rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}" if properties.respond_to?(:header_margin) && properties.header_margin
-        rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}" if properties.respond_to?(:footer_margin) && properties.footer_margin
+        rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}" if properties.header_margin
+        rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}" if properties.footer_margin
 
         "@page #{section_name} {\n  #{rules.join(";\n  ")};\n}"
       end
@@ -127,16 +127,16 @@ module Uniword
         properties = []
 
         # Font properties
-        properties << "font-family: '#{style.font}'" if style.respond_to?(:font) && style.font
-        if style.respond_to?(:font_size) && style.font_size
+        properties << "font-family: '#{style.font}'" if style.font
+        if style.font_size
           properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt',
                                                                 precision: 1)}"
         end
-        properties << "font-weight: bold" if style.respond_to?(:bold) && style.bold
-        properties << "font-style: italic" if style.respond_to?(:italic) && style.italic
+        properties << "font-weight: bold" if style.bold
+        properties << "font-style: italic" if style.italic
 
         # Paragraph properties
-        properties << "text-align: #{style.alignment}" if style.respond_to?(:alignment) && style.alignment
+        properties << "text-align: #{style.alignment}" if style.alignment
 
         return nil if properties.empty?
 

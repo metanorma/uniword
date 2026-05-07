@@ -49,7 +49,9 @@ module Uniword
     #
     # @return [String] The combined text of all paragraphs
     def text
-      @content.map { |p| p.respond_to?(:text) ? p.text : p.to_s }.join("\n")
+      @content.map do |p|
+        p.is_a?(Uniword::Wordprocessingml::Paragraph) ? p.text : p.to_s
+      end.join("\n")
     end
 
     # Convert to hash representation.

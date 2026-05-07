@@ -166,7 +166,7 @@ module Uniword
         ooxml_doc = Wordprocessingml::DocumentRoot.new
 
         # Get HTML content - use raw_html which is the correct method on Mhtml::Document
-        html_content = source.raw_html if source.respond_to?(:raw_html) && source.raw_html
+        html_content = source.raw_html if source.is_a?(Uniword::Mhtml::Document) && source.raw_html
         return ooxml_doc if html_content.nil? || html_content.empty?
 
         # Convert HTML to OOXML paragraphs
@@ -185,15 +185,15 @@ module Uniword
         doc_props = source.document_properties
         if doc_props
           ooxml_doc.core_properties ||= Uniword::Ooxml::CoreProperties.new
-          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
-          ooxml_doc.core_properties.creator = doc_props.author if doc_props.respond_to?(:author) && doc_props.author
-          if doc_props.respond_to?(:created) && doc_props.created
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.author
+          ooxml_doc.core_properties.creator = doc_props.author if doc_props.author
+          if doc_props.created
             ooxml_doc.core_properties.created = Uniword::Ooxml::Types::DctermsCreatedType.new(
               value: doc_props.created, type: "dcterms:W3CDTF",
             )
           end
-          ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.respond_to?(:last_author) && doc_props.last_author
-          if doc_props.respond_to?(:last_saved) && doc_props.last_saved
+          ooxml_doc.core_properties.last_modified_by = doc_props.last_author if doc_props.last_author
+          if doc_props.last_saved
             ooxml_doc.core_properties.modified = Uniword::Ooxml::Types::DctermsModifiedType.new(
               value: doc_props.last_saved, type: "dcterms:W3CDTF",
             )

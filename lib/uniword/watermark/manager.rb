@@ -106,7 +106,7 @@ module Uniword
 
       def watermark?(paragraph)
         return false unless paragraph.properties
-        return false unless paragraph.properties.respond_to?(:style)
+        return false unless paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
 
         paragraph.properties.style.to_s == "UniwordWatermark"
       end

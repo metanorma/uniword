@@ -17,7 +17,7 @@ module Uniword
                      Properties::Border.new(color: value, style: "single",
                                             size: 4)
                    end
-          props.borders.send("#{side}=", border)
+          props.borders.public_send("#{side}=", border)
         end
         self
       end

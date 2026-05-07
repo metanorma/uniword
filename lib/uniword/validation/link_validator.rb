@@ -193,27 +193,27 @@ module Uniword
         links = []
 
         # Extract from paragraphs
-        if document.respond_to?(:paragraphs)
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
           document.paragraphs.each do |para|
             links.concat(extract_links_from_paragraph(para))
           end
         end
 
         # Extract from tables
-        if document.respond_to?(:tables)
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
           document.tables.each do |table|
             links.concat(extract_links_from_table(table))
           end
         end
 
         # Extract from headers/footers
-        if document.respond_to?(:headers) && document.headers
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot) && document.headers
           document.headers.each do |header|
             links.concat(extract_links_from_section(header))
           end
         end
 
-        if document.respond_to?(:footers) && document.footers
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot) && document.footers
           document.footers.each do |footer|
             links.concat(extract_links_from_section(footer))
           end
@@ -230,14 +230,12 @@ module Uniword
         links = []
 
         # Check paragraph runs for hyperlinks
-        if para.respond_to?(:runs)
-          para.runs.each do |run|
-            links << run if run.is_a?(Wordprocessingml::Hyperlink)
-          end
+        para.runs.each do |run|
+          links << run if run.is_a?(Wordprocessingml::Hyperlink)
         end
 
         # Check for hyperlinks collection
-        links.concat(para.hyperlinks) if para.respond_to?(:hyperlinks)
+        links.concat(para.hyperlinks) if para.hyperlinks
 
         links
       end
@@ -249,16 +247,14 @@ module Uniword
       def extract_links_from_table(table)
         links = []
 
-        if table.respond_to?(:rows)
-          table.rows.each do |row|
-            next unless row.respond_to?(:cells)
+        table.rows&.each do |row|
+          next unless row.is_a?(Uniword::Wordprocessingml::TableRow)
 
-            row.cells.each do |cell|
-              next unless cell.respond_to?(:paragraphs)
+          row.cells.each do |cell|
+            next unless cell.is_a?(Uniword::Wordprocessingml::TableCell)
 
-              cell.paragraphs.each do |para|
-                links.concat(extract_links_from_paragraph(para))
-              end
+            cell.paragraphs.each do |para|
+              links.concat(extract_links_from_paragraph(para))
             end
           end
         end
@@ -273,10 +269,8 @@ module Uniword
       def extract_links_from_section(section)
         links = []
 
-        if section.respond_to?(:paragraphs)
-          section.paragraphs.each do |para|
-            links.concat(extract_links_from_paragraph(para))
-          end
+        section.paragraphs&.each do |para|
+          links.concat(extract_links_from_paragraph(para))
         end
 
         links
@@ -290,7 +284,7 @@ module Uniword
         refs = []
 
         # Check if document has footnotes
-        if document.respond_to?(:footnotes)
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
           footnotes = document.footnotes
           case footnotes
           when Hash
@@ -301,7 +295,7 @@ module Uniword
         end
 
         # Check if document has endnotes
-        if document.respond_to?(:endnotes)
+        if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
           endnotes = document.endnotes
           case endnotes
           when Hash

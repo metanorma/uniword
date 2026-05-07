@@ -152,13 +152,13 @@ module Uniword
       # @example
       #   result.link_identifier # => "https://example.com"
       def link_identifier
-        if @link.respond_to?(:url) && @link.url
+        if @link.is_a?(Lutaml::Model::Serializable) && @link.class.attributes.key?(:url) && @link.url
           @link.url
-        elsif @link.respond_to?(:anchor) && @link.anchor
+        elsif @link.is_a?(Lutaml::Model::Serializable) && @link.class.attributes.key?(:anchor) && @link.anchor
           "##{@link.anchor}"
-        elsif @link.respond_to?(:id)
+        elsif @link.is_a?(Lutaml::Model::Serializable) && @link.class.attributes.key?(:id)
           @link.id.to_s
-        elsif @link.respond_to?(:name)
+        elsif @link.is_a?(Lutaml::Model::Serializable) && @link.class.attributes.key?(:name)
           @link.name
         else
           @link.to_s

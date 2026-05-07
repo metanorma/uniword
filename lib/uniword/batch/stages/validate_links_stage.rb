@@ -160,7 +160,7 @@ module Uniword
       # @param document [Document] Document to check
       # @return [Boolean] true if bookmark exists
       def bookmark_exists?(bookmark_name, document)
-        return true unless document.respond_to?(:bookmarks)
+        return true unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
         return true if document.bookmarks.nil?
 
         document.bookmarks.any? { |b| b.name == bookmark_name }

@@ -107,13 +107,15 @@ RSpec.describe Uniword::MathEquation do
       expect(equation.valid?).to be true
     end
 
-    it "returns true when formula responds to to_latex" do
-      formula = double("formula", to_latex: "x^2")
+    it "returns true when formula is a Plurimath::Formula" do
+      skip "Plurimath not loaded" unless defined?(Plurimath::Formula)
+
+      formula = Plurimath::Formula.new([Plurimath::Math::Symbol.new("x")])
       equation = described_class.new(formula: formula)
       expect(equation.valid?).to be true
     end
 
-    it "returns false when formula does not respond to to_latex" do
+    it "returns false when formula is not a Plurimath::Formula" do
       equation = described_class.new(formula: "invalid")
       expect(equation.valid?).to be false
     end

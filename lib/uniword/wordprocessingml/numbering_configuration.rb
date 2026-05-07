@@ -127,7 +127,7 @@ module Uniword
 
       # Get a definition by abstract_num_id (accepts Integer or AbstractNumId)
       def get_definition(abstract_num_id)
-        target_id = abstract_num_id.respond_to?(:val) ? abstract_num_id.val : abstract_num_id
+        target_id = abstract_num_id.is_a?(AbstractNumId) ? abstract_num_id.val : abstract_num_id
         definitions.find { |d| d.abstract_num_id == target_id }
       end
 

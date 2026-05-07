@@ -239,7 +239,7 @@ module Uniword
           result = %(<span style="font-size:#{size_pt}pt">#{result}</span>)
         end
 
-        if props.font.respond_to?(:ascii) && props.font.ascii
+        if props.font.is_a?(Uniword::Properties::RunFonts) && props.font.ascii
           result = %(<span style="font-family:'#{props.font.ascii}'">#{result}</span>)
         elsif props.font.is_a?(String) && !props.font.empty?
           result = %(<span style="font-family:'#{props.font}'">#{result}</span>)
@@ -582,7 +582,7 @@ module Uniword
 
         attrs = []
 
-        attrs << %(w:id="#{props.id.value}") if props.id.respond_to?(:value) && props.id.value
+        attrs << %(w:id="#{props.id.value}") if props.id&.value
 
         attrs << 'w:showingPlcHdr="t"' if props.showing_placeholder_header
 
@@ -590,14 +590,12 @@ module Uniword
 
         if props.placeholder&.doc_part
           doc_part = props.placeholder.doc_part
-          attrs << %(w:docPart="#{doc_part.value}") if doc_part.respond_to?(:value) && doc_part.value
+          attrs << %(w:docPart="#{doc_part.value}") if doc_part&.value
         end
 
-        attrs << %(w:text="#{props.text.value}") if props.text.respond_to?(:value) && props.text.value
+        attrs << %(w:tag="#{escape_xml(props.tag.value)}") if props.tag&.value
 
-        attrs << %(w:tag="#{escape_xml(props.tag.value)}") if props.tag.respond_to?(:value) && props.tag.value
-
-        attrs << %(w:alias="#{escape_xml(props.alias_name.value)}") if props.alias_name.respond_to?(:value) && props.alias_name.value
+        attrs << %(w:alias="#{escape_xml(props.alias_name.value)}") if props.alias_name&.value
 
         attrs.empty? ? "" : " #{attrs.join(' ')}"
       end

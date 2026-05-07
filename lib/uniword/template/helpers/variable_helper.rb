@@ -33,7 +33,7 @@ module Uniword
             replace_cell(element, text)
           else
             # Try to treat as paragraph-like
-            replace_paragraph(element, text) if element.respond_to?(:runs)
+            replace_paragraph(element, text) if element.is_a?(Uniword::Wordprocessingml::Paragraph)
           end
         end
 

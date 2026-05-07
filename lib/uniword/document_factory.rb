@@ -199,8 +199,8 @@ module Uniword
         return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
         PACKAGE_PART_MAPPINGS.each do |pkg_attr, doc_attr|
-          value = package.send(pkg_attr)
-          document.send(:"#{doc_attr}=", value) if value
+          value = package.public_send(pkg_attr)
+          document.public_send(:"#{doc_attr}=", value) if value
         end
       end
 
@@ -232,7 +232,7 @@ module Uniword
         return if path.is_a?(IO) || path.is_a?(StringIO)
 
         # For strings, validate
-        if path.respond_to?(:empty?) && path.empty?
+        if path.is_a?(String) && path.empty?
           raise ArgumentError,
                 "Path cannot be empty"
         end

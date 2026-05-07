@@ -58,16 +58,16 @@ module Uniword
       def extract_text(document)
         parts = []
 
-        paragraphs = if document.respond_to?(:paragraphs)
+        paragraphs = if document.is_a?(Uniword::Wordprocessingml::DocumentRoot) || document.is_a?(Uniword::Wordprocessingml::Body)
                        document.paragraphs
                      else
                        []
                      end
         paragraphs.each do |para|
-          parts << para.text if para.respond_to?(:text)
+          parts << para.text if para.is_a?(Uniword::Wordprocessingml::Paragraph)
         end
 
-        tables = if document.respond_to?(:tables)
+        tables = if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
                    document.tables
                  else
                    []
@@ -85,13 +85,13 @@ module Uniword
       # @param parts [Array<String>] Accumulator for text parts
       # @return [void]
       def extract_table_text(table, parts)
-        return unless table.respond_to?(:rows)
+        return unless table.is_a?(Uniword::Wordprocessingml::Table)
 
         table.rows.each do |row|
-          next unless row.respond_to?(:cells)
+          next unless row.is_a?(Uniword::Wordprocessingml::TableRow)
 
           row.cells.each do |cell|
-            parts << cell.text if cell.respond_to?(:text)
+            parts << cell.text if cell.is_a?(Uniword::Wordprocessingml::TableCell)
           end
         end
       end

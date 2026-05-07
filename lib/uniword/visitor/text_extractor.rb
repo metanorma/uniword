@@ -37,14 +37,14 @@ module Uniword
       # @return [void]
       def visit_document(document)
         # Visit both paragraphs and tables from body
-        if document.body.respond_to?(:elements)
+        if document.body.is_a?(Uniword::Wordprocessingml::Body)
           document.body.elements.each do |element|
-            element.accept(self) if element.respond_to?(:accept)
+            element.accept(self) if element.is_a?(Lutaml::Model::Serializable)
           end
         else
           # Legacy support: visit paragraphs only
           document.elements.each do |element|
-            element.accept(self) if element.respond_to?(:accept)
+            element.accept(self) if element.is_a?(Lutaml::Model::Serializable)
           end
         end
       end

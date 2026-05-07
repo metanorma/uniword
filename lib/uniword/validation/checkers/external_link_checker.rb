@@ -55,7 +55,7 @@ module Uniword
         #   checker.can_check?(hyperlink) # => true
         def can_check?(link)
           return false unless enabled?
-          return false unless link.respond_to?(:url)
+          return false unless link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:url)
 
           url = link.url
           url&.to_s&.match?(%r{^https?://})

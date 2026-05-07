@@ -103,7 +103,7 @@ module Uniword
           # Find and replace variables in element
           # This is simplified - full implementation would
           # recursively process all text nodes
-          return unless element.respond_to?(:text)
+          return unless element.is_a?(Uniword::Wordprocessingml::Run)
 
           text = element.text
           # Simple variable replacement ({{var}})

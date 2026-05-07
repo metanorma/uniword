@@ -66,7 +66,7 @@ module Uniword
         uniword_slug = detect_ms_theme(word_theme)
 
         # Fall back to detection by theme name
-        uniword_slug = from_ms_name(word_theme.name) if uniword_slug.nil? && word_theme.respond_to?(:name) && word_theme.name
+        uniword_slug = from_ms_name(word_theme.name) if uniword_slug.nil? && word_theme.is_a?(Uniword::Drawingml::Theme) && word_theme.name
 
         return nil unless uniword_slug
 

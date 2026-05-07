@@ -49,14 +49,11 @@ module Uniword
         props = Uniword::Mhtml::Metadata::DocumentProperties.new
         cp = core_properties
 
-        if cp
-          props.author = cp.creator.to_s if cp.respond_to?(:creator) && cp.creator
-          props.created = cp.created.value.to_s if cp.respond_to?(:created) && cp.created
-          props.last_author = cp.last_modified_by.to_s if cp.respond_to?(:last_modified_by) && cp.last_modified_by
-          props.last_saved = cp.modified.value.to_s if cp.respond_to?(:modified) && cp.modified
-          props.pages = cp.pages.to_s if cp.respond_to?(:pages) && cp.pages
-          props.words = cp.words.to_s if cp.respond_to?(:words) && cp.words
-          props.characters = cp.characters.to_s if cp.respond_to?(:characters) && cp.characters
+        if cp.is_a?(Uniword::Ooxml::CoreProperties)
+          props.author = cp.creator.to_s if cp.creator
+          props.created = cp.created.value.to_s if cp.created
+          props.last_author = cp.last_modified_by.to_s if cp.last_modified_by
+          props.last_saved = cp.modified.value.to_s if cp.modified
           props.application = "Microsoft Word"
         end
 
@@ -109,11 +106,11 @@ module Uniword
         props = core_properties
         return "" unless props
 
-        author = props.respond_to?(:creator) ? props.creator : nil
-        last_author = props.respond_to?(:last_modified_by) ? props.last_modified_by : nil
-        revision = props.respond_to?(:revision) ? props.revision : nil
-        created = props.respond_to?(:created) && props.created ? props.created.value : nil
-        last_saved = props.respond_to?(:modified) && props.modified ? props.modified.value : nil
+        author = props.is_a?(Uniword::Ooxml::CoreProperties) ? props.creator : nil
+        last_author = props.is_a?(Uniword::Ooxml::CoreProperties) ? props.last_modified_by : nil
+        revision = props.is_a?(Uniword::Ooxml::CoreProperties) ? props.revision : nil
+        created = props.is_a?(Uniword::Ooxml::CoreProperties) && props.created ? props.created.value : nil
+        last_saved = props.is_a?(Uniword::Ooxml::CoreProperties) && props.modified ? props.modified.value : nil
 
         stats = calculate_document_stats
 
@@ -212,11 +209,13 @@ module Uniword
 
       # Get a custom document property by name
       def custom_property(name)
-        if @document.respond_to?(:core_properties) && @document.core_properties
-          cp = @document.core_properties
-          return cp.custom_properties[name] if cp.respond_to?(:custom_properties) && cp.custom_properties
-        end
-        nil
+        cp = @document.custom_properties
+        return nil unless cp
+
+        prop = cp.properties.find { |p| p.name == name }
+        return nil unless prop
+
+        prop.lpwstr || prop.lpstr || prop.bstr
       end
 
       # Escape XML special characters
