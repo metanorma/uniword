@@ -35,6 +35,9 @@ module XmlNormalizers
     normalize_content_types(doc)
     normalize_relationships(doc)
 
+    # Strip mc:Ignorable (reconciler sets it to match available xmlns declarations)
+    normalize_mc_ignorable(doc)
+
     doc.to_xml
   end
 
@@ -123,6 +126,15 @@ module XmlNormalizers
     rels.each { |n| doc.root << n }
   end
 
+  # Normalize mc:Ignorable attribute
+  # Reconciler sets it based on which xmlns declarations will appear in
+  # serialized output, which may differ from the original document's value.
+  def self.normalize_mc_ignorable(doc)
+    attr = doc.root&.attribute("Ignorable") ||
+      doc.root&.attribute_nodes&.find { |a| a.name == "Ignorable" }
+    attr&.remove
+  end
+
   # Remove unused namespace declarations
   # These don't affect functionality but cause Canon comparison failures
   #
@@ -153,7 +165,7 @@ module XmlNormalizers
     doc = Nokogiri::XML(xml)
 
     # Strip mc:Ignorable attribute (reconciler adds it)
-    doc.root&.delete_attribute("Ignorable") if doc.root&.namespace&.prefix == "mc"
+    normalize_mc_ignorable(doc)
 
     # Strip paragraph tracking attributes (reconciler adds rsid, paraId, textId)
     doc.xpath("//w:p",

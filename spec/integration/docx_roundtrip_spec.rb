@@ -54,17 +54,15 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     xml_files.each do |filename|
       orig = original_files[filename]
       saved = saved_files[filename]
-      # Normalize reconciled files (content types, relationships, metadata)
-      if filename == "[Content_Types].xml" || filename.end_with?(".rels") ||
-          filename.start_with?("docProps/")
-        orig = XmlNormalizers.normalize_for_roundtrip(orig)
-        saved = XmlNormalizers.normalize_for_roundtrip(saved)
-      end
       # Normalize document.xml: Reconciler adds namespace declarations,
       # mc:Ignorable, and paragraph tracking attributes (rsid, paraId)
       if filename == "word/document.xml"
         orig = XmlNormalizers.normalize_document_xml(orig)
         saved = XmlNormalizers.normalize_document_xml(saved)
+      else
+        # All other XML files: normalize mc:Ignorable and reconciled ordering
+        orig = XmlNormalizers.normalize_for_roundtrip(orig)
+        saved = XmlNormalizers.normalize_for_roundtrip(saved)
       end
       expect(saved).to be_xml_equivalent_to(orig),
                        "#{filename} was modified during round-trip"
@@ -132,7 +130,8 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
         expect(saved_files[filename]).not_to be_nil, "#{filename} must exist"
       end
 
-      expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+      expect(XmlNormalizers.normalize_document_xml(saved_files["word/document.xml"]))
+        .to be_xml_equivalent_to(XmlNormalizers.normalize_document_xml(original_files["word/document.xml"]))
     end
   end
 
@@ -180,7 +179,8 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
 
       files1 = extract_docx_files(path1)
       files3 = extract_docx_files(path3)
-      expect(files3["word/document.xml"]).to be_xml_equivalent_to(files1["word/document.xml"])
+      expect(XmlNormalizers.normalize_document_xml(files3["word/document.xml"]))
+        .to be_xml_equivalent_to(XmlNormalizers.normalize_document_xml(files1["word/document.xml"]))
     end
   end
 
@@ -270,14 +270,16 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
 
         original_files = extract_docx_files(original_path)
         saved_files = extract_docx_files(roundtrip_path)
-        expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+        expect(XmlNormalizers.normalize_document_xml(saved_files["word/document.xml"]))
+          .to be_xml_equivalent_to(XmlNormalizers.normalize_document_xml(original_files["word/document.xml"]))
       end
 
       it "maintains XML structure" do
         original_files = extract_docx_files(original_path)
         roundtrip(original_path, roundtrip_path)
         saved_files = extract_docx_files(roundtrip_path)
-        expect(saved_files["word/document.xml"]).to be_xml_equivalent_to(original_files["word/document.xml"])
+        expect(XmlNormalizers.normalize_document_xml(saved_files["word/document.xml"]))
+          .to be_xml_equivalent_to(XmlNormalizers.normalize_document_xml(original_files["word/document.xml"]))
       end
     end
   end

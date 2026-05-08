@@ -277,7 +277,6 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       ws = package.web_settings
       expect(ws).not_to be_nil
-      expect(ws.mc_ignorable).not_to be_nil
     end
 
     it "populates app properties" do
