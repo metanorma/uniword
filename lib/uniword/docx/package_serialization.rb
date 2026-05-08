@@ -79,19 +79,16 @@ document_rels)
         if document
           content["word/document.xml"] =
             document.to_xml(encoding: "UTF-8", prefix: true,
-                            fix_boolean_elements: true,
                             standalone: true)
         end
         if styles
           content["word/styles.xml"] =
             styles.to_xml(encoding: "UTF-8", prefix: true,
-                          fix_boolean_elements: true,
                           standalone: true)
         end
         if numbering
           content["word/numbering.xml"] =
             numbering.to_xml(encoding: "UTF-8", prefix: true,
-                             fix_boolean_elements: true,
                              standalone: true)
         end
         if settings
@@ -131,13 +128,11 @@ document_rels)
         if footnotes
           content["word/footnotes.xml"] =
             footnotes.to_xml(encoding: "UTF-8", prefix: true,
-                             fix_boolean_elements: true,
                              standalone: true)
         end
         if endnotes
           content["word/endnotes.xml"] =
             endnotes.to_xml(encoding: "UTF-8", prefix: true,
-                            fix_boolean_elements: true,
                             standalone: true)
         end
 
@@ -457,7 +452,6 @@ document_rels)
           idx += 1
           content["word/header#{idx}.xml"] =
             header_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              fix_boolean_elements: true,
                               standalone: true)
         end
       end
@@ -470,7 +464,6 @@ document_rels)
           idx += 1
           content["word/footer#{idx}.xml"] =
             footer_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              fix_boolean_elements: true,
                               standalone: true)
         end
       end
@@ -481,7 +474,6 @@ document_rels)
         document.header_footer_parts.each do |part|
           content["word/#{part[:target]}"] =
             part[:content].to_xml(encoding: "UTF-8", prefix: true,
-                                  fix_boolean_elements: true,
                                   standalone: true)
         end
       end
