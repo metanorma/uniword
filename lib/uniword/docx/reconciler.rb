@@ -88,6 +88,7 @@ module Uniword
           part.instance_variable_set(:@pending_namespace_data, nil)
           part.instance_variable_set(:@import_declaration_plan, nil)
           part.instance_variable_set(:@xml_input_namespaces, nil)
+          part.instance_variable_set(:@pending_plan_root_element, nil)
         end
       end
 

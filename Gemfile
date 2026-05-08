@@ -5,9 +5,9 @@ source "https://rubygems.org"
 gemspec
 
 # Math equation support via Plurimath
-gem "plurimath", github: "plurimath/plurimath", branch: "main"
+gem "plurimath", "~> 0.10"
 
-gem "lutaml-model", github: "lutaml/lutaml-model", branch: "main"
+# lutaml-model is already in gemspec as add_dependency
 
 gem "moxml", ">= 0.1.15"
 
