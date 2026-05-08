@@ -253,7 +253,7 @@ module Uniword
       end
 
       def to_xml(options = {})
-        super(options.merge(fix_boolean_elements: true))
+        super
       end
     end
   end
