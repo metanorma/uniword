@@ -390,12 +390,7 @@ module Uniword
           record_fix("R2", "Generated w15:docId in GUID format")
         end
 
-        unless settings.mc_ignorable
-          settings.mc_ignorable = Ooxml::Types::McIgnorable.new(
-            "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
-          )
-          record_fix("R1", "Added mc:Ignorable to settings")
-        end
+        settings.mc_ignorable = nil
       end
 
       def reconcile_font_table
@@ -436,9 +431,7 @@ module Uniword
           font_table.fonts << font
         end
 
-        font_table.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
-        )
+        font_table.mc_ignorable = nil
         record_fix("R13",
                    "Populated font table with profile fonts and signatures")
       end
@@ -457,9 +450,7 @@ module Uniword
 
         ensure_default_styles(styles)
 
-        styles.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
-        )
+        styles.mc_ignorable = nil
         record_fix("R10",
                    "Ensured styles have docDefaults, latentStyles, and default styles")
       end
@@ -468,12 +459,7 @@ module Uniword
         return unless profile
         return unless package.numbering
 
-        unless package.numbering.mc_ignorable
-          package.numbering.mc_ignorable = Ooxml::Types::McIgnorable.new(
-            "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14",
-          )
-          record_fix("R1", "Added mc:Ignorable to numbering")
-        end
+        package.numbering.mc_ignorable = nil
 
         # Validate instance → definition references
         package.numbering.instances.each do |inst|
@@ -499,10 +485,8 @@ module Uniword
           package.web_settings
         end
 
-        ws.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du",
-        )
-        record_fix("R1", "Added mc:Ignorable to webSettings")
+        ws.mc_ignorable = nil
+        record_fix("R1", "Cleared mc:Ignorable on webSettings")
       end
 
       def reconcile_app_properties
@@ -596,9 +580,7 @@ module Uniword
         return unless package.document&.body
 
         doc = package.document
-        doc.mc_ignorable ||= Ooxml::Types::McIgnorable.new(
-          "w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du wp14",
-        )
+        doc.mc_ignorable = Ooxml::Types::McIgnorable.new("w14")
 
         record_fix("R1", "Added mc:Ignorable to document body")
         record_fix("R12", "Assigned rsid and paraId to paragraphs")
