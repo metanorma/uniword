@@ -148,13 +148,23 @@ module Uniword
       run
     end
 
-    # Factory: creates a Run with a tab character
+    # Factory: creates a Run containing a tab character.
+    # Use this with ParagraphBuilder#<< to append a tab to a paragraph.
     #
     # @return [Wordprocessingml::Run]
+    # @see .tab_element for the bare Tab element
     def self.tab
       run = Wordprocessingml::Run.new
-      run.tab = Wordprocessingml::Tab.new
+      run.tab = tab_element
       run
+    end
+
+    # Factory: creates a bare Tab element for direct assignment to Run#tab.
+    # Most callers should use .tab instead, which wraps the Tab in a Run.
+    #
+    # @return [Wordprocessingml::Tab]
+    def self.tab_element
+      Wordprocessingml::Tab.new
     end
 
     # Factory: creates a Run containing a line break

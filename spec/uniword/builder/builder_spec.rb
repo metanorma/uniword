@@ -98,9 +98,36 @@ RSpec.describe Uniword::Builder do
   end
 
   describe ".tab" do
-    it "creates a Run with a tab character" do
+    it "creates a Run containing a Tab" do
       run = described_class.tab
       expect(run).to be_a(Uniword::Wordprocessingml::Run)
+      expect(run.tab).to be_a(Uniword::Wordprocessingml::Tab)
+    end
+
+    it "is appendable to ParagraphBuilder" do
+      doc = Uniword::Builder::DocumentBuilder.new
+      builder = doc.paragraph do |p|
+        p << "Before tab"
+        p << described_class.tab
+        p << "After tab"
+      end
+      model = builder.model
+      expect(model.runs.size).to eq(3)
+      expect(model.runs[0].text.to_s).to eq("Before tab")
+      expect(model.runs[1].tab).to be_a(Uniword::Wordprocessingml::Tab)
+      expect(model.runs[2].text.to_s).to eq("After tab")
+    end
+  end
+
+  describe ".tab_element" do
+    it "creates a bare Tab element" do
+      tab = described_class.tab_element
+      expect(tab).to be_a(Uniword::Wordprocessingml::Tab)
+    end
+
+    it "can be assigned directly to Run#tab" do
+      run = Uniword::Wordprocessingml::Run.new
+      run.tab = described_class.tab_element
       expect(run.tab).to be_a(Uniword::Wordprocessingml::Tab)
     end
   end
