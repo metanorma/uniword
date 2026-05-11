@@ -11,8 +11,8 @@ module Uniword
     class CommentBuilder
       attr_reader :model
 
-      def initialize(author:, comment_id: nil, date: nil, initials: nil)
-        @model = Comment.new(
+      def initialize(model: nil, author: nil, comment_id: nil, date: nil, initials: nil)
+        @model = model || Comment.new(
           author: author,
           comment_id: comment_id,
           date: date,
@@ -22,9 +22,7 @@ module Uniword
 
       # Wrap an existing Comment model
       def self.from_model(model)
-        builder = allocate
-        builder.instance_variable_set(:@model, model)
-        builder
+        new(model: model)
       end
 
       # Append text to the comment (creates a paragraph)

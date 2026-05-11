@@ -486,4 +486,39 @@ RSpec.describe Uniword::Docx::Reconciler do
       end
     end
   end
+
+  describe "clear_stored_namespace_plans" do
+    let(:profile) { Uniword::Docx::Profile.load(:word_2024_en) }
+
+    it "clears pending_namespace_data on all parts" do
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.pending_namespace_data = { "w" => "http://example.com" }
+      described_class.new(package, profile: profile).reconcile
+      expect(package.document.pending_namespace_data).to be_nil
+    end
+
+    it "clears pending_plan_root_element on all parts" do
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.pending_plan_root_element = "some_element_ref"
+      described_class.new(package, profile: profile).reconcile
+      expect(package.document.pending_plan_root_element).to be_nil
+    end
+
+    it "clears import_declaration_plan on all parts" do
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.import_declaration_plan = :some_plan
+      described_class.new(package, profile: profile).reconcile
+      expect(package.document.import_declaration_plan).to be_nil
+    end
+
+    it "handles nil parts gracefully" do
+      package = Uniword::Docx::Package.new
+      expect {
+        described_class.new(package).reconcile
+      }.not_to raise_error
+    end
+  end
 end

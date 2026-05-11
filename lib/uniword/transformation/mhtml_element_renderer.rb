@@ -543,11 +543,11 @@ module Uniword
         parts.join
       end
 
-      # Build position-indexed map from elements that have @_run_position markers
+      # Build position-indexed map from elements that have run_position markers
       def build_position_map(elements, fallback_pos)
         by_pos = {}
         elements.each do |el|
-          pos = el.instance_variable_get(:@_run_position)
+          pos = el.run_position if el.is_a?(Uniword::Wordprocessingml::Hyperlink) || el.is_a?(Uniword::Math::OMath)
           pos ||= fallback_pos
           by_pos[pos] ||= []
           by_pos[pos] << el

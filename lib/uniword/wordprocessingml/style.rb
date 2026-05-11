@@ -251,10 +251,6 @@ module Uniword
       def run_properties
         rPr
       end
-
-      def to_xml(options = {})
-        super
-      end
     end
   end
 end

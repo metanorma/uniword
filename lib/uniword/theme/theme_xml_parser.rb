@@ -79,7 +79,7 @@ module Uniword
 
           # Set the color using the appropriate attribute
           attr_name = color_name == "folHlink" ? :fol_hlink : color_name.to_sym
-          scheme.instance_variable_set("@#{attr_name}", color_obj)
+          scheme.public_send(:"#{attr_name}=", color_obj)
         end
 
         # Sync hash interface

@@ -33,18 +33,14 @@ document_rels)
 document_rels)
         # Package infrastructure
         content["[Content_Types].xml"] =
-          content_types.to_xml(encoding: "UTF-8", declaration: true,
-                               standalone: true)
+          serialize_infrastructure(content_types)
         content["_rels/.rels"] =
-          package_rels.to_xml(encoding: "UTF-8", declaration: true,
-                              standalone: true)
+          serialize_infrastructure(package_rels)
 
         # Document properties
         if core_properties
           content["docProps/core.xml"] =
-            core_properties.to_xml(encoding: "UTF-8",
-                                   prefix: true,
-                                   standalone: true)
+            serialize_part(core_properties)
         end
         if app_properties
           content["docProps/app.xml"] =
@@ -78,76 +74,73 @@ document_rels)
         # Document parts
         if document
           content["word/document.xml"] =
-            document.to_xml(encoding: "UTF-8", prefix: true,
-                            standalone: true)
+            serialize_part(document)
         end
         if styles
           content["word/styles.xml"] =
-            styles.to_xml(encoding: "UTF-8", prefix: true,
-                          standalone: true)
+            serialize_part(styles)
         end
         if numbering
           content["word/numbering.xml"] =
-            numbering.to_xml(encoding: "UTF-8", prefix: true,
-                             standalone: true)
+            serialize_part(numbering)
         end
         if settings
           content["word/settings.xml"] =
-            settings.to_xml(encoding: "UTF-8", prefix: true,
-                            standalone: true)
+            serialize_part(settings)
         end
         if font_table
           content["word/fontTable.xml"] =
-            font_table.to_xml(encoding: "UTF-8", prefix: true,
-                              standalone: true)
+            serialize_part(font_table)
         end
         if web_settings
           content["word/webSettings.xml"] =
-            web_settings.to_xml(encoding: "UTF-8", prefix: true,
-                                standalone: true)
+            serialize_part(web_settings)
         end
         if document_rels
           content["word/_rels/document.xml.rels"] =
-            document_rels.to_xml(encoding: "UTF-8", declaration: true,
-                                 standalone: true)
+            serialize_infrastructure(document_rels)
         end
 
         # Theme
         if theme
           content["word/theme/theme1.xml"] =
-            theme.to_xml(encoding: "UTF-8", prefix: true,
-                         standalone: true)
+            serialize_part(theme)
         end
         if theme_rels
           content["word/theme/_rels/theme1.xml.rels"] =
-            theme_rels.to_xml(encoding: "UTF-8", declaration: true,
-                              standalone: true)
+            serialize_infrastructure(theme_rels)
         end
 
         # Notes
         if footnotes
           content["word/footnotes.xml"] =
-            footnotes.to_xml(encoding: "UTF-8", prefix: true,
-                             standalone: true)
+            serialize_part(footnotes)
         end
         if endnotes
           content["word/endnotes.xml"] =
-            endnotes.to_xml(encoding: "UTF-8", prefix: true,
-                            standalone: true)
+            serialize_part(endnotes)
         end
 
         # Bibliography sources
         if document&.bibliography_sources
           content["word/sources.xml"] =
-            document.bibliography_sources.to_xml(encoding: "UTF-8",
-                                                 declaration: true,
-                                                 standalone: true)
+            serialize_infrastructure(document.bibliography_sources)
         end
 
         # Headers and footers
         serialize_headers(content)
         serialize_footers(content)
         serialize_header_footer_parts(content)
+      end
+
+      # Serialize an OOXML document part with standard encoding
+      def serialize_part(model)
+        model.to_xml(encoding: "UTF-8", prefix: true, standalone: true)
+      end
+
+      # Serialize package infrastructure (rels, content types) with declaration
+      def serialize_infrastructure(model)
+        model.to_xml(encoding: "UTF-8", declaration: true, standalone: true)
       end
 
       private
@@ -451,8 +444,7 @@ document_rels)
         document.headers.each_value do |header_obj|
           idx += 1
           content["word/header#{idx}.xml"] =
-            header_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              standalone: true)
+            serialize_part(header_obj)
         end
       end
 
@@ -463,8 +455,7 @@ document_rels)
         document.footers.each_value do |footer_obj|
           idx += 1
           content["word/footer#{idx}.xml"] =
-            footer_obj.to_xml(encoding: "UTF-8", prefix: true,
-                              standalone: true)
+            serialize_part(footer_obj)
         end
       end
 
@@ -473,8 +464,7 @@ document_rels)
 
         document.header_footer_parts.each do |part|
           content["word/#{part[:target]}"] =
-            part[:content].to_xml(encoding: "UTF-8", prefix: true,
-                                  standalone: true)
+            serialize_part(part[:content])
         end
       end
     end

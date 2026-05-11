@@ -178,34 +178,22 @@ module Uniword
       def merge_properties(base, override)
         merged = RunProperties.new
 
-        # Get all attribute names from RunProperties class
         RunProperties.attributes.each_key do |attr_name|
           override_val = override.public_send(attr_name)
           base_val = base.public_send(attr_name)
 
-          # Use override if it's non-nil AND not using default value
-          # For boolean properties like Bold, check if it was explicitly set
           use_override = if override_val.is_a?(Lutaml::Model::Serializable)
-                           # Check if the property has any non-default/non-nil values
                            override_val.class.attributes.any? do |k, _|
-                             iv = override_val.instance_variable_get(:"@#{k}")
-                             iv && !override_val.using_default?(k)
+                             !override_val.using_default?(k)
                            end
                          else
                            !override_val.nil?
                          end
 
-          begin
-            if use_override
-              merged.public_send(:"#{attr_name}=", override_val)
-            elsif base_val
-              merged.public_send(:"#{attr_name}=", base_val)
-            end
-          rescue StandardError => e
-            Uniword.logger&.debug do
-              "Skipping attribute #{attr_name}: #{e.message}"
-            end
-          end
+          value = use_override ? override_val : base_val
+          next unless value
+
+          merged.public_send(:"#{attr_name}=", value)
         end
 
         merged

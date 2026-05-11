@@ -32,6 +32,9 @@ module Uniword
       attribute :equation_arrays, EquationArray, collection: true,
                                                  initialize_empty: true
 
+      # Transient: position among sibling runs (used by MHTML renderer)
+      attribute :run_position, :integer
+
       xml do
         element "oMath"
         namespace Uniword::Ooxml::Namespaces::MathML

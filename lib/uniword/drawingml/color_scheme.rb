@@ -313,7 +313,7 @@ module Uniword
         color_name = color_name.to_sym
         # Map folHlink to fol_hlink for attribute access
         attr_name = color_name == :folHlink ? :fol_hlink : color_name
-        color_obj = instance_variable_get("@#{attr_name}")
+        color_obj = public_send(attr_name)
         color_obj&.value
       end
 
@@ -345,7 +345,7 @@ module Uniword
 
         color_obj = color_class.new
         color_obj.rgb = value
-        instance_variable_set("@#{attr_name}", color_obj)
+        public_send(:"#{attr_name}=", color_obj)
         @colors_hash[color_name] = value
       end
 

@@ -15,6 +15,9 @@ module Uniword
       attribute :history, Uniword::Properties::HistoryValue
       attribute :runs, Run, collection: true, initialize_empty: true
 
+      # Transient: position among sibling runs (used by MHTML renderer)
+      attribute :run_position, :integer
+
       xml do
         element "hyperlink"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML

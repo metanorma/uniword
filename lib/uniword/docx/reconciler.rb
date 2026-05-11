@@ -85,15 +85,14 @@ module Uniword
         ].compact
 
         parts.each do |part|
-          part.instance_variable_set(:@pending_namespace_data, nil)
-          part.instance_variable_set(:@import_declaration_plan, nil)
+          part.pending_namespace_data = nil
+          part.import_declaration_plan = nil
+          part.pending_plan_root_element = nil
+          # TODO: @xml_input_namespaces has no public accessor in lutaml-model.
+          # Replace with public API once lutaml-model exposes one.
           part.instance_variable_set(:@xml_input_namespaces, nil)
-          part.instance_variable_set(:@pending_plan_root_element, nil)
         end
       end
-
-      # -- Section Properties --
-
       def reconcile_section_properties
         return unless package.document&.body
 

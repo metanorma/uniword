@@ -9,11 +9,7 @@ module Uniword
     # the generated setter.
     module BooleanElement
       def value
-        @val != "false"
-      end
-
-      def value=(v)
-        @val = v ? nil : "false"
+        val != "false"
       end
     end
 
@@ -35,7 +31,7 @@ module Uniword
                    else
                      v
                    end
-            value_set_for(:val) if @val
+            value_set_for(:val)
           end
         end
       end
