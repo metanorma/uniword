@@ -173,7 +173,7 @@ module Uniword
           {
             paragraphs: html.scan(/<p[\s>]/i).count,
             tables: html.scan(/<table/i).count,
-            images: html.scan(/<img/i).count
+            images: html.scan(/<img/i).count,
           }
         else
           { paragraphs: 0, tables: 0, images: 0 }

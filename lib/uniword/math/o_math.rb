@@ -11,6 +11,7 @@ module Uniword
     # Element: <m:oMath>
     class OMath < Lutaml::Model::Serializable
       include Uniword::HasRunPosition
+
       # Pattern 0: Attributes BEFORE xml mappings
       attribute :runs, MathRun, collection: true, initialize_empty: true
       attribute :functions, Function, collection: true, initialize_empty: true
