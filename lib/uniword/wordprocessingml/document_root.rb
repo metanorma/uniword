@@ -2,6 +2,7 @@
 
 require "lutaml/model"
 
+require_relative "../document_input"
 require_relative "document_root/feature_facade"
 
 module Uniword
@@ -12,6 +13,7 @@ module Uniword
     # Element: <w:document>
     class DocumentRoot < Lutaml::Model::Serializable
       include FeatureFacade
+      include Uniword::DocumentInput
 
       attribute :mc_ignorable, Uniword::Ooxml::Types::McIgnorable
       attribute :body, Body, default: -> { Body.new }
@@ -208,6 +210,15 @@ module Uniword
         body.paragraphs.flat_map do |para|
           (para.runs || []).flat_map(&:drawings)
         end.compact
+      end
+
+      # @return [Hash] Document statistics (paragraphs, tables, images)
+      def document_stats
+        {
+          paragraphs: paragraphs.count,
+          tables: tables.count,
+          images: images.count
+        }
       end
 
       # Check if document structure is valid.

@@ -23,10 +23,12 @@ module Uniword
     autoload :NumberingProperties, "uniword/properties/numbering_properties"
     autoload :Tabs, "uniword/properties/tabs"
 
+    # Boolean element infrastructure
+    autoload :BooleanElement, "uniword/properties/boolean_element_factory"
+    autoload :BooleanValSetter, "uniword/properties/boolean_element_factory"
+    autoload :BooleanElementFactory, "uniword/properties/boolean_element_factory"
+
     # Boolean formatting classes (from boolean_formatting.rb)
-    # Note: BooleanElement and BooleanValSetter are also in boolean_formatting.rb
-    autoload :BooleanElement, "uniword/properties/boolean_formatting"
-    autoload :BooleanValSetter, "uniword/properties/boolean_formatting"
     autoload :Strike, "uniword/properties/boolean_formatting"
     autoload :DoubleStrike, "uniword/properties/boolean_formatting"
     autoload :SmallCaps, "uniword/properties/boolean_formatting"
@@ -49,7 +51,9 @@ module Uniword
 
     # Bold and Italic (from bold.rb and italic.rb)
     autoload :Bold, "uniword/properties/bold"
+    autoload :BoldCs, "uniword/properties/bold"
     autoload :Italic, "uniword/properties/italic"
+    autoload :ItalicCs, "uniword/properties/italic"
 
     # Complex objects
     autoload :Spacing, "uniword/properties/spacing"

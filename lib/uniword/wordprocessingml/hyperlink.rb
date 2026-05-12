@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
+require_relative "../has_run_position"
 
 module Uniword
   module Wordprocessingml
@@ -9,6 +10,7 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:hyperlink>
     class Hyperlink < Lutaml::Model::Serializable
+      include Uniword::HasRunPosition
       attribute :id, :string
       attribute :anchor, :string
       attribute :tooltip, :string

@@ -136,11 +136,7 @@ module Uniword
     # @raise [ArgumentError] if document is invalid
     def validate_document(doc)
       raise ArgumentError, "Document cannot be nil" if doc.nil?
-
-      # Accept OOXML Document
-      return if doc.is_a?(Uniword::Wordprocessingml::DocumentRoot)
-      # Accept MHTML Document
-      return if doc.is_a?(Uniword::Mhtml::Document)
+      return if doc.is_a?(Uniword::DocumentInput)
 
       raise ArgumentError, "Must be a Document instance"
     end

@@ -277,30 +277,15 @@ module Uniword
     # @param document [Object] Document (OOXML or MHTML)
     # @return [Hash] Statistics hash
     def document_stats(document)
-      # Handle OOXML document
-      if document.is_a?(Uniword::Wordprocessingml::DocumentRoot) || document.is_a?(Uniword::Wordprocessingml::Body)
+      if document.is_a?(Uniword::Wordprocessingml::Body)
         return {
           paragraphs: document.paragraphs.count,
-          tables: document.is_a?(Uniword::Wordprocessingml::DocumentRoot) ? document.tables.count : 0,
-          images: document.is_a?(Uniword::Wordprocessingml::DocumentRoot) ? document.images.count : 0
+          tables: 0,
+          images: 0
         }
       end
 
-      # Handle MHTML document - estimate from HTML content
-      html = if document.is_a?(Mhtml::Document) && document.raw_html
-               document.raw_html
-             elsif document.is_a?(Mhtml::Document) && document.html_content
-               document.html_content
-             end
-      if html
-        {
-          paragraphs: html.scan(/<p[\s>]/i).count,
-          tables: html.scan(/<table/i).count,
-          images: html.scan(/<img/i).count
-        }
-      else
-        { paragraphs: 0, tables: 0, images: 0 }
-      end
+      document.document_stats
     end
 
     # Validate conversion parameters

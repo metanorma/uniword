@@ -2,6 +2,8 @@
 
 require "lutaml/model"
 
+require_relative "../document_input"
+
 module Uniword
   module Mhtml
     # MHTML Document — top-level model for .mht/.mhtml/.doc files.
@@ -17,6 +19,8 @@ module Uniword
     #     ├── word_document_settings (Metadata::WordDocumentSettings)
     #     └── filelist_xml (String)
     class Document < Lutaml::Model::Serializable
+      include Uniword::DocumentInput
+
       # MIME headers
       attribute :mime_version, :string, default: -> { "1.0" }
       attribute :boundary, :string
@@ -160,6 +164,20 @@ module Uniword
       def inspect
         "#<#{self.class} parts=#{parts.length} images=#{image_parts.length} " \
           "xml=#{xml_parts.length} theme=#{theme_part ? 'yes' : 'no'}>"
+      end
+
+      # @return [Hash] Document statistics (paragraphs, tables, images)
+      def document_stats
+        html = raw_html || html_content
+        if html
+          {
+            paragraphs: html.scan(/<p[\s>]/i).count,
+            tables: html.scan(/<table/i).count,
+            images: html.scan(/<img/i).count
+          }
+        else
+          { paragraphs: 0, tables: 0, images: 0 }
+        end
       end
     end
   end
