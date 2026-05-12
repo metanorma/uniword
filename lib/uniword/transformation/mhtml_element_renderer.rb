@@ -547,7 +547,7 @@ module Uniword
       def build_position_map(elements, fallback_pos)
         by_pos = {}
         elements.each do |el|
-          pos = el.run_position if el.is_a?(Uniword::Wordprocessingml::Hyperlink) || el.is_a?(Uniword::Math::OMath)
+          pos = el.run_position if el.is_a?(Uniword::HasRunPosition)
           pos ||= fallback_pos
           by_pos[pos] ||= []
           by_pos[pos] << el
