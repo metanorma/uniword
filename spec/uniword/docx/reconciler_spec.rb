@@ -516,9 +516,9 @@ RSpec.describe Uniword::Docx::Reconciler do
 
     it "handles nil parts gracefully" do
       package = Uniword::Docx::Package.new
-      expect {
+      expect do
         described_class.new(package).reconcile
-      }.not_to raise_error
+      end.not_to raise_error
     end
   end
 end

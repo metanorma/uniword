@@ -217,7 +217,7 @@ module Uniword
         {
           paragraphs: paragraphs.count,
           tables: tables.count,
-          images: images.count
+          images: images.count,
         }
       end
 

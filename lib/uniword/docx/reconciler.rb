@@ -93,6 +93,7 @@ module Uniword
           part.instance_variable_set(:@xml_input_namespaces, nil)
         end
       end
+
       def reconcile_section_properties
         return unless package.document&.body
 

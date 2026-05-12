@@ -60,7 +60,8 @@ module Uniword
           xml do
             element element_name
             namespace WML_NS
-            map_attribute "val", to: :val, render_nil: false, render_default: false
+            map_attribute "val", to: :val, render_nil: false,
+                                 render_default: false
           end
         end
 

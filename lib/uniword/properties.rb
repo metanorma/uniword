@@ -26,7 +26,8 @@ module Uniword
     # Boolean element infrastructure
     autoload :BooleanElement, "uniword/properties/boolean_element_factory"
     autoload :BooleanValSetter, "uniword/properties/boolean_element_factory"
-    autoload :BooleanElementFactory, "uniword/properties/boolean_element_factory"
+    autoload :BooleanElementFactory,
+             "uniword/properties/boolean_element_factory"
 
     # Boolean formatting classes (from boolean_formatting.rb)
     autoload :Strike, "uniword/properties/boolean_formatting"

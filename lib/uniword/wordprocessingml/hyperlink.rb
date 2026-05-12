@@ -11,6 +11,7 @@ module Uniword
     # Element: <w:hyperlink>
     class Hyperlink < Lutaml::Model::Serializable
       include Uniword::HasRunPosition
+
       attribute :id, :string
       attribute :anchor, :string
       attribute :tooltip, :string

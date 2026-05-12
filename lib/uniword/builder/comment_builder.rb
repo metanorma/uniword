@@ -11,7 +11,8 @@ module Uniword
     class CommentBuilder
       attr_reader :model
 
-      def initialize(model: nil, author: nil, comment_id: nil, date: nil, initials: nil)
+      def initialize(model: nil, author: nil, comment_id: nil, date: nil,
+initials: nil)
         @model = model || Comment.new(
           author: author,
           comment_id: comment_id,

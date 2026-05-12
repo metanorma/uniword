@@ -125,7 +125,7 @@ RSpec.describe "Boolean formatting (BooleanValSetter + BooleanElement)" do
       "Italic" => ["w:i", Uniword::Properties::Italic],
       "Strike" => ["w:strike", Uniword::Properties::Strike],
       "SmallCaps" => ["w:smallCaps", Uniword::Properties::SmallCaps],
-    }.each do |name, (element, klass)|
+    }.each do |name, (_element, klass)|
       it "#{name} serializes true without val attribute" do
         obj = klass.new
         obj.val = true
