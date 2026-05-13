@@ -437,6 +437,91 @@ module Uniword
       end
     end
 
+    # Even and odd page headers (empty marker)
+    #
+    # Element: <w:evenAndOddHeaders>
+    class EvenAndOddHeaders < Lutaml::Model::Serializable
+      xml do
+        element "evenAndOddHeaders"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      end
+    end
+
+    # Mirror margins for book layout (empty marker)
+    #
+    # Element: <w:mirrorMargins>
+    class MirrorMargins < Lutaml::Model::Serializable
+      xml do
+        element "mirrorMargins"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      end
+    end
+
+    # Do not include subdocs in statistics (empty marker)
+    #
+    # Element: <w:doNotIncludeSubdocsInStats>
+    class DoNotIncludeSubdocsInStats < Lutaml::Model::Serializable
+      xml do
+        element "doNotIncludeSubdocsInStats"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+      end
+    end
+
+    # Hyphenation zone width
+    #
+    # Element: <w:hyphenationZone>
+    class HyphenationZone < Lutaml::Model::Serializable
+      attribute :val, :string
+
+      xml do
+        element "hyphenationZone"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute "val", to: :val
+      end
+    end
+
+    # Style pane sort method
+    #
+    # Element: <w:stylePaneSortMethod>
+    class StylePaneSortMethod < Lutaml::Model::Serializable
+      attribute :val, :string
+
+      xml do
+        element "stylePaneSortMethod"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute "val", to: :val
+      end
+    end
+
+    # Document variable entry
+    #
+    # Element: <w:docVar>
+    class DocVar < Lutaml::Model::Serializable
+      attribute :name, :string
+      attribute :val, :string
+
+      xml do
+        element "docVar"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        map_attribute "name", to: :name
+        map_attribute "val", to: :val
+      end
+    end
+
+    # Document variables container
+    #
+    # Element: <w:docVars>
+    class DocVars < Lutaml::Model::Serializable
+      attribute :doc_var, DocVar, collection: true
+
+      xml do
+        element "docVars"
+        namespace Uniword::Ooxml::Namespaces::WordProcessingML
+        mixed_content
+        map_element "docVar", to: :doc_var, render_nil: false
+      end
+    end
+
     # Footnote position
     #
     # Element: <w:pos>
@@ -540,6 +625,13 @@ module Uniword
       attribute :footnote_pr, FootnotePr
       attribute :endnote_pr, EndnotePr
       attribute :hdr_shape_defaults, HdrShapeDefaults
+      attribute :even_and_odd_headers, EvenAndOddHeaders
+      attribute :mirror_margins, MirrorMargins
+      attribute :do_not_include_subdocs_in_stats,
+                DoNotIncludeSubdocsInStats
+      attribute :hyphenation_zone, HyphenationZone
+      attribute :style_pane_sort_method, StylePaneSortMethod
+      attribute :doc_vars, DocVars
       attribute :w14_doc_id, W14DocId
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
@@ -606,6 +698,16 @@ module Uniword
         map_element "endnotePr", to: :endnote_pr, render_nil: false
         map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
                                         render_nil: false
+        map_element "evenAndOddHeaders", to: :even_and_odd_headers,
+                                         render_nil: false
+        map_element "mirrorMargins", to: :mirror_margins, render_nil: false
+        map_element "doNotIncludeSubdocsInStats",
+                    to: :do_not_include_subdocs_in_stats, render_nil: false
+        map_element "hyphenationZone", to: :hyphenation_zone,
+                                       render_nil: false
+        map_element "stylePaneSortMethod", to: :style_pane_sort_method,
+                                           render_nil: false
+        map_element "docVars", to: :doc_vars, render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root

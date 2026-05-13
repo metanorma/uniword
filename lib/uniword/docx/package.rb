@@ -87,6 +87,7 @@ module Uniword
 
       # Non-serialized attributes (DOCX packaging helpers)
       attr_accessor :chart_parts, :bibliography_sources, :profile
+      attr_accessor :settings_rels, :embeddings
 
       # Load DOCX package from file
       #
@@ -194,6 +195,13 @@ module Uniword
           )
         end
 
+        if zip_content["word/_rels/settings.xml.rels"]
+          package.settings_rels =
+            Ooxml::Relationships::PackageRelationships.from_xml(
+              zip_content["word/_rels/settings.xml.rels"]
+            )
+        end
+
         if zip_content["word/fontTable.xml"]
           package.font_table = Uniword::Wordprocessingml::FontTable.from_xml(
             zip_content["word/fontTable.xml"]
@@ -271,6 +279,16 @@ module Uniword
 
         # Extract image parts from word/media/ directory
         extract_image_parts(zip_content, package, zip_path)
+
+        # Extract OLE/embedded object binaries from word/embeddings/
+        embedding_files = zip_content.keys.grep(%r{^word/embeddings/.+$})
+        if embedding_files.any?
+          package.embeddings = {}
+          embedding_files.each do |emb_path|
+            target = emb_path.sub("word/", "")
+            package.embeddings[target] = zip_content[emb_path]
+          end
+        end
 
         package
       end
