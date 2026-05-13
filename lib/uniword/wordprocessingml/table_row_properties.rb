@@ -19,6 +19,7 @@ module Uniword
       attribute :w_after, WidthAfter
       attribute :cnf_style, CnfStyle
       attribute :div_id, ValInt
+      attribute :jc, Properties::Alignment
 
       xml do
         element "trPr"
@@ -34,6 +35,7 @@ module Uniword
         map_element "wAfter", to: :w_after, render_nil: false
         map_element "cnfStyle", to: :cnf_style, render_nil: false
         map_element "divId", to: :div_id, render_nil: false
+        map_element "jc", to: :jc, render_nil: false
       end
 
       def initialize(attrs = {})

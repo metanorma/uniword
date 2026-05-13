@@ -26,6 +26,7 @@ document_rels)
         inject_notes(content_types, document_rels)
         inject_theme(content_types, document_rels)
         inject_numbering(content_types, document_rels)
+        inject_embeddings(content_types, document_rels)
       end
 
       # Serialize all package parts to XML and add to content hash
@@ -88,6 +89,10 @@ document_rels)
           content["word/settings.xml"] =
             serialize_part(settings)
         end
+        if settings_rels
+          content["word/_rels/settings.xml.rels"] =
+            serialize_infrastructure(settings_rels)
+        end
         if font_table
           content["word/fontTable.xml"] =
             serialize_part(font_table)
@@ -131,6 +136,9 @@ document_rels)
         serialize_headers(content)
         serialize_footers(content)
         serialize_header_footer_parts(content)
+
+        # OLE/embedded object binaries
+        serialize_embeddings(content)
       end
 
       # Serialize an OOXML document part with standard encoding
@@ -409,6 +417,28 @@ document_rels)
         )
       end
 
+      def inject_embeddings(content_types, document_rels)
+        return unless embeddings && !embeddings.empty?
+
+        embeddings.each_with_index do |(target, _data), idx|
+          part_name = "/word/#{target}"
+          next if content_types.overrides.any? { |o| o.part_name == part_name }
+
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: part_name,
+            content_type: "application/vnd.openxmlformats-officedocument.oleObject",
+          )
+
+          next if document_rels.relationships.any? { |r| r.target == target }
+
+          document_rels.relationships << Ooxml::Relationships::Relationship.new(
+            id: "rIdEmbedding#{idx + 1}",
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject",
+            target: target,
+          )
+        end
+      end
+
       def wire_header_reference(type, r_id)
         return unless document&.body
 
@@ -465,6 +495,14 @@ document_rels)
         document.header_footer_parts.each do |part|
           content["word/#{part[:target]}"] =
             serialize_part(part[:content])
+        end
+      end
+
+      def serialize_embeddings(content)
+        return unless embeddings && !embeddings.empty?
+
+        embeddings.each do |target, data|
+          content["word/#{target}"] = data
         end
       end
     end
