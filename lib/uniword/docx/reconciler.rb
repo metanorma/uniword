@@ -85,7 +85,6 @@ module Uniword
         ].compact
 
         parts.each do |part|
-          part.pending_namespace_data = nil
           part.import_declaration_plan = nil
           part.pending_plan_root_element = nil
           # TODO: @xml_input_namespaces has no public accessor in lutaml-model.
