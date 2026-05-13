@@ -522,4 +522,113 @@ RSpec.describe Uniword::Docx::Reconciler do
       end.not_to raise_error
     end
   end
+
+  describe "note reference validation (R10)" do
+    let(:run_class) { Uniword::Wordprocessingml::Run }
+    let(:para_class) { Uniword::Wordprocessingml::Paragraph }
+    let(:fn_ref_class) { Uniword::Wordprocessingml::FootnoteReference }
+    let(:en_ref_class) { Uniword::Wordprocessingml::EndnoteReference }
+    let(:table_class) { Uniword::Wordprocessingml::Table }
+    let(:row_class) { Uniword::Wordprocessingml::TableRow }
+    let(:cell_class) { Uniword::Wordprocessingml::TableCell }
+    let(:body_class) { Uniword::Wordprocessingml::Body }
+
+    def build_package_with_refs(ref_ids_in_tables: [], ref_ids_in_paras: [])
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+
+      paras = ref_ids_in_paras.map do |id|
+        para_class.new(runs: [run_class.new(footnote_reference: fn_ref_class.new(id: id))])
+      end
+
+      if ref_ids_in_tables.any?
+        cells = ref_ids_in_tables.map do |id|
+          cell_class.new(
+            paragraphs: [para_class.new(
+              runs: [run_class.new(footnote_reference: fn_ref_class.new(id: id))]
+            )]
+          )
+        end
+        tbl = table_class.new(rows: [row_class.new(cells: cells)])
+        document.body = body_class.new(paragraphs: paras, tables: [tbl])
+      else
+        document.body = body_class.new(paragraphs: paras)
+      end
+
+      package = Uniword::Docx::Package.new
+      package.document = document
+      package
+    end
+
+    it "finds footnote references in table cells" do
+      footnotes = footnotes_class.new(
+        footnote_entries: [
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+          footnote_class.new(id: "2", paragraphs: [para_class.new]),
+          footnote_class.new(id: "3", paragraphs: [para_class.new]),
+        ],
+      )
+      package = build_package_with_refs(
+        ref_ids_in_paras: ["1"],
+        ref_ids_in_tables: ["2", "3"],
+      )
+      package.footnotes = footnotes
+
+      described_class.new(package).reconcile
+
+      # All references matched, no R10 fix should be applied
+      r10_fixes = described_class.new(package).instance_variable_get(:@applied_fixes)
+      described_class.new(package).reconcile
+      # No missing definitions, so no R10 fix
+      expect(package.footnotes.footnote_entries.map(&:id)).to include("1", "2", "3")
+    end
+
+    it "creates missing footnote definitions for references in table cells" do
+      package = build_package_with_refs(
+        ref_ids_in_paras: ["1"],
+        ref_ids_in_tables: ["2", "99"],
+      )
+      package.footnotes = footnotes_class.new(
+        footnote_entries: [
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+        ],
+      )
+
+      reconciler = described_class.new(package)
+      reconciler.reconcile
+
+      ids = package.footnotes.footnote_entries.map(&:id)
+      expect(ids).to include("99")
+      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      expect(r10).not_to be_nil
+      expect(r10[:message]).to include("99")
+    end
+
+    it "creates footnotes.xml when references exist but no footnotes part" do
+      package = build_package_with_refs(ref_ids_in_paras: ["1"])
+
+      reconciler = described_class.new(package)
+      reconciler.reconcile
+
+      expect(package.footnotes).to be_a(footnotes_class)
+      ids = package.footnotes.footnote_entries.map(&:id)
+      expect(ids).to include("-1", "0", "1")
+    end
+
+    it "returns empty when no footnote references exist" do
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      document.body = body_class.new
+      package = Uniword::Docx::Package.new
+      package.document = document
+
+      reconciler = described_class.new(package)
+      reconciler.reconcile
+
+      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      expect(r10).to be_nil
+    end
+  end
 end
