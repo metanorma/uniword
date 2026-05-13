@@ -178,6 +178,7 @@ module Uniword
       def reconcile_note_references
         reconcile_footnote_references
         reconcile_endnote_references
+        reconcile_note_definition_integrity
       end
 
       def reconcile_footnote_references
@@ -226,6 +227,58 @@ module Uniword
         record_fix("R10",
                    "Added #{missing.size} missing endnote definition(s) " \
                    "for orphaned endnoteReference IDs: #{missing.sort.join(', ')}")
+      end
+
+      # Validates structural integrity of footnote/endnote definitions.
+      def reconcile_note_definition_integrity
+        strip_invalid_note_types(:footnote)
+        strip_invalid_note_types(:endnote)
+        deduplicate_note_ids(:footnote)
+        deduplicate_note_ids(:endnote)
+      end
+
+      # R15: Regular footnotes/endnotes must NOT have w:type.
+      # Only separator (id=-1) and continuationSeparator (id=0) use w:type.
+      def strip_invalid_note_types(type)
+        notes = package.public_send(:"#{type}s")
+        return unless notes
+
+        entries = notes.public_send(:"#{type}_entries")
+        invalid = entries.select do |e|
+          e.type && e.id != "-1" && e.id != "0"
+        end
+        return if invalid.empty?
+
+        invalid.each { |e| e.type = nil }
+        record_fix("R15",
+                   "Removed invalid w:type from #{invalid.size} " \
+                   "regular #{type} definition(s): " \
+                   "IDs #{invalid.map(&:id).sort.join(', ')}")
+      end
+
+      # R16: Duplicate IDs in footnotes.xml/endnotes.xml are invalid.
+      # Keeps the first occurrence, removes subsequent duplicates.
+      def deduplicate_note_ids(type)
+        notes = package.public_send(:"#{type}s")
+        return unless notes
+
+        entries = notes.public_send(:"#{type}_entries")
+        seen = Set.new
+        dupes = []
+        entries.reject! do |e|
+          if seen.include?(e.id)
+            dupes << e
+            true
+          else
+            seen << e.id
+            false
+          end
+        end
+        return if dupes.empty?
+
+        record_fix("R16",
+                   "Removed #{dupes.size} duplicate #{type} ID(s): " \
+                   "#{dupes.map(&:id).sort.join(', ')}")
       end
 
       # -- Builders --

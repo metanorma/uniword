@@ -22,6 +22,11 @@ module Uniword
         self
       end
 
+      def character_style(value)
+        ensure_properties.style = Properties::RunStyleReference.new(value: value)
+        self
+      end
+
       def bold(value = true)
         ensure_properties.bold = Properties::Bold.new(value: value)
         self

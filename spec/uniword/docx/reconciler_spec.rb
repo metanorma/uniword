@@ -11,6 +11,7 @@ RSpec.describe Uniword::Docx::Reconciler do
   let(:endnote_class) { Uniword::Wordprocessingml::Endnote }
   let(:footnote_pr_class) { Uniword::Wordprocessingml::FootnotePr }
   let(:endnote_pr_class) { Uniword::Wordprocessingml::EndnotePr }
+  let(:para_class) { Uniword::Wordprocessingml::Paragraph }
 
   def build_package(settings: nil, footnotes: nil, endnotes: nil)
     package = Uniword::Docx::Package.new
@@ -525,7 +526,6 @@ RSpec.describe Uniword::Docx::Reconciler do
 
   describe "note reference validation (R10)" do
     let(:run_class) { Uniword::Wordprocessingml::Run }
-    let(:para_class) { Uniword::Wordprocessingml::Paragraph }
     let(:fn_ref_class) { Uniword::Wordprocessingml::FootnoteReference }
     let(:en_ref_class) { Uniword::Wordprocessingml::EndnoteReference }
     let(:table_class) { Uniword::Wordprocessingml::Table }
@@ -629,6 +629,188 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
       expect(r10).to be_nil
+    end
+  end
+
+  describe "note definition integrity (R15, R16)" do
+    def build_package_with_footnotes(footnote_entries)
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      document.body = Uniword::Wordprocessingml::Body.new
+      package = Uniword::Docx::Package.new
+      package.document = document
+      package.footnotes = footnotes_class.new(
+        footnote_entries: footnote_entries,
+      )
+      package
+    end
+
+    def build_package_with_endnotes(endnote_entries)
+      document = Uniword::Wordprocessingml::DocumentRoot.new
+      document.body = Uniword::Wordprocessingml::Body.new
+      package = Uniword::Docx::Package.new
+      package.document = document
+      package.endnotes = endnotes_class.new(
+        endnote_entries: endnote_entries,
+      )
+      package
+    end
+
+    describe "R15: strip_invalid_note_types" do
+      it "removes w:type from regular footnote definitions" do
+        package = build_package_with_footnotes([
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", type: "normal", paragraphs: [para_class.new]),
+          footnote_class.new(id: "2", type: "someOtherType", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        entries = package.footnotes.footnote_entries
+        expect(entries.find { |e| e.id == "1" }.type).to be_nil
+        expect(entries.find { |e| e.id == "2" }.type).to be_nil
+
+        r15 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R15" }
+        expect(r15).not_to be_nil
+        expect(r15[:message]).to include("2")
+        expect(r15[:message]).to include("1", "2")
+      end
+
+      it "preserves w:type on separator and continuation entries" do
+        package = build_package_with_footnotes([
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        entries = package.footnotes.footnote_entries
+        expect(entries.find { |e| e.id == "-1" }.type).to eq("separator")
+        expect(entries.find { |e| e.id == "0" }.type).to eq("continuationSeparator")
+        expect(entries.find { |e| e.id == "1" }.type).to be_nil
+
+        r15 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R15" }
+        expect(r15).to be_nil
+      end
+
+      it "removes w:type from regular endnote definitions" do
+        package = build_package_with_endnotes([
+          endnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          endnote_class.new(id: "1", type: "normal", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        expect(package.endnotes.endnote_entries.find { |e| e.id == "1" }.type).to be_nil
+        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        expect(r15.size).to eq(1)
+        expect(r15.first[:message]).to include("endnote")
+      end
+
+      it "does nothing when no invalid types exist" do
+        package = build_package_with_footnotes([
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        expect(r15).to be_empty
+      end
+
+      it "does nothing when footnotes and endnotes are nil" do
+        document = Uniword::Wordprocessingml::DocumentRoot.new
+        document.body = Uniword::Wordprocessingml::Body.new
+        package = Uniword::Docx::Package.new
+        package.document = document
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        expect(r15).to be_empty
+      end
+    end
+
+    describe "R16: deduplicate_note_ids" do
+      it "removes duplicate footnote IDs keeping first occurrence" do
+        package = build_package_with_footnotes([
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+          footnote_class.new(id: "2", paragraphs: [para_class.new]),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+          footnote_class.new(id: "3", paragraphs: [para_class.new]),
+          footnote_class.new(id: "2", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        ids = package.footnotes.footnote_entries.map(&:id)
+        expect(ids).to eq(["-1", "0", "1", "2", "3"])
+        expect(ids.uniq).to eq(ids)
+
+        r16 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R16" }
+        expect(r16).not_to be_nil
+        expect(r16[:message]).to include("2")
+        expect(r16[:message]).to include("1", "2")
+      end
+
+      it "removes duplicate endnote IDs" do
+        package = build_package_with_endnotes([
+          endnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          endnote_class.new(id: "1", paragraphs: [para_class.new]),
+          endnote_class.new(id: "1", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        ids = package.endnotes.endnote_entries.map(&:id)
+        expect(ids).to eq(["-1", "0", "1"])
+
+        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        expect(r16.size).to eq(1)
+        expect(r16.first[:message]).to include("endnote")
+      end
+
+      it "does nothing when no duplicates exist" do
+        package = build_package_with_footnotes([
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", paragraphs: [para_class.new]),
+          footnote_class.new(id: "2", paragraphs: [para_class.new]),
+        ])
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        expect(r16).to be_empty
+      end
+
+      it "does nothing when footnotes and endnotes are nil" do
+        document = Uniword::Wordprocessingml::DocumentRoot.new
+        document.body = Uniword::Wordprocessingml::Body.new
+        package = Uniword::Docx::Package.new
+        package.document = document
+
+        reconciler = described_class.new(package)
+        reconciler.reconcile
+
+        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        expect(r16).to be_empty
+      end
     end
   end
 end
