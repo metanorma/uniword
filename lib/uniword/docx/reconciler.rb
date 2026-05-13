@@ -191,7 +191,7 @@ module Uniword
           s << fn.id
         end
 
-        missing = referenced - defined
+        missing = referenced.to_set - defined
         return if missing.empty?
 
         missing.each do |id|
@@ -215,7 +215,7 @@ module Uniword
           s << en.id
         end
 
-        missing = referenced - defined
+        missing = referenced.to_set - defined
         return if missing.empty?
 
         missing.each do |id|
@@ -272,14 +272,35 @@ module Uniword
 
       def collect_note_ids(type)
         ref_attr = type == :footnote ? :footnote_reference : :endnote_reference
-        ids = Set.new
-        package.document.body.paragraphs.each do |p|
+        ids = []
+        collect_note_ids_from_element(package.document.body, ref_attr, ids)
+        ids
+      end
+
+      def collect_note_ids_from_element(element, ref_attr, ids)
+        return unless element
+
+        collect_note_ids_from_paragraphs(element.paragraphs, ref_attr, ids)
+
+        tables = element.tables
+        return unless tables
+        tables.each do |tbl|
+          tbl.rows.each do |row|
+            row.cells.each do |cell|
+              collect_note_ids_from_paragraphs(cell.paragraphs, ref_attr, ids)
+            end
+          end
+        end
+      end
+
+      def collect_note_ids_from_paragraphs(paragraphs, ref_attr, ids)
+        return unless paragraphs
+        paragraphs.each do |p|
           (p.runs || []).each do |r|
             ref = r.public_send(ref_attr)
             ids << ref.id if ref&.id
           end
         end
-        ids
       end
 
       def ensure_footnotes_part
