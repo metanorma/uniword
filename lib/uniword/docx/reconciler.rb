@@ -28,6 +28,7 @@ module Uniword
         reconcile_section_properties
         reconcile_footnotes
         reconcile_endnotes
+        reconcile_note_references
         repair_theme
 
         # Group 2: Support parts (profile-dependent)
@@ -172,6 +173,61 @@ module Uniword
         ensure_separators(package.endnotes, :endnote) if package.endnotes
       end
 
+      # -- Note reference consistency --
+
+      def reconcile_note_references
+        reconcile_footnote_references
+        reconcile_endnote_references
+      end
+
+      def reconcile_footnote_references
+        return unless package.document&.body
+
+        referenced = collect_note_ids(:footnote)
+        return if referenced.empty?
+
+        ensure_footnotes_part
+        defined = package.footnotes.footnote_entries.each_with_object(Set.new) do |fn, s|
+          s << fn.id
+        end
+
+        missing = referenced - defined
+        return if missing.empty?
+
+        missing.each do |id|
+          package.footnotes.footnote_entries << Wordprocessingml::Footnote.new(
+            id: id, paragraphs: [Wordprocessingml::Paragraph.new],
+          )
+        end
+        record_fix("R10",
+                   "Added #{missing.size} missing footnote definition(s) " \
+                   "for orphaned footnoteReference IDs: #{missing.sort.join(', ')}")
+      end
+
+      def reconcile_endnote_references
+        return unless package.document&.body
+
+        referenced = collect_note_ids(:endnote)
+        return if referenced.empty?
+
+        ensure_endnotes_part
+        defined = package.endnotes.endnote_entries.each_with_object(Set.new) do |en, s|
+          s << en.id
+        end
+
+        missing = referenced - defined
+        return if missing.empty?
+
+        missing.each do |id|
+          package.endnotes.endnote_entries << Wordprocessingml::Endnote.new(
+            id: id, paragraphs: [Wordprocessingml::Paragraph.new],
+          )
+        end
+        record_fix("R10",
+                   "Added #{missing.size} missing endnote definition(s) " \
+                   "for orphaned endnoteReference IDs: #{missing.sort.join(', ')}")
+      end
+
       # -- Builders --
 
       def minimal_footnotes
@@ -212,6 +268,32 @@ module Uniword
 
         entries.unshift(separator_entry(type)) unless ids.include?("-1")
         entries.unshift(continuation_entry(type)) unless ids.include?("0")
+      end
+
+      def collect_note_ids(type)
+        ref_attr = type == :footnote ? :footnote_reference : :endnote_reference
+        ids = Set.new
+        package.document.body.paragraphs.each do |p|
+          (p.runs || []).each do |r|
+            ref = r.public_send(ref_attr)
+            ids << ref.id if ref&.id
+          end
+        end
+        ids
+      end
+
+      def ensure_footnotes_part
+        return if package.footnotes
+
+        package.footnotes = minimal_footnotes
+        record_fix("R9", "Created footnotes.xml for orphaned references")
+      end
+
+      def ensure_endnotes_part
+        return if package.endnotes
+
+        package.endnotes = minimal_endnotes
+        record_fix("R9", "Created endnotes.xml for orphaned references")
       end
 
       # -- Group 2: Support parts (profile-dependent) --

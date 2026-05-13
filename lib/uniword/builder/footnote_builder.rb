@@ -75,7 +75,9 @@ module Uniword
       end
 
       def create_footnote_entry(id, text, &block)
-        entry = Wordprocessingml::Footnote.new(id: id.to_s, type: "normal")
+        # OOXML spec: regular footnotes must NOT have w:type.
+        # Only separator/continuationSeparator use w:type.
+        entry = Wordprocessingml::Footnote.new(id: id.to_s)
         para = ParagraphBuilder.new
         if block_given?
           block.call(para)
@@ -87,7 +89,7 @@ module Uniword
       end
 
       def create_endnote_entry(id, text, &block)
-        entry = Wordprocessingml::Endnote.new(id: id.to_s, type: "normal")
+        entry = Wordprocessingml::Endnote.new(id: id.to_s)
         para = ParagraphBuilder.new
         if block_given?
           block.call(para)

@@ -19,6 +19,24 @@ module Uniword
 
         map_element "footnote", to: :footnote_entries, render_nil: false
       end
+
+      def sync_element_order
+        return if element_order.nil? || element_order.empty?
+
+        counts = element_order.each_with_object(Hash.new(0)) do |e, h|
+          h[e.name] += 1
+        end
+
+        missing = footnote_entries.size - counts["footnote"]
+        missing.times do
+          element_order << Lutaml::Xml::Element.new("Element", "footnote")
+        end
+      end
+
+      def to_xml(options = {})
+        sync_element_order
+        super
+      end
     end
   end
 end
