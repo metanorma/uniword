@@ -81,13 +81,14 @@ module Uniword
         map_element "body", to: :body, render_default: true
       end
 
-      # Override to_xml to sync body element_order before serialization.
-      # lutaml-model's compiled serializer may bypass Body#to_xml when
-      # serializing Body as a child element, so we sync here at the
-      # DocumentRoot level to ensure programmatically added paragraphs
-      # and tables are included.
+      # Override to_xml to sync element_order on child collections
+      # before serialization. lutaml-model's compiled serializer may
+      # bypass child #to_xml when serializing nested elements, so we
+      # sync here at the DocumentRoot level.
       def to_xml(options = {})
         body&.sync_element_order_for_serialization
+        footnotes&.sync_element_order if footnotes
+        endnotes&.sync_element_order if endnotes
         super
       end
 
