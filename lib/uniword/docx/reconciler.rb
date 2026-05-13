@@ -87,10 +87,9 @@ module Uniword
         parts.each do |part|
           part.import_declaration_plan = nil
           part.pending_plan_root_element = nil
-          # TODO: @xml_input_namespaces has no public accessor in lutaml-model.
-          # Replace with public API once lutaml-model exposes one.
-          part.instance_variable_set(:@xml_input_namespaces, nil)
         end
+
+        parts.each(&:clear_xml_parse_state!)
       end
 
       def reconcile_section_properties

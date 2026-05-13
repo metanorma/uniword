@@ -71,48 +71,30 @@ module Uniword
       def sync_element_order
         return if element_order.nil? || element_order.empty?
 
-        # Count how many p/tbl/sdt entries exist in element_order
-        ordered_p_count = element_order.count { |e| e.name == "p" }
-        ordered_tbl_count = element_order.count { |e| e.name == "tbl" }
-        ordered_sdt_count = element_order.count { |e| e.name == "sdt" }
-        ordered_bookmark_start_count = element_order.count do |e|
-          e.name == "bookmarkStart"
-        end
-        ordered_bookmark_end_count = element_order.count do |e|
-          e.name == "bookmarkEnd"
+        counts = element_order.each_with_object(Hash.new(0)) do |e, h|
+          h[e.name] += 1
         end
 
-        # Add missing paragraphs
-        (paragraphs.size - ordered_p_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "p")
-        end
+        append_missing_elements("p", paragraphs.size - counts["p"])
+        append_missing_elements("tbl", tables.size - counts["tbl"])
+        append_missing_elements("sdt",
+                                structured_document_tags.size - counts["sdt"])
+        append_missing_elements("bookmarkStart",
+                                bookmark_starts.size - counts["bookmarkStart"])
+        append_missing_elements("bookmarkEnd",
+                                bookmark_ends.size - counts["bookmarkEnd"])
 
-        # Add missing tables
-        (tables.size - ordered_tbl_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "tbl")
-        end
+        return unless section_properties && counts["sectPr"].zero?
 
-        # Add missing structured document tags
-        (structured_document_tags.size - ordered_sdt_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "sdt")
-        end
+        element_order << build_order_element("sectPr")
+      end
 
-        # Add missing bookmark starts
-        (bookmark_starts.size - ordered_bookmark_start_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "bookmarkStart")
-        end
+      def append_missing_elements(name, count)
+        count.times { element_order << build_order_element(name) }
+      end
 
-        # Add missing bookmark ends
-        (bookmark_ends.size - ordered_bookmark_end_count).times do
-          element_order << Lutaml::Xml::Element.new("Element", "bookmarkEnd")
-        end
-
-        # Ensure section_properties is in element_order if present
-        return unless section_properties && element_order.none? do |e|
-          e.name == "sectPr"
-        end
-
-        element_order << Lutaml::Xml::Element.new("Element", "sectPr")
+      def build_order_element(name)
+        Lutaml::Xml::Element.new("Element", name)
       end
     end
   end

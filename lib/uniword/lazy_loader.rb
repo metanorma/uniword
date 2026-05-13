@@ -105,7 +105,7 @@ module Uniword
 
         # If not loaded, try to get count without loading
         # This is a hook for subclasses to override
-        send(name).size
+        public_send(name).size
       end
     end
   end

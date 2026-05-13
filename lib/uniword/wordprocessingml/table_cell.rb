@@ -45,6 +45,12 @@ module Uniword
       def text
         paragraphs.map(&:text).join("\n")
       end
+
+      # Set cell text, replacing all paragraphs with a single paragraph.
+      def text=(value)
+        paragraphs.clear
+        paragraphs << Paragraph.new(runs: [Run.new(text: value.to_s)])
+      end
     end
   end
 end

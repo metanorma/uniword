@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
                           lib/**/*.css
                           exe/*
                           data/**/*.yml
+                          data/**/*.xml
                           data/**/*.xsd
                           config/**/*.yml
                           README.adoc
@@ -42,7 +43,7 @@ Gem::Specification.new do |spec|
 
   # Core dependencies
   spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
-  spec.add_dependency "lutaml-model", "~> 0.8.0"
+  spec.add_dependency "lutaml-model", "~> 0.8.0", ">= 0.8.6"
   spec.add_dependency "nokogiri", "~> 1.19"
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 2.3"

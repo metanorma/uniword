@@ -14,23 +14,16 @@ module Uniword
     end
 
     # Helper to define val= override after attribute declaration.
-    # Uses alias_method to save the generated setter, then overrides it.
     module BooleanValSetter
       def self.included(base)
-        base.class_eval do
-          alias_method :__original_val_setter=, :val= if method_defined?(:val=)
-          define_method(:val=) do |v|
-            @val = if v.nil?
-                     nil
-                   elsif v == false || v.to_s == "false"
-                     "false"
-                   elsif v == true || v.to_s == "true"
-                     nil
-                   else
-                     v
-                   end
-            value_set_for(:val)
-          end
+        base.define_method(:val=) do |v|
+          @val = case v
+                 when nil then nil
+                 when false, "false" then "false"
+                 when true, "true" then nil
+                 else v
+                 end
+          value_set_for(:val)
         end
       end
     end
