@@ -506,6 +506,15 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(package.document.import_declaration_plan).to be_nil
     end
 
+    it "calls clear_xml_parse_state! on all parts" do
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.import_declaration_plan = :plan
+      described_class.new(package, profile: profile).reconcile
+      expect(package.document.import_declaration_plan).to be_nil
+      expect(package.document.pending_plan_root_element).to be_nil
+    end
+
     it "handles nil parts gracefully" do
       package = Uniword::Docx::Package.new
       expect do

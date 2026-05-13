@@ -85,6 +85,6 @@ module Uniword
     end
 
     # Raised when a schema file cannot be found
-    class SchemaNotFoundError < StandardError; end
+    class SchemaNotFoundError < Uniword::Error; end
   end
 end

@@ -13,9 +13,16 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 # Version 2.0 uses generated classes from YAML schemas covering 760 elements
 # across 22 OOXML namespaces with perfect round-trip fidelity.
 #
-# @example Create a simple document
+# @example Create a simple document (Builder API)
+#   doc = Uniword::Builder::DocumentBuilder.new
+#   doc.paragraph { |p| p << "Hello World" }
+#   doc.save('output.docx')
+#
+# @example Create a simple document (model API)
 #   doc = Uniword::Wordprocessingml::DocumentRoot.new
-#   doc.add_paragraph("Hello World", bold: true)
+#   doc.body.paragraphs << Uniword::Wordprocessingml::Paragraph.new(
+#     runs: [Uniword::Wordprocessingml::Run.new(text: "Hello World")]
+#   )
 #   doc.save('output.docx')
 #
 # @example Read an existing document
@@ -24,10 +31,10 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 #   doc.paragraphs.each { |p| puts p.text }
 #
 # @example Apply theme and StyleSet
-#   doc = Uniword::Wordprocessingml::DocumentRoot.new
-#   doc.add_paragraph("Hello World")
+#   doc = Uniword::Builder::DocumentBuilder.new
+#   doc.paragraph { |p| p << "Hello World" }
 #   doc.apply_theme('celestial')
-#   doc.apply_styleset('distinctive')
+#   doc.apply_styleset('signature')
 #   doc.save('output.docx')
 #
 # @see DocumentFactory Factory for reading documents
