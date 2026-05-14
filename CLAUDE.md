@@ -178,3 +178,32 @@ lib/uniword/
 - Test fixtures belong in `spec/fixtures/`
 - Each test should focus on a single behavior
 - Follow MECE (Mutually Exclusive, Collectively Exhaustive) principles
+- ISO document loading specs are tagged `:iso_loading` and excluded by default (`.rspec`)
+
+### Test Suite Performance
+
+**Do NOT run the full suite locally with `bundle exec rspec` — it will OOM and segfault.**
+
+Root cause: lutaml-model has a memory leak where `Lutaml::Model::Serializable` instances are never garbage-collected. Each DOCX load creates ~1200 retained objects per MB of DOCX content. Over 6781 examples, RSS grows past 8 GB and crashes. The spec_helper includes an `after(:each)` hook that clears `element_order` arrays to mitigate (reduces per-cycle growth from ~7MB to ~1MB), but the fundamental leak is in lutaml-model's instance tracking and needs an upstream fix.
+
+Run specific directories or files instead:
+
+```bash
+# Fast unit tests (< 2 min each)
+bundle exec rspec spec/uniword/docx/
+bundle exec rspec spec/uniword/validation/
+bundle exec rspec spec/uniword/assembly/
+bundle exec rspec spec/uniword/accessibility/
+
+# Medium tests (5-20 min each)
+bundle exec rspec spec/uniword/wordprocessingml/   # ~20s
+bundle exec rspec spec/uniword/builder/             # ~76s
+bundle exec rspec spec/uniword/ooxml/               # ~7s
+
+# Heavy tests (minutes) — avoid running together
+bundle exec rspec spec/uniword/drawingml/           # ~754s (theme roundtrips)
+bundle exec rspec spec/integration/                 # ~12min
+bundle exec rspec spec/transformation/              # ~35s
+```
+
+For profiling: `bundle exec rspec --profile 30`
