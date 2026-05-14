@@ -65,6 +65,20 @@ RSpec.configure do |config|
     FileUtils.mkdir_p("test_output")
   end
 
+  # Memory management: clear lutaml-model element_order references after each
+  # example. lutaml-model retains XML parse tree nodes in element_order arrays,
+  # creating reference graphs that prevent GC. Without this, RSS grows by
+  # ~7MB/example for DOCX-loading specs, reaching 8+ GB before segfault.
+  config.after(:each) do
+    ObjectSpace.each_object(Lutaml::Model::Serializable) do |obj|
+      if obj.element_order
+        obj.element_order = nil
+        obj.import_declaration_plan = nil
+        obj.pending_plan_root_element = nil
+      end
+    end
+  end
+
   # Skip LibreOffice tests if soffice is not available
   config.before do |example|
     if example.metadata[:skip_if_no_libreoffice]
