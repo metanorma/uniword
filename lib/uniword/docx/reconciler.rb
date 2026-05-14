@@ -508,7 +508,6 @@ module Uniword
         rsid = generate_rsid
 
         settings.zoom ||= Wordprocessingml::Zoom.new(percent: 100)
-        settings.do_not_display_page_boundaries ||= Wordprocessingml::DoNotDisplayPageBoundaries.new
         settings.proof_state ||= Wordprocessingml::ProofState.new(
           spelling: "clean", grammar: "clean",
         )

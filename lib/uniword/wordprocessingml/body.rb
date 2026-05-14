@@ -75,6 +75,18 @@ module Uniword
           h[e.name] += 1
         end
 
+        needed = false
+        needed = true if paragraphs.size > counts["p"]
+        needed = true if tables.size > counts["tbl"]
+        needed = true if structured_document_tags.size > counts["sdt"]
+        needed = true if bookmark_starts.size > counts["bookmarkStart"]
+        needed = true if bookmark_ends.size > counts["bookmarkEnd"]
+        needed = true if section_properties && counts["sectPr"].zero?
+
+        return unless needed
+
+        dup_element_order_if_frozen
+
         append_missing_elements("p", paragraphs.size - counts["p"])
         append_missing_elements("tbl", tables.size - counts["tbl"])
         append_missing_elements("sdt",
@@ -87,6 +99,12 @@ module Uniword
         return unless section_properties && counts["sectPr"].zero?
 
         element_order << build_order_element("sectPr")
+      end
+
+      def dup_element_order_if_frozen
+        return unless element_order.frozen?
+
+        self.element_order = element_order.dup
       end
 
       def append_missing_elements(name, count)
