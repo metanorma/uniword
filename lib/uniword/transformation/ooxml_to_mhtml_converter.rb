@@ -18,7 +18,8 @@ module Uniword
     #   output = Uniword::Infrastructure::MimePackager.new(mhtml_doc).build_mime_content
     #
     class OoxmlToMhtmlConverter
-      # Static MsoNormalTable CSS (used in wrap_html_document head)
+      # Static MsoNormalTable CSS (used in wrap_html_document head).
+      # Only used when MhtmlStyleBuilder does not provide custom CSS.
       MSO_NORMAL_TABLE_STYLE = <<~CSS
         <!--[if gte mso 10]>
         <style>
@@ -30,21 +31,12 @@ module Uniword
         	mso-style-noshow:yes;
         	mso-style-priority:99;
         	mso-style-parent:"";
-        	mso-padding-alt:0in 5.4pt 0in 5.4pt;
-        	mso-para-margin-top:0in;
-        	mso-para-margin-right:0in;
-        	mso-para-margin-bottom:8.0pt;
-        	mso-para-margin-left:0in;
-        	line-height:115%;
+        	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+        	mso-para-margin:0cm;
+        	mso-para-margin-bottom:.0001pt;
         	mso-pagination:widow-orphan;
-        	font-size:12.0pt;
-        	font-family:"Aptos",sans-serif;
-        	mso-ascii-font-family:Aptos;
-        	mso-ascii-theme-font:minor-latin;
-        	mso-hansi-font-family:Aptos;
-        	mso-hansi-theme-font:minor-latin;
-        	mso-font-kerning:1.0pt;
-        	mso-ligatures:standardcontextual;}
+        	font-size:10pt;
+        	font-family:"Cambria",serif;}
         </style>
         <![endif]-->
       CSS

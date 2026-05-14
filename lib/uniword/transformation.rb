@@ -34,5 +34,7 @@ module Uniword
              "#{__dir__}/transformation/mhtml_element_renderer"
     autoload :MhtmlMetadataBuilder,
              "#{__dir__}/transformation/mhtml_metadata_builder"
+    autoload :YamlCssGenerator,
+             "#{__dir__}/transformation/yaml_css_generator"
   end
 end

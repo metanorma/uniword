@@ -697,6 +697,12 @@ module Uniword
         </style>
       LSB_STYLE
 
+      class << self
+        # Custom CSS override set by callers (e.g., ISO adapter).
+        # When set, #style_block returns this instead of the default.
+        attr_accessor :custom_style_block
+      end
+
       # Build the w:LatentStyles block.
       # @return [String] Static latent styles XML
       def self.latent_styles
@@ -704,9 +710,10 @@ module Uniword
       end
 
       # Build the CSS style block.
-      # @return [String] Static CSS style block
+      # Returns custom CSS if set via custom_style_block=, otherwise default.
+      # @return [String] CSS style block
       def self.style_block
-        STYLE_BLOCK
+        custom_style_block || STYLE_BLOCK
       end
     end
   end
