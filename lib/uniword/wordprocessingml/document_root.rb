@@ -112,6 +112,8 @@ module Uniword
       attr_accessor :chart_parts
       # Bibliography sources for sources.xml
       attr_accessor :bibliography_sources
+      # OLE/embedded object binaries (word/embeddings/*)
+      attr_accessor :embeddings
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
                     :package_rels, :content_types, :custom_properties, :custom_xml_items

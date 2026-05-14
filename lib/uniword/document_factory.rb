@@ -188,6 +188,7 @@ module Uniword
         custom_xml_items: :custom_xml_items,
         footnotes: :footnotes,
         endnotes: :endnotes,
+        embeddings: :embeddings,
       }.freeze
 
       # Copy package parts to document for round-trip preservation

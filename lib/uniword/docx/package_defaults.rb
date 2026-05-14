@@ -50,6 +50,7 @@ module Uniword
           package.chart_parts = document.chart_parts if document.chart_parts
           package.custom_xml_items = document.custom_xml_items if document.custom_xml_items
           package.bibliography_sources = document.bibliography_sources if document.bibliography_sources
+          package.embeddings = document.embeddings if document.embeddings
         end
 
         # Create minimal content types for a valid DOCX
