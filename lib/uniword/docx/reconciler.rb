@@ -17,6 +17,16 @@ module Uniword
     class Reconciler
       CONFIG_DIR = File.join(__dir__, "../../../config")
 
+      # All w1x/w16x extension namespace prefixes declared by namespace_scope
+      # on wordprocessingml parts. These MUST be listed in mc:Ignorable so
+      # Word doesn't reject them as unknown extensions.
+      IGNORABLE_PREFIXES = %w[
+        w14 w15 w16se w16cid w16 w16cex w16sdtdh w16sdtfl w16du
+      ].freeze
+
+      # Extension prefixes used in document.xml (adds wp14 for drawing)
+      IGNORABLE_PREFIXES_DOCUMENT = (IGNORABLE_PREFIXES + %w[wp14]).freeze
+
       def initialize(package, profile: nil)
         @package = package
         @profile = profile
@@ -544,7 +554,9 @@ module Uniword
           record_fix("R2", "Generated w15:docId in GUID format")
         end
 
-        settings.mc_ignorable = nil
+        settings.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES.join(" "),
+        )
       end
 
       def reconcile_font_table
@@ -585,7 +597,9 @@ module Uniword
           font_table.fonts << font
         end
 
-        font_table.mc_ignorable = nil
+        font_table.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES.join(" "),
+        )
         record_fix("R13",
                    "Populated font table with profile fonts and signatures")
       end
@@ -604,7 +618,9 @@ module Uniword
 
         ensure_default_styles(styles)
 
-        styles.mc_ignorable = nil
+        styles.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES.join(" "),
+        )
         record_fix("R10",
                    "Ensured styles have docDefaults, latentStyles, and default styles")
       end
@@ -613,7 +629,9 @@ module Uniword
         return unless profile
         return unless package.numbering
 
-        package.numbering.mc_ignorable = nil
+        package.numbering.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES.join(" "),
+        )
 
         # Validate instance → definition references
         package.numbering.instances.each do |inst|
@@ -639,8 +657,11 @@ module Uniword
           package.web_settings
         end
 
-        ws.mc_ignorable = nil
-        record_fix("R1", "Cleared mc:Ignorable on webSettings")
+        ws.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES.join(" "),
+        )
+        ws.allow_png ||= Wordprocessingml::AllowPng.new
+        record_fix("R1", "Set mc:Ignorable and allowPNG on webSettings")
       end
 
       def reconcile_app_properties
@@ -734,7 +755,9 @@ module Uniword
         return unless package.document&.body
 
         doc = package.document
-        doc.mc_ignorable = Ooxml::Types::McIgnorable.new("w14")
+        doc.mc_ignorable = Ooxml::Types::McIgnorable.new(
+          IGNORABLE_PREFIXES_DOCUMENT.join(" "),
+        )
 
         record_fix("R1", "Added mc:Ignorable to document body")
         record_fix("R12", "Assigned rsid and paraId to paragraphs")
