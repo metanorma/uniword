@@ -517,10 +517,16 @@ module Uniword
 
         rsid = generate_rsid
 
+        # Only inject settings defaults for newly created documents.
+        # If settings already has substantial content (zoom + compat + rsids),
+        # the document was loaded from a real DOCX and defaults would alter
+        # its round-trip fidelity.
+        loaded_doc = settings.zoom && settings.compat && settings.rsids
+
         settings.zoom ||= Wordprocessingml::Zoom.new(percent: 100)
         settings.proof_state ||= Wordprocessingml::ProofState.new(
           spelling: "clean", grammar: "clean",
-        )
+        ) unless loaded_doc
         settings.default_tab_stop ||= Wordprocessingml::DefaultTabStop.new(val: "720")
         settings.character_spacing_control ||= Wordprocessingml::CharacterSpacingControl.new(
           val: "doNotCompress",
