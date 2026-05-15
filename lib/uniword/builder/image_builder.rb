@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "securerandom"
+require "digest"
 require "stringio"
 
 module Uniword
@@ -39,7 +39,7 @@ module Uniword
           r_id = "rIdImg#{root.image_parts.size + 1}"
         else
           # No document context — generate a placeholder rId
-          r_id = "rIdImg#{SecureRandom.random_number(1_000_000)}"
+          r_id = "rIdImg#{deterministic_id("img_rid", path)}"
         end
 
         content_type = case File.extname(path).downcase
@@ -137,7 +137,7 @@ alt_text: nil)
         inline.extent = WpDrawing::Extent.new(cx: w, cy: h)
         inline.effect_extent = WpDrawing::EffectExtent.new
         inline.doc_properties = WpDrawing::DocProperties.new(
-          id: SecureRandom.random_number(1_000_000_000),
+          id: deterministic_id("inline", path),
           name: File.basename(path, ".*"),
         )
         inline.graphic = build_graphic(r_id, w, h)
@@ -217,7 +217,7 @@ alt_text: nil)
         end
 
         anchor.doc_properties = WpDrawing::DocProperties.new(
-          id: SecureRandom.random_number(1_000_000_000),
+          id: deterministic_id("anchor", path),
           name: File.basename(path, ".*"),
         )
         anchor.graphic = build_graphic(r_id, w, h)
@@ -268,6 +268,10 @@ alt_text: nil)
       class << self
         private
 
+        def deterministic_id(*seeds)
+          Digest::SHA256.hexdigest(seeds.join(":")).to_i(16) % 1_000_000_000
+        end
+
         # Build the Graphic > GraphicData > Picture chain
         #
         # @param r_id [String] Relationship ID for the image
@@ -295,8 +299,8 @@ alt_text: nil)
           # Non-visual properties
           pic.nv_pic_pr = Picture::NonVisualPictureProperties.new
           pic.nv_pic_pr.c_nv_pr = Drawingml::NonVisualDrawingProperties.new(
-            id: SecureRandom.random_number(1_000_000_000),
-            name: "Picture #{SecureRandom.random_number(1_000_000)}",
+            id: deterministic_id("pic", r_id),
+            name: "Picture",
           )
           pic.nv_pic_pr.c_nv_pic_pr = Picture::NonVisualPictureDrawingProperties.new
 

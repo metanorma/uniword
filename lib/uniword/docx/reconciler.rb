@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "yaml"
-require "securerandom"
+require "digest"
 
 module Uniword
   module Docx
@@ -549,13 +549,15 @@ module Uniword
 
         unless settings.w14_doc_id
           settings.w14_doc_id = Wordprocessingml::W14DocId.new(
-            val: SecureRandom.hex(4).upcase,
+            val: hex_derive("w14_doc_id", 4),
           )
           record_fix("R2", "Generated w14:docId")
         end
         unless settings.w15_doc_id
+          raw = hex_derive("w15_doc_id", 16)
+          formatted = "#{raw[0..7]}-#{raw[8..11]}-#{raw[12..15]}-#{raw[16..19]}-#{raw[20..31]}"
           settings.w15_doc_id = Wordprocessingml::W15DocId.new(
-            val: "{#{SecureRandom.uuid.upcase}}",
+            val: "{#{formatted.upcase}}",
           )
           record_fix("R2", "Generated w15:docId in GUID format")
         end
@@ -771,10 +773,10 @@ module Uniword
         rsid = generate_rsid
         body = doc.body
 
-        body.paragraphs.each do |para|
+        body.paragraphs.each_with_index do |para, idx|
           para.rsid_r ||= rsid
           para.rsid_r_default ||= "00000000"
-          para.para_id ||= generate_hex_id
+          para.para_id ||= generate_hex_id(idx)
           para.text_id ||= "77777777"
         end
 
@@ -889,11 +891,27 @@ module Uniword
       end
 
       def generate_rsid
-        "00#{SecureRandom.hex(3).upcase}"
+        "00#{hex_derive("rsid", 3)}"
       end
 
-      def generate_hex_id
-        SecureRandom.hex(4).upcase
+      def generate_hex_id(index = 0)
+        hex_derive("paraId:#{index}", 4)
+      end
+
+      def hex_derive(seed, byte_count)
+        Digest::SHA256.hexdigest("#{document_fingerprint}:#{seed}")[0...(byte_count * 2)].upcase
+      end
+
+      def document_fingerprint
+        @document_fingerprint ||= begin
+          body = package.document&.body
+          return "empty" unless body
+
+          texts = (body.paragraphs || []).map do |p|
+            (p.runs || []).map { |r| r.text.to_s }.join
+          end
+          Digest::SHA256.hexdigest(texts.join("|"))
+        end
       end
 
       def content_type_overrides_for_present_parts
@@ -977,7 +995,7 @@ module Uniword
       end
 
       def build_rsids(rsid)
-        root = "00#{SecureRandom.hex(3).upcase}"
+        root = "00#{hex_derive("rsid_root", 3)}"
         Wordprocessingml::Rsids.new(
           rsid_root: Wordprocessingml::RsidRoot.new(val: root),
           rsid: [Wordprocessingml::Rsid.new(val: rsid)],

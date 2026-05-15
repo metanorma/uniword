@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "nokogiri"
-require "securerandom"
+require "digest"
 
 module Uniword
   module Builder
@@ -133,6 +133,10 @@ module Uniword
       end
 
       private
+
+      def deterministic_id(*seeds)
+        Digest::SHA256.hexdigest(seeds.join(":")).to_i(16) % 1_000_000_000
+      end
 
       # Build the inner chart XML
       def build_chart_xml(xml)
@@ -288,8 +292,8 @@ module Uniword
         inline.extent = WpDrawing::Extent.new(cx: @width, cy: @height)
         inline.effect_extent = WpDrawing::EffectExtent.new
         inline.doc_properties = WpDrawing::DocProperties.new(
-          id: SecureRandom.random_number(1_000_000_000),
-          name: "Chart #{SecureRandom.random_number(1_000_000)}",
+          id: deterministic_id("chart", @chart_type, r_id),
+          name: "Chart #{@chart_type}",
         )
 
         graphic = Drawingml::Graphic.new
