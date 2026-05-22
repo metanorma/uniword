@@ -33,6 +33,24 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(package.footnotes.footnote_entries.size).to eq(2)
     end
 
+    it "creates separator footnotes with proper paragraph spacing" do
+      settings = settings_class.new
+      settings.footnote_pr = footnote_pr_class.new
+      package = build_package(settings: settings, footnotes: nil, endnotes: nil)
+
+      described_class.new(package).reconcile
+
+      sep = package.footnotes.footnote_entries.find { |e| e.id == "-1" }
+      para = sep.paragraphs.first
+      expect(para).not_to be_nil
+      expect(para.properties).not_to be_nil
+      spacing = para.properties.spacing
+      expect(spacing).not_to be_nil
+      expect(spacing.after).to eq(0)
+      expect(spacing.line).to eq(240)
+      expect(spacing.line_rule).to eq("auto")
+    end
+
     it "creates footnote_pr when footnotes exist but footnote_pr is nil" do
       settings = settings_class.new
       footnotes = footnotes_class.new(
@@ -75,6 +93,43 @@ RSpec.describe Uniword::Docx::Reconciler do
       described_class.new(package).reconcile
 
       expect(package.footnotes).to be_nil
+    end
+
+    it "strips invalid w:type from normal footnotes" do
+      settings = settings_class.new
+      settings.footnote_pr = footnote_pr_class.new
+      footnotes = footnotes_class.new(
+        footnote_entries: [
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "1", type: "normal", paragraphs: []),
+        ],
+      )
+      package = build_package(settings: settings, footnotes: footnotes)
+
+      described_class.new(package).reconcile
+
+      fn1 = footnotes.footnote_entries.find { |e| e.id == "1" }
+      expect(fn1.type).to be_nil
+    end
+
+    it "preserves valid separator types" do
+      settings = settings_class.new
+      settings.footnote_pr = footnote_pr_class.new
+      footnotes = footnotes_class.new(
+        footnote_entries: [
+          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+        ],
+      )
+      package = build_package(settings: settings, footnotes: footnotes)
+
+      described_class.new(package).reconcile
+
+      sep = footnotes.footnote_entries.find { |e| e.id == "-1" }
+      cont = footnotes.footnote_entries.find { |e| e.id == "0" }
+      expect(sep.type).to eq("separator")
+      expect(cont.type).to eq("continuationSeparator")
     end
 
     it "injects missing separator entry (id=-1)" do
@@ -221,6 +276,17 @@ RSpec.describe Uniword::Docx::Reconciler do
       para.runs << run
       package.document.body.paragraphs << para
       package
+    end
+
+    it "expands mc:Ignorable to include all extension prefixes" do
+      package = build_package_with_document
+      described_class.new(package, profile: profile).reconcile
+
+      ignorable = package.document.mc_ignorable.to_s
+      expect(ignorable).to include("w14")
+      expect(ignorable).to include("w15")
+      expect(ignorable).to include("w16")
+      expect(ignorable).to include("wp14")
     end
 
     it "populates settings with Word defaults when profile is provided" do
@@ -587,10 +653,8 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       described_class.new(package).reconcile
 
-      # All references matched, no R10 fix should be applied
       r10_fixes = described_class.new(package).instance_variable_get(:@applied_fixes)
       described_class.new(package).reconcile
-      # No missing definitions, so no R10 fix
       expect(package.footnotes.footnote_entries.map(&:id)).to include("1", "2", "3")
     end
 
@@ -823,4 +887,168 @@ RSpec.describe Uniword::Docx::Reconciler do
       end
     end
   end
-end
+
+  describe "table reconciliation" do
+    let(:table_class) { Uniword::Wordprocessingml::Table }
+    let(:table_props_class) { Uniword::Wordprocessingml::TableProperties }
+    let(:grid_class) { Uniword::Wordprocessingml::TableGrid }
+    let(:grid_col_class) { Uniword::Wordprocessingml::GridCol }
+    let(:table_width_class) { Uniword::Properties::TableWidth }
+    let(:table_look_class) { Uniword::Properties::TableLook }
+    let(:row_class) { Uniword::Wordprocessingml::TableRow }
+    let(:cell_class) { Uniword::Wordprocessingml::TableCell }
+
+    def build_package_with_table(table)
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.body.tables << table
+      package
+    end
+
+    def build_table_with_cells(col_count, row_count)
+      rows = row_count.times.map do
+        cells = col_count.times.map { cell_class.new }
+        row_class.new(cells: cells)
+      end
+      table_class.new(rows: rows)
+    end
+
+    it "adds tblPr when missing" do
+      table = build_table_with_cells(2, 1)
+      table.properties = nil
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      expect(table.properties).to be_a(table_props_class)
+    end
+
+    it "adds tblW with defaults when missing" do
+      table = build_table_with_cells(2, 1)
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      tw = table.properties.table_width
+      expect(tw).not_to be_nil
+      expect(tw.w).to eq(0)
+      expect(tw.type).to eq("auto")
+    end
+
+    it "adds tblLook with defaults when missing" do
+      table = build_table_with_cells(2, 1)
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      look = table.properties.table_look
+      expect(look).not_to be_nil
+      expect(look.val).to eq("04A0")
+      expect(look.first_row).to eq(1)
+      expect(look.no_v_band).to eq(1)
+    end
+
+    it "creates tblGrid with correct column count" do
+      table = build_table_with_cells(3, 2)
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      expect(table.grid).not_to be_nil
+      expect(table.grid.columns.size).to eq(3)
+    end
+
+    it "adjusts tblGrid when column count mismatches" do
+      table = build_table_with_cells(3, 1)
+      table.grid = grid_class.new(columns: [grid_col_class.new])
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      expect(table.grid.columns.size).to eq(3)
+    end
+
+    it "fills missing tblLook attributes on existing table" do
+      table = build_table_with_cells(2, 1)
+      table.properties = table_props_class.new(
+        table_look: table_look_class.new,
+      )
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      look = table.properties.table_look
+      expect(look.val).to eq("04A0")
+      expect(look.first_row).to eq(1)
+    end
+
+    it "does not overwrite existing valid table structure" do
+      table = build_table_with_cells(2, 1)
+      table.properties = table_props_class.new(
+        table_width: table_width_class.new(w: 5000, type: "dxa"),
+        table_look: table_look_class.new(
+          val: "01A0", first_row: 0, last_row: 0,
+          first_column: 0, last_column: 0,
+          no_h_band: 0, no_v_band: 0,
+        ),
+      )
+      table.grid = grid_class.new(
+        columns: [grid_col_class.new(width: 2500),
+                  grid_col_class.new(width: 2500)],
+      )
+      package = build_package_with_table(table)
+
+      reconciler = described_class.new(package)
+      reconciler.reconcile
+
+      look = table.properties.table_look
+      expect(look.val).to eq("01A0")
+      expect(look.first_row).to eq(0)
+      expect(table.properties.table_width.w).to eq(5000)
+      expect(table.properties.table_width.type).to eq("dxa")
+    end
+  end
+
+  describe "headers/footers reconciliation" do
+    let(:header_class) { Uniword::Wordprocessingml::Header }
+    let(:footer_class) { Uniword::Wordprocessingml::Footer }
+    let(:run_class) { Uniword::Wordprocessingml::Run }
+    let(:run_props_class) { Uniword::Wordprocessingml::RunProperties }
+    let(:text_class) { Uniword::Wordprocessingml::Text }
+
+    def build_package_with_headers
+      package = Uniword::Docx::Package.new
+      header = header_class.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      props = Uniword::Wordprocessingml::ParagraphProperties.new
+      props.alignment = Uniword::Properties::Alignment.new(val: "right")
+      para.properties = props
+
+      run = run_class.new
+      run.properties = run_props_class.new
+      para.runs << run
+
+      header.paragraphs << para
+      package.document = Uniword::Wordprocessingml::DocumentRoot.new
+      package.document.headers = { "default" => header }
+      package
+    end
+
+    it "strips empty runs from header paragraphs" do
+      package = build_package_with_headers
+      described_class.new(package).reconcile
+
+      header = package.document.headers["default"]
+      expect(header.paragraphs.first.runs).to be_empty
+    end
+
+    it "preserves runs that have text content" do
+      package = build_package_with_headers
+      run = run_class.new
+      run.text = text_class.new(content: "Header text")
+      package.document.headers["default"].paragraphs.first.runs << run
+
+      described_class.new(package).reconcile
+
+      header = package.document.headers["default"]
+      expect(header.paragraphs.first.runs.size).to eq(1)

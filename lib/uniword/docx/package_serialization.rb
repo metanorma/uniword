@@ -214,7 +214,7 @@ document_rels)
         end
 
         document_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: "rIdSrc#{SecureRandom.hex(4)}",
+          id: "rIdSrcBib",
           type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
           target: "sources.xml",
         )
