@@ -202,11 +202,9 @@ module Uniword
         id = @bookmark_counter.to_s
 
         para = ParagraphBuilder.new
-        para.model.bookmark_starts <<
-          Wordprocessingml::BookmarkStart.new(id: id, name: name)
+        para << Wordprocessingml::BookmarkStart.new(id: id, name: name)
         block.call(para) if block_given?
-        para.model.bookmark_ends <<
-          Wordprocessingml::BookmarkEnd.new(id: id)
+        para << Wordprocessingml::BookmarkEnd.new(id: id)
         @model.body.paragraphs << para.build
         para
       end

@@ -25,6 +25,8 @@ module Uniword
       attribute :no_break_hyphen, NoBreakHyphen
       attribute :sym, Symbol
       attribute :last_rendered_page_break, LastRenderedPageBreak
+      attribute :separator_char, SeparatorChar
+      attribute :continuation_separator_char, ContinuationSeparatorChar
 
       # Revision tracking attributes
       attribute :rsid_r, :string          # Revision ID for run
@@ -60,6 +62,9 @@ module Uniword
         map_element "noBreakHyphen", to: :no_break_hyphen, render_nil: false
         map_element "sym", to: :sym, render_nil: false
         map_element "lastRenderedPageBreak", to: :last_rendered_page_break,
+                                             render_nil: false
+        map_element "separator", to: :separator_char, render_nil: false
+        map_element "continuationSeparator", to: :continuation_separator_char,
                                              render_nil: false
       end
 

@@ -38,48 +38,40 @@ module Uniword
         # Ensure output directory exists
         FileUtils.mkdir_p(File.dirname(output_path))
 
-        # Use temp file to avoid Windows atomic rename issues
-        # Rubyzip's CREATE mode fails when output_path exists
+        # Use Zip::OutputStream directly (not Zip::File) so that Entry objects
+        # with internal_file_attributes=0 are preserved through serialization.
+        # Zip::File wraps entries in StreamableStream which is NOT kind_of?(Entry),
+        # causing put_next_entry to discard our Entry and create a fresh one.
         temp_path = "#{output_path}.#{Process.pid}.tmp"
 
-        Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
+        Zip::OutputStream.open(temp_path) do |zos|
           content.each do |entry_path, entry_content|
-            zip_file.get_output_stream(entry_path) do |stream|
-              # Binary data (ASCII-8BIT) is written as-is;
-              # text content is ensured to be UTF-8
-              final_content =
-                if entry_content.encoding == Encoding::ASCII_8BIT
-                  entry_content
-                else
-                  entry_content.encode(
-                    "UTF-8", invalid: :replace, undef: :replace
-                  )
-                end
-              stream.write(final_content)
-            end
+            # DOCX ZIP entries must have binary flag (internal_file_attributes=0)
+            # and no Unix permissions (external_file_attributes=0) to match
+            # Word's output format.
+            # rubyzip's write_c_dir_entry overrides external_file_attributes
+            # on FSTYPE_UNIX, so we force FAT to prevent this.
+            entry = Zip::Entry.new(temp_path, entry_path.to_s)
+            entry.internal_file_attributes = 0
+            entry.external_file_attributes = 0
+            entry.fstype = Zip::FSTYPE_FAT
+
+            zos.put_next_entry(entry)
+
+            final_content =
+              if entry_content.encoding == Encoding::ASCII_8BIT
+                entry_content
+              else
+                entry_content.encode(
+                  "UTF-8", invalid: :replace, undef: :replace
+                )
+              end
+            zos.write(final_content)
           end
         end
 
-        # On Windows, the handle may still be held briefly after block ends
-        # and FileUtils.mv (rename) can fail with EACCES on locked files.
-        # Use File.binwrite + unlink instead, which is more Windows-friendly.
-        retries = 10
-        begin
-          FileUtils.rm_f(output_path)
-          # Wait for Windows to release the lock
-          sleep(0.5)
-          # Copy content instead of renaming to avoid rename locks
-          File.binwrite(output_path, File.binread(temp_path))
-          FileUtils.rm_f(temp_path)
-        rescue Errno::EACCES
-          retries -= 1
-          raise unless retries.positive?
-
-          sleep(0.5)
-          retry
-        end
+        move_temp_to_output(temp_path, output_path)
       ensure
-        # Clean up temp file if it still exists
         FileUtils.rm_f(temp_path) if defined?(temp_path) && temp_path && File.exist?(temp_path)
       end
 
@@ -162,31 +154,37 @@ module Uniword
       def write_to_zip_file(content, output_path)
         temp_path = "#{output_path}.#{Process.pid}.#{rand(1000)}.tmp"
 
-        Zip::File.open(temp_path, Zip::File::CREATE) do |zip_file|
+        Zip::OutputStream.open(temp_path) do |zos|
           content.each do |entry_path, entry_content|
-            zip_file.get_output_stream(entry_path) do |stream|
-              final_content =
-                if entry_content.encoding == Encoding::ASCII_8BIT
-                  entry_content
-                else
-                  entry_content.encode(
-                    "UTF-8", invalid: :replace, undef: :replace
-                  )
-                end
-              stream.write(final_content)
-            end
+            entry = Zip::Entry.new(temp_path, entry_path.to_s)
+            entry.internal_file_attributes = 0
+            entry.external_file_attributes = 0
+            entry.fstype = Zip::FSTYPE_FAT
+
+            zos.put_next_entry(entry)
+
+            final_content =
+              if entry_content.encoding == Encoding::ASCII_8BIT
+                entry_content
+              else
+                entry_content.encode(
+                  "UTF-8", invalid: :replace, undef: :replace
+                )
+              end
+            zos.write(final_content)
           end
         end
 
-        # On Windows, the handle may still be held briefly after block ends
-        # and FileUtils.mv (rename) can fail with EACCES on locked files.
-        # Use File.binwrite + unlink instead, which is more Windows-friendly.
+        move_temp_to_output(temp_path, output_path)
+      ensure
+        FileUtils.rm_f(temp_path) if defined?(temp_path) && temp_path && File.exist?(temp_path)
+      end
+
+      def move_temp_to_output(temp_path, output_path)
         retries = 10
         begin
           FileUtils.rm_f(output_path)
-          # Wait for Windows to release the lock
           sleep(0.5)
-          # Copy content instead of renaming to avoid rename locks
           File.binwrite(output_path, File.binread(temp_path))
           FileUtils.rm_f(temp_path)
         rescue Errno::EACCES
@@ -196,8 +194,6 @@ module Uniword
           sleep(0.5)
           retry
         end
-      ensure
-        FileUtils.rm_f(temp_path)
       end
 
       # Validate the content hash.

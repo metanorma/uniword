@@ -24,6 +24,7 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
 
       entry = doc.model.footnotes.footnote_entries.first
       expect(entry.id).to eq("1")
+      expect(entry.type).to be_nil
       expect(entry.paragraphs.size).to be >= 1
       expect(entry.paragraphs.first.text).to include("Footnote text")
     end
@@ -70,6 +71,7 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
 
       entry = doc.model.endnotes.endnote_entries.first
       expect(entry.id).to eq("1")
+      expect(entry.type).to be_nil
       expect(entry.paragraphs.first.text).to include("Endnote text")
     end
 

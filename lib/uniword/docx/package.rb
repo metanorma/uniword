@@ -89,6 +89,14 @@ module Uniword
       attr_accessor :chart_parts, :bibliography_sources, :profile
       attr_accessor :settings_rels, :embeddings
 
+      # Raw XML from template ZIP for unmodified parts.
+      # When present, these are used verbatim instead of re-serializing
+      # through lutaml-model (which drops unmapped elements).
+      attr_accessor :raw_xml_parts
+
+      # Paths that have been modified and should not use raw XML passthrough.
+      attr_accessor :modified_part_paths
+
       # Load DOCX package from file
       #
       # @param path [String] Path to .docx file
