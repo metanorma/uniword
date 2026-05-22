@@ -30,12 +30,16 @@ module Uniword
           para = Wordprocessingml::Paragraph.new
           para.runs << Wordprocessingml::Run.new(text: element)
           @model.paragraphs << para
+          track_element_order("p")
         when Wordprocessingml::Paragraph
           @model.paragraphs << element
+          track_element_order("p")
         when Wordprocessingml::Table
           @model.tables << element
+          track_element_order("tbl")
         when ParagraphBuilder
           @model.paragraphs << element.build
+          track_element_order("p")
         else
           raise ArgumentError, "Cannot add #{element.class} to table cell"
         end
@@ -87,7 +91,22 @@ module Uniword
 
       def ensure_properties
         @model.properties ||= Wordprocessingml::TableCellProperties.new
+        ensure_properties_in_order
         @model.properties
+      end
+
+      def track_element_order(tag)
+        @model.element_order ||= []
+        ensure_properties_in_order
+        @model.element_order << Lutaml::Xml::Element.new("Element", tag)
+      end
+
+      def ensure_properties_in_order
+        return unless @model.element_order
+        return if @model.element_order.any? { |e| e.element? && e.name == "tcPr" }
+        return unless @model.properties
+
+        @model.element_order.unshift(Lutaml::Xml::Element.new("Element", "tcPr"))
       end
     end
   end

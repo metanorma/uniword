@@ -66,6 +66,7 @@ module Uniword
     class Level < Lutaml::Model::Serializable
       attribute :ilvl, :integer
       attribute :tentative, :string
+      attribute :tplc, :string
       attribute :start, Start
       attribute :numFmt, NumFmt
       attribute :pStyle, PStyle
@@ -85,6 +86,7 @@ module Uniword
 
         map_attribute "ilvl", to: :ilvl
         map_attribute "tentative", to: :tentative, render_nil: false
+        map_attribute "tplc", to: :tplc, render_nil: false
         map_element "start", to: :start, render_nil: false
         map_element "numFmt", to: :numFmt, render_nil: false
         map_element "pStyle", to: :pStyle, render_nil: false

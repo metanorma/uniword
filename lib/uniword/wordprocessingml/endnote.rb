@@ -19,7 +19,7 @@ module Uniword
         mixed_content
 
         map_attribute "id", to: :id
-        map_attribute "type", to: :type
+        map_attribute "type", to: :type, render_nil: false
         map_element "p", to: :paragraphs, render_nil: false
       end
     end

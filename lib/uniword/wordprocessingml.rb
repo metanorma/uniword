@@ -34,6 +34,9 @@ module Uniword
     autoload :LastRenderedPageBreak,
              "uniword/wordprocessingml/last_rendered_page_break"
     autoload :CarriageReturn, "uniword/wordprocessingml/carriage_return"
+    autoload :SeparatorChar, "uniword/wordprocessingml/separator_char"
+    autoload :ContinuationSeparatorChar,
+             "uniword/wordprocessingml/separator_char"
     autoload :SimpleField, "uniword/wordprocessingml/simple_field"
     autoload :TextBoxContent, "uniword/wordprocessingml/text_box_content"
     autoload :Object, "uniword/wordprocessingml/object"
@@ -129,7 +132,23 @@ module Uniword
     autoload :Font, "uniword/wordprocessingml/font"
     autoload :Fonts, "uniword/wordprocessingml/fonts"
     autoload :FontTable, "uniword/wordprocessingml/font_table"
+
+    # Web settings
     autoload :WebSettings, "uniword/wordprocessingml/web_settings"
+    autoload :OptimizeForBrowser,
+             "uniword/wordprocessingml/optimize_for_browser"
+    autoload :AllowPng, "uniword/wordprocessingml/allow_png"
+    autoload :DivBorder, "uniword/wordprocessingml/div_border"
+    autoload :DivBorders, "uniword/wordprocessingml/div_borders"
+    autoload :MarLeft, "uniword/wordprocessingml/mar_left"
+    autoload :MarRight, "uniword/wordprocessingml/mar_right"
+    autoload :MarTop, "uniword/wordprocessingml/mar_top"
+    autoload :MarBottom, "uniword/wordprocessingml/mar_bottom"
+    autoload :BodyDiv, "uniword/wordprocessingml/body_div"
+    autoload :DivsChild, "uniword/wordprocessingml/divs_child"
+    autoload :WebDiv, "uniword/wordprocessingml/web_div"
+    autoload :WebDivs, "uniword/wordprocessingml/web_divs"
+    autoload :WebEncoding, "uniword/wordprocessingml/web_encoding"
 
     # Numbering
     autoload :AbstractNum, "uniword/wordprocessingml/abstract_num"
