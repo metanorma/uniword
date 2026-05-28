@@ -92,6 +92,54 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
       result = builder << "Hello"
       expect(result).to eq(builder)
     end
+
+    describe "newline splitting" do
+      it "splits text with \\n into runs separated by breaks" do
+        builder = described_class.new
+        builder << "hello\nworld"
+        runs = builder.model.runs
+        expect(runs.size).to eq(3)
+        expect(runs[0].text.content).to eq("hello")
+        expect(runs[1].break).not_to be_nil
+        expect(runs[2].text.content).to eq("world")
+      end
+
+      it "handles plain strings without newlines unchanged" do
+        builder = described_class.new
+        builder << "plain text"
+        expect(builder.model.runs.size).to eq(1)
+        expect(builder.model.text).to eq("plain text")
+      end
+
+      it "handles consecutive newlines" do
+        builder = described_class.new
+        builder << "a\n\nb"
+        runs = builder.model.runs
+        expect(runs.size).to eq(4)
+        expect(runs[0].text.content).to eq("a")
+        expect(runs[1].break).not_to be_nil
+        expect(runs[2].break).not_to be_nil
+        expect(runs[3].text.content).to eq("b")
+      end
+
+      it "handles leading newline" do
+        builder = described_class.new
+        builder << "\ntext"
+        runs = builder.model.runs
+        expect(runs.size).to eq(2)
+        expect(runs[0].break).not_to be_nil
+        expect(runs[1].text.content).to eq("text")
+      end
+
+      it "handles trailing newline" do
+        builder = described_class.new
+        builder << "text\n"
+        runs = builder.model.runs
+        expect(runs.size).to eq(2)
+        expect(runs[0].text.content).to eq("text")
+        expect(runs[1].break).not_to be_nil
+      end
+    end
   end
 
   describe "property setters" do

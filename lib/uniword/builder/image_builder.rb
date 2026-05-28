@@ -2,6 +2,7 @@
 
 require "digest"
 require "stringio"
+require_relative "deterministic_id"
 
 module Uniword
   module Builder
@@ -266,11 +267,9 @@ alt_text: nil)
       end
 
       class << self
-        private
+        include DeterministicId
 
-        def deterministic_id(*seeds)
-          Digest::SHA256.hexdigest(seeds.join(":")).to_i(16) % 1_000_000_000
-        end
+        private
 
         # Build the Graphic > GraphicData > Picture chain
         #

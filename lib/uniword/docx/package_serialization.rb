@@ -45,15 +45,15 @@ document_rels)
         end
         if app_properties
           content["docProps/app.xml"] =
-            app_properties.to_xml(encoding: "UTF-8",
-                                  prefix: false,
-                                  standalone: true)
+            flatten_xml(app_properties.to_xml(encoding: "UTF-8",
+                                              prefix: false,
+                                              standalone: true))
         end
         if custom_properties
           content["docProps/custom.xml"] =
-            custom_properties.to_xml(encoding: "UTF-8",
-                                     prefix: false,
-                                     standalone: true)
+            flatten_xml(custom_properties.to_xml(encoding: "UTF-8",
+                                                 prefix: false,
+                                                 standalone: true))
         end
 
         # Custom XML data items
@@ -141,17 +141,58 @@ document_rels)
         serialize_embeddings(content)
       end
 
-      # Serialize an OOXML document part with standard encoding
+      # Serialize an OOXML document part with standard encoding, single-line output
       def serialize_part(model)
-        model.to_xml(encoding: "UTF-8", prefix: true, standalone: true)
+        flatten_xml(model.to_xml(encoding: "UTF-8", prefix: true, standalone: true))
       end
 
-      # Serialize package infrastructure (rels, content types) with declaration
+      # Serialize package infrastructure (rels, content types) with declaration, single-line output
       def serialize_infrastructure(model)
-        model.to_xml(encoding: "UTF-8", declaration: true, standalone: true)
+        flatten_xml(model.to_xml(encoding: "UTF-8", declaration: true, standalone: true))
       end
 
       private
+
+      # Word expects single-line XML (no pretty-printing).
+      # Strips inter-element whitespace while preserving text content and
+      # the XML declaration on its own line.
+      def flatten_xml(xml)
+        return xml unless xml.include?("\n")
+
+        decl_end = xml.index("?>")
+        if decl_end
+          declaration = xml[0..decl_end + 1]
+          body = xml[(decl_end + 2)..].strip
+          flattened = body.gsub(/>\s+</, "><")
+          "#{declaration}\r\n#{flattened}"
+        else
+          xml.gsub(/>\s+</, "><")
+        end
+      end
+
+      # Generate the next numeric relationship ID for a Relationships object.
+      def next_rid(relationships)
+        Ooxml::Relationships::PackageRelationships.next_available_rid(
+          relationships,
+        )
+      end
+
+      # Shared pattern: ensure a part has both a content type override and
+      # a document relationship. Idempotent — skips if already present.
+      def ensure_part_registered(content_types, rels, part_name:,
+                                 content_type:, rel_type:, target:)
+        unless content_types.overrides.any? { |o| o.part_name == part_name }
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: part_name, content_type: content_type,
+          )
+        end
+
+        return if rels.relationships.any? { |r| r.target == target }
+
+        rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: next_rid(rels), type: rel_type, target: target,
+        )
+      end
 
       def inject_image_parts(content, content_types, document_rels)
         return unless document&.image_parts && !document.image_parts.empty?
@@ -200,24 +241,11 @@ document_rels)
       def inject_bibliography(content_types, document_rels)
         return unless document&.bibliography_sources
 
-        unless content_types.overrides.any? do |o|
-          o.part_name == "/word/sources.xml"
-        end
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/sources.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.bibliography+xml",
-          )
-        end
-
-        return if document_rels.relationships.any? do |r|
-          r.target == "sources.xml"
-        end
-
-        document_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: "rIdSrcBib",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
-          target: "sources.xml",
-        )
+        ensure_part_registered(content_types, document_rels,
+                               part_name: "/word/sources.xml",
+                               content_type: "application/vnd.openxmlformats-officedocument.bibliography+xml",
+                               rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
+                               target: "sources.xml")
       end
 
       def inject_custom_properties(content_types, package_rels)
@@ -232,15 +260,15 @@ document_rels)
           )
         end
 
-        unless package_rels.relationships.any? do |r|
+        return if package_rels.relationships.any? do |r|
           r.type.to_s.include?("officeDocument/2006/relationships/custom-properties")
         end
-          package_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdCustProps",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
-            target: "docProps/custom.xml",
-          )
-        end
+
+        package_rels.relationships << Ooxml::Relationships::Relationship.new(
+          id: next_rid(package_rels),
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
+          target: "docProps/custom.xml",
+        )
       end
 
       def inject_custom_xml(content_types)
@@ -265,17 +293,20 @@ document_rels)
         counter = 0
         document.headers.each_key do |type|
           counter += 1
-          r_id = "rIdHeader#{counter}"
+          target = "header#{counter}.xml"
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/header#{counter}.xml",
+            part_name: "/word/#{target}",
             content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
           )
 
+          next if document_rels.relationships.any? { |r| r.target == target }
+
+          r_id = next_rid(document_rels)
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
-            target: "header#{counter}.xml",
+            target: target,
           )
 
           wire_header_reference(type, r_id)
@@ -288,17 +319,20 @@ document_rels)
         counter = 0
         document.footers.each_key do |type|
           counter += 1
-          r_id = "rIdFooter#{counter}"
+          target = "footer#{counter}.xml"
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/footer#{counter}.xml",
+            part_name: "/word/#{target}",
             content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
           )
 
+          next if document_rels.relationships.any? { |r| r.target == target }
+
+          r_id = next_rid(document_rels)
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
             type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
-            target: "footer#{counter}.xml",
+            target: target,
           )
 
           wire_footer_reference(type, r_id)
@@ -329,92 +363,40 @@ document_rels)
 
       def inject_notes(content_types, document_rels)
         if footnotes
-          unless content_types.overrides.any? do |o|
-            o.part_name == "/word/footnotes.xml"
-          end
-            content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: "/word/footnotes.xml",
-              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml",
-            )
-          end
-
-          unless document_rels.relationships.any? do |r|
-            r.target == "footnotes.xml"
-          end
-            document_rels.relationships << Ooxml::Relationships::Relationship.new(
-              id: "rIdFootnotes",
-              type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
-              target: "footnotes.xml",
-            )
-          end
+          ensure_part_registered(content_types, document_rels,
+                                 part_name: "/word/footnotes.xml",
+                                 content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml",
+                                 rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
+                                 target: "footnotes.xml")
         end
 
         return unless endnotes
 
-        unless content_types.overrides.any? do |o|
-          o.part_name == "/word/endnotes.xml"
-        end
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/endnotes.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml",
-          )
-        end
-
-        return if document_rels.relationships.any? do |r|
-          r.target == "endnotes.xml"
-        end
-
-        document_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: "rIdEndnotes",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
-          target: "endnotes.xml",
-        )
+        ensure_part_registered(content_types, document_rels,
+                               part_name: "/word/endnotes.xml",
+                               content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml",
+                               rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
+                               target: "endnotes.xml")
       end
 
       def inject_theme(content_types, document_rels)
         return unless theme
 
-        unless content_types.overrides.any? do |o|
-          o.part_name == "/word/theme/theme1.xml"
-        end
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/theme/theme1.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.theme+xml",
-          )
-        end
-
-        return if document_rels.relationships.any? do |r|
-          r.target == "theme/theme1.xml"
-        end
-
-        document_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: "rIdTheme",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
-          target: "theme/theme1.xml",
-        )
+        ensure_part_registered(content_types, document_rels,
+                               part_name: "/word/theme/theme1.xml",
+                               content_type: "application/vnd.openxmlformats-officedocument.theme+xml",
+                               rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
+                               target: "theme/theme1.xml")
       end
 
       def inject_numbering(content_types, document_rels)
         return unless numbering
 
-        unless content_types.overrides.any? do |o|
-          o.part_name == "/word/numbering.xml"
-        end
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/numbering.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml",
-          )
-        end
-
-        return if document_rels.relationships.any? do |r|
-          r.target == "numbering.xml"
-        end
-
-        document_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: "rIdNumbering",
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
-          target: "numbering.xml",
-        )
+        ensure_part_registered(content_types, document_rels,
+                               part_name: "/word/numbering.xml",
+                               content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml",
+                               rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
+                               target: "numbering.xml")
       end
 
       def inject_embeddings(content_types, document_rels)
