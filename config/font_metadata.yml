@@ -90,6 +90,62 @@ fonts:
   # --- East Asian fonts (per locale) ---
 
   # Chinese Simplified (zh-CN)
+  SimSun:
+    alt_name: "宋体"
+    panose1: "02010600030101010101"
+    charset: "86"
+    family: roman
+    pitch: variable
+    sig:
+      usb0: "00000003"
+      usb1: "080E0000"
+      usb2: "00000010"
+      usb3: "00000000"
+      csb0: "00040000"
+      csb1: "00000000"
+
+  SimHei:
+    alt_name: "黑体"
+    panose1: "02010609060101010101"
+    charset: "86"
+    family: modern
+    pitch: fixed
+    sig:
+      usb0: "800002BF"
+      usb1: "38CF7CFA"
+      usb2: "00000016"
+      usb3: "00000000"
+      csb0: "0004000F"
+      csb1: "00000000"
+
+  MS Mincho:
+    alt_name: "ＭＳ 明朝"
+    panose1: "02020609040205080304"
+    charset: "80"
+    family: roman
+    pitch: fixed
+    sig:
+      usb0: "E00002FF"
+      usb1: "6FFF07FF"
+      usb2: "00000020"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
+  MS Gothic:
+    alt_name: "ＭＳ ゴシック"
+    panose1: "020B0609020205080204"
+    charset: "80"
+    family: modern
+    pitch: fixed
+    sig:
+      usb0: "E00002FF"
+      usb1: "6FFF07FF"
+      usb2: "00000020"
+      usb3: "00000000"
+      csb0: "0000019F"
+      csb1: "00000000"
+
   DengXian:
     alt_name: "等线"
     panose1: "02010600030101010101"

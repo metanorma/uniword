@@ -8,8 +8,9 @@ gemspec
 gem "plurimath", "~> 0.10"
 
 # lutaml-model is already in gemspec as add_dependency
+gem "lutaml-model", path: "../../lutaml/lutaml-model"
 
-gem "moxml", ">= 0.1.15"
+gem "moxml", path: "../../lutaml/moxml"
 
 # Standard library gems that will be removed from default in Ruby 4.0
 gem "benchmark"
