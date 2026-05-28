@@ -2,6 +2,7 @@
 
 require "nokogiri"
 require "digest"
+require_relative "deterministic_id"
 
 module Uniword
   module Builder
@@ -134,9 +135,7 @@ module Uniword
 
       private
 
-      def deterministic_id(*seeds)
-        Digest::SHA256.hexdigest(seeds.join(":")).to_i(16) % 1_000_000_000
-      end
+      include DeterministicId
 
       # Build the inner chart XML
       def build_chart_xml(xml)

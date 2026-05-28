@@ -39,8 +39,7 @@ module Uniword
       def <<(element)
         case element
         when String
-          @model.runs << Wordprocessingml::Run.new(text: element)
-          track_element_order("r")
+          append_string(element)
         when Wordprocessingml::Run
           @model.runs << element
           track_element_order("r")
@@ -153,24 +152,40 @@ module Uniword
 
       private
 
+      # OOXML forbids LF in <w:t> — line breaks must use <w:br/>.
+      # Split strings at "\n" into text runs separated by break runs.
+      def append_string(str)
+        return if str.nil? || str.empty?
+
+        unless str.include?("\n")
+          @model.runs << Wordprocessingml::Run.new(text: str)
+          track_element_order("r")
+          return
+        end
+
+        segments = str.split("\n", -1)
+        segments.each_with_index do |seg, i|
+          unless seg.empty?
+            @model.runs << Wordprocessingml::Run.new(text: seg)
+            track_element_order("r")
+          end
+          if i < segments.size - 1
+            br_run = Wordprocessingml::Run.new
+            br_run.break = Wordprocessingml::Break.new
+            @model.runs << br_run
+            track_element_order("r")
+          end
+        end
+      end
+
+      def properties_tag
+        "pPr"
+      end
+
       def ensure_properties
         @model.properties ||= Wordprocessingml::ParagraphProperties.new
         ensure_properties_in_order
         @model.properties
-      end
-
-      def track_element_order(tag)
-        @model.element_order ||= []
-        ensure_properties_in_order
-        @model.element_order << Lutaml::Xml::Element.new("Element", tag)
-      end
-
-      def ensure_properties_in_order
-        return unless @model.element_order
-        return if @model.element_order.any? { |e| e.element? && e.name == "pPr" }
-        return unless @model.properties
-
-        @model.element_order.unshift(Lutaml::Xml::Element.new("Element", "pPr"))
       end
     end
   end

@@ -511,6 +511,66 @@ module Uniword
         element_form_default :qualified
         attribute_form_default :qualified
       end
+
+      # Shared namespace_scope for document-level OOXML parts.
+      #
+      # Used by footnotes, endnotes, header, footer, and numbering models
+      # to declare all extension namespace prefixes that may appear in
+      # mc:Ignorable. Declared with declare: :always so serialization
+      # emits all needed xmlns declarations regardless of parse state.
+      DOCUMENT_PART_SCOPES = [
+        { namespace: WordprocessingCanvas, declare: :always },
+        { namespace: ChartEx, declare: :always },
+        { namespace: ChartEx1, declare: :always },
+        { namespace: ChartEx2, declare: :always },
+        { namespace: ChartEx3, declare: :always },
+        { namespace: ChartEx4, declare: :always },
+        { namespace: ChartEx5, declare: :always },
+        { namespace: ChartEx6, declare: :always },
+        { namespace: ChartEx7, declare: :always },
+        { namespace: ChartEx8, declare: :always },
+        { namespace: MarkupCompatibility, declare: :always },
+        { namespace: InkDrawing, declare: :always },
+        { namespace: Model3D, declare: :always },
+        { namespace: Office, declare: :always },
+        { namespace: OfficeExtensionList, declare: :always },
+        { namespace: Relationships, declare: :always },
+        { namespace: MathML, declare: :always },
+        { namespace: Vml, declare: :always },
+        { namespace: Word2010Drawing, declare: :always },
+        { namespace: WordProcessingDrawing, declare: :always },
+        { namespace: VmlWord, declare: :always },
+        { namespace: Word2010, declare: :always },
+        { namespace: Word2012, declare: :always },
+        { namespace: Word2018Cex, declare: :always },
+        { namespace: Word2016Cid, declare: :always },
+        { namespace: Word2018, declare: :always },
+        { namespace: Word2023Du, declare: :always },
+        { namespace: Word2020SdtDataHash, declare: :always },
+        { namespace: Word2024SdtFormatLock, declare: :always },
+        { namespace: Word2015Symex, declare: :always },
+        { namespace: WordprocessingGroup, declare: :always },
+        { namespace: WordprocessingInk, declare: :always },
+        { namespace: WordNumberingEquations, declare: :always },
+        { namespace: WordprocessingShape, declare: :always },
+      ].freeze
+
+      # Extension namespaces whose prefixes appear in mc:Ignorable on
+      # document-level parts. Single source of truth — prefixes are
+      # derived from the namespace class definitions above.
+      EXTENSION_NAMESPACES = [
+        Word2010, Word2012, Word2015Symex, Word2016Cid,
+        Word2018, Word2018Cex, Word2023Du, Word2020SdtDataHash,
+        Word2024SdtFormatLock,
+      ].freeze
+
+      # mc:Ignorable prefixes for settings/fontTable/styles/webSettings
+      # (document-level parts without wp14). Sorted for canonical output.
+      EXTENSION_PREFIXES = EXTENSION_NAMESPACES.map { |ns| ns.new.prefix }.sort.join(" ").freeze
+
+      # mc:Ignorable prefixes for document body parts that also include
+      # the wp14 (Word 2010 Drawing) namespace. Sorted for canonical output.
+      FULL_IGNORABLE_PREFIXES = (EXTENSION_NAMESPACES + [Word2010Drawing]).map { |ns| ns.new.prefix }.sort.join(" ").freeze
     end
   end
 end

@@ -71,48 +71,53 @@ module Uniword
       def sync_element_order
         return if element_order.nil? || element_order.empty?
 
-        counts = element_order.each_with_object(Hash.new(0)) do |e, h|
-          h[e.name] += 1
+        # lutaml-model freezes element_order after XML parsing.
+        # Build a mutable copy to append missing elements.
+        new_entries = []
+
+        # Count how many p/tbl/sdt entries exist in element_order
+        ordered_p_count = element_order.count { |e| e.name == "p" }
+        ordered_tbl_count = element_order.count { |e| e.name == "tbl" }
+        ordered_sdt_count = element_order.count { |e| e.name == "sdt" }
+        ordered_bookmark_start_count = element_order.count do |e|
+          e.name == "bookmarkStart"
+        end
+        ordered_bookmark_end_count = element_order.count do |e|
+          e.name == "bookmarkEnd"
         end
 
-        needed = false
-        needed = true if paragraphs.size > counts["p"]
-        needed = true if tables.size > counts["tbl"]
-        needed = true if structured_document_tags.size > counts["sdt"]
-        needed = true if bookmark_starts.size > counts["bookmarkStart"]
-        needed = true if bookmark_ends.size > counts["bookmarkEnd"]
-        needed = true if section_properties && counts["sectPr"].zero?
+        # Collect missing paragraphs
+        (paragraphs.size - ordered_p_count).times do
+          new_entries << Lutaml::Xml::Element.new("Element", "p")
+        end
 
-        return unless needed
+        # Collect missing tables
+        (tables.size - ordered_tbl_count).times do
+          new_entries << Lutaml::Xml::Element.new("Element", "tbl")
+        end
 
-        dup_element_order_if_frozen
+        # Collect missing structured document tags
+        (structured_document_tags.size - ordered_sdt_count).times do
+          new_entries << Lutaml::Xml::Element.new("Element", "sdt")
+        end
 
-        append_missing_elements("p", paragraphs.size - counts["p"])
-        append_missing_elements("tbl", tables.size - counts["tbl"])
-        append_missing_elements("sdt",
-                                structured_document_tags.size - counts["sdt"])
-        append_missing_elements("bookmarkStart",
-                                bookmark_starts.size - counts["bookmarkStart"])
-        append_missing_elements("bookmarkEnd",
-                                bookmark_ends.size - counts["bookmarkEnd"])
+        # Collect missing bookmark starts
+        (bookmark_starts.size - ordered_bookmark_start_count).times do
+          new_entries << Lutaml::Xml::Element.new("Element", "bookmarkStart")
+        end
 
-        return unless section_properties && counts["sectPr"].zero?
+        # Collect missing bookmark ends
+        (bookmark_ends.size - ordered_bookmark_end_count).times do
+          new_entries << Lutaml::Xml::Element.new("Element", "bookmarkEnd")
+        end
 
-        element_order << build_order_element("sectPr")
-      end
+        # Ensure section_properties is in element_order if present
+        if section_properties && element_order.none? { |e| e.name == "sectPr" }
+          new_entries << Lutaml::Xml::Element.new("Element", "sectPr")
+        end
 
-      def dup_element_order_if_frozen
-        return unless element_order.frozen?
-
-        self.element_order = element_order.dup
-      end
-
-      def append_missing_elements(name, count)
-        count.times { element_order << build_order_element(name) }
-      end
-
-      def build_order_element(name)
-        Lutaml::Xml::Element.new("Element", name)
+        # Replace frozen array with mutable copy containing new entries
+        self.element_order = element_order + new_entries unless new_entries.empty?
       end
     end
   end

@@ -39,6 +39,31 @@ module Uniword
         raise NotImplementedError,
               "#{name} must implement .default_model_class"
       end
+
+      private
+
+      # Tag name for the properties element (override in subclasses).
+      # e.g., "pPr" for ParagraphBuilder, "tcPr" for TableCellBuilder.
+      def properties_tag
+        raise NotImplementedError,
+              "#{self.class.name} must implement #properties_tag"
+      end
+
+      def track_element_order(tag)
+        @model.element_order ||= []
+        ensure_properties_in_order
+        @model.element_order << Lutaml::Xml::Element.new("Element", tag)
+      end
+
+      def ensure_properties_in_order
+        return unless @model.element_order
+        return if @model.element_order.any? { |e| e.element? && e.name == properties_tag }
+        return unless @model.properties
+
+        @model.element_order.unshift(
+          Lutaml::Xml::Element.new("Element", properties_tag)
+        )
+      end
     end
   end
 end

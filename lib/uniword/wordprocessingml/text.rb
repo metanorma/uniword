@@ -35,10 +35,16 @@ module Uniword
         else
           content_str = value.to_s
           text_obj = new(content: content_str)
-          # Preserve whitespace for XML serialization
-          text_obj.xml_space = "preserve" if content_str.start_with?(" ") || content_str.end_with?(" ") || content_str.include?("\t")
+          text_obj.xml_space = "preserve" if preserve_whitespace?(content_str)
           text_obj
         end
+      end
+
+      # Whether the content requires xml:space="preserve" per OOXML spec.
+      # Leading/trailing spaces, tabs, and newlines all need preservation.
+      def self.preserve_whitespace?(content)
+        content.start_with?(" ") || content.end_with?(" ") ||
+          content.include?("\t") || content.include?("\n")
       end
 
       # Get the actual text value

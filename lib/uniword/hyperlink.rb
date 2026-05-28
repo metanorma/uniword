@@ -61,7 +61,7 @@ module Uniword
 
       if text
         run = Wordprocessingml::Run.new
-        run.text = Wordprocessingml::Text.new(content: text)
+        run.text = Wordprocessingml::Text.cast(text)
         model.runs << run
       end
 

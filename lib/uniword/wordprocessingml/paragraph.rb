@@ -45,15 +45,15 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
+        # W14 namespace attributes first (matches Word output order)
+        map_attribute "paraId", to: :para_id, render_nil: false
+        map_attribute "textId", to: :text_id, render_nil: false
         # Revision tracking attributes
         map_attribute "rsidR", to: :rsid_r, render_nil: false
         map_attribute "rsidRDefault", to: :rsid_r_default, render_nil: false
         map_attribute "rsidP", to: :rsid_p, render_nil: false
         map_attribute "rsidRPr", to: :rsid_r_pr, render_nil: false
         map_attribute "rsidDel", to: :rsid_del, render_nil: false
-        # W14 namespace typed attributes - namespace declared on the type class
-        map_attribute "paraId", to: :para_id, render_nil: false
-        map_attribute "textId", to: :text_id, render_nil: false
 
         map_element "pPr", to: :properties, render_nil: false
         map_element "r", to: :runs, render_nil: false

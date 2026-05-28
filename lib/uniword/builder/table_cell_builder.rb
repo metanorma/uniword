@@ -89,24 +89,14 @@ module Uniword
 
       private
 
+      def properties_tag
+        "tcPr"
+      end
+
       def ensure_properties
         @model.properties ||= Wordprocessingml::TableCellProperties.new
         ensure_properties_in_order
         @model.properties
-      end
-
-      def track_element_order(tag)
-        @model.element_order ||= []
-        ensure_properties_in_order
-        @model.element_order << Lutaml::Xml::Element.new("Element", tag)
-      end
-
-      def ensure_properties_in_order
-        return unless @model.element_order
-        return if @model.element_order.any? { |e| e.element? && e.name == "tcPr" }
-        return unless @model.properties
-
-        @model.element_order.unshift(Lutaml::Xml::Element.new("Element", "tcPr"))
       end
     end
   end

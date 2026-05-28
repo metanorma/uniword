@@ -40,10 +40,20 @@ module Uniword
         def copy_document_parts_to_package(document, package)
           return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
-          DOCUMENT_TO_PACKAGE_MAPPINGS.each do |doc_attr, pkg_attr|
-            value = document.public_send(doc_attr)
-            package.public_send(:"#{pkg_attr}=", value) if value
-          end
+          package.styles = document.styles_configuration if document.styles_configuration
+          package.settings = document.settings if document.settings
+          package.font_table = document.font_table if document.font_table
+          package.web_settings = document.web_settings if document.web_settings
+          package.theme = document.theme if document.theme
+          package.core_properties = document.core_properties if document.core_properties
+          package.app_properties = document.app_properties if document.app_properties
+          package.custom_properties = document.custom_properties if document.custom_properties
+          package.document_rels = document.document_rels if document.document_rels
+          package.theme_rels = document.theme_rels if document.theme_rels
+          package.package_rels = document.package_rels if document.package_rels
+          package.content_types = document.content_types if document.content_types
+          package.footnotes = document.footnotes if document.footnotes
+          package.endnotes = document.endnotes if document.endnotes
 
           package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?
 

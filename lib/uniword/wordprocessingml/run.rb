@@ -245,7 +245,7 @@ module Uniword
       # Create Text object with xml:space="preserve" when needed
       def create_text_object(string)
         text_obj = Text.new(content: string)
-        text_obj.xml_space = "preserve" if string.start_with?(" ") || string.end_with?(" ") || string.include?("\t")
+        text_obj.xml_space = "preserve" if Text.preserve_whitespace?(string)
         text_obj
       end
     end

@@ -38,6 +38,12 @@ module XmlNormalizers
     # Strip mc:Ignorable (reconciler sets it to match available xmlns declarations)
     normalize_mc_ignorable(doc)
 
+    # Reconciler adds semiHidden to DefaultParagraphFont if missing
+    normalize_default_paragraph_font(doc)
+
+    # Reconciler reorders settings.xml child elements
+    normalize_settings(doc)
+
     doc.to_xml
   end
 
@@ -133,6 +139,43 @@ module XmlNormalizers
     attr = doc.root&.attribute("Ignorable") ||
       doc.root&.attribute_nodes&.find { |a| a.name == "Ignorable" }
     attr&.remove
+  end
+
+  # Normalize DefaultParagraphFont style: reconciler adds semiHidden if missing
+  def self.normalize_default_paragraph_font(doc)
+    ns_w = { "w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main" }
+    dpf = doc.at_xpath("//w:style[@w:styleId='DefaultParagraphFont']", ns_w)
+    return unless dpf
+
+    return if dpf.at_xpath("w:semiHidden", ns_w)
+
+    uhu = dpf.at_xpath("w:unhideWhenUsed", ns_w)
+    semi = Nokogiri::XML::Node.new("semiHidden", doc)
+    semi.namespace = dpf.namespace_definitions.find { |ns| ns.prefix == "w" }
+    uhu ? uhu.add_previous_sibling(semi) : dpf << semi
+  end
+
+  # Normalize settings.xml: sort child elements and add reconciler defaults
+  # The reconciler always adds proofState and may reorder settings children
+  def self.normalize_settings(doc)
+    ns_w = { "w" => "http://schemas.openxmlformats.org/wordprocessingml/2006/main" }
+    return unless doc.at_xpath("//w:settings", ns_w)
+
+    settings = doc.at_xpath("//w:settings", ns_w)
+
+    # Reconciler always adds proofState — ensure it exists in both
+    unless settings.at_xpath("w:proofState", ns_w)
+      ps = Nokogiri::XML::Node.new("proofState", doc)
+      ps.namespace = settings.namespace_definitions.find { |ns| ns.prefix == "w" }
+      ps["spelling"] = "clean"
+      ps["grammar"] = "clean"
+      settings << ps
+    end
+
+    # Sort children by namespace+name for consistent ordering
+    children = settings.element_children
+    sorted = children.sort_by { |n| [n.namespace.href, n.name] }
+    sorted.each { |n| settings << n }
   end
 
   # Remove unused namespace declarations
