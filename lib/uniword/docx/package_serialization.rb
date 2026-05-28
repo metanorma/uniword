@@ -12,6 +12,29 @@ module Uniword
     #
     # @api private
     module PackageSerialization
+      DOCX_XML_OPTIONS = {
+        encoding: "UTF-8",
+        line_ending: "\r\n",
+      }.freeze
+
+      DOCX_PART_OPTIONS = {
+        **DOCX_XML_OPTIONS,
+        prefix: true,
+        standalone: true,
+      }.freeze
+
+      DOCX_INFRA_OPTIONS = {
+        **DOCX_XML_OPTIONS,
+        declaration: true,
+        standalone: true,
+      }.freeze
+
+      DOCX_PROPS_OPTIONS = {
+        **DOCX_XML_OPTIONS,
+        prefix: false,
+        standalone: true,
+      }.freeze
+
       # Inject content types and relationships for all package parts
       def inject_part_relationships(content, content_types, package_rels,
 document_rels)
@@ -45,15 +68,11 @@ document_rels)
         end
         if app_properties
           content["docProps/app.xml"] =
-            flatten_xml(app_properties.to_xml(encoding: "UTF-8",
-                                              prefix: false,
-                                              standalone: true))
+            app_properties.to_xml(DOCX_PROPS_OPTIONS.dup)
         end
         if custom_properties
           content["docProps/custom.xml"] =
-            flatten_xml(custom_properties.to_xml(encoding: "UTF-8",
-                                                 prefix: false,
-                                                 standalone: true))
+            custom_properties.to_xml(DOCX_PROPS_OPTIONS.dup)
         end
 
         # Custom XML data items
@@ -143,32 +162,15 @@ document_rels)
 
       # Serialize an OOXML document part with standard encoding, single-line output
       def serialize_part(model)
-        flatten_xml(model.to_xml(encoding: "UTF-8", prefix: true, standalone: true))
+        model.to_xml(DOCX_PART_OPTIONS.dup)
       end
 
       # Serialize package infrastructure (rels, content types) with declaration, single-line output
       def serialize_infrastructure(model)
-        flatten_xml(model.to_xml(encoding: "UTF-8", declaration: true, standalone: true))
+        model.to_xml(DOCX_INFRA_OPTIONS.dup)
       end
 
       private
-
-      # Word expects single-line XML (no pretty-printing).
-      # Strips inter-element whitespace while preserving text content and
-      # the XML declaration on its own line.
-      def flatten_xml(xml)
-        return xml unless xml.include?("\n")
-
-        decl_end = xml.index("?>")
-        if decl_end
-          declaration = xml[0..decl_end + 1]
-          body = xml[(decl_end + 2)..].strip
-          flattened = body.gsub(/>\s+</, "><")
-          "#{declaration}\r\n#{flattened}"
-        else
-          xml.gsub(/>\s+</, "><")
-        end
-      end
 
       # Generate the next numeric relationship ID for a Relationships object.
       def next_rid(relationships)

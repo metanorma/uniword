@@ -41,8 +41,7 @@ module Uniword
         when String
           append_string(element)
         when Wordprocessingml::Run
-          @model.runs << element
-          track_element_order("r")
+          append_run(element)
         when Wordprocessingml::Hyperlink
           @model.hyperlinks << element
           track_element_order("hyperlink")
@@ -60,8 +59,7 @@ module Uniword
           @model.sdts << element
           track_element_order("sdt")
         when RunBuilder
-          @model.runs << element.build
-          track_element_order("r")
+          append_run(element.build)
         else
           raise ArgumentError, "Cannot add #{element.class} to paragraph"
         end
@@ -151,6 +149,43 @@ module Uniword
       end
 
       private
+
+      def append_run(run)
+        last = @model.runs.last
+        if last && mergeable?(last, run)
+          merge_run_text(last, run)
+        else
+          @model.runs << run
+          track_element_order("r")
+        end
+      end
+
+      def mergeable?(existing, incoming)
+        return false unless text_only_run?(existing) && text_only_run?(incoming)
+        rpr_match?(existing.properties, incoming.properties)
+      end
+
+      def text_only_run?(run)
+        run.tab.nil? && run.break.nil? && run.position_tab.nil? &&
+          run.no_break_hyphen.nil? && run.del_text.nil?
+      end
+
+      def rpr_match?(a, b)
+        return true if a.nil? && b.nil?
+        return false if a.nil? || b.nil?
+        a.to_xml == b.to_xml
+      end
+
+      def merge_run_text(target, source)
+        existing = target.text.to_s
+        appended = source.text.to_s
+        combined = existing + appended
+        new_text = Wordprocessingml::Text.new(content: combined)
+        if Wordprocessingml::Text.preserve_whitespace?(combined)
+          new_text.xml_space = "preserve"
+        end
+        target.text = new_text
+      end
 
       # OOXML forbids LF in <w:t> — line breaks must use <w:br/>.
       # Split strings at "\n" into text runs separated by break runs.
