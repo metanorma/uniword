@@ -17,6 +17,11 @@ module Uniword
         Wordprocessingml::TableCell
       end
 
+      def initialize(model = nil)
+        super
+        ensure_cell_structure
+      end
+
       # Append content to the cell. Routes by type:
       # - String -> creates a Paragraph with a Run
       # - Paragraph -> appends to paragraphs
@@ -97,6 +102,11 @@ module Uniword
         @model.properties ||= Wordprocessingml::TableCellProperties.new
         ensure_properties_in_order
         @model.properties
+      end
+
+      def ensure_cell_structure
+        ensure_properties
+        @model.properties.cell_width ||= Properties::CellWidth.new(w: 0, type: "auto")
       end
     end
   end
