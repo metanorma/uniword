@@ -1,29 +1,27 @@
 # frozen_string_literal: true
 
+require "digest"
+
 module Uniword
   module Builder
-    # Builds and configures Paragraph objects.
-    #
-    # Uses << operator to append child elements with smart type routing.
-    #
-    # @example Create a simple paragraph
-    #   para = ParagraphBuilder.new
-    #   para << 'Hello World'
-    #   para.build
-    #
-    # @example Styled paragraph with mixed content
-    #   para = ParagraphBuilder.new
-    #   para.style = 'Heading1'
-    #   para << Builder.text('Title', bold: true, size: 24)
-    #   para << Builder.hyperlink('https://example.com', 'link')
-    #   para << Builder.tab_stop(position: 7200)
-    #   para.build
     class ParagraphBuilder < BaseBuilder
       include HasBorders
       include HasShading
 
+      @sequence = 0
+      @mutex = Mutex.new
+
+      class << self
+        attr_accessor :sequence, :mutex
+      end
+
       def self.default_model_class
         Wordprocessingml::Paragraph
+      end
+
+      def initialize(model = nil)
+        super
+        assign_tracking_attributes
       end
 
       # Append a child element. Routes by type:
@@ -150,7 +148,19 @@ module Uniword
 
       private
 
+      def assign_tracking_attributes
+        idx = self.class.mutex.synchronize do
+          self.class.sequence += 1
+        end
+        hash = Digest::SHA256.hexdigest("para:#{idx}:#{Process.pid}")
+        @model.rsid_r = hash[0, 8]
+        @model.rsid_r_default = "00000000"
+        @model.para_id = Wordprocessingml::W14ParaId.new(hash[8, 8])
+        @model.text_id = Wordprocessingml::W14TextId.new("77777777")
+      end
+
       def append_run(run)
+        return if empty_run?(run)
         last = @model.runs.last
         if last && mergeable?(last, run)
           merge_run_text(last, run)
@@ -158,6 +168,15 @@ module Uniword
           @model.runs << run
           track_element_order("r")
         end
+      end
+
+      def empty_run?(run)
+        return false if run.text&.to_s&.then { !_1.empty? }
+        run.tab || run.break || run.position_tab ||
+          run.no_break_hyphen || run.del_text ||
+          run.is_a?(Wordprocessingml::Run) && (
+            run.footnote_reference || run.endnote_reference
+          )
       end
 
       def mergeable?(existing, incoming)

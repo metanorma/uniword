@@ -21,17 +21,16 @@ module Uniword
         Wordprocessingml::SectionProperties
       end
 
+      def initialize(model = nil)
+        super
+        ensure_section_defaults
+      end
+
       def type=(value)
         @model.type = value
         self
       end
 
-      # Set page size
-      #
-      # @param width [Integer] Page width in twips (default US Letter: 12240)
-      # @param height [Integer] Page height in twips (default US Letter: 15840)
-      # @param orientation [String] 'portrait' or 'landscape'
-      # @return [self]
       def page_size(width: 12_240, height: 15_840, orientation: "portrait")
         @model.page_size ||= Wordprocessingml::PageSize.new
         @model.page_size.width = width
@@ -40,16 +39,6 @@ module Uniword
         self
       end
 
-      # Set page margins
-      #
-      # @param top [Integer] Top margin in twips (default 1440 = 1 inch)
-      # @param bottom [Integer] Bottom margin in twips
-      # @param left [Integer] Left margin in twips
-      # @param right [Integer] Right margin in twips
-      # @param header [Integer] Header distance from edge in twips
-      # @param footer [Integer] Footer distance from edge in twips
-      # @param gutter [Integer] Gutter margin in twips
-      # @return [self]
       def margins(top: 1440, bottom: 1440, left: 1440, right: 1440,
                   header: 720, footer: 720, gutter: 0)
         @model.page_margins ||= Wordprocessingml::PageMargins.new
@@ -63,11 +52,6 @@ module Uniword
         self
       end
 
-      # Set number of columns
-      #
-      # @param count [Integer] Number of columns
-      # @param spacing [Integer] Space between columns in twips
-      # @return [self]
       def columns(count: 1, spacing: 720)
         @model.columns ||= Wordprocessingml::Columns.new
         @model.columns.num = count
@@ -75,67 +59,13 @@ module Uniword
         self
       end
 
-      def page_borders(**_options)
-        @model.page_borders ||= Wordprocessingml::PageBorders.new
-        self
-      end
+      private
 
-      # Set line numbering
-      #
-      # @param count_by [Integer] Line numbering interval
-      # @param start [Integer] Starting line number
-      # @param restart [String] Restart setting ('continuous', 'newPage', 'newSection')
-      # @return [self]
-      def line_numbering(count_by: 1, start: 1, restart: "continuous")
-        @model.line_numbering ||= Wordprocessingml::LineNumbering.new
-        @model.line_numbering.count_by = count_by
-        @model.line_numbering.start = start
-        @model.line_numbering.restart = restart
-        self
-      end
-
-      # Set page numbering for this section
-      #
-      # @param start [Integer, nil] Starting page number
-      # @param format [String, nil] Number format ('decimal', 'lowerRoman', 'upperRoman')
-      # @return [self]
-      def page_numbering(start: nil, format: nil)
-        @model.page_numbering ||= Wordprocessingml::PageNumbering.new
-        @model.page_numbering.start = start if start
-        @model.page_numbering.format = format if format
-        self
-      end
-
-      # Configure a header for this section
-      #
-      # @param type [String] Header type ('default', 'first', 'even')
-      # @yield [HeaderFooterBuilder] Builder for header content
-      # @return [HeaderFooterBuilder] The header/footer builder
-      def header(type: "default", &block)
-        hf = HeaderFooterBuilder.new(:header, type: type)
-        yield(hf) if block
-
-        ref = Wordprocessingml::HeaderReference.new(
-          type: type, r_id: "rIdHdr#{type}",
-        )
-        @model.header_references << ref
-        hf
-      end
-
-      # Configure a footer for this section
-      #
-      # @param type [String] Footer type ('default', 'first', 'even')
-      # @yield [HeaderFooterBuilder] Builder for footer content
-      # @return [HeaderFooterBuilder] The header/footer builder
-      def footer(type: "default", &block)
-        hf = HeaderFooterBuilder.new(:footer, type: type)
-        yield(hf) if block
-
-        ref = Wordprocessingml::FooterReference.new(
-          type: type, r_id: "rIdFtr#{type}",
-        )
-        @model.footer_references << ref
-        hf
+      def ensure_section_defaults
+        page_size
+        margins
+        columns
+        @model.doc_grid ||= Wordprocessingml::DocGrid.new(line_pitch: 360)
       end
     end
   end
