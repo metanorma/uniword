@@ -19,8 +19,11 @@ module Uniword
         Wordprocessingml::Paragraph
       end
 
-      def initialize(model = nil)
-        super
+      attr_reader :allocator
+
+      def initialize(model = nil, allocator: nil)
+        @allocator = allocator
+        super(model)
         assign_tracking_attributes
       end
 
@@ -56,6 +59,9 @@ module Uniword
         when Wordprocessingml::StructuredDocumentTag
           @model.sdts << element
           track_element_order("sdt")
+        when Wordprocessingml::SimpleField
+          @model.simple_fields << element
+          track_element_order("fldSimple")
         when RunBuilder
           append_run(element.build)
         else
@@ -149,65 +155,33 @@ module Uniword
       private
 
       def assign_tracking_attributes
-        idx = self.class.mutex.synchronize do
-          self.class.sequence += 1
+        if @allocator
+          @model.rsid_r = @allocator.alloc_rsid
+          @model.para_id = Wordprocessingml::W14ParaId.new(@allocator.alloc_para_id)
+        else
+          idx = self.class.mutex.synchronize do
+            self.class.sequence += 1
+          end
+          hash = Digest::SHA256.hexdigest("para:#{idx}:#{Process.pid}")
+          @model.rsid_r = hash[0, 8]
+          @model.para_id = Wordprocessingml::W14ParaId.new(hash[8, 8])
         end
-        hash = Digest::SHA256.hexdigest("para:#{idx}:#{Process.pid}")
-        @model.rsid_r = hash[0, 8]
         @model.rsid_r_default = "00000000"
-        @model.para_id = Wordprocessingml::W14ParaId.new(hash[8, 8])
         @model.text_id = Wordprocessingml::W14TextId.new("77777777")
       end
 
       def append_run(run)
-        return if empty_run?(run)
+        return if RunUtils.empty_run?(run)
+
         last = @model.runs.last
-        if last && mergeable?(last, run)
-          merge_run_text(last, run)
+        if last && RunUtils.mergeable?(last, run)
+          RunUtils.merge_text(last, run)
         else
           @model.runs << run
           track_element_order("r")
         end
       end
 
-      def empty_run?(run)
-        return false if run.text&.to_s&.then { !_1.empty? }
-        run.tab || run.break || run.position_tab ||
-          run.no_break_hyphen || run.del_text ||
-          run.is_a?(Wordprocessingml::Run) && (
-            run.footnote_reference || run.endnote_reference
-          )
-      end
-
-      def mergeable?(existing, incoming)
-        return false unless text_only_run?(existing) && text_only_run?(incoming)
-        rpr_match?(existing.properties, incoming.properties)
-      end
-
-      def text_only_run?(run)
-        run.tab.nil? && run.break.nil? && run.position_tab.nil? &&
-          run.no_break_hyphen.nil? && run.del_text.nil?
-      end
-
-      def rpr_match?(a, b)
-        return true if a.nil? && b.nil?
-        return false if a.nil? || b.nil?
-        a.to_xml == b.to_xml
-      end
-
-      def merge_run_text(target, source)
-        existing = target.text.to_s
-        appended = source.text.to_s
-        combined = existing + appended
-        new_text = Wordprocessingml::Text.new(content: combined)
-        if Wordprocessingml::Text.preserve_whitespace?(combined)
-          new_text.xml_space = "preserve"
-        end
-        target.text = new_text
-      end
-
-      # OOXML forbids LF in <w:t> — line breaks must use <w:br/>.
-      # Split strings at "\n" into text runs separated by break runs.
       def append_string(str)
         return if str.nil? || str.empty?
 

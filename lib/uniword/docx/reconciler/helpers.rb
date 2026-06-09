@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "digest"
+require "set"
 require "yaml"
 
 module Uniword
@@ -116,32 +117,10 @@ module Uniword
           model.element_order = order.dup << entry
         end
 
-        # -- Run utilities --
+        # -- Run utilities (delegate to RunUtils) --
 
         def empty_run?(run)
-          return false if run.break
-          return false if run.tab
-          return false if run.drawings&.any?
-          return false if run.pictures&.any?
-          return false if run.alternate_content
-          return false if run.footnote_reference
-          return false if run.endnote_reference
-          return false if run.field_char
-          return false if run.instr_text
-          return false if run.position_tab
-          return false if run.del_text
-          return false if run.no_break_hyphen
-          return false if run.sym
-          return false if run.last_rendered_page_break
-          return false if run.separator_char
-          return false if run.continuation_separator_char
-
-          t = run.text
-          return true unless t
-
-          content = t.content if t.class.attributes.key?(:content)
-          content = t.value if content.nil? && t.class.attributes.key?(:value)
-          !content.is_a?(String) || content.empty?
+          Builder::RunUtils.empty_run?(run)
         end
 
         def strip_empty_runs(paragraph)
@@ -172,14 +151,18 @@ module Uniword
 
         # Merge adjacent runs with identical formatting and consolidate
         # standalone tab/br runs into following text runs (F4 + F5).
+        # Respects element_order: only merges runs that are truly adjacent
+        # in document order (not separated by hyperlinks, bookmarks, etc.).
         def consolidate_runs(paragraph)
           runs = paragraph.runs
           return if runs.nil? || runs.size < 2
 
+          run_indices = adjacent_run_indices(paragraph)
           merged = [runs.first]
-          runs[1..].each do |run|
+          runs[1..].each_with_index do |run, idx|
             prev = merged.last
-            if run_properties_match?(prev, run) && can_merge?(prev, run)
+            if run_indices.include?(idx) &&
+               run_properties_match?(prev, run) && can_merge?(prev, run)
               merge_run_into(prev, run)
             else
               merged << run
@@ -187,6 +170,30 @@ module Uniword
           end
 
           paragraph.runs = merged
+        end
+
+        # Returns the set of run indices (0-based into runs[1..]) where
+        # the run at that index is immediately preceded by another run
+        # in element_order (no non-run elements between them).
+        def adjacent_run_indices(paragraph)
+          eo = paragraph.element_order
+          return (0...paragraph.runs.size - 1).to_a unless eo && !eo.empty?
+
+          indices = Set.new
+          run_count = 0
+          prev_was_run = false
+          eo.each do |entry|
+            if entry.name == "r"
+              if prev_was_run
+                indices << (run_count - 1)
+              end
+              run_count += 1
+              prev_was_run = true
+            else
+              prev_was_run = false
+            end
+          end
+          indices
         end
 
         def consolidate_runs_in_body(body)
@@ -215,6 +222,12 @@ module Uniword
           nil
         end
 
+        # -- mc:Ignorable helpers --
+
+        def set_mc_ignorable(model, prefixes: EXTENSION_PREFIXES)
+          model.mc_ignorable = Ooxml::Types::McIgnorable.new(prefixes)
+        end
+
         # -- Relationship builders --
 
         def build_rel(id, type, target, target_mode: nil)
@@ -224,42 +237,20 @@ module Uniword
         end
 
         def run_properties_match?(a, b)
-          rpr_a = a.properties
-          rpr_b = b.properties
-          return true if rpr_a.nil? && rpr_b.nil?
-          return false if rpr_a.nil? || rpr_b.nil?
-
-          rpr_a.to_xml == rpr_b.to_xml
+          Builder::RunUtils.properties_match?(a, b)
         end
 
         def can_merge?(prev, current)
-          return false unless text_only_run?(prev) && text_only_run?(current)
-          true
+          Builder::RunUtils.text_only_run?(prev) &&
+            Builder::RunUtils.text_only_run?(current)
         end
 
         def text_only_run?(run)
-          return false if run.drawings&.any?
-          return false if run.pictures&.any?
-          return false if run.alternate_content
-          return false if run.footnote_reference
-          return false if run.endnote_reference
-          return false if run.field_char
-          return false if run.instr_text
-          return false if run.sym
-          true
+          Builder::RunUtils.text_only_run?(run)
         end
 
         def merge_run_into(target, source)
-          if source.text
-            existing = target.text&.to_s.to_s
-            appended = source.text.to_s
-            combined = existing + appended
-            new_text = Wordprocessingml::Text.new(content: combined)
-            if Wordprocessingml::Text.preserve_whitespace?(combined)
-              new_text.xml_space = "preserve"
-            end
-            target.text = new_text
-          end
+          Builder::RunUtils.merge_text(target, source)
 
           target.tab ||= source.tab
           target.break ||= source.break

@@ -31,7 +31,9 @@ module Uniword
         self
       end
 
-      def page_size(width: 12_240, height: 15_840, orientation: "portrait")
+      def page_size(width: Wordprocessingml::PageDefaults::LETTER_WIDTH,
+                     height: Wordprocessingml::PageDefaults::LETTER_HEIGHT,
+                     orientation: "portrait")
         @model.page_size ||= Wordprocessingml::PageSize.new
         @model.page_size.width = width
         @model.page_size.height = height
@@ -52,11 +54,52 @@ module Uniword
         self
       end
 
+      def page_numbering(start: nil, format: nil)
+        @model.page_numbering ||= Wordprocessingml::PageNumbering.new
+        @model.page_numbering.start = start if start
+        @model.page_numbering.format = format if format
+        self
+      end
+
       def columns(count: 1, spacing: 720)
         @model.columns ||= Wordprocessingml::Columns.new
         @model.columns.num = count
         @model.columns.space = spacing
         self
+      end
+
+      def header(type: "default", &block)
+        hf = HeaderFooterBuilder.new(:header, type: type)
+        block&.call(hf)
+        ref = Wordprocessingml::HeaderReference.new(
+          type: type, r_id: "rIdHdr#{type}",
+        )
+        @model.header_references << ref
+        @header_builders ||= {}
+        @header_builders[type] = hf
+        hf
+      end
+
+      def footer(type: "default", &block)
+        hf = HeaderFooterBuilder.new(:footer, type: type)
+        block&.call(hf)
+        ref = Wordprocessingml::FooterReference.new(
+          type: type, r_id: "rIdFtr#{type}",
+        )
+        @model.footer_references << ref
+        @footer_builders ||= {}
+        @footer_builders[type] = hf
+        hf
+      end
+
+      # Built header content models keyed by type.
+      def header_models
+        (@header_builders || {}).transform_values(&:build)
+      end
+
+      # Built footer content models keyed by type.
+      def footer_models
+        (@footer_builders || {}).transform_values(&:build)
       end
 
       private
@@ -65,7 +108,7 @@ module Uniword
         page_size
         margins
         columns
-        @model.doc_grid ||= Wordprocessingml::DocGrid.new(line_pitch: 360)
+        @model.doc_grid ||= Wordprocessingml::PageDefaults.default_doc_grid
       end
     end
   end

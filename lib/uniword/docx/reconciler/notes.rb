@@ -64,21 +64,23 @@ module Uniword
         end
 
         def finalize_notes(notes, entries, type)
-          prefix = type == :footnote ? "fn" : "en"
-
           ensure_separators(notes, type, entries)
           strip_invalid_note_types(entries)
           strip_empty_runs_from_notes(entries)
+          reorder_notes_by_reference(entries, type)
 
-          entries.each_with_index do |entry, eidx|
-            backfill_paragraphs(entry.paragraphs, generate_rsid,
-                                "#{prefix}:#{eidx}")
+          unless allocator
+            prefix = type == :footnote ? "fn" : "en"
+
+            entries.each_with_index do |entry, eidx|
+              backfill_paragraphs(entry.paragraphs, generate_rsid,
+                                  "#{prefix}:#{eidx}")
+            end
+
+            renumber_notes(entries, type)
           end
 
-          reorder_notes_by_reference(entries, type)
-          renumber_notes(entries, type)
-          notes.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(FULL_IGNORABLE)
+          set_mc_ignorable(notes, prefixes: FULL_IGNORABLE)
         end
 
         def minimal_notes(type)
