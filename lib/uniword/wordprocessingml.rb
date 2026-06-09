@@ -250,5 +250,9 @@ module Uniword
     # Mail merge
     autoload :Recipients, "uniword/wordprocessingml/recipients"
     autoload :RecipientData, "uniword/wordprocessingml/recipient_data"
+
+    # Shared defaults
+    autoload :PageDefaults, "uniword/wordprocessingml/page_defaults"
+    autoload :TableDefaults, "uniword/wordprocessingml/table_defaults"
   end
 end

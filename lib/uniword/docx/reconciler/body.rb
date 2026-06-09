@@ -15,14 +15,10 @@ module Uniword
 
           unless body.section_properties
             body.section_properties = Wordprocessingml::SectionProperties.new(
-              page_size: Wordprocessingml::PageSize.new(width: 12_240,
-                                                        height: 15_840),
-              page_margins: Wordprocessingml::PageMargins.new(
-                top: 1440, right: 1440, bottom: 1440, left: 1440,
-                header: 720, footer: 720, gutter: 0
-              ),
-              columns: Wordprocessingml::Columns.new(space: 720),
-              doc_grid: Wordprocessingml::DocGrid.new(line_pitch: 360),
+              page_size: Wordprocessingml::PageDefaults.default_page_size,
+              page_margins: Wordprocessingml::PageDefaults.default_page_margins,
+              columns: Wordprocessingml::PageDefaults.default_columns,
+              doc_grid: Wordprocessingml::PageDefaults.default_doc_grid,
             )
             record_fix("R11",
                        "Added default section properties with US Letter page size")
@@ -32,19 +28,15 @@ module Uniword
           sect_pr = body.section_properties
           fixed = false
           unless sect_pr.page_size
-            sect_pr.page_size = Wordprocessingml::PageSize.new(width: 12_240,
-                                                               height: 15_840)
+            sect_pr.page_size = Wordprocessingml::PageDefaults.default_page_size
             fixed = true
           end
           unless sect_pr.page_margins
-            sect_pr.page_margins = Wordprocessingml::PageMargins.new(
-              top: 1440, right: 1440, bottom: 1440, left: 1440,
-              header: 720, footer: 720, gutter: 0
-            )
+            sect_pr.page_margins = Wordprocessingml::PageDefaults.default_page_margins
             fixed = true
           end
           unless sect_pr.columns
-            sect_pr.columns = Wordprocessingml::Columns.new(space: 720)
+            sect_pr.columns = Wordprocessingml::PageDefaults.default_columns
             fixed = true
           end
           if fixed
@@ -58,13 +50,15 @@ module Uniword
           set_header_footer_ignorable(package.document&.headers, ignorable)
           set_header_footer_ignorable(package.document&.footers, ignorable)
 
-          rsid = generate_rsid
-          backfill_header_footer_parts(package.document&.headers, rsid, "hdr")
-          backfill_header_footer_parts(package.document&.footers, rsid, "ftr")
+          unless allocator
+            rsid = generate_rsid
+            backfill_header_footer_parts(package.document&.headers, rsid, "hdr")
+            backfill_header_footer_parts(package.document&.footers, rsid, "ftr")
 
-          parts = package.document&.header_footer_parts
-          parts&.each_with_index do |part, pidx|
-            backfill_paragraphs(part[:content].paragraphs, rsid, "hfp:#{pidx}")
+            parts = package.document&.header_footer_parts
+            parts&.each_with_index do |part, pidx|
+              backfill_paragraphs(part[:content].paragraphs, rsid, "hfp:#{pidx}")
+            end
           end
 
           wire_builder_headers_footers
@@ -110,6 +104,12 @@ module Uniword
                              "footer", counter) do |type, r_id|
             wire_sect_pr_reference(doc, :footer, type, r_id)
           end
+
+          # Clear element_order so header/footer references serialize correctly.
+          # Ordered mode only outputs elements in element_order; the template's
+          # order may not include newly-added references.
+          sect_pr = doc.body.section_properties
+          sect_pr.element_order = nil if sect_pr&.element_order
         end
 
         def wire_parts_to_rels(parts, rels, rel_type, file_prefix, counter)
@@ -118,7 +118,11 @@ module Uniword
           parts.each_key do |type|
             counter += 1
             target = "#{file_prefix}#{counter}.xml"
-            r_id = find_or_create_rel(rels, rel_type, target)
+            r_id = if allocator
+                     allocator.alloc_rid(target: target, type: rel_type)
+                   else
+                     find_or_create_rel(rels, rel_type, target)
+                   end
             yield type, r_id
           end
         end

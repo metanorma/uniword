@@ -39,6 +39,7 @@ module Uniword
     autoload :SdtBuilder, "uniword/builder/sdt_builder"
     autoload :BibliographyBuilder, "uniword/builder/bibliography_builder"
     autoload :ChartBuilder, "uniword/builder/chart_builder"
+    autoload :DeterministicId, "uniword/builder/deterministic_id"
 
     # Factory: creates a Run with optional formatting
     #
@@ -216,28 +217,35 @@ module Uniword
       def build_field_paragraph(instruction)
         para = Wordprocessingml::Paragraph.new
 
-        # Begin character (inside a run wrapper)
-        fc_begin = Wordprocessingml::FieldChar.new
-        fc_begin.fldCharType = "begin"
-        para.field_chars << fc_begin
+        # Begin character inside a run
+        run_begin = Wordprocessingml::Run.new
+        run_begin.field_char = Wordprocessingml::FieldChar.new
+        run_begin.field_char.fldCharType = "begin"
+        para.runs << run_begin
 
-        # Instruction text
-        it = Wordprocessingml::InstrText.new
-        it.text = instruction
-        para.instr_text << it
+        # Instruction text inside a run
+        run_instr = Wordprocessingml::Run.new
+        run_instr.instr_text = Wordprocessingml::InstrText.new
+        run_instr.instr_text.text = instruction
+        para.runs << run_instr
 
-        # Separate character
-        fc_sep = Wordprocessingml::FieldChar.new
-        fc_sep.fldCharType = "separate"
-        para.field_chars << fc_sep
+        # Separate character inside a run
+        run_sep = Wordprocessingml::Run.new
+        run_sep.field_char = Wordprocessingml::FieldChar.new
+        run_sep.field_char.fldCharType = "separate"
+        para.runs << run_sep
 
-        # End character
-        fc_end = Wordprocessingml::FieldChar.new
-        fc_end.fldCharType = "end"
-        para.field_chars << fc_end
+        # End character inside a run
+        run_end = Wordprocessingml::Run.new
+        run_end.field_char = Wordprocessingml::FieldChar.new
+        run_end.field_char.fldCharType = "end"
+        para.runs << run_end
 
         para
       end
     end
+
+    # Shared run utilities
+    autoload :RunUtils, "uniword/builder/run_utils"
   end
 end
