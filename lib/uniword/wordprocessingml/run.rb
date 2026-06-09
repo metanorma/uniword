@@ -172,36 +172,16 @@ module Uniword
 
       private
 
-      # Merge two RunProperties objects with override taking precedence
+      # Merge two RunProperties objects with override taking precedence.
       #
-      # Creates a new RunProperties where each attribute is taken from
-      # `override` if set, otherwise from `base`.
+      # Delegates to RunProperties#merged_over which uses the model's
+      # declared attributes — fully model-driven, no dynamic dispatch.
       #
       # @param base [RunProperties] Base (inherited) properties
       # @param override [RunProperties] Override (explicit) properties
       # @return [RunProperties] Merged properties
       def merge_properties(base, override)
-        merged = RunProperties.new
-
-        RunProperties.attributes.each_key do |attr_name|
-          override_val = override.public_send(attr_name)
-          base_val = base.public_send(attr_name)
-
-          use_override = if override_val.is_a?(Lutaml::Model::Serializable)
-                           override_val.class.attributes.any? do |k, _|
-                             !override_val.using_default?(k)
-                           end
-                         else
-                           !override_val.nil?
-                         end
-
-          value = use_override ? override_val : base_val
-          next unless value
-
-          merged.public_send(:"#{attr_name}=", value)
-        end
-
-        merged
+        override.merged_over(base)
       end
 
       # Get inherited run properties from paragraph style chain

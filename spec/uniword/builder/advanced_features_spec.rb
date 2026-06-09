@@ -101,10 +101,13 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#page_number" do
 
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(1)
-    expect(paragraphs.first.field_chars.size).to be >= 3
 
-    instruction = paragraphs.first.instr_text.first
-    expect(instruction.text).to include("PAGE")
+    runs = paragraphs.first.runs
+    field_types = runs.filter_map { |r| r.field_char&.fldCharType }
+    expect(field_types).to eq(%w[begin separate end])
+
+    instr_run = runs.find { |r| r.instr_text }
+    expect(instr_run.instr_text.text).to include("PAGE")
   end
 end
 
@@ -116,8 +119,8 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#total_pages" do
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(1)
 
-    instruction = paragraphs.first.instr_text.first
-    expect(instruction.text).to include("NUMPAGES")
+    instr_run = paragraphs.first.runs.find { |r| r.instr_text }
+    expect(instr_run.instr_text.text).to include("NUMPAGES")
   end
 end
 
@@ -129,9 +132,9 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#date_field" do
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(1)
 
-    instruction = paragraphs.first.instr_text.first
-    expect(instruction.text).to include("DATE")
-    expect(instruction.text).to include("yyyy-MM-dd")
+    instr_run = paragraphs.first.runs.find { |r| r.instr_text }
+    expect(instr_run.instr_text.text).to include("DATE")
+    expect(instr_run.instr_text.text).to include("yyyy-MM-dd")
   end
 end
 
@@ -143,8 +146,8 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#time_field" do
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(1)
 
-    instruction = paragraphs.first.instr_text.first
-    expect(instruction.text).to include("TIME")
+    instr_run = paragraphs.first.runs.find { |r| r.instr_text }
+    expect(instr_run.instr_text.text).to include("TIME")
   end
 end
 

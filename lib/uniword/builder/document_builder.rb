@@ -29,15 +29,17 @@ module Uniword
     #   doc.footer { |f| f << Builder.page_number_field }
     #   doc.save('report.docx')
     class DocumentBuilder < BaseBuilder
+      attr_reader :allocator
+
       def self.default_model_class
         Wordprocessingml::DocumentRoot
       end
 
-      def initialize(model = nil)
-        super
-        @bookmark_counter = 0
-        @footnote_builder = FootnoteBuilder.new(self)
-        @comment_counter = 0
+      def initialize(model = nil, allocator: nil)
+        super(model)
+        @allocator = allocator
+        @model.allocator = allocator if allocator
+        @footnote_builder = FootnoteBuilder.new(self, allocator: @allocator)
       end
 
       # Load a document from file for manipulation
@@ -56,12 +58,16 @@ module Uniword
         case element
         when Wordprocessingml::Paragraph
           @model.body.paragraphs << element
+          @model.body.append_to_element_order("p")
         when Wordprocessingml::Table
           @model.body.tables << element
+          @model.body.append_to_element_order("tbl")
         when ParagraphBuilder
           @model.body.paragraphs << element.build
+          @model.body.append_to_element_order("p")
         when TableBuilder
           @model.body.tables << element.build
+          @model.body.append_to_element_order("tbl")
         else
           raise ArgumentError, "Cannot add #{element.class} to document"
         end
@@ -74,10 +80,10 @@ module Uniword
       # @yield [ParagraphBuilder] Builder for configuration
       # @return [ParagraphBuilder] The paragraph builder
       def paragraph(text = nil, &block)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         para << text if text
         block.call(para) if block_given?
-        @model.body.paragraphs << para.build
+        self << para
         para
       end
 
@@ -88,10 +94,10 @@ module Uniword
       # @yield [ParagraphBuilder] Builder for additional configuration
       # @return [ParagraphBuilder] The paragraph builder
       def heading(text, level: 1)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         para.style = "Heading#{level}"
         para << text
-        @model.body.paragraphs << para.build
+        self << para
         para
       end
 
@@ -99,7 +105,7 @@ module Uniword
       #
       # @return [self]
       def page_break
-        @model.body.paragraphs << Wordprocessingml::Paragraph.new(
+        self << Wordprocessingml::Paragraph.new(
           runs: [Builder.page_break]
         )
         self
@@ -112,7 +118,7 @@ module Uniword
       def table(&block)
         tbl = TableBuilder.new
         block.call(tbl) if block_given?
-        @model.body.tables << tbl.build
+        self << tbl
         tbl
       end
 
@@ -135,7 +141,7 @@ module Uniword
       # @yield [HeaderFooterBuilder] Builder for header content
       # @return [HeaderFooterBuilder] The header/footer builder
       def header(type: "default", &block)
-        hf = HeaderFooterBuilder.new(:header, type: type)
+        hf = HeaderFooterBuilder.new(:header, type: type, allocator: @allocator)
         block.call(hf) if block_given?
         (@model.headers ||= {})[type] = hf.build
         hf
@@ -147,7 +153,7 @@ module Uniword
       # @yield [HeaderFooterBuilder] Builder for footer content
       # @return [HeaderFooterBuilder] The header/footer builder
       def footer(type: "default", &block)
-        hf = HeaderFooterBuilder.new(:footer, type: type)
+        hf = HeaderFooterBuilder.new(:footer, type: type, allocator: @allocator)
         block.call(hf) if block_given?
         (@model.footers ||= {})[type] = hf.build
         hf
@@ -160,7 +166,7 @@ module Uniword
       # @return [self]
       def toc(title: "Table of Contents", styles: nil)
         TocBuilder.build(title: title, styles: styles).each do |para|
-          @model.body.paragraphs << para
+          self << para
         end
         self
       end
@@ -198,14 +204,17 @@ module Uniword
       # @yield [ParagraphBuilder] Builder for bookmark content
       # @return [ParagraphBuilder] The paragraph builder
       def bookmark(name, &block)
-        @bookmark_counter += 1
-        id = @bookmark_counter.to_s
+        id = @allocator ? @allocator.alloc_bookmark_id : begin
+          @bookmark_counter ||= 0
+          @bookmark_counter += 1
+          @bookmark_counter.to_s
+        end
 
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         para << Wordprocessingml::BookmarkStart.new(id: id, name: name)
         block.call(para) if block_given?
         para << Wordprocessingml::BookmarkEnd.new(id: id)
-        @model.body.paragraphs << para.build
+        self << para
         para
       end
 
@@ -304,12 +313,12 @@ module Uniword
       # @param size [Integer] Border size in eighths of a point (default 6)
       # @return [self]
       def horizontal_rule(style: "single", color: "auto", size: 6)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         para.borders(
           bottom: { style: style, color: color, size: size }
         )
         para.spacing(after: 0)
-        @model.body.paragraphs << para.build
+        self << para
         self
       end
 
@@ -325,7 +334,7 @@ module Uniword
         para.runs << ImageBuilder.create_run(
           self, path, width: width, height: height, alt_text: alt_text
         )
-        @model.body.paragraphs << para
+        self << para
         self
       end
 
@@ -348,7 +357,7 @@ module Uniword
           self, path, width: width, height: height, alt_text: alt_text,
                       align: align, wrap: wrap, behind_text: behind_text
         )
-        @model.body.paragraphs << para
+        self << para
         self
       end
 
@@ -387,10 +396,14 @@ module Uniword
       # @yield [CommentBuilder] Builder for rich comment content
       # @return [Comment] The created Comment model
       def comment(author:, text: nil, initials: nil, &block)
-        @comment_counter += 1
+        comment_id = @allocator ? @allocator.alloc_comment_id : begin
+          @comment_counter ||= 0
+          @comment_counter += 1
+          @comment_counter.to_s
+        end
         cb = CommentBuilder.new(
           author: author,
-          comment_id: @comment_counter.to_s,
+          comment_id: comment_id,
           initials: initials
         )
         cb << text if text
@@ -435,7 +448,7 @@ module Uniword
         sdt = SdtBuilder.bibliography.build
         para = Wordprocessingml::Paragraph.new
         para.sdts << sdt
-        @model.body.paragraphs << para
+        self << para
         self
       end
 
@@ -456,7 +469,7 @@ module Uniword
         run.drawings << drawing
         para = Wordprocessingml::Paragraph.new
         para.runs << run
-        @model.body.paragraphs << para
+        self << para
         cb
       end
 
@@ -464,7 +477,7 @@ module Uniword
       #
       # @return [self]
       def page_number
-        @model.body.paragraphs << Builder.page_number_field
+        self << Builder.page_number_field
         self
       end
 
@@ -472,7 +485,7 @@ module Uniword
       #
       # @return [self]
       def total_pages
-        @model.body.paragraphs << Builder.total_pages_field
+        self << Builder.total_pages_field
         self
       end
 
@@ -481,7 +494,7 @@ module Uniword
       # @param format [String] Date format (default 'M/d/yyyy')
       # @return [self]
       def date_field(format: "M/d/yyyy")
-        @model.body.paragraphs << Builder.date_field(format: format)
+        self << Builder.date_field(format: format)
         self
       end
 
@@ -490,7 +503,7 @@ module Uniword
       # @param format [String] Time format (default 'h:mm:ss am/pm')
       # @return [self]
       def time_field(format: "h:mm:ss am/pm")
-        @model.body.paragraphs << Builder.time_field(format: format)
+        self << Builder.time_field(format: format)
         self
       end
 

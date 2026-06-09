@@ -163,7 +163,7 @@ RSpec.describe Uniword::Builder::ImageBuilder do
 
       expect(doc.model.image_parts).not_to be_nil
       expect(doc.model.image_parts.keys).to include(r_id)
-      expect(r_id).to start_with("rIdImg")
+      expect(r_id).to start_with("rId")
     end
 
     it "stores image metadata" do
@@ -186,7 +186,7 @@ RSpec.describe Uniword::Builder::ImageBuilder do
 
   describe ".build_picture" do
     it "creates a Picture with proper structure" do
-      pic = described_class.send(:build_picture, "rId1", 500_000, 300_000)
+      pic = described_class.build_picture("rId1", 500_000, 300_000)
 
       expect(pic).to be_a(Uniword::Picture::Picture)
       expect(pic.nv_pic_pr).not_to be_nil
@@ -195,26 +195,26 @@ RSpec.describe Uniword::Builder::ImageBuilder do
     end
 
     it "sets blip reference" do
-      pic = described_class.send(:build_picture, "rId1", 500_000, 300_000)
+      pic = described_class.build_picture("rId1", 500_000, 300_000)
 
       expect(pic.blip_fill.blip.embed).to eq("rId1")
     end
 
     it "sets transform dimensions" do
-      pic = described_class.send(:build_picture, "rId1", 500_000, 300_000)
+      pic = described_class.build_picture("rId1", 500_000, 300_000)
 
       expect(pic.sp_pr.xfrm.ext.cx).to eq(500_000)
       expect(pic.sp_pr.xfrm.ext.cy).to eq(300_000)
     end
 
     it "sets preset geometry to rect" do
-      pic = described_class.send(:build_picture, "rId1", 500_000, 300_000)
+      pic = described_class.build_picture("rId1", 500_000, 300_000)
 
       expect(pic.sp_pr.prst_geom.prst).to eq("rect")
     end
 
     it "includes stretch fill rect" do
-      pic = described_class.send(:build_picture, "rId1", 500_000, 300_000)
+      pic = described_class.build_picture("rId1", 500_000, 300_000)
 
       expect(pic.blip_fill.stretch).not_to be_nil
       expect(pic.blip_fill.stretch.fill_rect).not_to be_nil
@@ -223,7 +223,7 @@ RSpec.describe Uniword::Builder::ImageBuilder do
 
   describe ".build_graphic" do
     it "creates graphic with picture namespace URI" do
-      graphic = described_class.send(:build_graphic, "rId1", 500_000, 300_000)
+      graphic = described_class.build_graphic("rId1", 500_000, 300_000)
 
       expect(graphic.graphic_data.uri).to include("picture")
       expect(graphic.graphic_data.picture).not_to be_nil
@@ -244,7 +244,7 @@ RSpec.describe Uniword::Builder::ImageBuilder, "serialization" do
     expect(xml).to include("blipFill")
     expect(xml).to include("spPr")
     expect(xml).to include("blip")
-    expect(xml).to include("rIdImg")
+    expect(xml).to include("r:embed")
   end
 
   it "serializes anchor drawing with positioning" do

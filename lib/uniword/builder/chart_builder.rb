@@ -2,7 +2,6 @@
 
 require "nokogiri"
 require "digest"
-require_relative "deterministic_id"
 
 module Uniword
   module Builder
@@ -268,19 +267,36 @@ module Uniword
 
       # Build a chart axis
       def build_axis(xml, tag, id, position, cross_id)
-        xml["c"].public_send(tag) do
-          xml["c"].axId("val" => id)
-          xml["c"].scaling do
-            xml["c"].orientation("val" => "minMax")
+        case tag
+        when "catAx"
+          xml["c"].catAx do
+            write_axis_content(xml, id, position, cross_id)
           end
-          xml["c"].delete("val" => "0")
-          xml["c"].axPos("val" => position)
-          xml["c"].majorGridlines
-          xml["c"].numFmt("formatCode" => "General",
-                          "sourceLinked" => "1")
-          xml["c"].tickLblPos("val" => "nextTo")
-          xml["c"].crossAx("val" => cross_id)
+        when "valAx"
+          xml["c"].valAx do
+            write_axis_content(xml, id, position, cross_id)
+          end
+        when "serAx"
+          xml["c"].serAx do
+            write_axis_content(xml, id, position, cross_id)
+          end
+        else
+          raise ArgumentError, "Unknown axis type: #{tag}"
         end
+      end
+
+      def write_axis_content(xml, id, position, cross_id)
+        xml["c"].axId("val" => id)
+        xml["c"].scaling do
+          xml["c"].orientation("val" => "minMax")
+        end
+        xml["c"].delete("val" => "0")
+        xml["c"].axPos("val" => position)
+        xml["c"].majorGridlines
+        xml["c"].numFmt("formatCode" => "General",
+                        "sourceLinked" => "1")
+        xml["c"].tickLblPos("val" => "nextTo")
+        xml["c"].crossAx("val" => cross_id)
       end
 
       # Create a Drawing element with chart reference

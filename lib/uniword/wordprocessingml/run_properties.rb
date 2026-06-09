@@ -2,11 +2,6 @@
 
 require "lutaml/model"
 
-require_relative "run_properties/yaml_transforms"
-require_relative "run_properties/predicates"
-require_relative "run_properties/accessors"
-require_relative "run_properties/conversion"
-
 module Uniword
   module Wordprocessingml
     # Run (character) formatting properties
@@ -14,9 +9,17 @@ module Uniword
     # Represents w:rPr element containing character-level formatting.
     # Used in StyleSets and run elements.
     class RunProperties < Lutaml::Model::Serializable
+      autoload :YamlTransforms, "#{__dir__}/run_properties/yaml_transforms"
+      autoload :Predicates, "#{__dir__}/run_properties/predicates"
+      autoload :Accessors, "#{__dir__}/run_properties/accessors"
+      autoload :Conversion, "#{__dir__}/run_properties/conversion"
+      autoload :Merging, "#{__dir__}/run_properties/merging"
+
+      include Uniword::ModelAttributeAccess
       include YamlTransforms
       include Predicates
       include Accessors
+      include Merging
       prepend Conversion
 
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings

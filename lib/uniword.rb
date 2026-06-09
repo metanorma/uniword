@@ -41,6 +41,7 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 module Uniword
   # Version constant
   autoload :VERSION, "uniword/version"
+  autoload :ModelAttributeAccess, "uniword/model_attribute_access"
 
   # === Namespace Modules (autoload) ===
   # All autoloads MUST be inside the module they're registering constants for
@@ -131,6 +132,10 @@ module Uniword
 
   # Review (comments and tracked changes)
   autoload :Review, "uniword/review"
+
+  # Shared tagging modules
+  autoload :HasRunPosition, "uniword/has_run_position"
+  autoload :DocumentInput, "uniword/document_input"
 
   # Spellcheck (spell and grammar checking)
   autoload :Spellcheck, "uniword/spellcheck"

@@ -238,13 +238,13 @@ RSpec.describe Uniword::Builder, "field factories" do
     it "creates a paragraph with PAGE field" do
       para = described_class.page_number_field
       expect(para).to be_a(Uniword::Wordprocessingml::Paragraph)
-      expect(para.field_chars.size).to eq(3)
-      expect(para.field_chars[0].fldCharType).to eq("begin")
-      expect(para.field_chars[1].fldCharType).to eq("separate")
-      expect(para.field_chars[2].fldCharType).to eq("end")
 
-      instruction = para.instr_text.first
-      expect(instruction.text).to include("PAGE")
+      runs = para.runs
+      field_types = runs.filter_map { |r| r.field_char&.fldCharType }
+      expect(field_types).to eq(%w[begin separate end])
+
+      instr_run = runs.find { |r| r.instr_text }
+      expect(instr_run.instr_text.text).to include("PAGE")
     end
   end
 
@@ -252,8 +252,9 @@ RSpec.describe Uniword::Builder, "field factories" do
     it "creates a paragraph with NUMPAGES field" do
       para = described_class.total_pages_field
       expect(para).to be_a(Uniword::Wordprocessingml::Paragraph)
-      instruction = para.instr_text.first
-      expect(instruction.text).to include("NUMPAGES")
+
+      instr_run = para.runs.find { |r| r.instr_text }
+      expect(instr_run.instr_text.text).to include("NUMPAGES")
     end
   end
 
@@ -261,9 +262,10 @@ RSpec.describe Uniword::Builder, "field factories" do
     it "creates a paragraph with DATE field" do
       para = described_class.date_field(format: "yyyy-MM-dd")
       expect(para).to be_a(Uniword::Wordprocessingml::Paragraph)
-      instruction = para.instr_text.first
-      expect(instruction.text).to include("DATE")
-      expect(instruction.text).to include("yyyy-MM-dd")
+
+      instr_run = para.runs.find { |r| r.instr_text }
+      expect(instr_run.instr_text.text).to include("DATE")
+      expect(instr_run.instr_text.text).to include("yyyy-MM-dd")
     end
   end
 
@@ -271,8 +273,9 @@ RSpec.describe Uniword::Builder, "field factories" do
     it "creates a paragraph with TIME field" do
       para = described_class.time_field
       expect(para).to be_a(Uniword::Wordprocessingml::Paragraph)
-      instruction = para.instr_text.first
-      expect(instruction.text).to include("TIME")
+
+      instr_run = para.runs.find { |r| r.instr_text }
+      expect(instr_run.instr_text.text).to include("TIME")
     end
   end
 end
