@@ -46,7 +46,7 @@ RSpec.describe Uniword::Builder::ImageBuilder do
 
       it "returns a relationship ID" do
         r_id = described_class.register_image(doc, png_path)
-        expect(r_id).to match(/^rIdImg\d+$/)
+        expect(r_id).to match(/^rId\d+$/)
       end
 
       it "registers image in document image_parts" do
@@ -76,7 +76,7 @@ RSpec.describe Uniword::Builder::ImageBuilder do
     context "without a document context" do
       it "returns a generated relationship ID" do
         r_id = described_class.register_image(nil, png_path)
-        expect(r_id).to match(/^rIdImg\d+$/)
+        expect(r_id).to match(/^rId\d+$/)
       end
     end
   end
