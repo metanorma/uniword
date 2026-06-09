@@ -97,4 +97,59 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       expect(builder.build).to be_a(Uniword::Wordprocessingml::DocumentRoot)
     end
   end
+
+  describe "element_order tracking" do
+    it "records paragraphs in element_order" do
+      builder = described_class.new
+      builder.paragraph("First")
+      builder.paragraph("Second")
+
+      eo = builder.model.body.element_order
+      expect(eo).not_to be_nil
+      expect(eo.map(&:name)).to eq(%w[p p])
+    end
+
+    it "records tables in element_order" do
+      builder = described_class.new
+      builder.paragraph("Intro")
+      builder.table do |t|
+        t.row { |r| r.cell(text: "Data") }
+      end
+      builder.paragraph("After")
+
+      eo = builder.model.body.element_order
+      expect(eo.map(&:name)).to eq(%w[p tbl p])
+    end
+
+    it "preserves interleaved paragraph/table ordering" do
+      builder = described_class.new
+      builder.heading("Title", level: 1)
+      builder.paragraph("Before table")
+      builder.table do |t|
+        t.row { |r| r.cell(text: "A"); r.cell(text: "B") }
+      end
+      builder.paragraph("After table")
+      builder.table do |t|
+        t.row { |r| r.cell(text: "C"); r.cell(text: "D") }
+      end
+      builder.paragraph("End")
+
+      eo = builder.model.body.element_order
+      expect(eo.map(&:name)).to eq(%w[p p tbl p tbl p])
+    end
+
+    it "tracks raw Paragraph and Table objects" do
+      builder = described_class.new
+      para = Uniword::Wordprocessingml::Paragraph.new
+      para.runs << Uniword::Wordprocessingml::Run.new(text: "Raw para")
+      builder << para
+
+      tbl = Uniword::Builder::TableBuilder.new
+      tbl.row { |r| r.cell(text: "Raw table") }
+      builder << tbl
+
+      eo = builder.model.body.element_order
+      expect(eo.map(&:name)).to eq(%w[p tbl])
+    end
+  end
 end
