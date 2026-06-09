@@ -29,7 +29,7 @@ module Uniword
         uri "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
         prefix_default "wp"
         element_form_default :qualified
-        attribute_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # DrawingML Chart namespace

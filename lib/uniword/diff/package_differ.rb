@@ -3,7 +3,6 @@
 require "zip"
 require "nokogiri"
 require "canon"
-require_relative "package_diff_result"
 
 module Uniword
   module Diff

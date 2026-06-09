@@ -15,19 +15,113 @@ module Uniword
         def reconcile_referential_integrity
           return unless package.document&.body
 
-          reconcile_note_body_references(:footnote)
-          reconcile_note_body_references(:endnote)
-          reconcile_sect_pr_references
+          if allocator
+            validate_builder_references
+          else
+            repair_all_references
+          end
+
           reconcile_style_references
           reconcile_style_inheritance
           reconcile_numbering_body_references
+        end
+
+        private
+
+        # Allocator present: builders produce correct output.
+        # Validate builder-constrained references — warn on issues
+        # but don't silently strip (indicates a builder bug).
+        def validate_builder_references
+          validate_note_references(:footnote)
+          validate_note_references(:endnote)
+          reconcile_image_references
+          validate_hyperlink_references
+          ensure_para_id_uniqueness
+          ensure_rid_uniqueness
+          reconcile_sect_pr_references
+        end
+
+        # No allocator: legacy repair path for template-loaded content.
+        def repair_all_references
+          reconcile_note_body_references(:footnote)
+          reconcile_note_body_references(:endnote)
+          reconcile_sect_pr_references
           reconcile_image_references
           reconcile_hyperlink_references
           ensure_para_id_uniqueness
           ensure_rid_uniqueness
         end
 
-        private
+        # Validate that note references in the body match existing notes.
+        # Logs warnings but does NOT strip — builder should produce correct refs.
+        def validate_note_references(type)
+          notes = case type
+                  when :footnote then package.footnotes
+                  when :endnote then package.endnotes
+                  end
+          return unless notes
+
+          entries = case type
+                    when :footnote then notes.footnote_entries
+                    when :endnote then notes.endnote_entries
+                    end
+          defined_ids = entries
+            .reject { |e| VALID_NOTE_TYPES.include?(e.type) }
+            .filter_map(&:id).to_set
+
+          dangling = 0
+          walk_body_paragraphs(package.document.body) do |para|
+            para.runs.each do |run|
+              ref = note_reference_from_run(run, type)
+              next unless ref&.id
+              next if defined_ids.include?(ref.id)
+
+              dangling += 1
+              Uniword.logger&.warn do
+                "Dangling #{type}note reference id=#{ref.id} in body — " \
+                "builder produced invalid reference"
+              end
+            end
+          end
+
+          return unless dangling.positive?
+
+          record_fix("R9",
+                     "WARNING: Found #{dangling} dangling #{type}note reference(s) " \
+                     "in body (allocator path — builder bug)")
+        end
+
+        # Validate that hyperlink references match existing rels.
+        # Logs warnings but does NOT strip — builder should register hyperlinks.
+        def validate_hyperlink_references
+          rels = package.document_rels
+          return unless rels
+
+          valid_rids = rels.relationships.to_set(&:id)
+          return if valid_rids.empty?
+
+          dangling = 0
+          walk_body_paragraphs(package.document.body) do |para|
+            (para.hyperlinks || []).each do |hl|
+              next if hl.anchor
+              next unless hl.id
+              next unless hl.id.match?(/\ArId\d+\z/i)
+              next if valid_rids.include?(hl.id)
+
+              dangling += 1
+              Uniword.logger&.warn do
+                "Dangling hyperlink r:id=#{hl.id} in body — " \
+                "builder failed to register hyperlink with allocator"
+              end
+            end
+          end
+
+          return unless dangling.positive?
+
+          record_fix("R10",
+                     "WARNING: Found #{dangling} dangling hyperlink reference(s) " \
+                     "in body (allocator path — builder bug)")
+        end
 
         # -- Note references (body → footnotes.xml / endnotes.xml) --
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require_relative "../has_run_position"
+require "uniword/ooxml/types/relationship_id"
 
 module Uniword
   module Wordprocessingml
@@ -12,7 +12,7 @@ module Uniword
     class Hyperlink < Lutaml::Model::Serializable
       include Uniword::HasRunPosition
 
-      attribute :id, :string
+      attribute :id, Ooxml::Types::RelationshipId
       attribute :anchor, :string
       attribute :tooltip, :string
       attribute :history, Uniword::Properties::HistoryValue

@@ -40,7 +40,8 @@ module Uniword
       # @yield [ParagraphBuilder] Builder for item content
       # @return [ParagraphBuilder] The paragraph builder
       def item(text = nil, level: 0, &block)
-        para = ParagraphBuilder.new
+        alloc = @document.is_a?(DocumentBuilder) ? @document.allocator : nil
+        para = ParagraphBuilder.new(allocator: alloc)
         para.numbering(@num_id, level)
         para << text if text
         yield(para) if block

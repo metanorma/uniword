@@ -1,38 +1,24 @@
 # frozen_string_literal: true
 
-require "lutaml/model"
-
 module Uniword
   # Hyperlink convenience wrapper for external and internal links.
   #
-  # This provides a simplified API over the underlying Wordprocessingml::Hyperlink model.
+  # Converts to Wordprocessingml::Hyperlink model objects. For external
+  # links, properly assigns an rId that references a relationship in
+  # document.xml.rels — not the raw URL string.
   #
   # @example External hyperlink
   #   link = Hyperlink.new(url: 'https://example.com', text: 'Click here')
   #   link.external?  # => true
-  #   link.url        # => 'https://example.com'
   #
   # @example Internal hyperlink (bookmark)
   #   link = Hyperlink.new(anchor: 'section1', text: 'Go to section')
   #   link.internal?  # => true
-  #   link.anchor    # => 'section1'
   class Hyperlink
-    # @return [String, nil] URL for external links
-    attr_reader :url
+    REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"
 
-    # @return [String, nil] Anchor/bookmark name for internal links
-    attr_reader :anchor
+    attr_reader :url, :anchor, :text, :tooltip
 
-    # @return [String] Display text
-    attr_reader :text
-
-    # @return [String, nil] Tooltip text
-    attr_reader :tooltip
-
-    # @param url [String, nil] URL for external links
-    # @param anchor [String, nil] Anchor for internal links
-    # @param text [String] Display text
-    # @param tooltip [String, nil] Optional tooltip
     def initialize(url: nil, anchor: nil, text: nil, tooltip: nil)
       @url = url
       @anchor = anchor
@@ -40,22 +26,38 @@ module Uniword
       @tooltip = tooltip
     end
 
-    # @return [Boolean] True if this is an external URL link
     def external?
       !url.nil?
     end
 
-    # @return [Boolean] True if this is an internal anchor link
     def internal?
       !anchor.nil?
     end
 
-    # Convert to the underlying Wordprocessingml::Hyperlink model
+    # Convert to the underlying Wordprocessingml::Hyperlink model.
     #
+    # When an allocator is provided, external links get a proper rId
+    # registered as a hyperlink relationship. Without an allocator,
+    # falls back to setting id to the raw URL (legacy behavior).
+    #
+    # @param allocator [Docx::IdAllocator, nil] ID allocator for rId assignment
     # @return [Wordprocessingml::Hyperlink] The OOXML hyperlink element
-    def to_model
+    def to_model(allocator: nil)
       model = Wordprocessingml::Hyperlink.new
-      model.id = url if url
+
+      if url
+        if allocator
+          r_id = allocator.alloc_rid(
+            target: url,
+            type: REL_TYPE,
+            target_mode: "External",
+          )
+          model.id = r_id
+        else
+          model.id = url
+        end
+      end
+
       model.anchor = anchor if anchor
       model.tooltip = tooltip if tooltip
 
@@ -68,7 +70,6 @@ module Uniword
       model
     end
 
-    # @return [Hash] Hash representation
     def to_h
       { url: url, anchor: anchor, text: text, tooltip: tooltip }
     end

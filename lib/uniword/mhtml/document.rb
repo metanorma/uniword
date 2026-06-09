@@ -2,8 +2,6 @@
 
 require "lutaml/model"
 
-require_relative "../document_input"
-
 module Uniword
   module Mhtml
     # MHTML Document — top-level model for .mht/.mhtml/.doc files.

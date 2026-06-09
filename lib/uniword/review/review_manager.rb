@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "accept_reject"
-
 module Uniword
   module Review
     # Orchestrator for comments and tracked changes in a document.

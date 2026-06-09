@@ -44,30 +44,31 @@ module Uniword
         # causing put_next_entry to discard our Entry and create a fresh one.
         temp_path = "#{output_path}.#{Process.pid}.tmp"
 
-        Zip::OutputStream.open(temp_path) do |zos|
-          content.each do |entry_path, entry_content|
-            # DOCX ZIP entries must have binary flag (internal_file_attributes=0)
-            # and no Unix permissions (external_file_attributes=0) to match
-            # Word's output format.
-            # rubyzip's write_c_dir_entry overrides external_file_attributes
-            # on FSTYPE_UNIX, so we force FAT to prevent this.
-            entry = Zip::Entry.new(temp_path, entry_path.to_s)
-            entry.internal_file_attributes = 0
-            entry.external_file_attributes = 0
-            entry.fstype = Zip::FSTYPE_FAT
+        was_zip64 = Zip.write_zip64_support
+        Zip.write_zip64_support = false
+        begin
+          Zip::OutputStream.open(temp_path) do |zos|
+            content.each do |entry_path, entry_content|
+              entry = Zip::Entry.new(temp_path, entry_path.to_s)
+              entry.internal_file_attributes = 0
+              entry.external_file_attributes = 0
+              entry.fstype = Zip::FSTYPE_FAT
 
-            zos.put_next_entry(entry)
+              zos.put_next_entry(entry)
 
-            final_content =
-              if entry_content.encoding == Encoding::ASCII_8BIT
-                entry_content
-              else
-                entry_content.encode(
-                  "UTF-8", invalid: :replace, undef: :replace
-                )
-              end
-            zos.write(final_content)
+              final_content =
+                if entry_content.encoding == Encoding::ASCII_8BIT
+                  entry_content
+                else
+                  entry_content.encode(
+                    "UTF-8", invalid: :replace, undef: :replace
+                  )
+                end
+              zos.write(final_content)
+            end
           end
+        ensure
+          Zip.write_zip64_support = was_zip64
         end
 
         move_temp_to_output(temp_path, output_path)
@@ -154,25 +155,31 @@ module Uniword
       def write_to_zip_file(content, output_path)
         temp_path = "#{output_path}.#{Process.pid}.#{rand(1000)}.tmp"
 
-        Zip::OutputStream.open(temp_path) do |zos|
-          content.each do |entry_path, entry_content|
-            entry = Zip::Entry.new(temp_path, entry_path.to_s)
-            entry.internal_file_attributes = 0
-            entry.external_file_attributes = 0
-            entry.fstype = Zip::FSTYPE_FAT
+        was_zip64 = Zip.write_zip64_support
+        Zip.write_zip64_support = false
+        begin
+          Zip::OutputStream.open(temp_path) do |zos|
+            content.each do |entry_path, entry_content|
+              entry = Zip::Entry.new(temp_path, entry_path.to_s)
+              entry.internal_file_attributes = 0
+              entry.external_file_attributes = 0
+              entry.fstype = Zip::FSTYPE_FAT
 
-            zos.put_next_entry(entry)
+              zos.put_next_entry(entry)
 
-            final_content =
-              if entry_content.encoding == Encoding::ASCII_8BIT
-                entry_content
-              else
-                entry_content.encode(
-                  "UTF-8", invalid: :replace, undef: :replace
-                )
-              end
-            zos.write(final_content)
+              final_content =
+                if entry_content.encoding == Encoding::ASCII_8BIT
+                  entry_content
+                else
+                  entry_content.encode(
+                    "UTF-8", invalid: :replace, undef: :replace
+                  )
+                end
+              zos.write(final_content)
+            end
           end
+        ensure
+          Zip.write_zip64_support = was_zip64
         end
 
         move_temp_to_output(temp_path, output_path)

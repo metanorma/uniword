@@ -7,7 +7,10 @@ module Uniword
   # This namespace holds DOCX-specific concerns: the package model,
   # document-level reconciliation, and user-defined requirements.
   module Docx
+    autoload :IdAllocator, "#{__dir__}/docx/id_allocator"
     autoload :Package, "#{__dir__}/docx/package"
+    autoload :PackageDefaults, "#{__dir__}/docx/package_defaults"
+    autoload :PackageSerialization, "#{__dir__}/docx/package_serialization"
     autoload :Profile, "#{__dir__}/docx/profile"
     autoload :DocumentStatistics, "#{__dir__}/docx/document_statistics"
     autoload :Reconciler, "#{__dir__}/docx/reconciler"
