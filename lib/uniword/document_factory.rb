@@ -169,27 +169,6 @@ module Uniword
         detector.detect(path)
       end
 
-      # Mapping from Docx::Package attribute names to DocumentRoot
-      # attribute names. Keys where names differ use explicit mapping.
-      PACKAGE_PART_MAPPINGS = {
-        styles: :styles_configuration,
-        numbering: :numbering_configuration,
-        settings: :settings,
-        font_table: :font_table,
-        web_settings: :web_settings,
-        theme: :theme,
-        core_properties: :core_properties,
-        app_properties: :app_properties,
-        document_rels: :document_rels,
-        theme_rels: :theme_rels,
-        package_rels: :package_rels,
-        content_types: :content_types,
-        custom_properties: :custom_properties,
-        custom_xml_items: :custom_xml_items,
-        footnotes: :footnotes,
-        endnotes: :endnotes,
-        embeddings: :embeddings,
-      }.freeze
 
       # Copy package parts to document for round-trip preservation
       #

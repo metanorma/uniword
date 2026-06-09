@@ -9,11 +9,18 @@ module Uniword
       # preserving non-standard entries from the source document.
       module PackageStructure
         # Relationship types for parts we don't model or serialize.
-        # These are legacy/transitional OOXML parts (Word 2010 Transitional)
-        # whose relationships must be dropped to avoid dangling references.
         UNSUPPORTED_REL_TYPES = Set[
           "http://schemas.microsoft.com/office/2007/relationships/stylesWithEffects",
         ].freeze
+
+        # Rel types that belong in package-level _rels/.rels, not document.xml.rels.
+        PACKAGE_LEVEL_REL_TYPES = Set[
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
+          "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
+          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
+        ].freeze
+
         def reconcile_content_types
           ct = package.content_types
           return unless ct
@@ -89,17 +96,75 @@ module Uniword
           ]
 
           standard_targets = defs.filter_map { |_, target, obj| target if obj }.to_set
-          non_standard = rels.relationships.reject do |r|
-            standard_targets.include?(r.target) || unsupported_rel_type?(r.type)
+
+          # If allocator is present, use it to build rels — preserves existing rIds
+          alloc = allocator
+          if alloc
+            reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
+          else
+            reconcile_document_rels_legacy(rels, base, defs, standard_targets)
+          end
+        end
+
+        private
+
+        def reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
+          # Collect standard part rels from allocator
+          all_rels = []
+          defs.each do |suffix, target, obj|
+            next unless obj
+            r_id = alloc.rid_for(target: target, type: "#{base}/#{suffix}")
+            if r_id
+              all_rels << build_rel(r_id, "#{base}/#{suffix}", target)
+            else
+              all_rels << build_rel(
+                alloc.alloc_rid(target: target, type: "#{base}/#{suffix}"),
+                "#{base}/#{suffix}", target,
+              )
+            end
           end
 
-          # Build all relationships with sequential rIds
+          # Add allocator-managed rels (images, headers, footers, hyperlinks)
+          alloc.all_rels.each do |entry|
+            next if standard_targets.include?(entry[:target])
+            next if all_rels.any? { |r| r.target == entry[:target] }
+            next if unsupported_rel_type?(entry[:type])
+            next if package_level_rel?(entry[:type])
+            next unless header_footer_target_present?(entry[:target])
+
+            all_rels << build_rel(
+              entry[:id], entry[:type], entry[:target],
+              target_mode: entry[:target_mode],
+            )
+          end
+
+          # Preserve non-standard rels not managed by allocator
+          existing_targets = all_rels.to_set(&:target)
+          non_standard = rels.relationships.reject do |r|
+            existing_targets.include?(r.target) ||
+              standard_targets.include?(r.target) ||
+              unsupported_rel_type?(r.type) ||
+              package_level_rel?(r.type) ||
+              !header_footer_target_present?(r.target)
+          end
+
+          rels.relationships = all_rels + non_standard
+          record_fix("R6", "Assembled document relationships from allocator")
+        end
+
+        def reconcile_document_rels_legacy(rels, base, defs, standard_targets)
+          non_standard = rels.relationships.reject do |r|
+            standard_targets.include?(r.target) ||
+              unsupported_rel_type?(r.type) ||
+              package_level_rel?(r.type) ||
+              !header_footer_target_present?(r.target)
+          end
+
           all_rels = []
           rid_mapping = {}
 
           defs.each do |suffix, target, obj|
             next unless obj
-
             rid = "rId#{all_rels.size + 1}"
             all_rels << build_rel(rid, "#{base}/#{suffix}", target)
           end
@@ -113,12 +178,11 @@ module Uniword
           end
 
           rels.relationships = all_rels
-
           update_sect_pr_rid_references(rid_mapping) unless rid_mapping.empty?
+          update_blip_embed_references(rid_mapping) unless rid_mapping.empty?
+          update_hyperlink_rid_references(rid_mapping) unless rid_mapping.empty?
           record_fix("R6", "Rebuilt document relationships with sequential rIds")
         end
-
-        private
 
         def update_sect_pr_rid_references(mapping)
           sect_pr = package.document&.body&.section_properties
@@ -134,8 +198,73 @@ module Uniword
           end
         end
 
+        def update_blip_embed_references(mapping)
+          paragraphs = package.document&.body&.paragraphs
+          return unless paragraphs
+
+          paragraphs.each do |para|
+            next unless para.runs
+
+            para.runs.each do |run|
+              next unless run.drawings
+
+              run.drawings.each do |drawing|
+                update_drawing_blip(drawing, mapping)
+              end
+            end
+          end
+        end
+
+        def update_drawing_blip(drawing, mapping)
+          graphic = drawing.inline&.graphic || drawing.anchor&.graphic
+          return unless graphic
+
+          picture = graphic.graphic_data&.picture
+          return unless picture
+
+          blip = picture.blip_fill&.blip
+          return unless blip&.embed
+
+          new_rid = mapping[blip.embed.to_s]
+          blip.embed = new_rid if new_rid
+        end
+
+        def update_hyperlink_rid_references(mapping)
+          body = package.document&.body
+          return unless body
+
+          walk_body_paragraphs(body) do |para|
+            (para.hyperlinks || []).each do |hl|
+              next unless hl.id
+              new_rid = mapping[hl.id.to_s]
+              hl.id = new_rid if new_rid
+            end
+          end
+        end
+
         def unsupported_rel_type?(type)
           UNSUPPORTED_REL_TYPES.include?(type.to_s)
+        end
+
+        def package_level_rel?(type)
+          PACKAGE_LEVEL_REL_TYPES.include?(type.to_s)
+        end
+
+        # Check if a header/footer rel target corresponds to a serialized part.
+        # Headers/footers are numbered sequentially: header1.xml, header2.xml...
+        # If the model has fewer headers/footers than the target index, it's stale.
+        def header_footer_target_present?(target)
+          if target.start_with?("header") && target.end_with?(".xml")
+            num = target[/header(\d+)\.xml/, 1]&.to_i
+            count = package.document&.headers&.size || 0
+            return num && num <= count
+          end
+          if target.start_with?("footer") && target.end_with?(".xml")
+            num = target[/footer(\d+)\.xml/, 1]&.to_i
+            count = package.document&.footers&.size || 0
+            return num && num <= count
+          end
+          true
         end
 
         def content_type_overrides_for_present_parts

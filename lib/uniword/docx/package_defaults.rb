@@ -9,29 +9,8 @@ module Uniword
     #
     # @api private
     module PackageDefaults
-      # Mapping from DocumentRoot attributes to Package attributes.
-      # Only entries where names differ need explicit mapping.
-      DOCUMENT_TO_PACKAGE_MAPPINGS = {
-        styles_configuration: :styles,
-        settings: :settings,
-        font_table: :font_table,
-        web_settings: :web_settings,
-        theme: :theme,
-        core_properties: :core_properties,
-        app_properties: :app_properties,
-        custom_properties: :custom_properties,
-        document_rels: :document_rels,
-        theme_rels: :theme_rels,
-        package_rels: :package_rels,
-        content_types: :content_types,
-        footnotes: :footnotes,
-        endnotes: :endnotes,
-      }.freeze
-
       def self.included(base)
         base.extend(ClassMethods)
-        base.const_set(:DOCUMENT_TO_PACKAGE_MAPPINGS,
-                       DOCUMENT_TO_PACKAGE_MAPPINGS)
       end
 
       # Class methods for package construction
@@ -54,6 +33,7 @@ module Uniword
           package.content_types = document.content_types if document.content_types
           package.footnotes = document.footnotes if document.footnotes
           package.endnotes = document.endnotes if document.endnotes
+          package.allocator = document.allocator if document.allocator
 
           package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?
 
