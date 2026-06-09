@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require_relative "../has_run_position"
 
 module Uniword
   module Math

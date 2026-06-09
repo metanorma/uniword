@@ -15,10 +15,11 @@ module Uniword
     #     f << Builder.page_number_field
     #   end
     class HeaderFooterBuilder
-      attr_reader :model, :kind
+      attr_reader :model, :kind, :allocator
 
-      def initialize(kind, type: "default")
+      def initialize(kind, type: "default", allocator: nil)
         @kind = kind
+        @allocator = allocator
         @model = if kind == :header
                    Wordprocessingml::Header.new
                  else
@@ -33,15 +34,14 @@ module Uniword
       def <<(element)
         case element
         when String
-          para = Wordprocessingml::Paragraph.new
-          para.runs << Wordprocessingml::Run.new(text: element)
-          @model.paragraphs << para
+          para = ParagraphBuilder.new(allocator: @allocator)
+          para << element
+          @model.paragraphs << para.build
         when Wordprocessingml::Run
-          # Auto-wrap Run in a paragraph, appending to the last one if possible
           if @model.paragraphs.empty?
-            para = Wordprocessingml::Paragraph.new
-            para.runs << element
-            @model.paragraphs << para
+            para = ParagraphBuilder.new(allocator: @allocator)
+            para << element
+            @model.paragraphs << para.build
           else
             @model.paragraphs.last.runs << element
           end
@@ -63,7 +63,7 @@ module Uniword
       # @yield [ParagraphBuilder] Builder for paragraph configuration
       # @return [ParagraphBuilder]
       def paragraph(text = nil, &block)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         para << text if text
         yield(para) if block
         @model.paragraphs << para.build

@@ -14,6 +14,10 @@ module Uniword
     autoload :DocumentDiffer, "uniword/diff/document_differ"
     autoload :Formatter, "uniword/diff/formatter"
     autoload :PackageDiffer, "uniword/diff/package_differ"
+    autoload :XmlChange, "uniword/diff/package_diff_result"
+    autoload :ZipMetadataChange, "uniword/diff/package_diff_result"
+    autoload :OpcIssue, "uniword/diff/package_diff_result"
+    autoload :PartChange, "uniword/diff/package_diff_result"
     autoload :PackageDiffResult, "uniword/diff/package_diff_result"
   end
 end

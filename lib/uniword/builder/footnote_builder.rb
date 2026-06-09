@@ -5,24 +5,15 @@ module Uniword
     # Builds footnotes and endnotes for documents.
     #
     # Manages footnote/endnote creation, ID assignment, and wiring
-    # references into the document body.
-    #
-    # @example Add footnotes to a document
-    #   doc = DocumentBuilder.new
-    #   doc.paragraph { |p| p << 'See the '; p << doc.footnote('A note') }
-    #
-    # @example Add endnotes
-    #   doc.paragraph { |p| p << 'See '; p << doc.endnote('An endnote') }
+    # references into the document body. Uses IdAllocator for all ID
+    # assignment when available.
     class FootnoteBuilder
-      def initialize(document)
+      def initialize(document, allocator: nil)
         @document = document
+        @allocator = allocator
       end
 
       # Create a footnote and return a Run with a footnoteReference.
-      #
-      # The footnote body is stored in the document's footnotes collection.
-      # The returned Run contains a <w:footnoteReference> element that
-      # Word uses to link to the footnote body.
       #
       # @param text [String] Footnote text content
       # @yield [ParagraphBuilder] Builder for rich footnote content
@@ -61,24 +52,32 @@ module Uniword
       end
 
       def next_footnote_id
-        @footnote_counter ||= 1
-        id = @footnote_counter
-        @footnote_counter += 1
-        id
+        if @allocator
+          @allocator.alloc_footnote_id
+        else
+          @footnote_counter ||= 1
+          id = @footnote_counter
+          @footnote_counter += 1
+          id
+        end
       end
 
       def next_endnote_id
-        @endnote_counter ||= 1
-        id = @endnote_counter
-        @endnote_counter += 1
-        id
+        if @allocator
+          @allocator.alloc_endnote_id
+        else
+          @endnote_counter ||= 1
+          id = @endnote_counter
+          @endnote_counter += 1
+          id
+        end
       end
 
       def create_footnote_entry(id, text, &block)
         # OOXML spec: regular footnotes must NOT have w:type.
         # Only separator/continuationSeparator use w:type.
         entry = Wordprocessingml::Footnote.new(id: id.to_s)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         if block_given?
           block.call(para)
         elsif text
@@ -90,7 +89,7 @@ module Uniword
 
       def create_endnote_entry(id, text, &block)
         entry = Wordprocessingml::Endnote.new(id: id.to_s)
-        para = ParagraphBuilder.new
+        para = ParagraphBuilder.new(allocator: @allocator)
         if block_given?
           block.call(para)
         elsif text

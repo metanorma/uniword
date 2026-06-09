@@ -66,6 +66,18 @@ module Uniword
         sync_element_order
       end
 
+      # Record a programmatically-added element in element_order.
+      # Called by DocumentBuilder to preserve insertion order when
+      # interleaving paragraphs, tables, and SDTs.
+      def append_to_element_order(element_name)
+        entry = Lutaml::Xml::Element.new("Element", element_name)
+        if element_order.nil? || element_order.empty?
+          self.element_order = [entry]
+        else
+          self.element_order = element_order + [entry]
+        end
+      end
+
       private
 
       def sync_element_order

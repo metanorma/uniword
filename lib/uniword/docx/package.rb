@@ -2,9 +2,6 @@
 
 require "securerandom"
 require "lutaml/model"
-require_relative "reconciler"
-require_relative "package_defaults"
-require_relative "package_serialization"
 
 module Uniword
   module Docx
@@ -89,6 +86,10 @@ module Uniword
       attr_accessor :chart_parts, :bibliography_sources, :profile
       attr_accessor :settings_rels, :embeddings
 
+      # Central ID allocator — owns all rId, footnote, bookmark, etc. assignment.
+      # Seeded from template rels on load; used by builders during construction.
+      attr_accessor :allocator
+
       # Raw XML from template ZIP for unmodified parts.
       # When present, these are used verbatim instead of re-serializing
       # through lutaml-model (which drops unmapped elements).
@@ -104,7 +105,9 @@ module Uniword
       def self.from_file(path)
         extractor = Infrastructure::ZipExtractor.new
         zip_content = extractor.extract(path)
-        from_zip_content(zip_content, path)
+        package = from_zip_content(zip_content, path)
+        package.populate_allocator
+        package
       end
 
       # Create package from extracted ZIP content
@@ -372,7 +375,14 @@ module Uniword
                          else "image/#{ext}"
                          end
 
-          r_id = "rIdImg#{package.document.image_parts.size + 1}"
+          r_id = if package.allocator
+                   package.allocator.alloc_rid(
+                     target: "media/#{filename}",
+                     type: IdAllocator::IMAGE_REL_TYPE,
+                   )
+                 else
+                   "rId#{package.document.image_parts.size + 1}"
+                 end
 
           binary_data = if zip_path
                           read_binary_from_zip(zip_path, media_path)
@@ -414,6 +424,18 @@ module Uniword
         package.to_file(path)
       end
 
+      # Populate the allocator from all existing template data.
+      # Must be called BEFORE any builder runs (populate-first principle).
+      def populate_allocator
+        @allocator = IdAllocator.new
+        @allocator.seed_from_rels(document_rels&.relationships)
+        @allocator.seed_from_rels(package_rels&.relationships)
+        @allocator.seed_from_notes(
+          footnotes&.footnote_entries,
+          endnotes&.endnote_entries,
+        )
+      end
+
       # Extract media files from word/theme/media/ directory
       def self.extract_theme_media(zip_content)
         media = {}
@@ -451,12 +473,24 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
-        Reconciler.new(self, profile: profile || Profile.defaults).reconcile
+        Reconciler.new(self,
+                       profile: profile || Profile.defaults,
+                       allocator: allocator).reconcile
 
         inject_part_relationships(content, content_types, package_rels, document_rels)
         serialize_package_parts(content, content_types, package_rels, document_rels)
 
+        # OOXML requires [Content_Types].xml as the first ZIP entry.
+        reorder_content_hash(content)
         content
+      end
+
+      # Ensure [Content_Types].xml is first, _rels/.rels is second.
+      def reorder_content_hash(content)
+        priority = {}
+        priority["[Content_Types].xml"] = content.delete("[Content_Types].xml") if content.key?("[Content_Types].xml")
+        priority["_rels/.rels"] = content.delete("_rels/.rels") if content.key?("_rels/.rels")
+        content.replace(priority.merge(content))
       end
 
       # Delegate common DocumentRoot methods for API compatibility

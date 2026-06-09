@@ -1,43 +1,23 @@
 # frozen_string_literal: true
 
-require_relative "reconciler/helpers"
-require_relative "reconciler/notes"
-require_relative "reconciler/referential_integrity"
-require_relative "reconciler/tables"
-require_relative "reconciler/theme"
-require_relative "reconciler/parts"
-require_relative "reconciler/package_structure"
-require_relative "reconciler/body"
-
 module Uniword
   module Docx
-    # Reconciles DOCX-level invariants before serialization.
-    #
-    # Ensures that the document's model state is internally consistent so that
-    # the serialized output is always a valid DOCX file. Called from
-    # Docx::Package#to_zip_content before the serialization phase.
-    #
-    # This is not an extension point -- it enforces built-in invariants.
-    # For customizable validation, use Uniword::Validation::Rules instead.
-    # For user-defined requirements, use Docx::Requirement (future).
-    #
-    # Composed of focused modules:
-    # - Helpers: ID generation, traversal, run utilities
-    # - Notes: footnote/endnote reconciliation
-    # - ReferentialIntegrity: cross-part ID consistency
-    # - Tables: table structure repair
-    # - Theme: theme creation and repair
-    # - Parts: profile-dependent support parts
-    # - PackageStructure: content types and relationships
-    # - Body: section properties, headers/footers
     class Reconciler
-      # mc:Ignorable prefixes — derived from Ooxml::Namespaces::EXTENSION_NAMESPACES.
       EXTENSION_PREFIXES = Ooxml::Namespaces::EXTENSION_PREFIXES
       FULL_IGNORABLE = Ooxml::Namespaces::FULL_IGNORABLE_PREFIXES
 
-      # Valid w:type values per OOXML spec for w:footnote/w:endnote.
       VALID_NOTE_TYPES = %w[separator continuationSeparator
                             footnoteSeparator continuationNotice].freeze
+
+      # Sub-modules autoloaded — no require_relative for internal code.
+      autoload :Helpers, "#{__dir__}/reconciler/helpers"
+      autoload :Notes, "#{__dir__}/reconciler/notes"
+      autoload :ReferentialIntegrity, "#{__dir__}/reconciler/referential_integrity"
+      autoload :Tables, "#{__dir__}/reconciler/tables"
+      autoload :Theme, "#{__dir__}/reconciler/theme"
+      autoload :Parts, "#{__dir__}/reconciler/parts"
+      autoload :PackageStructure, "#{__dir__}/reconciler/package_structure"
+      autoload :Body, "#{__dir__}/reconciler/body"
 
       include Helpers
       include Notes
@@ -48,9 +28,10 @@ module Uniword
       include PackageStructure
       include Body
 
-      def initialize(package, profile: nil)
+      def initialize(package, profile: nil, allocator: nil)
         @package = package
         @profile = profile
+        @allocator = allocator
         @applied_fixes = []
       end
 
@@ -62,7 +43,6 @@ module Uniword
         reconcile_headers_footers
         reconcile_tables
         repair_theme
-        reconcile_referential_integrity
 
         # Group 2: Support parts (profile-dependent)
         if @profile
@@ -84,6 +64,9 @@ module Uniword
         reconcile_content_types
         reconcile_package_rels
         reconcile_document_rels
+
+        # Group 4: Integrity checks (after rels are assembled)
+        reconcile_referential_integrity
       end
 
       # Audit trail of fixes applied during reconciliation.
@@ -92,6 +75,10 @@ module Uniword
       private
 
       attr_reader :package, :profile
+
+      def allocator
+        @allocator || package.allocator
+      end
 
       def record_fix(validity_rule, message)
         @applied_fixes << {

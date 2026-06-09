@@ -2,9 +2,6 @@
 
 require "lutaml/model"
 
-require_relative "../document_input"
-require_relative "document_root/feature_facade"
-
 module Uniword
   module Wordprocessingml
     # Root element of a WordprocessingML document
@@ -12,6 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:document>
     class DocumentRoot < Lutaml::Model::Serializable
+      autoload :FeatureFacade, "#{__dir__}/document_root/feature_facade"
+
       include FeatureFacade
       include Uniword::DocumentInput
 
@@ -117,6 +116,8 @@ module Uniword
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
                     :package_rels, :content_types, :custom_properties, :custom_xml_items
+      # Central ID allocator — preserves IDs across build/save cycle
+      attr_accessor :allocator
 
       # Writers for properties that have lazy-initialized getters
       # (removing from attr_accessor to avoid shadowing custom getters)
