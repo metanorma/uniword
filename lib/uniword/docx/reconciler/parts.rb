@@ -21,7 +21,7 @@ module Uniword
 
           rsid = generate_rsid
 
-          settings.zoom = Wordprocessingml::Zoom.new(percent: 100)
+          settings.zoom ||= Wordprocessingml::Zoom.new(percent: 100)
           if new_settings && settings.do_not_display_page_boundaries.nil?
             settings.do_not_display_page_boundaries =
               Wordprocessingml::DoNotDisplayPageBoundaries.new
@@ -66,8 +66,7 @@ module Uniword
             record_fix("R2", "Generated w15:docId in GUID format")
           end
 
-          settings.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(EXTENSION_PREFIXES)
+          set_mc_ignorable(settings)
         end
 
         def reconcile_font_table
@@ -80,8 +79,7 @@ module Uniword
             package.font_table
           end
 
-          font_table.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(EXTENSION_PREFIXES)
+          set_mc_ignorable(font_table)
 
           return unless font_table.fonts.empty?
 
@@ -111,8 +109,7 @@ module Uniword
             font_table.fonts << font
           end
 
-          font_table.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(EXTENSION_PREFIXES)
+          set_mc_ignorable(font_table)
           record_fix("R13",
                      "Populated font table with profile fonts and signatures")
         end
@@ -131,8 +128,7 @@ module Uniword
 
           ensure_default_styles(styles)
 
-          styles.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(EXTENSION_PREFIXES)
+          set_mc_ignorable(styles)
           record_fix("R10",
                      "Ensured styles have docDefaults, latentStyles, and default styles")
         end
@@ -141,8 +137,7 @@ module Uniword
           return unless profile
           return unless package.numbering
 
-          package.numbering.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(FULL_IGNORABLE)
+          set_mc_ignorable(package.numbering, prefixes: FULL_IGNORABLE)
 
           package.numbering.instances.each_with_index do |inst, idx|
             next if inst.durable_id
@@ -181,7 +176,7 @@ module Uniword
             package.web_settings
           end
 
-          ws.mc_ignorable = Ooxml::Types::McIgnorable.new(EXTENSION_PREFIXES)
+          set_mc_ignorable(ws)
           record_fix("R1", "Cleared mc:Ignorable on webSettings")
         end
 
@@ -269,24 +264,24 @@ module Uniword
           return unless package.document&.body
 
           doc = package.document
-          doc.mc_ignorable =
-            Ooxml::Types::McIgnorable.new(FULL_IGNORABLE)
+          set_mc_ignorable(doc, prefixes: FULL_IGNORABLE)
 
           record_fix("R1", "Added mc:Ignorable to document body")
-          record_fix("R12", "Assigned rsid and paraId to paragraphs")
 
-          rsid = generate_rsid
           body = doc.body
+          rsid = generate_rsid
 
           body.paragraphs.each_with_index do |para, idx|
+            strip_empty_runs(para)
+            next if allocator
+
             para.rsid_r ||= rsid
             para.rsid_r_default ||= "00000000"
             para.para_id ||= generate_hex_id(idx)
             para.text_id ||= "77777777"
-            strip_empty_runs(para)
           end
 
-          consolidate_runs_in_body(body)
+          record_fix("R12", "Assigned rsid and paraId to paragraphs") unless allocator
 
           sect_pr = body.section_properties
           return unless sect_pr
@@ -453,7 +448,7 @@ module Uniword
           end
 
           dpf = styles.styles.find { |s| s.id == "DefaultParagraphFont" }
-          if dpf && !dpf.semiHidden
+          if dpf && !dpf.semiHidden && !allocator
             dpf.semiHidden = Wordprocessingml::SemiHidden.new
             ensure_element_in_order(dpf, "semiHidden", after: "uiPriority")
             record_fix("R10", "Added semiHidden to DefaultParagraphFont style")
