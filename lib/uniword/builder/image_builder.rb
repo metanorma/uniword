@@ -2,7 +2,6 @@
 
 require "digest"
 require "stringio"
-require_relative "deterministic_id"
 
 module Uniword
   module Builder
@@ -28,20 +27,26 @@ module Uniword
       # Picture namespace URI for GraphicData
       PIC_URI = "http://schemas.openxmlformats.org/drawingml/2006/picture"
 
+      IMAGE_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+
       # Register an image part on the document for DOCX packaging.
       #
       # @param document [DocumentBuilder, DocumentRoot] Target document
       # @param path [String] Path to image file
-      # @return [String] Relationship ID (e.g., 'rIdImg1')
+      # @return [String] Relationship ID (e.g., 'rId5')
       def self.register_image(document, path)
         root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
-        if root
-          root.image_parts ||= {}
-          r_id = "rIdImg#{root.image_parts.size + 1}"
-        else
-          # No document context — generate a placeholder rId
-          r_id = "rIdImg#{deterministic_id("img_rid", path)}"
-        end
+        alloc = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.allocator : nil
+
+        target = "media/#{File.basename(path)}"
+        r_id = if alloc
+                 alloc.alloc_rid(target: target, type: IMAGE_REL_TYPE)
+               elsif root
+                 root.image_parts ||= {}
+                 "rId#{root.image_parts.size + 1}"
+               else
+                 "rId#{deterministic_id('img_rid', path)}"
+               end
 
         content_type = case File.extname(path).downcase
                        when ".png"  then "image/png"
@@ -54,6 +59,7 @@ module Uniword
                        end
 
         if root
+          root.image_parts ||= {}
           root.image_parts[r_id] = {
             path: path,
             data: File.binread(path),
@@ -134,9 +140,9 @@ alt_text: nil)
 
         drawing = Wordprocessingml::Drawing.new
 
-        inline = WpDrawing::Inline.new
+        inline = WpDrawing::Inline.new(dist_t: 0, dist_b: 0, dist_l: 0, dist_r: 0)
         inline.extent = WpDrawing::Extent.new(cx: w, cy: h)
-        inline.effect_extent = WpDrawing::EffectExtent.new
+        inline.effect_extent = WpDrawing::EffectExtent.new(l: 0, t: 0, r: 0, b: 0)
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: deterministic_id("inline", path),
           name: File.basename(path, ".*"),
@@ -269,8 +275,6 @@ alt_text: nil)
       class << self
         include DeterministicId
 
-        private
-
         # Build the Graphic > GraphicData > Picture chain
         #
         # @param r_id [String] Relationship ID for the image
@@ -315,6 +319,7 @@ alt_text: nil)
           pic.sp_pr.xfrm.off = Drawingml::Offset.new(x: 0, y: 0)
           pic.sp_pr.xfrm.ext = Drawingml::Extents.new(cx: width, cy: height)
           pic.sp_pr.prst_geom = Drawingml::PresetGeometry.new(prst: "rect")
+          pic.sp_pr.prst_geom.av_lst = Drawingml::AdjustValueList.new
 
           pic
         end

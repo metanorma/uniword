@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "diff_result"
-
 module Uniword
   module Diff
     # Compares two DocumentRoot instances and produces a DiffResult.
@@ -442,7 +440,10 @@ module Uniword
       def format_value(props, method)
         return nil unless props
 
-        val = props.public_send(method)
+        val = case method
+              when :alignment then props.alignment
+              when :style then props.style
+              end
         unwrap_value(val)
       end
 
@@ -454,7 +455,14 @@ module Uniword
       def run_prop_value(props, method)
         return nil unless props
 
-        val = props.public_send(method)
+        val = case method
+              when :bold then props.bold
+              when :italic then props.italic
+              when :underline then props.underline
+              when :fonts then props.fonts
+              when :size then props.size
+              when :color then props.color
+              end
         return nil if val.nil?
 
         unwrap_value(val)
@@ -468,7 +476,17 @@ module Uniword
       def metadata_value(cp, field)
         return nil unless cp
 
-        val = cp.public_send(field)
+        val = case field
+              when :title then cp.title
+              when :creator then cp.creator
+              when :subject then cp.subject
+              when :keywords then cp.keywords
+              when :description then cp.description
+              when :last_modified_by then cp.last_modified_by
+              when :revision then cp.revision
+              when :created then cp.created
+              when :modified then cp.modified
+              end
         return nil if val.nil?
 
         unwrap_value(val).to_s
