@@ -322,7 +322,7 @@ module Uniword
         uri "http://schemas.openxmlformats.org/officeDocument/2006/custom-properties"
         prefix_default "custprops"
         element_form_default :qualified
-        attribute_form_default :qualified
+        attribute_form_default :unqualified
       end
 
       # Additional Characteristics namespace

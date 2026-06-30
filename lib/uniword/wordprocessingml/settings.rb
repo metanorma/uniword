@@ -106,40 +106,42 @@ module Uniword
         ]
 
         map_attribute "Ignorable", to: :mc_ignorable, render_nil: false
+        # Element order MUST match OOXML CT_Settings schema sequence.
+        # Out-of-order elements cause Word "unreadable content" errors.
         map_element "zoom", to: :zoom, render_nil: false
         map_element "doNotDisplayPageBoundaries",
                     to: :do_not_display_page_boundaries, render_nil: false
-        map_element "compat", to: :compat, render_nil: false
+        map_element "mirrorMargins", to: :mirror_margins, render_nil: false
+        map_element "attachedTemplate", to: :attached_template,
+                                        render_nil: false
         map_element "proofState", to: :proof_state, render_nil: false
         map_element "stylePaneFormatFilter", to: :style_pane_format_filter,
                                              render_nil: false
+        map_element "stylePaneSortMethod", to: :style_pane_sort_method,
+                                           render_nil: false
         map_element "defaultTabStop", to: :default_tab_stop, render_nil: false
+        map_element "hyphenationZone", to: :hyphenation_zone,
+                                       render_nil: false
+        map_element "evenAndOddHeaders", to: :even_and_odd_headers,
+                                         render_nil: false
         map_element "characterSpacingControl", to: :character_spacing_control,
                                                render_nil: false
+        map_element "footnotePr", to: :footnote_pr, render_nil: false
+        map_element "endnotePr", to: :endnote_pr, render_nil: false
+        map_element "compat", to: :compat, render_nil: false
+        map_element "docVars", to: :doc_vars, render_nil: false
         map_element "rsids", to: :rsids, render_nil: false
         map_element "mathPr", to: :math_pr, render_nil: false
         map_element "themeFontLang", to: :theme_font_lang, render_nil: false
         map_element "clrSchemeMapping", to: :clr_scheme_mapping,
                                         render_nil: false
+        map_element "doNotIncludeSubdocsInStats",
+                    to: :do_not_include_subdocs_in_stats, render_nil: false
+        map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
+                                        render_nil: false
         map_element "shapeDefaults", to: :shape_defaults, render_nil: false
         map_element "decimalSymbol", to: :decimal_symbol, render_nil: false
         map_element "listSeparator", to: :list_separator, render_nil: false
-        map_element "attachedTemplate", to: :attached_template,
-                                        render_nil: false
-        map_element "footnotePr", to: :footnote_pr, render_nil: false
-        map_element "endnotePr", to: :endnote_pr, render_nil: false
-        map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
-                                        render_nil: false
-        map_element "evenAndOddHeaders", to: :even_and_odd_headers,
-                                         render_nil: false
-        map_element "mirrorMargins", to: :mirror_margins, render_nil: false
-        map_element "doNotIncludeSubdocsInStats",
-                    to: :do_not_include_subdocs_in_stats, render_nil: false
-        map_element "hyphenationZone", to: :hyphenation_zone,
-                                       render_nil: false
-        map_element "stylePaneSortMethod", to: :style_pane_sort_method,
-                                           render_nil: false
-        map_element "docVars", to: :doc_vars, render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root
