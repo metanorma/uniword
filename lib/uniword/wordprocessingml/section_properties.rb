@@ -52,9 +52,9 @@ module Uniword
         map_element "footerReference", to: :footer_references, render_nil: false
         map_element "pgSz", to: :page_size, render_nil: false
         map_element "pgMar", to: :page_margins, render_nil: false
-        map_element "cols", to: :columns, render_nil: false
         map_attribute "val", to: :type
         map_element "pgNumType", to: :page_numbering, render_nil: false
+        map_element "cols", to: :columns, render_nil: false
         map_element "docGrid", to: :doc_grid, render_nil: false
         map_element "footnotePr", to: :footnote_pr, render_nil: false
         map_element "titlePg", to: :title_pg, render_nil: false
