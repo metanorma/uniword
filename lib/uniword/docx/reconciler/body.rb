@@ -20,7 +20,7 @@ module Uniword
               columns: Wordprocessingml::PageDefaults.default_columns,
               doc_grid: Wordprocessingml::PageDefaults.default_doc_grid,
             )
-            record_fix("R11",
+            record_fix(FixCodes::SECTION_PROPERTIES_DEFAULTED,
                        "Added default section properties with US Letter page size")
             return
           end
@@ -40,7 +40,7 @@ module Uniword
             fixed = true
           end
           if fixed
-            record_fix("R11",
+            record_fix(FixCodes::SECTION_PROPERTIES_DEFAULTED,
                        "Filled missing pgSz/pgMar/cols in existing section properties")
           end
         end
@@ -160,6 +160,36 @@ module Uniword
                         end
             refs << ref_class.new(type: type, r_id: r_id)
           end
+        end
+
+        def reconcile_document_body
+          return unless profile
+          return unless package.document&.body
+
+          doc = package.document
+          set_mc_ignorable(doc, prefixes: FULL_IGNORABLE)
+
+          record_fix(FixCodes::MC_IGNORABLE, "Added mc:Ignorable to document body")
+
+          body = doc.body
+          rsid = generate_rsid
+
+          body.paragraphs.each_with_index do |para, idx|
+            strip_empty_runs(para)
+            next if allocator
+
+            para.rsid_r ||= rsid
+            para.rsid_r_default ||= "00000000"
+            para.para_id ||= generate_hex_id(idx)
+            para.text_id ||= "77777777"
+          end
+
+          record_fix(FixCodes::PARAGRAPH_BACKFILL, "Assigned rsid and paraId to paragraphs") unless allocator
+
+          sect_pr = body.section_properties
+          return unless sect_pr
+
+          sect_pr.rsid_r ||= rsid
         end
       end
     end
