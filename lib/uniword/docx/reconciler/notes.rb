@@ -14,32 +14,19 @@ module Uniword
             ref_ids = collect_note_ids(type)
             next if ref_ids.empty?
 
-            current = case type
-                      when :footnote then package.footnotes
-                      when :endnote then package.endnotes
-                      end
+            current = notes_collection_for(type)
 
             if current.nil?
               ensure_notes_part(type)
-              current = case type
-                        when :footnote then package.footnotes
-                        when :endnote then package.endnotes
-                        end
+              current = notes_collection_for(type)
             end
 
-            defined_ids = case type
-                          when :footnote then current.footnote_entries.map(&:id)
-                          when :endnote then current.endnote_entries.map(&:id)
-                          end
-            defined_set = defined_ids.to_set
+            defined_set = note_entries_for(current, type).map(&:id).to_set
 
             missing = ref_ids.reject { |id| defined_set.include?(id) }
             next if missing.empty?
 
-            entries = case type
-                      when :footnote then current.footnote_entries
-                      when :endnote then current.endnote_entries
-                      end
+            entries = note_entries_for(current, type)
             missing.each do |id|
               entries << entry_class(type).new(
                 id: id,
@@ -50,7 +37,7 @@ module Uniword
                 )],
               )
             end
-            record_fix("R10",
+            record_fix(FixCodes::NOTE_DEFINITION_CREATED,
                        "Created missing #{type}note definitions for ids=#{missing.join(', ')}")
           end
         end
@@ -83,28 +70,17 @@ module Uniword
                                  create_message:, pr_message:)
           if has_pr && !notes
             notes_setter.call(minimal_notes(type))
-            record_fix("R9", create_message)
+            record_fix(FixCodes::NOTE_PAIR_CREATED, create_message)
           elsif notes && !has_pr
             package.settings ||= Wordprocessingml::Settings.new
-            case type
-            when :footnote
-              package.settings.footnote_pr = Wordprocessingml::FootnotePr.new
-            when :endnote
-              package.settings.endnote_pr = Wordprocessingml::EndnotePr.new
-            end
-            record_fix("R9", pr_message)
+            assign_note_pr(package.settings, type)
+            record_fix(FixCodes::NOTE_PAIR_CREATED, pr_message)
           end
 
-          current = case type
-                    when :footnote then package.footnotes
-                    when :endnote then package.endnotes
-                    end
+          current = notes_collection_for(type)
           return unless current
 
-          entries = case type
-                    when :footnote then current.footnote_entries
-                    when :endnote then current.endnote_entries
-                    end
+          entries = note_entries_for(current, type)
 
           finalize_notes(current, entries, type)
         end
@@ -132,12 +108,7 @@ module Uniword
 
         def minimal_notes(type)
           entries = [separator_entry(type), continuation_entry(type)]
-          case type
-          when :footnote
-            Wordprocessingml::Footnotes.new(footnote_entries: entries)
-          when :endnote
-            Wordprocessingml::Endnotes.new(endnote_entries: entries)
-          end
+          build_notes_collection(type, entries: entries)
         end
 
         def entry_class(type)
@@ -177,7 +148,7 @@ module Uniword
             next if entry.paragraphs.empty?
 
             entry.paragraphs.each do |p|
-              p.runs.reject! { |r| empty_run?(r) }
+              strip_empty_runs(p)
               ensure_separator_run(p, entry.type)
             end
           end
@@ -210,7 +181,7 @@ module Uniword
           end
           return if stripped.empty?
 
-          record_fix("R15",
+          record_fix(FixCodes::NOTE_INVALID_TYPE_STRIPPED,
                      "Stripped invalid w:type from #{type}note ids=#{stripped.join(', ')}")
         end
 
@@ -228,7 +199,7 @@ module Uniword
           end
           return if dup_ids.empty?
 
-          record_fix("R16",
+          record_fix(FixCodes::NOTE_DUPLICATE_ID_REMOVED,
                      "Removed duplicate #{type}note ids=#{dup_ids.join(', ')}")
         end
 
@@ -256,7 +227,7 @@ module Uniword
           structural.each { |e| entries << e }
           reordered.each { |e| entries << e }
 
-          record_fix("R9", "Reordered #{type}notes by first reference in document body")
+          record_fix(FixCodes::NOTE_PAIR_CREATED, "Reordered #{type}notes by first reference in document body")
         end
 
         def renumber_notes(entries, type)
@@ -284,7 +255,7 @@ module Uniword
             end
           end
 
-          record_fix("R9", "Renumbered #{type}note IDs sequentially (#{id_map.size} changed)")
+          record_fix(FixCodes::NOTE_PAIR_CREATED, "Renumbered #{type}note IDs sequentially (#{id_map.size} changed)")
         end
 
         def collect_note_reference_order(body, type)
@@ -301,13 +272,7 @@ module Uniword
           seen
         end
 
-        # Explicit type dispatch — no public_send.
-        def note_reference_from_run(run, type)
-          case type
-          when :footnote then run.footnote_reference
-          when :endnote then run.endnote_reference
-          end
-        end
+        # note_reference_from_run lives in Helpers (single source for note-type dispatch).
 
         def collect_note_ids(type)
           ids = []
@@ -324,16 +289,11 @@ module Uniword
         end
 
         def ensure_notes_part(type)
-          case type
-          when :footnote
-            package.footnotes = Wordprocessingml::Footnotes.new(
-              footnote_entries: [separator_entry(type), continuation_entry(type)],
-            )
-          when :endnote
-            package.endnotes = Wordprocessingml::Endnotes.new(
-              endnote_entries: [separator_entry(type), continuation_entry(type)],
-            )
-          end
+          notes = build_notes_collection(
+            type,
+            entries: [separator_entry(type), continuation_entry(type)],
+          )
+          set_notes_collection(notes, type)
         end
       end
     end
