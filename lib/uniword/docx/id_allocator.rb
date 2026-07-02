@@ -38,6 +38,7 @@ module Uniword
         @bookmark_counter = 0
         @comment_counter = 0
         @para_counter = 0
+        @rsid_counter = 0
       end
 
       # Allocate a relationship ID for a target+type pair.
@@ -76,11 +77,12 @@ module Uniword
 
       def alloc_para_id
         @para_counter += 1
-        Digest::SHA256.hexdigest("para:#{@para_counter}").upcase[0, 8]
+        Digest::SHA256.hexdigest("para:#{@para_counter}").upcase[0, 12]
       end
 
       def alloc_rsid
-        Digest::SHA256.hexdigest("rsid:#{@para_counter}").upcase[0, 8]
+        @rsid_counter += 1
+        Digest::SHA256.hexdigest("rsid:#{@rsid_counter}").upcase[0, 12]
       end
 
       # Seed from a relationships collection — preserves existing rIds.
@@ -121,6 +123,20 @@ module Uniword
       def rid_for(target:, type:)
         key = [target, type.to_s]
         @rid_entries[key]&.fetch(:id, nil)
+      end
+
+      # Build an allocator seeded from every source on a package in one call.
+      # Used by both Package#populate_allocator and DocumentBuilder.from_template
+      # so they cannot drift apart.
+      def self.populate_from_package(package)
+        alloc = new
+        alloc.seed_from_rels(package.document_rels&.relationships)
+        alloc.seed_from_rels(package.package_rels&.relationships)
+        alloc.seed_from_notes(
+          package.footnotes&.footnote_entries,
+          package.endnotes&.endnote_entries,
+        )
+        alloc
       end
     end
   end

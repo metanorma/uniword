@@ -65,6 +65,30 @@ module Uniword
           end
         end
 
+        def walk_body_tables(body)
+          return unless body
+
+          if body.element_order && !body.element_order.empty?
+            tbl_idx = 0
+            body.element_order.each do |entry|
+              next unless entry.name == "tbl"
+
+              yield body.tables[tbl_idx] if body.tables[tbl_idx]
+              tbl_idx += 1
+            end
+          else
+            body.tables&.each { |tbl| yield tbl }
+          end
+        end
+
+        def walk_all_paragraphs(&block)
+          walk_body_paragraphs(package.document.body, &block)
+
+          (package.document&.header_footer_parts || []).each do |part|
+            (part[:content]&.paragraphs || []).each(&block)
+          end
+        end
+
         def walk_table_paragraphs(table)
           return unless table
           table.rows&.each do |row|
@@ -105,8 +129,6 @@ module Uniword
           thaw_and_insert(obj, order, position, entry)
         end
 
-        private
-
         # lutaml-model freezes element_order after XML parsing.
         # Replace the frozen array with a mutable copy when modification is needed.
         def thaw_and_insert(model, order, position, entry)
@@ -124,11 +146,13 @@ module Uniword
         end
 
         def strip_empty_runs(paragraph)
-          removed = paragraph.runs.reject! { |r| empty_run?(r) }
-          return unless removed && !removed.empty?
+          before = paragraph.runs.size
+          paragraph.runs.reject! { |r| empty_run?(r) }
+          removed = before - paragraph.runs.size
+          return unless removed.positive?
 
-          record_fix("R10",
-                     "Stripped #{removed.size} empty run(s) from " \
+          record_fix(FixCodes::EMPTY_RUNS_STRIPPED,
+                     "Stripped #{removed} empty run(s) from " \
                      "#{paragraph.class.name.split('::').last}")
         end
 
@@ -257,6 +281,55 @@ module Uniword
           target.position_tab ||= source.position_tab
           target.no_break_hyphen ||= source.no_break_hyphen
           target.del_text ||= source.del_text
+        end
+
+        # -- Note-type dispatch --
+        #
+        # Single source of truth for :footnote/:endnote discrimination.
+        # Adding a third note type means editing only these helpers.
+
+        def notes_collection_for(type)
+          case type
+          when :footnote then package.footnotes
+          when :endnote  then package.endnotes
+          end
+        end
+
+        def note_entries_for(notes, type)
+          return [] unless notes
+
+          case type
+          when :footnote then notes.footnote_entries
+          when :endnote  then notes.endnote_entries
+          end
+        end
+
+        def note_reference_from_run(run, type)
+          case type
+          when :footnote then run.footnote_reference
+          when :endnote  then run.endnote_reference
+          end
+        end
+
+        def build_notes_collection(type, entries:)
+          case type
+          when :footnote then Wordprocessingml::Footnotes.new(footnote_entries: entries)
+          when :endnote  then Wordprocessingml::Endnotes.new(endnote_entries: entries)
+          end
+        end
+
+        def assign_note_pr(settings, type)
+          case type
+          when :footnote then settings.footnote_pr = Wordprocessingml::FootnotePr.new
+          when :endnote  then settings.endnote_pr = Wordprocessingml::EndnotePr.new
+          end
+        end
+
+        def set_notes_collection(notes, type)
+          case type
+          when :footnote then package.footnotes = notes
+          when :endnote  then package.endnotes = notes
+          end
         end
       end
     end
