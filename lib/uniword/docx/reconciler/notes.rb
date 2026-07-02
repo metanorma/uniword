@@ -9,6 +9,52 @@ module Uniword
       # and sequential IDs. Creates missing notes/settings pairs and strips
       # invalid types.
       module Notes
+        def reconcile_note_references
+          [:footnote, :endnote].each do |type|
+            ref_ids = collect_note_ids(type)
+            next if ref_ids.empty?
+
+            current = case type
+                      when :footnote then package.footnotes
+                      when :endnote then package.endnotes
+                      end
+
+            if current.nil?
+              ensure_notes_part(type)
+              current = case type
+                        when :footnote then package.footnotes
+                        when :endnote then package.endnotes
+                        end
+            end
+
+            defined_ids = case type
+                          when :footnote then current.footnote_entries.map(&:id)
+                          when :endnote then current.endnote_entries.map(&:id)
+                          end
+            defined_set = defined_ids.to_set
+
+            missing = ref_ids.reject { |id| defined_set.include?(id) }
+            next if missing.empty?
+
+            entries = case type
+                      when :footnote then current.footnote_entries
+                      when :endnote then current.endnote_entries
+                      end
+            missing.each do |id|
+              entries << entry_class(type).new(
+                id: id,
+                paragraphs: [Wordprocessingml::Paragraph.new(
+                  runs: [Wordprocessingml::Run.new(
+                    text: Wordprocessingml::Text.new(content: " ")
+                  )]
+                )],
+              )
+            end
+            record_fix("R10",
+                       "Created missing #{type}note definitions for ids=#{missing.join(', ')}")
+          end
+        end
+
         def reconcile_footnotes
           reconcile_notes_type(
             notes: package.footnotes,
@@ -65,7 +111,8 @@ module Uniword
 
         def finalize_notes(notes, entries, type)
           ensure_separators(notes, type, entries)
-          strip_invalid_note_types(entries)
+          strip_invalid_note_types(entries, type)
+          deduplicate_note_ids(entries, type)
           strip_empty_runs_from_notes(entries)
           reorder_notes_by_reference(entries, type)
 
@@ -152,15 +199,37 @@ module Uniword
           para.runs << sep
         end
 
-        def strip_invalid_note_types(entries)
+        def strip_invalid_note_types(entries, type)
+          stripped = []
           entries.each do |entry|
-            next unless entry.type && !VALID_NOTE_TYPES.include?(entry.type)
+            next if VALID_NOTE_TYPES.include?(entry.type)
+            next unless entry.type
 
-            record_fix("R9",
-                       "Stripped invalid w:type=\"#{entry.type}\" from " \
-                       "note id=#{entry.id}")
+            stripped << entry.id
             entry.type = nil
           end
+          return if stripped.empty?
+
+          record_fix("R15",
+                     "Stripped invalid w:type from #{type}note ids=#{stripped.join(', ')}")
+        end
+
+        def deduplicate_note_ids(entries, type)
+          seen = {}
+          dup_ids = []
+          entries.reject! do |entry|
+            if seen[entry.id]
+              dup_ids << entry.id
+              true
+            else
+              seen[entry.id] = true
+              false
+            end
+          end
+          return if dup_ids.empty?
+
+          record_fix("R16",
+                     "Removed duplicate #{type}note ids=#{dup_ids.join(', ')}")
         end
 
         def reorder_notes_by_reference(entries, type)
@@ -237,6 +306,33 @@ module Uniword
           case type
           when :footnote then run.footnote_reference
           when :endnote then run.endnote_reference
+          end
+        end
+
+        def collect_note_ids(type)
+          ids = []
+          body = package.document&.body
+          return ids unless body
+
+          walk_body_paragraphs(body) do |para|
+            para.runs.each do |run|
+              ref = note_reference_from_run(run, type)
+              ids << ref.id if ref&.id
+            end
+          end
+          ids
+        end
+
+        def ensure_notes_part(type)
+          case type
+          when :footnote
+            package.footnotes = Wordprocessingml::Footnotes.new(
+              footnote_entries: [separator_entry(type), continuation_entry(type)],
+            )
+          when :endnote
+            package.endnotes = Wordprocessingml::Endnotes.new(
+              endnote_entries: [separator_entry(type), continuation_entry(type)],
+            )
           end
         end
       end

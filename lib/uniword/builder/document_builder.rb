@@ -50,6 +50,97 @@ module Uniword
         new(Uniword.load(path))
       end
 
+      # Load a DOCX as a template, reset its body to a clean state, and
+      # seed the IdAllocator from the template's existing relationships.
+      #
+      # Use this when you want the template's OOXML scaffolding (settings,
+      # fonts, styles, theme, content_types, namespace declarations) but
+      # will replace the document body with new content. This is the
+      # recommended path to producing Word-valid output: starting from a
+      # known-good DOCX preserves mc:Ignorable prefixes, rsid values, and
+      # other structural guarantees that Word expects.
+      #
+      # Resets performed:
+      # - Body content cleared (paragraphs, tables, SDTs, bookmarks,
+      #   element_order, section_properties)
+      # - User footnotes/endnotes cleared (separator/continuation kept)
+      # - custom_properties and custom_xml_items cleared
+      # - Stale image and customXml relationships removed
+      # - IdAllocator seeded from document_rels and package_rels
+      #
+      # @param path [String] Path to .docx template file
+      # @return [DocumentBuilder]
+      # @raise [ArgumentError] if path does not exist
+      def self.from_template(path)
+        raise ArgumentError, "Template not found: #{path}" unless File.exist?(path)
+
+        root = Uniword.load(path)
+        reset_template_body(root)
+        clear_user_notes(root)
+        root.custom_properties = nil
+        root.custom_xml_items = nil
+        remove_stale_relationships(root)
+        seed_allocator(root)
+        new(root, allocator: root.allocator)
+      end
+
+      def self.reset_template_body(root)
+        return unless root.body
+
+        root.body.paragraphs.clear
+        root.body.tables.clear
+        root.body.structured_document_tags.clear
+        root.body.bookmark_starts.clear
+        root.body.bookmark_ends.clear
+        root.body.element_order = [] if root.body.element_order
+        root.body.section_properties = nil
+      end
+      private_class_method :reset_template_body
+
+      def self.clear_user_notes(root)
+        clear_user_note_entries(root.footnotes, :footnote) if root.footnotes
+        clear_user_note_entries(root.endnotes, :endnote) if root.endnotes
+      end
+      private_class_method :clear_user_notes
+
+      def self.clear_user_note_entries(notes, kind)
+        entries = kind == :footnote ? notes.footnote_entries : notes.endnote_entries
+        entries.reject! { |e| e.type != "separator" && e.type != "continuationSeparator" }
+        notes.element_order = [] if notes.element_order
+      end
+      private_class_method :clear_user_note_entries
+
+      def self.remove_stale_relationships(root)
+        remove_rels_by_type_fragment(root.document_rels, "/image")
+        remove_rels_by_type_fragment(root.document_rels, "/customXml")
+        remove_rels_by_type_fragment(root.package_rels, "custom-properties")
+        root.content_types&.overrides&.reject! do |o|
+          part = o.part_name.to_s
+          part == "/docProps/custom.xml" || part.include?("customXml/")
+        end
+        root.image_parts = nil
+      end
+      private_class_method :remove_stale_relationships
+
+      def self.remove_rels_by_type_fragment(rels, fragment)
+        return unless rels&.relationships
+
+        rels.relationships.reject! { |r| r.type.to_s.include?(fragment) }
+      end
+      private_class_method :remove_rels_by_type_fragment
+
+      def self.seed_allocator(root)
+        allocator = Docx::IdAllocator.new
+        allocator.seed_from_rels(root.document_rels&.relationships)
+        allocator.seed_from_rels(root.package_rels&.relationships)
+        allocator.seed_from_notes(
+          root.footnotes&.footnote_entries,
+          root.endnotes&.endnote_entries,
+        )
+        root.allocator = allocator
+      end
+      private_class_method :seed_allocator
+
       # Append a top-level element (paragraph or table)
       #
       # @param element [Paragraph, Table, ParagraphBuilder, TableBuilder]
