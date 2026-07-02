@@ -7,10 +7,21 @@ gemspec
 # Math equation support via Plurimath
 gem "plurimath", "~> 0.10"
 
-# lutaml-model is already in gemspec as add_dependency
-gem "lutaml-model", path: "../../lutaml/lutaml-model"
+# Local development: use bleeding-edge local checkouts when present.
+# CI environments fall back to the published rubygems versions.
+repo_root = File.expand_path("../..", __dir__)
 
-gem "moxml", path: "../../lutaml/moxml"
+lutaml_local = File.join(repo_root, "lutaml/lutaml-model")
+if File.exist?(lutaml_local)
+  gem "lutaml-model", path: lutaml_local
+end
+
+moxml_local = File.join(repo_root, "lutaml/moxml")
+if File.exist?(moxml_local)
+  gem "moxml", path: moxml_local
+else
+  gem "moxml", ">= 0.1.15"
+end
 
 # Standard library gems that will be removed from default in Ruby 4.0
 gem "benchmark"
