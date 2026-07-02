@@ -55,4 +55,9 @@ docs/vendor/
 test_output/
 verify_stats/
 
-TODO*
+# Sed/backup transient files
+*.bak
+
+# Personal scratch TODO files (tracked TODO.*/ directories are committed)
+/TODO.md
+/TODO.txt
