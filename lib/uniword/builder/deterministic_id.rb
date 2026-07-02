@@ -9,8 +9,6 @@ module Uniword
     # Produces stable integer IDs from seed values using SHA256,
     # ensuring reproducible output across runs.
     module DeterministicId
-      private
-
       def deterministic_id(*seeds)
         Digest::SHA256.hexdigest(seeds.join(":")).to_i(16) % 1_000_000_000
       end

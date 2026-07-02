@@ -751,10 +751,9 @@ RSpec.describe Uniword::Docx::Reconciler do
       )
       package.footnotes = footnotes
 
-      described_class.new(package).reconcile
+      reconciler = described_class.new(package)
+      reconciler.reconcile
 
-      r10_fixes = described_class.new(package).instance_variable_get(:@applied_fixes)
-      described_class.new(package).reconcile
       expect(package.footnotes.footnote_entries.map(&:id)).to include("1", "2", "3")
     end
 
