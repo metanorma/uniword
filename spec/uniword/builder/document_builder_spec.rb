@@ -152,4 +152,54 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       expect(eo.map(&:name)).to eq(%w[p tbl])
     end
   end
+
+  describe ".from_template" do
+    let(:template_path) do
+      File.expand_path("../../examples/generated/simple_document.docx",
+                       __dir__)
+    end
+
+    it "raises ArgumentError when the template path does not exist" do
+      expect do
+        described_class.from_template("/nonexistent/template.docx")
+      end.to raise_error(ArgumentError, /Template not found/)
+    end
+
+    it "clears body paragraphs, tables, and element_order" do
+      builder = described_class.from_template(template_path)
+
+      body = builder.model.body
+      expect(body.paragraphs).to be_empty
+      expect(body.tables).to be_empty
+      expect(body.structured_document_tags).to be_empty
+      expect(body.element_order).to be_empty
+      expect(body.section_properties).to be_nil
+    end
+
+    it "clears user footnote entries but keeps separators" do
+      builder = described_class.from_template(template_path)
+      footnotes = builder.model.footnotes
+
+      next unless footnotes
+
+      types = footnotes.footnote_entries.map(&:type).compact
+      expect(types).to all(satisfy { |t| %w[separator continuationSeparator].include?(t) })
+    end
+
+    it "seeds an IdAllocator on the model and wires it to the builder" do
+      builder = described_class.from_template(template_path)
+
+      expect(builder.allocator).to be_a(Uniword::Docx::IdAllocator)
+      expect(builder.model.allocator).to equal(builder.allocator)
+    end
+
+    it "removes stale image and customXml relationships" do
+      builder = described_class.from_template(template_path)
+      rels = builder.model.document_rels&.relationships || []
+
+      types = rels.map { |r| r.type.to_s }
+      expect(types).not_to include(a_string_matching(%r{/image}))
+      expect(types).not_to include(a_string_matching(%r{/customXml}))
+    end
+  end
 end

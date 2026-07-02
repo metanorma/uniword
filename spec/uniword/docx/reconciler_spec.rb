@@ -1127,7 +1127,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       package
     end
 
-    it "removes dangling footnote references from body" do
+    it "creates missing footnote definition for dangling reference" do
       run = run_class.new(
         text: text_class.new(value: "text"),
         footnote_reference: fn_ref_class.new(id: "99"),
@@ -1139,12 +1139,15 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings.footnote_pr = footnote_pr_class.new
       package.settings = settings
 
-      described_class.new(package).reconcile
+      reconciler = described_class.new(package)
+      reconciler.reconcile
 
-      expect(para.runs).to be_empty
+      expect(package.footnotes.footnote_entries.map(&:id)).to include("99")
+      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      expect(r10).not_to be_nil
     end
 
-    it "removes dangling endnote references from body" do
+    it "creates missing endnote definition for dangling reference" do
       run = run_class.new(
         text: text_class.new(value: "text"),
         endnote_reference: en_ref_class.new(id: "99"),
@@ -1156,9 +1159,12 @@ RSpec.describe Uniword::Docx::Reconciler do
       settings.endnote_pr = endnote_pr_class.new
       package.settings = settings
 
-      described_class.new(package).reconcile
+      reconciler = described_class.new(package)
+      reconciler.reconcile
 
-      expect(para.runs).to be_empty
+      expect(package.endnotes.endnote_entries.map(&:id)).to include("99")
+      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      expect(r10).not_to be_nil
     end
 
     it "preserves valid footnote references" do
@@ -1969,3 +1975,6 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       header = package.document.headers["default"]
       expect(header.paragraphs.first.runs.size).to eq(1)
+    end
+  end
+end

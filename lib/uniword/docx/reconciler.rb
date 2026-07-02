@@ -40,6 +40,7 @@ module Uniword
         reconcile_section_properties
         reconcile_footnotes
         reconcile_endnotes
+        reconcile_note_references
         reconcile_headers_footers
         reconcile_tables
         repair_theme

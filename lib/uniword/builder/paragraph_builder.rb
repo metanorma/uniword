@@ -75,6 +75,10 @@ module Uniword
         self
       end
 
+      def style
+        @model.style
+      end
+
       def align=(value)
         ensure_properties.alignment = Properties::Alignment.new(value: value.to_s)
         self
