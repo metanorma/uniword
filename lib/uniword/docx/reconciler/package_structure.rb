@@ -43,7 +43,7 @@ module Uniword
           end
 
           ct.overrides = standard + non_standard
-          record_fix("R7", "Rebuilt content types for standard parts")
+          record_fix(FixCodes::CONTENT_TYPES_ASSEMBLED, "Rebuilt content types for standard parts")
         end
 
         def reconcile_package_rels
@@ -76,7 +76,7 @@ module Uniword
           end
 
           rels.relationships = standard + non_standard
-          record_fix("R6", "Rebuilt package relationships for standard parts")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Rebuilt package relationships for standard parts")
         end
 
         def reconcile_document_rels
@@ -149,7 +149,7 @@ module Uniword
           end
 
           rels.relationships = all_rels + non_standard
-          record_fix("R6", "Assembled document relationships from allocator")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Assembled document relationships from allocator")
         end
 
         def reconcile_document_rels_legacy(rels, base, defs, standard_targets)
@@ -181,7 +181,7 @@ module Uniword
           update_sect_pr_rid_references(rid_mapping) unless rid_mapping.empty?
           update_blip_embed_references(rid_mapping) unless rid_mapping.empty?
           update_hyperlink_rid_references(rid_mapping) unless rid_mapping.empty?
-          record_fix("R6", "Rebuilt document relationships with sequential rIds")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Rebuilt document relationships with sequential rIds")
         end
 
         def update_sect_pr_rid_references(mapping)

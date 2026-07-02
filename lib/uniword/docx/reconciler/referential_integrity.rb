@@ -55,16 +55,10 @@ module Uniword
         # Validate that note references in the body match existing notes.
         # Logs warnings but does NOT strip — builder should produce correct refs.
         def validate_note_references(type)
-          notes = case type
-                  when :footnote then package.footnotes
-                  when :endnote then package.endnotes
-                  end
+          notes = notes_collection_for(type)
           return unless notes
 
-          entries = case type
-                    when :footnote then notes.footnote_entries
-                    when :endnote then notes.endnote_entries
-                    end
+          entries = note_entries_for(notes, type)
           defined_ids = entries
             .reject { |e| VALID_NOTE_TYPES.include?(e.type) }
             .filter_map(&:id).to_set
@@ -86,7 +80,7 @@ module Uniword
 
           return unless dangling.positive?
 
-          record_fix("R9",
+          record_fix(FixCodes::DANGLING_NOTE_REFERENCE_WARNING,
                      "WARNING: Found #{dangling} dangling #{type}note reference(s) " \
                      "in body (allocator path — builder bug)")
         end
@@ -118,7 +112,7 @@ module Uniword
 
           return unless dangling.positive?
 
-          record_fix("R10",
+          record_fix(FixCodes::DANGLING_HYPERLINK_WARNING,
                      "WARNING: Found #{dangling} dangling hyperlink reference(s) " \
                      "in body (allocator path — builder bug)")
         end
@@ -126,16 +120,10 @@ module Uniword
         # -- Note references (body → footnotes.xml / endnotes.xml) --
 
         def reconcile_note_body_references(type)
-          notes = case type
-                  when :footnote then package.footnotes
-                  when :endnote then package.endnotes
-                  end
+          notes = notes_collection_for(type)
           return unless notes
 
-          entries = case type
-                    when :footnote then notes.footnote_entries
-                    when :endnote then notes.endnote_entries
-                    end
+          entries = note_entries_for(notes, type)
           defined_ids = entries
             .reject { |e| VALID_NOTE_TYPES.include?(e.type) }
             .filter_map(&:id).to_set
@@ -155,7 +143,7 @@ module Uniword
 
           return unless removed.positive?
 
-          record_fix("R9",
+          record_fix(FixCodes::DANGLING_NOTE_REFERENCE_REMOVED,
                      "Removed #{removed} dangling #{type}note reference(s) in body")
         end
 
@@ -178,7 +166,7 @@ module Uniword
 
           return unless removed.positive?
 
-          record_fix("R11",
+          record_fix(FixCodes::DANGLING_HEADER_FOOTER_REMOVED,
                      "Removed #{removed} dangling header/footer reference(s) from sectPr")
         end
 
@@ -223,7 +211,7 @@ module Uniword
 
           return unless removed.positive?
 
-          record_fix("R10",
+          record_fix(FixCodes::DANGLING_STYLE_REFERENCE_REMOVED,
                      "Removed #{removed} dangling style reference(s) from body")
         end
 
@@ -252,7 +240,7 @@ module Uniword
 
           return unless stripped.positive?
 
-          record_fix("R10",
+          record_fix(FixCodes::DANGLING_BASED_ON_REMOVED,
                      "Removed #{stripped} dangling basedOn/link reference(s) in styles")
         end
 
@@ -282,7 +270,7 @@ module Uniword
 
           return unless removed.positive?
 
-          record_fix("R4",
+          record_fix(FixCodes::DANGLING_NUMBERING_REMOVED,
                      "Removed #{removed} dangling numbering reference(s) from body")
         end
 
@@ -311,7 +299,7 @@ module Uniword
 
           return unless dangling.positive?
 
-          record_fix("R10",
+          record_fix(FixCodes::DANGLING_DRAWING_REMOVED,
                      "Found #{dangling} drawing(s) with dangling image reference(s)")
         end
 
@@ -340,7 +328,7 @@ module Uniword
 
           return unless removed.positive?
 
-          record_fix("R10",
+          record_fix(FixCodes::DANGLING_HYPERLINK_REMOVED,
                      "Removed #{removed} dangling hyperlink reference(s) from body")
         end
 
@@ -364,7 +352,7 @@ module Uniword
 
           return unless collisions.positive?
 
-          record_fix("R12",
+          record_fix(FixCodes::PARAGRAPH_BACKFILL,
                      "Resolved #{collisions} paraId collision(s)")
         end
 
@@ -390,28 +378,14 @@ module Uniword
           duplicates.each do |rel|
             old_id = rel.id
             rel.id = derive_unique_rid(rels, old_id)
-            record_fix("R6",
+            record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
                        "Deduplicated rId #{old_id} → #{rel.id}")
           end
 
-          record_fix("R6", "Resolved #{duplicates.size} rId collision(s)")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Resolved #{duplicates.size} rId collision(s)")
         end
 
         # -- Traversal helpers --
-
-        def walk_all_paragraphs(&block)
-          walk_body_paragraphs(package.document.body, &block)
-
-          (package.document&.header_footer_parts || []).each do |part|
-            (part[:content]&.paragraphs || []).each(&block)
-          end
-        end
-
-        def walk_body_tables(body, &block)
-          return unless body
-
-          (body.tables || []).each(&block)
-        end
 
         def reconcile_paragraph_style(para, defined_ids, style_names)
           style_ref = para.properties&.style

@@ -427,13 +427,7 @@ module Uniword
       # Populate the allocator from all existing template data.
       # Must be called BEFORE any builder runs (populate-first principle).
       def populate_allocator
-        @allocator = IdAllocator.new
-        @allocator.seed_from_rels(document_rels&.relationships)
-        @allocator.seed_from_rels(package_rels&.relationships)
-        @allocator.seed_from_notes(
-          footnotes&.footnote_entries,
-          endnotes&.endnote_entries,
-        )
+        @allocator = IdAllocator.populate_from_package(self)
       end
 
       # Extract media files from word/theme/media/ directory

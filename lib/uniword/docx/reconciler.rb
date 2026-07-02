@@ -10,6 +10,7 @@ module Uniword
                             footnoteSeparator continuationNotice].freeze
 
       # Sub-modules autoloaded — no require_relative for internal code.
+      autoload :FixCodes, "#{__dir__}/reconciler/fix_codes"
       autoload :Helpers, "#{__dir__}/reconciler/helpers"
       autoload :Notes, "#{__dir__}/reconciler/notes"
       autoload :ReferentialIntegrity, "#{__dir__}/reconciler/referential_integrity"

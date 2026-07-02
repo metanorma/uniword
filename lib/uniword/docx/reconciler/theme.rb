@@ -20,7 +20,7 @@ module Uniword
             word_theme = friendly.to_word_theme
             word_theme.name = "Office Theme"
             package.theme = word_theme
-            record_fix("R3", "Created default theme with complete fmtScheme")
+            record_fix(FixCodes::THEME_CREATED, "Created default theme with complete fmtScheme")
           rescue ArgumentError
             nil
           end
@@ -57,7 +57,7 @@ module Uniword
 
           return unless repaired
 
-          record_fix("R3",
+          record_fix(FixCodes::THEME_CREATED,
                      "Repaired theme fmtScheme with minimum required content")
         end
 

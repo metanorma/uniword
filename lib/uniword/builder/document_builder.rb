@@ -130,14 +130,7 @@ module Uniword
       private_class_method :remove_rels_by_type_fragment
 
       def self.seed_allocator(root)
-        allocator = Docx::IdAllocator.new
-        allocator.seed_from_rels(root.document_rels&.relationships)
-        allocator.seed_from_rels(root.package_rels&.relationships)
-        allocator.seed_from_notes(
-          root.footnotes&.footnote_entries,
-          root.endnotes&.endnote_entries,
-        )
-        root.allocator = allocator
+        root.allocator = Docx::IdAllocator.populate_from_package(root)
       end
       private_class_method :seed_allocator
 
