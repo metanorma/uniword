@@ -14,8 +14,7 @@ module Uniword
       #
       # Known debt: R10 is overloaded for several distinct concerns
       # (note defs, table structure, style defaults, dangling refs).
-      # Splitting requires consumer coordination — tracked in
-      # TODO.refactor/04-extract-fixcodes-constants.md.
+      # Splitting requires consumer coordination.
       module FixCodes
         # Settings / package structure
         MC_IGNORABLE = "R1"
