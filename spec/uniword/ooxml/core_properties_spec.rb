@@ -47,12 +47,15 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       expected = <<~XML
         <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
                           xmlns:dc="http://purl.org/dc/elements/1.1/"
-                          xmlns:dcterms="http://purl.org/dc/terms/">
+                          xmlns:dcterms="http://purl.org/dc/terms/"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <dc:title>Test Document</dc:title>
           <dc:subject>Test Subject</dc:subject>
           <dc:creator>John Doe</dc:creator>
-          <dcterms:created>2024-01-01T00:00:00Z</dcterms:created>
-          <dcterms:modified>2024-01-02T00:00:00Z</dcterms:modified>
+          <cp:keywords/>
+          <dc:description/>
+          <dcterms:created xsi:type="dcterms:W3CDTF">2024-01-01T00:00:00Z</dcterms:created>
+          <dcterms:modified xsi:type="dcterms:W3CDTF">2024-01-02T00:00:00Z</dcterms:modified>
         </cp:coreProperties>
       XML
 
@@ -79,16 +82,17 @@ RSpec.describe Uniword::Ooxml::CoreProperties do
       expected = <<~XML
         <cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties"
                           xmlns:dc="http://purl.org/dc/elements/1.1/"
-                          xmlns:dcterms="http://purl.org/dc/terms/">
+                          xmlns:dcterms="http://purl.org/dc/terms/"
+                          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
           <dc:title>Complete Test</dc:title>
           <dc:subject>Testing All Fields</dc:subject>
           <dc:creator>Test Author</dc:creator>
           <cp:keywords>complete, test, metadata</cp:keywords>
-          <cp:description>Testing all available fields</cp:description>
+          <dc:description>Testing all available fields</dc:description>
           <cp:lastModifiedBy>Test Editor</cp:lastModifiedBy>
           <cp:revision>5</cp:revision>
-          <dcterms:created>2024-01-01T00:00:00Z</dcterms:created>
-          <dcterms:modified>2024-01-15T12:30:00Z</dcterms:modified>
+          <dcterms:created xsi:type="dcterms:W3CDTF">2024-01-01T00:00:00Z</dcterms:created>
+          <dcterms:modified xsi:type="dcterms:W3CDTF">2024-01-15T12:30:00Z</dcterms:modified>
         </cp:coreProperties>
       XML
 
