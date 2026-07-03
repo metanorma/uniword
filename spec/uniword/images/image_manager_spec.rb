@@ -128,7 +128,7 @@ RSpec.describe Uniword::Images::ImageManager do
       manager = described_class.new(doc)
 
       r_id = manager.insert(sample_png)
-      expect(r_id).to start_with("rIdImg")
+      expect(r_id).to match(/\ArId\d+\z/)
     end
 
     it "registers the image in image_parts" do
@@ -173,7 +173,7 @@ RSpec.describe Uniword::Images::ImageManager do
       manager = described_class.new(doc)
 
       r_id = manager.insert(sample_png, width: "6in", height: "4in")
-      expect(r_id).to start_with("rIdImg")
+      expect(r_id).to match(/\ArId\d+\z/)
     end
 
     it "accepts description as alt text" do
