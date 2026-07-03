@@ -69,6 +69,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
         <app:Properties xmlns:app="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties">
           <app:Template>Normal.dotm</app:Template>
           <app:Application>Uniword</app:Application>
+          <app:Company/>
           <app:TotalTime>0</app:TotalTime>
         </app:Properties>
       XML
@@ -95,6 +96,7 @@ RSpec.describe Uniword::Ooxml::AppProperties do
           <app:Characters>50000</app:Characters>
           <app:Lines>2000</app:Lines>
           <app:Paragraphs>500</app:Paragraphs>
+          <app:Company/>
           <app:CharactersWithSpaces>60000</app:CharactersWithSpaces>
         </app:Properties>
       XML
