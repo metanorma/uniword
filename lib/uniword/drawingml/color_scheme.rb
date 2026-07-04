@@ -310,12 +310,28 @@ module Uniword
       # @param color_name [String, Symbol] The color name (e.g., :accent1)
       # @return [String, nil] The RGB hex color value
       def [](color_name)
-        color_name = color_name.to_sym
-        # Map folHlink to fol_hlink for attribute access
-        attr_name = color_name == :folHlink ? :fol_hlink : color_name
-        color_obj = public_send(attr_name)
+        attr_name = color_name.to_sym == :folHlink ? :fol_hlink : color_name.to_sym
+        color_obj = color_by_name(attr_name)
         color_obj&.value
       end
+
+      def color_by_name(name)
+        case name
+        when :dk1        then dk1
+        when :lt1        then lt1
+        when :dk2        then dk2
+        when :lt2        then lt2
+        when :accent1    then accent1
+        when :accent2    then accent2
+        when :accent3    then accent3
+        when :accent4    then accent4
+        when :accent5    then accent5
+        when :accent6    then accent6
+        when :hlink      then hlink
+        when :fol_hlink  then fol_hlink
+        end
+      end
+      private :color_by_name
 
       # Set a color by name
       #
@@ -345,8 +361,25 @@ module Uniword
 
         color_obj = color_class.new
         color_obj.rgb = value
-        public_send(:"#{attr_name}=", color_obj)
+        assign_color_by_name(attr_name, color_obj)
         @colors_hash[color_name] = value
+      end
+
+      def assign_color_by_name(name, color_obj)
+        case name
+        when :dk1        then self.dk1 = color_obj
+        when :lt1        then self.lt1 = color_obj
+        when :dk2        then self.dk2 = color_obj
+        when :lt2        then self.lt2 = color_obj
+        when :accent1    then self.accent1 = color_obj
+        when :accent2    then self.accent2 = color_obj
+        when :accent3    then self.accent3 = color_obj
+        when :accent4    then self.accent4 = color_obj
+        when :accent5    then self.accent5 = color_obj
+        when :accent6    then self.accent6 = color_obj
+        when :hlink      then self.hlink = color_obj
+        when :fol_hlink  then self.fol_hlink = color_obj
+        end
       end
 
       # Get all defined colors

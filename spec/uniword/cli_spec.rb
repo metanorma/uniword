@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "uniword/cli"
+require "uniword"
 
 RSpec.describe Uniword::CLI do
   let(:cli) { described_class.new }

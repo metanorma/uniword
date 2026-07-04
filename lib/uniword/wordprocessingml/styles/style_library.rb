@@ -106,6 +106,22 @@ module Uniword
           raise(ArgumentError, "Table style not found: #{style_name}")
       end
 
+      # Lookup a style by kind. Single dispatch point for all style types.
+      # @param kind [Symbol] One of :paragraph_style, :character_style,
+      #                      :list_style, :table_style, :semantic_style
+      # @param name [String, Symbol] Style name
+      def lookup(kind, name)
+        case kind
+        when :paragraph_style then paragraph_style(name)
+        when :character_style then character_style(name)
+        when :list_style      then list_style(name)
+        when :table_style     then table_style(name)
+        when :semantic_style  then semantic_style(name)
+        else
+          raise ArgumentError, "Unknown style kind: #{kind.inspect}"
+        end
+      end
+
       # Get semantic style definition
       #
       # @param style_name [String, Symbol] Style name
