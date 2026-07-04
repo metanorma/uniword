@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "thor"
-require_relative "helpers"
 
 module Uniword
   # Protect subcommand for Uniword CLI.

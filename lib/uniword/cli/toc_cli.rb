@@ -2,7 +2,6 @@
 
 require "thor"
 require "json"
-require_relative "helpers"
 
 module Uniword
   # TOC subcommands for Uniword CLI.

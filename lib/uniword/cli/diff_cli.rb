@@ -2,7 +2,6 @@
 
 require "thor"
 require "json"
-require_relative "helpers"
 
 module Uniword
   # Diff subcommands for Uniword CLI.

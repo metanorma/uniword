@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "thor"
-require_relative "helpers"
 
 module Uniword
   # Theme subcommands for Uniword CLI.
