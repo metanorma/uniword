@@ -2,7 +2,6 @@
 
 require "thor"
 require "rainbow"
-require_relative "helpers"
 require_relative "styleset_cli"
 require_relative "resources_cli"
 require_relative "theme_cli"
@@ -501,17 +500,17 @@ module Uniword
 
     def apply_metadata_updates(core_properties)
       setters = {
-        "set-title" => :title=,
-        "set-author" => :creator=,
-        "set-subject" => :subject=,
-        "set-keywords" => :keywords=,
-        "set-description" => :description=,
+        "set-title" => ->(cp, v) { cp.title = v },
+        "set-author" => ->(cp, v) { cp.creator = v },
+        "set-subject" => ->(cp, v) { cp.subject = v },
+        "set-keywords" => ->(cp, v) { cp.keywords = v },
+        "set-description" => ->(cp, v) { cp.description = v },
       }
       updated = false
       setters.each do |opt, setter|
         next unless options[opt]
 
-        core_properties&.public_send(setter, options[opt])
+        setter.call(core_properties, options[opt]) if core_properties
         updated = true
       end
       updated

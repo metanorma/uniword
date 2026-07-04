@@ -126,6 +126,17 @@ module Uniword
   autoload :GenerateCLI, "uniword/cli/generate_cli"
   autoload :DiffCLI, "uniword/cli/diff_cli"
   autoload :TemplateCLI, "uniword/cli/template_cli"
+  autoload :CLIHelpers, "uniword/cli/helpers"
+  autoload :StyleSetCLI, "uniword/cli/styleset_cli"
+  autoload :ResourcesCLI, "uniword/cli/resources_cli"
+  autoload :ThemeCLI, "uniword/cli/theme_cli"
+  autoload :ReviewCLI, "uniword/cli/review_cli"
+  autoload :TocCLI, "uniword/cli/toc_cli"
+  autoload :ImagesCLI, "uniword/cli/images_cli"
+  autoload :SpellcheckCLI, "uniword/cli/spellcheck_cli"
+  autoload :HeadersCLI, "uniword/cli/headers_cli"
+  autoload :WatermarkCLI, "uniword/cli/watermark_cli"
+  autoload :ProtectCLI, "uniword/cli/protect_cli"
 
   # Diff (document comparison)
   autoload :Diff, "uniword/diff"

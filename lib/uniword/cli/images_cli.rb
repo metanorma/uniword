@@ -2,7 +2,6 @@
 
 require "thor"
 require "json"
-require_relative "helpers"
 
 module Uniword
   # Images subcommands for Uniword CLI.

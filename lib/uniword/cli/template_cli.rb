@@ -3,7 +3,6 @@
 require "thor"
 require "json"
 require "yaml"
-require_relative "helpers"
 
 module Uniword
   # Template subcommands for Uniword CLI.

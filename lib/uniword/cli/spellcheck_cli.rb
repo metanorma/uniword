@@ -2,7 +2,6 @@
 
 require "thor"
 require "json"
-require_relative "helpers"
 
 module Uniword
   # Spellcheck subcommands for Uniword CLI.
