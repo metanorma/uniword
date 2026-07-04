@@ -25,7 +25,7 @@ module Uniword
       def resolve_inheritance(library = nil)
         return properties unless @base_style && library
 
-        base_def = library.public_send(style_type, @base_style)
+        base_def = library.lookup(style_type, @base_style)
         base_props = base_def.resolve_inheritance(library)
 
         merge_properties(base_props, properties)

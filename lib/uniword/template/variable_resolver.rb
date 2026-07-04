@@ -175,7 +175,20 @@ module Uniword
 
         return false if left_num.nil? || right_num.nil?
 
-        left_num.public_send(operator, right_num)
+        case operator
+        when :== then left_num == right_num
+        when :!= then left_num != right_num
+        when :>  then left_num > right_num
+        when :>= then left_num >= right_num
+        when :<  then left_num < right_num
+        when :<= then left_num <= right_num
+        when :+  then left_num + right_num
+        when :-  then left_num - right_num
+        when :*  then left_num * right_num
+        when :/  then left_num / right_num
+        else
+          raise ArgumentError, "Unsupported operator: #{operator.inspect}"
+        end
       end
 
       # Convert value to number
