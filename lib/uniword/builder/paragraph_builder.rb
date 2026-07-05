@@ -62,6 +62,9 @@ module Uniword
         when Wordprocessingml::SimpleField
           @model.simple_fields << element
           track_element_order("fldSimple")
+        when Math::OMath
+          @model.o_maths << element
+          track_element_order("oMath")
         when RunBuilder
           append_run(element.build)
         else
