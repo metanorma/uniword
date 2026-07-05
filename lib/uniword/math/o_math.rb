@@ -8,6 +8,11 @@ module Uniword
     #
     # Generated from OOXML schema: math.yml
     # Element: <m:oMath>
+    #
+    # When created via from_xml, the original inner XML is preserved so
+    # to_xml can emit it verbatim. This prevents data loss through the
+    # typed-collection round-trip (subscripts, fractions, etc. lose
+    # child text during deserialization/reserialization).
     class OMath < Lutaml::Model::Serializable
       include Uniword::HasRunPosition
 
@@ -36,6 +41,37 @@ module Uniword
 
       # Transient: position among sibling runs (used by MHTML renderer)
       attribute :run_position, :integer
+
+      # Raw inner XML preserved from from_xml for lossless round-trip.
+      # When set, to_xml emits this verbatim instead of the typed
+      # collections.
+      attr_accessor :raw_inner_xml
+
+      def self.from_xml(xml_string)
+        omath = super
+        doc = Nokogiri::XML(xml_string)
+        omath_node = doc.root || doc.at_xpath("//*[local-name()='oMath']")
+        if omath_node
+          omath.raw_inner_xml = omath_node.inner_html
+        end
+        omath
+      end
+
+      # When raw_inner_xml is set (from from_xml), emit the verbatim
+      # content instead of going through the lossy typed-collection
+      # round-trip.
+      def to_xml(options = {})
+        return build_raw_xml if raw_inner_xml
+
+        super
+      end
+
+      private
+
+      def build_raw_xml
+        ns = Uniword::Ooxml::Namespaces::MathML.new.uri
+        %(<oMath xmlns="#{ns}">#{raw_inner_xml}</oMath>)
+      end
 
       xml do
         element "oMath"
