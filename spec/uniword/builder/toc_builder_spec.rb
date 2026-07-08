@@ -16,7 +16,7 @@ RSpec.describe Uniword::Builder::TocBuilder do
     it "creates a title paragraph with the given title" do
       result = described_class.build(title: "Contents")
       title_run = result[0].runs.first
-      expect(title_run.text.to_s).to eq("Contents")
+      expect(title_run.text_string).to eq("Contents")
     end
 
     it "creates a TOC field paragraph with field chars" do

@@ -14,7 +14,7 @@ RSpec.describe Uniword::Builder::RunBuilder do
       run = Uniword::Wordprocessingml::Run.new(text: "Hello")
       builder = described_class.new(run)
       expect(builder.model).to eq(run)
-      expect(builder.model.text.to_s).to eq("Hello")
+      expect(builder.model.text_string).to eq("Hello")
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Uniword::Builder::RunBuilder do
       builder.text("Hello")
       model = builder.build
       expect(model).to be_a(Uniword::Wordprocessingml::Run)
-      expect(model.text.to_s).to eq("Hello")
+      expect(model.text_string).to eq("Hello")
     end
   end
 
@@ -106,7 +106,7 @@ RSpec.describe Uniword::Builder::RunBuilder do
         .color("0000FF")
         .size(14)
 
-      expect(builder.model.text.to_s).to eq("Styled")
+      expect(builder.model.text_string).to eq("Styled")
       expect(builder.model.properties.bold).not_to be_nil
       expect(builder.model.properties.italic).not_to be_nil
       expect(builder.model.properties.color).not_to be_nil
@@ -124,7 +124,7 @@ RSpec.describe Uniword::Builder::RunBuilder do
   describe "#text" do
     it "sets text content" do
       builder = described_class.new.text("Hello")
-      expect(builder.model.text.to_s).to eq("Hello")
+      expect(builder.model.text_string).to eq("Hello")
     end
   end
 

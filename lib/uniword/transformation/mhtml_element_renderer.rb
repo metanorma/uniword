@@ -69,7 +69,8 @@ module Uniword
       # Convert OOXML Run to HTML
       def run_to_html(run)
         # Handle breaks and drawings first (these never get style wrapping)
-        return break_to_html(run.break) if run.break
+        # (parsed runs hold [] for absent collections, so check emptiness)
+        return break_to_html(run.break) if Array(run.break).any?
         if run.drawings && !run.drawings.empty?
           return drawing_to_html(run.drawings.first)
         end
@@ -105,7 +106,8 @@ module Uniword
             # Skip wrapping for internal OOXML styles that shouldn't produce
             # visible HTML class wrappers
             is_internal_style = %w[stem hyperlink].include?(style_id)
-            is_stem_spacer = (style_id == "stem") && run.text.to_s.strip.empty?
+            is_stem_spacer = (style_id == "stem") &&
+              run.text_string.strip.empty?
             unless is_internal_style || is_stem_spacer
               style_val = run_style_to_class(props.style.value)
               content = %(<span class="#{style_val}">#{content}</span>)
@@ -125,7 +127,7 @@ module Uniword
         elsif run.tab
           tab_to_html(run)
         else
-          text = run.text.to_s
+          text = run.text_string
           return "" if text.empty?
 
           escape_html(text)
@@ -142,13 +144,15 @@ module Uniword
         %(<span class="MsoEndnoteReference"><span style="mso-special-character:endnote"></span></span>)
       end
 
-      # Convert OOXML Break to HTML
-      def break_to_html(brk)
-        if brk.type == "page"
-          %(<br clear="all" style="mso-special-character:line-break;page-break-before:always" />)
-        else
-          %(<br />)
-        end
+      # Convert OOXML Breaks to HTML, one <br> per Break element
+      def break_to_html(breaks)
+        Array(breaks).map do |brk|
+          if brk.type == "page"
+            %(<br clear="all" style="mso-special-character:line-break;page-break-before:always" />)
+          else
+            %(<br />)
+          end
+        end.join
       end
 
       # Convert OOXML FieldChar to HTML span

@@ -27,7 +27,13 @@ module DocumentHelpers
     return "" unless paragraph.respond_to?(:runs)
 
     paragraph.runs.map do |run|
-      run.respond_to?(:text) ? run.text : ""
+      if run.respond_to?(:text_string)
+        run.text_string
+      elsif run.respond_to?(:text)
+        run.text
+      else
+        ""
+      end
     end.join
   end
 

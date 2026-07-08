@@ -17,7 +17,8 @@ RSpec.describe Uniword::Builder::CommentBuilder do
       cb = described_class.new(author: "Editor")
       cb << "Review needed"
       expect(cb.model.paragraphs.size).to eq(1)
-      expect(cb.model.paragraphs.first.runs.first.text.to_s).to eq("Review needed")
+      expect(cb.model.paragraphs.first.runs.first.text_string)
+        .to eq("Review needed")
     end
 
     it "appends a Paragraph directly" do

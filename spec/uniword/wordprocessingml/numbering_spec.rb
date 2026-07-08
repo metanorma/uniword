@@ -366,7 +366,7 @@ RSpec.describe "Numbering Feature" do
         Uniword::Builder::ParagraphBuilder.new(para).numbering(2, 1)
         expect(para.properties.num_id).to eq(2)
         expect(para.properties.ilvl).to eq(1)
-        expect(para.properties.style.value).to eq("Normal")
+        expect(para.properties.style.first.value).to eq("Normal")
         expect(para.properties.alignment.value).to eq("left")
       end
     end

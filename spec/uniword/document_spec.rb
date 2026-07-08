@@ -77,7 +77,7 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot do
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.style = "Heading1"
       document.body.paragraphs << para
-      expect(para.properties.style).to eq("Heading1")
+      expect(para.style).to eq("Heading1")
     end
 
     it "applies heading option" do
@@ -87,7 +87,7 @@ RSpec.describe Uniword::Wordprocessingml::DocumentRoot do
       para.properties = Uniword::Wordprocessingml::ParagraphProperties.new
       para.properties.style = "Heading1"
       document.body.paragraphs << para
-      expect(para.properties.style).to eq("Heading1")
+      expect(para.style).to eq("Heading1")
     end
   end
 

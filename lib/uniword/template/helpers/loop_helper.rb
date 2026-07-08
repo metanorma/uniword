@@ -105,12 +105,12 @@ module Uniword
           # recursively process all text nodes
           return unless element.is_a?(Uniword::Wordprocessingml::Run)
 
-          text = element.text
+          text = element.text_string
           # Simple variable replacement ({{var}})
           text.scan(/\{\{([^@].+?)\}\}/).each do |match|
             var_name = match[0]
             value = resolver.resolve(var_name)
-            element.text = text.gsub("{{#{var_name}}}", value.to_s)
+            element.substitute("{{#{var_name}}}", value.to_s)
           end
         end
       end

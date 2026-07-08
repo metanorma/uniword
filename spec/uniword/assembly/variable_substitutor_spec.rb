@@ -112,8 +112,10 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
     it "substitutes variables in document paragraphs" do
       sub.substitute_document(document)
 
-      expect(document.body.paragraphs[0].runs[0].text).to eq("Title: Test Document")
-      expect(document.body.paragraphs[1].runs[0].text).to eq("Version: 1.0")
+      expect(document.body.paragraphs[0].runs[0].text_string)
+        .to eq("Title: Test Document")
+      expect(document.body.paragraphs[1].runs[0].text_string)
+        .to eq("Version: 1.0")
     end
 
     it "returns the document" do
@@ -130,7 +132,8 @@ RSpec.describe Uniword::Assembly::VariableSubstitutor do
       doc.body.paragraphs << para
 
       sub.substitute_document(doc)
-      expect(doc.body.paragraphs[0].runs[0].text).to eq("No variables")
+      expect(doc.body.paragraphs[0].runs[0].text_string)
+        .to eq("No variables")
     end
   end
 

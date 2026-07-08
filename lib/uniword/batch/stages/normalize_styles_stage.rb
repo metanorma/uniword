@@ -76,8 +76,10 @@ module Uniword
 
           # Detect style based on properties
           detected_style = detect_paragraph_style(paragraph)
+          target = detected_style && @target_styles[detected_style]
+          next unless target
 
-          paragraph.properties.style = @target_styles[detected_style] if detected_style && @target_styles[detected_style]
+          paragraph.properties.style = target
         end
       end
 
@@ -102,7 +104,7 @@ module Uniword
 
         # Check style name
         if paragraph.style
-          style_name = paragraph.style.downcase
+          style_name = paragraph.style.to_s.downcase
           return :heading1 if style_name.include?("heading 1")
           return :heading2 if style_name.include?("heading 2")
           return :heading3 if style_name.include?("heading 3")

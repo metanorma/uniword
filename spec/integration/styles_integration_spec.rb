@@ -54,11 +54,11 @@ RSpec.describe "Styles Integration", :integration do
 
         # Verify paragraphs (style is on properties)
         expect(loaded_doc.paragraphs.size).to eq(3)
-        expect(loaded_doc.paragraphs[0].properties&.style).to eq("Normal")
+        expect(loaded_doc.paragraphs[0].style).to eq("Normal")
         expect(loaded_doc.paragraphs[0].text).to eq("This is a normal paragraph.")
-        expect(loaded_doc.paragraphs[1].properties&.style).to eq("Heading1")
+        expect(loaded_doc.paragraphs[1].style).to eq("Heading1")
         expect(loaded_doc.paragraphs[1].text).to eq("This is Heading 1")
-        expect(loaded_doc.paragraphs[2].properties&.style).to eq("Heading2")
+        expect(loaded_doc.paragraphs[2].style).to eq("Heading2")
         expect(loaded_doc.paragraphs[2].text).to eq("This is Heading 2")
       ensure
         safe_delete(temp_path)
@@ -125,7 +125,7 @@ RSpec.describe "Styles Integration", :integration do
         expect(loaded_style.run_properties.color.value).to eq("FF0000")
 
         # Verify paragraph uses the style (style is on properties)
-        expect(loaded_doc.paragraphs.first.properties&.style&.value).to eq("MyCustomStyle")
+        expect(loaded_doc.paragraphs.first.style&.value).to eq("MyCustomStyle")
       ensure
         safe_delete(temp_path)
       end
@@ -242,7 +242,7 @@ RSpec.describe "Styles Integration", :integration do
         # Verify all headings (style is on properties)
         expect(loaded_doc.paragraphs.size).to eq(9)
         (1..9).each do |level|
-          expect(loaded_doc.paragraphs[level - 1].properties&.style).to eq("Heading#{level}")
+          expect(loaded_doc.paragraphs[level - 1].style).to eq("Heading#{level}")
         end
       ensure
         safe_delete(temp_path)

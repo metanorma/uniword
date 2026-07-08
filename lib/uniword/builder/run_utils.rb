@@ -15,7 +15,7 @@ module Uniword
       # A run is empty only if it has no text content and no structural
       # elements (breaks, tabs, drawings, field chars, etc.).
       def empty_run?(run)
-        return false if run.break
+        return false if Array(run.break).any?
         return false if run.tab
         return false if run.drawings&.any?
         return false if run.pictures&.any?
@@ -32,12 +32,7 @@ module Uniword
         return false if run.separator_char
         return false if run.continuation_separator_char
 
-        t = run.text
-        return true unless t
-
-        content = t.content if t.class.attributes.key?(:content)
-        content = t.value if content.nil? && t.class.attributes.key?(:value)
-        !content.is_a?(String) || content.empty?
+        run.text_string.empty?
       end
 
       # Whether a run contains only text (no structural elements).
@@ -53,7 +48,7 @@ module Uniword
         return false if run.field_char
         return false if run.instr_text
         return false if run.sym
-        return false if run.break
+        return false if Array(run.break).any?
         return false if run.tab
         return false if run.position_tab
         return false if run.no_break_hyphen
@@ -77,7 +72,7 @@ module Uniword
       # Runs can be merged if both are text-only with identical formatting.
       def mergeable?(existing, incoming)
         return false unless text_only_run?(existing) && text_only_run?(incoming)
-        return false unless incoming.text&.to_s && !incoming.text.to_s.empty?
+        return false if incoming.text_string.empty?
 
         properties_match?(existing, incoming)
       end
@@ -86,9 +81,9 @@ module Uniword
       #
       # Handles xml:space="preserve" for whitespace-sensitive content.
       def merge_text(target, source)
-        if source.text
-          existing = target.text&.to_s
-          appended = source.text.to_s
+        if Array(source.text).any?
+          existing = target.text_string
+          appended = source.text_string
           combined = existing + appended
           new_text = Wordprocessingml::Text.new(content: combined)
           if Wordprocessingml::Text.preserve_whitespace?(combined)

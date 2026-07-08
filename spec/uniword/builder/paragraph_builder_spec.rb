@@ -99,9 +99,9 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
         builder << "hello\nworld"
         runs = builder.model.runs
         expect(runs.size).to eq(3)
-        expect(runs[0].text.content).to eq("hello")
+        expect(runs[0].text.first.content).to eq("hello")
         expect(runs[1].break).not_to be_nil
-        expect(runs[2].text.content).to eq("world")
+        expect(runs[2].text.first.content).to eq("world")
       end
 
       it "handles plain strings without newlines unchanged" do
@@ -116,10 +116,10 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
         builder << "a\n\nb"
         runs = builder.model.runs
         expect(runs.size).to eq(4)
-        expect(runs[0].text.content).to eq("a")
+        expect(runs[0].text.first.content).to eq("a")
         expect(runs[1].break).not_to be_nil
         expect(runs[2].break).not_to be_nil
-        expect(runs[3].text.content).to eq("b")
+        expect(runs[3].text.first.content).to eq("b")
       end
 
       it "handles leading newline" do
@@ -128,7 +128,7 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
         runs = builder.model.runs
         expect(runs.size).to eq(2)
         expect(runs[0].break).not_to be_nil
-        expect(runs[1].text.content).to eq("text")
+        expect(runs[1].text.first.content).to eq("text")
       end
 
       it "handles trailing newline" do
@@ -136,7 +136,7 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
         builder << "text\n"
         runs = builder.model.runs
         expect(runs.size).to eq(2)
-        expect(runs[0].text.content).to eq("text")
+        expect(runs[0].text.first.content).to eq("text")
         expect(runs[1].break).not_to be_nil
       end
     end
@@ -146,7 +146,7 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
     it "sets style" do
       builder = described_class.new
       builder.style = "Heading1"
-      expect(builder.model.properties.style.value).to eq("Heading1")
+      expect(builder.model.properties.style.first.value).to eq("Heading1")
     end
 
     it "sets alignment" do

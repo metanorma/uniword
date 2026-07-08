@@ -17,6 +17,19 @@ module Uniword
         map_attribute "val", to: :value
       end
 
+      # Cast raw style-id strings into references (mirrors Text.cast), so
+      # `properties.style = "Heading1"` stores a proper StyleReference
+      def self.cast(value)
+        case value
+        when StyleReference, nil
+          value
+        when String
+          new(value: value)
+        else
+          super
+        end
+      end
+
       # Compare with another StyleReference or a string
       def ==(other)
         if other.is_a?(StyleReference)

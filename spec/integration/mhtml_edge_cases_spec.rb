@@ -531,8 +531,8 @@ RSpec.describe "MHTML Edge Cases", type: :integration do
       doc2 = Uniword::DocumentFactory.from_file(output_path, format: :mhtml)
 
       expect(doc2.paragraphs.count).to eq(6)
-      expect(doc2.paragraphs[0].properties.style).to eq("Heading1")
-      expect(doc2.paragraphs[5].properties.style).to eq("Heading6")
+      expect(doc2.paragraphs[0].style).to eq("Heading1")
+      expect(doc2.paragraphs[5].style).to eq("Heading6")
     end
 
     it "handles paragraphs without explicit styles" do

@@ -108,11 +108,11 @@ module Uniword
         return false unless paragraph.properties
         return false unless paragraph.properties.is_a?(Uniword::Wordprocessingml::ParagraphProperties)
 
-        paragraph.properties.style.to_s == "UniwordWatermark"
+        paragraph.style == "UniwordWatermark"
       end
 
       def extract_watermark_text(paragraph)
-        paragraph.runs.map { |r| r.text.to_s }.join
+        paragraph.runs.map(&:text_string).join
       end
     end
   end

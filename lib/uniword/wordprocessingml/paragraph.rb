@@ -92,7 +92,7 @@ module Uniword
         if run_or_sdt.is_a?(StructuredDocumentTag)
           extract_sdt_text(run_or_sdt)
         else
-          run_or_sdt.text.to_s
+          run_or_sdt.text_string
         end
       end
 
@@ -100,7 +100,7 @@ module Uniword
       def extract_sdt_text(sdt)
         return "" unless sdt.content
 
-        sdt.content.runs.map { |r| r.text.to_s }.join
+        sdt.content.runs.map(&:text_string).join
       end
 
       def empty?
@@ -108,7 +108,7 @@ module Uniword
       end
 
       def style
-        properties&.style
+        properties&.style&.first
       end
 
       def alignment

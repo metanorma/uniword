@@ -11,9 +11,12 @@ module Uniword
     class ParagraphProperties < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
-      # Simple element attributes (OOXML w:val attributes stored in wrapper objects)
-      attribute :style, Properties::StyleReference    # w:pStyle w:val="..." (style ID reference)
-      attribute :alignment, Properties::Alignment     # w:jc w:val="..." (alignment value)
+      # Simple element attributes (OOXML w:val attributes stored in
+      # wrapper objects)
+      # w:pStyle w:val="..." (style ID references; multiple tolerated)
+      attribute :style, Properties::StyleReference, collection: true
+      # w:jc w:val="..." (alignment value)
+      attribute :alignment, Properties::Alignment
 
       # Simple element wrapper objects
       attribute :outline_level, Properties::OutlineLevel
@@ -115,11 +118,15 @@ module Uniword
 
       # YAML transform methods (instance methods - called via send on an instance)
       def yaml_style_from(instance, value)
-        instance.style = Properties::StyleReference.new(value: value) if value
+        if value
+          instance.style = [
+            Properties::StyleReference.new(value: value),
+          ]
+        end
       end
 
       def yaml_style_to(instance, _doc)
-        instance.style&.value
+        instance.style&.first&.value
       end
 
       def yaml_alignment_from(instance, value)
@@ -288,9 +295,6 @@ module Uniword
       # This handles cases like ParagraphProperties.new(spacing_before: 120)
       # where the flat attribute is set but the wrapper object is not
       def convert_flat_attributes!
-        # Style - convert string to StyleReference wrapper
-        self.style = Properties::StyleReference.new(value: @style) if @style.is_a?(String)
-
         # Alignment - convert string to Alignment wrapper
         self.alignment = Properties::Alignment.new(value: @alignment) if @alignment.is_a?(String)
 

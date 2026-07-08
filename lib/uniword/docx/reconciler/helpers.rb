@@ -35,7 +35,7 @@ module Uniword
 
             texts = []
             walk_body_paragraphs(body) do |para|
-              texts << (para.runs || []).map { |r| r.text.to_s }.join
+              texts << (para.runs || []).map(&:text_string).join
             end
             Digest::SHA256.hexdigest(texts.join("|"))
           end

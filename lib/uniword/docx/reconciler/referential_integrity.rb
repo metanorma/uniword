@@ -388,7 +388,7 @@ module Uniword
         # -- Traversal helpers --
 
         def reconcile_paragraph_style(para, defined_ids, style_names)
-          style_ref = para.properties&.style
+          style_ref = Array(para.properties&.style).first
           return 0 unless style_ref&.value
           return 0 if defined_ids.include?(style_ref.value)
           return 0 if style_names.include?(style_ref.value)

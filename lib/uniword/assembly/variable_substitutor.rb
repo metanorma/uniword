@@ -186,10 +186,9 @@ module Uniword
       # @param run [Run] Run to process
       # @return [void]
       def substitute_run(run)
-        return unless run.text
-
-        content = run.text.to_s
-        run.text = substitute(content)
+        run.substitute_with_block(VARIABLE_PATTERN) do |match|
+          resolve_variable(match[1])
+        end
       end
 
       # Collect all keys from nested hash.

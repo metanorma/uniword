@@ -72,7 +72,7 @@ module Uniword
       # @param paragraph [Paragraph] The paragraph to check
       # @return [Integer, nil] Heading level (1-9) or nil if not a heading
       def extract_heading_level(paragraph)
-        style_name = paragraph.properties&.style
+        style_name = paragraph.style
         return nil unless style_name
 
         match = style_name.to_s.match(HEADING_PATTERN)

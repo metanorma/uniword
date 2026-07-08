@@ -163,7 +163,7 @@ RSpec.describe Uniword::Toc::TocGenerator do
       expect(paragraphs.size).to eq(4)
 
       # First paragraph is the title
-      title_text = paragraphs[0].runs.map { |r| r.text.to_s }.join
+      title_text = paragraphs[0].runs.map(&:text_string).join
       expect(title_text).to eq("Table of Contents")
     end
 

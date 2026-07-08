@@ -442,7 +442,7 @@ module Uniword
 
         val = case method
               when :alignment then props.alignment
-              when :style then props.style
+              when :style then props.style&.first
               end
         unwrap_value(val)
       end

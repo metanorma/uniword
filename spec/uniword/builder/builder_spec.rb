@@ -8,7 +8,7 @@ RSpec.describe Uniword::Builder do
     it "creates a Run with plain text" do
       run = described_class.text("Hello")
       expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.text.to_s).to eq("Hello")
+      expect(run.text_string).to eq("Hello")
       expect(run.properties).to be_nil
     end
 
@@ -63,7 +63,7 @@ RSpec.describe Uniword::Builder do
     it "creates a Hyperlink with text" do
       hl = described_class.hyperlink("https://example.com", "Click here")
       expect(hl.runs.size).to eq(1)
-      expect(hl.runs.first.text.to_s).to eq("Click here")
+      expect(hl.runs.first.text_string).to eq("Click here")
     end
 
     it "creates a Hyperlink with blue text by default" do
@@ -92,8 +92,8 @@ RSpec.describe Uniword::Builder do
     it "creates a Run with a page break" do
       run = described_class.page_break
       expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.break).to be_a(Uniword::Wordprocessingml::Break)
-      expect(run.break.type).to eq("page")
+      expect(run.break.first).to be_a(Uniword::Wordprocessingml::Break)
+      expect(run.break.first.type).to eq("page")
     end
   end
 
@@ -113,9 +113,9 @@ RSpec.describe Uniword::Builder do
       end
       model = builder.model
       expect(model.runs.size).to eq(3)
-      expect(model.runs[0].text.to_s).to eq("Before tab")
+      expect(model.runs[0].text_string).to eq("Before tab")
       expect(model.runs[1].tab).to be_a(Uniword::Wordprocessingml::Tab)
-      expect(model.runs[2].text.to_s).to eq("After tab")
+      expect(model.runs[2].text_string).to eq("After tab")
     end
   end
 
