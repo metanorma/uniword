@@ -15,7 +15,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#page_break" do
     # Middle paragraph has a page break
     break_run = paragraphs[1].runs.first
     expect(break_run.break).not_to be_nil
-    expect(break_run.break.first.type).to eq("page")
+    expect(Array(break_run.break).first.type).to eq("page")
   end
 end
 

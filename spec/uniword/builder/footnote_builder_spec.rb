@@ -153,7 +153,7 @@ RSpec.describe Uniword::Builder, ".line_break" do
 
     expect(run).to be_a(Uniword::Wordprocessingml::Run)
     expect(run.break).not_to be_nil
-    expect(run.break.first.type).to eq("line")
+    expect(Array(run.break).first.type).to eq("line")
   end
 
   it "can be used in a paragraph" do
@@ -167,7 +167,7 @@ RSpec.describe Uniword::Builder, ".line_break" do
     runs = doc.model.body.paragraphs.first.runs
     expect(runs.size).to eq(3)
     expect(runs[0].text_string).to eq("Line 1")
-    expect(runs[1].break.first.type).to eq("line")
+    expect(Array(runs[1].break).first.type).to eq("line")
     expect(runs[2].text_string).to eq("Line 2")
   end
 end

@@ -18,7 +18,7 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
         spacing_before: 240,
         spacing_after: 120,
       )
-      expect(props.style.first.value).to eq("Heading1")
+      expect(Array(props.style).first.value).to eq("Heading1")
       expect(props.alignment.value).to eq("center")
       expect(props.spacing&.before).to eq(240)
       expect(props.spacing&.after).to eq(120)
@@ -35,7 +35,7 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
 
     it "allows modification of attributes" do
       props.style = "Changed"
-      expect(props.style.first).to eq("Changed")
+      expect(Array(props.style).first).to eq("Changed")
     end
 
     it "is not frozen" do

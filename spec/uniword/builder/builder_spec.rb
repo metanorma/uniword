@@ -92,8 +92,8 @@ RSpec.describe Uniword::Builder do
     it "creates a Run with a page break" do
       run = described_class.page_break
       expect(run).to be_a(Uniword::Wordprocessingml::Run)
-      expect(run.break.first).to be_a(Uniword::Wordprocessingml::Break)
-      expect(run.break.first.type).to eq("page")
+      expect(Array(run.break).first).to be_a(Uniword::Wordprocessingml::Break)
+      expect(Array(run.break).first.type).to eq("page")
     end
   end
 

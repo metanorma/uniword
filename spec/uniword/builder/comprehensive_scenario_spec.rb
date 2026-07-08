@@ -313,7 +313,7 @@ RSpec.describe "Scenario: Document with line breaks and tabs" do
 
     runs = doc.model.body.paragraphs.first.runs
     expect(runs.size).to eq(3)
-    expect(runs[1].break.first.type).to eq("line")
+    expect(Array(runs[1].break).first.type).to eq("line")
 
     path = "/tmp/scenario_linebreak.docx"
     doc.save(path)

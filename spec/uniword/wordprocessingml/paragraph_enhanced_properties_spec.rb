@@ -154,7 +154,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
       builder.shading(fill: "FFFF00")
       builder << Uniword::Builder.tab_stop(position: 1440)
 
-      expect(paragraph.properties&.style&.first&.value).to eq("Heading1")
+      expect(Array(paragraph.properties&.style).first&.value).to eq("Heading1")
       expect(paragraph.properties&.alignment&.value).to eq("center")
       expect(paragraph.properties&.spacing&.before).to eq(240)
       expect(paragraph.properties.borders).not_to be_nil
@@ -184,7 +184,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
       )
 
       # Verify all properties are accessible
-      expect(paragraph.properties.style.first.value).to eq("Normal")
+      expect(Array(paragraph.properties.style).first.value).to eq("Normal")
       expect(paragraph.properties.alignment.value).to eq("left")
       expect(paragraph.properties.spacing_before).to eq(120)
       expect(paragraph.properties.spacing_after).to eq(120)
@@ -219,7 +219,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
       builder << Uniword::Builder.tab_stop(position: 1440)
 
       expect(builder.build).to eq(paragraph)
-      expect(paragraph.properties&.style&.first&.value).to eq("Heading1")
+      expect(Array(paragraph.properties&.style).first&.value).to eq("Heading1")
       expect(paragraph.properties&.alignment&.value).to eq("center")
       expect(paragraph.properties.borders).not_to be_nil
       expect(paragraph.properties.shading).not_to be_nil

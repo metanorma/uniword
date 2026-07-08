@@ -99,7 +99,7 @@ module Uniword
         Array(text).each do |t|
           content = t.content.to_s.gsub(pattern, replacement)
           t.content = content
-          t.xml_space = "preserve" if Text.preserve_whitespace?(content)
+          t.xml_space = Text.preserve_whitespace?(content) ? "preserve" : nil
         end
         self
       end
@@ -115,7 +115,7 @@ module Uniword
             yield(Regexp.last_match)
           end
           t.content = content
-          t.xml_space = "preserve" if Text.preserve_whitespace?(content)
+          t.xml_space = Text.preserve_whitespace?(content) ? "preserve" : nil
         end
         self
       end

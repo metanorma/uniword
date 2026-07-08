@@ -126,7 +126,7 @@ module Uniword
       end
 
       def yaml_style_to(instance, _doc)
-        instance.style&.first&.value
+        Array(instance.style).first&.value
       end
 
       def yaml_alignment_from(instance, value)

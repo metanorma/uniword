@@ -130,7 +130,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
       break_run = para.runs.find(&:break)
       expect(break_run).not_to be_nil
-      expect(break_run.break.first.type).to eq("page")
+      expect(Array(break_run.break).first.type).to eq("page")
     end
 
     it "handles footnote reference spans" do
@@ -304,13 +304,13 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
       # The <br> is inside a fragment; we test via create_break_run directly
       run = described_class.create_break_run(html)
-      expect(run.break.first.type).to eq("page")
+      expect(Array(run.break).first.type).to eq("page")
     end
 
     it "treats plain <br> as line break (no type)" do
       html = first_element("<br>")
       run = described_class.create_break_run(html)
-      expect(run.break.first.type).to be_nil
+      expect(Array(run.break).first.type).to be_nil
     end
   end
 

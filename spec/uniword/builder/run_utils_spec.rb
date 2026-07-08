@@ -167,7 +167,7 @@ RSpec.describe Uniword::Builder::RunUtils do
 
       described_class.merge_text(target, source)
 
-      expect(target.text.first.xml_space).to eq("preserve")
+      expect(Array(target.text).first.xml_space).to eq("preserve")
     end
 
     it "does not modify target when source has no text" do

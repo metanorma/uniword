@@ -108,7 +108,7 @@ module Uniword
       end
 
       def style
-        properties&.style&.first
+        Array(properties&.style).first
       end
 
       def alignment
