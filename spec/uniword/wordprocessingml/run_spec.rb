@@ -15,7 +15,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
   describe "#initialize" do
     it "creates a run with text" do
       run = described_class.new(text: "Hello")
-      expect(run.text.content).to eq("Hello")
+      expect(Array(run.text).first.content).to eq("Hello")
     end
 
     it "creates a run with properties" do
@@ -34,7 +34,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
     it "does not have text_element method (use text instead)" do
       run = described_class.new(text: "Hello")
       expect(run).not_to respond_to(:text_element)
-      expect(run.text.content).to eq("Hello")
+      expect(Array(run.text).first.content).to eq("Hello")
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe Uniword::Wordprocessingml::Run do
       expect(run).not_to respond_to(:text_element=)
       # Proper OOXML: set text with Text object
       run.text = Uniword::Wordprocessingml::Text.new(content: "New text")
-      expect(run.text.content).to eq("New text")
+      expect(Array(run.text).first.content).to eq("New text")
     end
   end
 
@@ -176,6 +176,6 @@ RSpec.describe Uniword::Wordprocessingml::Run do
 
   describe "XML round-trip" do
     it_behaves_like "a round-trippable serializable", described_class,
-                    { text: "Hello World" }, :text, "Hello World"
+                    { text: "Hello World" }, :text_string, "Hello World"
   end
 end

@@ -64,7 +64,7 @@ RSpec.describe "Format Conversion", type: :integration do
       docx_pkg.document.body.paragraphs
         .flat_map do |p|
         p.runs.map do |r|
-          r.text&.text
+          r.text_string
         end
       end.compact.join(" ")
 

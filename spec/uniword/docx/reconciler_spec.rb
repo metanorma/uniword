@@ -1315,7 +1315,7 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       described_class.new(package).reconcile
 
-      expect(package.document.body.paragraphs.first.properties.style.value)
+      expect(package.document.body.paragraphs.first.style.value)
         .to eq("Heading1")
     end
 

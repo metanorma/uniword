@@ -71,7 +71,7 @@ module Uniword
       end
 
       def style=(name)
-        ensure_properties.style = Properties::StyleReference.new(value: name)
+        ensure_properties.style = name
         self
       end
 

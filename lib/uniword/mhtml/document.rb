@@ -27,7 +27,7 @@ module Uniword
       attribute :html_part, HtmlPart
 
       # All MIME parts (including the HTML part)
-      attribute :parts, :array, default: -> { [] }
+      attribute :parts, MimePart, collection: true, default: -> { [] }
 
       # Parsed metadata from HTML head XML blocks
       attribute :document_properties, Metadata::DocumentProperties

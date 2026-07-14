@@ -102,7 +102,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
       doc = assembler.assemble(manifest_file)
 
       # Check that variables were substituted
-      text = doc.paragraphs.first.runs.first.text
+      text = doc.paragraphs.first.runs.first.text_string
       expect(text).to include("Test Document")
       expect(text).not_to include("{title}")
     end
@@ -113,7 +113,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
         variables: { title: "Override Title" },
       )
 
-      text = doc.paragraphs.first.runs.first.text
+      text = doc.paragraphs.first.runs.first.text_string
       expect(text).to include("Override Title")
     end
 

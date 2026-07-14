@@ -133,10 +133,9 @@ module Uniword
           return [] unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
           document.paragraphs.select do |p|
-            p.is_a?(Lutaml::Model::Serializable) && p.class.attributes.key?(:style) && p.style&.match?(/^Heading/)
+            p.style&.to_s&.match?(/^Heading/)
           end.filter_map do |p|
-            # Generate bookmark from heading text
-            p.is_a?(Lutaml::Model::Serializable) && p.class.attributes.key?(:text) ? heading_to_bookmark(p.text) : nil
+            heading_to_bookmark(p.text)
           end
         end
 

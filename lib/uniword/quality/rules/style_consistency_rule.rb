@@ -76,7 +76,7 @@ module Uniword
       # @param paragraph [Paragraph] The paragraph to check
       # @return [Boolean] true if has style
       def has_style?(paragraph)
-        style = paragraph.properties&.style
+        style = paragraph.style
         style&.value && !style.value.empty?
       end
 

@@ -107,7 +107,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       html = first_element("<td>Hello</td>")
       cell = described_class.build_cell(html)
       expect(cell.paragraphs.size).to eq(1)
-      expect(cell.paragraphs.first.runs.first.text.to_s).to eq("Hello")
+      expect(cell.paragraphs.first.runs.first.text_string).to eq("Hello")
     end
   end
 
@@ -117,7 +117,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       para = Uniword::Wordprocessingml::Paragraph.new
       described_class.build_children(para, html)
 
-      texts = para.runs.reject { |r| r.text.to_s.empty? }
+      texts = para.runs.reject { |r| r.text_string.empty? }
       breaks = para.runs.select(&:break)
       expect(texts.size).to eq(2)
       expect(breaks.size).to eq(1)
@@ -130,7 +130,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
       break_run = para.runs.find(&:break)
       expect(break_run).not_to be_nil
-      expect(break_run.break.type).to eq("page")
+      expect(Array(break_run.break).first.type).to eq("page")
     end
 
     it "handles footnote reference spans" do
@@ -164,7 +164,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
       expect(para.hyperlinks.size).to eq(1)
       expect(para.hyperlinks.first.id).to eq("https://example.com")
-      expect(para.hyperlinks.first.runs.first.text.to_s).to eq("here")
+      expect(para.hyperlinks.first.runs.first.text_string).to eq("here")
     end
 
     it "handles internal bookmark hyperlinks" do
@@ -190,7 +190,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       described_class.build_children(para, html)
 
       expect(para.runs.size).to eq(1)
-      expect(para.runs.first.text.to_s).to eq("styled text")
+      expect(para.runs.first.text_string).to eq("styled text")
     end
 
     it "preserves text nodes alongside special elements" do
@@ -198,7 +198,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       para = Uniword::Wordprocessingml::Paragraph.new
       described_class.build_children(para, html)
 
-      texts = para.runs.map { |r| r.text.to_s }.reject(&:empty?)
+      texts = para.runs.map(&:text_string).reject(&:empty?)
       expect(texts).to eq(%w[Before After])
     end
   end
@@ -269,7 +269,7 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
       expect(para).not_to be_nil
       expect( # "Some text" and "and"
         para.runs.reject do |r|
-          r.text.to_s.empty?
+          r.text_string.empty?
         end.size,
       ).to eq(2)
       expect(para.runs.select(&:footnote_reference).size).to eq(1)
@@ -304,13 +304,13 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
       # The <br> is inside a fragment; we test via create_break_run directly
       run = described_class.create_break_run(html)
-      expect(run.break.type).to eq("page")
+      expect(Array(run.break).first.type).to eq("page")
     end
 
     it "treats plain <br> as line break (no type)" do
       html = first_element("<br>")
       run = described_class.create_break_run(html)
-      expect(run.break.type).to be_nil
+      expect(Array(run.break).first.type).to be_nil
     end
   end
 

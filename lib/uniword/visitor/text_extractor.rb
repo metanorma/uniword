@@ -103,7 +103,8 @@ module Uniword
       # @param run [Run] The run to visit
       # @return [void]
       def visit_run(run)
-        @text_parts << run.text if run.text
+        text = run.text_string
+        @text_parts << text unless text.empty?
       end
 
       # Visit an image element.

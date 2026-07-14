@@ -166,11 +166,11 @@ module Uniword
       # @param paragraph [Wordprocessingml::Paragraph] Paragraph to check
       # @return [Integer, nil] Heading level or nil
       def heading_level(paragraph)
-        style_name = paragraph.properties&.style
-        return nil unless style_name
+        style = paragraph.style
+        return nil unless style
 
         # Check for heading styles (Heading 1, Heading 2, etc.)
-        match = style_name.match(/^Heading\s*(\d+)$/i)
+        match = style.to_s.match(/^Heading\s*(\d+)$/i)
         return match[1].to_i if match
 
         # Check for outline level in properties
@@ -187,17 +187,7 @@ module Uniword
       # @param paragraph [Wordprocessingml::Paragraph] Source paragraph
       # @return [String] Extracted text
       def extract_text(paragraph)
-        text_parts = []
-
-        paragraph.runs.each do |run|
-          run_text = run.text
-          next unless run_text
-
-          # Handle Text objects by converting to string
-          text_parts << run_text.to_s
-        end
-
-        text_parts.join
+        paragraph.runs.map(&:text_string).join
       end
 
       # Create title paragraph.

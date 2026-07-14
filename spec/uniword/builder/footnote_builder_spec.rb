@@ -119,7 +119,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder, "#footnote" do
 
     runs = paragraphs.first.runs
     expect(runs.size).to eq(2)
-    expect(runs.first.text.to_s).to eq("See note ")
+    expect(runs.first.text_string).to eq("See note ")
     expect(runs.last.footnote_reference).not_to be_nil
   end
 end
@@ -153,7 +153,7 @@ RSpec.describe Uniword::Builder, ".line_break" do
 
     expect(run).to be_a(Uniword::Wordprocessingml::Run)
     expect(run.break).not_to be_nil
-    expect(run.break.type).to eq("line")
+    expect(Array(run.break).first.type).to eq("line")
   end
 
   it "can be used in a paragraph" do
@@ -166,9 +166,9 @@ RSpec.describe Uniword::Builder, ".line_break" do
 
     runs = doc.model.body.paragraphs.first.runs
     expect(runs.size).to eq(3)
-    expect(runs[0].text.to_s).to eq("Line 1")
-    expect(runs[1].break.type).to eq("line")
-    expect(runs[2].text.to_s).to eq("Line 2")
+    expect(runs[0].text_string).to eq("Line 1")
+    expect(Array(runs[1].break).first.type).to eq("line")
+    expect(runs[2].text_string).to eq("Line 2")
   end
 end
 

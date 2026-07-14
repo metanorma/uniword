@@ -23,7 +23,8 @@ RSpec.describe Uniword::Builder::HeaderFooterBuilder do
       hf = described_class.new(:header)
       hf << "Header text"
       expect(hf.model.paragraphs.size).to eq(1)
-      expect(hf.model.paragraphs.first.runs.first.text.to_s).to eq("Header text")
+      expect(hf.model.paragraphs.first.runs.first.text_string)
+        .to eq("Header text")
     end
 
     it "appends a Run to the last paragraph" do
@@ -53,7 +54,8 @@ RSpec.describe Uniword::Builder::HeaderFooterBuilder do
       pb = Uniword::Builder::ParagraphBuilder.new
       pb << "Built paragraph"
       hf << pb
-      expect(hf.model.paragraphs.last.runs.first.text.to_s).to eq("Built paragraph")
+      expect(hf.model.paragraphs.last.runs.first.text_string)
+        .to eq("Built paragraph")
     end
 
     it "raises for unsupported types" do

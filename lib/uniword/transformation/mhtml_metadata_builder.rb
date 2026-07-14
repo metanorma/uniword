@@ -184,7 +184,7 @@ module Uniword
           para_chars = 0
 
           element.runs.each do |run|
-            text = run.text.to_s
+            text = run.text_string
             characters += text.length
             para_chars += text.length
             words += text.split.length

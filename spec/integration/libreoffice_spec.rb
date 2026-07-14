@@ -591,7 +591,11 @@ RSpec.describe "LibreOffice Compatibility Testing" do
       next unless para.respond_to?(:runs)
 
       para.runs.each do |run|
-        text << run.text if run.respond_to?(:text)
+        if run.respond_to?(:text_string)
+          text << run.text_string
+        elsif run.respond_to?(:text)
+          text << run.text
+        end
       end
     end
     text.join(" ")

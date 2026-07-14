@@ -88,7 +88,7 @@ module Uniword
           if paragraph.is_a?(Lutaml::Model::Serializable) && paragraph.class.attributes.key?(:text)
             paragraph.text
           elsif paragraph.is_a?(Lutaml::Model::Serializable) && paragraph.class.attributes.key?(:runs)
-            paragraph.runs.map(&:text).join
+            paragraph.runs.map(&:text_string).join
           end
         end
       end

@@ -120,8 +120,8 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
 
     it "accesses style via properties object" do
       paragraph = described_class.new(properties: properties)
-      # Access style via properties.style - returns string value
-      expect(paragraph.properties.style).to eq("Normal")
+      # Access style via properties.style - collection of style refs
+      expect(Array(paragraph.properties.style).first).to eq("Normal")
     end
   end
 
@@ -150,7 +150,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
       xml = para.to_xml
       restored = described_class.from_xml(xml)
       expect(restored.runs.size).to eq(1)
-      expect(restored.runs.first.text).to eq("Hello")
+      expect(restored.runs.first.text_string).to eq("Hello")
     end
   end
 end

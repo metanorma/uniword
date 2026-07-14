@@ -29,7 +29,7 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       expect(builder.model.body.paragraphs.size).to eq(1)
       para = builder.model.body.paragraphs.first
       expect(para.text).to eq("Styled text")
-      expect(para.properties.style.value).to eq("Heading1")
+      expect(Array(para.properties.style).first.value).to eq("Heading1")
       expect(para.properties.alignment.value).to eq("center")
     end
   end
@@ -40,13 +40,13 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       builder.heading("Introduction", level: 1)
       para = builder.model.body.paragraphs.first
       expect(para.text).to eq("Introduction")
-      expect(para.properties.style).to eq("Heading1")
+      expect(para.style).to eq("Heading1")
     end
 
     it "supports different heading levels" do
       builder = described_class.new
       builder.heading("Section", level: 2)
-      expect(builder.model.body.paragraphs.first.properties.style).to eq("Heading2")
+      expect(builder.model.body.paragraphs.first.style).to eq("Heading2")
     end
   end
 

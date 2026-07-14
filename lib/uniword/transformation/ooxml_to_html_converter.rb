@@ -54,7 +54,7 @@ module Uniword
       # @param run [Uniword::Wordprocessingml::Run]
       # @return [String] HTML text content with inline formatting
       def self.run_to_html(run)
-        text = escape_html(run.text || "")
+        text = escape_html(run.text_string)
         return text if text.empty?
 
         props = run.properties
@@ -135,12 +135,10 @@ module Uniword
       # @param paragraph [Uniword::Wordprocessingml::Paragraph]
       # @return [String] HTML class/style attribute or empty string
       def self.paragraph_style(paragraph)
-        return "" unless paragraph.properties
-
-        style = paragraph.properties.style
+        style = paragraph.style
         return "" unless style
 
-        " class=\"#{escape_html(style)}\""
+        " class=\"#{escape_html(style.to_s)}\""
       end
 
       # Convert OOXML font size (half-points) to HTML font size

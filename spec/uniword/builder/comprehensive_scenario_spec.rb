@@ -17,9 +17,9 @@ RSpec.describe "Scenario: Simple document" do
 
     paragraphs = doc.model.body.paragraphs
     expect(paragraphs.size).to eq(4)
-    expect(paragraphs[0].properties&.style&.value).to include("Heading1")
+    expect(paragraphs[0].style&.value).to include("Heading1")
     expect(paragraphs[1].text).to include("Hello World")
-    expect(paragraphs[2].properties&.style&.value).to include("Heading2")
+    expect(paragraphs[2].style&.value).to include("Heading2")
     expect(doc.model.core_properties.title).to eq("My Document")
 
     path = "/tmp/scenario_simple.docx"
@@ -313,7 +313,7 @@ RSpec.describe "Scenario: Document with line breaks and tabs" do
 
     runs = doc.model.body.paragraphs.first.runs
     expect(runs.size).to eq(3)
-    expect(runs[1].break.type).to eq("line")
+    expect(Array(runs[1].break).first.type).to eq("line")
 
     path = "/tmp/scenario_linebreak.docx"
     doc.save(path)

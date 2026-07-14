@@ -158,7 +158,7 @@ RSpec.describe Uniword::Builder::RunUtils do
 
       described_class.merge_text(target, source)
 
-      expect(target.text.to_s).to eq("Hello World")
+      expect(target.text_string).to eq("Hello World")
     end
 
     it "sets xml_space to preserve when combined text has leading whitespace" do
@@ -167,7 +167,7 @@ RSpec.describe Uniword::Builder::RunUtils do
 
       described_class.merge_text(target, source)
 
-      expect(target.text.xml_space).to eq("preserve")
+      expect(Array(target.text).first.xml_space).to eq("preserve")
     end
 
     it "does not modify target when source has no text" do
@@ -176,7 +176,7 @@ RSpec.describe Uniword::Builder::RunUtils do
 
       described_class.merge_text(target, source)
 
-      expect(target.text.to_s).to eq("Hello")
+      expect(target.text_string).to eq("Hello")
     end
   end
 end

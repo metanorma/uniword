@@ -10,9 +10,9 @@ module Uniword
     # Element: <w:r>
     class Run < Lutaml::Model::Serializable
       attribute :properties, RunProperties
-      attribute :text, Text
+      attribute :text, Text, collection: true
       attribute :tab, Tab
-      attribute :break, Break
+      attribute :break, Break, collection: true
       attribute :drawings, Drawing, collection: true, initialize_empty: true
       attribute :pictures, Picture, collection: true, initialize_empty: true
       attribute :alternate_content, AlternateContent, default: nil
@@ -83,15 +83,24 @@ module Uniword
         visitor.visit_run(self)
       end
 
+      # Combined string content of all text elements in the run
+      #
+      # @return [String] Concatenated content of every w:t element
+      def text_string
+        Array(text).join
+      end
+
       # Substitute text in run
       #
       # @param pattern [Regexp, String] Pattern to match
       # @param replacement [String] Replacement text
       # @return [self] For method chaining
       def substitute(pattern, replacement)
-        return self unless text
-
-        self.text = text.to_s.gsub(pattern, replacement)
+        Array(text).each do |t|
+          content = t.content.to_s.gsub(pattern, replacement)
+          t.content = content
+          t.xml_space = Text.preserve_whitespace?(content) ? "preserve" : nil
+        end
         self
       end
 
@@ -101,10 +110,12 @@ module Uniword
       # @yield [MatchData] Block receives match data object
       # @return [self] For method chaining
       def substitute_with_block(pattern, &block)
-        return self unless text
-
-        self.text = text.to_s.gsub(pattern) do |_match_str|
-          yield(Regexp.last_match)
+        Array(text).each do |t|
+          content = t.content.to_s.gsub(pattern) do |_match_str|
+            yield(Regexp.last_match)
+          end
+          t.content = content
+          t.xml_space = Text.preserve_whitespace?(content) ? "preserve" : nil
         end
         self
       end
@@ -113,7 +124,7 @@ module Uniword
       #
       # @return [String] Human-readable representation
       def inspect
-        text_preview = text.to_s
+        text_preview = text_string
         text_preview = "#{text_preview[0, 37]}..." if text_preview.length > 40
 
         flags = []
@@ -194,7 +205,7 @@ module Uniword
         return nil unless parent_paragraph
 
         paragraph = parent_paragraph
-        style_id = paragraph.style
+        style_id = paragraph.style&.to_s
 
         return nil unless style_id
         return nil unless paragraph.parent_document

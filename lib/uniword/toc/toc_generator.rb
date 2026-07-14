@@ -142,14 +142,7 @@ module Uniword
       # @param paragraph [Wordprocessingml::Paragraph] Paragraph to inspect
       # @return [String, nil] Style name or nil
       def resolve_style_name(paragraph)
-        style_ref = paragraph.properties&.style
-        return nil unless style_ref
-
-        if style_ref.is_a?(Uniword::Properties::StyleReference)
-          style_ref.value
-        else
-          style_ref.to_s
-        end
+        paragraph.style&.value
       end
 
       # Extract text content from a paragraph.
@@ -197,9 +190,7 @@ module Uniword
       def build_title_paragraph
         para = Wordprocessingml::Paragraph.new
         para.properties = Wordprocessingml::ParagraphProperties.new
-        para.properties.style = Uniword::Properties::StyleReference.new(
-          value: "TOCHeading",
-        )
+        para.properties.style = "TOCHeading"
 
         run = Wordprocessingml::Run.new
         run.text = "Table of Contents"
@@ -251,9 +242,7 @@ module Uniword
       def build_entry_paragraph(entry)
         para = Wordprocessingml::Paragraph.new
         para.properties = Wordprocessingml::ParagraphProperties.new
-        para.properties.style = Uniword::Properties::StyleReference.new(
-          value: "TOC#{entry.level}",
-        )
+        para.properties.style = "TOC#{entry.level}"
 
         run = Wordprocessingml::Run.new
         run.text = entry.text
