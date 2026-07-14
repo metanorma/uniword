@@ -39,6 +39,17 @@ Lutaml::Model::Config.xml_adapter_type = :nokogiri
 #
 # @see DocumentFactory Factory for reading documents
 module Uniword
+  # Wire Uniword into Omml's context system so Omml::Models types resolve
+  # correctly when used as attribute types on Uniword's serializable classes
+  # (Paragraph#o_maths typed as Omml::Models::CTOMath, etc.).
+  # register_in creates a :uniword context with all Omml models registered
+  # directly, falling back to :default for Uniword's own types. Setting
+  # Config.default_register means from_xml/to_xml calls without an explicit
+  # register: argument use :uniword automatically.
+  require "omml"
+  Omml::Configuration.register_in(:uniword)
+  Lutaml::Model::Config.default_register = :uniword
+
   # Version constant
   autoload :VERSION, "uniword/version"
   autoload :ModelAttributeAccess, "uniword/model_attribute_access"
