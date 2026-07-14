@@ -272,7 +272,9 @@ module Uniword
         end
       end
 
-      # Convert OOXML OMath to HTML (wrapped in stem span)
+      # Convert an OOXML OMath model to HTML (wrapped in stem span).
+      # Accepts Omml::Models::CTOMath/OMath/OMathPara (the typed attribute
+      # values on Paragraph) — anything responding to `to_xml` works.
       def omath_to_html(o_math)
         xml = o_math.to_xml
         # Strip XML declaration and namespace prefixes for clean inline HTML
@@ -491,23 +493,87 @@ module Uniword
 
       private
 
-      # Get paragraph content including runs, hyperlinks, SDTs, and oMath
-      # Interleaves all element types in correct order using position markers.
+      # Render paragraph content (runs, hyperlinks, SDTs, oMath) in the
+      # document order captured by `paragraph.element_order`.
+      #
+      # Walking element_order (rather than `build_position_map` keyed on
+      # run_position) keeps MHTML positioning in lockstep with the DOCX
+      # serializer, which is the single source of truth for interleaving.
+      # It also handles inline math, which is now an Omml::Models::CTOMath
+      # instance without a run_position attribute.
       def paragraph_content_to_html(paragraph)
+        order = paragraph.element_order
+        return paragraph_content_to_html_legacy(paragraph) if order.nil? || order.empty?
+
+        run_idx = 0
+        hl_idx = 0
+        omath_idx = 0
+        omp_idx = 0
+        sdt_idx = 0
+
+        parts = []
+        order.each do |entry|
+          next unless entry.element?
+
+          case entry.name
+          when "r"
+            collect_run_at(paragraph, run_idx, parts)
+            run_idx += 1
+          when "hyperlink"
+            hl = paragraph.hyperlinks[hl_idx]
+            parts << hyperlink_to_html(hl) if hl
+            hl_idx += 1
+          when "oMath"
+            om = paragraph.o_maths[omath_idx]
+            parts << omath_to_html(om) if om
+            omath_idx += 1
+          when "oMathPara"
+            omp = paragraph.o_math_paras[omp_idx]
+            parts << omath_to_html(omp) if omp
+            omp_idx += 1
+          when "sdt"
+            sdt = paragraph.sdts[sdt_idx]
+            parts << sdt_to_inline_html(sdt) if sdt
+            sdt_idx += 1
+          end
+        end
+
+        # Defensive: emit any math/SDTs not represented in element_order.
+        paragraph.o_math_paras.each_with_index do |omp, i|
+          next if i < omp_idx
+
+          parts << omath_to_html(omp)
+        end
+        paragraph.sdts.each_with_index do |sdt, i|
+          next if i < sdt_idx
+
+          parts << sdt_to_inline_html(sdt)
+        end
+
+        parts.join
+      end
+
+      def collect_run_at(paragraph, idx, parts)
+        run = paragraph.runs[idx]
+        return unless run
+
+        parts << if run.is_a?(Uniword::Wordprocessingml::StructuredDocumentTag)
+                   sdt_to_inline_html(run)
+                 else
+                   run_to_html(run)
+                 end
+      end
+
+      # Fallback for Paragraphs constructed without element_order tracking
+      # (older code paths). Preserves the previous behavior of appending
+      # inline math/hyperlinks at the end.
+      def paragraph_content_to_html_legacy(paragraph)
         run_count = paragraph.runs.size
 
-        # Build position-indexed maps of hyperlinks and oMaths
         hl_by_pos = build_position_map(paragraph.hyperlinks, run_count)
-        omath_by_pos = build_position_map(paragraph.o_maths, run_count)
 
         parts = []
         paragraph.runs.each_with_index do |run, idx|
-          # Insert any oMaths that should appear at this position
-          if omath_by_pos.key?(idx)
-            omath_by_pos[idx].each { |om| parts << omath_to_html(om) }
-          end
-
-          # Insert any hyperlinks that should appear at this position
           if hl_by_pos.key?(idx)
             hl_by_pos[idx].each { |hl| parts << hyperlink_to_html(hl) }
           end
@@ -519,26 +585,13 @@ module Uniword
                    end
         end
 
-        # Append any remaining oMaths at the end
-        if omath_by_pos.key?(run_count)
-          omath_by_pos[run_count].each { |om| parts << omath_to_html(om) }
-        end
-
-        # Append any remaining hyperlinks at the end
         if hl_by_pos.key?(run_count)
           hl_by_pos[run_count].each { |hl| parts << hyperlink_to_html(hl) }
         end
 
-        paragraph.o_math_paras.each do |omp|
-          # Block math: render each oMath inside the oMathPara
-          omp.o_maths.each do |om|
-            parts << omath_to_html(om)
-          end
-        end
-
-        paragraph.sdts.each do |sdt|
-          parts << sdt_to_inline_html(sdt)
-        end
+        paragraph.o_maths.each { |om| parts << omath_to_html(om) }
+        paragraph.o_math_paras.each { |omp| parts << omath_to_html(omp) }
+        paragraph.sdts.each { |sdt| parts << sdt_to_inline_html(sdt) }
 
         parts.join
       end

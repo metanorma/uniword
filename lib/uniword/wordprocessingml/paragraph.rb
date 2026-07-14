@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
+require "omml"
 
 module Uniword
   module Wordprocessingml
@@ -21,8 +22,11 @@ module Uniword
       attribute :comment_references, CommentReference, collection: true, initialize_empty: true
       attribute :alternate_content, AlternateContent, default: nil
       attribute :sdts, StructuredDocumentTag, collection: true, initialize_empty: true
-      attribute :o_math_paras, Uniword::Math::OMathPara, collection: true, initialize_empty: true
-      attribute :o_maths, Uniword::Math::OMath, collection: true, initialize_empty: true
+      # OMML math content from the omml gem. The element name (`<m:oMath>`)
+      # is supplied by the parent mapping; CTOMath is the schema type that
+      # carries the actual math tree.
+      attribute :o_math_paras, "Omml::Models::OMathPara", collection: true, initialize_empty: true
+      attribute :o_maths, "Omml::Models::CTOMath", collection: true, initialize_empty: true
       attribute :proof_errors, ProofErr, collection: true, initialize_empty: true
       attribute :simple_fields, SimpleField, collection: true, initialize_empty: true
 
@@ -68,11 +72,10 @@ module Uniword
         map_element "AlternateContent", to: :alternate_content, render_nil: false
         map_element "sdt", to: :sdts, render_nil: false
         # oMathPara from MathML namespace - the target class declares its namespace
-        map_element "oMathPara", to: :o_math_paras,
-                                 render_nil: false
-        # Inline oMath (without oMathPara wrapper)
-        map_element "oMath", to: :o_maths,
-                             render_nil: false
+        map_element "oMathPara", to: :o_math_paras, render_nil: false
+        # Inline oMath (without oMathPara wrapper). The element name "oMath"
+        # comes from this mapping; the underlying type is omml gem's CTOMath.
+        map_element "oMath", to: :o_maths, render_nil: false
         # Proofing errors
         map_element "proofErr", to: :proof_errors, render_nil: false
         map_element "fldSimple", to: :simple_fields, render_nil: false
