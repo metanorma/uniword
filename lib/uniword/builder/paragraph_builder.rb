@@ -41,6 +41,12 @@ module Uniword
         case element
         when String
           append_string(element)
+        when Omml::Models::CTOMath, Omml::Models::OMath
+          @model.o_maths << element
+          track_element_order("oMath")
+        when Omml::Models::OMathPara
+          @model.o_math_paras << element
+          track_element_order("oMathPara")
         when Wordprocessingml::Run
           append_run(element)
         when Wordprocessingml::Hyperlink
@@ -62,9 +68,6 @@ module Uniword
         when Wordprocessingml::SimpleField
           @model.simple_fields << element
           track_element_order("fldSimple")
-        when Math::OMath
-          @model.o_maths << element
-          track_element_order("oMath")
         when RunBuilder
           append_run(element.build)
         else
