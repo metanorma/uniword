@@ -24,6 +24,11 @@ moxml_local = File.join(repo_root, "lutaml/moxml")
 moxml_spec = File.exist?(moxml_local) ? { path: moxml_local } : ">= 0.1.15"
 gem "moxml", moxml_spec
 
+omml_local = File.join(repo_root, "plurimath/omml")
+if File.exist?(omml_local)
+  gem "omml", path: omml_local
+end
+
 # Standard library gems that will be removed from default in Ruby 4.0
 gem "benchmark"
 
