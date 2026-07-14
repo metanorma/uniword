@@ -152,5 +152,46 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph do
       expect(restored.runs.size).to eq(1)
       expect(restored.runs.first.text_string).to eq("Hello")
     end
+
+    it "round-trips inline oMath elements" do
+      omath = Omml::Models::OMath.new
+      para = described_class.new(o_maths: [omath])
+      para.element_order = [Lutaml::Xml::Element.new("Element", "oMath")]
+
+      xml = para.to_xml
+      restored = described_class.from_xml(xml)
+
+      expect(restored.o_maths.size).to eq(1)
+    end
+
+    it "round-trips oMathPara block math" do
+      omp = Omml::Models::OMathPara.new
+      para = described_class.new(o_math_paras: [omp])
+      para.element_order = [Lutaml::Xml::Element.new("Element", "oMathPara")]
+
+      xml = para.to_xml
+      restored = described_class.from_xml(xml)
+
+      expect(restored.o_math_paras.size).to eq(1)
+    end
+
+    it "interleaves runs and inline math in element_order" do
+      run1 = Uniword::Wordprocessingml::Run.new(text: "before ")
+      omath = Omml::Models::OMath.new
+      run2 = Uniword::Wordprocessingml::Run.new(text: " after")
+
+      para = described_class.new(runs: [run1, run2], o_maths: [omath])
+      para.element_order = [
+        Lutaml::Xml::Element.new("Element", "r"),
+        Lutaml::Xml::Element.new("Element", "oMath"),
+        Lutaml::Xml::Element.new("Element", "r"),
+      ]
+
+      xml = para.to_xml
+      restored = described_class.from_xml(xml)
+
+      expect(restored.runs.size).to eq(2)
+      expect(restored.o_maths.size).to eq(1)
+    end
   end
 end
