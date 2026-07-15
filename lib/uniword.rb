@@ -46,9 +46,15 @@ module Uniword
   # directly, falling back to :default for Uniword's own types. Setting
   # Config.default_register means from_xml/to_xml calls without an explicit
   # register: argument use :uniword automatically.
+  #
+  # OmmlIntegration (autoloaded below) then substitutes omml's minimal
+  # WordprocessingML stubs with Uniword's richer classes via the Register's
+  # type substitution mechanism — single source of truth for WordprocessingML.
   require "omml"
   Omml::Configuration.register_in(:uniword)
   Lutaml::Model::Config.default_register = :uniword
+
+  autoload :OmmlIntegration, "uniword/omml_integration"
 
   # Version constant
   autoload :VERSION, "uniword/version"
@@ -344,4 +350,8 @@ module Uniword
       from_html(html).to_file(path)
     end
   end
+
+  # Register WordprocessingML substitutions after autoloads are declared
+  # so OmmlIntegration can resolve Uniword class constants via const_get.
+  OmmlIntegration.register
 end
