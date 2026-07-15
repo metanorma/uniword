@@ -32,9 +32,12 @@ end
 # Standard library gems that will be removed from default in Ruby 4.0
 gem "benchmark"
 
+# rake is needed by `bundle exec rake release` which runs with
+# --without development; must not be in the :development group.
+gem "rake"
+
 group :development do
   gem "canon"
-  gem "rake"
   gem "rspec"
   gem "rubocop"
   gem "rubocop-performance"
