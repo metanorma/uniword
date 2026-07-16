@@ -18,7 +18,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       wcag_criterion: "1.1.1 Non-text Content",
       level: "A",
       message: "Image 1 missing alternative text",
-      element: double("Image"),
+      element: Uniword::Wordprocessingml::Drawing.new,
       severity: :error,
       suggestion: "Add descriptive alt text",
     )
@@ -29,7 +29,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       wcag_criterion: "1.3.1 Info and Relationships",
       level: "A",
       message: "Heading hierarchy skip",
-      element: double("Paragraph"),
+      element: Uniword::Wordprocessingml::Paragraph.new,
       severity: :warning,
       suggestion: "Use sequential heading levels",
     )
@@ -40,7 +40,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
       wcag_criterion: "2.4.6 Headings and Labels",
       level: "AA",
       message: "Heading could be more descriptive",
-      element: double("Paragraph"),
+      element: Uniword::Wordprocessingml::Paragraph.new,
       severity: :info,
       suggestion: "Make headings more descriptive",
     )
@@ -195,7 +195,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
               wcag_criterion: "1.1.1",
               level: "A",
               message: "Image #{i + 1} issue",
-              element: double("Image"),
+              element: Uniword::Wordprocessingml::Drawing.new,
               severity: :error,
               suggestion: "Fix it",
             ),
