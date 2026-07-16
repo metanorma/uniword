@@ -156,7 +156,7 @@ RSpec.describe Uniword::Validators::TableValidator do
   describe "edge cases" do
     it "handles table with nil rows array" do
       table = Uniword::Wordprocessingml::Table.new
-      table.instance_variable_set(:@rows, nil)
+      table.rows = nil
 
       expect(validator.errors(table)).to be_empty
     end

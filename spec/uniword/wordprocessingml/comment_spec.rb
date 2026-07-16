@@ -166,7 +166,7 @@ RSpec.describe Uniword::Comment do
 
     it "returns false without comment_id" do
       comment = described_class.new(author: "John")
-      comment.instance_variable_set(:@comment_id, nil)
+      comment.comment_id = nil
       expect(comment).not_to be_valid
     end
   end

@@ -36,6 +36,8 @@ module Uniword
 
       attr_reader :chart_type, :title_text, :series_list
 
+      attr_reader :show_legend, :width, :height, :series_list
+
       def initialize(chart_type: :bar)
         @chart_type = chart_type
         @title_text = nil

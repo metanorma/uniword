@@ -31,9 +31,9 @@ RSpec.describe Uniword::TrackedChanges do
 
     it "assigns sequential ID if not set" do
       rev1 = Uniword::Revision.new(author: "John")
-      rev1.instance_variable_set(:@revision_id, nil)
+      rev1.revision_id = nil
       rev2 = Uniword::Revision.new(author: "Jane")
-      rev2.instance_variable_set(:@revision_id, nil)
+      rev2.revision_id = nil
 
       tracked_changes.add_revision(rev1)
       tracked_changes.add_revision(rev2)
@@ -273,7 +273,7 @@ RSpec.describe Uniword::TrackedChanges do
 
     it "excludes nil authors" do
       revision = Uniword::Revision.new(revision_id: "1")
-      revision.instance_variable_set(:@author, nil)
+      revision.author = nil
       tracked_changes.add_revision(revision)
 
       expect(tracked_changes.authors).to be_empty
@@ -294,7 +294,7 @@ RSpec.describe Uniword::TrackedChanges do
       tracked_changes.clear
 
       revision = Uniword::Revision.new(author: "Jane")
-      revision.instance_variable_set(:@revision_id, nil)
+      revision.revision_id = nil
       tracked_changes.add_revision(revision)
 
       expect(revision.revision_id).to eq("1")

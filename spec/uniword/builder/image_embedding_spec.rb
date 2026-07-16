@@ -415,15 +415,15 @@ RSpec.describe "Image Embedding, Bibliography, Charts" do
     describe "legend" do
       it "configures legend visibility and position" do
         builder.legend(show: false)
-        expect(builder.instance_variable_get(:@show_legend)).to be(false)
+        expect(builder.show_legend).to be(false)
       end
     end
 
     describe "dimensions" do
       it "sets chart dimensions" do
         builder.dimensions(width: 4_000_000, height: 3_000_000)
-        expect(builder.instance_variable_get(:@width)).to eq(4_000_000)
-        expect(builder.instance_variable_get(:@height)).to eq(3_000_000)
+        expect(builder.width).to eq(4_000_000)
+        expect(builder.height).to eq(3_000_000)
       end
     end
 
