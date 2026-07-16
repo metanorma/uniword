@@ -331,7 +331,6 @@ module Uniword
         when :fol_hlink  then fol_hlink
         end
       end
-      private :color_by_name
 
       # Set a color by name
       #

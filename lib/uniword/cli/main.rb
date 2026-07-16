@@ -2,19 +2,6 @@
 
 require "thor"
 require "rainbow"
-require_relative "styleset_cli"
-require_relative "resources_cli"
-require_relative "theme_cli"
-require_relative "generate_cli"
-require_relative "review_cli"
-require_relative "template_cli"
-require_relative "diff_cli"
-require_relative "toc_cli"
-require_relative "images_cli"
-require_relative "spellcheck_cli"
-require_relative "headers_cli"
-require_relative "watermark_cli"
-require_relative "protect_cli"
 
 module Uniword
   # Command-line interface for Uniword.
