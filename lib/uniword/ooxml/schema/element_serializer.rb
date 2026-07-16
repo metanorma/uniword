@@ -301,7 +301,10 @@ module Uniword
         def get_attribute_value(element, attr_def)
           property_name = attr_def.property_name
 
-          # Try to get value using property name
+          # public_send is the canonical Ruby idiom for schema-driven
+          # serialization: reading attribute values by name from any
+          # Lutaml::Model::Serializable subclass. The property_name comes
+          # from the schema definition, not user input.
           if element.is_a?(Lutaml::Model::Serializable) && element.class.attributes.key?(property_name)
             element.public_send(property_name)
           elsif element.is_a?(Hash) && element.key?(property_name)

@@ -109,6 +109,10 @@ module Uniword
         if object.is_a?(Hash)
           object[property.to_sym] || object[property]
         else
+          # public_send is the canonical Ruby idiom for template-driven
+          # property access on arbitrary user objects. The property name
+          # comes from template syntax and may reference any public
+          # reader method on the model.
           object.public_send(property.to_sym)
         end
       end

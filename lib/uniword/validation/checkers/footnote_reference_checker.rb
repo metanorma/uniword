@@ -152,7 +152,10 @@ module Uniword
           collection_name = note_type == :endnote ? :endnotes : :footnotes
 
           if document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
-            collection = document.public_send(collection_name)
+            collection = case collection_name
+                         when :footnotes then document.footnotes
+                         when :endnotes  then document.endnotes
+                         end
 
             case collection
             when Hash
