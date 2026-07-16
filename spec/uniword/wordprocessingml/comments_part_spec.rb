@@ -23,9 +23,9 @@ RSpec.describe Uniword::CommentsPart do
 
     it "assigns sequential ID if not set" do
       comment1 = Uniword::Comment.new(author: "John")
-      comment1.instance_variable_set(:@comment_id, nil)
+      comment1.comment_id = nil
       comment2 = Uniword::Comment.new(author: "Jane")
-      comment2.instance_variable_set(:@comment_id, nil)
+      comment2.comment_id = nil
 
       comments_part.add_comment(comment1)
       comments_part.add_comment(comment2)
@@ -165,7 +165,7 @@ RSpec.describe Uniword::CommentsPart do
 
     it "excludes nil authors" do
       comment = Uniword::Comment.new(comment_id: "1")
-      comment.instance_variable_set(:@author, nil)
+      comment.author = nil
       comments_part.add_comment(comment)
 
       expect(comments_part.authors).to be_empty
@@ -186,7 +186,7 @@ RSpec.describe Uniword::CommentsPart do
       comments_part.clear
 
       comment = Uniword::Comment.new(author: "Jane")
-      comment.instance_variable_set(:@comment_id, nil)
+      comment.comment_id = nil
       comments_part.add_comment(comment)
 
       expect(comment.comment_id).to eq("1")

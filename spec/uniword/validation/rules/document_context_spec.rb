@@ -32,7 +32,7 @@ RSpec.describe Uniword::Validation::Rules::DocumentContext do
     it "clears cached parts" do
       context.document_xml
       context.close
-      expect(context.instance_variable_get(:@parsed_parts)).to be_empty
+      expect(context.parsed_parts).to be_empty
     end
   end
 

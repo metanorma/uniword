@@ -20,7 +20,7 @@ module Uniword
         RELS_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
         CT_NS = "http://schemas.openxmlformats.org/package/2006/content-types"
 
-        attr_reader :path
+        attr_reader :path, :parsed_parts
 
         # Initialize context for a DOCX file.
         #

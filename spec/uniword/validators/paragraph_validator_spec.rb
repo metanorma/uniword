@@ -57,7 +57,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
     it "returns false for paragraph with invalid properties" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
       # Using reflection to set invalid properties
-      paragraph.instance_variable_set(:@properties, "not properties")
+      paragraph.properties = "not properties"
 
       expect(validator.valid?(paragraph)).to be false
     end
@@ -98,7 +98,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
 
     it "returns property error for invalid properties" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.instance_variable_set(:@properties, "invalid")
+      paragraph.properties = "invalid"
 
       errors = validator.errors(paragraph)
       expect(errors).to include("Properties must be a ParagraphProperties instance")
@@ -107,7 +107,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
     it "returns multiple errors for multiple issues" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
       paragraph.runs << "invalid run"
-      paragraph.instance_variable_set(:@properties, "invalid properties")
+      paragraph.properties = "invalid properties"
 
       errors = validator.errors(paragraph)
       expect(errors.size).to eq(2)
@@ -135,7 +135,7 @@ RSpec.describe Uniword::Validators::ParagraphValidator do
   describe "edge cases" do
     it "handles paragraph with nil runs array" do
       paragraph = Uniword::Wordprocessingml::Paragraph.new
-      paragraph.instance_variable_set(:@runs, nil)
+      paragraph.runs = nil
 
       expect(validator.valid?(paragraph)).to be true
     end

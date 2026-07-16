@@ -71,8 +71,7 @@ RSpec.describe Uniword::Validation::LinkValidator do
         para.runs << anchor_link
         doc.body.paragraphs << para
         # Add bookmark to document
-        doc.instance_variable_set(:@bookmarks,
-                                  { "section1" => Uniword::Bookmark.new(name: "section1") })
+        doc.bookmarks = { "section1" => Uniword::Bookmark.new(name: "section1") }
         doc
       end
 
