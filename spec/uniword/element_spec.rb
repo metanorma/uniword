@@ -61,12 +61,20 @@ RSpec.describe Uniword::Element do
   end
 
   describe "#accept" do
+    let(:recording_visitor) do
+      Class.new do
+        def initialize; @visits = []; end
+        attr_reader :visits
+        def visit_test_element(el); @visits << [:test, el]; end
+        def visit_another_element(el); @visits << [:another, el]; end
+        def visit_element(el); @visits << [:default, el]; end
+      end.new
+    end
+
     it "calls visitor method for the element" do
       element = test_element_class.new
-      visitor = double("visitor")
-      expect(visitor).to receive(:visit_test_element).with(element)
-
-      element.accept(visitor)
+      element.accept(recording_visitor)
+      expect(recording_visitor.visits).to eq([[:test, element]])
     end
 
     context "with default accept method" do
@@ -76,10 +84,8 @@ RSpec.describe Uniword::Element do
 
       it "calls visit_element on visitor" do
         element = default_class.new
-        visitor = double("visitor")
-        expect(visitor).to receive(:visit_element).with(element)
-
-        element.accept(visitor)
+        element.accept(recording_visitor)
+        expect(recording_visitor.visits).to eq([[:default, element]])
       end
     end
   end

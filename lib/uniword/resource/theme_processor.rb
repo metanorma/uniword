@@ -87,7 +87,7 @@ lightness_shift: nil)
                          fol_hlink]
 
         color_attrs.each do |attr|
-          color_obj = color_scheme.public_send(attr)
+          color_obj = color_scheme.color_by_name(attr)
           next unless color_obj&.srgb_clr&.val
 
           original = color_obj.srgb_clr.val

@@ -17,7 +17,14 @@ module Uniword
                      Properties::Border.new(color: value, style: "single",
                                             size: 4)
                    end
-          props.borders.public_send("#{side}=", border)
+          case side
+          when :top     then props.borders.top = border
+          when :bottom  then props.borders.bottom = border
+          when :left    then props.borders.left = border
+          when :right   then props.borders.right = border
+          when :between then props.borders.between = border
+          when :bar     then props.borders.bar = border
+          end
         end
         self
       end

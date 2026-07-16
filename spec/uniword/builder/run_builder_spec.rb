@@ -134,7 +134,7 @@ RSpec.describe Uniword::Builder::RunBuilder do
       # Use a minimal mock that responds to the right class check
       drawing = Uniword::Wordprocessingml::Drawing.new
       builder.drawing(drawing)
-      drawings = builder.model.instance_variable_get(:@drawings)
+      drawings = builder.model.drawings
       expect(drawings).not_to be_empty
     end
   end

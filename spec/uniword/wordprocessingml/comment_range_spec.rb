@@ -89,7 +89,7 @@ RSpec.describe Uniword::CommentRange do
 
     it "raises error for invalid marker type" do
       range = described_class.new(comment_id: "1")
-      range.instance_variable_set(:@marker_type, :invalid)
+      range.marker_type = :invalid
       expect do
         range.xml_element_name
       end.to raise_error(ArgumentError, /Invalid marker type/)
@@ -120,7 +120,7 @@ RSpec.describe Uniword::CommentRange do
 
     it "returns false without marker_type" do
       range = described_class.new(comment_id: "1")
-      range.instance_variable_set(:@marker_type, nil)
+      range.marker_type = nil
       expect(range).not_to be_valid
     end
   end

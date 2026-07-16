@@ -60,13 +60,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
 
   describe "#check" do
     let(:checker) { described_class.new(profile: :wcag_2_1_aa) }
-    let(:document) { double("Document") }
-
-    before do
-      # Mock document methods
-      allow(document).to receive_messages(images: [], tables: [],
-                                          paragraphs: [])
-    end
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it "returns an AccessibilityReport" do
       report = checker.check(document)

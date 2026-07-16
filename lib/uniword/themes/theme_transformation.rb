@@ -182,7 +182,7 @@ module Uniword
 
         colors = {}
         COLOR_KEYS.each do |key|
-          if (color_ref = word_colors.public_send(key))
+          if (color_ref = word_colors.color_by_name(key))
             colors[key] = extract_hex_color(color_ref)
           end
         end
