@@ -76,7 +76,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityRule do
       subject(:base_rule) { described_class.new(config) }
 
       it "raises NotImplementedError" do
-        document = double("Document")
+        document = Uniword::Wordprocessingml::DocumentRoot.new
         expect { base_rule.check(document) }.to raise_error(
           NotImplementedError,
           /must implement #check/,
@@ -86,14 +86,14 @@ RSpec.describe Uniword::Accessibility::AccessibilityRule do
 
     context "when implemented by subclass" do
       it "can be called without error" do
-        document = double("Document")
+        document = Uniword::Wordprocessingml::DocumentRoot.new
         expect { rule.check(document) }.not_to raise_error
       end
     end
   end
 
   describe "#create_violation" do
-    let(:element) { double("Element") }
+    let(:element) { Uniword::Wordprocessingml::Paragraph.new }
     let(:violation_params) do
       {
         message: "Test violation",
