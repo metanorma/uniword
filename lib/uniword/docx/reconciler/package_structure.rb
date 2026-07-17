@@ -97,7 +97,12 @@ module Uniword
 
           standard_targets = defs.filter_map { |_, target, obj| target if obj }.to_set
 
-          # If allocator is present, use it to build rels — preserves existing rIds
+          # With an allocator, rels are rebuilt from its entries.
+          # Package.from_file and the template builders carry one.
+          # Uniword.load does not — it drops Package#allocator at the
+          # DocumentRoot boundary — so ordinary load/save takes the path
+          # below, which keeps the rIds the document arrived with; only
+          # missing or colliding ones are allocated again.
           alloc = allocator
           if alloc
             reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
@@ -160,28 +165,91 @@ module Uniword
               !header_footer_target_present?(r.target)
           end
 
-          all_rels = []
-          rid_mapping = {}
+          existing_by_target = rels.relationships.to_h { |r| [r.target, r] }
+          used_rids = rels.relationships.to_set(&:id)
 
-          defs.each do |suffix, target, obj|
+          standard = defs.filter_map do |suffix, target, obj|
             next unless obj
-            rid = "rId#{all_rels.size + 1}"
-            all_rels << build_rel(rid, "#{base}/#{suffix}", target)
+
+            existing = existing_by_target[target]
+            rid = existing&.id || allocate_free_rid(used_rids)
+            build_rel(rid, "#{base}/#{suffix}", target)
           end
 
-          non_standard.each do |rel|
-            old_rid = rel.id
-            new_rid = "rId#{all_rels.size + 1}"
-            rid_mapping[old_rid] = new_rid if old_rid != new_rid
-            all_rels << build_rel(new_rid, rel.type, rel.target,
-                                  target_mode: rel.target_mode)
+          deduped = reassign_colliding_rids(non_standard, standard, used_rids)
+          rels.relationships = standard + deduped
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Assembled document rels, preserving existing rIds")
+        end
+
+        # Every rel needs a unique id. A malformed source can reuse one —
+        # across a standard part and a non-standard rel, or between two
+        # non-standard rels — or omit it entirely. Such a rel is given a
+        # fresh id, and its references move with it; otherwise they keep
+        # resolving to whichever rel kept the id. Only these are touched, so
+        # well-formed input is preserved verbatim.
+        #
+        # Mappings are kept per reference kind. When two rels shared an id,
+        # only the reference of the reassigned rel's own kind belongs to it —
+        # a hyperlink reference follows the hyperlink rel, never the header
+        # rel that kept the id.
+        def reassign_colliding_rids(non_standard, standard, used_rids)
+          claimed = standard.to_set(&:id)
+          mappings = Hash.new { |h, kind| h[kind] = {} }
+
+          reassigned = non_standard.map do |rel|
+            next rel if rel.id && claimed.add?(rel.id)
+
+            new_id = allocate_free_rid(used_rids)
+            claimed << new_id
+            kind = reference_kind(rel.type)
+            mappings[kind][rel.id] = new_id if rel.id && kind
+            record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                       "Reassigned rId #{rel.id.inspect} → #{new_id}")
+            build_rel(new_id, rel.type, rel.target,
+                      target_mode: rel.target_mode)
           end
 
-          rels.relationships = all_rels
-          update_sect_pr_rid_references(rid_mapping) unless rid_mapping.empty?
-          update_blip_embed_references(rid_mapping) unless rid_mapping.empty?
-          update_hyperlink_rid_references(rid_mapping) unless rid_mapping.empty?
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Rebuilt document relationships with sequential rIds")
+          apply_rid_mappings(mappings)
+          reassigned
+        end
+
+        # Walks the document only for kinds that actually moved — the common
+        # case reassigns nothing and walks nothing.
+        def apply_rid_mappings(mappings)
+          mappings.each do |kind, mapping|
+            next if mapping.empty?
+
+            case kind
+            when :sect_pr then update_sect_pr_rid_references(mapping)
+            when :blip then update_blip_embed_references(mapping)
+            when :hyperlink then update_hyperlink_rid_references(mapping)
+            end
+          end
+        end
+
+        # Which document reference names a rel of this type, or nil when
+        # nothing in document.xml points at it by id.
+        def reference_kind(type)
+          case type.to_s
+          when IdAllocator::HEADER_REL_TYPE, IdAllocator::FOOTER_REL_TYPE
+            :sect_pr
+          when IdAllocator::IMAGE_REL_TYPE then :blip
+          when IdAllocator::HYPERLINK_REL_TYPE then :hyperlink
+          end
+        end
+
+        # Next numeric rId above the current maximum, so it cannot collide
+        # with a preserved id. Unlike PackageRelationships.next_available_rid,
+        # this tracks ids across calls, because the rebuilt list is not
+        # committed until every id has been chosen.
+        def allocate_free_rid(used_rids)
+          max = used_rids.filter_map do |id|
+            id&.[](/\ArId(\d+)\z/, 1)&.to_i
+          end.max || 0
+          rid = "rId#{max + 1}"
+          used_rids << rid
+          rid
         end
 
         def update_sect_pr_rid_references(mapping)

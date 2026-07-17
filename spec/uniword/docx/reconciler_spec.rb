@@ -4,6 +4,10 @@ require "spec_helper"
 require "uniword/docx"
 
 RSpec.describe Uniword::Docx::Reconciler do
+  let(:rel_base) do
+    "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+  end
+
   let(:settings_class) { Uniword::Wordprocessingml::Settings }
   let(:footnotes_class) { Uniword::Wordprocessingml::Footnotes }
   let(:endnotes_class) { Uniword::Wordprocessingml::Endnotes }
@@ -433,6 +437,19 @@ RSpec.describe Uniword::Docx::Reconciler do
   describe "Group 3: Package consistency" do
     let(:profile) { Uniword::Docx::Profile.load(:word_2024_en) }
 
+    # Minimal Drawing > Inline > Graphic > GraphicData > Picture > blip,
+    # which is the chain the reconciler walks to remap image references.
+    def drawing_embedding(r_id)
+      blip = Uniword::Drawingml::Blip.new(embed: r_id)
+      blip_fill = Uniword::Picture::PictureBlipFill.new(blip: blip)
+      picture = Uniword::Picture::Picture.new(blip_fill: blip_fill)
+      graphic_data = Uniword::Drawingml::GraphicData.new(picture: picture)
+      graphic = Uniword::Drawingml::Graphic.new(graphic_data: graphic_data)
+      inline = Uniword::WpDrawing::Inline.new(graphic: graphic)
+
+      Uniword::Wordprocessingml::Drawing.new(inline: inline)
+    end
+
     def build_full_package
       package = Uniword::Docx::Package.new
       package.document = Uniword::Wordprocessingml::DocumentRoot.new
@@ -569,7 +586,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(rId5).to be_nil
       end
 
-      it "preserves non-standard rels with sequential rIds" do
+      it "preserves non-standard rels with their original rIds" do
         package = build_full_package
         package.document_rels.relationships <<
           Uniword::Ooxml::Relationships::Relationship.new(
@@ -585,15 +602,13 @@ RSpec.describe Uniword::Docx::Reconciler do
         end
         expect(extra).not_to be_nil
         expect(extra.type).to include("image")
+        expect(extra.id).to eq("rIdExtra")
 
-        # All rIds must be sequential
         ids = package.document_rels.relationships.map(&:id)
-        ids.each_with_index do |rid, i|
-          expect(rid).to eq("rId#{i + 1}")
-        end
+        expect(ids).to eq(ids.uniq)
       end
 
-      it "renumbers non-sequential template rIds to sequential" do
+      it "preserves non-sequential template rIds instead of renumbering" do
         package = build_full_package
 
         rels = package.document_rels
@@ -604,17 +619,143 @@ RSpec.describe Uniword::Docx::Reconciler do
         rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
           id: "rId13", type: ".../fontTable", target: "fontTable.xml",
         )
+
+        described_class.new(package, profile: profile).reconcile
+
+        by_target = rels.relationships.to_h { |r| [r.target, r.id] }
+        expect(by_target["styles.xml"]).to eq("rId1")
+        expect(by_target["fontTable.xml"]).to eq("rId13")
+
+        ids = rels.relationships.map(&:id)
+        expect(ids).to eq(ids.uniq)
+      end
+
+      # Word legitimately emits several rIds pointing at one hyperlink target.
+      # Any rebuild keyed by [target, type] collapses them and leaves the
+      # document's r:id references dangling.
+      it "preserves duplicate rels sharing a target and type" do
+        package = build_full_package
+
+        rels = package.document_rels
+        hyperlink = "#{rel_base}/hyperlink"
+        %w[rId40 rId41 rId42].each do |rid|
+          rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+            id: rid, type: hyperlink, target: "https://example.com/same",
+            target_mode: "External",
+          )
+        end
+
+        described_class.new(package, profile: profile).reconcile
+
+        dupes = rels.relationships.select do |r|
+          r.target == "https://example.com/same"
+        end
+        expect(dupes.map(&:id)).to contain_exactly("rId40", "rId41", "rId42")
+      end
+
+      # Ids must be unique, so a duplicate has to be reassigned — but the
+      # references pointing at it must move too, or they silently resolve to
+      # whichever rel kept the id.
+      it "moves references when a duplicate rId is reassigned" do
+        package = build_full_package
+        rels = package.document_rels
+        taken = rels.relationships.first
+        hyperlink = "#{rel_base}/hyperlink"
         rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
-          id: "rId99", type: ".../header", target: "header1.xml",
+          id: taken.id, type: hyperlink, target: "https://example.com/link",
+          target_mode: "External",
         )
+
+        para = Uniword::Wordprocessingml::Paragraph.new
+        para.hyperlinks <<
+          Uniword::Wordprocessingml::Hyperlink.new(id: taken.id)
+        package.document.body.paragraphs << para
 
         described_class.new(package, profile: profile).reconcile
 
         ids = rels.relationships.map(&:id)
-        ids.each_with_index do |rid, i|
-          expect(rid).to eq("rId#{i + 1}"),
-                         "Expected rId#{i + 1} at position #{i}, got #{rid}"
+        expect(ids).to eq(ids.uniq)
+
+        ref_id = package.document.body.paragraphs.last.hyperlinks.first.id
+        resolved = rels.relationships.find { |r| r.id == ref_id }
+        expect(resolved.target).to eq("https://example.com/link")
+      end
+
+      # The image rel is the one reassigned, so only the blip may move. The
+      # hyperlink naming the id the hyperlink rel kept must stay put, or it
+      # starts resolving to the image.
+      it "moves only references of the reassigned rel's own kind" do
+        package = build_full_package
+        rels = package.document_rels
+        rels.relationships.clear
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId1", type: "#{rel_base}/hyperlink",
+          target: "https://example.com/link", target_mode: "External",
+        )
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId1", type: "#{rel_base}/image", target: "media/image1.png",
+        )
+
+        para = Uniword::Wordprocessingml::Paragraph.new
+        para.hyperlinks <<
+          Uniword::Wordprocessingml::Hyperlink.new(id: "rId1")
+        run = Uniword::Wordprocessingml::Run.new
+        run.drawings << drawing_embedding("rId1")
+        para.runs << run
+        package.document.body.paragraphs << para
+
+        described_class.new(package, profile: profile).reconcile
+
+        by_id = rels.relationships.to_h { |rel| [rel.id, rel.target] }
+        moved = package.document.body.paragraphs.last
+        blip = moved.runs.first.drawings.first
+                    .inline.graphic.graphic_data.picture.blip_fill.blip
+
+        expect(moved.hyperlinks.first.id.to_s).to eq("rId1")
+        expect(by_id["rId1"]).to eq("https://example.com/link")
+        expect(blip.embed.to_s).not_to eq("rId1")
+        expect(by_id[blip.embed.to_s]).to eq("media/image1.png")
+      end
+
+      it "assigns an rId to a rel that has none" do
+        package = build_full_package
+        rels = package.document_rels
+        rels.relationships.clear
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: nil, type: "#{rel_base}/hyperlink",
+          target: "https://example.com/no-id", target_mode: "External",
+        )
+
+        expect { described_class.new(package, profile: profile).reconcile }
+          .not_to raise_error
+
+        ids = rels.relationships.map(&:id)
+        expect(ids).to all(match(/\ArId\d+\z/))
+        expect(ids).to eq(ids.uniq)
+      end
+
+      it "assigns fresh rIds to standard parts the template lacks a rel for" do
+        package = build_full_package
+
+        rels = package.document_rels
+        rels.relationships.clear
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId13", type: ".../styles", target: "styles.xml",
+        )
+
+        described_class.new(package, profile: profile).reconcile
+
+        by_target = rels.relationships.to_h { |r| [r.target, r.id] }
+        expect(by_target["styles.xml"]).to eq("rId13")
+
+        fresh = rels.relationships.reject { |r| r.target == "styles.xml" }
+        expect(fresh).not_to be_empty
+        # fresh ids must clear the existing maximum, never collide
+        fresh.each do |rel|
+          expect(rel.id[/\ArId(\d+)\z/, 1].to_i).to be > 13
         end
+        ids = rels.relationships.map(&:id)
+        expect(ids).to eq(ids.uniq)
       end
 
       it "updates sectPr references after renumbering" do

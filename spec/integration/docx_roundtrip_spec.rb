@@ -39,6 +39,15 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     doc
   end
 
+  # rId => target for word/_rels/document.xml.rels, order-independent.
+  # Only ids are load-bearing for referential integrity; the reconciler
+  # emits standard rels before non-standard ones, so order is not compared.
+  def rel_id_to_target(files)
+    Nokogiri::XML(files["word/_rels/document.xml.rels"])
+      .xpath("//xmlns:Relationship")
+      .to_h { |r| [r["Id"], r["Target"]] }
+  end
+
   # Assert all XML files are preserved (no additions, no removals, all equivalent)
   def expect_all_xml_preserved(original_path, saved_path)
     original_files = extract_docx_files(original_path)
@@ -122,7 +131,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     end
 
     it "maintains XML file structure" do
-      skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
       original_files = extract_docx_files(original_path)
       roundtrip(original_path, roundtrip_path)
       saved_files = extract_docx_files(roundtrip_path)
@@ -133,6 +141,17 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
 
       expect(XmlNormalizers.normalize_document_xml(saved_files["word/document.xml"]))
         .to be_xml_equivalent_to(XmlNormalizers.normalize_document_xml(original_files["word/document.xml"]))
+    end
+
+    # The assertions above compare document.xml, and XmlNormalizers
+    # renumbers rIds when comparing rels — so neither would catch the
+    # rels table itself being rebuilt with different ids.
+    it "preserves every original rId in document.xml.rels" do
+      original_rels = rel_id_to_target(extract_docx_files(original_path))
+      roundtrip(original_path, roundtrip_path)
+      saved_rels = rel_id_to_target(extract_docx_files(roundtrip_path))
+
+      expect(saved_rels).to eq(original_rels)
     end
   end
 
@@ -266,7 +285,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
       end
 
       it "preserves text content" do
-        skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
         doc = roundtrip(original_path, roundtrip_path)
         expect(doc.text.length).to be > 0
 
@@ -277,7 +295,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
       end
 
       it "maintains XML structure" do
-        skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
         original_files = extract_docx_files(original_path)
         roundtrip(original_path, roundtrip_path)
         saved_files = extract_docx_files(roundtrip_path)
