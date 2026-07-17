@@ -113,7 +113,7 @@ module Uniword
         map_element "family", to: :family
         map_element "notTrueType", to: :not_true_type, render_nil: false
         map_element "pitch", to: :pitch
-        map_element "sig", to: :sig
+        map_element "sig", to: :sig, render_nil: false
       end
     end
   end

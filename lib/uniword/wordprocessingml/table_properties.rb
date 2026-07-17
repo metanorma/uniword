@@ -84,26 +84,21 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        # High-priority mappings (Phase 4 Session 1-2)
+        # ECMA-376 CT_TblPrBase schema sequence:
+        # tblStyle, tblpPr, tblOverlap, bidiVisual, tblStyleRowBandSize,
+        # tblStyleColBandSize, tblW, jc, tblCellSpacing, tblInd, tblBorders,
+        # shd, tblLayout, tblCellMar, tblLook, tblCaption, tblDescription
+        map_element "tblStyle", to: :style, render_nil: false
         map_element "tblW", to: :table_width, render_nil: false
+        map_element "jc", to: :alignment, render_nil: false
+        map_element "tblCellSpacing", to: :cell_spacing, render_nil: false
+        map_element "tblInd", to: :table_indent, render_nil: false
+        map_element "tblBorders", to: :table_borders, render_nil: false
         map_element "shd", to: :shading, render_nil: false
+        map_element "tblLayout", to: :table_layout, render_nil: false
         map_element "tblCellMar", to: :table_cell_margin, render_nil: false
         map_element "tblLook", to: :table_look, render_nil: false
         map_element "tblCaption", to: :caption, render_nil: false
-
-        # Table indentation - critical for table styles
-        map_element "tblInd", to: :table_indent, render_nil: false
-        # Table cell spacing
-        map_element "tblCellSpacing", to: :cell_spacing, render_nil: false
-        # Table alignment
-        map_element "jc", to: :alignment, render_nil: false
-        # Table layout
-        map_element "tblLayout", to: :table_layout, render_nil: false
-        # Table style reference
-        map_element "tblStyle", to: :style, render_nil: false
-
-        # Table borders
-        map_element "tblBorders", to: :table_borders, render_nil: false
       end
 
       def initialize(attrs = {})

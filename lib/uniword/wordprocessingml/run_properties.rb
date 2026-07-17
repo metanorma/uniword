@@ -121,73 +121,43 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
         mixed_content
 
-        # Style reference (wrapper object)
+        # ECMA-376 CT_RPr schema sequence order:
+        # rStyle, rFonts, b, bCs, i, iCs, caps, smallCaps, strike, dstrike,
+        # outline, shadow, emboss, imprint, noProof, snapToGrid, vanish, webHidden,
+        # color, spacing, w, kern, position, sz, szCs, highlight, u, effect, bdr,
+        # shd, fitText, vertAlign, rtl, cs, em, lang, eastAsianLayout, specVanish, oMath
         map_element "rStyle", to: :style, render_nil: false
-
-        # Fonts (complex object)
         map_element "rFonts", to: :fonts, render_nil: false
-
-        # Font sizes (wrapper objects)
-        map_element "sz", to: :size, render_nil: false
-        map_element "szCs", to: :size_cs, render_nil: false
-
-        # Boolean formatting (wrapper objects)
         map_element "b", to: :bold, render_nil: false
         map_element "bCs", to: :bold_cs, render_nil: false
         map_element "i", to: :italic, render_nil: false
         map_element "iCs", to: :italic_cs, render_nil: false
+        map_element "caps", to: :caps, render_nil: false
+        map_element "smallCaps", to: :small_caps, render_nil: false
         map_element "strike", to: :strike, render_nil: false
         map_element "dstrike", to: :double_strike, render_nil: false
-        map_element "smallCaps", to: :small_caps, render_nil: false
-        map_element "caps", to: :caps, render_nil: false
-        map_element "vanish", to: :hidden, render_nil: false
-        map_element "noProof", to: :no_proof, render_nil: false
-        map_element "webHidden", to: :web_hidden, render_nil: false
-
-        # Color (wrapper object)
-        map_element "color", to: :color, render_nil: false
-
-        # Underline (wrapper object)
-        map_element "u", to: :underline, render_nil: false
-
-        # Highlight (wrapper object)
-        map_element "highlight", to: :highlight, render_nil: false
-
-        # Vertical alignment (wrapper object)
-        map_element "vertAlign", to: :vertical_align, render_nil: false
-
-        # Position (wrapper object)
-        map_element "position", to: :position, render_nil: false
-
-        # Character spacing (wrapper object)
-        map_element "spacing", to: :character_spacing, render_nil: false
-
-        # Kerning (wrapper object)
-        map_element "kern", to: :kerning, render_nil: false
-
-        # Width scale (wrapper object)
-        map_element "w", to: :width_scale, render_nil: false
-
-        # Emphasis mark (wrapper object)
-        map_element "em", to: :emphasis_mark, render_nil: false
-
-        # Shading (complex object)
-        map_element "shd", to: :shading, render_nil: false
-
-        # Language (complex object)
-        map_element "lang", to: :language, render_nil: false
-
-        # Text effects (complex objects - basic support)
-        map_element "textFill", to: :text_fill, render_nil: false
-        map_element "textOutline", to: :text_outline, render_nil: false
-
-        # Additional boolean formatting
+        map_element "outline", to: :outline, render_nil: false
         map_element "shadow", to: :shadow, render_nil: false
         map_element "emboss", to: :emboss, render_nil: false
         map_element "imprint", to: :imprint, render_nil: false
-        map_element "outline", to: :outline, render_nil: false
-
-        # W14 namespace elements
+        map_element "noProof", to: :no_proof, render_nil: false
+        map_element "vanish", to: :hidden, render_nil: false
+        map_element "webHidden", to: :web_hidden, render_nil: false
+        map_element "color", to: :color, render_nil: false
+        map_element "spacing", to: :character_spacing, render_nil: false
+        map_element "w", to: :width_scale, render_nil: false
+        map_element "kern", to: :kerning, render_nil: false
+        map_element "position", to: :position, render_nil: false
+        map_element "sz", to: :size, render_nil: false
+        map_element "szCs", to: :size_cs, render_nil: false
+        map_element "highlight", to: :highlight, render_nil: false
+        map_element "u", to: :underline, render_nil: false
+        map_element "shd", to: :shading, render_nil: false
+        map_element "vertAlign", to: :vertical_align, render_nil: false
+        map_element "em", to: :emphasis_mark, render_nil: false
+        map_element "lang", to: :language, render_nil: false
+        map_element "textFill", to: :text_fill, render_nil: false
+        map_element "textOutline", to: :text_outline, render_nil: false
         map_element "ligatures", to: :ligatures, render_nil: false
       end
     end

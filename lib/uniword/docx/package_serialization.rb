@@ -69,11 +69,11 @@ document_rels)
         end
         if app_properties
           content["docProps/app.xml"] =
-            app_properties.to_xml(DOCX_PROPS_OPTIONS.dup)
+            add_standalone(app_properties.to_xml(DOCX_PROPS_OPTIONS.dup))
         end
         if custom_properties
           content["docProps/custom.xml"] =
-            custom_properties.to_xml(DOCX_PROPS_OPTIONS.dup)
+            add_standalone(custom_properties.to_xml(DOCX_PROPS_OPTIONS.dup))
         end
 
         # Custom XML data items
@@ -161,14 +161,24 @@ document_rels)
         serialize_embeddings(content)
       end
 
-      # Serialize an OOXML document part with standard encoding, single-line output
+      # Serialize an OOXML document part with standard encoding, single-line output.
+      # All DOCX parts require standalone="yes" in the XML declaration for Word compatibility.
       def serialize_part(model)
-        model.to_xml(DOCX_PART_OPTIONS.dup)
+        add_standalone(model.to_xml(DOCX_PART_OPTIONS.dup))
       end
 
       # Serialize package infrastructure (rels, content types) with declaration, single-line output
       def serialize_infrastructure(model)
-        model.to_xml(DOCX_INFRA_OPTIONS.dup)
+        add_standalone(model.to_xml(DOCX_INFRA_OPTIONS.dup))
+      end
+
+      # Ensure the XML declaration includes standalone="yes".
+      # lutaml-model omits this by default; Word's strict OPC validation requires it.
+      def add_standalone(xml)
+        xml.sub(
+          %r{<\?xml version="1.0" encoding="UTF-8"\?>},
+          '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',
+        )
       end
 
       private

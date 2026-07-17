@@ -98,7 +98,6 @@ module Uniword
         @theme_elements ||= ThemeElements.new
         @object_defaults ||= ObjectDefaults.new
         @extra_clr_scheme_lst ||= ExtraColorSchemeList.new
-        @ext_lst ||= ExtensionList.new
         @variants = {}
         @source_file = nil
         @media_files ||= {}
