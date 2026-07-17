@@ -717,6 +717,97 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(by_id[blip.embed.to_s]).to eq("media/image1.png")
       end
 
+      # Two rels of one kind sharing an id already make their references
+      # undecidable — the id still resolves, so the reference stays put
+      # rather than chase whichever duplicate was reassigned last. Two is
+      # the discriminating count: a rule that only fires once a mapping is
+      # overwritten would still move this reference.
+      it "leaves references alone when duplicates are the same kind" do
+        package = build_full_package
+        rels = package.document_rels
+        rels.relationships.clear
+        %w[a b].each do |name|
+          rels.relationships <<
+            Uniword::Ooxml::Relationships::Relationship.new(
+              id: "rId7", type: "#{rel_base}/image",
+              target: "media/#{name}.png",
+            )
+        end
+
+        para = Uniword::Wordprocessingml::Paragraph.new
+        run = Uniword::Wordprocessingml::Run.new
+        run.drawings << drawing_embedding("rId7")
+        para.runs << run
+        package.document.body.paragraphs << para
+
+        described_class.new(package, profile: profile).reconcile
+
+        ids = rels.relationships.map(&:id)
+        expect(ids).to eq(ids.uniq)
+
+        blip = package.document.body.paragraphs.last.runs.first.drawings
+                      .first.inline.graphic.graphic_data.picture
+                      .blip_fill.blip
+        expect(blip.embed.to_s).to eq("rId7")
+        by_id = rels.relationships.to_h { |rel| [rel.id, rel.target] }
+        expect(by_id["rId7"]).to eq("media/a.png")
+      end
+
+      # Ambiguity is between the duplicates themselves, not with whichever
+      # rel kept the id: the image keeps rId7, but the two hyperlinks are
+      # still indistinguishable from each other.
+      it "leaves references alone when only the duplicates share a kind" do
+        package = build_full_package
+        rels = package.document_rels
+        rels.relationships.clear
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId7", type: "#{rel_base}/image", target: "media/a.png",
+        )
+        %w[b c].each do |name|
+          rels.relationships <<
+            Uniword::Ooxml::Relationships::Relationship.new(
+              id: "rId7", type: "#{rel_base}/hyperlink",
+              target: "https://example.com/#{name}", target_mode: "External",
+            )
+        end
+
+        para = Uniword::Wordprocessingml::Paragraph.new
+        para.hyperlinks <<
+          Uniword::Wordprocessingml::Hyperlink.new(id: "rId7")
+        package.document.body.paragraphs << para
+
+        described_class.new(package, profile: profile).reconcile
+
+        ids = rels.relationships.map(&:id)
+        expect(ids).to eq(ids.uniq)
+        expect(package.document.body.paragraphs.last.hyperlinks.first.id.to_s)
+          .to eq("rId7")
+      end
+
+      # An image part carries its own rId and serialization emits it
+      # verbatim, so it cannot yield. A standard part holding that id has to
+      # give it up, or both are written and the id is duplicated.
+      it "yields a preserved rId to a part that owns it" do
+        package = build_full_package
+        styles_rel = package.document_rels.relationships.find do |rel|
+          rel.target == "styles.xml"
+        end
+        styles_rel.id = "rId99"
+        package.document.image_parts = {
+          "rId99" => { target: "media/later.png",
+                       content_type: "image/png", data: "x" },
+        }
+
+        described_class.new(package, profile: profile).reconcile
+
+        rebuilt = package.document_rels.relationships.find do |rel|
+          rel.target == "styles.xml"
+        end
+        expect(rebuilt.id).not_to eq("rId99")
+        ids = package.document_rels.relationships.map(&:id)
+        expect(ids).not_to include("rId99")
+      end
+
       it "assigns an rId to a rel that has none" do
         package = build_full_package
         rels = package.document_rels

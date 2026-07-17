@@ -166,17 +166,18 @@ module Uniword
           end
 
           existing_by_target = rels.relationships.to_h { |r| [r.target, r] }
-          used_rids = rels.relationships.to_set(&:id)
+          fixed = fixed_part_rids
+          @max_numeric_rid = highest_numeric_rid(rels.relationships, fixed)
 
           standard = defs.filter_map do |suffix, target, obj|
             next unless obj
 
             existing = existing_by_target[target]
-            rid = existing&.id || allocate_free_rid(used_rids)
+            rid = preserved_rid(existing, fixed) || allocate_free_rid
             build_rel(rid, "#{base}/#{suffix}", target)
           end
 
-          deduped = reassign_colliding_rids(non_standard, standard, used_rids)
+          deduped = reassign_colliding_rids(non_standard, standard)
           rels.relationships = standard + deduped
           record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
                      "Assembled document rels, preserving existing rIds")
@@ -189,29 +190,60 @@ module Uniword
         # resolving to whichever rel kept the id. Only these are touched, so
         # well-formed input is preserved verbatim.
         #
-        # Mappings are kept per reference kind. When two rels shared an id,
-        # only the reference of the reassigned rel's own kind belongs to it —
-        # a hyperlink reference follows the hyperlink rel, never the header
-        # rel that kept the id.
-        def reassign_colliding_rids(non_standard, standard, used_rids)
-          claimed = standard.to_set(&:id)
+        # A reference follows the rel that yielded only when it can be told
+        # apart from the one that kept the id — a hyperlink reference belongs
+        # to the hyperlink rel, never to the styles rel that kept the id. If
+        # the keeper is of the same kind, nothing distinguishes them, so the
+        # references stay where they are rather than chase an arbitrary
+        # survivor: the id they name still resolves.
+        def reassign_colliding_rids(non_standard, standard)
+          claimed = standard.to_h { |rel| [rel.id, nil] }
           mappings = Hash.new { |h, kind| h[kind] = {} }
+          shared = ambiguous_id_kinds(standard + non_standard)
 
           reassigned = non_standard.map do |rel|
-            next rel if rel.id && claimed.add?(rel.id)
-
-            new_id = allocate_free_rid(used_rids)
-            claimed << new_id
             kind = reference_kind(rel.type)
-            mappings[kind][rel.id] = new_id if rel.id && kind
-            record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                       "Reassigned rId #{rel.id.inspect} → #{new_id}")
-            build_rel(new_id, rel.type, rel.target,
-                      target_mode: rel.target_mode)
+            if rel.id && !claimed.key?(rel.id)
+              claimed[rel.id] = kind
+              next rel
+            end
+
+            reassign_rel(rel, kind, claimed, mappings,
+                         ambiguous: shared.include?([rel.id, kind]))
           end
 
           apply_rid_mappings(mappings)
           reassigned
+        end
+
+        # (id, kind) pairs carried by more than one rel. A reference of that
+        # kind naming that id cannot say which rel it meant, so it is left
+        # alone rather than sent to whichever duplicate was reassigned last.
+        def ambiguous_id_kinds(relationships)
+          counts = relationships.each_with_object(Hash.new(0)) do |rel, acc|
+            kind = reference_kind(rel.type)
+            acc[[rel.id, kind]] += 1 if rel.id && kind
+          end
+          counts.select { |_pair, count| count > 1 }.keys.to_set
+        end
+
+        def reassign_rel(rel, kind, claimed, mappings, ambiguous:)
+          new_id = allocate_free_rid
+          claimed[new_id] = kind
+          mappings[kind][rel.id] = new_id if rel.id && kind && !ambiguous
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     reassignment_note(rel.id, new_id, ambiguous))
+          build_rel(new_id, rel.type, rel.target,
+                    target_mode: rel.target_mode)
+        end
+
+        def reassignment_note(old_id, new_id, ambiguous)
+          unless ambiguous
+            return "Reassigned rId #{old_id.inspect} → #{new_id}"
+          end
+
+          "Reassigned duplicate rId #{old_id} → #{new_id}; its references " \
+            "are ambiguous and were left pointing at #{old_id}"
         end
 
         # Walks the document only for kinds that actually moved — the common
@@ -239,17 +271,43 @@ module Uniword
           end
         end
 
-        # Next numeric rId above the current maximum, so it cannot collide
-        # with a preserved id. Unlike PackageRelationships.next_available_rid,
-        # this tracks ids across calls, because the rebuilt list is not
-        # committed until every id has been chosen.
-        def allocate_free_rid(used_rids)
-          max = used_rids.filter_map do |id|
+        # Ids serialization later emits verbatim, from the keys of the part
+        # collections rather than from a relationship. They cannot move, so
+        # nothing else may hold them.
+        def fixed_part_rids
+          doc = package.document
+          return Set.new unless doc
+
+          ((doc.image_parts&.keys || []) +
+            (doc.chart_parts&.keys || [])).to_set
+        end
+
+        # An existing id is only worth keeping if nothing else already owns
+        # it. A part that carries its own id wins, since it cannot yield.
+        def preserved_rid(existing, fixed)
+          return unless existing
+          return if fixed.include?(existing.id)
+
+          existing.id
+        end
+
+        # Highest rIdN in play, ignoring ids that are not numeric (Word
+        # accepts any NCName, e.g. "rIdChart1").
+        def highest_numeric_rid(relationships, fixed)
+          (relationships.map(&:id) + fixed.to_a).filter_map do |id|
             id&.[](/\ArId(\d+)\z/, 1)&.to_i
           end.max || 0
-          rid = "rId#{max + 1}"
-          used_rids << rid
-          rid
+        end
+
+        # Hands out ids above every number the document already carries, so a
+        # fresh id cannot collide with one being preserved. Counting up from a
+        # single scan keeps this linear no matter how many ids are needed.
+        # PackageRelationships.next_available_rid cannot serve here: it
+        # recomputes the maximum from a committed list, and this list is not
+        # committed until every id has been chosen.
+        def allocate_free_rid
+          @max_numeric_rid += 1
+          "rId#{@max_numeric_rid}"
         end
 
         def update_sect_pr_rid_references(mapping)
