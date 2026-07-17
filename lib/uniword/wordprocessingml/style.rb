@@ -111,12 +111,12 @@ module Uniword
                                      value_map: { to: { true => true, false => :omitted } }
         map_element "name", to: :name, render_nil: false
         map_element "basedOn", to: :basedOn, render_nil: false
-        map_element "next", to: :nextStyle, render_nil: false # Maps XML 'next' to nextStyle attribute
+        map_element "next", to: :nextStyle, render_nil: false
         map_element "link", to: :link, render_nil: false
         map_element "uiPriority", to: :uiPriority, render_nil: false
-        map_element "qFormat", to: :qFormat, render_nil: false
         map_element "semiHidden", to: :semiHidden, render_nil: false
         map_element "unhideWhenUsed", to: :unhideWhenUsed, render_nil: false
+        map_element "qFormat", to: :qFormat, render_nil: false
         map_element "rsid", to: :rsid, render_nil: false
         map_element "pPr", to: :pPr, render_nil: false
         map_element "rPr", to: :rPr, render_nil: false

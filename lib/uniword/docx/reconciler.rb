@@ -111,7 +111,10 @@ module Uniword
         (package.document&.headers&.values || []).each { |h| parts << h }
         (package.document&.footers&.values || []).each { |f| parts << f }
 
-        parts.each(&:clear_xml_parse_state!)
+        parts.each do |part|
+          part.import_declaration_plan = nil
+          part.pending_plan_root_element = nil
+        end
       end
     end
   end

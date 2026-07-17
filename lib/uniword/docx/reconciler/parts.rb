@@ -98,12 +98,15 @@ module Uniword
               charset: Wordprocessingml::Charset.new(val: meta["charset"]),
               family: Wordprocessingml::Family.new(val: meta["family"]),
               pitch: Wordprocessingml::Pitch.new(val: meta["pitch"]),
-              sig: Wordprocessingml::Sig.new(
+            )
+
+            if sig_data["usb0"] || sig_data["csb0"]
+              font.sig = Wordprocessingml::Sig.new(
                 usb0: sig_data["usb0"], usb1: sig_data["usb1"],
                 usb2: sig_data["usb2"], usb3: sig_data["usb3"],
                 csb0: sig_data["csb0"], csb1: sig_data["csb1"]
-              ),
-            )
+              )
+            end
 
             font.alt_name = Wordprocessingml::AltName.new(val: meta["alt_name"]) if meta["alt_name"]
             font_table.fonts << font

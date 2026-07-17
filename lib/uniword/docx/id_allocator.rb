@@ -77,12 +77,12 @@ module Uniword
 
       def alloc_para_id
         @para_counter += 1
-        Digest::SHA256.hexdigest("para:#{@para_counter}").upcase[0, 12]
+        Digest::SHA256.hexdigest("para:#{@para_counter}").upcase[0, 8]
       end
 
       def alloc_rsid
         @rsid_counter += 1
-        Digest::SHA256.hexdigest("rsid:#{@rsid_counter}").upcase[0, 12]
+        Digest::SHA256.hexdigest("rsid:#{@rsid_counter}").upcase[0, 8]
       end
 
       # Seed from a relationships collection — preserves existing rIds.
