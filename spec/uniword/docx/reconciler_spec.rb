@@ -808,6 +808,37 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(ids).not_to include("rId99")
       end
 
+      # sectPr keeps header and footer references in their own arrays, so a
+      # header and a footer sharing an id are not ambiguous: each reference
+      # can follow its own rel.
+      it "moves header and footer references independently" do
+        package = build_full_package
+        rels = package.document_rels
+        rels.relationships.clear
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId1", type: "#{rel_base}/header", target: "header1.xml",
+        )
+        rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId1", type: "#{rel_base}/footer", target: "footer1.xml",
+        )
+        package.document.headers = {
+          "default" => Uniword::Wordprocessingml::Header.new,
+        }
+        package.document.footers = {
+          "default" => Uniword::Wordprocessingml::Footer.new,
+        }
+
+        described_class.new(package, profile: profile).reconcile
+
+        by_id = rels.relationships.to_h { |rel| [rel.id, rel.target] }
+        sect_pr = package.document.body.section_properties
+        header_ref = sect_pr.header_references.find { |r| r.type == "default" }
+        footer_ref = sect_pr.footer_references.find { |r| r.type == "default" }
+
+        expect(by_id[header_ref.r_id]).to eq("header1.xml")
+        expect(by_id[footer_ref.r_id]).to eq("footer1.xml")
+      end
+
       it "assigns an rId to a rel that has none" do
         package = build_full_package
         rels = package.document_rels

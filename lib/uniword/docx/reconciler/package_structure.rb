@@ -186,9 +186,8 @@ module Uniword
         # Every rel needs a unique id. A malformed source can reuse one —
         # across a standard part and a non-standard rel, or between two
         # non-standard rels — or omit it entirely. Such a rel is given a
-        # fresh id, and its references move with it; otherwise they keep
-        # resolving to whichever rel kept the id. Only these are touched, so
-        # well-formed input is preserved verbatim.
+        # fresh id. Only these are touched, so well-formed input is preserved
+        # verbatim.
         #
         # A reference follows the rel that yielded only when it can be told
         # apart from the one that kept the id — a hyperlink reference belongs
@@ -196,6 +195,11 @@ module Uniword
         # the keeper is of the same kind, nothing distinguishes them, so the
         # references stay where they are rather than chase an arbitrary
         # survivor: the id they name still resolves.
+        #
+        # Only the kinds `reference_kind` names are followed. A chart, OLE or
+        # altChunk rel takes its new id while its reference keeps naming the
+        # old one; nothing walks those. Renumbering used to strand them on
+        # every document, so only a duplicate id reaches them now.
         def reassign_colliding_rids(non_standard, standard)
           claimed = standard.to_h { |rel| [rel.id, nil] }
           mappings = Hash.new { |h, kind| h[kind] = {} }
@@ -253,7 +257,8 @@ module Uniword
             next if mapping.empty?
 
             case kind
-            when :sect_pr then update_sect_pr_rid_references(mapping)
+            when :header then update_header_references(mapping)
+            when :footer then update_footer_references(mapping)
             when :blip then update_blip_embed_references(mapping)
             when :hyperlink then update_hyperlink_rid_references(mapping)
             end
@@ -261,11 +266,13 @@ module Uniword
         end
 
         # Which document reference names a rel of this type, or nil when
-        # nothing in document.xml points at it by id.
+        # nothing in document.xml points at it by id. Headers and footers are
+        # separate kinds: sectPr keeps them in their own arrays, so a header
+        # and a footer sharing an id are still told apart.
         def reference_kind(type)
           case type.to_s
-          when IdAllocator::HEADER_REL_TYPE, IdAllocator::FOOTER_REL_TYPE
-            :sect_pr
+          when IdAllocator::HEADER_REL_TYPE then :header
+          when IdAllocator::FOOTER_REL_TYPE then :footer
           when IdAllocator::IMAGE_REL_TYPE then :blip
           when IdAllocator::HYPERLINK_REL_TYPE then :hyperlink
           end
@@ -310,17 +317,24 @@ module Uniword
           "rId#{@max_numeric_rid}"
         end
 
-        def update_sect_pr_rid_references(mapping)
+        def update_header_references(mapping)
+          update_sect_pr_references(mapping, &:header_references)
+        end
+
+        def update_footer_references(mapping)
+          update_sect_pr_references(mapping, &:footer_references)
+        end
+
+        def update_sect_pr_references(mapping)
           sect_pr = package.document&.body&.section_properties
           return unless sect_pr
 
-          [sect_pr.header_references, sect_pr.footer_references].each do |refs|
-            next unless refs
+          refs = yield(sect_pr)
+          return unless refs
 
-            refs.each do |ref|
-              new_rid = mapping[ref.r_id]
-              ref.r_id = new_rid if new_rid
-            end
+          refs.each do |ref|
+            new_rid = mapping[ref.r_id]
+            ref.r_id = new_rid if new_rid
           end
         end
 
