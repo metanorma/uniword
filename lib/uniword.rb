@@ -250,6 +250,30 @@ module Uniword
       Wordprocessingml::DocumentRoot.new
     end
 
+    # Get the global runtime configuration (memoized)
+    #
+    # @return [Configuration] The global configuration instance
+    #
+    # @example
+    #   Uniword.configuration.validate_on_save # => true
+    def configuration
+      @configuration ||= Configuration.new
+    end
+
+    # Configure global runtime policy
+    #
+    # @yieldparam config [Configuration] The global configuration instance
+    # @return [Configuration] The global configuration instance
+    #
+    # @example
+    #   Uniword.configure do |config|
+    #     config.xsd_validation = true
+    #   end
+    def configure
+      yield(configuration)
+      configuration
+    end
+
     # Load document from file
     #
     # @param path [String] File path
