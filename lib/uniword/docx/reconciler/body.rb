@@ -82,8 +82,8 @@ module Uniword
           end
         end
 
-        HEADER_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"
-        FOOTER_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"
+        HEADER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:header).rel_type
+        FOOTER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:footer).rel_type
 
         # Wire builder-path headers/footers into document_rels and sectPr
         # during reconciliation so referential integrity checks see valid rIds.

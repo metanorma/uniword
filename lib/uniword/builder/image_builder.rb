@@ -27,7 +27,7 @@ module Uniword
       # Picture namespace URI for GraphicData
       PIC_URI = "http://schemas.openxmlformats.org/drawingml/2006/picture"
 
-      IMAGE_REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+      IMAGE_REL_TYPE = Ooxml::PartRegistry.find_by_key(:image).rel_type
 
       # Register an image part on the document for DOCX packaging.
       #

@@ -94,6 +94,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - All 12 stylesets reauthored with OFL-licensed fonts (Calibri references fixed)
 - `uniword.gemspec` updated to include `data/**/*.yml` and `data/**/*.xsd` in gem
 - Added `rainbow ~> 3.1` gem dependency
+- Single `Uniword::Ooxml::PartRegistry` now owns the part↔content-type↔
+  relationship-type mapping for every DOCX part kind the library writes
+  - New `Ooxml::PartDefinition` value class (key, path/pattern, content
+    type, relationship type, extension, required, default-vs-override)
+  - `ContentTypes.generate`, `Docx::PackageDefaults.minimal_*`,
+    `Reconciler::PackageStructure`, and the `PackageSerialization`
+    `inject_*` methods derive from the registry instead of holding
+    string literals; `IdAllocator` and builder rel-type constants also
+    derive from it
+  - Open/closed: register a `PartDefinition` to add a part kind —
+    consumers need no changes
+  - No behavior change: saved packages are byte-identical
 
 #### StylesetPackage Implementation (December 4, 2024)
 - **StylesetPackage**: Proper MODEL-DRIVEN package for .dotx files

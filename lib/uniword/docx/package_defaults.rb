@@ -15,6 +15,21 @@ module Uniword
 
       # Class methods for package construction
       module ClassMethods
+        # Part kinds in a minimal [Content_Types].xml, emission order.
+        MINIMAL_CT_DEFAULT_PARTS = %i[rels xml].freeze
+        MINIMAL_CT_OVERRIDE_PARTS =
+          %i[document styles font_table settings web_settings
+             app_properties core_properties].freeze
+
+        # Part kinds in a minimal _rels/.rels, in rId order.
+        MINIMAL_PACKAGE_REL_PARTS =
+          %i[document core_properties app_properties].freeze
+
+        # Part kinds in a minimal word/_rels/document.xml.rels,
+        # in rId order.
+        MINIMAL_DOCUMENT_REL_PARTS =
+          %i[styles settings web_settings font_table].freeze
+
         # Copy parts from document to package for round-trip preservation
         def copy_document_parts_to_package(document, package)
           return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
@@ -55,94 +70,47 @@ module Uniword
         # Create minimal content types for a valid DOCX
         def minimal_content_types
           ct = Uniword::ContentTypes::Types.new
-          ct.defaults ||= []
-          ct.defaults << Uniword::ContentTypes::Default.new(
-            extension: "rels",
-            content_type: "application/vnd.openxmlformats-package.relationships+xml",
-          )
-          ct.defaults << Uniword::ContentTypes::Default.new(
-            extension: "xml",
-            content_type: "application/xml",
-          )
-
-          ct.overrides ||= []
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/document.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/styles.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/fontTable.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/settings.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/webSettings.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/docProps/app.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.extended-properties+xml",
-          )
-          ct.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/docProps/core.xml",
-            content_type: "application/vnd.openxmlformats-package.core-properties+xml",
-          )
+          ct.defaults = MINIMAL_CT_DEFAULT_PARTS.map do |key|
+            defn = Ooxml::PartRegistry.find_by_key(key)
+            Uniword::ContentTypes::Default.new(
+              extension: defn.extension,
+              content_type: defn.content_type,
+            )
+          end
+          ct.overrides = MINIMAL_CT_OVERRIDE_PARTS.map do |key|
+            defn = Ooxml::PartRegistry.find_by_key(key)
+            Uniword::ContentTypes::Override.new(
+              part_name: defn.part_name,
+              content_type: defn.content_type,
+            )
+          end
           ct
         end
 
         # Create minimal package relationships for a valid DOCX
         def minimal_package_rels
-          rels = Ooxml::Relationships::PackageRelationships.new
-          rels.relationships ||= []
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId1",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-            target: "word/document.xml",
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId2",
-            type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-            target: "docProps/core.xml",
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId3",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-            target: "docProps/app.xml",
-          )
-          rels
+          build_minimal_rels(MINIMAL_PACKAGE_REL_PARTS)
         end
 
         # Create minimal document relationships for a valid DOCX
         def minimal_document_rels
+          build_minimal_rels(MINIMAL_DOCUMENT_REL_PARTS)
+        end
+
+        private
+
+        # Build a Relationships part with sequential rIds (rId1..rIdN)
+        # for the given registry part keys, in the given order.
+        def build_minimal_rels(part_keys)
           rels = Ooxml::Relationships::PackageRelationships.new
-          rels.relationships ||= []
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId1",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles",
-            target: "styles.xml",
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId2",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings",
-            target: "settings.xml",
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId3",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings",
-            target: "webSettings.xml",
-          )
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rId4",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable",
-            target: "fontTable.xml",
-          )
+          rels.relationships = part_keys.each_with_index.map do |key, idx|
+            defn = Ooxml::PartRegistry.find_by_key(key)
+            Ooxml::Relationships::Relationship.new(
+              id: "rId#{idx + 1}",
+              type: defn.rel_type,
+              target: defn.target,
+            )
+          end
           rels
         end
       end

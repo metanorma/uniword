@@ -12,7 +12,7 @@ module Uniword
         def initialize(target:)
           super(
             id: "rId#{SecureRandom.hex(4)}",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            type: PartRegistry.find_by_key(:image).rel_type,
             target: target
           )
         end

@@ -15,7 +15,7 @@ module Uniword
   #   link = Hyperlink.new(anchor: 'section1', text: 'Go to section')
   #   link.internal?  # => true
   class Hyperlink
-    REL_TYPE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink"
+    REL_TYPE = Ooxml::PartRegistry.find_by_key(:hyperlink).rel_type
 
     attr_reader :url, :anchor, :text, :tooltip
 

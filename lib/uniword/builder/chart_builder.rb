@@ -28,11 +28,9 @@ module Uniword
     #   end
     class ChartBuilder
       CHART_NS = "http://schemas.openxmlformats.org/drawingml/2006/chart"
-      CHART_REL_TYPE =
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"
+      CHART_REL_TYPE = Ooxml::PartRegistry.find_by_key(:chart).rel_type
       CHART_CONTENT_TYPE =
-        "application/vnd.openxmlformats-officedocument." \
-        "drawingml.chart+xml"
+        Ooxml::PartRegistry.find_by_key(:chart).content_type
 
       attr_reader :chart_type, :title_text, :series_list
 

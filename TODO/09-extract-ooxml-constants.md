@@ -1,6 +1,16 @@
 # 024: Extract OOXML constants into dedicated module
 
-## Status: DEFERRED
+## Status: COMPLETED via TODO.validate/08
+
+Superseded by `Uniword::Ooxml::PartRegistry` (TODO.validate item 08):
+all part metadata — content types, relationship type URIs, part paths —
+now lives in `lib/uniword/ooxml/part_registry.rb` as `PartDefinition`
+entries. `IdAllocator`, `Reconciler::Body`, the image/chart/bibliography
+builders, `Hyperlink`, and `Docx::Package` derive their constants from
+the registry instead of duplicating literals. Remaining literal sites
+(read-path fragment matchers, validation namespace URIs, the
+stylesWithEffects filter) are documented exceptions in the item 08
+completion notes.
 
 ## Problem
 

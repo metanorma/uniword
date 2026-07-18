@@ -7,34 +7,35 @@ module Uniword
       #
       # Rebuilds content types and relationships for standard parts,
       # preserving non-standard entries from the source document.
+      # All part metadata (paths, content types, rel types) comes from
+      # Ooxml::PartRegistry; this module only declares which parts go
+      # where, in which order.
       module PackageStructure
         # Relationship types for parts we don't model or serialize.
+        # Exception: stylesWithEffects is a Microsoft extension never
+        # written by uniword, so it is not in Ooxml::PartRegistry.
         UNSUPPORTED_REL_TYPES = Set[
           "http://schemas.microsoft.com/office/2007/relationships/stylesWithEffects",
         ].freeze
 
         # Rel types that belong in package-level _rels/.rels, not document.xml.rels.
-        PACKAGE_LEVEL_REL_TYPES = Set[
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-          "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
-        ].freeze
+        PACKAGE_LEVEL_REL_TYPES =
+          Ooxml::PartRegistry.package_rel_types.to_set.freeze
+
+        # Standard package-level parts, in _rels/.rels emission order.
+        PACKAGE_REL_PARTS = %i[document core_properties app_properties].freeze
 
         def reconcile_content_types
           ct = package.content_types
           return unless ct
 
-          ct.defaults = [
+          ct.defaults = %i[rels xml].map do |key|
+            defn = Ooxml::PartRegistry.find_by_key(key)
             Uniword::ContentTypes::Default.new(
-              extension: "rels",
-              content_type: "application/vnd.openxmlformats-package.relationships+xml",
-            ),
-            Uniword::ContentTypes::Default.new(
-              extension: "xml",
-              content_type: "application/xml",
-            ),
-          ]
+              extension: defn.extension,
+              content_type: defn.content_type,
+            )
+          end
 
           standard = content_type_overrides_for_present_parts
           standard_parts = standard.to_set(&:part_name)
@@ -52,18 +53,10 @@ module Uniword
           rels = package.package_rels
           return unless rels
 
-          base = "http://schemas.openxmlformats.org"
-          standard_defs = [
-            ["rId1",
-             "#{base}/officeDocument/2006/relationships/officeDocument",
-             "word/document.xml"],
-            ["rId2",
-             "#{base}/package/2006/relationships/metadata/core-properties",
-             "docProps/core.xml"],
-            ["rId3",
-             "#{base}/officeDocument/2006/relationships/extended-properties",
-             "docProps/app.xml"],
-          ]
+          standard_defs = PACKAGE_REL_PARTS.each_with_index.map do |key, idx|
+            defn = Ooxml::PartRegistry.find_by_key(key)
+            ["rId#{idx + 1}", defn.rel_type, defn.target]
+          end
 
           standard_targets = standard_defs.to_set { |_, _, t| t }
           standard_rids = standard_defs.to_set { |rid, _, _| rid }
@@ -87,27 +80,30 @@ module Uniword
           rels = package.document_rels
           return unless rels
 
-          base = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
           defs = [
-            ["styles", "styles.xml", package.styles],
-            ["settings", "settings.xml", package.settings],
-            ["webSettings", "webSettings.xml", package.web_settings],
-            ["fontTable", "fontTable.xml", package.font_table],
-            ["theme", "theme/theme1.xml", package.theme],
-            ["numbering", "numbering.xml", package.numbering],
-            ["footnotes", "footnotes.xml", package.footnotes],
-            ["endnotes", "endnotes.xml", package.endnotes],
+            [Ooxml::PartRegistry.find_by_key(:styles), package.styles],
+            [Ooxml::PartRegistry.find_by_key(:settings), package.settings],
+            [Ooxml::PartRegistry.find_by_key(:web_settings),
+             package.web_settings],
+            [Ooxml::PartRegistry.find_by_key(:font_table),
+             package.font_table],
+            [Ooxml::PartRegistry.find_by_key(:theme), package.theme],
+            [Ooxml::PartRegistry.find_by_key(:numbering), package.numbering],
+            [Ooxml::PartRegistry.find_by_key(:footnotes), package.footnotes],
+            [Ooxml::PartRegistry.find_by_key(:endnotes), package.endnotes],
           ]
 
-          standard_targets = defs.filter_map { |_, target, obj| target if obj }.to_set
+          standard_targets = defs.filter_map do |defn, obj|
+            defn.target if obj
+          end.to_set
 
           # If allocator is present, use it to build rels — preserves existing rIds
           alloc = allocator
           if alloc
-            reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
+            reconcile_document_rels_from_allocator(rels, defs, standard_targets, alloc)
           else
-            register_legacy_image_relationships(rels, base)
-            reconcile_document_rels_legacy(rels, base, defs, standard_targets)
+            register_legacy_image_relationships(rels)
+            reconcile_document_rels_legacy(rels, defs, standard_targets)
           end
         end
 
@@ -117,30 +113,31 @@ module Uniword
         # Builder-assigned image rIds may collide with standard part rIds;
         # registering them up front lets the legacy renumbering (and blip
         # reference remapping) keep every rId unique.
-        def register_legacy_image_relationships(rels, base)
+        def register_legacy_image_relationships(rels)
           images = package.document&.image_parts
           return unless images
 
+          image_rel_type = Ooxml::PartRegistry.find_by_key(:image).rel_type
           images.each do |r_id, image_data|
             next if rels.relationships.any? { |r| r.target == image_data[:target] }
 
-            rels.relationships << build_rel(r_id, "#{base}/image",
+            rels.relationships << build_rel(r_id, image_rel_type,
                                             image_data[:target])
           end
         end
 
-        def reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
+        def reconcile_document_rels_from_allocator(rels, defs, standard_targets, alloc)
           # Collect standard part rels from allocator
           all_rels = []
-          defs.each do |suffix, target, obj|
+          defs.each do |defn, obj|
             next unless obj
-            r_id = alloc.rid_for(target: target, type: "#{base}/#{suffix}")
+            r_id = alloc.rid_for(target: defn.target, type: defn.rel_type)
             if r_id
-              all_rels << build_rel(r_id, "#{base}/#{suffix}", target)
+              all_rels << build_rel(r_id, defn.rel_type, defn.target)
             else
               all_rels << build_rel(
-                alloc.alloc_rid(target: target, type: "#{base}/#{suffix}"),
-                "#{base}/#{suffix}", target,
+                alloc.alloc_rid(target: defn.target, type: defn.rel_type),
+                defn.rel_type, defn.target,
               )
             end
           end
@@ -175,7 +172,7 @@ module Uniword
                      part: "word/_rels/document.xml.rels")
         end
 
-        def reconcile_document_rels_legacy(rels, base, defs, standard_targets)
+        def reconcile_document_rels_legacy(rels, defs, standard_targets)
           non_standard = rels.relationships.reject do |r|
             standard_targets.include?(r.target) ||
               unsupported_rel_type?(r.type) ||
@@ -186,10 +183,10 @@ module Uniword
           all_rels = []
           rid_mapping = {}
 
-          defs.each do |suffix, target, obj|
+          defs.each do |defn, obj|
             next unless obj
             rid = "rId#{all_rels.size + 1}"
-            all_rels << build_rel(rid, "#{base}/#{suffix}", target)
+            all_rels << build_rel(rid, defn.rel_type, defn.target)
           end
 
           non_standard.each do |rel|
@@ -306,38 +303,30 @@ module Uniword
           parts.count { |p| p[:target].to_s.start_with?(prefix) }
         end
 
+        # [registry key, package part] pairs in content-types emission
+        # order; overrides are derived from Ooxml::PartRegistry.
         def content_type_overrides_for_present_parts
           checks = [
-            [package.document, "/word/document.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"],
-            [package.styles, "/word/styles.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"],
-            [package.settings, "/word/settings.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"],
-            [package.font_table, "/word/fontTable.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.fontTable+xml"],
-            [package.web_settings, "/word/webSettings.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.webSettings+xml"],
-            [package.theme, "/word/theme/theme1.xml",
-             "application/vnd.openxmlformats-officedocument.theme+xml"],
-            [package.core_properties, "/docProps/core.xml",
-             "application/vnd.openxmlformats-package.core-properties+xml"],
-            [package.app_properties, "/docProps/app.xml",
-             "application/vnd.openxmlformats-officedocument.extended-properties+xml"],
-            [package.footnotes, "/word/footnotes.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml"],
-            [package.endnotes, "/word/endnotes.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml"],
-            [package.numbering, "/word/numbering.xml",
-             "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml"],
+            [:document, package.document],
+            [:styles, package.styles],
+            [:settings, package.settings],
+            [:font_table, package.font_table],
+            [:web_settings, package.web_settings],
+            [:theme, package.theme],
+            [:core_properties, package.core_properties],
+            [:app_properties, package.app_properties],
+            [:footnotes, package.footnotes],
+            [:endnotes, package.endnotes],
+            [:numbering, package.numbering],
           ]
 
-          checks.filter_map do |obj, part_name, content_type|
+          checks.filter_map do |key, obj|
             next unless obj
 
+            defn = Ooxml::PartRegistry.find_by_key(key)
             Uniword::ContentTypes::Override.new(
-              part_name: part_name,
-              content_type: content_type,
+              part_name: defn.part_name,
+              content_type: defn.content_type,
             )
           end
         end

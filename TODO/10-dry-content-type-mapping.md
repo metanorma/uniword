@@ -1,6 +1,13 @@
 # 029: DRY content type / part name mapping between package_structure and package_defaults
 
-## Status: DEFERRED
+## Status: COMPLETED via TODO.validate/08
+
+Implemented as `Uniword::Ooxml::PartRegistry` (TODO.validate item 08),
+with proper `PartDefinition` model objects instead of a raw hash.
+`PackageStructure#content_type_overrides_for_present_parts` and
+`PackageDefaults#minimal_content_types` (plus `ContentTypes.generate`
+and the `PackageSerialization` `inject_*` methods) all derive part
+names, content types, and relationship types from the single registry.
 
 ## Problem
 

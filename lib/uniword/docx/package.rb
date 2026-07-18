@@ -351,7 +351,7 @@ module Uniword
             r_id: rel.id,
             target: target,
             rel_type: rel.type,
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
+            content_type: Ooxml::PartRegistry.find_by_key(:header).content_type,
             content: Uniword::Wordprocessingml::Header.from_xml(zip_content[path]),
           }
         end
@@ -368,7 +368,7 @@ module Uniword
             r_id: rel.id,
             target: target,
             rel_type: rel.type,
-            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
+            content_type: Ooxml::PartRegistry.find_by_key(:footer).content_type,
             content: Uniword::Wordprocessingml::Footer.from_xml(zip_content[path]),
           }
         end
