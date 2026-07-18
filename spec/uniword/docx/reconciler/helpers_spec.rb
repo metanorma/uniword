@@ -146,7 +146,7 @@ RSpec.describe Uniword::Docx::Reconciler::Helpers do
 
       reconciler.strip_empty_runs(para)
 
-      expect(reconciler.applied_fixes.map { |f| f[:validity_rule] })
+      expect(reconciler.applied_fixes.map { |f| f.code })
         .to include(Uniword::Docx::Reconciler::FixCodes::EMPTY_RUNS_STRIPPED)
     end
 

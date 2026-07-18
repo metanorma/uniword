@@ -216,6 +216,10 @@ module Uniword
         sec.type = type
         block.call(sec) if block_given?
         @model.body.section_properties ||= sec.build
+        # Register section-level headers/footers so their sectPr
+        # references resolve to real parts at save time.
+        sec.header_models.each { |t, hf| (@model.headers ||= {})[t] = hf }
+        sec.footer_models.each { |t, hf| (@model.footers ||= {})[t] = hf }
         sec
       end
 

@@ -43,7 +43,9 @@ module Uniword
           end
 
           ct.overrides = standard + non_standard
-          record_fix(FixCodes::CONTENT_TYPES_ASSEMBLED, "Rebuilt content types for standard parts")
+          record_fix(FixCodes::CONTENT_TYPES_ASSEMBLED,
+                     "Rebuilt content types for standard parts",
+                     part: "[Content_Types].xml")
         end
 
         def reconcile_package_rels
@@ -76,7 +78,9 @@ module Uniword
           end
 
           rels.relationships = standard + non_standard
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Rebuilt package relationships for standard parts")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Rebuilt package relationships for standard parts",
+                     part: "_rels/.rels")
         end
 
         def reconcile_document_rels
@@ -102,11 +106,28 @@ module Uniword
           if alloc
             reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
           else
+            register_legacy_image_relationships(rels, base)
             reconcile_document_rels_legacy(rels, base, defs, standard_targets)
           end
         end
 
         private
+
+        # Register image parts as relationships before the legacy rebuild.
+        # Builder-assigned image rIds may collide with standard part rIds;
+        # registering them up front lets the legacy renumbering (and blip
+        # reference remapping) keep every rId unique.
+        def register_legacy_image_relationships(rels, base)
+          images = package.document&.image_parts
+          return unless images
+
+          images.each do |r_id, image_data|
+            next if rels.relationships.any? { |r| r.target == image_data[:target] }
+
+            rels.relationships << build_rel(r_id, "#{base}/image",
+                                            image_data[:target])
+          end
+        end
 
         def reconcile_document_rels_from_allocator(rels, base, defs, standard_targets, alloc)
           # Collect standard part rels from allocator
@@ -149,7 +170,9 @@ module Uniword
           end
 
           rels.relationships = all_rels + non_standard
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Assembled document relationships from allocator")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Assembled document relationships from allocator",
+                     part: "word/_rels/document.xml.rels")
         end
 
         def reconcile_document_rels_legacy(rels, base, defs, standard_targets)
@@ -181,7 +204,9 @@ module Uniword
           update_sect_pr_rid_references(rid_mapping) unless rid_mapping.empty?
           update_blip_embed_references(rid_mapping) unless rid_mapping.empty?
           update_hyperlink_rid_references(rid_mapping) unless rid_mapping.empty?
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Rebuilt document relationships with sequential rIds")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Rebuilt document relationships with sequential rIds",
+                     part: "word/_rels/document.xml.rels")
         end
 
         def update_sect_pr_rid_references(mapping)

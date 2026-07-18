@@ -9,7 +9,8 @@ module Uniword
       VALID_NOTE_TYPES = %w[separator continuationSeparator
                             footnoteSeparator continuationNotice].freeze
 
-      # Sub-modules autoloaded — no require_relative for internal code.
+      # Sub-modules autoloaded — registered below, loaded on first use.
+      autoload :Fix, "#{__dir__}/reconciler/fix"
       autoload :FixCodes, "#{__dir__}/reconciler/fix_codes"
       autoload :Helpers, "#{__dir__}/reconciler/helpers"
       autoload :Notes, "#{__dir__}/reconciler/notes"
@@ -71,7 +72,9 @@ module Uniword
         reconcile_referential_integrity
       end
 
-      # Audit trail of fixes applied during reconciliation.
+      # Audit trail of repairs applied during reconciliation.
+      #
+      # @return [Array<Fix>] Fixes recorded by the most recent #reconcile
       attr_reader :applied_fixes
 
       private
@@ -82,12 +85,13 @@ module Uniword
         @allocator || package.allocator
       end
 
-      def record_fix(validity_rule, message)
-        @applied_fixes << {
-          validity_rule: validity_rule,
-          message: message,
-          timestamp: Time.now,
-        }
+      # Record one applied repair as a Fix value object.
+      #
+      # @param code [String] Fix code (a FixCodes constant value)
+      # @param message [String] Human-readable description of the repair
+      # @param part [String, nil] Package part the repair applies to
+      def record_fix(code, message, part: nil)
+        @applied_fixes << Fix.new(code: code, message: message, part: part)
       end
 
       def clear_stored_namespace_plans

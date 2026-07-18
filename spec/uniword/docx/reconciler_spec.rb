@@ -524,6 +524,9 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "preserves non-standard rels" do
         package = build_full_package
+        # The custom-properties part must be carried by the package,
+        # otherwise Group 4 strips the rel as dangling (R32).
+        package.custom_properties = Uniword::Ooxml::CustomProperties.new
         package.package_rels.relationships <<
           Uniword::Ooxml::Relationships::Relationship.new(
             id: "rIdCustom",
@@ -571,6 +574,12 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "preserves non-standard rels with sequential rIds" do
         package = build_full_package
+        # The image part must be carried by the package, otherwise
+        # Group 4 strips the rel as dangling (R32).
+        package.document.image_parts = {
+          "rIdExtra" => { data: "png-bytes", target: "media/image1.png",
+                          content_type: "image/png" },
+        }
         package.document_rels.relationships <<
           Uniword::Ooxml::Relationships::Relationship.new(
             id: "rIdExtra",
@@ -641,7 +650,9 @@ RSpec.describe Uniword::Docx::Reconciler do
 
         rels = package.document_rels
         rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(
-          id: "rId99", type: ".../header", target: "header1.xml",
+          id: "rId99",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+          target: "header1.xml",
         )
 
         described_class.new(package, profile: profile).reconcile
@@ -775,9 +786,9 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       ids = package.footnotes.footnote_entries.map(&:id)
       expect(ids).to include("99")
-      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      r10 = reconciler.applied_fixes.find { |f| f.code == "R10" }
       expect(r10).not_to be_nil
-      expect(r10[:message]).to include("99")
+      expect(r10.message).to include("99")
     end
 
     it "creates footnotes.xml when references exist but no footnotes part" do
@@ -800,7 +811,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       reconciler = described_class.new(package)
       reconciler.reconcile
 
-      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      r10 = reconciler.applied_fixes.find { |f| f.code == "R10" }
       expect(r10).to be_nil
     end
   end
@@ -844,10 +855,10 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(entries.find { |e| e.id == "1" }.type).to be_nil
         expect(entries.find { |e| e.id == "2" }.type).to be_nil
 
-        r15 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R15" }
+        r15 = reconciler.applied_fixes.find { |f| f.code == "R15" }
         expect(r15).not_to be_nil
-        expect(r15[:message]).to include("2")
-        expect(r15[:message]).to include("1", "2")
+        expect(r15.message).to include("2")
+        expect(r15.message).to include("1", "2")
       end
 
       it "preserves w:type on separator and continuation entries" do
@@ -865,7 +876,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(entries.find { |e| e.id == "0" }.type).to eq("continuationSeparator")
         expect(entries.find { |e| e.id == "1" }.type).to be_nil
 
-        r15 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R15" }
+        r15 = reconciler.applied_fixes.find { |f| f.code == "R15" }
         expect(r15).to be_nil
       end
 
@@ -880,9 +891,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         reconciler.reconcile
 
         expect(package.endnotes.endnote_entries.find { |e| e.id == "1" }.type).to be_nil
-        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        r15 = reconciler.applied_fixes.select { |f| f.code == "R15" }
         expect(r15.size).to eq(1)
-        expect(r15.first[:message]).to include("endnote")
+        expect(r15.first.message).to include("endnote")
       end
 
       it "does nothing when no invalid types exist" do
@@ -895,7 +906,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         reconciler = described_class.new(package)
         reconciler.reconcile
 
-        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        r15 = reconciler.applied_fixes.select { |f| f.code == "R15" }
         expect(r15).to be_empty
       end
 
@@ -908,7 +919,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         reconciler = described_class.new(package)
         reconciler.reconcile
 
-        r15 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R15" }
+        r15 = reconciler.applied_fixes.select { |f| f.code == "R15" }
         expect(r15).to be_empty
       end
     end
@@ -932,10 +943,10 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(ids).to eq(["-1", "0", "1", "2", "3"])
         expect(ids.uniq).to eq(ids)
 
-        r16 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R16" }
+        r16 = reconciler.applied_fixes.find { |f| f.code == "R16" }
         expect(r16).not_to be_nil
-        expect(r16[:message]).to include("2")
-        expect(r16[:message]).to include("1", "2")
+        expect(r16.message).to include("2")
+        expect(r16.message).to include("1", "2")
       end
 
       it "removes duplicate endnote IDs" do
@@ -952,9 +963,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         ids = package.endnotes.endnote_entries.map(&:id)
         expect(ids).to eq(["-1", "0", "1"])
 
-        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        r16 = reconciler.applied_fixes.select { |f| f.code == "R16" }
         expect(r16.size).to eq(1)
-        expect(r16.first[:message]).to include("endnote")
+        expect(r16.first.message).to include("endnote")
       end
 
       it "does nothing when no duplicates exist" do
@@ -968,7 +979,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         reconciler = described_class.new(package)
         reconciler.reconcile
 
-        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        r16 = reconciler.applied_fixes.select { |f| f.code == "R16" }
         expect(r16).to be_empty
       end
 
@@ -981,7 +992,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         reconciler = described_class.new(package)
         reconciler.reconcile
 
-        r16 = reconciler.applied_fixes.select { |f| f[:validity_rule] == "R16" }
+        r16 = reconciler.applied_fixes.select { |f| f.code == "R16" }
         expect(r16).to be_empty
       end
     end
@@ -1142,7 +1153,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       reconciler.reconcile
 
       expect(package.footnotes.footnote_entries.map(&:id)).to include("99")
-      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      r10 = reconciler.applied_fixes.find { |f| f.code == "R10" }
       expect(r10).not_to be_nil
     end
 
@@ -1162,7 +1173,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       reconciler.reconcile
 
       expect(package.endnotes.endnote_entries.map(&:id)).to include("99")
-      r10 = reconciler.applied_fixes.find { |f| f[:validity_rule] == "R10" }
+      r10 = reconciler.applied_fixes.find { |f| f.code == "R10" }
       expect(r10).not_to be_nil
     end
 
@@ -1267,7 +1278,15 @@ RSpec.describe Uniword::Docx::Reconciler do
       para = para_class.new(runs: [run_class.new(text: text_class.new(value: "x"))])
       package = build_package_with_body_paragraphs(para)
       package.document.body.section_properties = sect_pr
-      package.document.header_footer_parts = []
+      package.document.header_footer_parts = [
+        {
+          r_id: "rId7",
+          target: "header1.xml",
+          rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
+          content: Uniword::Wordprocessingml::Header.new,
+        },
+      ]
       package.document_rels = Uniword::Docx::Package.minimal_document_rels
       package.document_rels.relationships <<
         Uniword::Ooxml::Relationships::Relationship.new(

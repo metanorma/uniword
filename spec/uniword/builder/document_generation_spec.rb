@@ -90,7 +90,10 @@ RSpec.describe "End-to-end Document Generation" do
         expect(doc_xml).to include("Chapter 2")
         expect(doc_xml).to include("Chapter 3")
         expect(doc_xml).to include("basic formatting")
-        expect(doc_xml).to include("https://example.com")
+
+        # External hyperlink targets live in the document relationships part
+        rels_xml = zip.read("word/_rels/document.xml.rels")
+        expect(rels_xml).to include("https://example.com")
       end
     end
 
@@ -778,8 +781,9 @@ RSpec.describe "End-to-end Document Generation" do
 
     it "contains hyperlink" do
       Zip::File.open(path) do |zip|
-        doc_xml = zip.read("word/document.xml")
-        expect(doc_xml).to include("mailto:info@example.com")
+        # External hyperlink targets live in the document relationships part
+        rels_xml = zip.read("word/_rels/document.xml.rels")
+        expect(rels_xml).to include("mailto:info@example.com")
       end
     end
   end
