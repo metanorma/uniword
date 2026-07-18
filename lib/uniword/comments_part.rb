@@ -22,6 +22,9 @@ module Uniword
   #
   # @see Comment For individual comment structure
   class CommentsPart < Lutaml::Model::Serializable
+    # Collection of all comments
+    attribute :comments, Comment, collection: true, initialize_empty: true
+
     # OOXML namespace configuration for comments
     xml do
       element "comments"
@@ -29,9 +32,6 @@ module Uniword
 
       map_element "comment", to: :comments
     end
-
-    # Collection of all comments
-    attribute :comments, Comment, collection: true, initialize_empty: true
 
     # Initialize a new comments part
     #

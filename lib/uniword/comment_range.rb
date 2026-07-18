@@ -27,6 +27,9 @@ module Uniword
   #
   # @see Comment For the comment content
   class CommentRange < Element
+    # Comment ID this range marker refers to
+    attribute :comment_id, :string
+
     # OOXML namespace configuration
     xml do
       element "commentRangeStart"
@@ -34,9 +37,6 @@ module Uniword
 
       map_attribute "id", to: :comment_id
     end
-
-    # Comment ID this range marker refers to
-    attribute :comment_id, :string
 
     # Type of marker (:start, :end, :reference)
     attr_accessor :marker_type

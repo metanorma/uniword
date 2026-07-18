@@ -19,19 +19,6 @@ module Uniword
   # @see CommentRange For comment range markers
   # @see CommentsPart For comments collection
   class Comment < Element
-    # OOXML namespace configuration for comments
-    xml do
-      element "comment"
-      namespace Ooxml::Namespaces::WordProcessingML
-
-      map_attribute "id", to: :comment_id
-      map_attribute "author", to: :author
-      map_attribute "date", to: :date
-      map_attribute "initials", to: :initials
-
-      map_element "p", to: :paragraphs
-    end
-
     # Unique comment identifier (required in OOXML)
     attribute :comment_id, :string
 
@@ -47,6 +34,19 @@ module Uniword
     # Comment content as paragraphs
     attribute :paragraphs, Uniword::Wordprocessingml::Paragraph, collection: true,
                                                                  initialize_empty: true
+
+    # OOXML namespace configuration for comments
+    xml do
+      element "comment"
+      namespace Ooxml::Namespaces::WordProcessingML
+
+      map_attribute "id", to: :comment_id
+      map_attribute "author", to: :author
+      map_attribute "date", to: :date
+      map_attribute "initials", to: :initials
+
+      map_element "p", to: :paragraphs
+    end
 
     # Initialize a new comment
     #

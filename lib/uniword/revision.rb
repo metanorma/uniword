@@ -34,6 +34,15 @@ module Uniword
   #
   # @see TrackedChanges For revision collection management
   class Revision < Lutaml::Model::Serializable
+    # Unique revision identifier
+    attribute :revision_id, :string
+
+    # Author name
+    attribute :author, :string
+
+    # Revision date/time
+    attribute :date, :string
+
     # OOXML namespace configuration
     xml do
       element "ins"
@@ -43,15 +52,6 @@ module Uniword
       map_attribute "author", to: :author
       map_attribute "date", to: :date
     end
-
-    # Unique revision identifier
-    attribute :revision_id, :string
-
-    # Author name
-    attribute :author, :string
-
-    # Revision date/time
-    attribute :date, :string
 
     # Revision type (:insert, :delete, :format_change)
     attr_accessor :type

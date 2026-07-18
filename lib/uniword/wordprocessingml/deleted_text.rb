@@ -16,8 +16,8 @@ module Uniword
       xml do
         element "delText"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        mixed_content
 
+        map_content to: :content
         map_attribute "xml:space", to: :xml_space, render_nil: false
       end
 

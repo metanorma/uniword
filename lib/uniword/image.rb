@@ -15,12 +15,6 @@ module Uniword
   class Image < Element
     extend LazyLoader
 
-    # OOXML namespace configuration for images (drawing elements)
-    xml do
-      element "drawing"
-      namespace Ooxml::Namespaces::WordProcessingML
-    end
-
     # Image relationship ID (reference to the image file in the package)
     attribute :relationship_id, :string
 
@@ -51,6 +45,12 @@ module Uniword
 
     # Text wrapping style (:square, :tight, :through, :none, etc.)
     attribute :text_wrapping, :string
+
+    # OOXML namespace configuration for images (drawing elements)
+    xml do
+      element "drawing"
+      namespace Ooxml::Namespaces::WordProcessingML
+    end
 
     # Image data loader (proc that loads the actual binary data)
     # This is not serialized - it's used for lazy loading
