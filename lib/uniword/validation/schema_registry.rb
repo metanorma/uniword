@@ -57,12 +57,20 @@ module Uniword
         word/document.xml
         word/styles.xml
         word/settings.xml
+        word/webSettings.xml
         word/fontTable.xml
         word/numbering.xml
         word/footnotes.xml
         word/endnotes.xml
         word/comments.xml
       ].freeze
+
+      # Document property parts and their primary schemas.
+      DOCPROPS_SCHEMAS = {
+        "docProps/core.xml" => "ecma/opc-coreProperties.xsd",
+        "docProps/app.xml" => "iso/shared-documentPropertiesExtended.xsd",
+        "docProps/custom.xml" => "iso/shared-documentPropertiesCustom.xsd",
+      }.freeze
 
       # Pattern for header/footer parts
       HEADER_FOOTER_PATTERN = %r{\Aword/(header|footer)\d*\.xml\z}
@@ -115,6 +123,7 @@ module Uniword
       # For Word parts (document.xml, styles.xml, etc.), returns wml-2010.xsd
       # which imports the base wml.xsd and all extension schemas.
       # For relationship and content type parts, returns the appropriate schema.
+      # For docProps parts, returns the OPC/extended/custom properties schema.
       #
       # @param part_name [String] Path within ZIP (e.g., "word/document.xml")
       # @return [String, nil] XSD path relative to schemas_dir
@@ -124,6 +133,8 @@ module Uniword
           "ecma/opc-contentTypes.xsd"
         when "_rels/.rels", ->(n) { n.match?(RELS_PATTERN) }
           "ecma/opc-relationships.xsd"
+        when *DOCPROPS_SCHEMAS.keys
+          DOCPROPS_SCHEMAS[part_name]
         when *WORDML_PARTS, ->(n) { n.match?(HEADER_FOOTER_PATTERN) }
           "microsoft/wml-2010.xsd"
         when ->(n) { n.match?(THEME_PATTERN) }

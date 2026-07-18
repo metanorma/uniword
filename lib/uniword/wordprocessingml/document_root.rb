@@ -115,7 +115,8 @@ module Uniword
       attr_accessor :embeddings
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
-                    :package_rels, :content_types, :custom_properties, :custom_xml_items
+                    :package_rels, :content_types, :custom_properties, :custom_xml_items,
+                    :settings_rels, :footnotes_rels, :endnotes_rels
       # Central ID allocator — preserves IDs across build/save cycle
       attr_accessor :allocator
 

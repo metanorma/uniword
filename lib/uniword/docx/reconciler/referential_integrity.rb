@@ -374,21 +374,24 @@ module Uniword
         def reconcile_relationship_targets
           carried = carried_part_paths
 
-          strip_dangling_relationship_targets(
-            package.package_rels, "", carried, "_rels/.rels"
-          )
-          strip_dangling_relationship_targets(
-            package.document_rels, "word", carried,
-            "word/_rels/document.xml.rels"
-          )
-          strip_dangling_relationship_targets(
-            package.settings_rels, "word", carried,
-            "word/_rels/settings.xml.rels"
-          )
-          strip_dangling_relationship_targets(
-            package.theme_rels, "word/theme", carried,
-            "word/theme/_rels/theme1.xml.rels"
-          )
+          rels_collections.each do |rels, base_dir, part|
+            strip_dangling_relationship_targets(rels, base_dir, carried,
+                                                part)
+          end
+        end
+
+        # [rels, base directory, .rels part path] for every relationships
+        # part the package serializes.
+        def rels_collections
+          [
+            [package.package_rels, "", "_rels/.rels"],
+            [package.document_rels, "word", "word/_rels/document.xml.rels"],
+            [package.settings_rels, "word", "word/_rels/settings.xml.rels"],
+            [package.theme_rels, "word/theme",
+             "word/theme/_rels/theme1.xml.rels"],
+            [package.footnotes_rels, "word", "word/_rels/footnotes.xml.rels"],
+            [package.endnotes_rels, "word", "word/_rels/endnotes.xml.rels"],
+          ]
         end
 
         def strip_dangling_relationship_targets(rels, base_dir, carried,
