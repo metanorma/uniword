@@ -1,11 +1,16 @@
 # 014: Replace `attr_accessor :header_footer_parts` with model-driven attribute
 
-## Status: DEFERRED
+## Status: COMPLETED via TODO.validate/09
 
-## Reason for deferral
-Depends on 012 (dual-path unification). `header_footer_parts` as an Array of
-hashes works for round-trip today. Model-driven attribute would be cleaner but
-requires the unified storage path first. Revisit after 012.
+`header_footer_parts` is now a `Docx::HeaderFooterPartCollection` of
+`HeaderFooterPart` value objects (r_id, target, rel_type, content_type,
+type, content, loaded flag — no more hashes with symbol keys).
+`chart_parts` and `embeddings` hold `Docx::Part`/`ChartPart` objects in
+`Docx::PartCollection`s; `custom_xml_items` holds `CustomXmlItem` objects
+(Package writers still accept legacy hashes and normalize them).
+`bibliography_sources` was already a `Bibliography::Sources`
+Serializable. `raw_xml_parts` and `modified_part_paths` remain plain
+serialization-level accessors as this note recommended.
 
 ## Problem
 

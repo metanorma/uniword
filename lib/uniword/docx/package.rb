@@ -44,7 +44,15 @@ module Uniword
       attribute :custom_properties, Ooxml::CustomProperties
 
       # Custom XML data items (customXml/item*.xml)
-      attr_accessor :custom_xml_items
+      #
+      # @return [Array<CustomXmlItem>, nil]
+      attr_reader :custom_xml_items
+
+      # Assign custom XML items; accepts CustomXmlItem objects and
+      # legacy hashes ({ index:, xml_content:, props_xml:, rels_xml: }).
+      def custom_xml_items=(items)
+        @custom_xml_items = items && items.map { |i| CustomXmlItem.wrap(i) }
+      end
 
       # === Document Parts (word/) ===
       # Main document content (word/document.xml)
@@ -84,7 +92,19 @@ module Uniword
 
       # Non-serialized attributes (DOCX packaging helpers)
       attr_accessor :chart_parts, :bibliography_sources, :profile
-      attr_accessor :settings_rels, :embeddings, :footnotes_rels, :endnotes_rels
+      attr_accessor :settings_rels, :footnotes_rels, :endnotes_rels
+
+      # OLE/embedded object binaries (word/embeddings/*), keyed by target.
+      #
+      # @return [PartCollection] target => Part
+      def embeddings
+        @embeddings ||= PartCollection.new(:target, Part)
+      end
+
+      # Bulk-assign embeddings (Hash of target => Part/binary; nil clears).
+      def embeddings=(value)
+        embeddings.replace_all(value)
+      end
 
       # Central ID allocator — owns all rId, footnote, bookmark, etc. assignment.
       # Seeded from template rels on load; used by builders during construction.
@@ -171,18 +191,15 @@ module Uniword
           package.custom_xml_items = []
           custom_xml_files.sort_by { |f| f[/item(\d+)/, 1].to_i }.each do |item_path|
             index = item_path[/item(\d+)/, 1].to_i
-            item = {
-              index: index,
-              xml_content: zip_content[item_path]
-            }
-
             props_path = "customXml/itemProps#{index}.xml"
-            item[:props_xml] = zip_content[props_path] if zip_content[props_path]
-
             rels_path = "customXml/_rels/item#{index}.xml.rels"
-            item[:rels_xml] = zip_content[rels_path] if zip_content[rels_path]
 
-            package.custom_xml_items << item
+            package.custom_xml_items << CustomXmlItem.new(
+              index: index,
+              xml_content: zip_content[item_path],
+              props_xml: zip_content[props_path],
+              rels_xml: zip_content[rels_path],
+            )
           end
         end
 
@@ -297,7 +314,6 @@ module Uniword
         # Parse Chart parts
         chart_files = zip_content.keys.grep(%r{^word/charts/chart\d+\.xml$})
         if chart_files.any? && package.document_rels
-          package.document.chart_parts ||= {}
           chart_files.each do |chart_path|
             chart_target = chart_path.sub("word/", "")
             rel = package.document_rels.relationships.find do |r|
@@ -337,7 +353,8 @@ module Uniword
 
         return if header_files.empty? && footer_files.empty?
 
-        package.document.header_footer_parts ||= []
+        store = package.document.header_footer_parts
+        ref_types = header_footer_reference_types(package.document)
 
         header_files.sort.each do |path|
           target = path.sub("word/", "")
@@ -347,13 +364,15 @@ module Uniword
           end
           next unless rel
 
-          package.document.header_footer_parts << {
+          store << HeaderFooterPart.new(
+            kind: :header,
             r_id: rel.id,
             target: target,
             rel_type: rel.type,
-            content_type: Ooxml::PartRegistry.find_by_key(:header).content_type,
+            type: ref_types[rel.id],
             content: Uniword::Wordprocessingml::Header.from_xml(zip_content[path]),
-          }
+            loaded: true,
+          )
         end
 
         footer_files.sort.each do |path|
@@ -364,14 +383,45 @@ module Uniword
           end
           next unless rel
 
-          package.document.header_footer_parts << {
+          store << HeaderFooterPart.new(
+            kind: :footer,
             r_id: rel.id,
             target: target,
             rel_type: rel.type,
-            content_type: Ooxml::PartRegistry.find_by_key(:footer).content_type,
+            type: ref_types[rel.id],
             content: Uniword::Wordprocessingml::Footer.from_xml(zip_content[path]),
-          }
+            loaded: true,
+          )
         end
+      end
+
+      # Map relationship id => sectPr reference type
+      # ("default"/"first"/"even") from every section properties
+      # element (body-level and paragraph-level).
+      def self.header_footer_reference_types(document)
+        types = {}
+        section_properties_of(document).each do |sect_pr|
+          (sect_pr.header_references || []).each do |ref|
+            types[ref.r_id] = ref.type if ref.r_id
+          end
+          (sect_pr.footer_references || []).each do |ref|
+            types[ref.r_id] = ref.type if ref.r_id
+          end
+        end
+        types
+      end
+
+      def self.section_properties_of(document)
+        body = document.body
+        return [] unless body
+
+        sect_prs = []
+        sect_prs << body.section_properties if body.section_properties
+        (body.paragraphs || []).each do |para|
+          sect_pr = para.properties&.section_properties
+          sect_prs << sect_pr if sect_pr
+        end
+        sect_prs
       end
 
       # Extract image files from word/media/ directory in DOCX

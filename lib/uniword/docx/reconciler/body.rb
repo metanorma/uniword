@@ -48,85 +48,84 @@ module Uniword
         end
 
         def reconcile_headers_footers
+          parts = package.document&.header_footer_parts
           ignorable = Ooxml::Types::McIgnorable.new(FULL_IGNORABLE)
-          set_header_footer_ignorable(package.document&.headers, ignorable)
-          set_header_footer_ignorable(package.document&.footers, ignorable)
 
-          unless allocator
-            rsid = generate_rsid
-            backfill_header_footer_parts(package.document&.headers, rsid, "hdr")
-            backfill_header_footer_parts(package.document&.footers, rsid, "ftr")
+          parts&.each do |part|
+            next unless part.content
+            next if part.loaded?
 
-            parts = package.document&.header_footer_parts
-            parts&.each_with_index do |part, pidx|
-              backfill_paragraphs(part[:content].paragraphs, rsid, "hfp:#{pidx}")
-            end
+            part.content.mc_ignorable = ignorable
           end
 
-          wire_builder_headers_footers
+          unless allocator
+            backfill_header_footer_paragraphs(parts, generate_rsid)
+          end
+
+          wire_header_footer_parts
         end
 
         private
 
-        def set_header_footer_ignorable(parts, ignorable)
+        # Assign rsid/paraId defaults to header/footer paragraphs
+        # (legacy non-allocator path only). Seeds preserve the historic
+        # per-kind ("hdr:N"/"ftr:N") and per-store ("hfp:N") schemes so
+        # generated IDs stay stable across the unified store.
+        def backfill_header_footer_paragraphs(parts, rsid)
           return unless parts
 
-          parts.each_value { |part| part.mc_ignorable = ignorable }
-        end
+          fresh_counts = Hash.new(0)
+          parts.each_with_index do |part, pidx|
+            next unless part.content
 
-        def backfill_header_footer_parts(parts, rsid, prefix)
-          return unless parts
-
-          parts.each_with_index do |(_, part), pidx|
-            backfill_paragraphs(part.paragraphs, rsid, "#{prefix}:#{pidx}")
+            if part.loaded?
+              backfill_paragraphs(part.content.paragraphs, rsid, "hfp:#{pidx}")
+            else
+              abbrev = part.kind == :footer ? "ftr" : "hdr"
+              idx = fresh_counts[part.kind]
+              fresh_counts[part.kind] += 1
+              backfill_paragraphs(part.content.paragraphs, rsid,
+                                  "#{abbrev}:#{idx}")
+            end
           end
         end
 
-        HEADER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:header).rel_type
-        FOOTER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:footer).rel_type
-
-        # Wire builder-path headers/footers into document_rels and sectPr
-        # during reconciliation so referential integrity checks see valid rIds.
-        def wire_builder_headers_footers
+        # Wire builder-added (fresh) header/footer parts into
+        # document_rels and sectPr during reconciliation — the single
+        # wiring implementation. Loaded parts keep the relationships
+        # and section references they arrived with.
+        def wire_header_footer_parts
           doc = package.document
           return unless doc&.body
-          return unless doc.headers || doc.footers
+
+          parts = doc.header_footer_parts
+          return if parts.nil? || parts.empty?
 
           rels = package.document_rels
           return unless rels
 
-          counter = 0
-          wire_parts_to_rels(doc.headers, rels, HEADER_REL_TYPE,
-                             "header", counter) do |type, r_id|
-            wire_sect_pr_reference(doc, :header, type, r_id)
+          wired = false
+          parts.each do |part|
+            next if part.loaded? || part.target.nil?
+
+            r_id = if allocator
+                     allocator.alloc_rid(target: part.target,
+                                         type: part.rel_type)
+                   else
+                     find_or_create_rel(rels, part.rel_type, part.target)
+                   end
+            part.r_id = r_id
+            wire_sect_pr_reference(doc, part.kind, part.type, r_id) if part.type
+            wired = true
           end
 
-          counter = 0
-          wire_parts_to_rels(doc.footers, rels, FOOTER_REL_TYPE,
-                             "footer", counter) do |type, r_id|
-            wire_sect_pr_reference(doc, :footer, type, r_id)
-          end
+          return unless wired
 
           # Clear element_order so header/footer references serialize correctly.
           # Ordered mode only outputs elements in element_order; the template's
           # order may not include newly-added references.
           sect_pr = doc.body.section_properties
           sect_pr.element_order = nil if sect_pr&.element_order
-        end
-
-        def wire_parts_to_rels(parts, rels, rel_type, file_prefix, counter)
-          return unless parts && !parts.empty?
-
-          parts.each_key do |type|
-            counter += 1
-            target = "#{file_prefix}#{counter}.xml"
-            r_id = if allocator
-                     allocator.alloc_rid(target: target, type: rel_type)
-                   else
-                     find_or_create_rel(rels, rel_type, target)
-                   end
-            yield type, r_id
-          end
         end
 
         def find_or_create_rel(rels, rel_type, target)

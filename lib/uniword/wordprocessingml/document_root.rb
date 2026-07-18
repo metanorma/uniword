@@ -94,25 +94,13 @@ module Uniword
       # Additional attributes for DOCX metadata (not part of document.xml)
       # These are stored in separate files within the DOCX package
       attr_accessor :theme, :raw_html, :revisions, :comments
-      # Headers and footers (stored as hash: type => Header/Footer)
-      # Single-section only. For multi-section, use header_footer_parts.
-      attr_accessor :headers, :footers
-      # Multi-section headers/footers (ordered array):
-      # [{r_id: "rIdH1", target: "header1.xml", rel_type: "...",
-      #   content_type: "...", content: Header|Footer}]
-      attr_accessor :header_footer_parts
       # Footnotes and endnotes (separate XML parts in DOCX package)
       attr_accessor :footnotes, :endnotes
       # Image parts to embed in the DOCX package
       # Hash: r_id => { path: String, data: String, content_type: String, target: String }
       attr_accessor :image_parts
-      # Chart parts to embed in the DOCX package
-      # Hash: r_id => { xml: String, target: String }
-      attr_accessor :chart_parts
       # Bibliography sources for sources.xml
       attr_accessor :bibliography_sources
-      # OLE/embedded object binaries (word/embeddings/*)
-      attr_accessor :embeddings
       # Round-trip parts (copied from DocxPackage during load)
       attr_accessor :settings, :font_table, :web_settings, :document_rels, :theme_rels,
                     :package_rels, :content_types, :custom_properties, :custom_xml_items,
@@ -123,6 +111,72 @@ module Uniword
       # Writers for properties that have lazy-initialized getters
       # (removing from attr_accessor to avoid shadowing custom getters)
       attr_writer :app_properties, :core_properties, :bookmarks
+
+      # Unified header/footer part store — the single storage path
+      # for both round-tripped and builder-created headers/footers.
+      #
+      # @return [Docx::HeaderFooterPartCollection] ordered part store
+      def header_footer_parts
+        @header_footer_parts ||= Docx::HeaderFooterPartCollection.new
+      end
+
+      # Replace the whole store (accepts HeaderFooterPart objects and
+      # legacy part hashes).
+      def header_footer_parts=(parts)
+        header_footer_parts.replace_all(parts)
+      end
+
+      # Headers view over the unified store (Hash-style by sectPr
+      # type, Array-style over parts).
+      #
+      # @return [Docx::HeaderFooterView]
+      def headers
+        @headers ||=
+          Docx::HeaderFooterView.new(header_footer_parts, :header)
+      end
+
+      # Bulk-assign headers (nil clears; Hash of type => model; Array
+      # of models/parts).
+      def headers=(value)
+        headers.replace(value)
+      end
+
+      # Footers view over the unified store.
+      #
+      # @return [Docx::HeaderFooterView]
+      def footers
+        @footers ||=
+          Docx::HeaderFooterView.new(header_footer_parts, :footer)
+      end
+
+      # Bulk-assign footers (see #headers=).
+      def footers=(value)
+        footers.replace(value)
+      end
+
+      # Chart parts to embed in the DOCX package, keyed by rId.
+      #
+      # @return [Docx::PartCollection] rId => ChartPart
+      def chart_parts
+        @chart_parts ||= Docx::PartCollection.new(:r_id, Docx::ChartPart)
+      end
+
+      # Bulk-assign chart parts (Hash of rId => ChartPart/hash; nil clears).
+      def chart_parts=(value)
+        chart_parts.replace_all(value)
+      end
+
+      # OLE/embedded object binaries (word/embeddings/*), keyed by target.
+      #
+      # @return [Docx::PartCollection] target => Part
+      def embeddings
+        @embeddings ||= Docx::PartCollection.new(:target, Docx::Part)
+      end
+
+      # Bulk-assign embeddings (Hash of target => Part/binary; nil clears).
+      def embeddings=(value)
+        embeddings.replace_all(value)
+      end
 
       # Get app_properties (lazy initialization)
       #

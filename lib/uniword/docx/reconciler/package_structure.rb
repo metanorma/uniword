@@ -272,35 +272,21 @@ module Uniword
           PACKAGE_LEVEL_REL_TYPES.include?(type.to_s)
         end
 
-        # Check if a header/footer rel target corresponds to a serialized part.
-        # Headers/footers may be in two places:
-        #   - document.headers / document.footers (single-section hash)
-        #   - document.header_footer_parts (multi-section ordered array)
-        # Headers/footers are numbered sequentially: header1.xml, header2.xml...
-        # If the model has fewer headers/footers than the target index, it's stale.
+        # Check if a header/footer rel target corresponds to a part the
+        # package will emit. All header/footer parts live in the unified
+        # store (document.header_footer_parts), whether loaded from the
+        # source package or added programmatically; a rel whose target
+        # is not in the store points at a part that will not be
+        # serialized and must be treated as stale.
         def header_footer_target_present?(target)
-          if target.start_with?("header") && target.end_with?(".xml")
-            num = target[/header(\d+)\.xml/, 1]&.to_i
-            hash_count = package.document&.headers&.size || 0
-            parts_count = count_parts_matching("header")
-            count = [hash_count, parts_count].max
-            return num && num <= count
-          end
-          if target.start_with?("footer") && target.end_with?(".xml")
-            num = target[/footer(\d+)\.xml/, 1]&.to_i
-            hash_count = package.document&.footers&.size || 0
-            parts_count = count_parts_matching("footer")
-            count = [hash_count, parts_count].max
-            return num && num <= count
+          header_like = target.start_with?("header") || target.start_with?("footer")
+          if header_like && target.end_with?(".xml")
+            parts = package.document&.header_footer_parts
+            return false unless parts
+
+            return parts.targets.include?(target)
           end
           true
-        end
-
-        def count_parts_matching(prefix)
-          parts = package.document&.header_footer_parts
-          return 0 unless parts
-
-          parts.count { |p| p[:target].to_s.start_with?(prefix) }
         end
 
         # [registry key, package part] pairs in content-types emission

@@ -82,6 +82,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   missing footnote/endnote separator entries into a parsed document
 - `uniword verify`-style integration spec hang: `soffice --view` example
   no longer blocks the LibreOffice integration spec indefinitely
+- Header/footer dual path: adding a header/footer via the Builder to a
+  loaded document no longer drops the new part, duplicates
+  relationships or content-type overrides, or points two sectPr
+  references at the same rId. Round-trips that previously re-added a
+  stale relationship with the original rId (duplicate target rels, e.g.
+  on the APA paper template) now emit exactly one rel per part
+- `uniword headers list` now reports headers/footers of loaded
+  documents, and `headers add-header` / watermark managers no longer
+  crash when saving (both used to bypass the round-trip storage)
 
 ### Changed
 
@@ -106,6 +115,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Open/closed: register a `PartDefinition` to add a part kind —
     consumers need no changes
   - No behavior change: saved packages are byte-identical
+- Package-held parts are now model objects instead of raw hashes
+  - New `Uniword::Docx::Part` value object (definition, rId, target,
+    content, verbatim rel-type/content-type overrides) with `ChartPart`
+    and `HeaderFooterPart` subclasses and `CustomXmlItem`;
+    `Docx::PartCollection` backs `chart_parts` (keyed by rId) and
+    `embeddings` (keyed by target)
+  - Single header/footer storage path: `DocumentRoot#header_footer_parts`
+    is a `Docx::HeaderFooterPartCollection` fed identically by the loader
+    (original rIds/targets, sectPr-derived types) and the Builder;
+    `document.headers`/`document.footers` are delegating
+    `Docx::HeaderFooterView`s over that store (Hash-style by sectPr type,
+    Array-style over parts) — public API preserved
+  - Single wiring implementation: the Reconciler wires fresh
+    header/footer parts into `document.xml.rels` and sectPr
+    (`IdAllocator` on the builder path, `find_or_create_rel` on the
+    legacy path); the serializer's duplicate rel/sectPr wiring and its
+    divergent rId strategy are deleted — it now only emits one part
+    file and one content-type override per store entry
 
 #### StylesetPackage Implementation (December 4, 2024)
 - **StylesetPackage**: Proper MODEL-DRIVEN package for .dotx files

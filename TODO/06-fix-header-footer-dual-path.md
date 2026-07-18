@@ -1,12 +1,16 @@
 # 012: Fix header/footer dual-path ambiguity
 
-## Status: DEFERRED
+## Status: COMPLETED via TODO.validate/09
 
-## Reason for deferral
-Requires coordinated changes to Package.from_zip_content loading, serialization,
-and round-trip paths. High risk of breaking existing round-trip compatibility.
-TODO 009 (rId wiring in reconciler) mitigates the most critical issue (rId mismatch).
-Revisit when round-trip test coverage is comprehensive enough to catch regressions.
+`header_footer_parts` is now the single storage path: a
+`Docx::HeaderFooterPartCollection` of `HeaderFooterPart` value objects
+populated identically by the loader (with original rIds/targets and
+sectPr-derived types) and by the Builder (`document.headers`/`footers`
+are delegating views over the same store with upsert-by-type semantics).
+Duplicate rels, overwritten sectPr rIds and duplicate content-type
+overrides are impossible by construction; the serializer-side dual
+injection was deleted. See `TODO.validate/09-model-driven-package-parts.md`
+completion notes.
 
 ## Problem
 

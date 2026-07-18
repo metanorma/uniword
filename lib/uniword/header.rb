@@ -12,6 +12,10 @@ module Uniword
     attribute :tables, Wordprocessingml::Table, collection: true,
                                                 initialize_empty: true
 
+    # mc:Ignorable prefix list carried to the serialized
+    # Wordprocessingml header part (set by the reconciler).
+    attr_accessor :mc_ignorable
+
     # Valid header types
     TYPES = %w[default first even].freeze
 
