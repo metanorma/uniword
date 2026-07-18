@@ -3,7 +3,7 @@
 require "yaml"
 
 module Uniword
-  module Configuration
+  class Configuration
     # Loads and manages external configuration files.
     #
     # Responsibility: Load configuration from external YAML files.
@@ -65,12 +65,14 @@ module Uniword
         # Get a configuration value with dot notation
         #
         # @param config [Hash] Configuration hash
-        # @param key_path [String] Dot-separated key path (e.g., 'format_defaults.docx.default_font')
+        # @param key_path [String] Dot-separated key path
+        #   (e.g., 'format_defaults.docx.default_font')
         # @param default [Object] Default value if key not found
         # @return [Object] Configuration value or default
         #
         # @example Get nested value
-        #   font = ConfigurationLoader.get(config, 'format_defaults.docx.default_font')
+        #   font = ConfigurationLoader.get(config,
+        #                                  'format_defaults.docx.default_font')
         def get(config, key_path, default = nil)
           keys = key_path.split(".")
           value = keys.reduce(config) do |hash, key|
