@@ -116,7 +116,8 @@ module Uniword
             with: { from: :yaml_widow_control_from, to: :yaml_widow_control_to }
       end
 
-      # YAML transform methods (instance methods - called via send on an instance)
+      # YAML transform methods (instance methods called by lutaml-model's
+      # `with:` transform mechanism)
       def yaml_style_from(instance, value)
         if value
           instance.style = [
@@ -200,21 +201,6 @@ module Uniword
         # Style reference - maps w:pStyle w:val="..." to style attribute
         map_element "pStyle", to: :style, render_nil: false
 
-        # Alignment - maps w:jc w:val="..." to alignment attribute
-        map_element "jc", to: :alignment, render_nil: false
-
-        # Spacing (complex object - WORKS)
-        map_element "spacing", to: :spacing, render_nil: false
-
-        # Indentation (complex object)
-        map_element "ind", to: :indentation, render_nil: false
-
-        # Outline level (wrapper object)
-        map_element "outlineLvl", to: :outline_level, render_nil: false
-
-        # Numbering properties (wrapped in w:numPr)
-        map_element "numPr", to: :numbering_properties, render_nil: false
-
         # Keep options (only render if true)
         map_element "keepNext", to: :keep_next_wrapper, render_nil: false,
                                 render_default: false
@@ -225,32 +211,51 @@ module Uniword
         map_element "widowControl", to: :widow_control_wrapper, render_nil: false,
                                     render_default: false
 
-        # Spacing options (only render if true)
-        map_element "contextualSpacing", to: :contextual_spacing, render_nil: false,
-                                         render_default: false
+        # Numbering properties (wrapped in w:numPr)
+        map_element "numPr", to: :numbering_properties, render_nil: false
+
+        # Suppress line numbers (only render if true)
         map_element "suppressLineNumbers", to: :suppress_line_numbers, render_nil: false,
                                            render_default: false
 
-        # Bidirectional (only render if true)
-        map_element "bidi", to: :bidirectional, render_nil: false,
-                            render_default: false
+        # Borders (complex object)
+        map_element "pBdr", to: :borders, render_nil: false
+
+        # Shading (complex object)
+        map_element "shd", to: :shading, render_nil: false
+
+        # Tabs (complex object - collection)
+        map_element "tabs", to: :tabs, render_nil: false
 
         # East Asian typography
         map_element "autoSpaceDE", to: :auto_space_de, render_nil: false,
                                    render_default: false
         map_element "autoSpaceDN", to: :auto_space_dn, render_nil: false,
                                    render_default: false
+
+        # Bidirectional (only render if true)
+        map_element "bidi", to: :bidirectional, render_nil: false,
+                            render_default: false
+
+        # Right indent adjustment
         map_element "adjustRightInd", to: :adjust_right_ind, render_nil: false,
                                       render_default: false
 
-        # Borders (complex object)
-        map_element "pBdr", to: :borders, render_nil: false
+        # Spacing (complex object - WORKS)
+        map_element "spacing", to: :spacing, render_nil: false
 
-        # Tabs (complex object - collection)
-        map_element "tabs", to: :tabs, render_nil: false
+        # Indentation (complex object)
+        map_element "ind", to: :indentation, render_nil: false
 
-        # Shading (complex object)
-        map_element "shd", to: :shading, render_nil: false
+        # Contextual spacing (only render if true)
+        map_element "contextualSpacing", to: :contextual_spacing, render_nil: false,
+                                         render_default: false
+
+        # Alignment - maps w:jc w:val="..." to alignment attribute
+        map_element "jc", to: :alignment, render_nil: false
+
+        # Outline level (wrapper object)
+        map_element "outlineLvl", to: :outline_level, render_nil: false
 
         # Run properties (for pPr/rPr - style overrides)
         map_element "rPr", to: :run_properties, render_nil: false
