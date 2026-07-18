@@ -54,7 +54,8 @@ module Uniword
             settings.w14_doc_id = Wordprocessingml::W14DocId.new(
               val: hex_derive("w14_doc_id", 4),
             )
-            record_fix(FixCodes::DOC_ID_GENERATED, "Generated w14:docId")
+            record_fix(FixCodes::DOC_ID_GENERATED, "Generated w14:docId",
+                       part: "word/settings.xml")
           end
           unless settings.w15_doc_id
             raw = hex_derive("w15_doc_id", 16)
@@ -63,7 +64,9 @@ module Uniword
             settings.w15_doc_id = Wordprocessingml::W15DocId.new(
               val: "{#{formatted.upcase}}",
             )
-            record_fix(FixCodes::DOC_ID_GENERATED, "Generated w15:docId in GUID format")
+            record_fix(FixCodes::DOC_ID_GENERATED,
+                       "Generated w15:docId in GUID format",
+                       part: "word/settings.xml")
           end
 
           set_mc_ignorable(settings)
@@ -75,7 +78,8 @@ module Uniword
           font_table = package.font_table
           font_table ||= begin
             package.font_table = Wordprocessingml::FontTable.new
-            record_fix(FixCodes::FONT_TABLE_CREATED, "Created font table")
+            record_fix(FixCodes::FONT_TABLE_CREATED, "Created font table",
+                       part: "word/fontTable.xml")
             package.font_table
           end
 
@@ -114,7 +118,8 @@ module Uniword
 
           set_mc_ignorable(font_table)
           record_fix(FixCodes::FONT_TABLE_CREATED,
-                     "Populated font table with profile fonts and signatures")
+                     "Populated font table with profile fonts and signatures",
+                     part: "word/fontTable.xml")
         end
 
         def reconcile_styles
@@ -133,7 +138,8 @@ module Uniword
 
           set_mc_ignorable(styles)
           record_fix(FixCodes::STYLE_DEFAULTS_ADDED,
-                     "Ensured styles have docDefaults, latentStyles, and default styles")
+                     "Ensured styles have docDefaults, latentStyles, and default styles",
+                     part: "word/styles.xml")
         end
 
         def reconcile_numbering
@@ -149,7 +155,8 @@ module Uniword
             raw = raw - 0x100000000 if raw >= 0x80000000
             inst.durable_id = raw.to_s
             record_fix(FixCodes::NUMBERING_REFERENCED,
-                       "Generated w16cid:durableId for numId=#{inst.num_id}")
+                       "Generated w16cid:durableId for numId=#{inst.num_id}",
+                       part: "word/numbering.xml")
           end
 
           package.numbering.instances.each do |inst|
@@ -165,8 +172,10 @@ module Uniword
             end
             next if defn
 
-            record_fix(FixCodes::NUMBERING_REFERENCED, "Numbering instance numId=#{inst.num_id} references " \
-                             "missing abstractNumId=#{abs_id}")
+            record_fix(FixCodes::NUMBERING_REFERENCED,
+                       "Numbering instance numId=#{inst.num_id} references " \
+                       "missing abstractNumId=#{abs_id}",
+                       part: "word/numbering.xml")
           end
         end
 
@@ -180,7 +189,8 @@ module Uniword
           end
 
           set_mc_ignorable(ws)
-          record_fix(FixCodes::MC_IGNORABLE, "Cleared mc:Ignorable on webSettings")
+          record_fix(FixCodes::MC_IGNORABLE, "Cleared mc:Ignorable on webSettings",
+                     part: "word/webSettings.xml")
         end
 
         def reconcile_app_properties
@@ -219,7 +229,9 @@ module Uniword
           app.heading_pairs = nil
           app.titles_of_parts = nil
 
-          record_fix(FixCodes::APP_PROPERTIES_ENSURED, "Ensured app properties with statistics")
+          record_fix(FixCodes::APP_PROPERTIES_ENSURED,
+                     "Ensured app properties with statistics",
+                     part: "docProps/app.xml")
         end
 
         def reconcile_core_properties
@@ -259,7 +271,9 @@ module Uniword
           )
 
           cp.revision = "1" unless cp.revision
-          record_fix(FixCodes::CORE_PROPERTIES_REBUILT, "Rebuilt core properties with namespace declarations")
+          record_fix(FixCodes::CORE_PROPERTIES_REBUILT,
+                     "Rebuilt core properties with namespace declarations",
+                     part: "docProps/core.xml")
         end
 
         private
@@ -424,7 +438,9 @@ module Uniword
           if dpf && !dpf.semiHidden && !allocator
             dpf.semiHidden = Wordprocessingml::SemiHidden.new
             ensure_element_in_order(dpf, "semiHidden", after: "uiPriority")
-            record_fix(FixCodes::SEMI_HIDDEN_ADDED, "Added semiHidden to DefaultParagraphFont style")
+            record_fix(FixCodes::SEMI_HIDDEN_ADDED,
+                       "Added semiHidden to DefaultParagraphFont style",
+                       part: "word/styles.xml")
           end
 
           unless style_ids.include?("TableNormal")

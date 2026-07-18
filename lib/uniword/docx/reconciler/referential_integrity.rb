@@ -6,43 +6,21 @@ module Uniword
       # Cross-part referential integrity enforcement.
       #
       # Verifies and repairs references between document.xml and other
-      # package parts. Each method follows the principle of least surprise:
-      # - For removable inline refs (notes): strip dangling silently
-      # - For structural refs (styles, numbering): warn and strip
+      # package parts. Both the allocator (builder) path and the legacy
+      # (template-loaded) path repair by stripping: identical input yields
+      # identical referential outcome regardless of path. Unrepairable
+      # leftovers are rejected by the write-time PackageIntegrityChecker.
+      # - For removable inline refs (notes, hyperlinks, drawings): strip
+      # - For structural refs (styles, numbering): strip
       # - For relationship refs (rId): reconcile against actual parts
+      # - For relationship targets: strip rels whose target part the
+      #   package does not carry (the part is never re-emitted, so the
+      #   rel would dangle in the saved package)
       # - For uniqueness constraints: deduplicate with deterministic resolution
       module ReferentialIntegrity
         def reconcile_referential_integrity
           return unless package.document&.body
 
-          if allocator
-            validate_builder_references
-          else
-            repair_all_references
-          end
-
-          reconcile_style_references
-          reconcile_style_inheritance
-          reconcile_numbering_body_references
-        end
-
-        private
-
-        # Allocator present: builders produce correct output.
-        # Validate builder-constrained references — warn on issues
-        # but don't silently strip (indicates a builder bug).
-        def validate_builder_references
-          validate_note_references(:footnote)
-          validate_note_references(:endnote)
-          reconcile_image_references
-          validate_hyperlink_references
-          ensure_para_id_uniqueness
-          ensure_rid_uniqueness
-          reconcile_sect_pr_references
-        end
-
-        # No allocator: legacy repair path for template-loaded content.
-        def repair_all_references
           reconcile_note_body_references(:footnote)
           reconcile_note_body_references(:endnote)
           reconcile_sect_pr_references
@@ -50,72 +28,14 @@ module Uniword
           reconcile_hyperlink_references
           ensure_para_id_uniqueness
           ensure_rid_uniqueness
+          reconcile_relationship_targets
+
+          reconcile_style_references
+          reconcile_style_inheritance
+          reconcile_numbering_body_references
         end
 
-        # Validate that note references in the body match existing notes.
-        # Logs warnings but does NOT strip — builder should produce correct refs.
-        def validate_note_references(type)
-          notes = notes_collection_for(type)
-          return unless notes
-
-          entries = note_entries_for(notes, type)
-          defined_ids = entries
-            .reject { |e| VALID_NOTE_TYPES.include?(e.type) }
-            .filter_map(&:id).to_set
-
-          dangling = 0
-          walk_body_paragraphs(package.document.body) do |para|
-            para.runs.each do |run|
-              ref = note_reference_from_run(run, type)
-              next unless ref&.id
-              next if defined_ids.include?(ref.id)
-
-              dangling += 1
-              Uniword.logger&.warn do
-                "Dangling #{type}note reference id=#{ref.id} in body — " \
-                "builder produced invalid reference"
-              end
-            end
-          end
-
-          return unless dangling.positive?
-
-          record_fix(FixCodes::DANGLING_NOTE_REFERENCE_WARNING,
-                     "WARNING: Found #{dangling} dangling #{type}note reference(s) " \
-                     "in body (allocator path — builder bug)")
-        end
-
-        # Validate that hyperlink references match existing rels.
-        # Logs warnings but does NOT strip — builder should register hyperlinks.
-        def validate_hyperlink_references
-          rels = package.document_rels
-          return unless rels
-
-          valid_rids = rels.relationships.to_set(&:id)
-          return if valid_rids.empty?
-
-          dangling = 0
-          walk_body_paragraphs(package.document.body) do |para|
-            (para.hyperlinks || []).each do |hl|
-              next if hl.anchor
-              next unless hl.id
-              next unless hl.id.match?(/\ArId\d+\z/i)
-              next if valid_rids.include?(hl.id)
-
-              dangling += 1
-              Uniword.logger&.warn do
-                "Dangling hyperlink r:id=#{hl.id} in body — " \
-                "builder failed to register hyperlink with allocator"
-              end
-            end
-          end
-
-          return unless dangling.positive?
-
-          record_fix(FixCodes::DANGLING_HYPERLINK_WARNING,
-                     "WARNING: Found #{dangling} dangling hyperlink reference(s) " \
-                     "in body (allocator path — builder bug)")
-        end
+        private
 
         # -- Note references (body → footnotes.xml / endnotes.xml) --
 
@@ -144,17 +64,21 @@ module Uniword
           return unless removed.positive?
 
           record_fix(FixCodes::DANGLING_NOTE_REFERENCE_REMOVED,
-                     "Removed #{removed} dangling #{type}note reference(s) in body")
+                     "Removed #{removed} dangling #{type}note reference(s) in body",
+                     part: "word/document.xml")
         end
 
         # -- Section property references (sectPr → document.xml.rels) --
 
+        # Strip header/footer references whose rId does not resolve.
+        # Builder-registered headers/footers are wired into document_rels
+        # during Group 1 (wire_builder_headers_footers), so any reference
+        # still dangling here has no backing part on either path.
         def reconcile_sect_pr_references
           sect_pr = package.document&.body&.section_properties
           return unless sect_pr
 
           valid_rids = collect_valid_header_footer_rids
-          return if valid_rids.empty?
 
           removed = 0
           [sect_pr.header_references, sect_pr.footer_references].each do |refs|
@@ -167,7 +91,8 @@ module Uniword
           return unless removed.positive?
 
           record_fix(FixCodes::DANGLING_HEADER_FOOTER_REMOVED,
-                     "Removed #{removed} dangling header/footer reference(s) from sectPr")
+                     "Removed #{removed} dangling header/footer reference(s) from sectPr",
+                     part: "word/document.xml")
         end
 
         def collect_valid_header_footer_rids
@@ -212,7 +137,8 @@ module Uniword
           return unless removed.positive?
 
           record_fix(FixCodes::DANGLING_STYLE_REFERENCE_REMOVED,
-                     "Removed #{removed} dangling style reference(s) from body")
+                     "Removed #{removed} dangling style reference(s) from body",
+                     part: "word/document.xml")
         end
 
         # -- Style inheritance (styles.xml self-references) --
@@ -241,7 +167,8 @@ module Uniword
           return unless stripped.positive?
 
           record_fix(FixCodes::DANGLING_BASED_ON_REMOVED,
-                     "Removed #{stripped} dangling basedOn/link reference(s) in styles")
+                     "Removed #{stripped} dangling basedOn/link reference(s) in styles",
+                     part: "word/styles.xml")
         end
 
         # -- Numbering references (body → numbering.xml) --
@@ -271,41 +198,17 @@ module Uniword
           return unless removed.positive?
 
           record_fix(FixCodes::DANGLING_NUMBERING_REMOVED,
-                     "Removed #{removed} dangling numbering reference(s) from body")
+                     "Removed #{removed} dangling numbering reference(s) from body",
+                     part: "word/document.xml")
         end
 
         # -- Image references (blip/@r:embed → document.xml.rels) --
 
+        # Remove drawings whose r:embed has no matching image relationship,
+        # consistent with the other referential repairs. A drawing is kept
+        # when it has no embed references (e.g. shape-only anchors) or at
+        # least one embed rId resolves.
         def reconcile_image_references
-          rels = package.document_rels
-          return unless rels
-
-          valid_rids = rels.relationships.to_set(&:id)
-          return if valid_rids.empty?
-
-          dangling = 0
-
-          walk_body_paragraphs(package.document.body) do |para|
-            (para.runs || []).each do |run|
-              (run.drawings || []).each do |drawing|
-                drawing_embed_rids(drawing).each do |rid|
-                  next if valid_rids.include?(rid)
-
-                  dangling += 1
-                end
-              end
-            end
-          end
-
-          return unless dangling.positive?
-
-          record_fix(FixCodes::DANGLING_DRAWING_REMOVED,
-                     "Found #{dangling} drawing(s) with dangling image reference(s)")
-        end
-
-        # -- Hyperlink references (hyperlink/@r:id → document.xml.rels) --
-
-        def reconcile_hyperlink_references
           rels = package.document_rels
           return unless rels
 
@@ -315,21 +218,93 @@ module Uniword
           removed = 0
 
           walk_body_paragraphs(package.document.body) do |para|
-            (para.hyperlinks || []).reject! do |hl|
-              next false if hl.anchor
-              next false unless hl.id
-              next false unless hl.id.match?(/\ArId\d+\z/i)
-              next false if valid_rids.include?(hl.id)
+            (para.runs || []).each do |run|
+              next unless run.drawings
 
-              removed += 1
-              true
+              kept = run.drawings.reject do |drawing|
+                dangling_drawing?(drawing, valid_rids)
+              end
+              removed += run.drawings.size - kept.size
+              run.drawings = kept
             end
           end
 
           return unless removed.positive?
 
+          record_fix(FixCodes::DANGLING_DRAWING_REMOVED,
+                     "Removed #{removed} drawing(s) with dangling image reference(s)",
+                     part: "word/document.xml")
+        end
+
+        # A drawing is dangling when it carries embed references and none
+        # of them resolves to a relationship in document.xml.rels.
+        def dangling_drawing?(drawing, valid_rids)
+          rids = drawing_embed_rids(drawing)
+          return false if rids.empty?
+
+          rids.none? { |rid| valid_rids.include?(rid) }
+        end
+
+        # -- Hyperlink references (hyperlink/@r:id → document.xml.rels) --
+
+        # Repair hyperlink references: dangling rIds are stripped (like
+        # other referential repairs); literal URLs placed in r:id by
+        # Builder.hyperlink's target= are promoted to proper External
+        # relationships so the package stays valid and the link survives.
+        def reconcile_hyperlink_references
+          rels = package.document_rels
+          return unless rels
+
+          valid_rids = rels.relationships.to_set(&:id)
+          return if valid_rids.empty?
+
+          removed = 0
+          promoted = 0
+
+          walk_body_paragraphs(package.document.body) do |para|
+            (para.hyperlinks || []).reject! do |hl|
+              next false if hl.anchor
+              next false unless hl.id
+              next false if valid_rids.include?(hl.id)
+
+              if hl.id.match?(/\ArId\d+\z/i)
+                removed += 1
+                true
+              else
+                promote_literal_hyperlink(rels, hl, valid_rids)
+                promoted += 1
+                false
+              end
+            end
+          end
+
+          if promoted.positive?
+            record_fix(FixCodes::HYPERLINK_RELATIONSHIP_CREATED,
+                       "Promoted #{promoted} literal hyperlink target(s) " \
+                       "to external relationship(s)",
+                       part: "word/_rels/document.xml.rels")
+          end
+
+          return unless removed.positive?
+
           record_fix(FixCodes::DANGLING_HYPERLINK_REMOVED,
-                     "Removed #{removed} dangling hyperlink reference(s) from body")
+                     "Removed #{removed} dangling hyperlink reference(s) from body",
+                     part: "word/document.xml")
+        end
+
+        # Promote a hyperlink whose r:id holds a literal URL to a proper
+        # External relationship, repointing the hyperlink at the new rId.
+        def promote_literal_hyperlink(rels, hyperlink, valid_rids)
+          new_rid = Ooxml::Relationships::PackageRelationships
+            .next_available_rid(rels)
+          rels.relationships << Ooxml::Relationships::Relationship.new(
+            id: new_rid,
+            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+            target: hyperlink.id.to_s,
+            target_mode: "External",
+          )
+          valid_rids << new_rid
+          hyperlink.id = new_rid
         end
 
         # -- Uniqueness constraints --
@@ -353,7 +328,8 @@ module Uniword
           return unless collisions.positive?
 
           record_fix(FixCodes::PARAGRAPH_BACKFILL,
-                     "Resolved #{collisions} paraId collision(s)")
+                     "Resolved #{collisions} paraId collision(s)",
+                     part: "word/document.xml")
         end
 
         def ensure_rid_uniqueness
@@ -379,10 +355,172 @@ module Uniword
             old_id = rel.id
             rel.id = derive_unique_rid(rels, old_id)
             record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                       "Deduplicated rId #{old_id} → #{rel.id}")
+                       "Deduplicated rId #{old_id} → #{rel.id}",
+                       part: "word/_rels/document.xml.rels")
           end
 
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED, "Resolved #{duplicates.size} rId collision(s)")
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Resolved #{duplicates.size} rId collision(s)",
+                     part: "word/_rels/document.xml.rels")
+        end
+
+        # -- Relationship targets (rels → emitted parts) --
+
+        # Strip relationships whose target part the package does not
+        # carry. Group 3 preserves non-standard source rels verbatim,
+        # including rels to parts uniword does not model (e.g.
+        # docProps/meta.xml); those parts are never re-emitted, so the
+        # rel would dangle (OPC-006) in the saved package.
+        def reconcile_relationship_targets
+          carried = carried_part_paths
+
+          strip_dangling_relationship_targets(
+            package.package_rels, "", carried, "_rels/.rels"
+          )
+          strip_dangling_relationship_targets(
+            package.document_rels, "word", carried,
+            "word/_rels/document.xml.rels"
+          )
+          strip_dangling_relationship_targets(
+            package.settings_rels, "word", carried,
+            "word/_rels/settings.xml.rels"
+          )
+          strip_dangling_relationship_targets(
+            package.theme_rels, "word/theme", carried,
+            "word/theme/_rels/theme1.xml.rels"
+          )
+        end
+
+        def strip_dangling_relationship_targets(rels, base_dir, carried,
+                                                part)
+          return unless rels&.relationships
+
+          dangling = rels.relationships.select do |rel|
+            dangling_relationship_target?(rel, base_dir, carried)
+          end
+          return if dangling.empty?
+
+          dangling.each { |rel| rels.relationships.delete(rel) }
+          record_target_removal(dangling, part)
+        end
+
+        def record_target_removal(dangling, part)
+          targets = dangling.map { |rel| rel.target.to_s }.join(", ")
+          record_fix(FixCodes::DANGLING_RELATIONSHIP_TARGET_REMOVED,
+                     "Removed #{dangling.size} relationship(s) to parts " \
+                     "not carried by the package: #{targets}",
+                     part: part)
+        end
+
+        # A relationship dangles when it is internal and its resolved
+        # target is not among the parts the save path emits.
+        def dangling_relationship_target?(rel, base_dir, carried)
+          return false if rel.target_mode.to_s == "External"
+
+          target = rel.target.to_s
+          return false if target.empty? || target.start_with?("#")
+
+          !carried.include?(resolve_relationship_target(base_dir, target))
+        end
+
+        # Resolve a relationship target to a normalized package path,
+        # handling package-absolute (leading slash) targets and "..".
+        def resolve_relationship_target(base_dir, target)
+          return target[1..] if target.start_with?("/")
+
+          File.expand_path(File.join("/", base_dir, target))[1..]
+        end
+
+        # Package paths the save path emits, derived from the model —
+        # mirrors serialize_package_parts / inject_* emission.
+        def carried_part_paths
+          paths = carried_word_parts + carried_docprops_parts
+          paths.concat(custom_xml_item_paths)
+          paths.concat(document_part_paths)
+          paths.to_set
+        end
+
+        # [model, package path] pairs for single-instance word/ parts.
+        def carried_word_parts
+          pairs = core_word_pairs + note_word_pairs
+          pairs.filter_map { |model, path| path if model }
+        end
+
+        def core_word_pairs
+          [
+            [package.document, "word/document.xml"],
+            [package.styles, "word/styles.xml"],
+            [package.numbering, "word/numbering.xml"],
+            [package.settings, "word/settings.xml"],
+            [package.font_table, "word/fontTable.xml"],
+            [package.web_settings, "word/webSettings.xml"],
+          ]
+        end
+
+        def note_word_pairs
+          [
+            [package.theme, "word/theme/theme1.xml"],
+            [package.footnotes, "word/footnotes.xml"],
+            [package.endnotes, "word/endnotes.xml"],
+            [package.document&.bibliography_sources, "word/sources.xml"],
+          ]
+        end
+
+        # [model, package path] pairs for single-instance docProps/ parts.
+        def carried_docprops_parts
+          pairs = [
+            [package.core_properties, "docProps/core.xml"],
+            [package.app_properties, "docProps/app.xml"],
+            [package.custom_properties, "docProps/custom.xml"],
+          ]
+          pairs.filter_map { |model, path| path if model }
+        end
+
+        def custom_xml_item_paths
+          (package.custom_xml_items || []).flat_map do |item|
+            paths = ["customXml/item#{item[:index]}.xml"]
+            if item[:props_xml]
+              paths << "customXml/itemProps#{item[:index]}.xml"
+            end
+            paths
+          end
+        end
+
+        # Paths emitted from the document model: media, charts,
+        # embeddings, headers and footers (hash and multi-section parts).
+        def document_part_paths
+          doc = package.document
+          return [] unless doc
+
+          media_chart_paths(doc) + header_footer_paths(doc)
+        end
+
+        def media_chart_paths(doc)
+          paths = [doc.image_parts, doc.chart_parts].compact.flat_map do |parts|
+            parts.values.map { |data| "word/#{data[:target]}" }
+          end
+          paths.concat(embedding_paths)
+        end
+
+        def embedding_paths
+          (package.embeddings || {}).keys.map { |target| "word/#{target}" }
+        end
+
+        def header_footer_paths(doc)
+          paths = multi_section_part_paths(doc)
+          paths.concat(sequential_part_paths("header", doc.headers&.size))
+          paths.concat(sequential_part_paths("footer", doc.footers&.size))
+          paths
+        end
+
+        def multi_section_part_paths(doc)
+          (doc.header_footer_parts || []).map do |part|
+            "word/#{part[:target]}"
+          end
+        end
+
+        def sequential_part_paths(prefix, count)
+          1.upto(count || 0).map { |i| "word/#{prefix}#{i}.xml" }
         end
 
         # -- Traversal helpers --

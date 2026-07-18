@@ -38,7 +38,8 @@ module Uniword
               )
             end
             record_fix(FixCodes::NOTE_DEFINITION_CREATED,
-                       "Created missing #{type}note definitions for ids=#{missing.join(', ')}")
+                       "Created missing #{type}note definitions for ids=#{missing.join(', ')}",
+                       part: notes_part_for(type))
           end
         end
 
@@ -70,11 +71,13 @@ module Uniword
                                  create_message:, pr_message:)
           if has_pr && !notes
             notes_setter.call(minimal_notes(type))
-            record_fix(FixCodes::NOTE_PAIR_CREATED, create_message)
+            record_fix(FixCodes::NOTE_PAIR_CREATED, create_message,
+                       part: notes_part_for(type))
           elsif notes && !has_pr
             package.settings ||= Wordprocessingml::Settings.new
             assign_note_pr(package.settings, type)
-            record_fix(FixCodes::NOTE_PAIR_CREATED, pr_message)
+            record_fix(FixCodes::NOTE_PAIR_CREATED, pr_message,
+                       part: "word/settings.xml")
           end
 
           current = notes_collection_for(type)
@@ -182,7 +185,8 @@ module Uniword
           return if stripped.empty?
 
           record_fix(FixCodes::NOTE_INVALID_TYPE_STRIPPED,
-                     "Stripped invalid w:type from #{type}note ids=#{stripped.join(', ')}")
+                     "Stripped invalid w:type from #{type}note ids=#{stripped.join(', ')}",
+                     part: notes_part_for(type))
         end
 
         def deduplicate_note_ids(entries, type)
@@ -200,7 +204,8 @@ module Uniword
           return if dup_ids.empty?
 
           record_fix(FixCodes::NOTE_DUPLICATE_ID_REMOVED,
-                     "Removed duplicate #{type}note ids=#{dup_ids.join(', ')}")
+                     "Removed duplicate #{type}note ids=#{dup_ids.join(', ')}",
+                     part: notes_part_for(type))
         end
 
         def reorder_notes_by_reference(entries, type)
@@ -227,7 +232,9 @@ module Uniword
           structural.each { |e| entries << e }
           reordered.each { |e| entries << e }
 
-          record_fix(FixCodes::NOTE_PAIR_CREATED, "Reordered #{type}notes by first reference in document body")
+          record_fix(FixCodes::NOTE_PAIR_CREATED,
+                     "Reordered #{type}notes by first reference in document body",
+                     part: notes_part_for(type))
         end
 
         def renumber_notes(entries, type)
@@ -255,7 +262,9 @@ module Uniword
             end
           end
 
-          record_fix(FixCodes::NOTE_PAIR_CREATED, "Renumbered #{type}note IDs sequentially (#{id_map.size} changed)")
+          record_fix(FixCodes::NOTE_PAIR_CREATED,
+                     "Renumbered #{type}note IDs sequentially (#{id_map.size} changed)",
+                     part: notes_part_for(type))
         end
 
         def collect_note_reference_order(body, type)

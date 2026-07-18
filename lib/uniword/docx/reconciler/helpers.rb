@@ -295,6 +295,14 @@ module Uniword
           end
         end
 
+        # Package part path of the notes collection for the note type.
+        def notes_part_for(type)
+          case type
+          when :footnote then "word/footnotes.xml"
+          when :endnote  then "word/endnotes.xml"
+          end
+        end
+
         def note_entries_for(notes, type)
           return [] unless notes
 

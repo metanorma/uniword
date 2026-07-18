@@ -7,14 +7,15 @@ module Uniword
       #
       # Every `record_fix` call site references a constant from this module
       # instead of a bare string literal. Adding a new fix category means
-      # adding one constant here, not hunting for the next free letter.
+      # adding one constant here with the next free code.
       #
-      # Wire format is preserved — external validation rules and audit-log
-      # consumers that pattern-match on "R1".."R16" continue to work.
-      #
-      # Known debt: R10 is overloaded for several distinct concerns
-      # (note defs, table structure, style defaults, dangling refs).
-      # Splitting requires consumer coordination.
+      # One code per concern: each constant has a unique, self-describing
+      # wire value. Codes "R1".."R16" are frozen — external validation rules
+      # (lib/uniword/validation/rules) and audit-log consumers pattern-match
+      # on them, so the original concerns keep their historic codes. Codes
+      # "R17" and up were introduced when the overloaded "R10" (and the
+      # remaining shared codes "R4"/"R11"/"R12"/"R13") were split into
+      # per-concern values.
       module FixCodes
         # Settings / package structure
         MC_IGNORABLE = "R1"
@@ -29,16 +30,11 @@ module Uniword
         CONTENT_TYPES_ASSEMBLED = "R7"
         APP_PROPERTIES_ENSURED = "R8"
 
-        # Notes — pair creation
+        # Notes — pair creation and definition integrity
         NOTE_PAIR_CREATED = "R9"
         NOTE_DEFINITION_CREATED = "R10"
         NOTE_INVALID_TYPE_STRIPPED = "R15"
         NOTE_DUPLICATE_ID_REMOVED = "R16"
-
-        # Notes — referential integrity warnings and removals
-        DANGLING_NOTE_REFERENCE_WARNING = "R9"
-        DANGLING_NOTE_REFERENCE_REMOVED = "R10"
-        DANGLING_HYPERLINK_WARNING = "R9"
 
         # Body
         SECTION_PROPERTIES_DEFAULTED = "R11"
@@ -48,26 +44,33 @@ module Uniword
         FONT_TABLE_CREATED = "R13"
         CORE_PROPERTIES_REBUILT = "R14"
 
-        # Styles (currently shares R10 with other concerns — see debt note above)
-        STYLE_DEFAULTS_ADDED = "R10"
-        SEMI_HIDDEN_ADDED = "R10"
+        # Referential integrity — dangling-reference repairs (split from
+        # the overloaded R10/R4/R11/R12 codes; one code per concern)
+        DANGLING_NUMBERING_REMOVED = "R17"
+        DANGLING_NOTE_REFERENCE_REMOVED = "R18"
+        DANGLING_STYLE_REFERENCE_REMOVED = "R19"
+        DANGLING_BASED_ON_REMOVED = "R20"
+        DANGLING_HYPERLINK_REMOVED = "R21"
+        DANGLING_HEADER_FOOTER_REMOVED = "R22"
+        DANGLING_DRAWING_REMOVED = "R23"
+        DANGLING_RELATIONSHIP_TARGET_REMOVED = "R32"
 
-        # Tables (currently shares R10)
-        TABLE_STRUCTURE_RECONCILED = "R10"
-        TABLE_CELL_PR_REORDERED = "R10"
-        TABLE_CELL_DEFAULTS = "R12"
-        TABLE_ROW_GRID_AFTER = "R13"
+        # Referential integrity — literal hyperlink targets promoted to
+        # proper External relationships (repairs Builder.hyperlink output)
+        HYPERLINK_RELATIONSHIP_CREATED = "R31"
 
-        # Referential integrity (currently shares R10)
-        DANGLING_STYLE_REFERENCE_REMOVED = "R10"
-        DANGLING_BASED_ON_REMOVED = "R10"
-        DANGLING_NUMBERING_REMOVED = "R4"
-        DANGLING_HYPERLINK_REMOVED = "R10"
-        DANGLING_HEADER_FOOTER_REMOVED = "R11"
-        DANGLING_DRAWING_REMOVED = "R12"
+        # Styles
+        STYLE_DEFAULTS_ADDED = "R24"
+        SEMI_HIDDEN_ADDED = "R25"
 
-        # Run cleanup (currently shares R10)
-        EMPTY_RUNS_STRIPPED = "R10"
+        # Tables
+        TABLE_STRUCTURE_RECONCILED = "R26"
+        TABLE_CELL_PR_REORDERED = "R27"
+        TABLE_CELL_DEFAULTS = "R28"
+        TABLE_ROW_GRID_AFTER = "R29"
+
+        # Run cleanup
+        EMPTY_RUNS_STRIPPED = "R30"
       end
     end
   end

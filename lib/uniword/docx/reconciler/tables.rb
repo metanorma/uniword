@@ -88,7 +88,9 @@ module Uniword
             end
           end
 
-          record_fix(FixCodes::TABLE_STRUCTURE_RECONCILED, "Reconciled table structure for table #{idx}") if fixed
+          record_fix(FixCodes::TABLE_STRUCTURE_RECONCILED,
+                     "Reconciled table structure for table #{idx}",
+                     part: "word/document.xml") if fixed
 
           tbl.rows&.each do |row|
             row.cells&.each do |cell|
@@ -98,10 +100,14 @@ module Uniword
                   cell_width: Uniword::Properties::CellWidth.new(w: 0, type: "auto"),
                 )
                 insert_element_order(cell, "tcPr", 0)
-                record_fix(FixCodes::TABLE_CELL_DEFAULTS, "Added missing tcPr with tcW to table cell")
+                record_fix(FixCodes::TABLE_CELL_DEFAULTS,
+                           "Added missing tcPr with tcW to table cell",
+                           part: "word/document.xml")
               elsif tc_pr.cell_width.nil?
                 tc_pr.cell_width = Uniword::Properties::CellWidth.new(w: 0, type: "auto")
-                record_fix(FixCodes::TABLE_CELL_DEFAULTS, "Added missing tcW to table cell")
+                record_fix(FixCodes::TABLE_CELL_DEFAULTS,
+                           "Added missing tcW to table cell",
+                           part: "word/document.xml")
               end
 
               reconcile_table_cell_order(cell)
@@ -124,7 +130,9 @@ module Uniword
           tcPr_entry = order.delete_at(tcPr_idx)
           order.insert(first_p_idx, tcPr_entry)
 
-          record_fix(FixCodes::TABLE_CELL_PR_REORDERED, "Moved tcPr before p in table cell")
+          record_fix(FixCodes::TABLE_CELL_PR_REORDERED,
+                     "Moved tcPr before p in table cell",
+                     part: "word/document.xml")
         end
 
         def reconcile_grid_after(tbl)
@@ -153,7 +161,9 @@ module Uniword
               row_props.grid_after ||= Wordprocessingml::GridAfter.new
               row_props.grid_after.value = missing
             end
-            record_fix(FixCodes::TABLE_ROW_GRID_AFTER, "Added gridAfter=#{missing} to table row (grid has #{grid_col_count} cols, row covers #{covered})")
+            record_fix(FixCodes::TABLE_ROW_GRID_AFTER,
+                       "Added gridAfter=#{missing} to table row (grid has #{grid_col_count} cols, row covers #{covered})",
+                       part: "word/document.xml")
           end
         end
       end

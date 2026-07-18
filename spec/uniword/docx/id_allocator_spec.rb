@@ -67,9 +67,9 @@ RSpec.describe Uniword::Docx::IdAllocator do
   end
 
   describe "#alloc_para_id and #alloc_rsid" do
-    it "returns 12-char uppercase hex strings" do
-      expect(allocator.alloc_para_id).to match(/\A[0-9A-F]{12}\z/)
-      expect(allocator.alloc_rsid).to match(/\A[0-9A-F]{12}\z/)
+    it "returns 8-char uppercase hex strings" do
+      expect(allocator.alloc_para_id).to match(/\A[0-9A-F]{8}\z/)
+      expect(allocator.alloc_rsid).to match(/\A[0-9A-F]{8}\z/)
     end
 
     it "is deterministic across runs for the same call sequence" do
