@@ -2,34 +2,6 @@
 
 require "lutaml/model"
 require "nokogiri"
-require_relative "../properties/relationship_id"
-require_relative "zoom"
-require_relative "compat"
-require_relative "proof_state"
-require_relative "style_pane_format_filter"
-require_relative "default_tab_stop"
-require_relative "character_spacing_control"
-require_relative "do_not_display_page_boundaries"
-require_relative "rsids"
-require_relative "math_pr"
-require_relative "theme_font_lang"
-require_relative "clr_scheme_mapping"
-require_relative "shape_defaults"
-require_relative "decimal_symbol"
-require_relative "list_separator"
-require_relative "attached_template"
-require_relative "footnote_pr"
-require_relative "endnote_pr"
-require_relative "hdr_shape_defaults"
-require_relative "even_and_odd_headers"
-require_relative "mirror_margins"
-require_relative "do_not_include_subdocs_in_stats"
-require_relative "hyphenation_zone"
-require_relative "style_pane_sort_method"
-require_relative "doc_vars"
-require_relative "w14_doc_id"
-require_relative "w15_chart_tracking_ref_based"
-require_relative "w15_doc_id"
 
 module Uniword
   module Wordprocessingml
@@ -112,9 +84,9 @@ module Uniword
         map_element "doNotDisplayPageBoundaries",
                     to: :do_not_display_page_boundaries, render_nil: false
         map_element "mirrorMargins", to: :mirror_margins, render_nil: false
+        map_element "proofState", to: :proof_state, render_nil: false
         map_element "attachedTemplate", to: :attached_template,
                                         render_nil: false
-        map_element "proofState", to: :proof_state, render_nil: false
         map_element "stylePaneFormatFilter", to: :style_pane_format_filter,
                                              render_nil: false
         map_element "stylePaneSortMethod", to: :style_pane_sort_method,
@@ -126,6 +98,8 @@ module Uniword
                                          render_nil: false
         map_element "characterSpacingControl", to: :character_spacing_control,
                                                render_nil: false
+        map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
+                                        render_nil: false
         map_element "footnotePr", to: :footnote_pr, render_nil: false
         map_element "endnotePr", to: :endnote_pr, render_nil: false
         map_element "compat", to: :compat, render_nil: false
@@ -137,11 +111,6 @@ module Uniword
                                         render_nil: false
         map_element "doNotIncludeSubdocsInStats",
                     to: :do_not_include_subdocs_in_stats, render_nil: false
-        map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
-                                        render_nil: false
-        map_element "shapeDefaults", to: :shape_defaults, render_nil: false
-        map_element "decimalSymbol", to: :decimal_symbol, render_nil: false
-        map_element "listSeparator", to: :list_separator, render_nil: false
         # Both w14:docId and w15:docId use the same element name 'docId'
         # Separate map_element entries needed for namespace-aware matching
         # The namespace_scope ensures w14 and w15 namespaces are declared on root
@@ -150,6 +119,9 @@ module Uniword
         map_element "docId", to: :w14_doc_id, render_nil: false
         map_element "docId", to: :w15_doc_id, render_nil: false
         map_element "schemaLibrary", to: :schema_library, render_nil: false
+        map_element "shapeDefaults", to: :shape_defaults, render_nil: false
+        map_element "decimalSymbol", to: :decimal_symbol, render_nil: false
+        map_element "listSeparator", to: :list_separator, render_nil: false
       end
 
       # Override from_xml to manually deserialize w15:docId which has the same
