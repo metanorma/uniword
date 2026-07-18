@@ -195,7 +195,13 @@ module Uniword
       #
       # @param document [Document] The document to save (Generated::Wordprocessingml::DocumentRoot)
       # @param path [String] Output path
-      def self.to_file(document, path, profile: nil)
+      # @param profile [Object, nil] Unused (DOCX reconciliation profile)
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      # @raise [Uniword::ValidationError] when the gate is enabled and the
+      #   generated package content is invalid
+      def self.to_file(document, path, profile: nil, validate: nil)
         # Create package
         package = new
 
@@ -217,6 +223,9 @@ module Uniword
         # Add required OOXML infrastructure files
         add_required_files(zip_content)
 
+        # Refuse invalid output before packaging
+        package.enforce_package_integrity(zip_content, validate)
+
         # Package and save
         packager = Infrastructure::ZipPackager.new
         packager.package(zip_content, path)
@@ -225,11 +234,42 @@ module Uniword
       # Save package to file
       #
       # @param path [String] Output path
-      def to_file(path)
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      # @raise [Uniword::ValidationError] when the gate is enabled and the
+      #   generated package content is invalid
+      def to_file(path, validate: nil)
         zip_content = to_zip_content
+
+        enforce_package_integrity(zip_content, validate)
 
         packager = Infrastructure::ZipPackager.new
         packager.package(zip_content, path)
+      end
+
+      # Write-time integrity gate: refuse invalid package content.
+      #
+      # DOTX is an OPC package like DOCX, so the same
+      # Docx::PackageIntegrityChecker invariants apply.
+      #
+      # @api private
+      # @param zip_content [Hash] File paths => content
+      # @param validate [Boolean, nil] explicit override; nil reads policy
+      # @return [void]
+      # @raise [Uniword::ValidationError] listing all integrity issues
+      def enforce_package_integrity(zip_content, validate)
+        validate = Uniword.configuration.validate_on_save if validate.nil?
+        return unless validate
+
+        issues = Docx::PackageIntegrityChecker.new.check(zip_content)
+        return if issues.empty?
+
+        raise Uniword::ValidationError.new(
+          self,
+          issues.map { |issue| "#{issue.code} (#{issue.part}): #{issue.message}" },
+          issues: issues,
+        )
       end
 
       # Generate ZIP content hash

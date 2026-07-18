@@ -10,6 +10,8 @@ module Uniword
     autoload :IdAllocator, "#{__dir__}/docx/id_allocator"
     autoload :Package, "#{__dir__}/docx/package"
     autoload :PackageDefaults, "#{__dir__}/docx/package_defaults"
+    autoload :PackageIntegrityChecker,
+             "#{__dir__}/docx/package_integrity_checker"
     autoload :PackageSerialization, "#{__dir__}/docx/package_serialization"
     autoload :Profile, "#{__dir__}/docx/profile"
     autoload :DocumentStatistics, "#{__dir__}/docx/document_statistics"

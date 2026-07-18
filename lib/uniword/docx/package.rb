@@ -98,6 +98,15 @@ module Uniword
       # Paths that have been modified and should not use raw XML passthrough.
       attr_accessor :modified_part_paths
 
+      # Audit trail of repairs applied by the Reconciler during the most
+      # recent save (to_zip_content). Empty before the first save and when
+      # the package needed no repairs.
+      #
+      # @return [Array<Reconciler::Fix>] Fixes from the most recent save
+      def applied_fixes
+        @applied_fixes ||= []
+      end
+
       # Load DOCX package from file
       #
       # @param path [String] Path to .docx file
@@ -410,7 +419,14 @@ module Uniword
       end
 
       # Save document to file (class method for DocumentWriter compatibility)
-      def self.to_file(document, path, profile: nil)
+      #
+      # @param document [Wordprocessingml::DocumentRoot] Document to save
+      # @param path [String] Output file path
+      # @param profile [Profile, nil] Reconciliation profile
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      def self.to_file(document, path, profile: nil, validate: nil)
         package = new
         package.document = document
         package.profile = profile || Profile.defaults
@@ -421,7 +437,7 @@ module Uniword
         package.settings ||= Uniword::Wordprocessingml::Settings.new
         package.font_table ||= Uniword::Wordprocessingml::FontTable.new
         package.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
-        package.to_file(path)
+        package.to_file(path, validate: validate)
       end
 
       # Populate the allocator from all existing template data.
@@ -449,14 +465,31 @@ module Uniword
       end
 
       # Save package to file
-      def to_file(path)
-        zip_content = to_zip_content
+      #
+      # @param path [String] Output file path
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      # @raise [Uniword::ValidationError] when the gate is enabled and the
+      #   generated package content is invalid
+      def to_file(path, validate: nil)
+        zip_content = to_zip_content(validate: validate)
         packager = Infrastructure::ZipPackager.new
         packager.package(zip_content, path)
       end
 
       # Generate ZIP content hash
-      def to_zip_content
+      #
+      # Runs the Reconciler (the only mutating pass), records its repair
+      # report on #applied_fixes, and — unless validation is disabled —
+      # refuses invalid output via the PackageIntegrityChecker gate.
+      #
+      # @param validate [Boolean, nil] Run the package integrity gate;
+      #   nil falls back to Uniword.configuration.validate_on_save
+      # @return [Hash] File paths => content
+      # @raise [Uniword::ValidationError] when the gate is enabled and the
+      #   generated package content is invalid
+      def to_zip_content(validate: nil)
         content = {}
 
         self.content_types ||= self.class.minimal_content_types
@@ -467,15 +500,20 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
-        Reconciler.new(self,
-                       profile: profile || Profile.defaults,
-                       allocator: allocator).reconcile
+        reconciler = Reconciler.new(self,
+                                    profile: profile || Profile.defaults,
+                                    allocator: allocator)
+        reconciler.reconcile
+        @applied_fixes = reconciler.applied_fixes
+        log_applied_fixes
 
         inject_part_relationships(content, content_types, package_rels, document_rels)
         serialize_package_parts(content, content_types, package_rels, document_rels)
 
         # OOXML requires [Content_Types].xml as the first ZIP entry.
         reorder_content_hash(content)
+
+        enforce_package_integrity(content, validate)
         content
       end
 
@@ -540,6 +578,40 @@ module Uniword
         dir = File.dirname(doc_path)
         basename = File.basename(doc_path)
         File.join(dir, "_rels", "#{basename}.rels")
+      end
+
+      private
+
+      # Log each applied fix via Uniword.logger when policy allows.
+      #
+      # @return [void]
+      def log_applied_fixes
+        return if @applied_fixes.empty?
+        return unless Uniword.configuration.log_save_fixes
+
+        @applied_fixes.each do |fix|
+          Uniword.logger&.info { "Reconciler fix #{fix}" }
+        end
+      end
+
+      # Write-time integrity gate: refuse invalid package content.
+      #
+      # @param content [Hash] File paths => content
+      # @param validate [Boolean, nil] explicit override; nil reads policy
+      # @return [void]
+      # @raise [Uniword::ValidationError] listing all integrity issues
+      def enforce_package_integrity(content, validate)
+        validate = Uniword.configuration.validate_on_save if validate.nil?
+        return unless validate
+
+        issues = PackageIntegrityChecker.new.check(content)
+        return if issues.empty?
+
+        raise Uniword::ValidationError.new(
+          self,
+          issues.map { |issue| "#{issue.code} (#{issue.part}): #{issue.message}" },
+          issues: issues,
+        )
       end
     end
   end

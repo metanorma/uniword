@@ -33,25 +33,34 @@ module Uniword
     #
     # @param path [String] The output file path
     # @param format [Symbol] The format (:auto, :docx, :mhtml)
+    # @param profile [Docx::Profile, nil] Profile for reconciliation
+    # @param validate [Boolean, nil] Run the package integrity gate before
+    #   writing; nil falls back to Uniword.configuration.validate_on_save.
+    #   Not applicable to :mhtml (MIME, not an OPC/ZIP package — there are
+    #   no content types, relationships parts, or ZIP entries to check).
     # @return [void]
     # @raise [ArgumentError] if path is invalid
     # @raise [ArgumentError] if format is not supported
+    # @raise [Uniword::ValidationError] when the gate is enabled and the
+    #   generated package content is invalid
     #
     # @example Save as DOCX
     #   writer.save("output.docx")
     #
     # @example Save with explicit format
     #   writer.save("output.mht", format: :mhtml)
-    def save(path, format: :auto, profile: nil)
+    def save(path, format: :auto, profile: nil, validate: nil)
       validate_path(path)
 
       format = infer_format(path) if format == :auto
 
       case format
       when :docx, :docm
-        Docx::Package.to_file(document, path, profile: profile)
+        Docx::Package.to_file(document, path, profile: profile,
+                                            validate: validate)
       when :dotx, :dotm
-        Ooxml::DotxPackage.to_file(document, path, profile: profile)
+        Ooxml::DotxPackage.to_file(document, path, profile: profile,
+                                                 validate: validate)
       when :mhtml
         Mhtml::MhtmlPackage.to_file(document, path)
       else
@@ -99,6 +108,8 @@ module Uniword
     #
     # @param stream [IO, StringIO] The output stream
     # @param format [Symbol] The format (:docx, :mhtml)
+    # @param validate [Boolean, nil] Run the package integrity gate before
+    #   writing; nil falls back to Uniword.configuration.validate_on_save
     # @return [void]
     #
     # @example Write to StringIO
@@ -106,14 +117,14 @@ module Uniword
     #   writer.write_to_stream(io)
     #   io.rewind
     #   content = io.read
-    def write_to_stream(stream, format: :docx)
+    def write_to_stream(stream, format: :docx, validate: nil)
       require "tempfile"
 
       # Use a temporary file to generate the document
       temp_file = Tempfile.new(["uniword_stream", ".#{format}"], binmode: true)
       begin
         # Save to temp file
-        save(temp_file.path, format: format)
+        save(temp_file.path, format: format, validate: validate)
 
         # Read and write to stream in binary mode
         temp_file.rewind

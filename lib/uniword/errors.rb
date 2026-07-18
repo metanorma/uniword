@@ -54,11 +54,14 @@ module Uniword
   class ValidationError < Error
     # @param element [Element] The element that failed validation
     # @param errors [Array<String>] Array of validation error messages
-    def initialize(element, errors)
+    # @param issues [Array] Structured issues (e.g.
+    #   Validation::Report::ValidationIssue with code, part, message)
+    def initialize(element, errors, issues: [])
       element_name = element.class.name.split("::").last
       super("Validation failed for #{element_name}: #{errors.join(', ')}")
       @element = element
       @errors = errors
+      @issues = issues
     end
 
     # @return [Element] The element that failed
@@ -66,6 +69,10 @@ module Uniword
 
     # @return [Array<String>] The validation errors
     attr_reader :errors
+
+    # @return [Array] Structured issues (code, part, message) — populated
+    #   by the write-time package integrity gate
+    attr_reader :issues
   end
 
   # Raised when trying to write to a read-only document

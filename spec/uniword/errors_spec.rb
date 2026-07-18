@@ -44,6 +44,27 @@ RSpec.describe Uniword do
         expect(error.element).to eq(para)
         expect(error.errors).to eq(errors)
       end
+
+      it "carries structured issues when provided" do
+        issue = Uniword::Validation::Report::ValidationIssue.new(
+          severity: "error", code: "OPC-008",
+          message: "Malformed XML", part: "word/document.xml"
+        )
+        error = described_class.new(
+          Uniword::Docx::Package.new, ["Malformed XML"], issues: [issue]
+        )
+
+        expect(error.issues).to eq([issue])
+        expect(error.issues.first.code).to eq("OPC-008")
+        expect(error.issues.first.part).to eq("word/document.xml")
+      end
+
+      it "defaults issues to an empty list" do
+        error = described_class.new(
+          Uniword::Wordprocessingml::Paragraph.new, ["bad"]
+        )
+        expect(error.issues).to eq([])
+      end
     end
 
     describe Uniword::ConversionError do
