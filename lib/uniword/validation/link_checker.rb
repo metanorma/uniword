@@ -19,7 +19,7 @@ module Uniword
     # @example Create a custom checker
     #   class MyChecker < LinkChecker
     #     def can_check?(link)
-    #       link.respond_to?(:custom_field)
+    #       link.is_a?(Uniword::Wordprocessingml::Hyperlink)
     #     end
     #
     #     def check(link, document)

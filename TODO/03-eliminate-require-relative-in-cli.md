@@ -1,5 +1,12 @@
 # 15 — Eliminate `require_relative` from `lib/uniword/cli.rb`
 
+**Status: COMPLETED via TODO.validate/12** — `lib/uniword/cli.rb` was
+already a namespace stub; all CLI classes autoload from
+`lib/uniword.rb:136-149`. All remaining `require_relative` sites in
+lib/ (wordprocessingml models, validation namespace) were converted to
+autoloads registered in the immediate parent namespace files. Verified:
+`exe/uniword help`, `exe/uniword verify`, CLI specs green.
+
 **Priority:** High (forbidden pattern in lib)
 **Files:** `lib/uniword/cli.rb`, `lib/uniword/cli/main.rb` (if needed)
 

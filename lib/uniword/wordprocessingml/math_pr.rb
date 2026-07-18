@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require_relative "math_font"
-require_relative "brk_bin"
-require_relative "brk_bin_sub"
-require_relative "small_frac"
-require_relative "disp_def"
-require_relative "l_margin"
-require_relative "r_margin"
-require_relative "def_jc"
-require_relative "wrap_indent"
-require_relative "int_lim"
-require_relative "nary_lim"
 
 module Uniword
   module Wordprocessingml

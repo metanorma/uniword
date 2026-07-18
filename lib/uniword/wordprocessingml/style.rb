@@ -49,7 +49,8 @@ module Uniword
         map "run_properties", to: :rPr
       end
 
-      # YAML transform methods (instance methods - called via send on an instance)
+      # YAML transform methods (instance methods called by lutaml-model's
+      # `with:` transform mechanism)
       def yaml_name_from(instance, value)
         instance.name = StyleName.new(val: value) if value
       end

@@ -101,20 +101,53 @@ module Uniword
 
       # Navigate to a property on an object
       #
+      # Dispatches on the object's class: Hash keys, declared attributes
+      # of Lutaml::Model objects, or public zero-arity readers on plain
+      # Ruby objects.
+      #
       # @param object [Object] Object to navigate
       # @param property [String] Property name
       # @return [Object] Property value or nil
       def navigate_property(object, property)
-        # For hashes, use key access
-        if object.is_a?(Hash)
+        case object
+        when Hash
           object[property.to_sym] || object[property]
+        when Lutaml::Model::Serializable
+          read_model_attribute(object, property)
         else
-          # public_send is the canonical Ruby idiom for template-driven
-          # property access on arbitrary user objects. The property name
-          # comes from template syntax and may reference any public
-          # reader method on the model.
-          object.public_send(property.to_sym)
+          read_object_property(object, property)
         end
+      end
+
+      # Read a declared attribute from a Lutaml::Model object
+      #
+      # Only attributes declared in the model's schema are readable from
+      # templates; arbitrary public methods are not exposed. The schema
+      # acts as the allowlist, the model's public method table provides
+      # the value.
+      #
+      # @param object [Lutaml::Model::Serializable] Model instance
+      # @param property [String] Property name
+      # @return [Object] Attribute value or nil when not declared
+      def read_model_attribute(object, property)
+        name = property.to_sym
+        return unless object.class.attributes.key?(name)
+
+        object.method(name).call
+      end
+
+      # Read a property from a plain Ruby object
+      #
+      # Looks the property up in the object's public method table.
+      # Returns nil when the object has no such public method.
+      #
+      # @param object [Object] Object to read from
+      # @param property [String] Property name
+      # @return [Object] Property value or nil
+      def read_object_property(object, property)
+        object.method(property.to_sym).call
+      rescue NameError
+        nil
       end
 
       # Parse literal value from string
