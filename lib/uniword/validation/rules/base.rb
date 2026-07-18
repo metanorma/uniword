@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "../report/validation_issue"
-
 module Uniword
   module Validation
     module Rules

@@ -2,8 +2,6 @@
 
 require "zip"
 require "nokogiri"
-require_relative "../schema_registry"
-require_relative "../report/validation_issue"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword

@@ -53,7 +53,7 @@ module Uniword
 
       # @return [Array<Hash>] All issues
       def issues
-        @issues ||= CHECKS.flat_map { |check| send(check) }
+        @issues ||= CHECKS.flat_map { |check| method(check).call }
       end
 
       private

@@ -62,8 +62,6 @@ module Uniword
         file_path
       end
 
-      private
-
       # Generate complete class code
       #
       # @param element_name [String] XML element name
@@ -97,6 +95,8 @@ module Uniword
         RUBY
       end
 
+      private
+
       # Generate attribute declarations
       # CRITICAL: These MUST come BEFORE xml mapping (Pattern 0)
       #
@@ -105,21 +105,37 @@ module Uniword
       def generate_attributes(attributes)
         return "" if attributes.empty?
 
-        lines = attributes.map do |attr|
-          # Convert type to symbol for primitive types
-          type_str = if %w[String
-                           Integer].include?(attr["type"])
-                       ":#{attr['type'].downcase}"
-                     else
-                       attr["type"]
-                     end
-          attr_code = "          attribute :#{attr['name']}, #{type_str}"
-          attr_code += ", collection: true" if attr["collection"]
-          attr_code += ", initialize_empty: true" if attr["collection"]
-          attr_code
-        end
+        attributes.map { |attr| generate_attribute(attr) }.join("\n")
+      end
 
-        lines.join("\n")
+      # Generate one attribute declaration
+      #
+      # @param attr [Hash] Attribute definition
+      # @return [String] Attribute declaration code
+      def generate_attribute(attr)
+        attr_code = "          attribute :#{attr['name']}, " \
+                    "#{attribute_type(attr['type'])}"
+        attr_code += ", collection: true" if attr["collection"]
+        attr_code += ", initialize_empty: true" if attr["collection"]
+        if attr["values"]
+          attr_code += ", values: %w[#{attr['values'].join(' ')}]"
+        end
+        attr_code += ", pattern: /#{attr['pattern']}/" if attr["pattern"]
+        attr_code
+      end
+
+      # Normalize an attribute type from YAML to Ruby code
+      # Primitive types become symbols (":string"), custom type class
+      # names are passed through verbatim
+      #
+      # @param type [String, Symbol] Type from YAML attribute definition
+      # @return [String] Ruby type expression
+      def attribute_type(type)
+        type = type.to_s
+        return ":#{type.downcase}" if %w[String Integer].include?(type)
+        return type if type.start_with?(":") || type.include?("::")
+
+        ":#{type}"
       end
 
       # Generate XML mapping block

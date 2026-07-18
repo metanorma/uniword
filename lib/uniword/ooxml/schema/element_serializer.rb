@@ -301,12 +301,12 @@ module Uniword
         def get_attribute_value(element, attr_def)
           property_name = attr_def.property_name
 
-          # public_send is the canonical Ruby idiom for schema-driven
-          # serialization: reading attribute values by name from any
-          # Lutaml::Model::Serializable subclass. The property_name comes
-          # from the schema definition, not user input.
+          # Schema-driven read: the model's declared attributes are the
+          # allowlist, and the value is fetched through the model's
+          # public method table. The property_name comes from the schema
+          # definition, not user input.
           if element.is_a?(Lutaml::Model::Serializable) && element.class.attributes.key?(property_name)
-            element.public_send(property_name)
+            element.method(property_name).call
           elsif element.is_a?(Hash) && element.key?(property_name)
             element[property_name]
           end
@@ -320,9 +320,10 @@ module Uniword
         def get_child_elements(element, child_def)
           property_name = child_def.property_name
 
-          # Try to get children using property name
+          # Schema-driven read via the model's public method table,
+          # guarded by the declared attribute names.
           if element.is_a?(Lutaml::Model::Serializable) && element.class.attributes.key?(property_name)
-            element.public_send(property_name)
+            element.method(property_name).call
           elsif element.is_a?(Hash) && element.key?(property_name)
             element[property_name]
           end

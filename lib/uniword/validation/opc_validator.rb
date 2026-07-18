@@ -2,7 +2,6 @@
 
 require "zip"
 require "nokogiri"
-require_relative "report/validation_issue"
 
 module Uniword
   module Validation

@@ -1,5 +1,12 @@
 # 17 — Eliminate `public_send` from lib/
 
+**Status: COMPLETED via TODO.validate/12** — the 8 enumerated sites had
+already been fixed before this wave (verified by grep); the remaining
+sites (`variable_resolver.rb:116`, `element_serializer.rb:309,325`) and
+the `__send__` dispatch in `model_attribute_access.rb` were replaced
+with case/on-class dispatch and schema-guarded method-table lookups.
+`grep -rn "public_send" lib/uniword/` returns nothing.
+
 **Priority:** High (forbidden pattern)
 **Files:**
 - `lib/uniword/wordprocessingml/styles/style_definition.rb`

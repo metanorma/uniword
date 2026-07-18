@@ -13,5 +13,11 @@ module Uniword
     autoload :Checkers, "#{__dir__}/validation/checkers"
     autoload :Validators, "#{__dir__}/validation/validators"
     autoload :StructuralValidator, "#{__dir__}/validation/structural_validator"
+    autoload :OpcValidator, "#{__dir__}/validation/opc_validator"
+    autoload :SchemaRegistry, "#{__dir__}/validation/schema_registry"
+    autoload :VerifyOrchestrator,
+             "#{__dir__}/validation/verify_orchestrator"
+    autoload :Rules, "#{__dir__}/validation/rules"
+    autoload :Report, "#{__dir__}/validation/report"
   end
 end

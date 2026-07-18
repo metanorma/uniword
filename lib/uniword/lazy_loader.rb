@@ -7,8 +7,7 @@ module Uniword
   # which helps reduce memory usage for large documents.
   #
   # All cached values are stored in a single Hash (`@_lazy_cache`)
-  # accessed via direct ivar reference — no instance_variable_get/set,
-  # no public_send, no remove_instance_variable.
+  # accessed via direct ivar reference inside the generated methods.
   #
   # @example Using lazy attributes
   #   class Document

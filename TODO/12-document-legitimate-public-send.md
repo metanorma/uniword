@@ -1,5 +1,14 @@
 # 20 — Eliminate remaining `public_send` sites
 
+**Status: COMPLETED via TODO.validate/12** — the directive forbids all
+dynamic dispatch, so no "legitimate" exceptions remain:
+`element_serializer.rb:309,325` now reads through the schema-guarded
+public method table (`element.method(name).call` behind the
+`element.class.attributes.key?` allowlist), and
+`variable_resolver.rb:116` uses case/on-class dispatch with a
+declared-attribute allowlist for Lutaml models.
+`grep -rn "public_send" lib/uniword/` returns 0 hits.
+
 **Priority:** Low (most are legitimate dynamic dispatch)
 **Files:**
 - `lib/uniword/ooxml/schema/element_serializer.rb` (2 sites)

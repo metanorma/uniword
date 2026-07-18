@@ -1,28 +1,46 @@
 # frozen_string_literal: true
 
-require_relative "rules/base"
-require_relative "rules/registry"
-require_relative "rules/document_context"
-require_relative "rules/style_references_rule"
-require_relative "rules/numbering_rule"
-require_relative "rules/footnotes_rule"
-require_relative "rules/headers_footers_rule"
-require_relative "rules/bookmarks_rule"
-require_relative "rules/images_rule"
-require_relative "rules/tables_rule"
-require_relative "rules/fonts_rule"
-require_relative "rules/theme_rule"
-require_relative "rules/settings_rule"
-require_relative "rules/mc_ignorable_namespace_rule"
-require_relative "rules/settings_values_rule"
-require_relative "rules/theme_completeness_rule"
-require_relative "rules/numbering_preservation_rule"
-require_relative "rules/section_properties_rule"
-require_relative "rules/core_properties_namespace_rule"
-require_relative "rules/content_types_coverage_rule"
-require_relative "rules/font_table_signature_rule"
-require_relative "rules/relationship_integrity_rule"
-require_relative "rules/rsid_rule"
+module Uniword
+  module Validation
+    # Document semantic validation rules and their registry.
+    module Rules
+      autoload :Base, "#{__dir__}/rules/base"
+      autoload :Registry, "#{__dir__}/rules/registry"
+      autoload :DocumentContext, "#{__dir__}/rules/document_context"
+      autoload :StyleReferencesRule,
+               "#{__dir__}/rules/style_references_rule"
+      autoload :NumberingRule, "#{__dir__}/rules/numbering_rule"
+      autoload :FootnotesRule, "#{__dir__}/rules/footnotes_rule"
+      autoload :HeadersFootersRule,
+               "#{__dir__}/rules/headers_footers_rule"
+      autoload :BookmarksRule, "#{__dir__}/rules/bookmarks_rule"
+      autoload :ImagesRule, "#{__dir__}/rules/images_rule"
+      autoload :TablesRule, "#{__dir__}/rules/tables_rule"
+      autoload :FontsRule, "#{__dir__}/rules/fonts_rule"
+      autoload :ThemeRule, "#{__dir__}/rules/theme_rule"
+      autoload :SettingsRule, "#{__dir__}/rules/settings_rule"
+      autoload :McIgnorableNamespaceRule,
+               "#{__dir__}/rules/mc_ignorable_namespace_rule"
+      autoload :SettingsValuesRule,
+               "#{__dir__}/rules/settings_values_rule"
+      autoload :ThemeCompletenessRule,
+               "#{__dir__}/rules/theme_completeness_rule"
+      autoload :NumberingPreservationRule,
+               "#{__dir__}/rules/numbering_preservation_rule"
+      autoload :SectionPropertiesRule,
+               "#{__dir__}/rules/section_properties_rule"
+      autoload :CorePropertiesNamespaceRule,
+               "#{__dir__}/rules/core_properties_namespace_rule"
+      autoload :ContentTypesCoverageRule,
+               "#{__dir__}/rules/content_types_coverage_rule"
+      autoload :FontTableSignatureRule,
+               "#{__dir__}/rules/font_table_signature_rule"
+      autoload :RelationshipIntegrityRule,
+               "#{__dir__}/rules/relationship_integrity_rule"
+      autoload :RsidRule, "#{__dir__}/rules/rsid_rule"
+    end
+  end
+end
 
 # Register all built-in validation rules
 Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::StyleReferencesRule)

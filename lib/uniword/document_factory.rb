@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # All classes autoloaded via lib/uniword.rb
-# No require_relative needed - autoload handles lazy loading
+# Lazy loading for internal library code is handled by autoload.
 
 module Uniword
   # Factory for creating Document instances.

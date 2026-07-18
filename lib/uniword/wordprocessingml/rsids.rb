@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require_relative "rsid_root"
-require_relative "rsid"
 
 module Uniword
   module Wordprocessingml

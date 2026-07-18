@@ -2,8 +2,6 @@
 
 require "lutaml/model"
 require "time"
-require_relative "validation_issue"
-require_relative "layer_result"
 
 module Uniword
   module Validation

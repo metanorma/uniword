@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 require "time"
-require_relative "opc_validator"
-require_relative "schema_registry"
-require_relative "report/verification_report"
-require_relative "report/layer_result"
-require_relative "report/terminal_formatter"
-require_relative "validators/xml_schema_validator"
-require_relative "validators/document_semantics_validator"
 
 module Uniword
   module Validation
