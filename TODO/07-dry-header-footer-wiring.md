@@ -1,6 +1,14 @@
 # 023: DRY header/footer wiring logic (body.rb vs package_serialization.rb)
 
-## Status: DEFERRED
+## Status: COMPLETED via TODO.validate/09
+
+The duplication is gone the way this note predicted: after the dual-path
+unification (TODO 012) only one path exists. The serializer-side wiring
+(`inject_headers`/`inject_footers` + `wire_header_reference`/
+`wire_footer_reference`, with its divergent `next_rid` strategy) was
+deleted; the reconciler's `wire_header_footer_parts` (via `IdAllocator`
+on the builder path, `find_or_create_rel` on the legacy path, and a
+single `wire_sect_pr_reference`) is the one remaining implementation.
 
 ## Problem
 

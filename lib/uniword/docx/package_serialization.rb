@@ -44,9 +44,7 @@ document_rels)
         inject_bibliography(content_types, document_rels)
         inject_custom_properties(content_types, package_rels)
         inject_custom_xml(content_types)
-        inject_headers(content_types, document_rels)
-        inject_footers(content_types, document_rels)
-        inject_header_footer_parts(content_types, document_rels)
+        inject_header_footer_content_types(content_types)
         inject_notes(content_types, document_rels)
         inject_theme(content_types, document_rels)
         inject_numbering(content_types, document_rels)
@@ -145,9 +143,7 @@ document_rels)
             serialize_infrastructure(document.bibliography_sources)
         end
 
-        # Headers and footers
-        serialize_headers(content)
-        serialize_footers(content)
+        # Headers and footers (unified store)
         serialize_header_footer_parts(content)
 
         # OLE/embedded object binaries
@@ -309,85 +305,22 @@ document_rels)
         end
       end
 
-      def inject_headers(content_types, document_rels)
-        return unless document&.headers && !document.headers.empty?
+      # Register content-type overrides for every header/footer part in
+      # the unified store. Relationships and sectPr references are owned
+      # by the Reconciler (single wiring implementation); the serializer
+      # only ensures each emitted part has exactly one override.
+      def inject_header_footer_content_types(content_types)
+        parts = document&.header_footer_parts
+        return unless parts && !parts.empty?
 
-        header = Ooxml::PartRegistry.find_by_key(:header)
-        counter = 0
-        document.headers.each_key do |type|
-          counter += 1
-          target = header.target_for(counter: counter)
+        parts.each do |part|
+          next unless part.target
 
-          unless content_types.overrides.any? { |o| o.part_name == "/word/#{target}" }
-            content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: header.part_name_for(counter: counter),
-              content_type: header.content_type,
-            )
-          end
+          part_name = "/word/#{part.target}"
+          next if content_types.overrides.any? { |o| o.part_name == part_name }
 
-          next if allocator
-          next if document_rels.relationships.any? { |r| r.target == target }
-
-          r_id = next_rid(document_rels)
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: r_id,
-            type: header.rel_type,
-            target: target,
-          )
-
-          wire_header_reference(type, r_id)
-        end
-      end
-
-      def inject_footers(content_types, document_rels)
-        return unless document&.footers && !document.footers.empty?
-
-        footer = Ooxml::PartRegistry.find_by_key(:footer)
-        counter = 0
-        document.footers.each_key do |type|
-          counter += 1
-          target = footer.target_for(counter: counter)
-
-          unless content_types.overrides.any? { |o| o.part_name == "/word/#{target}" }
-            content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: footer.part_name_for(counter: counter),
-              content_type: footer.content_type,
-            )
-          end
-
-          next if allocator
-          next if document_rels.relationships.any? { |r| r.target == target }
-
-          r_id = next_rid(document_rels)
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: r_id,
-            type: footer.rel_type,
-            target: target,
-          )
-
-          wire_footer_reference(type, r_id)
-        end
-      end
-
-      def inject_header_footer_parts(content_types, document_rels)
-        return unless document&.header_footer_parts && !document.header_footer_parts.empty?
-
-        document.header_footer_parts.each do |part|
-          part_name = "/word/#{part[:target]}"
-          unless content_types.overrides.any? { |o| o.part_name == part_name }
-            content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: part_name,
-              content_type: part[:content_type],
-            )
-          end
-
-          next if allocator
-          next if document_rels.relationships.any? { |r| r.id == part[:r_id] }
-
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: part[:r_id],
-            type: part[:rel_type],
-            target: part[:target],
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: part_name, content_type: part.content_type,
           )
         end
       end
@@ -441,34 +374,6 @@ document_rels)
         end
       end
 
-      def wire_header_reference(type, r_id)
-        return unless document&.body
-
-        sect_pr = document.body.section_properties ||= Wordprocessingml::SectionProperties.new
-        existing = sect_pr.header_references&.find { |r| r.type == type }
-        if existing
-          existing.r_id = r_id
-        else
-          sect_pr.header_references << Wordprocessingml::HeaderReference.new(
-            type: type, r_id: r_id,
-          )
-        end
-      end
-
-      def wire_footer_reference(type, r_id)
-        return unless document&.body
-
-        sect_pr = document.body.section_properties ||= Wordprocessingml::SectionProperties.new
-        existing = sect_pr.footer_references&.find { |r| r.type == type }
-        if existing
-          existing.r_id = r_id
-        else
-          sect_pr.footer_references << Wordprocessingml::FooterReference.new(
-            type: type, r_id: r_id,
-          )
-        end
-      end
-
       def serialize_notes(content)
         if footnotes
           content["word/footnotes.xml"] =
@@ -488,42 +393,25 @@ document_rels)
         end
       end
 
-      def serialize_headers(content)
-        return unless document&.headers && !document.headers.empty?
-
-        idx = 0
-        document.headers.each_value do |header_obj|
-          idx += 1
-          content["word/header#{idx}.xml"] =
-            serialize_part(header_obj)
-        end
-      end
-
-      def serialize_footers(content)
-        return unless document&.footers && !document.footers.empty?
-
-        idx = 0
-        document.footers.each_value do |footer_obj|
-          idx += 1
-          content["word/footer#{idx}.xml"] =
-            serialize_part(footer_obj)
-        end
-      end
-
+      # Emit every header/footer part from the unified store: one part
+      # file per part, headers before footers (historic emission order).
       def serialize_header_footer_parts(content)
-        return unless document&.header_footer_parts && !document.header_footer_parts.empty?
+        parts = document&.header_footer_parts
+        return unless parts && !parts.empty?
 
-        document.header_footer_parts.each do |part|
-          content["word/#{part[:target]}"] =
-            serialize_part(part[:content])
+        (parts.of_kind(:header) + parts.of_kind(:footer)).each do |part|
+          next unless part.target && part.content
+
+          content["word/#{part.target}"] =
+            serialize_part(part.serializable_content)
         end
       end
 
       def serialize_embeddings(content)
         return unless embeddings && !embeddings.empty?
 
-        embeddings.each do |target, data|
-          content["word/#{target}"] = data
+        embeddings.each do |target, part|
+          content["word/#{target}"] = part.content
         end
       end
     end

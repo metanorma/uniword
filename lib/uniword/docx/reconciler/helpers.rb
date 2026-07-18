@@ -85,7 +85,7 @@ module Uniword
           walk_body_paragraphs(package.document.body, &block)
 
           (package.document&.header_footer_parts || []).each do |part|
-            (part[:content]&.paragraphs || []).each(&block)
+            (part.content&.paragraphs || []).each(&block)
           end
         end
 

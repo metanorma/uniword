@@ -109,11 +109,8 @@ module Uniword
         ].compact
 
         (package.document&.header_footer_parts || []).each do |part|
-          parts << part[:content] if part[:content]
+          parts << part.content if part.content
         end
-
-        (package.document&.headers&.values || []).each { |h| parts << h }
-        (package.document&.footers&.values || []).each { |f| parts << f }
 
         parts.each do |part|
           part.import_declaration_plan = nil

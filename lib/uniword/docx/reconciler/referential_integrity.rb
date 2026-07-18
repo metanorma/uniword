@@ -72,8 +72,8 @@ module Uniword
 
         # Strip header/footer references whose rId does not resolve.
         # Builder-registered headers/footers are wired into document_rels
-        # during Group 1 (wire_builder_headers_footers), so any reference
-        # still dangling here has no backing part on either path.
+        # during Group 1 (wire_header_footer_parts), so any reference
+        # still dangling here has no backing part in the unified store.
         def reconcile_sect_pr_references
           sect_pr = package.document&.body&.section_properties
           return unless sect_pr
@@ -99,7 +99,7 @@ module Uniword
           rids = Set.new
 
           (package.document&.header_footer_parts || []).each do |part|
-            rids << part[:r_id] if part[:r_id]
+            rids << part.r_id if part.r_id
           end
 
           collect_rels_by_type(rids,
@@ -490,7 +490,7 @@ module Uniword
         end
 
         # Paths emitted from the document model: media, charts,
-        # embeddings, headers and footers (hash and multi-section parts).
+        # embeddings, headers and footers (unified part store).
         def document_part_paths
           doc = package.document
           return [] unless doc
@@ -510,20 +510,9 @@ module Uniword
         end
 
         def header_footer_paths(doc)
-          paths = multi_section_part_paths(doc)
-          paths.concat(sequential_part_paths("header", doc.headers&.size))
-          paths.concat(sequential_part_paths("footer", doc.footers&.size))
-          paths
-        end
-
-        def multi_section_part_paths(doc)
-          (doc.header_footer_parts || []).map do |part|
-            "word/#{part[:target]}"
+          doc.header_footer_parts.filter_map do |part|
+            part.target && "word/#{part.target}"
           end
-        end
-
-        def sequential_part_paths(prefix, count)
-          1.upto(count || 0).map { |i| "word/#{prefix}#{i}.xml" }
         end
 
         # -- Traversal helpers --

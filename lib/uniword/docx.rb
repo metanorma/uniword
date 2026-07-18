@@ -8,6 +8,14 @@ module Uniword
   # document-level reconciliation, and user-defined requirements.
   module Docx
     autoload :IdAllocator, "#{__dir__}/docx/id_allocator"
+    autoload :Part, "#{__dir__}/docx/part"
+    autoload :ChartPart, "#{__dir__}/docx/chart_part"
+    autoload :HeaderFooterPart, "#{__dir__}/docx/header_footer_part"
+    autoload :CustomXmlItem, "#{__dir__}/docx/custom_xml_item"
+    autoload :PartCollection, "#{__dir__}/docx/part_collection"
+    autoload :HeaderFooterPartCollection,
+             "#{__dir__}/docx/header_footer_part_collection"
+    autoload :HeaderFooterView, "#{__dir__}/docx/header_footer_view"
     autoload :Package, "#{__dir__}/docx/package"
     autoload :PackageDefaults, "#{__dir__}/docx/package_defaults"
     autoload :PackageIntegrityChecker,
