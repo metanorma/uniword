@@ -11,8 +11,8 @@ module Uniword
     class SharedStringTable < Lutaml::Model::Serializable
       attribute :count, :integer
       attribute :unique_count, :integer
-      attribute :si_entries, :stringItem, collection: true,
-                                          initialize_empty: true
+      attribute :si_entries, StringItem, collection: true,
+                                         initialize_empty: true
 
       xml do
         element "sst"

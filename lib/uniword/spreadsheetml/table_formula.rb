@@ -14,8 +14,8 @@ module Uniword
       xml do
         element "tableFormula"
         namespace Uniword::Ooxml::Namespaces::SpreadsheetML
-        mixed_content
 
+        map_content to: :content
         map_attribute "array", to: :array, render_nil: false
       end
     end
