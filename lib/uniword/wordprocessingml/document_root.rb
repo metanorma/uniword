@@ -168,17 +168,24 @@ module Uniword
       #
       # @param path [String] Output file path
       # @param format [Symbol] Format (:docx, :mhtml, :auto)
-      def save(path, format: :auto, profile: nil)
+      # @param profile [Docx::Profile, nil] Profile for reconciliation
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      def save(path, format: :auto, profile: nil, validate: nil)
         writer = DocumentWriter.new(self)
-        writer.save(path, format: format, profile: profile)
+        writer.save(path, format: format, profile: profile, validate: validate)
       end
 
       # Save document to DOCX file using DocxPackage
       #
       # @param path [String] Output file path
       # @param profile [Docx::Profile, nil] Profile for reconciliation
-      def to_file(path, profile: nil)
-        Docx::Package.to_file(self, path, profile: profile)
+      # @param validate [Boolean, nil] Run the package integrity gate before
+      #   writing; nil falls back to Uniword.configuration.validate_on_save
+      # @return [void]
+      def to_file(path, profile: nil, validate: nil)
+        Docx::Package.to_file(self, path, profile: profile, validate: validate)
       end
 
       # Get all paragraph text

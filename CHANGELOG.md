@@ -41,6 +41,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Injects missing separator (id=-1) and continuation (id=0) entries
 - Runs during `Docx::Package#to_zip_content` before serialization
 
+#### Write-Time Validation and Reconciler Transparency (July 2026)
+- `Docx::PackageIntegrityChecker`: write-time OPC integrity gate invoked on
+  every save after reconciliation, before packaging; refuses invalid output
+  (missing content types, unresolvable relationship targets, dangling
+  `r:id`/`r:embed`/`r:link` references, duplicate rIds, malformed XML)
+- Saves raise `Uniword::ValidationError` with structured `issues` (code,
+  part, message) when the gate rejects the package
+- Escape hatch: `save(path, validate: false)` threaded through
+  `DocumentRoot#save`/`#to_file`, `DocumentWriter`, `Docx::Package.to_file`
+  and `Ooxml::DotxPackage.to_file`; default from
+  `Uniword.configuration.validate_on_save` (default `true`)
+- `Uniword.configuration.log_save_fixes` (default `true`): log each repair
+  the Reconciler applies during save
+- `Docx::Package#applied_fixes`: reconciliation report (Fix value objects
+  with code, message, part) exposed after save
+- Reconciler now repairs dangling `r:embed` image references by removing
+  the drawing, and strips relationships whose target part the package does
+  not carry (e.g. unmodelled parts dropped on load) — recorded as fixes
+- Allocator (builder) and legacy (template) save paths now apply identical
+  referential repairs (previously the builder path only logged warnings)
+
 ### Changed
 
 - `Uniword::Ooxml::DocxPackage` renamed to `Uniword::Docx::Package`
