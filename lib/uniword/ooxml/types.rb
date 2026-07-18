@@ -40,6 +40,16 @@ module Uniword
       # Serializes true -> "1", false/nil -> omitted
       autoload :OoxmlBooleanOptional, "#{__dir__}/types/ooxml_boolean_optional"
 
+      # ST_HexColor constrained string type ("auto" or 6 hex digits)
+      autoload :HexColorValue, "#{__dir__}/types/hex_color_value"
+
+      # ST_ThemeColor enumeration carrier type
+      autoload :ThemeColorValue, "#{__dir__}/types/theme_color_value"
+
+      # ST_UnsignedDecimalNumber constrained integer type (non-negative)
+      autoload :UnsignedDecimalNumber,
+               "#{__dir__}/types/unsigned_decimal_number"
+
       # Relationships namespace type for r:embed/r:link cross-namespace attrs
       autoload :RelationshipId, "#{__dir__}/types/relationship_id"
 

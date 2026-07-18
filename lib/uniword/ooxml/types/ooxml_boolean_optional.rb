@@ -9,34 +9,39 @@ module Uniword
       #
       # Key behavior:
       # - cast(nil) -> nil (doesn't convert to false like OoxmlBoolean)
-      # - cast("1") -> true, cast("0") -> false
+      # - cast("1"/"true"/"on") -> true, cast("0"/"false"/"off") -> false
+      # - cast of any other value raises
+      #   Lutaml::Model::Type::InvalidValueError instead of passing
+      #   through unchanged
       # - to_xml(true) -> "1"
       # - to_xml(false) -> "0" (explicit false in original)
       # - to_xml(nil) -> nil (attribute absent, omit from output)
       #
       # This is the right type for attributes like w:locked, w:semiHidden
-      # on lsdException where absent = false = omit, but explicit "0" = render "0".
-      # Note: Due to cast(nil) = nil, absent attributes also serialize as omitted.
+      # on lsdException where absent = false = omit, but explicit
+      # "0" = render "0".
+      # Note: Due to cast(nil) = nil, absent attributes also serialize
+      # as omitted.
       class OoxmlBooleanOptional < Lutaml::Model::Type::Boolean
         def self.cast(value, _options = {})
-          case value
-          when true, "1", 1
-            true
-          when false, "0", 0
-            false
-          when nil
-            nil
-          else
-            value
-          end
+          return value if Lutaml::Model::Utils.uninitialized?(value)
+          return nil if value.nil?
+          return true if OoxmlBoolean::TRUE_VALUES.include?(value)
+          return false if OoxmlBoolean::FALSE_VALUES.include?(value)
+
+          raise Lutaml::Model::Type::InvalidValueError.new(
+            value, OoxmlBoolean::ON_OFF_VALUES
+          )
         end
 
         def self.serialize(value)
           return nil if value.nil?
-          return "1" if value == true || value.to_s.match?(/^(true|t|yes|y|1)$/i)
-          return "0" if value == false || value.to_s.match?(/^(false|f|no|n|0)$/i)
+          return "1" if OoxmlBoolean::TRUE_VALUES.include?(value)
+          return "0" if OoxmlBoolean::FALSE_VALUES.include?(value)
 
-          value
+          raise Lutaml::Model::Type::InvalidValueError.new(
+            value, OoxmlBoolean::ON_OFF_VALUES
+          )
         end
 
         # Override instance to_xml:

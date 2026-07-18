@@ -8,6 +8,8 @@ module Uniword
     #
     # Represents vertical alignment types from OOXML specification
     class CellVerticalAlignValue < Lutaml::Model::Type::String
+      # Full ST_VerticalJc enumeration from ECMA-376 (wml.xsd)
+      VALUES = %w[top center both bottom].freeze
     end
 
     # Table cell vertical alignment
@@ -19,7 +21,8 @@ module Uniword
     #   valign = CellVerticalAlign.new(value: 'center')
     class CellVerticalAlign < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
-      attribute :value, CellVerticalAlignValue # Alignment: top, center, bottom
+      attribute :value, CellVerticalAlignValue,
+                values: CellVerticalAlignValue::VALUES
 
       xml do
         element "vAlign"

@@ -46,7 +46,7 @@ elements:
     description: 'Hexadecimal color value (RGB)'
     attributes:
       - name: val
-        type: :string
+        type: Uniword::Ooxml::Types::HexColorValue
         xml_name: val
         xml_attribute: true
         required: true
@@ -57,7 +57,7 @@ elements:
     description: 'Measurement in twips (1/20th of a point)'
     attributes:
       - name: val
-        type: :integer
+        type: Uniword::Ooxml::Types::UnsignedDecimalNumber
         xml_name: val
         xml_attribute: true
         required: true
@@ -79,7 +79,7 @@ elements:
     description: 'Measurement in points'
     attributes:
       - name: val
-        type: :integer
+        type: Uniword::Ooxml::Types::UnsignedDecimalNumber
         xml_name: val
         xml_attribute: true
         required: true
@@ -90,7 +90,7 @@ elements:
     description: 'Measurement in pixels'
     attributes:
       - name: val
-        type: :integer
+        type: Uniword::Ooxml::Types::UnsignedDecimalNumber
         xml_name: val
         xml_attribute: true
         required: true
@@ -135,6 +135,7 @@ elements:
     attributes:
       - name: val
         type: :string
+        values: [top, center, baseline, bottom, auto]
         xml_name: val
         xml_attribute: true
         required: true

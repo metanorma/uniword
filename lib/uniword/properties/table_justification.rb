@@ -9,7 +9,10 @@ module Uniword
     # Represents <w:jc> element with val attribute for table alignment.
     # Used in table properties (w:tblPr) for table positioning.
     class TableJustification < Lutaml::Model::Serializable
-      attribute :value, :string
+      # Full ST_JcTable enumeration from ECMA-376 (wml.xsd)
+      VALUES = %w[center end left right start].freeze
+
+      attribute :value, :string, values: VALUES
 
       xml do
         element "jc"

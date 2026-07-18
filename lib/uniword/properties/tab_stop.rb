@@ -8,6 +8,10 @@ module Uniword
     #
     # Represents alignment types for tab stops
     class TabAlignmentValue < Lutaml::Model::Type::String
+      # Full ST_TabJc enumeration from ECMA-376 (wml.xsd)
+      VALUES = %w[
+        clear start center end decimal bar num left right
+      ].freeze
     end
 
     # Tab leader enumeration
@@ -28,7 +32,8 @@ module Uniword
     #   )
     class TabStop < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
-      attribute :alignment, TabAlignmentValue
+      attribute :alignment, TabAlignmentValue,
+                values: TabAlignmentValue::VALUES
       attribute :position, :integer # Position in twips
       attribute :leader, TabLeaderValue
 
