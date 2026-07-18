@@ -299,7 +299,7 @@ module Uniword
             .next_available_rid(rels)
           rels.relationships << Ooxml::Relationships::Relationship.new(
             id: new_rid,
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+            type: Ooxml::PartRegistry.find_by_key(:hyperlink).rel_type,
             target: hyperlink.id.to_s,
             target_mode: "External",
           )

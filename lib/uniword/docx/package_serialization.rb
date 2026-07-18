@@ -186,19 +186,21 @@ document_rels)
       # Shared pattern: ensure a part has both a content type override and
       # a document relationship. Idempotent — skips if already present.
       # When allocator is present, only adds content type (rels handled by allocator).
-      def ensure_content_type(content_types, rels, part_name:,
-                              content_type:, rel_type:, target:)
+      # All part metadata comes from the Ooxml::PartRegistry definition.
+      def ensure_content_type(content_types, rels, definition)
+        part_name = definition.part_name
         unless content_types.overrides.any? { |o| o.part_name == part_name }
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: part_name, content_type: content_type,
+            part_name: part_name, content_type: definition.content_type,
           )
         end
 
         return if allocator
-        return if rels.relationships.any? { |r| r.target == target }
+        return if rels.relationships.any? { |r| r.target == definition.target }
 
         rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: next_rid(rels), type: rel_type, target: target,
+          id: next_rid(rels), type: definition.rel_type,
+          target: definition.target,
         )
       end
 
@@ -223,12 +225,13 @@ document_rels)
 
         return if allocator
 
+        image_rel_type = Ooxml::PartRegistry.find_by_key(:image).rel_type
         document.image_parts.each do |r_id, image_data|
           next if document_rels.relationships.any? { |r| r.target == image_data[:target] }
 
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            type: image_rel_type,
             target: image_data[:target],
           )
         end
@@ -237,12 +240,13 @@ document_rels)
       def inject_chart_parts(content, content_types, document_rels)
         return unless document&.chart_parts && !document.chart_parts.empty?
 
+        chart = Ooxml::PartRegistry.find_by_key(:chart)
         unless content_types.overrides.any? do |o|
           o.part_name&.start_with?("/word/charts/")
         end
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/word/charts/chart1.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.drawingml.chart+xml",
+            part_name: chart.part_name_for(n: 1),
+            content_type: chart.content_type,
           )
         end
 
@@ -250,7 +254,7 @@ document_rels)
           content["word/#{chart_data[:target]}"] = chart_data[:xml]
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart",
+            type: chart.rel_type,
             target: chart_data[:target],
           )
         end
@@ -260,47 +264,47 @@ document_rels)
         return unless document&.bibliography_sources
 
         ensure_content_type(content_types, document_rels,
-                            part_name: "/word/sources.xml",
-                            content_type: "application/vnd.openxmlformats-officedocument.bibliography+xml",
-                            rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography",
-                            target: "sources.xml")
+                            Ooxml::PartRegistry.find_by_key(:bibliography))
       end
 
       def inject_custom_properties(content_types, package_rels)
         return unless custom_properties && !custom_properties.properties.empty?
 
+        definition = Ooxml::PartRegistry.find_by_key(:custom_properties)
         unless content_types.overrides.any? do |o|
-          o.part_name == "/docProps/custom.xml"
+          o.part_name == definition.part_name
         end
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/docProps/custom.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.custom-properties+xml",
+            part_name: definition.part_name,
+            content_type: definition.content_type,
           )
         end
 
         return if package_rels.relationships.any? do |r|
-          r.type.to_s.include?("officeDocument/2006/relationships/custom-properties")
+          r.type.to_s.include?(definition.rel_type)
         end
 
         package_rels.relationships << Ooxml::Relationships::Relationship.new(
           id: next_rid(package_rels),
-          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/custom-properties",
-          target: "docProps/custom.xml",
+          type: definition.rel_type,
+          target: definition.target,
         )
       end
 
       def inject_custom_xml(content_types)
         return unless custom_xml_items && !custom_xml_items.empty?
 
+        props = Ooxml::PartRegistry.find_by_key(:custom_xml_item_props)
         custom_xml_items.each do |item|
           idx = item[:index]
+          part_name = props.part_name_for(index: idx)
           next if content_types.overrides.any? do |o|
-            o.part_name == "/customXml/itemProps#{idx}.xml"
+            o.part_name == part_name
           end
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: "/customXml/itemProps#{idx}.xml",
-            content_type: "application/vnd.openxmlformats-officedocument.customXmlProperties+xml",
+            part_name: part_name,
+            content_type: props.content_type,
           )
         end
       end
@@ -308,15 +312,16 @@ document_rels)
       def inject_headers(content_types, document_rels)
         return unless document&.headers && !document.headers.empty?
 
+        header = Ooxml::PartRegistry.find_by_key(:header)
         counter = 0
         document.headers.each_key do |type|
           counter += 1
-          target = "header#{counter}.xml"
+          target = header.target_for(counter: counter)
 
           unless content_types.overrides.any? { |o| o.part_name == "/word/#{target}" }
             content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: "/word/#{target}",
-              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml",
+              part_name: header.part_name_for(counter: counter),
+              content_type: header.content_type,
             )
           end
 
@@ -326,7 +331,7 @@ document_rels)
           r_id = next_rid(document_rels)
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+            type: header.rel_type,
             target: target,
           )
 
@@ -337,15 +342,16 @@ document_rels)
       def inject_footers(content_types, document_rels)
         return unless document&.footers && !document.footers.empty?
 
+        footer = Ooxml::PartRegistry.find_by_key(:footer)
         counter = 0
         document.footers.each_key do |type|
           counter += 1
-          target = "footer#{counter}.xml"
+          target = footer.target_for(counter: counter)
 
           unless content_types.overrides.any? { |o| o.part_name == "/word/#{target}" }
             content_types.overrides << Uniword::ContentTypes::Override.new(
-              part_name: "/word/#{target}",
-              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml",
+              part_name: footer.part_name_for(counter: counter),
+              content_type: footer.content_type,
             )
           end
 
@@ -355,7 +361,7 @@ document_rels)
           r_id = next_rid(document_rels)
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: r_id,
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer",
+            type: footer.rel_type,
             target: target,
           )
 
@@ -389,58 +395,47 @@ document_rels)
       def inject_notes(content_types, document_rels)
         if footnotes
           ensure_content_type(content_types, document_rels,
-                              part_name: "/word/footnotes.xml",
-                              content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml",
-                              rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/footnotes",
-                              target: "footnotes.xml")
+                              Ooxml::PartRegistry.find_by_key(:footnotes))
         end
 
         return unless endnotes
 
         ensure_content_type(content_types, document_rels,
-                            part_name: "/word/endnotes.xml",
-                            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml",
-                            rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/endnotes",
-                            target: "endnotes.xml")
+                            Ooxml::PartRegistry.find_by_key(:endnotes))
       end
 
       def inject_theme(content_types, document_rels)
         return unless theme
 
         ensure_content_type(content_types, document_rels,
-                            part_name: "/word/theme/theme1.xml",
-                            content_type: "application/vnd.openxmlformats-officedocument.theme+xml",
-                            rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/theme",
-                            target: "theme/theme1.xml")
+                            Ooxml::PartRegistry.find_by_key(:theme))
       end
 
       def inject_numbering(content_types, document_rels)
         return unless numbering
 
         ensure_content_type(content_types, document_rels,
-                            part_name: "/word/numbering.xml",
-                            content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml",
-                            rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering",
-                            target: "numbering.xml")
+                            Ooxml::PartRegistry.find_by_key(:numbering))
       end
 
       def inject_embeddings(content_types, document_rels)
         return unless embeddings && !embeddings.empty?
 
+        ole = Ooxml::PartRegistry.find_by_key(:ole_object)
         embeddings.each_with_index do |(target, _data), idx|
           part_name = "/word/#{target}"
           next if content_types.overrides.any? { |o| o.part_name == part_name }
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
             part_name: part_name,
-            content_type: "application/vnd.openxmlformats-officedocument.oleObject",
+            content_type: ole.content_type,
           )
 
           next if document_rels.relationships.any? { |r| r.target == target }
 
           document_rels.relationships << Ooxml::Relationships::Relationship.new(
             id: "rIdEmbedding#{idx + 1}",
-            type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/oleObject",
+            type: ole.rel_type,
             target: target,
           )
         end

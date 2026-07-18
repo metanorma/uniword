@@ -95,7 +95,9 @@ Other major modules under `lib/uniword/`:
 - `cli/` — Thor commands (convert, info, validate, verify, diff, theme,
   template, review, toc, images, spellcheck, headers, watermark, protect...).
 - `ooxml/` — package parts, relationships, content types, namespaces,
-  schema library.
+  schema library; `PartRegistry` is the single source of truth for
+  part↔content-type↔rel-type mappings (consumers derive, never hold
+  literals).
 - `validation/`, `validators/`, `quality/`, `warnings/` — 3-layer verification
   (OPC + XSD + semantic rules).
 - `diff/` — document-level and package-level comparison (with Canon).

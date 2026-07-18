@@ -18,17 +18,20 @@ module Uniword
     # This is the "populate-first" principle: when loading a template DOCX,
     # parse and seed ALL existing IDs from the template before modification.
     class IdAllocator
-      REL_TYPE_BASE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+      # Relationship type namespace base (also the r: namespace URI).
+      # Individual rel type constants derive from Ooxml::PartRegistry,
+      # the single source of truth for part metadata.
+      REL_TYPE_BASE = Ooxml::PartRegistry::OFFICE_REL_BASE
 
-      IMAGE_REL_TYPE = "#{REL_TYPE_BASE}/image"
-      HEADER_REL_TYPE = "#{REL_TYPE_BASE}/header"
-      FOOTER_REL_TYPE = "#{REL_TYPE_BASE}/footer"
-      HYPERLINK_REL_TYPE = "#{REL_TYPE_BASE}/hyperlink"
-      CHART_REL_TYPE = "#{REL_TYPE_BASE}/chart"
-      FOOTNOTES_REL_TYPE = "#{REL_TYPE_BASE}/footnotes"
-      ENDNOTES_REL_TYPE = "#{REL_TYPE_BASE}/endnotes"
-      THEME_REL_TYPE = "#{REL_TYPE_BASE}/theme"
-      NUMBERING_REL_TYPE = "#{REL_TYPE_BASE}/numbering"
+      IMAGE_REL_TYPE = Ooxml::PartRegistry.find_by_key(:image).rel_type
+      HEADER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:header).rel_type
+      FOOTER_REL_TYPE = Ooxml::PartRegistry.find_by_key(:footer).rel_type
+      HYPERLINK_REL_TYPE = Ooxml::PartRegistry.find_by_key(:hyperlink).rel_type
+      CHART_REL_TYPE = Ooxml::PartRegistry.find_by_key(:chart).rel_type
+      FOOTNOTES_REL_TYPE = Ooxml::PartRegistry.find_by_key(:footnotes).rel_type
+      ENDNOTES_REL_TYPE = Ooxml::PartRegistry.find_by_key(:endnotes).rel_type
+      THEME_REL_TYPE = Ooxml::PartRegistry.find_by_key(:theme).rel_type
+      NUMBERING_REL_TYPE = Ooxml::PartRegistry.find_by_key(:numbering).rel_type
 
       def initialize
         @rid_counter = 0

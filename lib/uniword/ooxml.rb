@@ -29,6 +29,8 @@ module Uniword
     autoload :Types, "#{__dir__}/ooxml/types"
     autoload :PackageFile, "#{__dir__}/ooxml/package_file"
     autoload :ContentTypes, "#{__dir__}/content_types"
+    autoload :PartDefinition, "#{__dir__}/ooxml/part_definition"
+    autoload :PartRegistry, "#{__dir__}/ooxml/part_registry"
 
     # OOXML namespaces - autoload for runtime access
     autoload :Namespaces, "#{__dir__}/ooxml/namespaces"

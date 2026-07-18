@@ -20,7 +20,7 @@ module Uniword
     #   doc.paragraph { |p| p << SdtBuilder.bibliography.build }
     class BibliographyBuilder
       CHART_REL_TYPE =
-        "http://schemas.openxmlformats.org/officeDocument/2006/relationships/bibliography"
+        Ooxml::PartRegistry.find_by_key(:bibliography).rel_type
 
       attr_reader :sources
 

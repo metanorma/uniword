@@ -23,6 +23,9 @@ module Uniword
         #
         # Generate package-level .rels file
         #
+        # Historical rId assignment: rId3 = app, rId2 = core,
+        # rId1 = document (kept for byte-identical DOTX output).
+        #
         # @return [PackageRelationships] Relationships object for _rels/.rels
         def self.next_available_rid(relationships)
           max = relationships.relationships.filter_map do |r|
@@ -34,22 +37,24 @@ module Uniword
         def self.generate_package_rels
           new(
             relationships: [
-              PackageRelationship.new(
-                id: "rId3",
-                type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties",
-                target: "docProps/app.xml",
-              ),
-              PackageRelationship.new(
-                id: "rId2",
-                type: "http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties",
-                target: "docProps/core.xml",
-              ),
-              PackageRelationship.new(
-                id: "rId1",
-                type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument",
-                target: "word/document.xml",
-              ),
+              package_relationship("rId3", :app_properties),
+              package_relationship("rId2", :core_properties),
+              package_relationship("rId1", :document),
             ],
+          )
+        end
+
+        # Build one package-level relationship from the registry.
+        #
+        # @param rid [String] relationship ID
+        # @param key [Symbol] PartRegistry key
+        # @return [PackageRelationship]
+        def self.package_relationship(rid, key)
+          definition = PartRegistry.find_by_key(key)
+          PackageRelationship.new(
+            id: rid,
+            type: definition.rel_type,
+            target: definition.target,
           )
         end
       end
