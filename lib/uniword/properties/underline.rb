@@ -12,10 +12,12 @@ module Uniword
     #
     # Represents <w:u w:val="..."/> where value is:
     # - single, double, thick, dotted, dashed, wave, none, etc.
+    # color is ST_HexColor, themeColor is ST_ThemeColor (ECMA-376)
     class Underline < Lutaml::Model::Serializable
       attribute :value, UnderlineValue
-      attribute :color, :string
-      attribute :theme_color, :string
+      attribute :color, Ooxml::Types::HexColorValue
+      attribute :theme_color, Ooxml::Types::ThemeColorValue,
+                values: Ooxml::Types::ThemeColorValue::VALUES
       attribute :theme_shade, :string
 
       xml do

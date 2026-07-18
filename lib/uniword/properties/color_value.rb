@@ -5,18 +5,23 @@ require "lutaml/model"
 module Uniword
   module Properties
     # Namespaced custom type for color value
-    class ColorValueType < Lutaml::Model::Type::String
+    #
+    # Inherits the ST_HexColor constraint ("auto" or six hex digits)
+    # from Ooxml::Types::HexColorValue.
+    class ColorValueType < Ooxml::Types::HexColorValue
     end
 
     # Color value element
     #
     # Represents <w:color w:val="..." w:themeColor="..." w:themeShade="..."/>
-    # where value is RGB hex (e.g., "FF0000") and themeColor references theme (e.g., "background1")
+    # where value is RGB hex (e.g., "FF0000") and themeColor references
+    # theme (e.g., "background1")
     # themeShade is a hex tint value (e.g., "BF")
     class ColorValue < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :value, ColorValueType
-      attribute :theme_color, :string
+      attribute :theme_color, Ooxml::Types::ThemeColorValue,
+                values: Ooxml::Types::ThemeColorValue::VALUES
       attribute :theme_shade, :string
       attribute :theme_tint, :string
 

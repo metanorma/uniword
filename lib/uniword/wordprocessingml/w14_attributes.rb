@@ -16,15 +16,43 @@ module Uniword
     # W16CID namespace for Word 2016+ citation identifiers
     W16CID_NAMESPACE = Uniword::Ooxml::Namespaces::Word2016Cid
 
-    # Typed attribute for w14:paraId
+    # ST_LongHexNumber (ECMA-376): exactly 8 hexadecimal digits
+    LONG_HEX_NUMBER_PATTERN = /\A[0-9A-Fa-f]{8}\z/
+
+    # Validate an ST_LongHexNumber value at cast time
+    #
+    # @param value [Object] the raw value
+    # @return [String, nil, Object] the validated value
+    # @raise [Lutaml::Model::Type::InvalidValueError] when the value is
+    #   not 8 hexadecimal digits
+    def self.cast_long_hex_number(value)
+      casted = Lutaml::Model::Type::String.cast(value)
+      return casted if casted.nil? ||
+        Lutaml::Model::Utils.uninitialized?(casted)
+      return casted if LONG_HEX_NUMBER_PATTERN.match?(casted)
+
+      raise Lutaml::Model::Type::InvalidValueError.new(
+        value, ["ST_LongHexNumber: 8 hexadecimal digits"]
+      )
+    end
+
+    # Typed attribute for w14:paraId (ST_LongHexNumber)
     class W14ParaId < Lutaml::Model::Type::String
+      def self.cast(value, _options = {})
+        Wordprocessingml.cast_long_hex_number(value)
+      end
+
       xml do
         namespace W14_NAMESPACE
       end
     end
 
-    # Typed attribute for w14:textId
+    # Typed attribute for w14:textId (ST_LongHexNumber)
     class W14TextId < Lutaml::Model::Type::String
+      def self.cast(value, _options = {})
+        Wordprocessingml.cast_long_hex_number(value)
+      end
+
       xml do
         namespace W14_NAMESPACE
       end

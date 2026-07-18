@@ -8,8 +8,13 @@ module Uniword
     #
     # Generated from OOXML schema: shared_types.yml
     # Element: <st:text_alignment>
+    #
+    # Value constrained to ST_TextAlignment (ECMA-376, wml.xsd).
     class TextAlignment < Lutaml::Model::Serializable
-      attribute :val, :string
+      # Full ST_TextAlignment enumeration from ECMA-376 (wml.xsd)
+      VALUES = %w[top center baseline bottom auto].freeze
+
+      attribute :val, :string, values: VALUES
 
       xml do
         element "text_alignment"

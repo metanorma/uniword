@@ -8,8 +8,11 @@ module Uniword
     #
     # Generated from OOXML schema: shared_types.yml
     # Element: <st:pixel_measure>
+    #
+    # Value constrained to ST_PixelsMeasure (ECMA-376): non-negative
+    # integer; see Ooxml::Types::UnsignedDecimalNumber.
     class PixelMeasure < Lutaml::Model::Serializable
-      attribute :val, :integer
+      attribute :val, Uniword::Ooxml::Types::UnsignedDecimalNumber
 
       xml do
         element "pixel_measure"

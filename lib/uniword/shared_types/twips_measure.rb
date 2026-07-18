@@ -8,8 +8,11 @@ module Uniword
     #
     # Generated from OOXML schema: shared_types.yml
     # Element: <st:twips_measure>
+    #
+    # Value constrained to ST_TwipsMeasure (ECMA-376): non-negative
+    # integer; see Ooxml::Types::UnsignedDecimalNumber.
     class TwipsMeasure < Lutaml::Model::Serializable
-      attribute :val, :integer
+      attribute :val, Uniword::Ooxml::Types::UnsignedDecimalNumber
 
       xml do
         element "twips_measure"

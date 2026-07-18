@@ -8,8 +8,11 @@ module Uniword
     #
     # Generated from OOXML schema: shared_types.yml
     # Element: <st:hex_color>
+    #
+    # Value constrained to ST_HexColor (ECMA-376): "auto" or six
+    # hexadecimal digits; see Ooxml::Types::HexColorValue.
     class HexColor < Lutaml::Model::Serializable
-      attribute :val, :string
+      attribute :val, Uniword::Ooxml::Types::HexColorValue
 
       xml do
         element "hex_color"

@@ -23,9 +23,10 @@ module Uniword
     class Shading < Lutaml::Model::Serializable
       # Pattern 0: ATTRIBUTES FIRST
       attribute :pattern, ShadingPatternValue
-      attribute :color, :string      # Foreground color (RGB hex or 'auto')
-      attribute :fill, :string       # Background fill color (RGB hex)
-      attribute :theme_fill, :string # Theme color reference (e.g., 'accent1')
+      attribute :color, Ooxml::Types::HexColorValue
+      attribute :fill, Ooxml::Types::HexColorValue
+      attribute :theme_fill, Ooxml::Types::ThemeColorValue,
+                values: Ooxml::Types::ThemeColorValue::VALUES
 
       xml do
         element "shd"
