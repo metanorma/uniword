@@ -137,14 +137,7 @@ document_rels)
         end
 
         # Notes
-        if footnotes
-          content["word/footnotes.xml"] =
-            serialize_part(footnotes)
-        end
-        if endnotes
-          content["word/endnotes.xml"] =
-            serialize_part(endnotes)
-        end
+        serialize_notes(content)
 
         # Bibliography sources
         if document&.bibliography_sources
@@ -478,6 +471,25 @@ document_rels)
           sect_pr.footer_references << Wordprocessingml::FooterReference.new(
             type: type, r_id: r_id,
           )
+        end
+      end
+
+      def serialize_notes(content)
+        if footnotes
+          content["word/footnotes.xml"] =
+            serialize_part(footnotes)
+        end
+        if endnotes
+          content["word/endnotes.xml"] =
+            serialize_part(endnotes)
+        end
+        if footnotes_rels
+          content["word/_rels/footnotes.xml.rels"] =
+            serialize_infrastructure(footnotes_rels)
+        end
+        if endnotes_rels
+          content["word/_rels/endnotes.xml.rels"] =
+            serialize_infrastructure(endnotes_rels)
         end
       end
 

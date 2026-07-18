@@ -84,7 +84,7 @@ module Uniword
 
       # Non-serialized attributes (DOCX packaging helpers)
       attr_accessor :chart_parts, :bibliography_sources, :profile
-      attr_accessor :settings_rels, :embeddings
+      attr_accessor :settings_rels, :embeddings, :footnotes_rels, :endnotes_rels
 
       # Central ID allocator — owns all rId, footnote, bookmark, etc. assignment.
       # Seeded from template rels on load; used by builders during construction.
@@ -273,6 +273,22 @@ module Uniword
           package.endnotes = Uniword::Wordprocessingml::Endnotes.from_xml(
             zip_content["word/endnotes.xml"]
           )
+        end
+
+        # Parse note part relationships (r:id refs inside notes, e.g.
+        # hyperlinks in footnotes) so they survive the round-trip.
+        if zip_content["word/_rels/footnotes.xml.rels"]
+          package.footnotes_rels =
+            Ooxml::Relationships::PackageRelationships.from_xml(
+              zip_content["word/_rels/footnotes.xml.rels"]
+            )
+        end
+
+        if zip_content["word/_rels/endnotes.xml.rels"]
+          package.endnotes_rels =
+            Ooxml::Relationships::PackageRelationships.from_xml(
+              zip_content["word/_rels/endnotes.xml.rels"]
+            )
         end
 
         # Parse Header and Footer parts

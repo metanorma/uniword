@@ -80,8 +80,10 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "decimal"),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(
-                left: (720 * (i + 1)).to_s, hanging: "360",
+              pPr: Uniword::Wordprocessingml::ParagraphProperties.new(
+                indentation: Uniword::Properties::Indentation.new(
+                  left: 720 * (i + 1), hanging: 360,
+                ),
               ),
             )
           end
@@ -104,8 +106,10 @@ module Uniword
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: "bullet"),
               lvlText: Uniword::Wordprocessingml::LvlText.new(val: level_char),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(
-                left: (720 * (i + 1)).to_s, hanging: "360",
+              pPr: Uniword::Wordprocessingml::ParagraphProperties.new(
+                indentation: Uniword::Properties::Indentation.new(
+                  left: 720 * (i + 1), hanging: 360,
+                ),
               ),
               rPr: Uniword::Wordprocessingml::RunProperties.new(
                 fonts: Properties::RunFonts.new(ascii: "Symbol",
@@ -126,8 +130,10 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(
-                left: (720 * (i + 1)).to_s, hanging: "360",
+              pPr: Uniword::Wordprocessingml::ParagraphProperties.new(
+                indentation: Uniword::Properties::Indentation.new(
+                  left: 720 * (i + 1), hanging: 360,
+                ),
               ),
             )
           end
@@ -144,8 +150,10 @@ module Uniword
               start: Uniword::Wordprocessingml::Start.new(val: 1),
               numFmt: Uniword::Wordprocessingml::NumFmt.new(val: format),
               lvlJc: Uniword::Wordprocessingml::LvlJc.new(val: "left"),
-              ind: Uniword::Wordprocessingml::Ind.new(
-                left: (720 * (i + 1)).to_s, hanging: "360",
+              pPr: Uniword::Wordprocessingml::ParagraphProperties.new(
+                indentation: Uniword::Properties::Indentation.new(
+                  left: 720 * (i + 1), hanging: 360,
+                ),
               ),
             )
           end

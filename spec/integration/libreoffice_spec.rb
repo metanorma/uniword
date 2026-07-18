@@ -349,8 +349,22 @@ RSpec.describe "LibreOffice Compatibility Testing" do
       doc = create_test_document
       doc.save(test_path)
 
-      # Try to open and immediately close (validates structure)
-      system("#{soffice_cmd} --headless --invisible --view #{test_path} > /dev/null 2>&1")
+      # Try to open and immediately close (validates structure).
+      # soffice --view never exits on its own, so run it in a detached
+      # process group and terminate it after a grace period.
+      pid = spawn("#{soffice_cmd} --headless --invisible --view " \
+                  "#{test_path} > /dev/null 2>&1", pgroup: true)
+      sleep 5
+      begin
+        Process.kill("TERM", -pid)
+      rescue Errno::ESRCH
+        nil # already exited
+      end
+      begin
+        Process.wait(pid)
+      rescue Errno::ECHILD
+        nil
+      end
 
       # NOTE: This may not work on all systems, so we just check the file is valid
       expect(File.exist?(test_path)).to be true

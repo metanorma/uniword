@@ -61,6 +61,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   not carry (e.g. unmodelled parts dropped on load) — recorded as fixes
 - Allocator (builder) and legacy (template) save paths now apply identical
   referential repairs (previously the builder path only logged warnings)
+- `SchemaRegistry` now maps `word/webSettings.xml` and the docProps
+  core/app/custom parts to their XSDs; `docProps/core.xml` validates
+  offline (Dublin Core XSD imports bundled with relative schemaLocations)
+- Integration spec now XSD-validates real library output end-to-end
+  (Builder corpus + fixture round-trips) via `uniword verify --xsd`
+  semantics
+
+### Fixed
+
+- `w:lvl` no longer emits `w:ind`/`w:tabs` as direct children (invalid per
+  ECMA-376 CT_Lvl); numbering level indentation is now written via the
+  level's `w:pPr` — previously every Builder-generated list produced
+  schema-invalid `numbering.xml`
+- `word/_rels/settings.xml.rels`, `word/_rels/footnotes.xml.rels` and
+  `word/_rels/endnotes.xml.rels` now survive load → save round-trips on
+  both save paths (previously dropped, leaving dangling `r:id`
+  references in the saved package)
+- Saving no longer crashes with FrozenError when the Reconciler injects
+  missing footnote/endnote separator entries into a parsed document
+- `uniword verify`-style integration spec hang: `soffice --view` example
+  no longer blocks the LibreOffice integration spec indefinitely
 
 ### Changed
 

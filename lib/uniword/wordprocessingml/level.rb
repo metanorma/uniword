@@ -17,20 +17,6 @@ module Uniword
       end
     end
 
-    # Tabs container for numbering level
-    #
-    # Element: <w:tabs>
-    class Tabs < Lutaml::Model::Serializable
-      attribute :tab, Tab, collection: true
-
-      xml do
-        element "tabs"
-        namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        mixed_content
-        map_element "tab", to: :tab, render_nil: false
-      end
-    end
-
     # Numbering level suffix type
     #
     # Element: <w:suff>
@@ -63,6 +49,10 @@ module Uniword
     #
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:lvl>
+    #
+    # Per ECMA-376 CT_Lvl, `w:ind` and `w:tabs` are NOT direct children of
+    # `w:lvl` — they belong to the level's `w:pPr`. They are therefore not
+    # mapped here; use `pPr.indentation` / `pPr.tabs`.
     class Level < Lutaml::Model::Serializable
       attribute :ilvl, :integer
       attribute :tentative, :string
@@ -75,8 +65,6 @@ module Uniword
       attribute :lvlText, LvlText
       attribute :lvlJc, LvlJc
       attribute :pPr, ParagraphProperties
-      attribute :tabs, Tabs
-      attribute :ind, Ind
       attribute :rPr, RunProperties
 
       xml do
@@ -95,8 +83,6 @@ module Uniword
         map_element "lvlText", to: :lvlText, render_nil: false
         map_element "lvlJc", to: :lvlJc, render_nil: false
         map_element "pPr", to: :pPr, render_nil: false
-        map_element "tabs", to: :tabs, render_nil: false
-        map_element "ind", to: :ind, render_nil: false
         map_element "rPr", to: :rPr, render_nil: false
       end
 
@@ -122,12 +108,12 @@ module Uniword
 
       # Get left indent (convenience method - returns integer)
       def left_indent_value
-        ind&.left&.to_i
+        pPr&.indentation&.left.to_i
       end
 
       # Get hanging indent (convenience method - returns integer)
       def hanging_indent_value
-        ind&.hanging&.to_i
+        pPr&.indentation&.hanging.to_i
       end
 
       # Get level text value (convenience method - returns string)

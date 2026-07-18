@@ -30,6 +30,15 @@ module Uniword
           package.document_rels = document.document_rels if document.document_rels
           package.theme_rels = document.theme_rels if document.theme_rels
           package.package_rels = document.package_rels if document.package_rels
+          if document.settings_rels
+            package.settings_rels = document.settings_rels
+          end
+          if document.footnotes_rels
+            package.footnotes_rels = document.footnotes_rels
+          end
+          if document.endnotes_rels
+            package.endnotes_rels = document.endnotes_rels
+          end
           package.content_types = document.content_types if document.content_types
           package.footnotes = document.footnotes if document.footnotes
           package.endnotes = document.endnotes if document.endnotes
