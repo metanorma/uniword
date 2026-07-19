@@ -76,6 +76,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   target not found" errors for relationship targets containing dot
   segments (e.g. `../docProps/meta.xml`); target resolution now
   normalizes `.`/`..` per OPC Part 2, matching the write-time gate.
+- `uniword verify --xsd` no longer drowns in false errors for MCE
+  extension content every real document carries: the XSD layer
+  preprocesses each part per its own `mc:Ignorable` declaration,
+  stripping ignorable-marked attributes (w14:paraId/textId) and the
+  `mc:Ignorable` attribute itself before validation. Extension elements
+  are deliberately kept (removing them exposed baseline Word-vs-schema
+  quirks as false errors); their findings remain classified as
+  MCE-attributable
 
 ## [1.3.0] - 2026-07-19
 

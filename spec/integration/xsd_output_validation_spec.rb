@@ -20,16 +20,14 @@ require "fileutils"
 #   localized (bundled dc.xsd/dcterms.xsd/dcmitype.xsd/xml.xsd with
 #   relative schemaLocations) and SchemaRegistry maps all three docProps
 #   parts.
-# - WordprocessingML (and other non-OPC) parts: full validity is attempted
-#   but currently impossible for ANY producer, including Word itself:
-#   every real document carries MCE extension content (mc:Ignorable
-#   attributes, w14:paraId/w14:textId, w14:* elements) that the bundled
-#   transitional XSDs do not declare on most complex types. Stripping
-#   mc:Ignorable content before validation (MCE-aware preprocessing) is
-#   validation-engine work owned by TODO.validate/11. Until then, errors
-#   whose offending element/attribute lives in an extension namespace are
-#   classified as MCE-attributable and excluded from the hard assertion,
-#   and full validity is tracked by `pending` examples.
+# - WordprocessingML (and other non-OPC) parts: hard-fail on non-MCE
+#   errors. XmlSchemaValidator preprocesses each part per its own
+#   mc:Ignorable declaration (stripping ignorable-marked attributes,
+#   extension elements, and the mc:Ignorable attribute itself —
+#   TODO.refactor/06), so w14/w15 extension content no longer produces
+#   false errors; full validity after preprocessing is asserted for the
+#   whole corpus. Fixtures whose OWN content is schema-invalid
+#   independent of MCE remain `pending` with root causes below.
 RSpec.describe "XSD validation of generated output" do
   OUTPUT_DIR = File.join("test_output", "xsd_corpus").freeze
 
@@ -443,27 +441,21 @@ RSpec.describe "XSD validation of generated output" do
   end
 
   # -------------------------------------------------------------------
-  # Full validity (including MCE extension content) — systemic gap
+  # Full validity after MCE preprocessing (TODO.refactor/06)
   # -------------------------------------------------------------------
 
-  describe "full XSD validity including MCE extension content" do
-    it "produces zero XSD errors for the whole corpus" do
-      pending "XmlSchemaValidator does not strip MCE extension content " \
-              "(mc:Ignorable attributes, w14:paraId/w14:textId, w14:* " \
-              "elements) before XSD validation, and the bundled " \
-              "transitional XSDs do not declare it — genuine Word output " \
-              "fails identically. MCE-aware preprocessing is " \
-              "validation-engine work: TODO.validate/11."
+  describe "full XSD validity after MCE preprocessing" do
+    it "produces zero non-MCE XSD errors for the whole corpus" do
       offenders = (BUILDER_DOCS.keys.map do |n|
                      File.join(OUTPUT_DIR, "builder_#{n}.docx")
                    end +
                    CLEAN_ROUNDTRIP_FIXTURES.values.map do |f|
                      File.join(OUTPUT_DIR, "rt_#{File.basename(f)}")
                    end).select do |path|
-        xsd_findings(verify_once(path)).any?
+        non_mce_findings(verify_once(path)).any?
       end
       expect(offenders).to be_empty,
-                           "Documents with XSD findings:\n  " \
+                           "Documents with non-MCE XSD findings:\n  " \
                            "#{offenders.join("\n  ")}"
     end
   end
