@@ -133,6 +133,7 @@ module Uniword
   # CLI
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"
+  autoload :FontsCLI, "uniword/cli/fonts_cli"
   autoload :DiffCLI, "uniword/cli/diff_cli"
   autoload :TemplateCLI, "uniword/cli/template_cli"
   autoload :CLIHelpers, "uniword/cli/helpers"

@@ -130,6 +130,7 @@ module Uniword
 
     # Fonts
     autoload :Font, "uniword/wordprocessingml/font"
+    autoload :FontReplacer, "uniword/wordprocessingml/font_replacer"
     autoload :Fonts, "uniword/wordprocessingml/fonts"
     autoload :FontTable, "uniword/wordprocessingml/font_table"
 
