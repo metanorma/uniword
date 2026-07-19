@@ -17,8 +17,15 @@ RSpec.describe Uniword::Validation::Rules do
       end
     end
 
-    it "has 20 built-in rules registered" do
-      expect(described_class::Registry.all.size).to eq(20)
+    it "has 26 built-in rules registered" do
+      expect(described_class::Registry.all.size).to eq(26)
+    end
+
+    it "registers 6 model-level rules for the in-memory front-end" do
+      model_rules = described_class::Registry.all.select do |rule|
+        rule.context_type == :model
+      end
+      expect(model_rules.size).to eq(6)
     end
 
     it "finds rules by code" do

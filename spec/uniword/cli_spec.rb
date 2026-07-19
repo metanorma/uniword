@@ -63,11 +63,57 @@ RSpec.describe Uniword::CLI do
   end
 
   describe "#validate" do
+    # Invoke `uniword validate` and return the exit status
+    # (0 when the command completes without calling exit).
+    def validate_status(path)
+      cli.invoke(:validate, [path])
+      0
+    rescue SystemExit => e
+      e.status
+    end
+
     context "with non-existent file" do
       it "exits with error message" do
         expect do
           cli.invoke(:validate, ["nonexistent.docx"])
         end.to raise_error(SystemExit)
+      end
+    end
+
+    context "with a valid document" do
+      let(:fixture_path) { "spec/fixtures/docx_gem/basic.docx" }
+
+      it "exits zero" do
+        expect(validate_status(fixture_path)).to eq(0)
+      end
+    end
+
+    context "with a table missing tblGrid" do
+      let(:bad_path) { File.join(Dir.tmpdir, "uniword_validate_bad.docx") }
+
+      before do
+        # The save-time reconciler repairs tables, so strip tblGrid and
+        # tblPr from the package after saving.
+        doc = Uniword::Wordprocessingml::DocumentRoot.new
+        doc.body.tables << Uniword::Wordprocessingml::Table.new
+        doc.to_file(bad_path)
+        Zip::File.open(bad_path) do |zip|
+          xml = zip.read("word/document.xml")
+          xml = xml.gsub(%r{<w:tblPr>.*?</w:tblPr>}m, "")
+            .gsub("<w:tblGrid/>", "")
+          zip.remove("word/document.xml")
+          zip.get_output_stream("word/document.xml") { |f| f.write(xml) }
+        end
+      end
+
+      after { safe_delete(bad_path) }
+
+      it "exits with status 1" do
+        expect(validate_status(bad_path)).to eq(1)
+      end
+
+      it "reports the tblGrid error" do
+        expect { validate_status(bad_path) }.to output(/DOC-204/).to_stdout
       end
     end
 

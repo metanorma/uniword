@@ -62,6 +62,16 @@ module Uniword
           "error"
         end
 
+        # The context type this rule consumes. The Engine runs a rule
+        # only when the context's type matches: :package rules validate
+        # an on-disk DOCX via DocumentContext; :model rules validate an
+        # in-memory document model via ModelContext (see ModelRule).
+        #
+        # @return [Symbol] :package or :model
+        def context_type
+          :package
+        end
+
         # Check if this rule applies to the given document context.
         #
         # @param context [DocumentContext] The document being validated

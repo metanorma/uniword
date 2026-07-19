@@ -9,10 +9,9 @@ module Uniword
     autoload :LayerValidator, "#{__dir__}/validation/layer_validator"
     autoload :LayerValidationResult,
              "#{__dir__}/validation/layer_validation_result"
-    autoload :DocumentValidator, "#{__dir__}/validation/document_validator"
     autoload :Checkers, "#{__dir__}/validation/checkers"
     autoload :Validators, "#{__dir__}/validation/validators"
-    autoload :StructuralValidator, "#{__dir__}/validation/structural_validator"
+    autoload :Engine, "#{__dir__}/validation/engine"
     autoload :OpcValidator, "#{__dir__}/validation/opc_validator"
     autoload :SchemaRegistry, "#{__dir__}/validation/schema_registry"
     autoload :VerifyOrchestrator,

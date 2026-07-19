@@ -32,6 +32,13 @@ module Uniword
           @moxml = Moxml.new(:nokogiri)
         end
 
+        # Context type used by the Engine to select rules.
+        #
+        # @return [Symbol] :package — this context wraps an on-disk DOCX
+        def context_type
+          :package
+        end
+
         # Open the ZIP archive.
         #
         # @return [Zip::File]

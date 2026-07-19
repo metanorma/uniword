@@ -44,9 +44,7 @@ RSpec.describe "Round-trip validation with DOC-100..DOC-107 rules" do
 
   def run_validation(docx_path)
     context = Uniword::Validation::Rules::DocumentContext.new(docx_path)
-    Uniword::Validation::Rules::Registry.all.flat_map do |rule|
-      rule.applicable?(context) ? rule.check(context) : []
-    end
+    Uniword::Validation::Engine.run(context)
   ensure
     context.close
   end

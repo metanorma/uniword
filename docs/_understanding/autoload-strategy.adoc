@@ -61,7 +61,7 @@ When adding new classes, default to `autoload`:
 [source,ruby]
 ----
 # In lib/uniword.rb
-autoload :DocumentValidator, 'uniword/document_validator'
+autoload :DocumentFactory, 'uniword/document_factory'
 ----
 
 Only use `require_relative` if the class has load-time side effects, is referenced in module-level constants, or has deep cross-dependencies with eagerly loaded modules.
