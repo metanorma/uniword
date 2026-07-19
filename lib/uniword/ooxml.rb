@@ -10,6 +10,7 @@ module Uniword
   module Ooxml
     # Core OOXML packages
     autoload :DotxPackage, "#{__dir__}/ooxml/dotx_package"
+    autoload :ElementOrder, "#{__dir__}/ooxml/element_order"
     autoload :ThmxPackage, "#{__dir__}/ooxml/thmx_package"
     autoload :MhtmlPackage, "#{__dir__}/ooxml/mhtml_package"
     autoload :StylesetPackage, "#{__dir__}/ooxml/styleset_package"

@@ -51,6 +51,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   package paths (`package_paths`), and family definitions
   (`:header`/`:footer`/`:chart`/`:image`/`:bibliography`) gained the
   collection attributes needed to enumerate them.
+- Internal refactor (no user-visible behavior change):
+  `Uniword::Ooxml::ElementOrder` is now the single safe
+  `element_order` mutation point (`mutable_order`, `append`,
+  `insert_at`, `insert_once`), replacing per-model workarounds for
+  lutaml-model's frozen parse arrays in footnotes, endnotes, the TOC
+  generator, and the reconciler helpers
 
 ## [1.3.0] - 2026-07-19
 

@@ -91,14 +91,13 @@ module Uniword
         # Add the SDT to element_order so it serializes correctly
         return unless body.element_order
 
-        # element_order from the parser may be frozen; never mutate it.
-        body.element_order = body.element_order.dup
         insert_element = Lutaml::Xml::Element.new("Element", "sdt")
-        if position.positive? && body.element_order.size >= position
-          body.element_order.insert(position, insert_element)
-        else
-          body.element_order.insert(0, insert_element)
-        end
+        index = if position.positive? && body.element_order.size >= position
+                  position
+                else
+                  0
+                end
+        Ooxml::ElementOrder.insert_at(body, index, insert_element)
       end
 
       # Update an existing TOC in the document.
