@@ -428,6 +428,27 @@ module Uniword
         replacer.replace(self)
       end
 
+      # Apply uniform page setup to every section of the document
+      #
+      # Mirrors Word's Layout dialog: named paper sizes, orientation
+      # (with Word-style dimension swap), and margins.
+      #
+      # @param size [String, nil] Paper size: letter, legal, a4, a5,
+      #   executive
+      # @param orientation [String, nil] "portrait" or "landscape"
+      # @param margins [Integer, String, nil] Uniform margin for all
+      #   sides (twips, or "1in" / "2.5cm" / "25mm")
+      # @param top, right, bottom, left [Integer, String, nil] Per-side
+      #   margin overrides
+      # @return [Integer] Number of sections updated
+      def apply_page_setup(size: nil, orientation: nil, margins: nil,
+                           top: nil, right: nil, bottom: nil, left: nil)
+        setup = PageSetup.new(size: size, orientation: orientation,
+                              margins: margins, top: top, right: right,
+                              bottom: bottom, left: left)
+        setup.apply(self)
+      end
+
       # Auto-transition from MS theme to Uniword equivalent
       #
       # Detects the MS theme in the document's embedded theme and replaces

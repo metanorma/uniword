@@ -72,6 +72,7 @@ module Uniword
     autoload :PageSize, "uniword/wordprocessingml/page_size"
     autoload :PageMargins, "uniword/wordprocessingml/page_margins"
     autoload :PageNumbering, "uniword/wordprocessingml/page_numbering"
+    autoload :PageSetup, "uniword/wordprocessingml/page_setup"
     autoload :Columns, "uniword/wordprocessingml/columns"
     autoload :HeaderReference, "uniword/wordprocessingml/header_reference"
     autoload :FooterReference, "uniword/wordprocessingml/footer_reference"

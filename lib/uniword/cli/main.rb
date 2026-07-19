@@ -361,6 +361,9 @@ module Uniword
     desc "fonts SUBCOMMAND", "Replace font families in documents"
     subcommand "fonts", FontsCLI
 
+    desc "page SUBCOMMAND", "Page setup (size, orientation, margins)"
+    subcommand "page", PageCLI
+
     desc "styleset SUBCOMMAND", "Manage document StyleSets"
     subcommand "styleset", StyleSetCLI
 
