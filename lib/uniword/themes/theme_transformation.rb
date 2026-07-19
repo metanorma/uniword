@@ -52,34 +52,10 @@ module Uniword
         )
       end
 
-      private
-
-      OFFICE_THEME_PATH = File.expand_path(
-        "../../../data/themes/office_theme.xml", __dir__
-      ).freeze
-
-      def default_format_scheme
-        @default_format_scheme ||= begin
-          theme = Drawingml::Theme.from_xml(File.read(OFFICE_THEME_PATH))
-          theme.theme_elements.fmt_scheme
-        end
-      end
-
-      # Build OOXML ThemeElements from friendly theme
+      # Build OOXML ColorScheme from friendly color scheme.
       #
-      # @param friendly [Themes::Theme] Friendly theme
-      # @return [Drawingml::ThemeElements] OOXML theme elements
-      def build_theme_elements(friendly)
-        return nil unless friendly
-
-        Drawingml::ThemeElements.new(
-          clr_scheme: build_color_scheme(friendly.color_scheme),
-          font_scheme: build_font_scheme(friendly.font_scheme),
-          fmt_scheme: default_format_scheme,
-        )
-      end
-
-      # Build OOXML ColorScheme from friendly color scheme
+      # Public converter, used by partial theme edits (Design → Colors
+      # style scheme swaps that keep fonts and formats untouched).
       #
       # @param friendly_colors [Themes::ColorScheme, nil] Friendly color scheme
       # @return [Drawingml::ColorScheme, nil] OOXML color scheme
@@ -103,6 +79,58 @@ module Uniword
         )
       end
 
+      # Build OOXML FontScheme from friendly font scheme.
+      #
+      # Public converter, used by partial theme edits (Design → Fonts
+      # style scheme swaps that keep colors and formats untouched).
+      #
+      # @param friendly_fonts [Themes::FontScheme, nil] Friendly font scheme
+      # @return [Drawingml::FontScheme, nil] OOXML font scheme
+      def build_font_scheme(friendly_fonts)
+        return nil unless friendly_fonts
+
+        Drawingml::FontScheme.new(
+          name: friendly_fonts.name,
+          major_font_obj: build_major_font(friendly_fonts),
+          minor_font_obj: build_minor_font(friendly_fonts),
+        )
+      end
+
+      # A fresh parse of the bundled default Office theme.
+      #
+      # Each call re-parses the bundled XML so every returned theme (and
+      # its elements) is independent — callers may mutate it freely.
+      #
+      # @return [Drawingml::Theme] Default Office theme
+      def default_office_theme
+        Drawingml::Theme.from_xml(File.read(OFFICE_THEME_PATH))
+      end
+
+      private
+
+      OFFICE_THEME_PATH = File.expand_path(
+        "../../../data/themes/office_theme.xml", __dir__
+      ).freeze
+
+      def default_format_scheme
+        @default_format_scheme ||=
+          default_office_theme.theme_elements.fmt_scheme
+      end
+
+      # Build OOXML ThemeElements from friendly theme
+      #
+      # @param friendly [Themes::Theme] Friendly theme
+      # @return [Drawingml::ThemeElements] OOXML theme elements
+      def build_theme_elements(friendly)
+        return nil unless friendly
+
+        Drawingml::ThemeElements.new(
+          clr_scheme: build_color_scheme(friendly.color_scheme),
+          font_scheme: build_font_scheme(friendly.font_scheme),
+          fmt_scheme: default_format_scheme,
+        )
+      end
+
       # Build OOXML color reference from hex value
       #
       # Creates the appropriate color type (Dk1Color, Lt1Color, etc.)
@@ -116,20 +144,6 @@ module Uniword
 
         # Create the color type and use the rgb= helper from ThemeColorBase
         color_class.new.tap { |c| c.rgb = hex }
-      end
-
-      # Build OOXML FontScheme from friendly font scheme
-      #
-      # @param friendly_fonts [Themes::FontScheme, nil] Friendly font scheme
-      # @return [Drawingml::FontScheme, nil] OOXML font scheme
-      def build_font_scheme(friendly_fonts)
-        return nil unless friendly_fonts
-
-        Drawingml::FontScheme.new(
-          name: friendly_fonts.name,
-          major_font_obj: build_major_font(friendly_fonts),
-          minor_font_obj: build_minor_font(friendly_fonts),
-        )
       end
 
       # Build OOXML MajorFont from friendly font scheme

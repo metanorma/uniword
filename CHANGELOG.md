@@ -106,6 +106,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Integration spec now XSD-validates real library output end-to-end
   (Builder corpus + fixture round-trips) via `uniword verify --xsd`
   semantics
+- `uniword theme fonts INPUT OUTPUT --name X` and `uniword theme colors
+  INPUT OUTPUT --name Y`: apply a bundled font scheme (25) or color
+  scheme (23) to an existing document — Word's Design → Fonts / Colors
+  galleries as CLI commands, replacing only the targeted theme element
+  (`--list` shows available schemes); also available as
+  `DocumentRoot#apply_font_scheme` / `#apply_color_scheme`
 
 ### Fixed
 

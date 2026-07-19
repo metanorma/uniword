@@ -376,6 +376,42 @@ module Uniword
         self
       end
 
+      # Apply a bundled font scheme to the document's theme
+      #
+      # Mirrors Word's Design → Fonts gallery: replaces only the theme's
+      # fontScheme — colors and formats are untouched. Creates the theme
+      # part from the bundled Office theme when the document has none.
+      #
+      # @param name [String, Symbol] Font scheme slug (data/font_schemes/)
+      # @return [self] For method chaining
+      # @raise [ArgumentError] if the scheme is unknown
+      def apply_font_scheme(name)
+        fonts = Resource::FontSchemeLoader.load(name.to_s)
+        transformation = Themes::ThemeTransformation.new
+        ensure_theme!(transformation)
+        theme.theme_elements.font_scheme =
+          transformation.build_font_scheme(fonts)
+        self
+      end
+
+      # Apply a bundled color scheme to the document's theme
+      #
+      # Mirrors Word's Design → Colors gallery: replaces only the theme's
+      # clrScheme — fonts and formats are untouched. Creates the theme
+      # part from the bundled Office theme when the document has none.
+      #
+      # @param name [String, Symbol] Color scheme slug (data/color_schemes/)
+      # @return [self] For method chaining
+      # @raise [ArgumentError] if the scheme is unknown
+      def apply_color_scheme(name)
+        colors = Resource::ColorSchemeLoader.load(name.to_s)
+        transformation = Themes::ThemeTransformation.new
+        ensure_theme!(transformation)
+        theme.theme_elements.clr_scheme =
+          transformation.build_color_scheme(colors)
+        self
+      end
+
       # Auto-transition from MS theme to Uniword equivalent
       #
       # Detects the MS theme in the document's embedded theme and replaces
@@ -440,6 +476,18 @@ module Uniword
       end
 
       private
+
+      # Ensure the document carries a theme part, creating it from a
+      # fresh parse of the bundled Office theme when absent (every
+      # document gets its own copy — no shared state).
+      #
+      # @param transformation [Themes::ThemeTransformation] Converter
+      # @return [void]
+      def ensure_theme!(transformation)
+        return if theme&.theme_elements
+
+        self.theme = transformation.default_office_theme
+      end
 
       # Run model-level validation rules against this document.
       #

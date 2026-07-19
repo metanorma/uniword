@@ -147,6 +147,46 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "fonts INPUT OUTPUT", "Apply a bundled font scheme to a document"
+    long_desc <<~DESC
+      Replace the document theme's font scheme (major/minor fonts) while
+      keeping colors and formats — the equivalent of Word's Design →
+      Fonts gallery. Use --list to see available font schemes.
+
+      Examples:
+        $ uniword theme fonts input.docx output.docx --name carlito_sans
+        $ uniword theme fonts --list
+    DESC
+    option :name, type: :string,
+                  desc: "Bundled font scheme name (e.g., carlito_sans)"
+    option :list, type: :boolean, default: false,
+                  desc: "List available bundled font schemes"
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
+    def fonts(*args)
+      run_scheme_command(:fonts, args)
+    end
+
+    desc "colors INPUT OUTPUT", "Apply a bundled color scheme to a document"
+    long_desc <<~DESC
+      Replace the document theme's color scheme while keeping fonts and
+      formats — the equivalent of Word's Design → Colors gallery. Use
+      --list to see available color schemes.
+
+      Examples:
+        $ uniword theme colors input.docx output.docx --name emerald
+        $ uniword theme colors --list
+    DESC
+    option :name, type: :string,
+                  desc: "Bundled color scheme name (e.g., emerald)"
+    option :list, type: :boolean, default: false,
+                  desc: "List available bundled color schemes"
+    option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
+                     default: false
+    def colors(*args)
+      run_scheme_command(:colors, args)
+    end
+
     desc "auto INPUT OUTPUT", "Auto-transition MS theme to Uniword equivalent"
     long_desc <<~DESC
       Detect the Microsoft Word theme in a document and automatically
@@ -192,7 +232,55 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    # Scheme-switching command configuration: loader, document method,
+    # and output label per command kind.
+    SCHEME_COMMANDS = {
+      fonts: {
+        loader: Resource::FontSchemeLoader,
+        doc_method: :apply_font_scheme,
+        label: "Font scheme",
+      },
+      colors: {
+        loader: Resource::ColorSchemeLoader,
+        doc_method: :apply_color_scheme,
+        label: "Color scheme",
+      },
+    }.freeze
+
     private
+
+    def run_scheme_command(kind, args)
+      config = SCHEME_COMMANDS.fetch(kind)
+      if options[:list]
+        config[:loader].available_schemes.each { |s| say s }
+        return
+      end
+
+      require_name!(:name, config[:loader])
+      apply_scheme_to_file(config, args)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
+    def apply_scheme_to_file(config, (input_path, output_path))
+      say "Loading document #{input_path}...", :green if options[:verbose]
+
+      doc = load_document(input_path)
+      doc.method(config[:doc_method]).call(options[:name])
+      doc.save(output_path)
+      say "#{config[:label]} '#{options[:name]}' applied to #{output_path}",
+          :green
+    end
+
+    def require_name!(key, loader)
+      return if options[key]
+
+      say "Error: specify --name for a bundled scheme " \
+          "(available: #{loader.available_schemes.join(', ')})", :red
+      exit 1
+    end
 
     def apply_theme_to(doc)
       if options[:name]
