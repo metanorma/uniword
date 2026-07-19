@@ -169,8 +169,12 @@ module Uniword
         detector.detect(path)
       end
 
-
       # Copy package parts to document for round-trip preservation
+      #
+      # Registry-driven: every PartDefinition naming both a package
+      # and a document attribute (and not excluded via
+      # +copy_to_document: false+) is mirrored; a part can no longer
+      # exist in only one direction.
       #
       # @param package [Docx::Package] The source package
       # @param document [Wordprocessingml::DocumentRoot] The target document
@@ -178,29 +182,11 @@ module Uniword
       def copy_package_parts_to_document(package, document)
         return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
-        document.styles_configuration = package.styles if package.styles
-        document.numbering_configuration = package.numbering if package.numbering
-        document.settings = package.settings if package.settings
-        document.font_table = package.font_table if package.font_table
-        document.web_settings = package.web_settings if package.web_settings
-        document.theme = package.theme if package.theme
-        document.core_properties = package.core_properties if package.core_properties
-        document.app_properties = package.app_properties if package.app_properties
-        document.document_rels = package.document_rels if package.document_rels
-        document.theme_rels = package.theme_rels if package.theme_rels
-        document.package_rels = package.package_rels if package.package_rels
-        document.content_types = package.content_types if package.content_types
-        document.custom_properties = package.custom_properties if package.custom_properties
-        document.custom_xml_items = package.custom_xml_items if package.custom_xml_items
-        document.footnotes = package.footnotes if package.footnotes
-        document.endnotes = package.endnotes if package.endnotes
-        document.comments = package.comments if package.comments
-        document.settings_rels = package.settings_rels if package.settings_rels
-        if package.footnotes_rels
-          document.footnotes_rels = package.footnotes_rels
-        end
-        if package.endnotes_rels
-          document.endnotes_rels = package.endnotes_rels
+        Ooxml::PartRegistry.copied_to_document.each do |definition|
+          value = package.method(definition.package_attribute).call
+          next if value.nil?
+
+          document.method(:"#{definition.document_attribute}=").call(value)
         end
       end
 

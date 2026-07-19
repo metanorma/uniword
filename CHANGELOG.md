@@ -8,6 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Internal refactor (no user-visible behavior change): `Ooxml::PartRegistry`
+  is now bidirectional and loader-aware. `Ooxml::PartDefinition` describes
+  how each part loads (loader strategy key, parsing model, load priority,
+  dynamic path resolution) and where it lives on
+  `Wordprocessingml::DocumentRoot` and `Docx::Package`. Registry
+  registrations now cover every part the library reads (content types,
+  package/document/settings/theme/footnote/endnote rels, theme media).
+  `Docx::Package.from_zip_content` loads parts by iterating registry
+  entries through the new `Docx::PartLoader` strategy registry
+  (`XmlModelLoader`, `CustomXmlLoader`, `HeaderFooterLoader`,
+  `ChartLoader`, `ImageLoader`, `EmbeddingLoader`, `ThemeMediaLoader`)
+  instead of a hand-written per-part sequence, and the two
+  document↔package copy lists
+  (`DocumentFactory.copy_package_parts_to_document`,
+  `Docx::PackageDefaults.copy_document_parts_to_package`) are single
+  registry-driven loops — a part can no longer exist in only one
+  direction.
+
 ## [1.3.0] - 2026-07-19
 
 ### Added

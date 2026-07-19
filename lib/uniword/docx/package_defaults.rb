@@ -31,43 +31,20 @@ module Uniword
           %i[styles settings web_settings font_table].freeze
 
         # Copy parts from document to package for round-trip preservation
+        #
+        # Registry-driven: every PartDefinition naming both a document
+        # and a package attribute is mirrored, honoring the
+        # definition's optional +to_package_guard+ predicate (e.g. the
+        # lazily-initialized numbering configuration) and
+        # +to_package_type+ value constraint (e.g. comments).
         def copy_document_parts_to_package(document, package)
           return unless document.is_a?(Uniword::Wordprocessingml::DocumentRoot)
 
-          package.styles = document.styles_configuration if document.styles_configuration
-          package.settings = document.settings if document.settings
-          package.font_table = document.font_table if document.font_table
-          package.web_settings = document.web_settings if document.web_settings
-          package.theme = document.theme if document.theme
-          package.core_properties = document.core_properties if document.core_properties
-          package.app_properties = document.app_properties if document.app_properties
-          package.custom_properties = document.custom_properties if document.custom_properties
-          package.document_rels = document.document_rels if document.document_rels
-          package.theme_rels = document.theme_rels if document.theme_rels
-          package.package_rels = document.package_rels if document.package_rels
-          if document.settings_rels
-            package.settings_rels = document.settings_rels
+          Ooxml::PartRegistry.copied_to_package.each do |definition|
+            copy_part_to_package(document, package, definition)
           end
-          if document.footnotes_rels
-            package.footnotes_rels = document.footnotes_rels
-          end
-          if document.endnotes_rels
-            package.endnotes_rels = document.endnotes_rels
-          end
-          package.content_types = document.content_types if document.content_types
-          package.footnotes = document.footnotes if document.footnotes
-          package.endnotes = document.endnotes if document.endnotes
-          if document.comments.is_a?(Uniword::CommentsPart)
-            package.comments = document.comments
-          end
+
           package.allocator = document.allocator if document.allocator
-
-          package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?
-
-          package.chart_parts = document.chart_parts if document.chart_parts
-          package.custom_xml_items = document.custom_xml_items if document.custom_xml_items
-          package.bibliography_sources = document.bibliography_sources if document.bibliography_sources
-          package.embeddings = document.embeddings if document.embeddings
         end
 
         # Create minimal content types for a valid DOCX
@@ -101,6 +78,33 @@ module Uniword
         end
 
         private
+
+        # Copy one document part to the package when the definition's
+        # guard predicate and value type constraint allow it.
+        def copy_part_to_package(document, package, definition)
+          return unless copyable_to_package?(document, definition)
+
+          value = document.method(definition.document_attribute).call
+          return if value.nil?
+          return unless copyable_type?(definition, value)
+
+          package.method(:"#{definition.package_attribute}=").call(value)
+        end
+
+        # The guard predicate named by the definition (a method on the
+        # document, e.g. :numbering_configuration_loaded?) decides;
+        # without a guard the part copies.
+        def copyable_to_package?(document, definition)
+          guard = definition.to_package_guard
+          guard.nil? || document.method(guard).call
+        end
+
+        # When the definition constrains the value type (e.g.
+        # CommentsPart for comments), the value must satisfy it.
+        def copyable_type?(definition, value)
+          type = definition.to_package_type
+          type.nil? || value.is_a?(type)
+        end
 
         # Build a Relationships part with sequential rIds (rId1..rIdN)
         # for the given registry part keys, in the given order.

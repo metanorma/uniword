@@ -21,6 +21,7 @@ module Uniword
     autoload :PackageIntegrityChecker,
              "#{__dir__}/docx/package_integrity_checker"
     autoload :PackageSerialization, "#{__dir__}/docx/package_serialization"
+    autoload :PartLoader, "#{__dir__}/docx/part_loader"
     autoload :Profile, "#{__dir__}/docx/profile"
     autoload :DocumentStatistics, "#{__dir__}/docx/document_statistics"
     autoload :Reconciler, "#{__dir__}/docx/reconciler"
