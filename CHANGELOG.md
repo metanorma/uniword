@@ -132,6 +132,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   galleries as CLI commands, replacing only the targeted theme element
   (`--list` shows available schemes); also available as
   `DocumentRoot#apply_font_scheme` / `#apply_color_scheme`
+- `uniword fonts replace INPUT OUTPUT --from X --to Y`: Word's
+  Replace Fonts dialog as a one-shot CLI command — rewrites rFonts
+  references across styles and defaults, body content, headers/footers,
+  notes, comments, and numbering (also `DocumentRoot#replace_font`)
 
 ### Fixed
 

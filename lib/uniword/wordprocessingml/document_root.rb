@@ -412,6 +412,22 @@ module Uniword
         self
       end
 
+      # Replace one font family with another across the document
+      #
+      # Mirrors Word's Home → Replace → Replace Fonts: rewrites rFonts
+      # references in styles and defaults, body content, headers,
+      # footers, notes, comments, and numbering. Theme font references
+      # (asciiTheme etc.) are untouched — use #apply_font_scheme for
+      # those.
+      #
+      # @param from [String] Font family to replace (exact match)
+      # @param to [String] Replacement font family
+      # @return [Integer] Number of rFonts attribute values rewritten
+      def replace_font(from:, to:)
+        replacer = FontReplacer.new(from: from, to: to)
+        replacer.replace(self)
+      end
+
       # Auto-transition from MS theme to Uniword equivalent
       #
       # Detects the MS theme in the document's embedded theme and replaces

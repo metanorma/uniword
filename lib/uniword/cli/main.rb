@@ -358,6 +358,9 @@ module Uniword
     desc "theme SUBCOMMAND", "Manage document themes"
     subcommand "theme", ThemeCLI
 
+    desc "fonts SUBCOMMAND", "Replace font families in documents"
+    subcommand "fonts", FontsCLI
+
     desc "styleset SUBCOMMAND", "Manage document StyleSets"
     subcommand "styleset", StyleSetCLI
 
