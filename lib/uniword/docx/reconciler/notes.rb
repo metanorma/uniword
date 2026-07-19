@@ -95,7 +95,7 @@ module Uniword
           strip_empty_runs_from_notes(entries)
           reorder_notes_by_reference(entries, type)
 
-          unless allocator
+          unless builder_managed?
             prefix = type == :footnote ? "fn" : "en"
 
             entries.each_with_index do |entry, eidx|

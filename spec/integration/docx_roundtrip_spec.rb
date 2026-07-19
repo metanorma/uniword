@@ -4,6 +4,7 @@ require "spec_helper"
 require "fileutils"
 require "zip"
 require "canon"
+require "nokogiri"
 
 RSpec.describe "DOCX Round-Trip Fidelity" do
   let(:fixtures_dir) { File.expand_path("../fixtures", __dir__) }
@@ -122,7 +123,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     end
 
     it "maintains XML file structure" do
-      skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
       original_files = extract_docx_files(original_path)
       roundtrip(original_path, roundtrip_path)
       saved_files = extract_docx_files(roundtrip_path)
@@ -242,9 +242,92 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
     end
   end
 
+  describe "rId stability through round-trip" do
+    let(:demo_path) do
+      File.join(fixtures_dir, "uniword-demo/demo_formal_integral_proper.docx")
+    end
+    # Relationship-rich fixture: styles, settings, webSettings, fontTable,
+    # theme, numbering, footnotes, endnotes, headers, image, glossary,
+    # customXml (12+ relationships in document.xml.rels alone).
+    let(:apa_path) do
+      File.join(fixtures_dir,
+                "word-template-apa-style-paper/word-template-apa-style-paper.docx")
+    end
+    let(:roundtrip_path) { File.join(temp_dir, "rid_stable_roundtrip.docx") }
+
+    # Ordered (Id, Type, Target, TargetMode) signature of one .rels part.
+    def rels_signature(files, name)
+      Nokogiri::XML(files[name]).xpath(
+        "//xmlns:Relationship",
+        "xmlns" => "http://schemas.openxmlformats.org/package/2006/relationships",
+      ).map { |n| [n["Id"], n["Type"], n["Target"], n["TargetMode"]] }
+    end
+
+    it "preserves every relationship rId verbatim (byte-identical rIds)" do
+      roundtrip(demo_path, roundtrip_path)
+      original_files = extract_docx_files(demo_path)
+      saved_files = extract_docx_files(roundtrip_path)
+
+      rels_parts = original_files.keys.select { |f| f.end_with?(".rels") }
+      expect(rels_parts.size).to be >= 2
+
+      rels_parts.each do |name|
+        expect(saved_files).to have_key(name)
+        expect(rels_signature(saved_files, name))
+          .to eq(rels_signature(original_files, name)),
+              "rIds changed in #{name}"
+      end
+    end
+
+    it "keeps every carried part's rId stable in a relationship-rich template" do
+      roundtrip(apa_path, roundtrip_path)
+      original_files = extract_docx_files(apa_path)
+      saved_files = extract_docx_files(roundtrip_path)
+
+      original_files.keys.select { |f| f.end_with?(".rels") }.each do |name|
+        base = name.sub(%r{(^|/)_rels/[^/]+\.rels$}, '\1')
+        orig = rels_signature(original_files, name)
+        saved = saved_files[name] ? rels_signature(saved_files, name) : []
+
+        # Every rel in the output must exist verbatim in the input
+        # (no renumbering, no reassignment to a different target).
+        expect(saved - orig).to be_empty,
+                                "rels reassigned in #{name}: #{saved - orig}"
+
+        # Every input rel whose target part survived (external rels and
+        # parts uniword emits; the unmodeled glossary sub-document is a
+        # known coverage gap, unrelated to rId stability) must survive.
+        carried = orig.reject do |_, _, target, mode|
+          next false if mode == "External"
+
+          resolved = File.expand_path(File.join("/", base, target))[1..]
+          !saved_files.key?(resolved)
+        end
+        expect(carried - saved).to be_empty,
+                                   "carried rels lost in #{name}: " \
+                                   "#{carried - saved}"
+      end
+    end
+
+    it "keeps body r:id references pointing at their original rIds" do
+      doc = roundtrip(apa_path, roundtrip_path)
+      original_files = extract_docx_files(apa_path)
+      saved_files = extract_docx_files(roundtrip_path)
+
+      rid_refs = lambda do |xml|
+        Nokogiri::XML(xml).xpath(
+          "//@r:id | //@r:embed",
+          "r" => "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        ).map(&:value).sort
+      end
+      expect(rid_refs.call(saved_files["word/document.xml"]))
+        .to eq(rid_refs.call(original_files["word/document.xml"]))
+      expect(doc.text.length).to be > 0
+    end
+  end
+
   ISO_FIXTURES_DIR = File.join(__dir__,
                                "../../spec/fixtures/uniword-private/fixtures/iso")
-
   ISO_FIXTURES = {
     "ISO 8601-1:2019/Amd1" => "ISO 8601-1;2019_Amd 1 ed.1 - id.81801 Publication Word (en).docx",
     "ISO 690:2021" => "ISO_690_2021-Word_document(en).docx",
@@ -266,7 +349,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
       end
 
       it "preserves text content" do
-        skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
         doc = roundtrip(original_path, roundtrip_path)
         expect(doc.text.length).to be > 0
 
@@ -277,7 +359,6 @@ RSpec.describe "DOCX Round-Trip Fidelity" do
       end
 
       it "maintains XML structure" do
-        skip "rId reassignment during round-trip is a known gap; see TODO.refactor"
         original_files = extract_docx_files(original_path)
         roundtrip(original_path, roundtrip_path)
         saved_files = extract_docx_files(roundtrip_path)

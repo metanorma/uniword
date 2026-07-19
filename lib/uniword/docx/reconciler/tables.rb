@@ -15,7 +15,7 @@ module Uniword
           return unless tables
 
           tables.each_with_index do |tbl, idx|
-            if allocator
+            if builder_managed?
               reconcile_table_cell_order_only(tbl, idx)
             else
               reconcile_single_table(tbl, idx)
@@ -25,7 +25,7 @@ module Uniword
 
         private
 
-        # Allocator path: builders create complete tables.
+        # Builder-managed path: builders create complete tables.
         # Only fix element order issues and calculate gridAfter.
         def reconcile_table_cell_order_only(tbl, idx)
           tbl.rows&.each do |row|

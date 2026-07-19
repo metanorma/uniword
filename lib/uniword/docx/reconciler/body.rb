@@ -58,7 +58,7 @@ module Uniword
             part.content.mc_ignorable = ignorable
           end
 
-          unless allocator
+          unless builder_managed?
             backfill_header_footer_paragraphs(parts, generate_rsid)
           end
 
@@ -68,9 +68,9 @@ module Uniword
         private
 
         # Assign rsid/paraId defaults to header/footer paragraphs
-        # (legacy non-allocator path only). Seeds preserve the historic
-        # per-kind ("hdr:N"/"ftr:N") and per-store ("hfp:N") schemes so
-        # generated IDs stay stable across the unified store.
+        # (legacy, non-builder-managed path only). Seeds preserve the
+        # historic per-kind ("hdr:N"/"ftr:N") and per-store ("hfp:N")
+        # schemes so generated IDs stay stable across the unified store.
         def backfill_header_footer_paragraphs(parts, rsid)
           return unless parts
 
@@ -93,7 +93,8 @@ module Uniword
         # Wire builder-added (fresh) header/footer parts into
         # document_rels and sectPr during reconciliation — the single
         # wiring implementation. Loaded parts keep the relationships
-        # and section references they arrived with.
+        # and section references they arrived with. rIds come from the
+        # allocator, the single rId authority.
         def wire_header_footer_parts
           doc = package.document
           return unless doc&.body
@@ -108,12 +109,8 @@ module Uniword
           parts.each do |part|
             next if part.loaded? || part.target.nil?
 
-            r_id = if allocator
-                     allocator.alloc_rid(target: part.target,
-                                         type: part.rel_type)
-                   else
-                     find_or_create_rel(rels, part.rel_type, part.target)
-                   end
+            r_id = allocator.alloc_rid(target: part.target,
+                                       type: part.rel_type)
             part.r_id = r_id
             wire_sect_pr_reference(doc, part.kind, part.type, r_id) if part.type
             wired = true
@@ -126,18 +123,6 @@ module Uniword
           # order may not include newly-added references.
           sect_pr = doc.body.section_properties
           sect_pr.element_order = nil if sect_pr&.element_order
-        end
-
-        def find_or_create_rel(rels, rel_type, target)
-          existing = rels.relationships.find { |r| r.target == target }
-          return existing.id if existing
-
-          r_id = Ooxml::Relationships::PackageRelationships
-            .next_available_rid(rels)
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: r_id, type: rel_type, target: target,
-          )
-          r_id
         end
 
         def wire_sect_pr_reference(doc, kind, type, r_id)
@@ -178,7 +163,7 @@ module Uniword
 
           body.paragraphs.each_with_index do |para, idx|
             strip_empty_runs(para)
-            next if allocator
+            next if builder_managed?
 
             para.rsid_r ||= rsid
             para.rsid_r_default ||= "00000000"
@@ -186,7 +171,7 @@ module Uniword
             para.text_id ||= "77777777"
           end
 
-          unless allocator
+          unless builder_managed?
             record_fix(FixCodes::PARAGRAPH_BACKFILL,
                        "Assigned rsid and paraId to paragraphs",
                        part: "word/document.xml")

@@ -45,6 +45,16 @@ module Uniword
         @parts.each(&block)
       end
 
+      # Iterate over collection keys.
+      def each_key(&block)
+        @parts.each_key(&block)
+      end
+
+      # Iterate over stored parts.
+      def each_value(&block)
+        @parts.each_value(&block)
+      end
+
       # @return [Array<Part>]
       def values
         @parts.values

@@ -294,16 +294,22 @@ module Uniword
 
         # Promote a hyperlink whose r:id holds a literal URL to a proper
         # External relationship, repointing the hyperlink at the new rId.
+        # The rId comes from the allocator (single authority); repeated
+        # literals for the same URL share one relationship.
         def promote_literal_hyperlink(rels, hyperlink, valid_rids)
-          new_rid = Ooxml::Relationships::PackageRelationships
-            .next_available_rid(rels)
-          rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: new_rid,
-            type: Ooxml::PartRegistry.find_by_key(:hyperlink).rel_type,
-            target: hyperlink.id.to_s,
-            target_mode: "External",
-          )
-          valid_rids << new_rid
+          url = hyperlink.id.to_s
+          rel_type = Ooxml::PartRegistry.find_by_key(:hyperlink).rel_type
+          new_rid = allocator.alloc_rid(target: url, type: rel_type,
+                                        target_mode: "External")
+          unless valid_rids.include?(new_rid)
+            rels.relationships << Ooxml::Relationships::Relationship.new(
+              id: new_rid,
+              type: rel_type,
+              target: url,
+              target_mode: "External",
+            )
+            valid_rids << new_rid
+          end
           hyperlink.id = new_rid
         end
 
@@ -332,6 +338,11 @@ module Uniword
                      part: "word/document.xml")
         end
 
+        # rId uniqueness safety net. With the allocator as single
+        # authority, duplicate rIds are impossible by construction; this
+        # pass only fires on pathological source input (duplicate ids
+        # in the loaded rels). Duplicates are renamed — never
+        # renumbered wholesale — with fresh ids from the allocator.
         def ensure_rid_uniqueness
           rels = package.document_rels
           return unless rels
@@ -351,17 +362,27 @@ module Uniword
 
           return if duplicates.empty?
 
-          duplicates.each do |rel|
-            old_id = rel.id
-            rel.id = derive_unique_rid(rels, old_id)
-            record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                       "Deduplicated rId #{old_id} → #{rel.id}",
-                       part: "word/_rels/document.xml.rels")
-          end
+          rename_duplicate_rids(duplicates)
 
           record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
                      "Resolved #{duplicates.size} rId collision(s)",
                      part: "word/_rels/document.xml.rels")
+        end
+
+        # Rename duplicate rels with fresh allocator ids and register
+        # the new bindings so later lookups stay consistent.
+        def rename_duplicate_rids(duplicates)
+          duplicates.each do |rel|
+            old_id = rel.id
+            rel.id = allocator.register_rid(
+              allocator.next_free_rid,
+              target: rel.target, type: rel.type,
+              target_mode: rel.target_mode
+            )
+            record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                       "Deduplicated rId #{old_id} → #{rel.id}",
+                       part: "word/_rels/document.xml.rels")
+          end
         end
 
         # -- Relationship targets (rels → emitted parts) --
@@ -566,12 +587,6 @@ module Uniword
             t = rel.type.to_s
             rids << rel.id if type_fragments.any? { |frag| t.include?(frag) }
           end
-        end
-
-        def derive_unique_rid(relationships, _current_rel)
-          Ooxml::Relationships::PackageRelationships.next_available_rid(
-            relationships,
-          )
         end
       end
     end

@@ -91,9 +91,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `uniword headers list` now reports headers/footers of loaded
   documents, and `headers add-header` / watermark managers no longer
   crash when saving (both used to bypass the round-trip storage)
+- rId stability through round-trip: `Docx::IdAllocator` is now the single
+  rId authority for all relationships parts. Loaded documents round-trip
+  with their original rIds preserved verbatim (previously the reconciler
+  renumbered every rId on save, e.g. `r:embed="rId8"` becoming
+  `"rId9"`); only genuinely new relationships (builder-added images,
+  hyperlinks, charts, headers/footers) receive fresh allocations.
+  The 3 long-skipped `docx_roundtrip_spec.rb` round-trip examples
+  (APA template, two ISO fixtures) now pass unskipped
+- Loaded image parts are now keyed by their actual document relationship
+  rId, so `r:embed` references resolve correctly in MHTML conversion and
+  the image manager; theme-only media no longer gains a spurious
+  document-level relationship on save
+- Adding the same image file twice now stores one part with one
+  relationship shared by both drawings (previously produced a dangling
+  duplicate rId reference)
 
 ### Changed
 
+- `Uniword::Ooxml::Relationships::PackageRelationships.next_available_rid`
+  removed: all rId assignment flows through `Docx::IdAllocator` (scoped
+  per rels part — `:document`/`:package` — with `seed_from_rels`
+  preserving loaded rIds verbatim). The reconciler's legacy renumbering
+  path, the serializer-side `next_rid`, and `ChartBuilder`'s literal
+  `rIdChartN` ids are gone; chart relationship ids are now allocator
+  numerics. The reconciler's light-touch vs full normalization choice is
+  now explicit (`builder_managed`) instead of inferred from allocator
+  presence
 - `Uniword::Ooxml::DocxPackage` renamed to `Uniword::Docx::Package`
   - All references in lib/ and spec/ updated (~20 files)
   - `lib/uniword/ooxml/docx_package.rb` moved to `lib/uniword/docx/package.rb`

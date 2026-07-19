@@ -553,9 +553,12 @@ RSpec.describe "Image Embedding, Bibliography, Charts" do
         builder.categories(["A"])
         builder.series("Test", data: [1])
         builder.build_drawing(doc)
+        builder.build_drawing(doc)
 
-        r_id = doc.model.chart_parts.keys.first
-        expect(r_id).to start_with("rIdChart")
+        ids = doc.model.chart_parts.keys
+        expect(ids.size).to eq(2)
+        expect(ids.uniq.size).to eq(2)
+        expect(ids).to all(match(/\ArId\d+\z/))
       end
     end
 

@@ -172,38 +172,23 @@ document_rels)
 
       private
 
-      # Generate the next numeric relationship ID for a Relationships object.
-      def next_rid(relationships)
-        Ooxml::Relationships::PackageRelationships.next_available_rid(
-          relationships,
-        )
-      end
-
-      # Shared pattern: ensure a part has both a content type override and
-      # a document relationship. Idempotent — skips if already present.
-      # When allocator is present, only adds content type (rels handled by allocator).
-      # All part metadata comes from the Ooxml::PartRegistry definition.
-      def ensure_content_type(content_types, rels, definition)
+      # Shared pattern: ensure a part has a content type override.
+      # Idempotent — skips if already present. Relationships are owned
+      # by the Reconciler (assembled from the IdAllocator), never by
+      # the serializer. Part metadata comes from Ooxml::PartRegistry.
+      def ensure_content_type(content_types, definition)
         part_name = definition.part_name
-        unless content_types.overrides.any? { |o| o.part_name == part_name }
-          content_types.overrides << Uniword::ContentTypes::Override.new(
-            part_name: part_name, content_type: definition.content_type,
-          )
-        end
+        return if content_types.overrides.any? { |o| o.part_name == part_name }
 
-        return if allocator
-        return if rels.relationships.any? { |r| r.target == definition.target }
-
-        rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: next_rid(rels), type: definition.rel_type,
-          target: definition.target,
+        content_types.overrides << Uniword::ContentTypes::Override.new(
+          part_name: part_name, content_type: definition.content_type,
         )
       end
 
       # Legacy alias — calls ensure_content_type (same behavior)
       alias ensure_part_registered ensure_content_type
 
-      def inject_image_parts(content, content_types, document_rels)
+      def inject_image_parts(content, content_types, _document_rels)
         return unless document&.image_parts && !document.image_parts.empty?
 
         document.image_parts.each_value do |image_data|
@@ -218,22 +203,9 @@ document_rels)
         document.image_parts.each_value do |image_data|
           content["word/#{image_data[:target]}"] = image_data[:data]
         end
-
-        return if allocator
-
-        image_rel_type = Ooxml::PartRegistry.find_by_key(:image).rel_type
-        document.image_parts.each do |r_id, image_data|
-          next if document_rels.relationships.any? { |r| r.target == image_data[:target] }
-
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: r_id,
-            type: image_rel_type,
-            target: image_data[:target],
-          )
-        end
       end
 
-      def inject_chart_parts(content, content_types, document_rels)
+      def inject_chart_parts(content, content_types, _document_rels)
         return unless document&.chart_parts && !document.chart_parts.empty?
 
         chart = Ooxml::PartRegistry.find_by_key(:chart)
@@ -246,20 +218,15 @@ document_rels)
           )
         end
 
-        document.chart_parts.each do |r_id, chart_data|
+        document.chart_parts.each_value do |chart_data|
           content["word/#{chart_data[:target]}"] = chart_data[:xml]
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: r_id,
-            type: chart.rel_type,
-            target: chart_data[:target],
-          )
         end
       end
 
-      def inject_bibliography(content_types, document_rels)
+      def inject_bibliography(content_types, _document_rels)
         return unless document&.bibliography_sources
 
-        ensure_content_type(content_types, document_rels,
+        ensure_content_type(content_types,
                             Ooxml::PartRegistry.find_by_key(:bibliography))
       end
 
@@ -280,8 +247,12 @@ document_rels)
           r.type.to_s.include?(definition.rel_type)
         end
 
+        # The reconciler runs before injection; register the rId with
+        # the allocator (single authority) and append the rel here.
         package_rels.relationships << Ooxml::Relationships::Relationship.new(
-          id: next_rid(package_rels),
+          id: allocator.alloc_rid(target: definition.target,
+                                  type: definition.rel_type,
+                                  scope: :package),
           type: definition.rel_type,
           target: definition.target,
         )
@@ -325,51 +296,43 @@ document_rels)
         end
       end
 
-      def inject_notes(content_types, document_rels)
+      def inject_notes(content_types, _document_rels)
         if footnotes
-          ensure_content_type(content_types, document_rels,
+          ensure_content_type(content_types,
                               Ooxml::PartRegistry.find_by_key(:footnotes))
         end
 
         return unless endnotes
 
-        ensure_content_type(content_types, document_rels,
+        ensure_content_type(content_types,
                             Ooxml::PartRegistry.find_by_key(:endnotes))
       end
 
-      def inject_theme(content_types, document_rels)
+      def inject_theme(content_types, _document_rels)
         return unless theme
 
-        ensure_content_type(content_types, document_rels,
+        ensure_content_type(content_types,
                             Ooxml::PartRegistry.find_by_key(:theme))
       end
 
-      def inject_numbering(content_types, document_rels)
+      def inject_numbering(content_types, _document_rels)
         return unless numbering
 
-        ensure_content_type(content_types, document_rels,
+        ensure_content_type(content_types,
                             Ooxml::PartRegistry.find_by_key(:numbering))
       end
 
-      def inject_embeddings(content_types, document_rels)
+      def inject_embeddings(content_types, _document_rels)
         return unless embeddings && !embeddings.empty?
 
         ole = Ooxml::PartRegistry.find_by_key(:ole_object)
-        embeddings.each_with_index do |(target, _data), idx|
+        embeddings.each_key do |target|
           part_name = "/word/#{target}"
           next if content_types.overrides.any? { |o| o.part_name == part_name }
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
             part_name: part_name,
             content_type: ole.content_type,
-          )
-
-          next if document_rels.relationships.any? { |r| r.target == target }
-
-          document_rels.relationships << Ooxml::Relationships::Relationship.new(
-            id: "rIdEmbedding#{idx + 1}",
-            type: ole.rel_type,
-            target: target,
           )
         end
       end

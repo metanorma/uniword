@@ -35,10 +35,18 @@ module Uniword
         Wordprocessingml::DocumentRoot
       end
 
+      # Every DocumentBuilder carries an IdAllocator — the single ID
+      # authority — so build-time allocations (images, hyperlinks,
+      # paragraph ids) and the save path draw from one registry.
+      # Reuses an explicit allocator or one already on the model;
+      # otherwise populates one seeded from the model's current
+      # relationships (loaded documents keep their rIds; fresh models
+      # start empty).
       def initialize(model = nil, allocator: nil)
         super(model)
-        @allocator = allocator
-        @model.allocator = allocator if allocator
+        @allocator = allocator || @model.allocator ||
+          Docx::IdAllocator.populate_from_package(@model)
+        @model.allocator = @allocator
         @footnote_builder = FootnoteBuilder.new(self, allocator: @allocator)
       end
 
