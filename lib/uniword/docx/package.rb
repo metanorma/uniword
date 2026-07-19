@@ -94,7 +94,7 @@ module Uniword
       attribute :comments, Uniword::CommentsPart
 
       # Non-serialized attributes (DOCX packaging helpers)
-      attr_accessor :chart_parts, :bibliography_sources, :profile
+      attr_accessor :profile
       attr_accessor :settings_rels, :footnotes_rels, :endnotes_rels
 
       # OLE/embedded object binaries (word/embeddings/*), keyed by target.

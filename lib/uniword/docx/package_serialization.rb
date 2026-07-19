@@ -198,17 +198,17 @@ document_rels)
       def inject_image_parts(content, content_types, _document_rels)
         return unless document&.image_parts && !document.image_parts.empty?
 
-        document.image_parts.each_value do |image_data|
-          ext = File.extname(image_data[:target]).delete(".")
+        document.image_parts.each_value do |part|
+          ext = File.extname(part.target.to_s).delete(".")
           next if content_types.defaults.any? { |d| d.extension == ext }
 
           content_types.defaults << Uniword::ContentTypes::Default.new(
-            extension: ext, content_type: image_data[:content_type],
+            extension: ext, content_type: part.content_type,
           )
         end
 
-        document.image_parts.each_value do |image_data|
-          content["word/#{image_data[:target]}"] = image_data[:data]
+        document.image_parts.each_value do |part|
+          content["word/#{part.target}"] = part.data
         end
       end
 
@@ -225,8 +225,8 @@ document_rels)
           )
         end
 
-        document.chart_parts.each_value do |chart_data|
-          content["word/#{chart_data[:target]}"] = chart_data[:xml]
+        document.chart_parts.each_value do |part|
+          content["word/#{part.target}"] = part.xml
         end
       end
 

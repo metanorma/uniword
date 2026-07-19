@@ -30,10 +30,11 @@ module Uniword
           rel = find_chart_relationship(context.package, definition, target)
           return unless rel
 
-          context.package.document.chart_parts[rel.id] = {
-            xml: context.zip_content[path],
+          context.package.document.chart_parts[rel.id] = ChartPart.new(
+            r_id: rel.id,
             target: target,
-          }
+            content: context.zip_content[path],
+          )
         end
 
         # The document relationship of the definition's type targeting

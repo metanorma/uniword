@@ -96,9 +96,6 @@ module Uniword
       attr_accessor :theme, :raw_html, :revisions, :comments
       # Footnotes and endnotes (separate XML parts in DOCX package)
       attr_accessor :footnotes, :endnotes
-      # Image parts to embed in the DOCX package
-      # Hash: r_id => { path: String, data: String, content_type: String, target: String }
-      attr_accessor :image_parts
       # Bibliography sources for sources.xml
       attr_accessor :bibliography_sources
       # Round-trip parts (copied from DocxPackage during load)
@@ -152,6 +149,19 @@ module Uniword
       # Bulk-assign footers (see #headers=).
       def footers=(value)
         footers.replace(value)
+      end
+
+      # Image parts (word/media/* binaries), keyed by rId.
+      #
+      # @return [Docx::PartCollection] rId => Docx::ImagePart
+      def image_parts
+        @image_parts ||= Docx::PartCollection.new(:r_id, Docx::ImagePart)
+      end
+
+      # Bulk-assign image parts (Hash of rId => ImagePart/legacy part
+      # hash; nil clears).
+      def image_parts=(value)
+        image_parts.replace_all(value)
       end
 
       # Chart parts to embed in the DOCX package, keyed by rId.

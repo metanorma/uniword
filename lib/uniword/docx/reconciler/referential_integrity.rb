@@ -550,7 +550,7 @@ module Uniword
 
         def media_chart_paths(doc)
           paths = [doc.image_parts, doc.chart_parts].compact.flat_map do |parts|
-            parts.values.map { |data| "word/#{data[:target]}" }
+            parts.values.map { |part| "word/#{part.target}" }
           end
           paths.concat(embedding_paths)
         end
