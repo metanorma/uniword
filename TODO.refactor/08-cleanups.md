@@ -1,6 +1,6 @@
 # 08 — Cleanups: orphaned classes, dead code, DocumentRoot size
 
-Status: PENDING
+Status: DONE
 Priority: P2
 Absorbs: leftovers noted in TODO.validate/07 and /10 completion notes
 
@@ -46,3 +46,43 @@ Small debts recorded during the wave:
   `spec/uniword/wordprocessingml/ spec/uniword/builder/
   spec/uniword/docx/` green.
 - RuboCop: no new offenses.
+
+## Completion notes
+
+Completed 2026-07-19.
+
+1. **Orphaned classes** — grep proved zero references in lib and spec
+   for `Wordprocessingml::Ind` (numbering_elements.rb) and
+   `Wordprocessingml::Tabs` (level.rb — class already deleted in
+   TODO.validate/07's w:lvl fix; only its autoload remained). Deleted
+   the Ind class and both autoloads from wordprocessingml.rb.
+   `Wordprocessingml::Tab` (tab.rb) is NOT orphaned (Builder +
+   specs) — kept.
+2. **ImageRelationship** — the unreachable `SecureRandom.hex(4)` rId
+   default is removed; `id:` is now a required parameter (single rId
+   authority: Docx::IdAllocator). The class stays for the
+   config/ooxml/schemas/relationships.yml mapping (generation-time
+   reference). Separately noted: `Image.from_data`'s
+   `"temp_#{SecureRandom.hex(8)}"` relationship_id is a placeholder
+   overwritten at registration time (never emitted) — left as-is,
+   documented here.
+3. **DocumentRoot styling cluster** — extracted to
+   `Wordprocessingml::DocumentStyling` (new module, autoloaded in
+   wordprocessingml.rb, included in DocumentRoot): apply_theme*,
+   apply_styleset, apply_font_scheme, apply_color_scheme,
+   apply_page_setup, replace_font, rename_style, remove_style,
+   remove_unused_styles, auto_transition_theme, apply_*_from,
+   apply_template, ensure_theme!. Public signatures unchanged.
+   DocumentRoot: 596 → 380 lines.
+   `DocumentRoot#remove_style` now returns the removed style or nil
+   (was Boolean), matching rename_style's API shape.
+
+### Verification
+
+- `spec/uniword/wordprocessingml/ spec/uniword/builder/
+  spec/uniword/docx/ spec/uniword/cli/` — 1597 examples, 0 failures.
+- RuboCop net: document_root 13→5, document_styling 2 (pre-existing
+  apply_theme ABC + apply_page_setup param list, relocated verbatim);
+  numbering_elements/image_relationship clean; autoload resolution
+  smoke via ruby -e (apply_font_scheme/apply_page_setup/rename_style
+  through the module).

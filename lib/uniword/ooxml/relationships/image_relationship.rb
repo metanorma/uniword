@@ -9,9 +9,12 @@ module Uniword
       #
       # Used for image relationships in documents
       class ImageRelationship < Relationship
-        def initialize(target:)
+        # @param id [String] relationship ID (allocated by
+        #   Docx::IdAllocator — the single rId authority)
+        # @param target [String] image part target (e.g. "media/image1.png")
+        def initialize(id:, target:)
           super(
-            id: "rId#{SecureRandom.hex(4)}",
+            id: id,
             type: PartRegistry.find_by_key(:image).rel_type,
             target: target
           )

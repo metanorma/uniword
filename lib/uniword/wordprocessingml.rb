@@ -4,6 +4,7 @@ module Uniword
   module Wordprocessingml
     # Core document structure
     autoload :DocumentRoot, "uniword/wordprocessingml/document_root"
+    autoload :DocumentStyling, "uniword/wordprocessingml/document_styling"
     autoload :Body, "uniword/wordprocessingml/body"
     autoload :Paragraph, "uniword/wordprocessingml/paragraph"
     autoload :Run, "uniword/wordprocessingml/run"
@@ -165,9 +166,7 @@ module Uniword
     autoload :NumFmt, "uniword/wordprocessingml/num_fmt"
     autoload :LvlText, "uniword/wordprocessingml/lvl_text"
     autoload :LvlJc, "uniword/wordprocessingml/lvl_jc"
-    autoload :Ind, "uniword/wordprocessingml/numbering_elements"
     autoload :RFonts, "uniword/wordprocessingml/numbering_elements"
-    autoload :Tabs, "uniword/wordprocessingml/level"
     autoload :PStyle, "uniword/wordprocessingml/level"
     autoload :NumberingConfiguration,
              "uniword/wordprocessingml/numbering_configuration"
