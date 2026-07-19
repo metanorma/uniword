@@ -364,6 +364,9 @@ module Uniword
     desc "page SUBCOMMAND", "Page setup (size, orientation, margins)"
     subcommand "page", PageCLI
 
+    desc "styles SUBCOMMAND", "Inspect document styles"
+    subcommand "styles", StylesCLI
+
     desc "styleset SUBCOMMAND", "Manage document StyleSets"
     subcommand "styleset", StyleSetCLI
 
