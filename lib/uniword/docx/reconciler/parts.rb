@@ -50,6 +50,13 @@ module Uniword
             val: profile.list_separator,
           )
 
+          # w:updateFields set by the user/API: ensure it serializes —
+          # parsed settings carry a stored element_order that lacks it.
+          if settings.update_fields
+            ensure_element_in_order(settings, "updateFields",
+                                    after: "characterSpacingControl")
+          end
+
           unless settings.w14_doc_id
             settings.w14_doc_id = Wordprocessingml::W14DocId.new(
               val: hex_derive("w14_doc_id", 4),

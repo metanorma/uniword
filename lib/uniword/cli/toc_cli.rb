@@ -68,6 +68,9 @@ module Uniword
                       type: :numeric, default: 0
     option :max_level, desc: "Maximum heading level (1-6)", type: :numeric,
                        default: 3
+    option :update_fields, type: :boolean, default: true,
+                           desc: "Set w:updateFields so Word " \
+                                 "refreshes fields on open (default: true)"
     option :verbose, aliases: "-v", desc: "Show verbose output",
                      type: :boolean, default: false
     def insert(path)
@@ -84,7 +87,7 @@ module Uniword
                        position: options[:position],
                        max_level: options[:max_level])
 
-      doc.save(options[:output])
+      save_with_field_updates(doc, options[:output])
 
       say "TOC inserted with #{entries.count} entries at " \
           "position #{options[:position]}.", :green
@@ -109,6 +112,9 @@ module Uniword
                     type: :string
     option :max_level, desc: "Maximum heading level (1-6)", type: :numeric,
                        default: 6
+    option :update_fields, type: :boolean, default: true,
+                           desc: "Set w:updateFields so Word " \
+                                 "refreshes fields on open (default: true)"
     option :verbose, aliases: "-v", desc: "Show verbose output",
                      type: :boolean, default: false
     def update(path)
@@ -121,7 +127,7 @@ module Uniword
         return
       end
 
-      doc.save(options[:output])
+      save_with_field_updates(doc, options[:output])
 
       say "TOC updated with #{entries.count} entries.", :green
       say "Saved to: #{options[:output]}", :green
@@ -132,6 +138,20 @@ module Uniword
     end
 
     private
+
+    # Set w:updateFields (unless disabled) and save the document.
+    def save_with_field_updates(doc, output)
+      enable_field_updates(doc) if options[:update_fields]
+      doc.save(output)
+    end
+
+    # Set w:updateFields so Word refreshes all fields (TOC, page
+    # numbers, references) when the document is opened. Word may show a
+    # one-time prompt about updating fields.
+    def enable_field_updates(doc)
+      doc.settings ||= Wordprocessingml::Settings.new
+      doc.settings.update_fields = Wordprocessingml::UpdateFields.new
+    end
 
     # Display TOC entries in terminal format.
     #

@@ -192,6 +192,7 @@ module Uniword
     autoload :Next, "uniword/wordprocessingml/next"
     autoload :Link, "uniword/wordprocessingml/link"
     autoload :UiPriority, "uniword/wordprocessingml/ui_priority"
+    autoload :UpdateFields, "uniword/wordprocessingml/update_fields"
     autoload :LatentStyles, "uniword/wordprocessingml/latent_styles"
     autoload :ParagraphStyle, "uniword/wordprocessingml/paragraph_style"
     autoload :CharacterStyle, "uniword/wordprocessingml/character_style"

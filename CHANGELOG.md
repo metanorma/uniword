@@ -136,6 +136,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Replace Fonts dialog as a one-shot CLI command — rewrites rFonts
   references across styles and defaults, body content, headers/footers,
   notes, comments, and numbering (also `DocumentRoot#replace_font`)
+- `w:updateFields` support: `uniword toc insert` / `toc update` now set
+  it by default (`--no-update-fields` to opt out), so Word refreshes
+  the TOC and all fields when the document is opened — no manual F9
 
 ### Fixed
 
