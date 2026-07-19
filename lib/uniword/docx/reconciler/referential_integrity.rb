@@ -483,86 +483,11 @@ module Uniword
           segments.join("/")
         end
 
-        # Package paths the save path emits, derived from the model —
-        # mirrors serialize_package_parts / inject_* emission.
+        # Package paths the save path emits — answered by the
+        # PartRegistry (single authority), derived from model presence
+        # and part collections.
         def carried_part_paths
-          paths = carried_word_parts + carried_docprops_parts
-          paths.concat(custom_xml_item_paths)
-          paths.concat(document_part_paths)
-          paths.to_set
-        end
-
-        # [model, package path] pairs for single-instance word/ parts.
-        def carried_word_parts
-          pairs = core_word_pairs + note_word_pairs
-          pairs.filter_map { |model, path| path if model }
-        end
-
-        def core_word_pairs
-          [
-            [package.document, "word/document.xml"],
-            [package.styles, "word/styles.xml"],
-            [package.numbering, "word/numbering.xml"],
-            [package.settings, "word/settings.xml"],
-            [package.font_table, "word/fontTable.xml"],
-            [package.web_settings, "word/webSettings.xml"],
-          ]
-        end
-
-        def note_word_pairs
-          [
-            [package.theme, "word/theme/theme1.xml"],
-            [package.footnotes, "word/footnotes.xml"],
-            [package.endnotes, "word/endnotes.xml"],
-            [package.comments, "word/comments.xml"],
-            [package.document&.bibliography_sources, "word/sources.xml"],
-          ]
-        end
-
-        # [model, package path] pairs for single-instance docProps/ parts.
-        def carried_docprops_parts
-          pairs = [
-            [package.core_properties, "docProps/core.xml"],
-            [package.app_properties, "docProps/app.xml"],
-            [package.custom_properties, "docProps/custom.xml"],
-          ]
-          pairs.filter_map { |model, path| path if model }
-        end
-
-        def custom_xml_item_paths
-          (package.custom_xml_items || []).flat_map do |item|
-            paths = ["customXml/item#{item[:index]}.xml"]
-            if item[:props_xml]
-              paths << "customXml/itemProps#{item[:index]}.xml"
-            end
-            paths
-          end
-        end
-
-        # Paths emitted from the document model: media, charts,
-        # embeddings, headers and footers (unified part store).
-        def document_part_paths
-          doc = package.document
-          return [] unless doc
-
-          media_chart_paths(doc) + header_footer_paths(doc)
-        end
-
-        def media_chart_paths(doc)
-          paths = [doc.image_parts, doc.chart_parts].compact.flat_map do |parts|
-            parts.values.map { |part| "word/#{part.target}" }
-          end
-          paths.concat(embedding_paths)
-        end
-
-        def embedding_paths
-          (package.embeddings || {}).keys.map { |target| "word/#{target}" }
-        end
-
-        def header_footer_paths(doc)
-          doc.header_footer_parts.filter_map do |part|
-            part.target && "word/#{part.target}"
-          end
+          Ooxml::PartRegistry.emitted_paths(package)
         end
 
         # -- Traversal helpers --

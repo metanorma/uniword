@@ -90,6 +90,14 @@ module Uniword
         target && "word/#{target}"
       end
 
+      # Package paths this part emits (one for plain parts; subclasses
+      # with sidecar parts override).
+      #
+      # @return [Array<String>] emitted package paths
+      def package_paths
+        [path].compact
+      end
+
       # Verbatim overrides carried from a loaded package.
       attr_writer :rel_type, :content_type
 

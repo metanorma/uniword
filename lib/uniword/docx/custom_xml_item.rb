@@ -65,6 +65,14 @@ module Uniword
           .path_for(index: index)
       end
 
+      # Package paths this item emits (item part plus its properties
+      # part when present).
+      #
+      # @return [Array<String>] emitted package paths
+      def package_paths
+        [path, props_path].compact
+      end
+
       # Hash-style read compatibility.
       #
       # @param key [Symbol, String] one of :index, :xml_content,

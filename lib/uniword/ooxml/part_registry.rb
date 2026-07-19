@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "set"
+
 module Uniword
   module Ooxml
     # Single source of truth for OOXML package part metadata.
@@ -187,7 +189,8 @@ module Uniword
           target: "sources.xml",
           content_type: "#{CT_OFFICE}.bibliography+xml",
           rel_type: "#{OFFICE_REL_BASE}/bibliography",
-          rels_scope: :document },
+          rels_scope: :document,
+          document_attribute: :bibliography_sources },
         { key: :header, kind: :override,
           path_pattern: "word/header%<counter>d.xml",
           target_pattern: "header%<counter>d.xml",
@@ -196,7 +199,8 @@ module Uniword
           rels_scope: :document,
           loader: :header_footer,
           loader_model: Uniword::Wordprocessingml::Header,
-          load_priority: 90 },
+          load_priority: 90,
+          document_attribute: :header_footer_parts },
         { key: :footer, kind: :override,
           path_pattern: "word/footer%<counter>d.xml",
           target_pattern: "footer%<counter>d.xml",
@@ -205,7 +209,8 @@ module Uniword
           rels_scope: :document,
           loader: :header_footer,
           loader_model: Uniword::Wordprocessingml::Footer,
-          load_priority: 90 },
+          load_priority: 90,
+          document_attribute: :header_footer_parts },
         { key: :custom_properties, kind: :override,
           path: "docProps/custom.xml",
           content_type: "#{CT_OFFICE}.custom-properties+xml",
@@ -224,7 +229,8 @@ module Uniword
           content_type: "#{CT_OFFICE}.drawingml.chart+xml",
           rel_type: "#{OFFICE_REL_BASE}/chart",
           rels_scope: :document,
-          loader: :chart, load_priority: 100 },
+          loader: :chart, load_priority: 100,
+          document_attribute: :chart_parts },
         # Images carry a per-extension Default content type resolved
         # from the image data at save time, so content_type is nil.
         { key: :image, kind: :default,
@@ -232,7 +238,8 @@ module Uniword
           target_pattern: "media/%<name>s",
           rel_type: "#{OFFICE_REL_BASE}/image",
           rels_scope: :document,
-          loader: :image, load_priority: 110 },
+          loader: :image, load_priority: 110,
+          document_attribute: :image_parts },
         # The embedding loader keys parts by target on the package's
         # embeddings collection; no package→document copy.
         { key: :ole_object, kind: :override,
@@ -452,6 +459,20 @@ module Uniword
         # @return [Array<PartDefinition>] in registration order
         def copied_to_package
           definitions.select { |d| d.document_attribute && d.package_attribute }
+        end
+
+        # Package paths the given package will emit, derived from the
+        # definitions: single-instance kinds by model presence,
+        # collection families by their stored parts.
+        #
+        # Single authority for "will this part be emitted?" — used by
+        # the reconciler's dangling-relationship sweep.
+        #
+        # @param package [Docx::Package] Package to enumerate for
+        # @return [Set<String>] emitted package paths
+        def emitted_paths(package)
+          all.flat_map { |definition| definition.emitted_paths(package) }
+            .compact.to_set
         end
 
         private

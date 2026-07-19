@@ -1,6 +1,6 @@
 # 03 — carried_part_paths derived from the registry (kill the last mirror)
 
-Status: PENDING
+Status: DONE
 Priority: P1
 Depends on: 01 (registry v2), 02 (all part families model-driven)
 Absorbs: none (new)
@@ -43,3 +43,46 @@ temporary with a note to move it to the registry.
   round_trip_validation_spec.rb spec/integration/repair_spec.rb`
   green.
 - Registry spec: emitted-part enumeration for a representative package.
+
+## Completion notes
+
+Completed 2026-07-19.
+
+### Design
+
+- `PartDefinition#emitted_paths(package)`: single-instance kinds emit
+  their fixed `path` when the backing model is present
+  (`attribute_source` reads the package attribute, else the document
+  attribute through the package's document); collection families
+  (`collection?` — no fixed path) enumerate their stored parts.
+- `Docx::Part#package_paths` (`[path]`) and
+  `Docx::CustomXmlItem#package_paths` (`[path, props_path]`) — each
+  part object answers its own emitted paths, so no path-string
+  building remains anywhere downstream.
+- `PartRegistry.emitted_paths(package)` — the single authority:
+  `all.flat_map(&:emitted_paths).to_set`.
+- Registry metadata completed for the family definitions: `:header`,
+  `:footer` → `document_attribute: :header_footer_parts`; `:chart` →
+  `:chart_parts`; `:image` → `:image_parts`; `:bibliography` →
+  `:bibliography_sources` (`:ole_object` already had `:embeddings`).
+
+### Removed
+
+`carried_word_parts`, `core_word_pairs`, `note_word_pairs`,
+`carried_docprops_parts`, `custom_xml_item_paths`,
+`document_part_paths`, `media_chart_paths`, `embedding_paths`,
+`header_footer_paths` — the hand-written serializer mirror in
+`Reconciler::ReferentialIntegrity`. `carried_part_paths` is now a
+two-line delegation. The R32 sweep and the dangling-image check are
+unchanged consumers.
+
+### Verification
+
+- `spec/uniword/docx/` + `spec/uniword/ooxml/`: 565 examples, 0
+  failures (behavior-equivalence of the derivation).
+- New `.emitted_paths` registry examples (5): single-instance
+  presence/absence, image family, customXml item + itemProps,
+  header/footer store.
+- RuboCop: zero new offenses in every touched file
+  (part_registry/part_definition/part/custom_xml_item clean;
+  referential_integrity unchanged at 34).

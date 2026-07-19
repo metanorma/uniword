@@ -247,6 +247,21 @@ module Uniword
         path && "/#{path}"
       end
 
+      # Package paths this part kind emits for the given package.
+      #
+      # Single-instance kinds emit their fixed +path+ when the backing
+      # model is present; collection families emit each stored part's
+      # own paths (each part object answers +package_paths+).
+      #
+      # @param package [Docx::Package] Package to enumerate for
+      # @return [Array<String>] emitted package paths (possibly empty)
+      def emitted_paths(package)
+        source = attribute_source(package)
+        return [] if source.nil?
+
+        collection? ? collection_paths(source) : [path]
+      end
+
       # Two definitions are equal when every field matches.
       def ==(other)
         other.is_a?(PartDefinition) && fields == other.fields
@@ -267,6 +282,28 @@ module Uniword
       # rubocop:enable Metrics/AbcSize
 
       private
+
+      # The model object backing this part kind on the package: the
+      # package attribute when set, else the document attribute read
+      # through the package's document.
+      def attribute_source(package)
+        value = package_attribute && package.method(package_attribute).call
+        return value if value
+
+        document_attribute &&
+          package.document&.method(document_attribute)&.call
+      end
+
+      # Families (path_pattern, no fixed path) enumerate their parts;
+      # single-instance kinds do not.
+      def collection?
+        path.nil?
+      end
+
+      def collection_paths(source)
+        values = source.is_a?(Docx::PartCollection) ? source.values : source
+        values.flat_map(&:package_paths)
+      end
 
       def expand(template, vars)
         return nil unless template
