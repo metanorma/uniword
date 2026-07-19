@@ -68,7 +68,50 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "rename FILE OUTPUT", "Rename a style's display name"
+    long_desc <<~DESC
+      Rename a style's display name (w:name) — Word's style rename.
+      References target the styleId, so renamed styles stay linked from
+      all content. Identify the style by --id (w:styleId) or --from
+      (current display name).
+
+      Examples:
+        $ uniword styles rename input.docx output.docx --id Heading1 --name "Chapter Title"
+        $ uniword styles rename input.docx output.docx --from "Old Name" --name "New Name"
+    DESC
+    option :id, type: :string, desc: "Style id (w:styleId) to rename"
+    option :from, type: :string, desc: "Current display name of the style"
+    option :name, type: :string, required: true, desc: "New display name"
+    option :verbose, aliases: "-v", desc: "Verbose output",
+                     type: :boolean, default: false
+    def rename(input_path, output_path)
+      identifier = rename_identifier
+      doc = load_document(input_path)
+      perform_rename(doc, identifier, output_path)
+    rescue Uniword::Error, StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
     private
+
+    def rename_identifier
+      identifier = options[:id] || options[:from]
+      return identifier if identifier
+
+      say "Error: specify --id or --from to identify the style", :red
+      exit 1
+    end
+
+    def perform_rename(doc, identifier, output_path)
+      unless doc.rename_style(identifier, options[:name])
+        say "Style '#{identifier}' not found", :yellow
+        exit 1
+      end
+
+      doc.save(output_path)
+      say "Renamed style '#{identifier}' to '#{options[:name]}' " \
+          "in #{output_path}", :green
+    end
 
     def run_removal(doc)
       cleanup = Wordprocessingml::StyleCleanup.new(doc)

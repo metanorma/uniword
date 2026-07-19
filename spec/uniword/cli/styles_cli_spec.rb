@@ -65,4 +65,47 @@ RSpec.describe Uniword::StylesCLI do
       expect(File.exist?(output_path)).to be(false)
     end
   end
+
+  describe "#rename" do
+    let(:output_dir) { "tmp/styles_rename_spec" }
+    let(:input_path) { File.join(output_dir, "input.docx") }
+    let(:output_path) { File.join(output_dir, "out.docx") }
+
+    before do
+      FileUtils.mkdir_p(output_dir)
+      doc = Uniword::Builder::DocumentBuilder.new
+      doc.define_style("MyStyle", base_on: "Normal") { |s| s.italic(true) }
+      doc.paragraph { |p| p << Uniword::Builder.text("x", style: "MyStyle") }
+      doc.save(input_path)
+    end
+
+    after do
+      Dir.glob("#{output_dir}/*.docx").each { |f| safe_delete(f) }
+    end
+
+    it "renames the display name and keeps the styleId" do
+      expect do
+        cli.invoke(:rename, [input_path, output_path],
+                   id: "MyStyle", name: "Better Style")
+      end.to output(/Renamed style 'MyStyle' to 'Better Style'/).to_stdout
+
+      doc = Uniword::DocumentFactory.from_file(output_path)
+      style = doc.styles_configuration.style_by_id("MyStyle")
+      expect(style.name.val).to eq("Better Style")
+    end
+
+    it "finds the style by current display name with --from" do
+      expect do
+        cli.invoke(:rename, [input_path, output_path],
+                   from: "MyStyle", name: "Better Style")
+      end.to output(/Renamed style/).to_stdout
+    end
+
+    it "exits with error for an unknown style" do
+      expect do
+        cli.invoke(:rename, [input_path, output_path],
+                   id: "NoSuchStyle", name: "X")
+      end.to raise_error(SystemExit)
+    end
+  end
 end
