@@ -40,7 +40,69 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "remove FILE OUTPUT", "Remove styles from a document"
+    long_desc <<~DESC
+      Remove styles from a document: one style with --id, or every
+      style that no content references with --unused (Word's Styles-pane
+      decluttering as a one-shot command). Default styles are kept.
+
+      Examples:
+        $ uniword styles remove input.docx output.docx --id ObsoleteStyle
+        $ uniword styles remove input.docx output.docx --unused
+        $ uniword styles remove input.docx output.docx --unused --dry-run
+    DESC
+    option :id, type: :string, desc: "Style id to remove"
+    option :unused, type: :boolean, default: false,
+                    desc: "Remove all unreferenced styles"
+    option :dry_run, type: :boolean, default: false,
+                     desc: "List what would be removed, without saving"
+    option :verbose, aliases: "-v", desc: "Verbose output",
+                     type: :boolean, default: false
+    def remove(input_path, output_path)
+      doc = load_document(input_path)
+      removed = run_removal(doc)
+      report_removal(doc, removed, output_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
     private
+
+    def run_removal(doc)
+      cleanup = Wordprocessingml::StyleCleanup.new(doc)
+      removal_error unless options[:unused] || options[:id]
+
+      removed_ids(cleanup)
+    end
+
+    def removed_ids(cleanup)
+      if options[:unused]
+        options[:dry_run] ? cleanup.unused_ids : cleanup.remove_unused
+      else
+        [options[:id]].select { |id| options[:dry_run] || cleanup.remove?(id) }
+      end
+    end
+
+    def removal_error
+      say "Error: specify --id or --unused", :red
+      exit 1
+    end
+
+    def report_removal(doc, removed, output_path)
+      if removed.empty?
+        say "No styles removed.", :yellow
+        return
+      end
+
+      verb = options[:dry_run] ? "Would remove" : "Removed"
+      say "#{verb} #{removed.size} style(s): #{removed.join(', ')}", :green
+      return if options[:dry_run]
+
+      doc.save(output_path)
+      say "Saved to #{output_path}", :green
+    end
 
     def gather_styles(path)
       doc = load_document(path)

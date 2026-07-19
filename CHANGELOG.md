@@ -151,6 +151,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `uniword styles list FILE [--type T] [--verbose]`: Word's Styles
   pane as a terminal listing — style id, type, base style, and key
   formatting details
+- `uniword styles remove FILE OUTPUT [--id X | --unused] [--dry-run]`:
+  Styles-pane management as a one-shot command — delete a style by id,
+  or declutter every style that no content references (directly or via
+  basedOn/link/next chains); default styles are always kept (also
+  `DocumentRoot#remove_style` / `#remove_unused_styles`)
 
 ### Fixed
 

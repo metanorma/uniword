@@ -449,6 +449,24 @@ module Uniword
         setup.apply(self)
       end
 
+      # Remove one style from the document's style definitions
+      #
+      # Default styles (w:default="1") are never removed.
+      #
+      # @param style_id [String] Style id (w:styleId)
+      # @return [Boolean] true when the style was removed
+      def remove_style(style_id)
+        StyleCleanup.new(self).remove?(style_id)
+      end
+
+      # Remove every style that no content references — Word's
+      # Styles-pane decluttering as one call. Default styles are kept.
+      #
+      # @return [Array<String>] Ids of removed styles
+      def remove_unused_styles
+        StyleCleanup.new(self).remove_unused
+      end
+
       # Auto-transition from MS theme to Uniword equivalent
       #
       # Detects the MS theme in the document's embedded theme and replaces
