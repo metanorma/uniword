@@ -34,10 +34,9 @@ module Uniword
         missing = endnote_entries.size - counts["endnote"]
         return unless missing.positive?
 
-        # element_order from the parser may be frozen; never mutate it.
-        self.element_order = element_order.dup
+        order = Ooxml::ElementOrder.mutable_order(self)
         missing.times do
-          element_order << Lutaml::Xml::Element.new("Element", "endnote")
+          order << Lutaml::Xml::Element.new("Element", "endnote")
         end
       end
 

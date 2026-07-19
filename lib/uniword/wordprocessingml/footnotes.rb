@@ -34,10 +34,9 @@ module Uniword
         missing = footnote_entries.size - counts["footnote"]
         return unless missing.positive?
 
-        # element_order from the parser may be frozen; never mutate it.
-        self.element_order = element_order.dup
+        order = Ooxml::ElementOrder.mutable_order(self)
         missing.times do
-          element_order << Lutaml::Xml::Element.new("Element", "footnote")
+          order << Lutaml::Xml::Element.new("Element", "footnote")
         end
       end
 

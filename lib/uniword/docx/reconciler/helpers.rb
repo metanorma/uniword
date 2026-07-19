@@ -98,45 +98,24 @@ module Uniword
           end
         end
 
-        # -- Element order --
+        # -- Element order (delegates to Ooxml::ElementOrder) --
 
+        # Idempotent singleton insert in schema position.
         def ensure_element_in_order(model, tag_name, after: nil, before: nil)
-          order = model.element_order
-          return unless order
-
-          return if order.any? { |e| e.name == tag_name }
-
-          entry = Lutaml::Xml::Element.new("Element", tag_name)
-
-          if after
-            idx = order.index { |e| e.name == after }
-            thaw_and_insert(model, order, idx ? idx + 1 : order.size, entry)
-          elsif before
-            idx = order.index { |e| e.name == before }
-            thaw_and_insert(model, order, idx || 0, entry)
-          else
-            thaw_and_append(model, order, entry)
-          end
+          Ooxml::ElementOrder.insert_once(model, tag_name,
+                                          after: after, before: before)
         end
 
+        # Positional insert for repeatable elements.
         def insert_element_order(obj, name, position)
           order = obj.element_order
           return unless order
-
           return if order.any? { |e| e.name == name }
 
-          entry = Lutaml::Xml::Element.new("Element", name, node_type: :element)
-          thaw_and_insert(obj, order, position, entry)
-        end
-
-        # lutaml-model freezes element_order after XML parsing.
-        # Replace the frozen array with a mutable copy when modification is needed.
-        def thaw_and_insert(model, order, position, entry)
-          model.element_order = order.dup.insert(position, entry)
-        end
-
-        def thaw_and_append(model, order, entry)
-          model.element_order = order.dup << entry
+          Ooxml::ElementOrder.insert_at(
+            obj, position, Lutaml::Xml::Element.new("Element", name,
+                                                    node_type: :element)
+          )
         end
 
         # -- Run utilities (delegate to RunUtils) --

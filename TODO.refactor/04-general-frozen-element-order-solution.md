@@ -1,6 +1,6 @@
 # 04 — General frozen element_order solution (one mechanism, not per-model patches)
 
-Status: PENDING
+Status: DONE
 Priority: P1
 Absorbs: the piecemeal fixes in footnotes.rb, endnotes.rb,
 toc_generator.rb
@@ -46,3 +46,57 @@ mechanism, not a fifth workaround.
   endnotes, body (toc insert), settings (updateFields path).
 - `bundle exec rspec spec/uniword/wordprocessingml/ spec/uniword/docx/
   spec/uniword/toc/ spec/lint/` green.
+
+## Completion notes
+
+Completed 2026-07-19.
+
+### The mechanism
+
+New `Uniword::Ooxml::ElementOrder` (lib/uniword/ooxml/element_order.rb,
+autoloaded in lib/uniword/ooxml.rb) — the single element_order
+mutation point:
+
+- `mutable_order(model)` — thaw on demand (frozen parsed array → dup
+  assigned back; mutable arrays returned as-is, so repeated mutations
+  keep hitting the registered array).
+- `append(model, entry)` — repeatable append.
+- `insert_at(model, position, entry)` — positional insert for
+  repeatable elements (toc SDT).
+- `insert_once(model, name, after:/before:/position:)` — idempotent
+  singleton insert with the existing anchor fallbacks (after → end,
+  before → start).
+
+No monkey-patching of lutaml-model classes.
+
+### Namespace detour (recorded)
+
+The utility first landed as `Uniword::Lutaml` — immediately reverted:
+that name shadows the gem's top-level `Lutaml` inside `module Uniword`
+and breaks every model (`Lutaml::Model` resolved to the nonexistent
+`Uniword::Lutaml::Model`). It lives in `Uniword::Ooxml` (the
+OOXML-serialization namespace it belongs to).
+
+### Migrated sites
+
+- `Reconciler::Helpers#ensure_element_in_order` and
+  `#insert_element_order` — now thin delegators (reconciler call sites
+  in parts.rb/tables.rb unchanged); `thaw_and_insert`/`thaw_and_append`
+  deleted.
+- `Footnotes#sync_element_order` / `Endnotes#sync_element_order` — use
+  `mutable_order` (dup-per-call workaround gone).
+- `TocGenerator#insert` — uses `insert_at` (frozen dup gone).
+
+### Verification
+
+- New `spec/uniword/ooxml/element_order_spec.rb` (12 examples):
+  mutable_order thaw/register-back, insert_once anchor and fallback
+  semantics, idempotence, insert_at, append, plus parse → mutate →
+  serialize regressions for footnotes, endnotes, body TOC insert, and
+  the settings updateFields path (insert lands after
+  characterSpacingControl).
+- `spec/uniword/ooxml/ spec/uniword/wordprocessingml/
+  spec/uniword/docx/ spec/uniword/toc/ spec/lint/` — 1307 examples,
+  0 failures.
+- RuboCop: element_order.rb clean; helpers 33→29, toc_generator 10→9,
+  foot/endnotes unchanged.
