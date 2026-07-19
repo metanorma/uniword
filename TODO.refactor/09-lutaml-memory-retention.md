@@ -1,6 +1,6 @@
 # 09 — lutaml-model memory retention: verify, document, upstream
 
-Status: PENDING
+Status: DONE
 Priority: P3 (tracking/diagnosis — the fix is upstream)
 Absorbs: none
 
@@ -37,3 +37,42 @@ an `element_order`-clearing after(:each) mitigation.
   item's completion notes.
 - Upstream issue link recorded, or a local adopted fix with the
   workaround removed and the full-suite constraint re-verified.
+
+## Completion notes
+
+Completed 2026-07-19.
+
+### Measurement (Ruby 3.4.8, lutaml-model 0.8.17, office365.docx round-trips)
+
+| scenario | RSS after 100 load/save cycles |
+| --- | --- |
+| natural GC only (no clearing) | +35.1 MB (~0.35 MB/cycle) |
+| spec_helper clearing (element_order nil per cycle) | +5.8 MB (~0.06 MB/cycle) |
+
+Reachability check: `ObjectSpace.each_object
+(Lutaml::Model::Serializable).count` is 0 after `GC.start` even with
+no clearing — instances ARE GC-collectable; the problem is the size
+and lifetime of retained parse graphs BETWEEN GC cycles (~6x larger
+without eager clearing). That is why the after(:each) hook is both
+effective (~6x RSS reduction) and necessary for full-suite viability
+(6000+ examples × ~1 MB+/cycle would otherwise pass 8 GB RSS — the
+documented segfault mode).
+
+### Upstream
+
+- Filed https://github.com/lutaml/lutaml-model/issues/734 with the
+  reproduction and table — requesting an official per-instance
+  `clear_parse_state!` / bulk parse-state release API. (No existing
+  issue found for this retention; lutaml-model 0.8.17 has
+  `GlobalRegister#clear_all_model_caches` but nothing per-instance.)
+- Linked from `AGENTS.md` (suite-warning paragraph) and
+  `spec/spec_helper.rb` (hook comment — remove the hook if the API
+  lands).
+
+### Decision
+
+Keep the workaround, justified by data: the hook is cheap (one
+ObjectSpace sweep per example), and there is no official alternative
+today. No uniword-side refactor around a third-party issue; the
+suite discipline (targeted directories, never bare rspec) stands
+until #734 resolves.

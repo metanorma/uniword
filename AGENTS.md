@@ -69,7 +69,8 @@ segfaults. `spec/spec_helper.rb` has an `after(:each)` hook that clears
 `element_order` references to mitigate, but run individual directories/files
 instead. Known timings (see CLAUDE.md): `spec/uniword/ooxml/` ~7s,
 `wordprocessingml/` ~20s, `builder/` ~76s, `drawingml/` ~750s,
-`spec/integration/` ~12min.
+`spec/integration/` ~12min. Upstream tracking:
+https://github.com/lutaml/lutaml-model/issues/734.
 
 ## Runtime Architecture
 

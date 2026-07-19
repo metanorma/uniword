@@ -69,6 +69,8 @@ RSpec.configure do |config|
   # example. lutaml-model retains XML parse tree nodes in element_order arrays,
   # creating reference graphs that prevent GC. Without this, RSS grows by
   # ~7MB/example for DOCX-loading specs, reaching 8+ GB before segfault.
+  # Upstream: https://github.com/lutaml/lutaml-model/issues/734 (official
+  # parse-state release API requested; remove this hook if it lands).
   config.after(:each) do
     ObjectSpace.each_object(Lutaml::Model::Serializable) do |obj|
       if obj.element_order
