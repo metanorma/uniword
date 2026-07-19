@@ -1,6 +1,6 @@
 # 07 — Package::Loading split (package.rb back under the size guideline)
 
-Status: PENDING
+Status: DONE
 Priority: P2
 Depends on: 01 (registry-driven load shrinks the load code first)
 Absorbs: none (new)
@@ -39,3 +39,28 @@ save orchestration (to_file/to_zip_content), and the integrity gate.
 - `bundle exec rspec spec/uniword/docx/ spec/integration/
   docx_roundtrip_spec.rb` green; `bundle exec exe/uniword help` OK.
 - RuboCop: no new offenses.
+
+## Completion notes
+
+Completed 2026-07-19 — premise consumed by item 01; no further code
+change was needed.
+
+Item 01 (registry-driven bidirectional loading) already performed the
+split this item called for: loading lives in `Docx::PartLoader` and
+its strategy classes (`lib/uniword/docx/part_loader/`), and
+`Package.from_zip_content` is a 4-line delegation. Verified the
+acceptance criteria against the current tree:
+
+- `lib/uniword/docx/package.rb` is **354 lines** (was 734) — well
+  under the ≤400 target.
+- Loading (ZIP reading, registry-driven part loading, binary
+  re-extraction via `read_binary_from_zip` in
+  `part_loader/image_loader.rb`) is entirely outside package.rb.
+- Longest method: 50 lines (custom_xml_items= writer, at the
+  boundary).
+- Public surface preserved: `Package.from_file`,
+  `Package.from_zip_content`, `Package.to_file`; binary re-extraction
+  is internal to the loader (grep showed no external callers of the
+  old `Package.read_binary_from_zip`).
+- `spec/uniword/docx/` — 352 examples, 0 failures;
+  `exe/uniword help` OK; no touched files, no RuboCop delta.
