@@ -450,14 +450,13 @@ module Uniword
                          else "image/#{ext}"
                          end
 
-          r_id = if package.allocator
-                   package.allocator.alloc_rid(
-                     target: "media/#{filename}",
-                     type: IdAllocator::IMAGE_REL_TYPE,
-                   )
-                 else
-                   "rId#{package.document.image_parts.size + 1}"
-                 end
+          # Key the part by the rId the loaded document rels assign to
+          # this target, so downstream consumers (MHTML rendering, image
+          # manager) resolve r:embed references correctly. Media with no
+          # document-level rel (e.g. theme-only images) gets a synthetic
+          # key; it never becomes a relationship.
+          r_id = loaded_image_rid(package, filename) ||
+            next_synthetic_image_key(package)
 
           binary_data = if zip_path
                           read_binary_from_zip(zip_path, media_path)
@@ -471,6 +470,25 @@ module Uniword
             content_type: content_type
           }
         end
+      end
+
+      # The rId a loaded document relationship assigns to
+      # "media/<filename>", or nil when no image rel targets it.
+      def self.loaded_image_rid(package, filename)
+        image_type = Ooxml::PartRegistry.find_by_key(:image).rel_type
+        rel = package.document_rels&.relationships&.find do |r|
+          r.target == "media/#{filename}" && r.type.to_s == image_type
+        end
+        rel&.id
+      end
+
+      # Synthetic image-part key that cannot collide with a loaded
+      # relationship id or an already-keyed image part.
+      def self.next_synthetic_image_key(package)
+        taken = package.document_rels&.relationships&.map(&:id) || []
+        n = package.document.image_parts.size + 1
+        n += 1 while taken.include?("rId#{n}")
+        "rId#{n}"
       end
 
       # Read binary data directly from ZIP file without UTF-8 encoding
@@ -510,6 +528,20 @@ module Uniword
       # Must be called BEFORE any builder runs (populate-first principle).
       def populate_allocator
         @allocator = IdAllocator.populate_from_package(self)
+      end
+
+      # Guarantee the single rId authority before reconciliation: reuse
+      # the package's allocator (loaded/builder-seeded) or start one,
+      # then seed it from the package's current relationships. Seeding
+      # preserves loaded rIds verbatim; earlier builder allocations keep
+      # their ids — a seeded rel whose id collides is reallocated
+      # deterministically (IdAllocator#seed_from_rels).
+      def prepare_allocator
+        self.allocator ||= IdAllocator.new
+        allocator.seed_from_rels(package_rels&.relationships,
+                                 scope: :package)
+        allocator.seed_from_rels(document_rels&.relationships)
+        allocator
       end
 
       # Extract media files from word/theme/media/ directory
@@ -566,9 +598,17 @@ module Uniword
         self.font_table ||= Uniword::Wordprocessingml::FontTable.new
         self.web_settings ||= Uniword::Wordprocessingml::WebSettings.new
 
+        # An allocator carried into the save (builder-managed document
+        # or loaded package) selects light-touch repairs; documents
+        # without one get the full normalization repertoire. rIds flow
+        # through the allocator either way.
+        builder_managed = !allocator.nil?
+        prepare_allocator
+
         reconciler = Reconciler.new(self,
                                     profile: profile || Profile.defaults,
-                                    allocator: allocator)
+                                    allocator: allocator,
+                                    builder_managed: builder_managed)
         reconciler.reconcile
         @applied_fixes = reconciler.applied_fixes
         log_applied_fixes

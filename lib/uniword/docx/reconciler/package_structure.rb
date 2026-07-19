@@ -53,26 +53,34 @@ module Uniword
           rels = package.package_rels
           return unless rels
 
-          standard_defs = PACKAGE_REL_PARTS.each_with_index.map do |key, idx|
+          # Preserve-first: existing rels keep their position and rId;
+          # only genuinely missing standard parts are appended, with
+          # rIds allocated by the allocator (seeded from these rels).
+          # A later rel whose rId duplicates an already-kept one is
+          # dropped — duplicates are impossible by construction.
+          kept = []
+          seen_ids = Set.new
+          rels.relationships.each do |rel|
+            next if rel.id && seen_ids.include?(rel.id)
+
+            kept << rel
+            seen_ids << rel.id if rel.id
+          end
+
+          PACKAGE_REL_PARTS.each do |key|
             defn = Ooxml::PartRegistry.find_by_key(key)
-            ["rId#{idx + 1}", defn.rel_type, defn.target]
+            next if kept.any? { |r| r.target == defn.target }
+
+            kept << build_rel(
+              allocator.alloc_rid(target: defn.target, type: defn.rel_type,
+                                  scope: :package),
+              defn.rel_type, defn.target,
+            )
           end
 
-          standard_targets = standard_defs.to_set { |_, _, t| t }
-          standard_rids = standard_defs.to_set { |rid, _, _| rid }
-          non_standard = rels.relationships.reject do |r|
-            standard_targets.include?(r.target) || standard_rids.include?(r.id)
-          end
-
-          existing_by_target = rels.relationships.to_h { |r| [r.target, r] }
-          standard = standard_defs.map do |rid, type, target|
-            existing = existing_by_target[target]
-            build_rel(existing ? existing.id : rid, type, target)
-          end
-
-          rels.relationships = standard + non_standard
+          rels.relationships = kept
           record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                     "Rebuilt package relationships for standard parts",
+                     "Assembled package relationships (preserve-first)",
                      part: "_rels/.rels")
         end
 
@@ -80,6 +88,14 @@ module Uniword
           rels = package.document_rels
           return unless rels
 
+          assemble_document_rels(rels, document_rel_defs)
+        end
+
+        private
+
+        # [PartDefinition, package part] pairs for document-level parts
+        # that must carry a relationship when present, in emission order.
+        def document_rel_defs
           defs = [
             [Ooxml::PartRegistry.find_by_key(:styles), package.styles],
             [Ooxml::PartRegistry.find_by_key(:settings), package.settings],
@@ -93,174 +109,104 @@ module Uniword
             [Ooxml::PartRegistry.find_by_key(:endnotes), package.endnotes],
           ]
 
-          standard_targets = defs.filter_map do |defn, obj|
-            defn.target if obj
-          end.to_set
+          sources = package.bibliography_sources ||
+            package.document&.bibliography_sources
+          if sources
+            defs << [Ooxml::PartRegistry.find_by_key(:bibliography), sources]
+          end
 
-          # If allocator is present, use it to build rels — preserves existing rIds
+          defs
+        end
+
+        # Preserve-first assembly: existing relationships keep their
+        # position and rId (the allocator was seeded from them), new
+        # standard parts and new allocator-registered entries (images,
+        # hyperlinks, headers/footers added at build time) are appended
+        # with freshly allocated ids. No renumbering, ever.
+        def assemble_document_rels(rels, defs)
           alloc = allocator
-          if alloc
-            reconcile_document_rels_from_allocator(rels, defs, standard_targets, alloc)
-          else
-            register_legacy_image_relationships(rels)
-            reconcile_document_rels_legacy(rels, defs, standard_targets)
+          register_auxiliary_part_rels(alloc)
+          kept = kept_existing_relationships(rels, alloc)
+          kept_targets = kept.to_set(&:target)
+
+          append_missing_standard_rels(kept, kept_targets, defs, alloc)
+          append_allocator_rels(kept, kept_targets, alloc)
+
+          rels.relationships = kept
+          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
+                     "Assembled document relationships (preserve-first)",
+                     part: "word/_rels/document.xml.rels")
+        end
+
+        # Existing rels that survive the assembly, in original order:
+        # drops unsupported and package-level types and stale
+        # header/footer targets; everything else keeps its rId verbatim
+        # (or the allocator's reallocated id when seeding resolved a
+        # collision for this target+type).
+        def kept_existing_relationships(rels, alloc)
+          used_ids = Set.new
+          rels.relationships.filter_map do |rel|
+            next if unsupported_rel_type?(rel.type)
+            next if package_level_rel?(rel.type)
+            next unless header_footer_target_present?(rel.target)
+
+            rid = alloc.rid_for(target: rel.target, type: rel.type)
+            rid = rel.id if rid.nil? || used_ids.include?(rid)
+            next if rid && used_ids.include?(rid)
+
+            used_ids << rid if rid
+            build_rel(rid, rel.type, rel.target,
+                      target_mode: rel.target_mode)
           end
         end
 
-        private
+        # Register rels for package-carried parts outside the standard
+        # defs: OLE/embedded binaries and chart parts. Loaded packages
+        # seeded these already (no-op); programmatically added parts
+        # get freshly allocated ids from the allocator.
+        def register_auxiliary_part_rels(alloc)
+          ole = Ooxml::PartRegistry.find_by_key(:ole_object)
+          (package.embeddings&.keys || []).each do |target|
+            alloc.alloc_rid(target: target, type: ole.rel_type)
+          end
 
-        # Register image parts as relationships before the legacy rebuild.
-        # Builder-assigned image rIds may collide with standard part rIds;
-        # registering them up front lets the legacy renumbering (and blip
-        # reference remapping) keep every rId unique.
-        def register_legacy_image_relationships(rels)
-          images = package.document&.image_parts
-          return unless images
+          chart = Ooxml::PartRegistry.find_by_key(:chart)
+          (package.document&.chart_parts&.values || []).each do |data|
+            next unless data[:target]
 
-          image_rel_type = Ooxml::PartRegistry.find_by_key(:image).rel_type
-          images.each do |r_id, image_data|
-            next if rels.relationships.any? { |r| r.target == image_data[:target] }
-
-            rels.relationships << build_rel(r_id, image_rel_type,
-                                            image_data[:target])
+            alloc.alloc_rid(target: data[:target], type: chart.rel_type)
           end
         end
 
-        def reconcile_document_rels_from_allocator(rels, defs, standard_targets, alloc)
-          # Collect standard part rels from allocator
-          all_rels = []
+        # Append rels for present standard parts that have no
+        # relationship yet (fresh or newly added parts).
+        def append_missing_standard_rels(kept, kept_targets, defs, alloc)
           defs.each do |defn, obj|
             next unless obj
-            r_id = alloc.rid_for(target: defn.target, type: defn.rel_type)
-            if r_id
-              all_rels << build_rel(r_id, defn.rel_type, defn.target)
-            else
-              all_rels << build_rel(
-                alloc.alloc_rid(target: defn.target, type: defn.rel_type),
-                defn.rel_type, defn.target,
-              )
-            end
-          end
+            next if kept_targets.include?(defn.target)
 
-          # Add allocator-managed rels (images, headers, footers, hyperlinks)
-          alloc.all_rels.each do |entry|
-            next if standard_targets.include?(entry[:target])
-            next if all_rels.any? { |r| r.target == entry[:target] }
+            kept << build_rel(
+              alloc.alloc_rid(target: defn.target, type: defn.rel_type),
+              defn.rel_type, defn.target,
+            )
+            kept_targets << defn.target
+          end
+        end
+
+        # Append allocator-registered rels not already present —
+        # builder-added images, hyperlinks, charts, headers/footers.
+        def append_allocator_rels(kept, kept_targets, alloc)
+          alloc.all_rels(scope: :document).each do |entry|
+            next if kept_targets.include?(entry[:target])
             next if unsupported_rel_type?(entry[:type])
             next if package_level_rel?(entry[:type])
             next unless header_footer_target_present?(entry[:target])
 
-            all_rels << build_rel(
+            kept << build_rel(
               entry[:id], entry[:type], entry[:target],
               target_mode: entry[:target_mode],
             )
-          end
-
-          # Preserve non-standard rels not managed by allocator
-          existing_targets = all_rels.to_set(&:target)
-          non_standard = rels.relationships.reject do |r|
-            existing_targets.include?(r.target) ||
-              standard_targets.include?(r.target) ||
-              unsupported_rel_type?(r.type) ||
-              package_level_rel?(r.type) ||
-              !header_footer_target_present?(r.target)
-          end
-
-          rels.relationships = all_rels + non_standard
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                     "Assembled document relationships from allocator",
-                     part: "word/_rels/document.xml.rels")
-        end
-
-        def reconcile_document_rels_legacy(rels, defs, standard_targets)
-          non_standard = rels.relationships.reject do |r|
-            standard_targets.include?(r.target) ||
-              unsupported_rel_type?(r.type) ||
-              package_level_rel?(r.type) ||
-              !header_footer_target_present?(r.target)
-          end
-
-          all_rels = []
-          rid_mapping = {}
-
-          defs.each do |defn, obj|
-            next unless obj
-            rid = "rId#{all_rels.size + 1}"
-            all_rels << build_rel(rid, defn.rel_type, defn.target)
-          end
-
-          non_standard.each do |rel|
-            old_rid = rel.id
-            new_rid = "rId#{all_rels.size + 1}"
-            rid_mapping[old_rid] = new_rid if old_rid != new_rid
-            all_rels << build_rel(new_rid, rel.type, rel.target,
-                                  target_mode: rel.target_mode)
-          end
-
-          rels.relationships = all_rels
-          update_sect_pr_rid_references(rid_mapping) unless rid_mapping.empty?
-          update_blip_embed_references(rid_mapping) unless rid_mapping.empty?
-          update_hyperlink_rid_references(rid_mapping) unless rid_mapping.empty?
-          record_fix(FixCodes::RELATIONSHIPS_ASSEMBLED,
-                     "Rebuilt document relationships with sequential rIds",
-                     part: "word/_rels/document.xml.rels")
-        end
-
-        def update_sect_pr_rid_references(mapping)
-          sect_pr = package.document&.body&.section_properties
-          return unless sect_pr
-
-          [sect_pr.header_references, sect_pr.footer_references].each do |refs|
-            next unless refs
-
-            refs.each do |ref|
-              new_rid = mapping[ref.r_id]
-              ref.r_id = new_rid if new_rid
-            end
-          end
-        end
-
-        def update_blip_embed_references(mapping)
-          paragraphs = package.document&.body&.paragraphs
-          return unless paragraphs
-
-          paragraphs.each do |para|
-            next unless para.runs
-
-            para.runs.each do |run|
-              next unless run.drawings
-
-              run.drawings.each do |drawing|
-                update_drawing_blip(drawing, mapping)
-              end
-            end
-          end
-        end
-
-        def update_drawing_blip(drawing, mapping)
-          graphic = drawing.inline&.graphic || drawing.anchor&.graphic
-          return unless graphic
-
-          picture = graphic.graphic_data&.picture
-          return unless picture
-
-          blip = picture.blip_fill&.blip
-          return unless blip&.embed
-
-          new_rid = mapping[blip.embed.to_s]
-          blip.embed = new_rid if new_rid
-        end
-
-        def update_hyperlink_rid_references(mapping)
-          body = package.document&.body
-          return unless body
-
-          walk_body_paragraphs(body) do |para|
-            (para.hyperlinks || []).each do |hl|
-              next unless hl.id
-              new_rid = mapping[hl.id.to_s]
-              hl.id = new_rid if new_rid
-            end
+            kept_targets << entry[:target]
           end
         end
 

@@ -30,10 +30,16 @@ module Uniword
       include PackageStructure
       include Body
 
-      def initialize(package, profile: nil, allocator: nil)
+      def initialize(package, profile: nil, allocator: nil,
+                     builder_managed: nil)
         @package = package
         @profile = profile
         @allocator = allocator
+        @builder_managed = if builder_managed.nil?
+                             !allocator.nil? || !package.allocator.nil?
+                           else
+                             builder_managed
+                           end
         @applied_fixes = []
       end
 
@@ -81,8 +87,22 @@ module Uniword
 
       attr_reader :package, :profile
 
+      # The single rId/ID authority for this run. Falls back to an
+      # allocator populated from the package when the package carries
+      # none (direct Reconciler use outside Package#to_zip_content).
       def allocator
-        @allocator || package.allocator
+        @allocator ||= package.allocator ||
+          IdAllocator.populate_from_package(package)
+      end
+
+      # Whether the document's IDs were managed outside the reconciler
+      # (builder-created content, or a package loaded with an explicit
+      # allocator). Builder-managed documents get light-touch repairs;
+      # legacy documents get the full normalization repertoire (ID
+      # backfill, table normalization, note renumbering). rIds flow
+      # through the allocator either way. Decided at initialize time.
+      def builder_managed?
+        @builder_managed
       end
 
       # Record one applied repair as a Fix value object.

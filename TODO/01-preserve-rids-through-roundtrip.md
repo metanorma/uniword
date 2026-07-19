@@ -1,5 +1,14 @@
 # 14 — Preserve rIds through round-trip (load → save)
 
+**Status: COMPLETED via TODO.validate/10** — `Docx::IdAllocator` is now
+the single rId authority. `Package#prepare_allocator` seeds it from the
+package's current rels before reconciliation, and the Reconciler's
+preserve-first assembly keeps loaded rIds verbatim (only genuinely new
+relationships get fresh allocations). The legacy renumbering path and
+all out-of-band allocators (`next_available_rid`, serializer `next_rid`)
+are gone. The 3 previously skipped `docx_roundtrip_spec.rb` examples
+pass unskipped.
+
 **Priority:** Medium (correctness gap)
 **Files:** `lib/uniword/docx/reconciler/referential_integrity.rb`,
 `lib/uniword/docx/id_allocator.rb`,

@@ -115,24 +115,36 @@ module Uniword
 
       # Register chart on a document and create the Drawing element
       #
+      # The relationship id comes from the document's IdAllocator
+      # (single authority), so the c:chart reference and the assembled
+      # document relationship always agree.
+      #
       # @param document [DocumentBuilder, DocumentRoot] Target document
       # @return [Wordprocessingml::Drawing]
       def build_drawing(document)
         root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
-        root.chart_parts ||= {}
+        create_drawing(register_chart_part(root))
+      end
 
-        r_id = "rIdChart#{root.chart_parts.size + 1}"
+      private
+
+      # Store the chart XML as a chart part keyed by its allocated rId.
+      #
+      # @param root [Wordprocessingml::DocumentRoot] target document
+      # @return [String] relationship id of the chart part
+      def register_chart_part(root)
+        root.chart_parts ||= {}
+        root.allocator ||= Docx::IdAllocator.new
+
         target = "charts/chart#{root.chart_parts.size + 1}.xml"
+        r_id = root.allocator.alloc_rid(target: target, type: CHART_REL_TYPE)
 
         root.chart_parts[r_id] = {
           xml: build_xml,
           target: target,
         }
-
-        create_drawing(r_id)
+        r_id
       end
-
-      private
 
       include DeterministicId
 

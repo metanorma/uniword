@@ -17,6 +17,12 @@ module Uniword
     #
     # This is the "populate-first" principle: when loading a template DOCX,
     # parse and seed ALL existing IDs from the template before modification.
+    #
+    # rId namespaces are per relationships part: "rId1" in _rels/.rels and
+    # "rId1" in word/_rels/document.xml.rels do not collide. The allocator
+    # therefore tracks rIds per +scope+ (:document for document-level rels,
+    # :package for package-level rels); each scope has its own registry,
+    # counter and uniqueness domain.
     class IdAllocator
       # Relationship type namespace base (also the r: namespace URI).
       # Individual rel type constants derive from Ooxml::PartRegistry,
@@ -34,8 +40,9 @@ module Uniword
       NUMBERING_REL_TYPE = Ooxml::PartRegistry.find_by_key(:numbering).rel_type
 
       def initialize
-        @rid_counter = 0
-        @rid_entries = {}  # [target, type] -> { id, type, target, target_mode }
+        @rid_counters = Hash.new(0) # scope -> high-water mark
+        # [scope, target, type] -> { id, type, target, target_mode, scope }
+        @rid_entries = {}
         @footnote_counter = 1
         @endnote_counter = 1
         @bookmark_counter = 0
@@ -46,14 +53,54 @@ module Uniword
 
       # Allocate a relationship ID for a target+type pair.
       # Returns existing rId if this target+type was already registered.
-      def alloc_rid(target:, type:, target_mode: nil)
-        key = [target, type.to_s]
+      #
+      # @param target [String] relationship target
+      # @param type [String] relationship type
+      # @param target_mode [String, nil] e.g. "External"
+      # @param scope [Symbol] :document or :package (rels part namespace)
+      # @return [String] the allocated (or existing) rId
+      def alloc_rid(target:, type:, target_mode: nil, scope: :document)
+        key = [scope, target, type.to_s]
         @rid_entries[key] ||= begin
-          @rid_counter += 1
-          { id: "rId#{@rid_counter}", type: type.to_s,
-            target: target, target_mode: target_mode }
+          @rid_counters[scope] += 1
+          @rid_counters[scope] += 1 while rid_id_taken?(
+            "rId#{@rid_counters[scope]}", scope
+          )
+          { id: "rId#{@rid_counters[scope]}", type: type.to_s,
+            target: target, target_mode: target_mode, scope: scope }
         end
         @rid_entries[key][:id]
+      end
+
+      # Register an explicit rId for a target+type pair.
+      # Used when a relationship id is assigned outside the counter
+      # (rId dedup repair) so later lookups stay consistent.
+      #
+      # @param id [String] relationship ID to register
+      # @param target [String] relationship target
+      # @param type [String] relationship type
+      # @param target_mode [String, nil] e.g. "External"
+      # @param scope [Symbol] :document or :package
+      # @return [String] the registered id
+      def register_rid(id, target:, type:, target_mode: nil, scope: :document)
+        @rid_entries[[scope, target, type.to_s]] = {
+          id: id, type: type.to_s, target: target, target_mode: target_mode,
+          scope: scope
+        }
+        num = id[/\ArId(\d+)\z/, 1]&.to_i || 0
+        @rid_counters[scope] = [@rid_counters[scope], num].max
+        id
+      end
+
+      # The next free rId past the high-water mark of a scope —
+      # guaranteed not registered to any target+type in that scope.
+      #
+      # @param scope [Symbol] :document or :package
+      # @return [String] e.g. "rId7"
+      def next_free_rid(scope: :document)
+        candidate = @rid_counters[scope] + 1
+        candidate += 1 while rid_id_taken?("rId#{candidate}", scope)
+        "rId#{candidate}"
       end
 
       def alloc_footnote_id
@@ -88,21 +135,19 @@ module Uniword
         Digest::SHA256.hexdigest("rsid:#{@rsid_counter}").upcase[0, 8]
       end
 
-      # Seed from a relationships collection — preserves existing rIds.
-      def seed_from_rels(relationships)
+      # Seed from a relationships collection — preserves existing rIds
+      # verbatim so a load→save round-trip is rId-stable. A loaded rId
+      # already registered to a different target+type in the same scope
+      # (only possible when allocation preceded seeding, or the source
+      # has duplicate ids) yields a fresh counter allocation for the
+      # seeded pair instead — uniqueness wins over verbatim preservation.
+      #
+      # @param relationships [Array, nil] rels to seed
+      # @param scope [Symbol] :document or :package (rels part namespace)
+      def seed_from_rels(relationships, scope: :document)
         return unless relationships
 
-        relationships.each do |r|
-          key = [r.target, r.type.to_s]
-          @rid_entries[key] = {
-            id: r.id,
-            type: r.type.to_s,
-            target: r.target,
-            target_mode: r.target_mode,
-          }
-          num = r.id[/\ArId(\d+)\z/, 1]&.to_i || 0
-          @rid_counter = [@rid_counter, num].max
-        end
+        relationships.each { |r| seed_rel(r, scope) }
       end
 
       # Seed footnote/endnote counters from existing note entries.
@@ -118,13 +163,17 @@ module Uniword
       end
 
       # Produce the final ordered list of all allocated relationships.
-      def all_rels
-        @rid_entries.values.sort_by { |r| r[:id][/\d+/]&.to_i || 0 }
+      #
+      # @param scope [Symbol, nil] restrict to one scope; nil for all
+      def all_rels(scope: nil)
+        entries = @rid_entries.values
+        entries = entries.select { |r| r[:scope] == scope } if scope
+        entries.sort_by { |r| r[:id][/\d+/]&.to_i || 0 }
       end
 
       # Check if a relationship has been registered for a target+type.
-      def rid_for(target:, type:)
-        key = [target, type.to_s]
+      def rid_for(target:, type:, scope: :document)
+        key = [scope, target, type.to_s]
         @rid_entries[key]&.fetch(:id, nil)
       end
 
@@ -134,12 +183,37 @@ module Uniword
       def self.populate_from_package(package)
         alloc = new
         alloc.seed_from_rels(package.document_rels&.relationships)
-        alloc.seed_from_rels(package.package_rels&.relationships)
+        alloc.seed_from_rels(package.package_rels&.relationships,
+                             scope: :package)
         alloc.seed_from_notes(
           package.footnotes&.footnote_entries,
           package.endnotes&.endnote_entries,
         )
         alloc
+      end
+
+      private
+
+      # Seed one relationship (see seed_from_rels for the collision rule).
+      def seed_rel(rel, scope)
+        key = [scope, rel.target, rel.type.to_s]
+        return if @rid_entries.key?(key)
+
+        if rid_id_taken?(rel.id, scope)
+          alloc_rid(target: rel.target, type: rel.type,
+                    target_mode: rel.target_mode, scope: scope)
+          return
+        end
+
+        register_rid(rel.id, target: rel.target, type: rel.type,
+                           target_mode: rel.target_mode, scope: scope)
+      end
+
+      # Whether an rId string is already registered within a scope.
+      def rid_id_taken?(id, scope)
+        @rid_entries.any? do |key, entry|
+          key[0] == scope && entry[:id] == id
+        end
       end
     end
   end

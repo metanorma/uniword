@@ -36,14 +36,15 @@ module Uniword
       # @return [String] Relationship ID (e.g., 'rId5')
       def self.register_image(document, path)
         root = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.model : document
-        alloc = document.is_a?(Uniword::Builder::DocumentBuilder) ? document.allocator : nil
+        alloc = if document.is_a?(Uniword::Builder::DocumentBuilder)
+                  document.allocator
+                elsif root
+                  root.allocator ||= Docx::IdAllocator.new
+                end
 
         target = "media/#{File.basename(path)}"
         r_id = if alloc
                  alloc.alloc_rid(target: target, type: IMAGE_REL_TYPE)
-               elsif root
-                 root.image_parts ||= {}
-                 "rId#{root.image_parts.size + 1}"
                else
                  "rId#{deterministic_id('img_rid', path)}"
                end

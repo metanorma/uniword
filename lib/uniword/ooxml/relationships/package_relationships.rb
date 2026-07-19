@@ -27,13 +27,6 @@ module Uniword
         # rId1 = document (kept for byte-identical DOTX output).
         #
         # @return [PackageRelationships] Relationships object for _rels/.rels
-        def self.next_available_rid(relationships)
-          max = relationships.relationships.filter_map do |r|
-            r.id[/\ArId(\d+)\z/, 1]&.to_i
-          end.max || 0
-          "rId#{max + 1}"
-        end
-
         def self.generate_package_rels
           new(
             relationships: [

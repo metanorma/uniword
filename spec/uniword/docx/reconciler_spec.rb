@@ -572,7 +572,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         expect(rId5).to be_nil
       end
 
-      it "preserves non-standard rels with sequential rIds" do
+      it "preserves non-standard rels verbatim (no renumbering)" do
         package = build_full_package
         # The image part must be carried by the package, otherwise
         # Group 4 strips the rel as dangling (R32).
@@ -593,16 +593,17 @@ RSpec.describe Uniword::Docx::Reconciler do
           r.target == "media/image1.png"
         end
         expect(extra).not_to be_nil
+        expect(extra.id).to eq("rIdExtra")
         expect(extra.type).to include("image")
 
-        # All rIds must be sequential
-        ids = package.document_rels.relationships.map(&:id)
-        ids.each_with_index do |rid, i|
-          expect(rid).to eq("rId#{i + 1}")
+        # Loaded standard rels keep their original ids
+        styles = package.document_rels.relationships.find do |r|
+          r.target == "styles.xml"
         end
+        expect(styles.id).to eq("rId1")
       end
 
-      it "renumbers non-sequential template rIds to sequential" do
+      it "preserves non-sequential template rIds verbatim" do
         package = build_full_package
 
         rels = package.document_rels
@@ -620,10 +621,14 @@ RSpec.describe Uniword::Docx::Reconciler do
         described_class.new(package, profile: profile).reconcile
 
         ids = rels.relationships.map(&:id)
-        ids.each_with_index do |rid, i|
-          expect(rid).to eq("rId#{i + 1}"),
-                         "Expected rId#{i + 1} at position #{i}, got #{rid}"
-        end
+        expect(ids).to include("rId1", "rId13")
+        # The stale header rel (no backing part) is dropped, not renumbered
+        expect(ids).not_to include("rId99")
+
+        styles = rels.relationships.find { |r| r.target == "styles.xml" }
+        expect(styles.id).to eq("rId1")
+        font_table = rels.relationships.find { |r| r.target == "fontTable.xml" }
+        expect(font_table.id).to eq("rId13")
       end
 
       it "updates sectPr references after renumbering" do

@@ -664,7 +664,11 @@ RSpec.describe "Scenario: Document with inline and floating images" do
                                                    align: :right, wrap: :square)
 
     expect(doc.model.body.paragraphs.size).to be >= 4
-    expect(doc.model.image_parts.size).to be >= 2
+    # The same image file is stored once and referenced by both
+    # drawings (target-deduped relationship allocation)
+    expect(doc.model.image_parts.size).to be >= 1
+    drawings = doc.model.body.paragraphs.flat_map(&:runs).flat_map(&:drawings)
+    expect(drawings.size).to be >= 2
   end
 end
 
@@ -717,7 +721,9 @@ RSpec.describe "Scenario: Complete document with images, watermarks, and content
     # Verify
     expect(doc.model.headers["default"]).not_to be_nil
     expect(doc.model.footers["default"]).not_to be_nil
-    expect(doc.model.image_parts.size).to be >= 2
+    # The same image file is stored once and referenced by both
+    # drawings (target-deduped relationship allocation)
+    expect(doc.model.image_parts.size).to be >= 1
     expect(doc.model.styles_configuration.styles.size).to be > 0
   end
 end

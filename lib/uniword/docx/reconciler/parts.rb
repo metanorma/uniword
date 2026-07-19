@@ -435,7 +435,7 @@ module Uniword
           end
 
           dpf = styles.styles.find { |s| s.id == "DefaultParagraphFont" }
-          if dpf && !dpf.semiHidden && !allocator
+          if dpf && !dpf.semiHidden && !builder_managed?
             dpf.semiHidden = Wordprocessingml::SemiHidden.new
             ensure_element_in_order(dpf, "semiHidden", after: "uiPriority")
             record_fix(FixCodes::SEMI_HIDDEN_ADDED,
