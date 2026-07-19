@@ -98,8 +98,11 @@ Other major modules under `lib/uniword/`:
   schema library; `PartRegistry` is the single source of truth for
   part↔content-type↔rel-type mappings (consumers derive, never hold
   literals).
-- `validation/`, `validators/`, `quality/`, `warnings/` — 3-layer verification
-  (OPC + XSD + semantic rules).
+- `validation/`, `quality/` — one validation engine (`Validation::Engine`)
+  over one rule registry (`Validation::Rules::Registry`) with two
+  front-ends: in-memory (`Rules::ModelContext`, powers `DocumentRoot#valid?`
+  and CLI `validate`) and on-disk (`Rules::DocumentContext`, powers the
+  `verify` 3-layer pipeline: OPC + XSD + semantic rules).
 - `diff/` — document-level and package-level comparison (with Canon).
 - `themes/`, `stylesets/`, `template/`, `toc/`, `images/`, `review/`,
   `accessibility/`, `assembly/`, `batch/`, `transformation/`, `generation/`,

@@ -107,20 +107,15 @@ module Uniword
       doc = load_document(path)
       say "File format is valid", :green
 
-      if doc.valid?
-        say "Document structure is valid", :green
-      else
-        say "Document has structural issues", :yellow
-      end
-
-      if doc.paragraphs.any? || doc.tables.any?
-        say "Document contains content", :green
-      else
-        say "Document appears to be empty", :yellow
-      end
+      issues = Uniword::Validation::Engine.run(
+        Uniword::Validation::Rules::ModelContext.new(doc),
+      )
+      report_validation_issues(issues)
+      report_content_presence(doc)
 
       display_detailed_validation(doc) if options[:verbose]
       say "\nValidation complete!", :green
+      exit 1 if issues.any?(&:error?)
     rescue Uniword::Error => e
       handle_error(e)
     rescue StandardError => e
@@ -418,6 +413,30 @@ module Uniword
       say "  Tables:"
       doc.tables.each_with_index do |table, i|
         say "    #{i + 1}. #{table.row_count} rows x #{table.column_count} columns"
+      end
+    end
+
+    # Print validation issues grouped by severity.
+    def report_validation_issues(issues)
+      errors = issues.select(&:error?)
+      if errors.empty?
+        say "Document structure is valid", :green
+      else
+        say "Document has structural errors:", :red
+        errors.each { |issue| say "  [#{issue.code}] #{issue.message}", :red }
+      end
+
+      issues.select(&:warning?).each do |issue|
+        say "  [#{issue.code}] #{issue.message}", :yellow
+      end
+    end
+
+    # Print whether the document contains any content.
+    def report_content_presence(doc)
+      if doc.paragraphs.any? || doc.tables.any?
+        say "Document contains content", :green
+      else
+        say "Document appears to be empty", :yellow
       end
     end
 

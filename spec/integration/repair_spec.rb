@@ -17,9 +17,8 @@ RSpec.describe "DOCX repair verification" do
 
   def our_errors(path)
     ctx = Uniword::Validation::Rules::DocumentContext.new(path)
-    Uniword::Validation::Rules::Registry.all.flat_map do |rule|
-      rule.applicable?(ctx) ? rule.check(ctx) : []
-    end.select { |i| i.severity == "error" && i.code.to_s.match?(/^DOC-10[0-9]$/) }
+    Uniword::Validation::Engine.run(ctx)
+      .select { |i| i.severity == "error" && i.code.to_s.match?(/^DOC-10[0-9]$/) }
   ensure
     ctx&.close
   end

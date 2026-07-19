@@ -7,6 +7,18 @@ module Uniword
       autoload :Base, "#{__dir__}/rules/base"
       autoload :Registry, "#{__dir__}/rules/registry"
       autoload :DocumentContext, "#{__dir__}/rules/document_context"
+      autoload :ModelContext, "#{__dir__}/rules/model_context"
+      autoload :ModelRule, "#{__dir__}/rules/model_rule"
+      autoload :DocumentBodyRule, "#{__dir__}/rules/document_body_rule"
+      autoload :BookmarkPairingRule,
+               "#{__dir__}/rules/bookmark_pairing_rule"
+      autoload :BookmarkUniquenessRule,
+               "#{__dir__}/rules/bookmark_uniqueness_rule"
+      autoload :EmptyParagraphsRule,
+               "#{__dir__}/rules/empty_paragraphs_rule"
+      autoload :TableGridRule, "#{__dir__}/rules/table_grid_rule"
+      autoload :TablePropertiesRule,
+               "#{__dir__}/rules/table_properties_rule"
       autoload :StyleReferencesRule,
                "#{__dir__}/rules/style_references_rule"
       autoload :NumberingRule, "#{__dir__}/rules/numbering_rule"
@@ -43,6 +55,14 @@ module Uniword
 end
 
 # Register all built-in validation rules
+# Model-level (in-memory) rules
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::DocumentBodyRule)
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::BookmarkPairingRule)
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::BookmarkUniquenessRule)
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::EmptyParagraphsRule)
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::TableGridRule)
+Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::TablePropertiesRule)
+# Package-level (on-disk) rules
 Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::StyleReferencesRule)
 Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::NumberingRule)
 Uniword::Validation::Rules::Registry.register(Uniword::Validation::Rules::FootnotesRule)

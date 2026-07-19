@@ -55,7 +55,7 @@ uniword validate document.docx --verbose
 | Verifies the file can be loaded without errors
 
 | Document structure
-| Runs `StructuralValidator` checks: bookmark pairing, name uniqueness, body integrity
+| Runs model-level validation rules via `Validation::Engine`: body presence, bookmark pairing and uniqueness, required table elements (`tblGrid`, `tblPr`), empty paragraphs
 
 | Content presence
 | Confirms the document has paragraphs or tables

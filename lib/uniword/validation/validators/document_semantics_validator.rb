@@ -27,15 +27,9 @@ module Uniword
 
         def validate(path)
           issues = []
-
           context = Rules::DocumentContext.new(path)
           begin
-            rules = Rules::Registry.all
-            rules.each do |rule|
-              next unless rule.applicable?(context)
-
-              issues.concat(rule.check(context))
-            end
+            issues = Engine.run(context)
           ensure
             context.close
           end

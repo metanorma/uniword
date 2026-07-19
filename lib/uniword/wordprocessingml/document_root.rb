@@ -288,26 +288,26 @@ module Uniword
       end
 
       # Check if document structure is valid.
-      # Runs structural checks via Validation::StructuralValidator.
+      # Runs model-level validation rules via Validation::Engine.
       # Use the verify CLI command for full OPC + XSD + semantic validation.
       #
       # @return [Boolean] true if document has valid structure
       def valid?
-        Validation::StructuralValidator.new(self).valid?
+        validation_errors.empty?
       end
 
       # Get structural validation errors.
       #
       # @return [Array<String>] Error messages
       def validation_errors
-        Validation::StructuralValidator.new(self).errors
+        structural_issues.select(&:error?).map(&:message)
       end
 
       # Get structural validation warnings.
       #
       # @return [Array<String>] Warning messages
       def validation_warnings
-        Validation::StructuralValidator.new(self).warnings
+        structural_issues.reject(&:error?).map(&:message)
       end
 
       # Get bookmarks from document paragraphs
@@ -437,6 +437,15 @@ module Uniword
       # @return [String] HTML document content
       def to_html_document
         Uniword::Transformation::OoxmlToHtmlConverter.document_to_html(self)
+      end
+
+      private
+
+      # Run model-level validation rules against this document.
+      #
+      # @return [Array<Validation::Report::ValidationIssue>] issues found
+      def structural_issues
+        Validation::Engine.run(Validation::Rules::ModelContext.new(self))
       end
     end
   end

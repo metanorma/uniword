@@ -110,11 +110,11 @@ Use the prevention layer to guarantee valid output. Use the verification pipelin
 
 == Structural Validation
 
-`Validation::StructuralValidator` provides document-level integrity checks used by `DocumentRoot#valid?`:
+Model-level validation rules (`Validation::Rules::ModelRule` subclasses, run by `Validation::Engine` over a `Rules::ModelContext`) provide document-level integrity checks used by `DocumentRoot#valid?`:
 
-* Verifies the document body exists and contains at least one block element
-* Checks paragraph integrity (no nil runs within paragraphs)
-* Validates table structure (rows and cells present)
-* Detects broken internal references
+* Verifies the document body exists (DOC-200)
+* Checks bookmark pairing (DOC-201) and name uniqueness (DOC-202)
+* Flags empty paragraphs (DOC-203)
+* Requires `tblGrid` (DOC-204) and `tblPr` (DOC-205) on every table
 
-This validator runs on demand via `document.valid?` and is separate from the automatic prevention layer.
+These rules run on demand via `document.valid?` and are separate from the automatic prevention layer.

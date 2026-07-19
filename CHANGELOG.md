@@ -10,6 +10,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Validation Engine Consolidation
+- `Validation::Engine`: single validation engine running the rules of
+  `Rules::Registry` against a validation context, with two front-ends
+  sharing one result model (`Report::ValidationIssue`)
+- `Rules::ModelContext`: in-memory validation context wrapping a
+  `Wordprocessingml::DocumentRoot` (pre-save invocation)
+- `Rules::ModelRule`: base class for in-memory model-level rules;
+  `Rules::Base#context_type` (`:package`/`:model`) selects the rule set
+- Model-level rules: DOC-200 (document requires body), DOC-201 (bookmark
+  pairing), DOC-202 (bookmark name uniqueness), DOC-203 (empty
+  paragraphs), DOC-204 (`tbl` requires `tblGrid` per wml.xsd CT_Tbl),
+  DOC-205 (`tbl` requires `tblPr` per wml.xsd CT_Tbl)
+
+### Changed
+
+- `DocumentRoot#valid?`, `#validation_errors`, `#validation_warnings` are
+  now powered by `Validation::Engine` over the model-level rules instead
+  of the deleted `Validation::StructuralValidator`
+- `uniword validate` runs the same engine on the in-memory model, prints
+  rule-coded issues, and exits 1 on error-severity issues (aligned with
+  `uniword verify`); it previously always exited 0
+- `Validators::DocumentSemanticsValidator` (verify layer 3) runs through
+  `Validation::Engine` like every other front-end
+
+### Removed
+
+- Dead validation code (no production callers):
+  `Validation::DocumentValidator` (7-layer pipeline),
+  `Validation::StructuralValidator`, the `validation/validators/` layer
+  validators unused by `VerifyOrchestrator` (`FileStructureValidator`,
+  `ZipIntegrityValidator`, `OoxmlPartValidator`, `RelationshipValidator`,
+  `ContentTypeValidator`), the `Uniword::Validators` stub namespace
+  (`ElementValidator`/`ParagraphValidator`/`TableValidator`), the
+  `Uniword::Warnings` module (`Warning`/`WarningCollector`/
+  `WarningReport`), and the orphaned `config/validation_rules.yml` and
+  `config/warning_rules.yml`
+
+### Added
+
 #### Open-Source Resource System (April 2025)
 - 23 OFL-licensed color scheme YAML files (`data/color_schemes/`)
 - 25 OFL-licensed font scheme YAML files (`data/font_schemes/`)

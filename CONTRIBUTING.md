@@ -226,7 +226,7 @@ After adding any class (autoload or require_relative):
 **Good (autoload)**:
 ```ruby
 # New utility class with no dependencies
-autoload :DocumentValidator, 'uniword/document_validator'
+autoload :DocumentFactory, 'uniword/document_factory'
 ```
 
 **Good (require_relative with documentation)**:
