@@ -20,6 +20,11 @@ module Uniword
       #   validator = XmlSchemaValidator.new("xml_schema" => { "xsd_validation" => true })
       #   result = validator.validate('/path/to/document.docx')
       class XmlSchemaValidator < LayerValidator
+        # Markup Compatibility namespace — the mc:Ignorable attribute
+        # itself lives here and is stripped during MCE preprocessing.
+        MCE_NAMESPACE_URI =
+          "http://schemas.openxmlformats.org/markup-compatibility/2006"
+
         def layer_name
           "XSD Schema"
         end
@@ -83,6 +88,7 @@ module Uniword
               content = entry.get_input_stream.read
               schema = registry.load_schema(schema_path)
               doc = Nokogiri::XML(content)
+              preprocess_mce(doc)
 
               schema.validate(doc).each do |error|
                 issues << Report::ValidationIssue.new(
@@ -110,6 +116,46 @@ module Uniword
                 message: "Cannot validate #{entry.name}: #{e.message}",
                 part: entry.name,
               )
+            end
+          end
+        end
+
+        # Strip MCE-ignorable ATTRIBUTES per the part's own mc:Ignorable
+        # declaration (w14:paraId/textId and the mc:Ignorable attribute
+        # itself), so XSD validation is not drowned in false errors for
+        # content every real document carries.
+        #
+        # Extension ELEMENTS are deliberately kept: removing them changes
+        # libxml2's content-model evaluation and can expose pre-existing
+        # Word-vs-schema quirks (e.g. rsids placed late, tolerated via the
+        # sequence's trailing xsd:any) as false baseline errors.
+        # Operates in place on the parsed document; never touches the
+        # packaged bytes.
+        #
+        # @param doc [Nokogiri::XML::Document] parsed part to clean
+        # @return [void]
+        def preprocess_mce(doc)
+          root = doc.root
+          return unless root
+
+          ignorable = root["Ignorable"] || root["mc:Ignorable"]
+          return if ignorable.nil? || ignorable.empty?
+
+          uris = ignorable.split(/\s+/).filter_map do |prefix|
+            root.namespaces["xmlns:#{prefix}"]
+          end
+          # The mc:Ignorable attribute itself is MCE machinery and is
+          # undeclared on most root elements in the transitional XSDs.
+          strip_mce_attributes(root, uris + [MCE_NAMESPACE_URI])
+        end
+
+        # Remove attributes in ignorable namespaces from every element.
+        def strip_mce_attributes(doc, uris)
+          doc.traverse do |node|
+            next unless node.element?
+
+            node.attribute_nodes.each do |attr|
+              attr.remove if uris.include?(attr.namespace&.href)
             end
           end
         end
