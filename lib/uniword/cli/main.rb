@@ -91,6 +91,35 @@ module Uniword
       handle_error(e)
     end
 
+    desc "repair INPUT OUTPUT", "Repair a document and report the fixes"
+    long_desc <<~DESC
+      Load a document, run the save-time Reconciler over it, and write a
+      repaired copy: dangling references are stripped, missing required
+      parts are rebuilt, relationship issues are normalized, and the
+      result is verified by the write-time integrity gate. Every repair
+      is reported (code, part, message).
+
+      Examples:
+        $ uniword repair broken.docx fixed.docx
+        $ uniword repair broken.docx fixed.docx --verbose
+    DESC
+    option :verbose, aliases: "-v", desc: "Show every applied fix",
+                     type: :boolean, default: false
+    def repair(input_path, output_path)
+      say "Loading #{input_path}...", :green
+
+      fixes = repair_file(input_path, output_path)
+      report_repairs(fixes)
+      say "Saved to #{output_path}", :green
+    rescue Uniword::ValidationError => e
+      say "Repair failed — the document has issues the Reconciler " \
+          "cannot fix:", :red
+      e.issues.each { |issue| say "  #{issue.code}: #{issue.message}", :red }
+      exit 1
+    rescue Uniword::Error, StandardError => e
+      handle_error(e)
+    end
+
     desc "validate FILE", "Validate document structure"
     long_desc <<~DESC
       Validate a document's structure and check for common issues.
@@ -403,7 +432,49 @@ module Uniword
     desc "protect SUBCOMMAND", "Manage document protection"
     subcommand "protect", ProtectCLI
 
+    # Fix codes that are routine normalization, applied on every save
+    # regardless of document health (package structure, properties,
+    # default styles) — not evidence of a broken document.
+    BASELINE_FIX_CODES = %w[R1 R6 R7 R8 R14 R24].freeze
+
     private
+
+    # Report substantive repairs; routine normalization is summarized
+    # separately so a healthy document does not look "repaired".
+    def report_repairs(fixes)
+      substantive = substantive_fixes(fixes)
+      baseline = fixes.size - substantive.size
+
+      return report_consistent(baseline) if substantive.empty?
+
+      say "Applied #{substantive.size} repair(s):", :green
+      summarize_fixes(substantive)
+      say "(plus #{baseline} routine normalization(s))", :cyan
+      substantive.each { |fix| say "  #{fix}" } if options[:verbose]
+    end
+
+    def substantive_fixes(fixes)
+      fixes.reject { |fix| BASELINE_FIX_CODES.include?(fix.code) }
+    end
+
+    def report_consistent(baseline)
+      say "No repairs needed — document consistent " \
+          "(#{baseline} routine normalization(s)).", :green
+    end
+
+    # Load, reconcile, and save; return the reconciler's fix report.
+    def repair_file(input_path, output_path)
+      package = Docx::Package.from_file(input_path)
+      package.to_file(output_path)
+      package.applied_fixes
+    end
+
+    # Print a one-line count per fix code (full list with --verbose).
+    def summarize_fixes(fixes)
+      fixes.group_by(&:code).sort.each do |code, group|
+        say "  #{code} ×#{group.size}: #{group.first.message}"
+      end
+    end
 
     def display_verbose_info(doc)
       say "\nDetailed Information:", :cyan

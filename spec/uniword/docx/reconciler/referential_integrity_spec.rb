@@ -75,6 +75,10 @@ RSpec.describe "Reconciler referential integrity" do
   describe "image reference repair" do
     it "keeps drawings whose r:embed resolves" do
       package = build_package(with_allocator: false)
+      package.document.image_parts = {
+        "rId99" => { data: "png", target: "media/image1.png",
+                     content_type: "image/png" },
+      }
       package.document_rels.relationships <<
         Uniword::Ooxml::Relationships::Relationship.new(
           id: "rId99",
@@ -228,6 +232,31 @@ RSpec.describe "Reconciler referential integrity" do
       referential = %w[R17 R18 R19 R20 R21 R22 R23 R32]
       codes = reconciler.applied_fixes.map(&:code)
       expect(codes & referential).to be_empty
+    end
+  end
+
+  describe "repair ordering" do
+    it "strips a dangling rel and its drawing in a single pass" do
+      package = Uniword::Docx::Package.new
+      package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
+        document_xml
+      )
+      package.document_rels = Uniword::Docx::Package.minimal_document_rels
+      package.document_rels.relationships <<
+        Uniword::Ooxml::Relationships::Relationship.new(
+          id: "rId99",
+          type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+          target: "media/missing.png",
+        )
+
+      reconciler = reconciler_class.new(package)
+      reconciler.reconcile
+
+      codes = reconciler.applied_fixes.map(&:code)
+      expect(codes).to include("R32", "R23")
+      drawings = package.document.body.paragraphs
+        .flat_map(&:runs).flat_map(&:drawings)
+      expect(drawings).to be_empty
     end
   end
 end

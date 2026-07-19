@@ -156,6 +156,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   or declutter every style that no content references (directly or via
   basedOn/link/next chains); default styles are always kept (also
   `DocumentRoot#remove_style` / `#remove_unused_styles`)
+- `uniword repair INPUT OUTPUT`: load a document, run the save-time
+  Reconciler over it, and write a repaired copy — dangling references
+  stripped, missing parts rebuilt — with every repair reported by code
+  (substantive repairs vs routine normalization); exits non-zero when
+  the write-time gate rejects what the Reconciler cannot fix
 
 ### Fixed
 
@@ -163,6 +168,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ECMA-376 CT_Lvl); numbering level indentation is now written via the
   level's `w:pPr` — previously every Builder-generated list produced
   schema-invalid `numbering.xml`
+- Dangling image drawings and their relationships are now removed in a
+  single reconcile pass: a drawing whose `r:embed` rel exists but points
+  at a part the package does not carry is treated as dangling (previously
+  the first pass kept the drawing and stripped the rel, leaving a new
+  dangling reference for the next save)
 - `word/_rels/settings.xml.rels`, `word/_rels/footnotes.xml.rels` and
   `word/_rels/endnotes.xml.rels` now survive load → save round-trips on
   both save paths (previously dropped, leaving dangling `r:id`
