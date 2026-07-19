@@ -495,7 +495,24 @@ module Uniword
       # @param initials [String, nil] Author initials
       # @yield [CommentBuilder] Builder for rich comment content
       # @return [Comment] The created Comment model
-      def comment(author:, text: nil, initials: nil, &block)
+      # Create a comment and store it in the document's comments
+      # collection.
+      #
+      # Without `on:`, the comment is anchored around the yielded
+      # paragraph (or the document's last paragraph when no block is
+      # given). With `on:`, the comment is anchored around an existing
+      # paragraph — anywhere in the document, including table cells.
+      #
+      # @param author [String] Comment author name
+      # @param text [String, nil] Comment text
+      # @param initials [String, nil] Author initials
+      # @param on [Wordprocessingml::Paragraph, Integer, nil] Anchor
+      #   target: a paragraph object, or an index into body paragraphs
+      # @yield [CommentBuilder] Builder for rich comment content
+      # @return [Comment] The created Comment model
+      # @raise [ArgumentError] when `on` is neither a Paragraph nor an
+      #   index of an existing body paragraph
+      def comment(author:, text: nil, initials: nil, on: nil, &block)
         comment_id = @allocator ? @allocator.alloc_comment_id : begin
           @comment_counter ||= 0
           @comment_counter += 1
@@ -510,7 +527,7 @@ module Uniword
         block.call(cb) if block_given?
         comment_obj = cb.build
         comments_part.add_comment(comment_obj)
-        CommentAnchorer.anchor(@model.body&.paragraphs&.last,
+        CommentAnchorer.anchor(comment_anchor_target(on),
                                comment_obj.comment_id)
         ensure_comment_reference_style
         comment_obj
@@ -632,6 +649,22 @@ module Uniword
           @model.comments = part
         else
           @model.comments = Uniword::CommentsPart.new
+        end
+      end
+
+      # Resolve the paragraph a comment anchors to: the explicit `on`
+      # target when given, else the document's last body paragraph.
+      def comment_anchor_target(on)
+        case on
+        when nil then @model.body&.paragraphs&.last
+        when Wordprocessingml::Paragraph then on
+        when Integer
+          @model.body&.paragraphs&.[](on) ||
+            raise(ArgumentError, "no body paragraph at index #{on}")
+        else
+          raise ArgumentError,
+                "comment target must be a Paragraph or paragraph index, " \
+                "got #{on.class}"
         end
       end
 

@@ -147,4 +147,65 @@ RSpec.describe "Builder comment authoring (end-to-end)" do
       expect(xml).not_to include("commentRangeStart")
     end
   end
+
+  describe "targeted comments (on:)" do
+    it "anchors on a paragraph object instead of the last paragraph" do
+      doc = Uniword::Builder::DocumentBuilder.new
+      doc.paragraph { |p| p << "First." }
+      doc.paragraph { |p| p << "Second." }
+      target = doc.model.body.paragraphs.first
+
+      doc.comment(author: "Ann", text: "note", on: target)
+      doc.paragraph { |p| p << "Third." }
+
+      first, second = doc.model.body.paragraphs
+      expect(first.comment_range_starts.size).to eq(1)
+      expect(second.comment_range_starts).to be_empty
+    end
+
+    it "anchors on a paragraph index" do
+      doc = Uniword::Builder::DocumentBuilder.new
+      doc.paragraph { |p| p << "First." }
+      doc.paragraph { |p| p << "Second." }
+
+      doc.comment(author: "Ann", text: "note", on: 0)
+
+      first = doc.model.body.paragraphs.first
+      expect(first.comment_range_starts.size).to eq(1)
+      expect(first.runs.last.comment_reference).not_to be_nil
+    end
+
+    it "anchors on a paragraph inside a table cell" do
+      doc = Uniword::Builder::DocumentBuilder.new
+      doc.table do |t|
+        t.row do |r|
+          r.cell { |c| c << "cell text" }
+        end
+      end
+      cell_para = doc.model.body.tables.first.rows.first.cells.first
+        .paragraphs.first
+
+      doc.comment(author: "Ann", text: "cell note", on: cell_para)
+      doc.save(path)
+
+      expect(cell_para.comment_range_starts.size).to eq(1)
+      xml = zip_read(path, "word/document.xml")
+      expect(xml).to include("commentRangeStart")
+    end
+
+    it "raises ArgumentError for an out-of-range index" do
+      doc = Uniword::Builder::DocumentBuilder.new
+      doc.paragraph { |p| p << "Only." }
+
+      expect { doc.comment(author: "Ann", text: "x", on: 5) }
+        .to raise_error(ArgumentError, /index 5/)
+    end
+
+    it "raises ArgumentError for a wrong target type" do
+      doc = Uniword::Builder::DocumentBuilder.new
+
+      expect { doc.comment(author: "Ann", text: "x", on: "0") }
+        .to raise_error(ArgumentError, /Paragraph or paragraph index/)
+    end
+  end
 end
