@@ -30,21 +30,6 @@ module Uniword
       end
     end
 
-    # Indentation for numbering level
-    #
-    # Element: <w:ind>
-    class Ind < Lutaml::Model::Serializable
-      attribute :left, :string
-      attribute :hanging, :string
-
-      xml do
-        element "ind"
-        namespace Uniword::Ooxml::Namespaces::WordProcessingML
-        map_attribute "left", to: :left
-        map_attribute "hanging", to: :hanging
-      end
-    end
-
     # Run fonts for numbering
     #
     # Element: <w:rFonts>
