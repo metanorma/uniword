@@ -29,6 +29,7 @@ module Uniword
       attribute :footnote_pr, FootnotePr
       attribute :endnote_pr, EndnotePr
       attribute :hdr_shape_defaults, HdrShapeDefaults
+      attribute :update_fields, UpdateFields
       attribute :even_and_odd_headers, EvenAndOddHeaders
       attribute :mirror_margins, MirrorMargins
       attribute :do_not_include_subdocs_in_stats,
@@ -98,6 +99,7 @@ module Uniword
                                          render_nil: false
         map_element "characterSpacingControl", to: :character_spacing_control,
                                                render_nil: false
+        map_element "updateFields", to: :update_fields, render_nil: false
         map_element "hdrShapeDefaults", to: :hdr_shape_defaults,
                                         render_nil: false
         map_element "footnotePr", to: :footnote_pr, render_nil: false
