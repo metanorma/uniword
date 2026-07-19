@@ -467,7 +467,20 @@ module Uniword
         def resolve_relationship_target(base_dir, target)
           return target[1..] if target.start_with?("/")
 
-          File.expand_path(File.join("/", base_dir, target))[1..]
+          normalize_package_path(File.join(base_dir, target))
+        end
+
+        # Lexically normalize a package-relative path (resolve "." and
+        # ".." segments). Deliberately avoids File.expand_path, which
+        # prepends a drive letter on Windows.
+        def normalize_package_path(path)
+          segments = []
+          path.split("/").each do |segment|
+            next if segment.empty? || segment == "."
+
+            segment == ".." ? segments.pop : segments << segment
+          end
+          segments.join("/")
         end
 
         # Package paths the save path emits, derived from the model —
