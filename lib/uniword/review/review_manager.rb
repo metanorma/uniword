@@ -40,6 +40,10 @@ module Uniword
 
       # Add a new comment to the document.
       #
+      # The comment is registered in the document's CommentsPart, which
+      # the save path serializes to word/comments.xml. The collection
+      # assigns a sequential decimal ID (OOXML ST_DecimalNumber).
+      #
       # @param text [String] Comment text
       # @param author [String] Author name
       # @param initials [String, nil] Author initials
@@ -50,6 +54,7 @@ module Uniword
           author: author,
           initials: initials,
         )
+        comment.comment_id = nil
         comments_part.add_comment(comment)
       end
 
@@ -74,6 +79,7 @@ module Uniword
           text: text,
           author: author,
         )
+        comment.comment_id = nil
         comments_part.add_comment(comment)
       end
 
@@ -216,15 +222,23 @@ module Uniword
       #
       # @return [Uniword::CommentsPart] The comments collection
       def comments_part
-        @comments_part ||= begin
-          existing = document.comments
-          if existing.is_a?(CommentsPart)
-            existing
-          else
-            part = CommentsPart.new
-            document.comments = part
-            part
-          end
+        @comments_part ||= migrate_comments(document.comments)
+      end
+
+      # Migrate legacy Array storage into a CommentsPart, preserving
+      # its entries; initialize the collection when absent.
+      #
+      # @param existing [CommentsPart, Array, nil] current value
+      # @return [Uniword::CommentsPart] The comments collection
+      def migrate_comments(existing)
+        case existing
+        when CommentsPart then existing
+        when Array
+          part = CommentsPart.new
+          existing.each { |c| part.add_comment(c) }
+          document.comments = part
+        else
+          document.comments = CommentsPart.new
         end
       end
 

@@ -484,7 +484,11 @@ module Uniword
         self
       end
 
-      # Create a comment and store it in the document's comments collection.
+      # Create a comment, register it in the document's comments
+      # collection (serialized to word/comments.xml on save), and anchor
+      # it around the most recently added body paragraph with
+      # commentRangeStart/commentRangeEnd markers and a CommentReference
+      # run. With no preceding paragraph the comment stays unanchored.
       #
       # @param author [String] Comment author name
       # @param text [String, nil] Comment text
@@ -505,8 +509,10 @@ module Uniword
         cb << text if text
         block.call(cb) if block_given?
         comment_obj = cb.build
-        @model.comments ||= []
-        @model.comments << comment_obj
+        comments_part.add_comment(comment_obj)
+        CommentAnchorer.anchor(@model.body&.paragraphs&.last,
+                               comment_obj.comment_id)
+        ensure_comment_reference_style
         comment_obj
       end
 
@@ -608,6 +614,46 @@ module Uniword
       # @param path [String] Output file path
       def save(path)
         @model.to_file(path)
+      end
+
+      private
+
+      # The document's comments collection, migrating legacy Array
+      # storage (assigned by earlier builder versions) into a
+      # CommentsPart so comments serialize to word/comments.xml.
+      #
+      # @return [Uniword::CommentsPart] The comments collection
+      def comments_part
+        case (existing = @model.comments)
+        when Uniword::CommentsPart then existing
+        when Array
+          part = Uniword::CommentsPart.new
+          existing.each { |c| part.add_comment(c) }
+          @model.comments = part
+        else
+          @model.comments = Uniword::CommentsPart.new
+        end
+      end
+
+      # Register Word's built-in CommentReference character style when
+      # absent, so the anchor run's rStyle resolves against styles.xml
+      # (the reconciler strips dangling style references).
+      #
+      # @return [void]
+      def ensure_comment_reference_style
+        styles = @model.styles_configuration
+        return if styles.style_by_id(CommentAnchorer::REFERENCE_STYLE)
+
+        styles.add_style(
+          Wordprocessingml::Style.new(
+            type: "character",
+            styleId: CommentAnchorer::REFERENCE_STYLE,
+            name: Wordprocessingml::StyleName.new(val: "annotation reference"),
+            uiPriority: Wordprocessingml::UiPriority.new(val: 99),
+            semiHidden: Wordprocessingml::SemiHidden.new,
+            unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new,
+          )
+        )
       end
     end
   end

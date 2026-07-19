@@ -162,6 +162,14 @@ module Uniword
         end
       end
 
+      # Seed the comment counter from existing comment entries so newly
+      # allocated comment IDs do not collide with loaded ones.
+      def seed_from_comments(comments)
+        comments&.each do |c|
+          @comment_counter = [@comment_counter, c.comment_id.to_i].max
+        end
+      end
+
       # Produce the final ordered list of all allocated relationships.
       #
       # @param scope [Symbol, nil] restrict to one scope; nil for all
@@ -189,8 +197,17 @@ module Uniword
           package.footnotes&.footnote_entries,
           package.endnotes&.endnote_entries,
         )
+        alloc.seed_from_comments(comment_entries_of(package))
         alloc
       end
+
+      # Comment entries of a package or document, tolerating the legacy
+      # Array form of DocumentRoot#comments.
+      def self.comment_entries_of(source)
+        part = source.comments
+        part.is_a?(Uniword::CommentsPart) ? part.comments : part
+      end
+      private_class_method :comment_entries_of
 
       private
 

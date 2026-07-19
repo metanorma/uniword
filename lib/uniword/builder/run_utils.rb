@@ -22,6 +22,7 @@ module Uniword
         return false if run.alternate_content
         return false if run.footnote_reference
         return false if run.endnote_reference
+        return false if run.comment_reference
         return false if run.field_char
         return false if run.instr_text
         return false if run.position_tab
@@ -45,6 +46,7 @@ module Uniword
         return false if run.alternate_content
         return false if run.footnote_reference
         return false if run.endnote_reference
+        return false if run.comment_reference
         return false if run.field_char
         return false if run.instr_text
         return false if run.sym

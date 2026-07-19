@@ -52,6 +52,40 @@ RSpec.describe Uniword::CommentsPart do
       result = comments_part.add_comment(comment)
       expect(result).to eq(comment)
     end
+
+    it "reassigns an ID that collides with an existing comment" do
+      comments_part.add_comment(Uniword::Comment.new(comment_id: "1"))
+      dupe = Uniword::Comment.new(comment_id: "1")
+      comments_part.add_comment(dupe)
+      expect(dupe.comment_id).to eq("2")
+    end
+
+    it "assigns IDs past the highest existing decimal ID" do
+      comments_part.add_comment(Uniword::Comment.new(comment_id: "5"))
+      added = Uniword::Comment.new(author: "K")
+      added.comment_id = nil
+      comments_part.add_comment(added)
+      expect(added.comment_id).to eq("6")
+    end
+  end
+
+  describe "Array compatibility" do
+    before do
+      comments_part.add_comment(Uniword::Comment.new(author: "John"))
+      comments_part.add_comment(Uniword::Comment.new(author: "Jane"))
+    end
+
+    it "supports size" do
+      expect(comments_part.size).to eq(2)
+    end
+
+    it "supports []" do
+      expect(comments_part[0].author).to eq("John")
+    end
+
+    it "supports each via Enumerable" do
+      expect(comments_part.map(&:author)).to eq(%w[John Jane])
+    end
   end
 
   describe "#find_comment" do

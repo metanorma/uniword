@@ -46,6 +46,7 @@ document_rels)
         inject_custom_xml(content_types)
         inject_header_footer_content_types(content_types)
         inject_notes(content_types, document_rels)
+        inject_comments(content_types, document_rels)
         inject_theme(content_types, document_rels)
         inject_numbering(content_types, document_rels)
         inject_embeddings(content_types, document_rels)
@@ -136,6 +137,12 @@ document_rels)
 
         # Notes
         serialize_notes(content)
+
+        # Comments
+        if comments
+          content["word/comments.xml"] =
+            serialize_part(comments)
+        end
 
         # Bibliography sources
         if document&.bibliography_sources
@@ -313,6 +320,13 @@ document_rels)
 
         ensure_content_type(content_types,
                             Ooxml::PartRegistry.find_by_key(:theme))
+      end
+
+      def inject_comments(content_types, _document_rels)
+        return unless comments
+
+        ensure_content_type(content_types,
+                            Ooxml::PartRegistry.find_by_key(:comments))
       end
 
       def inject_numbering(content_types, _document_rels)
