@@ -50,6 +50,7 @@ document_rels)
         inject_theme(content_types, document_rels)
         inject_numbering(content_types, document_rels)
         inject_embeddings(content_types, document_rels)
+        inject_raw_part_content_types(content_types)
       end
 
       # Serialize all package parts to XML and add to content hash
@@ -155,6 +156,9 @@ document_rels)
 
         # OLE/embedded object binaries
         serialize_embeddings(content)
+
+        # Raw passthrough parts (unmodelled; byte-for-byte)
+        serialize_raw_parts(content)
       end
 
       # Serialize an OOXML document part with standard encoding, single-line output.
@@ -389,6 +393,41 @@ document_rels)
 
         embeddings.each do |target, part|
           content["word/#{target}"] = part.content
+        end
+      end
+
+      # Content types for raw-carried parts. Source Overrides survive
+      # reconciliation untouched (non-standard entries are preserved);
+      # a part whose content type came from a Default entry needs an
+      # Override once the reconciler rebuilds the standard Defaults.
+      def inject_raw_part_content_types(content_types)
+        return if raw_parts.empty?
+
+        raw_parts.each_value do |part|
+          next unless part.path && part.content_type
+
+          ext = File.extname(part.path)[1..]
+          next if ext && content_types.defaults.any? do |d|
+            d.extension == ext
+          end
+
+          part_name = "/#{part.path}"
+          next if content_types.overrides.any? { |o| o.part_name == part_name }
+
+          content_types.overrides << Uniword::ContentTypes::Override.new(
+            part_name: part_name, content_type: part.content_type,
+          )
+        end
+      end
+
+      # Emit raw-carried parts byte-for-byte. Model emission always
+      # wins: raw claiming already excludes registry paths, and the
+      # key guard makes double emission impossible by construction.
+      def serialize_raw_parts(content)
+        return if raw_parts.empty?
+
+        raw_parts.each do |path, part|
+          content[path] = part.content unless content.key?(path)
         end
       end
     end

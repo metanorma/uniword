@@ -326,6 +326,18 @@ module Uniword
         { key: :theme_media, kind: :none,
           path_pattern: "word/theme/media/%<name>s",
           loader: :theme_media, load_priority: 72 },
+        # Fallback passthrough for parts no definition claims
+        # (unmodelled parts such as docProps/meta.xml, glossary
+        # documents, VBA projects): the :raw loader runs last and
+        # carries the remainder byte-for-byte on the package's
+        # raw_parts collection. Emission is derived from the stored
+        # parts like any collection family, so emitted_paths — and
+        # with it the reconciler's dangling-relationship sweep — sees
+        # raw-carried parts as first-class.
+        { key: :raw_parts, kind: :none,
+          loader: :raw, load_priority: 130,
+          package_attribute: :raw_parts,
+          document_attribute: :raw_parts },
       ].freeze
 
       class << self

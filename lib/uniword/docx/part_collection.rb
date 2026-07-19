@@ -101,6 +101,14 @@ module Uniword
         value.each { |key, part| self[key] = part }
       end
 
+      # Key attribute => assigner lambda filling the attribute from
+      # the collection key when the part does not carry it.
+      KEY_ASSIGNERS = {
+        r_id: ->(part, key) { part.r_id ||= key },
+        target: ->(part, key) { part.target ||= key },
+        path: ->(part, key) { part.path ||= key },
+      }.freeze
+
       private
 
       def wrap(key, value)
@@ -115,10 +123,8 @@ module Uniword
       end
 
       def assign_key(part, key)
-        case @key_attribute
-        when :r_id then part.r_id ||= key.to_s
-        when :target then part.target ||= key.to_s
-        end
+        assigner = KEY_ASSIGNERS[@key_attribute]
+        assigner&.call(part, key.to_s)
       end
     end
   end

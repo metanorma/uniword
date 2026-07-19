@@ -448,5 +448,14 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
       expect(described_class.emitted_paths(package))
         .to include("word/header1.xml")
     end
+
+    it "enumerates raw passthrough parts (R32 keeps their rels)" do
+      package.raw_parts["docProps/meta.xml"] =
+        Uniword::Docx::RawPart.new(path: "docProps/meta.xml",
+                                   content: "<meta/>")
+
+      expect(described_class.emitted_paths(package))
+        .to include("docProps/meta.xml")
+    end
   end
 end

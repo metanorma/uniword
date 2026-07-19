@@ -8,6 +8,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- DOCX parts the library does not model (e.g. `docProps/meta.xml`,
+  glossary documents, VBA projects, customXml outside the standard
+  layout, header/comment `.rels` sidecars) now round-trip
+  byte-for-byte instead of being dropped on load. Unclaimed ZIP
+  entries are preserved as raw parts (`Docx::RawPart`,
+  `Package#raw_parts`) with their source content types, re-emitted
+  verbatim on save; relationships targeting them are kept by the
+  reconciler's dangling-relationship sweep, and the write-time
+  package integrity gate treats them as first-class parts.
+
 ### Changed
 
 - Internal refactor (no user-visible behavior change): `Ooxml::PartRegistry`
@@ -57,6 +69,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `insert_at`, `insert_once`), replacing per-model workarounds for
   lutaml-model's frozen parse arrays in footnotes, endnotes, the TOC
   generator, and the reconciler helpers
+
+### Fixed
+
+- `uniword verify` no longer reports false OPC-006 "relationship
+  target not found" errors for relationship targets containing dot
+  segments (e.g. `../docProps/meta.xml`); target resolution now
+  normalizes `.`/`..` per OPC Part 2, matching the write-time gate.
 
 ## [1.3.0] - 2026-07-19
 
