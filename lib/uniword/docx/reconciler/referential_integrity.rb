@@ -204,10 +204,10 @@ module Uniword
 
         # -- Image references (blip/@r:embed → document.xml.rels) --
 
-        # Remove drawings whose r:embed has no matching image relationship,
-        # consistent with the other referential repairs. A drawing is kept
-        # when it has no embed references (e.g. shape-only anchors) or at
-        # least one embed rId resolves.
+        # Remove drawings whose r:embed has no backing image: either no
+        # matching relationship, or a relationship whose target part the
+        # package does not carry (the rel is R32-stripped below, so both
+        # repairs complete in a single pass regardless of order).
         def reconcile_image_references
           rels = package.document_rels
           return unless rels
@@ -215,6 +215,8 @@ module Uniword
           valid_rids = rels.relationships.to_set(&:id)
           return if valid_rids.empty?
 
+          carried = carried_part_paths
+          targets_by_id = rels.relationships.to_h { |r| [r.id, r.target] }
           removed = 0
 
           walk_body_paragraphs(package.document.body) do |para|
@@ -222,7 +224,8 @@ module Uniword
               next unless run.drawings
 
               kept = run.drawings.reject do |drawing|
-                dangling_drawing?(drawing, valid_rids)
+                dangling_drawing?(drawing, valid_rids, targets_by_id,
+                                  carried)
               end
               removed += run.drawings.size - kept.size
               run.drawings = kept
@@ -236,13 +239,25 @@ module Uniword
                      part: "word/document.xml")
         end
 
-        # A drawing is dangling when it carries embed references and none
-        # of them resolves to a relationship in document.xml.rels.
-        def dangling_drawing?(drawing, valid_rids)
+        # A drawing is dangling when it carries embed references and
+        # none of them resolves to a relationship with a carried target.
+        def dangling_drawing?(drawing, valid_rids, targets_by_id, carried)
           rids = drawing_embed_rids(drawing)
           return false if rids.empty?
 
-          rids.none? { |rid| valid_rids.include?(rid) }
+          rids.none? do |rid|
+            valid_rids.include?(rid) &&
+              carried_relationship_target?(targets_by_id[rid], carried)
+          end
+        end
+
+        # A rel target backs the rId only when the package emits it
+        # (External and fragment targets do not need a part).
+        def carried_relationship_target?(target, carried)
+          target = target.to_s
+          return true if target.empty? || target.start_with?("#")
+
+          carried.include?(resolve_relationship_target("word", target))
         end
 
         # -- Hyperlink references (hyperlink/@r:id → document.xml.rels) --
