@@ -399,14 +399,13 @@ module Uniword
 
       # Duplicate the color scheme
       #
+      # Deep copy via XML round-trip — preserves system-color entries
+      # (dk1/lt1 as windowText/window) and every color slot, not just
+      # the standard hex values.
+      #
       # @return [ColorScheme] A deep copy of this color scheme
       def dup
-        new_scheme = ColorScheme.new(name: name)
-        THEME_COLORS.each do |color_name|
-          value = self[color_name]
-          new_scheme[color_name] = value if value
-        end
-        new_scheme
+        self.class.from_xml(to_xml)
       end
     end
   end
