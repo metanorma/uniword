@@ -44,6 +44,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   document/package copy attributes. Builders, part loaders,
   serializers and reconcilers read and write the model objects
   directly.
+- Internal refactor (no user-visible behavior change): "will this part
+  be emitted?" is now answered by `Ooxml::PartRegistry.emitted_paths`
+  instead of a hand-written mirror in the reconciler. Part objects
+  (`Docx::Part`, `Docx::CustomXmlItem`) report their own emitted
+  package paths (`package_paths`), and family definitions
+  (`:header`/`:footer`/`:chart`/`:image`/`:bibliography`) gained the
+  collection attributes needed to enumerate them.
 
 ## [1.3.0] - 2026-07-19
 

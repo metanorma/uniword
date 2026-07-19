@@ -389,4 +389,64 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
         .to raise_error(ArgumentError, /PartDefinition/)
     end
   end
+
+  describe ".emitted_paths" do
+    let(:package) do
+      Uniword::Docx::Package.new.tap do |pkg|
+        pkg.document = Uniword::Wordprocessingml::DocumentRoot.new
+        pkg.document.body = Uniword::Wordprocessingml::Body.new
+        # Mirror the to_zip_content model state the sweep runs against.
+        pkg.settings = Uniword::Wordprocessingml::Settings.new
+        pkg.font_table = Uniword::Wordprocessingml::FontTable.new
+        pkg.web_settings = Uniword::Wordprocessingml::WebSettings.new
+      end
+    end
+
+    it "includes single-instance parts whose models are present" do
+      paths = described_class.emitted_paths(package)
+
+      expect(paths).to include("word/document.xml", "word/styles.xml",
+                               "word/settings.xml")
+    end
+
+    it "omits single-instance parts whose models are absent" do
+      paths = described_class.emitted_paths(package)
+
+      expect(paths).not_to include("word/footnotes.xml",
+                                   "word/endnotes.xml")
+    end
+
+    it "enumerates collection families from their stored parts" do
+      package.document.image_parts["rId1"] = {
+        data: "png", target: "media/image1.png",
+        content_type: "image/png",
+      }
+
+      expect(described_class.emitted_paths(package))
+        .to include("word/media/image1.png")
+    end
+
+    it "enumerates customXml items with their properties parts" do
+      package.custom_xml_items = [
+        { index: 1, xml_content: "<a/>", props_xml: "<p/>" },
+      ]
+
+      paths = described_class.emitted_paths(package)
+      expect(paths).to include("customXml/item1.xml",
+                               "customXml/itemProps1.xml")
+    end
+
+    it "enumerates header/footer parts from the unified store" do
+      package.document.header_footer_parts <<
+        Uniword::Docx::HeaderFooterPart.new(
+          r_id: "rId7", target: "header1.xml",
+          rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
+          content: Uniword::Wordprocessingml::Header.new,
+          type: "default",
+        )
+
+      expect(described_class.emitted_paths(package))
+        .to include("word/header1.xml")
+    end
+  end
 end
