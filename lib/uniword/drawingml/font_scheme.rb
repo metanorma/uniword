@@ -225,16 +225,12 @@ module Uniword
 
       # Duplicate the font scheme
       #
+      # Deep copy via XML round-trip — preserves per-script font entries
+      # (Jpan/Hang/Arab/...) that the previous hand-rolled copy dropped.
+      #
       # @return [FontScheme] A deep copy of this font scheme
       def dup
-        new_scheme = FontScheme.new(name: name)
-        new_scheme.major_font = major_font
-        new_scheme.minor_font = minor_font
-        new_scheme.major_east_asian = major_east_asian if major_east_asian
-        new_scheme.major_complex_script = major_complex_script if major_complex_script
-        new_scheme.minor_east_asian = minor_east_asian if minor_east_asian
-        new_scheme.minor_complex_script = minor_complex_script if minor_complex_script
-        new_scheme
+        self.class.from_xml(to_xml)
       end
     end
   end

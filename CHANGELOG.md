@@ -170,7 +170,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   rejects as "unreadable content"; the save-time fill repair also used
   a wrong attribute kwarg (`scheme_color:` for `scheme_clr:`), creating
   color-less fills. Both fixed — applied themes now carry the complete
-  format scheme
+  format scheme. Same family fixed in `FontScheme#dup` (per-script
+  font entries were dropped) and `ColorScheme#dup` (system-color
+  entries like windowText were lost)
 - Tables whose `gridCol` columns lack widths now get even shares of the
   section content width (page width minus margins) at save time —
   matching Word's fallback — instead of emitting width-less `gridCol`

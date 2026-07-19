@@ -41,6 +41,37 @@ RSpec.describe Uniword::Drawingml::Theme, "#dup" do
   end
 end
 
+RSpec.describe Uniword::Drawingml::FontScheme, "#dup" do
+  let(:font_scheme) do
+    friendly = Uniword::Resource::FontSchemeLoader.load("carlito_sans")
+    Uniword::Themes::ThemeTransformation.new.build_font_scheme(friendly)
+  end
+
+  it "preserves per-script font entries" do
+    copy = font_scheme.dup
+
+    scripts = copy.major_font_obj.fonts.map(&:script)
+    expect(scripts).to include("Jpan", "Hang", "Hans", "Arab")
+    expect(copy.major_font_obj.latin.typeface).to eq("Carlito")
+  end
+end
+
+RSpec.describe Uniword::Drawingml::ColorScheme, "#dup" do
+  let(:color_scheme) do
+    theme = Uniword::Drawingml::Theme.from_xml(
+      File.read("data/themes/office_theme.xml")
+    )
+    theme.theme_elements.clr_scheme
+  end
+
+  it "preserves system-color entries" do
+    copy = color_scheme.dup
+
+    expect(copy.dk1.sys_clr&.val).to eq("windowText")
+    expect(copy.lt1.sys_clr&.val).to eq("window")
+  end
+end
+
 RSpec.describe "theme apply fill-list regression" do
   let(:output_dir) { "tmp/theme_dup_regression" }
   let(:path) { File.join(output_dir, "themed.docx") }
