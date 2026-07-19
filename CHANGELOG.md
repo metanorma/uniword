@@ -85,6 +85,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   quirks as false errors); their findings remain classified as
   MCE-attributable
 
+### Changed
+
+- `DocumentRoot#remove_style` now returns the removed `Style` object or
+  nil (previously a Boolean), consistent with `#rename_style`; the
+  theme/style/scheme application methods on `DocumentRoot` moved into
+  `Wordprocessingml::DocumentStyling` (internal extraction, signatures
+  unchanged)
+- `Ooxml::Relationships::ImageRelationship.new` now requires an
+  explicit `id:` (the unreachable random rId default is gone;
+  `Docx::IdAllocator` remains the single rId authority)
+
 ## [1.3.0] - 2026-07-19
 
 ### Added
