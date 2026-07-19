@@ -156,6 +156,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   references in the saved package)
 - Saving no longer crashes with FrozenError when the Reconciler injects
   missing footnote/endnote separator entries into a parsed document
+- Theme application no longer produces invalid `theme1.xml`:
+  `Drawingml::Theme#dup` silently dropped the format scheme (fill/line/
+  effect lists), so every `theme apply` emitted a `fillStyleLst` Word
+  rejects as "unreadable content"; the save-time fill repair also used
+  a wrong attribute kwarg (`scheme_color:` for `scheme_clr:`), creating
+  color-less fills. Both fixed — applied themes now carry the complete
+  format scheme
 - Tables whose `gridCol` columns lack widths now get even shares of the
   section content width (page width minus margins) at save time —
   matching Word's fallback — instead of emitting width-less `gridCol`

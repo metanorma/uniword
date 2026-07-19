@@ -103,7 +103,7 @@ module Uniword
           fills = Array(lst.solid_fills).dup
           while fills.size < 2
             fills << Drawingml::SolidFill.new(
-              scheme_color: Drawingml::SchemeColor.new(
+              scheme_clr: Drawingml::SchemeColor.new(
                 val: "accent#{fills.size + 1}"
               ),
             )
@@ -121,7 +121,7 @@ module Uniword
             lines << Drawingml::LineProperties.new(
               width: widths[idx] || 9525,
               solid_fill: Drawingml::SolidFill.new(
-                scheme_color: Drawingml::SchemeColor.new(val: "accent#{idx + 1}"),
+                scheme_clr: Drawingml::SchemeColor.new(val: "accent#{idx + 1}"),
               ),
             )
           end

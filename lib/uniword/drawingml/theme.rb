@@ -127,14 +127,20 @@ module Uniword
 
       # Duplicate the theme
       #
+      # Deep copy via XML round-trip: copies color scheme, font scheme,
+      # format scheme (fill/line/effect lists), and every other mapped
+      # part. The previous hand-rolled copy dropped fmt_scheme (and
+      # object_defaults/ext_lst/media_files), producing themes with
+      # empty fillStyleLst that Word rejects.
+      #
       # @return [Theme] A deep copy of this theme
       def dup
-        new_theme = Theme.new(name: name)
-        new_theme.color_scheme = color_scheme.dup if color_scheme
-        new_theme.font_scheme = font_scheme.dup if font_scheme
-        new_theme.variants = @variants.dup if @variants
-        new_theme.source_file = @source_file
-        new_theme
+        self.class.from_xml(to_xml).tap do |copy|
+          copy.variants = @variants&.dup
+          copy.source_file = @source_file
+          copy.media_files = @media_files
+          copy.raw_xml = @raw_xml
+        end
       end
 
       # Check if theme is valid
