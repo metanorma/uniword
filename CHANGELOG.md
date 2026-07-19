@@ -148,6 +148,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   orientation with Word-style dimension swap, and margins in
   in/cm/mm/twips units, applied to every section (also
   `DocumentRoot#apply_page_setup`)
+- `uniword styles list FILE [--type T] [--verbose]`: Word's Styles
+  pane as a terminal listing — style id, type, base style, and key
+  formatting details
 
 ### Fixed
 
