@@ -37,6 +37,108 @@ RSpec.describe Uniword::Ooxml::PartDefinition do
 
       expect(defn.target).to eq("docProps/core.xml")
     end
+
+    it "defaults loader metadata to absent" do
+      defn = described_class.new(key: :plain, kind: :none)
+
+      expect([defn.loader, defn.loader_model, defn.path_resolution,
+              defn.load_priority]).to all(be_nil)
+    end
+
+    it "defaults copy metadata to absent" do
+      defn = described_class.new(key: :plain, kind: :none)
+
+      expect([defn.document_attribute, defn.package_attribute,
+              defn.to_package_guard, defn.to_package_type]).to all(be_nil)
+    end
+
+    it "copies to the document by default and is not loadable" do
+      defn = described_class.new(key: :plain, kind: :none)
+
+      expect([defn.copy_to_document?, defn.loadable?]).to eq([true, false])
+    end
+  end
+
+  describe "loader and copy metadata" do
+    subject(:loaded) do
+      described_class.new(
+        key: :styles, kind: :override, path: "word/styles.xml",
+        loader: :xml_model,
+        loader_model: Uniword::Wordprocessingml::StylesConfiguration,
+        load_priority: 50, package_attribute: :styles,
+        document_attribute: :styles_configuration,
+        to_package_guard: :styles_loaded?,
+        to_package_type: Uniword::Wordprocessingml::StylesConfiguration,
+        copy_to_document: false
+      )
+    end
+
+    it "exposes the loader strategy, model, and priority" do
+      expect([loaded.loader, loaded.loader_model, loaded.load_priority])
+        .to eq([:xml_model,
+                Uniword::Wordprocessingml::StylesConfiguration, 50])
+    end
+
+    it "exposes the copy attributes, guard, and type" do
+      expect([loaded.package_attribute, loaded.document_attribute,
+              loaded.to_package_guard, loaded.copy_to_document?])
+        .to eq([:styles, :styles_configuration, :styles_loaded?, false])
+    end
+
+    it "exposes the value type constraint" do
+      expect(loaded.to_package_type)
+        .to eq(Uniword::Wordprocessingml::StylesConfiguration)
+    end
+
+    it "is loadable" do
+      expect(loaded).to be_loadable
+    end
+  end
+
+  describe "#match_path?" do
+    let(:numbered) do
+      described_class.new(key: :header, kind: :override,
+                          path_pattern: "word/header%<counter>d.xml")
+    end
+
+    let(:named) do
+      described_class.new(key: :image, kind: :default,
+                          path_pattern: "word/media/%<name>s")
+    end
+
+    it "matches a fixed path with or without a leading slash" do
+      expect([definition.match_path?("word/styles.xml"),
+              definition.match_path?("/word/styles.xml")]).to eq([true, true])
+    end
+
+    it "rejects other paths" do
+      expect(definition.match_path?("word/settings.xml")).to be(false)
+    end
+
+    it "matches numbered paths against the pattern" do
+      expect([numbered.match_path?("word/header12.xml"),
+              numbered.match_path?("word/footer1.xml")]).to eq([true, false])
+    end
+
+    it "matches name placeholders against any path run" do
+      expect([named.match_path?("word/media/image 1.png"),
+              named.match_path?("word/embeddings/a.bin")]).to eq([true, false])
+    end
+  end
+
+  describe "#pattern_prefix" do
+    it "returns the static prefix up to the first placeholder" do
+      media = described_class.new(
+        key: :theme_media, kind: :none,
+        path_pattern: "word/theme/media/%<name>s"
+      )
+
+      expect(media.pattern_prefix).to eq("word/theme/media/")
+    end
+
+    it "is nil for fixed-path definitions" do
+      expect(definition.pattern_prefix).to be_nil
+    end
   end
 
   describe "predicates" do

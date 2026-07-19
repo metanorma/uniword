@@ -152,6 +152,165 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
     end
   end
 
+  describe "loader metadata" do
+    let(:rels_parts) do
+      %i[content_types package_rels document_rels settings_rels
+         theme_rels footnotes_rels endnotes_rels]
+    end
+
+    it "selects the xml_model loader for fixed XML parts" do
+      expect(described_class.find_by_key(:styles).loader).to eq(:xml_model)
+    end
+
+    it "names the parsing model class" do
+      expect(described_class.find_by_key(:styles).loader_model)
+        .to eq(Uniword::Wordprocessingml::StylesConfiguration)
+    end
+
+    it "names the package and document attributes" do
+      styles = described_class.find_by_key(:styles)
+
+      expect([styles.package_attribute, styles.document_attribute])
+        .to eq(%i[styles styles_configuration])
+    end
+
+    it "resolves the main document path from package relationships" do
+      expect(described_class.find_by_key(:document).path_resolution)
+        .to eq(:office_document)
+    end
+
+    it "resolves the document rels path as the document sidecar" do
+      expect(described_class.find_by_key(:document_rels).path_resolution)
+        .to eq(:office_document_rels)
+    end
+
+    it "registers every read-side rels part as loadable" do
+      expect(rels_parts.map { |k| described_class.find_by_key(k) })
+        .to all(be_loadable)
+    end
+
+    it "registers the header/footer strategy for both kinds" do
+      expect([described_class.find_by_key(:header).loader,
+              described_class.find_by_key(:footer).loader])
+        .to eq(%i[header_footer header_footer])
+    end
+
+    it "registers the chart, image, and embedding strategies" do
+      keys = %i[chart image ole_object]
+
+      expect(keys.map { |k| described_class.find_by_key(k).loader })
+        .to eq(%i[chart image embedding])
+    end
+
+    it "registers the custom_xml and theme_media strategies" do
+      expect([described_class.find_by_key(:custom_xml_item).loader,
+              described_class.find_by_key(:theme_media).loader])
+        .to eq(%i[custom_xml theme_media])
+    end
+
+    it "keeps write-only parts without loaders" do
+      keys = %i[bibliography hyperlink thmx_theme]
+
+      expect(keys.map { |k| described_class.find_by_key(k).loadable? })
+        .to all(be(false))
+    end
+
+    it "carries the numbering copy guard" do
+      expect(described_class.find_by_key(:numbering).to_package_guard)
+        .to eq(:numbering_configuration_loaded?)
+    end
+
+    it "carries the comments copy type" do
+      expect(described_class.find_by_key(:comments).to_package_type)
+        .to eq(Uniword::CommentsPart)
+    end
+  end
+
+  describe ".loadable" do
+    let(:load_order) { described_class.loadable.map(&:key) }
+
+    it "orders content types and package rels before the document" do
+      expect([load_order.index(:content_types),
+              load_order.index(:package_rels)])
+        .to all(be < load_order.index(:document))
+    end
+
+    it "orders the document and its rels before dependent parts" do
+      expect([load_order.index(:header), load_order.index(:chart),
+              load_order.index(:image)])
+        .to all(be > load_order.index(:document_rels))
+    end
+
+    it "orders headers before footers and theme before theme media" do
+      expect([load_order.index(:header) < load_order.index(:footer),
+              load_order.index(:theme) < load_order.index(:theme_media)])
+        .to eq([true, true])
+    end
+
+    it "excludes parts without loaders" do
+      expect(load_order)
+        .not_to include(:hyperlink, :bibliography, :thmx_theme,
+                        :custom_xml_item_props, :jpeg, :rels)
+    end
+  end
+
+  describe ".copied_to_document / .copied_to_package" do
+    let(:rels_parts) do
+      %i[content_types package_rels document_rels settings_rels
+         theme_rels footnotes_rels endnotes_rels]
+    end
+
+    let(:copy_methods) do
+      described_class.copied_to_package.flat_map do |d|
+        [d.package_attribute, :"#{d.package_attribute}=",
+         d.document_attribute, :"#{d.document_attribute}="]
+      end
+    end
+
+    it "mirrors core attribute-backed parts onto the document" do
+      expect(described_class.copied_to_document.map(&:key))
+        .to include(:styles, :numbering, :settings, :font_table,
+                    :web_settings, :theme)
+    end
+
+    it "mirrors properties and note parts onto the document" do
+      expect(described_class.copied_to_document.map(&:key))
+        .to include(:core_properties, :app_properties, :footnotes,
+                    :endnotes, :comments, :custom_xml_item)
+    end
+
+    it "mirrors rels parts onto the document" do
+      keys = described_class.copied_to_document.map(&:key)
+
+      expect(rels_parts - keys).to be_empty
+    end
+
+    it "excludes parts the loader places directly" do
+      expect(described_class.copied_to_document.map(&:key))
+        .not_to include(:chart, :ole_object, :bibliography, :document)
+    end
+
+    it "mirrors loader-placed parts back to the package" do
+      keys = described_class.copied_to_package.map(&:key)
+
+      expect(keys).to include(:chart, :ole_object, :bibliography)
+    end
+
+    it "differs between directions only by the copy_to_document flag" do
+      both = described_class.copied_to_package.map(&:key)
+      document = described_class.copied_to_document.map(&:key)
+
+      expect(both - document).to eq(%i[bibliography chart ole_object])
+    end
+
+    it "names attributes that exist on the package and the document" do
+      models = [Uniword::Docx::Package.new,
+                Uniword::Wordprocessingml::DocumentRoot.new]
+
+      expect(copy_methods - models.flat_map(&:methods)).to be_empty
+    end
+  end
+
   describe ".all" do
     it "returns every definition in registration order" do
       keys = described_class.all.map(&:key)
