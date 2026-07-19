@@ -139,6 +139,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `w:updateFields` support: `uniword toc insert` / `toc update` now set
   it by default (`--no-update-fields` to opt out), so Word refreshes
   the TOC and all fields when the document is opened — no manual F9
+- Comments can now target an arbitrary paragraph:
+  `doc.comment(author:, text:, on: paragraph_or_index)` — anchor around
+  any existing paragraph object or body index, including paragraphs
+  inside table cells (default remains the last paragraph)
 
 ### Fixed
 
