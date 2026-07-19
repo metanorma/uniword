@@ -459,6 +459,22 @@ module Uniword
         StyleCleanup.new(self).remove?(style_id)
       end
 
+      # Rename a style's display name (w:name) — Word's style rename.
+      # References (pStyle/rStyle/tblStyle) target the styleId, so they
+      # keep working unchanged.
+      #
+      # @param identifier [String] Style id (w:styleId) or current
+      #   display name (w:name)
+      # @param new_name [String] New display name
+      # @return [Style, nil] The renamed style, or nil when not found
+      def rename_style(identifier, new_name)
+        style = styles_configuration.style(identifier)
+        return unless style
+
+        style.name = StyleName.new(val: new_name)
+        style
+      end
+
       # Remove every style that no content references — Word's
       # Styles-pane decluttering as one call. Default styles are kept.
       #

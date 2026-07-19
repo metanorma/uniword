@@ -156,6 +156,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   or declutter every style that no content references (directly or via
   basedOn/link/next chains); default styles are always kept (also
   `DocumentRoot#remove_style` / `#remove_unused_styles`)
+- `uniword styles rename FILE OUTPUT --id X --name Y`: Word's style
+  rename — updates the display name while the styleId (and every
+  reference to it) stays intact (also `DocumentRoot#rename_style`)
 - `uniword repair INPUT OUTPUT`: load a document, run the save-time
   Reconciler over it, and write a repaired copy — dangling references
   stripped, missing parts rebuilt — with every repair reported by code
