@@ -64,6 +64,7 @@ module Uniword
     # Structure and metadata
     autoload :Level, "uniword/wordprocessingml/level"
     autoload :Style, "uniword/wordprocessingml/style"
+    autoload :StyleCleanup, "uniword/wordprocessingml/style_cleanup"
     autoload :StructuredDocumentTag,
              "uniword/wordprocessingml/structured_document_tag"
     autoload :StructuredDocumentTagProperties,
