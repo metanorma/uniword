@@ -31,6 +31,8 @@ module Uniword
                "#{__dir__}/part_loader/embedding_loader"
       autoload :ThemeMediaLoader,
                "#{__dir__}/part_loader/theme_media_loader"
+      autoload :RawPartLoader,
+               "#{__dir__}/part_loader/raw_part_loader"
 
       class << self
         # Load every registered part from extracted ZIP content into
@@ -84,6 +86,7 @@ module Uniword
       register_loader(:image, ImageLoader.new)
       register_loader(:embedding, EmbeddingLoader.new)
       register_loader(:theme_media, ThemeMediaLoader.new)
+      register_loader(:raw, RawPartLoader.new)
     end
   end
 end

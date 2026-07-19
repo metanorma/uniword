@@ -188,6 +188,21 @@ module Uniword
         embeddings.replace_all(value)
       end
 
+      # Raw passthrough parts (unmodelled package parts carried
+      # byte-for-byte), keyed by package path. Mirrored from the
+      # package on load and back on save via the registry-driven
+      # document↔package copies (:raw_parts definition).
+      #
+      # @return [Docx::PartCollection] package path => Docx::RawPart
+      def raw_parts
+        @raw_parts ||= Docx::PartCollection.new(:path, Docx::RawPart)
+      end
+
+      # Bulk-assign raw parts (Hash of path => RawPart/hash; nil clears).
+      def raw_parts=(value)
+        raw_parts.replace_all(value)
+      end
+
       # Get app_properties (lazy initialization)
       #
       # @return [Uniword::Ooxml::AppProperties] The app properties object

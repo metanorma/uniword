@@ -109,6 +109,22 @@ module Uniword
         embeddings.replace_all(value)
       end
 
+      # Raw passthrough parts no registry definition models, keyed by
+      # package path ("docProps/meta.xml", "word/glossary/document.xml",
+      # ...). Carried byte-for-byte from load to save — see
+      # PartLoader::RawPartLoader for claiming and
+      # PackageSerialization#serialize_raw_parts for emission.
+      #
+      # @return [PartCollection] package path => RawPart
+      def raw_parts
+        @raw_parts ||= PartCollection.new(:path, RawPart)
+      end
+
+      # Bulk-assign raw parts (Hash of path => RawPart/hash; nil clears).
+      def raw_parts=(value)
+        raw_parts.replace_all(value)
+      end
+
       # Central ID allocator — owns all rId, footnote, bookmark, etc. assignment.
       # Seeded from template rels on load; used by builders during construction.
       attr_accessor :allocator

@@ -88,6 +88,33 @@ RSpec.describe Uniword::Validation::OpcValidator do
 
       FileUtils.rm_rf(File.dirname(zip_path))
     end
+
+    it "resolves '..' segments in relationship targets (OPC Part 2)" do
+      zip_path = create_test_zip(dot_segment_entries)
+      issues = validator.validate(zip_path)
+      expect(issues.select { |i| i.code == "OPC-006" }).to be_empty
+      FileUtils.rm_rf(File.dirname(zip_path))
+    end
+
+    # A package whose document-level rel targets
+    # "../docProps/meta.xml": dot-segment resolution against the word/
+    # base yields docProps/meta.xml, which the package carries.
+    def dot_segment_entries
+      ct = "http://schemas.openxmlformats.org/package/2006/content-types"
+      ns = "http://schemas.openxmlformats.org/package/2006/relationships"
+      {
+        "[Content_Types].xml" =>
+          %(<Types xmlns="#{ct}">) \
+          '<Default Extension="xml" ContentType="application/xml"/>' \
+          "</Types>",
+        "word/_rels/document.xml.rels" =>
+          %(<Relationships xmlns="#{ns}">) \
+          '<Relationship Id="rId1" Type="http://test/rel" ' \
+          'Target="../docProps/meta.xml"/></Relationships>',
+        "word/document.xml" => "<w:document/>",
+        "docProps/meta.xml" => "<meta/>",
+      }
+    end
   end
 
   describe "content types" do
