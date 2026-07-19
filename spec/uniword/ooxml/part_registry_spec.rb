@@ -290,17 +290,23 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
         .not_to include(:chart, :ole_object, :bibliography, :document)
     end
 
-    it "mirrors loader-placed parts back to the package" do
+    it "mirrors package-owned parts back to the package" do
       keys = described_class.copied_to_package.map(&:key)
 
-      expect(keys).to include(:chart, :ole_object, :bibliography)
+      expect(keys).to include(:ole_object)
+    end
+
+    it "no longer copies chart or bibliography parts to the package" do
+      keys = described_class.copied_to_package.map(&:key)
+
+      expect(keys).not_to include(:chart, :bibliography)
     end
 
     it "differs between directions only by the copy_to_document flag" do
       both = described_class.copied_to_package.map(&:key)
       document = described_class.copied_to_document.map(&:key)
 
-      expect(both - document).to eq(%i[bibliography chart ole_object])
+      expect(both - document).to eq(%i[ole_object])
     end
 
     it "names attributes that exist on the package and the document" do

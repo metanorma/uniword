@@ -180,17 +180,14 @@ module Uniword
           load_priority: 80,
           package_attribute: :comments, document_attribute: :comments,
           to_package_type: Uniword::CommentsPart },
-        # Bibliography sources are write-only: nothing reads
-        # word/sources.xml back, so there is no loader and no
-        # package→document copy.
+        # Bibliography sources live only on the document (single home:
+        # DocumentRoot#bibliography_sources); nothing reads
+        # word/sources.xml back, so there is no loader.
         { key: :bibliography, kind: :override, path: "word/sources.xml",
           target: "sources.xml",
           content_type: "#{CT_OFFICE}.bibliography+xml",
           rel_type: "#{OFFICE_REL_BASE}/bibliography",
-          rels_scope: :document,
-          package_attribute: :bibliography_sources,
-          document_attribute: :bibliography_sources,
-          copy_to_document: false },
+          rels_scope: :document },
         { key: :header, kind: :override,
           path_pattern: "word/header%<counter>d.xml",
           target_pattern: "header%<counter>d.xml",
@@ -219,17 +216,15 @@ module Uniword
           package_attribute: :custom_properties,
           document_attribute: :custom_properties },
         # The chart loader keys parts by document relationship id, so
-        # they land directly on the document; no package→document copy.
+        # they land directly on the document — the single home for
+        # chart parts (DocumentRoot#chart_parts).
         { key: :chart, kind: :override,
           path_pattern: "word/charts/chart%<n>d.xml",
           target_pattern: "charts/chart%<n>d.xml",
           content_type: "#{CT_OFFICE}.drawingml.chart+xml",
           rel_type: "#{OFFICE_REL_BASE}/chart",
           rels_scope: :document,
-          loader: :chart, load_priority: 100,
-          package_attribute: :chart_parts,
-          document_attribute: :chart_parts,
-          copy_to_document: false },
+          loader: :chart, load_priority: 100 },
         # Images carry a per-extension Default content type resolved
         # from the image data at save time, so content_type is nil.
         { key: :image, kind: :default,

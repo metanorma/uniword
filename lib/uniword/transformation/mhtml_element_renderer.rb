@@ -219,11 +219,7 @@ module Uniword
       def resolve_image_target(embed_id)
         return nil unless @image_parts
 
-        entry = @image_parts.find { |pair| pair[0] == embed_id }
-        return nil unless entry
-
-        image_data = entry[1]
-        image_data[:target]
+        @image_parts[embed_id]&.target
       end
 
       # Apply run formatting (text must already be HTML-escaped)

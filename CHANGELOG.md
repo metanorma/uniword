@@ -27,6 +27,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `Docx::PackageDefaults.copy_document_parts_to_package`) are single
   registry-driven loops — a part can no longer exist in only one
   direction.
+- Internal refactor (no user-visible behavior change): the remaining
+  hash-based part families are now model objects. New
+  `Docx::ImagePart` (binary data, target, content type, relationship
+  id, source path) backs `DocumentRoot#image_parts`, which is now an
+  rId-keyed `Docx::PartCollection` that normalizes legacy
+  `{ data:, target:, content_type: }` hash assignments and keeps
+  hash-style reads working (`[]`, `each`, `each_value`, `keys`,
+  `size`, `empty?`, `[]=`, `delete`, `key?`/`has_key?`).
+  `Docx::PartCollection` wraps hash entries through the new
+  polymorphic `Docx::Part.from_hash` hook. The write-only
+  `Package#chart_parts` and `Package#bibliography_sources` copies are
+  gone — `DocumentRoot#chart_parts` and
+  `DocumentRoot#bibliography_sources` are the single homes, and the
+  registry's `:chart`/`:bibliography` definitions no longer carry
+  document/package copy attributes. Builders, part loaders,
+  serializers and reconcilers read and write the model objects
+  directly.
 
 ## [1.3.0] - 2026-07-19
 

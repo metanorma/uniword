@@ -133,16 +133,14 @@ module Uniword
       # @param root [Wordprocessingml::DocumentRoot] target document
       # @return [String] relationship id of the chart part
       def register_chart_part(root)
-        root.chart_parts ||= {}
         root.allocator ||= Docx::IdAllocator.new
 
         target = "charts/chart#{root.chart_parts.size + 1}.xml"
         r_id = root.allocator.alloc_rid(target: target, type: CHART_REL_TYPE)
 
-        root.chart_parts[r_id] = {
-          xml: build_xml,
-          target: target,
-        }
+        root.chart_parts[r_id] = Docx::ChartPart.new(
+          r_id: r_id, target: target, content: build_xml,
+        )
         r_id
       end
 

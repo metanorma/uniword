@@ -7,9 +7,9 @@ module Uniword
   module Images
     # Orchestrator for image operations on a DocumentRoot.
     #
-    # Works with the document's +image_parts+ hash (populated during DOCX
-    # loading) and the package ZIP to enumerate, extract, insert, and
-    # remove images.
+    # Works with the document's +image_parts+ collection (populated
+    # during DOCX loading) and the package ZIP to enumerate, extract,
+    # insert, and remove images.
     #
     # @example List images
     #   doc = Uniword::DocumentFactory.from_file("report.docx")
@@ -50,15 +50,15 @@ module Uniword
         parts = @document.image_parts
         return [] unless parts && !parts.empty?
 
-        parts.map do |_r_id, entry|
-          data = entry[:data]
+        parts.map do |_r_id, part|
+          data = part.data
           px_w, px_h = detect_pixel_dimensions(data) if data
-          name = File.basename(entry[:target].to_s)
+          name = File.basename(part.target.to_s)
 
           ImageInfo.new(
             name: name,
-            path: "word/#{entry[:target]}",
-            content_type: entry[:content_type].to_s,
+            path: "word/#{part.target}",
+            content_type: part.content_type.to_s,
             size: data ? data.bytesize : 0,
             width: px_w,
             height: px_h,
@@ -79,11 +79,11 @@ module Uniword
         parts = @document.image_parts
         return 0 unless parts && !parts.empty?
 
-        parts.each_value do |entry|
-          data = entry[:data]
+        parts.each_value do |part|
+          data = part.data
           next unless data
 
-          filename = File.basename(entry[:target].to_s)
+          filename = File.basename(part.target.to_s)
           File.binwrite(File.join(output_dir, filename), data)
         end
 
@@ -160,8 +160,8 @@ module Uniword
         parts = @document.image_parts
         return false unless parts && !parts.empty?
 
-        key = parts.find do |_k, entry|
-          File.basename(entry[:target].to_s) == image_name
+        key = parts.find do |_k, part|
+          File.basename(part.target.to_s) == image_name
         end&.first
 
         return false unless key

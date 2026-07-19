@@ -4,7 +4,7 @@ module Uniword
   module Docx
     class PartLoader
       # Loads image parts (word/media/*) into the document's
-      # image_parts hash, keyed by the relationship id the loaded
+      # image_parts collection, keyed by the relationship id the loaded
       # document rels assign to each media target so downstream
       # consumers (MHTML rendering, image manager) resolve r:embed
       # references correctly. Media with no document-level rel (e.g.
@@ -37,7 +37,6 @@ module Uniword
           paths = context.matching_paths(definition)
           return if paths.empty?
 
-          package.document.image_parts ||= {}
           paths.each do |path|
             load_image(context, definition, path)
           end
@@ -51,11 +50,12 @@ module Uniword
           r_id = loaded_image_rid(package, definition, filename) ||
             next_synthetic_image_key(package)
 
-          package.document.image_parts[r_id] = {
+          package.document.image_parts[r_id] = ImagePart.new(
+            r_id: r_id,
             data: binary_data(context, path),
             target: "media/#{filename}",
             content_type: content_type_for(filename),
-          }
+          )
         end
 
         # The rId a loaded document relationship assigns to

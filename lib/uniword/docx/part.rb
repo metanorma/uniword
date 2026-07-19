@@ -60,6 +60,17 @@ module Uniword
       end
       # rubocop:enable Metrics/ParameterLists
 
+      # Wrap a legacy raw-hash entry ({ content:/xml:, target: }) into
+      # a Part. Subclasses override for family-specific keys (e.g.
+      # ImagePart's { data:, content_type:, path: }). Used by
+      # PartCollection to normalize hash assignments.
+      #
+      # @param hash [Hash] legacy hash entry
+      # @return [Part]
+      def self.from_hash(hash)
+        new(target: hash[:target], content: hash[:content] || hash[:xml])
+      end
+
       # @return [String, nil] relationship type URI
       def rel_type
         @rel_type || definition&.rel_type

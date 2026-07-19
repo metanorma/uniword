@@ -80,6 +80,10 @@ module Uniword
         @parts.key?(key)
       end
 
+      # Hash-style alias for key? (RSpec's have_key matcher, legacy
+      # callers).
+      alias has_key? key?
+
       # @return [Part, nil] the removed part
       def delete(key)
         @parts.delete(key)
@@ -104,9 +108,7 @@ module Uniword
         when Part
           value
         when Hash
-          @part_class.new(
-            target: value[:target], content: value[:content] || value[:xml],
-          ).tap { |part| assign_key(part, key) }
+          @part_class.from_hash(value).tap { |part| assign_key(part, key) }
         else
           @part_class.new(content: value).tap { |part| assign_key(part, key) }
         end

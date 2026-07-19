@@ -60,13 +60,13 @@ module Uniword
                        end
 
         if root
-          root.image_parts ||= {}
-          root.image_parts[r_id] = {
-            path: path,
+          root.image_parts[r_id] = Docx::ImagePart.new(
+            r_id: r_id,
             data: File.binread(path),
             content_type: content_type,
-            target: "media/#{File.basename(path)}",
-          }
+            target: target,
+            source_path: path,
+          )
         end
         r_id
       end

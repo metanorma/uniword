@@ -110,8 +110,7 @@ module Uniword
             [Ooxml::PartRegistry.find_by_key(:comments), package.comments],
           ]
 
-          sources = package.bibliography_sources ||
-            package.document&.bibliography_sources
+          sources = package.document&.bibliography_sources
           if sources
             defs << [Ooxml::PartRegistry.find_by_key(:bibliography), sources]
           end
@@ -172,10 +171,10 @@ module Uniword
           end
 
           chart = Ooxml::PartRegistry.find_by_key(:chart)
-          (package.document&.chart_parts&.values || []).each do |data|
-            next unless data[:target]
+          (package.document&.chart_parts&.values || []).each do |part|
+            next unless part.target
 
-            alloc.alloc_rid(target: data[:target], type: chart.rel_type)
+            alloc.alloc_rid(target: part.target, type: chart.rel_type)
           end
         end
 
