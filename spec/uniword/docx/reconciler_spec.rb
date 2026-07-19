@@ -1083,6 +1083,57 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(table.grid.columns.size).to eq(3)
     end
 
+    it "defaults gridCol widths to equal content-width shares" do
+      table = build_table_with_cells(2, 1)
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      widths = table.grid.columns.map(&:width)
+      # US Letter defaults: (12240 - 1440 - 1440) / 2 = 4680
+      expect(widths).to eq([4680, 4680])
+    end
+
+    it "keeps explicit widths and shares the remainder" do
+      table = build_table_with_cells(2, 1)
+      table.grid = grid_class.new(
+        columns: [grid_col_class.new(width: 2500), grid_col_class.new],
+      )
+      package = build_package_with_table(table)
+
+      described_class.new(package).reconcile
+
+      widths = table.grid.columns.map(&:width)
+      expect(widths).to eq([2500, 6860])
+    end
+
+    it "records the width defaulting as a fix" do
+      table = build_table_with_cells(2, 1)
+      package = build_package_with_table(table)
+
+      reconciler = described_class.new(package)
+      reconciler.reconcile
+
+      fix = reconciler.applied_fixes.find { |f| f.code == "R33" }
+      expect(fix).not_to be_nil
+      expect(fix.part).to eq("word/document.xml")
+    end
+
+    it "defaults widths on the builder-managed path too" do
+      table = build_table_with_cells(3, 1)
+      # Mirrors TableBuilder output: grid present, columns width-less.
+      table.grid = grid_class.new(
+        columns: [grid_col_class.new, grid_col_class.new,
+                  grid_col_class.new],
+      )
+      package = build_package_with_table(table)
+
+      described_class.new(package, builder_managed: true).reconcile
+
+      widths = table.grid.columns.map(&:width)
+      expect(widths).to eq([3120, 3120, 3120])
+    end
+
     it "fills missing tblLook attributes on existing table" do
       table = build_table_with_cells(2, 1)
       table.properties = table_props_class.new(

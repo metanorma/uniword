@@ -71,6 +71,10 @@ module Uniword
 
         # Run cleanup
         EMPTY_RUNS_STRIPPED = "R30"
+
+        # Tables — gridCol widths defaulted to equal shares of the
+        # section content width (Word's fallback behavior)
+        TABLE_GRID_COL_WIDTHS_DEFAULTED = "R33"
       end
     end
   end

@@ -26,13 +26,15 @@ module Uniword
         private
 
         # Builder-managed path: builders create complete tables.
-        # Only fix element order issues and calculate gridAfter.
+        # Only fix element order issues, default gridCol widths, and
+        # calculate gridAfter.
         def reconcile_table_cell_order_only(tbl, idx)
           tbl.rows&.each do |row|
             row.cells&.each do |cell|
               reconcile_table_cell_order(cell)
             end
           end
+          reconcile_grid_col_widths(tbl)
           reconcile_grid_after(tbl)
         end
 
@@ -79,14 +81,7 @@ module Uniword
             fixed = true
           end
 
-          tbl.grid&.columns&.each_with_index do |col, ci|
-            next if col.width
-
-            Uniword.logger&.warn do
-              "Table #{idx}: gridCol[#{ci}] has no w:w — " \
-              "table may render with incorrect column widths"
-            end
-          end
+          reconcile_grid_col_widths(tbl)
 
           record_fix(FixCodes::TABLE_STRUCTURE_RECONCILED,
                      "Reconciled table structure for table #{idx}",
@@ -115,6 +110,63 @@ module Uniword
           end
 
           reconcile_grid_after(tbl)
+        end
+
+        # Default missing gridCol widths to an equal share of the
+        # section's content width (page width minus left/right margins) —
+        # the same fallback Word applies, keeping the package free of
+        # width-less grids. Explicit widths are kept; width-less columns
+        # share the remaining width equally.
+        def reconcile_grid_col_widths(tbl)
+          columns = tbl.grid&.columns
+          return unless columns&.any?
+
+          missing = columns.count { |col| col.width.nil? }
+          return if missing.zero?
+
+          default_missing_widths(columns, missing)
+        end
+
+        def default_missing_widths(columns, missing)
+          width = shared_column_width(columns, missing)
+          columns.each { |col| col.width ||= width }
+          record_fix(FixCodes::TABLE_GRID_COL_WIDTHS_DEFAULTED,
+                     "Defaulted #{missing} gridCol width(s) to " \
+                     "#{width} twips",
+                     part: "word/document.xml")
+        end
+
+        # Equal content-width share for `missing` width-less columns
+        # after explicit widths take their part.
+        def shared_column_width(columns, missing)
+          content = section_content_width
+          explicit = columns.sum { |col| col.width || 0 }
+          remainder = [content - explicit, 0].max
+          (remainder.positive? ? remainder : content) / missing
+        end
+
+        # Content width (page width minus left/right margins) in twips.
+        # Tables do not track section ownership, so the body-level sectPr
+        # governs; falls back to US Letter defaults.
+        def section_content_width
+          left, right = section_side_margins
+          [section_page_width - left - right, 1].max
+        end
+
+        def section_page_width
+          sect_pr = package.document&.body&.section_properties
+          sect_pr&.page_size&.width ||
+            Wordprocessingml::PageDefaults.default_page_size.width
+        end
+
+        def section_side_margins
+          margins = section_properties_margins
+          defaults = Wordprocessingml::PageDefaults.default_page_margins
+          [margins&.left || defaults.left, margins&.right || defaults.right]
+        end
+
+        def section_properties_margins
+          package.document&.body&.section_properties&.page_margins
         end
 
         def reconcile_table_cell_order(cell)

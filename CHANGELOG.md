@@ -119,6 +119,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   references in the saved package)
 - Saving no longer crashes with FrozenError when the Reconciler injects
   missing footnote/endnote separator entries into a parsed document
+- Tables whose `gridCol` columns lack widths now get even shares of the
+  section content width (page width minus margins) at save time —
+  matching Word's fallback — instead of emitting width-less `gridCol`
+  elements and warning; explicit widths are preserved and the remainder
+  is shared
 - `uniword verify`-style integration spec hang: `soffice --view` example
   no longer blocks the LibreOffice integration spec indefinitely
 - Header/footer dual path: adding a header/footer via the Builder to a
