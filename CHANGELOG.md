@@ -143,6 +143,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `doc.comment(author:, text:, on: paragraph_or_index)` — anchor around
   any existing paragraph object or body index, including paragraphs
   inside table cells (default remains the last paragraph)
+- `uniword page setup INPUT OUTPUT`: Word's Layout dialog as a CLI
+  command — paper size presets (letter/legal/a4/a5/executive),
+  orientation with Word-style dimension swap, and margins in
+  in/cm/mm/twips units, applied to every section (also
+  `DocumentRoot#apply_page_setup`)
 
 ### Fixed
 
