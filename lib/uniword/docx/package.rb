@@ -90,6 +90,9 @@ module Uniword
       # Endnotes (word/endnotes.xml)
       attribute :endnotes, Uniword::Wordprocessingml::Endnotes
 
+      # Comments (word/comments.xml)
+      attribute :comments, Uniword::CommentsPart
+
       # Non-serialized attributes (DOCX packaging helpers)
       attr_accessor :chart_parts, :bibliography_sources, :profile
       attr_accessor :settings_rels, :footnotes_rels, :endnotes_rels
@@ -289,6 +292,13 @@ module Uniword
         if zip_content["word/endnotes.xml"]
           package.endnotes = Uniword::Wordprocessingml::Endnotes.from_xml(
             zip_content["word/endnotes.xml"]
+          )
+        end
+
+        # Parse Comments
+        if zip_content["word/comments.xml"]
+          package.comments = Uniword::CommentsPart.from_xml(
+            zip_content["word/comments.xml"]
           )
         end
 

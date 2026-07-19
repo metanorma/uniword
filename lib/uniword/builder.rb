@@ -31,6 +31,7 @@ module Uniword
     autoload :NumberingBuilder, "uniword/builder/numbering_builder"
     autoload :ImageBuilder, "uniword/builder/image_builder"
     autoload :CommentBuilder, "uniword/builder/comment_builder"
+    autoload :CommentAnchorer, "uniword/builder/comment_anchorer"
     autoload :TocBuilder, "uniword/builder/toc_builder"
     autoload :ListBuilder, "uniword/builder/list_builder"
     autoload :ThemeBuilder, "uniword/builder/theme_builder"

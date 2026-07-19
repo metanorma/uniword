@@ -22,10 +22,10 @@ module Uniword
     #
     # @example Register a custom part kind
     #   PartRegistry.register(
-    #     PartDefinition.new(key: :comments, path: "word/comments.xml",
-    #                        target: "comments.xml",
-    #                        content_type: "...comments+xml",
-    #                        rel_type: ".../comments",
+    #     PartDefinition.new(key: :glossary, path: "word/glossary/document.xml",
+    #                        target: "glossary/document.xml",
+    #                        content_type: "...document.glossary+xml",
+    #                        rel_type: ".../glossaryDocument",
     #                        kind: :override, rels_scope: :document)
     #   )
     module PartRegistry
@@ -112,6 +112,11 @@ module Uniword
           target: "endnotes.xml",
           content_type: "#{CT_WML}.endnotes+xml",
           rel_type: "#{OFFICE_REL_BASE}/endnotes",
+          rels_scope: :document },
+        { key: :comments, kind: :override, path: "word/comments.xml",
+          target: "comments.xml",
+          content_type: "#{CT_WML}.comments+xml",
+          rel_type: "#{OFFICE_REL_BASE}/comments",
           rels_scope: :document },
         { key: :bibliography, kind: :override, path: "word/sources.xml",
           target: "sources.xml",

@@ -126,6 +126,7 @@ module Uniword
           package.app_properties,
           package.footnotes,
           package.endnotes,
+          package.comments,
         ].compact
 
         (package.document&.header_footer_parts || []).each do |part|

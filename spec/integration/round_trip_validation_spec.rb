@@ -22,8 +22,7 @@ RSpec.describe "Round-trip validation with DOC-100..DOC-107 rules" do
     editing: "editing.docx",
     formatting: "formatting.docx",
     tables: "tables.docx",
-    # styles.docx excluded: Uniword drops comments.xml during save.
-    # DOC-108 correctly catches this. Tracked as separate serialization bug.
+    styles: "styles.docx",
     office365: "office365.docx",
     internal_links: "internal-links.docx",
     no_styles: "no_styles.docx",

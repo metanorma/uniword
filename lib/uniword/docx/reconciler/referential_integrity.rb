@@ -486,6 +486,7 @@ module Uniword
             [package.theme, "word/theme/theme1.xml"],
             [package.footnotes, "word/footnotes.xml"],
             [package.endnotes, "word/endnotes.xml"],
+            [package.comments, "word/comments.xml"],
             [package.document&.bibliography_sources, "word/sources.xml"],
           ]
         end

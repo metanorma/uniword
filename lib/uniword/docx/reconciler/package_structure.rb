@@ -107,6 +107,7 @@ module Uniword
             [Ooxml::PartRegistry.find_by_key(:numbering), package.numbering],
             [Ooxml::PartRegistry.find_by_key(:footnotes), package.footnotes],
             [Ooxml::PartRegistry.find_by_key(:endnotes), package.endnotes],
+            [Ooxml::PartRegistry.find_by_key(:comments), package.comments],
           ]
 
           sources = package.bibliography_sources ||
@@ -249,6 +250,7 @@ module Uniword
             [:app_properties, package.app_properties],
             [:footnotes, package.footnotes],
             [:endnotes, package.endnotes],
+            [:comments, package.comments],
             [:numbering, package.numbering],
           ]
 

@@ -22,6 +22,8 @@ module Uniword
   #
   # @see Comment For individual comment structure
   class CommentsPart < Lutaml::Model::Serializable
+    include Enumerable
+
     # Collection of all comments
     attribute :comments, Comment, collection: true, initialize_empty: true
 
@@ -33,15 +35,11 @@ module Uniword
       map_element "comment", to: :comments
     end
 
-    # Initialize a new comments part
-    #
-    # @param attributes [Hash] Comments part attributes
-    def initialize(attributes = {})
-      super
-      @comment_counter = 0
-    end
-
     # Add a comment to the collection
+    #
+    # Assigns the next sequential decimal ID when the comment has no ID
+    # yet or its ID collides with one already in the collection; explicit
+    # unique IDs are preserved.
     #
     # @param comment [Comment] The comment to add
     # @return [Comment] The added comment with assigned ID
@@ -51,9 +49,7 @@ module Uniword
               "comment must be a Comment instance"
       end
 
-      # Assign sequential ID if not already set
-      comment.comment_id = next_comment_id unless comment.comment_id && !comment.comment_id.empty?
-
+      comment.comment_id = next_comment_id if assign_id?(comment)
       comments << comment
       comment
     end
@@ -91,6 +87,29 @@ module Uniword
       comments.size
     end
 
+    # Get the number of comments (Array compatibility)
+    #
+    # @return [Integer] The count of comments
+    def size
+      comments.size
+    end
+
+    # Iterate over the comments (Array compatibility)
+    #
+    # @yield [Comment] Each comment in insertion order
+    # @return [Enumerator, Array<Comment>]
+    def each(&block)
+      comments.each(&block)
+    end
+
+    # Array-style access to comments (Array compatibility)
+    #
+    # @param index [Integer] Position in the collection
+    # @return [Comment, nil] The comment at the position
+    def [](index)
+      comments[index]
+    end
+
     # Check if there are any comments
     #
     # @return [Boolean] true if empty
@@ -110,7 +129,6 @@ module Uniword
     # @return [void]
     def clear
       comments.clear
-      @comment_counter = 0
     end
 
     # Provide detailed inspection for debugging
@@ -122,13 +140,27 @@ module Uniword
 
     private
 
-    # Generate next sequential comment ID
+    # Whether the comment needs an ID assigned by the collection: it has
+    # none, or another comment in the collection already carries it.
+    #
+    # @param comment [Comment] The comment being added
+    # @return [Boolean] true when an ID must be assigned
+    def assign_id?(comment)
+      id = comment.comment_id.to_s
+      id.empty? || !find_comment(id).nil?
+    end
+
+    # Generate the next sequential comment ID
+    #
+    # Decimal IDs already in the collection (loaded or assigned) set the
+    # high-water mark, so assigned IDs never collide with existing ones.
     #
     # @return [String] The next comment ID
     def next_comment_id
-      @comment_counter ||= 0
-      @comment_counter += 1
-      @comment_counter.to_s
+      max = comments.filter_map do |c|
+        Integer(c.comment_id, exception: false)
+      end.max
+      ((max || 0) + 1).to_s
     end
   end
 end

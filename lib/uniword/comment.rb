@@ -129,9 +129,14 @@ module Uniword
 
     # Generate a unique comment ID
     #
-    # @return [String] A unique comment ID
+    # OOXML w:id is ST_DecimalNumber (a 32-bit integer), so the fallback
+    # ID must be decimal digits only; CommentsPart#add_comment reassigns
+    # the ID when it collides inside the part, so time+random precision
+    # is sufficient here.
+    #
+    # @return [String] A unique decimal comment ID
     def generate_comment_id
-      "#{Time.now.to_i}_#{rand(10_000)}"
+      "#{Time.now.strftime('%H%M%S')}#{format('%03d', rand(1000))}".to_i.to_s
     end
 
     # Format date for OOXML

@@ -194,6 +194,7 @@ module Uniword
         document.custom_xml_items = package.custom_xml_items if package.custom_xml_items
         document.footnotes = package.footnotes if package.footnotes
         document.endnotes = package.endnotes if package.endnotes
+        document.comments = package.comments if package.comments
         document.settings_rels = package.settings_rels if package.settings_rels
         if package.footnotes_rels
           document.footnotes_rels = package.footnotes_rels

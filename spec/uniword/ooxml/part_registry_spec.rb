@@ -84,7 +84,7 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
     end
 
     it "returns nil for unregistered paths" do
-      expect(described_class.find_by_path("word/comments.xml")).to be_nil
+      expect(described_class.find_by_path("word/glossary.xml")).to be_nil
     end
   end
 
@@ -170,34 +170,34 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
   describe "custom registration" do
     let(:custom) do
       Uniword::Ooxml::PartDefinition.new(
-        key: :comments,
+        key: :glossary,
         kind: :override,
-        path: "word/comments.xml",
-        target: "comments.xml",
-        content_type: "#{wml_ct}.comments+xml",
-        rel_type: "#{office_rel}/comments",
+        path: "word/glossary.xml",
+        target: "glossary.xml",
+        content_type: "#{wml_ct}.glossary+xml",
+        rel_type: "#{office_rel}/glossary",
         rels_scope: :document,
       )
     end
 
     after do
-      described_class.unregister(:comments)
+      described_class.unregister(:glossary)
     end
 
     it "makes a new part kind findable by key, path, and content type" do
       described_class.register(custom)
 
-      expect(described_class.find_by_key(:comments)).to eq(custom)
-      expect(described_class.find_by_path("word/comments.xml")).to eq(custom)
-      expect(described_class.find_by_content_type("#{wml_ct}.comments+xml"))
+      expect(described_class.find_by_key(:glossary)).to eq(custom)
+      expect(described_class.find_by_path("word/glossary.xml")).to eq(custom)
+      expect(described_class.find_by_content_type("#{wml_ct}.glossary+xml"))
         .to eq(custom)
-      expect(described_class.override_for("/word/comments.xml")).to eq(custom)
+      expect(described_class.override_for("/word/glossary.xml")).to eq(custom)
     end
 
     it "appends new keys after the built-ins" do
       described_class.register(custom)
 
-      expect(described_class.all.map(&:key).last).to eq(:comments)
+      expect(described_class.all.map(&:key).last).to eq(:glossary)
     end
 
     it "replaces an existing key in place, preserving position" do

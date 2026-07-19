@@ -57,6 +57,9 @@ module Uniword
           package.content_types = document.content_types if document.content_types
           package.footnotes = document.footnotes if document.footnotes
           package.endnotes = document.endnotes if document.endnotes
+          if document.comments.is_a?(Uniword::CommentsPart)
+            package.comments = document.comments
+          end
           package.allocator = document.allocator if document.allocator
 
           package.numbering = document.numbering_configuration if document.numbering_configuration_loaded?

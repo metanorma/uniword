@@ -10,6 +10,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+#### Comment Authoring and Round-Trip Preservation
+- `DocumentBuilder#comment` now anchors the comment around the preceding
+  body paragraph (`w:commentRangeStart`/`w:commentRangeEnd` plus a
+  `w:commentReference` run styled with the `CommentReference` character
+  style, auto-registered in styles.xml) in addition to registering it in
+  the document's comments collection
+- Saving a document with comments emits `word/comments.xml` with its
+  `[Content_Types].xml` override and `document.xml.rels` relationship
+  (part metadata registered in `Ooxml::PartRegistry` under `:comments`);
+  loading parses the part into the document's comments collection, so
+  comments (ids, authors, dates, text) and their body anchors survive
+  load → save round-trips
+- `Builder::CommentAnchorer`: anchor placement for fresh and parsed
+  paragraphs (nested anchors on the same paragraph match Word's output)
+- `Wordprocessingml::Run` maps `w:commentReference`
+- `CommentsPart` is the single comments collection for both
+  `DocumentBuilder` and `Review::ReviewManager`; it gains Array-style
+  access (`size`/`[]`/`each`) and collision-safe sequential ID
+  assignment (OOXML `ST_DecimalNumber`)
+
 #### Validation Engine Consolidation
 - `Validation::Engine`: single validation engine running the rules of
   `Rules::Registry` against a validation context, with two front-ends
