@@ -93,16 +93,26 @@ RSpec.describe Uniword::CLI do
 
       before do
         # The save-time reconciler repairs tables, so strip tblGrid and
-        # tblPr from the package after saving.
+        # tblPr from the package after saving. Read-close-rewrite fresh
+        # rather than edit in place: rubyzip's in-place commit renames a
+        # temp file over the original, which Windows denies while the
+        # handle is open (Errno::EACCES).
         doc = Uniword::Wordprocessingml::DocumentRoot.new
         doc.body.tables << Uniword::Wordprocessingml::Table.new
         doc.to_file(bad_path)
+
+        entries = {}
         Zip::File.open(bad_path) do |zip|
-          xml = zip.read("word/document.xml")
-          xml = xml.gsub(%r{<w:tblPr>.*?</w:tblPr>}m, "")
+          zip.each { |e| entries[e.name] = e.get_input_stream.read }
+        end
+        entries["word/document.xml"] =
+          entries["word/document.xml"]
+            .gsub(%r{<w:tblPr>.*?</w:tblPr>}m, "")
             .gsub("<w:tblGrid/>", "")
-          zip.remove("word/document.xml")
-          zip.get_output_stream("word/document.xml") { |f| f.write(xml) }
+        Zip::File.open(bad_path, create: true) do |zip|
+          entries.each do |name, data|
+            zip.get_output_stream(name) { |f| f.write(data) }
+          end
         end
       end
 
