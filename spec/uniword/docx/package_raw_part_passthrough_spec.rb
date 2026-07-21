@@ -201,35 +201,92 @@ RSpec.describe Uniword::Docx::Package do
     end
   end
 
-  describe "a raw part with no declared content type" do
+  describe "non-compliant parts (no content type declaration)" do
     let(:input_path) { File.join(output_dir, "with_trash.docx") }
     let(:output_path) { File.join(output_dir, "with_trash_out.docx") }
     let(:trash_bytes) { "word junk bytes".b }
+    let(:package) { described_class.from_file(input_path) }
 
     before do
       add_undeclared_part("spec/fixtures/docx_gem/no_styles.docx", input_path)
-      described_class.from_file(input_path).to_file(output_path)
     end
 
-    it "saves without an OPC-005 failure" do
-      issues = Uniword::Docx::PackageIntegrityChecker.new.check(
-        described_class.from_file(input_path).to_zip_content(validate: true),
-      )
+    describe "default policy (:strip, Word-identical)" do
+      before do
+        Uniword.configuration.on_noncompliant_content = :strip
+        described_class.from_file(input_path).to_file(output_path)
+      end
 
-      expect(issues).to be_empty
+      it "strips the undeclared part from raw_parts" do
+        expect(package.raw_parts).not_to have_key("[trash]/0000.dat")
+      end
+
+      it "records the strip on package.stripped_parts" do
+        stripped = package.stripped_parts.find do |s|
+          s.path == "[trash]/0000.dat"
+        end
+
+        expect(stripped).not_to be_nil
+        expect(stripped.reason)
+          .to include("No content type declaration")
+      end
+
+      it "does not emit the undeclared part in the output ZIP" do
+        entries = zip_entry_names(output_path)
+
+        expect(entries).not_to include("[trash]/0000.dat")
+      end
+
+      it "does not declare an Override for the stripped part" do
+        content_types = ZipHelper.extract_file(output_path,
+                                               "[Content_Types].xml")
+
+        expect(content_types).not_to include('PartName="/[trash]/0000.dat"')
+        expect(content_types).not_to include("application/octet-stream")
+      end
+
+      it "passes the write-time integrity gate with no OPC-005 issues" do
+        issues = Uniword::Docx::PackageIntegrityChecker.new.check(
+          package.to_zip_content(validate: true),
+        )
+
+        expect(issues).to be_empty
+      end
+
+      it "still preserves legitimate unmodelled parts (docProps/meta.xml)" do
+        expect(package.raw_parts).to have_key("docProps/meta.xml")
+      end
     end
 
-    it "declares application/octet-stream for the undeclared part" do
-      content_types = described_class.from_file(input_path)
-        .to_zip_content["[Content_Types].xml"]
+    describe "strict policy (:raise)" do
+      before do
+        Uniword.configuration.on_noncompliant_content = :raise
+      end
 
-      expect(content_types).to include('PartName="/[trash]/0000.dat"')
-      expect(content_types).to include("application/octet-stream")
-    end
+      after do
+        Uniword.configuration.reset!
+      end
 
-    it "round-trips the part byte-identically" do
-      expect(ZipHelper.extract_file(output_path, "[trash]/0000.dat"))
-        .to eq(trash_bytes)
+      it "preserves the undeclared part as a RawPart with nil content type" do
+        expect(package.raw_parts["[trash]/0000.dat"]).to be_a(
+          Uniword::Docx::RawPart,
+        )
+        expect(package.raw_parts["[trash]/0000.dat"].content_type).to be_nil
+      end
+
+      it "does not populate stripped_parts" do
+        paths = package.stripped_parts.map(&:path)
+
+        expect(paths).not_to include("[trash]/0000.dat")
+      end
+
+      it "raises ValidationError at save with structured OPC-005 issues" do
+        expect { package.to_zip_content(validate: true) }
+          .to raise_error(Uniword::ValidationError) do |error|
+            codes = error.issues.map(&:code)
+            expect(codes).to include("OPC-005")
+          end
+      end
     end
 
     # Copy the source package, adding [trash]/0000.dat with NO content
@@ -243,6 +300,14 @@ RSpec.describe Uniword::Docx::Package do
         entries.each do |name, bytes|
           zos.put_next_entry(name)
           zos.write(bytes)
+        end
+      end
+    end
+
+    def zip_entry_names(path)
+      Zip::File.open(path) do |zip|
+        zip.each_with_object([]) do |entry, list|
+          list << entry.name unless entry.directory?
         end
       end
     end

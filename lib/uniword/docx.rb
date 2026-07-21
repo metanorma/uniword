@@ -10,6 +10,8 @@ module Uniword
     autoload :IdAllocator, "#{__dir__}/docx/id_allocator"
     autoload :Part, "#{__dir__}/docx/part"
     autoload :RawPart, "#{__dir__}/docx/raw_part"
+    autoload :StrippedPart, "#{__dir__}/docx/stripped_part"
+    autoload :JunkClassifier, "#{__dir__}/docx/junk_classifier"
     autoload :ChartPart, "#{__dir__}/docx/chart_part"
     autoload :ImagePart, "#{__dir__}/docx/image_part"
     autoload :HeaderFooterPart, "#{__dir__}/docx/header_footer_part"

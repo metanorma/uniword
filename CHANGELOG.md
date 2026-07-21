@@ -8,6 +8,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-07-21
+
+### Added
+
+- `Configuration#on_noncompliant_content` policy knob (default
+  `:strip`, alternative `:raise`). Controls what happens when a
+  loaded package contains parts with no content type declaration.
+- `Docx::JunkClassifier` — classifies a package-relative path as
+  junk based on OS/tooling artifact patterns and the OPC "no content
+  type AND no referencing relationship" rule. Single source of truth
+  for the junk decision.
+- `Docx::StrippedPart` value object (path + reason) — the reporting
+  record for parts stripped at load.
+- `ContentTypes::Types#content_type_for(path)` — Override-then-Default
+  lookup. Single source of truth for content type resolution,
+  replacing duplicated lookup logic.
+- `Package#stripped_parts` — `Array<StrippedPart>` populated by the
+  loader in `:strip` mode. Empty in `:raise` mode and for
+  programmatically-constructed packages.
+
+### Changed
+
+- `Docx::RawPartLoader` now strips non-compliant parts at load by
+  default (Word-identical behavior). Legitimate unmodelled parts
+  (those with a content type declaration, e.g. VBA, glossary,
+  `docProps/meta.xml`) continue to round-trip byte-for-byte per the
+  1.4.0 promise. Stripped parts are recorded on
+  `Package#stripped_parts` for caller introspection.
+
+### Fixed
+
+- Loading then saving a DOCX with `[trash]/*.dat` or other
+  undeclared parts no longer fails with
+  `OPC-005 No content type declared` at save. The junk is stripped
+  at load and reported via `Package#stripped_parts`.
+
+### Removed
+
+- `FALLBACK_RAW_PART_CONTENT_TYPE` constant and the
+  `application/octet-stream` fallback in
+  `Docx::PackageSerialization#inject_raw_part_content_types`. The
+  fallback preserved junk that Word would strip and masked genuinely
+  missing declarations. (Introduced in 1.4.1; reverted before
+  broader release.)
+
 ## [1.4.0] - 2026-07-20
 
 ### Added

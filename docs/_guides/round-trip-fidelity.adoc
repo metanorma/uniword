@@ -176,6 +176,47 @@ This means `.docm` files round-trip without losing their macros, and documents
 with embedded PDFs, OLE objects, or custom XML survive load-modify-save cycles
 unchanged.
 
+=== Non-compliant parts: stripped at load (1.4.2+)
+
+The byte-for-byte preservation promise covers *legitimate* unmodelled parts —
+those with a content type declaration (Override or Default extension match)
+in `[Content_Types].xml`. Parts with no declaration, and no incoming
+relationship, are stripped at load:
+
+* `[trash]/*.dat` and similar junk drawers Word and other producers leave
+  inside the ZIP
+* OS artifacts (`__MACOSX/`, `.DS_Store`, `Thumbs.db`, `._*`, `~$*`)
+
+This matches Word's own behavior: Word ignores such parts on open and does
+not write them on save.
+
+[cols="2,4"]
+|===
+| Configuration | Behavior
+
+| `on_noncompliant_content = :strip` (default)
+| Strip silently. Populate `package.stripped_parts`. Save succeeds.
+
+| `on_noncompliant_content = :raise`
+| Don't strip. The write-time integrity gate raises `Uniword::ValidationError` with structured OPC-005 issues.
+|===
+
+Strips are visible three ways:
+
+. `Package#stripped_parts` — `Array<StrippedPart>` (path + reason)
+. `Uniword.configuration.log_save_fixes = true` — INFO log per strip
+. `uniword verify` on the source — still reports OPC-005 (verify reads the ZIP directly; it doesn't go through the loader). Save applies cleanup; verify reports source state.
+
+[source,ruby]
+----
+Uniword.configure do |c|
+  c.on_noncompliant_content = :raise  # strict mode for QA pipelines
+end
+
+doc = Uniword::DocumentFactory.from_file("input.docx")
+# In :strip mode, package.stripped_parts lists what was dropped
+----
+
 == Write-time integrity gate (1.3+)
 
 Every save invokes `Docx::PackageIntegrityChecker` after reconciliation and

@@ -146,6 +146,29 @@ module Uniword
         @applied_fixes ||= []
       end
 
+      # Parts stripped at load because they were non-compliant (no
+      # content type declaration, OS artifact, ...). Populated by
+      # `Docx::PartLoader::RawPartLoader` when
+      # `Uniword.configuration.on_noncompliant_content` is `:strip`
+      # (the default). Empty in `:raise` mode and for packages
+      # constructed by hand.
+      #
+      # @return [Array<StrippedPart>] path + reason for every stripped
+      #   part, in load order
+      def stripped_parts
+        @stripped_parts ||= []
+      end
+
+      # Record a stripped part. Append-only; used by the loader.
+      #
+      # @param path [String] package-relative path
+      # @param reason [String] why the part was stripped (from
+      #   `JunkClassifier#reason`)
+      # @return [void]
+      def add_stripped_part(path:, reason:)
+        stripped_parts << StrippedPart.new(path: path, reason: reason)
+      end
+
       # Load DOCX package from file
       #
       # @param path [String] Path to .docx file
