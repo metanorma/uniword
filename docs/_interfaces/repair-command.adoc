@@ -1,0 +1,71 @@
+---
+layout: default
+title: repair
+nav_order: 23
+parent: CLI
+permalink: /interfaces/cli/repair-command/
+---
+= repair
+
+Load a document, run the save-time Reconciler over it, and write a repaired
+copy. Every applied fix is reported with a code, the affected part, and a
+human-readable message. The result is then run through the write-time
+package integrity gate, so the output is guaranteed to be a valid OPC
+package.
+
+Use this when Word's "The file is corrupt and cannot be opened" dialog
+appears, when `uniword verify` reports structural issues, or to clean up
+documents produced by older or non-conformant tools.
+
+== Usage
+
+[source,shell]
+----
+# Repair and report a summary
+uniword repair broken.docx fixed.docx
+
+# Show every applied fix
+uniword repair broken.docx fixed.docx --verbose
+----
+
+Exit code is `0` on success, `1` if the Reconciler cannot fix every issue
+(reported with their codes).
+
+== What the Reconciler fixes
+
+The Reconciler enforces cross-part invariants before serialization. The
+repairs are deterministic and applied every time you save -- `repair`
+simply makes them visible.
+
+[cols="1,3"]
+|===
+| Area | Repair
+
+| Relationships | Strips dangling `r:id` / `r:embed` / `r:link` references, normalizes duplicate rIds, allocates fresh ids via `Docx::IdAllocator`
+| Required parts | Rebuilds missing `footnotes.xml`, `endnotes.xml`, `comments.xml`, settings defaults
+| Footnote/endnote sync | Bidirectional: creates `footnotePr` when footnotes exist, creates `footnotes.xml` when `footnotePr` is set; same for endnotes
+| Note separators | Injects missing separator (id=-1) and continuation (id=0) footnote/endnote entries
+| Bookmark pairing | Strips unpaired `bookmarkStart` / `bookmarkEnd` references
+| Comments | Anchors `commentRangeStart`/`commentRangeEnd`/`commentReference` to the right paragraph; registers `CommentReference` style
+| Content types | Adds missing overrides for parts the document actually carries
+| Settings | Fills defaults Word expects (compat, mathPr, rsid, etc.)
+|===
+
+== Programmatic usage
+
+The Reconciler runs automatically on every `doc.save`. To see what was
+applied, capture the repair log:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("broken.docx")
+doc.save("fixed.docx")   # Reconciler runs here
+----
+
+For one-shot repair reporting, the CLI is the simplest path.
+
+== Relationship to other commands
+
+* link:../verify-command/[`uniword verify`]\+ -- report issues without fixing them.
+* link:../validate-command/[`uniword validate`]\+ -- in-memory model rules over a single document.
+* link:../repair-command/[`uniword repair`]\+ -- load, fix, and save in one pass.

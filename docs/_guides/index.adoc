@@ -11,6 +11,10 @@ Step-by-step guides for common document tasks.
 
 == Topics
 
+=== Start here
+
+* link:guides/word-for-the-command-line/[Word for the command line] -- The master Word UI → CLI / API mapping. **Start here if you're new.**
+
 === Document Elements
 
 * link:guides/text-formatting/[Text Formatting] -- Bold, italic, color, size, effects

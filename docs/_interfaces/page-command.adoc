@@ -1,0 +1,87 @@
+---
+layout: default
+title: page
+nav_order: 22
+parent: CLI
+permalink: /interfaces/cli/page-command/
+---
+= page
+
+Apply uniform page setup -- paper size, orientation, and margins -- to
+every section of a document. The CLI equivalent of Word's *Layout → Page
+Setup* dialog, applied to all sections at once.
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `setup INPUT OUTPUT`
+| Apply page setup to every section
+|===
+
+== setup
+
+Apply page setup to every section of a document. Any option you omit is
+left as-is; specify only what you want to change.
+
+[source,shell]
+----
+# Resize to A4
+uniword page setup input.docx output.docx --size a4
+
+# A4 landscape with 1-inch margins
+uniword page setup input.docx output.docx --size a4 --orientation landscape --margins 1in
+
+# 2.5 cm on every side, 3 cm on top
+uniword page setup input.docx output.docx --margins 2.5cm --margin-top 3cm
+----
+
+Options:
+
+`--size`:: Paper size: `letter`, `legal`, `a4`, `a5`, `executive`
+`--orientation`:: `portrait` or `landscape`
+`--margins`:: Uniform margin for all four sides
+`--margin-top`:: Top margin override
+`--margin-right`:: Right margin override
+`--margin-bottom`:: Bottom margin override
+`--margin-left`:: Left margin override
+`--verbose`, `-v`:: Verbose output
+
+Margins accept any OOXML length unit: `1in`, `2.5cm`, `25mm`, or a raw
+twip count (`1440` = 1 inch). When `--margins` and a side-specific
+override are both given, the override wins for that side.
+
+The command reports the number of sections updated.
+
+[TIP]
+====
+`page setup` applies to *every* section. To change a single section, use
+the Ruby API and target the section directly:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("input.docx")
+doc.sections.first.tap do |s|
+  s.page_width   = Uniword::SharedTypes::Twips.inches(8.5)
+  s.page_height  = Uniword::SharedTypes::Twips.inches(11)
+  s.orientation  = "portrait"
+end
+doc.save("output.docx")
+----
+====
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("input.docx")
+sections = doc.apply_page_setup(
+  size:        "a4",
+  orientation: "landscape",
+  margins:     "1in",
+  top:         "1.5in"
+)
+puts "updated #{sections} sections"
+doc.save("output.docx")
+----
