@@ -23,6 +23,9 @@ apply StyleSets to documents.
 
 | `apply INPUT OUTPUT`
 | Apply a StyleSet to a document
+
+| `extract DOCX`
+| Extract styles from a DOCX into a YAML StyleSet
 |===
 
 == list
@@ -92,6 +95,22 @@ ones.
 ----
 uniword styleset apply in.docx out.docx --name formal --strategy replace
 ----
+
+== extract
+
+Extract the styles from a DOCX document into a YAML StyleSet that can be
+re-applied to other documents with `styleset apply`. Useful for capturing
+a corporate style baseline from an existing template document.
+
+[source,shell]
+----
+uniword styleset extract corporate_report.docx
+uniword styleset extract corporate_report.docx --output stylesets/corporate.yml
+----
+
+Options:
+
+`--output`, `-o`:: Output YAML file (default: `<docname>.styleset.yml` in the current directory)
 
 == Bundled StyleSets
 

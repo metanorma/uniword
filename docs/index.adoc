@@ -2,7 +2,7 @@
 layout: default
 title: Home
 nav_order: 1
-description: "Uniword: Ruby library for reading, writing, and manipulating OOXML (DOCX) documents"
+description: "Uniword: Microsoft Word's feature set as a Ruby API and CLI. Read, write, verify, and transform DOCX documents programmatically."
 permalink: /
 ---
 = Uniword Documentation
@@ -10,32 +10,86 @@ permalink: /
 :toclevels: 2
 
 [.lead]
-Uniword is a comprehensive Ruby library for reading and writing Microsoft Word documents in both DOCX (Word 2007+) and MHTML (Word 2003+) formats, with 100% OOXML specification coverage and perfect round-trip fidelity.
+Uniword is Microsoft Word's feature set, scripted. Every Ribbon tab, dialog,
+and pane that produces or inspects document content has a CLI command or Ruby
+API equivalent -- with perfect OOXML round-trip fidelity, deterministic
+output, and three-layer verification that goes beyond what Word itself can
+check.
+
+Version 1.4.0 -- covers 760 OOXML elements across 22 namespaces.
 
 toc::[]
+
+== Why uniword
+
+* **Scriptable Word** -- Replace Word's UI with one-shot CLI commands or a
+  fluent Ruby API. No COM, no headless Office, no GUI dependency.
+* **100% round-trip fidelity** -- Every OOXML element preserved across
+  load-modify-save. ISO documents round-trip with zero normative differences.
+* **Verification beyond Word** -- Three-layer pipeline: OPC package, XSD
+  schema, and 15+ semantic rules. `uniword verify --xsd` is stricter than
+  Word's own "Check for Issues".
+* **Deterministic output** -- Stable rIds via `Docx::IdAllocator`. The same
+  input always produces the same ZIP -- diff-friendly for git.
+* **Repair with reporting** -- `uniword repair` shows every applied fix with
+  a code and message. Word's repair is silent.
+* **Byte-for-byte unmodelled parts** -- VBA projects, glossary documents,
+  custom XML, embedded objects: anything uniword doesn't model is preserved
+  verbatim instead of dropped.
+
+== Start here: Word for the command line
+
+If you are new to uniword, the fastest on-ramp is the master Word UI →
+CLI / API mapping. It shows side-by-side what each Word feature looks like
+as a uniword command or Ruby call:
+
+→ link:guides/word-for-the-command-line/[Word for the command line]
+
+The 60-second tour from that page:
+
+[source,shell]
+----
+uniword convert brief.html brief.docx
+uniword theme apply brief.docx themed.docx --name meridian
+uniword styleset apply themed.docx styled.docx --name signature
+uniword fonts replace styled.docx defonted.docx --from Calibri --to Carlito
+uniword page setup defonted.docx paged.docx --size a4 --margins 2cm
+uniword toc insert paged.docx
+uniword watermark add paged.docx "DRAFT"
+uniword headers add-footer paged.docx "Page "
+uniword spellcheck check paged.docx
+uniword protect apply paged.docx --mode tracked_changes
+uniword verify final.docx --xsd
+----
 
 == Quick Navigation
 
 === By Your Role
 
 **Ruby Developer**::
-Start with link:getting-started/quick-start/[Quick Start] then link:interfaces/ruby-api/[Ruby API] to build documents programmatically.
+Start with link:getting-started/quick-start/[Quick Start], then
+link:interfaces/ruby-api/[Ruby API] and
+link:interfaces/ruby-api/builder-api/[Builder API].
 
 **Technical Writer**::
-Start with link:guides/themes/[Themes] and link:guides/stylesets/[StyleSets] to style documents, then link:features/themes-catalog/[Theme Catalog] for the full list.
+Start with link:guides/themes/[Themes] and link:guides/stylesets/[StyleSets],
+then link:features/themes-catalog/[Theme Catalog] for the full list.
 
 **QA Engineer**::
-Start with link:verification/three-layer-pipeline/[Three-Layer Pipeline] for DOCX validation, then link:interfaces/cli/verify-command/[CLI: verify command].
+Start with link:verification/three-layer-pipeline/[Three-Layer Pipeline]
+for DOCX verification, then link:interfaces/cli/verify-command/[verify].
 
 **DevOps**::
-Start with link:interfaces/cli/[CLI] for command-line conversion and link:guides/format-conversion/[Format Conversion] for batch processing.
+Start with link:interfaces/cli/[CLI] for command-line conversion and
+link:guides/format-conversion/[Format Conversion] for batch processing.
 
 **Contributor**::
-Start with link:development/contributing/[Contributing] then link:development/adding-ooxml-elements/[Adding OOXML Elements].
+Start with link:development/contributing/[Contributing] then
+link:development/adding-ooxml-elements/[Adding OOXML Elements].
 
 === By Task
 
-**Create a document**::
+**Create a document from code**::
 * link:getting-started/quick-start/[Quick Start]
 * link:interfaces/ruby-api/builder-api/[Builder API]
 * link:guides/text-formatting/[Text Formatting]
@@ -49,13 +103,62 @@ Start with link:development/contributing/[Contributing] then link:development/ad
 * link:guides/stylesets/[StyleSets Guide]
 * link:guides/styles/[Styles Guide]
 
+**Replace fonts across a document**::
+* link:interfaces/cli/fonts-command/[fonts replace]
+* link:interfaces/cli/theme-commands/[theme fonts]
+
+**Lay out pages**::
+* link:interfaces/cli/page-command/[page setup]
+
+**Manage styles**::
+* link:interfaces/cli/styles-commands/[styles list/rename/remove]
+
+**Repair a broken document**::
+* link:interfaces/cli/repair-command/[repair]
+
 **Validate DOCX files**::
 * link:verification/three-layer-pipeline/[Three-Layer Pipeline]
-* link:interfaces/cli/verify-command/[CLI: verify]
+* link:interfaces/cli/verify-command/[verify]
+* link:interfaces/cli/validate-command/[validate]
 
 **Convert formats**::
 * link:guides/format-conversion/[DOCX to MHTML]
-* link:interfaces/cli/convert-command/[CLI: convert]
+* link:interfaces/cli/convert-command/[convert]
+
+== What's new
+
+=== 1.4.0 (July 2026)
+
+* **Unmodelled parts preserved byte-for-byte** -- VBA projects, glossary
+  documents, `docProps/meta.xml`, custom XML, header/comment `.rels`
+  sidecars round-trip verbatim via `Docx::RawPart`.
+* **MCE-aware XSD validation** -- `uniword verify --xsd` no longer drowns
+  in false positives for `w14:paraId`, `mc:Ignorable`, and other MCE
+  extension content real documents always carry.
+* **`uniword repair`** -- Reconcile and report; the Reconciler's deterministic
+  fixes surfaced as a one-shot command with per-fix codes.
+* **`uniword styles rename` / `remove`** -- Word's style rename and the
+  Styles-pane cleanup as commands.
+* **`uniword page setup`** -- Word's Page Setup dialog (size, orientation,
+  margins) as a command.
+* **`uniword fonts replace`** -- Word's Replace Fonts dialog as a one-shot
+  command.
+* **`uniword theme fonts` / `colors`** -- Word's Design → Fonts and
+  Design → Colors galleries as commands.
+* **Comment authoring and `word/comments.xml` round-trip** --
+  `Builder#comment` anchors a comment around a paragraph; comments survive
+  load-modify-save.
+* **Write-time integrity gate** -- `PackageIntegrityChecker` refuses to
+  write a broken package; saves raise `Uniword::ValidationError` with
+  structured issues.
+* **Consolidated validation engine** -- `Validation::Engine` runs the same
+  rule registry for `validate`, `verify`, and `DocumentRoot#valid?`.
+* **New model-level rules** -- DOC-200 (body required), DOC-201/202
+  (bookmark pairing and uniqueness), DOC-203 (empty paragraphs),
+  DOC-204/205 (`tbl` requires `tblGrid`/`tblPr`).
+
+See the link:https://github.com/metanorma/uniword/blob/main/CHANGELOG.md[CHANGELOG]
+for the full history.
 
 == Learning Path
 
@@ -65,27 +168,32 @@ Start with link:development/contributing/[Contributing] then link:development/ad
 . link:getting-started/quick-start/[Try basic examples]
 . link:getting-started/core-concepts/[Understand core concepts]
 
-=== Level 2: Learn Interfaces (15 minutes)
+=== Level 2: See the Word mapping (10 minutes)
+
+. link:guides/word-for-the-command-line/[Word for the command line]
+
+=== Level 3: Learn Interfaces (15 minutes)
 
 Choose your interface:
 
 * link:interfaces/ruby-api/[Ruby API] -- Build documents programmatically
 * link:interfaces/cli/[CLI] -- Command-line usage
 
-=== Level 3: Follow Guides (30 minutes)
+=== Level 4: Follow Guides (30 minutes)
 
 . link:guides/text-formatting/[Text Formatting]
 . link:guides/tables/[Tables]
 . link:guides/themes/[Themes]
 . link:guides/stylesets/[StyleSets]
+. link:guides/round-trip-fidelity/[Round-Trip Fidelity]
 
-=== Level 4: Understand the Design (1 hour)
+=== Level 5: Understand the Design (1 hour)
 
 . link:understanding/architecture/[Architecture overview]
 . link:understanding/schema-driven-generation/[Schema-driven generation]
 . link:understanding/prevention-layer/[Prevention Layer]
 
-=== Level 5: Master Features (As needed)
+=== Level 6: Master Features (As needed)
 
 . link:features/themes-catalog/[29 bundled themes]
 . link:features/stylesets-catalog/[12 bundled stylesets]

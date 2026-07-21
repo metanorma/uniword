@@ -140,3 +140,66 @@ doc.save("output.docx", profile: profile)
 # - Web settings, app/core properties
 # - Theme, tracking attributes
 ----
+
+== Unmodelled parts: byte-for-byte preservation (1.4+)
+
+Uniword models 760 OOXML elements across 22 namespaces. Parts the library
+does not model are preserved as raw bytes and re-emitted verbatim on save:
+
+* VBA projects (`vbaProject.bin` in `.docm` files)
+* Glossary documents (`word/glossary/document.xml`)
+* `docProps/meta.xml` and other custom property parts
+* `customXml/` items outside the standard layout
+* Header and comment `.rels` sidecars
+
+[cols="2,4"]
+|===
+| Surface | Behavior
+
+| `Docx::RawPart`
+| Holds the source bytes, content type, and package path
+
+| `Package#raw_parts`
+| Collection of raw parts loaded from the source ZIP
+
+| Reconciler
+| Dangling-relationship sweep keeps relationships that target raw parts
+
+| Write-time gate
+| `PackageIntegrityChecker` treats raw parts as first-class
+
+| `uniword verify`
+| OPC-006 no longer reports false positives for raw part targets with dot segments (`../docProps/meta.xml`)
+|===
+
+This means `.docm` files round-trip without losing their macros, and documents
+with embedded PDFs, OLE objects, or custom XML survive load-modify-save cycles
+unchanged.
+
+== Write-time integrity gate (1.3+)
+
+Every save invokes `Docx::PackageIntegrityChecker` after reconciliation and
+before packaging. The gate refuses to write a broken package, raising
+`Uniword::ValidationError` with structured issues:
+
+* missing content types
+* unresolvable relationship targets
+* dangling `r:id` / `r:embed` / `r:link` references
+* duplicate rIds
+* malformed XML
+
+[source,ruby]
+----
+begin
+  doc.save("output.docx")
+rescue Uniword::ValidationError => e
+  e.issues.each { |i| puts "#{i.code} [#{i.part}]: #{i.message}" }
+end
+----
+
+== See also
+
+* link:/verification/three-layer-pipeline/[Three-Layer Verification] -- the
+  full pipeline behind `uniword verify --xsd`
+* link:/guides/word-for-the-command-line/[Word for the command line] -- the
+  master Word UI → CLI / API mapping

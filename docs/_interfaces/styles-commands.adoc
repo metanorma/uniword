@@ -1,0 +1,120 @@
+---
+layout: default
+title: styles
+nav_order: 20
+parent: CLI
+permalink: /interfaces/cli/styles-commands/
+---
+= styles
+
+Inspect and manage the styles in a document -- the CLI equivalent of Word's
+Styles pane.
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `list FILE`
+| List all styles in a document
+
+| `remove FILE OUTPUT`
+| Remove styles from a document
+
+| `rename FILE OUTPUT`
+| Rename a style's display name
+|===
+
+== list
+
+List every style in a document with its id, type, and base style. The CLI
+equivalent of opening Word's Styles pane.
+
+[source,shell]
+----
+uniword styles list report.docx
+uniword styles list report.docx --type paragraph
+uniword styles list report.docx --verbose
+----
+
+Options:
+
+`--type`:: Filter by style type: `paragraph`, `character`, `table`, `numbering`
+`--verbose`, `-v`:: Show font, size, bold/italic for each style
+
+== remove
+
+Remove one style or every unreferenced style from a document. Word's
+Styles-pane "Remove Style" and "Clean unused styles" as a one-shot command.
+Default styles (`Normal`, `Heading1`, etc.) are always kept.
+
+[source,shell]
+----
+# Remove one style by id
+uniword styles remove input.docx output.docx --id ObsoleteStyle
+
+# Remove every style no content references
+uniword styles remove input.docx output.docx --unused
+
+# Preview the removal without writing
+uniword styles remove input.docx output.docx --unused --dry-run
+----
+
+Options:
+
+`--id`:: Style id (`w:styleId`) to remove
+`--unused`:: Remove every style no content references
+`--dry-run`:: List what would be removed, do not write
+`--verbose`, `-v`:: Verbose output
+
+You must specify exactly one of `--id` or `--unused`.
+
+== rename
+
+Rename a style's display name (`w:name`). References target the `w:styleId`,
+which is unchanged, so renamed styles stay linked from every paragraph, run,
+or numbering definition that uses them.
+
+[source,shell]
+----
+# Identify the style by id
+uniword styles rename input.docx output.docx --id Heading1 --name "Chapter Title"
+
+# Identify the style by its current display name
+uniword styles rename input.docx output.docx --from "Old Name" --name "New Name"
+----
+
+Options:
+
+`--id`:: Style id (`w:styleId`) to rename
+`--from`:: Current display name of the style
+`--name`:: New display name (required)
+`--verbose`, `-v`:: Verbose output
+
+You must specify exactly one of `--id` or `--from` to identify the style.
+
+== Ruby API
+
+The same operations are available programmatically:
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("report.docx")
+
+# Inspect
+doc.styles_configuration.styles.each do |style|
+  puts "#{style.styleId} (#{style.type})"
+end
+
+# Rename
+doc.rename_style("Heading1", "Chapter Title")
+
+# Remove one
+doc.remove_style("ObsoleteStyle")
+
+# Remove every unreferenced style
+cleanup = Uniword::Wordprocessingml::StyleCleanup.new(doc)
+cleanup.remove_unused   # => Array<String> of removed ids
+
+doc.save("output.docx")
+----

@@ -25,5 +25,12 @@ Uniword provides two interfaces: a Ruby API for programmatic document manipulati
 * link:interfaces/cli/info-command/[info] -- Document inspection
 * link:interfaces/cli/validate-command/[validate] -- Schema validation
 * link:interfaces/cli/verify-command/[verify] -- Three-layer verification
+* link:interfaces/cli/repair-command/[repair] -- Reconcile and repair
 * link:interfaces/cli/theme-commands/[theme] -- Theme operations
 * link:interfaces/cli/styleset-commands/[styleset] -- StyleSet operations
+* link:interfaces/cli/styles-commands/[styles] -- Styles pane (list/rename/remove)
+* link:interfaces/cli/fonts-command/[fonts] -- Replace Fonts
+* link:interfaces/cli/page-command/[page] -- Page Setup dialog
+
+For the full side-by-side Word → CLI / Ruby API mapping, see
+link:../guides/word-for-the-command-line/[Word for the command line].

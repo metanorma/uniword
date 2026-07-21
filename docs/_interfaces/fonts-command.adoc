@@ -1,0 +1,85 @@
+---
+layout: default
+title: fonts
+nav_order: 21
+parent: CLI
+permalink: /interfaces/cli/fonts-command/
+---
+= fonts
+
+Replace one font family with another throughout a document -- the CLI
+equivalent of Word's *Home → Replace → Replace Fonts*. Replaces every
+content-level reference in one pass; theme font references are untouched
+(use link:../theme-commands/[`uniword theme fonts`] for those).
+
+== Subcommands
+
+|===
+| Subcommand | Description
+
+| `replace INPUT OUTPUT`
+| Replace a font family throughout a document
+|===
+
+== replace
+
+Replace one font family with another across every place a font name appears
+in the body content, styles and defaults, headers/footers, footnotes,
+endnotes, comments, and numbering definitions.
+
+[source,shell]
+----
+# Swap Calibri for Carlito (Calibri-metric OFL substitute)
+uniword fonts replace input.docx output.docx --from Calibri --to Carlito
+
+# Replace Arial with Liberation Sans
+uniword fonts replace input.docx output.docx --from Arial --to "Liberation Sans"
+----
+
+Options:
+
+`--from`:: Font family to replace (exact, case-sensitive match; required)
+`--to`:: Replacement font family (required)
+`--verbose`, `-v`:: Verbose output
+
+The command prints the total number of references rewritten.
+
+[TIP]
+====
+This command rewrites content-level fonts. To replace the theme's major/minor
+fonts (Word's *Design → Fonts* gallery), use:
+
+[source,shell]
+----
+uniword theme fonts input.docx output.docx --name carlito_sans
+----
+====
+
+== Where replacement applies
+
+`fonts replace` walks every part that can carry a font reference:
+
+[cols="1,3"]
+|===
+| Part | What is rewritten
+
+| `word/styles.xml` | `rFonts` in style definitions and `docDefaults`
+| `word/document.xml` | Run-level `rFonts` in the body
+| `word/header*.xml`, `word/footer*.xml` | Run-level `rFonts` in headers and footers
+| `word/footnotes.xml`, `word/endnotes.xml` | Run-level `rFonts` in notes
+| `word/comments.xml` | Run-level `rFonts` in comments
+| `word/numbering.xml` | Run-level `rFonts` in numbering definitions
+|===
+
+Theme font references (`<a:latin>` / `<a:cs>` in `word/theme/theme1.xml`) are
+deliberately left alone so the document's font scheme stays coherent.
+
+== Ruby API
+
+[source,ruby]
+----
+doc = Uniword::DocumentFactory.from_file("input.docx")
+count = doc.replace_font(from: "Calibri", to: "Carlito")
+puts "rewrote #{count} references"
+doc.save("output.docx")
+----

@@ -25,6 +25,12 @@ equivalents.
 | `apply INPUT OUTPUT`
 | Apply a theme to a document
 
+| `fonts INPUT OUTPUT`
+| Replace the theme's font scheme (Design → Fonts gallery)
+
+| `colors INPUT OUTPUT`
+| Replace the theme's color scheme (Design → Colors gallery)
+
 | `auto INPUT OUTPUT`
 | Auto-transition MS theme to Uniword equivalent
 |===
@@ -81,6 +87,52 @@ Options:
 `--verbose`, `-v`:: Show detailed output
 
 You must specify `--name` or `--file`, but not both.
+
+== fonts
+
+Replace the document theme's font scheme (major/minor fonts) while keeping
+its colors and formats -- the CLI equivalent of Word's *Design → Fonts*
+gallery. Reads from the link:../../features/font-schemes-catalog/[25 bundled font schemes].
+
+[source,shell]
+----
+# Apply a bundled font scheme
+uniword theme fonts input.docx output.docx --name carlito_sans
+
+# List available font schemes
+uniword theme fonts --list
+----
+
+Options:
+
+`--name`:: Bundled font scheme name (e.g., `carlito_sans`)
+`--list`:: List available bundled font schemes and exit
+`--verbose`, `-v`:: Verbose output
+
+When `--list` is passed, no document is required.
+
+== colors
+
+Replace the document theme's color scheme while keeping its fonts and
+formats -- the CLI equivalent of Word's *Design → Colors* gallery. Reads
+from the link:../../features/color-schemes-catalog/[23 bundled color schemes].
+
+[source,shell]
+----
+# Apply a bundled color scheme
+uniword theme colors input.docx output.docx --name emerald
+
+# List available color schemes
+uniword theme colors --list
+----
+
+Options:
+
+`--name`:: Bundled color scheme name (e.g., `emerald`)
+`--list`:: List available bundled color schemes and exit
+`--verbose`, `-v`:: Verbose output
+
+When `--list` is passed, no document is required.
 
 == auto
 

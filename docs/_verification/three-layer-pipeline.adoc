@@ -59,16 +59,31 @@ The second layer validates XML parts against their schemas:
 * 40+ bundled XSD schemas from ISO, ECMA, and Microsoft
 * Namespace-aware validation with correct prefix resolution
 * Validates `word/document.xml`, `word/styles.xml`, `docProps/core.xml`, and other parts
+* *MCE-aware preprocessing* (1.4+): each part is preprocessed per its own
+  `mc:Ignorable` declaration before validation -- ignorable-marked attributes
+  (e.g. `w14:paraId`, `w14:textId`) and the `mc:Ignorable` attribute itself
+  are stripped, so real documents no longer drown in false errors for MCE
+  extension content they carry by default. Extension elements are kept;
+  their findings remain classified as MCE-attributable.
 
-XSD validation is opt-in (`--xsd` flag) because it is slower than the other layers.
+XSD validation is opt-in (`--xsd` flag) because it is slower than the other
+layers.
 
 == Layer 3: Semantic Rules
 
-The third layer checks document-level invariants:
+The third layer checks document-level invariants via a single
+`Validation::Engine` over `Rules::Registry` (consolidated in 1.3+):
 
-* 10 built-in semantic rule categories
-* Style references, numbering, footnotes, headers, bookmarks, images, tables, fonts, theme, settings
+* Built-in rule categories: styles, numbering, footnotes, headers,
+  bookmarks, images, tables, fonts, theme, settings
+* New model-level rules: DOC-200 (body required), DOC-201 (bookmark
+  pairing), DOC-202 (bookmark name uniqueness), DOC-203 (empty paragraphs),
+  DOC-204 (`tbl` requires `tblGrid`), DOC-205 (`tbl` requires `tblPr`)
 * Custom rules can be registered via `Uniword::Validation::Rules.register`
+
+`uniword validate` runs the same engine in-memory on a loaded document;
+`uniword verify` runs it as the third layer of the package pipeline. Both
+front-ends share the same `Report::ValidationIssue` model.
 
 See link:/verification/semantic-rules/[Semantic Rules] for the full list of rule categories.
 
@@ -78,7 +93,7 @@ See link:/verification/semantic-rules/[Semantic Rules] for the full list of rule
 ----
 require 'uniword'
 
-# Run verification programmatically
+# Three-layer verification
 result = Uniword::Verification.verify('document.docx')
 puts result.valid?           # => true or false
 puts result.issues.count     # => number of issues
@@ -88,4 +103,11 @@ end
 
 # With XSD validation
 result = Uniword::Verification.verify('document.docx', xsd: true)
+
+# In-memory model rules only (no ZIP, no XSD)
+doc = Uniword::DocumentFactory.from_file('document.docx')
+issues = Uniword::Validation::Engine.run(
+  Uniword::Validation::Rules::ModelContext.new(doc)
+)
+puts issues.map { |i| "#{i.code}: #{i.message}" }
 ----

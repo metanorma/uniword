@@ -1,0 +1,727 @@
+---
+layout: default
+title: Word for the command line
+nav_order: 24
+parent: Guides
+permalink: /guides/word-for-the-command-line/
+---
+= Word for the command line
+
+[.lead]
+Microsoft Word is a GUI application. Uniword is the same feature set, scripted:
+every Ribbon tab, dialog, and pane that produces or inspects document content
+has a CLI command or Ruby method equivalent. This page is the master map --
+use it as both a tutorial (what can uniword do?) and a reference (how do I do
+_X_?).
+
+If you have ever wished you could script Word's UI without COM automation,
+without a headless LibreOffice, and without clicking the same dialog 200 times,
+this is the page for you.
+
+== How to read this guide
+
+Each Word feature is mapped to:
+
+* a **CLI** command -- for one-shot operations, scripts, and CI
+* a **Ruby API** call -- for embedding inside applications
+
+The two interfaces share the same model layer. Anything you can do in Word's
+UI, you can do from either one. Anything Word's UI *cannot* do (batch
+operations, deterministic output, XSD-level verification, repair-and-report),
+uniword can also do -- see <<things-uniword-does-that-word-cannot>>.
+
+== The 60-second tour
+
+A document that exercises almost every Word feature, end to end:
+
+[source,shell]
+----
+# 1. Convert HTML → DOCX (File → Open)
+uniword convert brief.html brief.docx
+
+# 2. Apply a bundled theme (Design → Themes)
+uniword theme apply brief.docx themed.docx --name meridian
+
+# 3. Apply a corporate StyleSet (Design → Style Set gallery)
+uniword styleset apply themed.docx styled.docx --name signature
+
+# 4. Swap Calibri for Carlito (Home → Replace Fonts)
+uniword fonts replace styled.docx defonted.docx --from Calibri --to Carlito
+
+# 5. A4 portrait with 2 cm margins (Layout → Page Setup)
+uniword page setup defonted.docx paged.docx --size a4 --margins 2cm
+
+# 6. Insert a TOC (References → Table of Contents)
+uniword toc insert paged.docx
+
+# 7. Add a "DRAFT" watermark (Design → Watermark)
+uniword watermark add paged.docx "DRAFT"
+
+# 8. Add a footer with the page number (Insert → Footer)
+uniword headers add-footer paged.docx "Page "
+
+# 9. Spell-check before sending (Review → Spelling & Grammar)
+uniword spellcheck check paged.docx
+
+# 10. Lock for tracked changes (Review → Restrict Editing)
+uniword protect apply paged.docx --mode tracked_changes
+
+# 11. Verify the package is OPC-compliant (File → Info → Check Issues)
+uniword verify final.docx --xsd
+----
+
+Every step is one command. The same workflow in Word would be eleven
+click-through dialogs and a lot of repetitive pointing.
+
+== Master mapping: Word UI → uniword
+
+[cols="2,2,3"]
+|===
+| Word location | CLI | Ruby API
+
+| File → New from template
+| `uniword build TEMPLATE OUTPUT --data data.yml`
+| `Template::Template.load(...).render(data)`
+
+| File → Open (any format)
+| `uniword convert INPUT OUTPUT`
+| `DocumentFactory.from_file(path)`
+
+| File → Info → Check for Issues
+| `uniword verify FILE --xsd`
+| `Verification.verify(path, xsd: true)`
+
+| File → Inspect Document
+| `uniword info FILE`
+| `doc.paragraphs`, `doc.tables`, `doc.text`
+
+| Home → Font (Bold, Italic, Size, Face)
+| n/a (build-time)
+| `Builder#bold`, `#italic`, `#font_size`, `#font`
+
+| Home → Paragraph (Alignment, Spacing, Indent)
+| n/a (build-time)
+| `Builder#align`, `#spacing`, `#indent`
+
+| Home → Styles pane (list, rename, remove)
+| `uniword styles list\|rename\|remove`
+| `doc.styles_configuration`, `doc.rename_style`, `doc.remove_style`
+
+| Home → Replace → Replace Fonts
+| `uniword fonts replace INPUT OUTPUT`
+| `doc.replace_font(from:, to:)`
+
+| Insert → Table
+| n/a (build-time)
+| `Builder#add_table { row { cell ... } }`
+
+| Insert → Pictures
+| `uniword images insert FILE IMAGE`
+| `doc.insert_image(path, width:, height:)`
+
+| Insert → Header & Footer
+| `uniword headers add-header\|add-footer FILE TEXT`
+| `doc.add_header(text)`, `doc.add_footer(text)`
+
+| Insert → Text Box
+| n/a (build-time)
+| `Builder#add_text_box(...)` -- see link:../text-boxes/[Text Boxes]
+
+| Insert → Links → Bookmark
+| n/a (build-time)
+| `Builder#bookmark(name)` -- see link:../bookmarks-and-references/[Bookmarks]
+
+| Insert → Equation
+| n/a (build-time)
+| `Builder#add_math(latex: "...")` -- see link:../math-formulas/[Math]
+
+| Insert → Comment
+| n/a (build-time)
+| `Builder#comment(text:, author:, on: :paragraph)`
+
+| Layout → Page Setup (Margins, Size, Orientation)
+| `uniword page setup INPUT OUTPUT`
+| `doc.apply_page_setup(size:, orientation:, margins:)`
+
+| Design → Themes
+| `uniword theme apply\|auto INPUT OUTPUT`
+| `doc.apply_theme(name)`, `doc.auto_transition_theme`
+
+| Design → Colors gallery
+| `uniword theme colors INPUT OUTPUT --name SCHEME`
+| `doc.apply_color_scheme(name)`
+
+| Design → Fonts gallery
+| `uniword theme fonts INPUT OUTPUT --name SCHEME`
+| `doc.apply_font_scheme(name)`
+
+| Design → Watermark
+| `uniword watermark add\|remove\|list FILE`
+| `doc.add_watermark`, `doc.remove_watermark`, `doc.list_watermarks`
+
+| References → Table of Contents
+| `uniword toc generate\|insert\|update FILE`
+| `doc.generate_toc`, `doc.insert_toc`, `doc.update_toc`
+
+| References → Insert Footnote
+| n/a (build-time)
+| `Builder#footnote(...)` -- see link:../footnotes-and-endnotes/[Footnotes]
+
+| References → Insert Endnote
+| n/a (build-time)
+| `Builder#endnote(...)`
+
+| Review → Spelling & Grammar
+| `uniword spellcheck check FILE`
+| `doc.spellcheck(language:)`
+
+| Review → Compare (documents)
+| `uniword diff compare OLD NEW`
+| `doc.diff(other_doc)`
+
+| Review → Compare (packages)
+| `uniword diff package OLD NEW`
+| `Uniword::Diff::PackageDiffer.new(...)`
+
+| Review → Comments pane
+| `uniword review comments FILE`
+| `doc.list_comments`
+
+| Review → Track Changes (accept/reject)
+| `uniword review accept\|reject\|accept-all\|reject-all`
+| `doc.accept_all_changes`, `doc.reject_all_changes`
+
+| Review → Restrict Editing
+| `uniword protect apply\|remove\|info FILE`
+| `doc.protect(mode, password:)`, `doc.unprotect`
+
+| Developer → Content Controls (SDT)
+| n/a (build-time)
+| `Builder#content_control(...)` -- see link:../structured-document-tag/[SDT]
+
+| File → Save As (DOCX ↔ MHTML)
+| `uniword convert INPUT OUTPUT`
+| `doc.save(path, format: :mhtml)`
+|===
+
+== File tab
+
+=== File → New from template — `uniword build`
+
+Fill a `.docx` template with data from YAML or JSON. Markers in the template
+are replaced with values, producing a finished document.
+
+[source,shell]
+----
+uniword build report.docx out.docx --data values.yml
+uniword build report.docx out.docx --set title="Q3 Report" --set author="Alice"
+----
+
+link:../../interfaces/cli/build-command/[build command reference]
+
+=== File → Open / Save As (any format) — `uniword convert`
+
+Convert between DOCX, MHTML (Word 2003), and HTML. Format is auto-detected
+from the file extension or `--from` / `--to`.
+
+[source,shell]
+----
+uniword convert brief.docx brief.mhtml
+uniword convert brief.html brief.docx
+----
+
+link:../../interfaces/cli/convert-command/[convert command reference]
+
+=== File → Info → Check for Issues — `uniword verify`
+
+The full three-layer pipeline: OPC package, XSD schema, and semantic
+rules. The `--xsd` flag enables schema-level validation; otherwise the
+XSD layer is skipped.
+
+[source,shell]
+----
+uniword verify final.docx --xsd --verbose
+uniword verify final.docx --json   # machine-readable
+----
+
+link:../../interfaces/cli/verify-command/[verify command reference]
+
+=== File → Inspect Document — `uniword info`
+
+A summary of the document: paragraph and table counts, text length,
+styles.
+
+[source,shell]
+----
+uniword info report.docx --verbose
+----
+
+link:../../interfaces/cli/info-command/[info command reference]
+
+== Home tab
+
+=== Home → Replace Fonts — `uniword fonts replace`
+
+Replace one font family throughout the document -- body content, styles
+and defaults, headers/footers, footnotes, endnotes, comments, and
+numbering definitions. This is Word's *Replace Fonts* dialog as a
+one-shot command.
+
+[source,shell]
+----
+uniword fonts replace in.docx out.docx --from Calibri --to Carlito
+----
+
+link:../../interfaces/cli/fonts-command/[fonts command reference]
+
+=== Home → Styles pane — `uniword styles`
+
+List every style in a document, rename a style, or remove styles (one by
+id or all unused). The CLI equivalent of Word's Styles pane.
+
+[source,shell]
+----
+# List
+uniword styles list report.docx --type paragraph --verbose
+
+# Rename -- references stay linked via styleId
+uniword styles rename in.docx out.docx --id Heading1 --name "Chapter Title"
+
+# Remove one
+uniword styles remove in.docx out.docx --id ObsoleteStyle
+
+# Clean every unreferenced style
+uniword styles remove in.docx out.docx --unused
+----
+
+link:../../interfaces/cli/styles-commands/[styles command reference]
+
+=== Home → Font and Paragraph dialogs — Builder API
+
+There is no CLI for build-time font and paragraph formatting because these
+are properties of the document you are constructing, not operations on an
+existing one. Use the link:../../interfaces/ruby-api/builder-api/[Builder API]:
+
+[source,ruby]
+----
+Uniword::Builder.new
+  .add_heading("Chapter 1", level: 1)
+  .add_paragraph("Important note", bold: true, italic: true, font_size: 24)
+  .add_paragraph("Right-aligned paragraph", align: :right)
+  .add_paragraph("Indented", indent: { left: 720 })
+  .build
+----
+
+See link:../text-formatting/[Text Formatting] and
+link:../paragraph-formatting/[Paragraph Formatting] for the full attribute
+reference.
+
+== Insert tab
+
+=== Insert → Pictures — `uniword images`
+
+List, extract, insert, or remove images.
+
+[source,shell]
+----
+uniword images list report.docx
+uniword images extract report.docx /tmp/imgs
+uniword images insert report.docx photo.png
+uniword images remove report.docx image1.png
+----
+
+link:../../interfaces/cli/images-command/[images command reference]
+
+=== Insert → Header & Footer — `uniword headers`
+
+Add a header or footer, list what's there, or remove them.
+
+[source,shell]
+----
+uniword headers list report.docx
+uniword headers add-header report.docx "Company Confidential"
+uniword headers add-footer report.docx "Page "
+uniword headers remove report.docx
+----
+
+link:../../interfaces/cli/headers-command/[headers command reference]
+
+=== Insert → Equation — Builder API
+
+OMML (Office Math Markup Language) equations are first-class content via
+the link:../math-formulas/[Math guide]. The `omml` gem handles round-trip,
+and `Builder#add_math` accepts LaTeX input:
+
+[source,ruby]
+----
+builder.add_math(latex: "E = mc^2")
+builder.add_math(latex: "\\frac{a}{b} = c")
+----
+
+=== Insert → Comment — Builder API
+
+Comments are anchored to a paragraph with `Builder#comment`. The anchored
+paragraph gets `commentRangeStart` / `commentRangeEnd` plus a
+`commentReference` run; the comment itself lives in `word/comments.xml`,
+which round-trips through load/save.
+
+[source,ruby]
+----
+builder.add_paragraph("Controversial claim").comment(
+  text: "Citation needed",
+  author: "QA",
+  on: :paragraph
+)
+----
+
+=== Insert → Text Box, Bookmark, Hyperlink — Builder API
+
+All three are first-class content during document construction. See
+link:../text-boxes/[Text Boxes] and
+link:../bookmarks-and-references/[Bookmarks and References].
+
+[source,ruby]
+----
+builder.add_text_box("Pull quote", width: "3in", height: "1in")
+builder.bookmark("sec-methods")
+builder.hyperlink("Read more", url: "https://example.com")
+----
+
+== Layout tab
+
+=== Layout → Page Setup — `uniword page setup`
+
+The Page Setup dialog (paper size, orientation, margins) applied to every
+section in one pass.
+
+[source,shell]
+----
+uniword page setup in.docx out.docx --size a4 --orientation portrait --margins 1in
+uniword page setup in.docx out.docx --margin-top 3cm --margin-bottom 3cm
+----
+
+link:../../interfaces/cli/page-command/[page command reference]
+
+=== Layout → Columns — Builder API
+
+[source,ruby]
+----
+builder.add_section(columns: 2, separator: true)
+----
+
+== Design tab
+
+=== Design → Themes — `uniword theme apply`
+
+Apply a theme (colors, fonts, and formats together) from the
+link:../../features/themes-catalog/[29 bundled themes], an imported YAML, or a
+`.thmx` file.
+
+[source,shell]
+----
+uniword theme apply in.docx out.docx --name meridian
+uniword theme apply in.docx out.docx --name atlas --variant 2
+----
+
+=== Design → Colors / Fonts galleries — `uniword theme colors` / `fonts`
+
+Replace just the color scheme or just the font scheme, keeping everything
+else. These are the Design tab's Colors and Fonts dropdowns as one-shot
+commands.
+
+[source,shell]
+----
+uniword theme colors in.docx out.docx --name emerald
+uniword theme fonts  in.docx out.docx --name carlito_sans
+uniword theme colors --list   # list available schemes
+----
+
+=== Design → Style Set gallery — `uniword styleset apply`
+
+Apply a StyleSet (paragraph, character, and table style definitions) from
+the link:../../features/stylesets-catalog/[12 bundled StyleSets] or an
+imported YAML.
+
+[source,shell]
+----
+uniword styleset apply in.docx out.docx --name signature
+uniword styleset apply in.docx out.docx --name ceremonial --strategy replace
+----
+
+`styleset extract` captures an existing document's styles into a YAML
+StyleSet you can re-apply elsewhere.
+
+[source,shell]
+----
+uniword styleset extract corporate_report.docx
+----
+
+=== Design → Watermark — `uniword watermark`
+
+Add, remove, or list text watermarks.
+
+[source,shell]
+----
+uniword watermark add report.docx "DRAFT"
+uniword watermark add report.docx "CONFIDENTIAL" --color "#FF0000"
+uniword watermark list report.docx
+uniword watermark remove report.docx
+----
+
+=== Design → Auto-transition — `uniword theme auto`
+
+Detect a Microsoft theme in a document (by color fingerprint) and replace
+it with the matching Uniword theme. Useful when migrating existing
+documents away from proprietary fonts.
+
+[source,shell]
+----
+uniword theme auto ms_report.docx uniword_report.docx
+----
+
+== References tab
+
+=== References → Table of Contents — `uniword toc`
+
+Generate TOC entries from headings, insert a TOC into the document, or
+update an existing one.
+
+[source,shell]
+----
+uniword toc generate report.docx
+uniword toc insert report.docx
+uniword toc update report.docx
+----
+
+link:../../interfaces/cli/toc-command/[toc command reference]
+
+[TIP]
+====
+To make Word rebuild the TOC and other fields when the document is opened,
+save with `w:updateFields` enabled. From Ruby:
+
+[source,ruby]
+----
+doc.settings.update_fields_on_open = true
+----
+====
+
+=== References → Footnotes / Endnotes — Builder API
+
+Footnotes and endnotes are first-class content during construction. The
+Reconciler keeps `footnotePr` / `footnotes.xml` in sync, and round-trip
+preserves everything. See link:../footnotes-and-endnotes/[Footnotes and
+Endnotes].
+
+== Review tab
+
+=== Review → Spelling & Grammar — `uniword spellcheck`
+
+[source,shell]
+----
+uniword spellcheck check report.docx
+----
+
+link:../../interfaces/cli/spellcheck-command/[spellcheck command reference]
+
+=== Review → Compare — `uniword diff`
+
+Document-level diff (content, formatting, structure, metadata, styles) or
+package-level diff (ZIP parts, XML content, OPC validation).
+
+[source,shell]
+----
+uniword diff compare old.docx new.docx
+uniword diff package old.docx new.docx
+----
+
+link:../../interfaces/cli/diff-command/[diff command reference]
+
+=== Review → Comments — `uniword review comments`
+
+List every comment with its author, date, and text.
+
+[source,shell]
+----
+uniword review comments report.docx
+----
+
+=== Review → Track Changes — `uniword review accept/reject`
+
+Accept or reject individual revisions or all at once.
+
+[source,shell]
+----
+uniword review changes report.docx                      # list
+uniword review accept report.docx 42                    # one revision
+uniword review reject report.docx 42
+uniword review accept-all report.docx
+uniword review reject-all report.docx
+----
+
+link:../../interfaces/cli/review-command/[review command reference]
+
+=== Review → Restrict Editing — `uniword protect`
+
+Apply or remove document protection.
+
+[source,shell]
+----
+uniword protect apply report.docx --mode read_only --password secret
+uniword protect apply report.docx --mode tracked_changes
+uniword protect info report.docx
+uniword protect remove report.docx
+----
+
+link:../../interfaces/cli/protect-command/[protect command reference]
+
+== Developer tab
+
+=== Developer → Content Controls (Structured Document Tags)
+
+SDTs are first-class content during construction. See
+link:../structured-document-tag/[Structured Document Tags].
+
+[source,ruby]
+----
+builder.content_control(type: :rich_text, tag: "title", placeholder: "Enter title")
+----
+
+=== Developer → Macros (VBA)
+
+Documents with VBA projects (`.docm`) round-trip byte-for-byte: the VBA
+part is preserved as a `Docx::RawPart` and re-emitted verbatim on save.
+This applies to every part uniword does not model -- glossary documents,
+`docProps/meta.xml`, custom XML outside the standard layout, header/comment
+`.rels` sidecars. See <<raw-parts-preservation>> below.
+
+[[things-uniword-does-that-word-cannot]]
+== Things uniword does that Word cannot
+
+These are the things you would *never* get from the Word UI -- they are why
+uniword exists.
+
+[cols="2,4"]
+|===
+| Capability | What it gives you
+
+| Scriptable from the command line
+| One-shot conversions, repairs, and transforms. No COM, no headless Office, no clicking.
+
+| Deterministic output
+| `Docx::IdAllocator` produces stable rIds, so the same input always produces the same ZIP. Diff-friendly for git.
+
+| Three-layer verification
+| `uniword verify --xsd` validates against the actual OOXML XSDs plus 10+ semantic rules. Word's "Check for Issues" only does basic checks.
+
+| Write-time integrity gate
+| `Docx::PackageIntegrityChecker` runs on every save and refuses to write a broken package. Word will happily save a corrupted file.
+
+| Reconciler with reporting
+| `uniword repair` shows every applied fix with a code, part, and message. Word's repair is silent.
+
+| Round-trip fidelity
+| 100% preservation of all 760 OOXML elements across 22 namespaces. ISO documents round-trip with 0 normative differences.
+
+| Raw parts preservation
+| Anything uniword does not model (VBA, glossary, custom XML) is preserved byte-for-byte instead of dropped.
+
+| Batch processing
+| `uniword batch PATTERN OUTPUT_DIR` processes hundreds of documents in parallel.
+
+| Server-side execution
+| No GUI dependency. Runs on Linux servers, CI runners, Docker containers.
+
+| Open-source resources
+| 29 OFL themes, 12 OFL StyleSets, 23 color schemes, 25 font schemes -- no proprietary Microsoft assets bundled.
+
+| Profile-driven output
+| Profiles tune output to a specific Word version, locale, and user identity.
+|===
+
+[[raw-parts-preservation]]
+== Unmodelled parts: byte-for-byte preservation
+
+Uniword models 760 OOXML elements across 22 namespaces. Some real-world
+documents carry parts that are not (yet) modelled:
+
+* VBA projects (`vbaProject.bin`, `.docm`)
+* Glossary documents (`word/glossary/document.xml`)
+* `docProps/meta.xml` and other custom property parts
+* `customXml/` items outside the standard layout
+* Header and comment `.rels` sidecars
+
+Older versions of uniword silently dropped these on load, which broke
+round-trip fidelity for documents that used them. As of 1.4.0, every part
+the library does not model is preserved as a `Docx::RawPart` with its
+source content type, and re-emitted verbatim on save. The reconciler keeps
+relationships targeting them; the write-time integrity gate treats them
+as first-class parts.
+
+This means:
+
+* `.docm` files round-trip without losing their macros
+* documents with embedded PDFs, OLE objects, or custom XML survive
+  load-modify-save cycles unchanged
+* nothing about the original package is silently lost
+
+== Round-trip and verification
+
+Two pages complement this guide:
+
+* link:../round-trip-fidelity/[Round-Trip Fidelity] -- what is preserved and how
+  it's tested (ISO 8601, ISO 690, ISO DIS 5878).
+* link:../../verification/three-layer-pipeline/[Three-Layer Verification] --
+  the OPC / XSD / semantic pipeline behind `uniword verify`.
+
+== Building documents programmatically
+
+The link:../../interfaces/ruby-api/builder-api/[Builder API] is the programmatic
+equivalent of this guide: a fluent interface for constructing documents
+with rich formatting, tables, lists, images, math, bookmarks, comments,
+hyperlinks, and content controls.
+
+[source,ruby]
+----
+doc = Uniword::Builder.new
+  .add_heading("Quarterly Report", level: 1)
+  .add_paragraph("Prepared by Finance", italic: true)
+  .add_paragraph("This document is DRAFT.", bold: true)
+    .comment(text: "Remove before sending", author: "QA", on: :paragraph)
+  .add_heading("Methodology", level: 2)
+  .bookmark("sec-methods")
+  .add_paragraph("Revenue is computed as...")
+  .add_math(latex: "\\text{revenue} = \\sum_{i=1}^{n} p_i \\cdot q_i")
+  .add_table do
+    row do
+      cell "Quarter",   bold: true
+      cell "Revenue",   bold: true
+    end
+    row do
+      cell "Q1"
+      cell "$1.2M"
+    end
+  end
+  .build
+
+doc.apply_theme("meridian")
+doc.apply_styleset("signature")
+doc.add_header("Acme Inc. — Confidential")
+doc.add_footer("Page ")
+doc.add_watermark("DRAFT", color: "#888888")
+doc.protect(:comments)
+doc.save("report.docx")
+----
+
+That single block replaces a long Word session: write the body, apply a
+theme and StyleSet, add a header and footer, watermark, lock for
+comments-only edits, and save.
+
+== Where to go next
+
+* link:../../getting-started/quick-start/[Quick Start] -- five-minute intro
+* link:../../interfaces/ruby-api/builder-api/[Builder API] -- fluent document
+  construction
+* link:../round-trip-fidelity/[Round-Trip Fidelity] -- guarantees and tests
+* link:../../verification/three-layer-pipeline/[Three-Layer Verification] --
+  the verification pipeline
