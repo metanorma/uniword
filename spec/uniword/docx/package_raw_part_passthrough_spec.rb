@@ -200,4 +200,51 @@ RSpec.describe Uniword::Docx::Package do
         .to be_empty
     end
   end
+
+  describe "a raw part with no declared content type" do
+    let(:input_path) { File.join(output_dir, "with_trash.docx") }
+    let(:output_path) { File.join(output_dir, "with_trash_out.docx") }
+    let(:trash_bytes) { "word junk bytes".b }
+
+    before do
+      add_undeclared_part("spec/fixtures/docx_gem/no_styles.docx", input_path)
+      described_class.from_file(input_path).to_file(output_path)
+    end
+
+    it "saves without an OPC-005 failure" do
+      issues = Uniword::Docx::PackageIntegrityChecker.new.check(
+        described_class.from_file(input_path).to_zip_content(validate: true),
+      )
+
+      expect(issues).to be_empty
+    end
+
+    it "declares application/octet-stream for the undeclared part" do
+      content_types = described_class.from_file(input_path)
+        .to_zip_content["[Content_Types].xml"]
+
+      expect(content_types).to include('PartName="/[trash]/0000.dat"')
+      expect(content_types).to include("application/octet-stream")
+    end
+
+    it "round-trips the part byte-identically" do
+      expect(ZipHelper.extract_file(output_path, "[trash]/0000.dat"))
+        .to eq(trash_bytes)
+    end
+
+    # Copy the source package, adding [trash]/0000.dat with NO content
+    # type declaration (Word's own junk folders look exactly like this).
+    def add_undeclared_part(source_path, target_path)
+      entries = Zip::File.open(source_path).each_with_object({}) do |e, h|
+        h[e.name] = e.get_input_stream.read unless e.directory?
+      end
+      entries["[trash]/0000.dat"] = trash_bytes
+      Zip::OutputStream.open(target_path) do |zos|
+        entries.each do |name, bytes|
+          zos.put_next_entry(name)
+          zos.write(bytes)
+        end
+      end
+    end
+  end
 end
