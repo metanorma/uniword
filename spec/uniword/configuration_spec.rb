@@ -22,6 +22,10 @@ RSpec.describe Uniword::Configuration do
     it "defaults log_save_fixes to true" do
       expect(config.log_save_fixes).to be(true)
     end
+
+    it "defaults on_noncompliant_content to :strip" do
+      expect(config.on_noncompliant_content).to eq(:strip)
+    end
   end
 
   describe "attribute writers" do
@@ -44,6 +48,26 @@ RSpec.describe Uniword::Configuration do
       expect { config.validate_on_save = "yes" }
         .to raise_error(ArgumentError, /validate_on_save/)
     end
+
+    it "round-trips on_noncompliant_content with :raise" do
+      config.on_noncompliant_content = :raise
+      expect(config.on_noncompliant_content).to eq(:raise)
+    end
+
+    it "accepts string mode values and normalizes to a symbol" do
+      config.on_noncompliant_content = "strip"
+      expect(config.on_noncompliant_content).to eq(:strip)
+    end
+
+    it "rejects an unknown mode" do
+      expect { config.on_noncompliant_content = :bogus }
+        .to raise_error(ArgumentError, /on_noncompliant_content/)
+    end
+
+    it "rejects a boolean value" do
+      expect { config.on_noncompliant_content = true }
+        .to raise_error(ArgumentError, /on_noncompliant_content/)
+    end
   end
 
   describe "#reset!" do
@@ -51,12 +75,14 @@ RSpec.describe Uniword::Configuration do
       config.validate_on_save = false
       config.xsd_validation = true
       config.log_save_fixes = false
+      config.on_noncompliant_content = :raise
     end
 
     it "restores default values after modification" do
       config.reset!
       expect(config).to have_attributes(
         validate_on_save: true, xsd_validation: false, log_save_fixes: true,
+        on_noncompliant_content: :strip
       )
     end
   end

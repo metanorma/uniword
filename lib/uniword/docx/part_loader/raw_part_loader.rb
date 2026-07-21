@@ -17,6 +17,13 @@ module Uniword
       # sidecar) at a non-standard location, or when it is a customXml
       # item rels sidecar consumed by CustomXmlLoader.
       #
+      # Non-compliant parts (no content type declaration, OS artifact,
+      # ...) are stripped at load when
+      # `Uniword.configuration.on_noncompliant_content` is `:strip`
+      # (the default, matching Word's behavior). In `:raise` mode the
+      # parts are preserved and the save-time integrity gate raises
+      # with structured OPC-005 issues.
+      #
       # Bytes are re-read from the original ZIP when available (the
       # extracted hash may carry corrupted UTF-8 binary); content
       # types come from the loaded [Content_Types].xml model.
@@ -32,20 +39,83 @@ module Uniword
         #   by definition matching)
         # @return [void]
         def load(context, _definition)
-          paths = unclaimed_paths(context)
-          return if paths.empty?
+          preservable, stripped = partition_unclaimed(context)
 
-          bytes = raw_bytes(context, paths)
-          paths.each do |path|
+          record_stripped(context, stripped)
+          return if preservable.empty?
+
+          bytes = raw_bytes(context, preservable)
+          rels_by_target = relationships_by_target(context.package)
+
+          preservable.each do |path|
             next unless bytes[path]
 
             context.package.raw_parts[path] = build_part(
-              context.package, path, bytes[path]
+              context.package, path, bytes[path], rels_by_target
             )
           end
         end
 
         private
+
+        # Split unclaimed paths into preservable and stripped based on
+        # the configured policy. In `:raise` mode everything is
+        # preserved (existing behavior); the save-time gate handles
+        # non-compliance.
+        #
+        # @return [Array(Array<String>, Array<String>)] preservable
+        #   paths and stripped paths (each in zip_content order)
+        def partition_unclaimed(context)
+          unclaimed = unclaimed_paths(context)
+          return [unclaimed, []] if raise_mode?
+
+          classifier = build_classifier(context.package)
+          unclaimed.partition { |path| classifier.reason(path).nil? }
+        end
+
+        # @return [Boolean] true when the configured policy is :raise
+        def raise_mode?
+          Uniword.configuration.on_noncompliant_content == :raise
+        end
+
+        # Record stripped parts on the package and log each one when
+        # save-fix logging is enabled.
+        #
+        # @return [void]
+        def record_stripped(context, stripped)
+          return if stripped.empty?
+
+          classifier = build_classifier(context.package)
+          stripped.each do |path|
+            reason = classifier.reason(path)
+            context.package.add_stripped_part(path: path, reason: reason)
+            log_strip(path, reason)
+          end
+        end
+
+        # @return [JunkClassifier] classifier wired to the package's
+        #   content types and relationship targets
+        def build_classifier(package)
+          JunkClassifier.new(
+            content_types: package.content_types,
+            relationships_by_path: relationships_by_target(package),
+          )
+        end
+
+        # @return [Hash{String => Array<Ooxml::Relationships::Relationship>}]
+        #   target path => relationships referencing it. Multiple rels
+        #   may target the same path; the first is used for metadata.
+        #   The classifier uses `key?` only.
+        def relationships_by_target(package)
+          rels_collections(package).each_with_object({}) do |(rels, base), memo|
+            rels&.relationships&.each do |rel|
+              target = rel.target.to_s
+              next if target.empty?
+
+              (memo[resolve_target(base, target)] ||= []) << rel
+            end
+          end
+        end
 
         # @return [Array<String>] ZIP entries claimed by no registry
         #   loader, in zip_content order
@@ -71,8 +141,8 @@ module Uniword
         end
 
         # @return [RawPart]
-        def build_part(package, path, content)
-          rel = referencing_relationship(package, path)
+        def build_part(package, path, content, rels_by_target)
+          rel = first_referencing_relationship(rels_by_target, path)
           RawPart.new(
             path: path,
             content: content,
@@ -105,44 +175,23 @@ module Uniword
         end
 
         # Content type the source [Content_Types].xml declared for the
-        # part: its Override first, else the Default for its extension.
+        # part. Delegates to `ContentTypes::Types#content_type_for`
+        # (single source of truth for the lookup).
         #
         # @return [String, nil] nil when the source declared neither
         def content_type_for(package, path)
           content_types = package.content_types
           return nil unless content_types
 
-          override_type(content_types, path) ||
-            default_type(content_types, path)
+          content_types.content_type_for(path)
         end
 
-        def override_type(content_types, path)
-          part_name = "/#{path}"
-          content_types.overrides.find do |o|
-            o.part_name == part_name
-          end&.content_type
-        end
-
-        def default_type(content_types, path)
-          ext = File.extname(path)[1..]
-          return nil unless ext
-
-          content_types.defaults.find do |d|
-            d.extension == ext
-          end&.content_type
-        end
-
-        # The first relationship in a modelled rels part whose
-        # resolved target is this part, or nil. Recorded as metadata
-        # only; the rel itself stays in its rels collection.
-        def referencing_relationship(package, path)
-          rels_collections(package).each do |rels, base_dir|
-            rel = rels&.relationships&.find do |r|
-              resolve_target(base_dir, r.target.to_s) == path
-            end
-            return rel if rel
-          end
-          nil
+        # The first relationship referencing the given path, or nil.
+        # Recorded as metadata only; the rel itself stays in its rels
+        # collection.
+        def first_referencing_relationship(rels_by_target, path)
+          rels = rels_by_target[path]
+          rels.is_a?(Array) ? rels.first : nil
         end
 
         # [rels collection, base directory] pairs mirroring the rels
@@ -176,6 +225,15 @@ module Uniword
             segment == ".." ? segments.pop : segments << segment
           end
           segments.join("/")
+        end
+
+        # @return [void]
+        def log_strip(path, reason)
+          return unless Uniword.configuration.log_save_fixes
+
+          Uniword.logger&.info do
+            "Stripped non-compliant part #{path} (#{reason})"
+          end
         end
       end
     end
