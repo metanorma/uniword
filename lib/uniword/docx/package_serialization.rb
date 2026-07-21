@@ -401,18 +401,15 @@ document_rels)
       # a part whose content type came from a Default entry needs an
       # Override once the reconciler rebuilds the standard Defaults.
       #
-      # A loaded package may carry parts with NO declared content type
-      # (e.g. Word's own [trash]/*.dat junk): the load path accepts
-      # them, so the save path must be able to emit them. Declare the
-      # OPC-canonical application/octet-stream fallback rather than
-      # emitting an undeclared part (OPC-005 violation).
-      FALLBACK_RAW_PART_CONTENT_TYPE = "application/octet-stream"
-
+      # Raw parts always carry a non-nil content type: the loader
+      # strips undeclared parts at load (default `:strip` policy), and
+      # API-created raw parts without a content type are a programmer
+      # error that the save-time gate catches as OPC-005.
       def inject_raw_part_content_types(content_types)
         return if raw_parts.empty?
 
         raw_parts.each_value do |part|
-          next unless part.path
+          next unless part.path && part.content_type
 
           ext = File.extname(part.path)[1..]
           next if ext && content_types.defaults.any? do |d|
@@ -424,7 +421,7 @@ document_rels)
 
           content_types.overrides << Uniword::ContentTypes::Override.new(
             part_name: part_name,
-            content_type: part.content_type || FALLBACK_RAW_PART_CONTENT_TYPE,
+            content_type: part.content_type,
           )
         end
       end
