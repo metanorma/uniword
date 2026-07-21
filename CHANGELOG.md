@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.4.2] - 2026-07-21
+## [1.5.0] - 2026-07-22
 
 ### Added
 
@@ -30,12 +30,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- `Docx::RawPartLoader` now strips non-compliant parts at load by
-  default (Word-identical behavior). Legitimate unmodelled parts
-  (those with a content type declaration, e.g. VBA, glossary,
-  `docProps/meta.xml`) continue to round-trip byte-for-byte per the
-  1.4.0 promise. Stripped parts are recorded on
-  `Package#stripped_parts` for caller introspection.
+- **Default behavior change**: `Docx::RawPartLoader` now strips
+  non-compliant parts at load by default (Word-identical behavior).
+  Previously, parts with no content type declaration were preserved
+  as `RawPart(content_type: nil)`, which then tripped OPC-005 at the
+  write-time integrity gate. Legitimate unmodelled parts (those with
+  a content type declaration, e.g. VBA, glossary, `docProps/meta.xml`)
+  continue to round-trip byte-for-byte per the 1.4.0 promise.
+- Stripped parts are recorded on `Package#stripped_parts` for caller
+  introspection. Set `Configuration#on_noncompliant_content = :raise`
+  to preserve the previous behavior for QA pipelines that want to
+  catch every deviation.
 
 ### Fixed
 
