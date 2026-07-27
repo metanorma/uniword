@@ -111,12 +111,12 @@ end
 def safe_delete(path)
   return unless path && File.exist?(path)
 
-  retries = 5
+  retries = 10
   begin
     File.delete(path)
-  rescue Errno::EACCES
-    if retries > 0
-      sleep(0.2)
+  rescue Errno::EACCES, Errno::ENOTEMPTY
+    if retries.positive?
+      sleep(0.3)
       retries -= 1
       retry
     end

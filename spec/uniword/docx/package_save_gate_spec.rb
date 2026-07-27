@@ -51,6 +51,15 @@ RSpec.describe "Package save integrity gate" do
       doc
     end
 
+    # Order-independent clean state — Windows file-handle release can
+    # lag past the previous test's `after` block (GC delay, AV scan),
+    # leaving the output file on disk. Pre-clean here so the assertions
+    # below do not depend on cross-test cleanup timing.
+    before do
+      safe_delete(output_path)
+      Dir.glob("#{output_path}.*.tmp").each { |p| safe_delete(p) }
+    end
+
     it "raises ValidationError listing structured issues" do
       expect { document.save(output_path) }
         .to raise_error(Uniword::ValidationError) do |error|
