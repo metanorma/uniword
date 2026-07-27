@@ -73,7 +73,7 @@ module Uniword
 
         move_temp_to_output(temp_path, output_path)
       ensure
-        FileUtils.rm_f(temp_path) if defined?(temp_path) && temp_path && File.exist?(temp_path)
+        remove_temp_file(temp_path)
       end
 
       # Add a file to an existing ZIP archive.
@@ -184,7 +184,7 @@ module Uniword
 
         move_temp_to_output(temp_path, output_path)
       ensure
-        FileUtils.rm_f(temp_path) if defined?(temp_path) && temp_path && File.exist?(temp_path)
+        remove_temp_file(temp_path)
       end
 
       def move_temp_to_output(temp_path, output_path)
@@ -200,6 +200,25 @@ module Uniword
 
           sleep(0.5)
           retry
+        end
+      end
+
+      # Best-effort temp file removal with Windows-safe retries. AV
+      # scanners and the indexer briefly hold newly-written files; a
+      # single `FileUtils.rm_f` can return EACCES and leak the temp.
+      def remove_temp_file(temp_path)
+        return unless defined?(temp_path) && temp_path
+        return unless File.exist?(temp_path)
+
+        retries = 5
+        begin
+          FileUtils.rm_f(temp_path)
+        rescue Errno::EACCES
+          retries -= 1
+          if retries.positive?
+            sleep(0.3)
+            retry
+          end
         end
       end
 
