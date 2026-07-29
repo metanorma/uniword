@@ -180,15 +180,26 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
     it "sets spacing before and after" do
       builder = described_class.new
       builder.spacing(before: 240, after: 120)
-      expect(builder.model.properties.spacing.before).to eq(240)
-      expect(builder.model.properties.spacing.after).to eq(120)
+      spacing = builder.model.properties.spacing.first
+      expect(spacing.before).to eq(240)
+      expect(spacing.after).to eq(120)
     end
 
     it "sets line spacing with rule" do
       builder = described_class.new
       builder.spacing(line: 360, rule: "exact")
-      expect(builder.model.properties.spacing.line).to eq(360)
-      expect(builder.model.properties.spacing.line_rule).to eq("exact")
+      spacing = builder.model.properties.spacing.first
+      expect(spacing.line).to eq(360)
+      expect(spacing.line_rule).to eq("exact")
+    end
+
+    it "reuses the existing entry instead of appending a second" do
+      builder = described_class.new
+      builder.spacing(before: 240)
+      builder.spacing(after: 120)
+      expect(builder.model.properties.spacing.size).to eq(1)
+      expect(builder.model.properties.spacing.first.before).to eq(240)
+      expect(builder.model.properties.spacing.first.after).to eq(120)
     end
   end
 

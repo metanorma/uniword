@@ -133,7 +133,8 @@ RSpec.describe "StyleSet Integration (Binary .dotx)" do
       expect(heading1.run_properties).not_to be_nil
 
       pPr = heading1.paragraph_properties
-      expect(pPr.spacing.before).to eq(300) if pPr.spacing
+      spacing = Array(pPr.spacing).first
+      expect(spacing.before).to eq(300) if spacing
       expect(pPr.outline_level.value).to eq(0) if pPr.outline_level
 
       rPr = heading1.run_properties

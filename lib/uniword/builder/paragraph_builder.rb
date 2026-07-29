@@ -98,12 +98,11 @@ module Uniword
       # @param rule [String, nil] Line rule ('auto', 'exact', 'atLeast')
       # @return [self]
       def spacing(before: nil, after: nil, line: nil, rule: nil)
-        ensure_properties.spacing ||= Properties::Spacing.new
-        props = @model.properties.spacing
-        props.before = before if before
-        props.after = after if after
-        props.line = line if line
-        props.line_rule = rule if rule
+        sp = ensure_properties.ensure_spacing
+        sp.before = before if before
+        sp.after = after if after
+        sp.line = line if line
+        sp.line_rule = rule if rule
         self
       end
 

@@ -55,8 +55,9 @@ RSpec.describe Uniword::Builder::StyleBuilder do
     it "sets spacing" do
       sb = described_class.new("S")
       sb.spacing(before: 240, after: 120)
-      expect(sb.model.pPr.spacing.before).to eq(240)
-      expect(sb.model.pPr.spacing.after).to eq(120)
+      spacing = sb.model.pPr.spacing.first
+      expect(spacing.before).to eq(240)
+      expect(spacing.after).to eq(120)
     end
   end
 

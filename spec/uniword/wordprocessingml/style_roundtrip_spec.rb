@@ -100,4 +100,56 @@ RSpec.describe "Style Round-Trip Fidelity" do
       expect(style.font_color_theme_tint).to eq("BF")
     end
   end
+
+  # Word splits one paragraph's spacing across several w:spacing elements
+  # (seen in Modern.dotx). Covered with inline XML so it runs without the
+  # private fixture submodule.
+  describe "repeated w:spacing in one w:pPr" do
+    let(:repeated_spacing_xml) do
+      <<~XML
+        <?xml version="1.0" encoding="UTF-8"?>
+        <w:style xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+                 w:type="paragraph" w:styleId="NoSpacing">
+          <w:name w:val="No Spacing"/>
+          <w:pPr>
+            <w:spacing w:before="0" w:after="0"/>
+            <w:spacing w:line="240" w:lineRule="auto"/>
+          </w:pPr>
+        </w:style>
+      XML
+    end
+    let(:style) do
+      Uniword::Wordprocessingml::Style.from_xml(repeated_spacing_xml)
+    end
+
+    it "keeps every entry when parsing" do
+      expect(style.paragraph_properties.spacing.map do |s|
+        [s.before, s.after, s.line, s.line_rule]
+      end).to eq([[0, 0, nil, nil], [nil, nil, 240, "auto"]])
+    end
+
+    it "keeps every entry through a round-trip" do
+      reparsed = Uniword::Wordprocessingml::Style.from_xml(
+        style.to_xml(prefix: true),
+      )
+
+      expect(reparsed.paragraph_properties.spacing.map do |s|
+        [s.before, s.after, s.line, s.line_rule]
+      end).to eq([[0, 0, nil, nil], [nil, nil, 240, "auto"]])
+    end
+
+    it "reads spacing_before and spacing_after across entries" do
+      expect([style.spacing_before, style.spacing_after]).to eq([0, 0])
+    end
+
+    it "finds a value that lives on a later entry" do
+      style = Uniword::Wordprocessingml::Style.from_xml(
+        repeated_spacing_xml.sub('w:before="0" w:after="0"', 'w:line="240"')
+                            .sub('w:line="240" w:lineRule="auto"',
+                                 'w:before="120" w:after="60"'),
+      )
+
+      expect([style.spacing_before, style.spacing_after]).to eq([120, 60])
+    end
+  end
 end

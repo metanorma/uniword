@@ -20,8 +20,16 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       )
       expect(Array(props.style).first.value).to eq("Heading1")
       expect(props.alignment.value).to eq("center")
-      expect(props.spacing&.before).to eq(240)
-      expect(props.spacing&.after).to eq(120)
+      expect(props.spacing.first.before).to eq(240)
+      expect(props.spacing.first.after).to eq(120)
+    end
+
+    it "builds a single spacing entry from flat attributes" do
+      props = described_class.new(spacing_before: 120, spacing_after: 240)
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(120)
+      expect(props.spacing.first.after).to eq(240)
     end
 
     it "allows mutation for test compatibility" do
@@ -126,6 +134,57 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       expect(props.keep_next_wrapper&.value).to be true
       expect(props.keep_lines_wrapper&.value).to be true
       expect(props.page_break_before_wrapper&.value).to be true
+    end
+  end
+
+  describe "#ensure_spacing" do
+    let(:ns) do
+      "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    end
+    let(:two_entries_xml) do
+      <<~XML
+        <w:pPr xmlns:w="#{ns}">
+          <w:spacing w:before="0" w:after="0"/>
+          <w:spacing w:line="240" w:lineRule="auto"/>
+        </w:pPr>
+      XML
+    end
+
+    it "appends an entry when the properties were built without spacing" do
+      props = described_class.new
+
+      props.ensure_spacing.before = 240
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(240)
+    end
+
+    it "appends an entry when parsing left the collection empty" do
+      props = described_class.from_xml(%(<w:pPr xmlns:w="#{ns}"/>))
+
+      props.ensure_spacing.before = 240
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(240)
+    end
+
+    it "returns the existing first entry instead of appending" do
+      props = described_class.from_xml(
+        %(<w:pPr xmlns:w="#{ns}"><w:spacing w:before="60"/></w:pPr>),
+      )
+
+      props.ensure_spacing.after = 120
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(60)
+      expect(props.spacing.first.after).to eq(120)
+    end
+
+    it "returns the first of several entries Word emitted" do
+      props = described_class.from_xml(two_entries_xml)
+
+      expect(props.ensure_spacing).to equal(props.spacing.first)
+      expect(props.spacing.size).to eq(2)
     end
   end
 

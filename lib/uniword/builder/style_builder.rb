@@ -102,11 +102,10 @@ module Uniword
       # @param line [Integer, nil] Line spacing in twips
       # @return [self]
       def spacing(before: nil, after: nil, line: nil)
-        ensure_para_props
-        @model.pPr.spacing ||= Properties::Spacing.new
-        @model.pPr.spacing.before = before if before
-        @model.pPr.spacing.after = after if after
-        @model.pPr.spacing.line = line if line
+        sp = ensure_para_props.ensure_spacing
+        sp.before = before if before
+        sp.after = after if after
+        sp.line = line if line
         self
       end
 
