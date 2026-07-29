@@ -276,10 +276,10 @@ RSpec.describe Uniword::Docx::Reconciler do
     let(:footer_ref_class) { Uniword::Wordprocessingml::FooterReference }
     let(:sect_pr_class) { Uniword::Wordprocessingml::SectionProperties }
     let(:page_size_class) { Uniword::Wordprocessingml::PageSize }
-let(:settings_class) { Uniword::Wordprocessingml::Settings }
-let(:footnotes_class) { Uniword::Wordprocessingml::Footnotes }
-let(:footnote_class) { Uniword::Wordprocessingml::Footnote }
-let(:footnote_pr_class) { Uniword::Wordprocessingml::FootnotePr }
+    let(:settings_class) { Uniword::Wordprocessingml::Settings }
+    let(:footnotes_class) { Uniword::Wordprocessingml::Footnotes }
+    let(:footnote_class) { Uniword::Wordprocessingml::Footnote }
+    let(:footnote_pr_class) { Uniword::Wordprocessingml::FootnotePr }
 
     def build_package_with_body_paragraphs(*paras)
       package = Uniword::Docx::Package.new
