@@ -7,23 +7,6 @@ require "tempfile"
 RSpec.describe Uniword::Infrastructure::ZipExtractor do
   let(:extractor) { described_class.new }
 
-  # Helper to create a temporary ZIP file on disk, properly handling Windows file locking.
-  # On Windows, Tempfile keeps a handle open which conflicts with Zip::File::CREATE's
-  # atomic rename. This helper closes and deletes the tempfile first, and suppresses
-  # the Tempfile finalizer to prevent EACCES errors when rubyzip locks files.
-  def create_temp_zip
-    temp_zip = Tempfile.new(["test", ".zip"])
-    temp_zip.close
-    safe_delete(temp_zip.path)
-    # Suppress finalizer - we handle cleanup manually via safe_delete
-    begin
-      Tempfile.send(:remove_instance_variable, :@finalizer)
-    rescue StandardError
-      nil
-    end
-    temp_zip
-  end
-
   describe "#extract" do
     context "with valid ZIP file" do
       it "extracts all files from ZIP archive" do
@@ -33,8 +16,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(["test", ".zip"])
         temp_zip.close
         safe_delete(temp_zip.path)
-        # Suppress finalizer - we handle cleanup manually via ensure block
-        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.get_output_stream("file1.txt") { |f| f.write("Content 1") }
@@ -59,8 +40,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(["test", ".zip"])
         temp_zip.close
         safe_delete(temp_zip.path)
-        # Suppress finalizer - we handle cleanup manually via ensure block
-        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
             zip_file.mkdir("empty_dir")
@@ -80,8 +59,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         temp_zip = Tempfile.new(["test", ".zip"])
         temp_zip.close
         safe_delete(temp_zip.path)
-        # Suppress finalizer - we handle cleanup manually via ensure block
-        temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
           Zip::File.open(temp_zip.path, Zip::File::CREATE) { |_zip_file| }
 
@@ -132,8 +109,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       tf = Tempfile.new(["test", ".zip"])
       tf.close
       safe_delete(tf.path)
-      # Suppress finalizer - we handle cleanup manually via after block
-      tf.instance_variable_set(:@finalizer, proc {})
       tf
     end
 
@@ -187,8 +162,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       tf = Tempfile.new(["test", ".zip"])
       tf.close
       safe_delete(tf.path)
-      # Suppress finalizer - we handle cleanup manually via after block
-      tf.instance_variable_set(:@finalizer, proc {})
       tf
     end
 
@@ -222,8 +195,6 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       temp_empty = Tempfile.new(["empty", ".zip"])
       temp_empty.close
       safe_delete(temp_empty.path)
-      # Suppress finalizer - we handle cleanup manually via ensure block
-      temp_empty.instance_variable_set(:@finalizer, proc {})
       begin
         Zip::File.open(temp_empty.path, Zip::File::CREATE) { |_zip_file| }
 

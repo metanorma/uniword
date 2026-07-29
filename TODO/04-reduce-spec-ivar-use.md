@@ -1,67 +1,115 @@
-# 19 — Reduce spec `instance_variable_set`/`get` (30 sites)
+# 19 — Reduce spec `instance_variable_set`/`get`
 
-**Priority:** Medium (spec quality)
-**Files:** Multiple spec files:
-- `spec/uniword/wordprocessingml/comments_part_spec.rb` (4)
-- `spec/uniword/wordprocessingml/tracked_changes_spec.rb` (4)
-- `spec/uniword/wordprocessingml/comment_spec.rb` (1)
-- `spec/uniword/wordprocessingml/comment_range_spec.rb` (2)
-- `spec/uniword/validators/paragraph_validator_spec.rb` (4)
-- `spec/uniword/validators/element_validator_spec.rb` (1)
-- `spec/uniword/validators/table_validator_spec.rb` (1)
-- `spec/uniword/infrastructure/zip_extractor_spec.rb` (5)
-- `spec/uniword/builder/run_builder_spec.rb` (1)
-- `spec/uniword/builder/image_embedding_spec.rb` (3)
-- `spec/uniword/validation/rules/document_context_spec.rb` (1)
-- `spec/uniword/validation/link_validator_spec.rb` (3)
+**Status:** Implemented, pending Windows CI. 30 claimed → 6 real → 0. The 6
+were dead code: they set an ivar (`@finalizer`) that `Tempfile` never reads.
+Local runs are green, but the workaround existed for a Windows-only `EACCES`
+flake, so Windows CI is the gate that closes this out.
+**Priority:** Low (the remaining sites are dead code, not encapsulation
+breaks)
+**Files:** `spec/uniword/infrastructure/zip_extractor_spec.rb`
+
+## Status of the original note
+
+Stale. It claimed **30 sites across 12 files**. Actual today: **7
+matches**, **6** of them real, all in one file:
+
+Before this change:
+
+```
+spec/uniword/infrastructure/zip_extractor_spec.rb:37,63,84,136,191,226
+spec/uniword/builder/run_builder_drawing_spec.rb:7   # a test NAME, not a use
+```
+
+After it, the only remaining match in `spec/` is that test name — no real
+uses are left.
+
+The 11 other files listed in the original note were already clean. The
+work happened incrementally and nobody updated the note. The three
+patterns it describes no longer occur.
 
 ## Problem
 
-Project rule: never use `instance_variable_set`/`get`. Breaks
-encapsulation.
+The six remaining sites are all the same line:
 
-30 sites in specs use these to:
-1. Force-clear an attribute after construction (to test nil handling)
-2. Inspect internal state (when no public reader exists)
-3. Inject test doubles into private state
-
-## Fix per pattern
-
-### Pattern 1: Force-clear an attribute
 ```ruby
-# Before
-comment = Comment.new(comment_id: "1")
-comment.instance_variable_set(:@comment_id, nil)
-
-# After — construct without the attribute
-comment = Comment.new
+temp_zip.instance_variable_set(:@finalizer, proc {})
+# "Suppress finalizer - we handle cleanup manually via ensure block"
 ```
 
-### Pattern 2: Inspect internal state
-Add a public reader to the model, then assert through it:
-```ruby
-# Before
-drawings = builder.model.instance_variable_get(:@drawings)
+**`Tempfile` has no `@finalizer` ivar.** The installed version
+(`tempfile-0.3.1`) uses `@finalizer_manager`:
 
-# After — expose on the model
-class Model
-  def drawings = @drawings
-end
-drawings = builder.model.drawings
+```
+instance ivars: [:@unlinked, :@mode, :@opts, :@delegate_dc_obj, :@finalizer_manager]
+after set:      [..., :@finalizer_manager, :@finalizer]
 ```
 
-### Pattern 3: Inject test doubles
-Refactor to constructor injection:
-```ruby
-# Before
-tf = TempZip.new
-tf.instance_variable_set(:@finalizer, proc {})
+The assignment creates a brand-new ivar that nothing ever reads. It
+suppresses nothing. The comment describes behavior the code does not
+have.
 
-# After — pass via constructor or a public writer
-tf = TempZip.new(finalizer: proc {})
-```
+The variant at line 20 is broken differently — it calls
+`remove_instance_variable` on the `Tempfile` **class object** rather than
+on a tempfile instance, then rescues the resulting `NameError`. Also a
+no-op.
+
+So whatever fixed the original Windows `EACCES` flake, it was not this.
+The `close` + `safe_delete` calls above it are doing the actual work.
+
+This inverts the obvious fix. Consolidating the six copies behind one
+well-named helper, or documenting a sanctioned exception, would enshrine
+dead code and teach the next reader that the project needs an ivar
+exception it does not need.
+
+## Fix
+
+Single PR. Small.
+
+What was done:
+
+1. Deleted all six `instance_variable_set(:@finalizer, proc {})` calls and
+   the `remove_instance_variable` variant in `create_temp_zip`, along with
+   the comments claiming they suppress finalization.
+2. Kept `Tempfile.new` and the existing cleanup. That was the minimal
+   correct change; nothing else moved.
+
+`Tempfile.create` or `Dir.mktmpdir` is **optional and not drop-in**:
+`Tempfile.create` returns a plain `File`, which has no `unlink` instance
+method, so any existing `temp_zip.unlink` cleanup breaks. A valid
+conversion closes and deletes the created file before rubyzip opens the
+path, then uses `safe_delete(file.path)` in the `ensure` block. Only do
+this if it genuinely simplifies the fixture.
+
+## Risk
+
+The file header (`zip_extractor_spec.rb:13`) attributes this workaround
+to a **Windows** `EACCES` flake, and there is a recent commit hardening a
+different Windows save-gate test (`facd8fb`). Development machines here
+are macOS, so the flake cannot be reproduced locally either way.
+
+The evidence says the ivar cannot be load-bearing — it targets a name
+Tempfile does not use. But "cannot possibly matter" is exactly the
+reasoning that precedes a surprise, and the surprise here lands on a
+platform we cannot test on.
+
+**Land this alone, on its own branch, and let Windows CI vote.** Do not
+bundle it with other work. If CI goes red, the fallback is
+`Tempfile.create`, not restoring the no-op.
 
 ## Verification
 
-`grep -rn "instance_variable_set\|instance_variable_get" spec/uniword/ | wc -l`
-should trend toward 0. All affected specs pass.
+- `bundle exec rspec spec/uniword/infrastructure/zip_extractor_spec.rb`
+  green, run repeatedly to check for a resurfaced flake.
+- `grep -rn "instance_variable_set\|instance_variable_get" spec/` returns
+  only the unrelated test name in `run_builder_drawing_spec.rb`.
+- **Windows CI green.** This is the gate that matters; local green proves
+  little for a Windows-only workaround.
+- `bundle exec rubocop spec/uniword/infrastructure/zip_extractor_spec.rb`
+
+## Out of scope
+
+- Renaming the `run_builder_drawing_spec.rb` example. Its name
+  accurately describes what it asserts; it is only a grep false positive.
+- `Uniword::Infrastructure::ZipExtractor` itself. Nothing here touches
+  library code.
+- `send`/`__send__` in specs. Different rule, different TODO.
