@@ -169,15 +169,21 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
     end
 
     # Reconciler builds properties this way (notes.rb, parts.rb), passing a
-    # single Spacing rather than an array. lutaml-model wraps it on assignment.
+    # single Spacing rather than an array.
+    #
+    # Assert the entry and the emitted XML, not the shape of `spacing` itself:
+    # whether lutaml-model wraps a scalar assignment into a one-element array
+    # differs between lutaml-model releases, and that is not our contract.
     it "handles properties constructed with a scalar spacing" do
       props = described_class.new(
         spacing: Uniword::Properties::Spacing.new(after: 0, line: 240),
       )
 
-      expect(props.spacing).to be_an(Array)
-      expect(props.ensure_spacing).to equal(props.spacing.first)
-      expect(props.spacing.size).to eq(1)
+      entry = props.ensure_spacing
+
+      expect(entry.after).to eq(0)
+      expect(entry.line).to eq(240)
+      expect(props.to_xml(prefix: true)).to include('w:line="240"')
     end
 
     it "returns the existing first entry instead of appending" do
