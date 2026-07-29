@@ -10,6 +10,20 @@ RSpec.describe "Accessibility Rules Integration" do
     allow(document).to receive_messages(images: [], tables: [], paragraphs: [])
   end
 
+  # A picture whose wp:docPr carries no descr, so it has no alt text.
+  def document_with_alt_less_picture
+    Uniword::Wordprocessingml::DocumentRoot.from_xml(<<~XML)
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <w:document
+        xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+        <w:body><w:p><w:r><w:drawing><wp:inline>
+          <wp:docPr id="1" name="Picture 1"/>
+        </wp:inline></w:drawing></w:r></w:p></w:body>
+      </w:document>
+    XML
+  end
+
   describe "All rules can be instantiated" do
     let(:config) do
       {
@@ -83,8 +97,7 @@ RSpec.describe "Accessibility Rules Integration" do
 
   describe "Rules return violations when issues found" do
     it "ImageAltTextRule detects missing alt text" do
-      image_no_alt = double("Image", alt_text: nil)
-      allow(document).to receive(:images).and_return([image_no_alt])
+      document = document_with_alt_less_picture
 
       rule = Uniword::Accessibility::Rules::ImageAltTextRule.new(
         wcag_criterion: "1.1.1",
@@ -133,9 +146,6 @@ RSpec.describe "Accessibility Rules Integration" do
 
   describe "Rules respect enabled flag" do
     it "disabled rules return no violations" do
-      image_no_alt = double("Image", alt_text: nil)
-      allow(document).to receive(:images).and_return([image_no_alt])
-
       rule = Uniword::Accessibility::Rules::ImageAltTextRule.new(
         wcag_criterion: "1.1.1",
         level: "A",

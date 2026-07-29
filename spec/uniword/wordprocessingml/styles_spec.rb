@@ -47,6 +47,81 @@ RSpec.describe Uniword::Wordprocessingml::Style do
       expect(style.paragraph_style?).to be false
     end
   end
+
+  # Every ST_OnOff reader on Style routes through the private boolean_flag
+  # helper, which delegates to Properties::BooleanElement#on?. The full
+  # lexical table lives in spec/uniword/properties/bold_spec.rb; these only
+  # prove each reader delegates rather than hand-rolling the decision.
+  describe "ST_OnOff readers" do
+    def style_with(body)
+      wml = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+      described_class.from_xml(<<~XML)
+        <w:style xmlns:w="#{wml}" w:type="paragraph" w:styleId="S">
+          #{body}
+        </w:style>
+      XML
+    end
+
+    describe "#bold and #italic" do
+      it "reads an off token as false" do
+        style = style_with(%(<w:rPr><w:b w:val="0"/><w:i w:val="off"/></w:rPr>))
+
+        expect(style.bold).to be(false)
+        expect(style.italic).to be(false)
+      end
+
+      it "reads an on token as true" do
+        style = style_with(%(<w:rPr><w:b w:val="1"/><w:i w:val="on"/></w:rPr>))
+
+        expect(style.bold).to be(true)
+        expect(style.italic).to be(true)
+      end
+
+      it "returns nil when the toggle element is absent" do
+        style = style_with("<w:rPr/>")
+
+        expect(style.bold).to be_nil
+        expect(style.italic).to be_nil
+      end
+    end
+
+    describe "#quick_format" do
+      it "reads an off token as false" do
+        expect(style_with(%(<w:qFormat w:val="0"/>)).quick_format).to be(false)
+      end
+
+      it "reads a bare element as true" do
+        expect(style_with("<w:qFormat/>").quick_format).to be(true)
+      end
+
+      it "is false when absent" do
+        expect(style_with("").quick_format).to be(false)
+      end
+    end
+
+    describe "#keep_next and #keep_lines" do
+      it "reads off tokens as false" do
+        style = style_with(
+          %(<w:pPr><w:keepNext w:val="0"/><w:keepLines w:val="off"/></w:pPr>),
+        )
+
+        expect(style.keep_next).to be(false)
+        expect(style.keep_lines).to be(false)
+      end
+
+      it "reads bare elements as true" do
+        style = style_with(%(<w:pPr><w:keepNext/><w:keepLines/></w:pPr>))
+
+        expect(style.keep_next).to be(true)
+        expect(style.keep_lines).to be(true)
+      end
+
+      it "is false when pPr is absent" do
+        expect(style_with("").keep_next).to be(false)
+        expect(style_with("").keep_lines).to be(false)
+      end
+    end
+  end
 end
 
 RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do

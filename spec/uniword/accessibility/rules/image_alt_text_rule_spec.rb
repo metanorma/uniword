@@ -18,12 +18,50 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     }
   end
 
-  describe "#check" do
-    let(:document) { double("Document") }
+  # Alt text for a w:drawing lives in wp:docPr/@descr. Build the documents by
+  # parsing real OOXML so the rule is exercised against the drawings that
+  # DocumentRoot#images actually returns.
+  def document_with(*bodies)
+    Uniword::Wordprocessingml::DocumentRoot.from_xml(<<~XML)
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <w:document
+        xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+        xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"
+        xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"
+        xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture">
+        <w:body>#{bodies.join}</w:body>
+      </w:document>
+    XML
+  end
 
+  # A w:p holding one inline drawing. Pass alt_text: nil to omit @descr, which
+  # is how Word writes a picture that has no alternative text at all.
+  def drawing_paragraph(alt_text, id: 1)
+    descr = alt_text.nil? ? "" : %( descr="#{alt_text}")
+    <<~XML
+      <w:p><w:r><w:drawing><wp:inline>
+        <wp:extent cx="1000" cy="1000"/>
+        <wp:docPr id="#{id}" name="Picture #{id}"#{descr}/>
+        <a:graphic><a:graphicData
+          uri="http://schemas.openxmlformats.org/drawingml/2006/picture">
+          <pic:pic><pic:blipFill><a:blip r:embed="rId#{id}"/></pic:blipFill></pic:pic>
+        </a:graphicData></a:graphic>
+      </wp:inline></w:drawing></w:r></w:p>
+    XML
+  end
+
+  def document_with_alt_texts(*alt_texts)
+    paragraphs = alt_texts.each_with_index.map do |alt_text, index|
+      drawing_paragraph(alt_text, id: index + 1)
+    end
+    document_with(*paragraphs)
+  end
+
+  describe "#check" do
     context "with no images" do
-      before do
-        allow(document).to receive(:images).and_return([])
+      let(:document) do
+        document_with("<w:p><w:r><w:t>No pictures here</w:t></w:r></w:p>")
       end
 
       it "returns no violations" do
@@ -32,11 +70,7 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     end
 
     context "with image missing alt text" do
-      let(:image_no_alt) { double("Image", alt_text: nil) }
-
-      before do
-        allow(document).to receive(:images).and_return([image_no_alt])
-      end
+      let(:document) { document_with_alt_texts(nil) }
 
       it "returns violation" do
         violations = rule.check(document)
@@ -57,14 +91,15 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
         violation = rule.check(document).first
         expect(violation.suggestion).to include("descriptive alternative text")
       end
+
+      it "reports the offending drawing as the element" do
+        violation = rule.check(document).first
+        expect(violation.element).to be_a(Uniword::Wordprocessingml::Drawing)
+      end
     end
 
     context "with image having empty alt text" do
-      let(:image_empty_alt) { double("Image", alt_text: "   ") }
-
-      before do
-        allow(document).to receive(:images).and_return([image_empty_alt])
-      end
+      let(:document) { document_with_alt_texts("   ") }
 
       it "returns violation" do
         violations = rule.check(document)
@@ -73,12 +108,8 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     end
 
     context "with valid alt text" do
-      let(:image_with_alt) do
-        double("Image", alt_text: "A beautiful sunset over mountains")
-      end
-
-      before do
-        allow(document).to receive(:images).and_return([image_with_alt])
+      let(:document) do
+        document_with_alt_texts("A beautiful sunset over mountains")
       end
 
       it "returns no violations" do
@@ -86,13 +117,60 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
       end
     end
 
+    context "with an anchored drawing" do
+      def anchored_document(descr)
+        attr = descr.nil? ? "" : %( descr="#{descr}")
+        document_with(<<~XML)
+          <w:p><w:r><w:drawing><wp:anchor>
+            <wp:extent cx="1000" cy="1000"/>
+            <wp:docPr id="1" name="Picture 1"#{attr}/>
+          </wp:anchor></w:drawing></w:r></w:p>
+        XML
+      end
+
+      it "reads alt text from the anchor's docPr" do
+        document = anchored_document("A chart of quarterly revenue")
+
+        expect(rule.check(document)).to be_empty
+      end
+
+      it "reports missing alt text when the anchor has no descr" do
+        violation = rule.check(anchored_document(nil)).first
+
+        expect(violation.message).to include("Image 1 missing alternative text")
+      end
+    end
+
+    # CT_Drawing is a choice over wp:inline and wp:anchor with maxOccurs
+    # unbounded, so a drawing carrying both is schema-valid.
+    context "with a drawing carrying both inline and anchor" do
+      def both_frames_document(inline_attr)
+        document_with(<<~XML)
+          <w:p><w:r><w:drawing>
+            <wp:inline>
+              <wp:docPr id="1" name="Picture 1"#{inline_attr}/>
+            </wp:inline>
+            <wp:anchor>
+              <wp:docPr id="2" name="Picture 2" descr="A revenue chart"/>
+            </wp:anchor>
+          </w:drawing></w:r></w:p>
+        XML
+      end
+
+      it "falls back to the anchor when the inline docPr has no descr" do
+        expect(rule.check(both_frames_document(""))).to be_empty
+      end
+
+      # A blank descr is truthy in Ruby, so a naive || chain stops here and
+      # reports missing alt text despite the anchor carrying a real one.
+      it "falls back to the anchor when the inline descr is blank" do
+        expect(rule.check(both_frames_document(%( descr="")))).to be_empty
+      end
+    end
+
     context "when check_quality is enabled" do
       context "with alt text too short" do
-        let(:image_short_alt) { double("Image", alt_text: "Logo") }
-
-        before do
-          allow(document).to receive(:images).and_return([image_short_alt])
-        end
+        let(:document) { document_with_alt_texts("Logo") }
 
         it "returns warning violation" do
           violations = rule.check(document)
@@ -108,12 +186,7 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
       end
 
       context "with alt text too long" do
-        let(:long_text) { "a" * 200 }
-        let(:image_long_alt) { double("Image", alt_text: long_text) }
-
-        before do
-          allow(document).to receive(:images).and_return([image_long_alt])
-        end
+        let(:document) { document_with_alt_texts("a" * 200) }
 
         it "returns warning violation" do
           violations = rule.check(document)
@@ -137,11 +210,7 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
           "picture of",
         ].each do |generic_text|
           context "with '#{generic_text}'" do
-            let(:image_generic) { double("Image", alt_text: generic_text) }
-
-            before do
-              allow(document).to receive(:images).and_return([image_generic])
-            end
+            let(:document) { document_with_alt_texts(generic_text) }
 
             it "returns warning for generic text" do
               violations = rule.check(document)
@@ -154,12 +223,8 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
       end
 
       context "with good alt text" do
-        let(:image_good) do
-          double("Image", alt_text: "Company logo showing blue mountain")
-        end
-
-        before do
-          allow(document).to receive(:images).and_return([image_good])
+        let(:document) do
+          document_with_alt_texts("Company logo showing blue mountain")
         end
 
         it "returns no violations" do
@@ -169,24 +234,9 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     end
 
     context "when check_quality is disabled" do
-      let(:config_no_quality) do
-        {
-          wcag_criterion: "1.1.1 Non-text Content",
-          level: "A",
-          enabled: true,
-          severity: :error,
-          check_quality: false,
-          min_length: 10,
-          max_length: 150,
-          suggestion: "Add descriptive alternative text",
-        }
-      end
+      let(:config_no_quality) { config.merge(check_quality: false) }
       let(:rule_no_quality) { described_class.new(config_no_quality) }
-      let(:image_short) { double("Image", alt_text: "Logo") }
-
-      before do
-        allow(document).to receive(:images).and_return([image_short])
-      end
+      let(:document) { document_with_alt_texts("Logo") }
 
       it "does not check quality" do
         violations = rule_no_quality.check(document)
@@ -195,12 +245,8 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
     end
 
     context "with multiple images" do
-      let(:image1) { double("Image", alt_text: nil) }
-      let(:image2) { double("Image", alt_text: "Valid description here") }
-      let(:image3) { double("Image", alt_text: "img") }
-
-      before do
-        allow(document).to receive(:images).and_return([image1, image2, image3])
+      let(:document) do
+        document_with_alt_texts(nil, "Valid description here", "img")
       end
 
       it "checks all images" do

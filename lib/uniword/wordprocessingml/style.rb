@@ -152,11 +152,7 @@ module Uniword
       end
 
       def quick_format
-        val = qFormat
-        return true if val == true
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(qFormat) == true
       end
 
       def spacing_before
@@ -172,23 +168,11 @@ module Uniword
       end
 
       def keep_next
-        return false unless pPr
-
-        val = pPr.keep_next_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(pPr&.keep_next_wrapper) == true
       end
 
       def keep_lines
-        return false unless pPr
-
-        val = pPr.keep_lines_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(pPr&.keep_lines_wrapper) == true
       end
 
       def outline_level
@@ -200,13 +184,11 @@ module Uniword
       end
 
       def bold
-        return nil unless rPr
+        boolean_flag(rPr&.bold)
+      end
 
-        val = rPr.bold
-        return nil if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+      def italic
+        boolean_flag(rPr&.italic)
       end
 
       def font_size
@@ -251,6 +233,18 @@ module Uniword
 
       def run_properties
         rPr
+      end
+
+      private
+
+      # ST_OnOff toggles arrive as BooleanElement wrappers when parsed and as
+      # plain booleans when built. Returns nil when the toggle is absent, so
+      # readers wanting a strict false-when-absent contract compare == true.
+      def boolean_flag(element)
+        return nil if element.nil?
+        return element.on? if element.is_a?(Uniword::Properties::BooleanElement)
+
+        element == true
       end
     end
   end

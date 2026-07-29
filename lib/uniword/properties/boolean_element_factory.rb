@@ -11,6 +11,13 @@ module Uniword
       def value
         val != "false"
       end
+
+      # ST_OnOff accepts 0/1, false/true and off/on. An absent w:val means the
+      # toggle is on, and nil is not in FALSE_VALUES, so it falls through.
+      # Unknown tokens read as on: a reader must not raise on a malformed doc.
+      def on?
+        !Ooxml::Types::OoxmlBoolean::FALSE_VALUES.include?(val)
+      end
     end
 
     # Helper to define val= override after attribute declaration.
