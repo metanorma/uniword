@@ -98,6 +98,20 @@ RSpec.describe Uniword::Accessibility::Rules::ImageAltTextRule do
       end
     end
 
+    context "with alt text padded by whitespace" do
+      # Padding is not description. If extract_alt_text returned the raw
+      # attribute, the length checks would measure the padding and a
+      # 3-character description would satisfy min_length: 10.
+      let(:document) { document_with_alt_texts("        img        ") }
+
+      it "measures the stripped length, not the padding" do
+        violation = rule.check(document).first
+
+        expect(violation.message).to include("too short")
+        expect(violation.message).to include("3 chars")
+      end
+    end
+
     context "with image having empty alt text" do
       let(:document) { document_with_alt_texts("   ") }
 

@@ -49,12 +49,17 @@ module Uniword
         # may carry either or both. Take the first frame supplying a non-blank
         # description. Blank counts as absent, so callers test only nil.
         #
+        # The value is stripped: surrounding whitespace is not description, and
+        # returning it unstripped would let padding satisfy the length checks in
+        # check_alt_text_quality.
+        #
         # @param drawing [Wordprocessingml::Drawing] Drawing to read
         # @return [String, nil] Alternative text, or nil when absent
         def extract_alt_text(drawing)
           [drawing.inline, drawing.anchor]
             .filter_map { |frame| frame&.doc_properties&.descr }
-            .find { |descr| !descr.strip.empty? }
+            .map(&:strip)
+            .find { |descr| !descr.empty? }
         end
 
         # Check quality of alt text
