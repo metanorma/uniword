@@ -1,6 +1,6 @@
 # 18 — Reduce spec doubles
 
-**Status:** PRs 1-3 done. PR 4 outstanding. Count went 59 → 30 (29
+**Status:** Items 1-3 done. Item 4 outstanding. Count went 59 → 30 (29
 addressed). Both contract defects are fixed: `ImageAltTextRule` now reads
 `wp:docPr/@descr`, and `WordCss` now speaks `Wordprocessingml::Style`'s
 real API (`id`, `font_family`, `alignment.value`, plus a new `Style#italic`).
@@ -11,12 +11,13 @@ What remains, by file:
 | --- | --- | --- |
 | `spec/uniword/math_equation_spec.rb` | 10 (7 `double`, 3 `class_double`) | Plurimath — out of scope |
 | `spec/uniword/math/plurimath_adapter_spec.rb` | 7 | Plurimath — out of scope |
-| `spec/uniword/accessibility/rules_integration_spec.rb` | 5 | table/heading rules — PR 4 |
-| `spec/uniword/accessibility/accessibility_checker_spec.rb` | 2 (1 `double`, 1 `instance_double`) | PR 4 |
-| 6 single-site files | 6 | PR 4, fold in opportunistically |
+| `spec/uniword/accessibility/rules_integration_spec.rb` | 5 | table/heading rules — item 4 |
+| `spec/uniword/accessibility/accessibility_checker_spec.rb` | 2 (1 `double`, 1 `instance_double`) | item 4 |
+| 6 single-site files | 6 | item 4, fold in opportunistically |
 
-**Priority:** Medium (spec quality), but PR 1 and PR 2 are correctness
-**Files:** see PR breakdown below
+**Priority:** Medium for the spec cleanup; the two contract repairs below are
+correctness fixes.
+**Files:** see the work items below.
 
 ## Status of the original note
 
@@ -74,7 +75,7 @@ enumerable of style objects.
 So "replace the double with a real instance" cannot be done for these
 two without fixing production first.
 
-## PR 1 — repair the accessibility contract (prerequisite)
+## 1. Repair the accessibility contract (prerequisite)
 
 Decide what `ImageAltTextRule` operates on. Most likely real OOXML
 drawings, reading the description off `wp:docPr/@descr`, not a phantom
@@ -85,7 +86,7 @@ drawings, reading the description off `wp:docPr/@descr`, not a phantom
 Regression test must be a parsed document containing a real drawing, and
 must fail before the fix.
 
-## PR 2 — repair the WordCss contract (prerequisite)
+## 2. Repair the WordCss contract (prerequisite)
 
 Decide whether `WordCss` consumes WordprocessingML styles or MHTML style
 hashes, then make the code and the type agree. Replace the 7 style-side
@@ -102,12 +103,12 @@ it exposes `id` (`style.rb:130`) and `font_family` (`style.rb:200`), has a
 wrapper-backed `alignment`, and has no `italic` reader at all — whereas the
 doubles invent `style_id`, `font` and `italic`.
 
-## PR 3 — WordCss numbering doubles
+## 3. WordCss numbering doubles
 
 The other 7 doubles in that file are 5 `NumberingInstance` and 2
 `NumberingConfiguration`.
 
-**This is independent of PR 2 and can ship on its own.** `word_css.rb:50` calls
+**This is independent of item 2 and can be done on its own.** `word_css.rb:50` calls
 `numbering_config.instances`, and only `Wordprocessingml::NumberingConfiguration`
 declares `instances` (`numbering_configuration.rb:16`); the MHTML one does not.
 So the namespace is settled by the call itself, and a real
@@ -117,9 +118,9 @@ Two earlier revisions got this wrong in both directions — first calling it
 unblocked without checking, then calling it blocked on a namespace ambiguity
 that does not exist. The call site resolves it.
 
-## PR 4 — the remainder
+## 4. The remaining doubles
 
-Whatever is left after PRs 1-3, largest file first, one file per PR.
+Whatever is left after items 1-3, largest file first, one file per PR.
 For each double: name the real class, construct it the way production
 does, keep the assertion on observable behavior rather than call counts.
 
@@ -130,7 +131,7 @@ another double.
 ## Verification
 
 - Per file: `bundle exec rspec <file>` green **and proven able to fail**.
-  Break the behavior under test once and watch it go red. Given what PRs
+  Break the behavior under test once and watch it go red. Given what items
   1 and 2 uncovered, a green double-free spec that cannot fail is the
   main risk here.
 - The count drops from 59 by the number actually addressed. Count all three
@@ -153,7 +154,7 @@ another double.
 ## Expected outcome, stated honestly
 
 This will not reduce the count much on its own. Its real output is the two
-contract defects in PRs 1 and 2.
+contract defects in items 1 and 2.
 
 Severity differs between them. `ImageAltTextRule` is reachable and crashes on a
 real document. `WordCss.generate_style_css` / `generate_list_css` have **no
