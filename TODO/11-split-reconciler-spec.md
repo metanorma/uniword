@@ -64,14 +64,14 @@ and the endnote equivalent) go through `Notes#reconcile_note_references`
 is the one describe that must be split by example rather than moved
 intact, so read each example's call path before moving it.
 
-## PR shape — one destination file per PR, setup included
+## How to sequence the work
 
-There is no useful "move the setup first" PR. Concern-local setup cannot move
+There is no useful "move the setup first" step. Concern-local setup cannot move
 before its describe moves, and relocating the top-level aliases into nested
 blocks inside the monolith would be review-only churn that changes no behaviour.
-Two earlier revisions of this note proposed such a PR; drop it.
+Two earlier revisions of this note proposed one; drop it.
 
-Instead, each PR moves one concern **and** carries whatever setup that concern
+Instead, each step moves one concern **and** carries whatever setup that concern
 needs.
 
 Measured, so the sizing is real: the top level has **8 `let`s** (class aliases)
