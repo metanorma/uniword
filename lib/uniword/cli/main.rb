@@ -383,6 +383,50 @@ module Uniword
       say "Uniword version #{Uniword::VERSION}", :green
     end
 
+    desc "find-replace INPUT OUTPUT PATTERN REPLACEMENT",
+         "Find and replace text across document parts"
+    long_desc <<~DESC
+      Replace every non-overlapping match of PATTERN with REPLACEMENT
+      across the configured document parts -- Word's Home → Replace
+      dialog as a one-shot CLI command.
+
+      Scopes: body, headers, footers, footnotes, endnotes, comments,
+      styles, all (default). Pass --scope multiple times to combine.
+
+      Examples:
+        $ uniword find-replace report.docx out.docx "Acme" "MegaCorp"
+        $ uniword find-replace report.docx out.docx 'Chapter (\\d+)' 'Ch. \\1' --regex
+        $ uniword find-replace report.docx out.docx "DRAFT" "FINAL" --scope headers --scope footers
+        $ uniword find-replace report.docx out.docx "foo" "bar" --ignore-case --verbose
+    DESC
+    option :scope, type: :array, default: [:all],
+                   desc: "Scope(s): body, headers, footers, footnotes, " \
+                         "endnotes, comments, styles, all"
+    option :regex, type: :boolean, default: false,
+                   desc: "Treat PATTERN as a regular expression"
+    option :ignore_case, type: :boolean, default: false,
+                         desc: "Case-insensitive match (plain-string mode)"
+    option :verbose, aliases: "-v", type: :boolean, default: false,
+                     desc: "Show per-scope counts"
+    def find_replace(input_path, output_path, pattern, replacement)
+      scopes = expand_scopes(options[:scope])
+      doc = load_document(input_path)
+      result = run_find_replace(doc, pattern, replacement, scopes)
+
+      if options[:verbose]
+        say "Replacements by scope:", :cyan
+        result.by_scope.each do |scope_name, count|
+          say "  #{scope_name}: #{count}" if count.positive?
+        end
+      end
+      say "Replaced #{result.count} match(es) in #{output_path}", :green
+      doc.save(output_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
     # Register subcommands
     desc "theme SUBCOMMAND", "Manage document themes"
     subcommand "theme", ThemeCLI
@@ -438,6 +482,42 @@ module Uniword
     BASELINE_FIX_CODES = %w[R1 R6 R7 R8 R14 R24].freeze
 
     private
+
+    # -- find-replace helpers -------------------------------------------
+
+    # Normalize --scope arguments. `[:all]` collapses to `:all`; any
+    # combination of named scopes stays as an array.
+    #
+    # @param scopes [Array<Symbol>]
+    # @return [Symbol, Array<Symbol>]
+    def expand_scopes(scopes)
+      return :all if scopes.nil? || scopes.empty?
+
+      symbols = scopes.map(&:to_sym)
+      return :all if symbols.include?(:all)
+
+      symbols
+    end
+
+    # Build the right matcher from --regex flag and run the engine.
+    def run_find_replace(doc, pattern, replacement, scopes)
+      matcher = build_find_replace_matcher(pattern, replacement)
+      Uniword::FindReplace::Engine.new(document: doc, matcher: matcher,
+                                       scopes: scopes).run
+    end
+
+    def build_find_replace_matcher(pattern, replacement)
+      if options[:regex]
+        Uniword::FindReplace::RegexMatcher.new(pattern: pattern,
+                                               replacement: replacement)
+      else
+        Uniword::FindReplace::StringMatcher.new(
+          pattern: pattern,
+          replacement: replacement,
+          ignore_case: options[:ignore_case],
+        )
+      end
+    end
 
     # Report substantive repairs; routine normalization is summarized
     # separately so a healthy document does not look "repaired".

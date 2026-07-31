@@ -130,6 +130,10 @@ module Uniword
   # Builder API (construction layer for OOXML models)
   autoload :Builder, "uniword/builder"
 
+  # Find & replace over document parts (body, headers, footers,
+  # footnotes, endnotes, comments, styles).
+  autoload :FindReplace, "uniword/find_replace"
+
   # CLI
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"

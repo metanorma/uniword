@@ -119,6 +119,74 @@ module Uniword
         replacer.replace(self)
       end
 
+      # Find and replace text across document parts.
+      #
+      # Mirrors Word's Home → Replace dialog (without the GUI).
+      # Replaces every non-overlapping match of `pattern` with
+      # `replacement` across the configured scopes. Returns a
+      # `FindReplace::Result` with per-scope counts.
+      #
+      # v1 limitation: matches inside a single run only. Matches
+      # that span run boundaries are silently skipped (Word does the
+      # same in default mode).
+      #
+      # @param pattern [String, Regexp] literal String or Regexp
+      # @param replacement [String] replacement text; for regex
+      #   patterns, may reference captures via `\1`, `\2`, ...
+      # @param scope [Symbol, Array<Symbol>, :all] one or more of
+      #   `:body`, `:headers`, `:footers`, `:footnotes`, `:endnotes`,
+      #   `:comments`, `:styles`, or `:all` (default)
+      # @param ignore_case [Boolean] case-insensitive match
+      # @return [FindReplace::Result]
+      def find_replace(pattern, replacement, scope: :all, ignore_case: false)
+        matcher = build_find_replace_matcher(pattern, replacement, ignore_case)
+        FindReplace::Engine.new(document: self, matcher: matcher,
+                                scopes: scope).run
+      end
+
+      # Turn change tracking on. Every subsequent edit is recorded as
+      # a tracked change. Mirrors Word's Review → Track Changes → On.
+      #
+      # @return [self]
+      def track_changes_on!
+        ensure_settings.track_changes = Wordprocessingml::TrackChanges.new
+        self
+      end
+
+      # Turn change tracking off. Existing tracked changes remain in
+      # the document; new edits are applied silently. Mirrors Word's
+      # Review → Track Changes → Off.
+      #
+      # @return [self]
+      def track_changes_off!
+        ensure_settings.track_changes = nil
+        self
+      end
+
+      # True when change tracking is enabled.
+      #
+      # @return [Boolean]
+      def track_changes_enabled?
+        settings&.track_changes ? true : false
+      end
+
+      private
+
+      def build_find_replace_matcher(pattern, replacement, ignore_case)
+        if pattern.is_a?(Regexp)
+          FindReplace::RegexMatcher.new(pattern: pattern,
+                                        replacement: replacement)
+        else
+          FindReplace::StringMatcher.new(pattern: pattern,
+                                         replacement: replacement,
+                                         ignore_case: ignore_case)
+        end
+      end
+
+      def ensure_settings
+        self.settings ||= Wordprocessingml::Settings.new
+      end
+
       # Apply uniform page setup to every section of the document
       #
       # Mirrors Word's Layout dialog: named paper sizes, orientation
@@ -227,8 +295,6 @@ module Uniword
                                    conflict_resolution: strategy)
         self
       end
-
-      private
 
       # Ensure the document carries a theme part, creating it from a
       # fresh parse of the bundled Office theme when absent (every
