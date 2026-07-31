@@ -195,23 +195,6 @@ module Uniword
         Lint::Engine.new(document: self, ruleset: ruleset).run
       end
 
-      private
-
-      def build_find_replace_matcher(pattern, replacement, ignore_case)
-        if pattern.is_a?(Regexp)
-          FindReplace::RegexMatcher.new(pattern: pattern,
-                                        replacement: replacement)
-        else
-          FindReplace::StringMatcher.new(pattern: pattern,
-                                         replacement: replacement,
-                                         ignore_case: ignore_case)
-        end
-      end
-
-      def ensure_settings
-        self.settings ||= Wordprocessingml::Settings.new
-      end
-
       # Apply uniform page setup to every section of the document
       #
       # Mirrors Word's Layout dialog: named paper sizes, orientation
@@ -319,6 +302,23 @@ module Uniword
         styles_configuration.merge(template_doc.styles_configuration,
                                    conflict_resolution: strategy)
         self
+      end
+
+      private
+
+      def build_find_replace_matcher(pattern, replacement, ignore_case)
+        if pattern.is_a?(Regexp)
+          FindReplace::RegexMatcher.new(pattern: pattern,
+                                        replacement: replacement)
+        else
+          FindReplace::StringMatcher.new(pattern: pattern,
+                                         replacement: replacement,
+                                         ignore_case: ignore_case)
+        end
+      end
+
+      def ensure_settings
+        self.settings ||= Wordprocessingml::Settings.new
       end
 
       # Ensure the document carries a theme part, creating it from a
