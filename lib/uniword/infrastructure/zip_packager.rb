@@ -80,31 +80,6 @@ module Uniword
         remove_temp_file(temp_path)
       end
 
-      private
-
-      # When `Uniword.configuration.deterministic_output` is true,
-      # reorder entries (priority for OPC-required first, alphabetical
-      # for the rest). Otherwise return content unchanged (insertion
-      # order, which matches Word's behavior).
-      #
-      # @param content [Hash<String, String>]
-      # @return [Hash<String, String>] ordered hash
-      def order_content(content)
-        return content unless Uniword.configuration.deterministic_output
-
-        ordered_keys = Docx::DeterministicOutput.reorder_entries(content.keys)
-        ordered_keys.to_h { |k| [k, content[k]] }
-      end
-
-      # Fixed timestamp for deterministic mode; nil otherwise.
-      #
-      # @return [Time, nil]
-      def deterministic_timestamp
-        return nil unless Uniword.configuration.deterministic_output
-
-        Docx::DeterministicOutput::FIXED_TIMESTAMP
-      end
-
       # Add a file to an existing ZIP archive.
       #
       # @param zip_path [String] The path to the ZIP file
@@ -173,6 +148,29 @@ module Uniword
       end
 
       private
+
+      # When `Uniword.configuration.deterministic_output` is true,
+      # reorder entries (priority for OPC-required first, alphabetical
+      # for the rest). Otherwise return content unchanged (insertion
+      # order, which matches Word's behavior).
+      #
+      # @param content [Hash<String, String>]
+      # @return [Hash<String, String>] ordered hash
+      def order_content(content)
+        return content unless Uniword.configuration.deterministic_output
+
+        ordered_keys = Docx::DeterministicOutput.reorder_entries(content.keys)
+        ordered_keys.to_h { |k| [k, content[k]] }
+      end
+
+      # Fixed timestamp for deterministic mode; nil otherwise.
+      #
+      # @return [Time, nil]
+      def deterministic_timestamp
+        return nil unless Uniword.configuration.deterministic_output
+
+        Docx::DeterministicOutput::FIXED_TIMESTAMP
+      end
 
       # Write content to a ZIP file using a temp file and atomic move.
       # This avoids Windows file locking issues by ensuring we never
