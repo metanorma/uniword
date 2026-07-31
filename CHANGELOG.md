@@ -8,6 +8,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `DocumentRoot#find_replace(pattern, replacement, scope:, ignore_case:)`
+  — Word's Home → Replace dialog as an API. Replaces every
+  non-overlapping match across one or more scopes (`body`, `headers`,
+  `footers`, `footnotes`, `endnotes`, `comments`, `styles`, or `:all`
+  default). Supports plain-string and regex patterns with capture
+  references (`\1`, `\2`, ...).
+- `uniword find-replace INPUT OUTPUT PATTERN REPLACEMENT` CLI command.
+  Same surface as the Ruby API; supports `--scope` (repeatable),
+  `--regex`, `--ignore-case`, `--verbose`.
+- `Uniword::FindReplace` module — orchestrator (`Engine`), per-part
+  strategies (`Scope` subclasses), and matcher hierarchy
+  (`StringMatcher`, `RegexMatcher`). Open/closed: new scope = new
+  subclass + registration.
+- `Wordprocessingml::TrackChanges` element + `Settings#track_changes`
+  attribute — Word's `<w:trackChanges/>` toggle.
+- `DocumentRoot#track_changes_on!`, `#track_changes_off!`,
+  `#track_changes_enabled?` — Review → Track Changes as an API.
+- `uniword review track-changes on/off/status FILE` CLI subcommand.
+
+### Changed
+
+- `Wordprocessingml::Settings` now carries an optional `track_changes`
+  element. Documents that already had `<w:trackChanges/>` round-trip
+  it correctly (previously dropped on load).
+
 ## [1.5.0] - 2026-07-22
 
 ### Added

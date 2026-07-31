@@ -88,6 +88,7 @@ module Uniword
     autoload :DefaultTabStop, "uniword/wordprocessingml/default_tab_stop"
     autoload :CharacterSpacingControl, "uniword/wordprocessingml/character_spacing_control"
     autoload :DoNotDisplayPageBoundaries, "uniword/wordprocessingml/do_not_display_page_boundaries"
+    autoload :TrackChanges, "uniword/wordprocessingml/track_changes"
     autoload :Rsids, "uniword/wordprocessingml/rsids"
     autoload :RsidRoot, "uniword/wordprocessingml/rsid_root"
     autoload :Rsid, "uniword/wordprocessingml/rsid"

@@ -37,6 +37,7 @@ module Uniword
       attribute :hyphenation_zone, HyphenationZone
       attribute :style_pane_sort_method, StylePaneSortMethod
       attribute :doc_vars, DocVars
+      attribute :track_changes, TrackChanges
       attribute :w14_doc_id, W14DocId
       attribute :w15_chart_tracking_ref_based, W15ChartTrackingRefBased
       attribute :w15_doc_id, W15DocId
@@ -106,6 +107,7 @@ module Uniword
         map_element "endnotePr", to: :endnote_pr, render_nil: false
         map_element "compat", to: :compat, render_nil: false
         map_element "docVars", to: :doc_vars, render_nil: false
+        map_element "trackChanges", to: :track_changes, render_nil: false
         map_element "rsids", to: :rsids, render_nil: false
         map_element "mathPr", to: :math_pr, render_nil: false
         map_element "themeFontLang", to: :theme_font_lang, render_nil: false
