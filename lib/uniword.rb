@@ -134,6 +134,12 @@ module Uniword
   # footnotes, endnotes, comments, styles).
   autoload :FindReplace, "uniword/find_replace"
 
+  # Document redaction (PII patterns, custom regex).
+  autoload :Redact, "uniword/redact"
+
+  # Document lint (style-guide enforcement).
+  autoload :Lint, "uniword/lint"
+
   # CLI
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"

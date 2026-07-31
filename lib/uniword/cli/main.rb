@@ -383,6 +383,48 @@ module Uniword
       say "Uniword version #{Uniword::VERSION}", :green
     end
 
+    desc "redact INPUT OUTPUT", "Redact PII patterns from a document"
+    long_desc <<~DESC
+      Replace PII patterns (SSN, email, phone, credit card, IPv4)
+      with [REDACTED] across the document. Compliance use case Word
+      cannot serve.
+
+      Scopes: body, headers, footers, footnotes, endnotes, comments,
+      styles, all (default). Pass --scope multiple times to combine.
+
+      Examples:
+        $ uniword redact report.docx redacted.docx
+        $ uniword redact report.docx redacted.docx --pattern ssn --pattern email
+        $ uniword redact report.docx redacted.docx --scope body --verbose
+    DESC
+    option :pattern, type: :array, default: [:pii],
+                     desc: "Pattern(s): pii (default), ssn, email, " \
+                           "phone, credit_card, ipv4"
+    option :scope, type: :array, default: [:all],
+                   desc: "Scope(s): body, headers, footers, footnotes, " \
+                         "endnotes, comments, styles, all"
+    option :verbose, aliases: "-v", type: :boolean, default: false,
+                     desc: "Show per-pattern counts"
+    def redact(input_path, output_path)
+      doc = load_document(input_path)
+      patterns = resolve_redact_patterns(options[:pattern])
+      result = doc.redact(patterns: patterns,
+                          scope: expand_scopes(options[:scope]))
+
+      if options[:verbose]
+        say "Redactions by pattern:", :cyan
+        result.by_pattern.each do |name, count|
+          say "  #{name}: #{count}" if count.positive?
+        end
+      end
+      say "Redacted #{result.count} match(es) in #{output_path}", :green
+      doc.save(output_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
     desc "find-replace INPUT OUTPUT PATTERN REPLACEMENT",
          "Find and replace text across document parts"
     long_desc <<~DESC
@@ -504,6 +546,18 @@ module Uniword
       matcher = build_find_replace_matcher(pattern, replacement)
       Uniword::FindReplace::Engine.new(document: doc, matcher: matcher,
                                        scopes: scopes).run
+    end
+
+    # Translate --pattern args (`pii`, `ssn`, ...) into a list of
+    # Redact::Pattern objects via PatternLibrary.
+    #
+    # @param names [Array<Symbol>]
+    # @return [Array<Uniword::Redact::Pattern>]
+    def resolve_redact_patterns(names)
+      symbols = Array(names).map(&:to_sym)
+      return :pii if symbols == [:pii]
+
+      Uniword::Redact::PatternLibrary.select(symbols)
     end
 
     def build_find_replace_matcher(pattern, replacement)

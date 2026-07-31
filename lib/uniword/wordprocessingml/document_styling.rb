@@ -170,6 +170,31 @@ module Uniword
         settings&.track_changes ? true : false
       end
 
+      # Redact PII patterns and/or custom regex across the document.
+      #
+      # Built on FindReplace. Default pattern library matches US
+      # phone numbers, email, SSN, credit card numbers, IPv4
+      # addresses. Pass `patterns: :pii` for defaults, or an array
+      # of names (`[:ssn, :email]`) to select a subset.
+      #
+      # @param patterns [Symbol, Array<Symbol>, Array<Redact::Pattern>]
+      #   `:pii` (default), or names/Pattern objects to apply
+      # @param scope [Symbol, Array<Symbol>, :all] find-replace scope
+      # @return [Redact::Result]
+      def redact(patterns: :pii, scope: :all)
+        Redact::Engine.new(document: self, patterns: patterns,
+                           scope: scope).run
+      end
+
+      # Run a lint ruleset against the document.
+      #
+      # @param ruleset [Lint::Ruleset, Array<Lint::Rule>] rules to
+      #   apply
+      # @return [Lint::Result]
+      def lint(ruleset:)
+        Lint::Engine.new(document: self, ruleset: ruleset).run
+      end
+
       private
 
       def build_find_replace_matcher(pattern, replacement, ignore_case)
