@@ -52,6 +52,14 @@ module Uniword
     # @return [Symbol] `:strip` (default) or `:raise`
     attr_reader :on_noncompliant_content
 
+    # Whether save produces deterministic output (fixed ZIP
+    # timestamps, sorted entry order). Default false (Word-compatible
+    # timestamps and order). Enable for git-tracked documents where
+    # byte-stable diffs matter.
+    #
+    # @return [Boolean]
+    attr_reader :deterministic_output
+
     # Create a configuration with default policy values.
     #
     # Defaults: validate_on_save: true, xsd_validation: false,
@@ -68,6 +76,7 @@ module Uniword
       @xsd_validation = false
       @log_save_fixes = true
       @on_noncompliant_content = :strip
+      @deterministic_output = false
       self
     end
 
@@ -107,6 +116,14 @@ module Uniword
     #   `ON_NONCOMPLIANT_MODES`
     def on_noncompliant_content=(value)
       @on_noncompliant_content = typed_mode(value, :on_noncompliant_content)
+    end
+
+    # Set the deterministic-output policy.
+    #
+    # @param value [Boolean]
+    # @return [Boolean]
+    def deterministic_output=(value)
+      @deterministic_output = typed_boolean(value, :deterministic_output)
     end
 
     private
