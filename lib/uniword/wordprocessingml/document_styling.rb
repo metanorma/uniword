@@ -195,6 +195,46 @@ module Uniword
         Lint::Engine.new(document: self, ruleset: ruleset).run
       end
 
+      # Counter for auto-numbered captions. Persisted across the
+      # document's lifetime; reset on document load.
+      #
+      # @return [Caption::Counter]
+      def caption_counter
+        @caption_counter ||= Caption::Counter.new
+      end
+
+      # Add an auto-numbered caption paragraph to the body and
+      # return the bookmark name (for use in cross-references).
+      #
+      # The caption is appended as a new paragraph with style
+      # "Caption" and a SEQ field. The bookmark wraps the entire
+      # paragraph so cross-references resolve to the caption text.
+      #
+      # @param label [String] "Figure", "Table", "Equation", or any
+      #   other category — each gets its own counter
+      # @param text [String] caption body
+      # @param separator [String] between the label/number and the
+      #   body (default ": ")
+      # @return [String] bookmark name (e.g. "_Figure1")
+      def add_caption(label:, text:, separator: ": ")
+        builder = Caption::CaptionBuilder.new(caption_counter)
+        paragraph, bookmark_name = builder.build(label: label,
+                                                 text: text,
+                                                 separator: separator)
+        body.paragraphs << paragraph
+        bookmark_name
+      end
+
+      # Build a cross-reference run targeting a bookmark. Returns a
+      # Run containing a SimpleField with a REF instruction. The
+      # caller decides where to place it.
+      #
+      # @param bookmark_name [String] target bookmark
+      # @return [Wordprocessingml::SimpleField]
+      def cross_reference_to(bookmark_name)
+        Caption::CrossReference.new(bookmark_name).build
+      end
+
       # Apply uniform page setup to every section of the document
       #
       # Mirrors Word's Layout dialog: named paper sizes, orientation

@@ -15,5 +15,6 @@ module Uniword
     autoload :UpdateMetadataStage,
              "#{__dir__}/batch/stages/update_metadata_stage"
     autoload :ValidateLinksStage, "#{__dir__}/batch/stages/validate_links_stage"
+    autoload :Operation, "#{__dir__}/batch/operation"
   end
 end
