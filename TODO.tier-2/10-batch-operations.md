@@ -1,6 +1,6 @@
 # 10 — Batch operations
 
-**Status:** PLANNED
+**Status:** COMPLETED (framework + RepairTask + VerifyTask; find-replace/diff tasks deferred)
 **Priority:** High for ops/CI
 **Depends on:** nothing
 

@@ -140,6 +140,12 @@ module Uniword
   # Document lint (style-guide enforcement).
   autoload :Lint, "uniword/lint"
 
+  # Auto-numbered captions + cross-references.
+  autoload :Caption, "uniword/caption"
+
+  # Plugin system (validators, transformers, CLI commands).
+  autoload :Plugin, "uniword/plugin"
+
   # CLI
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"

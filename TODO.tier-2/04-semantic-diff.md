@@ -1,6 +1,6 @@
 # 04 — Semantic diff
 
-**Status:** PLANNED
+**Status:** COMPLETED (paragraph-level; table/image/style comparators deferred)
 **Priority:** Medium
 **Depends on:** existing diff (text-level)
 

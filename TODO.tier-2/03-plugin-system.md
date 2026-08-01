@@ -1,6 +1,6 @@
 # 03 — Plugin system
 
-**Status:** PLANNED
+**Status:** COMPLETED
 **Priority:** Medium (extensibility)
 **Depends on:** nothing
 

@@ -10,6 +10,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `Uniword::Caption` module — auto-numbered figure/table/equation
+  captions with `Caption::Counter`, `Caption::CaptionBuilder`
+  (SEQ field + bookmark), and `Caption::CrossReference` (REF
+  fldSimple).
+- `DocumentRoot#caption_counter`, `#add_caption(label:, text:,`
+  ` separator:)`, `#cross_reference_to(bookmark_name)` Ruby API.
+- `Uniword::Plugin` module — extensibility surface with
+  `Plugin::Validator`, `Plugin::Transformer`, `Plugin::CliCommand`
+  base classes and `Plugin::Registry` for registration.
+  `Plugin::Loader` discovers plugins via `Gem.find_files`.
+- `Uniword::Diff::Semantic` module — element-level diff with
+  change classification (`:added`, `:removed`, `:modified`, `:moved`)
+  and sub-classification for modifications (`:text`, `:format`,
+  `:structure`). LCS-based paragraph alignment.
+- `Uniword::Batch::Operation` module — parallel-by-design runner
+  for batch CLI operations. Includes `RepairTask` and `VerifyTask`;
+  extensible via `Operation::Task` subclass + `Operation::Runner`.
+
+### Changed
+
+- `Uniword::Diff` module now autoloads `Semantic` (element-level
+  diff sits alongside the existing text-level `DocumentDiffer`).
+- `Uniword::Batch` module now autoloads `Operation` (sibling to
+  the existing staged-pipeline `DocumentProcessor`).
+
+### Added (from prior PR — kept here for Unreleased record)
+
 - `DocumentRoot#find_replace(pattern, replacement, scope:, ignore_case:)`
   — Word's Home → Replace dialog as an API. Replaces every
   non-overlapping match across one or more scopes (`body`, `headers`,

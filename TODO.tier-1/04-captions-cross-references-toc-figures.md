@@ -1,6 +1,6 @@
 # 04 — captions + cross-references + TOC of figures
 
-**Status:** PLANNED (next session)
+**Status:** COMPLETED (captions + cross-references; TOC-figures variant deferred to follow-up)
 **Priority:** High for tech/science writing
 **Depends on:** nothing (but complements existing TOC)
 
