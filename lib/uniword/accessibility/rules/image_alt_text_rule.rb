@@ -18,17 +18,15 @@ module Uniword
           violations = []
 
           document.images.each_with_index do |image, index|
-            alt_text = extract_alt_text(image)
+            alt_text = image.alt_text
 
-            # extract_alt_text already treats a blank descr as absent.
+            # Drawing#alt_text already treats a blank descr as absent.
             if alt_text.nil?
               violations << create_violation(
                 message: "Image #{index + 1} missing alternative text",
                 element: image,
                 severity: @config[:severity] || :error,
-                suggestion: @config[:suggestion] ||
-                  "Add descriptive alternative text via the drawing's " \
-                  "docPr descr attribute",
+                suggestion: missing_alt_text_suggestion(image),
               )
               next # Skip quality checks if no alt text
             end
@@ -44,22 +42,23 @@ module Uniword
 
         private
 
-        # Alt text for a w:drawing is the descr attribute of its wp:docPr.
-        # CT_Drawing is a choice over wp:inline and wp:anchor, so a drawing
-        # may carry either or both. Take the first frame supplying a non-blank
-        # description. Blank counts as absent, so callers test only nil.
+        # Word's older Alt Text dialog had both a Title and a Description
+        # field, and templates from that era put the description in Title.
+        # Title is a caption, not a text alternative, so the image still
+        # counts as undescribed — but say where the text already is.
         #
-        # The value is stripped: surrounding whitespace is not description, and
-        # returning it unstripped would let padding satisfy the length checks in
-        # check_alt_text_quality.
-        #
-        # @param drawing [Wordprocessingml::Drawing] Drawing to read
-        # @return [String, nil] Alternative text, or nil when absent
-        def extract_alt_text(drawing)
-          [drawing.inline, drawing.anchor]
-            .filter_map { |frame| frame&.doc_properties&.descr }
-            .map(&:strip)
-            .find { |descr| !descr.empty? }
+        # @param drawing [Wordprocessingml::Drawing] Drawing being reported
+        # @return [String] Suggestion text
+        def missing_alt_text_suggestion(drawing)
+          title = drawing.alt_title
+          if title
+            return "Move the drawing's docPr title (#{title.inspect}) into " \
+                   "its descr attribute; title is a caption, not alt text"
+          end
+
+          @config[:suggestion] ||
+            "Add descriptive alternative text via the drawing's " \
+            "docPr descr attribute"
         end
 
         # Check quality of alt text

@@ -9,6 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:style>
     class Style < Lutaml::Model::Serializable
+      include YamlWriter
+
       # Pattern 0: ATTRIBUTES FIRST
       attribute :type, :string
       attribute :styleId, :string
@@ -50,53 +52,57 @@ module Uniword
       end
 
       # YAML transform methods (instance methods called by lutaml-model's
-      # `with:` transform mechanism)
+      # `with:` transform mechanism). The `_from` readers build wrapper
+      # objects; the `_to` writers assign through YamlWriter#yaml_put rather
+      # than returning a value — see that module for why.
       def yaml_name_from(instance, value)
         instance.name = StyleName.new(val: value) if value
       end
 
-      def yaml_name_to(instance, _doc)
-        instance.name&.val
+      def yaml_name_to(instance, doc)
+        yaml_put(doc, "name", instance.name&.val)
       end
 
       def yaml_quick_format_from(instance, value)
         instance.qFormat = Properties::QuickFormat.new(value: value) unless value.nil?
       end
 
-      def yaml_quick_format_to(instance, _doc)
-        instance.qFormat&.value
+      # w:qFormat is an ST_OnOff toggle, read through BooleanElement#on?
+      # like every other one.
+      def yaml_quick_format_to(instance, doc)
+        yaml_put(doc, "quick_format", instance.qFormat&.on?)
       end
 
       def yaml_based_on_from(instance, value)
         instance.basedOn = BasedOn.new(val: value) if value
       end
 
-      def yaml_based_on_to(instance, _doc)
-        instance.basedOn&.val
+      def yaml_based_on_to(instance, doc)
+        yaml_put(doc, "based_on", instance.basedOn&.val)
       end
 
       def yaml_next_style_from(instance, value)
         instance.nextStyle = Next.new(val: value) if value
       end
 
-      def yaml_next_style_to(instance, _doc)
-        instance.nextStyle&.val
+      def yaml_next_style_to(instance, doc)
+        yaml_put(doc, "next_style", instance.nextStyle&.val)
       end
 
       def yaml_linked_style_from(instance, value)
         instance.link = Link.new(val: value) if value
       end
 
-      def yaml_linked_style_to(instance, _doc)
-        instance.link&.val
+      def yaml_linked_style_to(instance, doc)
+        yaml_put(doc, "linked_style", instance.link&.val)
       end
 
       def yaml_ui_priority_from(instance, value)
         instance.uiPriority = UiPriority.new(val: value.to_s) if value
       end
 
-      def yaml_ui_priority_to(instance, _doc)
-        instance.uiPriority&.val&.to_i
+      def yaml_ui_priority_to(instance, doc)
+        yaml_put(doc, "ui_priority", instance.uiPriority&.val&.to_i)
       end
 
       xml do

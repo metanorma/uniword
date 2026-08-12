@@ -18,5 +18,9 @@ module Uniword
     BooleanElementFactory.define("qFormat", "QuickFormat")
     BooleanElementFactory.define("keepNext", "KeepNext")
     BooleanElementFactory.define("keepLines", "KeepLines")
+
+    # Paragraph-level boolean elements
+    BooleanElementFactory.define("suppressLineNumbers", "SuppressLineNumbers")
+    BooleanElementFactory.define("bidi", "Bidi")
   end
 end

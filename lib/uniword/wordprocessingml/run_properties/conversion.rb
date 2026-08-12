@@ -9,6 +9,25 @@ module Uniword
       # (e.g., RunProperties.new(bold: true)) and the wrapper
       # objects (e.g., Properties::Bold) required by lutaml-model.
       module Conversion
+        # Every rPr attribute whose value is an ST_OnOff toggle element.
+        BOOLEAN_WRAPPERS = {
+          bold: Properties::Bold,
+          bold_cs: Properties::BoldCs,
+          italic: Properties::Italic,
+          italic_cs: Properties::ItalicCs,
+          strike: Properties::Strike,
+          double_strike: Properties::DoubleStrike,
+          small_caps: Properties::SmallCaps,
+          caps: Properties::Caps,
+          hidden: Properties::Vanish,
+          no_proof: Properties::NoProof,
+          web_hidden: Properties::WebHidden,
+          shadow: Properties::Shadow,
+          emboss: Properties::Emboss,
+          imprint: Properties::Imprint,
+          outline: Properties::Outline,
+        }.freeze
+
         def initialize(attrs = {})
           # Extract flat convenience keys before super (lutaml-model ignores
           # unknown keys). These are converted to proper wrapper objects below.
@@ -96,16 +115,18 @@ module Uniword
           shading.pattern = type_val if type_val
         end
 
+        # Wrap every ST_OnOff toggle handed in as a primitive.
+        #
+        # `false` is a value, not an absence: testing truthiness here left a
+        # raw Ruby false on the attribute and to_xml then died on it.
         def convert_boolean_attrs!
-          @bold = Properties::Bold.new(value: @bold) if @bold && !@bold.is_a?(Properties::Bold)
-          @bold_cs = Properties::BoldCs.new(value: @bold_cs) if @bold_cs && !@bold_cs.is_a?(Properties::BoldCs)
-          @italic = Properties::Italic.new(value: @italic) if @italic && !@italic.is_a?(Properties::Italic)
-          @italic_cs = Properties::ItalicCs.new(value: @italic_cs) if @italic_cs && !@italic_cs.is_a?(Properties::ItalicCs)
-          @strike = Properties::Strike.new(value: @strike) if @strike && !@strike.is_a?(Properties::Strike)
-          @double_strike = Properties::DoubleStrike.new(value: @double_strike) if @double_strike && !@double_strike.is_a?(Properties::DoubleStrike)
-          @small_caps = Properties::SmallCaps.new(value: @small_caps) if @small_caps && !@small_caps.is_a?(Properties::SmallCaps)
-          @caps = Properties::Caps.new(value: @caps) if @caps && !@caps.is_a?(Properties::Caps)
-          @hidden = Properties::Vanish.new(value: @hidden) if @hidden && !@hidden.is_a?(Properties::Vanish)
+          BOOLEAN_WRAPPERS.each do |name, klass|
+            current = instance_variable_get(:"@#{name}")
+            next if current.nil? || current.is_a?(klass) ||
+              Lutaml::Model::Utils.uninitialized?(current)
+
+            instance_variable_set(:"@#{name}", klass.new(val: current))
+          end
         end
 
         def convert_style_attr!
