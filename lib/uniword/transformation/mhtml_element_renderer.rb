@@ -212,7 +212,13 @@ module Uniword
         style_attrs << "height:#{height_px}px" if height_px
         style = style_attrs.empty? ? "" : " style='#{style_attrs.join(';')}'"
 
-        %(<img src="#{image_target}"#{style}>)
+        # No alt attribute at all when the drawing carries no description.
+        # An empty alt says "decorative", which is a claim about the image
+        # we have no grounds to make.
+        alt_text = drawing.alt_text
+        alt = alt_text ? %( alt="#{escape_xml(alt_text)}") : ""
+
+        %(<img src="#{image_target}"#{alt}#{style}>)
       end
 
       # Resolve image target path from image_parts
@@ -637,9 +643,9 @@ module Uniword
 
         attrs << %(w:id="#{props.id.value}") if props.id&.value
 
-        attrs << 'w:showingPlcHdr="t"' if props.showing_placeholder_header
+        attrs << 'w:showingPlcHdr="t"' if props.showing_placeholder_header&.on?
 
-        attrs << 'w:temporary="t"' if props.temporary
+        attrs << 'w:temporary="t"' if props.temporary&.on?
 
         if props.placeholder&.doc_part
           doc_part = props.placeholder.doc_part

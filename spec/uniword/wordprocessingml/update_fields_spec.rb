@@ -15,8 +15,16 @@ RSpec.describe Uniword::Wordprocessingml::UpdateFields do
     expect(xml).to include("updateFields")
   end
 
+  # w:updateFields now goes through the same ST_OnOff element machinery as
+  # every other toggle, which spells off as w:val="false". The assertion is
+  # about the meaning, not the spelling: both are ST_OnOff off.
   it "serializes w:val when false" do
-    expect(described_class.new(value: false).to_xml).to include('w:val="0"')
+    xml = described_class.new(value: false).to_xml
+
+    aggregate_failures do
+      expect(xml).to match(/w:val="(0|false|off)"/)
+      expect(described_class.from_xml(xml).on?).to be(false)
+    end
   end
 
   it "parses w:updateFields from settings XML" do

@@ -119,29 +119,37 @@ module Uniword
 
       # Build a CSS rule for a style.
       #
-      # @param style [Style] The style
+      # @param style [Wordprocessingml::Style] The style
       # @return [String, nil] The CSS rule or nil
       def self.build_style_rule(style)
         return nil unless style
 
+        # w:styleId is optional in the schema, and without it there is no
+        # class selector to hang the rule on.
+        style_id = style.id
+        return nil if style_id.nil? || style_id.empty?
+
         properties = []
 
         # Font properties
-        properties << "font-family: '#{style.font}'" if style.font
+        font_family = style.font_family
+        properties << "font-family: '#{font_family}'" if font_family
         if style.font_size
-          properties << "font-size: #{CssNumberFormatter.format(style.font_size, 'pt',
-                                                                precision: 1)}"
+          # w:sz is in half-points, so it needs the font-size formatter.
+          formatted_size = CssNumberFormatter
+            .format_font_size(style.font_size, precision: 1)
+          properties << "font-size: #{formatted_size}"
         end
         properties << "font-weight: bold" if style.bold
         properties << "font-style: italic" if style.italic
 
-        # Paragraph properties
-        properties << "text-align: #{style.alignment}" if style.alignment
+        # Paragraph properties, whose alignment is a w:jc wrapper element
+        alignment = style.alignment&.value
+        properties << "text-align: #{alignment}" if alignment
 
         return nil if properties.empty?
 
-        selector = ".#{style.style_id}"
-        "#{selector} {\n  #{properties.join(";\n  ")};\n}"
+        ".#{style_id} {\n  #{properties.join(";\n  ")};\n}"
       end
 
       # Build a CSS rule for list numbering.

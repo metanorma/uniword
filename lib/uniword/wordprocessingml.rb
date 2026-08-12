@@ -233,6 +233,9 @@ module Uniword
     autoload :HideMark, "uniword/wordprocessingml/hide_mark"
     autoload :TextDirection, "uniword/wordprocessingml/text_direction"
 
+    # Shared YAML serialization helper mixed into the models below
+    autoload :YamlWriter, "uniword/wordprocessingml/yaml_writer"
+
     # Properties classes (consolidated from Ooxml::WordProcessingML)
     autoload :ParagraphProperties,
              "uniword/wordprocessingml/paragraph_properties"

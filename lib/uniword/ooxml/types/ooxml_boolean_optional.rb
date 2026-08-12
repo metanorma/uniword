@@ -10,9 +10,9 @@ module Uniword
       # Key behavior:
       # - cast(nil) -> nil (doesn't convert to false like OoxmlBoolean)
       # - cast("1"/"true"/"on") -> true, cast("0"/"false"/"off") -> false
-      # - cast of any other value raises
-      #   Lutaml::Model::Type::InvalidValueError instead of passing
-      #   through unchanged
+      # - cast of any other token -> true, the same reading
+      #   Properties::BooleanElement gives an unrecognised w:val. A reader
+      #   must not raise on a malformed document.
       # - to_xml(true) -> "1"
       # - to_xml(false) -> "0" (explicit false in original)
       # - to_xml(nil) -> nil (attribute absent, omit from output)
@@ -26,12 +26,8 @@ module Uniword
         def self.cast(value, _options = {})
           return value if Lutaml::Model::Utils.uninitialized?(value)
           return nil if value.nil?
-          return true if OoxmlBoolean::TRUE_VALUES.include?(value)
-          return false if OoxmlBoolean::FALSE_VALUES.include?(value)
 
-          raise Lutaml::Model::Type::InvalidValueError.new(
-            value, OoxmlBoolean::ON_OFF_VALUES
-          )
+          OoxmlBoolean.on?(value)
         end
 
         def self.serialize(value)

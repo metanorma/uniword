@@ -18,9 +18,17 @@ RSpec.describe Uniword::Ooxml::Types::OoxmlBoolean do
       expect(described_class.cast(nil)).to be false
     end
 
-    it "raises on an unknown value instead of passing it through" do
-      expect { described_class.cast("diagonal-garbage") }
-        .to raise_error(Lutaml::Model::Type::InvalidValueError)
+    # A reader must not raise on a malformed document. One bad token in
+    # styles.xml used to kill the whole parse.
+    it "reads an unknown token as on instead of raising" do
+      expect(described_class.cast("diagonal-garbage")).to be(true)
+    end
+
+    it "reads the same way Properties::BooleanElement does" do
+      %w[1 0 true false on off banana].each do |token|
+        expect(described_class.cast(token))
+          .to be(Uniword::Properties::Bold.new(val: token).on?)
+      end
     end
   end
 

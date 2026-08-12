@@ -60,9 +60,14 @@ module Uniword
         props = run.properties
         return text unless props
 
-        # Apply inline formatting
-        text = "<strong>#{text}</strong>" if props.bold
-        text = "<em>#{text}</em>" if props.italic
+        # Apply inline formatting.
+        #
+        # w:b and w:i are ST_OnOff toggles, so they are read through
+        # BooleanElement#on? and an explicit off ("0"/"false"/"off") stays
+        # off. The reads below are value elements, not toggles: w:u carries
+        # an ST_Underline style, the rest carry plain values.
+        text = "<strong>#{text}</strong>" if props.bold&.on?
+        text = "<em>#{text}</em>" if props.italic&.on?
         text = "<u>#{text}</u>" if props.underline&.value
         text = "<span style=\"color:#{props.color&.value}\">#{text}</span>" if props.color&.value
         text = "<span style=\"font-size:#{font_size_to_html(props.size&.value)}\">#{text}</span>" if props.size&.value

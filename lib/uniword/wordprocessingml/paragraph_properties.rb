@@ -9,6 +9,8 @@ module Uniword
     # Represents w:pPr element containing paragraph-level formatting.
     # Used in StyleSets and document paragraph elements.
     class ParagraphProperties < Lutaml::Model::Serializable
+      include YamlWriter
+
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
       # Simple element attributes (OOXML w:val attributes stored in
@@ -64,10 +66,15 @@ module Uniword
 
       # Spacing options
       attribute :contextual_spacing, Properties::ContextualSpacing
-      attribute :suppress_line_numbers, :boolean, default: -> { false }
+
+      # w:suppressLineNumbers and w:bidi are ST_OnOff elements, not plain
+      # booleans. Declared as :boolean they read "" for every spelling, so an
+      # explicitly-off flag was indistinguishable from an on one, and a
+      # parsed element was dropped on the way back out.
+      attribute :suppress_line_numbers_wrapper, Properties::SuppressLineNumbers
 
       # Bidirectional text
-      attribute :bidirectional, :boolean, default: -> { false }
+      attribute :bidirectional_wrapper, Properties::Bidi
 
       # East Asian typography
       attribute :auto_space_de, Properties::AutoSpaceDE
@@ -104,11 +111,15 @@ module Uniword
                     to: :yaml_page_break_before_to }
         map "outline_level",
             with: { from: :yaml_outline_level_from, to: :yaml_outline_level_to }
-        map "suppress_line_numbers", to: :suppress_line_numbers
+        map "suppress_line_numbers",
+            with: { from: :yaml_suppress_line_numbers_from,
+                    to: :yaml_suppress_line_numbers_to }
         map "contextual_spacing",
             with: { from: :yaml_contextual_spacing_from,
                     to: :yaml_contextual_spacing_to }
-        map "bidirectional", to: :bidirectional
+        map "bidirectional",
+            with: { from: :yaml_bidirectional_from,
+                    to: :yaml_bidirectional_to }
         map "indent_left", to: :indent_left
         map "indent_right", to: :indent_right
         map "indent_first_line", to: :indent_first_line
@@ -117,7 +128,9 @@ module Uniword
       end
 
       # YAML transform methods (instance methods called by lutaml-model's
-      # `with:` transform mechanism)
+      # `with:` transform mechanism). Every writer assigns through
+      # YamlWriter#yaml_put; see that module for why.
+
       def yaml_style_from(instance, value)
         if value
           instance.style = [
@@ -126,40 +139,42 @@ module Uniword
         end
       end
 
-      def yaml_style_to(instance, _doc)
-        Array(instance.style).first&.value
+      def yaml_style_to(instance, doc)
+        yaml_put(doc, "style", Array(instance.style).first&.value)
       end
 
       def yaml_alignment_from(instance, value)
         instance.alignment = Properties::Alignment.new(value: value) if value
       end
 
-      def yaml_alignment_to(instance, _doc)
-        instance.alignment&.value
+      def yaml_alignment_to(instance, doc)
+        yaml_put(doc, "alignment", instance.alignment&.value)
       end
 
       def yaml_keep_next_from(instance, value)
         instance.keep_next_wrapper = Properties::KeepNext.new(value: value) unless value.nil?
       end
 
-      def yaml_keep_next_to(instance, _doc)
-        instance.keep_next_wrapper&.value
+      # Toggles read through BooleanElement#on?, the same reading the XML and
+      # predicate consumers get, so w:val="0" and w:val="off" stay off.
+      def yaml_keep_next_to(instance, doc)
+        yaml_put(doc, "keep_next", instance.keep_next_wrapper&.on?)
       end
 
       def yaml_keep_lines_from(instance, value)
         instance.keep_lines_wrapper = Properties::KeepLines.new(value: value) unless value.nil?
       end
 
-      def yaml_keep_lines_to(instance, _doc)
-        instance.keep_lines_wrapper&.value
+      def yaml_keep_lines_to(instance, doc)
+        yaml_put(doc, "keep_lines", instance.keep_lines_wrapper&.on?)
       end
 
       def yaml_outline_level_from(instance, value)
         instance.outline_level = Properties::OutlineLevel.new(value: value.to_i) if value
       end
 
-      def yaml_outline_level_to(instance, _doc)
-        instance.outline_level&.value
+      def yaml_outline_level_to(instance, doc)
+        yaml_put(doc, "outline_level", instance.outline_level&.value)
       end
 
       def yaml_contextual_spacing_from(instance, value)
@@ -168,8 +183,8 @@ module Uniword
         instance.contextual_spacing = Properties::ContextualSpacing.new(value: value)
       end
 
-      def yaml_contextual_spacing_to(instance, _doc)
-        instance.contextual_spacing&.value
+      def yaml_contextual_spacing_to(instance, doc)
+        yaml_put(doc, "contextual_spacing", instance.contextual_spacing&.on?)
       end
 
       def yaml_page_break_before_from(instance, value)
@@ -178,8 +193,8 @@ module Uniword
         instance.page_break_before_wrapper = Properties::PageBreakBefore.new(value: value)
       end
 
-      def yaml_page_break_before_to(instance, _doc)
-        instance.page_break_before_wrapper&.value
+      def yaml_page_break_before_to(instance, doc)
+        yaml_put(doc, "page_break_before", instance.page_break_before_wrapper&.on?)
       end
 
       def yaml_widow_control_from(instance, value)
@@ -188,8 +203,44 @@ module Uniword
         instance.widow_control_wrapper = Properties::WidowControl.new(value: value)
       end
 
-      def yaml_widow_control_to(instance, _doc)
-        instance.widow_control_wrapper&.value
+      def yaml_widow_control_to(instance, doc)
+        yaml_put(doc, "widow_control", instance.widow_control_wrapper&.on?)
+      end
+
+      def yaml_suppress_line_numbers_from(instance, value)
+        return if value.nil?
+
+        instance.suppress_line_numbers_wrapper =
+          Properties::SuppressLineNumbers.new(value: value)
+      end
+
+      def yaml_suppress_line_numbers_to(instance, doc)
+        yaml_put(doc, "suppress_line_numbers",
+                 instance.suppress_line_numbers_wrapper&.on?)
+      end
+
+      def yaml_bidirectional_from(instance, value)
+        return if value.nil?
+
+        instance.bidirectional_wrapper = Properties::Bidi.new(value: value)
+      end
+
+      def yaml_bidirectional_to(instance, doc)
+        yaml_put(doc, "bidirectional", instance.bidirectional_wrapper&.on?)
+      end
+
+      # Is line numbering suppressed for this paragraph?
+      #
+      # @return [Boolean] false when w:suppressLineNumbers is absent or off
+      def suppress_line_numbers
+        suppress_line_numbers_wrapper&.on? || false
+      end
+
+      # Does this paragraph run right-to-left?
+      #
+      # @return [Boolean] false when w:bidi is absent or off
+      def bidirectional
+        bidirectional_wrapper&.on? || false
       end
 
       # XML mappings come AFTER attributes
@@ -214,8 +265,9 @@ module Uniword
         # Numbering properties (wrapped in w:numPr)
         map_element "numPr", to: :numbering_properties, render_nil: false
 
-        # Suppress line numbers (only render if true)
-        map_element "suppressLineNumbers", to: :suppress_line_numbers, render_nil: false,
+        # Suppress line numbers (only render if present)
+        map_element "suppressLineNumbers", to: :suppress_line_numbers_wrapper,
+                                           render_nil: false,
                                            render_default: false
 
         # Borders (complex object)
@@ -233,8 +285,8 @@ module Uniword
         map_element "autoSpaceDN", to: :auto_space_dn, render_nil: false,
                                    render_default: false
 
-        # Bidirectional (only render if true)
-        map_element "bidi", to: :bidirectional, render_nil: false,
+        # Bidirectional (only render if present)
+        map_element "bidi", to: :bidirectional_wrapper, render_nil: false,
                             render_default: false
 
         # Right indent adjustment
@@ -271,6 +323,9 @@ module Uniword
         keep_lines_val = attrs.key?(:keep_lines) ? attrs.delete(:keep_lines) : nil
         page_break_before_val = attrs.key?(:page_break_before) ? attrs.delete(:page_break_before) : nil
         widow_control_val = attrs.key?(:widow_control) ? attrs.delete(:widow_control) : nil
+        suppress_line_numbers_val =
+          attrs.key?(:suppress_line_numbers) ? attrs.delete(:suppress_line_numbers) : nil
+        bidirectional_val = attrs.key?(:bidirectional) ? attrs.delete(:bidirectional) : nil
         style_val = attrs.key?(:style) ? attrs.delete(:style) : nil
 
         super
@@ -289,6 +344,14 @@ module Uniword
         unless widow_control_val.nil?
           self.widow_control_wrapper =
             Properties::WidowControl.new(value: widow_control_val)
+        end
+        unless suppress_line_numbers_val.nil?
+          self.suppress_line_numbers_wrapper =
+            Properties::SuppressLineNumbers.new(value: suppress_line_numbers_val)
+        end
+        unless bidirectional_val.nil?
+          self.bidirectional_wrapper =
+            Properties::Bidi.new(value: bidirectional_val)
         end
         self.style = style_val if style_val
 
