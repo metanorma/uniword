@@ -102,10 +102,11 @@ module Uniword
       # @param line [Integer, nil] Line spacing in twips
       # @return [self]
       def spacing(before: nil, after: nil, line: nil)
-        sp = ensure_para_props.ensure_spacing
-        sp.before = before if before
-        sp.after = after if after
-        sp.line = line if line
+        written = {
+          before: before, after: after, line: line
+        }.select { |_, value| value }
+        sp = ensure_para_props.ensure_spacing(*written.keys)
+        written.each { |field, value| sp.public_send(:"#{field}=", value) }
         self
       end
 

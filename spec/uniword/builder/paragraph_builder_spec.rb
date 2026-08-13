@@ -201,6 +201,41 @@ RSpec.describe Uniword::Builder::ParagraphBuilder do
       expect(builder.model.properties.spacing.first.before).to eq(240)
       expect(builder.model.properties.spacing.first.after).to eq(120)
     end
+
+    # A pPr whose spacing Word split across two w:spacing elements.
+    context "when a later entry already carries the field" do
+      let(:two_entries_xml) do
+        <<~XML
+          <w:pPr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+            <w:spacing w:before="0"/>
+            <w:spacing w:line="240" w:lineRule="auto"/>
+          </w:pPr>
+        XML
+      end
+      let(:properties) do
+        Uniword::Wordprocessingml::ParagraphProperties.from_xml(two_entries_xml)
+      end
+      let(:paragraph) do
+        para = Uniword::Wordprocessingml::Paragraph.new
+        para.properties = properties
+        para
+      end
+
+      # Leaving the stale 240 standing emits two w:line, and a last-wins
+      # reader keeps 240 rather than the 360 that was asked for.
+      it "emits only the value it was asked for" do
+        described_class.new(paragraph).spacing(line: 360)
+
+        expect(paragraph.properties.to_xml(prefix: true).scan(/w:line="\d+"/))
+          .to eq(['w:line="360"'])
+      end
+
+      it "leaves fields it was not asked to set alone" do
+        described_class.new(paragraph).spacing(after: 120)
+
+        expect(paragraph.properties.spacing.map(&:line)).to eq([nil, 240])
+      end
+    end
   end
 
   describe "#indent" do

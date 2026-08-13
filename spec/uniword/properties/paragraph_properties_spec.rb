@@ -204,6 +204,24 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       expect(props.ensure_spacing).to equal(props.spacing.first)
       expect(props.spacing.size).to eq(2)
     end
+
+    it "clears the named fields from the later entries" do
+      props = described_class.from_xml(two_entries_xml)
+
+      props.ensure_spacing(:line).line = 360
+
+      expect(props.spacing.map(&:line)).to eq([360, nil])
+      expect(props.to_xml(prefix: true).scan(/w:line="\d+"/))
+        .to eq(['w:line="360"'])
+    end
+
+    it "leaves the later entries alone when no field is named" do
+      props = described_class.from_xml(two_entries_xml)
+
+      props.ensure_spacing.before = 60
+
+      expect(props.spacing.map(&:line)).to eq([nil, 240])
+    end
   end
 
   describe "inheritance" do

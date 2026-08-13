@@ -303,14 +303,25 @@ module Uniword
       # attribute is a collection. Callers setting individual spacing fields
       # want the first entry.
       #
+      # Each field named in +clearing+ is dropped from the later entries. A
+      # value written into the first entry while a later one still carries its
+      # own would emit two contradictory values, and a last-wins reader keeps
+      # the stale one.
+      #
+      # @param clearing [Array<Symbol>] fields the caller is about to write
       # @return [Properties::Spacing] the first spacing entry
-      def ensure_spacing
+      def ensure_spacing(*clearing)
         entries = Array(spacing)
-        entries.first || begin
-          entry = Properties::Spacing.new
-          self.spacing = entries + [entry]
-          entry
+        if entries.empty?
+          entries = [Properties::Spacing.new]
+          self.spacing = entries
         end
+
+        entries.drop(1).each do |stale|
+          clearing.each { |field| stale.public_send(:"#{field}=", nil) }
+        end
+
+        entries.first
       end
 
       # Convert flat convenience attributes to proper wrapper objects
