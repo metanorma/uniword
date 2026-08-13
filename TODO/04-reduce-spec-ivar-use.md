@@ -48,10 +48,10 @@ The assignment creates a brand-new ivar that nothing ever reads. It
 suppresses nothing. The comment describes behavior the code does not
 have.
 
-The variant at line 20 is broken differently — it calls
-`remove_instance_variable` on the `Tempfile` **class object** rather than
-on a tempfile instance, then rescues the resulting `NameError`. Also a
-no-op.
+The variant inside the `create_temp_zip` helper (line 20 before this
+change) is broken differently — it calls `remove_instance_variable` on
+the `Tempfile` **class object** rather than on a tempfile instance, then
+rescues the resulting `NameError`. Also a no-op.
 
 So whatever fixed the original Windows `EACCES` flake, it was not this.
 The `close` + `safe_delete` calls above it are doing the actual work.
@@ -67,11 +67,13 @@ Single PR. Small.
 
 What was done:
 
-1. Deleted all six `instance_variable_set(:@finalizer, proc {})` calls and
-   the `remove_instance_variable` variant in `create_temp_zip`, along with
-   the comments claiming they suppress finalization.
-2. Kept `Tempfile.new` and the existing cleanup. That was the minimal
-   correct change; nothing else moved.
+1. Deleted all six `instance_variable_set(:@finalizer, proc {})` calls
+   along with the comments claiming they suppress finalization.
+2. Deleted `create_temp_zip` in full — its own `Tempfile.new`, `close`
+   and `safe_delete` included. It had no callers on either ref, so
+   nothing lost coverage.
+3. Kept `Tempfile.new` and the existing cleanup at all six remaining
+   sites. That was the minimal correct change; nothing else moved.
 
 `Tempfile.create` or `Dir.mktmpdir` is **optional and not drop-in**:
 `Tempfile.create` returns a plain `File`, which has no `unlink` instance
@@ -82,10 +84,11 @@ this if it genuinely simplifies the fixture.
 
 ## Risk
 
-The file header (`zip_extractor_spec.rb:13`) attributes this workaround
-to a **Windows** `EACCES` flake, and there is a recent commit hardening a
-different Windows save-gate test (`facd8fb`). Development machines here
-are macOS, so the flake cannot be reproduced locally either way.
+The `create_temp_zip` comment this change deletes attributed the
+workaround to a **Windows** `EACCES` flake, and there is a recent commit
+hardening a different Windows save-gate test (`facd8fb`). Development
+machines here are macOS, so the flake cannot be reproduced locally
+either way.
 
 The evidence says the ivar cannot be load-bearing — it targets a name
 Tempfile does not use. But "cannot possibly matter" is exactly the
