@@ -38,14 +38,17 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Open-Source YAML)" do
         it "preserves spacing" do
           skip "Heading1 not found" unless heading1
           skip "No paragraph properties" unless heading1.paragraph_properties
-          skip "No spacing" unless heading1.paragraph_properties.spacing
 
-          original = heading1.paragraph_properties.spacing
+          original = Array(heading1.paragraph_properties.spacing)
+          skip "No spacing" if original.empty?
+
           xml = heading1.to_xml(prefix: true)
           reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
+          roundtripped = Array(reparsed.paragraph_properties.spacing)
 
-          expect(reparsed.paragraph_properties.spacing.before).to eq(original.before)
-          expect(reparsed.paragraph_properties.spacing.after).to eq(original.after)
+          expect(roundtripped.size).to eq(original.size)
+          expect(roundtripped.map(&:before)).to eq(original.map(&:before))
+          expect(roundtripped.map(&:after)).to eq(original.map(&:after))
         end
       end
 
@@ -111,14 +114,17 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Binary .dotx)" do
             it "preserves spacing" do
               skip "Heading1 not found" unless heading1
               skip "No paragraph properties" unless heading1.paragraph_properties
-              skip "No spacing" unless heading1.paragraph_properties.spacing
 
-              original = heading1.paragraph_properties.spacing
+              original = Array(heading1.paragraph_properties.spacing)
+              skip "No spacing" if original.empty?
+
               xml = heading1.to_xml(prefix: true)
               reparsed = Uniword::Wordprocessingml::Style.from_xml(xml)
+              roundtripped = Array(reparsed.paragraph_properties.spacing)
 
-              expect(reparsed.paragraph_properties.spacing.before).to eq(original.before)
-              expect(reparsed.paragraph_properties.spacing.after).to eq(original.after)
+              expect(roundtripped.size).to eq(original.size)
+              expect(roundtripped.map(&:before)).to eq(original.map(&:before))
+              expect(roundtripped.map(&:after)).to eq(original.map(&:after))
             end
 
             it "preserves alignment" do
@@ -166,5 +172,33 @@ RSpec.describe "StyleSet Round-Trip Fidelity (Binary .dotx)" do
 
   after(:all) do
     Dir.glob("spec/fixtures/uniword-private/word-resources/quick-styles/*.dotx").count
+  end
+
+  # Word emits two w:spacing elements in one w:pPr in Modern.dotx, which is
+  # why ParagraphProperties#spacing is a collection. Keep both.
+  describe "repeated w:spacing in a single w:pPr" do
+    let(:file) do
+      "spec/fixtures/uniword-private/word-resources/quick-styles/Modern.dotx"
+    end
+    let(:style) do
+      skip "Modern.dotx not available" unless File.exist?(file)
+      Uniword::StyleSet.from_dotx(file).styles.find { |s| s.id == "NoSpacing" }
+    end
+    let(:fields) do
+      ->(list) { list.map { |s| [s.before, s.after, s.line, s.line_rule] } }
+    end
+
+    it "keeps both entries when loading" do
+      expect(style.paragraph_properties.spacing.size).to eq(2)
+    end
+
+    it "keeps both entries through an XML round-trip" do
+      reparsed = Uniword::Wordprocessingml::Style.from_xml(
+        style.to_xml(prefix: true),
+      )
+
+      expect(fields.call(reparsed.paragraph_properties.spacing))
+        .to eq(fields.call(style.paragraph_properties.spacing))
+    end
   end
 end

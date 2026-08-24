@@ -22,8 +22,9 @@ module Uniword
       attribute :outline_level, Properties::OutlineLevel
       attribute :numbering_properties, Properties::NumberingProperties
 
-      # Complex spacing object
-      attribute :spacing, Properties::Spacing
+      # Complex spacing objects. Word can emit more than one w:spacing in a
+      # single w:pPr, so this is a collection.
+      attribute :spacing, Properties::Spacing, collection: true
 
       # Complex indentation object
       attribute :indentation, Properties::Indentation
@@ -296,6 +297,33 @@ module Uniword
         convert_flat_attributes!
       end
 
+      # First w:spacing entry, appending one when absent
+      #
+      # Word can emit more than one w:spacing inside a single w:pPr, so the
+      # attribute is a collection. Callers setting individual spacing fields
+      # want the first entry.
+      #
+      # Each field named in +clearing+ is dropped from the later entries. A
+      # value written into the first entry while a later one still carries its
+      # own would emit two contradictory values, and a last-wins reader keeps
+      # the stale one.
+      #
+      # @param clearing [Array<Symbol>] fields the caller is about to write
+      # @return [Properties::Spacing] the first spacing entry
+      def ensure_spacing(*clearing)
+        entries = Array(spacing)
+        if entries.empty?
+          entries = [Properties::Spacing.new]
+          self.spacing = entries
+        end
+
+        entries.drop(1).each do |stale|
+          clearing.each { |field| stale.public_send(:"#{field}=", nil) }
+        end
+
+        entries.first
+      end
+
       # Convert flat convenience attributes to proper wrapper objects
       # This handles cases like ParagraphProperties.new(spacing_before: 120)
       # where the flat attribute is set but the wrapper object is not
@@ -303,13 +331,16 @@ module Uniword
         # Alignment - convert string to Alignment wrapper
         self.alignment = Properties::Alignment.new(value: @alignment) if @alignment.is_a?(String)
 
-        # Spacing - create spacing object from flat spacing attributes
-        if (@spacing_before || @spacing_after || @line_spacing || @line_rule) && !@spacing
-          self.spacing = Properties::Spacing.new
-          spacing.before = @spacing_before if @spacing_before
-          spacing.after = @spacing_after if @spacing_after
-          spacing.line = @line_spacing.to_i if @line_spacing
-          spacing.line_rule = @line_rule if @line_rule
+        # Spacing - create spacing object from flat spacing attributes.
+        # Array() covers both absent forms: nil when built, [] when parsed.
+        if (@spacing_before || @spacing_after || @line_spacing || @line_rule) &&
+            Array(@spacing).empty?
+          entry = Properties::Spacing.new
+          entry.before = @spacing_before if @spacing_before
+          entry.after = @spacing_after if @spacing_after
+          entry.line = @line_spacing.to_i if @line_spacing
+          entry.line_rule = @line_rule if @line_rule
+          self.spacing = [entry]
         end
 
         # Indentation - create indentation object from flat indent attributes

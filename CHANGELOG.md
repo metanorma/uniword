@@ -30,6 +30,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Breaking:** `ParagraphProperties#spacing` now returns an Array of
+  `Properties::Spacing` (was a single `Spacing` or nil), because Word
+  can emit more than one `w:spacing` inside a single `w:pPr`. Use
+  `ensure_spacing` to mutate spacing fields and the `Style` readers
+  (`spacing_before`/`spacing_after`) to read them. The readers resolve
+  conflicting values last-wins, matching Word.
 - `Uniword::Diff` module now autoloads `Semantic` (element-level
   diff sits alongside the existing text-level `DocumentDiffer`).
 - `Uniword::Batch` module now autoloads `Operation` (sibling to
