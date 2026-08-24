@@ -151,5 +151,14 @@ RSpec.describe "Style Round-Trip Fidelity" do
 
       expect([style.spacing_before, style.spacing_after]).to eq([120, 60])
     end
+
+    it "resolves conflicting values last-wins, matching Word readers" do
+      style = Uniword::Wordprocessingml::Style.from_xml(
+        repeated_spacing_xml.sub('w:line="240" w:lineRule="auto"',
+                                 'w:before="777"'),
+      )
+
+      expect(style.spacing_before).to eq(777)
+    end
   end
 end

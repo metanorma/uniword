@@ -160,13 +160,14 @@ module Uniword
       end
 
       # Word splits one paragraph's spacing across several w:spacing elements,
-      # so take the first entry that actually carries the value.
+      # and Word readers resolve conflicts last-wins, so take the last entry
+      # that actually carries the value.
       def spacing_before
-        Array(pPr&.spacing).filter_map(&:before).first || pPr&.spacing_before
+        Array(pPr&.spacing).filter_map(&:before).last || pPr&.spacing_before
       end
 
       def spacing_after
-        Array(pPr&.spacing).filter_map(&:after).first || pPr&.spacing_after
+        Array(pPr&.spacing).filter_map(&:after).last || pPr&.spacing_after
       end
 
       def alignment
