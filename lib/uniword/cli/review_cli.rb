@@ -212,6 +212,40 @@ module Uniword
       handle_error(e)
     end
 
+    desc "track-changes SUBCOMMAND", "Toggle or query change tracking"
+    long_desc <<~DESC
+      Turn Word's Review → Track Changes toggle on or off, or query
+      its current state.
+
+      Examples:
+        $ uniword review track-changes on input.docx output.docx
+        $ uniword review track-changes off input.docx output.docx
+        $ uniword review track-changes status input.docx
+    DESC
+    def track_changes(command, input_path, output_path = nil)
+      doc = load_document(input_path)
+
+      case command.to_sym
+      when :on
+        doc.track_changes_on!
+        doc.save(output_path || input_path)
+        say "Change tracking ON in #{output_path || input_path}", :green
+      when :off
+        doc.track_changes_off!
+        doc.save(output_path || input_path)
+        say "Change tracking OFF in #{output_path || input_path}", :green
+      when :status
+        say doc.track_changes_enabled? ? "ON" : "OFF"
+      else
+        say "Unknown subcommand: #{command}. Use on, off, or status.", :red
+        exit 1
+      end
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e)
+    end
+
     desc "interactive FILE", "Interactively review all changes"
     long_desc <<~DESC
       Step through comments and tracked changes one-by-one.

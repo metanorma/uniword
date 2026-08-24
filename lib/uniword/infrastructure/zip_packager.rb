@@ -44,15 +44,19 @@ module Uniword
         # causing put_next_entry to discard our Entry and create a fresh one.
         temp_path = "#{output_path}.#{Process.pid}.tmp"
 
+        ordered_content = order_content(content)
+        fixed_time = deterministic_timestamp
+
         was_zip64 = Zip.write_zip64_support
         Zip.write_zip64_support = false
         begin
           Zip::OutputStream.open(temp_path) do |zos|
-            content.each do |entry_path, entry_content|
+            ordered_content.each do |entry_path, entry_content|
               entry = Zip::Entry.new(temp_path, entry_path.to_s)
               entry.internal_file_attributes = 0
               entry.external_file_attributes = 0
               entry.fstype = Zip::FSTYPE_FAT
+              entry.time = fixed_time if fixed_time
 
               zos.put_next_entry(entry)
 
@@ -144,6 +148,29 @@ module Uniword
       end
 
       private
+
+      # When `Uniword.configuration.deterministic_output` is true,
+      # reorder entries (priority for OPC-required first, alphabetical
+      # for the rest). Otherwise return content unchanged (insertion
+      # order, which matches Word's behavior).
+      #
+      # @param content [Hash<String, String>]
+      # @return [Hash<String, String>] ordered hash
+      def order_content(content)
+        return content unless Uniword.configuration.deterministic_output
+
+        ordered_keys = Docx::DeterministicOutput.reorder_entries(content.keys)
+        ordered_keys.to_h { |k| [k, content[k]] }
+      end
+
+      # Fixed timestamp for deterministic mode; nil otherwise.
+      #
+      # @return [Time, nil]
+      def deterministic_timestamp
+        return nil unless Uniword.configuration.deterministic_output
+
+        Docx::DeterministicOutput::FIXED_TIMESTAMP
+      end
 
       # Write content to a ZIP file using a temp file and atomic move.
       # This avoids Windows file locking issues by ensuring we never

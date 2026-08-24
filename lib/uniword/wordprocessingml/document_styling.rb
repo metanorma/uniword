@@ -119,6 +119,122 @@ module Uniword
         replacer.replace(self)
       end
 
+      # Find and replace text across document parts.
+      #
+      # Mirrors Word's Home → Replace dialog (without the GUI).
+      # Replaces every non-overlapping match of `pattern` with
+      # `replacement` across the configured scopes. Returns a
+      # `FindReplace::Result` with per-scope counts.
+      #
+      # v1 limitation: matches inside a single run only. Matches
+      # that span run boundaries are silently skipped (Word does the
+      # same in default mode).
+      #
+      # @param pattern [String, Regexp] literal String or Regexp
+      # @param replacement [String] replacement text; for regex
+      #   patterns, may reference captures via `\1`, `\2`, ...
+      # @param scope [Symbol, Array<Symbol>, :all] one or more of
+      #   `:body`, `:headers`, `:footers`, `:footnotes`, `:endnotes`,
+      #   `:comments`, `:styles`, or `:all` (default)
+      # @param ignore_case [Boolean] case-insensitive match
+      # @return [FindReplace::Result]
+      def find_replace(pattern, replacement, scope: :all, ignore_case: false)
+        matcher = build_find_replace_matcher(pattern, replacement, ignore_case)
+        FindReplace::Engine.new(document: self, matcher: matcher,
+                                scopes: scope).run
+      end
+
+      # Turn change tracking on. Every subsequent edit is recorded as
+      # a tracked change. Mirrors Word's Review → Track Changes → On.
+      #
+      # @return [self]
+      def track_changes_on!
+        ensure_settings.track_changes = Wordprocessingml::TrackChanges.new
+        self
+      end
+
+      # Turn change tracking off. Existing tracked changes remain in
+      # the document; new edits are applied silently. Mirrors Word's
+      # Review → Track Changes → Off.
+      #
+      # @return [self]
+      def track_changes_off!
+        ensure_settings.track_changes = nil
+        self
+      end
+
+      # True when change tracking is enabled.
+      #
+      # @return [Boolean]
+      def track_changes_enabled?
+        settings&.track_changes ? true : false
+      end
+
+      # Redact PII patterns and/or custom regex across the document.
+      #
+      # Built on FindReplace. Default pattern library matches US
+      # phone numbers, email, SSN, credit card numbers, IPv4
+      # addresses. Pass `patterns: :pii` for defaults, or an array
+      # of names (`[:ssn, :email]`) to select a subset.
+      #
+      # @param patterns [Symbol, Array<Symbol>, Array<Redact::Pattern>]
+      #   `:pii` (default), or names/Pattern objects to apply
+      # @param scope [Symbol, Array<Symbol>, :all] find-replace scope
+      # @return [Redact::Result]
+      def redact(patterns: :pii, scope: :all)
+        Redact::Engine.new(document: self, patterns: patterns,
+                           scope: scope).run
+      end
+
+      # Run a lint ruleset against the document.
+      #
+      # @param ruleset [Lint::Ruleset, Array<Lint::Rule>] rules to
+      #   apply
+      # @return [Lint::Result]
+      def lint(ruleset:)
+        Lint::Engine.new(document: self, ruleset: ruleset).run
+      end
+
+      # Counter for auto-numbered captions. Persisted across the
+      # document's lifetime; reset on document load.
+      #
+      # @return [Caption::Counter]
+      def caption_counter
+        @caption_counter ||= Caption::Counter.new
+      end
+
+      # Add an auto-numbered caption paragraph to the body and
+      # return the bookmark name (for use in cross-references).
+      #
+      # The caption is appended as a new paragraph with style
+      # "Caption" and a SEQ field. The bookmark wraps the entire
+      # paragraph so cross-references resolve to the caption text.
+      #
+      # @param label [String] "Figure", "Table", "Equation", or any
+      #   other category — each gets its own counter
+      # @param text [String] caption body
+      # @param separator [String] between the label/number and the
+      #   body (default ": ")
+      # @return [String] bookmark name (e.g. "_Figure1")
+      def add_caption(label:, text:, separator: ": ")
+        builder = Caption::CaptionBuilder.new(caption_counter)
+        paragraph, bookmark_name = builder.build(label: label,
+                                                 text: text,
+                                                 separator: separator)
+        body.paragraphs << paragraph
+        bookmark_name
+      end
+
+      # Build a cross-reference run targeting a bookmark. Returns a
+      # Run containing a SimpleField with a REF instruction. The
+      # caller decides where to place it.
+      #
+      # @param bookmark_name [String] target bookmark
+      # @return [Wordprocessingml::SimpleField]
+      def cross_reference_to(bookmark_name)
+        Caption::CrossReference.new(bookmark_name).build
+      end
+
       # Apply uniform page setup to every section of the document
       #
       # Mirrors Word's Layout dialog: named paper sizes, orientation
@@ -229,6 +345,21 @@ module Uniword
       end
 
       private
+
+      def build_find_replace_matcher(pattern, replacement, ignore_case)
+        if pattern.is_a?(Regexp)
+          FindReplace::RegexMatcher.new(pattern: pattern,
+                                        replacement: replacement)
+        else
+          FindReplace::StringMatcher.new(pattern: pattern,
+                                         replacement: replacement,
+                                         ignore_case: ignore_case)
+        end
+      end
+
+      def ensure_settings
+        self.settings ||= Wordprocessingml::Settings.new
+      end
 
       # Ensure the document carries a theme part, creating it from a
       # fresh parse of the bundled Office theme when absent (every
