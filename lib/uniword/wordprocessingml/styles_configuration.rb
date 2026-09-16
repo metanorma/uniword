@@ -157,7 +157,7 @@ module Uniword
       #
       # @return [Array<Style>] Custom styles
       def custom_styles
-        styles.select(&:custom)
+        styles.select(&:custom?)
       end
 
       # Get the number of styles
