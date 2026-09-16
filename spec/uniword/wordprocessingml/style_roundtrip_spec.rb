@@ -3,9 +3,6 @@
 require "spec_helper"
 require "canon/comparison"
 
-# Add canon to load path
-$LOAD_PATH.unshift("/Users/mulgogi/src/lutaml/canon/lib")
-
 RSpec.describe "Style Round-Trip Fidelity" do
   describe "XML → Model → XML round-trip" do
     let(:sample_style_xml) do
