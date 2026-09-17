@@ -223,6 +223,37 @@ module XmlNormalizers
       end.each(&:remove)
     end
 
+    # Strip bookmark displacedByCustomXml tracking attributes (any
+    # namespace): fixtures carry the noncompliant w:-qualified form while
+    # the serializer emits the spec-correct w14: form
+    doc.xpath("//*[local-name() = 'bookmarkStart' or local-name() = 'bookmarkEnd']")
+       .each do |node|
+      node.attribute_nodes
+          .select { |a| a.name == "displacedByCustomXml" }
+          .each(&:remove)
+    end
+
+    # useLocalDpi val: source documents use the unqualified form; the
+    # serializer emits the a14-qualified form — canonicalize to unqualified
+    doc.xpath("//*[local-name() = 'useLocalDpi']").each do |node|
+      attr = node.attribute_nodes.find { |a| a.name == "val" }
+      next unless attr
+      value = attr.value
+      attr.remove
+      node["val"] = value
+    end
+
+    # footnoteColumns val: source uses the w:-qualified form on the w15
+    # extension element; serializer emits per its own qualification —
+    # canonicalize to unqualified
+    doc.xpath("//*[local-name() = 'footnoteColumns']").each do |node|
+      attr = node.attribute_nodes.find { |a| a.name == "val" }
+      next unless attr
+      value = attr.value
+      attr.remove
+      node["val"] = value
+    end
+
     doc.to_xml
   end
 
