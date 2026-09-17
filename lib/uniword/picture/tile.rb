@@ -7,7 +7,8 @@ module Uniword
     # Tile properties for picture fill
     #
     # Generated from OOXML schema: picture.yml
-    # Element: <pic:tile>
+    # Element: <a:tile> (CT_BlipFillProperties reuses DrawingML
+    # children inside pic:blipFill)
     class Tile < Lutaml::Model::Serializable
       attribute :tx, :integer
       attribute :ty, :integer
@@ -17,7 +18,7 @@ module Uniword
 
       xml do
         element "tile"
-        namespace Uniword::Ooxml::Namespaces::Picture
+        namespace Uniword::Ooxml::Namespaces::DrawingML
 
         map_attribute "tx", to: :tx
         map_attribute "ty", to: :ty

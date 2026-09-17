@@ -302,7 +302,7 @@ alt_text: nil)
 
           # Non-visual properties
           pic.nv_pic_pr = Picture::NonVisualPictureProperties.new
-          pic.nv_pic_pr.c_nv_pr = Drawingml::NonVisualDrawingProperties.new(
+          pic.nv_pic_pr.c_nv_pr = Picture::NonVisualDrawingProperties.new(
             id: deterministic_id("pic", r_id),
             name: "Picture",
           )
