@@ -112,7 +112,7 @@ module Uniword
           rels = Ooxml::Relationships::PackageRelationships.new
           rels.relationships = part_keys.each_with_index.map do |key, idx|
             defn = Ooxml::PartRegistry.find_by_key(key)
-            Ooxml::Relationships::Relationship.new(
+            Ooxml::Relationships::PackageRelationship.new(
               id: "rId#{idx + 1}",
               type: defn.rel_type,
               target: defn.target,

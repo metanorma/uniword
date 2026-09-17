@@ -36,7 +36,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         # Suppress finalizer - we handle cleanup manually via ensure block
         temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
-          Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
+          Zip::File.open(temp_zip.path, create: true) do |zip_file|
             zip_file.get_output_stream("file1.txt") { |f| f.write("Content 1") }
             zip_file.get_output_stream("dir/file2.txt") do |f|
               f.write("Content 2")
@@ -62,7 +62,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         # Suppress finalizer - we handle cleanup manually via ensure block
         temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
-          Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
+          Zip::File.open(temp_zip.path, create: true) do |zip_file|
             zip_file.mkdir("empty_dir")
             zip_file.get_output_stream("file.txt") { |f| f.write("Content") }
           end
@@ -83,7 +83,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
         # Suppress finalizer - we handle cleanup manually via ensure block
         temp_zip.instance_variable_set(:@finalizer, proc {})
         begin
-          Zip::File.open(temp_zip.path, Zip::File::CREATE) { |_zip_file| }
+          Zip::File.open(temp_zip.path, create: true) { |_zip_file| }
 
           result = extractor.extract(temp_zip.path)
 
@@ -138,7 +138,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
     end
 
     before do
-      Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
+      Zip::File.open(temp_zip.path, create: true) do |zip_file|
         zip_file.get_output_stream("document.xml") do |f|
           f.write("<doc>Test</doc>")
         end
@@ -193,7 +193,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
     end
 
     before do
-      Zip::File.open(temp_zip.path, Zip::File::CREATE) do |zip_file|
+      Zip::File.open(temp_zip.path, create: true) do |zip_file|
         zip_file.get_output_stream("file1.txt") { |f| f.write("Content 1") }
         zip_file.get_output_stream("dir/file2.txt") { |f| f.write("Content 2") }
         zip_file.mkdir("empty_dir")
@@ -225,7 +225,7 @@ RSpec.describe Uniword::Infrastructure::ZipExtractor do
       # Suppress finalizer - we handle cleanup manually via ensure block
       temp_empty.instance_variable_set(:@finalizer, proc {})
       begin
-        Zip::File.open(temp_empty.path, Zip::File::CREATE) { |_zip_file| }
+        Zip::File.open(temp_empty.path, create: true) { |_zip_file| }
 
         result = extractor.list_files(temp_empty.path)
 

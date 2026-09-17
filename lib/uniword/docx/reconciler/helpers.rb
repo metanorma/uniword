@@ -236,7 +236,7 @@ module Uniword
         def build_rel(id, type, target, target_mode: nil)
           attrs = { id: id, type: type, target: target }
           attrs[:target_mode] = target_mode if target_mode
-          Ooxml::Relationships::Relationship.new(**attrs)
+          Ooxml::Relationships::PackageRelationship.new(**attrs)
         end
 
         def run_properties_match?(a, b)

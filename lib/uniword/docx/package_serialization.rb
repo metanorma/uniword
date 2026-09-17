@@ -260,7 +260,7 @@ document_rels)
 
         # The reconciler runs before injection; register the rId with
         # the allocator (single authority) and append the rel here.
-        package_rels.relationships << Ooxml::Relationships::Relationship.new(
+        package_rels.relationships << Ooxml::Relationships::PackageRelationship.new(
           id: allocator.alloc_rid(target: definition.target,
                                   type: definition.rel_type,
                                   scope: :package),
