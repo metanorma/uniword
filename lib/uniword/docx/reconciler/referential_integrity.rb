@@ -317,7 +317,7 @@ module Uniword
           new_rid = allocator.alloc_rid(target: url, type: rel_type,
                                         target_mode: "External")
           unless valid_rids.include?(new_rid)
-            rels.relationships << Ooxml::Relationships::Relationship.new(
+            rels.relationships << Ooxml::Relationships::PackageRelationship.new(
               id: new_rid,
               type: rel_type,
               target: url,

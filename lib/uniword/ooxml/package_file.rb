@@ -86,7 +86,7 @@ module Uniword
         # Ensure output directory exists
         FileUtils.mkdir_p(File.dirname(output_path))
 
-        Zip::File.open(output_path, Zip::File::CREATE) do |zipfile|
+        Zip::File.open(output_path, create: true) do |zipfile|
           Dir.glob(File.join(@extracted_dir, "**", "*")).each do |file_path|
             next if File.directory?(file_path)
 

@@ -145,7 +145,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
 
     before do
       File.write(temp_zip, "")
-      Zip::File.open(temp_zip, Zip::File::CREATE) do |zip_file|
+      Zip::File.open(temp_zip, create: true) do |zip_file|
         zip_file.get_output_stream("existing.txt") { |f| f.write("Existing") }
       end
     end
@@ -202,7 +202,7 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
 
     before do
       File.write(temp_zip, "")
-      Zip::File.open(temp_zip, Zip::File::CREATE) do |zip_file|
+      Zip::File.open(temp_zip, create: true) do |zip_file|
         zip_file.get_output_stream("file1.txt") { |f| f.write("Content 1") }
         zip_file.get_output_stream("file2.txt") { |f| f.write("Content 2") }
       end
