@@ -1,0 +1,39 @@
+name: benchmark
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+
+# One benchmark run per PR (and per branch on push): newer pushes cancel
+# the superseded run instead of piling up duplicate jobs.
+concurrency:
+  group: benchmark-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.4"
+
+      - name: Install bundle
+        run: bundle install --jobs 4
+
+      - name: Run performance benchmark
+        run: |
+          bundle exec ruby benchmark/performance.rb \
+            --iterations "${BENCH_ITERATIONS:-5}" \
+            --json benchmark-results.json
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ github.run_number }}
+          path: benchmark-results.json
