@@ -172,6 +172,20 @@ module XmlNormalizers
       settings << ps
     end
 
+    # Fixture documents carry unqualified spelling/grammar attributes while
+    # the serializer emits the w:-qualified form — canonicalize to unqualified
+    settings.xpath("w:proofState", ns_w).each do |ps|
+      %w[spelling grammar].each do |attr|
+        ns_attr = ps.attribute_nodes.find { |a| a.name == attr }
+        next unless ns_attr
+        next if ps.attribute(attr) == ns_attr && ns_attr.namespace.nil?
+
+        value = ns_attr.value
+        ns_attr.remove
+        ps[attr] = value
+      end
+    end
+
     # Sort children by namespace+name for consistent ordering
     children = settings.element_children
     sorted = children.sort_by { |n| [n.namespace.href, n.name] }
