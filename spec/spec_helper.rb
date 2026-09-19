@@ -111,10 +111,13 @@ end
 def safe_delete(path)
   return unless path && File.exist?(path)
 
-  retries = 10
+  # Windows runners can hold a handle past the previous example's
+  # `after` block (GC-delayed finalizers, AV scan) for well over the
+  # old 3s budget — this flaked the save-gate spec four times
+  retries = 40
   begin
     File.delete(path)
-  rescue Errno::EACCES, Errno::ENOTEMPTY
+  rescue Errno::EACCES, Errno::ENOTEMPTY, Errno::EPERM
     if retries.positive?
       sleep(0.3)
       retries -= 1
