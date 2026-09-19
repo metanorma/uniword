@@ -2,5 +2,13 @@
 # frozen_string_literal: true
 
 require "bundler/setup"
+
+# Hydration-heavy workloads run ~1.75x under YJIT (measured on the
+# 608KB corpus). Opt out with UNIWORD_DISABLE_YJIT=1.
+if defined?(RubyVM::YJIT) && !RubyVM::YJIT.enabled? &&
+    ENV["UNIWORD_DISABLE_YJIT"] != "1"
+  RubyVM::YJIT.enable
+end
+
 require "uniword"
 Uniword::CLI.start(ARGV)
