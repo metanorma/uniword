@@ -26,6 +26,9 @@ jobs:
         run: bundle install --jobs 4
 
       - name: Run performance benchmark
+        env:
+          # the recommended consumer configuration — measure what we ship
+          RUBYOPT: "--yjit"
         run: |
           bundle exec ruby benchmark/performance.rb \
             --iterations "${BENCH_ITERATIONS:-5}" \
