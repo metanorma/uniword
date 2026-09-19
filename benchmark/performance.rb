@@ -13,10 +13,10 @@
 # Usage:
 #   bundle exec ruby benchmark/performance.rb [--iterations N] [--json PATH]
 #
-# Output: per-case wall-time median / mean / min / max, RSS delta, and
-# gem versions. Numbers are comparable across runs of the same runner
-# class (CI: ubuntu-latest, pinned Ruby); absolute values are meaningless
-# on a contended development machine.
+# Output: per-case wall + CPU time (median/mean/min/max), allocations
+# per iteration, RSS delta, and gem versions. CPU time is the primary
+# comparison metric — wall time on shared runners swings ±40-75% with
+# neighbor load; CPU time stayed within ±4% under the same load.
 
 require "json"
 require "nokogiri"
@@ -60,34 +60,51 @@ def build_corpus(paragraphs: 4000)
   xml.freeze
 end
 
-def summary_entry(times, rss_delta)
+# rubocop:disable Metrics/AbcSize
+def summary_entry(times, cpus, allocs_total, rss_delta)
   {
     median_s: median(times).round(4),
     mean_s: (times.sum / times.size).round(4),
     min_s: times.min.round(4),
     max_s: times.max.round(4),
+    cpu_median_s: median(cpus).round(4),
+    cpu_min_s: cpus.min.round(4),
+    allocs_m: (allocs_total.to_f / times.size / 1_000_000).round(2),
     rss_delta_mb: rss_delta.round(1),
   }
 end
+# rubocop:enable Metrics/AbcSize
 
 def report_line(name, entry)
-  format("  %-<name>16s median=%<median>.3fs mean=%<mean>.3fs " \
-         "min=%<min>.3fs rss=%<rss>+.1fMB\n",
-         name: name, median: entry[:median_s], mean: entry[:mean_s],
-         min: entry[:min_s], rss: entry[:rss_delta_mb])
+  format("  %-<name>16s wall=%<wall>.3fs cpu=%<cpu>.3fs " \
+         "allocs=%<allocs>.2fM rss=%<rss>+.1fMB\n",
+         name: name, wall: entry[:median_s], cpu: entry[:cpu_median_s],
+         allocs: entry[:allocs_m], rss: entry[:rss_delta_mb])
 end
 
+# Wall time on shared runners swings ±40-75% with neighbor load; CPU
+# time measures our own cycles and stays stable (±4% observed), so it
+# is the primary comparison metric. Allocations per iteration feed the
+# retention story (lutaml-model instance registry).
 # rubocop:disable Metrics/AbcSize
 def run_case(results, name, iterations)
   times = []
+  cpus = []
+  allocs_total = 0
   rss_before = rss_mb
   iterations.times do
+    a0 = GC.stat(:total_allocated_objects)
     t0 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    c0 = Process.clock_gettime(Process::CLOCK_PROCESS_CPUTIME_ID)
     result = yield
-    times << (Process.clock_gettime(Process::CLOCK_MONOTONIC) - t0)
+    c1 = Process.clock_gettime(Process::CLOCK_PROCESS_CPUTIME_ID)
+    t1 = Process.clock_gettime(Process::CLOCK_MONOTONIC)
+    allocs_total += GC.stat(:total_allocated_objects) - a0
+    times << (t1 - t0)
+    cpus << (c1 - c0)
     raise "case #{name}: nil result" if result.nil?
   end
-  entry = summary_entry(times, rss_mb - rss_before)
+  entry = summary_entry(times, cpus, allocs_total, rss_mb - rss_before)
   results[:cases][name.to_s] = entry
   puts report_line(name, entry)
 end
@@ -107,6 +124,7 @@ puts "versions: #{RUBY_DESCRIPTION}"
 
 results = {
   ruby: RUBY_VERSION,
+  yjit: defined?(RubyVM::YJIT) ? RubyVM::YJIT.enabled? : false,
   corpus_bytes: corpus.bytesize,
   iterations: iterations,
   cases: {},
