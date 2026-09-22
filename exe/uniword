@@ -10,5 +10,14 @@ if defined?(RubyVM::YJIT) && !RubyVM::YJIT.enabled? &&
   RubyVM::YJIT.enable
 end
 
+# POSIX NO_COLOR convention: suppress colored CLI output.
+if ENV["NO_COLOR"] && !ENV["NO_COLOR"].empty?
+  require "uniword/cli/no_color"
+end
+
+# Never let a task's return value become the process exit status:
+# success is 0, and failures raise SystemExit inside `start`
+# (exit_on_failure? / handle_error).
 require "uniword"
 Uniword::CLI.start(ARGV)
+exit 0
