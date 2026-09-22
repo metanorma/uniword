@@ -49,36 +49,57 @@ module Uniword
     #
     # @example Save with explicit format
     #   writer.save("output.mht", format: :mhtml)
+    # rubocop:disable Metrics/AbcSize
+    # rubocop:disable Metrics/CyclomaticComplexity
     def save(path, format: :auto, profile: nil, validate: nil)
       validate_path(path)
+
+      if path == "-"
+        # stdout: "-" cannot carry an extension; default to DOCX when
+        # the caller does not pin the format (use --to to override).
+        format = :docx if format == :auto
+        write_to_stream($stdout, format: format, validate: validate)
+        return
+      end
 
       format = infer_format(path) if format == :auto
 
       case format
       when :docx, :docm
         Docx::Package.to_file(document, path, profile: profile,
-                                            validate: validate)
+                                              validate: validate)
       when :dotx, :dotm
         Ooxml::DotxPackage.to_file(document, path, profile: profile,
-                                                 validate: validate)
+                                                   validate: validate)
       when :mhtml
         Mhtml::MhtmlPackage.to_file(document, path)
+      when :html
+        File.write(path, html_document)
       else
         raise ArgumentError,
               "No handler registered for format: #{format.inspect}"
       end
     end
+    # rubocop:enable Metrics/AbcSize
+    # rubocop:enable Metrics/CyclomaticComplexity
+
+    # Render the document as a standalone HTML string.
+    #
+    # @return [String] HTML document
+    def html_document
+      Transformation::OoxmlToHtmlConverter.document_to_html(document)
+    end
 
     # Infer the format from file extension.
     #
     # @param path [String] The file path
-    # @return [Symbol] The inferred format (:docx, :mhtml)
+    # @return [Symbol] The inferred format (:docx, :mhtml, :html)
     # @raise [ArgumentError] if format cannot be inferred
     #
     # @example Infer format
     #   format = writer.infer_format("output.docx")
     #   # => :docx
-    def infer_format(path)
+    def infer_format(path) # rubocop:disable Metrics/CyclomaticComplexity
       extension = File.extname(path).downcase
 
       case extension
@@ -90,16 +111,17 @@ module Uniword
         :dotx
       when ".dotm"
         :dotm
-      when ".mhtml", ".mht"
-        :mhtml
-      when ".doc"
-        # .doc can be MHTML saved with Word (not binary old Word format)
-        # We don't support binary .doc output, but MHTML .doc is valid
+      when ".html"
+        :html
+      # .doc can be MHTML saved with Word (not binary old Word format)
+      # We don't support binary .doc output, but MHTML .doc is valid
+      when ".mhtml", ".mht", ".doc"
         :mhtml
       else
         raise ArgumentError,
               "Cannot infer format from extension: #{extension}. " \
-              "Supported extensions: .docx, .docm, .dotx, .dotm, .mhtml, .mht"
+              "Supported extensions: .docx, .docm, .dotx, .dotm, " \
+              ".html, .mhtml, .mht, .doc"
       end
     end
 

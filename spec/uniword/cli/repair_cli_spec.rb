@@ -28,11 +28,11 @@ RSpec.describe "uniword repair" do
     FileUtils.mkdir_p(output_dir)
     package = Uniword::Docx::Package.new
     package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
-      document_xml
+      document_xml,
     )
     package.document_rels =
       Uniword::Ooxml::Relationships::PackageRelationships.from_xml(
-        broken_rels_xml
+        broken_rels_xml,
       )
     package.to_file(input_path, validate: false)
   end

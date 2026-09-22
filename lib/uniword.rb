@@ -147,6 +147,11 @@ module Uniword
   autoload :Plugin, "uniword/plugin"
 
   # CLI
+  module Cli
+    autoload :Completions, "uniword/cli/completions"
+    autoload :HelpSwitch, "uniword/cli/help_switch"
+    autoload :NoColor, "uniword/cli/no_color"
+  end
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"
   autoload :FontsCLI, "uniword/cli/fonts_cli"
