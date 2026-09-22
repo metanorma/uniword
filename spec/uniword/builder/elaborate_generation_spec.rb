@@ -15,12 +15,12 @@ require "zip"
 
 RSpec.describe "Elaborated Document Generation" do
   let(:output_dir) do
-    File.expand_path("../../../examples/generated", __dir__)
+    File.expand_path("../tmp/elaborate_generated", __dir__)
   end
   let(:b) { Uniword::Builder }
 
   before(:all) do
-    FileUtils.mkdir_p(File.expand_path("../../../examples/generated",
+    FileUtils.mkdir_p(File.expand_path("../tmp/elaborate_generated",
                                        __dir__))
   end
 
