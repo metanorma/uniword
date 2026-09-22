@@ -46,6 +46,14 @@ module Uniword
         errors.empty?
       end
 
+      # Report-contract predicate shared with Quality::QualityReport:
+      # true when the document has no error-level violations.
+      #
+      # @return [Boolean]
+      def valid?
+        compliant?
+      end
+
       # Get all error-level violations
       #
       # @return [Array<AccessibilityViolation>] Error violations
