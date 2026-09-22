@@ -21,7 +21,9 @@
 # Bundler
 /.bundle/
 /vendor/bundle
-Gemfile.lock
+# Gemfile.lock IS committed: CI resolves exactly these versions
+# (deterministic matrix). Bump deliberately via `bundle update <gem>`
+# PRs — never let CI re-resolve.
 
 # Environment
 .env
