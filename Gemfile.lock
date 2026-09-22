@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    uniword (1.5.4)
+    uniword (1.6.0)
       logger
       lutaml-model (~> 0.8.0, >= 0.8.6)
       nokogiri (~> 1.19)
@@ -319,7 +319,7 @@ CHECKSUMS
   unicode-emoji (4.3.0) sha256=11c02fa73290378c066bb0562cd4c87d8e1b706fbbe0059ca12746a4244de8ce
   unicode-name (1.15.0) sha256=bc762b5b7b3409c85ed9f8da1604e0d6b011150c794cf7f9b6149aa237d71fb0
   unicode-types (1.12.0) sha256=7e26a4352cecc2a50325a3793df834b732581ca9f25c5e29f46f3378934363f6
-  uniword (1.5.4)
+  uniword (1.6.0)
   yard (0.9.45) sha256=52e211493f7cb8a3ebf7e104a25a1e73937a3103092545d34cb88fafebb3dc51
   yeptris (0.6.15.2) sha256=ac9a7cbe32a167a89cb41599dbf0092e1d84129c1e04f926f72405f0a3be99da
   yeptris (0.6.15.2-aarch64-linux) sha256=6de55da88eabe873b62a6b2948b84ae4da845865edf5066cb7e2ea6e4b2e63eb
