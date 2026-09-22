@@ -229,6 +229,8 @@ module Uniword
     long_desc <<~DESC
       Run document quality and accessibility checks.
 
+      Exits 1 when any report has error-level findings.
+
       Examples:
         $ uniword check document.docx
         $ uniword check document.docx --type accessibility
@@ -257,14 +259,15 @@ module Uniword
 
       if options[:json]
         require "json"
-        output = reports.transform_values do |r|
-          { valid: r.valid?,
-            issues: r.is_a?(Uniword::Quality::CheckReport) ? r.issues.count : 0 }
+        output = reports.transform_values do |report|
+          { valid: report.valid?, issues: report.violations.count }
         end
         puts JSON.pretty_generate(output)
       else
         display_check_reports(reports)
       end
+
+      exit 1 if reports.values.any? { |report| !report.valid? }
     rescue Uniword::Error => e
       handle_error(e)
     rescue StandardError => e
@@ -733,14 +736,14 @@ module Uniword
         label = type.to_s.capitalize
         if report.valid?
           say("#{label}: No issues found", :green)
-        else
-          issue_count = report.is_a?(Uniword::Quality::CheckReport) ? report.issues.count : "?"
-          say("#{label}: #{issue_count} issue(s) found", :yellow)
-          if options[:verbose] && report.is_a?(Uniword::Quality::CheckReport)
-            report.issues.each do |issue|
-              say("  - #{issue}", :yellow)
-            end
-          end
+          next
+        end
+
+        say("#{label}: #{report.violations.count} issue(s) found", :yellow)
+        next unless options[:verbose]
+
+        report.violations.each do |violation|
+          say("  - #{violation.message}", :yellow)
         end
       end
     end
