@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "nokogiri"
-
 module Uniword
   module Themes
     # Parses theme XML files into Theme models
@@ -26,7 +24,7 @@ module Uniword
       # @return [Theme] Parsed theme
       # @raise [ArgumentError] if XML is invalid or missing theme element
       def parse(xml)
-        doc = Nokogiri::XML(xml)
+        doc = Moxml.parse(xml)
         theme_node = doc.at_xpath("//a:theme", THEME_NS)
 
         unless theme_node
