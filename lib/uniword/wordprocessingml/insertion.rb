@@ -14,9 +14,9 @@ module Uniword
     #   ins = Insertion.new(id: "7", author: "Alice",
     #                        runs: [Run.new(text: "inserted")])
     class Insertion < Lutaml::Model::Serializable
-      attribute :id, :string
-      attribute :author, :string
-      attribute :date, :string
+      attribute :id, Ooxml::Types::WmlVal
+      attribute :author, Ooxml::Types::WmlVal
+      attribute :date, Ooxml::Types::WmlVal
       attribute :runs, Run, collection: true, initialize_empty: true
 
       xml do
