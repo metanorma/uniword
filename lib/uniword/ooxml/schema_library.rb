@@ -12,8 +12,8 @@ module Uniword
     # Namespace: http://schemas.openxmlformats.org/schemaLibrary/2006/main
     # Prefix: sl
     class SchemaLibEntry < Lutaml::Model::Serializable
-      attribute :uri, :string, default: -> { "" }
-      attribute :manifest_location, :string
+      attribute :uri, Types::SchemaLibraryVal, default: -> { "" }
+      attribute :manifest_location, Types::SchemaLibraryVal
 
       xml do
         element "schema"

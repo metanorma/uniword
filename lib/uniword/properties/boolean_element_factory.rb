@@ -47,7 +47,7 @@ module Uniword
         klass = Class.new(Lutaml::Model::Serializable) do
           include BooleanElement
 
-          attribute :val, :string, default: nil
+          attribute :val, Ooxml::Types::WmlVal, default: nil
           include BooleanValSetter
 
           xml do
