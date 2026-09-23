@@ -21,11 +21,11 @@ GEM
     benchmark-memory (0.2.0)
       memory_profiler (~> 1)
     bigdecimal (4.1.3)
-    canon (0.3.70)
+    canon (0.3.69)
       diff-lcs
       json
-      leptris (~> 1.9.228)
-      moxml (~> 0.5.78)
+      leptris (~> 1.9.222)
+      moxml (~> 0.5.73)
       paint
       rainbow
       table_tennis
@@ -72,7 +72,7 @@ GEM
       bigdecimal
       strscan (>= 3.1.1)
     logger (1.7.0)
-    lutaml-model (0.8.57)
+    lutaml-model (0.8.56)
       base64
       bigdecimal
       canon
@@ -84,7 +84,7 @@ GEM
       thor
     memo_wise (1.13.0)
     memory_profiler (1.1.0)
-    moxml (0.5.78)
+    moxml (0.5.77)
     nokogiri (1.19.4-aarch64-linux-gnu)
       racc (~> 1.4)
     nokogiri (1.19.4-aarch64-linux-musl)
@@ -245,7 +245,7 @@ CHECKSUMS
   benchmark-memory (0.2.0) sha256=ca1e436433b09535ee8f64f80600a5edb407cff1f6ac70e089ca238118e6ab5c
   bigdecimal (4.1.3) sha256=61ebe1e5e559bdc3cc6f2c0ee7f427321fc838f59611c294356eb04d6e21cf66
   bundler (4.0.11) sha256=5bcec0fb78302e48d02ee46f10ee6e6942be647ba5b44a6d1ddfda9a240ce785
-  canon (0.3.70) sha256=b16adeef03a4f757f1ea0e1e27b1747c26c6da6266b7025de592e09aca1c8d97
+  canon (0.3.69) sha256=5267137c0fad8637cdc38ff072f410fefa6f942a5e7ba5cb2d0c8d6e92280277
   concurrent-ruby (1.3.8) sha256=b2f1be836e968ccc78ccfce277ea79c72a88633f22306782c16ff23fb415d1e1
   csv (3.3.6) sha256=aba61e7e507a66f03d45cb1f3c4b6359861c3504038b422962875dce099e4456
   diff-lcs (1.6.2) sha256=9ae0d2cba7d4df3075fe8cd8602a8604993efc0dfa934cff568969efb1909962
@@ -273,10 +273,10 @@ CHECKSUMS
   lint_roller (1.1.0) sha256=2c0c845b632a7d172cb849cc90c1bce937a28c5c8ccccb50dfd46a485003cc87
   liquid (5.14.0) sha256=e1020c2b2ee58c7a4d3bfdc7a331537bd27a783353748bff0bf27c6ac0c17065
   logger (1.7.0) sha256=196edec7cc44b66cfb40f9755ce11b392f21f7967696af15d274dde7edff0203
-  lutaml-model (0.8.57) sha256=a91943bbcb052f27c09d866b8c636a1f75bd93b47782f43e64d85ba3d2931f92
+  lutaml-model (0.8.56) sha256=bc1d93bb38bf677f0053cfddea0cf6f6810d20ee873088779d3b2adff3df0027
   memo_wise (1.13.0) sha256=30220c38c4cef410849bc73553c58664dc2c91c6379e4a1df22aea02358b716b
   memory_profiler (1.1.0) sha256=79a17df7980a140c83c469785905409d3027ca614c42c086089d128b805aa8f8
-  moxml (0.5.78) sha256=23594bdd16507331b4789d370035506678532b3f126cf8d22670358f7ddc60ff
+  moxml (0.5.77) sha256=2b75a24ff348b9a3dc74f18f2ce99d587ccad3d394675be3304229726f046bf7
   nokogiri (1.19.4-aarch64-linux-gnu) sha256=1269fb644a6de405057a53dd5c762b1209b43ca7424f839454d3dbc677c31a8f
   nokogiri (1.19.4-aarch64-linux-musl) sha256=35c65b9ce72b3bb03207bdbe7067915019dc18c1b9b59139684bd6690fdd01af
   nokogiri (1.19.4-arm-linux-gnu) sha256=a301313e38bb065d68239e79734bcd6f56fb6efaacebde29e9abf2a4735340ca
