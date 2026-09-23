@@ -59,16 +59,19 @@ module Uniword
 
       # Walk every paragraph in `containers` and yield each run's
       # text elements. Shared by body / headers / footers / footnotes
-      # / endnotes / comments scopes.
+      # / endnotes / comments scopes. Runs inside tracked insertions
+      # are live content and included; runs inside deletions are
+      # deleted content and left untouched.
       #
-      # @param containers [Enumerable<#paragraphs, #tables,
-      #   #structured_document_tags>]
+      # @param containers [Enumerable<#paragraphs>]
       # @yieldparam text_element [Wordprocessingml::Text]
       # @yieldparam accessor [TextAccessor]
       # @return [void]
       def each_text_in_containers(containers)
         ParagraphWalker.each_paragraph(containers) do |paragraph|
-          paragraph.runs&.each do |run|
+          runs = paragraph.runs +
+            paragraph.insertions.flat_map(&:runs)
+          runs.each do |run|
             each_text_in_run(run) { |*a| yield(*a) }
           end
         end

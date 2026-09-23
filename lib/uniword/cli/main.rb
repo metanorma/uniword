@@ -242,8 +242,14 @@ module Uniword
                      default: false
     option :json, desc: "Output JSON report", type: :boolean, default: false
     def check(path)
-      doc = load_document(path)
       check_type = options[:type]
+      unless CHECK_TYPES.include?(check_type)
+        say("Unknown check type: #{check_type} " \
+            "(valid: #{CHECK_TYPES.join(', ')})", :red)
+        exit 1
+      end
+
+      doc = load_document(path)
 
       reports = {}
 
@@ -463,6 +469,8 @@ module Uniword
     option :verbose, aliases: "-v", type: :boolean, default: false,
                      desc: "Show per-pattern counts"
     def redact(input_path, output_path)
+      validate_scopes!(options[:scope])
+      validate_redact_patterns!(options[:pattern])
       doc = load_document(input_path)
       patterns = resolve_redact_patterns(options[:pattern])
       result = doc.redact(patterns: patterns,
@@ -508,6 +516,8 @@ module Uniword
     option :verbose, aliases: "-v", type: :boolean, default: false,
                      desc: "Show per-scope counts"
     def find_replace(input_path, output_path, pattern, replacement)
+      validate_scopes!(options[:scope])
+      validate_regex!(pattern) if options[:regex]
       scopes = expand_scopes(options[:scope])
       doc = load_document(input_path)
       result = run_find_replace(doc, pattern, replacement, scopes)
@@ -596,6 +606,36 @@ module Uniword
       return :all if symbols.include?(:all)
 
       symbols
+    end
+
+    # Valid values for `check --type`.
+    CHECK_TYPES = %w[all quality accessibility].freeze
+
+    def validate_scopes!(scopes)
+      valid = ["all"] + Uniword::FindReplace::Engine::ALL_SCOPES.map(&:to_s)
+      unknown = Array(scopes).map(&:to_s) - valid
+      return if unknown.empty?
+
+      say("Unknown scope: #{unknown.join(', ')} " \
+          "(valid: #{valid.join(', ')})", :red)
+      exit 1
+    end
+
+    def validate_regex!(pattern)
+      Regexp.new(pattern)
+    rescue RegexpError => e
+      say("Invalid regular expression: #{e.message}", :red)
+      exit 1
+    end
+
+    def validate_redact_patterns!(names)
+      valid = [:pii] + Uniword::Redact::PatternLibrary.all.map(&:name)
+      unknown = Array(names).map(&:to_sym) - valid
+      return if unknown.empty?
+
+      say("Unknown pattern: #{unknown.join(', ')} " \
+          "(valid: #{valid.join(', ')})", :red)
+      exit 1
     end
 
     # Build the right matcher from --regex flag and run the engine.
