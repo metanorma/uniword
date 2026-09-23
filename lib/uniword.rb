@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require "nokogiri"
 require "zip"
 
 # XML hydration: lutaml-model routes through Moxml. The Nokogiri
-# adapter stays pinned until upstream Lutaml::Xml::PlanOrder handles
-# Leptris namespace objects (issue #58 tracks the migration).
+# adapter stays pinned until lutaml-model's Leptris serialization
+# preserves declared namespaces on standalone to_xml (namespace
+# detection fixed in 0.8.56 via lutaml-model#845; serialization drop
+# is the remaining blocker — issue filed upstream).
 Lutaml::Model::Config.xml_adapter_type = :nokogiri
 
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
