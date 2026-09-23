@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "zip"
-require "nokogiri"
 
 module Uniword
   module Validation
@@ -107,7 +106,7 @@ module Uniword
         ct_entry = zip.find_entry("[Content_Types].xml")
         return unless ct_entry
 
-        ct_doc = Nokogiri::XML(ct_entry.get_input_stream.read, &:strict)
+        ct_doc = Moxml.parse(ct_entry.get_input_stream.read)
 
         # Get declared extensions
         declared_exts = ct_doc.xpath("//xmlns:Default", "xmlns" => CT_NS)
@@ -137,7 +136,7 @@ module Uniword
             suggestion: "Add a Default or Override entry in [Content_Types].xml.",
           )
         end
-      rescue Nokogiri::XML::SyntaxError => e
+      rescue Moxml::ParseError => e
         issues << Report::ValidationIssue.new(
           severity: "error",
           code: "OPC-008",
@@ -155,7 +154,7 @@ module Uniword
       end
 
       def check_relationship_file(zip, entry, issues)
-        doc = Nokogiri::XML(entry.get_input_stream.read)
+        doc = Moxml.parse(entry.get_input_stream.read)
 
         base_dir = compute_base_dir(entry.name)
 
@@ -181,7 +180,7 @@ module Uniword
                         "from the package. Remove the relationship or add the part.",
           )
         end
-      rescue Nokogiri::XML::SyntaxError => e
+      rescue Moxml::ParseError => e
         issues << Report::ValidationIssue.new(
           severity: "error",
           code: "OPC-008",
@@ -195,8 +194,8 @@ module Uniword
 
         xml_entries.each do |entry|
           content = entry.get_input_stream.read
-          Nokogiri::XML(content, &:strict)
-        rescue Nokogiri::XML::SyntaxError => e
+          Moxml.parse(content)
+        rescue Moxml::ParseError => e
           issues << Report::ValidationIssue.new(
             severity: "error",
             code: "OPC-008",

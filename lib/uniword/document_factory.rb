@@ -80,7 +80,7 @@ module Uniword
       rescue Zip::Error => e
         raise CorruptedFileError.new(path.to_s,
                                      "Invalid ZIP structure: #{e.message}")
-      rescue Nokogiri::XML::SyntaxError => e
+      rescue Moxml::ParseError => e
         raise CorruptedFileError.new(path.to_s, "Invalid XML: #{e.message}")
       rescue StandardError => e
         # Re-raise our custom errors
@@ -143,7 +143,7 @@ module Uniword
       rescue Zip::Error => e
         raise CorruptedFileError.new(path.to_s,
                                      "Invalid ZIP structure: #{e.message}")
-      rescue Nokogiri::XML::SyntaxError => e
+      rescue Moxml::ParseError => e
         raise CorruptedFileError.new(path.to_s, "Invalid XML: #{e.message}")
       rescue StandardError => e
         # Re-raise our custom errors
