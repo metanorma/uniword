@@ -59,6 +59,9 @@ module Uniword
       # schemaLibrary namespace type for sl: qualified attributes
       autoload :SchemaLibraryVal, "#{__dir__}/types/schema_library_val"
 
+      # Additional Characteristics namespace type
+      autoload :CharacteristicsVal, "#{__dir__}/types/characteristics_val"
+
       # Variant Types (vt: namespace) for OLE property values
       autoload :VariantTypes, "#{__dir__}/types/variant_types"
 

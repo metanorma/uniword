@@ -13,6 +13,14 @@ module Uniword
       module VariantTypes
         VT_NS = Uniword::Ooxml::Namespaces::VariantTypes
 
+        # String type for qualified vt: attributes (e.g. baseType on
+        # vector elements).
+        class VtAttr < Lutaml::Model::Type::String
+          xml do
+            namespace VT_NS
+          end
+        end
+
         # Base class for simple variant type values (text content only)
         class VTValue < Lutaml::Model::Serializable
           attribute :value, :string
@@ -259,7 +267,7 @@ module Uniword
 
         # vt:vector - Typed array of values
         class VtVector < Lutaml::Model::Serializable
-          attribute :base_type, :string
+          attribute :base_type, VtAttr
           attribute :size, :string
           attribute :lpwstr_values, VtLpwstr, collection: true
           attribute :lpstr_values, VtLpstr, collection: true
@@ -287,7 +295,7 @@ module Uniword
 
         # vt:array - Typed array with bounds
         class VtArray < Lutaml::Model::Serializable
-          attribute :base_type, :string
+          attribute :base_type, VtAttr
           attribute :size, :string
           attribute :l_bound, :string
           attribute :u_bound, :string

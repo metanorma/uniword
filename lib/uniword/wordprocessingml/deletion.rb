@@ -14,9 +14,9 @@ module Uniword
     # @example
     #   del = Deletion.new(id: "8", author: "Alice")
     class Deletion < Lutaml::Model::Serializable
-      attribute :id, :string
-      attribute :author, :string
-      attribute :date, :string
+      attribute :id, Ooxml::Types::WmlVal
+      attribute :author, Ooxml::Types::WmlVal
+      attribute :date, Ooxml::Types::WmlVal
       attribute :runs, Run, collection: true, initialize_empty: true
 
       xml do
