@@ -27,6 +27,8 @@ module Uniword
       def initialize(document)
         @document = document
         @accept_reject = AcceptReject.new
+        @resolver = RevisionResolver.new(document)
+        @resolver_hydrated = false
       end
 
       # --- Comments ---
@@ -141,26 +143,41 @@ module Uniword
 
       # Accept a single revision by ID.
       #
+      # Applies the decision to the document models (tracked-change
+      # nodes are spliced or removed) and keeps the facade list in
+      # sync.
+      #
       # @param revision_id [String] The revision ID to accept
       # @return [Boolean] true if accepted, false if not found
-      def accept(revision_id)
+      def accept(revision_id) # rubocop:disable Naming/PredicateMethod
         revision = tracked_changes.find_revision(revision_id)
         return false unless revision
 
-        @accept_reject.accept(revision)
+        if @resolver.ids.include?(revision_id.to_s)
+          @resolver.accept(revision_id)
+        else
+          @accept_reject.accept(revision)
+        end
         tracked_changes.remove_revision(revision_id)
         true
       end
 
       # Reject a single revision by ID.
       #
+      # Applies the decision to the document models and keeps the
+      # facade list in sync.
+      #
       # @param revision_id [String] The revision ID to reject
       # @return [Boolean] true if rejected, false if not found
-      def reject(revision_id)
+      def reject(revision_id) # rubocop:disable Naming/PredicateMethod
         revision = tracked_changes.find_revision(revision_id)
         return false unless revision
 
-        @accept_reject.reject(revision)
+        if @resolver.ids.include?(revision_id.to_s)
+          @resolver.reject(revision_id)
+        else
+          @accept_reject.reject(revision)
+        end
         tracked_changes.remove_revision(revision_id)
         true
       end
@@ -169,6 +186,8 @@ module Uniword
       #
       # @return [Integer] Number of changes accepted
       def accept_all
+        tracked_changes # hydrates the resolver's node registry
+        @resolver.ids.each { |id| @resolver.accept(id) }
         tracked_changes.accept_all
       end
 
@@ -176,6 +195,8 @@ module Uniword
       #
       # @return [Integer] Number of changes rejected
       def reject_all
+        tracked_changes # hydrates the resolver's node registry
+        @resolver.ids.each { |id| @resolver.reject(id) }
         tracked_changes.reject_all
       end
 
@@ -242,7 +263,10 @@ module Uniword
         end
       end
 
-      # Get or initialize TrackedChanges for the document.
+      # Get or initialize TrackedChanges for the document. On first
+      # access, parsed <w:ins>/<w:del> nodes are registered on the
+      # facade (via RevisionResolver) so listing and accept/reject
+      # reflect the document's real tracked changes.
       #
       # @return [Uniword::TrackedChanges] The tracked changes collection
       def tracked_changes
@@ -256,6 +280,11 @@ module Uniword
             tc
           end
         end
+        unless @resolver_hydrated
+          @resolver.hydrate(@tracked_changes)
+          @resolver_hydrated = true
+        end
+        @tracked_changes
       end
     end
   end
