@@ -11,10 +11,10 @@ module Uniword
     #
     # Namespace: http://schemas.openxmlformats.org/officeDocument/2006/characteristics
     class Characteristic < Lutaml::Model::Serializable
-      attribute :name, :string
-      attribute :relation, :string
-      attribute :val, :string
-      attribute :vocabulary, :string
+      attribute :name, Types::CharacteristicsVal
+      attribute :relation, Types::CharacteristicsVal
+      attribute :val, Types::CharacteristicsVal
+      attribute :vocabulary, Types::CharacteristicsVal
 
       xml do
         element "characteristic"
