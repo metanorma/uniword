@@ -18,12 +18,12 @@ module Uniword
         document.to_xml(encoding: "UTF-8", prefix: true)
       end
 
-      # Serialize a document to XML and return as a Nokogiri document
+      # Serialize a document to XML and return as a Moxml document
       #
       # @param document [DocumentRoot] The document to serialize
-      # @return [Nokogiri::XML::Document] The serialized document
+      # @return [Moxml::Document] The serialized document
       def serialize_to_doc(document)
-        Nokogiri::XML(serialize(document))
+        Moxml.parse(serialize(document))
       end
     end
   end

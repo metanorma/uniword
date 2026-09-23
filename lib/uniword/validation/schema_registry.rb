@@ -85,7 +85,7 @@ module Uniword
 
       def initialize(schemas_dir: nil)
         @schemas_dir = schemas_dir || default_schemas_dir
-        @moxml = Moxml.new(:nokogiri)
+        @moxml = Moxml.new
         @schema_cache = {}
       end
 

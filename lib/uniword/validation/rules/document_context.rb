@@ -29,7 +29,7 @@ module Uniword
           @path = path
           @zip = nil
           @parsed_parts = {}
-          @moxml = Moxml.new(:nokogiri)
+          @moxml = Moxml.new
         end
 
         # Context type used by the Engine to select rules.
@@ -139,7 +139,7 @@ module Uniword
           raw = part_raw(rels_path)
           return [] unless raw
 
-          doc = Nokogiri::XML(raw)
+          doc = Moxml.parse(raw)
           doc.xpath("//xmlns:Relationship", "xmlns" => RELS_NS).map do |rel|
             {
               id: rel["Id"],
@@ -157,7 +157,7 @@ module Uniword
           raw = part_raw("[Content_Types].xml")
           return {} unless raw
 
-          doc = Nokogiri::XML(raw)
+          doc = Moxml.parse(raw)
           types = {}
 
           doc.xpath("//xmlns:Default", "xmlns" => CT_NS).each do |node|
