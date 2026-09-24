@@ -3,13 +3,10 @@
 require "lutaml/model"
 require "zip"
 
-# XML hydration: lutaml-model routes through Moxml. The Nokogiri
-# adapter stays pinned until lutaml-model's Leptris adapter preserves
-# namespaced attributes on parse and serialize (detection fixed in
-# 0.8.56 via #845, serialization in 0.8.57 via #848; attribute loss
-# is the remaining blocker — lutaml-model#849). The hydration flip
-# itself is staged on fix/hydration-flip.
-Lutaml::Model::Config.xml_adapter_type = :nokogiri
+# XML hydration routes through lutaml-model's Moxml layer with the
+# runtime default adapter (Leptris). Nokogiri remains available as a
+# Moxml adapter and is used directly for XSD schema validation and
+# HTML handling.
 
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
 # documents in DOCX format using a schema-driven architecture.
