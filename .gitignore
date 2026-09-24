@@ -21,9 +21,11 @@
 # Bundler
 /.bundle/
 /vendor/bundle
-# Gemfile.lock IS committed: CI resolves exactly these versions
-# (deterministic matrix). Bump deliberately via `bundle update <gem>`
-# PRs — never let CI re-resolve.
+/Gemfile.lock
+# Gemfile.lock is intentionally untracked: the cimas release workflow's
+# fresh-bundle-resolve preflight regenerates it, which would otherwise
+# leave a dirty tree and abort `gem bump` (metanorma/ci rubygems-release).
+# Local determinism still applies via the working-copy lock.
 
 # Environment
 .env
