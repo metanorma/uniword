@@ -9,13 +9,13 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:pgMar>
     class PageMargins < Lutaml::Model::Serializable
-      attribute :top, :integer
-      attribute :bottom, :integer
-      attribute :left, :integer
-      attribute :right, :integer
-      attribute :header, :integer
-      attribute :footer, :integer
-      attribute :gutter, :integer
+      attribute :top, Ooxml::Types::WmlInt
+      attribute :bottom, Ooxml::Types::WmlInt
+      attribute :left, Ooxml::Types::WmlInt
+      attribute :right, Ooxml::Types::WmlInt
+      attribute :header, Ooxml::Types::WmlInt
+      attribute :footer, Ooxml::Types::WmlInt
+      attribute :gutter, Ooxml::Types::WmlInt
 
       xml do
         element "pgMar"

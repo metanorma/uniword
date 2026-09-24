@@ -56,6 +56,9 @@ module Uniword
       # WordProcessingML namespace type for qualified w:val attributes
       autoload :WmlVal, "#{__dir__}/types/wml_val"
 
+      # WordProcessingML namespace type for qualified integer attributes
+      autoload :WmlInt, "#{__dir__}/types/wml_int"
+
       # schemaLibrary namespace type for sl: qualified attributes
       autoload :SchemaLibraryVal, "#{__dir__}/types/schema_library_val"
 
