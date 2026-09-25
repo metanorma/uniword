@@ -249,8 +249,12 @@ RSpec.describe "MHTML Document Model Round-Trip", type: :integration do
         expect(props.pages).to eq("5")
 
         xml_out = props.to_xml
-        expect(xml_out).to include("<o:Author>Test Author</o:Author>")
-        expect(xml_out).to include("<o:Created>2025-01-01T00:00:00Z</o:Created>")
+        # Namespace spelling varies by adapter (o:-prefixed or default
+        # xmlns); assert the round-trip semantically via re-parse.
+        reparsed = Uniword::Mhtml::Metadata::DocumentProperties.from_xml(xml_out)
+        expect(reparsed.author).to eq("Test Author")
+        expect(reparsed.created).to eq("2025-01-01T00:00:00Z")
+        expect(reparsed.pages).to eq("5")
       end
     end
 
@@ -266,7 +270,9 @@ RSpec.describe "MHTML Document Model Round-Trip", type: :integration do
         expect(settings.lid_theme_other).to eq("EN-US")
 
         xml_out = settings.to_xml
-        expect(xml_out).to include("<w:TrackMoves>false</w:TrackMoves>")
+        # Namespace spelling varies by adapter (w:-prefixed or default
+        # xmlns); assert the round-trip semantically via re-parse.
+        expect(settings.class.from_xml(xml_out).track_moves).to eq("false")
       end
     end
   end
