@@ -156,7 +156,7 @@ RSpec.describe Uniword::Wordprocessingml::Paragraph, "Enhanced Properties" do
 
       expect(Array(paragraph.properties&.style).first&.value).to eq("Heading1")
       expect(paragraph.properties&.alignment&.value).to eq("center")
-      expect(paragraph.properties&.spacing&.before).to eq(240)
+      expect(Array(paragraph.properties&.spacing).first&.before).to eq(240)
       expect(paragraph.properties.borders).not_to be_nil
       expect(paragraph.properties.shading).not_to be_nil
       expect(paragraph.properties.tabs).not_to be_nil

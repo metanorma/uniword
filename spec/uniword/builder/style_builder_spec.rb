@@ -55,8 +55,34 @@ RSpec.describe Uniword::Builder::StyleBuilder do
     it "sets spacing" do
       sb = described_class.new("S")
       sb.spacing(before: 240, after: 120)
-      expect(sb.model.pPr.spacing.before).to eq(240)
-      expect(sb.model.pPr.spacing.after).to eq(120)
+      spacing = sb.model.pPr.spacing.first
+      expect(spacing.before).to eq(240)
+      expect(spacing.after).to eq(120)
+    end
+
+    # A .dotx style whose spacing Word split across two w:spacing elements.
+    context "when a later entry already carries the field" do
+      let(:two_entries_xml) do
+        <<~XML
+          <w:pPr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+            <w:spacing w:before="0"/>
+            <w:spacing w:before="777" w:line="240"/>
+          </w:pPr>
+        XML
+      end
+      let(:style_builder) do
+        sb = described_class.new("S")
+        sb.model.pPr =
+          Uniword::Wordprocessingml::ParagraphProperties.from_xml(two_entries_xml)
+        sb
+      end
+
+      it "sets spacing without leaving the stale value standing" do
+        style_builder.spacing(before: 111)
+
+        expect(style_builder.model.pPr.spacing.map(&:before)).to eq([111, nil])
+        expect(style_builder.model.pPr.spacing.map(&:line)).to eq([nil, 240])
+      end
     end
   end
 
