@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "zip"
-require "nokogiri"
+require "moxml"
 # LayerValidator autoloaded via lib/uniword/validation.rb
 
 module Uniword
@@ -14,7 +14,8 @@ module Uniword
       # - XSD validation: parts validated against OOXML XSD schemas
       #
       # XSD validation uses SchemaRegistry for namespace-aware schema selection.
-      # Uses Moxml for namespace detection and Nokogiri::XML::Schema for validation.
+      # Uses Moxml throughout: parse, namespace detection, and the
+      # Moxml::XSD (Leptris engine) validator.
       #
       # @example Validate with XSD
       #   validator = XmlSchemaValidator.new("xml_schema" => { "xsd_validation" => true })
@@ -66,8 +67,8 @@ module Uniword
 
         def validate_entry(entry, issues)
           content = entry.get_input_stream.read
-          Nokogiri::XML(content, &:strict)
-        rescue Nokogiri::XML::SyntaxError => e
+          moxml.parse(content)
+        rescue Moxml::ParseError => e
           issues << Report::ValidationIssue.new(
             severity: "error",
             code: "XSD-001",
@@ -87,16 +88,15 @@ module Uniword
             begin
               content = entry.get_input_stream.read
               schema = registry.load_schema(schema_path)
-              doc = Nokogiri::XML(content)
+              doc = moxml.parse(content)
               preprocess_mce(doc)
 
               schema.validate(doc).each do |error|
                 issues << Report::ValidationIssue.new(
                   severity: "error",
                   code: "XSD-002",
-                  message: error.message.gsub("\n", " ").strip,
+                  message: error.to_s.gsub("\n", " ").strip,
                   part: entry.name,
-                  line: error.line,
                 )
               end
 
@@ -132,17 +132,18 @@ module Uniword
         # Operates in place on the parsed document; never touches the
         # packaged bytes.
         #
-        # @param doc [Nokogiri::XML::Document] parsed part to clean
+        # @param doc [Moxml::Document] parsed part to clean
         # @return [void]
         def preprocess_mce(doc)
           root = doc.root
           return unless root
 
-          ignorable = root["Ignorable"] || root["mc:Ignorable"]
+          ignorable = root["mc:Ignorable"]
           return if ignorable.nil? || ignorable.empty?
 
+          prefix_uris = root.namespaces.to_h { |ns| [ns.prefix, ns.uri] }
           uris = ignorable.split(/\s+/).filter_map do |prefix|
-            root.namespaces["xmlns:#{prefix}"]
+            prefix_uris[prefix]
           end
           # The mc:Ignorable attribute itself is MCE machinery and is
           # undeclared on most root elements in the transitional XSDs.
@@ -152,10 +153,10 @@ module Uniword
         # Remove attributes in ignorable namespaces from every element.
         def strip_mce_attributes(doc, uris)
           doc.traverse do |node|
-            next unless node.element?
+            next unless node.is_a?(Moxml::Element)
 
-            node.attribute_nodes.each do |attr|
-              attr.remove if uris.include?(attr.namespace&.href)
+            node.attributes.each do |attr|
+              attr.remove if uris.include?(attr.namespace&.uri)
             end
           end
         end
@@ -190,6 +191,10 @@ module Uniword
 
         def xsd_validation?
           layer_config["xsd_validation"] == true
+        end
+
+        def moxml
+          @moxml ||= Moxml.new
         end
 
         def layer_config

@@ -100,7 +100,10 @@ RSpec.describe Uniword::Validation::Validators::XmlSchemaValidator do
 
       result = validator.validate(path)
 
-      expect(error_messages(result).join).to include("pgMar")
+      # Leptris names the missing attribute without the element.
+      joined = error_messages(result).join
+      expect(joined).to include("required but absent")
+      expect(joined).to include("header")
     end
   end
 end
