@@ -31,7 +31,7 @@ module Uniword
             .gsub(/=([0-9A-Fa-f]{2})/) { [::Regexp.last_match(1).hex].pack("C") }
             .force_encoding("UTF-8")
         else
-          raw_content
+          raw_content&.force_encoding("UTF-8") || raw_content
         end
       end
 

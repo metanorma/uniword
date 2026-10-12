@@ -121,7 +121,7 @@ module Uniword
       # @param element [Nokogiri::XML::Element] span element
       # @param props [Uniword::Wordprocessingml::RunProperties]
       def self.apply_span_styles(element, props)
-        style = element.attr("style") || ""
+        style = element.attribute("style")&.value || ""
 
         if style =~ /color:\s*#?([0-9a-fA-F]{6})/i
           props.color =
