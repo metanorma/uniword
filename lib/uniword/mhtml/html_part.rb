@@ -7,26 +7,26 @@ module Uniword
     # Contains the Word HTML document with embedded XML metadata
     # (DocumentProperties, WordDocument settings, LatentStyles).
     class HtmlPart < MimePart
-      # Parse the decoded HTML with Nokogiri
+      # Parse the decoded HTML with Moxml (Leptris HTML parser)
       def html_document
-        @html_document ||= Nokogiri::HTML(decoded_content)
+        @html_document ||= Moxml.new.parse_html(decoded_content)
       end
 
       # Extract the <head> element as string
       def head_html
-        node = html_document.at_css("head")
-        node ? node.to_s : ""
+        node = html_document.at_xpath(".//head")
+        node ? node.to_xml : ""
       end
 
       # Extract the <body> element inner HTML
       def body_html
-        node = html_document.at_css("body")
-        node ? node.inner_html : ""
+        node = html_document.at_xpath(".//body")
+        node ? node.children.map(&:to_xml).join : ""
       end
 
       # Extract inline CSS styles from <style> tags
       def css_styles
-        html_document.css("style").map(&:content).join("\n")
+        html_document.xpath(".//style").map(&:content).join("\n")
       end
 
       # Extract DocumentProperties XML from HTML head comments.
@@ -58,7 +58,7 @@ module Uniword
 
       # Extract all <xml> blocks from head
       def xml_blocks
-        html_document.at_css("head")&.xpath("comment()")&.filter_map do |comment|
+        html_document.at_xpath(".//head")&.xpath("comment()")&.filter_map do |comment|
           text = comment.text
           ::Regexp.last_match(1).strip if text =~ %r{<xml>(.*?)</xml>}m
         end || []
@@ -82,7 +82,7 @@ module Uniword
       # This method finds the requested root element and wraps it
       # with proper namespace declarations for lutaml-model.
       def extract_office_xml(element_name, namespace_uri, prefix)
-        head = html_document.at_css("head")
+        head = html_document.at_xpath(".//head")
         return nil unless head
 
         head.xpath("comment()").each do |comment|

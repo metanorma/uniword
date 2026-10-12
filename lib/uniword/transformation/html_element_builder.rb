@@ -60,13 +60,13 @@ module Uniword
             row.cells << cell
 
             # Track rowspan for continuation cell insertion in subsequent rows
-            rowspan = html_cell.attr("rowspan")&.to_i
+            rowspan = html_cell.attribute("rowspan")&.value&.to_i
             if rowspan && rowspan > 1
-              colspan = html_cell.attr("colspan")&.to_i || 1
+              colspan = html_cell.attribute("colspan")&.value&.to_i || 1
               colspan.times { |c| occupied[col_idx + c] = rowspan - 1 }
             end
 
-            col_idx += html_cell.attr("colspan")&.to_i || 1
+            col_idx += html_cell.attribute("colspan")&.value&.to_i || 1
           end
 
           # Handle remaining occupied columns at end of row
@@ -118,8 +118,8 @@ module Uniword
         cell.header = html_cell.name.downcase == "th"
 
         # Handle colspan → gridSpan, rowspan → vMerge restart
-        colspan = html_cell.attr("colspan")
-        rowspan = html_cell.attr("rowspan")
+        colspan = html_cell.attribute("colspan")&.value
+        rowspan = html_cell.attribute("rowspan")&.value
 
         if (colspan && colspan.to_i > 1) || (rowspan && rowspan.to_i > 1)
           cell.properties ||= Uniword::Wordprocessingml::TableCellProperties.new
@@ -213,7 +213,7 @@ module Uniword
 
       # Apply CSS class → OOXML style mapping.
       def self.apply_css_style(paragraph, element)
-        css_class = element.attr("class")
+        css_class = element.attribute("class")&.value
         return unless css_class && !css_class.empty?
 
         mapped_style = HtmlFormattingMapper.map_css_class_to_style(css_class)
@@ -230,13 +230,12 @@ module Uniword
       # → FootnoteReference run, <span class="MsoEndnoteReference"> → EndnoteReference run.
       def self.build_children(paragraph, element)
         element.children.each do |child|
-          case child.type
-          when Nokogiri::XML::Node::TEXT_NODE
+          if child.is_a?(Moxml::Text)
             text = child.text.strip
             next if text.empty?
 
             paragraph.runs << create_run(text)
-          when Nokogiri::XML::Node::ELEMENT_NODE
+          elsif child.is_a?(Moxml::Element)
             case child.name.downcase
             when "w:sdt", "sdt"
               sdt = create_sdt_from_element(child)
@@ -325,8 +324,8 @@ module Uniword
       def self.create_break_run(element)
         run = Uniword::Wordprocessingml::Run.new
         brk = Uniword::Wordprocessingml::Break.new
-        style = element.attr("style").to_s
-        clear = element.attr("clear").to_s
+        style = element.attribute("style")&.value.to_s
+        clear = element.attribute("clear")&.value.to_s
         if style.include?("page-break-before") || style.include?("page-break-after") || clear == "all"
           brk.type = "page"
         end
@@ -341,7 +340,7 @@ module Uniword
       def self.footnote_reference_span?(element)
         return false unless element.name.downcase == "span"
 
-        element.attr("class").to_s.split.include?("MsoFootnoteReference")
+        element.attribute("class")&.value.to_s.split.include?("MsoFootnoteReference")
       end
 
       # Check if element is an endnote reference span.
@@ -351,7 +350,7 @@ module Uniword
       def self.endnote_reference_span?(element)
         return false unless element.name.downcase == "span"
 
-        element.attr("class").to_s.split.include?("MsoEndnoteReference")
+        element.attribute("class")&.value.to_s.split.include?("MsoEndnoteReference")
       end
 
       # Create a Run with FootnoteReference from an HTML footnote reference span.
@@ -388,7 +387,7 @@ module Uniword
         # Try nested <a href="#_ftnN"> or <a href="#_ednN">
         anchor = element.at_css("a[href^='#']")
         if anchor
-          href = anchor.attr("href").sub(/^#/, "")
+          href = anchor.attribute("href")&.value.sub(/^#/, "")
           if href =~ /(\d+)\s*$/
             return Regexp.last_match(1)
           end
@@ -408,20 +407,19 @@ module Uniword
       # @param element [Nokogiri::XML::Element] <a> element
       # @return [Uniword::Wordprocessingml::Hyperlink, nil]
       def self.create_hyperlink(element)
-        href = element.attr("href")
+        href = element.attribute("href")&.value
         return nil unless href
 
         hyperlink = Uniword::Wordprocessingml::Hyperlink.new
         hyperlink.target = href
 
         element.children.each do |child|
-          case child.type
-          when Nokogiri::XML::Node::TEXT_NODE
+          if child.is_a?(Moxml::Text)
             text = child.text.strip
             next if text.empty?
 
             hyperlink.runs << create_run(text)
-          when Nokogiri::XML::Node::ELEMENT_NODE
+          elsif child.is_a?(Moxml::Element)
             run = create_run_from_element(child)
             hyperlink.runs << run if run
           end

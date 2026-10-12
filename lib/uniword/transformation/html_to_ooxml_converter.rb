@@ -18,15 +18,15 @@ module Uniword
         return [] if html_content.nil? || html_content.empty?
 
         body = HtmlFormattingMapper.extract_body(html_content)
-        doc = Nokogiri::HTML(body)
+        doc = Moxml.new.parse_html(body)
         paragraphs = []
 
-        doc.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").each do |element|
-          next if element.ancestors("td, th").any?
+        doc.xpath(".//p | .//h1 | .//h2 | .//h3 | .//h4 | .//h5 | .//h6 | .//li | .//div | .//tr").each do |element|
+          next if element.ancestors("td").any? || element.ancestors("th").any?
           next if %w[tr td].include?(element.name)
 
           if %w[div li].include?(element.name) &&
-              element.css("p, h1, h2, h3, h4, h5, h6, li, div, tr").any?
+              element.xpath(".//p | .//h1 | .//h2 | .//h3 | .//h4 | .//h5 | .//h6 | .//li | .//div | .//tr").any?
             next
           end
 
@@ -45,10 +45,10 @@ module Uniword
         return [] if html_content.nil? || html_content.empty?
 
         body = HtmlFormattingMapper.extract_body(html_content)
-        doc = Nokogiri::HTML(body)
+        doc = Moxml.new.parse_html(body)
         tables = []
 
-        doc.css("table").each do |html_table|
+        doc.xpath(".//table").each do |html_table|
           table = HtmlElementBuilder.build_table(html_table)
           tables << table if table
         end
