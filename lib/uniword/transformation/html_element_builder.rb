@@ -2,7 +2,7 @@
 
 module Uniword
   module Transformation
-    # Builds OOXML element objects from parsed HTML (Nokogiri nodes).
+    # Builds OOXML element objects from parsed HTML (Moxml nodes).
     #
     # Pure functions — no state, no side effects.
     # Used by HtmlToOoxmlConverter to construct OOXML paragraphs, tables, runs.
@@ -11,7 +11,7 @@ module Uniword
     class HtmlElementBuilder
       # Build an OOXML Paragraph from an HTML element.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Paragraph, nil]
       def self.build_paragraph(element)
         paragraph = Uniword::Wordprocessingml::Paragraph.new
@@ -32,7 +32,7 @@ module Uniword
       # cell insertion. The grid layout is computed row-by-row to correctly
       # place vMerge continuation cells where HTML rowspan omits cells.
       #
-      # @param html_table [Nokogiri::XML::Element] HTML table element
+      # @param html_table [Moxml::Element] HTML table element
       # @return [Uniword::Wordprocessingml::Table, nil]
       def self.build_table(html_table)
         table = Uniword::Wordprocessingml::Table.new
@@ -88,7 +88,7 @@ module Uniword
 
       # Build an OOXML TableRow from an HTML tr element.
       #
-      # @param html_row [Nokogiri::XML::Element] HTML tr element
+      # @param html_row [Moxml::Element] HTML tr element
       # @return [Uniword::Wordprocessingml::TableRow, nil]
       def self.build_row(html_row)
         row = Uniword::Wordprocessingml::TableRow.new
@@ -109,7 +109,7 @@ module Uniword
       #
       # Handles colspan → gridSpan, rowspan → vMerge restart, <th> → header.
       #
-      # @param html_cell [Nokogiri::XML::Element] HTML td/th element
+      # @param html_cell [Moxml::Element] HTML td/th element
       # @return [Uniword::Wordprocessingml::TableCell, nil]
       def self.build_cell(html_cell)
         cell = Uniword::Wordprocessingml::TableCell.new
@@ -165,7 +165,7 @@ module Uniword
 
       # Create an OOXML Run from an HTML element with inline formatting.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Run, nil]
       def self.create_run_from_element(element)
         text = element.text.strip
@@ -182,7 +182,7 @@ module Uniword
 
       # Create an OOXML SDT from an HTML w:sdt element.
       #
-      # @param element [Nokogiri::XML::Element] HTML w:sdt element
+      # @param element [Moxml::Element] HTML w:sdt element
       # @return [Uniword::Wordprocessingml::StructuredDocumentTag, nil]
       def self.create_sdt_from_element(element)
         text = element.text.strip
@@ -319,7 +319,7 @@ module Uniword
 
       # Create a Run with Break from an HTML <br> element.
       #
-      # @param element [Nokogiri::XML::Element] <br> element
+      # @param element [Moxml::Element] <br> element
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_break_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -335,7 +335,7 @@ module Uniword
 
       # Check if element is a footnote reference span.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Boolean]
       def self.footnote_reference_span?(element)
         return false unless element.name.downcase == "span"
@@ -345,7 +345,7 @@ module Uniword
 
       # Check if element is an endnote reference span.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Boolean]
       def self.endnote_reference_span?(element)
         return false unless element.name.downcase == "span"
@@ -355,7 +355,7 @@ module Uniword
 
       # Create a Run with FootnoteReference from an HTML footnote reference span.
       #
-      # @param element [Nokogiri::XML::Element] Span element with MsoFootnoteReference class
+      # @param element [Moxml::Element] Span element with MsoFootnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_footnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -367,7 +367,7 @@ module Uniword
 
       # Create a Run with EndnoteReference from an HTML endnote reference span.
       #
-      # @param element [Nokogiri::XML::Element] Span element with MsoEndnoteReference class
+      # @param element [Moxml::Element] Span element with MsoEndnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_endnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -381,7 +381,7 @@ module Uniword
       #
       # Tries: nested <a href="#_ftnN">, then text content digits.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [String, nil]
       def self.extract_note_id(element)
         # Try nested <a href="#_ftnN"> or <a href="#_ednN">
@@ -404,7 +404,7 @@ module Uniword
 
       # Create a Hyperlink from an HTML <a href> element.
       #
-      # @param element [Nokogiri::XML::Element] <a> element
+      # @param element [Moxml::Element] <a> element
       # @return [Uniword::Wordprocessingml::Hyperlink, nil]
       def self.create_hyperlink(element)
         href = element.attribute("href")&.value

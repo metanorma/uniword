@@ -108,7 +108,6 @@ RSpec.describe "MHTML Document Model Round-Trip", type: :integration do
       end
 
       it "contains SDT elements" do
-        # Nokogiri lowercases tag names, so check for w:sdt (lowercase)
         expect(doc.body_html).to include("w:sdt")
       end
 
