@@ -36,7 +36,7 @@ module Uniword
       # @return [Uniword::Wordprocessingml::Table, nil]
       def self.build_table(html_table)
         table = Uniword::Wordprocessingml::Table.new
-        html_rows = html_table.css("tr")
+        html_rows = html_table.xpath(".//tr")
         return nil if html_rows.empty?
 
         # Track columns occupied by rowspan: col_idx → remaining continuation rows
@@ -47,7 +47,7 @@ module Uniword
           row = Uniword::Wordprocessingml::TableRow.new
           col_idx = 0
 
-          html_row.css("td, th").each do |html_cell|
+          html_row.xpath(".//td | .//th").each do |html_cell|
             # Insert vMerge continuation cells for columns occupied by rowspan
             while occupied.key?(col_idx)
               row.cells << create_vmerge_continuation_cell
@@ -94,7 +94,7 @@ module Uniword
         row = Uniword::Wordprocessingml::TableRow.new
         cells = []
 
-        html_row.css("td, th").each do |html_cell|
+        html_row.xpath(".//td | .//th").each do |html_cell|
           cell = build_cell(html_cell)
           cells << cell if cell
         end
@@ -134,7 +134,9 @@ module Uniword
         end
 
         # Convert cell content to paragraphs
-        html_cell.css("p, div, h1, h2, h3, h4, h5, h6").each do |para_element|
+        block_tags = ".//p | .//div | .//h1 | .//h2 | .//h3 | .//h4 | " \
+                     ".//h5 | .//h6"
+        html_cell.xpath(block_tags).each do |para_element|
           paragraph = build_paragraph(para_element)
           cell.paragraphs << paragraph if paragraph
         end
@@ -272,49 +274,63 @@ module Uniword
 
       # Parse SDT attributes from HTML element.
       def self.parse_sdt_attributes(element)
-        attrs = element.attributes
-        return nil if attrs.empty?
+        return nil if element.attributes.empty?
 
         sdt_props =
           Uniword::Wordprocessingml::StructuredDocumentTagProperties.new
 
-        if attrs["showingplchdr"] || attrs["ShowingPlcHdr"]
+        if attr_value(element, "showingplchdr") ||
+            attr_value(element, "ShowingPlcHdr")
           sdt_props.showing_placeholder_header =
             Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
         end
 
-        if attrs["temporary"] || attrs["Temporary"]
+        if attr_value(element, "temporary") ||
+            attr_value(element, "Temporary")
           sdt_props.temporary =
             Uniword::Wordprocessingml::StructuredDocumentTag::Temporary.new
         end
 
-        doc_part = attrs["docpart"] || attrs["DocPart"]
+        doc_part = attr_value(element, "docpart") ||
+          attr_value(element, "DocPart")
         if doc_part
           placeholder =
             Uniword::Wordprocessingml::StructuredDocumentTag::Placeholder.new
           doc_part_ref =
-            Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(value: doc_part.value)
+            Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(
+              value: doc_part,
+            )
           placeholder.doc_part = doc_part_ref
           sdt_props.placeholder = placeholder
         end
 
-        if attrs["text"] || attrs["Text"]
+        if attr_value(element, "text") || attr_value(element, "Text")
           sdt_props.text =
-            Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(value: "whole")
+            Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(
+              value: "whole",
+            )
         end
 
-        id_attr = attrs["id"] || attrs["ID"]
+        id_attr = attr_value(element, "id") || attr_value(element, "ID")
         if id_attr
           sdt_props.id =
-            Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(value: id_attr.value.to_i)
+            Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(
+              value: id_attr.to_i,
+            )
         end
 
-        if attrs["bibliography"] || attrs["Bibliography"]
+        if attr_value(element, "bibliography") ||
+            attr_value(element, "Bibliography")
           sdt_props.bibliography =
             Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography.new
         end
 
         sdt_props
+      end
+
+      # Read an attribute value from a Moxml element by name.
+      def self.attr_value(element, name)
+        element.attribute(name)&.value
       end
 
       # Create a Run with Break from an HTML <br> element.
@@ -355,7 +371,7 @@ module Uniword
 
       # Create a Run with FootnoteReference from an HTML footnote reference span.
       #
-      # @param element [Moxml::Element] Span element with MsoFootnoteReference class
+      # @param element [Moxml::Element] Span with MsoFootnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_footnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -367,7 +383,7 @@ module Uniword
 
       # Create a Run with EndnoteReference from an HTML endnote reference span.
       #
-      # @param element [Moxml::Element] Span element with MsoEndnoteReference class
+      # @param element [Moxml::Element] Span with MsoEndnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_endnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -385,9 +401,9 @@ module Uniword
       # @return [String, nil]
       def self.extract_note_id(element)
         # Try nested <a href="#_ftnN"> or <a href="#_ednN">
-        anchor = element.at_css("a[href^='#']")
+        anchor = element.at_xpath('.//a[starts-with(@href, "#")]')
         if anchor
-          href = anchor.attribute("href")&.value.sub(/^#/, "")
+          href = anchor.attribute("href")&.value&.sub(/^#/, "")
           if href =~ /(\d+)\s*$/
             return Regexp.last_match(1)
           end
