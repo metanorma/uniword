@@ -58,7 +58,7 @@ module Uniword
 
       # Convert a single HTML table to OOXML table.
       #
-      # @param html_table [Nokogiri::XML::Element] HTML table element
+      # @param html_table [Moxml::Element] HTML table element
       # @return [Uniword::Wordprocessingml::Table, nil]
       def self.html_table_to_table(html_table)
         HtmlElementBuilder.build_table(html_table)
@@ -66,7 +66,7 @@ module Uniword
 
       # Convert a single HTML row to OOXML table row.
       #
-      # @param html_row [Nokogiri::XML::Element] HTML tr element
+      # @param html_row [Moxml::Element] HTML tr element
       # @return [Uniword::Wordprocessingml::TableRow, nil]
       def self.html_row_to_row(html_row)
         HtmlElementBuilder.build_row(html_row)
@@ -74,7 +74,7 @@ module Uniword
 
       # Convert a single HTML cell to OOXML table cell.
       #
-      # @param html_cell [Nokogiri::XML::Element] HTML td/th element
+      # @param html_cell [Moxml::Element] HTML td/th element
       # @return [Uniword::Wordprocessingml::TableCell, nil]
       def self.html_cell_to_cell(html_cell)
         HtmlElementBuilder.build_cell(html_cell)
@@ -82,7 +82,7 @@ module Uniword
 
       # Convert a single HTML element to OOXML paragraph.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Paragraph, nil]
       def self.html_element_to_paragraph(element)
         HtmlElementBuilder.build_paragraph(element)
@@ -98,7 +98,7 @@ module Uniword
 
       # Create a run from HTML element with inline formatting.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Run, nil]
       def self.create_run_from_element(element)
         HtmlElementBuilder.create_run_from_element(element)

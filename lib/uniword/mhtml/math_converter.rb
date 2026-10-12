@@ -111,44 +111,50 @@ module Uniword
       #
       # Identifies math elements by tag name or special markers.
       #
-      # @param element [Nokogiri::XML::Element] The HTML element
+      # @param element [Moxml::Element] The HTML element
       # @return [Boolean] true if element contains math content
       #
       # @example Check if element is math
       #   is_math = MathConverter.math_element?(element)
       def self.math_element?(element)
-        return false unless element.is_a?(Nokogiri::XML::Element)
+        return false unless element.is_a?(Moxml::Element)
 
         math_tags = %w[math mml:math m:oMath m:oMathPara]
         return true if math_tags.include?(element.name)
-        return true if element["class"]&.include?("math")
-        return true if element["data-mathml"]
 
-        false
+        css_class = attribute_value(element, "class").to_s
+        return true if css_class.include?("math")
+
+        !attribute_value(element, "data-mathml").nil?
       end
 
       # Extract math content from element.
       #
       # Extracts the mathematical content from various element types.
       #
-      # @param element [Nokogiri::XML::Element] The HTML element
+      # @param element [Moxml::Element] The HTML element
       # @return [Hash] Hash with :type and :content
       #
       # @example Extract math from element
       #   math = MathConverter.extract_math(element)
       #   # => { type: :mathml, content: "<math>...</math>" }
       def self.extract_math(element)
-        if element["data-mathml"]
-          { type: :mathml, content: element["data-mathml"] }
+        if (mathml = attribute_value(element, "data-mathml"))
+          { type: :mathml, content: mathml }
         elsif /^(math|mml:math)$/.match?(element.name)
-          { type: :mathml, content: element.to_s }
+          { type: :mathml, content: element.to_xml }
         elsif /^m:(oMath|oMathPara)$/.match?(element.name)
-          { type: :omml, content: element.to_s }
-        elsif element["class"]&.include?("asciimath")
+          { type: :omml, content: element.to_xml }
+        elsif attribute_value(element, "class").to_s.include?("asciimath")
           { type: :asciimath, content: element.text }
         else
-          { type: :unknown, content: element.to_s }
+          { type: :unknown, content: element.to_xml }
         end
+      end
+
+      # Read an attribute value from a Moxml element.
+      def self.attribute_value(element, name)
+        element.attribute(name)&.value
       end
     end
   end
