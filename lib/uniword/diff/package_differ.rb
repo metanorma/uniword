@@ -200,8 +200,8 @@ canon_profile: :spec_friendly)
       def compare_xml(part_name, old_xml, new_xml)
         changes = []
 
-        old_doc = Nokogiri::XML(old_xml)
-        new_doc = Nokogiri::XML(new_xml)
+        old_doc = Moxml.parse(old_xml)
+        new_doc = Moxml.parse(new_xml)
 
         # Compare namespace declarations
         changes.concat(
@@ -219,7 +219,7 @@ canon_profile: :spec_friendly)
         )
 
         changes
-      rescue Nokogiri::XML::SyntaxError
+      rescue Moxml::ParseError
         changes
       end
 
@@ -361,7 +361,7 @@ canon_profile: :spec_friendly)
           return issues
         end
 
-        doc = Nokogiri::XML(rels_xml)
+        doc = Moxml.parse(rels_xml)
         doc.xpath("//xmlns:Relationship").each do |rel|
           target = rel["Target"]&.sub(%r{^/}, "")
           next unless target
@@ -376,7 +376,7 @@ canon_profile: :spec_friendly)
         end
 
         issues
-      rescue Nokogiri::XML::SyntaxError
+      rescue Moxml::ParseError
         issues
       end
 
@@ -386,7 +386,7 @@ canon_profile: :spec_friendly)
       # @return [Hash{String => String}, nil]
       def parse_content_types(zip)
         ct_xml = zip.read("[Content_Types].xml")
-        doc = Nokogiri::XML(ct_xml)
+        doc = Moxml.parse(ct_xml)
         overrides = {}
         doc.xpath("//xmlns:Override").each do |node|
           overrides[node["PartName"]] = node["ContentType"]
@@ -532,28 +532,29 @@ canon_profile: :spec_friendly)
 
       # Extract namespace prefix-to-URI mapping from an element.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Hash{String => String}]
       def namespace_hash(element)
         return {} unless element
 
         result = {}
-        element.namespace_definitions.each do |ns|
+        element.namespaces.each do |ns|
           prefix = ns.prefix || ""
-          result[prefix] = ns.href
+          result[prefix] = ns.uri
         end
         result
       end
 
       # Extract attribute name-to-value mapping from an element.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Hash{String => String}]
       def attribute_hash(element)
         return {} unless element
 
         result = {}
-        element.attributes.each do |name, attr|
+        element.attributes.each do |attr|
+          name = attr.name
           key = attr.namespace ? "#{attr.namespace.prefix}:#{name}" : name
           result[key] = attr.value
         end
@@ -562,7 +563,7 @@ canon_profile: :spec_friendly)
 
       # Count elements by qualified name.
       #
-      # @param doc [Nokogiri::XML::Document]
+      # @param doc [Moxml::Document]
       # @return [Hash{String => Integer}]
       def element_counts(doc)
         counts = Hash.new(0)
