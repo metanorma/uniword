@@ -120,15 +120,18 @@ module Uniword
           end
         end
 
-        # Strip MCE-ignorable ATTRIBUTES per the part's own mc:Ignorable
-        # declaration (w14:paraId/textId and the mc:Ignorable attribute
-        # itself), so XSD validation is not drowned in false errors for
-        # content every real document carries.
+        # Apply MCE preprocessing per the part's own mc:Ignorable
+        # declaration so strict XSD validation is not drowned in errors
+        # for extension content:
         #
-        # Extension ELEMENTS are deliberately kept: removing them changes
-        # libxml2's content-model evaluation and can expose pre-existing
-        # Word-vs-schema quirks (e.g. rsids placed late, tolerated via the
-        # sequence's trailing xsd:any) as false baseline errors.
+        # - mc:AlternateContent is unwrapped to the first understood
+        #   mc:Choice (else the mc:Fallback) per MCE branch selection;
+        # - elements in ignorable namespaces are removed (w15:docId,
+        #   w16se:* settings extensions);
+        # - attributes in ignorable namespaces are removed (w14:paraId,
+        #   w14:textId), plus the mc:Ignorable attribute itself, which
+        #   is undeclared on most roots in the transitional XSDs.
+        #
         # Operates in place on the parsed document; never touches the
         # packaged bytes.
         #
@@ -138,16 +141,57 @@ module Uniword
           root = doc.root
           return unless root
 
+          uris = ignorable_namespace_uris(root)
+          unwrap_alternate_content(doc, uris)
+          remove_ignorable_elements(doc, uris) unless uris.empty?
+          strip_mce_attributes(root, uris + [MCE_NAMESPACE_URI])
+        end
+
+        # Namespace URIs the root declares ignorable via mc:Ignorable.
+        def ignorable_namespace_uris(root)
           ignorable = root["mc:Ignorable"]
-          return if ignorable.nil? || ignorable.empty?
+          return [] if ignorable.nil? || ignorable.empty?
 
           prefix_uris = root.namespaces.to_h { |ns| [ns.prefix, ns.uri] }
-          uris = ignorable.split(/\s+/).filter_map do |prefix|
-            prefix_uris[prefix]
+          ignorable.split(/\s+/).filter_map { |prefix| prefix_uris[prefix] }
+        end
+
+        # Replace each mc:AlternateContent with the content of its first
+        # understood mc:Choice, or its mc:Fallback when no Choice applies.
+        def unwrap_alternate_content(doc, ignorable_uris)
+          doc.xpath("//mc:AlternateContent", "mc" => MCE_NAMESPACE_URI)
+            .to_a.reverse.each do |alternate|
+            branch = chosen_branch(alternate, ignorable_uris)
+            if branch
+              anchor = alternate
+              branch.children.each do |child|
+                anchor.add_next_sibling(child)
+                anchor = child
+              end
+            end
+            alternate.remove
           end
-          # The mc:Ignorable attribute itself is MCE machinery and is
-          # undeclared on most root elements in the transitional XSDs.
-          strip_mce_attributes(root, uris + [MCE_NAMESPACE_URI])
+        end
+
+        # The first mc:Choice whose required namespaces are all
+        # non-ignorable, else the mc:Fallback, else nil.
+        def chosen_branch(alternate, ignorable_uris)
+          choices = alternate.xpath("./mc:Choice", "mc" => MCE_NAMESPACE_URI)
+          choices.find do |choice|
+            requires = choice.attributes
+              .find { |attr| attr.name == "Requires" }
+              &.value.to_s.split(/\s+/)
+            requires.all? { |prefix| !ignorable_uris.include?(prefix) }
+          end || alternate.at_xpath("./mc:Fallback", "mc" => MCE_NAMESPACE_URI)
+        end
+
+        # Remove elements whose namespace is declared ignorable.
+        def remove_ignorable_elements(doc, uris)
+          doc.traverse do |node|
+            next unless node.is_a?(Moxml::Element)
+
+            node.remove if uris.include?(node.namespace&.uri)
+          end
         end
 
         # Remove attributes in ignorable namespaces from every element.
