@@ -92,19 +92,12 @@ module Uniword
         # Empty line separating headers from body
         lines << ""
 
-        # Body — encode if needed
+        # Body — encode if needed (part content is always decoded)
         encoding = part.content_transfer_encoding
         if encoding == "quoted-printable"
-          # Use decoded_content to avoid double-encoding on round-trip
-          body = quoted_printable_encode(part.decoded_content)
+          body = quoted_printable_encode(part.raw_content)
         elsif encoding == "base64"
-          begin
-            # Decoded content (round-trip: raw_content is already base64)
-            body = Base64.strict_encode64(part.decoded_content)
-          rescue ArgumentError
-            # New part: raw_content is raw binary data
-            body = Base64.strict_encode64(part.raw_content)
-          end
+          body = Base64.strict_encode64(part.raw_content)
           body = body.gsub(/.{1,76}/, "\\0\r\n").rstrip
         else
           body = part.raw_content

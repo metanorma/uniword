@@ -56,9 +56,15 @@ module Uniword
                            "urn:schemas-microsoft-com:office:word", "w")
       end
 
+      # The document head element.
+      def head_element
+        html_document.at_xpath(".//head")
+      end
+
       # Extract all <xml> blocks from head
       def xml_blocks
-        html_document.at_xpath(".//head")&.xpath("comment()")&.filter_map do |comment|
+        head = head_element
+        head&.xpath("comment()")&.filter_map do |comment|
           text = comment.text
           ::Regexp.last_match(1).strip if text =~ %r{<xml>(.*?)</xml>}m
         end || []
@@ -82,23 +88,23 @@ module Uniword
       # This method finds the requested root element and wraps it
       # with proper namespace declarations for lutaml-model.
       def extract_office_xml(element_name, namespace_uri, prefix)
-        head = html_document.at_xpath(".//head")
+        head = head_element
         return nil unless head
 
         head.xpath("comment()").each do |comment|
           text = comment.text
-          next unless text.include?("<#{prefix}:#{element_name}")
+          tag = "#{prefix}:#{element_name}"
+          next unless text.include?("<#{tag}")
 
           # Extract the specific element with its content
-          pattern = %r{(<#{prefix}:#{element_name}[^>]*>.*?</#{prefix}:#{element_name}>)}m
+          pattern = %r{(<#{tag}[^>]*>.*?</#{tag}>)}m
           next unless text =~ pattern
 
           xml = ::Regexp.last_match(1)
           # Ensure namespace declaration is present
           ns_decl = "xmlns:#{prefix}=\"#{namespace_uri}\""
           unless xml.include?(ns_decl)
-            xml = xml.sub(/(<#{prefix}:#{element_name})/,
-                          "\\1 #{ns_decl}")
+            xml = xml.sub(/(<#{tag})/, "\\1 #{ns_decl}")
           end
           return xml
         end
