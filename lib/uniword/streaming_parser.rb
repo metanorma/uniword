@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "nokogiri"
-
 module Uniword
   # Streaming parser for large DOCX documents.
   #
@@ -48,21 +46,20 @@ module Uniword
     # @param zip_content [Hash] Extracted ZIP content from DOCX
     # @return [Document] The parsed document
     def parse_streaming(zip_content)
-      document = Document.new
+      document = Wordprocessingml::DocumentRoot.new
       document_xml = zip_content["word/document.xml"]
 
       return document unless document_xml
 
-      # Use Nokogiri's SAX parser for streaming
+      # Stream via Moxml's SAX parser
       handler = DocumentSaxHandler.new(document, @paragraph_limit, @table_limit)
-      parser = Nokogiri::XML::SAX::Parser.new(handler)
-      parser.parse(document_xml)
+      Moxml.new.config.adapter.sax_parse(document_xml, handler)
 
       document
     end
 
     # SAX handler for streaming document parsing
-    class DocumentSaxHandler < Nokogiri::XML::SAX::Document
+    class DocumentSaxHandler < Moxml::SAX::Handler
       attr_reader :document
 
       def initialize(document, paragraph_limit = nil, table_limit = nil)
@@ -86,8 +83,8 @@ module Uniword
       end
 
       # Called when an element starts
-      def start_element(name, attributes = [])
-        attrs = attributes.to_h
+      def on_start_element(name, _attributes = {}, _namespaces = {})
+        name = local_name(name)
         @element_stack.push(name)
 
         case name
@@ -96,7 +93,7 @@ module Uniword
         when "r"
           start_run
         when "t"
-          start_text(attrs)
+          start_text
         when "tbl"
           start_table
         when "tr"
@@ -109,7 +106,8 @@ module Uniword
       end
 
       # Called when an element ends
-      def end_element(name)
+      def on_end_element(name)
+        name = local_name(name)
         @element_stack.pop
 
         case name
@@ -131,13 +129,18 @@ module Uniword
       end
 
       # Called when text content is encountered
-      def characters(string)
+      def on_characters(string)
         return unless @current_text
 
         @current_text << string
       end
 
       private
+
+      # Strip any namespace prefix from a SAX element name.
+      def local_name(name)
+        name.split(":").last
+      end
 
       # Check if we've hit paragraph limit
       def paragraph_limit_reached?
@@ -153,7 +156,7 @@ module Uniword
       def start_paragraph
         return if paragraph_limit_reached?
 
-        @current_paragraph = Paragraph.new
+        @current_paragraph = Wordprocessingml::Paragraph.new
         @paragraph_count += 1
       end
 
@@ -176,7 +179,7 @@ module Uniword
       def start_run
         return unless @current_paragraph
 
-        @current_run = Run.new
+        @current_run = Wordprocessingml::Run.new
       end
 
       # End parsing a run
@@ -188,7 +191,7 @@ module Uniword
       end
 
       # Start parsing text
-      def start_text(_attrs)
+      def start_text
         return unless @current_run
 
         @current_text = +""
@@ -198,8 +201,7 @@ module Uniword
       def end_text
         return unless @current_text && @current_run
 
-        text_element = TextElement.new(content: @current_text)
-        @current_run.text_element = text_element
+        @current_run.text = [Wordprocessingml::Text.new(content: @current_text)]
         @current_text = nil
       end
 
@@ -207,7 +209,7 @@ module Uniword
       def start_table
         return if table_limit_reached?
 
-        @current_table = Table.new
+        @current_table = Wordprocessingml::Table.new
         @table_count += 1
       end
 
@@ -223,7 +225,7 @@ module Uniword
       def start_table_row
         return unless @current_table
 
-        @current_row = TableRow.new
+        @current_row = Wordprocessingml::TableRow.new
       end
 
       # End parsing a table row
@@ -238,7 +240,7 @@ module Uniword
       def start_table_cell
         return unless @current_row
 
-        @current_cell = TableCell.new
+        @current_cell = Wordprocessingml::TableCell.new
       end
 
       # End parsing a table cell
