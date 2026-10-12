@@ -110,10 +110,9 @@ module Uniword
         when "base64"
           Base64.decode64(body)
         when "quoted-printable"
-          # Work in BINARY encoding to avoid gsub encoding conflicts,
-          # then force UTF-8 at the end without altering bytes.
-          body.dup
-            .force_encoding("BINARY")
+          # Decode in BINARY so hex escapes map 1:1 to bytes; single-pass
+          # gsub, so an already-decoded byte is never re-decoded.
+          body.force_encoding("BINARY")
             .gsub(/=\r?\n/, "")
             .gsub(/=([0-9A-Fa-f]{2})/) do
               [::Regexp.last_match(1).hex].pack("C")
