@@ -34,7 +34,7 @@ module Uniword
 
       # Create a MathEquation from OMML XML
       #
-      # @param omml_xml [String, Nokogiri::XML::Node] OMML XML content
+      # @param omml_xml [String, Moxml::Node] OMML XML content
       # @return [MathEquation] New equation instance with parsed formula
       #
       # @example Parse OMML
@@ -94,7 +94,7 @@ module Uniword
 
       # Parse OMML to Plurimath formula
       #
-      # @param node [Nokogiri::XML::Node] OMML node
+      # @param node [Moxml::Node] OMML node
       # @return [Plurimath::Math::Formula] Parsed formula
       #
       # @api private
@@ -131,7 +131,7 @@ module Uniword
 
       # Determine if equation is inline or block display
       #
-      # @param node [Nokogiri::XML::Node] OMML node
+      # @param node [Moxml::Node] OMML node
       # @return [String] "inline" or "block"
       #
       # @api private
@@ -143,7 +143,7 @@ module Uniword
 
       # Extract equation properties from OMML
       #
-      # @param node [Nokogiri::XML::Node] OMML node
+      # @param node [Moxml::Node] OMML node
       # @return [Hash] Extracted properties
       #
       # @api private
@@ -220,21 +220,26 @@ module Uniword
       #
       # @api private
       def self.wrap_block_equation(omml_content, equation)
-        builder = Nokogiri::XML::Builder.new do |xml|
-          xml["m"].oMathPara("xmlns:m" => OMML_NAMESPACE) do
-            # Add paragraph properties if needed
-            if equation.alignment || equation.break_enabled
-              xml["m"].oMathParaPr do
-                xml["m"].jc("m:val" => equation.alignment) if equation.alignment
-              end
-            end
+        doc = Moxml.new.create_document
+        para = doc.create_element("m:oMathPara")
+        para.add_namespace("m", OMML_NAMESPACE)
+        doc.root = para
 
-            # Add the math content
-            xml.parent << Nokogiri::XML.fragment(omml_content)
+        # Add paragraph properties if needed
+        if equation.alignment || equation.break_enabled
+          props = doc.create_element("m:oMathParaPr")
+          if equation.alignment
+            jc = doc.create_element("m:jc")
+            jc["m:val"] = equation.alignment
+            props.add_child(jc)
           end
+          para.add_child(props)
         end
 
-        builder.to_xml
+        # Add the math content
+        para.add_child(Moxml.parse(omml_content).root)
+
+        doc.to_xml
       end
 
       # Format OMML output
@@ -248,33 +253,32 @@ module Uniword
       def self.format_omml(omml, options = {})
         return omml unless options[:pretty]
 
-        doc = Nokogiri::XML(omml)
-        doc.to_xml(indent: 2)
+        Moxml.parse(omml).to_xml(indent: 2)
       end
 
       # Parse XML node from string or node
       #
-      # @param xml [String, Nokogiri::XML::Node] XML input
-      # @return [Nokogiri::XML::Node] Parsed node
+      # @param xml [String, Moxml::Node] XML input
+      # @return [Moxml::Node] Parsed node
       #
       # @api private
       def self.parse_xml_node(xml)
         case xml
-        when Nokogiri::XML::Node
+        when Moxml::Node
           xml
         when String
-          doc = Nokogiri::XML(xml)
+          doc = Moxml.parse(xml)
           doc.root || raise(ArgumentError, "Invalid XML: no root element")
         else
           raise ArgumentError,
-                "Expected String or Nokogiri::XML::Node, got #{xml.class}"
+                "Expected String or Moxml::Node, got #{xml.class}"
         end
       end
 
       # Extract the math node (m:oMath) from container
       #
-      # @param node [Nokogiri::XML::Node] OMML node (could be oMath or oMathPara)
-      # @return [Nokogiri::XML::Node] The m:oMath node
+      # @param node [Moxml::Node] OMML node (could be oMath or oMathPara)
+      # @return [Moxml::Node] The m:oMath node
       #
       # @api private
       def self.extract_math_node(node)
