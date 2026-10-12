@@ -36,9 +36,8 @@ module Uniword
       CHART_CONTENT_TYPE =
         Ooxml::PartRegistry.find_by_key(:chart).content_type
 
-      attr_reader :chart_type, :title_text, :series_list
-
-      attr_reader :show_legend, :width, :height, :series_list
+      attr_reader :chart_type, :title_text, :series_list, :show_legend, :width,
+                  :height
 
       def initialize(chart_type: :bar)
         @chart_type = chart_type
@@ -266,11 +265,14 @@ module Uniword
       def build_axis(parent, tag, id, position, cross_id)
         case tag
         when "catAx"
-          write_axis_content(add_element(parent, "c:catAx"), id, position, cross_id)
+          write_axis_content(add_element(parent, "c:catAx"), id, position,
+                             cross_id)
         when "valAx"
-          write_axis_content(add_element(parent, "c:valAx"), id, position, cross_id)
+          write_axis_content(add_element(parent, "c:valAx"), id, position,
+                             cross_id)
         when "serAx"
-          write_axis_content(add_element(parent, "c:serAx"), id, position, cross_id)
+          write_axis_content(add_element(parent, "c:serAx"), id, position,
+                             cross_id)
         else
           raise ArgumentError, "Unknown axis type: #{tag}"
         end
@@ -284,7 +286,7 @@ module Uniword
         add_element(axis, "c:axPos", "val" => position)
         add_element(axis, "c:majorGridlines")
         add_element(axis, "c:numFmt", "formatCode" => "General",
-                                        "sourceLinked" => "1")
+                                      "sourceLinked" => "1")
         add_element(axis, "c:tickLblPos", "val" => "nextTo")
         add_element(axis, "c:crossAx", "val" => cross_id)
       end
