@@ -52,7 +52,7 @@ module Uniword
 
     # Create a MathEquation from OMML XML
     #
-    # @param omml_xml [String, Nokogiri::XML::Node] OMML XML content
+    # @param omml_xml [String, Moxml::Node] OMML XML content
     # @return [MathEquation] New equation instance
     #
     # @example
