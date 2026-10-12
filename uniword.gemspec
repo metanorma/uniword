@@ -45,9 +45,11 @@ Gem::Specification.new do |spec|
   spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
   spec.add_dependency "leptris", "~> 1.9.352" # XSD engine: ns-keyed lookups + cross-ns type refs (validation floor)
   spec.add_dependency "lutaml-model", "~> 0.8"
-  spec.add_dependency "nokogiri", "~> 1.19"
   spec.add_dependency "omml", "~> 0.2.3"
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 3.4"
   spec.add_dependency "thor", "~> 1.3"
+
+  # Test/dev only: Moxml nokogiri adapter for spec comparisons
+  spec.add_development_dependency "nokogiri", "~> 1.19"
 end
