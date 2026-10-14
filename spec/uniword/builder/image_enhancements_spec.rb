@@ -71,7 +71,7 @@ RSpec.describe "Fix: Anchor model child elements" do
     expect(xml).to include("wp:positionH")
     expect(xml).to include("wp:positionV")
     expect(xml).to include("wp:wrapSquare")
-    expect(xml).to include('relative-from="margin"')
+    expect(xml).to include('relativeFrom="margin"')
   end
 end
 
