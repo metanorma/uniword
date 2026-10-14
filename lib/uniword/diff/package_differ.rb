@@ -243,8 +243,8 @@ canon_profile: :spec_friendly)
                                    compression_name(new_e.compression_method)]
           end
 
-          old_text = old_e.internal_file_attributes & 1 != 0
-          new_text = new_e.internal_file_attributes & 1 != 0
+          old_text = old_e.internal_file_attributes.anybits?(1)
+          new_text = new_e.internal_file_attributes.anybits?(1)
           if old_text != new_text
             diffs[:internal_attr] = [old_text ? "text" : "binary",
                                      new_text ? "text" : "binary"]
@@ -397,7 +397,7 @@ canon_profile: :spec_friendly)
         nil
       end
 
-      # --- Legacy structural comparison methods (kept for backward compat) ---
+      # --- Structural comparison methods ---
 
       # Compare namespace declarations between two XML documents.
       #

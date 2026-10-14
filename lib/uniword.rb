@@ -378,10 +378,6 @@ module Uniword
       doc
     end
 
-    # Convert HTML to a document with paragraphs.
-    # Alias for {#from_html} for backward compatibility.
-    alias html_to_doc from_html
-
     # Convert HTML directly to a DOCX file
     #
     # @param html [String] HTML content
