@@ -77,6 +77,27 @@ module Uniword
       end
       module_function :insert_once
 
+      # Reposition an existing singleton entry after (or before) the
+      # given anchor. No-op when the entry or model order is absent.
+      # Falls back to end (after: missing) or start (before: missing).
+      #
+      # @param model [Lutaml::Model::Serializable] model to mutate
+      # @param name [String] element name to move
+      # @param after [String, nil] place after this element name
+      # @param before [String, nil] place before this element name
+      # @return [Array, nil] the mutated order
+      def move_once(model, name, after: nil, before: nil)
+        order = mutable_order(model)
+        return unless order
+
+        entry = order.find { |e| e.name == name }
+        return unless entry
+
+        order.delete_at(order.index { |e| e.name == name })
+        order.insert(insertion_index(order, after, before, nil), entry)
+      end
+      module_function :move_once
+
       # @return [Integer] index for the insert
       def insertion_index(order, after, before, position)
         if after

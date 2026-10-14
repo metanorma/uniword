@@ -18,7 +18,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute "relative-from", to: :relative_from
+        map_attribute "relativeFrom", to: :relative_from
         map_element "align", to: :align, render_nil: false
         map_element "posOffset", to: :pos_offset, render_nil: false
       end

@@ -43,6 +43,7 @@ Gem::Specification.new do |spec|
 
   # Core dependencies
   spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
+  spec.add_dependency "leptris", "~> 1.9.352" # XSD engine: ns-keyed lookups + cross-ns type refs (validation floor)
   spec.add_dependency "lutaml-model", "~> 0.8"
   spec.add_dependency "omml", "~> 0.2.3"
   spec.add_dependency "rainbow", "~> 3.1"
