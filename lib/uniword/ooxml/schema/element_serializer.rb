@@ -67,7 +67,7 @@ module Uniword
           schema_def = @schema.definition_for(element.class)
 
           # Build XML document
-          doc = Nokogiri::XML::Document.new
+          doc = Moxml.new.create_document
 
           # Create root element with proper namespace
           root = serialize_element_to_node(doc, element, schema_def, options)
@@ -105,21 +105,21 @@ module Uniword
           OoxmlSchema.load(schema_path)
         end
 
-        # Serialize element to Nokogiri node
+        # Serialize element to Moxml node
         #
-        # @param doc [Nokogiri::XML::Document] XML document
+        # @param doc [Moxml::Document] XML document
         # @param element [Element] Element to serialize
         # @param schema_def [ElementDefinition] Schema definition
         # @param options [Hash] Serialization options
-        # @return [Nokogiri::XML::Node] Created node
+        # @return [Moxml::Element] Created node
         def serialize_element_to_node(doc, element, schema_def, options)
           # Create element node with namespace
           prefix = schema_def.prefix
           local_name = schema_def.local_name
           namespace_uri = @schema.namespace[:uri]
 
-          node = Nokogiri::XML::Node.new(local_name, doc)
-          node.namespace = node.add_namespace_definition(prefix, namespace_uri)
+          node = doc.create_element(local_name)
+          node.add_namespace(prefix, namespace_uri)
 
           # Serialize attributes according to schema
           serialize_attributes_to_node(node, element, schema_def)
@@ -132,7 +132,7 @@ module Uniword
 
         # Serialize element attributes to node
         #
-        # @param node [Nokogiri::XML::Node] Node to add attributes to
+        # @param node [Moxml::Element] Node to add attributes to
         # @param element [Element] Element with attributes
         # @param schema_def [ElementDefinition] Schema definition
         def serialize_attributes_to_node(node, element, schema_def)
@@ -157,8 +157,8 @@ module Uniword
 
         # Serialize element children to node
         #
-        # @param doc [Nokogiri::XML::Document] XML document
-        # @param node [Nokogiri::XML::Node] Parent node
+        # @param doc [Moxml::Document] XML document
+        # @param node [Moxml::Element] Parent node
         # @param element [Element] Element with children
         # @param schema_def [ElementDefinition] Schema definition
         # @param options [Hash] Serialization options
@@ -190,11 +190,11 @@ module Uniword
 
         # Serialize a single child element to node
         #
-        # @param doc [Nokogiri::XML::Document] XML document
+        # @param doc [Moxml::Document] XML document
         # @param child [Element, Object] Child element or value
         # @param child_def [ChildDefinition] Child schema definition
         # @param options [Hash] Serialization options
-        # @return [Nokogiri::XML::Node, nil] Created node
+        # @return [Moxml::Element, nil] Created node
         def serialize_child_to_node(doc, child, child_def, options)
           # Get namespace prefix from tag (e.g., 'w:p' -> 'w')
           tag_parts = child_def.tag.split(":")
@@ -204,24 +204,21 @@ module Uniword
 
           if child_def.presence_only?
             # Presence-only element (e.g., <w:b/> for bold)
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
             node
           elsif child.is_a?(String)
             # Simple string value (e.g., text content)
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
             node.content = child
             node
           elsif child.is_a?(Uniword::Element)
             # Check if this is a TextElement that needs special handling
             if child.instance_of?(::Uniword::TextElement) && child.is_a?(Uniword::TextElement)
               # TextElement: serialize as element with text content
-              node = Nokogiri::XML::Node.new(local_name, doc)
-              node.namespace = node.add_namespace_definition(prefix,
-                                                             namespace_uri)
+              node = doc.create_element(local_name)
+              node.add_namespace(prefix, namespace_uri)
               node.content = child.content.to_s if child.content
               node
             else
@@ -238,9 +235,8 @@ module Uniword
             else
               # For properties without schema, create empty element
               # (will be filled with children if schema definition exists for element type)
-              node = Nokogiri::XML::Node.new(local_name, doc)
-              node.namespace = node.add_namespace_definition(prefix,
-                                                             namespace_uri)
+              node = doc.create_element(local_name)
+              node.add_namespace(prefix, namespace_uri)
 
               if child_def.has_attributes?
                 child_def.attributes.each do |attr_config|
@@ -256,9 +252,8 @@ module Uniword
             end
           elsif child_def.has_attributes?
             # Element with attributes but no child elements
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
 
             child_def.attributes.each do |attr_config|
               attr_def = AttributeDefinition.new(attr_config)
@@ -271,23 +266,20 @@ module Uniword
             node
           elsif child.is_a?(String)
             # Simple string value
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
             node.content = child
             node
           elsif child.is_a?(Uniword::TextElement)
             # TextElement or similar - get the content
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
             node.content = child.content.to_s if child.content
             node
           elsif child
             # Other value element - convert to string
-            node = Nokogiri::XML::Node.new(local_name, doc)
-            node.namespace = node.add_namespace_definition(prefix,
-                                                           namespace_uri)
+            node = doc.create_element(local_name)
+            node.add_namespace(prefix, namespace_uri)
             node.content = child.to_s
             node
           end

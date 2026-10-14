@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "nokogiri"
 require "set"
 
 module Uniword
@@ -83,15 +82,15 @@ module Uniword
       # Memoized strict parse of one entry.
       #
       # @param name [String] Entry path
-      # @return [Nokogiri::XML::Document, nil] Parsed document, or nil when
+      # @return [Moxml::Document, nil] Parsed document, or nil when
       #   the entry is malformed (OPC-008 already recorded)
       def parsed_part(name)
         return @parsed_parts[name] if @parsed_parts.key?(name)
 
         @parsed_parts[name] =
           begin
-            Nokogiri::XML(@content[name], &:strict)
-          rescue Nokogiri::XML::SyntaxError => e
+            Moxml.parse(@content[name])
+          rescue Moxml::ParseError => e
             add_issue("OPC-008", name,
                       "Malformed XML in #{name}: #{e.message}")
             nil
@@ -180,19 +179,19 @@ module Uniword
 
       # Collect (attribute local name, value) pairs for r:id/r:embed/r:link.
       #
-      # @param doc [Nokogiri::XML::Document] Parsed XML part
+      # @param doc [Moxml::Document] Parsed XML part
       # @return [Array<Array(String, String)>] Reference pairs
       def relationship_references(doc)
         refs = []
         doc.traverse do |node|
           next unless node.element?
 
-          node.attribute_nodes.each do |attr|
-            next unless attr.namespace&.href == OFFICE_RELS_NS
-            next unless R_REF_ATTRIBUTES.include?(attr.node_name)
+          node.attributes.each do |attr|
+            next unless attr.namespace&.uri == OFFICE_RELS_NS
+            next unless R_REF_ATTRIBUTES.include?(attr.name)
 
             value = attr.value
-            refs << [attr.node_name, value] unless value.empty?
+            refs << [attr.name, value] unless value.empty?
           end
         end
         refs
@@ -243,8 +242,8 @@ module Uniword
 
       # Relationship elements of a parsed .rels document.
       #
-      # @param doc [Nokogiri::XML::Document] Parsed .rels part
-      # @return [Nokogiri::XML::NodeSet] Relationship elements
+      # @param doc [Moxml::Document] Parsed .rels part
+      # @return [Moxml::NodeSet] Relationship elements
       def relationship_nodes(doc)
         doc.xpath("//xmlns:Relationship", "xmlns" => RELS_NS)
       end

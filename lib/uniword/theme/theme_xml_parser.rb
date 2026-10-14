@@ -61,7 +61,7 @@ module Uniword
 
       # Parse color scheme from XML
       #
-      # @param node [Nokogiri::XML::Element] Color scheme node
+      # @param node [Moxml::Element] Color scheme node
       # @return [ColorScheme] Parsed color scheme
       def parse_color_scheme(node)
         scheme = ColorScheme.new
@@ -138,7 +138,7 @@ module Uniword
       # - schemeClr: Reference to another theme color
       # - prstClr: Preset color name
       #
-      # @param node [Nokogiri::XML::Element] Color node
+      # @param node [Moxml::Element] Color node
       # @return [String, nil] RGB hex value (6 characters, no #)
       def extract_color_value(node)
         # Try sRGB color first (direct RGB value)
@@ -180,7 +180,7 @@ module Uniword
 
       # Parse font scheme from XML
       #
-      # @param node [Nokogiri::XML::Element] Font scheme node
+      # @param node [Moxml::Element] Font scheme node
       # @return [FontScheme] Parsed font scheme
       def parse_font_scheme(node)
         scheme = FontScheme.new
