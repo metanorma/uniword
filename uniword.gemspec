@@ -48,7 +48,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 3.4"
   spec.add_dependency "thor", "~> 1.3"
-
-  # Test/dev only: Moxml nokogiri adapter for spec comparisons
-  spec.add_development_dependency "nokogiri", "~> 1.19"
 end
