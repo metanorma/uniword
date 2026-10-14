@@ -17,7 +17,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingDrawing
         mixed_content
 
-        map_attribute "relative-from", to: :relative_from
+        map_attribute "relativeFrom", to: :relative_from
         map_element "pctHeight", to: :pct_height, render_nil: false
       end
     end
