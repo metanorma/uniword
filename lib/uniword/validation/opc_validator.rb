@@ -106,7 +106,9 @@ module Uniword
         ct_entry = zip.find_entry("[Content_Types].xml")
         return unless ct_entry
 
-        ct_doc = Moxml.parse(ct_entry.get_input_stream.read)
+        Ooxml::WellFormedXml.verify!(ct_entry.get_input_stream.read)
+        ct_doc = Moxml.parse(ct_entry.get_input_stream.read,
+                             strict: true)
 
         # Get declared extensions
         declared_exts = ct_doc.xpath("//xmlns:Default", "xmlns" => CT_NS)
@@ -154,7 +156,8 @@ module Uniword
       end
 
       def check_relationship_file(zip, entry, issues)
-        doc = Moxml.parse(entry.get_input_stream.read)
+        Ooxml::WellFormedXml.verify!(entry.get_input_stream.read)
+        doc = Moxml.parse(entry.get_input_stream.read, strict: true)
 
         base_dir = compute_base_dir(entry.name)
 
@@ -194,7 +197,8 @@ module Uniword
 
         xml_entries.each do |entry|
           content = entry.get_input_stream.read
-          Moxml.parse(content)
+          Ooxml::WellFormedXml.verify!(content)
+          Moxml.parse(content, strict: true)
         rescue Moxml::ParseError => e
           issues << Report::ValidationIssue.new(
             severity: "error",

@@ -47,6 +47,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency "lutaml-model", "~> 0.8"
   spec.add_dependency "omml", "~> 0.2.3"
   spec.add_dependency "rainbow", "~> 3.1"
+  # stdlib gem, extracted from default gems in Ruby 4.0: strict
+  # well-formedness detection (OPC-008/XSD-001) -- the default engine
+  # parse recovers silently (moxml#385).
+  spec.add_dependency "rexml", "~> 3.4"
   spec.add_dependency "rubyzip", "~> 3.4"
   spec.add_dependency "thor", "~> 1.3"
 end
