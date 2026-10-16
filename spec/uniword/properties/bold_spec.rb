@@ -43,6 +43,36 @@ RSpec.describe "Bold boolean elements" do
       bold = described_class.from_xml(xml)
       expect(bold.to_xml).to include('w:val="false"')
     end
+
+    # ST_OnOff (ECMA-376) accepts 0/1, false/true and off/on. An absent w:val
+    # means the toggle is on. Bold stands in for every BooleanElement
+    # includer; this is the one home for that table.
+    describe "#on?" do
+      {
+        nil => true,
+        "0" => false,
+        "false" => false,
+        "off" => false,
+        "1" => true,
+        "true" => true,
+        "on" => true,
+      }.each do |val, expected|
+        it "reads #{val.inspect} as #{expected}" do
+          attr = val.nil? ? "" : %( w:val="#{val}")
+          bold = described_class.from_xml("<w:b #{ns_decl}#{attr}/>")
+
+          expect(bold.on?).to be(expected)
+        end
+      end
+
+      # Unknown tokens stay on, matching the #value beside it. Reading is
+      # total: a malformed attribute must not raise out of a reader.
+      it "reads an unknown token as on" do
+        bold = described_class.from_xml(%(<w:b #{ns_decl} w:val="garbage"/>))
+
+        expect(bold.on?).to be(true)
+      end
+    end
   end
 
   describe Uniword::Properties::BoldCs do

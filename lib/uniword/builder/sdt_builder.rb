@@ -63,19 +63,27 @@ module Uniword
 
       # Set the lock / content cannot be edited
       #
+      # Passing false writes an explicit <w:temporary w:val="false"/> rather
+      # than leaving the flag out, so the intent survives a round trip.
+      #
       # @param value [Boolean] Lock content (default true)
       # @return [self]
-      def lock(_value = true)
-        properties.temporary = Wordprocessingml::StructuredDocumentTag::Temporary.new
+      def lock(value = true)
+        properties.temporary =
+          Wordprocessingml::StructuredDocumentTag::Temporary.new(value: value)
         self
       end
 
       # Set placeholder text showing the placeholder header
       #
+      # Passing false writes an explicit <w:showingPlcHdr w:val="false"/>,
+      # the same way #lock does.
+      #
       # @param value [Boolean] Show placeholder (default true)
       # @return [self]
-      def showing_placeholder(_value = true)
-        properties.showing_placeholder_header = Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
+      def showing_placeholder(value = true)
+        klass = Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader
+        properties.showing_placeholder_header = klass.new(value: value)
         self
       end
 

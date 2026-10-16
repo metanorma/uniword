@@ -8,19 +8,25 @@ module Uniword
     #
     # Element: <w:updateFields>
     #
-    # When true, Word updates all fields (TOC, page numbers, cross
+    # When on, Word updates all fields (TOC, page numbers, cross
     # references) the first time the document is opened — generated
     # documents show correct field values without a manual F9.
+    #
+    # This reads through the same ST_OnOff element machinery as every other
+    # toggle. It used to go through Ooxml::Types::OoxmlBoolean, a second
+    # definition that raised on a malformed w:val and disagreed about nil.
     class UpdateFields < Lutaml::Model::Serializable
-      attribute :value, Ooxml::Types::OoxmlBoolean,
-                default: -> { true }
+      include Uniword::Properties::BooleanElement
+
+      attribute :val, :string, default: nil
+      include Uniword::Properties::BooleanValSetter
 
       xml do
         element "updateFields"
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
-        map_attribute "val", to: :value, render_nil: false,
-                                        render_default: false
+        map_attribute "val", to: :val, render_nil: false,
+                             render_default: false
       end
     end
   end

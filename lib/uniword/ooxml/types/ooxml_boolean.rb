@@ -11,8 +11,9 @@ module Uniword
       #
       # Parsing: "1"/"true"/"on" -> true, "0"/"false"/"off"/nil -> false
       # Serialization: true -> "1", false -> "0"
-      # Anything else raises Lutaml::Model::Type::InvalidValueError
-      # instead of passing through unchanged.
+      # Serializing anything else raises
+      # Lutaml::Model::Type::InvalidValueError, because a value the program
+      # set is a bug rather than a document we were handed.
       class OoxmlBoolean < Lutaml::Model::Type::Boolean
         # Accepted ST_OnOff spellings for Boolean true
         TRUE_VALUES = [true, 1, "1", "true", "on"].freeze
@@ -23,14 +24,25 @@ module Uniword
         # All accepted ST_OnOff spellings
         ON_OFF_VALUES = (TRUE_VALUES + FALSE_VALUES).freeze
 
+        # The one ST_OnOff reading, shared by these attribute types and by
+        # Properties::BooleanElement.
+        #
+        # A reader must not raise on a malformed document. One bad token in
+        # styles.xml used to kill the whole parse, and a token outside the
+        # vocabulary is not an off token, so it reads as on — the same way an
+        # unrecognised w:val does.
+        #
+        # @param value [Object] Raw ST_OnOff token
+        # @return [Boolean] true when the toggle is on
+        def self.on?(value)
+          !FALSE_VALUES.include?(value)
+        end
+
         def self.cast(value, _options = {})
           return value if Lutaml::Model::Utils.uninitialized?(value)
-          return true if TRUE_VALUES.include?(value)
-          return false if FALSE_VALUES.include?(value) || value.nil?
+          return false if value.nil?
 
-          raise Lutaml::Model::Type::InvalidValueError.new(
-            value, ON_OFF_VALUES
-          )
+          on?(value)
         end
 
         def self.serialize(value)

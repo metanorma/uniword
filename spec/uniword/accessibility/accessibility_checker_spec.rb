@@ -128,12 +128,18 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
     end
 
     context "with violations" do
-      let(:image_without_alt) do
-        double("Image", alt_text: nil)
-      end
-
-      before do
-        allow(document).to receive(:images).and_return([image_without_alt])
+      # A picture whose wp:docPr carries no descr, so it has no alt text.
+      let(:document) do
+        Uniword::Wordprocessingml::DocumentRoot.from_xml(<<~XML)
+          <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+          <w:document
+            xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+            xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+            <w:body><w:p><w:r><w:drawing><wp:inline>
+              <wp:docPr id="1" name="Picture 1"/>
+            </wp:inline></w:drawing></w:r></w:p></w:body>
+          </w:document>
+        XML
       end
 
       it "collects violations from rules" do
