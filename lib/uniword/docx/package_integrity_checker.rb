@@ -89,12 +89,7 @@ module Uniword
 
         @parsed_parts[name] =
           begin
-            # OPC-008 exists to flag malformed XML; the engine default
-            # recovers silently, so well-formedness is verified with
-            # REXML (moxml#385: parse strict is not honored on this
-            # stack) before the recovering parse builds the tree.
-            Ooxml::WellFormedXml.verify!(@content[name])
-            Moxml.parse(@content[name])
+            Moxml.parse(@content[name], strict: true)
           rescue Moxml::ParseError => e
             add_issue("OPC-008", name,
                       "Malformed XML in #{name}: #{e.message}")

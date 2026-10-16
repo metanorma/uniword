@@ -8,7 +8,6 @@
 # NOTE: The Namespaces module can now be autoloaded - it constant access is at runtime
 module Uniword
   module Ooxml
-    autoload :WellFormedXml, "uniword/ooxml/well_formed_xml"
     # Core OOXML packages
     autoload :DotxPackage, "#{__dir__}/ooxml/dotx_package"
     autoload :ElementOrder, "#{__dir__}/ooxml/element_order"

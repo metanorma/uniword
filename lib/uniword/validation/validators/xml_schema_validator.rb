@@ -67,12 +67,7 @@ module Uniword
 
         def validate_entry(entry, issues)
           content = entry.get_input_stream.read
-          # XSD-001 exists to flag malformed XML; the engine default
-          # recovers silently, so well-formedness is verified with
-          # REXML (moxml#385: parse strict is not honored on this
-          # stack).
-          Ooxml::WellFormedXml.verify!(content)
-          moxml.parse(content)
+          moxml.parse(content, strict: true)
         rescue Moxml::ParseError => e
           issues << Report::ValidationIssue.new(
             severity: "error",
