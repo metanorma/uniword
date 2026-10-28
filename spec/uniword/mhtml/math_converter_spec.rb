@@ -36,9 +36,7 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
       it "produces valid XML output" do
         result = described_class.mathml_to_omml(mathml)
-        # Should be parseable as XML
-        doc = Nokogiri::XML(result)
-        expect(doc.errors).to be_empty
+        expect { Moxml.parse(result) }.not_to raise_error
       end
     end
 
@@ -111,29 +109,34 @@ RSpec.describe Uniword::Mhtml::MathConverter do
   describe ".math_element?" do
     context "with math element" do
       it "detects math tag" do
-        doc = Nokogiri::HTML("<math><mi>x</mi></math>")
-        element = doc.at("math")
+        doc = Moxml.new.parse_html("<math><mi>x</mi></math>")
+        element = doc.at_xpath(".//math")
 
         expect(described_class.math_element?(element)).to be true
       end
 
       it "detects mml:math tag" do
-        doc = Nokogiri::XML('<mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML"><mml:mi>x</mml:mi></mml:math>')
+        doc = Moxml.parse(
+          '<mml:math xmlns:mml="http://www.w3.org/1998/Math/MathML">' \
+          "<mml:mi>x</mml:mi></mml:math>",
+        )
         element = doc.at_xpath("//mml:math")
 
         expect(described_class.math_element?(element)).to be true if element
       end
 
       it "detects math class" do
-        doc = Nokogiri::HTML('<div class="math">x</div>')
-        element = doc.at("div.math")
+        doc = Moxml.new.parse_html('<div class="math">x</div>')
+        element = doc.at_xpath(".//div")
 
         expect(described_class.math_element?(element)).to be true
       end
 
       it "detects data-mathml attribute" do
-        doc = Nokogiri::HTML('<span data-mathml="<math><mi>x</mi></math>">x</span>')
-        element = doc.at("span")
+        doc = Moxml.new.parse_html(
+          '<span data-mathml="<math><mi>x</mi></math>">x</span>',
+        )
+        element = doc.at_xpath(".//span")
 
         expect(described_class.math_element?(element)).to be true
       end
@@ -141,8 +144,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context "with non-math element" do
       it "returns false for paragraph" do
-        doc = Nokogiri::HTML("<p>text</p>")
-        element = doc.at("p")
+        doc = Moxml.new.parse_html("<p>text</p>")
+        element = doc.at_xpath(".//p")
 
         expect(described_class.math_element?(element)).to be false
       end
@@ -157,8 +160,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
     context "with data-mathml attribute" do
       it "extracts MathML from attribute" do
         mathml = "<math><mi>x</mi></math>"
-        doc = Nokogiri::HTML("<span data-mathml=\"#{mathml}\">x</span>")
-        element = doc.at("span")
+        doc = Moxml.new.parse_html("<span data-mathml=\"#{mathml}\">x</span>")
+        element = doc.at_xpath(".//span")
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:mathml)
@@ -168,8 +171,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context "with math tag" do
       it "extracts MathML from element" do
-        doc = Nokogiri::HTML("<math><mi>x</mi></math>")
-        element = doc.at("math")
+        doc = Moxml.new.parse_html("<math><mi>x</mi></math>")
+        element = doc.at_xpath(".//math")
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:mathml)
@@ -180,8 +183,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context "with asciimath class" do
       it "extracts AsciiMath from text" do
-        doc = Nokogiri::HTML('<span class="asciimath">x^2 + y^2</span>')
-        element = doc.at("span.asciimath")
+        doc = Moxml.new.parse_html('<span class="asciimath">x^2 + y^2</span>')
+        element = doc.at_xpath(".//span")
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:asciimath)
@@ -191,8 +194,8 @@ RSpec.describe Uniword::Mhtml::MathConverter do
 
     context "with unknown math content" do
       it "returns unknown type for non-math element" do
-        doc = Nokogiri::HTML("<div>content</div>")
-        element = doc.at("div")
+        doc = Moxml.new.parse_html("<div>content</div>")
+        element = doc.at_xpath(".//div")
 
         result = described_class.extract_math(element)
         expect(result[:type]).to eq(:unknown)

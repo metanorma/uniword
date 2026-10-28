@@ -96,9 +96,31 @@ module Uniword
         mime_part.content_location = content_location
         mime_part.content_transfer_encoding = encoding
         mime_part.content_id = content_id&.gsub(/[<>]/, "")
-        mime_part.raw_content = body.rstrip
+        mime_part.decoded_content = decode_body(body.rstrip, encoding)
 
         mime_part
+      end
+
+      # Decode a wire body into its content, per the declared
+      # Content-Transfer-Encoding. Stored content is always decoded.
+      # Tolerant of real-world corruption (Word truncates some base64
+      # tails), so base64 uses the non-strict decoder.
+      def decode_body(body, encoding)
+        case encoding&.downcase
+        when "base64"
+          Base64.decode64(body)
+        when "quoted-printable"
+          # Decode in BINARY so hex escapes map 1:1 to bytes; single-pass
+          # gsub, so an already-decoded byte is never re-decoded.
+          body.force_encoding("BINARY")
+            .gsub(/=\r?\n/, "")
+            .gsub(/=([0-9A-Fa-f]{2})/) do
+              [::Regexp.last_match(1).hex].pack("C")
+            end
+            .force_encoding("UTF-8")
+        else
+          body&.force_encoding("UTF-8") || body
+        end
       end
 
       # Create a typed MimePart based on content type.

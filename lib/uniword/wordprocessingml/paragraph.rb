@@ -12,6 +12,8 @@ module Uniword
     class Paragraph < Lutaml::Model::Serializable
       attribute :properties, ParagraphProperties
       attribute :runs, Run, collection: true, initialize_empty: true
+      attribute :insertions, Insertion, collection: true, initialize_empty: true
+      attribute :deletions, Deletion, collection: true, initialize_empty: true
       attribute :hyperlinks, Hyperlink, collection: true, initialize_empty: true
       attribute :bookmark_starts, BookmarkStart, collection: true, initialize_empty: true
       attribute :bookmark_ends, BookmarkEnd, collection: true, initialize_empty: true
@@ -61,6 +63,8 @@ module Uniword
 
         map_element "pPr", to: :properties, render_nil: false
         map_element "r", to: :runs, render_nil: false
+        map_element "ins", to: :insertions, render_nil: false
+        map_element "del", to: :deletions, render_nil: false
         map_element "hyperlink", to: :hyperlinks, render_nil: false
         map_element "bookmarkStart", to: :bookmark_starts, render_nil: false
         map_element "bookmarkEnd", to: :bookmark_ends, render_nil: false
@@ -83,11 +87,33 @@ module Uniword
 
       # Get paragraph text
       #
-      # @return [String] Combined text from all runs
+      # Insertion runs are live content and included, in document
+      # order; deletion runs are deleted content and excluded.
+      #
+      # @return [String] Combined text from runs and insertions
       def text
-        return "" unless runs
+        text_sources.map do |source|
+          source.is_a?(Insertion) ? source.text : run_text(source)
+        end.join
+      end
 
-        runs.map { |r| run_text(r) }.join
+      # Runs and insertions in document order when element_order is
+      # available; typed collections in declaration order otherwise.
+      #
+      # @return [Array<Run, Insertion>]
+      def text_sources
+        order = element_order
+        return runs + insertions if order.nil? || order.empty?
+
+        runs_left = runs.dup
+        insertions_left = insertions.dup
+        walked = order.filter_map do |entry|
+          case entry.name
+          when "r" then runs_left.shift
+          when "ins" then insertions_left.shift
+          end
+        end.compact
+        walked + runs_left + insertions_left
       end
 
       # Extract text from a run or SDT element
@@ -107,7 +133,7 @@ module Uniword
       end
 
       def empty?
-        !runs || runs.empty? || runs.all? { |r| run_text(r).empty? }
+        text.empty?
       end
 
       def style

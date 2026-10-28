@@ -153,9 +153,13 @@ RSpec.describe "MHTML Compatibility", type: :integration do
       doc = create_test_document
       doc.save(output_path, format: :mhtml)
 
+      # Word's own MHTML files carry no DOCTYPE (see
+      # spec/fixtures/word-template-*), and neither does ours; the html
+      # part must still round-trip as a parseable document.
       document = parse_mhtml(output_path)
-      full_html = document.html_part&.html_document&.to_html || ""
-      expect(full_html).to include("<!DOCTYPE")
+      full_html = document.html_part&.html_document&.to_s || ""
+      expect(full_html).to include("<html")
+      expect(full_html).to include("</html>")
     end
 
     it "includes HTML structure tags" do
@@ -163,7 +167,7 @@ RSpec.describe "MHTML Compatibility", type: :integration do
       doc.save(output_path, format: :mhtml)
 
       document = parse_mhtml(output_path)
-      full_html = document.html_part&.html_document&.to_html || ""
+      full_html = document.html_part&.html_document&.to_s || ""
 
       expect(full_html).to include("<html")
       expect(full_html).to include("<head>")

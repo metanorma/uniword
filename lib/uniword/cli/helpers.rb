@@ -10,6 +10,7 @@ module Uniword
   module CLIHelpers
     def self.included(base)
       base.extend(ClassMethods)
+      base.extend(Cli::HelpSwitch)
     end
 
     module ClassMethods

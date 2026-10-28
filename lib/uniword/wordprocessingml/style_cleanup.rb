@@ -141,21 +141,12 @@ module Uniword
       end
 
       # Paragraphs in body (incl. table cells), headers/footers,
-      # notes, comments.
+      # notes, comments. Reuses the typed-dispatch walker (Body maps
+      # tables and SDTs; TableCell/Header/Footer map tables;
+      # Footnote/Endnote/Comment map paragraphs only).
       def walk_all_paragraphs(&block)
-        each_container { |container| walk_paragraphs(container, &block) }
-      end
-
-      def walk_paragraphs(container, &block)
-        return unless container
-
-        (container.paragraphs || []).each(&block)
-        walk_tables(container) { |table| walk_table_rows(table, &block) }
-      end
-
-      def walk_table_rows(table, &block)
-        (table.rows || []).each do |row|
-          (row.cells || []).each { |cell| walk_paragraphs(cell, &block) }
+        each_container do |container|
+          FindReplace::ParagraphWalker.each_paragraph([container], &block)
         end
       end
 

@@ -4,6 +4,8 @@ require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require "yard"
 
+Dir.glob("lib/tasks/*.rake").sort.each { |task| import task }
+
 RSpec::Core::RakeTask.new(:spec)
 
 YARD::Rake::YardocTask.new do |t|

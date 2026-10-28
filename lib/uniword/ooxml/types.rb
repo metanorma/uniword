@@ -53,6 +53,18 @@ module Uniword
       # Relationships namespace type for r:embed/r:link cross-namespace attrs
       autoload :RelationshipId, "#{__dir__}/types/relationship_id"
 
+      # WordProcessingML namespace type for qualified w:val attributes
+      autoload :WmlVal, "#{__dir__}/types/wml_val"
+
+      # WordProcessingML namespace type for qualified integer attributes
+      autoload :WmlInt, "#{__dir__}/types/wml_int"
+
+      # schemaLibrary namespace type for sl: qualified attributes
+      autoload :SchemaLibraryVal, "#{__dir__}/types/schema_library_val"
+
+      # Additional Characteristics namespace type
+      autoload :CharacteristicsVal, "#{__dir__}/types/characteristics_val"
+
       # Variant Types (vt: namespace) for OLE property values
       autoload :VariantTypes, "#{__dir__}/types/variant_types"
 

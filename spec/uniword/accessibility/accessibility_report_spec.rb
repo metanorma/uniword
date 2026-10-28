@@ -103,6 +103,18 @@ RSpec.describe Uniword::Accessibility::AccessibilityReport do
     end
   end
 
+  describe "#valid?" do
+    it "agrees with compliant? when error violations exist" do
+      report.add_violation(error_violation)
+      expect(report.valid?).to be false
+    end
+
+    it "agrees with compliant? when only warnings exist" do
+      report.add_violation(warning_violation)
+      expect(report.valid?).to be true
+    end
+  end
+
   describe "#errors" do
     before do
       report.add_violation(error_violation)

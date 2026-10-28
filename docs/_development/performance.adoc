@@ -1,0 +1,56 @@
+---
+layout: default
+title: Performance
+nav_order: 4
+parent: Development
+permalink: /development/performance/
+---
+= Performance
+
+== YJIT (recommended, enabled by default in the CLI)
+
+Uniword's hydration pipeline is dispatch-heavy Ruby and runs **~1.75x faster under YJIT** (measured on the standard 608 KB corpus: 8.3 s → 4.7 s CPU). The `uniword` CLI enables YJIT automatically since 1.6.0; opt out with:
+
+[source,shell]
+----
+UNIWORD_DISABLE_YJIT=1 uniword convert input.docx output.html
+----
+
+Library consumers get the same win by running Ruby with YJIT:
+
+[source,shell]
+----
+RUBYOPT="--yjit" ruby my_script.rb
+----
+
+== Benchmarking
+
+A deterministic benchmark ships with the repository and runs on every PR (single job, per-PR concurrency — new pushes cancel superseded runs):
+
+[source,shell]
+----
+bundle exec rake benchmark                    # 5 iterations
+BENCH_ITERATIONS=10 bundle exec rake benchmark
+----
+
+It generates a fixed ~600 KB WordprocessingML corpus and measures three cases:
+
+[cols="1,3"]
+|===
+|Case |Meaning
+
+|`engine_parse`
+|Raw XML-engine parse of the corpus — the floor.
+
+|`model_parse`
+|End-to-end hydration (`DocumentRoot.from_xml`) — the number that matters for consumers.
+
+|`model_serialize`
+|`DocumentRoot#to_xml`.
+|===
+
+Each case reports wall time, **CPU time** (the primary comparison metric — wall time on shared runners swings ±40–75% with neighbor load while CPU time stays within ±4%), allocations per iteration, and RSS delta. Results are also written as JSON artifacts on CI.
+
+== Deterministic CI dependencies
+
+`Gemfile.lock` is committed. CI resolves exactly the locked versions; upstream releases never flip the matrix silently. Upgrade deliberately via `bundle update <gem>` in a PR so the lock diff is reviewable.

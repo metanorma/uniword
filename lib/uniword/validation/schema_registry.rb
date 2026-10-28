@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require "moxml"
-require "nokogiri"
+require "leptris/xml/xsd"
 
 module Uniword
   module Validation
     # Maps XML namespace URIs to XSD schema files and loads schemas for validation.
     #
     # Uses Moxml for namespace detection (parsing XML to find declared namespaces)
-    # and Nokogiri::XML::Schema for actual XSD validation.
+    # and Moxml::XSD (Leptris engine) for actual XSD validation.
     #
     # The registry knows which OOXML namespace URIs correspond to which XSD files
     # bundled in data/schemas/.
@@ -17,7 +17,7 @@ module Uniword
     #   registry = SchemaRegistry.new
     #   ns_uris = registry.detect_namespaces(xml_string)
     #   schema = registry.schema_for_namespaces(ns_uris)
-    #   errors = schema.validate(Nokogiri::XML(xml_string))
+    #   errors = schema.validate(xml_string)
     class SchemaRegistry
       # Map of namespace URI => XSD file (relative to data/schemas/)
       NAMESPACE_XSD_MAP = {
@@ -85,7 +85,7 @@ module Uniword
 
       def initialize(schemas_dir: nil)
         @schemas_dir = schemas_dir || default_schemas_dir
-        @moxml = Moxml.new(:nokogiri)
+        @moxml = Moxml.new
         @schema_cache = {}
       end
 
@@ -145,7 +145,7 @@ module Uniword
       # Load and cache an XSD schema for validation.
       #
       # @param xsd_relative_path [String] Path relative to schemas_dir
-      # @return [Nokogiri::XML::Schema] Compiled schema
+      # @return [Moxml::XSD::Schema] Compiled schema
       def load_schema(xsd_relative_path)
         return @schema_cache[xsd_relative_path] if @schema_cache.key?(xsd_relative_path)
 
@@ -155,18 +155,11 @@ module Uniword
                 "XSD schema not found: #{xsd_path}"
         end
 
-        # Nokogiri::XML::Schema resolves relative imports from CWD.
-        # We chdir to the schema file's own directory so imports like
-        # "word12.xsd" (from microsoft/wml-2010.xsd) resolve correctly.
-        schema = nil
-        original_dir = Dir.pwd
-        schema_dir = File.dirname(xsd_path)
-        begin
-          Dir.chdir(schema_dir)
-          schema = Nokogiri::XML::Schema(File.read(File.basename(xsd_path)))
-        ensure
-          Dir.chdir(original_dir)
-        end
+        # Path-based compilation resolves xsd:import chains relative
+        # to the schema file's own directory; string compilation does
+        # not resolve them.
+        handle = Leptris::XML::XSD.compile_file(xsd_path)
+        schema = Moxml::XSD::Schema.new(handle, @moxml)
 
         @schema_cache[xsd_relative_path] = schema
         schema

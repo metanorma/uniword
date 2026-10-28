@@ -87,6 +87,7 @@ module Uniword
               backfill_paragraphs(part.content.paragraphs, rsid,
                                   "#{abbrev}:#{idx}")
             end
+            ensure_w14_ignorable(part.content)
           end
         end
 

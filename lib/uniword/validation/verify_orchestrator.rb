@@ -8,7 +8,7 @@ module Uniword
     #
     # Coordinates:
     # 1. OPC Package validation (ZIP, content types, relationships)
-    # 2. XSD Schema validation (namespace-aware, using Moxml + Nokogiri)
+    # 2. XSD Schema validation (namespace-aware, via Moxml::XSD)
     # 3. Word Document semantic validation (extensible rule system)
     #
     # Returns a VerificationReport that can be serialized to JSON/YAML

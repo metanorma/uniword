@@ -7,7 +7,12 @@ require "stringio"
 # reconciliation transparency (Package#applied_fixes + fix logging).
 RSpec.describe "Package save integrity gate" do
   let(:output_dir) { File.expand_path("../../tmp", __dir__) }
-  let(:output_path) { File.join(output_dir, "gate_spec_output.docx") }
+  # Unique per example: a stale file from a sibling example (Windows
+  # handle-lag can defeat even the pre-clean's safe_delete retries) must
+  # never satisfy this group's File.exist? assertions.
+  let(:output_path) do
+    File.join(output_dir, "gate_spec_output_#{RSpec.current_example.object_id}.docx")
+  end
 
   let(:document) do
     doc = Uniword::Wordprocessingml::DocumentRoot.new

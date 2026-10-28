@@ -6,6 +6,9 @@ module Uniword
   module Properties
     # Namespaced custom type for font size value
     class FontSizeValue < Lutaml::Model::Type::Integer
+      xml do
+        namespace Ooxml::Namespaces::WordProcessingML
+      end
     end
 
     # Font size element

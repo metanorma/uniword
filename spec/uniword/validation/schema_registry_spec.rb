@@ -108,7 +108,7 @@ RSpec.describe Uniword::Validation::SchemaRegistry do
   describe "#load_schema" do
     it "loads and caches a schema" do
       schema = registry.load_schema("ecma/opc-contentTypes.xsd")
-      expect(schema).to be_a(Nokogiri::XML::Schema)
+      expect(schema).to be_a(Moxml::XSD::Schema)
 
       # Should be cached
       schema2 = registry.load_schema("ecma/opc-contentTypes.xsd")
