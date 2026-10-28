@@ -172,6 +172,20 @@ module XmlNormalizers
       settings << ps
     end
 
+    # Fixture documents carry unqualified spelling/grammar attributes while
+    # the serializer emits the w:-qualified form — canonicalize to unqualified
+    settings.xpath("w:proofState", ns_w).each do |ps|
+      %w[spelling grammar].each do |attr|
+        ns_attr = ps.attribute_nodes.find { |a| a.name == attr }
+        next unless ns_attr
+        next if ps.attribute(attr) == ns_attr && ns_attr.namespace.nil?
+
+        value = ns_attr.value
+        ns_attr.remove
+        ps[attr] = value
+      end
+    end
+
     # Sort children by namespace+name for consistent ordering
     children = settings.element_children
     sorted = children.sort_by { |n| [n.namespace.href, n.name] }
@@ -221,6 +235,37 @@ module XmlNormalizers
       node.attribute_nodes.select do |a|
         a.namespace&.prefix == "w14"
       end.each(&:remove)
+    end
+
+    # Strip bookmark displacedByCustomXml tracking attributes (any
+    # namespace): fixtures carry the noncompliant w:-qualified form while
+    # the serializer emits the spec-correct w14: form
+    doc.xpath("//*[local-name() = 'bookmarkStart' or local-name() = 'bookmarkEnd']")
+       .each do |node|
+      node.attribute_nodes
+          .select { |a| a.name == "displacedByCustomXml" }
+          .each(&:remove)
+    end
+
+    # useLocalDpi val: source documents use the unqualified form; the
+    # serializer emits the a14-qualified form — canonicalize to unqualified
+    doc.xpath("//*[local-name() = 'useLocalDpi']").each do |node|
+      attr = node.attribute_nodes.find { |a| a.name == "val" }
+      next unless attr
+      value = attr.value
+      attr.remove
+      node["val"] = value
+    end
+
+    # footnoteColumns val: source uses the w:-qualified form on the w15
+    # extension element; serializer emits per its own qualification —
+    # canonicalize to unqualified
+    doc.xpath("//*[local-name() = 'footnoteColumns']").each do |node|
+      attr = node.attribute_nodes.find { |a| a.name == "val" }
+      next unless attr
+      value = attr.value
+      attr.remove
+      node["val"] = value
     end
 
     doc.to_xml

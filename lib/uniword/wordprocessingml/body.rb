@@ -32,15 +32,54 @@ module Uniword
         map_element "bookmarkEnd", to: :bookmark_ends, render_nil: false
       end
 
-      # Get all elements in body
+      # Get all elements in body, in document order.
       #
-      # @return [Array<Paragraph, Table, SectionProperties, StructuredDocumentTag>] All block-level content
+      # Walks `element_order` (populated by lutaml-model when mixed_content
+      # is parsed) and dispatches each tag to its typed collection —
+      # `p` -> paragraphs, `tbl` -> tables, `sdt` -> structured_document_tags,
+      # `bookmarkStart` -> bookmark_starts, `bookmarkEnd` -> bookmark_ends,
+      # `sectPr` -> section_properties. Whitespace/comment entries are
+      # skipped. Elements not represented in `element_order` are appended
+      # at the end in collection order (the only order available when
+      # `element_order` is empty or nil).
+      #
+      # @return [Array] Block-level content in document order
       def elements
+        return concatenate_typed_collections if element_order.nil? || element_order.empty?
+
         result = []
-        result.concat(paragraphs || [])
-        result.concat(structured_document_tags || [])
-        result.concat(tables || [])
-        result << section_properties if section_properties
+        counters = Hash.new(0)
+        sectpr_seen = false
+        collections = {
+          "p" => paragraphs,
+          "tbl" => tables,
+          "sdt" => structured_document_tags,
+          "bookmarkStart" => bookmark_starts,
+          "bookmarkEnd" => bookmark_ends,
+        }
+
+        element_order.each do |entry|
+          name = entry.name
+          if collections.key?(name)
+            collection = collections[name]
+            index = counters[name]
+            if collection && index < collection.size
+              result << collection[index]
+              counters[name] = index + 1
+            end
+          elsif name == "sectPr"
+            sectpr_seen = true
+            result << section_properties if section_properties
+          end
+        end
+
+        collections.each do |name, collection|
+          next unless collection && counters[name] < collection.size
+
+          result.concat(collection[counters[name]..])
+        end
+
+        result << section_properties if section_properties && !sectpr_seen
         result
       end
 
@@ -79,6 +118,15 @@ module Uniword
       end
 
       private
+
+      def concatenate_typed_collections
+        result = []
+        result.concat(paragraphs || [])
+        result.concat(structured_document_tags || [])
+        result.concat(tables || [])
+        result << section_properties if section_properties
+        result
+      end
 
       def sync_element_order
         return if element_order.nil? || element_order.empty?

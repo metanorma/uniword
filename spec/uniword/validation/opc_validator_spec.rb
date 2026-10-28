@@ -11,7 +11,7 @@ RSpec.describe Uniword::Validation::OpcValidator do
     dir = Dir.mktmpdir
     zip_path = File.join(dir, "test.docx")
 
-    Zip::File.open(zip_path, Zip::File::CREATE) do |zip|
+    Zip::File.open(zip_path, create: true) do |zip|
       entries.each do |name, content|
         zip.get_output_stream(name) { |f| f.write(content) }
       end

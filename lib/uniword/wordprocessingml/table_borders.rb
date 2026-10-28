@@ -22,8 +22,8 @@ module Uniword
         mixed_content
 
         map_element "top", to: :top, render_nil: false
-        map_element "bottom", to: :bottom, render_nil: false
         map_element "left", to: :left, render_nil: false
+        map_element "bottom", to: :bottom, render_nil: false
         map_element "right", to: :right, render_nil: false
         map_element "insideH", to: :inside_h, render_nil: false
         map_element "insideV", to: :inside_v, render_nil: false

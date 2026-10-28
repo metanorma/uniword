@@ -30,7 +30,7 @@ module Uniword
       #
       # Handles nested formatting like <u><em><strong>text</strong></em></u>.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::RunProperties]
       def self.collect_formatting(element)
         props = Uniword::Wordprocessingml::RunProperties.new
@@ -118,10 +118,10 @@ module Uniword
 
       # Apply formatting from span element's style attribute.
       #
-      # @param element [Nokogiri::XML::Element] span element
+      # @param element [Moxml::Element] span element
       # @param props [Uniword::Wordprocessingml::RunProperties]
       def self.apply_span_styles(element, props)
-        style = element.attr("style") || ""
+        style = element.attribute("style")&.value || ""
 
         if style =~ /color:\s*#?([0-9a-fA-F]{6})/i
           props.color =

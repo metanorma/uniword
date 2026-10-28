@@ -14,6 +14,7 @@ module Uniword
   module Review
     autoload :AcceptReject, "uniword/review/accept_reject"
     autoload :ReviewManager, "uniword/review/review_manager"
+    autoload :RevisionResolver, "uniword/review/revision_resolver"
     autoload :InteractiveReview, "uniword/review/interactive_review"
   end
 end

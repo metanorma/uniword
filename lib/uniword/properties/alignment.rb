@@ -6,6 +6,10 @@ module Uniword
   module Properties
     # Namespaced custom type for alignment value
     class AlignmentValue < Lutaml::Model::Type::String
+      xml do
+        namespace Ooxml::Namespaces::WordProcessingML
+      end
+
       # Full ST_Jc enumeration from ECMA-376 (wml.xsd)
       VALUES = %w[
         start center end both mediumKashida distribute numTab

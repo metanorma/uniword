@@ -2,7 +2,7 @@
 
 module Uniword
   module Transformation
-    # Builds OOXML element objects from parsed HTML (Nokogiri nodes).
+    # Builds OOXML element objects from parsed HTML (Moxml nodes).
     #
     # Pure functions — no state, no side effects.
     # Used by HtmlToOoxmlConverter to construct OOXML paragraphs, tables, runs.
@@ -11,7 +11,7 @@ module Uniword
     class HtmlElementBuilder
       # Build an OOXML Paragraph from an HTML element.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Paragraph, nil]
       def self.build_paragraph(element)
         paragraph = Uniword::Wordprocessingml::Paragraph.new
@@ -32,11 +32,11 @@ module Uniword
       # cell insertion. The grid layout is computed row-by-row to correctly
       # place vMerge continuation cells where HTML rowspan omits cells.
       #
-      # @param html_table [Nokogiri::XML::Element] HTML table element
+      # @param html_table [Moxml::Element] HTML table element
       # @return [Uniword::Wordprocessingml::Table, nil]
       def self.build_table(html_table)
         table = Uniword::Wordprocessingml::Table.new
-        html_rows = html_table.css("tr")
+        html_rows = html_table.xpath(".//tr")
         return nil if html_rows.empty?
 
         # Track columns occupied by rowspan: col_idx → remaining continuation rows
@@ -47,7 +47,7 @@ module Uniword
           row = Uniword::Wordprocessingml::TableRow.new
           col_idx = 0
 
-          html_row.css("td, th").each do |html_cell|
+          html_row.xpath(".//td | .//th").each do |html_cell|
             # Insert vMerge continuation cells for columns occupied by rowspan
             while occupied.key?(col_idx)
               row.cells << create_vmerge_continuation_cell
@@ -60,13 +60,13 @@ module Uniword
             row.cells << cell
 
             # Track rowspan for continuation cell insertion in subsequent rows
-            rowspan = html_cell.attr("rowspan")&.to_i
+            rowspan = html_cell.attribute("rowspan")&.value&.to_i
             if rowspan && rowspan > 1
-              colspan = html_cell.attr("colspan")&.to_i || 1
+              colspan = html_cell.attribute("colspan")&.value&.to_i || 1
               colspan.times { |c| occupied[col_idx + c] = rowspan - 1 }
             end
 
-            col_idx += html_cell.attr("colspan")&.to_i || 1
+            col_idx += html_cell.attribute("colspan")&.value&.to_i || 1
           end
 
           # Handle remaining occupied columns at end of row
@@ -88,13 +88,13 @@ module Uniword
 
       # Build an OOXML TableRow from an HTML tr element.
       #
-      # @param html_row [Nokogiri::XML::Element] HTML tr element
+      # @param html_row [Moxml::Element] HTML tr element
       # @return [Uniword::Wordprocessingml::TableRow, nil]
       def self.build_row(html_row)
         row = Uniword::Wordprocessingml::TableRow.new
         cells = []
 
-        html_row.css("td, th").each do |html_cell|
+        html_row.xpath(".//td | .//th").each do |html_cell|
           cell = build_cell(html_cell)
           cells << cell if cell
         end
@@ -109,7 +109,7 @@ module Uniword
       #
       # Handles colspan → gridSpan, rowspan → vMerge restart, <th> → header.
       #
-      # @param html_cell [Nokogiri::XML::Element] HTML td/th element
+      # @param html_cell [Moxml::Element] HTML td/th element
       # @return [Uniword::Wordprocessingml::TableCell, nil]
       def self.build_cell(html_cell)
         cell = Uniword::Wordprocessingml::TableCell.new
@@ -118,8 +118,8 @@ module Uniword
         cell.header = html_cell.name.downcase == "th"
 
         # Handle colspan → gridSpan, rowspan → vMerge restart
-        colspan = html_cell.attr("colspan")
-        rowspan = html_cell.attr("rowspan")
+        colspan = html_cell.attribute("colspan")&.value
+        rowspan = html_cell.attribute("rowspan")&.value
 
         if (colspan && colspan.to_i > 1) || (rowspan && rowspan.to_i > 1)
           cell.properties ||= Uniword::Wordprocessingml::TableCellProperties.new
@@ -134,7 +134,9 @@ module Uniword
         end
 
         # Convert cell content to paragraphs
-        html_cell.css("p, div, h1, h2, h3, h4, h5, h6").each do |para_element|
+        block_tags = ".//p | .//div | .//h1 | .//h2 | .//h3 | .//h4 | " \
+                     ".//h5 | .//h6"
+        html_cell.xpath(block_tags).each do |para_element|
           paragraph = build_paragraph(para_element)
           cell.paragraphs << paragraph if paragraph
         end
@@ -165,7 +167,7 @@ module Uniword
 
       # Create an OOXML Run from an HTML element with inline formatting.
       #
-      # @param element [Nokogiri::XML::Element] HTML element
+      # @param element [Moxml::Element] HTML element
       # @return [Uniword::Wordprocessingml::Run, nil]
       def self.create_run_from_element(element)
         text = element.text.strip
@@ -182,7 +184,7 @@ module Uniword
 
       # Create an OOXML SDT from an HTML w:sdt element.
       #
-      # @param element [Nokogiri::XML::Element] HTML w:sdt element
+      # @param element [Moxml::Element] HTML w:sdt element
       # @return [Uniword::Wordprocessingml::StructuredDocumentTag, nil]
       def self.create_sdt_from_element(element)
         text = element.text.strip
@@ -213,7 +215,7 @@ module Uniword
 
       # Apply CSS class → OOXML style mapping.
       def self.apply_css_style(paragraph, element)
-        css_class = element.attr("class")
+        css_class = element.attribute("class")&.value
         return unless css_class && !css_class.empty?
 
         mapped_style = HtmlFormattingMapper.map_css_class_to_style(css_class)
@@ -230,13 +232,12 @@ module Uniword
       # → FootnoteReference run, <span class="MsoEndnoteReference"> → EndnoteReference run.
       def self.build_children(paragraph, element)
         element.children.each do |child|
-          case child.type
-          when Nokogiri::XML::Node::TEXT_NODE
+          if child.is_a?(Moxml::Text)
             text = child.text.strip
             next if text.empty?
 
             paragraph.runs << create_run(text)
-          when Nokogiri::XML::Node::ELEMENT_NODE
+          elsif child.is_a?(Moxml::Element)
             case child.name.downcase
             when "w:sdt", "sdt"
               sdt = create_sdt_from_element(child)
@@ -273,44 +274,53 @@ module Uniword
 
       # Parse SDT attributes from HTML element.
       def self.parse_sdt_attributes(element)
-        attrs = element.attributes
-        return nil if attrs.empty?
+        return nil if element.attributes.empty?
 
         sdt_props =
           Uniword::Wordprocessingml::StructuredDocumentTagProperties.new
 
-        if attrs["showingplchdr"] || attrs["ShowingPlcHdr"]
+        if attr_value(element, "showingplchdr") ||
+            attr_value(element, "ShowingPlcHdr")
           sdt_props.showing_placeholder_header =
             Uniword::Wordprocessingml::StructuredDocumentTag::ShowingPlaceholderHeader.new
         end
 
-        if attrs["temporary"] || attrs["Temporary"]
+        if attr_value(element, "temporary") ||
+            attr_value(element, "Temporary")
           sdt_props.temporary =
             Uniword::Wordprocessingml::StructuredDocumentTag::Temporary.new
         end
 
-        doc_part = attrs["docpart"] || attrs["DocPart"]
+        doc_part = attr_value(element, "docpart") ||
+          attr_value(element, "DocPart")
         if doc_part
           placeholder =
             Uniword::Wordprocessingml::StructuredDocumentTag::Placeholder.new
           doc_part_ref =
-            Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(value: doc_part.value)
+            Uniword::Wordprocessingml::StructuredDocumentTag::DocPartReference.new(
+              value: doc_part,
+            )
           placeholder.doc_part = doc_part_ref
           sdt_props.placeholder = placeholder
         end
 
-        if attrs["text"] || attrs["Text"]
+        if attr_value(element, "text") || attr_value(element, "Text")
           sdt_props.text =
-            Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(value: "whole")
+            Uniword::Wordprocessingml::StructuredDocumentTag::Text.new(
+              value: "whole",
+            )
         end
 
-        id_attr = attrs["id"] || attrs["ID"]
+        id_attr = attr_value(element, "id") || attr_value(element, "ID")
         if id_attr
           sdt_props.id =
-            Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(value: id_attr.value.to_i)
+            Uniword::Wordprocessingml::StructuredDocumentTag::Id.new(
+              value: id_attr.to_i,
+            )
         end
 
-        if attrs["bibliography"] || attrs["Bibliography"]
+        if attr_value(element, "bibliography") ||
+            attr_value(element, "Bibliography")
           sdt_props.bibliography =
             Uniword::Wordprocessingml::StructuredDocumentTag::Bibliography.new
         end
@@ -318,15 +328,20 @@ module Uniword
         sdt_props
       end
 
+      # Read an attribute value from a Moxml element by name.
+      def self.attr_value(element, name)
+        element.attribute(name)&.value
+      end
+
       # Create a Run with Break from an HTML <br> element.
       #
-      # @param element [Nokogiri::XML::Element] <br> element
+      # @param element [Moxml::Element] <br> element
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_break_run(element)
         run = Uniword::Wordprocessingml::Run.new
         brk = Uniword::Wordprocessingml::Break.new
-        style = element.attr("style").to_s
-        clear = element.attr("clear").to_s
+        style = element.attribute("style")&.value.to_s
+        clear = element.attribute("clear")&.value.to_s
         if style.include?("page-break-before") || style.include?("page-break-after") || clear == "all"
           brk.type = "page"
         end
@@ -336,27 +351,27 @@ module Uniword
 
       # Check if element is a footnote reference span.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Boolean]
       def self.footnote_reference_span?(element)
         return false unless element.name.downcase == "span"
 
-        element.attr("class").to_s.split.include?("MsoFootnoteReference")
+        element.attribute("class")&.value.to_s.split.include?("MsoFootnoteReference")
       end
 
       # Check if element is an endnote reference span.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [Boolean]
       def self.endnote_reference_span?(element)
         return false unless element.name.downcase == "span"
 
-        element.attr("class").to_s.split.include?("MsoEndnoteReference")
+        element.attribute("class")&.value.to_s.split.include?("MsoEndnoteReference")
       end
 
       # Create a Run with FootnoteReference from an HTML footnote reference span.
       #
-      # @param element [Nokogiri::XML::Element] Span element with MsoFootnoteReference class
+      # @param element [Moxml::Element] Span with MsoFootnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_footnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -368,7 +383,7 @@ module Uniword
 
       # Create a Run with EndnoteReference from an HTML endnote reference span.
       #
-      # @param element [Nokogiri::XML::Element] Span element with MsoEndnoteReference class
+      # @param element [Moxml::Element] Span with MsoEndnoteReference class
       # @return [Uniword::Wordprocessingml::Run]
       def self.create_endnote_reference_run(element)
         run = Uniword::Wordprocessingml::Run.new
@@ -382,13 +397,13 @@ module Uniword
       #
       # Tries: nested <a href="#_ftnN">, then text content digits.
       #
-      # @param element [Nokogiri::XML::Element]
+      # @param element [Moxml::Element]
       # @return [String, nil]
       def self.extract_note_id(element)
         # Try nested <a href="#_ftnN"> or <a href="#_ednN">
-        anchor = element.at_css("a[href^='#']")
+        anchor = element.at_xpath('.//a[starts-with(@href, "#")]')
         if anchor
-          href = anchor.attr("href").sub(/^#/, "")
+          href = anchor.attribute("href")&.value&.sub(/^#/, "")
           if href =~ /(\d+)\s*$/
             return Regexp.last_match(1)
           end
@@ -405,23 +420,22 @@ module Uniword
 
       # Create a Hyperlink from an HTML <a href> element.
       #
-      # @param element [Nokogiri::XML::Element] <a> element
+      # @param element [Moxml::Element] <a> element
       # @return [Uniword::Wordprocessingml::Hyperlink, nil]
       def self.create_hyperlink(element)
-        href = element.attr("href")
+        href = element.attribute("href")&.value
         return nil unless href
 
         hyperlink = Uniword::Wordprocessingml::Hyperlink.new
         hyperlink.target = href
 
         element.children.each do |child|
-          case child.type
-          when Nokogiri::XML::Node::TEXT_NODE
+          if child.is_a?(Moxml::Text)
             text = child.text.strip
             next if text.empty?
 
             hyperlink.runs << create_run(text)
-          when Nokogiri::XML::Node::ELEMENT_NODE
+          elsif child.is_a?(Moxml::Element)
             run = create_run_from_element(child)
             hyperlink.runs << run if run
           end

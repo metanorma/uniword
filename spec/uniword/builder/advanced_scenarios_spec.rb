@@ -6,7 +6,7 @@ require "zip"
 RSpec.describe "Advanced Builder Scenarios" do
   let(:b) { Uniword::Builder }
   let(:output_dir) do
-    File.expand_path("../../../examples/generated", __dir__)
+    File.expand_path("../tmp/advanced_generated", __dir__)
   end
 
   before { FileUtils.mkdir_p(output_dir) }

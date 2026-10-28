@@ -10,14 +10,14 @@ require "zip"
 # their structure. Generated files are saved to examples/generated/.
 
 RSpec.describe "End-to-end Document Generation" do
-  let(:output_dir) { File.expand_path("../../examples/generated", __dir__) }
+  let(:output_dir) { File.expand_path("../tmp/generated_docs", __dir__) }
 
   # Shortcut for Builder factory methods (avoids module resolution issues
   # inside DocumentBuilder blocks where Uniword::Builder resolves incorrectly)
   let(:b) { Uniword::Builder }
 
   before(:all) do
-    FileUtils.mkdir_p(File.expand_path("../../examples/generated", __dir__))
+    FileUtils.mkdir_p(File.expand_path("../tmp/generated_docs", __dir__))
   end
 
   after(:all) do

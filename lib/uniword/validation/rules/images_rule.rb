@@ -89,7 +89,7 @@ module Uniword
           raw = context.part_raw("word/document.xml")
           return unless raw
 
-          doc = Nokogiri::XML(raw)
+          doc = Moxml.parse(raw)
           doc.xpath("//a:blip", "a" => A_NS).each do |blip|
             embed = blip["r:embed"] ||
               blip.attributes.find { |a| a.name == "embed" }&.value

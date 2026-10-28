@@ -7,7 +7,8 @@ module Uniword
     # Source rectangle for picture cropping
     #
     # Generated from OOXML schema: picture.yml
-    # Element: <pic:srcRect>
+    # Element: <a:srcRect> (CT_BlipFillProperties reuses DrawingML
+    # children inside pic:blipFill)
     class PictureSourceRect < Lutaml::Model::Serializable
       attribute :l, :integer
       attribute :t, :integer
@@ -16,7 +17,7 @@ module Uniword
 
       xml do
         element "srcRect"
-        namespace Uniword::Ooxml::Namespaces::Picture
+        namespace Uniword::Ooxml::Namespaces::DrawingML
 
         map_attribute "l", to: :l
         map_attribute "t", to: :t

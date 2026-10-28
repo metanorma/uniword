@@ -7,7 +7,10 @@ module Uniword
     # Base class for MIME parts in an MHTML document.
     #
     # Each MIME part has headers (Content-Type, Content-Location,
-    # Content-Transfer-Encoding) and a body (raw content).
+    # Content-Transfer-Encoding) and a body (raw_content, always in
+    # DECODED form: the wire encoding declared by
+    # content_transfer_encoding is applied by MimePackager and removed
+    # by MimeParser, never here).
     #
     # Subclasses: HtmlPart, XmlPart, ImagePart, FileListPart, HeaderPart
     class MimePart < Lutaml::Model::Serializable
@@ -18,21 +21,7 @@ module Uniword
       attribute :raw_content, :string
 
       def decoded_content
-        case content_transfer_encoding&.downcase
-        when "base64"
-          Base64.strict_decode64(raw_content.gsub(/\s+/, ""))
-        when "quoted-printable"
-          # Work in BINARY encoding to avoid gsub encoding conflicts,
-          # then force UTF-8 at the end. Use .b to get BINARY encoding
-          # without altering bytes.
-          content = raw_content.dup.force_encoding("BINARY")
-          content
-            .gsub(/=\r?\n/, "")
-            .gsub(/=([0-9A-Fa-f]{2})/) { [::Regexp.last_match(1).hex].pack("C") }
-            .force_encoding("UTF-8")
-        else
-          raw_content
-        end
+        raw_content
       end
 
       def decoded_content=(value)
