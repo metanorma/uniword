@@ -31,6 +31,11 @@ module Uniword
     autoload :Pict, "uniword/wordprocessingml/pict"
     autoload :Symbol, "uniword/wordprocessingml/symbol"
     autoload :DeletedText, "uniword/wordprocessingml/deleted_text"
+
+    # Tracked changes (CT_RunTrackChange wrappers)
+    autoload :Insertion, "uniword/wordprocessingml/insertion"
+    autoload :Deletion, "uniword/wordprocessingml/deletion"
+
     autoload :NoBreakHyphen, "uniword/wordprocessingml/no_break_hyphen"
     autoload :LastRenderedPageBreak,
              "uniword/wordprocessingml/last_rendered_page_break"

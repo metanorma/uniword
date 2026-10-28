@@ -15,7 +15,7 @@ module Uniword
         # -- ID generation --
 
         def generate_rsid
-          "00#{hex_derive("rsid", 3)}"
+          "00#{hex_derive('rsid', 3)}"
         end
 
         def generate_hex_id(seed = 0)
@@ -24,7 +24,7 @@ module Uniword
 
         def hex_derive(seed, byte_count)
           Digest::SHA256.hexdigest(
-            "#{document_fingerprint}:#{seed}"
+            "#{document_fingerprint}:#{seed}",
           )[0...(byte_count * 2)].upcase
         end
 
@@ -43,7 +43,7 @@ module Uniword
 
         # -- Traversal --
 
-        def walk_body_paragraphs(body)
+        def walk_body_paragraphs(body, &block)
           if body.element_order && !body.element_order.empty?
             p_idx = 0
             tbl_idx = 0
@@ -54,18 +54,20 @@ module Uniword
                 p_idx += 1
               when "tbl"
                 if body.tables[tbl_idx]
-                  walk_table_paragraphs(body.tables[tbl_idx]) { |p| yield p }
+                  walk_table_paragraphs(body.tables[tbl_idx], &block)
                 end
                 tbl_idx += 1
               end
             end
           else
-            body.paragraphs.each { |p| yield p }
-            body.tables&.each { |tbl| walk_table_paragraphs(tbl) { |p| yield p } }
+            body.paragraphs.each(&block)
+            body.tables&.each do |tbl|
+              walk_table_paragraphs(tbl, &block)
+            end
           end
         end
 
-        def walk_body_tables(body)
+        def walk_body_tables(body, &block)
           return unless body
 
           if body.element_order && !body.element_order.empty?
@@ -77,7 +79,7 @@ module Uniword
               tbl_idx += 1
             end
           else
-            body.tables&.each { |tbl| yield tbl }
+            body.tables&.each(&block)
           end
         end
 
@@ -89,11 +91,12 @@ module Uniword
           end
         end
 
-        def walk_table_paragraphs(table)
+        def walk_table_paragraphs(table, &block)
           return unless table
+
           table.rows&.each do |row|
             row.cells&.each do |cell|
-              cell.paragraphs.each { |p| yield p }
+              cell.paragraphs.each(&block)
             end
           end
         end
@@ -152,6 +155,18 @@ module Uniword
           end
         end
 
+        # The paragraph backfill above emits w14:paraId/textId; part
+        # roots that never declared w14 ignorable must list it or
+        # strict MCE consumers reject those attributes.
+        def ensure_w14_ignorable(root)
+          prefixes = root.mc_ignorable.to_s.split(/\s+/)
+          return if prefixes.include?("w14")
+
+          root.mc_ignorable = Ooxml::Types::McIgnorable.new(
+            (prefixes + ["w14"]).join(" "),
+          )
+        end
+
         # Merge adjacent runs with identical formatting and consolidate
         # standalone tab/br runs into following text runs (F4 + F5).
         # Respects element_order: only merges runs that are truly adjacent
@@ -165,7 +180,7 @@ module Uniword
           runs[1..].each_with_index do |run, idx|
             prev = merged.last
             if run_indices.include?(idx) &&
-               run_properties_match?(prev, run) && can_merge?(prev, run)
+                run_properties_match?(prev, run) && can_merge?(prev, run)
               merge_run_into(prev, run)
             else
               merged << run
@@ -180,7 +195,7 @@ module Uniword
         # in element_order (no non-run elements between them).
         def adjacent_run_indices(paragraph)
           eo = paragraph.element_order
-          return (0...paragraph.runs.size - 1).to_a unless eo && !eo.empty?
+          return (0...(paragraph.runs.size - 1)).to_a unless eo && !eo.empty?
 
           indices = Set.new
           run_count = 0
@@ -236,7 +251,7 @@ module Uniword
         def build_rel(id, type, target, target_mode: nil)
           attrs = { id: id, type: type, target: target }
           attrs[:target_mode] = target_mode if target_mode
-          Ooxml::Relationships::Relationship.new(**attrs)
+          Ooxml::Relationships::PackageRelationship.new(**attrs)
         end
 
         def run_properties_match?(a, b)

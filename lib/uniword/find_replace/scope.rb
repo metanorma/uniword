@@ -38,9 +38,8 @@ module Uniword
       protected
 
       # Yield every Text element inside a run. A run carries its
-      # `<w:t>` Text element on the `text` accessor (lutaml-model
-      # returns the instance directly even when the attribute is
-      # declared as a collection).
+      # `<w:t>` Text elements on the `text` accessor (declared as a
+      # collection; lutaml-model 0.8.32+ returns an Array).
       #
       # @param run [Wordprocessingml::Run, nil]
       # @yieldparam text_element [Wordprocessingml::Text]
@@ -49,28 +48,30 @@ module Uniword
       def each_text_in_run(run)
         return unless run
 
-        text_element = run.text
-        return unless text_element
-
-        accessor = TextAccessor.new(
-          -> { text_element.content },
-          ->(value) { text_element.content = value },
-        )
-        yield text_element, accessor
+        run.text&.each do |text_element|
+          accessor = TextAccessor.new(
+            -> { text_element.content },
+            ->(value) { text_element.content = value },
+          )
+          yield text_element, accessor
+        end
       end
 
       # Walk every paragraph in `containers` and yield each run's
       # text elements. Shared by body / headers / footers / footnotes
-      # / endnotes / comments scopes.
+      # / endnotes / comments scopes. Runs inside tracked insertions
+      # are live content and included; runs inside deletions are
+      # deleted content and left untouched.
       #
-      # @param containers [Enumerable<#paragraphs, #tables,
-      #   #structured_document_tags>]
+      # @param containers [Enumerable<#paragraphs>]
       # @yieldparam text_element [Wordprocessingml::Text]
       # @yieldparam accessor [TextAccessor]
       # @return [void]
       def each_text_in_containers(containers)
         ParagraphWalker.each_paragraph(containers) do |paragraph|
-          paragraph.runs&.each do |run|
+          runs = paragraph.runs +
+            paragraph.insertions.flat_map(&:runs)
+          runs.each do |run|
             each_text_in_run(run) { |*a| yield(*a) }
           end
         end

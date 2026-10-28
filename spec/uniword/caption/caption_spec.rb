@@ -55,7 +55,7 @@ RSpec.describe Uniword::Caption::CaptionBuilder do
 
   it "uses Caption style" do
     paragraph, _name = builder.build(label: "Figure", text: "x")
-    expect(paragraph.properties.style.value).to eq("Caption")
+    expect(paragraph.properties.style.first.value).to eq("Caption")
   end
 
   it "wraps the paragraph in a bookmark" do

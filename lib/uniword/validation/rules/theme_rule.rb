@@ -59,7 +59,7 @@ module Uniword
           raw = context.part_raw("word/theme/theme1.xml")
           return unless raw
 
-          doc = Nokogiri::XML(raw, &:strict)
+          doc = Moxml.parse(raw)
           root = doc.root
           return if root&.name == "theme"
 
@@ -71,7 +71,7 @@ module Uniword
             suggestion: "The theme part should have <a:theme> as its " \
                         "root element per DrawingML specification.",
           )
-        rescue Nokogiri::XML::SyntaxError => e
+        rescue Moxml::ParseError => e
           issues << issue(
             "Theme part is malformed: #{e.message}",
             code: "DOC-081",

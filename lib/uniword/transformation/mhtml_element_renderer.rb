@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "nokogiri"
 
 module Uniword
   module Transformation
@@ -625,7 +624,7 @@ module Uniword
         return "" unless content
 
         xml = content.to_xml
-        doc = Nokogiri::HTML(xml)
+        doc = Moxml.new.parse_html(xml)
         doc.text.gsub(/\s+/, " ").strip
       end
 

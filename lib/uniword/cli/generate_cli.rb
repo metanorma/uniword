@@ -10,6 +10,11 @@ module Uniword
   class GenerateCLI < Thor
     include CLIHelpers
 
+    # `uniword generate INPUT OUTPUT ...` dispatches straight to the
+    # generate task; the explicit `generate generate ...` form stays
+    # valid for backwards compatibility.
+    default_task :generate
+
     desc "generate INPUT OUTPUT",
          "Generate DOCX from structured text"
     long_desc <<~DESC

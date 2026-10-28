@@ -20,16 +20,22 @@ module Uniword
     long_desc <<~DESC
       Convert a document from one format to another.
 
-      Supported formats: DOCX, MHTML, HTML
+      Supported formats: DOCX, DOCM, DOTX, DOTM, MHTML/MHT, HTML
+
+      Use "-" as OUTPUT to write to stdout (binary formats print raw
+      bytes; pipe or redirect them).
 
       Examples:
         $ uniword convert input.docx output.mhtml
         $ uniword convert input.mhtml output.docx --verbose
         $ uniword convert input.html output.docx
+        $ uniword convert input.docx output.html
+        $ uniword convert input.docx - > converted.docx
     DESC
     option :from, aliases: "-f", desc: "Input format (docx/mhtml/html)",
                   type: :string
-    option :to, aliases: "-t", desc: "Output format (docx/mhtml)", type: :string
+    option :to, aliases: "-t", desc: "Output format (docx/mhtml/html)",
+                type: :string
     option :verbose, aliases: "-v", desc: "Verbose output", type: :boolean,
                      default: false
     def convert(input_path, output_path)
@@ -68,14 +74,29 @@ module Uniword
     DESC
     option :verbose, aliases: "-v", desc: "Show detailed information", type: :boolean,
                      default: false
+    option :json, type: :boolean, default: false,
+                  desc: "Output statistics as JSON (machine-readable)"
     def info(path)
-      say "Analyzing #{path}...", :green
-
       detector = ::Uniword::FormatDetector.new
       format = detector.detect(path)
-      say "\nFormat: #{format.to_s.upcase}", :cyan
-
       doc = load_document(path)
+
+      if options[:json]
+        require "json"
+        stats = {
+          path: path,
+          format: format.to_s.upcase,
+          paragraphs: doc.paragraphs.count,
+          tables: doc.tables.count,
+          text_length: doc.text.length,
+          styles: doc.styles_configuration&.styles&.count || 0,
+        }
+        puts JSON.pretty_generate(stats)
+        return
+      end
+
+      say "Analyzing #{path}...", :green
+      say "\nFormat: #{format.to_s.upcase}", :cyan
 
       say "\nDocument Statistics:", :cyan
       say "  Paragraphs: #{doc.paragraphs.count}"
@@ -130,15 +151,32 @@ module Uniword
     DESC
     option :verbose, aliases: "-v", desc: "Show detailed validation results", type: :boolean,
                      default: false
+    option :json, type: :boolean, default: false,
+                  desc: "Output the validation report as JSON (machine-readable)"
     def validate(path)
-      say "Validating #{path}...", :green
-
       doc = load_document(path)
-      say "File format is valid", :green
 
       issues = Uniword::Validation::Engine.run(
         Uniword::Validation::Rules::ModelContext.new(doc),
       )
+
+      if options[:json]
+        require "json"
+        puts JSON.pretty_generate(
+          path: path,
+          valid: issues.none?(&:error?),
+          issues: issues.map { |i|
+            { code: i.code, severity: i.severity,
+              part: i.part, message: i.message }
+          },
+        )
+        exit 1 if issues.any?(&:error?)
+        return
+      end
+
+      say "Validating #{path}...", :green
+      say "File format is valid", :green
+
       report_validation_issues(issues)
       report_content_presence(doc)
 
@@ -191,6 +229,8 @@ module Uniword
     long_desc <<~DESC
       Run document quality and accessibility checks.
 
+      Exits 1 when any report has error-level findings.
+
       Examples:
         $ uniword check document.docx
         $ uniword check document.docx --type accessibility
@@ -202,8 +242,14 @@ module Uniword
                      default: false
     option :json, desc: "Output JSON report", type: :boolean, default: false
     def check(path)
-      doc = load_document(path)
       check_type = options[:type]
+      unless CHECK_TYPES.include?(check_type)
+        say("Unknown check type: #{check_type} " \
+            "(valid: #{CHECK_TYPES.join(', ')})", :red)
+        exit 1
+      end
+
+      doc = load_document(path)
 
       reports = {}
 
@@ -219,14 +265,15 @@ module Uniword
 
       if options[:json]
         require "json"
-        output = reports.transform_values do |r|
-          { valid: r.valid?,
-            issues: r.is_a?(Uniword::Quality::CheckReport) ? r.issues.count : 0 }
+        output = reports.transform_values do |report|
+          { valid: report.valid?, issues: report.violations.count }
         end
         puts JSON.pretty_generate(output)
       else
         display_check_reports(reports)
       end
+
+      exit 1 if reports.values.any? { |report| !report.valid? }
     rescue Uniword::Error => e
       handle_error(e)
     rescue StandardError => e
@@ -383,6 +430,22 @@ module Uniword
       say "Uniword version #{Uniword::VERSION}", :green
     end
 
+    desc "completions [SHELL]", "Print shell completion script (bash|zsh|fish)"
+    long_desc <<~DESC
+      Print a self-contained shell completion script.
+
+      Install:
+        $ uniword completions bash >> ~/.bashrc
+        $ uniword completions zsh >> ~/.zshrc
+        $ uniword completions fish > ~/.config/fish/completions/uniword.fish
+    DESC
+    def completions(shell = "bash")
+      require "uniword/cli/completions"
+      puts Cli::Completions.script(shell, root: self.class)
+    rescue ArgumentError => e
+      handle_error(e)
+    end
+
     desc "redact INPUT OUTPUT", "Redact PII patterns from a document"
     long_desc <<~DESC
       Replace PII patterns (SSN, email, phone, credit card, IPv4)
@@ -406,6 +469,8 @@ module Uniword
     option :verbose, aliases: "-v", type: :boolean, default: false,
                      desc: "Show per-pattern counts"
     def redact(input_path, output_path)
+      validate_scopes!(options[:scope])
+      validate_redact_patterns!(options[:pattern])
       doc = load_document(input_path)
       patterns = resolve_redact_patterns(options[:pattern])
       result = doc.redact(patterns: patterns,
@@ -451,6 +516,8 @@ module Uniword
     option :verbose, aliases: "-v", type: :boolean, default: false,
                      desc: "Show per-scope counts"
     def find_replace(input_path, output_path, pattern, replacement)
+      validate_scopes!(options[:scope])
+      validate_regex!(pattern) if options[:regex]
       scopes = expand_scopes(options[:scope])
       doc = load_document(input_path)
       result = run_find_replace(doc, pattern, replacement, scopes)
@@ -539,6 +606,36 @@ module Uniword
       return :all if symbols.include?(:all)
 
       symbols
+    end
+
+    # Valid values for `check --type`.
+    CHECK_TYPES = %w[all quality accessibility].freeze
+
+    def validate_scopes!(scopes)
+      valid = ["all"] + Uniword::FindReplace::Engine::ALL_SCOPES.map(&:to_s)
+      unknown = Array(scopes).map(&:to_s) - valid
+      return if unknown.empty?
+
+      say("Unknown scope: #{unknown.join(', ')} " \
+          "(valid: #{valid.join(', ')})", :red)
+      exit 1
+    end
+
+    def validate_regex!(pattern)
+      Regexp.new(pattern)
+    rescue RegexpError => e
+      say("Invalid regular expression: #{e.message}", :red)
+      exit 1
+    end
+
+    def validate_redact_patterns!(names)
+      valid = [:pii] + Uniword::Redact::PatternLibrary.all.map(&:name)
+      unknown = Array(names).map(&:to_sym) - valid
+      return if unknown.empty?
+
+      say("Unknown pattern: #{unknown.join(', ')} " \
+          "(valid: #{valid.join(', ')})", :red)
+      exit 1
     end
 
     # Build the right matcher from --regex flag and run the engine.
@@ -679,14 +776,14 @@ module Uniword
         label = type.to_s.capitalize
         if report.valid?
           say("#{label}: No issues found", :green)
-        else
-          issue_count = report.is_a?(Uniword::Quality::CheckReport) ? report.issues.count : "?"
-          say("#{label}: #{issue_count} issue(s) found", :yellow)
-          if options[:verbose] && report.is_a?(Uniword::Quality::CheckReport)
-            report.issues.each do |issue|
-              say("  - #{issue}", :yellow)
-            end
-          end
+          next
+        end
+
+        say("#{label}: #{report.violations.count} issue(s) found", :yellow)
+        next unless options[:verbose]
+
+        report.violations.each do |violation|
+          say("  - #{violation.message}", :yellow)
         end
       end
     end

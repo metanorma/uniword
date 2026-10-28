@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require "nokogiri"
 require "zip"
 
-# Configure lutaml-model to use Nokogiri adapter for XML
-Lutaml::Model::Config.xml_adapter_type = :nokogiri
+# XML hydration, XSD validation, and HTML parsing all route through
+# lutaml-model's Moxml layer with the runtime default adapter
+# (Leptris). Nokogiri remains available as an alternative Moxml
+# adapter for development and testing.
 
 # Uniword is a comprehensive Ruby library for reading and writing Microsoft Word
 # documents in DOCX format using a schema-driven architecture.
@@ -147,6 +148,11 @@ module Uniword
   autoload :Plugin, "uniword/plugin"
 
   # CLI
+  module Cli
+    autoload :Completions, "uniword/cli/completions"
+    autoload :HelpSwitch, "uniword/cli/help_switch"
+    autoload :NoColor, "uniword/cli/no_color"
+  end
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"
   autoload :FontsCLI, "uniword/cli/fonts_cli"
@@ -371,10 +377,6 @@ module Uniword
       end
       doc
     end
-
-    # Convert HTML to a document with paragraphs.
-    # Alias for {#from_html} for backward compatibility.
-    alias html_to_doc from_html
 
     # Convert HTML directly to a DOCX file
     #
