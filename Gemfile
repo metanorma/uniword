@@ -20,3 +20,6 @@ gem "rubocop-rake"
 gem "rubocop-rspec"
 gem "ruby-prof"
 gem "yard"
+
+# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); 0.5.166 is good
+gem "moxml", "0.5.166"
