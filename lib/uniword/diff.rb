@@ -19,5 +19,6 @@ module Uniword
     autoload :OpcIssue, "uniword/diff/package_diff_result"
     autoload :PartChange, "uniword/diff/package_diff_result"
     autoload :PackageDiffResult, "uniword/diff/package_diff_result"
+    autoload :Semantic, "uniword/diff/semantic"
   end
 end

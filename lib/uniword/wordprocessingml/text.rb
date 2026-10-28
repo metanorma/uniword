@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "lutaml/model"
-require "nokogiri"
 
 module Uniword
   module Wordprocessingml

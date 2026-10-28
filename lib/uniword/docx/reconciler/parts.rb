@@ -50,6 +50,11 @@ module Uniword
             val: profile.list_separator,
           )
 
+          # CT_Settings places w:rsids between w:compat and m:mathPr;
+          # fixtures carrying rsids last serialize it after the
+          # appended siblings and fail strict sequence validation.
+          Ooxml::ElementOrder.move_once(settings, "rsids", after: "compat")
+
           # w:updateFields set by the user/API: ensure it serializes —
           # parsed settings carry a stored element_order that lacks it.
           if settings.update_fields

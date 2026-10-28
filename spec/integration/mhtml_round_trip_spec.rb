@@ -145,7 +145,7 @@ RSpec.describe "MHTML Round-trip Validation", type: :integration do
     it "preserves special HTML characters" do
       mhtml_doc = docx_to_mhtml("spec/fixtures/blank/blank.docx")
       body = mhtml_doc.body_html
-      # Nokogiri decodes &nbsp; to actual non-breaking space
+      # Parsers decode entities to their characters (&nbsp; -> U+00A0)
       has_entities = body.include?("\u00a0") || body.include?("<o:p>")
       expect(has_entities).to be true
     end

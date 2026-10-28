@@ -7,7 +7,7 @@ module Uniword
     # Fill rectangle insets
     #
     # Generated from OOXML schema: picture.yml
-    # Element: <pic:fillRect>
+    # Element: <a:fillRect> (child of a:stretch in CT_BlipFillProperties)
     class FillRect < Lutaml::Model::Serializable
       attribute :l, :integer
       attribute :t, :integer
@@ -16,7 +16,7 @@ module Uniword
 
       xml do
         element "fillRect"
-        namespace Uniword::Ooxml::Namespaces::Picture
+        namespace Uniword::Ooxml::Namespaces::DrawingML
 
         map_attribute "l", to: :l
         map_attribute "t", to: :t

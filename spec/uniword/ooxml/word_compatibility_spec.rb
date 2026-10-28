@@ -123,8 +123,8 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
 
     it "emits pgNumType before cols" do
       xml = sect_pr.to_xml
-      pn_idx = xml.index("<pgNumType")
-      cols_idx = xml.index("<cols")
+      pn_idx = xml.index(/<(w:)?pgNumType/)
+      cols_idx = xml.index(/<(w:)?cols/)
       expect(pn_idx).not_to be_nil
       expect(cols_idx).not_to be_nil
       expect(pn_idx).to be < cols_idx,

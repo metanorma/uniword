@@ -31,6 +31,11 @@ module Uniword
     autoload :Pict, "uniword/wordprocessingml/pict"
     autoload :Symbol, "uniword/wordprocessingml/symbol"
     autoload :DeletedText, "uniword/wordprocessingml/deleted_text"
+
+    # Tracked changes (CT_RunTrackChange wrappers)
+    autoload :Insertion, "uniword/wordprocessingml/insertion"
+    autoload :Deletion, "uniword/wordprocessingml/deletion"
+
     autoload :NoBreakHyphen, "uniword/wordprocessingml/no_break_hyphen"
     autoload :LastRenderedPageBreak,
              "uniword/wordprocessingml/last_rendered_page_break"
@@ -88,6 +93,7 @@ module Uniword
     autoload :DefaultTabStop, "uniword/wordprocessingml/default_tab_stop"
     autoload :CharacterSpacingControl, "uniword/wordprocessingml/character_spacing_control"
     autoload :DoNotDisplayPageBoundaries, "uniword/wordprocessingml/do_not_display_page_boundaries"
+    autoload :TrackChanges, "uniword/wordprocessingml/track_changes"
     autoload :Rsids, "uniword/wordprocessingml/rsids"
     autoload :RsidRoot, "uniword/wordprocessingml/rsid_root"
     autoload :Rsid, "uniword/wordprocessingml/rsid"

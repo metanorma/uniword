@@ -11,6 +11,7 @@ gem "benchmark-ips"
 gem "benchmark-memory"
 gem "canon"
 gem "get_process_mem"
+gem "nokogiri", "~> 1.19" # Moxml adapter for spec comparisons
 gem "rake"
 gem "rspec"
 gem "rubocop"

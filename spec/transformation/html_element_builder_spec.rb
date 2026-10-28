@@ -3,12 +3,14 @@
 require "spec_helper"
 
 RSpec.describe Uniword::Transformation::HtmlElementBuilder do
-  def parse_fragment(html)
-    Nokogiri::HTML.fragment(html)
+  def parse_fragment(html, context_tag: :body)
+    Moxml.new.parse_html_fragment(html, context_tag: context_tag)
   end
 
-  def first_element(html)
-    parse_fragment(html).first_element_child
+  def first_element(html, context_tag: :body)
+    parse_fragment(html, context_tag: context_tag)
+      .children
+      .find { |node| node.is_a?(Moxml::Element) }
   end
 
   describe ".build_table" do
@@ -86,25 +88,25 @@ RSpec.describe Uniword::Transformation::HtmlElementBuilder do
 
   describe ".build_cell" do
     it "sets header flag for <th>" do
-      html = first_element("<th>Header</th>")
+      html = first_element("<th>Header</th>", context_tag: :tr)
       cell = described_class.build_cell(html)
       expect(cell.header).to be(true)
     end
 
     it "sets grid_span for colspan" do
-      html = first_element("<td colspan='4'>Wide</td>")
+      html = first_element("<td colspan='4'>Wide</td>", context_tag: :tr)
       cell = described_class.build_cell(html)
       expect(cell.properties.grid_span.value).to eq(4)
     end
 
     it "sets vMerge restart for rowspan" do
-      html = first_element("<td rowspan='3'>Tall</td>")
+      html = first_element("<td rowspan='3'>Tall</td>", context_tag: :tr)
       cell = described_class.build_cell(html)
       expect(cell.properties.v_merge.value).to eq(1)
     end
 
     it "creates paragraph from cell text content" do
-      html = first_element("<td>Hello</td>")
+      html = first_element("<td>Hello</td>", context_tag: :tr)
       cell = described_class.build_cell(html)
       expect(cell.paragraphs.size).to eq(1)
       expect(cell.paragraphs.first.runs.first.text_string).to eq("Hello")

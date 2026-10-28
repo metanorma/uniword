@@ -181,4 +181,34 @@ RSpec.describe Uniword::Wordprocessingml::StylesConfiguration do
       expect(char_styles.size).to eq(1)
     end
   end
+
+  describe "#custom_styles" do
+    let(:config) { described_class.new(include_defaults: false) }
+
+    it "returns styles whose customStyle attribute is true without raising" do
+      custom_para = Uniword::Wordprocessingml::Style.new(
+        styleId: "CustomPara",
+        name: Uniword::Wordprocessingml::StyleName.new(val: "Custom Para"),
+        type: "paragraph",
+        customStyle: true,
+      )
+      built_in = Uniword::Wordprocessingml::Style.new(
+        styleId: "BuiltIn",
+        name: Uniword::Wordprocessingml::StyleName.new(val: "Built In"),
+        type: "paragraph",
+        customStyle: false,
+      )
+      unset_custom = Uniword::Wordprocessingml::Style.new(
+        styleId: "Unset",
+        name: Uniword::Wordprocessingml::StyleName.new(val: "Unset"),
+        type: "paragraph",
+      )
+
+      [built_in, custom_para, unset_custom].each do |style|
+        config.add_style(style, allow_overwrite: true)
+      end
+
+      expect(config.custom_styles).to eq([custom_para])
+    end
+  end
 end
