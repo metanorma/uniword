@@ -1,7 +1,7 @@
 # 18 — Reduce spec doubles
 
-**Status:** Items 1-3 done. Item 4 outstanding. Count went 59 → 30 (29
-addressed). Both contract defects are fixed: `ImageAltTextRule` now reads
+**Status:** Items 1-3 done. Item 4 is done for the two accessibility specs;
+the 6 single-site files remain. Count went 59 → 23 (36 addressed). Both contract defects are fixed: `ImageAltTextRule` now reads
 `wp:docPr/@descr`, and `WordCss` now speaks `Wordprocessingml::Style`'s
 real API (`id`, `font_family`, `alignment.value`, plus a new `Style#italic`).
 
@@ -11,8 +11,6 @@ What remains, by file:
 | --- | --- | --- |
 | `spec/uniword/math_equation_spec.rb` | 10 (7 `double`, 3 `class_double`) | Plurimath — out of scope |
 | `spec/uniword/math/plurimath_adapter_spec.rb` | 7 | Plurimath — out of scope |
-| `spec/uniword/accessibility/rules_integration_spec.rb` | 5 | table/heading rules — item 4 |
-| `spec/uniword/accessibility/accessibility_checker_spec.rb` | 2 (1 `double`, 1 `instance_double`) | item 4 |
 | 6 single-site files | 6 | item 4, fold in opportunistically |
 
 **Priority:** Medium for the spec cleanup; the two contract repairs below are
