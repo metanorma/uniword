@@ -3,11 +3,23 @@
 require "spec_helper"
 
 RSpec.describe "Accessibility Rules Integration" do
-  let(:document) { double("Document") }
+  let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
-  before do
-    # Setup default document structure
-    allow(document).to receive_messages(images: [], tables: [], paragraphs: [])
+  def document_from_body(body)
+    Uniword::Wordprocessingml::DocumentRoot.from_xml(<<~XML)
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body>#{body}</w:body></w:document>
+    XML
+  end
+
+  def heading(style)
+    %(<w:p><w:pPr><w:pStyle w:val="#{style}"/></w:pPr>) +
+      "<w:r><w:t>H</w:t></w:r></w:p>"
+  end
+
+  def table_xml
+    "<w:tbl><w:tr><w:tc><w:p><w:r><w:t>cell</w:t></w:r></w:p></w:tc>" \
+      "</w:tr></w:tbl>"
   end
 
   # A picture whose wp:docPr carries no descr, so it has no alt text.
@@ -111,9 +123,7 @@ RSpec.describe "Accessibility Rules Integration" do
     end
 
     it "TableHeadersRule detects missing headers" do
-      table_row = double("TableRow", header?: false)
-      table = double("Table", rows: [table_row])
-      allow(document).to receive(:tables).and_return([table])
+      document = document_from_body(table_xml)
 
       rule = Uniword::Accessibility::Rules::TableHeadersRule.new(
         wcag_criterion: "1.3.1",
@@ -122,13 +132,24 @@ RSpec.describe "Accessibility Rules Integration" do
       )
       violations = rule.check(document)
 
-      expect(violations).not_to be_empty
+      expect(violations.map(&:message)).to eq(["Table 1 missing header row"])
+    end
+
+    it "TableHeadersRule accepts a flagged header row" do
+      document = document_from_body(table_xml)
+      document.tables.first.rows.first.header = true
+
+      rule = Uniword::Accessibility::Rules::TableHeadersRule.new(
+        wcag_criterion: "1.3.1",
+        level: "A",
+        severity: :error,
+      )
+
+      expect(rule.check(document)).to be_empty
     end
 
     it "HeadingStructureRule detects hierarchy skips" do
-      h1 = double("Paragraph", style: "Heading 1")
-      h3 = double("Paragraph", style: "Heading 3")
-      allow(document).to receive(:paragraphs).and_return([h1, h3])
+      document = document_from_body(heading("Heading1") + heading("Heading3"))
 
       rule = Uniword::Accessibility::Rules::HeadingStructureRule.new(
         wcag_criterion: "1.3.1",
@@ -139,21 +160,54 @@ RSpec.describe "Accessibility Rules Integration" do
       )
       violations = rule.check(document)
 
-      expect(violations).not_to be_empty
+      expect(violations.size).to eq(1)
       expect(violations.first.message).to include("hierarchy skip")
+    end
+
+    it "HeadingStructureRule accepts consecutive heading levels" do
+      document = document_from_body(heading("Heading1") + heading("Heading2"))
+
+      rule = Uniword::Accessibility::Rules::HeadingStructureRule.new(
+        wcag_criterion: "1.3.1",
+        level: "A",
+        check_hierarchy: true,
+        no_level_skipping: true,
+        severity: :error,
+      )
+
+      expect(rule.check(document)).to be_empty
     end
   end
 
   describe "Rules respect enabled flag" do
-    it "disabled rules return no violations" do
-      rule = Uniword::Accessibility::Rules::ImageAltTextRule.new(
-        wcag_criterion: "1.1.1",
-        level: "A",
-        enabled: false,
-        severity: :error,
+    def checker_with_image_rule(enabled:)
+      config = Tempfile.new(["rules_integration", ".yml"])
+      File.write(config.path, {
+        profiles: {
+          single: {
+            name: "Single", level: "Test",
+            rules: { image_alt_text: { enabled: enabled,
+                                       wcag_criterion: "1.1.1",
+                                       level: "A" } }
+          },
+        },
+      }.to_yaml)
+      Uniword::Accessibility::AccessibilityChecker.new(
+        profile: :single, config_file: config.path,
       )
+    ensure
+      config&.close!
+    end
 
-      expect(rule.enabled?).to be false
+    it "disabled rules return no violations" do
+      document = document_with_alt_less_picture
+
+      enabled = checker_with_image_rule(enabled: true).check(document)
+      disabled = checker_with_image_rule(enabled: false).check(document)
+
+      expect(enabled.violations.map(&:message))
+        .to eq(["Image 1 missing alternative text"])
+      expect(disabled.violations).to be_empty
     end
   end
 end

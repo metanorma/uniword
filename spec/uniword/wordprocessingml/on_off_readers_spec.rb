@@ -103,19 +103,19 @@ RSpec.describe "ST_OnOff readers outside run properties" do
     { "1" => true, "0" => false, "true" => true, "false" => false,
       "on" => true, "off" => false }.each do |spelling, expected|
       it "reads w:val=#{spelling.inspect} as #{expected}" do
-        expect(described_class.from_xml(%(<w:updateFields #{ns} w:val="#{spelling}"/>)).on?)
+        expect(described_class.from_xml(%(<w:updateFields #{ns} w:val="#{spelling}"/>)).value)
           .to be(expected)
       end
     end
 
     it "reads a bare element as on, the way Word does" do
-      expect(described_class.from_xml(%(<w:updateFields #{ns}/>)).on?).to be(true)
+      expect(described_class.from_xml(%(<w:updateFields #{ns}/>)).value).to be(true)
     end
 
-    # The old OoxmlBoolean-typed attribute raised on anything outside the
-    # ST_OnOff vocabulary. A reader must not blow up on a malformed document.
+    # OoxmlBoolean used to raise on anything outside the ST_OnOff vocabulary.
+    # A reader must not blow up on a malformed document.
     it "reads an unknown token as on instead of raising" do
-      expect(described_class.from_xml(%(<w:updateFields #{ns} w:val="banana"/>)).on?)
+      expect(described_class.from_xml(%(<w:updateFields #{ns} w:val="banana"/>)).value)
         .to be(true)
     end
 
