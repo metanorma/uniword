@@ -20,3 +20,15 @@ gem "rubocop-rake"
 gem "rubocop-rspec"
 gem "ruby-prof"
 gem "yard"
+
+# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168
+gem "moxml", ">= 0.5.168"
+
+# lutaml-model 0.8.138+ constructs custom-initialize classes through the constructor, and the
+# writer_populated? check (#922) then marks their defaults as set, so render_default: false
+# booleans (pPr bidi, suppressLineNumbers) are emitted. 0.8.137 is good; 0.8.147 still bad.
+gem "lutaml-model", "0.8.137"
+
+# leptris 1.9.386 rejects r:embed on a:blip ("attribute 'embed': not declared") in
+# xsd_output_validation_spec; 1.9.385 is good.
+gem "leptris", "1.9.385.0"
