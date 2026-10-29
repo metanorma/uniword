@@ -21,8 +21,8 @@ gem "rubocop-rspec"
 gem "ruby-prof"
 gem "yard"
 
-# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); 0.5.166 is good
-gem "moxml", "0.5.166"
+# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168
+gem "moxml", ">= 0.5.168"
 
 # lutaml-model 0.8.138+ constructs custom-initialize classes through the constructor, and the
 # writer_populated? check (#922) then marks their defaults as set, so render_default: false
