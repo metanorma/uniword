@@ -33,54 +33,33 @@ module Uniword
 
         return violations unless @require_alt_text
 
-        image_count = 0
-        document.paragraphs.each_with_index do |para, para_index|
-          # Images are in runs as drawings
-          para.runs.each do |run|
-            run.drawings.each do |drawing|
-              image_count += 1
+        # Same drawings the accessibility rule and the renderer see, table
+        # cells included, read through the same Drawing#alt_text.
+        document.images.each_with_index do |drawing, index|
+          image_count = index + 1
+          alt_text = drawing.alt_text
 
-              alt_text = extract_alt_text(drawing)
-
-              if alt_text.nil? || alt_text.empty?
-                violations << create_violation(
-                  severity: :error,
-                  message: "Image #{image_count} is missing alt text. " \
-                           "Alt text is required for accessibility.",
-                  location: "Paragraph #{para_index + 1}, Image #{image_count}",
-                  element: drawing,
-                )
-              elsif alt_text.length < @min_length
-                violations << create_violation(
-                  severity: :warning,
-                  message: "Image #{image_count} has alt text that is too short " \
-                           "(#{alt_text.length} characters, minimum: #{@min_length}). " \
-                           "Provide more descriptive alt text.",
-                  location: "Paragraph #{para_index + 1}, Image #{image_count}",
-                  element: drawing,
-                )
-              end
-            end
+          if alt_text.nil?
+            violations << create_violation(
+              severity: :error,
+              message: "Image #{image_count} is missing alt text. " \
+                       "Alt text is required for accessibility.",
+              location: "Image #{image_count}",
+              element: drawing,
+            )
+          elsif alt_text.length < @min_length
+            violations << create_violation(
+              severity: :warning,
+              message: "Image #{image_count} has alt text that is too short " \
+                       "(#{alt_text.length} characters, minimum: #{@min_length}). " \
+                       "Provide more descriptive alt text.",
+              location: "Image #{image_count}",
+              element: drawing,
+            )
           end
         end
 
         violations
-      end
-
-      private
-
-      # Extract alt text from image (Drawing element)
-      #
-      # In OOXML, alt text is stored in:
-      # - drawing.inline.doc_properties.descr (for inline images)
-      # - drawing.anchor.doc_properties.descr (for anchored images)
-      #
-      # @param drawing [Drawing] The drawing element to extract alt text from
-      # @return [String, nil] Alt text or nil if not present
-      def extract_alt_text(drawing)
-        # Try inline first, then anchor
-        doc_props = drawing&.inline&.doc_properties || drawing&.anchor&.doc_properties
-        doc_props&.descr
       end
     end
   end

@@ -63,48 +63,114 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
   end
 
+  # WordCss consumes a WordprocessingML styles configuration: generate_style_css
+  # calls styles_config.styles.map and then reads style-object methods, while
+  # Mhtml::StylesConfiguration#styles is a plain hash of CSS properties.
+  def styles_config_from(*style_xml)
+    Uniword::Wordprocessingml::StylesConfiguration.from_xml(<<~XML)
+      <w:styles
+        xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        #{style_xml.join}
+      </w:styles>
+    XML
+  end
+
+  # Note w:sz is in half-points, so w:val="24" is a 12pt font.
+  def style_xml(id, **opts)
+    [
+      %(<w:style w:type="paragraph" w:styleId="#{id}">),
+      paragraph_props_xml(opts[:align]),
+      run_props_xml(opts),
+      "</w:style>",
+    ].join
+  end
+
+  def paragraph_props_xml(align)
+    return "" unless align
+
+    %(<w:pPr><w:jc w:val="#{align}"/></w:pPr>)
+  end
+
+  def run_props_xml(opts)
+    parts = [
+      (%(<w:rFonts w:ascii="#{opts[:font]}"/>) if opts[:font]),
+      ("<w:b/>" if opts[:bold]),
+      ("<w:i/>" if opts[:italic]),
+      (%(<w:sz w:val="#{opts[:half_points]}"/>) if opts[:half_points]),
+    ].compact
+    return "" if parts.empty?
+
+    "<w:rPr>#{parts.join}</w:rPr>"
+  end
+
+  def single_style(xml)
+    styles_config_from(xml).styles.first
+  end
+
+  # A style whose w:b and w:i carry explicit ST_OnOff values.
+  def toggle_style(bold_val, italic_val)
+    single_style(<<~XML)
+      <w:style w:type="paragraph" w:styleId="Toggles"><w:rPr>
+        <w:b w:val="#{bold_val}"/><w:i w:val="#{italic_val}"/>
+        <w:rFonts w:ascii="Arial"/>
+      </w:rPr></w:style>
+    XML
+  end
+
+  # generate_list_css calls numbering_config.instances, which only
+  # Wordprocessingml::NumberingConfiguration declares.
+  def numbering_config_from(*num_ids)
+    nums = num_ids.map { |id| %(<w:num w:numId="#{id}"/>) }.join
+    Uniword::Wordprocessingml::NumberingConfiguration.from_xml(<<~XML)
+      <w:numbering
+        xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+        #{nums}
+      </w:numbering>
+    XML
+  end
+
   describe ".generate_style_css" do
     it "returns empty string for nil config" do
       css = described_class.generate_style_css(nil)
       expect(css).to eq("")
     end
 
-    it "generates CSS for styles" do
-      # Create a mock style
-      style = double("Style",
-                     style_id: "CustomStyle",
-                     font: "Arial",
-                     font_size: 12,
-                     bold: true,
-                     italic: false,
-                     alignment: "center")
+    it "generates CSS from a parsed WordprocessingML styles configuration" do
+      config = styles_config_from(
+        style_xml("RichStyle", font: "Arial", bold: true, italic: true,
+                               align: "right"),
+      )
 
-      config = double("StylesConfiguration")
-      allow(config).to receive(:styles).and_return([style])
+      expected = <<~CSS.chomp
+        .RichStyle {
+          font-family: 'Arial';
+          font-weight: bold;
+          font-style: italic;
+          text-align: right;
+        }
+      CSS
 
-      css = described_class.generate_style_css(config)
-      expect(css).to include(".CustomStyle")
-      expect(css).to include("Arial")
-      expect(css).to include("12pt")
-      expect(css).to include("bold")
-      expect(css).to include("center")
+      expect(described_class.generate_style_css(config)).to eq(expected)
     end
 
     it "handles styles without optional properties" do
-      style = double("Style",
-                     style_id: "Simple",
-                     font: nil,
-                     font_size: nil,
-                     bold: nil,
-                     italic: nil,
-                     alignment: nil)
-
-      config = double("StylesConfiguration")
-      allow(config).to receive(:styles).and_return([style])
+      config = styles_config_from(style_xml("Simple"))
 
       css = described_class.generate_style_css(config)
-      # Should not raise error, may return empty or minimal CSS
-      expect(css).to be_a(String)
+
+      expect(css).to eq("")
+    end
+
+    it "generates one rule per style" do
+      config = styles_config_from(
+        style_xml("First", font: "Arial"),
+        style_xml("Second", font: "Georgia"),
+      )
+
+      css = described_class.generate_style_css(config)
+
+      expect(css).to include(".First")
+      expect(css).to include(".Second")
     end
   end
 
@@ -115,27 +181,19 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "generates CSS for numbering" do
-      instance = double("NumberingInstance", num_id: 1)
-
-      config = double("NumberingConfiguration")
-      allow(config).to receive(:instances).and_return([instance])
+      config = numbering_config_from(1)
 
       css = described_class.generate_list_css(config)
+
       expect(css).to include("@list l1")
       expect(css).to include("mso-list-id: 1")
     end
 
     it "handles multiple numbering instances" do
-      instances = [
-        double("NumberingInstance", num_id: 1),
-        double("NumberingInstance", num_id: 2),
-        double("NumberingInstance", num_id: 3),
-      ]
-
-      config = double("NumberingConfiguration")
-      allow(config).to receive(:instances).and_return(instances)
+      config = numbering_config_from(1, 2, 3)
 
       css = described_class.generate_list_css(config)
+
       expect(css).to include("@list l1")
       expect(css).to include("@list l2")
       expect(css).to include("@list l3")
@@ -149,29 +207,22 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "builds CSS rule for style with font" do
-      style = double("Style",
-                     style_id: "TestStyle",
-                     font: "Times New Roman",
-                     font_size: nil,
-                     bold: nil,
-                     italic: nil,
-                     alignment: nil)
+      style = single_style(style_xml("TestStyle", font: "Times New Roman"))
 
       rule = described_class.build_style_rule(style)
+
       expect(rule).to include(".TestStyle")
       expect(rule).to include("Times New Roman")
     end
 
     it "builds CSS rule for style with multiple properties" do
-      style = double("Style",
-                     style_id: "RichStyle",
-                     font: "Arial",
-                     font_size: 14,
-                     bold: true,
-                     italic: true,
-                     alignment: "right")
+      style = single_style(
+        style_xml("RichStyle", font: "Arial", half_points: 28, bold: true,
+                               italic: true, align: "right"),
+      )
 
       rule = described_class.build_style_rule(style)
+
       expect(rule).to include(".RichStyle")
       expect(rule).to include("Arial")
       expect(rule).to include("14pt")
@@ -180,17 +231,36 @@ RSpec.describe Uniword::Mhtml::WordCss do
       expect(rule).to include("right")
     end
 
+    it "converts the half-point w:sz value to points" do
+      style = single_style(style_xml("Sized", half_points: 24))
+
+      expect(described_class.build_style_rule(style))
+        .to include("font-size: 12pt")
+    end
+
     it "returns nil for style with no properties" do
-      style = double("Style",
-                     style_id: "EmptyStyle",
-                     font: nil,
-                     font_size: nil,
-                     bold: nil,
-                     italic: nil,
-                     alignment: nil)
+      style = single_style(style_xml("EmptyStyle"))
 
       rule = described_class.build_style_rule(style)
+
       expect(rule).to be_nil
+    end
+
+    # An ST_OnOff false token must not turn the toggle on. rFonts keeps the
+    # rule non-nil so the absence assertions have a string to run against.
+    it "omits toggles whose w:val is an ST_OnOff false token" do
+      rule = described_class.build_style_rule(toggle_style("0", "0"))
+
+      expect(rule).not_to include("font-weight: bold")
+      expect(rule).not_to include("font-style: italic")
+    end
+
+    it "returns nil for a style with no styleId" do
+      style = single_style(
+        %(<w:style><w:rPr><w:rFonts w:ascii="Arial"/></w:rPr></w:style>),
+      )
+
+      expect(described_class.build_style_rule(style)).to be_nil
     end
   end
 
@@ -201,7 +271,7 @@ RSpec.describe Uniword::Mhtml::WordCss do
     end
 
     it "builds @list rule" do
-      instance = double("NumberingInstance", num_id: 5)
+      instance = numbering_config_from(5).instances.first
 
       rule = described_class.build_list_rule(instance)
       expect(rule).to include("@list l5")
