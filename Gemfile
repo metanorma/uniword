@@ -22,14 +22,13 @@ gem "ruby-prof"
 gem "yard"
 
 # moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168.
-# 0.5.174 refuses leptris below 1.9.386 and falls back to nokogiri, while leptris stays
-# on 1.9.385 below.
-gem "moxml", ">= 0.5.168", "< 0.5.174"
+gem "moxml", ">= 0.5.168"
 
-# lutaml-model 0.8.138 to 0.8.147 emit render_default: false booleans (pPr bidi,
-# suppressLineNumbers) for custom-initialize classes; fixed in 0.8.148 (lutaml-model#1057).
+# lutaml-model 0.8.148 fixes the #1057 emission of render_default: false booleans.
+# 0.8.138+ also runs custom-initialize classes through the constructor during XML
+# parsing, costing +50% hydration CPU on the uniword corpus (lutaml-model#1059).
 gem "lutaml-model", ">= 0.8.148"
 
-# leptris 1.9.386 rejects r:embed on a:blip ("attribute 'embed': not declared") in
-# xsd_output_validation_spec; 1.9.385 is good.
-gem "leptris", "1.9.385.0"
+# leptris 1.9.386-1.9.390 reject r:embed on a:blip ("attribute 'embed': not declared");
+# fixed in 1.9.391 (leptris-ruby#569).
+gem "leptris", "1.9.391.0"
