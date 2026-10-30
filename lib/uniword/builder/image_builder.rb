@@ -147,6 +147,7 @@ alt_text: nil)
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: deterministic_id("inline", path),
           name: File.basename(path, ".*"),
+          descr: alt_text,
         )
         inline.graphic = build_graphic(r_id, w, h)
 
@@ -227,6 +228,7 @@ alt_text: nil)
         anchor.doc_properties = WpDrawing::DocProperties.new(
           id: deterministic_id("anchor", path),
           name: File.basename(path, ".*"),
+          descr: alt_text,
         )
         anchor.graphic = build_graphic(r_id, w, h)
 

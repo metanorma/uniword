@@ -20,8 +20,16 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       )
       expect(Array(props.style).first.value).to eq("Heading1")
       expect(props.alignment.value).to eq("center")
-      expect(props.spacing&.before).to eq(240)
-      expect(props.spacing&.after).to eq(120)
+      expect(props.spacing.first.before).to eq(240)
+      expect(props.spacing.first.after).to eq(120)
+    end
+
+    it "builds a single spacing entry from flat attributes" do
+      props = described_class.new(spacing_before: 120, spacing_after: 240)
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(120)
+      expect(props.spacing.first.after).to eq(240)
     end
 
     it "allows mutation for test compatibility" do
@@ -126,6 +134,93 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
       expect(props.keep_next_wrapper&.value).to be true
       expect(props.keep_lines_wrapper&.value).to be true
       expect(props.page_break_before_wrapper&.value).to be true
+    end
+  end
+
+  describe "#ensure_spacing" do
+    let(:ns) do
+      "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+    end
+    let(:two_entries_xml) do
+      <<~XML
+        <w:pPr xmlns:w="#{ns}">
+          <w:spacing w:before="0" w:after="0"/>
+          <w:spacing w:line="240" w:lineRule="auto"/>
+        </w:pPr>
+      XML
+    end
+
+    it "appends an entry when the properties were built without spacing" do
+      props = described_class.new
+
+      props.ensure_spacing.before = 240
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(240)
+    end
+
+    it "appends an entry when parsing left the collection empty" do
+      props = described_class.from_xml(%(<w:pPr xmlns:w="#{ns}"/>))
+
+      props.ensure_spacing.before = 240
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(240)
+    end
+
+    # Reconciler builds properties this way (notes.rb, parts.rb), passing a
+    # single Spacing rather than an array.
+    #
+    # Assert the entry and the emitted XML, not the shape of `spacing` itself:
+    # whether lutaml-model wraps a scalar assignment into a one-element array
+    # differs between lutaml-model releases, and that is not our contract.
+    it "handles properties constructed with a scalar spacing" do
+      props = described_class.new(
+        spacing: Uniword::Properties::Spacing.new(after: 0, line: 240),
+      )
+
+      entry = props.ensure_spacing
+
+      expect(entry.after).to eq(0)
+      expect(entry.line).to eq(240)
+      expect(props.to_xml(prefix: true)).to include('w:line="240"')
+    end
+
+    it "returns the existing first entry instead of appending" do
+      props = described_class.from_xml(
+        %(<w:pPr xmlns:w="#{ns}"><w:spacing w:before="60"/></w:pPr>),
+      )
+
+      props.ensure_spacing.after = 120
+
+      expect(props.spacing.size).to eq(1)
+      expect(props.spacing.first.before).to eq(60)
+      expect(props.spacing.first.after).to eq(120)
+    end
+
+    it "returns the first of several entries Word emitted" do
+      props = described_class.from_xml(two_entries_xml)
+
+      expect(props.ensure_spacing).to equal(props.spacing.first)
+      expect(props.spacing.size).to eq(2)
+    end
+
+    it "clears the named fields from the later entries" do
+      props = described_class.from_xml(two_entries_xml)
+
+      props.ensure_spacing(:line).line = 360
+
+      expect(props.spacing.map(&:line)).to eq([360, nil])
+      expect(props.to_xml(prefix: true).scan(/w:line="\d+"/))
+        .to eq(['w:line="360"'])
+    end
+
+    it "leaves the later entries alone when no field is named" do
+      props = described_class.from_xml(two_entries_xml)
+
+      props.ensure_spacing.before = 60
+
+      expect(props.spacing.map(&:line)).to eq([nil, 240])
     end
   end
 

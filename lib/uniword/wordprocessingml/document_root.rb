@@ -292,16 +292,31 @@ module Uniword
         body&.tables || []
       end
 
+      # Every paragraph in the document, including the ones inside table
+      # cells and inside tables nested in those cells.
+      #
+      # Top-level paragraphs come first, then table paragraphs: w:p and w:tbl
+      # are separate collections on the model, so their interleaving is not
+      # recoverable here.
+      #
+      # @return [Array<Paragraph>] All paragraphs, top-level ones first
+      def all_paragraphs
+        return [] unless body
+
+        (body.paragraphs || []) +
+          (body.tables || []).flat_map { |table| table_paragraphs(table) }
+      end
+
       # Get all drawings (image references) from the document.
-      # Walks all paragraphs and collects Drawing elements from runs.
+      # Walks every paragraph, table cells included, and collects Drawing
+      # elements from runs. A drawing in a table cell is still an image the
+      # renderer emits, so the accessibility and quality rules must see it.
       #
       # @return [Array<Drawing>] All drawing elements in document
       def images
-        return [] unless body&.paragraphs
-
-        body.paragraphs.flat_map do |para|
-          (para.runs || []).flat_map(&:drawings)
-        end.compact
+        all_paragraphs
+          .flat_map { |para| (para.runs || []).flat_map(&:drawings) }
+          .compact
       end
 
       # @return [Hash] Document statistics (paragraphs, tables, images)
@@ -368,6 +383,25 @@ module Uniword
       end
 
       private
+
+      # Paragraphs held by a table, walking nested tables as well.
+      #
+      # @param table [Table] Table to walk
+      # @return [Array<Paragraph>] Paragraphs in that table
+      def table_paragraphs(table)
+        cells = (table.rows || []).flat_map { |row| row.cells || [] }
+        cells.flat_map { |cell| cell_paragraphs(cell) }
+      end
+
+      # Paragraphs held by one table cell, including its nested tables.
+      #
+      # @param cell [TableCell] Cell to walk
+      # @return [Array<Paragraph>] Paragraphs in that cell
+      def cell_paragraphs(cell)
+        nested = (cell.tables || [])
+          .flat_map { |table| table_paragraphs(table) }
+        (cell.paragraphs || []) + nested
+      end
 
       # Run model-level validation rules against this document.
       #

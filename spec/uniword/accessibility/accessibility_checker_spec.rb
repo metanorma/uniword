@@ -7,6 +7,20 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
     File.expand_path("../../../config/accessibility_profiles.yml", __dir__)
   end
 
+  # A picture whose wp:docPr carries no descr, so it has no alt text.
+  def alt_less_picture_document
+    Uniword::Wordprocessingml::DocumentRoot.from_xml(<<~XML)
+      <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+      <w:document
+        xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing">
+        <w:body><w:p><w:r><w:drawing><wp:inline>
+          <wp:docPr id="1" name="Picture 1"/>
+        </wp:inline></w:drawing></w:r></w:p></w:body>
+      </w:document>
+    XML
+  end
+
   describe "#initialize" do
     it "loads default profile (wcag_2_1_aa)" do
       checker = described_class.new
@@ -118,9 +132,12 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
         profile: :all_disabled,
         config_file: custom_config.path,
       )
-      report = checker_disabled.check(document)
+      alt_less = alt_less_picture_document
+      report = checker_disabled.check(alt_less)
 
-      # No violations should be found since all rules are disabled
+      # The same document violates the enabled profile, so an empty result
+      # here is the disabled flag at work, not an empty document.
+      expect(checker.check(alt_less).violations).not_to be_empty
       expect(report.violations).to be_empty
 
       custom_config.close
@@ -128,13 +145,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
     end
 
     context "with violations" do
-      let(:image_without_alt) do
-        double("Image", alt_text: nil)
-      end
-
-      before do
-        allow(document).to receive(:images).and_return([image_without_alt])
-      end
+      let(:document) { alt_less_picture_document }
 
       it "collects violations from rules" do
         report = checker.check(document)
@@ -167,20 +178,32 @@ RSpec.describe Uniword::Accessibility::AccessibilityChecker do
 
     context "when check returns no errors" do
       it "returns true" do
-        report = instance_double(Uniword::Accessibility::AccessibilityReport,
-                                 compliant?: true)
-        allow(checker).to receive(:check).and_return(report)
-        expect(checker.compliant?(document)).to be true
+        config = Tempfile.new(["alt_only", ".yml"])
+        File.write(config.path, {
+          profiles: {
+            alt_only: {
+              name: "Alt only", level: "Test",
+              rules: { image_alt_text: { enabled: true,
+                                         wcag_criterion: "1.1.1",
+                                         level: "A" } }
+            },
+          },
+        }.to_yaml)
+        alt_checker = described_class.new(profile: :alt_only,
+                                          config_file: config.path)
+        with_alt = alt_less_picture_document
+        with_alt.images.first.alt_text = "A red bicycle"
+
+        expect(alt_checker.compliant?(alt_less_picture_document)).to be false
+        expect(alt_checker.compliant?(with_alt)).to be true
+      ensure
+        config&.close!
       end
     end
   end
 
   describe "different profiles" do
-    let(:document) do
-      doc = double("Document")
-      allow(doc).to receive_messages(images: [], tables: [], paragraphs: [])
-      doc
-    end
+    let(:document) { Uniword::Wordprocessingml::DocumentRoot.new }
 
     it "Level A profile has fewer rules than Level AA" do
       checker_a = described_class.new(profile: :wcag_2_1_a)

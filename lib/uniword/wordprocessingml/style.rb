@@ -9,6 +9,8 @@ module Uniword
     # Generated from OOXML schema: wordprocessingml.yml
     # Element: <w:style>
     class Style < Lutaml::Model::Serializable
+      include YamlWriter
+
       # Pattern 0: ATTRIBUTES FIRST
       attribute :type, :string
       attribute :styleId, :string
@@ -50,53 +52,57 @@ module Uniword
       end
 
       # YAML transform methods (instance methods called by lutaml-model's
-      # `with:` transform mechanism)
+      # `with:` transform mechanism). The `_from` readers build wrapper
+      # objects; the `_to` writers assign through YamlWriter#yaml_put rather
+      # than returning a value — see that module for why.
       def yaml_name_from(instance, value)
         instance.name = StyleName.new(val: value) if value
       end
 
-      def yaml_name_to(instance, _doc)
-        instance.name&.val
+      def yaml_name_to(instance, doc)
+        yaml_put(doc, "name", instance.name&.val)
       end
 
       def yaml_quick_format_from(instance, value)
         instance.qFormat = Properties::QuickFormat.new(value: value) unless value.nil?
       end
 
-      def yaml_quick_format_to(instance, _doc)
-        instance.qFormat&.value
+      # w:qFormat is an ST_OnOff toggle, read through BooleanElement#on?
+      # like every other one.
+      def yaml_quick_format_to(instance, doc)
+        yaml_put(doc, "quick_format", instance.qFormat&.on?)
       end
 
       def yaml_based_on_from(instance, value)
         instance.basedOn = BasedOn.new(val: value) if value
       end
 
-      def yaml_based_on_to(instance, _doc)
-        instance.basedOn&.val
+      def yaml_based_on_to(instance, doc)
+        yaml_put(doc, "based_on", instance.basedOn&.val)
       end
 
       def yaml_next_style_from(instance, value)
         instance.nextStyle = Next.new(val: value) if value
       end
 
-      def yaml_next_style_to(instance, _doc)
-        instance.nextStyle&.val
+      def yaml_next_style_to(instance, doc)
+        yaml_put(doc, "next_style", instance.nextStyle&.val)
       end
 
       def yaml_linked_style_from(instance, value)
         instance.link = Link.new(val: value) if value
       end
 
-      def yaml_linked_style_to(instance, _doc)
-        instance.link&.val
+      def yaml_linked_style_to(instance, doc)
+        yaml_put(doc, "linked_style", instance.link&.val)
       end
 
       def yaml_ui_priority_from(instance, value)
         instance.uiPriority = UiPriority.new(val: value.to_s) if value
       end
 
-      def yaml_ui_priority_to(instance, _doc)
-        instance.uiPriority&.val&.to_i
+      def yaml_ui_priority_to(instance, doc)
+        yaml_put(doc, "ui_priority", instance.uiPriority&.val&.to_i)
       end
 
       xml do
@@ -152,19 +158,18 @@ module Uniword
       end
 
       def quick_format
-        val = qFormat
-        return true if val == true
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(qFormat) == true
       end
 
+      # Word splits one paragraph's spacing across several w:spacing elements,
+      # and Word readers resolve conflicts last-wins, so take the last entry
+      # that actually carries the value.
       def spacing_before
-        pPr&.spacing&.before || pPr&.spacing_before
+        Array(pPr&.spacing).filter_map(&:before).last || pPr&.spacing_before
       end
 
       def spacing_after
-        pPr&.spacing&.after || pPr&.spacing_after
+        Array(pPr&.spacing).filter_map(&:after).last || pPr&.spacing_after
       end
 
       def alignment
@@ -172,23 +177,11 @@ module Uniword
       end
 
       def keep_next
-        return false unless pPr
-
-        val = pPr.keep_next_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(pPr&.keep_next_wrapper) == true
       end
 
       def keep_lines
-        return false unless pPr
-
-        val = pPr.keep_lines_wrapper
-        return false if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+        boolean_flag(pPr&.keep_lines_wrapper) == true
       end
 
       def outline_level
@@ -200,13 +193,11 @@ module Uniword
       end
 
       def bold
-        return nil unless rPr
+        boolean_flag(rPr&.bold)
+      end
 
-        val = rPr.bold
-        return nil if val.nil?
-
-        val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-        val == true
+      def italic
+        boolean_flag(rPr&.italic)
       end
 
       def font_size
@@ -251,6 +242,18 @@ module Uniword
 
       def run_properties
         rPr
+      end
+
+      private
+
+      # ST_OnOff toggles arrive as BooleanElement wrappers when parsed and as
+      # plain booleans when built. Returns nil when the toggle is absent, so
+      # readers wanting a strict false-when-absent contract compare == true.
+      def boolean_flag(element)
+        return nil if element.nil?
+        return element.on? if element.is_a?(Uniword::Properties::BooleanElement)
+
+        element == true
       end
     end
   end

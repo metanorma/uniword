@@ -44,7 +44,7 @@ RSpec.describe Uniword::Docx::Reconciler do
       para = sep.paragraphs.first
       expect(para).not_to be_nil
       expect(para.properties).not_to be_nil
-      spacing = para.properties.spacing
+      spacing = Array(para.properties.spacing).first
       expect(spacing).not_to be_nil
       expect(spacing.after).to eq(0)
       expect(spacing.line).to eq(240)

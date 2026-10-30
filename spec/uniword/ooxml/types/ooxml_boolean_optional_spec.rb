@@ -18,9 +18,8 @@ RSpec.describe Uniword::Ooxml::Types::OoxmlBooleanOptional do
       expect(described_class.cast(nil)).to be_nil
     end
 
-    it "raises on an unknown value instead of passing it through" do
-      expect { described_class.cast("yes") }
-        .to raise_error(Lutaml::Model::Type::InvalidValueError)
+    it "reads an unknown token as on instead of raising" do
+      expect(described_class.cast("yes")).to be(true)
     end
   end
 

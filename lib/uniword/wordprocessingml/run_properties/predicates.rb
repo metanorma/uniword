@@ -5,30 +5,19 @@ module Uniword
     class RunProperties < Lutaml::Model::Serializable
       # Boolean predicate methods for RunProperties.
       #
-      # Unwraps boolean property objects and returns true/false.
+      # Every predicate reads through BooleanElement#on?, so all of them
+      # agree on what "0", "off" and an absent w:val mean.
       module Predicates
         def bold?
-          val = bold
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-          val == true
+          toggle_on?(bold)
         end
 
         def italic?
-          val = italic
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-          val == true
+          toggle_on?(italic)
         end
 
         def strike?
-          val = strike
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-          val == true
+          toggle_on?(strike)
         end
 
         def all_caps
@@ -36,59 +25,45 @@ module Uniword
         end
 
         def caps?
-          val = caps
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Uniword::Properties::BooleanElement)
-          val == true
+          toggle_on?(caps)
         end
 
         def small_caps?
-          val = small_caps
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Properties::SmallCaps)
-          val == true
+          toggle_on?(small_caps)
         end
 
         def shadow?
-          val = shadow
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Properties::Shadow)
-          val == true
+          toggle_on?(shadow)
         end
 
         def imprint?
-          val = imprint
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Properties::Imprint)
-          val == true
+          toggle_on?(imprint)
         end
 
         def emboss?
-          val = emboss
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Properties::Emboss)
-          val == true
+          toggle_on?(emboss)
         end
 
         def hidden?
-          val = hidden
-          return false if val.nil?
-
-          val = val.value if val.is_a?(Properties::Vanish)
-          val == true
+          toggle_on?(hidden)
         end
 
         def outline?
-          val = outline
-          return false if val.nil?
+          toggle_on?(outline)
+        end
 
-          val = val.val if val.is_a?(Properties::Outline)
-          val != "false"
+        private
+
+        # Toggles arrive as BooleanElement wrappers when parsed and as plain
+        # booleans when a caller assigns one directly.
+        #
+        # @param toggle [Object, nil] Wrapper, boolean, or nil when absent
+        # @return [Boolean] true when the toggle is on
+        def toggle_on?(toggle)
+          return false if toggle.nil?
+          return toggle.on? if toggle.is_a?(Uniword::Properties::BooleanElement)
+
+          toggle == true
         end
       end
     end
