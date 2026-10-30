@@ -21,13 +21,14 @@ gem "rubocop-rspec"
 gem "ruby-prof"
 gem "yard"
 
-# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168
-gem "moxml", ">= 0.5.168"
+# moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168.
+# 0.5.174 refuses leptris below 1.9.386 and falls back to nokogiri, while leptris stays
+# on 1.9.385 below.
+gem "moxml", ">= 0.5.168", "< 0.5.174"
 
-# lutaml-model 0.8.138+ constructs custom-initialize classes through the constructor, and the
-# writer_populated? check (#922) then marks their defaults as set, so render_default: false
-# booleans (pPr bidi, suppressLineNumbers) are emitted. 0.8.137 is good; 0.8.147 still bad.
-gem "lutaml-model", "0.8.137"
+# lutaml-model 0.8.138 to 0.8.147 emit render_default: false booleans (pPr bidi,
+# suppressLineNumbers) for custom-initialize classes; fixed in 0.8.148 (lutaml-model#1057).
+gem "lutaml-model", ">= 0.8.148"
 
 # leptris 1.9.386 rejects r:embed on a:blip ("attribute 'embed': not declared") in
 # xsd_output_validation_spec; 1.9.385 is good.
