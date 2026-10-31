@@ -561,6 +561,9 @@ module Uniword
     desc "review SUBCOMMAND", "Review comments and tracked changes"
     subcommand "review", ReviewCLI
 
+    desc "comments SUBCOMMAND", "Manage document comments"
+    subcommand "comments", CommentsCLI
+
     desc "diff SUBCOMMAND", "Compare two DOCX files"
     subcommand "diff", DiffCLI
 

@@ -13,6 +13,25 @@ RSpec.describe Uniword::Review::ReviewManager do
 
   let(:manager) { described_class.new(doc) }
 
+  def plain_run(text)
+    Uniword::Wordprocessingml::Run.new(
+      text: [Uniword::Wordprocessingml::Text.new(content: text)],
+    )
+  end
+
+  def paragraph_with_text(text)
+    Uniword::Wordprocessingml::Paragraph.new(runs: [plain_run(text)])
+  end
+
+  def paragraph_with_anchor(*comments)
+    paragraph = paragraph_with_text("Anchored text")
+    comments.each do |comment|
+      Uniword::Builder::CommentAnchorer.anchor(paragraph,
+                                               comment.comment_id)
+    end
+    paragraph
+  end
+
   describe "#list_comments" do
     it "returns empty array when no comments" do
       expect(manager.list_comments).to eq([])
@@ -282,6 +301,134 @@ RSpec.describe Uniword::Review::ReviewManager do
       expect(entry).to have_key(:item)
       expect(entry).to have_key(:position)
       expect(entry[:type]).to eq(:comment)
+    end
+  end
+
+  describe "#resolve_comment!" do
+    it "removes the comment entry and all anchor markers" do
+      comment = manager.add_comment(text: "Resolve me", author: "Alice")
+      paragraph = paragraph_with_anchor(comment)
+      doc.body.paragraphs << paragraph
+
+      result = manager.resolve_comment!(comment.comment_id)
+
+      expect(result).to eq(comment)
+      expect(manager.list_comments).to be_empty
+      expect(paragraph.comment_range_starts).to be_empty
+      expect(paragraph.comment_range_ends).to be_empty
+      expect(paragraph.comment_references).to be_empty
+      expect(paragraph.runs.map(&:comment_reference)).to all(be_nil)
+    end
+
+    it "keeps element_order free of removed anchor entries" do
+      comment = manager.add_comment(text: "Resolve me", author: "Alice")
+      paragraph = paragraph_with_anchor(comment)
+      doc.body.paragraphs << paragraph
+
+      manager.resolve_comment!(comment.comment_id)
+
+      names = paragraph.element_order.map(&:name)
+      expect(names).not_to include("commentRangeStart")
+      expect(names).not_to include("commentRangeEnd")
+      expect(names).not_to include("commentReference")
+    end
+
+    it "keeps the anchored text when resolving" do
+      comment = manager.add_comment(text: "Resolve me", author: "Alice")
+      paragraph = paragraph_with_anchor(comment)
+      doc.body.paragraphs << paragraph
+
+      manager.resolve_comment!(comment.comment_id)
+
+      expect(paragraph.text).to eq("Anchored text")
+    end
+
+    it "resolves only the targeted comment" do
+      first = manager.add_comment(text: "First", author: "Alice")
+      second = manager.add_comment(text: "Second", author: "Bob")
+      paragraph = paragraph_with_anchor(first, second)
+      doc.body.paragraphs << paragraph
+
+      manager.resolve_comment!(first.comment_id)
+
+      expect(paragraph.comment_range_starts.map(&:id))
+        .to eq([second.comment_id])
+      expect(manager.list_comments.map(&:comment_id))
+        .to eq([second.comment_id])
+    end
+
+    it "returns nil for an unknown comment ID" do
+      expect(manager.resolve_comment!("404")).to be_nil
+    end
+
+    it "round-trips a resolved document without anchor markup" do
+      comment = manager.add_comment(text: "Resolve me", author: "Alice")
+      doc.body.paragraphs << paragraph_with_anchor(comment)
+      path = "tmp/review_manager_resolve/roundtrip.docx"
+      FileUtils.mkdir_p(File.dirname(path))
+      doc.save(path)
+
+      manager.resolve_comment!(comment.comment_id)
+      doc.save(path)
+
+      reloaded = Uniword::DocumentFactory.from_file(path)
+      expect(reloaded.comments.count).to eq(0)
+      reloaded.all_paragraphs.each do |paragraph|
+        expect(paragraph.comment_range_starts).to be_empty
+        expect(paragraph.comment_range_ends).to be_empty
+        expect(paragraph.comment_references).to be_empty
+      end
+    ensure
+      safe_delete(path)
+    end
+  end
+
+  describe "#anchor_comment" do
+    it "adds range markers and a reference run to the paragraph" do
+      comment = manager.add_comment(text: "Anchor me", author: "Alice")
+      paragraph = Uniword::Wordprocessingml::Paragraph.new(
+        runs: [plain_run("Hello")],
+      )
+
+      manager.anchor_comment(comment.comment_id, paragraph)
+
+      expect(paragraph.comment_range_starts.map(&:id))
+        .to eq([comment.comment_id])
+      expect(paragraph.comment_range_ends.map(&:id))
+        .to eq([comment.comment_id])
+      expect(paragraph.runs.last.comment_reference.id)
+        .to eq(comment.comment_id)
+    end
+
+    it "keeps an unanchored comment valid with a nil paragraph" do
+      comment = manager.add_comment(text: "Floating", author: "Alice")
+
+      expect { manager.anchor_comment(comment.comment_id, nil) }
+        .not_to raise_error
+    end
+  end
+
+  describe "#comment_anchor_texts" do
+    it "maps each anchored comment to its paragraph text" do
+      first = manager.add_comment(text: "On intro", author: "Alice")
+      second = manager.add_comment(text: "On outro", author: "Bob")
+      doc.body.paragraphs << paragraph_with_text("Intro")
+      manager.anchor_comment(first.comment_id,
+                             doc.body.paragraphs.first)
+      doc.body.paragraphs << paragraph_with_text("Outro")
+      manager.anchor_comment(second.comment_id,
+                             doc.body.paragraphs.last)
+
+      anchors = manager.comment_anchor_texts
+
+      expect(anchors[first.comment_id.to_s]).to eq("Intro")
+      expect(anchors[second.comment_id.to_s]).to eq("Outro")
+    end
+
+    it "omits unanchored comments" do
+      manager.add_comment(text: "Floating", author: "Alice")
+
+      expect(manager.comment_anchor_texts).to eq({})
     end
   end
 end
