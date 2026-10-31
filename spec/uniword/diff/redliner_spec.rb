@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "tmpdir"
 require "zip"
 
 RSpec.describe Uniword::Diff::Redliner do
+  let(:work_dir) { "tmp/redliner_spec" }
+
+  before { FileUtils.mkdir_p(work_dir) }
+
+  after do
+    Dir.glob("#{work_dir}/*.docx").each { |f| safe_delete(f) }
+  end
+
   def build_document(texts)
     doc = Uniword::Wordprocessingml::DocumentRoot.new
     doc.body = Uniword::Wordprocessingml::Body.new
@@ -21,11 +28,9 @@ RSpec.describe Uniword::Diff::Redliner do
   # model to_xml renders default-namespace element names for
   # constructed documents, so assertions read the saved bytes.
   def saved_document_xml(result)
-    Dir.mktmpdir do |dir|
-      path = File.join(dir, "redline.docx")
-      result.document.save(path)
-      Zip::File.open(path) { |zip| zip.read("word/document.xml") }
-    end
+    path = File.join(work_dir, "redline-#{result.object_id}.docx")
+    result.document.save(path)
+    Zip::File.open(path) { |zip| zip.read("word/document.xml") }
   end
 
   def redline(old_texts, new_texts)
@@ -189,53 +194,49 @@ RSpec.describe Uniword::Diff::Redliner do
 
   describe "file round trip" do
     it "preserves the tracked changes through save and reload" do
-      Dir.mktmpdir do |dir|
-        old_path = File.join(dir, "old.docx")
-        new_path = File.join(dir, "new.docx")
-        out_path = File.join(dir, "redline.docx")
-        build_document(["Alpha line.", "Beta line.",
-                        "Gamma line."]).save(old_path)
-        build_document(["Alpha line.", "Beta!", "Gamma line."]).save(new_path)
+      old_path = File.join(work_dir, "old.docx")
+      new_path = File.join(work_dir, "new.docx")
+      out_path = File.join(work_dir, "redline.docx")
+      build_document(["Alpha line.", "Beta line.",
+                      "Gamma line."]).save(old_path)
+      build_document(["Alpha line.", "Beta!", "Gamma line."]).save(new_path)
 
-        base = Uniword::DocumentFactory.from_file(old_path)
-        revised = Uniword::DocumentFactory.from_file(new_path)
-        result = described_class.new(base, revised).redline
-        result.document.save(out_path)
+      base = Uniword::DocumentFactory.from_file(old_path)
+      revised = Uniword::DocumentFactory.from_file(new_path)
+      result = described_class.new(base, revised).redline
+      result.document.save(out_path)
 
-        reloaded = Uniword::DocumentFactory.from_file(out_path)
-        ins = reloaded.body.paragraphs.sum { |p| p.insertions.size }
-        dels = reloaded.body.paragraphs.sum { |p| p.deletions.size }
-        expect(ins).to eq(result.insertions)
-        expect(dels).to eq(result.deletions)
-        expect(ins).to be_positive
-        expect(dels).to be_positive
-      end
+      reloaded = Uniword::DocumentFactory.from_file(out_path)
+      ins = reloaded.body.paragraphs.sum { |p| p.insertions.size }
+      dels = reloaded.body.paragraphs.sum { |p| p.deletions.size }
+      expect(ins).to eq(result.insertions)
+      expect(dels).to eq(result.deletions)
+      expect(ins).to be_positive
+      expect(dels).to be_positive
     end
   end
 
   describe "XSD validity" do
     it "produces an XSD-clean document" do
-      Dir.mktmpdir do |dir|
-        out_path = File.join(dir, "redline.docx")
-        base = Uniword::DocumentFactory.from_file(
-          "spec/fixtures/03_two_paragraphs.docx",
-        )
-        revised = Uniword::DocumentFactory.from_file(
-          "spec/fixtures/05_longer_text.docx",
-        )
-        result = described_class.new(base, revised).redline
-        result.document.save(out_path)
+      out_path = File.join(work_dir, "redline.docx")
+      base = Uniword::DocumentFactory.from_file(
+        "spec/fixtures/03_two_paragraphs.docx",
+      )
+      revised = Uniword::DocumentFactory.from_file(
+        "spec/fixtures/05_longer_text.docx",
+      )
+      result = described_class.new(base, revised).redline
+      result.document.save(out_path)
 
-        report = Uniword::Validation::VerifyOrchestrator
-          .new(xsd_validation: true).verify(out_path)
-        xsd = report.layers.find { |l| l.name == "XSD Schema" }
-        # Some fixtures carry known inherited theme-part errors; the
-        # redline only rewrites document.xml, so assert on that part.
-        doc_errors = xsd.errors.select do |error|
-          error.part.to_s.end_with?("document.xml")
-        end
-        expect(doc_errors).to be_empty
+      report = Uniword::Validation::VerifyOrchestrator
+        .new(xsd_validation: true).verify(out_path)
+      xsd = report.layers.find { |l| l.name == "XSD Schema" }
+      # Some fixtures carry known inherited theme-part errors; the
+      # redline only rewrites document.xml, so assert on that part.
+      doc_errors = xsd.errors.select do |error|
+        error.part.to_s.end_with?("document.xml")
       end
+      expect(doc_errors).to be_empty
     end
   end
 end
