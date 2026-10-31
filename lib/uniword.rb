@@ -94,6 +94,7 @@ module Uniword
   autoload :DependencyError, "uniword/errors"
   autoload :UnsupportedOperationError, "uniword/errors"
   autoload :ConversionError, "uniword/errors"
+  autoload :MissingVariablesError, "uniword/errors"
 
   # Styles (moved to wordprocessingml/styles/)
   autoload :Styles, "uniword/wordprocessingml/styles"

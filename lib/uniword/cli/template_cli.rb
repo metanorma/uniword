@@ -151,7 +151,82 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "fill DOCUMENT", "Fill placeholders in a document with data"
+    long_desc <<~DESC
+      Fill placeholders in a DOCX document (mail merge) and save the
+      result as a new DOCX file.
+
+      Placeholder sources, in precedence order:
+        1. Content controls (w:sdt) whose alias or tag names a variable
+        2. MERGEFIELD simple fields (w:fldSimple)
+        3. {{var}} text placeholders inside run text
+
+      Data is loaded from a YAML or JSON file (--data, required). Nested
+      data keys are addressed with dotted paths ({{client.name}}).
+      Placeholders without data are left untouched unless --strict,
+      which fails with the list of missing variable names.
+
+      Examples:
+        $ uniword template fill letter.docx --data data.yml
+        $ uniword template fill letter.docx --data data.json -o out.docx
+        $ uniword template fill letter.docx --data data.yml --strict
+        $ uniword template fill letter.docx --data data.yml --json
+    DESC
+    option :data, desc: "Path to YAML or JSON data file", type: :string,
+                  required: true
+    option :output, aliases: "-o",
+                    desc: "Output DOCX path (default: <name>.filled.docx)",
+                    type: :string
+    option :strict, desc: "Fail when a placeholder variable has no data",
+                    type: :boolean, default: false
+    option :json, desc: "Report as JSON", type: :boolean, default: false
+    option :verbose, aliases: "-v", desc: "Verbose output",
+                     type: :boolean, default: false
+    def fill(input_path)
+      validate_input_file(input_path)
+
+      document = DocumentFactory.from_file(input_path)
+      data = parse_data_file(options[:data])
+      log_fill_start(data) if options[:verbose]
+      report_fill(document, data, input_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e, verbose: options[:verbose])
+    end
+
     private
+
+    def validate_input_file(path)
+      return if File.exist?(path)
+
+      say "File not found: #{path}", :red
+      exit 1
+    end
+
+    def log_fill_start(data)
+      return unless data.any?
+
+      say "  Data keys: #{data.keys.join(', ')}", :cyan
+    end
+
+    def report_fill(document, data, input_path)
+      result = fill_document(document, data)
+      output_path = options[:output] || derive_filled_path(input_path)
+      document.save(output_path)
+
+      if options[:json]
+        puts result.to_json
+      else
+        say result.summary, result.complete? ? :green : :yellow
+        say "Filled document -> #{output_path}", :green
+      end
+    end
+
+    def fill_document(document, data)
+      Uniword::Template::Filler.new(document)
+        .fill(data, strict: options[:strict])
+    end
 
     def load_template_data
       data = {}
@@ -188,6 +263,12 @@ module Uniword
       end
 
       data
+    end
+
+    # Default output path: "<name>.filled.docx" next to the input.
+    def derive_filled_path(path)
+      ext = File.extname(path)
+      "#{path.delete_suffix(ext)}.filled#{ext}"
     end
   end
 end
