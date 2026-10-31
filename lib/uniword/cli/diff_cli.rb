@@ -2,6 +2,7 @@
 
 require "thor"
 require "json"
+require "rainbow"
 
 module Uniword
   # Diff subcommands for Uniword CLI.
@@ -103,6 +104,57 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "redline OLD NEW", "Create a tracked-changes (redline) DOCX"
+    long_desc <<~DESC
+      Compare two DOCX files and write the base document rewritten with
+      tracked changes (w:ins / w:del runs), the way Word's Compare
+      does. Paragraphs removed in NEW are wrapped in w:del with a
+      deleted paragraph mark, paragraphs added in NEW arrive wrapped in
+      w:ins with an inserted paragraph mark, and modified paragraphs
+      carry their word-level delta as interleaved w:del / w:ins runs.
+
+      The revision identity (author, date) is applied to every emitted
+      change. Tables pass through unchanged.
+
+      Examples:
+        $ uniword diff redline old.docx new.docx -o redline.docx
+        $ uniword diff redline old.docx new.docx --author Alice
+        $ uniword diff redline old.docx new.docx --json
+    DESC
+    option :output, aliases: "-o", desc: "Output DOCX path",
+                    type: :string
+    option :author, desc: "Revision author for emitted changes",
+                    type: :string, default: "uniword"
+    option :date, desc: "Revision date (ISO 8601) for emitted changes",
+                  type: :string
+    option :json, desc: "Output summary as JSON", type: :boolean,
+                  default: false
+    def redline(old_path, new_path)
+      validate_file_exists(old_path)
+      validate_file_exists(new_path)
+
+      base = load_document(old_path)
+      revised = load_document(new_path)
+      result = Uniword::Diff::Redliner.new(
+        base, revised,
+        author: options[:author], date: options[:date]
+      ).redline
+
+      output = options[:output] || default_redline_path(old_path)
+      result.document.save(output)
+
+      if options[:json]
+        puts result.to_json
+      else
+        puts Rainbow("  Redline written to #{output}").green.bright
+        puts "  #{result.summary}"
+      end
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e)
+    end
+
     private
 
     # Build options hash for DocumentDiffer from CLI options.
@@ -113,6 +165,14 @@ module Uniword
         text_only: options["text-only"],
         part: options[:part],
       }
+    end
+
+    # Default redline output path: base name of OLD with a .redline
+    # suffix, e.g. contract.docx -> contract.redline.docx.
+    def default_redline_path(old_path)
+      dirname = File.dirname(old_path)
+      basename = File.basename(old_path, ".*")
+      File.join(dirname, "#{basename}.redline.docx")
     end
 
     def validate_file_exists(path)

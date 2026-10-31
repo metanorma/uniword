@@ -36,6 +36,12 @@ module Uniword
     autoload :Insertion, "uniword/wordprocessingml/insertion"
     autoload :Deletion, "uniword/wordprocessingml/deletion"
 
+    # Tracked paragraph marks (CT_TrackChange inside pPr/rPr)
+    autoload :DeletedParagraphMark,
+             "uniword/wordprocessingml/deleted_paragraph_mark"
+    autoload :InsertedParagraphMark,
+             "uniword/wordprocessingml/inserted_paragraph_mark"
+
     autoload :NoBreakHyphen, "uniword/wordprocessingml/no_break_hyphen"
     autoload :LastRenderedPageBreak,
              "uniword/wordprocessingml/last_rendered_page_break"
@@ -89,10 +95,13 @@ module Uniword
     # Document settings and defaults
     autoload :Settings, "uniword/wordprocessingml/settings"
     autoload :ProofState, "uniword/wordprocessingml/proof_state"
-    autoload :StylePaneFormatFilter, "uniword/wordprocessingml/style_pane_format_filter"
+    autoload :StylePaneFormatFilter,
+             "uniword/wordprocessingml/style_pane_format_filter"
     autoload :DefaultTabStop, "uniword/wordprocessingml/default_tab_stop"
-    autoload :CharacterSpacingControl, "uniword/wordprocessingml/character_spacing_control"
-    autoload :DoNotDisplayPageBoundaries, "uniword/wordprocessingml/do_not_display_page_boundaries"
+    autoload :CharacterSpacingControl,
+             "uniword/wordprocessingml/character_spacing_control"
+    autoload :DoNotDisplayPageBoundaries,
+             "uniword/wordprocessingml/do_not_display_page_boundaries"
     autoload :TrackChanges, "uniword/wordprocessingml/track_changes"
     autoload :Rsids, "uniword/wordprocessingml/rsids"
     autoload :RsidRoot, "uniword/wordprocessingml/rsid_root"
@@ -115,7 +124,8 @@ module Uniword
     autoload :DecimalSymbol, "uniword/wordprocessingml/decimal_symbol"
     autoload :ListSeparator, "uniword/wordprocessingml/list_separator"
     autoload :W14DocId, "uniword/wordprocessingml/w14_doc_id"
-    autoload :W15ChartTrackingRefBased, "uniword/wordprocessingml/w15_chart_tracking_ref_based"
+    autoload :W15ChartTrackingRefBased,
+             "uniword/wordprocessingml/w15_chart_tracking_ref_based"
     autoload :W15DocId, "uniword/wordprocessingml/w15_doc_id"
     autoload :AttachedTemplate, "uniword/wordprocessingml/attached_template"
     autoload :HdrShapeDefaults, "uniword/wordprocessingml/hdr_shape_defaults"

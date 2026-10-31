@@ -24,6 +24,12 @@ module Uniword
 
       # Pattern 0: ATTRIBUTES FIRST, then XML mappings
 
+      # Paragraph-mark revision markers. Only valid when this rPr is
+      # the w:pPr/w:rPr (CT_ParaRPr); Word marks a deleted or inserted
+      # paragraph mark with w:del / w:ins there during change tracking.
+      attribute :del, DeletedParagraphMark, default: nil
+      attribute :ins, InsertedParagraphMark, default: nil
+
       # Simple element wrapper objects (default: nil so unset properties are nil)
       attribute :style, Properties::RunStyleReference, default: nil
       attribute :size, Properties::FontSize, default: nil
@@ -126,6 +132,10 @@ module Uniword
         # outline, shadow, emboss, imprint, noProof, snapToGrid, vanish, webHidden,
         # color, spacing, w, kern, position, sz, szCs, highlight, u, effect, bdr,
         # shd, fitText, vertAlign, rtl, cs, em, lang, eastAsianLayout, specVanish, oMath
+        # CT_ParaRPr additionally opens with ins, del, moveFrom, moveTo before
+        # the shared sequence; the paragraph-mark revision markers come first.
+        map_element "ins", to: :ins, render_nil: false
+        map_element "del", to: :del, render_nil: false
         map_element "rStyle", to: :style, render_nil: false
         map_element "rFonts", to: :fonts, render_nil: false
         map_element "b", to: :bold, render_nil: false
