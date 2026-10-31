@@ -100,6 +100,45 @@ module Uniword
         comment
       end
 
+      # Resolve a comment with Word semantics: remove the comment entry
+      # and every anchor marker referencing it (commentRangeStart,
+      # commentRangeEnd, and the commentReference run) from the body.
+      #
+      # @param comment_id [String] The comment ID to resolve
+      # @return [Uniword::Comment, nil] The removed comment
+      def resolve_comment!(comment_id)
+        comment = comments_part.find_comment(comment_id)
+        return nil unless comment
+
+        strip_comment_anchors(comment_id.to_s)
+        comments_part.remove_comment(comment_id)
+      end
+
+      # Anchor a comment entry around a paragraph using Word's canonical
+      # markup (range start/end plus the styled reference run).
+      #
+      # @param comment_id [String] The comment ID to anchor
+      # @param paragraph [Wordprocessingml::Paragraph, nil] anchor target
+      # @return [void]
+      def anchor_comment(comment_id, paragraph)
+        Builder::CommentAnchorer.anchor(paragraph, comment_id)
+      end
+
+      # Map of comment ID to the text of the paragraph anchoring it.
+      #
+      # @return [Hash{String => String}] anchored paragraph text per ID;
+      #   IDs without an anchor in the body are absent
+      def comment_anchor_texts
+        texts = {}
+        each_body_paragraph do |paragraph|
+          paragraph.comment_range_starts.each do |marker|
+            id = marker.id.to_s
+            texts[id] ||= paragraph.text
+          end
+        end
+        texts
+      end
+
       # Remove a comment from the document.
       #
       # @param comment_id [String] The comment ID to remove
@@ -285,6 +324,89 @@ module Uniword
           @resolver_hydrated = true
         end
         @tracked_changes
+      end
+
+      # --- Comment anchor removal ---------------------------------------
+
+      # Remove every anchor marker for a comment ID from the body,
+      # tables and SDT content included. Mirrors RevisionResolver's
+      # element_order surgery: parsed models keep serialization order in
+      # element_order, so each removed element's order entry goes with it.
+      #
+      # @param comment_id [String] The comment ID being resolved
+      # @return [void]
+      def strip_comment_anchors(comment_id)
+        each_body_paragraph do |paragraph|
+          remove_anchored_elements(paragraph, :comment_range_starts,
+                                   "commentRangeStart", comment_id)
+          remove_anchored_elements(paragraph, :comment_range_ends,
+                                   "commentRangeEnd", comment_id)
+          remove_reference_runs(paragraph, comment_id)
+        end
+      end
+
+      # @yieldparam paragraph [Wordprocessingml::Paragraph]
+      # @return [void]
+      def each_body_paragraph(&block)
+        containers = [@document.body].compact
+        FindReplace::ParagraphWalker.each_paragraph(containers, &block)
+      end
+
+      # Remove the elements with the ID from a paragraph collection,
+      # keeping element_order in sync.
+      #
+      # @param paragraph [Wordprocessingml::Paragraph]
+      # @param collection_name [Symbol] reader of the marker collection
+      # @param tag [String] element_order tag of the marker
+      # @param comment_id [String] the comment ID being resolved
+      # @return [void]
+      def remove_anchored_elements(paragraph, collection_name, tag,
+                                   comment_id)
+        collection = paragraph.public_send(collection_name)
+        matching = collection.select { |element| element.id.to_s == comment_id }
+        matching.each do |element|
+          index = collection.index(element)
+          collection.delete(element)
+          remove_nth_order_entry(paragraph, tag, index)
+        end
+      end
+
+      # Remove the runs carrying the comment's w:commentReference.
+      #
+      # @param paragraph [Wordprocessingml::Paragraph]
+      # @param comment_id [String] the comment ID being resolved
+      # @return [void]
+      def remove_reference_runs(paragraph, comment_id)
+        paragraph.runs.select do |run|
+          run.comment_reference&.id.to_s == comment_id
+        end.each do |run|
+          index = paragraph.runs.index(run)
+          paragraph.runs.delete(run)
+          remove_nth_order_entry(paragraph, "r", index)
+        end
+      end
+
+      # Drop the index-th entry named `tag` from a model's element_order
+      # (no-op without a parsed order or when the entry is missing).
+      #
+      # @param model [Lutaml::Model::Serializable]
+      # @param tag [String]
+      # @param index [Integer, nil]
+      # @return [void]
+      def remove_nth_order_entry(model, tag, index)
+        order = Ooxml::ElementOrder.mutable_order(model)
+        return unless order && index
+
+        seen = -1
+        order.each_with_index do |entry, i|
+          next unless entry.name == tag
+
+          seen += 1
+          next unless seen == index
+
+          order.delete_at(i)
+          return
+        end
       end
     end
   end
