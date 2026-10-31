@@ -215,7 +215,7 @@ end
 
 # Hydrate every registry-loadable part from extracted ZIP entries.
 def hydrate_all_parts(zip_content)
-  Uniword::Ooxml::PartRegistry.loadable.each_key do |definition|
+  Uniword::Ooxml::PartRegistry.loadable.each do |definition|
     content = zip_content[definition.path]
     definition.loader_model.from_xml(content) if content
   end
