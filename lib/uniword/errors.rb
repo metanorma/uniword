@@ -144,4 +144,17 @@ module Uniword
     # @return [String] The reason
     attr_reader :reason
   end
+
+  # Raised when a template fill (strict mode) finds placeholders whose
+  # variables have no data
+  class MissingVariablesError < Error
+    # @param variables [Array<String>] The variable names without data
+    def initialize(variables)
+      super("Missing template variables: #{variables.join(', ')}")
+      @variables = variables
+    end
+
+    # @return [Array<String>] The missing variable names
+    attr_reader :variables
+  end
 end

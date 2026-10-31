@@ -9,6 +9,8 @@ module Uniword
     autoload :TemplateValidator, "#{__dir__}/template/template_validator"
     autoload :TemplateContext, "#{__dir__}/template/template_context"
     autoload :TemplateMarker, "#{__dir__}/template/template_marker"
+    autoload :Filler, "#{__dir__}/template/filler"
+    autoload :FillResult, "#{__dir__}/template/fill_result"
     autoload :Helpers, "#{__dir__}/template/helpers"
   end
 end
