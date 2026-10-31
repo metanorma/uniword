@@ -43,8 +43,8 @@ Gem::Specification.new do |spec|
 
   # Core dependencies
   spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
-  spec.add_dependency "leptris", "~> 1.9.368" # XSD engine: ns-keyed lookups, cross-ns type refs, Ruby 4.0 hydration safety (validation floor)
-  spec.add_dependency "lutaml-model", "~> 0.8"
+  spec.add_dependency "leptris", "~> 1.9.391" # XSD engine floor: 1.9.386-1.9.390 reject a:blip r:embed; fixed in 1.9.391
+  spec.add_dependency "lutaml-model", "~> 0.8.148" # 0.8.138-0.8.147 emit render_default: false booleans; fixed in 0.8.148
   spec.add_dependency "omml", "~> 0.2.3"
   spec.add_dependency "rainbow", "~> 3.1"
   spec.add_dependency "rubyzip", "~> 3.4"
