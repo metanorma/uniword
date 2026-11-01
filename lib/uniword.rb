@@ -95,6 +95,7 @@ module Uniword
   autoload :UnsupportedOperationError, "uniword/errors"
   autoload :ConversionError, "uniword/errors"
   autoload :MissingVariablesError, "uniword/errors"
+  autoload :FidelityError, "uniword/errors"
 
   # Styles (moved to wordprocessingml/styles/)
   autoload :Styles, "uniword/wordprocessingml/styles"
@@ -148,11 +149,16 @@ module Uniword
   # Plugin system (validators, transformers, CLI commands).
   autoload :Plugin, "uniword/plugin"
 
+  # Plain-text (Markdown / AsciiDoc) conversion via Coradoc. The
+  # coradoc gems are optional at runtime and lazily required.
+  autoload :Converter, "uniword/converter"
+
   # CLI
   module Cli
     autoload :Completions, "uniword/cli/completions"
     autoload :HelpSwitch, "uniword/cli/help_switch"
     autoload :NoColor, "uniword/cli/no_color"
+    autoload :PlainTextCommand, "uniword/cli/plain_text_command"
   end
   autoload :CLI, "uniword/cli/main"
   autoload :GenerateCLI, "uniword/cli/generate_cli"

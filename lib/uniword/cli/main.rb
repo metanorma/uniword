@@ -536,6 +536,78 @@ module Uniword
       handle_error(e, verbose: options[:verbose])
     end
 
+    desc "to md|adoc INPUT", "Convert a DOCX to Markdown or AsciiDoc"
+    long_desc <<~DESC
+      Convert a Word document to a plain-text editing format -- Markdown
+      or AsciiDoc -- through the Coradoc CoreModel bridge.
+
+      Carried: headings h1-h6, paragraphs, bold/italic/underline/
+      strikethrough, lists, tables with header rows, links, bookmarks.
+      Dropped or degraded features (headers/footers, comments, tracked
+      changes, SDTs, math, images, footnotes) are reported; --strict
+      fails instead of losing them.
+
+      Examples:
+        $ uniword to md report.docx
+        $ uniword to adoc report.docx -o report.adoc
+        $ uniword to md report.docx -o - --strict
+    DESC
+    option :output, aliases: "-o", type: :string,
+                    desc: "Output path ('-' for stdout; " \
+                          "default: <input>.md/.adoc)"
+    option :strict, type: :boolean, default: false,
+                    desc: "Fail when fidelity loss would occur"
+    option :json, type: :boolean, default: false,
+                  desc: "Report as JSON (requires an output file)"
+    def to(format, input_path)
+      validate_plain_text_json!
+      result = Cli::PlainTextCommand.convert_to(
+        format, input_path, strict: options[:strict]
+      )
+      output_path = options[:output] || Cli::PlainTextCommand.default_output(
+        input_path, Cli::PlainTextCommand.extension_for(format)
+      )
+      Cli::PlainTextCommand.write_text(result, output_path)
+      report_plain_text(result, input_path, output_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e)
+    end
+
+    desc "from md|adoc INPUT", "Convert Markdown or AsciiDoc to a DOCX"
+    long_desc <<~DESC
+      Convert a Markdown or AsciiDoc file to a Word document through
+      the Coradoc CoreModel bridge. Headings become Heading styles,
+      lists get numbering, tables keep their header rows, and
+      AsciiDoc links become real hyperlinks.
+
+      Examples:
+        $ uniword from md notes.md
+        $ uniword from adoc report.adoc -o report.docx
+        $ uniword from md notes.md --json
+    DESC
+    option :output, aliases: "-o", type: :string,
+                    desc: "Output DOCX path (default: <input>.docx)"
+    option :strict, type: :boolean, default: false,
+                    desc: "Fail when fidelity loss would occur"
+    option :json, type: :boolean, default: false,
+                  desc: "Report as JSON"
+    def from(format, input_path)
+      result = Cli::PlainTextCommand.convert_from(
+        format, input_path, strict: options[:strict]
+      )
+      output_path = options[:output] || Cli::PlainTextCommand.default_output(
+        input_path, ".docx"
+      )
+      result.document.save(output_path)
+      report_plain_text(result, input_path, output_path)
+    rescue Uniword::Error => e
+      handle_error(e)
+    rescue StandardError => e
+      handle_error(e)
+    end
+
     # Register subcommands
     desc "theme SUBCOMMAND", "Manage document themes"
     subcommand "theme", ThemeCLI
@@ -598,6 +670,31 @@ module Uniword
     BASELINE_FIX_CODES = %w[R1 R6 R7 R8 R14 R24].freeze
 
     private
+
+    # -- plain-text (to/from) helpers -----------------------------------
+
+    # --json pairs with an output file; stdout text and a JSON report
+    # cannot share the stream.
+    def validate_plain_text_json!
+      return unless options[:json] && options[:output] == "-"
+
+      say("Error: --json cannot be combined with '-o -'", :red)
+      exit 1
+    end
+
+    def report_plain_text(result, input_path, output_path)
+      if options[:json]
+        require "json"
+        puts JSON.pretty_generate(
+          result.to_h.merge(input: input_path, output: output_path)
+        )
+        return
+      end
+
+      say result.summary, result.clean? ? :green : :yellow
+      destination = output_path == "-" ? "stdout" : output_path
+      say "Converted #{input_path} -> #{destination}", :green
+    end
 
     # -- find-replace helpers -------------------------------------------
 
