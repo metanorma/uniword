@@ -334,8 +334,10 @@ module Uniword
         count = 1
       else
         targets = filtered_revisions(manager)
-        targets.each { |rev| decide(manager, action, rev.revision_id) }
+        # Capture the count first: deciding a revision splices it out
+        # of the facade's list, which `targets` may alias.
         count = targets.count
+        targets.each { |rev| decide(manager, action, rev.revision_id) }
       end
 
       save_output(doc, path)

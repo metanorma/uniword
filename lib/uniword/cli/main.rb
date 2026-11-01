@@ -564,6 +564,10 @@ module Uniword
     desc "comments SUBCOMMAND", "Manage document comments"
     subcommand "comments", CommentsCLI
 
+    desc "revisions SUBCOMMAND",
+         "Tracked changes (alias of review changes/accept/reject)"
+    subcommand "revisions", RevisionsCLI
+
     desc "diff SUBCOMMAND", "Compare two DOCX files"
     subcommand "diff", DiffCLI
 

@@ -431,4 +431,25 @@ RSpec.describe Uniword::Review::ReviewManager do
       expect(manager.comment_anchor_texts).to eq({})
     end
   end
+
+  describe "hydration across manager instances" do
+    it "does not duplicate revisions when a second manager reuses the facade" do
+      doc.body.paragraphs << paragraph_with_text("Stable")
+      first = described_class.new(doc)
+      deletion = Uniword::Wordprocessingml::Deletion.new(
+        id: "7", author: "Alice", date: "2026-01-02T00:00:00Z",
+        runs: [plain_run("gone")],
+      )
+      para = paragraph_with_text("keep gone here")
+      para.deletions << deletion
+      doc.body.paragraphs << para
+
+      counts = Array.new(3) do
+        described_class.new(doc).list_revisions.size
+      end
+
+      expect(counts).to all(eq(1))
+      expect(first.list_revisions.size).to eq(1)
+    end
+  end
 end
