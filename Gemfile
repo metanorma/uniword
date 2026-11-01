@@ -22,7 +22,7 @@ gem "ruby-prof"
 gem "yard"
 
 # moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168.
-gem "moxml", "~> 0.5.168"
+gem "moxml", "~> 0.6.0"
 
 # lutaml-model 0.8.138-0.8.147 emit render_default: false booleans; fixed in
 # 0.8.148 (lutaml-model#1057). 0.8.138+ also runs custom-initialize classes
