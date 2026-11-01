@@ -320,7 +320,12 @@ module Uniword
           end
         end
         unless @resolver_hydrated
-          @resolver.hydrate(@tracked_changes)
+          # The facade is shared on the document, so a second manager
+          # (or a second verb on the same manager chain) would re-run
+          # the resolver over already-hydrated entries and duplicate
+          # every revision. Hydrate only a facade that is still empty;
+          # a populated one is already in sync with the document.
+          @resolver.hydrate(@tracked_changes) if @tracked_changes.revisions.empty?
           @resolver_hydrated = true
         end
         @tracked_changes

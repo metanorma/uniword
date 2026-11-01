@@ -167,6 +167,7 @@ module Uniword
   autoload :ThemeCLI, "uniword/cli/theme_cli"
   autoload :ReviewCLI, "uniword/cli/review_cli"
   autoload :CommentsCLI, "uniword/cli/comments_cli"
+  autoload :RevisionsCLI, "uniword/cli/revisions_cli"
   autoload :TocCLI, "uniword/cli/toc_cli"
   autoload :ImagesCLI, "uniword/cli/images_cli"
   autoload :SpellcheckCLI, "uniword/cli/spellcheck_cli"
