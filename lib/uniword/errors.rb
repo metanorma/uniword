@@ -157,4 +157,24 @@ module Uniword
     # @return [Array<String>] The missing variable names
     attr_reader :variables
   end
+
+  # Raised when a strict plain-text conversion (Converter::PlainText)
+  # encounters features that would be dropped or degraded in the
+  # target format
+  class FidelityError < Error
+    # @param format [Symbol, String] The target format of the conversion
+    # @param dropped_features [Array<String>] The features that would be lost
+    def initialize(format, dropped_features)
+      super("Strict #{format} conversion would drop: " \
+            "#{dropped_features.join(', ')}")
+      @format = format
+      @dropped_features = dropped_features
+    end
+
+    # @return [Symbol, String] The target format
+    attr_reader :format
+
+    # @return [Array<String>] The features that would be lost
+    attr_reader :dropped_features
+  end
 end
