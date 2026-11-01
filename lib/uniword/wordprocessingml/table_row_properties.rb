@@ -38,18 +38,13 @@ module Uniword
         map_element "jc", to: :jc, render_nil: false
       end
 
-      def initialize(attrs = {})
-        # Handle table_header: keyword for docx-js API compatibility
-        if attrs.key?(:table_header)
-          val = attrs.delete(:table_header)
-          attrs[:tbl_header] = coerce_to_val_int(val)
-        end
-        super
-      end
-
-      private
-
-      def coerce_to_val_int(val)
+      # Coerce a table_header value (true/false/Integer/ValInt) into the
+      # w:tblHeader model value: false and 0 mean "off", which the
+      # element expresses by absence.
+      #
+      # @param val [Object] raw table_header value
+      # @return [ValInt, nil]
+      def self.coerce_table_header(val)
         case val
         when ValInt then val
         when true, 1 then ValInt.new(value: 1)
@@ -58,6 +53,15 @@ module Uniword
         when nil then nil
         else ValInt.new(value: val.to_i)
         end
+      end
+
+      def initialize(attrs = {})
+        # Handle table_header: keyword for docx-js API compatibility
+        if attrs.key?(:table_header)
+          val = attrs.delete(:table_header)
+          attrs[:tbl_header] = self.class.coerce_table_header(val)
+        end
+        super
       end
     end
   end

@@ -39,6 +39,26 @@ RSpec.describe Uniword::Builder::TableBuilder do
 end
 
 RSpec.describe Uniword::Builder::TableRowBuilder do
+  describe "#header_row" do
+    it "sets the persisted tblHeader flag" do
+      builder = described_class.new
+      builder.header_row
+      expect(builder.model.properties.tbl_header.value).to eq(1)
+    end
+
+    it "drops the flag when turned off" do
+      builder = described_class.new
+      builder.header_row(false)
+      expect(builder.model.properties.tbl_header).to be_nil
+    end
+
+    it "serializes w:tblHeader into the row" do
+      builder = described_class.new
+      builder.header_row
+      expect(builder.model.to_xml).to include("tblHeader")
+    end
+  end
+
   describe "#cell" do
     it "creates a cell with text" do
       builder = described_class.new
