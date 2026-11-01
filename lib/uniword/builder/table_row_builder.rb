@@ -45,7 +45,8 @@ module Uniword
       # @return [self]
       def header_row(value = true)
         @model.properties ||= Wordprocessingml::TableRowProperties.new
-        @model.properties.table_header = value
+        @model.properties.tbl_header =
+          Wordprocessingml::TableRowProperties.coerce_table_header(value)
         self
       end
     end
