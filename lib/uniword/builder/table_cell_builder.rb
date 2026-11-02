@@ -58,9 +58,9 @@ module Uniword
       # @return [self]
       def width(value, rule: nil)
         ensure_properties
-        @model.properties.width ||= Properties::CellWidth.new
-        @model.properties.width.value = value
-        @model.properties.width.rule = rule if rule
+        @model.properties.cell_width ||= Properties::CellWidth.new
+        @model.properties.cell_width.w = value
+        @model.properties.cell_width.type = rule if rule
         self
       end
 
