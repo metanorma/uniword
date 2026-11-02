@@ -35,8 +35,8 @@ module Uniword
       def width(value, rule: nil)
         ensure_properties
         @model.properties.table_width ||= Properties::TableWidth.new
-        @model.properties.table_width.value = value
-        @model.properties.table_width.rule = rule if rule
+        @model.properties.table_width.w = value
+        @model.properties.table_width.type = rule if rule
         self
       end
 

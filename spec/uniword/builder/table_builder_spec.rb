@@ -11,6 +11,24 @@ RSpec.describe Uniword::Builder::TableBuilder do
     end
   end
 
+  describe "#width" do
+    it "writes the table width onto the tblW model" do
+      builder = described_class.new
+      builder.width(5000, rule: "pct")
+      tw = builder.model.properties.table_width
+      expect(tw.w).to eq(5000)
+      expect(tw.type).to eq("pct")
+    end
+
+    it "does not overwrite the width type without a rule" do
+      builder = described_class.new
+      expect { builder.width(9360) }.not_to(
+        change { builder.model.properties.table_width&.type },
+      )
+      expect(builder.model.properties.table_width.w).to eq(9360)
+    end
+  end
+
   describe "#row" do
     it "creates and adds a row" do
       builder = described_class.new
@@ -100,6 +118,24 @@ RSpec.describe Uniword::Builder::TableCellBuilder do
       builder = described_class.new
       builder.shading(fill: "FF0000")
       expect(builder.model.properties.shading).not_to be_nil
+    end
+  end
+
+  describe "#width" do
+    it "writes the cell width onto the tcW model" do
+      builder = described_class.new
+      builder.width(2000, rule: "dxa")
+      cw = builder.model.properties.cell_width
+      expect(cw.w).to eq(2000)
+      expect(cw.type).to eq("dxa")
+    end
+
+    it "does not overwrite the width type without a rule" do
+      builder = described_class.new
+      expect { builder.width(1440) }.not_to(
+        change { builder.model.properties.cell_width&.type },
+      )
+      expect(builder.model.properties.cell_width.w).to eq(1440)
     end
   end
 end
