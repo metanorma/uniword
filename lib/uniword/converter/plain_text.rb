@@ -37,8 +37,9 @@ module Uniword
     # * structured document tags (content survives, wrapper unwrapped)
     # * math (OMML)
     # * images (docx extractor does not carry drawings)
-    # * footnotes (coradoc-docx 0.1.4 cannot read the current Footnotes
-    #   collection; the bridge sets it aside for the conversion)
+    # * footnotes (coradoc-docx reads the part since 0.1.5 but still
+    #   does not carry footnotes into the core model, so they would
+    #   vanish silently; the bridge sets it aside and reports them)
     #
     # Never carried by any plain-text format (not detected per document):
     # themes, settings, font table, and other package-level parts.
@@ -204,8 +205,8 @@ module Uniword
         raise FidelityError.new(format, drops)
       end
 
-      # Temporarily set aside content that would break or pollute the
-      # conversion (footnotes crash coradoc-docx 0.1.4) and rewrite
+      # Temporarily set aside content the writers would silently drop
+      # (footnotes never reach the coradoc core model) and rewrite
       # hyperlink rIds to their target URLs so the writers emit real
       # links; every mutation is restored after the conversion.
       def with_conversion_guards(document, drops)
