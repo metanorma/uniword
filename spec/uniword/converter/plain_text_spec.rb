@@ -321,7 +321,7 @@ RSpec.describe Uniword::Converter::PlainText do
       expect(result).to be_dropped("images")
     end
 
-    it "detects footnotes and converts the body without crashing" do
+    it "converts footnotes to GFM references and definitions" do
       doc = Uniword::Builder::DocumentBuilder.new
       doc.paragraph do |p|
         p << "Has a note"
@@ -330,8 +330,10 @@ RSpec.describe Uniword::Converter::PlainText do
 
       result = converter.to_markdown_result(doc.build)
 
-      expect(result).to be_dropped("footnotes")
+      expect(result).not_to be_dropped("footnotes")
       expect(result.text).to include("Has a note")
+      expect(result.text).to include("[^")
+      expect(result.text).to include("The note text")
     end
   end
 end

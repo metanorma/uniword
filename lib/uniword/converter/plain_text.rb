@@ -27,6 +27,8 @@ module Uniword
     # * tables with a header row
     # * links (bridge resolves relationship ids to target URLs)
     # * bookmarks (heading/paragraph anchor id propagation)
+    # * footnotes (coradoc-docx 0.1.6 carries them into the core
+    #   model; to md/adoc emits GFM [^id] + definitions)
     #
     # Dropped or degraded (recorded on PlainTextResult, warned about;
     # +strict: true+ raises FidelityError):
@@ -36,19 +38,18 @@ module Uniword
     # * tracked changes (w:ins/w:del)
     # * structured document tags (content survives, wrapper unwrapped)
     # * math (OMML)
-    # * images (docx extractor does not carry drawings)
-    # * footnotes (coradoc-docx reads the part since 0.1.5 but still
-    #   does not carry footnotes into the core model, so they would
-    #   vanish silently; the bridge sets it aside and reports them)
+    # * images (docx extractor does not carry drawings; coradoc#322)
     #
     # Never carried by any plain-text format (not detected per document):
     # themes, settings, font table, and other package-level parts.
     #
     # From the plain-text side, links written to DOCX resolve to real
-    # External relationships on save. One upstream flattening remains:
+    # External relationships on save. Upstream flattenings that remain:
     # coradoc-markdown's CoreModel transform emits inline Markdown links
     # as literal text, so from_markdown keeps links as text while
-    # from_asciidoc builds real hyperlinks.
+    # from_asciidoc builds real hyperlinks (coradoc#320); the same
+    # inline parser gap leaves from_markdown footnote REFERENCES as
+    # literal text (definitions do convert, coradoc#320).
     #
     # @example Document to Markdown
     #   md = Uniword::Converter::PlainText.new.to_markdown(document)
@@ -195,7 +196,6 @@ module Uniword
         end
         features << "math (OMML)" if any_paragraph?(document) { |p| math?(p) }
         features << "images" if any_paragraph?(document) { |p| drawing?(p) }
-        features << "footnotes" if user_footnotes?(document)
         features
       end
 
@@ -205,23 +205,12 @@ module Uniword
         raise FidelityError.new(format, drops)
       end
 
-      # Temporarily set aside content the writers would silently drop
-      # (footnotes never reach the coradoc core model) and rewrite
-      # hyperlink rIds to their target URLs so the writers emit real
-      # links; every mutation is restored after the conversion.
-      def with_conversion_guards(document, drops)
-        stash = {}
-        if drops.include?("footnotes")
-          stash[:footnotes] = document.footnotes
-          document.footnotes = nil
-        end
+      # Rewrite hyperlink rIds to their target URLs so coradoc's
+      # writers emit real links; every mutation is restored after the
+      # conversion.
+      def with_conversion_guards(document, _drops)
         rewrites = resolve_link_targets(document)
-        begin
-          yield
-        ensure
-          restore_link_targets(rewrites)
-          document.footnotes = stash[:footnotes] if stash.key?(:footnotes)
-        end
+        yield.tap { restore_link_targets(rewrites) }
       end
 
       # Rewrite w:hyperlink r:id attributes to their relationship
@@ -412,16 +401,6 @@ module Uniword
         end
       end
 
-      def user_footnotes?(document)
-        footnotes = document.footnotes
-        unless footnotes.is_a?(Uniword::Wordprocessingml::Footnotes)
-          return false
-        end
-
-        footnotes.footnote_entries.any? do |entry|
-          entry.type != "separator" && entry.type != "continuationSeparator"
-        end
-      end
     end
   end
 end
