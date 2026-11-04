@@ -37,6 +37,6 @@ gem "leptris", "~> 1.9.391"
 # optional at runtime (lazy requires), never in the gemspec, so no
 # dependency cycle with coradoc-docx which depends on uniword.
 gem "coradoc", "~> 2.0"
-gem "coradoc-docx", "~> 0.1.5"
+gem "coradoc-docx", "~> 0.1.6"
 gem "coradoc-markdown", "~> 1.0.14"
 gem "coradoc-adoc", "~> 2.0"
