@@ -28,7 +28,7 @@ gem "moxml", "~> 0.6.0"
 # 0.8.148 (lutaml-model#1057). 0.8.138+ also runs custom-initialize classes
 # through the constructor during XML parsing, costing +50% hydration CPU on
 # the uniword corpus (lutaml-model#1059).
-gem "lutaml-model", path: "/Users/mulgogi/src/lutaml/lutaml-model"
+gem "lutaml-model", "~> 0.8.169"
 
 # leptris 1.9.386-1.9.390 reject r:embed on a:blip; fixed in 1.9.391 (leptris-ruby#569).
 gem "leptris", "~> 1.9.407"
