@@ -137,9 +137,28 @@ module Uniword
         core = with_conversion_guards(document, drops) do
           ::Coradoc::Docx.parse_to_core(document)
         end
+        adoc_model = ::Coradoc::AsciiDoc::Transform::FromCoreModel
+          .transform(core)
+        normalize_emphasis_constraint!(adoc_model)
         build_result(format: :asciidoc, direction: :docx_to_asciidoc,
-                     core: core, drops: drops, text:
-                     ::Coradoc::AsciiDoc.serialize(core))
+                     core: core, drops: drops, text: adoc_model.to_adoc)
+      end
+
+      # CoreModel carries no emphasis constraint, and the framework's
+      # flank guess can downgrade boundary-flanked runs to the
+      # constrained spelling, which does not reparse mid-word. The
+      # DOCX contract emits the unconstrained forms (`**bold**`,
+      # `__italic__`) — they parse unconditionally — so the
+      # converter restores the emphasis models' own unconstrained
+      # default after the transform.
+      def normalize_emphasis_constraint!(model)
+        model.visit do |element, _phase|
+          element.unconstrained = true if element.is_a?(
+            ::Coradoc::AsciiDoc::Model::Inline::Bold,
+          ) || element.is_a?(::Coradoc::AsciiDoc::Model::Inline::Italic)
+          element
+        end
+        model
       end
 
       # Parse AsciiDoc into a document model.
