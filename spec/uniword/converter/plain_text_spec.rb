@@ -209,8 +209,8 @@ RSpec.describe Uniword::Converter::PlainText do
 
       expect(adoc).to include("= Main Title")
       expect(adoc).to include("=== Section")
-      expect(adoc).to include("**bold word**")
-      expect(adoc).to include("__italic word__")
+      expect(adoc).to include("*bold word*")
+      expect(adoc).to include("_italic word_")
       expect(adoc).to include("* first")
       expect(adoc).to include("* second")
       expect(adoc).to include("|===")
