@@ -32,7 +32,7 @@ RSpec.describe Uniword::Builder::CommentAnchorer do
 
         xml = paragraph.to_xml
         start_pos = xml.index("commentRangeStart")
-        run_pos = xml.index("<t>reviewed text</t>")
+        run_pos = xml.index("reviewed text")
         end_pos = xml.index("commentRangeEnd")
         ref_pos = xml.index("commentReference")
         expect(start_pos).to be < run_pos
