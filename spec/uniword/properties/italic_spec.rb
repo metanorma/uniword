@@ -11,7 +11,7 @@ RSpec.describe "Italic boolean elements" do
       italic = described_class.new
       italic.val = true
       expect(italic.to_xml).not_to include("w:val")
-      expect(italic.to_xml).to include("<i ")
+      expect(italic.to_xml).to include("<w:i ")
     end
 
     it "serializes false as <w:i w:val='false'/>" do
@@ -50,7 +50,7 @@ RSpec.describe "Italic boolean elements" do
       italic = described_class.new
       italic.val = true
       expect(italic.to_xml).not_to include("w:val")
-      expect(italic.to_xml).to include("<iCs ")
+      expect(italic.to_xml).to include("<w:iCs ")
     end
 
     it "serializes false as <w:iCs w:val='false'/>" do

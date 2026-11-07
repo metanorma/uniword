@@ -165,8 +165,8 @@ RSpec.describe Uniword::Wordprocessingml::AlternateContent do
       )
 
       xml = fallback.to_xml
-      expect(xml).to include("<Fallback")
-      expect(xml).to include('xmlns="http://schemas.openxmlformats.org/markup-compatibility/2006"')
+      expect(xml).to include("<mc:Fallback")
+      expect(xml).to include('xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"')
     end
 
     it "parses from XML" do

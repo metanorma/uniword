@@ -11,7 +11,7 @@ RSpec.describe "Bold boolean elements" do
       bold = described_class.new
       bold.val = true
       expect(bold.to_xml).not_to include("w:val")
-      expect(bold.to_xml).to include("<b ")
+      expect(bold.to_xml).to include("<w:b ")
     end
 
     it "serializes false as <w:b w:val='false'/>" do
@@ -80,7 +80,7 @@ RSpec.describe "Bold boolean elements" do
       bold = described_class.new
       bold.val = true
       expect(bold.to_xml).not_to include("w:val")
-      expect(bold.to_xml).to include("<bCs ")
+      expect(bold.to_xml).to include("<w:bCs ")
     end
 
     it "serializes false as <w:bCs w:val='false'/>" do

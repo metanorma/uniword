@@ -156,7 +156,7 @@ RSpec.describe Uniword::Ooxml::Schema::ElementSerializer do
 
         expect(xml).to be_a(String)
         # Pretty print should produce valid XML with content
-        expect(xml).to include("<p")
+        expect(xml).to include("<w:p")
         expect(xml).to include("Test")
       end
 
