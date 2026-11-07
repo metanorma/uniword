@@ -84,22 +84,28 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
 
     it "emits mirrorMargins before proofState" do
       xml = settings.to_xml
-      mm_idx = xml.index("<mirrorMargins")
-      ps_idx = xml.index("<proofState")
+      mm_idx = xml.index(/<(w:)?mirrorMargins/)
+      ps_idx = xml.index(/<(w:)?proofState/)
+      expect(mm_idx).not_to be_nil
+      expect(ps_idx).not_to be_nil
       expect(mm_idx).to be < ps_idx
     end
 
     it "emits hyphenationZone after defaultTabStop" do
       xml = settings.to_xml
-      dts_idx = xml.index("<defaultTabStop")
-      hz_idx = xml.index("<hyphenationZone")
+      dts_idx = xml.index(/<(w:)?defaultTabStop/)
+      hz_idx = xml.index(/<(w:)?hyphenationZone/)
+      expect(dts_idx).not_to be_nil
+      expect(hz_idx).not_to be_nil
       expect(hz_idx).to be > dts_idx
     end
 
     it "emits compat after characterSpacingControl" do
       xml = settings.to_xml
-      csc_idx = xml.index("<characterSpacingControl")
-      compat_idx = xml.index(/<compat[ >\/]/)
+      csc_idx = xml.index(/<(w:)?characterSpacingControl/)
+      compat_idx = xml.index(/<(w:)?compat[ >\/]/)
+      expect(csc_idx).not_to be_nil
+      expect(compat_idx).not_to be_nil
       expect(compat_idx).to be > csc_idx
     end
   end

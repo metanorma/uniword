@@ -282,7 +282,11 @@ RSpec.describe "OOXML Namespace Configuration" do
       expect(xml).to match(/<w:t/)
     end
 
-    it "uses default namespace without prefix option" do
+    it "honors the declared prefixes on a constructed model (declare-always staged)" do
+      # #1124: DocumentRoot stages namespace_scope declare: :always -
+      # the constructed model serializes with the DECLARED prefixes
+      # (w: for WordProcessingML), matching the parsed-and-reserialized
+      # form. prefix: false opts out to the default namespace form.
       doc = Uniword::Wordprocessingml::DocumentRoot.new
       para = Uniword::Wordprocessingml::Paragraph.new
       run = Uniword::Wordprocessingml::Run.new(text: "Test")
@@ -290,12 +294,14 @@ RSpec.describe "OOXML Namespace Configuration" do
       doc.body.paragraphs << para
 
       xml = doc.to_xml
+      expect(xml).to match(/<w:document/)
+      expect(xml).to match(/<w:body/)
+      expect(xml).to match(/<w:p>/)
+      expect(xml).to match(/<w:t/)
 
-      # Without prefix option, default namespace is used (no prefix)
-      expect(xml).to include('xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
-      expect(xml).to match(/<document/)
-      expect(xml).to match(/<body/)
-      expect(xml).to match(/<p>/).or match(/<p\s/)
+      unprefixed = doc.to_xml(prefix: false)
+      expect(unprefixed).to include('xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
+      expect(unprefixed).to match(/<document/)
     end
   end
 
