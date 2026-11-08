@@ -28,10 +28,15 @@ gem "moxml", "~> 0.6.0"
 # 0.8.148 (lutaml-model#1057). 0.8.138+ also runs custom-initialize classes
 # through the constructor during XML parsing, costing +50% hydration CPU on
 # the uniword corpus (lutaml-model#1059).
-gem "lutaml-model", "~> 0.8.169"
+#
+# 0.8.165-0.8.170 fix the native emission lane regressions (#1126, #1136,
+# #1140) and settle the render_default contract (6fd1c0fc). Validated green
+# on the full corpus (8380/0) with the attribute-qualified wire forms
+# pinned by PR #96 (lutaml-model#1145 reconciled as stale local state).
+gem "lutaml-model", "~> 0.8.170"
 
 # leptris 1.9.386-1.9.390 reject r:embed on a:blip; fixed in 1.9.391 (leptris-ruby#569).
-gem "leptris", "~> 1.9.407"
+gem "leptris", "~> 1.9.412"
 
 # Coradoc bridge (issue #80): plain-text editing round trip. DEV-only --
 # optional at runtime (lazy requires), never in the gemspec, so no
