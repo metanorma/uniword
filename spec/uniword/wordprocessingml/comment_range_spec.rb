@@ -128,9 +128,10 @@ RSpec.describe Uniword::CommentRange do
   describe "#accept" do
     it "calls visitor visit_comment_range method" do
       range = described_class.new(comment_id: "1")
-      visitor = double("visitor")
-      expect(visitor).to receive(:visit_comment_range).with(range)
+      visitor = RecordingVisitor.new
+
       range.accept(visitor)
+      expect(visitor.visited).to eq([[:comment_range, range]])
     end
   end
 end

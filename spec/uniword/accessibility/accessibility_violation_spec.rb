@@ -11,7 +11,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityViolation do
       wcag_criterion: "1.1.1 Non-text Content",
       level: "A",
       message: "Image 1 missing alternative text",
-      element: double("Image"),
+      element: Uniword::Wordprocessingml::Drawing.new,
       severity: :error,
       suggestion: "Add descriptive alternative text for images",
     }
@@ -23,7 +23,7 @@ RSpec.describe Uniword::Accessibility::AccessibilityViolation do
       expect(violation.wcag_criterion).to eq("1.1.1 Non-text Content")
       expect(violation.level).to eq("A")
       expect(violation.message).to eq("Image 1 missing alternative text")
-      expect(violation.element).to be_a(RSpec::Mocks::Double)
+      expect(violation.element).to be_a(Uniword::Wordprocessingml::Drawing)
       expect(violation.severity).to eq(:error)
       expect(violation.suggestion).to eq("Add descriptive alternative text for images")
     end

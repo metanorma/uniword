@@ -47,10 +47,10 @@ RSpec.describe Uniword::Image do
   describe "#accept" do
     it "accepts a visitor" do
       image = described_class.new(relationship_id: "rId1")
-      visitor = double("visitor")
+      visitor = RecordingVisitor.new
 
-      expect(visitor).to receive(:visit_image).with(image)
       image.accept(visitor)
+      expect(visitor.visited).to eq([[:image, image]])
     end
   end
 

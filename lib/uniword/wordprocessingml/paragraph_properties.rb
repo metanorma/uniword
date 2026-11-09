@@ -381,7 +381,14 @@ module Uniword
         end
 
         entries.drop(1).each do |stale|
-          clearing.each { |field| stale.public_send(:"#{field}=", nil) }
+          clearing.each do |field|
+            case field
+            when :before then stale.before = nil
+            when :after then stale.after = nil
+            when :line then stale.line = nil
+            when :line_rule then stale.line_rule = nil
+            end
+          end
         end
 
         entries.first

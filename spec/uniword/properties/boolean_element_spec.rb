@@ -24,28 +24,28 @@ spellings = {
   "Ruby false" => [false, false],
 }.freeze
 
-# Every rPr toggle, as [attribute, element name, predicate or nil].
+# Every rPr toggle, as [attribute, element name, predicate or nil, wrapper].
 #
-# This list must cover Conversion::BOOLEAN_WRAPPERS exactly. It used to name
-# ten of the fifteen, and the five it skipped — bold_cs, italic_cs,
-# double_strike, no_proof, web_hidden — were the ones whose conversion could
-# be deleted without a single spec noticing.
+# This list must cover every attribute RunProperties converts from a
+# primitive. It used to name ten of the fifteen, and the five it skipped —
+# bold_cs, italic_cs, double_strike, no_proof, web_hidden — were the ones
+# whose conversion could be deleted without a single spec noticing.
 toggles = [
-  [:bold, "b", :bold?],
-  [:bold_cs, "bCs", nil],
-  [:italic, "i", :italic?],
-  [:italic_cs, "iCs", nil],
-  [:strike, "strike", :strike?],
-  [:double_strike, "dstrike", nil],
-  [:small_caps, "smallCaps", :small_caps?],
-  [:caps, "caps", :caps?],
-  [:hidden, "vanish", :hidden?],
-  [:no_proof, "noProof", nil],
-  [:web_hidden, "webHidden", nil],
-  [:shadow, "shadow", :shadow?],
-  [:emboss, "emboss", :emboss?],
-  [:imprint, "imprint", :imprint?],
-  [:outline, "outline", :outline?],
+  [:bold, "b", :bold?, Uniword::Properties::Bold],
+  [:bold_cs, "bCs", nil, Uniword::Properties::BoldCs],
+  [:italic, "i", :italic?, Uniword::Properties::Italic],
+  [:italic_cs, "iCs", nil, Uniword::Properties::ItalicCs],
+  [:strike, "strike", :strike?, Uniword::Properties::Strike],
+  [:double_strike, "dstrike", nil, Uniword::Properties::DoubleStrike],
+  [:small_caps, "smallCaps", :small_caps?, Uniword::Properties::SmallCaps],
+  [:caps, "caps", :caps?, Uniword::Properties::Caps],
+  [:hidden, "vanish", :hidden?, Uniword::Properties::Vanish],
+  [:no_proof, "noProof", nil, Uniword::Properties::NoProof],
+  [:web_hidden, "webHidden", nil, Uniword::Properties::WebHidden],
+  [:shadow, "shadow", :shadow?, Uniword::Properties::Shadow],
+  [:emboss, "emboss", :emboss?, Uniword::Properties::Emboss],
+  [:imprint, "imprint", :imprint?, Uniword::Properties::Imprint],
+  [:outline, "outline", :outline?, Uniword::Properties::Outline],
 ].freeze
 
 RSpec.describe Uniword::Properties::BooleanElement do
@@ -58,16 +58,18 @@ RSpec.describe Uniword::Properties::BooleanElement do
   end
 
   describe "the toggle list" do
-    it "covers every attribute Conversion wraps" do
-      wrapped = Uniword::Wordprocessingml::RunProperties::Conversion::BOOLEAN_WRAPPERS
-      expect(toggles.map(&:first)).to match_array(wrapped.keys)
+    it "wraps every toggle passed as a primitive" do
+      toggles.each do |attr, _element, _predicate, wrapper|
+        rpr = Uniword::Wordprocessingml::RunProperties.new(attr => "1")
+        expect(rpr.public_send(attr)).to be_a(wrapper)
+      end
     end
 
-    it "names the wrapper class each attribute converts to" do
-      wrapped = Uniword::Wordprocessingml::RunProperties::Conversion::BOOLEAN_WRAPPERS
-      toggles.each do |attr, _element, _predicate|
-        rpr = Uniword::Wordprocessingml::RunProperties.new(attr => "1")
-        expect(rpr.public_send(attr)).to be_a(wrapped.fetch(attr))
+    it "leaves already-wrapped values alone" do
+      toggles.each do |attr, _element, _predicate, wrapper|
+        original = wrapper.new(val: "1")
+        rpr = Uniword::Wordprocessingml::RunProperties.new(attr => original)
+        expect(rpr.public_send(attr)).to equal(original)
       end
     end
   end

@@ -174,9 +174,10 @@ RSpec.describe Uniword::Comment do
   describe "#accept" do
     it "calls visitor visit_comment method" do
       comment = described_class.new(author: "Editor")
-      visitor = double("visitor")
-      expect(visitor).to receive(:visit_comment).with(comment)
+      visitor = RecordingVisitor.new
+
       comment.accept(visitor)
+      expect(visitor.visited).to eq([[:comment, comment]])
     end
   end
 

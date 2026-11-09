@@ -158,7 +158,7 @@ module Uniword
             # Extract alignment (m:jc)
             jc_node = para_props.at_xpath(".//m:jc", "m" => OMML_NAMESPACE)
             if jc_node
-              jc_val = jc_node.attr("m:val")
+              jc_val = jc_node["m:val"]
               properties[:alignment] = normalize_alignment(jc_val)
             end
           end

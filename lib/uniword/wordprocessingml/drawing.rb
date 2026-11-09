@@ -36,7 +36,7 @@ module Uniword
       #
       # @return [String, nil] Alternative text, or nil when absent
       def alt_text
-        first_non_blank(:descr)
+        first_non_blank(&:descr)
       end
 
       # Set the alternative text on whichever frame this drawing carries.
@@ -57,16 +57,17 @@ module Uniword
       #
       # @return [String, nil] Title, or nil when absent
       def alt_title
-        first_non_blank(:title)
+        first_non_blank(&:title)
       end
 
       private
 
-      # @param attribute [Symbol] docPr attribute to read
+      # @param attribute [#call] reader called on each frame's docPr
       # @return [String, nil] First non-blank value across the frames
-      def first_non_blank(attribute)
+      def first_non_blank(&attribute)
         [inline, anchor]
-          .filter_map { |frame| frame&.doc_properties&.public_send(attribute) }
+          .filter_map { |frame| frame&.doc_properties }
+          .filter_map(&attribute)
           .map(&:strip)
           .find { |text| !text.empty? }
       end
