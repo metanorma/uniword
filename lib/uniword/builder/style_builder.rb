@@ -106,7 +106,9 @@ module Uniword
           before: before, after: after, line: line
         }.select { |_, value| value }
         sp = ensure_para_props.ensure_spacing(*written.keys)
-        written.each { |field, value| sp.public_send(:"#{field}=", value) }
+        sp.before = before if before
+        sp.after = after if after
+        sp.line = line if line
         self
       end
 

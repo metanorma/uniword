@@ -53,10 +53,10 @@ RSpec.describe Uniword::Batch::ProcessingStage do
 
     it "is called when implemented" do
       stage = TestStage.new
-      document = double("Document")
+      document = Uniword::Wordprocessingml::DocumentRoot.new
       result = stage.process(document)
       expect(stage.process_called).to be true
-      expect(result).to eq(document)
+      expect(result).to equal(document)
     end
   end
 

@@ -9,25 +9,6 @@ module Uniword
       # (e.g., RunProperties.new(bold: true)) and the wrapper
       # objects (e.g., Properties::Bold) required by lutaml-model.
       module Conversion
-        # Every rPr attribute whose value is an ST_OnOff toggle element.
-        BOOLEAN_WRAPPERS = {
-          bold: Properties::Bold,
-          bold_cs: Properties::BoldCs,
-          italic: Properties::Italic,
-          italic_cs: Properties::ItalicCs,
-          strike: Properties::Strike,
-          double_strike: Properties::DoubleStrike,
-          small_caps: Properties::SmallCaps,
-          caps: Properties::Caps,
-          hidden: Properties::Vanish,
-          no_proof: Properties::NoProof,
-          web_hidden: Properties::WebHidden,
-          shadow: Properties::Shadow,
-          emboss: Properties::Emboss,
-          imprint: Properties::Imprint,
-          outline: Properties::Outline,
-        }.freeze
-
         def initialize(attrs = {})
           # Extract flat convenience keys before super (lutaml-model ignores
           # unknown keys). These are converted to proper wrapper objects below.
@@ -118,15 +99,46 @@ module Uniword
         # Wrap every ST_OnOff toggle handed in as a primitive.
         #
         # `false` is a value, not an absence: testing truthiness here left a
-        # raw Ruby false on the attribute and to_xml then died on it.
+        # raw Ruby false on the attribute and to_xml then died on it. Each
+        # toggle is named explicitly so a new one cannot silently skip
+        # conversion; boolean_element_spec asserts the full set converts.
         def convert_boolean_attrs!
-          BOOLEAN_WRAPPERS.each do |name, klass|
-            current = instance_variable_get(:"@#{name}")
-            next if current.nil? || current.is_a?(klass) ||
-              Lutaml::Model::Utils.uninitialized?(current)
+          self.bold = Properties::Bold.new(val: bold) if wrap_needed?(bold, Properties::Bold)
+          self.bold_cs = Properties::BoldCs.new(val: bold_cs) if
+            wrap_needed?(bold_cs, Properties::BoldCs)
+          self.italic = Properties::Italic.new(val: italic) if
+            wrap_needed?(italic, Properties::Italic)
+          self.italic_cs = Properties::ItalicCs.new(val: italic_cs) if
+            wrap_needed?(italic_cs, Properties::ItalicCs)
+          self.strike = Properties::Strike.new(val: strike) if
+            wrap_needed?(strike, Properties::Strike)
+          self.double_strike = Properties::DoubleStrike.new(val: double_strike) if
+            wrap_needed?(double_strike, Properties::DoubleStrike)
+          self.small_caps = Properties::SmallCaps.new(val: small_caps) if
+            wrap_needed?(small_caps, Properties::SmallCaps)
+          self.caps = Properties::Caps.new(val: caps) if
+            wrap_needed?(caps, Properties::Caps)
+          self.hidden = Properties::Vanish.new(val: hidden) if
+            wrap_needed?(hidden, Properties::Vanish)
+          self.no_proof = Properties::NoProof.new(val: no_proof) if
+            wrap_needed?(no_proof, Properties::NoProof)
+          self.web_hidden = Properties::WebHidden.new(val: web_hidden) if
+            wrap_needed?(web_hidden, Properties::WebHidden)
+          self.shadow = Properties::Shadow.new(val: shadow) if
+            wrap_needed?(shadow, Properties::Shadow)
+          self.emboss = Properties::Emboss.new(val: emboss) if
+            wrap_needed?(emboss, Properties::Emboss)
+          self.imprint = Properties::Imprint.new(val: imprint) if
+            wrap_needed?(imprint, Properties::Imprint)
+          self.outline = Properties::Outline.new(val: outline) if
+            wrap_needed?(outline, Properties::Outline)
+        end
 
-            instance_variable_set(:"@#{name}", klass.new(val: current))
-          end
+        private
+
+        def wrap_needed?(value, klass)
+          !value.nil? && !value.is_a?(klass) &&
+            !Lutaml::Model::Utils.uninitialized?(value)
         end
 
         def convert_style_attr!

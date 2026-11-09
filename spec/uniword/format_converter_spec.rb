@@ -12,7 +12,7 @@ RSpec.describe Uniword::FormatConverter do
     end
 
     it "accepts optional logger" do
-      logger = double("Logger")
+      logger = Logger.new(StringIO.new)
       conv = described_class.new(logger: logger)
       expect(conv).to be_a(described_class)
     end

@@ -367,7 +367,12 @@ module Uniword
       # @return [void]
       def remove_anchored_elements(paragraph, collection_name, tag,
                                    comment_id)
-        collection = paragraph.public_send(collection_name)
+        collection = case collection_name
+                     when :comment_range_starts
+                       paragraph.comment_range_starts
+                     when :comment_range_ends
+                       paragraph.comment_range_ends
+                     end
         matching = collection.select { |element| element.id.to_s == comment_id }
         matching.each do |element|
           index = collection.index(element)
