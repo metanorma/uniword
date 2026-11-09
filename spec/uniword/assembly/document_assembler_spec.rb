@@ -28,7 +28,7 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
 
   def create_component(name)
     path = File.join(components_dir, "#{name}.docx")
-    File.write(path, "PK") # Minimal ZIP marker
+    TestDocx.write(path, text: "Component content with {title}")
   end
 
   def create_manifest(sections: nil)
@@ -80,19 +80,6 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
   describe "#assemble" do
     let(:assembler) { described_class.new(components_dir: components_dir) }
 
-    before do
-      # Mock DocumentFactory to avoid actual file loading
-      allow(Uniword::DocumentFactory).to receive(:from_file) do
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
-        para = Uniword::Wordprocessingml::Paragraph.new
-        run = Uniword::Wordprocessingml::Run.new
-        run.text = "Component content with {title}"
-        para.runs << run
-        doc.body.paragraphs << para
-        doc
-      end
-    end
-
     it "assembles document from manifest" do
       doc = assembler.assemble(manifest_file)
       expect(doc).to be_a(Uniword::Wordprocessingml::DocumentRoot)
@@ -128,35 +115,31 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     let(:assembler) { described_class.new(components_dir: components_dir) }
     let(:output_path) { File.join(temp_dir, "output.docx") }
 
-    before do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
+    it "assembles and saves the document to the output path" do
+      path = assembler.assemble_and_save(
+        manifest_file,
+        output_path: output_path,
+      )
+      expect(path).to eq(output_path)
+      expect(File.size(output_path)).to be > 0
     end
 
-    it "assembles and saves document" do
-      # Mock save method
-      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
-
-      path = assembler.assemble_and_save(manifest_file)
-      expect(path).to eq("output.docx")
-    end
-
-    it "uses custom output path if provided" do
-      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
+    it "saves a custom output path if provided" do
+      custom = File.join(temp_dir, "custom.docx")
 
       path = assembler.assemble_and_save(
         manifest_file,
-        output_path: "custom.docx",
+        output_path: custom,
       )
-      expect(path).to eq("custom.docx")
+      expect(path).to eq(custom)
+      expect(File.exist?(custom)).to be true
     end
 
     it "passes variables to assembly" do
-      allow_any_instance_of(Uniword::Wordprocessingml::DocumentRoot).to receive(:save)
-
       expect do
         assembler.assemble_and_save(
           manifest_file,
+          output_path: output_path,
           variables: { custom: "value" },
         )
       end.not_to raise_error
@@ -208,9 +191,6 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
     let(:assembler) { described_class.new(components_dir: components_dir) }
 
     it "clears component cache" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       # Load a component to cache it
       assembler.registry.get("cover_page")
       expect(assembler.cache_stats[:size]).to eq(1)
@@ -239,9 +219,6 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
                         { "component" => "__toc__",
                           "options" => { "max_level" => 3 } },
                       ])
-
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
     end
 
     it "generates TOC for __toc__ component" do
@@ -262,16 +239,6 @@ RSpec.describe Uniword::Assembly::DocumentAssembler do
                         { "component" => "clauses/*",
                           "order" => "alphabetical" },
                       ])
-
-      allow(Uniword::DocumentFactory).to receive(:from_file) do
-        doc = Uniword::Wordprocessingml::DocumentRoot.new
-        para = Uniword::Wordprocessingml::Paragraph.new
-        run = Uniword::Wordprocessingml::Run.new
-        run.text = "Component content with {title}"
-        para.runs << run
-        doc.body.paragraphs << para
-        doc
-      end
     end
 
     it "resolves wildcard patterns" do
