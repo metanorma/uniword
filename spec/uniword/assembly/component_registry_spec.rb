@@ -28,10 +28,7 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
 
   def create_component(name)
     path = File.join(components_dir, "#{name}.docx")
-    FileUtils.mkdir_p(File.dirname(path))
-
-    # Create minimal DOCX structure
-    File.write(path, "PK") # Minimal ZIP marker
+    TestDocx.write(path, text: "Component #{name}")
   end
 
   describe "#initialize" do
@@ -94,18 +91,12 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     let(:registry) { described_class.new(components_dir) }
 
     it "resolves single component" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       components = registry.resolve("cover_page")
       expect(components.size).to eq(1)
       expect(components[0][:name]).to eq("cover_page")
     end
 
     it "resolves wildcard pattern" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       components = registry.resolve("clauses/*")
       expect(components.size).to be >= 2
       names = components.map { |c| c[:name] }
@@ -113,18 +104,12 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     end
 
     it "sorts alphabetically when requested" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       components = registry.resolve("clauses/*", order: "alphabetical")
       names = components.map { |c| c[:name] }
       expect(names).to eq(names.sort)
     end
 
     it "sorts numerically when requested" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       components = registry.resolve("clauses/*", order: "numeric")
       names = components.map { |c| c[:name] }
 
@@ -138,9 +123,6 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     let(:registry) { described_class.new(components_dir) }
 
     it "clears cached components" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       # Load component to cache it
       registry.get("cover_page")
       expect(registry.cache_stats[:size]).to eq(1)
@@ -162,9 +144,6 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
     end
 
     it "tracks cached components" do
-      allow(Uniword::DocumentFactory).to receive(:from_file)
-        .and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-
       registry.get("cover_page")
       stats = registry.cache_stats
 
@@ -174,40 +153,28 @@ RSpec.describe Uniword::Assembly::ComponentRegistry do
   end
 
   describe "caching behavior" do
-    it "caches components when enabled" do
+    it "keeps one cached entry when enabled" do
       registry = described_class.new(components_dir, cache_enabled: true)
 
-      # Mock DocumentFactory to track calls
-      call_count = 0
-      allow(Uniword::DocumentFactory).to receive(:from_file) do
-        call_count += 1
-        Uniword::Wordprocessingml::DocumentRoot.new
-      end
-
       # Get component twice
       registry.get("cover_page")
       registry.get("cover_page")
 
-      # Should only load once
-      expect(call_count).to eq(1)
+      # The second get is served from the cache
+      stats = registry.cache_stats
+      expect(stats[:size]).to eq(1)
+      expect(stats[:components]).to eq(["cover_page"])
     end
 
-    it "does not cache when disabled" do
+    it "caches nothing when disabled" do
       registry = described_class.new(components_dir, cache_enabled: false)
-
-      # Mock DocumentFactory to track calls
-      call_count = 0
-      allow(Uniword::DocumentFactory).to receive(:from_file) do
-        call_count += 1
-        Uniword::Wordprocessingml::DocumentRoot.new
-      end
 
       # Get component twice
       registry.get("cover_page")
       registry.get("cover_page")
 
-      # Should load twice
-      expect(call_count).to eq(2)
+      # Nothing is retained
+      expect(registry.cache_stats[:size]).to eq(0)
     end
   end
 

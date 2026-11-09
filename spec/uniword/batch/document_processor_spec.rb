@@ -89,11 +89,7 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
     end
 
     before do
-      # Create a minimal DOCX structure for testing
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Wordprocessingml::DocumentRoot.new)
-      # Create empty placeholder files
-      FileUtils.touch(input_path)
-      FileUtils.touch(output_path)
+      TestDocx.write(input_path, text: "Body text")
     end
 
     after do
@@ -133,10 +129,14 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
       expect(result.failure_count).to eq(0)
     end
 
-    it "records failure when error occurs" do
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_raise(
-        StandardError, "Test error"
-      )
+    it "saves the processed document" do
+      processor.process_file(input_path, output_path)
+
+      expect(File.size(output_path)).to be > 0
+    end
+
+    it "records failure when the input is not a readable document" do
+      File.write(input_path, "PK") # ZIP marker only, no archive
 
       result = processor.process_file(input_path, output_path)
 
@@ -152,11 +152,9 @@ RSpec.describe Uniword::Batch::DocumentProcessor do
 
     before do
       FileUtils.mkdir_p(input_dir)
-      # Create test files
-      FileUtils.touch(File.join(input_dir, "test1.docx"))
-      FileUtils.touch(File.join(input_dir, "test2.docx"))
-
-      allow(Uniword::DocumentFactory).to receive(:from_file).and_return(Uniword::Wordprocessingml::DocumentRoot.new)
+      # Create test documents
+      TestDocx.write(File.join(input_dir, "test1.docx"), text: "First")
+      TestDocx.write(File.join(input_dir, "test2.docx"), text: "Second")
     end
 
     after do
