@@ -270,16 +270,55 @@ document_name = nil)
       # Build HTML body content from sections array.
       # Each section is wrapped in a <div class=WordSectionN> with <br> between them.
       def build_sections_html(sections)
-        return "" if sections.empty?
+        return footnote_list_html if sections.empty?
 
-        # Single section: wrap in WordSection1 without breaks
-        if sections.size == 1
-          elements_html = sections.first.map do |element|
-            @element_renderer.element_to_html(element)
-          end.join("\n")
-          return "<div class=WordSection1>\n\n#{elements_html}\n\n</div>"
+        body = if sections.size == 1
+                 elements_html = sections.first.map do |element|
+                   @element_renderer.element_to_html(element)
+                 end.join("\n")
+                 "<div class=WordSection1>\n\n#{elements_html}\n\n</div>"
+               else
+                 section_divs(sections)
+               end
+
+        body + footnote_list_html
+      end
+
+      # Word MHTML carries footnote bodies at the end of the document body,
+      # wrapped in a footnote-list container; the in-text footnote
+      # references point at these blocks. Without this section the MHTML
+      # output silently loses every footnote body that the DOCX output
+      # keeps in word/footnotes.xml.
+      def footnote_list_html
+        entries = footnote_entries
+        return "" if entries.empty?
+
+        blocks = entries.map { |entry| footnote_entry_to_html(entry) }
+        "<div style='mso-element:footnote-list'>\n#{blocks.join("\n")}\n</div>"
+      end
+
+      # User footnote entries, in document order. The separator and
+      # continuationSeparator entries are Word plumbing, not content.
+      def footnote_entries
+        footnotes = @document.footnotes
+        return [] unless footnotes.is_a?(Uniword::Wordprocessingml::Footnotes)
+
+        footnotes.footnote_entries.reject do |entry|
+          entry.type == "separator" || entry.type == "continuationSeparator"
         end
+      end
 
+      def footnote_entry_to_html(entry)
+        html = Array(entry.paragraphs).map do |paragraph|
+          @element_renderer.paragraph_to_html(paragraph)
+        end.join("\n")
+
+        "<div style='mso-element:footnote' id=\"ftn#{entry.id}\">\n#{html}\n</div>"
+      end
+
+      private
+
+      def section_divs(sections)
         section_divs = sections.each_with_index.map do |section_elements, idx|
           elements_html = section_elements.map do |element|
             @element_renderer.element_to_html(element)
