@@ -29,6 +29,40 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
       expect(entry.paragraphs.first.text).to include("Footnote text")
     end
 
+    # OOXML 17.11.11: the footnote body must begin with a
+    # <w:footnoteRef/> run — Word renders the footnote's number from this
+    # marker. Without it the footnote pane shows the body text with no
+    # number label (metanorma/metanorma-pdfa#120).
+    it "prepends a footnoteRef marker run to the footnote body" do
+      fb = described_class.new(doc)
+      fb.footnote("Footnote text")
+
+      entry = doc.model.footnotes.footnote_entries.first
+      runs = entry.paragraphs.first.runs
+      first = runs.first
+      expect(first.footnote_ref).to be_a(Uniword::Wordprocessingml::FootnoteRef),
+        "footnote body must start with a footnoteRef marker run"
+      expect(runs.map { |r| r.text_string }).to include("Footnote text")
+    end
+
+    it "serializes the footnoteRef marker into footnotes.xml" do
+      fb = described_class.new(doc)
+      fb.footnote("Footnote text")
+
+      xml = doc.model.footnotes.to_xml(prefix: true)
+      expect(xml).to include("<w:footnoteRef/>")
+    end
+
+    it "prepends an endnoteRef marker run to the endnote body" do
+      fb = described_class.new(doc)
+      fb.endnote("Endnote text")
+
+      entry = doc.model.endnotes.endnote_entries.first
+      first = entry.paragraphs.first.runs.first
+      expect(first.endnote_ref).to be_a(Uniword::Wordprocessingml::EndnoteRef),
+        "endnote body must start with an endnoteRef marker run"
+    end
+
     it "assigns unique IDs to multiple footnotes" do
       fb = described_class.new(doc)
       run1 = fb.footnote("First")
@@ -285,6 +319,10 @@ RSpec.describe "Document with footnotes round-trip" do
       fn_xml = zip.read("word/footnotes.xml")
       expect(fn_xml).to include("First footnote")
       expect(fn_xml).to include("Second footnote")
+
+      # The number marker survives the save-time reconcile pass —
+      # strip_empty_runs must not treat the footnoteRef run as empty.
+      expect(fn_xml).to include("<w:footnoteRef/>")
     end
 
     File.delete(path)

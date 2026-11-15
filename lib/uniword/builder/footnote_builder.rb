@@ -83,7 +83,9 @@ module Uniword
         elsif text
           para << text
         end
-        entry.paragraphs << para.build
+        paragraph = para.build
+        prepend_ref_marker(paragraph, :footnote_ref, Wordprocessingml::FootnoteRef)
+        entry.paragraphs << paragraph
         footnotes.footnote_entries << entry
       end
 
@@ -95,8 +97,19 @@ module Uniword
         elsif text
           para << text
         end
-        entry.paragraphs << para.build
+        paragraph = para.build
+        prepend_ref_marker(paragraph, :endnote_ref, Wordprocessingml::EndnoteRef)
+        entry.paragraphs << paragraph
         endnotes.endnote_entries << entry
+      end
+
+      # OOXML 17.11.10/17.11.11: a note body begins with the automatic
+      # number marker (<w:footnoteRef/> / <w:endnoteRef/>); Word renders
+      # the note's number from this marker. Without it the footnote pane
+      # shows the body text with no number label.
+      def prepend_ref_marker(paragraph, attr, marker_class)
+        marker = Wordprocessingml::Run.new(attr => marker_class.new)
+        paragraph.runs.unshift(marker)
       end
     end
   end
