@@ -77,6 +77,8 @@ module Uniword
         # Handle footnote/endnote references (rendered as special markers)
         return footnote_reference_to_html(run) if run.footnote_reference
         return endnote_reference_to_html(run) if run.endnote_reference
+        return footnote_ref_to_html(run) if run.footnote_ref
+        return endnote_ref_to_html(run) if run.endnote_ref
 
         # Render content based on run type
         content = render_run_content(run)
@@ -140,6 +142,19 @@ module Uniword
 
       # Convert OOXML EndnoteReference to HTML
       def endnote_reference_to_html(_run)
+        %(<span class="MsoEndnoteReference"><span style="mso-special-character:endnote"></span></span>)
+      end
+
+      # Automatic number marker at the start of a note body
+      # (<w:footnoteRef/> / <w:endnoteRef/>): rendered with the same
+      # special-character span as the in-text reference, so the note body
+      # keeps its number placeholder in MHTML output.
+      def footnote_ref_to_html(_run)
+        %(<span class="MsoFootnoteReference"><span style="mso-special-character:footnote"></span></span>)
+      end
+
+      # Convert OOXML EndnoteRef to HTML
+      def endnote_ref_to_html(_run)
         %(<span class="MsoEndnoteReference"><span style="mso-special-character:endnote"></span></span>)
       end
 

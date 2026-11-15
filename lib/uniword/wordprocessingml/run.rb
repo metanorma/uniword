@@ -18,6 +18,8 @@ module Uniword
       attribute :alternate_content, AlternateContent, default: nil
       attribute :footnote_reference, FootnoteReference
       attribute :endnote_reference, EndnoteReference
+      attribute :footnote_ref, FootnoteRef
+      attribute :endnote_ref, EndnoteRef
       attribute :comment_reference, CommentReference
       attribute :field_char, FieldChar
       attribute :instr_text, InstrText
@@ -56,6 +58,10 @@ module Uniword
                                          render_nil: false
         map_element "endnoteReference", to: :endnote_reference,
                                         render_nil: false
+        # Automatic number markers inside note bodies
+        # (OOXML 17.11.10 / 17.11.11).
+        map_element "footnoteRef", to: :footnote_ref, render_nil: false
+        map_element "endnoteRef", to: :endnote_ref, render_nil: false
         map_element "commentReference", to: :comment_reference,
                                         render_nil: false
         map_element "fldChar", to: :field_char, render_nil: false
