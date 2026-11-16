@@ -53,6 +53,25 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
       expect(xml).to include("<w:footnoteRef/>")
     end
 
+    # The marker run is prepended to runs AFTER the paragraph was built,
+    # so element_order (which builders keep in step with runs) must be
+    # prepended too. Consumers that walk element_order — the MHTML
+    # renderer's paragraph_content_to_html — render one element per "r"
+    # entry; a missing entry silently dropped every note body's text
+    # runs from the MHTML output while the DOCX output kept them.
+    it "prepends the marker's element_order entry ahead of the body runs" do
+      fb = described_class.new(doc)
+      fb.footnote("Footnote text")
+
+      paragraph = doc.model.footnotes.footnote_entries.first.paragraphs.first
+      order = paragraph.element_order
+      expect(order).to be_a(Array), "builder paragraphs carry element_order"
+      r_entries = order.select { |e| e.element? && e.name == "r" }
+      expect(r_entries.length).to eq(paragraph.runs.length),
+        "element_order 'r' entries must match the run count " \
+        "(#{r_entries.length} entries vs #{paragraph.runs.length} runs)"
+    end
+
     it "prepends an endnoteRef marker run to the endnote body" do
       fb = described_class.new(doc)
       fb.endnote("Endnote text")

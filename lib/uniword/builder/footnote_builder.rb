@@ -107,9 +107,21 @@ module Uniword
       # number marker (<w:footnoteRef/> / <w:endnoteRef/>); Word renders
       # the note's number from this marker. Without it the footnote pane
       # shows the body text with no number label.
+      #
+      # The marker run is prepended to BOTH the runs collection and
+      # element_order: builder-built paragraphs carry an element_order
+      # ("r" per appended run), and consumers that walk element_order —
+      # the MHTML renderer's paragraph_content_to_html — would otherwise
+      # render only the first "r" entry (the marker) and silently drop
+      # the note body's runs.
       def prepend_ref_marker(paragraph, attr, marker_class)
         marker = Wordprocessingml::Run.new(attr => marker_class.new)
         paragraph.runs.unshift(marker)
+        if paragraph.element_order.is_a?(Array)
+          paragraph.element_order.unshift(
+            Lutaml::Xml::Element.new("Element", "r"),
+          )
+        end
       end
     end
   end
