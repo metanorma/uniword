@@ -4,8 +4,59 @@ require "spec_helper"
 require "zip"
 require "securerandom"
 
+# Fails the first archive write with the real exception raised by
+# Ruby's zlib wrapper under signal interruption (uniword#105), then
+# behaves normally.
+class OnceFailingZipPackager < Uniword::Infrastructure::ZipPackager
+  attr_reader :write_attempts
+
+  def initialize
+    super
+    @write_attempts = 0
+  end
+
+  private
+
+  def write_entries_to_stream(temp_path, entries, fixed_time)
+    @write_attempts += 1
+    raise Zlib::BufError, "buffer error" if @write_attempts == 1
+
+    super
+  end
+end
+
+# Fails every archive write; the retry must give up loudly.
+class AlwaysFailingZipPackager < Uniword::Infrastructure::ZipPackager
+  def write_entries_to_stream(_temp_path, _entries, _fixed_time)
+    raise Zlib::BufError, "buffer error"
+  end
+end
+
 RSpec.describe Uniword::Infrastructure::ZipPackager do
   let(:packager) { described_class.new }
+
+  def expect_archive_content(path)
+    Zip::File.open(path) do |zip_file|
+      expect(zip_file.read("file1.txt")).to eq("Content 1")
+      expect(zip_file.read("dir/file2.txt")).to eq("Content 2")
+    end
+  end
+
+  # 32 parts x ~120KB: a DOCX-shaped sustained compression load
+  # (uniword#105 repro shape: many parts, several MB of runs).
+  def many_part_content
+    32.times.to_h do |i|
+      ["part_#{i}.xml", "part #{i} #{'x' * 120_000}"]
+    end
+  end
+
+  def expect_stress_archive(path)
+    expected = many_part_content["part_17.xml"]
+    Zip::File.open(path) do |zip_file|
+      expect(zip_file.count).to eq(32)
+      expect(zip_file.read("part_17.xml")).to eq(expected)
+    end
+  end
 
   describe "#package" do
     let(:content) do
@@ -66,6 +117,17 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
             expect(zip_file.find_entry("old.txt")).to be_nil
             expect(zip_file.find_entry("file1.txt")).not_to be_nil
           end
+        end
+      end
+    end
+
+    context "with sustained many-part runs" do
+      it "packages 30+ part archives repeatedly without stream errors" do
+        Dir.mktmpdir do |tmpdir|
+          output_path = File.join(tmpdir, "stress.zip")
+
+          8.times { packager.package(many_part_content, output_path) }
+          expect_stress_archive(output_path)
         end
       end
     end
@@ -136,6 +198,31 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
         )
       end
     end
+
+    context "when the deflate stream hits the interrupt flake" do
+      it "retries once with a fresh stream and writes the archive" do
+        Dir.mktmpdir do |tmpdir|
+          output_path = File.join(tmpdir, "output.zip")
+          flaky = OnceFailingZipPackager.new
+
+          flaky.package(content, output_path)
+
+          expect(flaky.write_attempts).to eq(2)
+          expect_archive_content(output_path)
+        end
+      end
+
+      it "re-raises when every attempt fails" do
+        Dir.mktmpdir do |tmpdir|
+          output_path = File.join(tmpdir, "output.zip")
+          broken = AlwaysFailingZipPackager.new
+
+          expect { broken.package(content, output_path) }
+            .to raise_error(Zlib::BufError, /buffer error/)
+          expect(File.exist?(output_path)).to be false
+        end
+      end
+    end
   end
 
   describe "#add_file" do
@@ -161,6 +248,17 @@ RSpec.describe Uniword::Infrastructure::ZipPackager do
         Zip::File.open(temp_zip) do |zip_file|
           expect(zip_file.find_entry("existing.txt")).not_to be_nil
           expect(zip_file.find_entry("new.txt")).not_to be_nil
+          expect(zip_file.read("new.txt")).to eq("New content")
+        end
+      end
+
+      it "recovers from the deflate interrupt flake" do
+        flaky = OnceFailingZipPackager.new
+
+        flaky.add_file(temp_zip, "new.txt", "New content")
+
+        expect(flaky.write_attempts).to eq(2)
+        Zip::File.open(temp_zip) do |zip_file|
           expect(zip_file.read("new.txt")).to eq("New content")
         end
       end
