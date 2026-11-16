@@ -35,49 +35,9 @@ module Uniword
         validate_content(content)
         validate_output_path(output_path)
 
-        # Ensure output directory exists
-        FileUtils.mkdir_p(File.dirname(output_path))
-
-        # Use Zip::OutputStream directly (not Zip::File) so that Entry objects
-        # with internal_file_attributes=0 are preserved through serialization.
-        # Zip::File wraps entries in StreamableStream which is NOT kind_of?(Entry),
-        # causing put_next_entry to discard our Entry and create a fresh one.
-        temp_path = "#{output_path}.#{Process.pid}.tmp"
-
-        ordered_content = order_content(content)
-        fixed_time = deterministic_timestamp
-
-        was_zip64 = Zip.write_zip64_support
-        Zip.write_zip64_support = false
-        begin
-          Zip::OutputStream.open(temp_path) do |zos|
-            ordered_content.each do |entry_path, entry_content|
-              entry = Zip::Entry.new(temp_path, entry_path.to_s)
-              entry.internal_file_attributes = 0
-              entry.external_file_attributes = 0
-              entry.fstype = Zip::FSTYPE_FAT
-              entry.time = fixed_time if fixed_time
-
-              zos.put_next_entry(entry)
-
-              final_content =
-                if entry_content.encoding == Encoding::ASCII_8BIT
-                  entry_content
-                else
-                  entry_content.encode(
-                    "UTF-8", invalid: :replace, undef: :replace
-                  )
-                end
-              zos.write(final_content)
-            end
-          end
-        ensure
-          Zip.write_zip64_support = was_zip64
+        with_deflate_flake_retry do
+          write_archive(content, output_path)
         end
-
-        move_temp_to_output(temp_path, output_path)
-      ensure
-        remove_temp_file(temp_path)
       end
 
       # Add a file to an existing ZIP archive.
@@ -149,6 +109,87 @@ module Uniword
 
       private
 
+      # Retry once on Zlib::BufError with a completely fresh archive
+      # write. Ruby's zlib wrapper raises this spuriously when the
+      # GVL-released deflate run is interrupted by a signal; no released
+      # Ruby or zlib gem carries the fix (ruby/ruby d848052e is
+      # master-only, uniword#105). The archive is rebuilt from the
+      # content hash, so a retry cannot mask real defects: genuinely
+      # unserializable content fails identically on the second attempt.
+      def with_deflate_flake_retry
+        yield
+      rescue Zlib::BufError => e
+        Uniword.logger.warn(
+          "ZipPackager: Zlib::BufError (#{e.message}); retrying with " \
+          "a fresh deflate stream",
+        )
+        yield
+      end
+
+      # Write the archive to a temp file, then move it into place.
+      #
+      # @param content [Hash<String, String>] paths to contents
+      # @param output_path [String] final archive path
+      # @return [void]
+      def write_archive(content, output_path)
+        # Ensure output directory exists
+        FileUtils.mkdir_p(File.dirname(output_path))
+
+        # Use Zip::OutputStream directly (not Zip::File) so that Entry objects
+        # with internal_file_attributes=0 are preserved through serialization.
+        # Zip::File wraps entries in StreamableStream which is NOT kind_of?(Entry),
+        # causing put_next_entry to discard our Entry and create a fresh one.
+        temp_path = "#{output_path}.#{Process.pid}.tmp"
+
+        ordered_content = order_content(content)
+        fixed_time = deterministic_timestamp
+
+        begin
+          write_entries_to_stream(temp_path, ordered_content, fixed_time)
+
+          move_temp_to_output(temp_path, output_path)
+        ensure
+          remove_temp_file(temp_path)
+        end
+      end
+
+      # Stream every entry into a fresh Zip::OutputStream.
+      #
+      # @param temp_path [String] archive being written
+      # @param entries [Hash<String, String>] paths to contents
+      # @param fixed_time [Time, nil] deterministic timestamp, or nil
+      # @return [void]
+      def write_entries_to_stream(temp_path, entries, fixed_time)
+        was_zip64 = Zip.write_zip64_support
+        Zip.write_zip64_support = false
+        begin
+          Zip::OutputStream.open(temp_path) do |zos|
+            entries.each do |entry_path, entry_content|
+              entry = Zip::Entry.new(temp_path, entry_path.to_s)
+              entry.internal_file_attributes = 0
+              entry.external_file_attributes = 0
+              entry.fstype = Zip::FSTYPE_FAT
+              entry.time = fixed_time if fixed_time
+
+              zos.put_next_entry(entry)
+              zos.write(encode_entry_content(entry_content))
+            end
+          end
+        ensure
+          Zip.write_zip64_support = was_zip64
+        end
+      end
+
+      # @param entry_content [String]
+      # @return [String] UTF-8 content, or binary content unchanged
+      def encode_entry_content(entry_content)
+        if entry_content.encoding == Encoding::ASCII_8BIT
+          entry_content
+        else
+          entry_content.encode("UTF-8", invalid: :replace, undef: :replace)
+        end
+      end
+
       # When `Uniword.configuration.deterministic_output` is true,
       # reorder entries (priority for OPC-required first, alphabetical
       # for the rest). Otherwise return content unchanged (insertion
@@ -180,38 +221,17 @@ module Uniword
       # @param output_path [String] The path for the output ZIP file
       # @return [void]
       def write_to_zip_file(content, output_path)
-        temp_path = "#{output_path}.#{Process.pid}.#{rand(1000)}.tmp"
+        with_deflate_flake_retry do
+          temp_path = "#{output_path}.#{Process.pid}.#{rand(1000)}.tmp"
 
-        was_zip64 = Zip.write_zip64_support
-        Zip.write_zip64_support = false
-        begin
-          Zip::OutputStream.open(temp_path) do |zos|
-            content.each do |entry_path, entry_content|
-              entry = Zip::Entry.new(temp_path, entry_path.to_s)
-              entry.internal_file_attributes = 0
-              entry.external_file_attributes = 0
-              entry.fstype = Zip::FSTYPE_FAT
+          begin
+            write_entries_to_stream(temp_path, content, nil)
 
-              zos.put_next_entry(entry)
-
-              final_content =
-                if entry_content.encoding == Encoding::ASCII_8BIT
-                  entry_content
-                else
-                  entry_content.encode(
-                    "UTF-8", invalid: :replace, undef: :replace
-                  )
-                end
-              zos.write(final_content)
-            end
+            move_temp_to_output(temp_path, output_path)
+          ensure
+            remove_temp_file(temp_path)
           end
-        ensure
-          Zip.write_zip64_support = was_zip64
         end
-
-        move_temp_to_output(temp_path, output_path)
-      ensure
-        remove_temp_file(temp_path)
       end
 
       def move_temp_to_output(temp_path, output_path)
