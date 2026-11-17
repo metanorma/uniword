@@ -1,5 +1,17 @@
 # frozen_string_literal: true
 
+# Prime the Moxml adapter selection BEFORE lutaml-model loads it, so the
+# default is resolved deterministically from a clean load state. moxml
+# memoizes its first verdict: Leptris when the engine's capability probe
+# passes, otherwise the first loaded XML library (Nokogiri > Ox > Oga).
+# When another gem in the bundle loads Ox early (e.g. Plurimath's chain
+# on Ruby 4.0, where the Leptris probe legitimately fails per
+# leptris-ruby#1966), an unpinned process silently runs the whole OOXML
+# stack under the deprecated Ox adapter, whose serialization semantics
+# differ (XSD round-trip attribute losses). Requiring our gemspec
+# runtime dependency here freezes: Leptris when usable, else moxml's
+# Nokogiri fallback - the contract documented below and validated in CI.
+require "leptris"
 require "lutaml/model"
 require "zip"
 
