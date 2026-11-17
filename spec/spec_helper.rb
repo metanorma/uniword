@@ -65,6 +65,22 @@ RSpec.configure do |config|
     FileUtils.mkdir_p("test_output")
   end
 
+  # Isolate the global lutaml-model XML adapter from spec-file side effects.
+  # Gems loaded by specs mutate it: Plurimath's mml load does
+  # `Mml::V4::Configuration.adapter=` which writes
+  # Lutaml::Model::Config.xml_adapter_type - the process-wide setting our
+  # serialization round-trips depend on (reproduced: math specs before
+  # real_world_documents flipped the round-trip's attribute output).
+  # Restore the adapter uniword's boot resolved (leptris when the engine
+  # probe passes, Moxml's nokogiri fallback otherwise) before every
+  # example; lutaml's setter requires a concrete symbol, so the snapshot
+  # falls back to the effective Moxml default when unset at boot.
+  XML_ADAPTER_SNAPSHOT = Lutaml::Model::Config.xml_adapter_type ||
+                         Moxml::Config.default_adapter
+  config.before(:each) do
+    Lutaml::Model::Config.xml_adapter_type = XML_ADAPTER_SNAPSHOT
+  end
+
   # Memory management: clear lutaml-model element_order references after each
   # example. lutaml-model retains XML parse tree nodes in element_order arrays,
   # creating reference graphs that prevent GC. Without this, RSS grows by
