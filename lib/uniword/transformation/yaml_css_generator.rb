@@ -157,7 +157,8 @@ module Uniword
         @doc_defaults = doc_defaults["run_properties"] || {}
         @numbering = numbering
         @defaults = resolve_defaults
-        @normal_spacing_after = (@para_styles.dig("Normal", "paragraph_properties", "spacing", "after") || "6.0")
+        @normal_spacing_after = @para_styles.dig("Normal",
+                                                 "paragraph_properties", "spacing", "after") || "6.0"
       end
 
       # Generate complete CSS string for MHTML output.
@@ -204,11 +205,11 @@ module Uniword
           next if font.nil? || font.empty?
 
           face = FONT_FACE_LIBRARY[font]
-          if face
-            faces << face.strip
-          else
-            faces << generic_font_face(font)
-          end
+          faces << if face
+                     face.strip
+                   else
+                     generic_font_face(font)
+                   end
         end
         "/* Font Definitions */\n#{faces.join("\n")}" unless faces.empty?
       end
@@ -377,17 +378,17 @@ module Uniword
         spacing = para_props["spacing"] || {}
         before = spacing["before"]
         after = spacing["after"]
-        if before
-          lines << "  margin-top: #{pt_value(before)};"
-        else
-          lines << "  margin-top: 0cm;"
-        end
+        lines << if before
+                   "  margin-top: #{pt_value(before)};"
+                 else
+                   "  margin-top: 0cm;"
+                 end
         lines << "  margin-right: 0cm;"
-        if after
-          lines << "  margin-bottom: #{pt_value(after)};"
-        else
-          lines << "  margin-bottom: #{pt_value(@normal_spacing_after)};"
-        end
+        lines << if after
+                   "  margin-bottom: #{pt_value(after)};"
+                 else
+                   "  margin-bottom: #{pt_value(@normal_spacing_after)};"
+                 end
         lines << "  margin-left: 0cm;"
 
         # Indent
@@ -473,7 +474,7 @@ module Uniword
             lines << "  border-#{side}: #{border_str};"
             lines << "  mso-border-#{side}-alt: solid ##{color} #{pt_value(sz)};" if color && sz
             if space
-              padding_side = side == "top" || side == "bottom" ? "top" : "left"
+              ["top", "bottom"].include?(side) ? "top" : "left"
               lines << "  padding: #{pt_value(space)};"
             end
           end
@@ -481,11 +482,11 @@ module Uniword
 
         # Font size
         font_size = run_props["font_size"]
-        if font_size
-          lines << "  font-size: #{pt_value(font_size)};"
-        else
-          lines << "  font-size: #{pt_value(@defaults[:font_size])};"
-        end
+        lines << if font_size
+                   "  font-size: #{pt_value(font_size)};"
+                 else
+                   "  font-size: #{pt_value(@defaults[:font_size])};"
+                 end
 
         # Font family
         fonts = run_props["fonts"] || {}
@@ -704,7 +705,7 @@ module Uniword
         return "" unless @numbering
 
         definitions = @numbering["definitions"] || []
-        instances = @numbering["instances"] || []
+        @numbering["instances"] || []
 
         return "" if definitions.empty?
 
@@ -717,7 +718,7 @@ module Uniword
       end
 
       def generate_list_definition(idx, defn)
-        abstract_id = defn["abstract_num_id"]
+        defn["abstract_num_id"]
         levels = defn["levels"] || []
         parts = ["@list l#{idx} {"]
 
@@ -733,7 +734,7 @@ module Uniword
               "upperLetter" => "mso-level-number-format: alpha-upper;",
               "lowerLetter" => "mso-level-number-format: alpha-lower;",
               "upperRoman" => "mso-level-number-format: roman-upper;",
-              "lowerRoman" => "mso-level-number-format: roman-lower;",
+              "lowerRoman" => "mso-level-number-format: roman-lower;"
             }
             parts << "    #{fmt_map[fmt]}" if fmt_map[fmt]
           end
@@ -789,6 +790,7 @@ module Uniword
       # Format a value as points (e.g., "11.0" → "11pt")
       def pt_value(val)
         return "0pt" unless val
+
         v = val.to_f
         v == v.to_i ? "#{v.to_i}pt" : "#{v}pt"
       end
@@ -796,6 +798,7 @@ module Uniword
       # Format a value as centimeters (e.g., "0.71" → "0.71cm")
       def cm_value(val)
         return "0cm" unless val
+
         v = val.to_f
         v == v.to_i ? "#{v.to_i}cm" : "#{v}cm"
       end

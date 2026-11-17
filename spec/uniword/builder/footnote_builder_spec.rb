@@ -41,7 +41,7 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
       runs = entry.paragraphs.first.runs
       first = runs.first
       expect(first.footnote_ref).to be_a(Uniword::Wordprocessingml::FootnoteRef),
-        "footnote body must start with a footnoteRef marker run"
+                                    "footnote body must start with a footnoteRef marker run"
       expect(runs.map { |r| r.text_string }).to include("Footnote text")
     end
 
@@ -68,8 +68,8 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
       expect(order).to be_a(Array), "builder paragraphs carry element_order"
       r_entries = order.select { |e| e.element? && e.name == "r" }
       expect(r_entries.length).to eq(paragraph.runs.length),
-        "element_order 'r' entries must match the run count " \
-        "(#{r_entries.length} entries vs #{paragraph.runs.length} runs)"
+                                  "element_order 'r' entries must match the run count " \
+                                  "(#{r_entries.length} entries vs #{paragraph.runs.length} runs)"
     end
 
     it "prepends an endnoteRef marker run to the endnote body" do
@@ -79,7 +79,7 @@ RSpec.describe Uniword::Builder::FootnoteBuilder do
       entry = doc.model.endnotes.endnote_entries.first
       first = entry.paragraphs.first.runs.first
       expect(first.endnote_ref).to be_a(Uniword::Wordprocessingml::EndnoteRef),
-        "endnote body must start with an endnoteRef marker run"
+                                   "endnote body must start with an endnoteRef marker run"
     end
 
     it "assigns unique IDs to multiple footnotes" do

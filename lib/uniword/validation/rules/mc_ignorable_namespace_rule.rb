@@ -12,7 +12,11 @@ module Uniword
 
         def code = "DOC-100"
         def validity_rule = "R1"
-        def description = "mc:Ignorable prefixes must have xmlns declarations in scope"
+
+        def description
+          "mc:Ignorable prefixes must have xmlns declarations in scope"
+        end
+
         def category = :namespaces
         def severity = "error"
 

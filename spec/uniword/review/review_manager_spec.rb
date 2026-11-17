@@ -438,7 +438,7 @@ RSpec.describe Uniword::Review::ReviewManager do
       first = described_class.new(doc)
       deletion = Uniword::Wordprocessingml::Deletion.new(
         id: "7", author: "Alice", date: "2026-01-02T00:00:00Z",
-        runs: [plain_run("gone")],
+        runs: [plain_run("gone")]
       )
       para = paragraph_with_text("keep gone here")
       para.deletions << deletion

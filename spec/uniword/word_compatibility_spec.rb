@@ -34,7 +34,10 @@ RSpec.describe "Word compatibility" do
       builder.heading("Test Document", level: 1)
       builder.paragraph("Hello World")
       builder.table do |t|
-        t.row { |r| r.cell(text: "A"); r.cell(text: "B") }
+        t.row do |r|
+          r.cell(text: "A")
+          r.cell(text: "B")
+        end
       end
       Uniword::DocumentWriter.new(builder.model).save(output_path)
     end
@@ -43,7 +46,7 @@ RSpec.describe "Word compatibility" do
       all_xml_parts(output_path).each do |name, xml|
         declaration = xml.lines.first
         expect(declaration).to include('standalone="yes"'),
-                                 "#{name} missing standalone=\"yes\": #{declaration}"
+                               "#{name} missing standalone=\"yes\": #{declaration}"
       end
     end
 
@@ -66,13 +69,13 @@ RSpec.describe "Word compatibility" do
     it "fontTable.xml has no empty <w:sig/> elements" do
       ft = read_part(output_path, "word/fontTable.xml")
       expect(ft).not_to include("<w:sig/>"),
-                      "fontTable.xml has empty <w:sig/> which violates CT_FontSig schema"
+                        "fontTable.xml has empty <w:sig/> which violates CT_FontSig schema"
     end
 
     it "theme1.xml has no empty <a:extLst/> element" do
       theme = read_part(output_path, "word/theme/theme1.xml")
       expect(theme).not_to include("<a:extLst/>"),
-                         "theme1.xml has empty <a:extLst/>"
+                           "theme1.xml has empty <a:extLst/>"
     end
 
     it "RunProperties elements follow ECMA-376 CT_RPr schema order" do
@@ -91,7 +94,7 @@ RSpec.describe "Word compatibility" do
       next unless kern_idx && sz_idx
 
       expect(kern_idx).to be < sz_idx,
-                           "kern must come before sz in CT_RPr, got kern at #{kern_idx}, sz at #{sz_idx}"
+                          "kern must come before sz in CT_RPr, got kern at #{kern_idx}, sz at #{sz_idx}"
     end
 
     it "Style elements follow ECMA-376 CT_Style schema order" do
@@ -111,7 +114,7 @@ RSpec.describe "Word compatibility" do
       next unless semihidden_idx && qformat_idx
 
       expect(semihidden_idx).to be < qformat_idx,
-                                   "semiHidden must come before qFormat in CT_Style"
+                                "semiHidden must come before qFormat in CT_Style"
     end
 
     it "TableProperties elements follow ECMA-376 CT_TblPrBase schema order" do
@@ -130,7 +133,7 @@ RSpec.describe "Word compatibility" do
       next unless tblstyle_idx && tblw_idx
 
       expect(tblstyle_idx).to be < tblw_idx,
-                                  "tblStyle must come before tblW in CT_TblPrBase"
+                              "tblStyle must come before tblW in CT_TblPrBase"
     end
 
     it "all XML is well-formed" do
@@ -158,7 +161,7 @@ RSpec.describe "Word compatibility" do
       all_xml_parts(output_path).each do |name, xml|
         declaration = xml.lines.first
         expect(declaration).to include('standalone="yes"'),
-                                 "#{name} missing standalone after round-trip"
+                               "#{name} missing standalone after round-trip"
       end
     end
 

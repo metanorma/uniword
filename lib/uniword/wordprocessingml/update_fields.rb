@@ -20,7 +20,7 @@ module Uniword
         namespace Uniword::Ooxml::Namespaces::WordProcessingML
 
         map_attribute "val", to: :value, render_nil: false,
-                                        render_default: false
+                             render_default: false
       end
     end
   end

@@ -75,11 +75,13 @@ module Uniword
 
         def count_line_styles(lst)
           return 0 unless lst
+
           (lst.lines || []).size
         end
 
         def count_effect_styles(lst)
           return 0 unless lst
+
           (lst.effect_styles || []).size
         end
 
@@ -104,7 +106,7 @@ module Uniword
           while fills.size < 2
             fills << Drawingml::SolidFill.new(
               scheme_clr: Drawingml::SchemeColor.new(
-                val: "accent#{fills.size + 1}"
+                val: "accent#{fills.size + 1}",
               ),
             )
           end

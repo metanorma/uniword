@@ -14,14 +14,14 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
     it "uses unqualified attribute form" do
       ns = described_class.new
       expect(ns.attribute_form_default).to eq(:unqualified),
-        "CustomProperties attributes must be unqualified " \
-        "(got #{ns.attribute_form_default.inspect})"
+                                           "CustomProperties attributes must be unqualified " \
+                                           "(got #{ns.attribute_form_default.inspect})"
     end
 
     it "uses qualified element form" do
       ns = described_class.new
       expect(ns.element_form_default).to eq(:qualified),
-        "CustomProperties elements must be qualified"
+                                         "CustomProperties elements must be qualified"
     end
   end
 
@@ -39,12 +39,12 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
 
     it "emits <property> attributes without custprops: prefix" do
       xml = props.to_xml
-      expect(xml).to include('fmtid='), "fmtid should be unqualified"
-      expect(xml).to include('pid='), "pid should be unqualified"
-      expect(xml).to include('name='), "name should be unqualified"
-      expect(xml).not_to match(/custprops:/),
-        "custprops: prefix must NOT appear on attributes; " \
-        "Word rejects it as an undeclared prefix. XML: #{xml}"
+      expect(xml).to include("fmtid="), "fmtid should be unqualified"
+      expect(xml).to include("pid="), "pid should be unqualified"
+      expect(xml).to include("name="), "name should be unqualified"
+      expect(xml).not_to include("custprops:"),
+                         "custprops: prefix must NOT appear on attributes; " \
+                         "Word rejects it as an undeclared prefix. XML: #{xml}"
     end
 
     it "round-trips cleanly through Nokogiri strict parsing" do
@@ -52,7 +52,7 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
       expect { Nokogiri::XML(xml) { |c| c.strict } }.not_to raise_error
       doc = Nokogiri::XML(xml) { |c| c.strict }
       expect(doc.errors).to be_empty,
-        "custom.xml must be strict-XML clean: #{doc.errors.map(&:message).inspect}"
+                            "custom.xml must be strict-XML clean: #{doc.errors.map(&:message).inspect}"
     end
   end
 
@@ -116,10 +116,11 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
     # failure with no recovery prompt.
     let(:sect_pr) do
       s = described_class.new
-      s.page_size = Uniword::Wordprocessingml::PageSize.new(width: "11906", height: "16838")
+      s.page_size = Uniword::Wordprocessingml::PageSize.new(width: "11906",
+                                                            height: "16838")
       s.page_margins = Uniword::Wordprocessingml::PageMargins.new(
         top: "794", bottom: "567", left: "1077", right: "1077",
-        header: "720", footer: "720", gutter: "0",
+        header: "720", footer: "720", gutter: "0"
       )
       s.page_numbering = Uniword::Wordprocessingml::PageNumbering.new(start: "1")
       s.columns = Uniword::Wordprocessingml::Columns.new(space: "720")
@@ -134,7 +135,7 @@ RSpec.describe "OOXML structural invariants for Word compatibility" do
       expect(pn_idx).not_to be_nil
       expect(cols_idx).not_to be_nil
       expect(pn_idx).to be < cols_idx,
-        "pgNumType must precede cols in sectPr, got: #{xml}"
+                        "pgNumType must precede cols in sectPr, got: #{xml}"
     end
   end
 end

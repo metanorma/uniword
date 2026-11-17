@@ -28,7 +28,7 @@ module Uniword
         # Builder-managed path: builders create complete tables.
         # Only fix element order issues, default gridCol widths, and
         # calculate gridAfter.
-        def reconcile_table_cell_order_only(tbl, idx)
+        def reconcile_table_cell_order_only(tbl, _idx)
           tbl.rows&.each do |row|
             row.cells&.each do |cell|
               reconcile_table_cell_order(cell)
@@ -48,7 +48,8 @@ module Uniword
 
           tw = tbl.properties.table_width
           if tw.nil?
-            tbl.properties.table_width = Properties::TableWidth.new(w: 0, type: "auto")
+            tbl.properties.table_width = Properties::TableWidth.new(w: 0,
+                                                                    type: "auto")
             fixed = true
           elsif tw.w.nil? || tw.type.nil?
             tw.w ||= 0
@@ -83,23 +84,27 @@ module Uniword
 
           reconcile_grid_col_widths(tbl)
 
-          record_fix(FixCodes::TABLE_STRUCTURE_RECONCILED,
-                     "Reconciled table structure for table #{idx}",
-                     part: "word/document.xml") if fixed
+          if fixed
+            record_fix(FixCodes::TABLE_STRUCTURE_RECONCILED,
+                       "Reconciled table structure for table #{idx}",
+                       part: "word/document.xml")
+          end
 
           tbl.rows&.each do |row|
             row.cells&.each do |cell|
               tc_pr = cell.properties
               if tc_pr.nil?
                 cell.properties = Wordprocessingml::TableCellProperties.new(
-                  cell_width: Uniword::Properties::CellWidth.new(w: 0, type: "auto"),
+                  cell_width: Uniword::Properties::CellWidth.new(w: 0,
+                                                                 type: "auto"),
                 )
                 insert_element_order(cell, "tcPr", 0)
                 record_fix(FixCodes::TABLE_CELL_DEFAULTS,
                            "Added missing tcPr with tcW to table cell",
                            part: "word/document.xml")
               elsif tc_pr.cell_width.nil?
-                tc_pr.cell_width = Uniword::Properties::CellWidth.new(w: 0, type: "auto")
+                tc_pr.cell_width = Uniword::Properties::CellWidth.new(w: 0,
+                                                                      type: "auto")
                 record_fix(FixCodes::TABLE_CELL_DEFAULTS,
                            "Added missing tcW to table cell",
                            part: "word/document.xml")

@@ -101,7 +101,8 @@ RSpec.describe "Unified header/footer path (TODO.validate/09)" do
       refs.each do |ref|
         rel = by_id[ref_attr(ref, "id")]
         expect(rel).not_to be_nil,
-                           "dangling sectPr reference r:id=#{ref_attr(ref, 'id')}"
+                           "dangling sectPr reference r:id=#{ref_attr(ref,
+                                                                      'id')}"
         expected_kind = ref.name == "headerReference" ? "header" : "footer"
         expect(rel["Type"]).to end_with("/#{expected_kind}")
       end

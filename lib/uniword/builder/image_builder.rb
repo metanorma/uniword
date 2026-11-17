@@ -50,10 +50,10 @@ module Uniword
                end
 
         content_type = case File.extname(path).downcase
-                       when ".png"  then "image/png"
+                       when ".png" then "image/png"
                        when ".jpg", ".jpeg" then "image/jpeg"
-                       when ".gif"  then "image/gif"
-                       when ".bmp"  then "image/bmp"
+                       when ".gif" then "image/gif"
+                       when ".bmp" then "image/bmp"
                        when ".tiff", ".tif" then "image/tiff"
                        when ".svg" then "image/svg+xml"
                        else "application/octet-stream"
@@ -141,9 +141,11 @@ alt_text: nil)
 
         drawing = Wordprocessingml::Drawing.new
 
-        inline = WpDrawing::Inline.new(dist_t: 0, dist_b: 0, dist_l: 0, dist_r: 0)
+        inline = WpDrawing::Inline.new(dist_t: 0, dist_b: 0, dist_l: 0,
+                                       dist_r: 0)
         inline.extent = WpDrawing::Extent.new(cx: w, cy: h)
-        inline.effect_extent = WpDrawing::EffectExtent.new(l: 0, t: 0, r: 0, b: 0)
+        inline.effect_extent = WpDrawing::EffectExtent.new(l: 0, t: 0, r: 0,
+                                                           b: 0)
         inline.doc_properties = WpDrawing::DocProperties.new(
           id: deterministic_id("inline", path),
           name: File.basename(path, ".*"),

@@ -16,7 +16,11 @@ module Uniword
 
         def code = "DOC-108"
         def validity_rule = "R6"
-        def description = "All rId references must resolve through .rels files to existing parts"
+
+        def description
+          "All rId references must resolve through .rels files to existing parts"
+        end
+
         def category = :relationships
         def severity = "error"
 

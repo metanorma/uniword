@@ -21,7 +21,7 @@ class CannedFormula
   end
 
   def to_omml
-    '<m:r><m:t>x</m:t></m:r>'
+    "<m:r><m:t>x</m:t></m:r>"
   end
 end
 

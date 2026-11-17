@@ -83,14 +83,14 @@ RSpec.describe "ST_OnOff readers outside run properties" do
     # owns: it normalises an assigned boolean so an on toggle writes the bare
     # element Word expects and an off one writes w:val="false".
     it "writes a bare element when built on" do
-      expect(described_class.new(value: true).to_xml).not_to match(/val=/)
+      expect(described_class.new(value: true).to_xml).not_to include("val=")
     end
 
     # "false" specifically: BooleanValSetter normalises an assigned Ruby
     # boolean to the one ST_OnOff spelling, so the output is not merely "some
     # off token".
     it "writes val=\"false\" when built off" do
-      expect(described_class.new(value: false).to_xml).to match(/val="false"/)
+      expect(described_class.new(value: false).to_xml).to include('val="false"')
     end
 
     it "reads back what it built, both ways" do

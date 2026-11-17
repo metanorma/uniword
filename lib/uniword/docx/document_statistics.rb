@@ -58,6 +58,7 @@ module Uniword
       def collect_sdt_text(sdts, text_per_paragraph)
         sdts.each do |sdt|
           next unless sdt.content
+
           collect_paragraphs(sdt.content.paragraphs, text_per_paragraph)
         end
       end

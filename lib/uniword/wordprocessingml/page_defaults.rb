@@ -12,7 +12,7 @@ module Uniword
 
       DEFAULT_MARGINS = {
         top: 1440, right: 1440, bottom: 1440, left: 1440,
-        header: 720, footer: 720, gutter: 0,
+        header: 720, footer: 720, gutter: 0
       }.freeze
 
       DEFAULT_COL_SPACE = 720

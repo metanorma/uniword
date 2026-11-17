@@ -110,11 +110,11 @@ module Uniword
       # interleaving paragraphs, tables, and SDTs.
       def append_to_element_order(element_name)
         entry = Lutaml::Xml::Element.new("Element", element_name)
-        if element_order.nil? || element_order.empty?
-          self.element_order = [entry]
-        else
-          self.element_order = element_order + [entry]
-        end
+        self.element_order = if element_order.nil? || element_order.empty?
+                               [entry]
+                             else
+                               element_order + [entry]
+                             end
       end
 
       private

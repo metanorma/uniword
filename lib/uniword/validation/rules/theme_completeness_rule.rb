@@ -19,7 +19,11 @@ module Uniword
 
         def code = "DOC-102"
         def validity_rule = "R3"
-        def description = "Theme fmtScheme must have minimum content in each style list"
+
+        def description
+          "Theme fmtScheme must have minimum content in each style list"
+        end
+
         def category = :theme
         def severity = "error"
 

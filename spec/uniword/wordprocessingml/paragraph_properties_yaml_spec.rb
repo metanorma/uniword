@@ -117,7 +117,8 @@ RSpec.describe Uniword::Wordprocessingml::ParagraphProperties do
     end
 
     it "writes a w:val attribute rather than element text" do
-      props = described_class.new(suppress_line_numbers: false, bidirectional: false)
+      props = described_class.new(suppress_line_numbers: false,
+                                  bidirectional: false)
 
       aggregate_failures do
         expect(props.to_xml).to match(%r{<(w:)?suppressLineNumbers w:val="false"\s*/>})

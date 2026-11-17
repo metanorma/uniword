@@ -12,7 +12,11 @@ module Uniword
 
         def code = "DOC-109"
         def validity_rule = "R12"
-        def description = "Paragraphs should have rsidR and rsidRDefault attributes"
+
+        def description
+          "Paragraphs should have rsidR and rsidRDefault attributes"
+        end
+
         def category = :structure
         def severity = "warning"
 

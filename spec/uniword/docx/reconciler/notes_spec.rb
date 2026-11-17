@@ -101,7 +101,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
           footnote_class.new(id: "1", type: "normal", paragraphs: []),
         ],
       )
@@ -119,7 +120,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
         ],
       )
       package = build_package(settings: settings, footnotes: footnotes)
@@ -284,8 +286,8 @@ RSpec.describe Uniword::Docx::Reconciler do
         cells = ref_ids_in_tables.map do |id|
           cell_class.new(
             paragraphs: [para_class.new(
-              runs: [run_class.new(footnote_reference: fn_ref_class.new(id: id))]
-            )]
+              runs: [run_class.new(footnote_reference: fn_ref_class.new(id: id))],
+            )],
           )
         end
         tbl = table_class.new(rows: [row_class.new(cells: cells)])
@@ -303,7 +305,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
           footnote_class.new(id: "1", paragraphs: [para_class.new]),
           footnote_class.new(id: "2", paragraphs: [para_class.new]),
           footnote_class.new(id: "3", paragraphs: [para_class.new]),
@@ -318,7 +321,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       reconciler = described_class.new(package)
       reconciler.reconcile
 
-      expect(package.footnotes.footnote_entries.map(&:id)).to include("1", "2", "3")
+      expect(package.footnotes.footnote_entries.map(&:id)).to include("1", "2",
+                                                                      "3")
     end
 
     it "creates missing footnote definitions for references in table cells" do
@@ -329,7 +333,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       package.footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
           footnote_class.new(id: "1", paragraphs: [para_class.new]),
         ],
       )
@@ -395,11 +400,15 @@ RSpec.describe Uniword::Docx::Reconciler do
     describe "R15: strip_invalid_note_types" do
       it "removes w:type from regular footnote definitions" do
         package = build_package_with_footnotes([
-          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", type: "normal", paragraphs: [para_class.new]),
-          footnote_class.new(id: "2", type: "someOtherType", paragraphs: [para_class.new]),
-        ])
+                                                 footnote_class.new(id: "-1",
+                                                                    type: "separator", paragraphs: []),
+                                                 footnote_class.new(id: "0", type: "continuationSeparator",
+                                                                    paragraphs: []),
+                                                 footnote_class.new(id: "1", type: "normal",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "2", type: "someOtherType",
+                                                                    paragraphs: [para_class.new]),
+                                               ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
@@ -416,17 +425,22 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "preserves w:type on separator and continuation entries" do
         package = build_package_with_footnotes([
-          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [para_class.new]),
-        ])
+                                                 footnote_class.new(id: "-1",
+                                                                    type: "separator", paragraphs: []),
+                                                 footnote_class.new(id: "0", type: "continuationSeparator",
+                                                                    paragraphs: []),
+                                                 footnote_class.new(id: "1",
+                                                                    paragraphs: [para_class.new]),
+                                               ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
 
         entries = package.footnotes.footnote_entries
         expect(entries.find { |e| e.id == "-1" }.type).to eq("separator")
-        expect(entries.find { |e| e.id == "0" }.type).to eq("continuationSeparator")
+        expect(entries.find do |e|
+          e.id == "0"
+        end.type).to eq("continuationSeparator")
         expect(entries.find { |e| e.id == "1" }.type).to be_nil
 
         r15 = reconciler.applied_fixes.find { |f| f.code == "R15" }
@@ -435,15 +449,20 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "removes w:type from regular endnote definitions" do
         package = build_package_with_endnotes([
-          endnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          endnote_class.new(id: "1", type: "normal", paragraphs: [para_class.new]),
-        ])
+                                                endnote_class.new(id: "-1",
+                                                                  type: "separator", paragraphs: []),
+                                                endnote_class.new(id: "0", type: "continuationSeparator",
+                                                                  paragraphs: []),
+                                                endnote_class.new(id: "1", type: "normal",
+                                                                  paragraphs: [para_class.new]),
+                                              ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
 
-        expect(package.endnotes.endnote_entries.find { |e| e.id == "1" }.type).to be_nil
+        expect(package.endnotes.endnote_entries.find do |e|
+          e.id == "1"
+        end.type).to be_nil
         r15 = reconciler.applied_fixes.select { |f| f.code == "R15" }
         expect(r15.size).to eq(1)
         expect(r15.first.message).to include("endnote")
@@ -451,10 +470,13 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "does nothing when no invalid types exist" do
         package = build_package_with_footnotes([
-          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [para_class.new]),
-        ])
+                                                 footnote_class.new(id: "-1",
+                                                                    type: "separator", paragraphs: []),
+                                                 footnote_class.new(id: "0", type: "continuationSeparator",
+                                                                    paragraphs: []),
+                                                 footnote_class.new(id: "1",
+                                                                    paragraphs: [para_class.new]),
+                                               ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
@@ -480,14 +502,21 @@ RSpec.describe Uniword::Docx::Reconciler do
     describe "R16: deduplicate_note_ids" do
       it "removes duplicate footnote IDs keeping first occurrence" do
         package = build_package_with_footnotes([
-          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [para_class.new]),
-          footnote_class.new(id: "2", paragraphs: [para_class.new]),
-          footnote_class.new(id: "1", paragraphs: [para_class.new]),
-          footnote_class.new(id: "3", paragraphs: [para_class.new]),
-          footnote_class.new(id: "2", paragraphs: [para_class.new]),
-        ])
+                                                 footnote_class.new(id: "-1",
+                                                                    type: "separator", paragraphs: []),
+                                                 footnote_class.new(id: "0", type: "continuationSeparator",
+                                                                    paragraphs: []),
+                                                 footnote_class.new(id: "1",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "2",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "1",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "3",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "2",
+                                                                    paragraphs: [para_class.new]),
+                                               ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
@@ -504,11 +533,15 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "removes duplicate endnote IDs" do
         package = build_package_with_endnotes([
-          endnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          endnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          endnote_class.new(id: "1", paragraphs: [para_class.new]),
-          endnote_class.new(id: "1", paragraphs: [para_class.new]),
-        ])
+                                                endnote_class.new(id: "-1",
+                                                                  type: "separator", paragraphs: []),
+                                                endnote_class.new(id: "0", type: "continuationSeparator",
+                                                                  paragraphs: []),
+                                                endnote_class.new(id: "1",
+                                                                  paragraphs: [para_class.new]),
+                                                endnote_class.new(id: "1",
+                                                                  paragraphs: [para_class.new]),
+                                              ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
@@ -523,11 +556,15 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       it "does nothing when no duplicates exist" do
         package = build_package_with_footnotes([
-          footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [para_class.new]),
-          footnote_class.new(id: "2", paragraphs: [para_class.new]),
-        ])
+                                                 footnote_class.new(id: "-1",
+                                                                    type: "separator", paragraphs: []),
+                                                 footnote_class.new(id: "0", type: "continuationSeparator",
+                                                                    paragraphs: []),
+                                                 footnote_class.new(id: "1",
+                                                                    paragraphs: [para_class.new]),
+                                                 footnote_class.new(id: "2",
+                                                                    paragraphs: [para_class.new]),
+                                               ])
 
         reconciler = described_class.new(package)
         reconciler.reconcile
@@ -581,16 +618,22 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
-          footnote_class.new(id: "1", paragraphs: [para_class.new(runs: [run_class.new(text: text_class.new(value: "fn1"))])]),
-          footnote_class.new(id: "2", paragraphs: [para_class.new(runs: [run_class.new(text: text_class.new(value: "fn2"))])]),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
+          footnote_class.new(id: "1",
+                             paragraphs: [para_class.new(runs: [run_class.new(text: text_class.new(value: "fn1"))])]),
+          footnote_class.new(id: "2",
+                             paragraphs: [para_class.new(runs: [run_class.new(text: text_class.new(value: "fn2"))])]),
         ],
       )
       package.footnotes = footnotes
 
       described_class.new(package).reconcile
 
-      user_entries = footnotes.footnote_entries.reject { |e| %w[separator continuationSeparator footnoteSeparator continuationNotice].include?(e.type) }
+      user_entries = footnotes.footnote_entries.reject do |e|
+        %w[separator continuationSeparator footnoteSeparator
+           continuationNotice].include?(e.type)
+      end
       expect(user_entries.map(&:id)).to eq(%w[1 2])
     end
   end

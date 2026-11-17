@@ -26,18 +26,18 @@ RSpec.describe "mc:Ignorable reconciliation" do
     package.footnotes = Uniword::Wordprocessingml::Footnotes.new(
       footnote_entries: [
         Uniword::Wordprocessingml::Footnote.new(id: "-1", type: "separator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
+                                                paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
         Uniword::Wordprocessingml::Footnote.new(id: "0", type: "continuationSeparator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
-      ]
+                                                paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
+      ],
     )
     package.endnotes = Uniword::Wordprocessingml::Endnotes.new(
       endnote_entries: [
         Uniword::Wordprocessingml::Endnote.new(id: "-1", type: "separator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
+                                               paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
         Uniword::Wordprocessingml::Endnote.new(id: "0", type: "continuationSeparator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
-      ]
+                                               paragraphs: [Uniword::Wordprocessingml::Paragraph.new]),
+      ],
     )
     package.numbering = Uniword::Wordprocessingml::NumberingConfiguration.new
     package.settings = Uniword::Wordprocessingml::Settings.new

@@ -24,7 +24,7 @@ RSpec.describe Uniword::Spellcheck::GrammarChecker do
     it "detects double spaces" do
       issues = checker.check("This is  a test")
       expect(issues.size).to be >= 1
-      expect(issues.first[:message]).to match(/Double space/)
+      expect(issues.first[:message]).to include("Double space")
       expect(issues.first[:position]).to be_a(Integer)
       expect(issues.first[:context]).to be_a(String)
     end

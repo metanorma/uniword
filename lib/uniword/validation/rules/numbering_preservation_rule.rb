@@ -15,7 +15,11 @@ module Uniword
 
         def code = "DOC-103"
         def validity_rule = "R4"
-        def description = "Numbering level elements and lvlOverride/startOverride are properly structured"
+
+        def description
+          "Numbering level elements and lvlOverride/startOverride are properly structured"
+        end
+
         def category = :numbering
         def severity = "warning"
 

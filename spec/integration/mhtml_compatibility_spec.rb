@@ -32,7 +32,7 @@ RSpec.describe "MHTML Compatibility", type: :integration do
       # Verify MIME headers
       expect(content).to include("MIME-Version: 1.0")
       expect(content).to include("Content-Type: multipart/related")
-      expect(content).to match(/boundary="----=_NextPart_/)
+      expect(content).to include('boundary="----=_NextPart_')
     end
 
     it "includes proper MIME version header" do

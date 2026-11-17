@@ -11,7 +11,7 @@ RSpec.describe Uniword::Ooxml::DotxPackage do
     doc.body = Uniword::Wordprocessingml::Body.new
     doc.body.paragraphs << Uniword::Wordprocessingml::Paragraph.new(
       runs: [Uniword::Wordprocessingml::Run.new(
-        text: Uniword::Wordprocessingml::Text.new(content: "Template")
+        text: Uniword::Wordprocessingml::Text.new(content: "Template"),
       )],
     )
     doc

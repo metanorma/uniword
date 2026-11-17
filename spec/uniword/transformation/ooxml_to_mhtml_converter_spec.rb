@@ -19,7 +19,7 @@ RSpec.describe Uniword::Transformation::OoxmlToMhtmlConverter do
 
   def document_with_footnotes(footnote_xmls)
     Uniword::Wordprocessingml::DocumentRoot.from_xml(
-      <<~XML
+      <<~XML,
         <w:document #{ns}>
           <w:body><w:p><w:r><w:t>Hello</w:t></w:r></w:p></w:body>
         </w:document>
@@ -55,10 +55,12 @@ RSpec.describe Uniword::Transformation::OoxmlToMhtmlConverter do
 
     it "omits separator and continuationSeparator plumbing entries" do
       document = document_with_footnotes([
-        footnote_xml(-1, type: "separator", text: "separator"),
-        footnote_xml(0, type: "continuationSeparator", text: "continuation"),
-        footnote_xml(1),
-      ])
+                                           footnote_xml(-1, type: "separator",
+                                                            text: "separator"),
+                                           footnote_xml(0,
+                                                        type: "continuationSeparator", text: "continuation"),
+                                           footnote_xml(1),
+                                         ])
       html = converter_for(document).build_html_body
 
       expect(html).not_to include("separator")
@@ -75,8 +77,8 @@ RSpec.describe Uniword::Transformation::OoxmlToMhtmlConverter do
 
     it "renders the entry paragraphs with their run content" do
       document = document_with_footnotes([
-        footnote_xml(1, text: "Withdrawn."),
-      ])
+                                           footnote_xml(1, text: "Withdrawn."),
+                                         ])
       html = converter_for(document).build_html_body
 
       expect(html).to include("Withdrawn.")

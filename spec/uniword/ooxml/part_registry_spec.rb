@@ -419,7 +419,7 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
     it "enumerates collection families from their stored parts" do
       package.document.image_parts["rId1"] = {
         data: "png", target: "media/image1.png",
-        content_type: "image/png",
+        content_type: "image/png"
       }
 
       expect(described_class.emitted_paths(package))
@@ -442,7 +442,7 @@ RSpec.describe Uniword::Ooxml::PartRegistry do
           r_id: "rId7", target: "header1.xml",
           rel_type: "http://schemas.openxmlformats.org/officeDocument/2006/relationships/header",
           content: Uniword::Wordprocessingml::Header.new,
-          type: "default",
+          type: "default"
         )
 
       expect(described_class.emitted_paths(package))

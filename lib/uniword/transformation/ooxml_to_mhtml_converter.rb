@@ -304,7 +304,7 @@ document_name = nil)
         return [] unless footnotes.is_a?(Uniword::Wordprocessingml::Footnotes)
 
         footnotes.footnote_entries.reject do |entry|
-          entry.type == "separator" || entry.type == "continuationSeparator"
+          ["separator", "continuationSeparator"].include?(entry.type)
         end
       end
 
@@ -315,8 +315,6 @@ document_name = nil)
 
         "<div style='mso-element:footnote' id=\"ftn#{entry.id}\">\n#{html}\n</div>"
       end
-
-      private
 
       def section_divs(sections)
         section_divs = sections.each_with_index.map do |section_elements, idx|

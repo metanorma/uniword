@@ -145,7 +145,7 @@ RSpec.describe Uniword::Docx::PackageIntegrityChecker do
       )
       content["[Content_Types].xml"] = content_types_xml.sub(
         '<Default Extension="xml"',
-        '<Default Extension="png" ContentType="image/png"/><Default Extension="xml"'
+        '<Default Extension="png" ContentType="image/png"/><Default Extension="xml"',
       )
       content["word/_rels/document.xml.rels"] = <<~XML
         <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -197,7 +197,7 @@ RSpec.describe Uniword::Docx::PackageIntegrityChecker do
       content = valid_content.merge("word/media/image1.png" => "\x89PNG\x00\xFF".dup)
       content["[Content_Types].xml"] = content_types_xml.sub(
         '<Default Extension="xml"',
-        '<Default Extension="png" ContentType="image/png"/><Default Extension="xml"'
+        '<Default Extension="png" ContentType="image/png"/><Default Extension="xml"',
       )
 
       expect(checker.check(content).map(&:code)).not_to include("OPC-008")

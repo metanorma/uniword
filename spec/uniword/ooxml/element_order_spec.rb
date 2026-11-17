@@ -93,7 +93,7 @@ RSpec.describe Uniword::Ooxml::ElementOrder do
       notes.footnote_entries.unshift(
         Uniword::Wordprocessingml::Footnote.new(
           id: -1, type: "separator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new],
+          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]
         ),
       )
 
@@ -110,7 +110,7 @@ RSpec.describe Uniword::Ooxml::ElementOrder do
       endnotes.endnote_entries.unshift(
         Uniword::Wordprocessingml::Endnote.new(
           id: -1, type: "separator",
-          paragraphs: [Uniword::Wordprocessingml::Paragraph.new],
+          paragraphs: [Uniword::Wordprocessingml::Paragraph.new]
         ),
       )
 

@@ -10,7 +10,7 @@ module Uniword
       # invalid types.
       module Notes
         def reconcile_note_references
-          [:footnote, :endnote].each do |type|
+          %i[footnote endnote].each do |type|
             ref_ids = collect_note_ids(type)
             next if ref_ids.empty?
 
@@ -32,8 +32,8 @@ module Uniword
                 id: id,
                 paragraphs: [Wordprocessingml::Paragraph.new(
                   runs: [Wordprocessingml::Run.new(
-                    text: Wordprocessingml::Text.new(content: " ")
-                  )]
+                    text: Wordprocessingml::Text.new(content: " "),
+                  )],
                 )],
               )
             end
@@ -141,11 +141,11 @@ module Uniword
               spacing: Properties::Spacing.new(after: 0, line: 240,
                                                line_rule: "auto"),
             ),
-            runs: [sep_run]
+            runs: [sep_run],
           )
         end
 
-        def ensure_separators(notes, type, entries)
+        def ensure_separators(_notes, type, entries)
           entries.each do |entry|
             next unless %w[separator continuationSeparator].include?(entry.type)
             next if entry.paragraphs.empty?
@@ -162,7 +162,9 @@ module Uniword
         end
 
         def ensure_separator_run(para, type)
-          has_sep = para.runs.any? { |r| r.separator_char || r.continuation_separator_char }
+          has_sep = para.runs.any? do |r|
+            r.separator_char || r.continuation_separator_char
+          end
           return if has_sep
 
           sep = if type == "separator"
@@ -216,14 +218,18 @@ module Uniword
           return if ref_order.empty?
 
           structural = entries.select { |e| VALID_NOTE_TYPES.include?(e.type) }
-          user_entries = entries.reject { |e| VALID_NOTE_TYPES.include?(e.type) }
+          user_entries = entries.reject do |e|
+            VALID_NOTE_TYPES.include?(e.type)
+          end
           return if user_entries.size <= 1
 
           by_id = user_entries.group_by(&:id)
           reordered = ref_order.filter_map { |id| by_id[id]&.first }
 
           referenced_ids = ref_order.to_set
-          unreferenced = user_entries.reject { |e| referenced_ids.include?(e.id) }
+          unreferenced = user_entries.reject do |e|
+            referenced_ids.include?(e.id)
+          end
           reordered.concat(unreferenced)
 
           return if reordered == user_entries
@@ -238,7 +244,9 @@ module Uniword
         end
 
         def renumber_notes(entries, type)
-          user_entries = entries.reject { |e| VALID_NOTE_TYPES.include?(e.type) }
+          user_entries = entries.reject do |e|
+            VALID_NOTE_TYPES.include?(e.type)
+          end
           return if user_entries.size <= 1
 
           id_map = {}
@@ -246,6 +254,7 @@ module Uniword
             old_id = entry.id
             new_id = (idx + 1).to_s
             next if old_id == new_id
+
             id_map[old_id] = new_id
             entry.id = new_id
           end
@@ -258,6 +267,7 @@ module Uniword
             para.runs.each do |run|
               ref = note_reference_from_run(run, type)
               next unless ref && ref.id && id_map.key?(ref.id)
+
               ref.id = id_map[ref.id]
             end
           end
@@ -274,6 +284,7 @@ module Uniword
             para.runs.each do |run|
               ref = note_reference_from_run(run, type)
               next unless ref && ref.id
+
               seen << ref.id unless seen.include?(ref.id)
             end
           end
