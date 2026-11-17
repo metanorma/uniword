@@ -24,6 +24,12 @@ gem "yard"
 # moxml 0.5.167 regressed same_node? on Leptris::XML::Attr (c_ptr); fixed in 0.5.168.
 gem "moxml", "~> 0.6.0"
 
+# DEV-only: enables the math cross-format specs (plurimath_adapter_spec,
+# math_equation_spec). Optional at runtime - PlurimathAdapter lazy-requires
+# it; omml (gemspec) handles the OMML wire format, plurimath converts
+# between math formats (OMML <-> LaTeX/MathML/AsciiMath).
+gem "plurimath", "~> 0.11"
+
 # lutaml-model 0.8.138-0.8.147 emit render_default: false booleans; fixed in
 # 0.8.148 (lutaml-model#1057). 0.8.138+ also runs custom-initialize classes
 # through the constructor during XML parsing, costing +50% hydration CPU on

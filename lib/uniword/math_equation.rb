@@ -152,9 +152,9 @@ module Uniword
       # If present, it should be a Plurimath formula
       return true if formula.nil?
 
-      return false unless defined?(Plurimath::Formula)
+      return false unless defined?(Plurimath::Math::Formula)
 
-      formula.is_a?(Plurimath::Formula)
+      formula.is_a?(Plurimath::Math::Formula)
     end
   end
 end

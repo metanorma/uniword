@@ -4,6 +4,16 @@ require "spec_helper"
 require "uniword/math_equation"
 require "uniword/math/plurimath_adapter"
 
+# plurimath_adapter_spec defines this too; only one definition per process.
+unless defined?(PLURIMATH_AVAILABLE)
+  begin
+    require "plurimath"
+    PLURIMATH_AVAILABLE = true
+  rescue LoadError, ArgumentError
+    PLURIMATH_AVAILABLE = false
+  end
+end
+
 # A formula stand-in with fixed outputs. MathEquation's contract is to hold
 # any formula-like object and delegate rendering to it; the canned outputs
 # make the delegation observable without requiring Plurimath.
@@ -21,7 +31,7 @@ class CannedFormula
   end
 
   def to_omml
-    '<m:r><m:t>x</m:t></m:r>'
+    "<m:r><m:t>x</m:t></m:r>"
   end
 end
 
@@ -126,9 +136,9 @@ RSpec.describe Uniword::MathEquation do
     end
 
     it "returns true when formula is a Plurimath::Formula" do
-      skip "Plurimath not loaded" unless defined?(Plurimath::Formula)
+      skip "Plurimath not loaded" unless defined?(Plurimath::Math::Formula)
 
-      formula = Plurimath::Formula.new([Plurimath::Math::Symbol.new("x")])
+      formula = Plurimath::Math::Formula.new
       equation = described_class.new(formula: formula)
       expect(equation.valid?).to be true
     end
@@ -150,47 +160,47 @@ RSpec.describe Uniword::MathEquation do
   end
 
   describe ".from_omml" do
-    it "returns an inline equation built through the adapter" do
-      skip "Plurimath not loaded" unless defined?(Plurimath::Math)
-
-      omml = <<~XML
+    let(:inline_omml) do
+      <<~XML
         <m:oMath xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math">
           <m:r><m:t>x</m:t></m:r>
         </m:oMath>
       XML
+    end
 
-      result = described_class.from_omml(omml)
+    it "returns an inline equation built through the adapter" do
+      skip "Plurimath not loaded" unless defined?(Plurimath::Math)
+
+      result = described_class.from_omml(inline_omml)
       expect(result).to be_a(described_class)
       expect(result.display_type).to eq("inline")
     end
   end
 
   describe "#to_omml" do
+    def block_equation
+      described_class.new(
+        formula: CannedFormula.new,
+        display_type: "block",
+        alignment: "center",
+      )
+    end
+
     it "passes inline formula content through unwrapped" do
       equation = described_class.new(formula: CannedFormula.new)
       expect(equation.to_omml).to eq("<m:r><m:t>x</m:t></m:r>")
     end
 
     it "wraps block equations in m:oMathPara with alignment" do
-      equation = described_class.new(
-        formula: CannedFormula.new,
-        display_type: "block",
-        alignment: "center",
-      )
-      result = equation.to_omml
+      result = block_equation.to_omml
       expect(result).to include("oMathPara")
       expect(result).to include("m:jc")
       expect(result).to include("center")
     end
 
     it "passes pretty printing through to the adapter" do
-      equation = described_class.new(
-        formula: CannedFormula.new,
-        display_type: "block",
-        alignment: "center",
-      )
-      plain = equation.to_omml
-      pretty = equation.to_omml(pretty: true)
+      plain = block_equation.to_omml
+      pretty = block_equation.to_omml(pretty: true)
       expect(pretty).to include("\n")
       expect(pretty.length).to be >= plain.length
     end
