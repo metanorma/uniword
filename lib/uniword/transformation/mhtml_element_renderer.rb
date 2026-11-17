@@ -295,13 +295,26 @@ module Uniword
       # Accepts Omml::Models::CTOMath/OMath/OMathPara (the typed attribute
       # values on Paragraph) — anything responding to `to_xml` works.
       def omath_to_html(o_math)
-        xml = o_math.to_xml
+        xml = o_math_to_xml_string(o_math)
         # Strip XML declaration and namespace prefixes for clean inline HTML
         xml = xml.gsub(/<\?[^>]+>\s*/, "")
         # Remove namespace declarations that Word HTML doesn't use
         xml = xml.gsub(/ xmlns(:[^=]+)?="[^"]+"/, "")
         # Ensure m: prefix on math elements for Word HTML compatibility
         %(<span class="stem">#{xml}</span>)
+      end
+
+      # Serialize an OMML model for the inline MHTML payload. A bare
+      # Omml::Models::CTOMath serializes with its schema TYPE name as the
+      # root element (`m:CT_OMath`); Word only accepts the m:oMath ELEMENT
+      # there — inside a paragraph the DOCX writer emits oMath via the
+      # paragraph mapping, so this root-level path is MHTML-only. Rename
+      # the root tag so the equation survives the .doc round-trip.
+      def o_math_to_xml_string(o_math)
+        xml = o_math.to_xml
+        xml.sub(/\A<\s*m?:CT_OMath/, "<m:oMath")
+          .sub(/<\s*m?:CT_OMath([^>]*)\/>/, "<m:oMath\\1>")
+          .sub(/<\/\s*m?:CT_OMath\s*>\z/, "</m:oMath>")
       end
 
       # Convert OOXML Table to HTML
