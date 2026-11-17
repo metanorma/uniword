@@ -84,4 +84,34 @@ RSpec.describe Uniword::Transformation::OoxmlToHtmlConverter do
       end
     end
   end
+
+  describe ".table_cell_to_html with a nested table" do
+    def outer_table_with_nested_cell
+      nested_cell = Uniword::Wordprocessingml::TableCell.new
+      nested_para = Uniword::Wordprocessingml::Paragraph.new
+      nested_para.runs << Uniword::Wordprocessingml::Run.new(text: "Inner")
+      nested_cell.paragraphs << nested_para
+      nested_row = Uniword::Wordprocessingml::TableRow.new
+      nested_row.cells << nested_cell
+      nested_table = Uniword::Wordprocessingml::Table.new
+      nested_table.rows << nested_row
+
+      outer_cell = Uniword::Wordprocessingml::TableCell.new
+      outer_cell.tables << nested_table
+      outer_row = Uniword::Wordprocessingml::TableRow.new
+      outer_row.cells << outer_cell
+      table = Uniword::Wordprocessingml::Table.new
+      table.rows << outer_row
+      table
+    end
+
+    it "renders the nested table inside the outer cell" do
+      html = described_class.table_to_html(outer_table_with_nested_cell)
+      doc = Nokogiri::HTML(html)
+
+      expect(doc.css("td table").size).to eq(1),
+        "the nested table must be rendered inside the outer cell"
+      expect(doc.css("td table td").first.text.strip).to eq("Inner")
+    end
+  end
 end

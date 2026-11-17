@@ -379,12 +379,16 @@ module Uniword
       # Convert OOXML TableCell to HTML
       # For simple cells (single plain paragraph), render text directly.
       # For complex cells (multiple paragraphs, styled text), wrap in <p>.
+      # Nested tables (<w:tbl> inside <w:tc>) are rendered as <table>
+      # inside the cell — dropping them silently loses the whole nested
+      # table from the MHTML output while the DOCX keeps it.
       # Header cells (<th>) use <th> tag instead of <td>.
       #
       # @param cell [TableCell] The cell to render
       # @param rowspan [Integer, nil] Rowspan from vMerge computation
       def table_cell_to_html(cell, rowspan: nil)
         paragraphs = cell.paragraphs || []
+        nested_tables = cell.tables || []
         tag = cell.header ? "th" : "td"
 
         # Build merge attributes
@@ -395,14 +399,13 @@ module Uniword
         attrs << "rowspan=#{rowspan}" if rowspan
         attr_str = attrs.empty? ? "" : " #{attrs.join(' ')}"
 
-        if paragraphs.size == 1 && simple_cell_paragraph?(paragraphs.first)
+        if nested_tables.empty? && paragraphs.size == 1 &&
+            simple_cell_paragraph?(paragraphs.first)
           # Simple cell: render text content directly (no <p> wrapping)
           content = paragraph_content_to_html(paragraphs.first)
           %(<#{tag}#{attr_str}>#{content}</#{tag}>)
         else
-          content = paragraphs.map do |para|
-            paragraph_to_html(para)
-          end.join("\n")
+          content = table_cell_content_to_html(cell, paragraphs, nested_tables)
 
           <<~HTML
             <#{tag}#{attr_str}>
@@ -410,6 +413,44 @@ module Uniword
             </#{tag}>
           HTML
         end
+      end
+
+      # Cell body HTML: paragraphs and nested tables in document order.
+      # element_order (tracked by the builders and by lutaml's
+      # mixed-content parse) drives the interleaving; models without it
+      # fall back to paragraphs-then-tables. Content not represented in
+      # element_order (appended programmatically after a parse) is
+      # appended, so no cell content is ever dropped.
+      def table_cell_content_to_html(cell, paragraphs, nested_tables)
+        order = Array(cell.element_order)
+        if order.empty?
+          paragraph_html = paragraphs.map { |para| paragraph_to_html(para) }
+          table_html = nested_tables.map { |tbl| table_to_html(tbl) }
+          return (paragraph_html + table_html).join("\n")
+        end
+
+        para_idx = 0
+        table_idx = 0
+        ordered_html = order.filter_map do |entry|
+          next unless entry.element?
+
+          case entry.name
+          when "p"
+            para = paragraphs[para_idx]
+            para_idx += 1
+            paragraph_to_html(para) if para
+          when "tbl"
+            tbl = nested_tables[table_idx]
+            table_idx += 1
+            table_to_html(tbl) if tbl
+          end
+        end
+
+        leftover_html =
+          paragraphs[para_idx..].to_a.map { |para| paragraph_to_html(para) } +
+          nested_tables[table_idx..].to_a.map { |tbl| table_to_html(tbl) }
+
+        (ordered_html + leftover_html).join("\n")
       end
 
       # Check if a paragraph is simple enough to render without <p> wrapping
