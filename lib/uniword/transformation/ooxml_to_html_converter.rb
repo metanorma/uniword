@@ -98,13 +98,21 @@ module Uniword
 
       # Convert OOXML TableCell to HTML
       #
+      # Nested tables (<w:tbl> inside <w:tc>) are rendered after the
+      # cell's paragraphs; dropping them silently loses the whole nested
+      # table from the HTML output while the DOCX keeps it.
+      #
       # @param cell [Uniword::Wordprocessingml::TableCell]
       # @return [String] HTML <td> element
       def self.table_cell_to_html(cell)
         paragraphs_html = cell.paragraphs.map do |p|
           paragraph_to_html(p)
         end.join("\n")
-        "<td>\n#{paragraphs_html}\n</td>"
+        tables_html = Array(cell.tables).map do |tbl|
+          table_to_html(tbl)
+        end.join("\n")
+        content = [paragraphs_html, tables_html].reject(&:empty?).join("\n")
+        "<td>\n#{content}\n</td>"
       end
 
       # Wrap HTML content in full HTML document

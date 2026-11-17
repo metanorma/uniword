@@ -217,4 +217,87 @@ v_merge_val: nil, header: false)
       expect(rows[1].css("td").first.text).to eq("B2")
     end
   end
+
+  describe "nested tables in table cells" do
+    # A 2x2 table nested inside an outer cell — the shape the ISO DOCX
+    # glue builds for a table whose NOTE annotations wrap the table in
+    # an outer 2-row table (row 1 cell = the table itself).
+    def nested_table
+      make_table(rows: [
+                   make_table_row(cells: [
+                                    make_table_cell(
+                                      paragraphs: [make_paragraph(runs: [make_run(text: "H1")])],
+                                      header: true,
+                                    ),
+                                    make_table_cell(
+                                      paragraphs: [make_paragraph(runs: [make_run(text: "H2")])],
+                                      header: true,
+                                    ),
+                                  ]),
+                   make_table_row(cells: [
+                                    make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "R1C1")])]),
+                                    make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "R1C2")])]),
+                                  ]),
+                 ])
+    end
+
+    def outer_table_with(cell)
+      make_table(rows: [make_table_row(cells: [cell])])
+    end
+
+    it "renders a nested table inside its cell" do
+      cell = make_table_cell(paragraphs: [])
+      cell.tables << nested_table
+
+      html = renderer.table_to_html(outer_table_with(cell))
+      doc = Nokogiri::HTML(html)
+
+      expect(doc.css("td table").size).to eq(1),
+        "the nested table must be rendered inside the cell"
+      nested_rows = doc.css("td table tr")
+      expect(nested_rows.size).to eq(2)
+      expect(nested_rows[0].css("th").map(&:text)).to eq(%w[H1 H2])
+      expect(nested_rows[1].css("td").map(&:text)).to eq(%w[R1C1 R1C2])
+    end
+
+    it "renders a nested table with an empty-paragraph cell (no stray text)" do
+      cell = make_table_cell(paragraphs: [])
+      cell.tables << nested_table
+
+      html = renderer.table_to_html(outer_table_with(cell))
+      doc = Nokogiri::HTML(html)
+
+      outer_cell = doc.css("td").first
+      expect(outer_cell.element_children.first.name).to eq("table"),
+        "the nested table must be the cell's content, not whitespace"
+    end
+
+    it "renders paragraphs before a nested table when no element_order is tracked" do
+      cell = make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "Intro")])])
+      cell.tables << nested_table
+
+      html = renderer.table_to_html(outer_table_with(cell))
+      doc = Nokogiri::HTML(html)
+
+      outer_cell = doc.css("td").first
+      expect(outer_cell.element_children.map(&:name)).to eq(%w[p table])
+      expect(outer_cell.at_css("p").text).to eq("Intro")
+    end
+
+    it "interleaves paragraphs and nested tables by element_order" do
+      cell = make_table_cell(paragraphs: [make_paragraph(runs: [make_run(text: "After")])])
+      cell.tables << nested_table
+      cell.element_order = [
+        Lutaml::Xml::Element.new("Element", "tbl"),
+        Lutaml::Xml::Element.new("Element", "p"),
+      ]
+
+      html = renderer.table_to_html(outer_table_with(cell))
+      doc = Nokogiri::HTML(html)
+
+      outer_cell = doc.css("td").first
+      expect(outer_cell.element_children.map(&:name)).to eq(%w[table p])
+      expect(outer_cell.at_css("p").text).to eq("After")
+    end
+  end
 end
