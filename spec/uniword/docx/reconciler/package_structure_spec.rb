@@ -225,7 +225,8 @@ RSpec.describe Uniword::Docx::Reconciler do
         end
         sect_pr.header_references ||= []
         sect_pr.header_references <<
-          Uniword::Wordprocessingml::HeaderReference.new(type: "default", r_id: "rId99")
+          Uniword::Wordprocessingml::HeaderReference.new(type: "default",
+                                                         r_id: "rId99")
 
         rels = package.document_rels
         rels.relationships << Uniword::Ooxml::Relationships::Relationship.new(

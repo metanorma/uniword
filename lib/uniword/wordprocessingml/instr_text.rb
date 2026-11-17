@@ -25,7 +25,10 @@ module Uniword
         if attrs.is_a?(Hash)
           text_val = attrs.delete(:text) || attrs[:content]
           if text_val.is_a?(String)
-            attrs[:xml_space] = "preserve" if Text.preserve_whitespace?(text_val)
+            if Text.preserve_whitespace?(text_val)
+              attrs[:xml_space] =
+                "preserve"
+            end
             attrs[:content] = [text_val] unless attrs.key?(:content)
           end
         end

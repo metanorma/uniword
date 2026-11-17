@@ -251,20 +251,20 @@ module Uniword
 
           old_cp = package.core_properties
           package.core_properties = if old_cp
-                                     Ooxml::CoreProperties.new(
-                                       title: old_cp.title,
-                                       subject: old_cp.subject,
-                                       creator: old_cp.creator,
-                                       keywords: old_cp.keywords,
-                                       description: old_cp.description,
-                                       last_modified_by: old_cp.last_modified_by,
-                                       revision: old_cp.revision,
-                                       created: old_cp.created,
-                                       modified: old_cp.modified,
-                                     )
-                                   else
-                                     Ooxml::CoreProperties.new
-                                   end
+                                      Ooxml::CoreProperties.new(
+                                        title: old_cp.title,
+                                        subject: old_cp.subject,
+                                        creator: old_cp.creator,
+                                        keywords: old_cp.keywords,
+                                        description: old_cp.description,
+                                        last_modified_by: old_cp.last_modified_by,
+                                        revision: old_cp.revision,
+                                        created: old_cp.created,
+                                        modified: old_cp.modified,
+                                      )
+                                    else
+                                      Ooxml::CoreProperties.new
+                                    end
           cp = package.core_properties
 
           if profile.user_name && !profile.user_name.empty?
@@ -333,7 +333,7 @@ module Uniword
         end
 
         def build_rsids(rsid)
-          root = "00#{hex_derive("rsid_root", 3)}"
+          root = "00#{hex_derive('rsid_root', 3)}"
           Wordprocessingml::Rsids.new(
             rsid_root: Wordprocessingml::RsidRoot.new(val: root),
             rsid: [Wordprocessingml::Rsid.new(val: rsid)],
@@ -429,21 +429,21 @@ module Uniword
 
           unless style_ids.include?("Normal")
             styles.add_style(Wordprocessingml::Style.new(
-              type: "paragraph", default: true, styleId: "Normal",
-              name: Wordprocessingml::StyleName.new(val: "Normal"),
-              qFormat: Properties::QuickFormat.new
-            ))
+                               type: "paragraph", default: true, styleId: "Normal",
+                               name: Wordprocessingml::StyleName.new(val: "Normal"),
+                               qFormat: Properties::QuickFormat.new
+                             ))
           end
 
           unless style_ids.include?("DefaultParagraphFont")
             styles.add_style(Wordprocessingml::Style.new(
-              type: "character", default: true,
-              styleId: "DefaultParagraphFont",
-              name: Wordprocessingml::StyleName.new(val: "Default Paragraph Font"),
-              uiPriority: Wordprocessingml::UiPriority.new(val: 1),
-              semiHidden: Wordprocessingml::SemiHidden.new,
-              unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new
-            ))
+                               type: "character", default: true,
+                               styleId: "DefaultParagraphFont",
+                               name: Wordprocessingml::StyleName.new(val: "Default Paragraph Font"),
+                               uiPriority: Wordprocessingml::UiPriority.new(val: 1),
+                               semiHidden: Wordprocessingml::SemiHidden.new,
+                               unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new
+                             ))
           end
 
           dpf = styles.styles.find { |s| s.id == "DefaultParagraphFont" }
@@ -467,24 +467,24 @@ module Uniword
             )
 
             styles.add_style(Wordprocessingml::Style.new(
-              type: "table", default: true, styleId: "TableNormal",
-              name: Wordprocessingml::StyleName.new(val: "Normal Table"),
-              uiPriority: Wordprocessingml::UiPriority.new(val: 99),
-              semiHidden: Wordprocessingml::SemiHidden.new,
-              unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new,
-              tblPr: tbl_pr
-            ))
+                               type: "table", default: true, styleId: "TableNormal",
+                               name: Wordprocessingml::StyleName.new(val: "Normal Table"),
+                               uiPriority: Wordprocessingml::UiPriority.new(val: 99),
+                               semiHidden: Wordprocessingml::SemiHidden.new,
+                               unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new,
+                               tblPr: tbl_pr
+                             ))
           end
 
           return if style_ids.include?("NoList")
 
           styles.add_style(Wordprocessingml::Style.new(
-            type: "numbering", default: true, styleId: "NoList",
-            name: Wordprocessingml::StyleName.new(val: "No List"),
-            uiPriority: Wordprocessingml::UiPriority.new(val: 99),
-            semiHidden: Wordprocessingml::SemiHidden.new,
-            unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new
-          ))
+                             type: "numbering", default: true, styleId: "NoList",
+                             name: Wordprocessingml::StyleName.new(val: "No List"),
+                             uiPriority: Wordprocessingml::UiPriority.new(val: 99),
+                             semiHidden: Wordprocessingml::SemiHidden.new,
+                             unhideWhenUsed: Wordprocessingml::UnhideWhenUsed.new
+                           ))
         end
 
         def font_names_for_profile

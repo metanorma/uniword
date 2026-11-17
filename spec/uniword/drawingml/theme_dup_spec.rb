@@ -59,7 +59,7 @@ end
 RSpec.describe Uniword::Drawingml::ColorScheme, "#dup" do
   let(:color_scheme) do
     theme = Uniword::Drawingml::Theme.from_xml(
-      File.read("data/themes/office_theme.xml")
+      File.read("data/themes/office_theme.xml"),
     )
     theme.theme_elements.clr_scheme
   end

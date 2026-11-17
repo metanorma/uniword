@@ -11,7 +11,8 @@ RSpec.describe "Package save integrity gate" do
   # handle-lag can defeat even the pre-clean's safe_delete retries) must
   # never satisfy this group's File.exist? assertions.
   let(:output_path) do
-    File.join(output_dir, "gate_spec_output_#{RSpec.current_example.object_id}.docx")
+    File.join(output_dir,
+              "gate_spec_output_#{RSpec.current_example.object_id}.docx")
   end
 
   let(:document) do
@@ -19,7 +20,7 @@ RSpec.describe "Package save integrity gate" do
     doc.body = Uniword::Wordprocessingml::Body.new
     doc.body.paragraphs << Uniword::Wordprocessingml::Paragraph.new(
       runs: [Uniword::Wordprocessingml::Run.new(
-        text: Uniword::Wordprocessingml::Text.new(content: "Hello")
+        text: Uniword::Wordprocessingml::Text.new(content: "Hello"),
       )],
     )
     doc

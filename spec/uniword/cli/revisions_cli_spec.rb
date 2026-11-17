@@ -18,7 +18,7 @@ RSpec.describe "uniword revisions" do
         del_text: Uniword::Wordprocessingml::DeletedText.new(
           content: "drop this",
         ),
-      )],
+      )]
     )
     Uniword::Builder::DocumentBuilder.new.tap do |builder|
       para = builder.paragraph("keep this drop this")

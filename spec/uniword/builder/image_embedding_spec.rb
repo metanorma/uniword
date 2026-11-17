@@ -26,7 +26,7 @@ RSpec.describe "Image Embedding, Bibliography, Charts" do
       doc.image(sample_png)
 
       content = zip_content_for(doc.model)
-      expect(content.keys).to include(match(%r{word/media/}))
+      expect(content.keys).to include(include("word/media/"))
     end
 
     it "adds image content type for PNG" do

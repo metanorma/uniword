@@ -102,20 +102,20 @@ RSpec.describe Uniword::Builder::RunUtils do
       a = run_class.new
       b = run_class.new
       b.properties = Uniword::Wordprocessingml::RunProperties.new(
-        bold: Uniword::Properties::Bold.new(val: true)
+        bold: Uniword::Properties::Bold.new(val: true),
       )
       expect(described_class.properties_match?(a, b)).to be false
     end
 
     it "returns true when both have identical properties" do
       props = Uniword::Wordprocessingml::RunProperties.new(
-        bold: Uniword::Properties::Bold.new(val: true)
+        bold: Uniword::Properties::Bold.new(val: true),
       )
       a = run_class.new
       a.properties = props
       b = run_class.new
       b.properties = Uniword::Wordprocessingml::RunProperties.new(
-        bold: Uniword::Properties::Bold.new(val: true)
+        bold: Uniword::Properties::Bold.new(val: true),
       )
       expect(described_class.properties_match?(a, b)).to be true
     end
@@ -145,7 +145,7 @@ RSpec.describe Uniword::Builder::RunUtils do
       a = run_class.new(text: "Hello")
       b = run_class.new(text: "World")
       b.properties = Uniword::Wordprocessingml::RunProperties.new(
-        bold: Uniword::Properties::Bold.new(val: true)
+        bold: Uniword::Properties::Bold.new(val: true),
       )
       expect(described_class.mergeable?(a, b)).to be false
     end

@@ -42,8 +42,8 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 3.0.0"
 
   # Core dependencies
-  spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
   spec.add_dependency "leptris", "~> 1.9.425" # XSD engine floor: 1.9.386-1.9.390 reject a:blip r:embed; fixed in 1.9.391
+  spec.add_dependency "logger" # stdlib gem, extracted in Ruby 4.0
   spec.add_dependency "lutaml-model", "~> 0.8.175" # floor at the current line; 0.8.138-0.8.147 emitted render_default: false booleans (fixed in 0.8.148)
   spec.add_dependency "omml", "~> 0.2.11"
   spec.add_dependency "rainbow", "~> 3.1"

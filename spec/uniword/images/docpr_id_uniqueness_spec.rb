@@ -22,7 +22,9 @@ RSpec.describe "wp:docPr ids when editing a document that already has drawings" 
               "word-template-apa-style-paper.docx")
   end
   let(:png) { File.join(__dir__, "../../fixtures/sample.png") }
-  let(:other_png) { File.join(__dir__, "../../fixtures/docx_gem/replacement.png") }
+  let(:other_png) do
+    File.join(__dir__, "../../fixtures/docx_gem/replacement.png")
+  end
 
   def doc_pr_ids(root)
     root.images

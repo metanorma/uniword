@@ -126,11 +126,17 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       builder.heading("Title", level: 1)
       builder.paragraph("Before table")
       builder.table do |t|
-        t.row { |r| r.cell(text: "A"); r.cell(text: "B") }
+        t.row do |r|
+          r.cell(text: "A")
+          r.cell(text: "B")
+        end
       end
       builder.paragraph("After table")
       builder.table do |t|
-        t.row { |r| r.cell(text: "C"); r.cell(text: "D") }
+        t.row do |r|
+          r.cell(text: "C")
+          r.cell(text: "D")
+        end
       end
       builder.paragraph("End")
 
@@ -183,7 +189,9 @@ RSpec.describe Uniword::Builder::DocumentBuilder do
       next unless footnotes
 
       types = footnotes.footnote_entries.map(&:type).compact
-      expect(types).to all(satisfy { |t| %w[separator continuationSeparator].include?(t) })
+      expect(types).to all(satisfy { |t|
+        %w[separator continuationSeparator].include?(t)
+      })
     end
 
     it "seeds an IdAllocator on the model and wires it to the builder" do

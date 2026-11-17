@@ -57,11 +57,13 @@ module Uniword
 
       def ensure_properties_in_order
         return unless @model.element_order
-        return if @model.element_order.any? { |e| e.element? && e.name == properties_tag }
+        return if @model.element_order.any? do |e|
+          e.element? && e.name == properties_tag
+        end
         return unless @model.properties
 
         @model.element_order.unshift(
-          Lutaml::Xml::Element.new("Element", properties_tag)
+          Lutaml::Xml::Element.new("Element", properties_tag),
         )
       end
     end

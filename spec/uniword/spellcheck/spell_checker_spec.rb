@@ -67,7 +67,7 @@ RSpec.describe Uniword::Spellcheck::SpellChecker do
 
       expect(result.grammar_issues).not_to be_empty
       messages = result.grammar_issues.map { |g| g[:message] }
-      expect(messages).to include(match(/Double space/))
+      expect(messages).to include(include("Double space"))
     end
 
     it "detects repeated words" do

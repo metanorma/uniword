@@ -22,7 +22,7 @@ RSpec.describe Uniword::Quality::ImageAltTextRule do
     drawing = Uniword::Wordprocessingml::Drawing.new
     inline = Uniword::WpDrawing::Inline.new
     inline.doc_properties = Uniword::WpDrawing::DocProperties.new(
-      id: "1", name: "image1", descr: descr
+      id: "1", name: "image1", descr: descr,
     )
     drawing.inline = inline
     drawing

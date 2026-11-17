@@ -143,21 +143,23 @@ RSpec.describe Uniword::Docx::Reconciler do
 
       # Build a style collection where DefaultParagraphFont is at index 2 without semiHidden
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", default: true, styleId: "Normal",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Normal"),
-      ))
+                         type: "paragraph", default: true, styleId: "Normal",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Normal")
+                       ))
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "Heading1",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "heading 1"),
-      ))
+                         type: "paragraph", styleId: "Heading1",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "heading 1")
+                       ))
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "character", default: true, styleId: "DefaultParagraphFont",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Default Paragraph Font"),
-        uiPriority: Uniword::Wordprocessingml::UiPriority.new(val: 1),
-        unhideWhenUsed: Uniword::Wordprocessingml::UnhideWhenUsed.new,
-      ))
+                         type: "character", default: true, styleId: "DefaultParagraphFont",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Default Paragraph Font"),
+                         uiPriority: Uniword::Wordprocessingml::UiPriority.new(val: 1),
+                         unhideWhenUsed: Uniword::Wordprocessingml::UnhideWhenUsed.new
+                       ))
 
-      dpf_index_before = styles.styles.index { |s| s.id == "DefaultParagraphFont" }
+      dpf_index_before = styles.styles.index do |s|
+        s.id == "DefaultParagraphFont"
+      end
       expect(dpf_index_before).to eq(2)
 
       described_class.new(package, profile: profile).reconcile
@@ -166,9 +168,11 @@ RSpec.describe Uniword::Docx::Reconciler do
       expect(dpf).not_to be_nil
       expect(dpf.semiHidden).not_to be_nil
 
-      dpf_index_after = styles.styles.index { |s| s.id == "DefaultParagraphFont" }
+      dpf_index_after = styles.styles.index do |s|
+        s.id == "DefaultParagraphFont"
+      end
       expect(dpf_index_after).to eq(dpf_index_before),
-        "DefaultParagraphFont moved from position #{dpf_index_before} to #{dpf_index_after}"
+                                 "DefaultParagraphFont moved from position #{dpf_index_before} to #{dpf_index_after}"
     end
   end
 

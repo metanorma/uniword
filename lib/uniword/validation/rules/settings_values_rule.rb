@@ -16,7 +16,11 @@ module Uniword
 
         def code = "DOC-101"
         def validity_rule = "R2"
-        def description = "Settings value formats (w15:docId GUID, w14:docId hex)"
+
+        def description
+          "Settings value formats (w15:docId GUID, w14:docId hex)"
+        end
+
         def category = :settings
         def severity = "error"
 

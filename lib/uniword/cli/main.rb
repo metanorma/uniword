@@ -686,7 +686,7 @@ module Uniword
       if options[:json]
         require "json"
         puts JSON.pretty_generate(
-          result.to_h.merge(input: input_path, output: output_path)
+          result.to_h.merge(input: input_path, output: output_path),
         )
         return
       end

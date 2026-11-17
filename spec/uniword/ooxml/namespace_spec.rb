@@ -37,7 +37,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       doc = described_class.new
       xml = doc.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:document/)
+      expect(xml).to include("<w:document")
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       para = described_class.new
       xml = para.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:p/)
+      expect(xml).to include("<w:p")
     end
 
     it "serializes runs with w:r elements" do
@@ -76,7 +76,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       run = described_class.new(text: "Test")
       xml = run.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:r/)
+      expect(xml).to include("<w:r")
     end
 
     it "serializes text with w:t element" do
@@ -99,7 +99,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       table = described_class.new
       xml = table.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:tbl/)
+      expect(xml).to include("<w:tbl")
     end
 
     it "serializes rows with w:tr elements" do
@@ -135,7 +135,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       row = described_class.new
       xml = row.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:tr/)
+      expect(xml).to include("<w:tr")
     end
 
     it "serializes cells with w:tc elements" do
@@ -163,7 +163,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       cell = described_class.new
       xml = cell.to_xml(prefix: true)
 
-      expect(xml).to match(/<w:tc/)
+      expect(xml).to include("<w:tc")
     end
 
     it "serializes paragraphs with w:p elements" do
@@ -192,7 +192,7 @@ RSpec.describe "OOXML Namespace Configuration" do
       xml = image.to_xml(prefix: true)
 
       # Image uses WordProcessingML namespace for the drawing wrapper
-      expect(xml).to match(/<w:drawing/)
+      expect(xml).to include("<w:drawing")
     end
   end
 
@@ -275,11 +275,11 @@ RSpec.describe "OOXML Namespace Configuration" do
       xml = doc.to_xml(prefix: true)
 
       # All WordProcessingML elements should use w: prefix when prefix: true
-      expect(xml).to match(/<w:document/)
-      expect(xml).to match(/<w:body/)
-      expect(xml).to match(/<w:p/)
-      expect(xml).to match(/<w:r/)
-      expect(xml).to match(/<w:t/)
+      expect(xml).to include("<w:document")
+      expect(xml).to include("<w:body")
+      expect(xml).to include("<w:p")
+      expect(xml).to include("<w:r")
+      expect(xml).to include("<w:t")
     end
 
     it "honors the declared prefixes on a constructed model (declare-always staged)" do
@@ -294,14 +294,14 @@ RSpec.describe "OOXML Namespace Configuration" do
       doc.body.paragraphs << para
 
       xml = doc.to_xml
-      expect(xml).to match(/<w:document/)
-      expect(xml).to match(/<w:body/)
-      expect(xml).to match(/<w:p>/)
-      expect(xml).to match(/<w:t/)
+      expect(xml).to include("<w:document")
+      expect(xml).to include("<w:body")
+      expect(xml).to include("<w:p>")
+      expect(xml).to include("<w:t")
 
       unprefixed = doc.to_xml(prefix: false)
       expect(unprefixed).to include('xmlns="http://schemas.openxmlformats.org/wordprocessingml/2006/main"')
-      expect(unprefixed).to match(/<document/)
+      expect(unprefixed).to include("<document")
     end
   end
 

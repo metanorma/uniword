@@ -24,7 +24,7 @@ RSpec.describe Uniword::Builder::SdtBuilder do
     it "writes w:val=\"false\" when explicitly not locked" do
       builder.lock(false)
 
-      expect(sdt_pr_xml).to match(/val="false"/)
+      expect(sdt_pr_xml).to include('val="false"')
     end
 
     it "defaults to locked" do
@@ -34,7 +34,9 @@ RSpec.describe Uniword::Builder::SdtBuilder do
     end
 
     it "round-trips the value it was given" do
-      expect([true, false].map { |v| described_class.new.lock(v).properties.temporary.on? })
+      expect([true, false].map do |v|
+        described_class.new.lock(v).properties.temporary.on?
+      end)
         .to eq([true, false])
     end
   end
@@ -49,7 +51,7 @@ RSpec.describe Uniword::Builder::SdtBuilder do
     it "writes w:val=\"false\" when explicitly not shown" do
       builder.showing_placeholder(false)
 
-      expect(sdt_pr_xml).to match(/val="false"/)
+      expect(sdt_pr_xml).to include('val="false"')
     end
 
     it "defaults to shown" do

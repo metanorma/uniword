@@ -106,7 +106,8 @@ module Uniword
 
       def ensure_cell_structure
         ensure_properties
-        @model.properties.cell_width ||= Properties::CellWidth.new(w: 0, type: "auto")
+        @model.properties.cell_width ||= Properties::CellWidth.new(w: 0,
+                                                                   type: "auto")
       end
     end
   end

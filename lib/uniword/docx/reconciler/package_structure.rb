@@ -74,7 +74,7 @@ module Uniword
             kept << build_rel(
               allocator.alloc_rid(target: defn.target, type: defn.rel_type,
                                   scope: :package),
-              defn.rel_type, defn.target,
+              defn.rel_type, defn.target
             )
           end
 
@@ -187,7 +187,7 @@ module Uniword
 
             kept << build_rel(
               alloc.alloc_rid(target: defn.target, type: defn.rel_type),
-              defn.rel_type, defn.target,
+              defn.rel_type, defn.target
             )
             kept_targets << defn.target
           end
@@ -204,7 +204,7 @@ module Uniword
 
             kept << build_rel(
               entry[:id], entry[:type], entry[:target],
-              target_mode: entry[:target_mode],
+              target_mode: entry[:target_mode]
             )
             kept_targets << entry[:target]
           end
@@ -225,7 +225,7 @@ module Uniword
         # is not in the store points at a part that will not be
         # serialized and must be treated as stale.
         def header_footer_target_present?(target)
-          header_like = target.start_with?("header") || target.start_with?("footer")
+          header_like = target.start_with?("header", "footer")
           if header_like && target.end_with?(".xml")
             parts = package.document&.header_footer_parts
             return false unless parts

@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 module Uniword
   module Transformation
     # Converts OOXML elements (Paragraph, Table, Run, etc.) to Word HTML

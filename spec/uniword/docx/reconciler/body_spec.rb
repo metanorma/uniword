@@ -41,7 +41,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         Uniword::Wordprocessingml::SectionProperties.new(
           rsid_r: "FFEEDDCC",
           page_size: Uniword::Wordprocessingml::PageSize.new(
-            width: 12_240, height: 15_840
+            width: 12_240, height: 15_840,
           ),
         )
 

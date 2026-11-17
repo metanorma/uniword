@@ -157,7 +157,7 @@ RSpec.describe Uniword::Docx::Reconciler do
         table_look: table_look_class.new(
           val: "01A0", first_row: 0, last_row: 0,
           first_column: 0, last_column: 0,
-          no_h_band: 0, no_v_band: 0,
+          no_h_band: 0, no_v_band: 0
         ),
       )
       table.grid = grid_class.new(
@@ -179,7 +179,8 @@ RSpec.describe Uniword::Docx::Reconciler do
 
   describe "table gridAfter reconciliation" do
     it "adds gridAfter when row covers fewer columns than grid" do
-      row_full = row_class.new(cells: [cell_class.new, cell_class.new, cell_class.new])
+      row_full = row_class.new(cells: [cell_class.new, cell_class.new,
+                                       cell_class.new])
       row_short = row_class.new(cells: [cell_class.new, cell_class.new])
       table = table_class.new(rows: [row_full, row_short])
       package = build_package_with_table(table)
@@ -194,7 +195,8 @@ RSpec.describe Uniword::Docx::Reconciler do
     end
 
     it "does not add gridAfter when row covers all grid columns" do
-      row = row_class.new(cells: [cell_class.new, cell_class.new, cell_class.new])
+      row = row_class.new(cells: [cell_class.new, cell_class.new,
+                                  cell_class.new])
       table = table_class.new(rows: [row])
       package = build_package_with_table(table)
 
@@ -205,7 +207,8 @@ RSpec.describe Uniword::Docx::Reconciler do
 
     it "accounts for gridSpan when calculating gridAfter" do
       # Row 1: 3 cells, covers 3 cols
-      row_full = row_class.new(cells: [cell_class.new, cell_class.new, cell_class.new])
+      row_full = row_class.new(cells: [cell_class.new, cell_class.new,
+                                       cell_class.new])
       # Row 2: 1 cell with gridSpan=2, covers 2 out of 3 → gridAfter=1
       tc_pr = Uniword::Wordprocessingml::TableCellProperties.new(
         grid_span: Uniword::Wordprocessingml::ValInt.new(value: 2),

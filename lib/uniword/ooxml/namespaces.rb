@@ -561,16 +561,20 @@ module Uniword
       EXTENSION_NAMESPACES = [
         Word2010, Word2012, Word2015Symex, Word2016Cid,
         Word2018, Word2018Cex, Word2023Du, Word2020SdtDataHash,
-        Word2024SdtFormatLock,
+        Word2024SdtFormatLock
       ].freeze
 
       # mc:Ignorable prefixes for settings/fontTable/styles/webSettings
       # (document-level parts without wp14). Sorted for canonical output.
-      EXTENSION_PREFIXES = EXTENSION_NAMESPACES.map { |ns| ns.new.prefix }.sort.join(" ").freeze
+      EXTENSION_PREFIXES = EXTENSION_NAMESPACES.map do |ns|
+        ns.new.prefix
+      end.sort.join(" ").freeze
 
       # mc:Ignorable prefixes for document body parts that also include
       # the wp14 (Word 2010 Drawing) namespace. Sorted for canonical output.
-      FULL_IGNORABLE_PREFIXES = (EXTENSION_NAMESPACES + [Word2010Drawing]).map { |ns| ns.new.prefix }.sort.join(" ").freeze
+      FULL_IGNORABLE_PREFIXES = (EXTENSION_NAMESPACES + [Word2010Drawing]).map do |ns|
+        ns.new.prefix
+      end.sort.join(" ").freeze
     end
   end
 end

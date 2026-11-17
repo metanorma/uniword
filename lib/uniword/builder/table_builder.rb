@@ -67,7 +67,8 @@ module Uniword
 
       def ensure_table_structure
         ensure_properties
-        @model.properties.table_width ||= Properties::TableWidth.new(w: 0, type: "auto")
+        @model.properties.table_width ||= Properties::TableWidth.new(w: 0,
+                                                                     type: "auto")
         @model.properties.table_look ||= Wordprocessingml::TableDefaults.default_table_look
       end
 

@@ -239,7 +239,7 @@ RSpec.describe Uniword::Diff::PackageDiffer, "Word repair stats analysis" do
         end
         expect(dndpb).not_to be_nil,
                              "#{label}: no doNotDisplayPageBoundaries change in settings.xml"
-        expect(dndpb.description).to match(/1 -> 0/),
+        expect(dndpb.description).to include("1 -> 0"),
                                      "#{label}: expected doNotDisplayPageBoundaries 1 -> 0, got: #{dndpb.description}"
       end
     end

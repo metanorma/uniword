@@ -65,6 +65,7 @@ RSpec.describe Uniword::Element do
       Class.new do
         def initialize; @visits = []; end
         attr_reader :visits
+
         def visit_test_element(el); @visits << [:test, el]; end
         def visit_another_element(el); @visits << [:another, el]; end
         def visit_element(el); @visits << [:default, el]; end

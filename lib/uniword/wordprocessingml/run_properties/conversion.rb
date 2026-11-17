@@ -134,8 +134,6 @@ module Uniword
             wrap_needed?(outline, Properties::Outline)
         end
 
-        private
-
         def wrap_needed?(value, klass)
           !value.nil? && !value.is_a?(klass) &&
             !Lutaml::Model::Utils.uninitialized?(value)

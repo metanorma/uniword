@@ -419,7 +419,6 @@ module Uniword
         else false
         end
       end
-
     end
   end
 end

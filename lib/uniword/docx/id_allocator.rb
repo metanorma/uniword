@@ -223,7 +223,7 @@ module Uniword
         end
 
         register_rid(rel.id, target: rel.target, type: rel.type,
-                           target_mode: rel.target_mode, scope: scope)
+                             target_mode: rel.target_mode, scope: scope)
       end
 
       # Whether an rId string is already registered within a scope.

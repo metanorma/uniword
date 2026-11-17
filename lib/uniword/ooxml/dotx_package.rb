@@ -267,7 +267,9 @@ module Uniword
 
         raise Uniword::ValidationError.new(
           self,
-          issues.map { |issue| "#{issue.code} (#{issue.part}): #{issue.message}" },
+          issues.map { |issue|
+            "#{issue.code} (#{issue.part}): #{issue.message}"
+          },
           issues: issues,
         )
       end

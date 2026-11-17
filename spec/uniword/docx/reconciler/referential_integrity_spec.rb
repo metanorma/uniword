@@ -239,7 +239,7 @@ RSpec.describe "Reconciler referential integrity" do
     it "strips a dangling rel and its drawing in a single pass" do
       package = Uniword::Docx::Package.new
       package.document = Uniword::Wordprocessingml::DocumentRoot.from_xml(
-        document_xml
+        document_xml,
       )
       package.document_rels = Uniword::Docx::Package.minimal_document_rels
       package.document_rels.relationships <<
@@ -301,7 +301,8 @@ RSpec.describe Uniword::Docx::Reconciler do
       footnotes = footnotes_class.new(
         footnote_entries: [
           footnote_class.new(id: "-1", type: "separator", paragraphs: []),
-          footnote_class.new(id: "0", type: "continuationSeparator", paragraphs: []),
+          footnote_class.new(id: "0", type: "continuationSeparator",
+                             paragraphs: []),
           footnote_class.new(id: "1", paragraphs: []),
         ],
       )
@@ -438,9 +439,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "Heading1",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "heading 1"),
-      ))
+                         type: "paragraph", styleId: "Heading1",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "heading 1")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -455,9 +456,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "Normal",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Normal"),
-      ))
+                         type: "paragraph", styleId: "Normal",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Normal")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -490,10 +491,10 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "MyStyle",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "My Style"),
-        basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "GhostParent"),
-      ))
+                         type: "paragraph", styleId: "MyStyle",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "My Style"),
+                         basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "GhostParent")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -513,10 +514,10 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "MyStyle",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "My Style"),
-        link: Uniword::Wordprocessingml::Link.new(val: "GhostCharStyle"),
-      ))
+                         type: "paragraph", styleId: "MyStyle",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "My Style"),
+                         link: Uniword::Wordprocessingml::Link.new(val: "GhostCharStyle")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -536,19 +537,19 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "ParentStyle",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Parent"),
-      ))
+                         type: "paragraph", styleId: "ParentStyle",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Parent")
+                       ))
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "character", styleId: "LinkedChar",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Linked Char"),
-      ))
+                         type: "character", styleId: "LinkedChar",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Linked Char")
+                       ))
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "paragraph", styleId: "ChildStyle",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Child"),
-        basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "ParentStyle"),
-        link: Uniword::Wordprocessingml::Link.new(val: "LinkedChar"),
-      ))
+                         type: "paragraph", styleId: "ChildStyle",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Child"),
+                         basedOn: Uniword::Wordprocessingml::BasedOn.new(val: "ParentStyle"),
+                         link: Uniword::Wordprocessingml::Link.new(val: "LinkedChar")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -576,9 +577,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "character", styleId: "Emphasis",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Emphasis"),
-      ))
+                         type: "character", styleId: "Emphasis",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Emphasis")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -608,9 +609,9 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "table", styleId: "TableNormal",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Normal Table"),
-      ))
+                         type: "table", styleId: "TableNormal",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Normal Table")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile
@@ -649,13 +650,13 @@ RSpec.describe Uniword::Docx::Reconciler do
         include_defaults: false,
       )
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "character", styleId: "Emphasis",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Emphasis"),
-      ))
+                         type: "character", styleId: "Emphasis",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Emphasis")
+                       ))
       styles.add_style(Uniword::Wordprocessingml::Style.new(
-        type: "table", styleId: "TableNormal",
-        name: Uniword::Wordprocessingml::StyleName.new(val: "Normal Table"),
-      ))
+                         type: "table", styleId: "TableNormal",
+                         name: Uniword::Wordprocessingml::StyleName.new(val: "Normal Table")
+                       ))
       package.styles = styles
 
       described_class.new(package).reconcile

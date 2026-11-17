@@ -16,7 +16,11 @@ module Uniword
 
         def code = "DOC-105"
         def validity_rule = "R14"
-        def description = "Core properties must have dc/dcterms/xsi namespaces and xsi:type on dates"
+
+        def description
+          "Core properties must have dc/dcterms/xsi namespaces and xsi:type on dates"
+        end
+
         def category = :core_properties
         def severity = "error"
 

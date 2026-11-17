@@ -195,7 +195,8 @@ module Uniword
       end
 
       def yaml_page_break_before_to(instance, doc)
-        yaml_put(doc, "page_break_before", instance.page_break_before_wrapper&.on?)
+        yaml_put(doc, "page_break_before",
+                 instance.page_break_before_wrapper&.on?)
       end
 
       def yaml_widow_control_from(instance, value)

@@ -51,7 +51,7 @@ RSpec.describe Uniword::Wordprocessingml::TableDefaults do
 
     it "preserves already-set values" do
       look = Uniword::Properties::TableLook.new(
-        val: "00A0", first_row: 0
+        val: "00A0", first_row: 0,
       )
       described_class.fill_missing_table_look(look)
 
