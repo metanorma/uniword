@@ -254,6 +254,7 @@ module Uniword
       #   writing; nil falls back to Uniword.configuration.validate_on_save
       # @return [void]
       def save(path, format: :auto, profile: nil, validate: nil)
+        Uniword.ensure_adapter!
         writer = DocumentWriter.new(self)
         writer.save(path, format: format, profile: profile, validate: validate)
       end

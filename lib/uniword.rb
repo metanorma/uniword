@@ -52,6 +52,27 @@ require "zip"
 #
 # @see DocumentFactory Factory for reading documents
 module Uniword
+  # The adapter boot resolved (leptris when usable, else moxml's
+  # nokogiri fallback). Gems loaded after uniword can overwrite lutaml's
+  # process-global adapter at their own require or first-parse time -
+  # plurimath's mml chain writes
+  # Lutaml::Model::Config.xml_adapter_type = :ox (plurimath#588) - so
+  # every public entry point re-asserts this value via ensure_adapter!.
+  UNIWORD_XML_ADAPTER = Moxml::Config.default_adapter
+
+  # Re-assert the adapter boot resolved when another gem's global write
+  # has replaced it. nil means the unset delegate form (which resolves to
+  # the same Moxml default) and is left alone; a concrete foreign value
+  # is replaced. Every DocumentFactory/DocumentRoot entry point calls
+  # this, so a mid-process adapter flip cannot change serialization or
+  # validation semantics of uniword round trips.
+  def self.ensure_adapter!
+    current = Lutaml::Model::Config.xml_adapter_type
+    return if current.nil? || current == UNIWORD_XML_ADAPTER
+
+    Lutaml::Model::Config.xml_adapter_type = UNIWORD_XML_ADAPTER
+  end
+
   # Wire Uniword into Omml's context system so Omml::Models types resolve
   # correctly when used as attribute types on Uniword's serializable classes
   # (Paragraph#o_maths typed as Omml::Models::CTOMath, etc.).
