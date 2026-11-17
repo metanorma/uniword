@@ -44,6 +44,8 @@ module Uniword
       # @example Load with explicit format
       #   document = DocumentFactory.from_file("doc.mht", format: :mhtml)
       def from_file(path, format: :auto)
+        Uniword.ensure_adapter!
+
         # Handle binary strings (for docx gem compatibility)
         # Convert to StringIO if it's a binary string (contains null bytes or has binary encoding)
         path = StringIO.new(path) if path.is_a?(String) && (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
@@ -105,6 +107,8 @@ module Uniword
       #   data = File.binread("doc.docx")
       #   document = DocumentFactory.from_file_data(data)
       def from_file_data(stream, format: :auto)
+        Uniword.ensure_adapter!
+
         # Convert binary string to StringIO if needed
         stream = StringIO.new(stream) if stream.is_a?(String)
 
