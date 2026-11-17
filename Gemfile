@@ -32,13 +32,15 @@ gem "moxml", "~> 0.6.0"
 # 0.8.165-0.8.171 fix the native emission lane regressions (#1126, #1136,
 # #1140) and settle the render_default contract (6fd1c0fc). 0.8.170 carries
 # lutaml-model#1144 (constructed lane spells attribute-qualified namespaces
-# prefixed, closing #1124). 0.8.171 prefers the yeptris YAML engine when
-# present (lutaml-model#1149). Validated green on the corpus with the
-# attribute-qualified wire forms pinned by PR #96.
-gem "lutaml-model", "~> 0.8.171"
+# prefixed, closing #1124). 0.8.171+ prefers the yeptris YAML engine when
+# present (lutaml-model#1149). 0.8.175 makes leptris the default XML
+# adapter; the open #1163 (element_order nil on parse) and #1164 (built
+# mixed_content drops consecutive text) do not manifest on uniword shapes -
+# full corpus green on 0.8.175 (3,897 examples, 0 failures).
+gem "lutaml-model", "~> 0.8.175"
 
 # leptris 1.9.386-1.9.390 reject r:embed on a:blip; fixed in 1.9.391 (leptris-ruby#569).
-gem "leptris", "~> 1.9.414"
+gem "leptris", "~> 1.9.425"
 
 # Coradoc bridge (issue #80): plain-text editing round trip. DEV-only --
 # optional at runtime (lazy requires), never in the gemspec, so no
