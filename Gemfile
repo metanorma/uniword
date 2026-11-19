@@ -46,7 +46,7 @@ gem "plurimath", "~> 0.11"
 gem "lutaml-model", "~> 0.8.175"
 
 # leptris 1.9.386-1.9.390 reject r:embed on a:blip; fixed in 1.9.391 (leptris-ruby#569).
-gem "leptris", "~> 1.9.425"
+gem "leptris", "~> 1.9.429"
 
 # Coradoc bridge (issue #80): plain-text editing round trip. DEV-only --
 # optional at runtime (lazy requires), never in the gemspec, so no
