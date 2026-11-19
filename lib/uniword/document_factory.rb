@@ -44,38 +44,38 @@ module Uniword
       # @example Load with explicit format
       #   document = DocumentFactory.from_file("doc.mht", format: :mhtml)
       def from_file(path, format: :auto)
-        Uniword.ensure_adapter!
+        Uniword.with_boot_adapter do
+          # Handle binary strings (for docx gem compatibility)
+          # Convert to StringIO if it's a binary string (contains null bytes or has binary encoding)
+          path = StringIO.new(path) if path.is_a?(String) &&
+            (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
 
-        # Handle binary strings (for docx gem compatibility)
-        # Convert to StringIO if it's a binary string (contains null bytes or has binary encoding)
-        path = StringIO.new(path) if path.is_a?(String) &&
-          (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
+          validate_path(path)
 
-        validate_path(path)
+          format = detect_format(path) if format == :auto
 
-        format = detect_format(path) if format == :auto
-
-        case format
-        when :docx, :docm
-          package = Docx::Package.from_file(path)
-          doc = package.document
-          copy_package_parts_to_document(package, doc)
-          doc
-        when :dotx, :dotm
-          Ooxml::DotxPackage.from_file(path)
-        when :mhtml
-          mhtml_doc = Mhtml::MhtmlPackage.from_file(path)
-          # Convert Mhtml::Document to DocumentRoot for uniform API
-          if mhtml_doc.is_a?(Mhtml::Document)
-            Transformation::Transformer.new.mhtml_to_docx(mhtml_doc)
+          case format
+          when :docx, :docm
+            package = Docx::Package.from_file(path)
+            doc = package.document
+            copy_package_parts_to_document(package, doc)
+            doc
+          when :dotx, :dotm
+            Ooxml::DotxPackage.from_file(path)
+          when :mhtml
+            mhtml_doc = Mhtml::MhtmlPackage.from_file(path)
+            # Convert Mhtml::Document to DocumentRoot for uniform API
+            if mhtml_doc.is_a?(Mhtml::Document)
+              Transformation::Transformer.new.mhtml_to_docx(mhtml_doc)
+            else
+              mhtml_doc
+            end
+          when :html
+            html_content = read_file_content(path)
+            Uniword.from_html(html_content)
           else
-            mhtml_doc
+            raise ArgumentError, "Unsupported format: #{format}"
           end
-        when :html
-          html_content = read_file_content(path)
-          Uniword.from_html(html_content)
-        else
-          raise ArgumentError, "Unsupported format: #{format}"
         end
       rescue ArgumentError
         # Re-raise validation errors as-is
@@ -108,13 +108,13 @@ module Uniword
       #   data = File.binread("doc.docx")
       #   document = DocumentFactory.from_file_data(data)
       def from_file_data(stream, format: :auto)
-        Uniword.ensure_adapter!
+        Uniword.with_boot_adapter do
+          # Convert binary string to StringIO if needed
+          stream = StringIO.new(stream) if stream.is_a?(String)
 
-        # Convert binary string to StringIO if needed
-        stream = StringIO.new(stream) if stream.is_a?(String)
-
-        # Use from_file which already supports IO/StringIO
-        from_file(stream, format: format)
+          # Use from_file which already supports IO/StringIO
+          from_file(stream, format: format)
+        end
       end
 
       # Create a Theme from a theme file (.thmx).

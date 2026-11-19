@@ -57,15 +57,37 @@ module Uniword
   # process-global adapter at their own require or first-parse time -
   # plurimath's mml chain writes
   # Lutaml::Model::Config.xml_adapter_type = :ox (plurimath#588) - so
-  # every public entry point re-asserts this value via ensure_adapter!.
+  # every public entry point pins this value for the duration of its
+  # operation via with_boot_adapter.
   UNIWORD_XML_ADAPTER = Moxml::Config.default_adapter
+
+  # Pin the adapter boot resolved for the duration of a uniword
+  # operation and restore the caller's value on return. lutaml's adapter
+  # setting is process-global: a foreign gem's write (plurimath#588's
+  # :ox) must not change uniword's serialization or validation
+  # semantics mid-operation - and uniword's entries must not clobber
+  # the host's value for the rest of the process. A host may have
+  # configured the adapter for its own serializations (metanorma pins
+  # :nokogiri for its collection Config; a bare re-assert turned that
+  # lane onto the leptris adapter and reformatted its inline XML -
+  # metanorma's collection.doc Word suite). nil means the unset
+  # delegate form (which resolves to the same Moxml default) and is
+  # restored as-is.
+  def self.with_boot_adapter
+    prior = Lutaml::Model::Config.xml_adapter_type
+    Lutaml::Model::Config.xml_adapter_type = UNIWORD_XML_ADAPTER
+    yield
+  ensure
+    Lutaml::Model::Config.xml_adapter_type = prior
+  end
 
   # Re-assert the adapter boot resolved when another gem's global write
   # has replaced it. nil means the unset delegate form (which resolves to
   # the same Moxml default) and is left alone; a concrete foreign value
-  # is replaced. Every DocumentFactory/DocumentRoot entry point calls
-  # this, so a mid-process adapter flip cannot change serialization or
-  # validation semantics of uniword round trips.
+  # is replaced. Kept for 1.7.10 API compatibility: the entry points no
+  # longer call this - they scope the pin with with_boot_adapter,
+  # because a bare re-assert permanently overwrites a host-configured
+  # adapter for the rest of the process.
   def self.ensure_adapter!
     current = Lutaml::Model::Config.xml_adapter_type
     return if current.nil? || current == UNIWORD_XML_ADAPTER
