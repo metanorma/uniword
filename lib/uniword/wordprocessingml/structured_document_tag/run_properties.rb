@@ -6,7 +6,9 @@ module Uniword
   module Wordprocessingml
     class StructuredDocumentTag
       # Run properties for SDT content formatting
-      # Reference XML: <w:rPr><w:caps/><w:color w:val="FFFFFF" w:themeColor="background1"/><w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr>
+      # Reference XML:
+      #   <w:rPr><w:caps/><w:color w:val="FFFFFF" w:themeColor="background1"/>
+      #     <w:sz w:val="32"/><w:szCs w:val="32"/></w:rPr>
       #
       # Uses mixed_content to preserve all child run property elements.
       # This is the same structure as Wordprocessingml::RunProperties but

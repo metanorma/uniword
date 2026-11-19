@@ -494,7 +494,8 @@ module Uniword
         if text.empty?
           %(<w:sdt#{sdt_attrs}><w:sdtPr></w:sdtPr></w:sdt>)
         else
-          %(<w:sdt#{sdt_attrs}><w:sdtPr></w:sdtPr><w:sdtContent><span>#{escape_html(text)}</span></w:sdtContent></w:sdt>)
+          %(<w:sdt#{sdt_attrs}><w:sdtPr></w:sdtPr><w:sdtContent>) +
+            %(<span>#{escape_html(text)}</span></w:sdtContent></w:sdt>)
         end
       end
 

@@ -41,8 +41,9 @@ module Uniword
           # Check if link is a footnote reference
           (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:footnote_id)) ||
             (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:endnote_id)) ||
-            (link.is_a?(Lutaml::Model::Serializable) && link.class.attributes.key?(:type) && %i[footnote
-                                                                                                endnote].include?(link.type))
+            (link.is_a?(Lutaml::Model::Serializable) &&
+             link.class.attributes.key?(:type) &&
+             %i[footnote endnote].include?(link.type))
         end
 
         # Validate the footnote reference.

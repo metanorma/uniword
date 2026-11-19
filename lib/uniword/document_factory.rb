@@ -48,7 +48,8 @@ module Uniword
 
         # Handle binary strings (for docx gem compatibility)
         # Convert to StringIO if it's a binary string (contains null bytes or has binary encoding)
-        path = StringIO.new(path) if path.is_a?(String) && (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
+        path = StringIO.new(path) if path.is_a?(String) &&
+          (path.encoding == Encoding::ASCII_8BIT || path.include?("\x00"))
 
         validate_path(path)
 

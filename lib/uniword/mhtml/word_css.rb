@@ -98,13 +98,19 @@ module Uniword
 
         # Margins
         rules << "margin-top: #{CssNumberFormatter.twips_to_in(properties.margin_top)}" if properties.margin_top
-        rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}" if properties.margin_bottom
+        if properties.margin_bottom
+          rules << "margin-bottom: #{CssNumberFormatter.twips_to_in(properties.margin_bottom)}"
+        end
         rules << "margin-left: #{CssNumberFormatter.twips_to_in(properties.margin_left)}" if properties.margin_left
         rules << "margin-right: #{CssNumberFormatter.twips_to_in(properties.margin_right)}" if properties.margin_right
 
         # Header/Footer margins
-        rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}" if properties.header_margin
-        rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}" if properties.footer_margin
+        if properties.header_margin
+          rules << "mso-header-margin: #{CssNumberFormatter.twips_to_in(properties.header_margin)}"
+        end
+        if properties.footer_margin
+          rules << "mso-footer-margin: #{CssNumberFormatter.twips_to_in(properties.footer_margin)}"
+        end
 
         "@page #{section_name} {\n  #{rules.join(";\n  ")};\n}"
       end

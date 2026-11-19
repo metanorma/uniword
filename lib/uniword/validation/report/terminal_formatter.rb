@@ -75,7 +75,11 @@ module Uniword
           parts << "  #{layers_count} layers"
           parts << Rainbow("\xC2\xB7").color("#555555").to_s
           parts << Rainbow(" \xE2\x9D\x8C #{errors} error#{'s' unless errors == 1}").red.to_s if errors.positive?
-          parts << Rainbow(" \xE2\x9A\xA0\xEF\xB8\x8F #{warnings} warning#{'s' unless warnings == 1}").yellow.to_s if warnings.positive?
+          if warnings.positive?
+            parts << Rainbow(
+              " \xE2\x9A\xA0\xEF\xB8\x8F #{warnings} warning#{'s' unless warnings == 1}",
+            ).yellow.to_s
+          end
           parts << Rainbow(" \xE2\x9C\x85 All checks passed").green.to_s if errors.zero? && warnings.zero?
           parts << Rainbow(" \xE2\x8F\xB1 #{report.duration_ms}ms").color("#888888").to_s
 

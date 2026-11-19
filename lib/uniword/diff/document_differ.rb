@@ -421,7 +421,12 @@ module Uniword
         styles.each do |style|
           style_id = style.styleId&.to_s
           name_obj = style.name
-          name = name_obj.is_a?(Lutaml::Model::Serializable) && name_obj.class.attributes.key?(:val) ? name_obj.val : name_obj.to_s
+          name = if name_obj.is_a?(Lutaml::Model::Serializable) &&
+              name_obj.class.attributes.key?(:val)
+                   name_obj.val
+                 else
+                   name_obj.to_s
+                 end
           result[style_id] = name if style_id
         end
 

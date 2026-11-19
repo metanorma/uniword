@@ -17,3 +17,10 @@ plugins:
 
 AllCops:
   TargetRubyVersion: 3.0
+
+# Phase 2 tranche A (uniword#115): Layout/LineLength re-enabled at 120.
+# The codebase outgrew the implicit 80 long ago (1,305 lib lines >80 vs
+# 47 >120); the todo had disabled the cop wholesale.
+Layout/LineLength:
+  Enabled: true
+  Max: 120

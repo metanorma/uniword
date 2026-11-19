@@ -219,7 +219,9 @@ module Uniword
               row_props.grid_after.value = missing
             end
             record_fix(FixCodes::TABLE_ROW_GRID_AFTER,
-                       "Added gridAfter=#{missing} to table row (grid has #{grid_col_count} cols, row covers #{covered})",
+                       "Added gridAfter=#{missing} to table row " \
+                       "(grid has #{grid_col_count} cols, " \
+                       "row covers #{covered})",
                        part: "word/document.xml")
           end
         end

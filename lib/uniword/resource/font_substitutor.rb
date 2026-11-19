@@ -44,10 +44,16 @@ module Uniword
       def self.transform_font_scheme(font_scheme)
         font_scheme.dup.tap do |scheme|
           # Transform major font Latin
-          scheme.major_font_obj.latin.typeface = substitute(scheme.major_font_obj.latin.typeface) if scheme.major_font_obj&.latin
+          if scheme.major_font_obj&.latin
+            scheme.major_font_obj.latin.typeface =
+              substitute(scheme.major_font_obj.latin.typeface)
+          end
 
           # Transform minor font Latin
-          scheme.minor_font_obj.latin.typeface = substitute(scheme.minor_font_obj.latin.typeface) if scheme.minor_font_obj&.latin
+          if scheme.minor_font_obj&.latin
+            scheme.minor_font_obj.latin.typeface =
+              substitute(scheme.minor_font_obj.latin.typeface)
+          end
         end
       end
 

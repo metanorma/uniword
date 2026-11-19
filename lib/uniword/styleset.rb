@@ -148,7 +148,9 @@ module Uniword
           document.styles_configuration.add_style(style.dup,
                                                   allow_overwrite: true)
         when :keep_existing
-          document.styles_configuration.add_style(style.dup) unless document.styles_configuration.style_exists?(style.id)
+          unless document.styles_configuration.style_exists?(style.id)
+            document.styles_configuration.add_style(style.dup)
+          end
         when :rename
           if document.styles_configuration.style_exists?(style.id)
             new_style = style.dup

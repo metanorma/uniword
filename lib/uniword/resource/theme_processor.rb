@@ -69,7 +69,11 @@ lightness_shift: nil)
           transform_color_scheme(processed.theme_elements.clr_scheme) if processed.theme_elements&.clr_scheme
 
           # Transform font scheme
-          FontSubstitutor.transform_font_scheme(processed.theme_elements.font_scheme) if processed.theme_elements&.font_scheme
+          if processed.theme_elements&.font_scheme
+            FontSubstitutor.transform_font_scheme(
+              processed.theme_elements.font_scheme,
+            )
+          end
 
           # Update name to indicate it's a Uniword variant
           processed.name = "#{theme.name} (Uniword)"
