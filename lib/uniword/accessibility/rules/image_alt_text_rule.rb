@@ -77,7 +77,9 @@ module Uniword
                        "(too short: #{alt_text.length} chars)",
               element: image,
               severity: :warning,
-              suggestion: "Alternative text should describe the image content meaningfully (min #{@config[:min_length]} chars)",
+              suggestion: "Alternative text should describe the image " \
+                          "content meaningfully " \
+                          "(min #{@config[:min_length]} chars)",
             )
           end
 

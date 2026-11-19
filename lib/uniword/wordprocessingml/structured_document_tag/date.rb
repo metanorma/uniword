@@ -50,7 +50,10 @@ module Uniword
       end
 
       # Date control in SDT properties
-      # Reference XML: <w:date w:fullDate="2012-06-20T00:00:00Z"><w:dateFormat w:val="M/d/yy"/><w:lid w:val="en-US"/><w:storeMappedDataAs w:val="dateTime"/><w:calendar w:val="gregorian"/></w:date>
+      # Reference XML:
+      #   <w:date w:fullDate="2012-06-20T00:00:00Z"><w:dateFormat w:val="M/d/yy"/>
+      #     <w:lid w:val="en-US"/><w:storeMappedDataAs w:val="dateTime"/>
+      #     <w:calendar w:val="gregorian"/></w:date>
       class Date < Lutaml::Model::Serializable
         attribute :full_date, :string
         attribute :date_format, DateFormat

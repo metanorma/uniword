@@ -175,15 +175,23 @@ module Uniword
         end
 
         def convert_vertical_align_attr!
-          @vertical_align = Properties::VerticalAlign.new(value: @vertical_align.to_s) if @vertical_align && !@vertical_align.is_a?(Properties::VerticalAlign)
+          return unless @vertical_align && !@vertical_align.is_a?(Properties::VerticalAlign)
+
+          @vertical_align =
+            Properties::VerticalAlign.new(value: @vertical_align.to_s)
         end
 
         def convert_simple_wrapper_attrs!
           @position = Properties::Position.new(value: @position) if @position && !@position.is_a?(Properties::Position)
-          @character_spacing = Properties::CharacterSpacing.new(value: @character_spacing) if @character_spacing && !@character_spacing.is_a?(Properties::CharacterSpacing)
+          if @character_spacing && !@character_spacing.is_a?(Properties::CharacterSpacing)
+            @character_spacing =
+              Properties::CharacterSpacing.new(value: @character_spacing)
+          end
           @kerning = Properties::Kerning.new(value: @kerning) if @kerning && !@kerning.is_a?(Properties::Kerning)
           @width_scale = Properties::WidthScale.new(value: @width_scale) if @width_scale && !@width_scale.is_a?(Properties::WidthScale)
-          @emphasis_mark = Properties::EmphasisMark.new(value: @emphasis_mark.to_s) if @emphasis_mark && !@emphasis_mark.is_a?(Properties::EmphasisMark)
+          if @emphasis_mark && !@emphasis_mark.is_a?(Properties::EmphasisMark)
+            @emphasis_mark = Properties::EmphasisMark.new(value: @emphasis_mark.to_s)
+          end
         end
 
         def convert_text_effect_attrs!

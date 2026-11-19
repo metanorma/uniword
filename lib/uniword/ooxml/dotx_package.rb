@@ -108,16 +108,28 @@ module Uniword
         package = new
 
         # Parse lutaml-model files
-        package.core_properties = CoreProperties.from_xml(zip_content["docProps/core.xml"]) if zip_content["docProps/core.xml"]
+        if (core = zip_content["docProps/core.xml"])
+          package.core_properties = CoreProperties.from_xml(core)
+        end
 
-        package.app_properties = AppProperties.from_xml(zip_content["docProps/app.xml"]) if zip_content["docProps/app.xml"]
+        if (app = zip_content["docProps/app.xml"])
+          package.app_properties = AppProperties.from_xml(app)
+        end
 
-        package.theme = Uniword::Drawingml::Theme.from_xml(zip_content["word/theme/theme1.xml"]) if zip_content["word/theme/theme1.xml"]
+        if (theme = zip_content["word/theme/theme1.xml"])
+          package.theme = Uniword::Drawingml::Theme.from_xml(theme)
+        end
 
         # Parse styles and numbering as models
-        package.styles_configuration = Uniword::Wordprocessingml::StylesConfiguration.from_xml(zip_content["word/styles.xml"]) if zip_content["word/styles.xml"]
+        if (styles = zip_content["word/styles.xml"])
+          package.styles_configuration =
+            Uniword::Wordprocessingml::StylesConfiguration.from_xml(styles)
+        end
 
-        package.numbering_configuration = Uniword::Wordprocessingml::NumberingConfiguration.from_xml(zip_content["word/numbering.xml"]) if zip_content["word/numbering.xml"]
+        if (numbering = zip_content["word/numbering.xml"])
+          package.numbering_configuration =
+            Uniword::Wordprocessingml::NumberingConfiguration.from_xml(numbering)
+        end
 
         # Store raw document XML (will be parsed by DotxHandler)
         package.raw_document_xml = zip_content["word/document.xml"] if zip_content["word/document.xml"]
