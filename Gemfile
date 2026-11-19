@@ -42,8 +42,11 @@ gem "plurimath", "~> 0.11"
 # present (lutaml-model#1149). 0.8.175 makes leptris the default XML
 # adapter; the open #1163 (element_order nil on parse) and #1164 (built
 # mixed_content drops consecutive text) do not manifest on uniword shapes -
-# full corpus green on 0.8.175 (3,897 examples, 0 failures).
-gem "lutaml-model", "~> 0.8.175"
+# full corpus green on 0.8.175 (3,897 examples, 0 failures). 0.8.176
+# carries #1168: PlanCompiler refuses the broken element+map_all_content
+# plan, healing the silent nil hydration via the interpretive lane
+# (corpus green on 0.8.176, 3,631 examples, 0 failures).
+gem "lutaml-model", "~> 0.8.176"
 
 # leptris 1.9.386-1.9.390 reject r:embed on a:blip; fixed in 1.9.391 (leptris-ruby#569).
 gem "leptris", "~> 1.9.429"
