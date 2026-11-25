@@ -539,7 +539,7 @@ module Uniword
     desc "to md|adoc INPUT", "Convert a DOCX to Markdown or AsciiDoc"
     long_desc <<~DESC
       Convert a Word document to a plain-text editing format -- Markdown
-      or AsciiDoc -- through the Coradoc CoreModel bridge.
+      or AsciiDoc -- through the Ceradoc CoreModel bridge.
 
       Carried: headings h1-h6, paragraphs, bold/italic/underline/
       strikethrough, lists, tables with header rows, links, bookmarks.
@@ -578,7 +578,7 @@ module Uniword
     desc "from md|adoc INPUT", "Convert Markdown or AsciiDoc to a DOCX"
     long_desc <<~DESC
       Convert a Markdown or AsciiDoc file to a Word document through
-      the Coradoc CoreModel bridge. Headings become Heading styles,
+      the Ceradoc CoreModel bridge. Headings become Heading styles,
       lists get numbering, tables keep their header rows, and
       AsciiDoc links become real hyperlinks.
 

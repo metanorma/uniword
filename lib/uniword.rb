@@ -210,8 +210,8 @@ module Uniword
   # Plugin system (validators, transformers, CLI commands).
   autoload :Plugin, "uniword/plugin"
 
-  # Plain-text (Markdown / AsciiDoc) conversion via Coradoc. The
-  # coradoc gems are optional at runtime and lazily required.
+  # Plain-text (Markdown / AsciiDoc) conversion via Ceradoc. The
+  # ceradoc gems are optional at runtime and lazily required.
   autoload :Converter, "uniword/converter"
 
   # CLI

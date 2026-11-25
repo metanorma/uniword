@@ -5,15 +5,15 @@ module Uniword
     # Plain-text editing round trip for Word documents (issue #80).
     #
     # Bridges Uniword::Wordprocessingml::DocumentRoot to Markdown and
-    # AsciiDoc through Coradoc's hub-and-spoke CoreModel:
+    # AsciiDoc through Ceradoc's hub-and-spoke CoreModel:
     #
-    #   DocumentRoot -> Coradoc::Docx.parse_to_core -> core
-    #     -> (Coradoc::Markdown | Coradoc::AsciiDoc) writer
+    #   DocumentRoot -> Ceradoc::Docx.parse_to_core -> core
+    #     -> (Ceradoc::Markdown | Ceradoc::AsciiDoc) writer
     #
-    #   (Coradoc::Markdown | Coradoc::AsciiDoc) parser -> core
-    #     -> Coradoc::Docx.serialize -> DocumentRoot
+    #   (Ceradoc::Markdown | Ceradoc::AsciiDoc) parser -> core
+    #     -> Ceradoc::Docx.serialize -> DocumentRoot
     #
-    # The coradoc gems are OPTIONAL runtime dependencies: they are
+    # The ceradoc gems are OPTIONAL runtime dependencies: they are
     # required lazily inside the conversion methods, never at file
     # load. When missing, a DependencyError with an install hint is
     # raised.
@@ -27,7 +27,7 @@ module Uniword
     # * tables with a header row
     # * links (bridge resolves relationship ids to target URLs)
     # * bookmarks (heading/paragraph anchor id propagation)
-    # * footnotes (coradoc-docx 0.1.6 carries them into the core
+    # * footnotes (ceradoc-docx 0.1.6 carries them into the core
     #   model; to md/adoc emits GFM [^id] + definitions)
     #
     # Dropped or degraded (recorded on PlainTextResult, warned about;
@@ -38,18 +38,17 @@ module Uniword
     # * tracked changes (w:ins/w:del)
     # * structured document tags (content survives, wrapper unwrapped)
     # * math (OMML)
-    # * images (docx extractor does not carry drawings; coradoc#322)
+    # * images (docx extractor does not carry drawings; ceradoc#322)
     #
     # Never carried by any plain-text format (not detected per document):
     # themes, settings, font table, and other package-level parts.
     #
     # From the plain-text side, links written to DOCX resolve to real
-    # External relationships on save. Upstream flattenings that remain:
-    # coradoc-markdown's CoreModel transform emits inline Markdown links
-    # as literal text, so from_markdown keeps links as text while
-    # from_asciidoc builds real hyperlinks (coradoc#320); the same
-    # inline parser gap leaves from_markdown footnote REFERENCES as
-    # literal text (definitions do convert, coradoc#320).
+    # External relationships on save, and from_markdown builds real
+    # hyperlinks from inline Markdown links (ceradoc-markdown fixed the
+    # literal-text flattening, ceradoc#320). Upstream flattening that
+    # remains: from_markdown footnote REFERENCES stay literal text
+    # (definitions do convert, ceradoc#320).
     #
     # @example Document to Markdown
     #   md = Uniword::Converter::PlainText.new.to_markdown(document)
@@ -57,7 +56,7 @@ module Uniword
     # @example Markdown to a DocumentRoot
     #   doc = Uniword::Converter::PlainText.new.from_markdown(md_text)
     class PlainText
-      GEMS_HINT = "coradoc-docx coradoc-markdown coradoc-adoc"
+      GEMS_HINT = "ceradoc-docx ceradoc-markdown ceradoc-adoc"
 
       # Convert a document to Markdown.
       #
@@ -78,15 +77,15 @@ module Uniword
       # @return [PlainTextResult]
       # @raise [FidelityError] in strict mode with dropped features
       def to_markdown_result(document, strict: false)
-        require_gems!("coradoc/docx", "coradoc/markdown")
+        require_gems!("ceradoc/docx", "ceradoc/markdown")
         drops = detect_dropped_features(document)
         assert_strict!(drops, :markdown) if strict
         core = with_conversion_guards(document, drops) do
-          ::Coradoc::Docx.parse_to_core(document)
+          ::Ceradoc::Docx.parse_to_core(document)
         end
         build_result(format: :markdown, direction: :docx_to_markdown,
                      core: core, drops: drops, text:
-                     ::Coradoc::Markdown.serialize(core))
+                     ::Ceradoc::Markdown.serialize(core))
       end
 
       # Parse Markdown into a document model.
@@ -106,8 +105,8 @@ module Uniword
       # @param strict [Boolean] raise when features would be dropped
       # @return [PlainTextResult]
       def from_markdown_result(text, strict: false)
-        require_gems!("coradoc/docx", "coradoc/markdown")
-        core = ::Coradoc::Markdown.parse_to_core(text)
+        require_gems!("ceradoc/docx", "ceradoc/markdown")
+        core = ::Ceradoc::Markdown.parse_to_core(text)
         finish_from_core(format: :markdown,
                          direction: :markdown_to_docx,
                          core: core, strict: strict)
@@ -132,13 +131,13 @@ module Uniword
       # @return [PlainTextResult]
       # @raise [FidelityError] in strict mode with dropped features
       def to_asciidoc_result(document, strict: false)
-        require_gems!("coradoc/docx", "coradoc/asciidoc")
+        require_gems!("ceradoc/docx", "ceradoc/asciidoc")
         drops = detect_dropped_features(document)
         assert_strict!(drops, :asciidoc) if strict
         core = with_conversion_guards(document, drops) do
-          ::Coradoc::Docx.parse_to_core(document)
+          ::Ceradoc::Docx.parse_to_core(document)
         end
-        adoc_model = ::Coradoc::AsciiDoc::Transform::FromCoreModel
+        adoc_model = ::Ceradoc::AsciiDoc::Transform::FromCoreModel
           .transform(core)
         normalize_emphasis_constraint!(adoc_model)
         build_result(format: :asciidoc, direction: :docx_to_asciidoc,
@@ -155,8 +154,8 @@ module Uniword
       def normalize_emphasis_constraint!(model)
         model.visit do |element, _phase|
           element.unconstrained = true if element.is_a?(
-            ::Coradoc::AsciiDoc::Model::Inline::Bold,
-          ) || element.is_a?(::Coradoc::AsciiDoc::Model::Inline::Italic)
+            ::Ceradoc::AsciiDoc::Model::Inline::Bold,
+          ) || element.is_a?(::Ceradoc::AsciiDoc::Model::Inline::Italic)
           element
         end
         model
@@ -179,8 +178,8 @@ module Uniword
       # @param strict [Boolean] raise when features would be dropped
       # @return [PlainTextResult]
       def from_asciidoc_result(text, strict: false)
-        require_gems!("coradoc/docx", "coradoc/asciidoc")
-        core = ::Coradoc::AsciiDoc.parse_to_core(text)
+        require_gems!("ceradoc/docx", "ceradoc/asciidoc")
+        core = ::Ceradoc::AsciiDoc.parse_to_core(text)
         finish_from_core(format: :asciidoc,
                          direction: :asciidoc_to_docx,
                          core: core, strict: strict)
@@ -188,7 +187,7 @@ module Uniword
 
       private
 
-      # Lazily load the coradoc gems; raise a DependencyError with an
+      # Lazily load the ceradoc gems; raise a DependencyError with an
       # install hint when any is missing.
       def require_gems!(*libs)
         libs.each { |lib| require lib }
@@ -224,7 +223,7 @@ module Uniword
         raise FidelityError.new(format, drops)
       end
 
-      # Rewrite hyperlink rIds to their target URLs so coradoc's
+      # Rewrite hyperlink rIds to their target URLs so ceradoc's
       # writers emit real links; every mutation is restored after the
       # conversion.
       def with_conversion_guards(document, _drops)
@@ -233,7 +232,7 @@ module Uniword
       end
 
       # Rewrite w:hyperlink r:id attributes to their relationship
-      # targets so coradoc's writers emit real URLs instead of "rId1".
+      # targets so ceradoc's writers emit real URLs instead of "rId1".
       # Relationships live in document.xml.rels on loaded documents
       # and in the IdAllocator on builder-built ones; both sources are
       # consulted. Returns the rewrite log for restoration.
@@ -287,7 +286,7 @@ module Uniword
       # Serialize the CoreModel into a DocumentRoot and wrap both in a
       # result (from_* direction).
       def finish_from_core(format:, direction:, core:, strict:)
-        document = ::Coradoc::Docx.serialize(core)
+        document = ::Ceradoc::Docx.serialize(core)
         build_result(format: format, direction: direction, core: core,
                      drops: [], document: document).tap do |result|
           assert_strict!(result.dropped_features, format) if strict
@@ -311,15 +310,15 @@ module Uniword
         Array(core).each do |root|
           walk_core(root, skip_self: true) do |node|
             case node
-            when ::Coradoc::CoreModel::StructuralElement
+            when ::Ceradoc::CoreModel::StructuralElement
               counts[:headings] += 1 if heading?(node)
-            when ::Coradoc::CoreModel::Block
+            when ::Ceradoc::CoreModel::Block
               counts[:paragraphs] += 1
-            when ::Coradoc::CoreModel::ListBlock
+            when ::Ceradoc::CoreModel::ListBlock
               counts[:lists] += 1
-            when ::Coradoc::CoreModel::Table
+            when ::Ceradoc::CoreModel::Table
               counts[:tables] += 1
-            when ::Coradoc::CoreModel::InlineElement
+            when ::Ceradoc::CoreModel::InlineElement
               counts[:links] += 1 if link?(node)
             end
           end
@@ -342,14 +341,14 @@ module Uniword
 
       def children_of(node)
         case node
-        when ::Coradoc::CoreModel::StructuralElement
+        when ::Ceradoc::CoreModel::StructuralElement
           Array(node.children)
-        when ::Coradoc::CoreModel::Block
+        when ::Ceradoc::CoreModel::Block
           content = node.renderable_content
-          content.is_a?(Array) ? content.grep(::Coradoc::CoreModel::Base) : []
-        when ::Coradoc::CoreModel::ListBlock
+          content.is_a?(Array) ? content.grep(::Ceradoc::CoreModel::Base) : []
+        when ::Ceradoc::CoreModel::ListBlock
           Array(node.items)
-        when ::Coradoc::CoreModel::Table
+        when ::Ceradoc::CoreModel::Table
           Array(node.rows).flat_map { |row| Array(row.cells) }
         else
           []
