@@ -4,7 +4,7 @@ require "spec_helper"
 require "tmpdir"
 
 # Plain-text editing round trip (issue #80): DocumentRoot <-> Markdown
-# and AsciiDoc through the Coradoc CoreModel bridge.
+# and AsciiDoc through the Ceradoc CoreModel bridge.
 RSpec.describe Uniword::Converter::PlainText do
   let(:converter) { described_class.new }
   let(:output_dir) { "tmp/converter_plain_text_spec" }
@@ -80,8 +80,8 @@ RSpec.describe Uniword::Converter::PlainText do
   end
 
   describe "lazy loading" do
-    it "does not load the coradoc gems when uniword is required" do
-      code = 'require "uniword"; print defined?(Coradoc).inspect'
+    it "does not load the ceradoc gems when uniword is required" do
+      code = 'require "uniword"; print defined?(Ceradoc).inspect'
       out = IO.popen([RbConfig.ruby, "-e", code], &:read)
       expect(out).to eq("nil")
     end
@@ -191,15 +191,18 @@ RSpec.describe Uniword::Converter::PlainText do
       expect(table.rows.last.properties&.tbl_header).to be_nil
     end
 
-    it "keeps inline links as literal text (upstream flattening)" do
+    # ceradoc-markdown 1.0.17 fixed the literal-text flattening
+    # (ceradoc#320): inline Markdown links now parse into real links,
+    # and the bridge resolves them into External-relationship
+    # hyperlinks on save.
+    it "builds real hyperlinks from inline Markdown links" do
       document = converter.from_markdown(
         "See [Example Site](https://example.com) for more.",
       )
 
       paragraph = document.body.paragraphs.first
-      expect(paragraph.hyperlinks).to be_empty
-      expect(paragraph.text)
-        .to include("[Example Site](https://example.com)")
+      expect(paragraph.hyperlinks).not_to be_empty
+      expect(paragraph.hyperlinks.first.id).to eq("https://example.com")
     end
   end
 

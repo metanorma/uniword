@@ -5,7 +5,7 @@ require "open3"
 require "tmpdir"
 
 # CLI coverage for the top-level `to` / `from` verbs (issue #80):
-# plain-text editing round trip through the Coradoc bridge.
+# plain-text editing round trip through the Ceradoc bridge.
 RSpec.describe Uniword::CLI do
   let(:cli) { described_class.new }
   let(:output_dir) { "tmp/plain_text_cli_spec" }
